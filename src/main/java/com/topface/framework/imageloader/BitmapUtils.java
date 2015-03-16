@@ -17,6 +17,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
+import com.topface.topface.R;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -331,6 +333,7 @@ public class BitmapUtils {
         return output;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public static Bitmap getRoundedBitmap(Bitmap bitmap, int dstWidth, int dstHeight) {
         if (bitmap == null)
             return null;
@@ -377,7 +380,9 @@ public class BitmapUtils {
             Debug.error("Bitmap is already recycled");
         }
 
-        clippedBitmap.recycle();
+        if (clippedBitmap != null) {
+            clippedBitmap.recycle();
+        }
         return output;
     }
 
@@ -401,11 +406,43 @@ public class BitmapUtils {
 
         final Rect src = new Rect(0, 0, resSize, resSize);
         canvas.drawBitmap(bitmap, src, src, new Paint());
+        return output;
+    }
 
-        if (!bitmap.isRecycled()) {
-            bitmap.recycle();
+    public static Bitmap getRoundBitmap(Bitmap bitmap, float radiusMult) {
+        final int bitmapWidth = bitmap.getWidth();
+        final int bitmapHeight = bitmap.getHeight();
+
+        int multWidth = (int) (((bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
+
+        @SuppressWarnings("SuspiciousNameCombination")
+        Bitmap output = Bitmap.createBitmap(multWidth, multWidth, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(output);
+
+        final Rect src = new Rect(0, 0, bitmapWidth, bitmapHeight);
+        final Rect dst = new Rect((multWidth - bitmapWidth) / 2, (multWidth - bitmapHeight) / 2, (multWidth + bitmapWidth) / 2, (multWidth - bitmapHeight) / 2 + bitmapHeight);
+
+        Paint circlePaint = new Paint();
+        circlePaint.setAntiAlias(true);
+        circlePaint.setColor(App.getContext().getResources().getColor(R.color.bg_white));
+        Paint canvasPaint = new Paint();
+        canvasPaint.setAntiAlias(true);
+        canvas.drawCircle(multWidth / 2, multWidth / 2, multWidth / 2, circlePaint);
+        canvasPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
+        canvas.drawBitmap(bitmap, src, dst, canvasPaint);
+        return Bitmap.createScaledBitmap(output, bitmap.getWidth(), bitmap.getWidth(), true);
+    }
+
+    public static Bitmap squareBitmap(Bitmap bitmap, int width, int height) {
+        int srcWidth = bitmap.getWidth();
+        int srcHeight = bitmap.getHeight();
+        Bitmap output;
+        if (srcHeight != srcWidth) {
+            int delta = Math.abs(srcHeight - srcWidth);
+            output = Bitmap.createScaledBitmap(bitmap, width, height - delta / 2, true);
         } else {
-            Debug.error("Bitmap is already recycled");
+            output = Bitmap.createScaledBitmap(bitmap, width, height, true);
         }
         return output;
     }

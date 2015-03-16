@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.topface.topface.App;
@@ -23,7 +24,6 @@ import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
 import com.topface.topface.ui.views.FeedItemViewConstructor.TypeAndFlag;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.ui.views.NoParentPressImageView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ad.NativeAd;
 import com.topface.topface.utils.ad.NativeAdManager;
@@ -87,7 +87,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         public TextView age;
         public TextView time;
         public TextView unreadCounter;
-        public NoParentPressImageView heart;
+        public ImageView heart;
         public Drawable background;
     }
 
@@ -161,7 +161,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     protected View getViewByType(int type, int position, View view, ViewGroup viewGroup) {
         if (type == T_NATIVE_AD) {
             if (mFeedAdView == null) {
-                initFeedAd();
+                mFeedAdView = getAdView();
             }
             mFeedAd.show(mFeedAdView);
             return mFeedAdView;
@@ -283,11 +283,14 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     @Override
     public final void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        loadOlderItemsIfNeeded(firstVisibleItem, visibleItemCount, totalItemCount);
+    }
+
+    public void loadOlderItemsIfNeeded(int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= totalItemCount - 1 - mLoadController.getItemsOffsetByConnectionType()) {
             loadOlderItems();
         }
     }
-
 
     /**
      * Method tries to load older items (if there is loader item at the end of listView)
@@ -325,7 +328,9 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
                 mFeedAd = NativeAdManager.getNativeAd();
             }
             if (mFeedAd != null) {
-                data.add(mFeedAd.getPosition(), getNativeAdItemCreator().getAdItem(mFeedAd));
+                int adPosition = mFeedAd.getPosition();
+                data.add(adPosition < data.size() ? adPosition : data.size() - 1,
+                        getNativeAdItemCreator().getAdItem(mFeedAd));
                 mHasFeedAd = true;
                 Intent intent = new Intent(TabbedFeedFragment.HAS_FEED_AD);
                 LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
@@ -334,6 +339,10 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     public void removeAdItems() {
+        removeAdItems(true);
+    }
+
+    private void removeAdItems(boolean notify) {
         mHasFeedAd = false;
         mFeedAd = null;
         boolean removed = false;
@@ -344,9 +353,15 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
                 removed = true;
             }
         }
-        if (removed) {
+        if (notify && removed) {
             notifyDataSetChanged();
         }
+    }
+
+    public void refreshAdItem() {
+        removeAdItems(false);
+        addItemForAd();
+        notifyDataSetChanged();
     }
 
     protected void setLastUpdate() {
@@ -466,7 +481,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         if (!isEmpty()) {
             FeedList<T> data = getData();
             item = data.getFirst();
-            if (item.isAd()) {
+            if (item.isAd() && data.size() >= 2) {
                 item = data.get(1);
             }
         }

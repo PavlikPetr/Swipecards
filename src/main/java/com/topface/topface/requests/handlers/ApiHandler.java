@@ -17,6 +17,7 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.Utils;
 
 import org.json.JSONObject;
 
@@ -53,6 +54,12 @@ abstract public class ApiHandler extends Handler {
                 } else if (response.isCodeEqual(ErrorCodes.UNCONFIRMED_LOGIN)) {
                     ConfirmedApiRequest.showConfirmDialog(mContext);
                     fail(result, response);
+                } else if (response.isCodeEqual(ErrorCodes.CODE_OLD_APPLICATION_VERSION)) {
+                    fail(result, response);
+                    Context context = getContext();
+                    if (context instanceof Activity) {
+                        Utils.startOldVersionPopup((Activity) context, false);
+                    }
                 } else if (result != ErrorCodes.RESULT_OK) {
                     fail(result, response);
                 } else {

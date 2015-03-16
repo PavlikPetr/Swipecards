@@ -40,11 +40,13 @@
             android:layout_alignParentBottom="true"
             android:orientation="vertical">
 
-            <include
-                android:id="@+id/loUserInfo"
-                layout="@layout/dating_user_info"
+            <TextView
+                android:id="@+id/tvDatingUserStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
                 android:layout_gravity="left"
                 android:layout_marginLeft="6dp"/>
 

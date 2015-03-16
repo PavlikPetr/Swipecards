@@ -4,7 +4,6 @@
     <string name="app_locale">de_DE</string>
     <string name="general_warning">WARNUNG</string>
     <string name="general_ok">OK</string>
-    <string name="general_dbl_new">Neue</string>
     <string name="general_settings_abbr">Einst.</string>
     <string name="general_disallow">Verboten</string>
     <string name="general_allow">Erlauben</string>
@@ -18,7 +17,6 @@
     <string name="likes_background_text">Keine Sympathien</string>
     <string name="visitors_background_text">Keine Gäste</string>
     <string name="chat_background_text">Keine neuen Nachrichten</string>
-    <string name="general_location">Lage</string>
     <string name="filter_only_online">Nur on-line</string>
     <string name="filter_city_age_parameters">Alter und Stadt</string>
     <string name="filter_select_city">Stadt auswählen</string>
@@ -66,15 +64,12 @@
     <string name="general_search_empty_title">Leider, nichts gefunden</string>
     <string name="general_search_empty_text">Sie können Ihre Suche wiederholen, oder die Filter Einstellungen ändern</string>
     <string name="map_title">Karte</string>
-    <string name="settings_want_answer">Ich will die Antwort bekommen</string>
     <string name="general_buying">Sympathie und Coins kaufen</string>
     <string name="popup_version_title">Neue Version der Anwendung ist erreichbar</string>
     <string name="popup_version_message">Es ist die Zeit, Ihre Version zu aktualisieren!</string>
     <string name="leaders_select_photo_info">Wählen Sie Ihr effektvolles Foto! Man darf nicht Fotos mit niedrigem Rating wählen</string>
     <string name="map_popup_address">Adresse</string>
     <string name="black_list_info">Sie haben den Nutzer in die schwarze Liste hinzugefügt. Sie können das in Ihrem Profil in Einstellungen von VIP-Status ändern.</string>
-    <string name="general_place">Platz</string>
-    <string name="general_soon">Bald</string>
     <string name="black_list_activation">Aktivieren Sie VIP-Status und benutzen Sie die schwarze Liste</string>
     <string name="buying_total">Insgesamt</string>
     <string name="we_dont_detect_your_city">Wollen Sie die Menschen in der Nähe finden? Wir müssen wissen, wo Sie sich befinden. Geben Sie bitte Ihre Stadt an.</string>
@@ -117,7 +112,9 @@
     <string name="pincode_auth_input">Sie müssen Login und Passwort eingeben.</string>
     <string name="pincode_will_be_reset">Bei erfolgreicher Autorisierung werden alle App-Einstellungen zurückgesetzt.</string>
     <plurals name="pincode_interval">
+        <item quantity="zero">sofort nach der Schließung</item>
         <item quantity="other">%d Min.</item>
+        <item quantity="one">%d Min.</item>
     </plurals>
     <string name="general_error">FEHLER</string>
     <string name="general_yes">Ja</string>
@@ -125,9 +122,8 @@
     <string name="general_cancel">Abbrechen</string>
     <string name="general_delete_title">Löschen</string>
     <string name="general_dialog_loading">Ladung</string>
-    <string name="general_dialog_saving">Speicherung</string>
     <string name="general_fill_button">Ausfüllen</string>
-    <string name="general_send_full">Senden</string>
+    <string name="general_send_full">Send</string>
     <string name="general_dialog_retry">Wiederholen</string>
     <string name="general_copy_title">Kopieren</string>
     <string name="general_back">Zurück</string>
@@ -138,10 +134,9 @@
     <string name="general_spinner_title">Wählen Sie die Aktion</string>
     <string name="general_profile_error">Fehler bei der Ladung des Profils</string>
     <string name="general_dbl_all">Alle</string>
-    <string name="general_dbl_unread">Ungelesene</string>
     <string name="time_yesterday">Gestern</string>
     <string name="time_today">Heute</string>
-    <string name="general_send_button">Senden</string>
+    <string name="general_send_button">Send</string>
     <string name="general_boys">Männer</string>
     <string name="general_girls">Mädchen</string>
     <string name="general_city">Stadt</string>
@@ -174,17 +169,23 @@
     <string name="chat_sexuality_out">Sie schätzten eine Sexualität.</string>
     <string name="chat_wink_in">Jemand hat Ihnen angestupst.</string>
     <string name="chat_wink_out">Sie haben angestupst.</string>
+    <string name="filter_search">Suche</string>
     <string name="filter_filter">Filter</string>
     <string name="filter_age_string">Von %1$d bis %2$d</string>
     <string name="filter_only_beautiful">Nur schöne</string>
     <string name="filter_extra_parameters">Ergänzende Parameter</string>
     <string name="filter_age">Alter</string>
-    <string name="filter_online">On-line</string>
+    <string name="filter_age_start_prefix">Von %s</string>
+    <string name="filter_age_end_prefix">bis %s</string>
     <string name="filter_cities_all">Nach allen Städten</string>
     <string name="buying_header_title">Käufe</string>
     <plurals name="buying_gift_you_need_coins">
         <item quantity="other">Um ein Geschenk zu senden, kaufen Sie noch %d Coins</item>
         <item quantity="one">Um ein Geschenk zu senden, kaufen Sie noch %d Coin</item>
+    </plurals>
+    <plurals name="buying_admiration_you_need_coins">
+        <item quantity="other">Um Bewunderung zu senden, kaufen Sie noch %d Coins</item>
+        <item quantity="one">Um Bewunderung zu senden, kaufen Sie noch %d Coin</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
         <item quantity="other">Um zu sehen, wem Sie gefallen, kaufen Sie noch %d Coins</item>
@@ -194,13 +195,13 @@
         <item quantity="other">Damit alle Sie gesehen haben, kaufen Sie noch %d Coins</item>
         <item quantity="one">Damit alle Sie gesehen haben, kaufen Sie noch %d Coin</item>
     </plurals>
+    <plurals name="buying_you_need_coins">
+        <item quantity="other">Sie brauchen %d Coins</item>
+        <item quantity="one">Sie brauchen %d Coins</item>
+    </plurals>
     <string name="buying_default_message">Sie können Geschenke und Bewunderungen für Coins senden</string>
     <string name="buying_money">Coins kaufen</string>
-    <string name="gifts_romantic">Romantische</string>
-    <string name="gifts_friends">Freundschaftliche</string>
-    <string name="gifts_present">Glückwunschgeschenke</string>
     <string name="gifts_title">Wählen Sie ein Geschenk</string>
-    <string name="gifts_send_btn">Ein Geschenk senden</string>
     <string name="profile_header_title">Mein Profil</string>
     <string name="album_add_photo_title">Foto hinzufügen</string>
     <string name="profile_add_album">Wählen aus den vorhandenen</string>
@@ -298,7 +299,6 @@
     <string name="ban_complain">Auf Ban beklagen</string>
     <string name="general_ready">Fertig</string>
     <string name="buying_store_ok">Kauf ist erfolgreich beendet</string>
-    <string name="general_close">Schließen</string>
     <string name="vip_privileges">VIP-Privilegien</string>
     <string name="vip_rest">Sie abonnieren VIP</string>
     <string name="vip_invis">Unsichtbares Regime</string>
@@ -316,7 +316,6 @@
     <string name="vip_info_blackList">Befreien Sie sich von langweiligen Leuten mit Hilfe der \"schwarzen Liste\"</string>
     <string name="vip_info_vip">Zeichnen Sie sich mit Hilfe von VIP-Status in der Suche und in Ihrem Profil aus!</string>
     <string name="buying_vip_status">VIP Status kaufen</string>
-    <string name="buy_play_market_not_available">Play Market ist nicht erreichbar</string>
     <string name="edit_my_city">Meine Stadt</string>
     <string name="settings_feedback_email">E-Mail für die Verbindung</string>
     <string name="settings_invalid_email">E-Mail ist unkorrekt</string>
@@ -331,20 +330,13 @@
     <string name="general_buying_disabled">Der Kauf ist jetzt unmöglich</string>
     <string name="ban_flood_detected">Sie machen Anfragen an den Server zu oft. Um die Anwendung weiter zu benutzen, bitte warten Sie</string>
     <string name="general_maintenance">Man führt technische Arbeit auf dem Server durch und Ihre Anfrage kann nicht ausgefüllt werden. Versuchen Sie später.</string>
-    <string name="virus_chat_likes_request_title">Sympathien Ihren Freunden schenken</string>
     <string name="virus_chat_btn">Sympathien bekommen</string>
-    <string name="virus_request_error">Es klappt nicht, Ihren Freunden Sympathien zu senden</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="other">Jetzt haben Sie %d Sympathien!</item>
-        <item quantity="one">Jetzt haben Sie %d Sympathie!</item>
-    </plurals>
     <string name="profile_ask_sent">Bitte ist gesendet</string>
     <string name="virus_error">Ihr Freund kann nur einmal pro Tag Sympathien Ihnen schenken! Versuchen Sie morgen!</string>
     <string name="popup_version_update">Aktualisieren</string>
     <string name="popup_version_cancel">Später erinnern</string>
     <string name="general_version_not_supported">Ihre Version der Anwendung ist veraltet und wird nicht mehr unterstützt. Aktualisieren Sie Ihre Anwendung</string>
     <string name="default_price_format">Insgesamt: %.2f USD</string>
-    <string name="dating_online_only">%s, nur on-line</string>
     <string name="leaders_pick_condition">Sie können das Foto mit dem Rating niedriger als %d%% nicht auswählen:</string>
     <string name="general_gift">Geschenk</string>
     <string name="user_actions_chat">Konversation</string>
@@ -383,7 +375,6 @@
     <string name="password_changing">Passwort ändern</string>
     <string name="save">Speichern</string>
     <string name="confirmation_successfully_sent">Die Bestätigung wurde auf Ihre E-Mail-Adresse gesendet</string>
-    <string name="password_hint">Passwort</string>
     <string name="password_confirmation_hint">Passwort bestätigen</string>
     <string name="enter_new_password">Geben Sie ein neues Passwort ein</string>
     <string name="enter_password_confirmation">Geben Sie eine Passwortbestätigung ein</string>
@@ -403,8 +394,6 @@
     <string name="you_dont_have_gifts_yet">Sie haben noch keine Geschenke</string>
     <string name="buy_sympathies">Sympathien kaufen</string>
     <string name="upload_photos">Laden Sie Fotos hoch</string>
-    <string name="chat_no_message_title">Fangen Sie die Kommunikation an!</string>
-    <string name="chat_no_message_text">Schreiben Sie eine Nachricht oder senden Sie ein Geschenk und man antwortet Ihnen unbedingt</string>
     <string name="user_baned">Nutzer wurde gebannt</string>
     <string name="general_choose_city">Wählen Sie eine Stadt</string>
     <string name="buy_mobile_payments">Andere Zahlungsweisen</string>
@@ -474,7 +463,6 @@
     <string name="general_complain_sended">Ihre Meldung wurde gesendet, vielen Dank für Ihre Hilfe</string>
     <string name="general_complain">Meldung</string>
     <string name="general_msg">Nachricht</string>
-    <string name="general_no_notifications">Leider, die Benachrichtigungen auf Ihrem Gerät sind nicht verfügbar</string>
     <string name="black_list_add_short">In die schwarze Liste</string>
     <string name="confirm_email_for_dating">Wir sind gegen Spam. Bestätigen Sie Ihre E-Mail-Adresse, um in Topface sich kennen zu lernen!</string>
     <string name="send_confirm_link">Link für die Bestätigung senden</string>
@@ -500,7 +488,6 @@
     <string name="delete_account_will_be_restored_are_you_sure">Sie versuchen in von Ihnen gelöschten Profil einloggen. Beim Einloggen wrid Ihr Account wiederhergestellt. Sind Sie sicher?</string>
     <string name="restore">Wiederherstellen</string>
     <string name="admiration_sended">Bewunderung ist gesendet</string>
-    <string name="getjar_auth_title">Wählen Sie den Account</string>
     <string name="skip">Überspringen</string>
     <string name="chat">Schreiben</string>
     <plurals name="number_of_sympathies">
@@ -518,16 +505,13 @@
     </plurals>
     <string name="general_attention">Achtung!</string>
     <string name="general_delete_messages">Nachrichten löschen</string>
-    <string name="mutual_sympathies">Gegenseitig</string>
     <string name="skip_all">Alle überspringen</string>
-    <string name="watching_as_list">Als Liste sehen</string>
     <string name="settings_feedback_transaction_number">Bestellnummer</string>
     <string name="settings_feedback_transaction_link">Wo kann man Bestellnummer finden?</string>
     <string name="general_logout_error">Leider, konnte man nicht abmelden</string>
     <string name="auth_btn_ok">Via Odnoklassniki einloggen</string>
     <string name="other_auth">Via andere Services einloggen</string>
     <string name="settings_feedback_transaction_number_hint">Geben Sie Bestellnummer ein</string>
-    <string name="youve_earned">Sie verdienen %s</string>
     <string name="delete_visitors">Gäste löschen</string>
     <string name="delete_admirations">Bewunderungen löschen</string>
     <string name="general_admirations">Bewunderungen</string>
@@ -544,8 +528,6 @@
     <string name="photo_is_uploading">Foto wird hochgeladen</string>
     <string name="default_ringtone">Standard</string>
     <string name="user_deleted_or_banned">Nutzer ist gelöscht oder gebannt</string>
-    <string name="locking_popup_title">Zugang zu «%s» ist begrenzt</string>
-    <string name="locking_popup_message">Um Zugang zu bekommen, antworten Sie auf alle empfangenen Sympathien oder bekommen Sie VIP</string>
     <string name="locking_popup_button_answer">Antworten</string>
     <string name="locking_menu_message">Der Zugang zu einigen Seiten der App ist begrenzt. Falls Sie sich von allen Begrenzungen befreien wollen, antworten Sie auf alle empfangene Sympathien oder bekommen Sie VIP.</string>
     <string name="current_city">Aktuelle Stadt</string>
@@ -559,7 +541,6 @@
         <item quantity="other">und noch %d</item>
         <item quantity="one">und noch %d</item>
     </plurals>
-    <string name="you_were_subscribed">Sie haben jetzt ein Abonnement</string>
     <string name="subscriptions_can_be_changed">Das Abonnement ist erledigt. Abonnementsbedingungen können Sie im Google Play ändern</string>
     <string name="people_nearby">Menschen in der Nähe</string>
     <string name="nobody_nearby">Keine Menschenseele in der Nähe!</string>
@@ -578,7 +559,11 @@
     <string name="billing_item_already_owned">Ihr voriger Kauf ist in der Bearbeitung, bitte warten Sie</string>
     <string name="dialog">Dialog</string>
     <string name="reply">Antworten</string>
-    <string name="measurement_unit_weight">kg.</string>
-    <string name="measurement_unit_height">cm.</string>
     <string name="email_changing">E-Mail ändern</string>
+    <string name="pull_to_refresh_refreshing_label">Laden…</string>
+    <string name="preload_photo_type_wifi_3g">WiFi und 3G</string>
+    <string name="preload_photo_type_wifi">Nur WiFi</string>
+    <string name="wrong_time_popup_button">Einstellungen öffnen</string>
+    <string name="google_service_missing_button">Installieren</string>
+    <string name="google_service_version_update_required_button">Aktualisieren</string>
 </resources>

@@ -41,6 +41,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
         }
 
     }
+
     public static final String CONNECTION_TYPE = "connection_type";
     public static final String REAUTH = "reauth_after_internet_connected";
     private static ConnectionType mConnectionType;
@@ -88,7 +89,6 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
         return connectionType;
     }
 
-    //TODO: Следующие два метода наверно можно объединить в один
     private void reAuthIfNeed() {
         Intent intent = new Intent();
         intent.setAction(REAUTH);

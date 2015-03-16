@@ -1,5 +1,6 @@
 package com.topface.topface.data;
 
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.statistics.android.StatisticsConfiguration;
 import com.topface.topface.App;
@@ -18,11 +19,18 @@ public class AppOptions extends AbstractData {
 
     private ClientStatisticSettings clientStatisticsSettings = new ClientStatisticSettings();
     private Conditions conditions = new Conditions();
+
+    /**
+     * минимальные размеры фотографии, которая может быть загружена
+     */
+    private MinPhotoSize minPhotoSize = new MinPhotoSize();
+
     /**
      * Session timeout in seconds
      */
     private int sessionTimeout;
     private int maxPartialRequestsCount;
+    private Boolean scruffy = null;
 
     public AppOptions(JSONObject data) {
         if (data != null) {
@@ -38,6 +46,8 @@ public class AppOptions extends AbstractData {
             }
             maxPartialRequestsCount = item.optInt("maxPartialRequestsCount", DEFAULT_MAX_PARTIAL_REQUEST_COUNT);
             sessionTimeout = item.optInt("sessionTimeout", DEFAULT_SESSION_TIMEOUT);
+            scruffy = item.optBoolean("scruffy", false);
+            minPhotoSize = JsonUtils.fromJson(item.optString("minPhotoSize"), MinPhotoSize.class);
             JSONObject conditionsJson = item.optJSONObject("conditions");
             if (conditionsJson != null) {
                 conditions = new Conditions(conditionsJson);
@@ -75,6 +85,14 @@ public class AppOptions extends AbstractData {
         return conditions;
     }
 
+    public MinPhotoSize getMinPhotoSize() {
+        if (minPhotoSize != null) {
+            return minPhotoSize;
+        } else {
+            return new MinPhotoSize();
+        }
+    }
+
     public int getUserWeightMin() {
         return conditions.userWeightMin;
     }
@@ -97,6 +115,10 @@ public class AppOptions extends AbstractData {
 
     public int getUserAboutMeMaxLength() {
         return conditions.userAboutMeMaxLength;
+    }
+
+    public boolean isScruffyEnabled() {
+        return scruffy != null ? scruffy : false;
     }
 
     private class ClientStatisticSettings {
@@ -138,6 +160,14 @@ public class AppOptions extends AbstractData {
             userWeightMax = json.optInt("userWeightMax", 999);
             userHeightMin = json.optInt("userHeightMin", 1);
             userHeightMax = json.optInt("userHeightMax", 999);
+        }
+    }
+
+    public class MinPhotoSize {
+        public int height = 150;
+        public int width = 200;
+
+        MinPhotoSize() {
         }
     }
 }

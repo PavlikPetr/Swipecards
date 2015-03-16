@@ -23,7 +23,6 @@ import android.widget.Toast;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
-import com.topface.topface.data.Options;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.PasswordRecoverActivity;
 import com.topface.topface.ui.RegistrationActivity;
@@ -130,8 +129,6 @@ public class AuthFragment extends BaseAuthFragment {
         if (isAdded() && activity instanceof BaseFragmentActivity) {
             ((BaseFragmentActivity) activity).close(this, true);
             MenuFragment.selectFragment(CacheProfile.getOptions().startPageFragmentId);
-            LocalBroadcastManager.getInstance(getActivity())
-                    .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
         }
     }
 

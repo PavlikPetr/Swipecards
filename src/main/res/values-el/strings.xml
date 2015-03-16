@@ -4,7 +4,6 @@
     <string name="app_locale">el_GR</string>
     <string name="general_warning">ΠΡΟΕΙΔΟΠΟΙΗΣΗ</string>
     <string name="general_ok">OK</string>
-    <string name="general_dbl_new">Νέες</string>
     <string name="general_settings_abbr">Ρυθμίσεις</string>
     <string name="general_disallow">Απαγορεύστε</string>
     <string name="general_allow">Επιτρέψτε</string>
@@ -18,7 +17,6 @@
     <string name="likes_background_text">Δεν υπάρχουν συμπάθειας</string>
     <string name="visitors_background_text">ΟΙ επισκέπτες δεν υπάρχουν</string>
     <string name="chat_background_text">Δεν υπάρχουν εισερχόμενα μηνύματα</string>
-    <string name="general_location">Τοποθεσία</string>
     <string name="filter_only_online">Mόνο online</string>
     <string name="filter_city_age_parameters">Ηλικία και πόλη</string>
     <string name="filter_select_city">Επιλέξτε τη πόλη</string>
@@ -66,15 +64,12 @@
     <string name="general_search_empty_title">Μας συγχωρείτε,τίποτα δεν βρέθηκε.</string>
     <string name="general_search_empty_text">Μπορείτε να δοκιμάσετε την αναζήτηση ξανά, ή να αλλάξετε τις επιλογές του φίλτρου</string>
     <string name="map_title">Ο χάρτης</string>
-    <string name="settings_want_answer">Μακάρι να είχε κάποιος έγραψε</string>
     <string name="general_buying">Αγοράστε τις συμπάθειες και τα κέρματα</string>
     <string name="popup_version_title">Διαθέσιμα μια νέα έκδοση της εφαρμογής</string>
     <string name="popup_version_message">Η ώρα να ενημερώσετε την έκδοση σας!</string>
     <string name="leaders_select_photo_info">Επιλέξτε την πιο θεαματική φωτογραφία! Τις φωτογραφίες με χαμηλή βαθμολογία δεν μπορείτε να επιλέξετε</string>
     <string name="map_popup_address">Η διεύθυνση</string>
     <string name="black_list_info">Έχετε προσθέσει του συνομιλητής στη μαύρη λίστα. Μπορείτε να αλλάξετε αυτό στο προφίλ σας στις ρυθμίσεις  τη VIP-κατάσταση.</string>
-    <string name="general_place">Τόπος</string>
-    <string name="general_soon">Σύντομα θα είναι</string>
     <string name="black_list_activation">Ενεργοποιήστε το VIP-κατάσταση, και χρησιμοποιήστε μια μαύρη λίστα</string>
     <string name="buying_total">Στη συνολική</string>
     <string name="we_dont_detect_your_city">Καθόρισε τη πόλη σας για να ξέρετε πού βρίσκεστε. Ζητήστε από εκείνους που είναι κοντά σας.</string>
@@ -121,7 +116,6 @@
     <string name="general_cancel">Ακύρωση</string>
     <string name="general_delete_title">Κατάργηση</string>
     <string name="general_dialog_loading">Κατεβάστε</string>
-    <string name="general_dialog_saving">Διαφύλαξη</string>
     <string name="general_fill_button">Συμπληρώστε</string>
     <string name="general_send_full">Στείλτε</string>
     <string name="general_dialog_retry">Επαναλάβετε</string>
@@ -134,7 +128,6 @@
     <string name="general_spinner_title">Επιλέξτε μια δράση</string>
     <string name="general_profile_error">Λάθους τη φόρτωση του προφίλ</string>
     <string name="general_dbl_all">\'Ολα</string>
-    <string name="general_dbl_unread">Αδιάβαστος</string>
     <string name="time_yesterday">Χτες</string>
     <string name="time_today">σήμερα</string>
     <string name="general_send_button">Στείλ.</string>
@@ -173,7 +166,6 @@
     <string name="filter_only_beautiful">Μόνο όμορφες</string>
     <string name="filter_extra_parameters">Περισσότερες Επιλογές Αναζήτησης</string>
     <string name="filter_age">Ηλικία</string>
-    <string name="filter_online">Online</string>
     <string name="filter_cities_all">Σε όλες οι πόλεις</string>
     <string name="buying_header_title">Αγορά</string>
     <plurals name="buying_gift_you_need_coins">
@@ -190,11 +182,7 @@
     </plurals>
     <string name="buying_default_message">Μπορείτε να στείλετε τα δώρα και το θαυμασμό για τα κέρματα</string>
     <string name="buying_money">Αγορά κερμάτων</string>
-    <string name="gifts_romantic">Ρομαντισμό</string>
-    <string name="gifts_friends">Φιλία</string>
-    <string name="gifts_present">Συγχαρητήρια</string>
     <string name="gifts_title">Επιλέξτε ένα δώρο</string>
-    <string name="gifts_send_btn">Στείλτε ένα δώρο</string>
     <string name="profile_header_title">Το προφίλ μου</string>
     <string name="profile_add_album">Επιλέξτε από τις διαθέσιμες</string>
     <string name="profile_add_camera">Τραβήξτε μια εικόνα</string>
@@ -291,7 +279,6 @@
     <string name="ban_complain">Η αναφορά για την απαγόρευση</string>
     <string name="general_ready">Έγινε</string>
     <string name="buying_store_ok">Αγορά ολοκληρώθηκε με επιτυχία</string>
-    <string name="general_close">Κλείστε</string>
     <string name="vip_privileges">VIP τα προνόμια</string>
     <string name="vip_rest">Έχετε εγγραφεί στη VIP</string>
     <string name="vip_invis">Αόρατη Λειτουργία</string>
@@ -309,7 +296,6 @@
     <string name="vip_info_blackList">Απαλλαγείτε από τα ενοχλητικά άτομα με \"μαύρη λίστα\"</string>
     <string name="vip_info_vip">Ξεχωρίστε με VIP-κατάστασή σας στην αναζήτηση και με το προφίλ σας!</string>
     <string name="buying_vip_status">Αγοράστε VIP κατάσταση</string>
-    <string name="buy_play_market_not_available">Play Market δεν είναι διαθέσιμη</string>
     <string name="edit_my_city">Η πόλη μου</string>
     <string name="settings_feedback_email">Email για να επικοινωνήσετε</string>
     <string name="settings_invalid_email">Εσφαλμένος e-mail</string>
@@ -323,20 +309,13 @@
     <string name="general_buying_disabled">Αγορά αυτή τη στιγμή δεν μπορεί να γίνει</string>
     <string name="ban_flood_detected">Εσείς πολύ συχνά κάνετε αιτήματα στο διακομιστή. Για την περαιτέρω χρήση της εφαρμογής, να περιμένετε.</string>
     <string name="general_maintenance">Στο διακομιστή διεξάγονται τεχνικές εργασίες, και το αίτημά σας δεν μπορεί να εκτελεστεί. Παρακαλώ δοκιμάστε ξανά αργότερα.</string>
-    <string name="virus_chat_likes_request_title">Να δώσω συμπάθειες προς τους φίλους σας</string>
     <string name="virus_chat_btn">Αποκτήστε τις συμπάθειες</string>
-    <string name="virus_request_error">Απέτυχε η αποστολή τις συμπάθειες στους φίλους σας</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="other">Τώρα έχετε %d συμπάθειες!</item>
-        <item quantity="one">Τώρα έχετε %d συμπάθεια!</item>
-    </plurals>
     <string name="profile_ask_sent">Αίτηση έχει σταλεί.</string>
     <string name="virus_error">Κατά τη διάρκεια της ημέρας, ο φίλος σας μπορεί να δώσει για δώρο τις συμπάθειες μόνο 1 φορά! Δοκιμάστε το αύριο!</string>
     <string name="popup_version_update">Ενημερώσω</string>
     <string name="popup_version_cancel">Υπενθύμιση αργότερα</string>
     <string name="general_version_not_supported">Δική σας έκδοση της εφαρμογής είναι ξεπερασμένη και δεν υποστηρίζεται πλέον. Σας παρακαλούμε να ενημερώστε την εφαρμογή</string>
     <string name="default_price_format">Στη συνολική: %.2f USD</string>
-    <string name="dating_online_only">%s, μόνο online</string>
     <string name="leaders_pick_condition">Δεν μπορείτε να επιλέξετε μια φωτογραφία με βαθμολογία κάτω από %d%%:</string>
     <string name="general_gift">Το δώρω</string>
     <string name="user_actions_chat">Συνομιλία</string>
@@ -375,7 +354,6 @@
     <string name="password_changing">Αλλαγή κωδικού</string>
     <string name="save">Αποθήκευση</string>
     <string name="confirmation_successfully_sent">Η επιβεβαίωση θα αποσταλεί στο e-mail σας</string>
-    <string name="password_hint">το κωδικό</string>
     <string name="password_confirmation_hint">επιβεβαίωση κωδικού</string>
     <string name="enter_new_password">Εισάγετε τον νέο κωδικό</string>
     <string name="enter_password_confirmation">Επιβεβαίωση κωδικού</string>
@@ -395,8 +373,6 @@
     <string name="you_dont_have_gifts_yet">Δεν έχετε ακόμα δωρά</string>
     <string name="buy_sympathies">Αγοράστε τις συμπάθειες</string>
     <string name="upload_photos">Ανεβάστε τις φωτογραφίες!</string>
-    <string name="chat_no_message_title">Ξεκινήστε την επικοινωνία!</string>
-    <string name="chat_no_message_text">Γράψτε ένα μήνυμα ή στέιλτε ένα δώρο για να λάβετε μια απάντηση</string>
     <string name="user_baned">Ο χρήστης έχει απαγορευτεί</string>
     <string name="general_choose_city">Επιλέξτε τη πόλη</string>
     <string name="buy_mobile_payments">Άλλοι τρόποι πληρωμής</string>
@@ -465,7 +441,6 @@
     <string name="general_complain_sended">Σας ευχαριστούμε, το παράπονό σας θα εξεταστεί στο προσεχές μέλλον</string>
     <string name="general_complain">Η αναφορά</string>
     <string name="general_msg">Μήνυμα</string>
-    <string name="general_no_notifications">Δυστυχώς, η κοινοποίησης στη συσκευή σας δεν είναι διαθέσιμες</string>
     <string name="black_list_add_short">Στη μαύρη λίστα</string>
     <string name="confirm_email_for_dating">Είμαστε αντίθετοι με την τοποθέτηση  spam.Επιβεβαιώστε το email  για να εξοικείωσετε στο Topface!</string>
     <string name="send_confirm_link">Στείλτε ένα σύνδεσμο για την επιβεβαίωση</string>
@@ -491,7 +466,6 @@
     <string name="delete_account_will_be_restored_are_you_sure">Προσπαθείτε να εισάγεται έναν λογαριασμό που έχετε διαγράψει. Κατά την είσοδο ο λογαριασμός θα επανέλθει. Θέλετε να συνεχίσετε?</string>
     <string name="restore">Αποκαταστήστε</string>
     <string name="admiration_sended">Θαυμασμός εστάλη.</string>
-    <string name="getjar_auth_title">Επιλέξτε ένα λογαριασμό</string>
     <string name="skip">Παραλείψετε</string>
     <string name="chat">Γράψτε</string>
     <plurals name="number_of_sympathies">
@@ -509,16 +483,13 @@
     </plurals>
     <string name="general_attention">Προσοχή!</string>
     <string name="general_delete_messages">Διαγραφή μηνυμάτων</string>
-    <string name="mutual_sympathies">Αμοιβαία</string>
     <string name="skip_all">Παραλείψτε όλα</string>
-    <string name="watching_as_list">Εμφανίστε ολόκληρη τη λίστα</string>
     <string name="settings_feedback_transaction_number">Αριθμός παραγγελίας</string>
     <string name="settings_feedback_transaction_link">πού να βρείτε τον αριθμό παραγγελίας?</string>
     <string name="general_logout_error">Δυστυχώς, ο λογαριασμός σας δεν απενεργοποιήθηκε</string>
     <string name="auth_btn_ok">Εισάγετε με Odnoklassniki</string>
     <string name="other_auth">Συνδεθείτε σε άλλες υπηρεσίες</string>
     <string name="settings_feedback_transaction_number_hint">Εισάγετε τον αριθμό παραγγελίας σας</string>
-    <string name="youve_earned">έχετε λάβει %s</string>
     <string name="delete_visitors">Αφαιρέστε τους επισκέπτες</string>
     <string name="delete_admirations">Αφαιρέστε τους θαυμασμους</string>
     <string name="general_admirations">Θαυμασμούς</string>
@@ -535,8 +506,6 @@
     <string name="photo_is_uploading">Ανεβάστε μια φωτογραφία</string>
     <string name="default_ringtone">Από προεπιλογή</string>
     <string name="user_deleted_or_banned">Ο χρήστης απαγορεύεται ή να διαγραφεί</string>
-    <string name="locking_popup_title">Η μετάβαση στο τμήμα «%s» είναι περιορισμένη</string>
-    <string name="locking_popup_message">Για να αποκτήσετε πρόσβαση, ανταποκριθείτε σε όλες τις αμοιβαίες συμπάθειες ή πάρτε VIP</string>
     <string name="locking_popup_button_answer">Απαντήστε σε νέες συμπάθειες</string>
     <string name="locking_menu_message">Η πρόσβαση σε ορισμένες σελίδες της εφαρμογής είναι περιορισμένη. Για κατάργηση όλων των περιορισμών, απαντήστε σε όλες τις νέες συμπάθειες ή αποκτήστε VIP.</string>
     <string name="current_city">Τρέχουσα πόλη</string>
@@ -550,7 +519,6 @@
         <item quantity="other">και ακόμα %d</item>
         <item quantity="one">και ακόμα %d</item>
     </plurals>
-    <string name="you_were_subscribed">Η Εγγραφή ολοκληρώθηκε</string>
     <string name="subscriptions_can_be_changed">Η Εγγραφή ολοκληρώθηκε. Αλλαγή των όρων εγγραφής στο Google Play</string>
     <string name="people_nearby">Οι ανθρώπους που βρίσκονται κοντά</string>
     <string name="nobody_nearby">Ούτε ψυχή γύρω!</string>

@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -21,6 +24,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.AddedPhoto;
+import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -62,6 +66,7 @@ public class AddPhotoHelper {
     private Fragment mFragment;
     private Handler mHandler;
     private View mProgressView;
+    private AppOptions.MinPhotoSize minPhotoSize;
     private UserNotificationManager mNotificationManager;
     private File outputFile;
     private View.OnClickListener mOnAddPhotoClickListener = new View.OnClickListener() {
@@ -87,6 +92,7 @@ public class AddPhotoHelper {
     }
 
     public AddPhotoHelper(Activity activity) {
+        minPhotoSize = App.getAppOptions().getMinPhotoSize();
         mActivity = activity;
         mContext = activity.getApplicationContext();
         PATH_TO_FILE = StorageUtils.getCacheDirectory(mContext).getPath() + "/topface_profile/";
@@ -257,6 +263,18 @@ public class AddPhotoHelper {
             }
             return;
         }
+
+        if (!isPhotoCorrectSize(uri)) {
+            Toast.makeText(mContext, String.format(mContext.getString(R.string.incorrect_photo_size),
+                    minPhotoSize.width,
+                    minPhotoSize.height), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // если начинаем грузить аватарку, то выставляем флаг, чтобы resumeFragment не вызвал показ попапа
+        if (CacheProfile.photos != null && CacheProfile.photos.size() == 0) {
+            App.getConfig().getUserConfig().setUserAvatarAvailable(true);
+            App.getConfig().getUserConfig().saveConfig();
+        }
         Toast.makeText(mContext, R.string.photo_is_uploading, Toast.LENGTH_SHORT).show();
         showProgressDialog();
         mNotificationManager = UserNotificationManager.getInstance();
@@ -271,7 +289,6 @@ public class AddPhotoHelper {
         final PhotoAddRequest photoAddRequest = new PhotoAddProfileRequest(uri, mContext, new IProgressListener() {
             @Override
             public void onProgress(final int percentage) {
-
                 if (notificationListener.notification != null) {
                     //Видимо из-за ошибок в прошивке на редких девайсах с Android 4.0.4
                     //падает - https://rink.hockeyapp.net/manage/apps/26531/app_versions/62/crash_reasons/12857941?type=overview
@@ -379,7 +396,9 @@ public class AddPhotoHelper {
                 Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_format), Toast.LENGTH_LONG).show();
                 break;
             case ErrorCodes.INCORRECT_PHOTO_SIZES:
-                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_size), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, String.format(mContext.getString(R.string.incorrect_photo_size),
+                        minPhotoSize.width,
+                        minPhotoSize.height), Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -446,6 +465,33 @@ public class AddPhotoHelper {
         }
     }
 
+    private BitmapFactory.Options getPhotoSizeByUri(Uri uri) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(getPath(uri), options);
+        return options;
+    }
 
+    private boolean isPhotoCorrectSize(Uri uri) {
+        BitmapFactory.Options currentPhotoSize = getPhotoSizeByUri(uri);
+        return currentPhotoSize != null && !(currentPhotoSize.outWidth < minPhotoSize.width ||
+                currentPhotoSize.outHeight < minPhotoSize.height);
+    }
+
+    public String getPath(Uri uri) {
+        String picturePath;
+        Cursor cursor = mContext.getContentResolver().query(uri,
+                new String[]{MediaStore.Images.Media.DATA}, null, null, null);
+        if (cursor != null) {
+            // получаем путь к изображению из галлереи
+            cursor.moveToFirst();
+            picturePath = cursor.getString(0);
+            cursor.close();
+        } else {
+            // путь к файлу, полученному с камеры
+            picturePath = uri.getEncodedPath();
+        }
+        return picturePath;
+    }
 }
 

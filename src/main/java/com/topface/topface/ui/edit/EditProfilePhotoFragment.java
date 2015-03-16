@@ -13,31 +13,46 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
+import com.topface.topface.requests.AlbumRequest;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.ui.GridViewWithHeaderAndFooter;
+import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoGridAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.loadcontollers.AlbumLoadController;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
 public class EditProfilePhotoFragment extends AbstractEditFragment {
+
+    private static final String PHOTOS = "PHOTOS";
+    private static final String POSITION = "POSITION";
+    private static final String FLIPPER_VISIBLE_CHILD = "FLIPPER_VISIBLE_CHILD";
 
     private ArrayList<Photo> mDeleted = new ArrayList<>();
 
@@ -45,10 +60,12 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     private int mLastSelectedAsMainId;
     private int mSelectedAsMainId;
 
-    private GridView mPhotoGridView;
+    private GridViewWithHeaderAndFooter mPhotoGridView;
     private Photos mPhotoLinks;
 
     private AddPhotoHelper mAddPhotoHelper;
+
+    private View mGridFooterView;
 
     private ViewFlipper mViewFlipper;
     private View mLoadingLocker;
@@ -109,18 +126,77 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         mSelectedAsMainId = CacheProfile.photo == null ? -1 : CacheProfile.photo.getId();
         mLastSelectedAsMainId = mSelectedAsMainId;
         CacheProfile.sendUpdateProfileBroadcast();
-        mPhotoLinks = new Photos();
-        if (CacheProfile.photos != null) {
-            mPhotoLinks.addAll(CacheProfile.photos);
-        }
+        mPhotoLinks = getPhotoLinks();
         mPhotoGridAdapter = new EditProfileGridAdapter(
-                getActivity().getApplicationContext(), mPhotoLinks);
+                getActivity().getApplicationContext(), mPhotoLinks, CacheProfile.totalPhotos, new LoadingListAdapter.Updater() {
+            @Override
+            public void onUpdate() {
+                sendAlbumRequest();
+            }
+        });
+    }
+
+    private Photos getPhotoLinks() {
+        Photos photoLinks = new Photos();
+        photoLinks.clear();
+        if (CacheProfile.photos != null) {
+            photoLinks.addAll(CacheProfile.photos);
+        }
+        return photoLinks;
+    }
+
+    private void sendAlbumRequest() {
+        Photos photoLinks = mPhotoGridAdapter.getAdaprerData();
+        if (photoLinks == null || photoLinks.size() < 2) {
+            return;
+        }
+        mGridFooterView.setVisibility(View.VISIBLE);
+        Photo photo = mPhotoGridAdapter.getItem(photoLinks.size() - 1);
+        int position = photo.getPosition();
+        AlbumRequest request = new AlbumRequest(
+                getActivity(),
+                CacheProfile.uid,
+                position + 1,
+                AlbumRequest.MODE_ALBUM,
+                AlbumLoadController.FOR_GALLERY
+        );
+        request.callback(new DataApiHandler<AlbumPhotos>() {
+
+            @Override
+            protected void success(AlbumPhotos data, IApiResponse response) {
+                if (mPhotoGridAdapter != null) {
+
+                    mPhotoGridAdapter.addPhotos(data, data.more, false);
+                }
+            }
+
+            @Override
+            protected AlbumPhotos parseResponse(ApiResponse response) {
+                return new AlbumPhotos(response);
+            }
+
+            @Override
+            public void always(IApiResponse response) {
+                super.always(response);
+                mGridFooterView.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+                Utils.showErrorMessage();
+            }
+        }).exec();
+    }
+
+    private View createGridViewFooter() {
+        return ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.gridview_footer_progress_bar, null, false);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
+        mGridFooterView = createGridViewFooter();
 
         mLoadingLocker = root.findViewById(R.id.fppLocker);
         mAddPhotoHelper = new AddPhotoHelper(this, mLoadingLocker);
@@ -128,9 +204,24 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
         mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
 
-        mPhotoGridView = (GridView) root.findViewById(R.id.usedGrid);
+        int position = 0;
+        if (savedInstanceState != null) {
+            try {
+                mPhotoGridAdapter.setData(new Photos(
+                        new JSONArray(savedInstanceState.getString(PHOTOS))), false, false);
+            } catch (JSONException e) {
+                Debug.error(e);
+            }
+            position = savedInstanceState.getInt(POSITION, 0);
+            mViewFlipper.setDisplayedChild(savedInstanceState.getInt(FLIPPER_VISIBLE_CHILD, 0));
+        }
+
+        mPhotoGridView = (GridViewWithHeaderAndFooter) root.findViewById(R.id.usedGrid);
+        addFooterView();
+        mPhotoGridView.setSelection(position);
         mPhotoGridView.setAdapter(mPhotoGridAdapter);
         mPhotoGridView.setOnItemClickListener(mOnItemClickListener);
+        mPhotoGridView.setOnScrollListener(mPhotoGridAdapter);
 
         TextView title = (TextView) root.findViewById(R.id.usedTitle);
         title.setVisibility(View.GONE);
@@ -146,6 +237,27 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
         });
 
         return root;
+    }
+
+    private void addFooterView() {
+        if (mPhotoGridView != null) {
+            if (mPhotoGridView.getFooterViewCount() == 0) {
+                mPhotoGridView.addFooterView(mGridFooterView);
+            }
+            mGridFooterView.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        try {
+            outState.putString(PHOTOS, mPhotoGridAdapter.getAdaprerData().toJson().toString());
+        } catch (JSONException e) {
+            Debug.error(e);
+        }
+        outState.putInt(POSITION, mPhotoGridView.getFirstVisiblePosition());
+        outState.putInt(FLIPPER_VISIBLE_CHILD, mViewFlipper.getDisplayedChild());
     }
 
     @Override
@@ -212,7 +324,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
                     @Override
                     public void success(IApiResponse response) {
-                        CacheProfile.photo = mPhotoLinks.getPhotoById(mLastSelectedAsMainId);
+                        CacheProfile.photo = mPhotoGridAdapter.getPhotoLinks().getPhotoById(mLastSelectedAsMainId);
                         mSelectedAsMainId = mLastSelectedAsMainId;
                         CacheProfile.sendUpdateProfileBroadcast();
                         finishOperations(handler);
@@ -291,8 +403,8 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
     class EditProfileGridAdapter extends ProfilePhotoGridAdapter {
 
         public EditProfileGridAdapter(Context context,
-                                      Photos photoLinks) {
-            super(context, photoLinks);
+                                      Photos photoLinks, int photoSize, LoadingListAdapter.Updater listener) {
+            super(context, photoLinks, photoSize, listener);
         }
 
         @Override
@@ -371,7 +483,10 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     });
                 }
             }
-
+            if (item.isFake()) {
+                holder.mBtnDelete.setVisibility(View.INVISIBLE);
+                holder.mBtnSetAsMain.setVisibility(View.INVISIBLE);
+            }
             return convertView;
         }
 

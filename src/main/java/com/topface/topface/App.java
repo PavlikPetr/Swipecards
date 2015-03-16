@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
+import com.appsflyer.AppsFlyerLib;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.topface.billing.OpenIabHelperManager;
 import com.topface.framework.imageloader.DefaultImageLoader;
@@ -24,6 +25,7 @@ import com.topface.offerwall.common.TFCredentials;
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.data.AppOptions;
+import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
@@ -43,6 +45,9 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.requests.transport.HttpApiTransport;
+import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
+import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
@@ -71,7 +76,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-@ReportsCrashes(formKey = "817b00ae731c4a663272b4c4e53e4b61")
+@ReportsCrashes(formUri = "817b00ae731c4a663272b4c4e53e4b61")
 public class App extends Application {
 
     public static final String TAG = "Topface";
@@ -88,15 +93,18 @@ public class App extends Application {
     private static Boolean mIsGmsSupported;
     private static String mStartLabel;
     private static Location mCurLocation;
+    private static AppsFlyerData.ConversionHolder mAppsFlyerConversionHolder;
 
     private static OpenIabHelperManager mOpenIabHelperManager = new OpenIabHelperManager();
+    private static boolean mAppOptionsObtainedFromServer = false;
+    private static boolean mUserOptionsObtainedFromServer = false;
 
     /**
      * Множественный запрос Options и профиля
      */
     public static void sendProfileAndOptionsRequests(ApiHandler handler) {
         new ParallelApiRequest(App.getContext())
-                .addRequest(getOptionsRequest())
+                .addRequest(getUserOptionsRequest())
                 .addRequest(getProductsRequest())
                 .addRequest(getPaymentwallProductsRequest())
                 .addRequest(getProfileRequest(ProfileRequest.P_ALL))
@@ -139,14 +147,7 @@ public class App extends Application {
      * Множественный запрос Options и профиля
      */
     public static void sendProfileAndOptionsRequests() {
-        sendProfileAndOptionsRequests(new SimpleApiHandler() {
-            @Override
-            public void success(IApiResponse response) {
-                super.success(response);
-                LocalBroadcastManager.getInstance(getContext())
-                        .sendBroadcast(new Intent(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION));
-            }
-        });
+        sendProfileAndOptionsRequests(new SimpleApiHandler());
     }
 
     private static ApiRequest getProductsRequest() {
@@ -185,11 +186,17 @@ public class App extends Application {
         return request;
     }
 
-    private static ApiRequest getOptionsRequest() {
+    public static void sendUserOptionsRequest() {
+        getUserOptionsRequest().exec();
+    }
+
+    private static ApiRequest getUserOptionsRequest() {
         return new UserGetAppOptionsRequest(App.getContext())
                 .callback(new DataApiHandler<Options>() {
                     @Override
                     protected void success(Options data, IApiResponse response) {
+                        LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Options.OPTIONS_RECEIVED_ACTION));
+                        mUserOptionsObtainedFromServer = true;
                     }
 
                     @Override
@@ -215,6 +222,10 @@ public class App extends Application {
 
                     @Override
                     protected void success(Profile data, IApiResponse response) {
+                        if (data.photosCount == 0) {
+                            App.getConfig().getUserConfig().setUserAvatarAvailable(false);
+                            App.getConfig().getUserConfig().saveConfig();
+                        }
                         CacheProfile.setProfile(data, response.getJsonResult(), part);
                         CacheProfile.sendUpdateProfileBroadcast();
                         NativeAdManager.init();
@@ -360,7 +371,8 @@ public class App extends Application {
         }
 
         // Инициализируем общие срезы для статистики
-        StatisticsTracker.getInstance().setContext(mContext)
+        StatisticsTracker.getInstance()
+                .setContext(mContext)
                 .putPredefinedSlice("app", BuildConfig.STATISTICS_APP)
                 .putPredefinedSlice("cvn", BuildConfig.VERSION_NAME);
         if (BuildConfig.DEBUG) {
@@ -376,6 +388,9 @@ public class App extends Application {
         DefaultImageLoader.getInstance(getContext()).setErrorImageResId(R.drawable.im_photo_error);
 
         sendAppOptionsRequest();
+
+        mAppsFlyerConversionHolder = new AppsFlyerData.ConversionHolder();
+        AppsFlyerLib.registerConversionListener(mContext, new AppsFlyerData.ConversionListener(mAppsFlyerConversionHolder));
 
         final Handler handler = new Handler();
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
@@ -420,6 +435,7 @@ public class App extends Application {
             @Override
             protected void success(AppOptions data, IApiResponse response) {
                 mAppOptions = data;
+                mAppOptionsObtainedFromServer = true;
                 StatisticsTracker.getInstance()
                         .setConfiguration(data.getStatisticsConfiguration(Connectivity.getConnType(mContext)));
             }
@@ -503,12 +519,32 @@ public class App extends Application {
         return mIsGmsSupported;
     }
 
+    public static AppsFlyerData.ConversionHolder getConversionHolder() {
+        return mAppsFlyerConversionHolder;
+    }
+
     @Override
     public void onTerminate() {
         super.onTerminate();
         //Прекращаем слушать подключение к интернету
         if (mConnectionIntent != null && mConnectionReceiver != null) {
             unregisterReceiver(mConnectionReceiver);
+        }
+    }
+
+
+    public static String getApiTransport() {
+        if (!mAppOptionsObtainedFromServer && !mUserOptionsObtainedFromServer) {
+            return HttpApiTransport.TRANSPORT_NAME;
+        } else {
+            boolean userOptions = mAppOptionsObtainedFromServer && CacheProfile.getOptions().isScruffyEnabled();
+            boolean appOptions = mUserOptionsObtainedFromServer && getAppOptions().isScruffyEnabled();
+            if (appOptions || userOptions) {
+                if (ScruffyRequestManager.getInstance().isAvailable()) {
+                    return ScruffyApiTransport.TRANSPORT_NAME;
+                }
+            }
+            return HttpApiTransport.TRANSPORT_NAME;
         }
     }
 }

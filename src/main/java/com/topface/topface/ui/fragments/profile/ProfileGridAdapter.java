@@ -47,11 +47,15 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
     }
 
     public void setData(Photos photoLinks, boolean needMore) {
+        setData(photoLinks, needMore, isAddPhotoButtonEnabled());
+    }
+
+    public void setData(Photos photoLinks, boolean needMore, boolean isAddPhotoButtonEnabled) {
         mPhotoLinks.clear();
-        addPhotos(photoLinks, needMore, false);
-        if (isAddPhotoButtonEnabled()) {
+        if (isAddPhotoButtonEnabled && !(!photoLinks.isEmpty() && photoLinks.get(0).isFake())) {
             mPhotoLinks.add(0, new Photo());
         }
+        addPhotos(photoLinks, needMore, false);
     }
 
     protected boolean isAddPhotoButtonEnabled() {
@@ -81,12 +85,7 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
             }
         }
 
-        if (needMore) {
-            mPhotoLinks.add(new Photo());
-            needLoadNewItems = true;
-        } else {
-            needLoadNewItems = !mPhotoLinks.isEmpty() && mPhotoLinks.get(mPhotoLinks.size() - 1).isFake();
-        }
+        needLoadNewItems = needMore;
         notifyDataSetChanged();
     }
 

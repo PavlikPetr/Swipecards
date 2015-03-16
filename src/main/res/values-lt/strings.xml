@@ -4,7 +4,6 @@
     <string name="app_locale">lt_LT</string>
     <string name="general_warning">ĮSPĖJIMAS</string>
     <string name="general_ok">OK</string>
-    <string name="general_dbl_new">Nauji</string>
     <string name="general_settings_abbr">Nustat.</string>
     <string name="general_disallow">Uždrausti</string>
     <string name="general_allow">Leisti</string>
@@ -19,7 +18,6 @@
     <string name="likes_background_text">Nėra simpatijų</string>
     <string name="visitors_background_text">Nėra svečių</string>
     <string name="chat_background_text">Įeinančių pranešimų nėra</string>
-    <string name="general_location">Buvimo vieta</string>
     <string name="filter_only_online">Tiktai online</string>
     <string name="filter_city_age_parameters">Amžius ir miestas</string>
     <string name="filter_select_city">Miesto pasirinkimas</string>
@@ -67,15 +65,12 @@
     <string name="general_search_empty_title">Gaila, bet nieko nerasta</string>
     <string name="general_search_empty_text">Jūs galite pabandyti pakartoti paiešką arba pakeisti filtro nustatymus</string>
     <string name="map_title">Žemėlapis</string>
-    <string name="settings_want_answer">Aš noriu, kad man atsakytų</string>
     <string name="general_buying">Pirkti simpatijas ir monetas</string>
     <string name="popup_version_title">Yra nauja priedo versija</string>
     <string name="popup_version_message">Laikas atnaujinti savo versiją!</string>
     <string name="leaders_select_photo_info">Pasirinkite pačią efektingiausią fotografiją! Fotografijos su mažu reitingu pasirinkti negalima</string>
     <string name="map_popup_address">Adresas</string>
     <string name="black_list_info">Jūs pridėjote pašnekovą į juodąjį sąrašą. Pakeisti tai galima savo profilyje, VIP statuso nustatymuose.</string>
-    <string name="general_place">Vieta</string>
-    <string name="general_soon">Greitai bus</string>
     <string name="black_list_activation">Aktyvuokite VIP statusą ir naudokite juodąjį sąrašą</string>
     <string name="buying_total">Viso</string>
     <string name="we_dont_detect_your_city">Tam, kad rastumėte žmonės šalia jūsų, mums reikia žinoti, kur jūs esate. Prašome nurodyti savo miestą.</string>
@@ -130,7 +125,6 @@
     <string name="general_cancel">Atšaukti</string>
     <string name="general_delete_title">Pašalinti</string>
     <string name="general_dialog_loading">Užkrovimas</string>
-    <string name="general_dialog_saving">Išsaugojimas</string>
     <string name="general_fill_button">Užpildyti</string>
     <string name="general_send_full">Išsiųsti</string>
     <string name="general_dialog_retry">Pakartoti</string>
@@ -143,7 +137,6 @@
     <string name="general_spinner_title">Pasirinkite veiksmą</string>
     <string name="general_profile_error">Profilio užkrovimo klaida</string>
     <string name="general_dbl_all">Visi</string>
-    <string name="general_dbl_unread">Neperskaityti</string>
     <string name="time_yesterday">Vakar</string>
     <string name="time_today">Šiandien</string>
     <string name="general_send_button">Išsiųsti</string>
@@ -186,7 +179,6 @@
     <string name="filter_only_beautiful">Tiktai gražūs</string>
     <string name="filter_extra_parameters">Papildomi parametrai</string>
     <string name="filter_age">Amžius</string>
-    <string name="filter_online">Online</string>
     <string name="filter_age_start_prefix">Nuo %s</string>
     <string name="filter_age_end_prefix">iki %s</string>
     <string name="filter_cities_all">Visuose miestuose</string>
@@ -218,11 +210,7 @@
     </plurals>
     <string name="buying_default_message">Jūs galite siųsti dovanas ir susižavėjimus už monetas</string>
     <string name="buying_money">Monetų pirkimas</string>
-    <string name="gifts_romantic">Romantiškos</string>
-    <string name="gifts_friends">Draugiškos</string>
-    <string name="gifts_present">Sveikinimų</string>
     <string name="gifts_title">Pasirinkite dovaną</string>
-    <string name="gifts_send_btn">Išsiųsti dovaną</string>
     <string name="profile_header_title">Mano profilis</string>
     <string name="album_add_photo_title">Pridėti foto</string>
     <string name="profile_add_album">Pasirinkti iš esančių</string>
@@ -326,7 +314,6 @@
     <string name="ban_complain">Pasiskųsti dėl bano</string>
     <string name="general_ready">Paruošta</string>
     <string name="buying_store_ok">Pirkimas sėkmingai baigtas</string>
-    <string name="general_close">Uždaryti</string>
     <string name="vip_privileges">VIP privilegijos</string>
     <string name="vip_rest">Jūs prenumeruojate VIP</string>
     <string name="vip_invis">Nematomas režimas</string>
@@ -344,7 +331,6 @@
     <string name="vip_info_blackList">Atsikratykite nusibodusių asmenų \"juodojo sąrašo\" pagalba</string>
     <string name="vip_info_vip">Išsiskirkite savo VIP-statuso pagalba atliekant paiešką ir savo profilyje!</string>
     <string name="buying_vip_status">Pirkti VIP statusą</string>
-    <string name="buy_play_market_not_available">Play Market neprieinamas</string>
     <string name="edit_my_city">Mano miestas</string>
     <string name="settings_feedback_email">El. paštas kontaktams</string>
     <string name="settings_invalid_email">Neteisingas el. paštas</string>
@@ -358,21 +344,13 @@
     <string name="general_buying_disabled">Šiuo metu pirkimas negalimas</string>
     <string name="ban_flood_detected">Jūs per dažnai duodate užklausas serveriui. Dėl tolesnio priedo vartojimo palaukite.</string>
     <string name="general_maintenance">Serveryje yra atliekami techniniai darbai ir jūsų užklausa negali būti įvykdyta. Pabandykite vėliau.</string>
-    <string name="virus_chat_likes_request_title">Padovanoti simpatijas jūsų draugams</string>
     <string name="virus_chat_btn">Gauti simpatijas</string>
-    <string name="virus_request_error">Nepavyko išsiųsti simpatijų jūsų draugams</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="few">Dabar pas jus %d simpatijos!</item>
-        <item quantity="other">Dabar pas jus %d simpatijų!</item>
-        <item quantity="one">Dabar pas jus %d simpatija!</item>
-    </plurals>
     <string name="profile_ask_sent">Prašymas išsiųstas</string>
     <string name="virus_error">Per parą jūsų draugas gali padovanoti simpatijas tiktai 1 kartą! Pabandykite rytoj!</string>
     <string name="popup_version_update">Atnaujinti</string>
     <string name="popup_version_cancel">Priminti vėliau</string>
     <string name="general_version_not_supported">Jūsų priedo versija paseno ir daugiau nėra palaikoma. Prašome atnaujinti priedą</string>
     <string name="default_price_format">Viso: %.2f USD</string>
-    <string name="dating_online_only">%s, tiktai on-line</string>
     <string name="leaders_pick_condition">Jūs negalite pasirinkti fotografijos su reitingu, mažesniu nei %d%%:</string>
     <string name="general_gift">Dovana</string>
     <string name="user_actions_chat">Pokalbis</string>
@@ -411,7 +389,6 @@
     <string name="password_changing">Slaptažodžio keitimas</string>
     <string name="save">Išsaugoti</string>
     <string name="confirmation_successfully_sent">Patvirtinimas išsiųstas jūsų nurodytu el. pašto adresu</string>
-    <string name="password_hint">slaptažodis</string>
     <string name="password_confirmation_hint">slaptažodžio patvirtinimas</string>
     <string name="enter_new_password">Įveskite naują slaptažodį</string>
     <string name="enter_password_confirmation">Įveskite slaptažodžio patvirtinimą</string>
@@ -431,8 +408,6 @@
     <string name="you_dont_have_gifts_yet">Pas jus kol kas nėra dovanų</string>
     <string name="buy_sympathies">Pirkti simpatijas</string>
     <string name="upload_photos">Įkelkite fotografijas</string>
-    <string name="chat_no_message_title">Pradėkite bendravimą!</string>
-    <string name="chat_no_message_text">Parašykite pranešimą arba išsiųskite dovaną ir jums būtinai atsakys</string>
     <string name="user_baned">Vartotojas užbanintas</string>
     <string name="general_choose_city">Pasirinkite miestą</string>
     <string name="buy_mobile_payments">Kiti apmokėjimo būdai</string>
@@ -505,7 +480,6 @@
     <string name="general_complain_sended">Jūsų skundas išsiųstas, labai dėkojame už pagalbą</string>
     <string name="general_complain">Skundas</string>
     <string name="general_msg">Pranešimas</string>
-    <string name="general_no_notifications">Deja, jūsų įrenginyje pranešimai neprieinami</string>
     <string name="black_list_add_short">Į juodąjį sąrašą</string>
     <string name="confirm_email_for_dating">Mes esame prieš brukalą. Patvirtinkite savo el. pašto adresą, kad pažindintis Topface!</string>
     <string name="send_confirm_link">Išsiųsti nuorodą patvirtinimui</string>
@@ -533,7 +507,6 @@
     <string name="delete_account_will_be_restored_are_you_sure">Jūs mėginate įeiti į paskyrą, kurią pašalinote. Įeinant paskyra bus atstatyta. Ar esate įsitikinę?</string>
     <string name="restore">Atstatyti</string>
     <string name="admiration_sended">Susižavėjimas išsiųstas</string>
-    <string name="getjar_auth_title">Pasirinkite paskyrą</string>
     <string name="skip">Praleisti</string>
     <string name="chat">Parašyti</string>
     <plurals name="number_of_sympathies">
@@ -554,16 +527,13 @@
     </plurals>
     <string name="general_attention">Dėmesio!</string>
     <string name="general_delete_messages">Pašalinti pranešimus</string>
-    <string name="mutual_sympathies">Abipusiai</string>
     <string name="skip_all">Praleisti visus</string>
-    <string name="watching_as_list">Žiūrėti sąrašu</string>
     <string name="settings_feedback_transaction_number">Užsakymo numeris</string>
     <string name="settings_feedback_transaction_link">kur rasti užsakymo numerį?</string>
     <string name="general_logout_error">Apgailestaujame, nepavyko išeiti iš paskyros.</string>
     <string name="auth_btn_ok">Įeiti per Odnoklassniki</string>
     <string name="other_auth">Įeiti per kitas svetaines</string>
     <string name="settings_feedback_transaction_number_hint">Įveskite užsakymo numerį</string>
-    <string name="youve_earned">Jūs uždirbote %s</string>
     <string name="delete_visitors">Pašalinti svečius</string>
     <string name="delete_admirations">Pašalinti susižavėjimus</string>
     <string name="general_admirations">Susižavėjimai</string>
@@ -582,8 +552,6 @@
     <string name="photo_is_uploading">Foto įkrova</string>
     <string name="default_ringtone">Pagal nutylėjimą</string>
     <string name="user_deleted_or_banned">Vartotojas pašalintas arba užbanintas</string>
-    <string name="locking_popup_title">Perėjimas į skiltį «%s» apribotas</string>
-    <string name="locking_popup_message">Kad gauti priėjimą, atsakykite į įeinančias simpatijas arba gaukite VIP</string>
     <string name="locking_popup_button_answer">Atsakyti į simpatijas</string>
     <string name="locking_menu_message">Prieiga prie kai kurių programos puslapių apribota. Kad pašalinti apribojimus atsakykite į visas įeinančias simpatijas arba gaukite VIP.</string>
     <string name="current_city">Dabartinis miestas</string>
@@ -599,7 +567,6 @@
         <item quantity="other">ir dar %d</item>
         <item quantity="one">ir dar %d</item>
     </plurals>
-    <string name="you_were_subscribed">Prenumerata įforminta</string>
     <string name="subscriptions_can_be_changed">Prenumerata įforminta. Pakeisti prenumeratos sąlygas galima Google Play</string>
     <string name="people_nearby">Žmonės šalia</string>
     <string name="nobody_nearby">Aplinkui nė gyvos dvasios!</string>
@@ -619,8 +586,6 @@
     <string name="billing_item_already_owned">Jūsų praeitas pirkinys apdorojamas, prašome palaukti</string>
     <string name="dialog">Susirašinėjimas</string>
     <string name="reply">Atsakyti</string>
-    <string name="measurement_unit_weight">kg.</string>
-    <string name="measurement_unit_height">cm.</string>
     <string name="maximum_number_of_users">Pasirinktas maksimalus vartotojų kiekis</string>
     <string name="logout_if_email_already_registred">Vartotojas su tokiu el. paštu jau egzistuoja. Jeigu tai jūsų el. paštas, jums būtina išeiti iš dabartinės paskyros ir įeiti į paskyrą %s</string>
     <string name="recover_password_instructions">Jūsų el. pašto adresu išsiųstas laiškas su slaptažodžio atstatymo instrukcija</string>
@@ -640,5 +605,17 @@
     <string name="preload_photo_type_wifi">Tik WiFi</string>
     <string name="preload_photo_type_always_on">Visada įjungta</string>
     <string name="preload_photo_type_preload_off">Įjungta</string>
+    <string name="wrong_time_popup_text">Nepavyko užmegzti saugaus ryšio su serveriu.\nGalbūta data arba laikas jūsų įrenginyje nurodyti neteisingai.</string>
     <string name="wrong_time_popup_button">Atverti nustatymus</string>
+    <string name="google_service_general_title">Pranešimai nepasiekiami</string>
+    <string name="google_service_disabled_title">Pas jus yra išjungtos Google Play paslaugos, kurias būtina įjungti, kad veiktų pranešimai.</string>
+    <string name="google_service_disabled_button">Įjungti</string>
+    <string name="google_service_missing_title">Pas jus neįdiegtos Google plays paslaugos, kurios yra būtinos pranešimų veikimui.</string>
+    <string name="google_service_missing_button">Įdiegti</string>
+    <string name="google_service_version_update_required_title">Pas jus įdiegta sena Google Play paslaugų versija, korektiškam pranešimų veikimui, prašome, atnaujinkite.</string>
+    <string name="google_service_version_update_required_button">Atnaujinti</string>
+    <string name="google_invalid_account_title">Pasitikrinte jūsų Google paskyros duomenis arba susisiekite su Google techniniu palaikymu.</string>
+    <string name="google_sign_in_account_title">Pas jus nepridėta Google paskyra, jūs turite autorizuotis, jei norite gauti pranešimus.</string>
+    <string name="google_sign_in_account_button">Autorizuotis</string>
+    <string name="google_unavailable_services_title">Deja, pranešimai nepalaikomi jūsų įrenginyje.</string>
 </resources>

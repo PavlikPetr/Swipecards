@@ -4,7 +4,6 @@
     <string name="app_locale">it_IT</string>
     <string name="general_warning">AVVERTIMENTO</string>
     <string name="general_ok">OK</string>
-    <string name="general_dbl_new">Nuovi</string>
     <string name="general_settings_abbr">Impost.</string>
     <string name="general_disallow">Non abilitare</string>
     <string name="general_allow">Abilitare</string>
@@ -19,7 +18,6 @@
     <string name="likes_background_text">Non hai simpatie</string>
     <string name="visitors_background_text">Non ci sono le visite</string>
     <string name="chat_background_text">Non ci sono i messaggi in entrata</string>
-    <string name="general_location">Posizione</string>
     <string name="filter_only_online">Solo online</string>
     <string name="filter_city_age_parameters">Età e città</string>
     <string name="filter_select_city">Scelta della città</string>
@@ -67,15 +65,12 @@
     <string name="general_search_empty_title">Purtroppo, la ricerca non ha prodotto risultati</string>
     <string name="general_search_empty_text">Puoi rifare la ricerca oppure cambiare le impostazioni dei parametri di ricerca</string>
     <string name="map_title">Mappa</string>
-    <string name="settings_want_answer">Vorrei ricevere le risposte</string>
     <string name="general_buying">Compra simpatie e monete</string>
     <string name="popup_version_title">La nuova versione dell’applicazione è disponibile</string>
     <string name="popup_version_message">È ora di aggiornare la versione!</string>
     <string name="leaders_select_photo_info">Scegli la tua foto migliore! Non puoi scegliere le foto con un voto basso</string>
     <string name="map_popup_address">Indirizzo</string>
     <string name="black_list_info">Hai aggiunto una persona alla black list. Per modificarlo vedi le impostazioni dello stato VIP del tuo profilo.</string>
-    <string name="general_place">Luogo</string>
-    <string name="general_soon">In arrivo</string>
     <string name="black_list_activation">Abbonati allo stato VIP e usa la black list</string>
     <string name="buying_total">Totale</string>
     <string name="we_dont_detect_your_city">Per trovare le persone vicine a te dobbiamo sapere dove ti trovi. Per favore, indica la tua città.</string>
@@ -127,7 +122,6 @@
     <string name="general_cancel">Annulla</string>
     <string name="general_delete_title">Elimina</string>
     <string name="general_dialog_loading">Caricamento…</string>
-    <string name="general_dialog_saving">Salvataggio…</string>
     <string name="general_fill_button">Riempire</string>
     <string name="general_send_full">Inviare</string>
     <string name="general_dialog_retry">Ripetere</string>
@@ -140,7 +134,6 @@
     <string name="general_spinner_title">Scegli l’azione</string>
     <string name="general_profile_error">Errore durante il caricamento del profilo</string>
     <string name="general_dbl_all">Tutti</string>
-    <string name="general_dbl_unread">Non letti</string>
     <string name="time_yesterday">Ieri</string>
     <string name="time_today">Oggi</string>
     <string name="general_send_button">Inv.</string>
@@ -177,12 +170,12 @@
     <string name="chat_sexuality_out">Hai valutato la sessualità.</string>
     <string name="chat_wink_in">Hai ricevuto un occhiolino.</string>
     <string name="chat_wink_out">Hai inviato un occhiolino.</string>
+    <string name="filter_search">Ricerca</string>
     <string name="filter_filter">Filtro</string>
     <string name="filter_age_string">Da %1$d a %2$d</string>
     <string name="filter_only_beautiful">Solo belle</string>
     <string name="filter_extra_parameters">Parametri aggiuntivi</string>
     <string name="filter_age">Età</string>
-    <string name="filter_online">Online</string>
     <string name="filter_age_start_prefix">Dai %s</string>
     <string name="filter_age_end_prefix">ai %s</string>
     <string name="filter_cities_all">In tutte le città</string>
@@ -209,11 +202,7 @@
     </plurals>
     <string name="buying_default_message">Puoi inviare regali e ammirazioni pagando con le monete</string>
     <string name="buying_money">Acquisto monete</string>
-    <string name="gifts_romantic">Romanticismo</string>
-    <string name="gifts_friends">Amicizia</string>
-    <string name="gifts_present">Auguri</string>
     <string name="gifts_title">Scegli regalo</string>
-    <string name="gifts_send_btn">Invia regalo</string>
     <string name="profile_header_title">Mio profilo</string>
     <string name="album_add_photo_title">Aggiungere foto</string>
     <string name="profile_add_album">Scegliere dagli esistenti</string>
@@ -314,7 +303,6 @@
     <string name="ban_complain">Reclamare ban</string>
     <string name="general_ready">Fatto</string>
     <string name="buying_store_ok">L’acquisto è stato completato con successo</string>
-    <string name="general_close">Chiudi</string>
     <string name="vip_privileges">Privilegi di essere VIP</string>
     <string name="vip_rest">Non hai abbonamento VIP</string>
     <string name="vip_invis">Stato di invisibilità</string>
@@ -332,7 +320,6 @@
     <string name="vip_info_blackList">Liberati dalle persone fastidiose grazie alla \”black list\”</string>
     <string name="vip_info_vip">Distinguiti nella ricerca e nel tuo profilo grazie allo stato VIP!</string>
     <string name="buying_vip_status">Compra lo stato VIP</string>
-    <string name="buy_play_market_not_available">Play Market non è disponibile</string>
     <string name="edit_my_city">Mia città</string>
     <string name="settings_feedback_email">E-mail</string>
     <string name="settings_invalid_email">E-mail erronea</string>
@@ -346,20 +333,14 @@
     <string name="general_buying_disabled">Attualmente è impossibile effettuare l’acquisto</string>
     <string name="ban_flood_detected">Invii troppo spesso le richieste al server. Attendere prego per continuare ad utilizzare l’applicazione.</string>
     <string name="general_maintenance">Stiamo effettuando i lavori tecnici sul server e non possiamo completare la tua richiesta. Riprova più tardi.</string>
-    <string name="virus_chat_likes_request_title">Regalare simpatie agli amici</string>
     <string name="virus_chat_btn">Ricevere simpatie</string>
-    <string name="virus_request_error">Non siamo riusciti ad inviare simpatie ai tuoi amici</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="other">Ora hai %d simpatie!</item>
-        <item quantity="one">Ora hai %d simpatia!</item>
-    </plurals>
     <string name="profile_ask_sent">La richiesta è stata inviata</string>
     <string name="virus_error">Il tuo amico può regalare le simpatie solo 1 volta al giorno! Riprova domani!</string>
     <string name="popup_version_update">Aggiorna</string>
     <string name="popup_version_cancel">Ricordamelo più tardi</string>
     <string name="general_version_not_supported">La versione che stai usando è obsoleta e non viene più supportata. Per favore aggiorna la versione dell’applicazione</string>
     <string name="default_price_format">Totale: %.2f USD</string>
-    <string name="dating_online_only">%s, solo online</string>
+    <string name="default_price_format_extended">Totale: %1$.2f %2$s</string>
     <string name="leaders_pick_condition">Non puoi scegliere la foto con il voto medio inferiore al %d%%:</string>
     <string name="general_gift">Regalo</string>
     <string name="user_actions_chat">Chat</string>
@@ -398,7 +379,6 @@
     <string name="password_changing">Modifica password</string>
     <string name="save">Salvare</string>
     <string name="confirmation_successfully_sent">All’indirizzo e-mail da te indicato è stata inviata la conferma</string>
-    <string name="password_hint">password</string>
     <string name="password_confirmation_hint">conferma password</string>
     <string name="enter_new_password">Inserisci la nuova password</string>
     <string name="enter_password_confirmation">Inserisci la conferma di password</string>
@@ -418,8 +398,6 @@
     <string name="you_dont_have_gifts_yet">Non hai ancora ricevuto regali</string>
     <string name="buy_sympathies">Compra simpatie</string>
     <string name="upload_photos">Carica le foto</string>
-    <string name="chat_no_message_title">Inizia a chattare!</string>
-    <string name="chat_no_message_text">Scrivi un messaggio o invia un regalo e avrai la risposta</string>
     <string name="user_baned">L’utente è stato bannato</string>
     <string name="general_choose_city">Scegli città</string>
     <string name="buy_mobile_payments">Altre modalità di pagamento</string>
@@ -488,7 +466,6 @@
     <string name="general_complain_sended">Il tuo reclamo è stato inviato, grazie per il tuo aiuto</string>
     <string name="general_complain">Reclamo</string>
     <string name="general_msg">Massaggio</string>
-    <string name="general_no_notifications">Purtroppo, per il tuo dispositivo gli avvisi non sono disponibili</string>
     <string name="black_list_add_short">Nella black list</string>
     <string name="confirm_email_for_dating">Siamo contrari allo spam. Conferma il tuo e-mail per chattare su Topface!</string>
     <string name="send_confirm_link">Invia il link di conferma</string>
@@ -508,6 +485,7 @@
     <string name="or">o</string>
     <string name="settings_delete_account">Cancella l’account</string>
     <string name="chat_block_not_mutual">Puoi iniziare la conversazione con l’utente solo se ti ha inviato una simpatia o se sei utente VIP</string>
+    <string name="add_to_favorite_block_not_vip">Solo gli utenti VIP possono aggiungere ai preferiti dalla schermata di incontri</string>
     <string name="delete_account_are_you_sure">Sicuro al 100%?</string>
     <string name="delete">Cancella</string>
     <string name="delete_account_warning">Attenzione! Stai cercando di cancellare il tuo account in Topface.</string>
@@ -515,7 +493,6 @@
     <string name="delete_account_will_be_restored_are_you_sure">Stai cercando di accedere all’account che hai cancellato. Accedendovi verrà ripristinato. Vuoi farlo?</string>
     <string name="restore">Ripristinare</string>
     <string name="admiration_sended">L’ammirazione è stata inviata</string>
-    <string name="getjar_auth_title">Scegli l’account</string>
     <string name="skip">Salta</string>
     <string name="chat">Scrivi</string>
     <plurals name="number_of_sympathies">
@@ -533,16 +510,13 @@
     </plurals>
     <string name="general_attention">Attenzione!</string>
     <string name="general_delete_messages">Elimina messaggi</string>
-    <string name="mutual_sympathies">Reciprocamente</string>
     <string name="skip_all">Salta tutti</string>
-    <string name="watching_as_list">Visualizza nell’elenco</string>
     <string name="settings_feedback_transaction_number">Numero dell’ordine</string>
     <string name="settings_feedback_transaction_link">Dove posso trovare numero dell’ordine?</string>
     <string name="general_logout_error">Purtroppo il logout non è stato effettuato</string>
     <string name="auth_btn_ok">Accedi tramite Odnoklassniki</string>
     <string name="other_auth">Accedi tramite altri sistemi</string>
     <string name="settings_feedback_transaction_number_hint">Inserisci il numero dell’ordine</string>
-    <string name="youve_earned">Hai guadagnato %s</string>
     <string name="delete_visitors">Elimina visitatori</string>
     <string name="delete_admirations">Elimina ammirazioni</string>
     <string name="general_admirations">Ammirazioni</string>
@@ -559,8 +533,6 @@
     <string name="photo_is_uploading">Caricamento foto</string>
     <string name="default_ringtone">Preimpostato</string>
     <string name="user_deleted_or_banned">L’utente è stato eliminato o ha ricevuto ban</string>
-    <string name="locking_popup_title">L’accesso alla sezione “%s” è limitato</string>
-    <string name="locking_popup_message">Per accedervi rispondi alle simpatie in entrata o ricevi VIP</string>
     <string name="locking_popup_button_answer">Rispondere alle simpatie</string>
     <string name="locking_menu_message">L’accesso ad alcune sezioni è limitato. Rispondi a tutte le simpatie in entrata o ricevi VIP per togliere le restrizioni.</string>
     <string name="current_city">Città attuale</string>
@@ -574,7 +546,6 @@
         <item quantity="other">e ancora %d</item>
         <item quantity="one">e ancora %d</item>
     </plurals>
-    <string name="you_were_subscribed">L’abbonamento è stato completato</string>
     <string name="subscriptions_can_be_changed">L’abbonamento è stato completato. Puoi cambiare le condizioni dell’abbonamento su Google Play</string>
     <string name="people_nearby">Persone attorno a te</string>
     <string name="nobody_nearby">Non c’è un’anima viva!</string>
@@ -615,4 +586,17 @@
     <string name="preload_photo_type_wifi">Solo WiFi</string>
     <string name="preload_photo_type_always_on">Sempre accesa</string>
     <string name="preload_photo_type_preload_off">Spenta</string>
+    <string name="wrong_time_popup_text">Non siamo riusciti a stabilire una connessione sicura.\nProbabilmente il tuo dispositivo mostra una data o l’ora scorretta.</string>
+    <string name="wrong_time_popup_button">Aprire i parametri</string>
+    <string name="google_service_general_title">Notifiche non disponibili</string>
+    <string name="google_service_disabled_title">Hai disabilitato i Servizi Google Play che servono per il corretto funzionamento di notifiche.</string>
+    <string name="google_service_disabled_button">Abilita</string>
+    <string name="google_service_missing_title">Non hai installato i Servizi Google Play che servono per il corretto funzionamento di notifiche.</string>
+    <string name="google_service_missing_button">Installare</string>
+    <string name="google_service_version_update_required_title">Hai una versione vecchia di Servizi Google Play, per il corretto funzionamento di notifiche si prega di aggiornarla.</string>
+    <string name="google_service_version_update_required_button">Aggiornare</string>
+    <string name="google_invalid_account_title">Controlla i dati del tuo account Google oppure scrivi al supporto tecnico di Google.</string>
+    <string name="google_sign_in_account_title">Non hai aggiunto l’account Google, devi accedervi per ricevere le notifiche.</string>
+    <string name="google_sign_in_account_button">Accedere</string>
+    <string name="google_unavailable_services_title">Purtroppo il tuo dispositivo non supporta l’invio di notifiche.</string>
 </resources>

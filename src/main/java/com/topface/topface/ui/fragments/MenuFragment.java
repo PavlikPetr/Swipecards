@@ -20,7 +20,6 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -29,17 +28,13 @@ import android.widget.TextView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.Options;
 import com.topface.topface.data.Products;
-import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
-import com.topface.topface.ui.dialogs.ClosingsBuyVipDialog;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
-import com.topface.topface.ui.fragments.closing.LikesClosingFragment;
-import com.topface.topface.ui.fragments.closing.MutualClosingFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
+import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
 import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
@@ -51,7 +46,6 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.ResourcesUtils;
 import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.controllers.ClosingsController;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
@@ -64,6 +58,7 @@ import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.BONUS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.DATING;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.GEO;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.PHOTO_BLOG;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.PROFILE;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_DIALOGS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_LIKES;
@@ -88,11 +83,8 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private View mHeaderView;
     private TextView mProfileButton;
     private BuyWidgetController mBuyWidgetController;
-    private ViewStub mHeaderViewStub;
     private ViewGroup mFooterView;
     private View mEditorItem;
-
-    private ClosingsController mClosingsController;
 
     private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -104,17 +96,11 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 case CountersManager.UPDATE_BALANCE:
                     mAdapter.refreshCounterBadges();
                     mBuyWidgetController.updateBalance();
-                    if (mClosingsController != null) {
-                        mClosingsController.refreshCounterBadges();
-                    }
                     break;
                 case CacheProfile.PROFILE_UPDATE_ACTION:
                     initProfileMenuItem(mHeaderView);
                     initEditor();
                     initBonus();
-                    if (mClosingsController.isLeftMenuLocked() && CacheProfile.premium) {
-                        mClosingsController.onPremiumObtained();
-                    }
                     break;
                 case Products.INTENT_UPDATE_PRODUCTS:
                     Products products = CacheProfile.getMarketProducts();
@@ -139,21 +125,10 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                     }
                     selectMenu(fragmentId);
                     break;
-                case LikesClosingFragment.ACTION_LIKES_CLOSINGS_PROCESSED:
-                    mClosingsController.onClosingsProcessed(FeedRequest.FeedService.LIKES);
-
-                    break;
-                case MutualClosingFragment.ACTION_MUTUAL_CLOSINGS_PROCESSED:
-                    mClosingsController.onClosingsProcessed(FeedRequest.FeedService.MUTUAL);
-                    break;
-                case Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION:
-                    if (!CacheProfile.premium) {
-                        mClosingsController.show();
-                    }
-                    break;
             }
         }
     };
+
     private INavigationFragmentsListener mFragmentSwitchListener;
     private ListView mListView;
 
@@ -172,19 +147,11 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         mFragmentSwitchListener = null;
     }
 
-    public INavigationFragmentsListener getNavigationFragmentsListener() {
-        return mFragmentSwitchListener;
-    }
-
     public static void selectFragment(FragmentId fragmentId) {
         Intent intent = new Intent();
         intent.setAction(SELECT_MENU_ITEM);
         intent.putExtra(SELECTED_FRAGMENT_ID, fragmentId);
         LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
-    }
-
-    public static void onLogout() {
-        ClosingsController.onLogout();
     }
 
     private void initBonus() {
@@ -227,16 +194,12 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         mHeaderView.setTag(FragmentId.PROFILE);
         mHeaderView.setOnClickListener(this);
         initProfileMenuItem(mHeaderView);
-        mHeaderViewStub = (ViewStub) mHeaderView.findViewById(R.id.vsHeaderStub);
         mListView.addHeaderView(mHeaderView);
     }
 
 
     public void updateAdapter() {
         initAdapter();
-        if (mClosingsController != null) {
-            mClosingsController.unlockLeftMenu();
-        }
     }
 
     private void initAdapter() {
@@ -246,6 +209,8 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 R.drawable.ic_dating_selector));
         menuItems.put(TABBED_DIALOGS.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_dialog_selector));
+        menuItems.put(PHOTO_BLOG.getId(), LeftMenuAdapter.newLeftMenuItem(PHOTO_BLOG, LeftMenuAdapter.TYPE_MENU_BUTTON,
+                R.drawable.ic_photolenta));
         menuItems.put(TABBED_VISITORS.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
         menuItems.put(TABBED_LIKES.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
@@ -270,9 +235,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         initAdapter();
         // init & add footer
         initFooter(root);
-        // set listview settings
-        // controller for closings uses ViewStub in header to be inflated
-        mClosingsController = new ClosingsController(this, mHeaderViewStub, mAdapter);
         return root;
     }
 
@@ -375,18 +337,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         );
     }
 
-    public void hideBuyWidget() {
-        if (mBuyWidgetController != null) {
-            mBuyWidgetController.hide();
-        }
-    }
-
-    public void showBuyWidjet() {
-        if (mBuyWidgetController != null) {
-            mBuyWidgetController.show();
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -395,9 +345,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         filter.addAction(Products.INTENT_UPDATE_PRODUCTS);
         filter.addAction(CountersManager.UPDATE_BALANCE);
         filter.addAction(SELECT_MENU_ITEM);
-        filter.addAction(LikesClosingFragment.ACTION_LIKES_CLOSINGS_PROCESSED);
-        filter.addAction(MutualClosingFragment.ACTION_MUTUAL_CLOSINGS_PROCESSED);
-        filter.addAction(Options.Closing.DATA_FOR_CLOSING_RECEIVED_ACTION);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, filter);
         initProfileMenuItem(mHeaderView);
         if (mBuyWidgetController != null) {
@@ -407,12 +354,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 mBuyWidgetController.setSalesEnabled(products.saleExists);
             }
         }
-        // We need to clean state if there was a logout in other Activity
-        mClosingsController.onLogoutWasInitiated();
-        if (mClosingsController.isLeftMenuLocked() && CacheProfile.premium) {
-            mClosingsController.onPremiumObtained();
-        }
-
     }
 
     @Override
@@ -463,10 +404,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         if (mProfileButton != null) {
             if (mSelectedFragment == PROFILE || mSelectedFragment == VIP_PROFILE) {
                 mProfileButton.setSelected(true);
-                if (mClosingsController != null) {
-                    mClosingsController.unselectMenuItems();
-                    mClosingsController.unlockLeftMenu();
-                }
             } else {
                 mProfileButton.setSelected(false);
             }
@@ -549,12 +486,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             case DATING:
                 fragment = new DatingFragment();
                 break;
-            case LIKES_CLOSINGS:
-                fragment = new LikesClosingFragment();
-                break;
-            case MUTUAL_CLOSINGS:
-                fragment = new MutualClosingFragment();
-                break;
             case GEO:
                 fragment = new PeopleNearbyFragment();
                 break;
@@ -572,6 +503,9 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 if (Editor.isEditor()) {
                     fragment = new EditorFragment();
                 }
+                break;
+            case PHOTO_BLOG:
+                fragment = new PhotoBlogFragment();
                 break;
             case TABBED_LIKES:
                 fragment = new TabbedLikesFragment();
@@ -619,17 +553,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void onLoadProfile() {
-        // We don't have counters' values from cached data
-        // so we have to make actions after we will receive data from server.
-        // Another call is in BroadcastReceiver of MenuFragment
-        if (!CacheProfile.premium) mClosingsController.show();
-    }
-
-    public boolean isLockedByClosings() {
-        return mClosingsController.isLeftMenuLocked();
-    }
-
     public void setOnFragmentSelected(OnFragmentSelectedListener listener) {
         mOnFragmentSelected = listener;
     }
@@ -638,32 +561,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         mListView.setClickable(clickable);
     }
 
-    public void showClosingsDialog() {
-        showClosingsDialog(mSelectedFragment);
-    }
-
-    public void showClosingsDialog(FragmentId selectedFragment) {
-        if (ClosingsBuyVipDialog.opened) return;
-
-        ClosingsBuyVipDialog newFragment = ClosingsBuyVipDialog.newInstance(selectedFragment);
-
-        newFragment.setOnRespondToLikesListener(new ClosingsBuyVipDialog.IRespondToLikesListener() {
-            @Override
-            public void onRespondToLikes() {
-                if (mClosingsController != null) {
-                    mClosingsController.respondToLikes();
-                }
-            }
-        });
-
-        newFragment.show(getActivity().getSupportFragmentManager(), ClosingsBuyVipDialog.TAG);
-    }
-
     public static interface OnFragmentSelectedListener {
         public void onFragmentSelected(FragmentId fragmentId);
-    }
-
-    public boolean isClosingsAvailable() {
-        return !mAdapter.hasTabbdedPages();
     }
 }

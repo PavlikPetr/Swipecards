@@ -22,7 +22,6 @@ public class UserPhotoGridAdapter extends ProfileGridAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_user_gallery, null, false);
             holder = new ViewHolder();
@@ -31,9 +30,11 @@ public class UserPhotoGridAdapter extends ProfileGridAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
-        holder.photo.setPhoto(getItem(position));
-
+        // проверка нужна для исключения краша в адаптере при добавлении
+        // GridViewWithHeaderAndFooter header и/или footer
+        if (holder != null && holder.photo != null) {
+            holder.photo.setPhoto(getItem(position));
+        }
         return convertView;
     }
 

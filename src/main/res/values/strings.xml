@@ -4,7 +4,6 @@
     <string name="app_locale">en_US</string>
     <string name="general_warning">WARNING</string>
     <string name="general_ok">OK</string>
-    <string name="general_dbl_new">New</string>
     <string name="general_settings_abbr">Sett.</string>
     <string name="general_disallow">Forbid</string>
     <string name="general_allow">Allow</string>
@@ -15,11 +14,10 @@
     <string name="dating_switch_button">More…</string>
     <string name="dating_prev_button">Previous</string>
     <string name="dating_chat_button">Chat</string>
-    <string name="waiting_a_products">Please hold on. We are loading the available products.</string>
+    <string name="waiting_a_products">Please hold on. We are loading the available products</string>
     <string name="likes_background_text">No likes</string>
     <string name="visitors_background_text">No guests</string>
     <string name="chat_background_text">No incoming messages</string>
-    <string name="general_location">Location</string>
     <string name="filter_only_online">Online only</string>
     <string name="filter_city_age_parameters">Age and city</string>
     <string name="filter_select_city">Select city</string>
@@ -68,14 +66,12 @@
     <string name="general_search_empty_text">You can try to run the search again, or change the filter settings.</string>
     <string name="map_title">Map</string>
     <string name="settings_want_answer">I want to get a reply.</string>
-    <string name="general_buying">Buy coins and likes</string>
+    <string name="general_buying">Coins and likes purchase</string>
     <string name="popup_version_title">New app version is available</string>
     <string name="popup_version_message">Time to update your app version!</string>
     <string name="leaders_select_photo_info">Select the most impressive photo! You cannot select a photo with a low rating.</string>
     <string name="map_popup_address">Address</string>
     <string name="black_list_info">You added someone to your blacklist. You can change this in your profile or in your VIP-status settings.</string>
-    <string name="general_place">Place</string>
-    <string name="general_soon">Will be soon</string>
     <string name="black_list_activation">Activate your VIP-status and use the blacklist.</string>
     <string name="buying_total">Total</string>
     <string name="we_dont_detect_your_city">To find people nearby, we need to know where you are. Please indicate your city.</string>
@@ -127,7 +123,6 @@
     <string name="general_cancel">Cancel</string>
     <string name="general_delete_title">Delete</string>
     <string name="general_dialog_loading">Loading</string>
-    <string name="general_dialog_saving">Saving</string>
     <string name="general_fill_button">Fill in</string>
     <string name="general_send_full">Send</string>
     <string name="general_dialog_retry">Retry</string>
@@ -140,7 +135,6 @@
     <string name="general_spinner_title">Choose an action</string>
     <string name="general_profile_error">Error loading profile</string>
     <string name="general_dbl_all">All</string>
-    <string name="general_dbl_unread">Unread</string>
     <string name="time_yesterday">Yesterday</string>
     <string name="time_today">Today</string>
     <string name="general_send_button">Send</string>
@@ -183,7 +177,6 @@
     <string name="filter_only_beautiful">Attractive only</string>
     <string name="filter_extra_parameters">Advanced search</string>
     <string name="filter_age">Select age</string>
-    <string name="filter_online">Online</string>
     <string name="filter_age_start_prefix">From %s</string>
     <string name="filter_age_end_prefix">to %s</string>
     <string name="filter_cities_all">All cities</string>
@@ -209,15 +202,11 @@
         <item quantity="one">You are short of %d coin</item>
     </plurals>
     <string name="buying_default_message">You can send gifts and admirations with coins</string>
-    <string name="buying_money">Coins purchase</string>
-    <string name="gifts_romantic">Romance</string>
-    <string name="gifts_friends">Friendship</string>
-    <string name="gifts_present">Congratulations</string>
+    <string name="buying_money">Purchase coins</string>
     <string name="gifts_title">Choose a gift</string>
-    <string name="gifts_send_btn">Send a gift</string>
     <string name="profile_header_title">My profile</string>
     <string name="album_add_photo_title">Add a photo</string>
-    <string name="profile_add_album">Choose from available ones</string>
+    <string name="profile_add_album">Choose from the library</string>
     <string name="profile_add_camera">Take a photo</string>
     <string name="profile_photo">Photo</string>
     <string name="profile_form">Profile form</string>
@@ -253,7 +242,7 @@
     <string name="settings_vibration">Vibration alert</string>
     <string name="settings_notifications_header">Notifications</string>
     <string name="settings_likes">Likes</string>
-    <string name="settings_mutual">Mutual likes</string>
+    <string name="settings_mutual">They like me</string>
     <string name="settings_messages">Messages</string>
     <string name="settings_guests">Guests</string>
     <string name="settings_help">Help</string>
@@ -315,7 +304,6 @@
     <string name="ban_complain">Ban complaint</string>
     <string name="general_ready">Done</string>
     <string name="buying_store_ok">Purchase successfully completed</string>
-    <string name="general_close">Close</string>
     <string name="vip_privileges">VIP-privileges</string>
     <string name="vip_rest">You are subscribed to VIP-status.</string>
     <string name="vip_invis">Invisibility mode</string>
@@ -325,7 +313,7 @@
     <string name="black_list_title">Blacklist</string>
     <string name="black_list_empty">Your blacklist is empty.</string>
     <string name="black_list_delete">Delete from the blacklist</string>
-    <string name="vip_buy_vip">Purchase of VIP-status</string>
+    <string name="vip_buy_vip">Purchase VIP-status</string>
     <string name="vip_state_off">Your VIP-status is not activated.</string>
     <string name="vip_info_guest">Find out who got interested in you - view your guests!</string>
     <string name="vip_info_invisible">Stay hidden while visiting others\' pages with invisibility mode.</string>
@@ -333,13 +321,12 @@
     <string name="vip_info_blackList">Get rid of pesky persons with the help of  the \"Blacklist\"</string>
     <string name="vip_info_vip">With a VIP-status you will stand out of the crowd in the \"dating\" section, as well as in your profile.</string>
     <string name="buying_vip_status">Buy VIP-status</string>
-    <string name="buy_play_market_not_available">Play Market is not available.</string>
     <string name="edit_my_city">My city</string>
     <string name="settings_feedback_email">Enter your email to get a reply from us.</string>
     <string name="settings_invalid_email">Invalid email</string>
     <string name="chat_write_message">Write a message</string>
     <string name="dating_message">Message…</string>
-    <string name="buying_sympathies">Likes purchase</string>
+    <string name="buying_sympathies">Purchase likes</string>
     <string name="novice_sympathies_bonus">You are getting %1$d likes as a gift! It means that %2$d people will give you a like and they\'ll mean it.</string>
     <string name="novice_buy_sympathies">If you want to be sure that\nyou\'ll get likes,\nbuy them right now!</string>
     <string name="general_reconnect_social">Cannot connect to the social network. Please try again later.</string>
@@ -347,20 +334,14 @@
     <string name="general_buying_disabled">The purchase is impossible at the moment.</string>
     <string name="ban_flood_detected">You are making requests to the server too often. Please wait for the app.</string>
     <string name="general_maintenance">The server is down for technical maintenance, and your request can not be processed. Please try again later.</string>
-    <string name="virus_chat_likes_request_title">Give likes to your friends</string>
     <string name="virus_chat_btn">Get likes</string>
-    <string name="virus_request_error">Unable to send likes to your friends.</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="other">Now you have %d likes!</item>
-        <item quantity="one">Now you have %d like!</item>
-    </plurals>
     <string name="profile_ask_sent">Request is sent.</string>
     <string name="virus_error">A friend can send you a like only once every 24 hours. Try again tomorrow!</string>
     <string name="popup_version_update">Update</string>
     <string name="popup_version_cancel">Remind me later</string>
     <string name="general_version_not_supported">Your version of the app is outdated and is no longer supported. Please update it.</string>
     <string name="default_price_format">Total: %.2f USD</string>
-    <string name="dating_online_only">%s, online only</string>
+    <string name="default_price_format_extended">Total: %1$.2f %2$s</string>
     <string name="leaders_pick_condition">You cannot select a photo with a rating lower than %d%%:</string>
     <string name="general_gift">Gift</string>
     <string name="user_actions_chat">Chat</string>
@@ -399,7 +380,6 @@
     <string name="password_changing">Change password</string>
     <string name="save">Save</string>
     <string name="confirmation_successfully_sent">Confirmation was successfully sent to your email.</string>
-    <string name="password_hint">password</string>
     <string name="password_confirmation_hint">password confirmation</string>
     <string name="enter_new_password">Enter your new password</string>
     <string name="enter_password_confirmation">Confirm your password</string>
@@ -417,10 +397,8 @@
     <string name="user_does_not_have_gifts">This user has no gifts, give the first one and you will be noticed.</string>
     <string name="status_is_empty">You status is empty</string>
     <string name="you_dont_have_gifts_yet">You don\'t have gifts yet.</string>
-    <string name="buy_sympathies">Buy likes</string>
+    <string name="buy_sympathies">Purchase likes</string>
     <string name="upload_photos">Upload photos</string>
-    <string name="chat_no_message_title">Start chatting!</string>
-    <string name="chat_no_message_text">Write a message or send a gift, and it surely will be answered.</string>
     <string name="user_baned">The user is banned.</string>
     <string name="general_choose_city">Select your city</string>
     <string name="buy_mobile_payments">Other payment methods</string>
@@ -489,7 +467,6 @@
     <string name="general_complain_sended">Your complaint has been submitted, much thanks for your help.</string>
     <string name="general_complain">Complaint</string>
     <string name="general_msg">Message</string>
-    <string name="general_no_notifications">Unfortunately, the notifications on your device are not available.</string>
     <string name="black_list_add_short">To the blacklist</string>
     <string name="confirm_email_for_dating">We are against spam. Please confirm your email, so that you can meet people in Topface!</string>
     <string name="send_confirm_link">Send a link for confirmation</string>
@@ -509,6 +486,7 @@
     <string name="or">or</string>
     <string name="settings_delete_account">Delete your account</string>
     <string name="chat_block_not_mutual">You can only start chatting with the user if he sent you a like or if you have VIP-status</string>
+    <string name="add_to_favorite_block_not_vip">Only VIP users can add Favorites from the Dating screen</string>
     <string name="delete_account_are_you_sure">Are you sure?</string>
     <string name="delete">Delete</string>
     <string name="delete_account_warning">Attention! You are trying to delete your profile in Topface.</string>
@@ -516,7 +494,6 @@
     <string name="delete_account_will_be_restored_are_you_sure">You are trying to log in to your deleted account. If you log in, your account will be restored. Are you sure?</string>
     <string name="restore">Restore</string>
     <string name="admiration_sended">Admiration is sent.</string>
-    <string name="getjar_auth_title">Choose account</string>
     <string name="skip">Skip</string>
     <string name="chat">Chat</string>
     <plurals name="number_of_sympathies">
@@ -527,8 +504,8 @@
         <item quantity="one">%d likes</item>
     </plurals>
     <plurals name="popup_vip_messages">
-        <item quantity="other">Received %d messages with express delivery</item>
-        <item quantity="one">Received %d message with express delivery</item>
+        <item quantity="other">You have %d new express delivery messages</item>
+        <item quantity="one">You have %d new express delivery message</item>
     </plurals>
     <plurals name="popup_vip_visitors">
         <item quantity="few">You have %d visitors</item>
@@ -538,16 +515,13 @@
     </plurals>
     <string name="general_attention">Attention!</string>
     <string name="general_delete_messages">Delete messages</string>
-    <string name="mutual_sympathies">Mutual</string>
     <string name="skip_all">Skip all</string>
-    <string name="watching_as_list">View as a list</string>
     <string name="settings_feedback_transaction_number">Order number</string>
     <string name="settings_feedback_transaction_link">Where do I find the order number?</string>
     <string name="general_logout_error">Unfortunately, you couldn\'t log out of your account.</string>
     <string name="auth_btn_ok">Log in with Odnoklassniki</string>
     <string name="other_auth">Log in with other services</string>
     <string name="settings_feedback_transaction_number_hint">Enter the order number</string>
-    <string name="youve_earned">You\'ve earned %s</string>
     <string name="delete_visitors">Delete visitors</string>
     <string name="delete_admirations">Delete admirations</string>
     <string name="general_admirations">Admirations</string>
@@ -564,8 +538,6 @@
     <string name="photo_is_uploading">Uploading a photo</string>
     <string name="default_ringtone">By default</string>
     <string name="user_deleted_or_banned">The user is banned or deleted.</string>
-    <string name="locking_popup_title">The access to the «%s» section is limited</string>
-    <string name="locking_popup_message">To get access, respond to incoming likes or get the VIP-status.</string>
     <string name="locking_popup_button_answer">Respond to likes</string>
     <string name="locking_menu_message">Attention! Access to some pages of the app is limited. To get access, respond to all incoming likes or get the VIP-status.</string>
     <string name="current_city">Current city</string>
@@ -579,7 +551,6 @@
         <item quantity="other">and %d</item>
         <item quantity="one">and %d</item>
     </plurals>
-    <string name="you_were_subscribed">Congratulations, you got subscribed.</string>
     <string name="subscriptions_can_be_changed">You are now subscribed. You can change your subscription settings on Google Play.</string>
     <string name="people_nearby">People nearby</string>
     <string name="nobody_nearby">Not a soul!</string>
@@ -599,8 +570,8 @@
     <string name="billing_item_already_owned">Your previous purchase is now processing, please wait.</string>
     <string name="dialog">Conversation</string>
     <string name="reply">Reply</string>
-    <string name="measurement_unit_weight">kg.</string>
-    <string name="measurement_unit_height">cm.</string>
+    <string name="measurement_unit_weight">kg</string>
+    <string name="measurement_unit_height">cm</string>
     <string name="maximum_number_of_users">You have selected the maximum number of users.</string>
     <string name="logout_if_email_already_registred">There is a user with this email already. If this is your email, you have to log out of the current account and log into %s account.</string>
     <string name="recover_password_instructions">An email has been sent to you with the password recovery instruction.</string>
@@ -620,5 +591,17 @@
     <string name="preload_photo_type_wifi">WiFi only</string>
     <string name="preload_photo_type_always_on">Always on</string>
     <string name="preload_photo_type_preload_off">Off</string>
+    <string name="wrong_time_popup_text">Cannot establish a safe connection.\nMaybe the date or time settings on your device have been set incorrectly.</string>
     <string name="wrong_time_popup_button">View settings</string>
+    <string name="google_service_general_title">Reminders are not available</string>
+    <string name="google_service_disabled_title">You have Google Play disabled. You need to enable it to receive reminders.</string>
+    <string name="google_service_disabled_button">Enable</string>
+    <string name="google_service_missing_title">You don\'t have Google Play installed. You need to install it to receive reminders.</string>
+    <string name="google_service_missing_button">Install</string>
+    <string name="google_service_version_update_required_title">Your version of Google Play is outdated. For the reminders to function correctly, please, renew it.</string>
+    <string name="google_service_version_update_required_button">Update</string>
+    <string name="google_invalid_account_title">Check your Google account details or contact Google technical support.</string>
+    <string name="google_sign_in_account_title">Your Google account has not been added. You have to sign in, if you want to receive reminders.</string>
+    <string name="google_sign_in_account_button">Sign in</string>
+    <string name="google_unavailable_services_title">Unfortunately, the remainders are not available on your device.</string>
 </resources>

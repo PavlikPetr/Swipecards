@@ -136,8 +136,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="offerwall"
-                    android:scheme="topface" />
+                    android:host="@string/offerwall_host"
+                    android:scheme="@string/default_sheme" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -145,13 +145,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="topface"
+                <data android:scheme="@string/default_sheme"
 
                     />
             </intent-filter>
         </activity>
 
 
+        <activity
+            android:name=".ui.AddToLeaderActivity"
+            android:parentActivityName=".ui.NavigationActivity" />
         <activity
             android:name=".ui.SslErrorActivity"
             android:launchMode="singleTask"
@@ -167,6 +170,7 @@
         <activity
             android:name=".ui.CitySearchActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.Topface.OldDarkDesign"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.fragments.profile.PhotoSwitcherActivity"
@@ -179,15 +183,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Topface.Light" />
         <activity
-            android:name=".ui.LeadersActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.settings.SettingsContainerActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.BanActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Topface.White" />
+            android:theme="@style/Theme.Topface.Ban"
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.BlackListActivity" />
 
         <activity
@@ -202,6 +203,15 @@
 
         <activity
             android:name=".ui.UserProfileActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.OwnProfileActivity"
             android:parentActivityName=".ui.NavigationActivity"
             android:screenOrientation="portrait">
             <meta-data

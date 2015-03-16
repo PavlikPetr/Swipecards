@@ -3,24 +3,16 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-
-    <ImageView
-        android:id="@+id/giftHeaderDivider"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/chat_divider_bg" />
-
     <FrameLayout
         android:id="@+id/giftGrid"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/giftHeaderDivider" />
+        android:layout_height="fill_parent" />
 
     <RelativeLayout
         android:id="@+id/lockScreen"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/giftHeaderDivider"
+        android:layout_below="@id/giftGrid"
         android:background="@color/bg_main"
         android:visibility="gone" />
 
