@@ -20,7 +20,11 @@ public class AppOptions extends AbstractData {
     private ClientStatisticSettings clientStatisticsSettings = new ClientStatisticSettings();
     private Conditions conditions = new Conditions();
 
-    private MinPhotoSize minPhotoSize = new MinPhotoSize(); // минимальные размеры фотографии, которая может быть загружена
+    /**
+     * минимальные размеры фотографии, которая может быть загружена
+     */
+    private MinPhotoSize minPhotoSize = new MinPhotoSize();
+
     /**
      * Session timeout in seconds
      */
@@ -43,7 +47,7 @@ public class AppOptions extends AbstractData {
             maxPartialRequestsCount = item.optInt("maxPartialRequestsCount", DEFAULT_MAX_PARTIAL_REQUEST_COUNT);
             sessionTimeout = item.optInt("sessionTimeout", DEFAULT_SESSION_TIMEOUT);
             scruffy = item.optBoolean("scruffy", false);
-            minPhotoSize =  JsonUtils.fromJson(item.optString("minPhotoSize"),MinPhotoSize.class);
+            minPhotoSize = JsonUtils.fromJson(item.optString("minPhotoSize"), MinPhotoSize.class);
             JSONObject conditionsJson = item.optJSONObject("conditions");
             if (conditionsJson != null) {
                 conditions = new Conditions(conditionsJson);
@@ -82,7 +86,11 @@ public class AppOptions extends AbstractData {
     }
 
     public MinPhotoSize getMinPhotoSize() {
-        return minPhotoSize;
+        if (minPhotoSize != null) {
+            return minPhotoSize;
+        } else {
+            return new MinPhotoSize();
+        }
     }
 
     public int getUserWeightMin() {
@@ -160,11 +168,6 @@ public class AppOptions extends AbstractData {
         public int width = 200;
 
         MinPhotoSize() {
-        }
-
-        MinPhotoSize(JSONObject json) {
-            height = json.optInt("height", 150);
-            width = json.optInt("width", 200);
         }
     }
 }
