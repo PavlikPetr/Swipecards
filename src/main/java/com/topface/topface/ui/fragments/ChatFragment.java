@@ -38,6 +38,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nhaarman.listviewanimations.appearance.ChatListAnimatedAdapter;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
 import com.topface.framework.utils.Debug;
@@ -63,10 +64,10 @@ import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
-import com.topface.topface.ui.adapters.ChatListAnimatedAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.ui.adapters.HackBaseAdapterDecorator;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
@@ -190,6 +191,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     };
     private ImageButton mSendButton;
+    private ChatListAnimatedAdapter mAnimatedAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -366,9 +368,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 update(true, "pull to refresh");
             }
         });
-        ChatListAnimatedAdapter animatedAdapter = new ChatListAnimatedAdapter(mAdapter);
-        animatedAdapter.setAbsListView(mListView.getRefreshableView());
-        mListView.setAdapter(animatedAdapter);
+        mAnimatedAdapter = new ChatListAnimatedAdapter(new HackBaseAdapterDecorator(mAdapter));
+        mAnimatedAdapter.setAbsListView(mListView.getRefreshableView());
+        mListView.setAdapter(mAnimatedAdapter);
 
         mListView.setOnScrollListener(mAdapter);
         final ListView mListViewFromPullToRefresh = mListView.getRefreshableView();
@@ -509,6 +511,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
      */
     private void deleteItem(final int position) {
         History item = mAdapter.getItem(position);
+        mAnimatedAdapter.decrementAnimationAdapter(mAdapter.getCount());
         if (item != null && (item.id == null || item.isFake())) {
             Toast.makeText(getActivity(), R.string.cant_delete_fake_item,
                     Toast.LENGTH_LONG).show();

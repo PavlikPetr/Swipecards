@@ -151,6 +151,7 @@
             </intent-filter>
         </activity>
 
+
         <activity
             android:name=".ui.AddToLeaderActivity"
             android:parentActivityName=".ui.NavigationActivity" />
@@ -206,7 +207,7 @@
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.NavigationActivity"/>
+                android:value=".ui.NavigationActivity" />
         </activity>
 
         <activity
