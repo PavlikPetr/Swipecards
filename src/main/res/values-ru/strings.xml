@@ -597,7 +597,7 @@
     <string name="avatar_set_successfully">Аватарка успешно установлена</string>
     <string name="incorrect_photo">Некорректное фото. Попробуйте загрузить другое</string>
     <string name="incorrect_photo_format">Некорректный формат фото. Попробуйте загрузить jpg или png</string>
-    <string name="incorrect_photo_size">Недопустимый размер фотографии</string>
+    <string name="incorrect_photo_size">У этой фотографии маленький размер (минимальный размер фото — %1$dx%2$d пикселей).</string>
     <string name="input_contact_name">Введите имя контакта</string>
     <string name="incorrect_locale">Если Вы хотите, чтобы мы смогли прочитать Ваш отзыв, пишите его на русском или на
         английском языке
