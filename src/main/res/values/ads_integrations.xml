@@ -2,8 +2,6 @@
 <resources>
     <string name="ad_mob_banner_bottom_unit_id" translatable="false">ca-app-pub-9530442067223936/8256188006</string>
     <string name="ad_mob_banner_bottom_mediation_unit_id" translatable="false">ca-app-pub-9530442067223936/1609366403</string>
-    <string name="adman_pad_id" translatable="false">654516d1b4df6917094de807156adc14</string>
-    <integer name="adman_mediation_slot_id">6392</integer>
     <integer name="smaato_publisher_id">1001000709</integer>
     <integer name="smaato_space_id">130000663</integer>
     <integer name="smaato_autoreload_time">60</integer>

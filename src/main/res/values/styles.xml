@@ -918,7 +918,7 @@
 
     <style name="OverflowDropDownMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="overlapAnchor">false</item>
-        <item name="android:overlapAnchor">false</item>
+        <item name="android:overlapAnchor" tools:ignore="NewApi">false</item>
     </style>
 
     <style name="FlatButton">

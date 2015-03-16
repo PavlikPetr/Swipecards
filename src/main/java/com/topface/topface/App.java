@@ -61,10 +61,14 @@ import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.Configurations;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.debug.DebugEmailSender;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.geo.GeoLocationManager;
 
 import org.acra.ACRA;
+import org.acra.ACRAConfiguration;
+import org.acra.ACRAConfigurationException;
+import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -92,13 +96,15 @@ public class App extends Application {
     private static AppsFlyerData.ConversionHolder mAppsFlyerConversionHolder;
 
     private static OpenIabHelperManager mOpenIabHelperManager = new OpenIabHelperManager();
+    private static boolean mAppOptionsObtainedFromServer = false;
+    private static boolean mUserOptionsObtainedFromServer = false;
 
     /**
      * Множественный запрос Options и профиля
      */
     public static void sendProfileAndOptionsRequests(ApiHandler handler) {
         new ParallelApiRequest(App.getContext())
-                .addRequest(getOptionsRequest())
+                .addRequest(getUserOptionsRequest())
                 .addRequest(getProductsRequest())
                 .addRequest(getPaymentwallProductsRequest())
                 .addRequest(getProfileRequest(ProfileRequest.P_ALL))
@@ -180,16 +186,17 @@ public class App extends Application {
         return request;
     }
 
-    public static void sendOptionsRequest() {
-        getOptionsRequest().exec();
+    public static void sendUserOptionsRequest() {
+        getUserOptionsRequest().exec();
     }
 
-    private static ApiRequest getOptionsRequest() {
+    private static ApiRequest getUserOptionsRequest() {
         return new UserGetAppOptionsRequest(App.getContext())
                 .callback(new DataApiHandler<Options>() {
                     @Override
                     protected void success(Options data, IApiResponse response) {
                         LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Options.OPTIONS_RECEIVED_ACTION));
+                        mUserOptionsObtainedFromServer = true;
                     }
 
                     @Override
@@ -428,6 +435,7 @@ public class App extends Application {
             @Override
             protected void success(AppOptions data, IApiResponse response) {
                 mAppOptions = data;
+                mAppOptionsObtainedFromServer = true;
                 StatisticsTracker.getInstance()
                         .setConfiguration(data.getStatisticsConfiguration(Connectivity.getConnType(mContext)));
             }
@@ -460,27 +468,27 @@ public class App extends Application {
     }
 
     private void initAcra() {
-//        if (!BuildConfig.DEBUG) {
+        if (!BuildConfig.DEBUG) {
             ACRA.init(this);
             ACRA.getErrorReporter().setReportSender(new HockeySender());
-//        } else {
-//            //Если дебажим приложение, то показываем диалог и отправляем на email вместо Hockeyapp
-//            try {
-//                //Что бы такая схема работала, сперва выставляем конфиг
-//                ACRAConfiguration acraConfig = ACRA.getConfig();
-//                acraConfig.setResDialogTitle(R.string.crash_dialog_title);
-//                acraConfig.setResDialogText(R.string.crash_dialog_text);
-//                acraConfig.setResDialogCommentPrompt(R.string.crash_dialog_comment_prompt);
-//                acraConfig.setMode(ReportingInteractionMode.DIALOG);
-//                ACRA.setConfig(acraConfig);
-//                //Потом инитим
-//                ACRA.init(this);
-//                //И потом выставляем ReportSender
-//                ACRA.getErrorReporter().setReportSender(new DebugEmailSender(this));
-//            } catch (ACRAConfigurationException e) {
-//                Debug.error("Acra init error", e);
-//            }
-//        }
+        } else {
+            //Если дебажим приложение, то показываем диалог и отправляем на email вместо Hockeyapp
+            try {
+                //Что бы такая схема работала, сперва выставляем конфиг
+                ACRAConfiguration acraConfig = ACRA.getConfig();
+                acraConfig.setResDialogTitle(R.string.crash_dialog_title);
+                acraConfig.setResDialogText(R.string.crash_dialog_text);
+                acraConfig.setResDialogCommentPrompt(R.string.crash_dialog_comment_prompt);
+                acraConfig.setMode(ReportingInteractionMode.DIALOG);
+                ACRA.setConfig(acraConfig);
+                //Потом инитим
+                ACRA.init(this);
+                //И потом выставляем ReportSender
+                ACRA.getErrorReporter().setReportSender(new DebugEmailSender(this));
+            } catch (ACRAConfigurationException e) {
+                Debug.error("Acra init error", e);
+            }
+        }
     }
 
     private void checkKeepAlive() {
@@ -526,14 +534,18 @@ public class App extends Application {
 
 
     public static String getApiTransport() {
-        Options userOptions = CacheProfile.getOptions();
-        AppOptions appOptions = getAppOptions();
-        if (appOptions.isScruffyEnabled() || userOptions.isScruffyEnabled()) {
-            if (ScruffyRequestManager.getInstance().isAvailable()) {
-                return ScruffyApiTransport.TRANSPORT_NAME;
+        if (!mAppOptionsObtainedFromServer && !mUserOptionsObtainedFromServer) {
+            return HttpApiTransport.TRANSPORT_NAME;
+        } else {
+            boolean userOptions = mAppOptionsObtainedFromServer && CacheProfile.getOptions().isScruffyEnabled();
+            boolean appOptions = mUserOptionsObtainedFromServer && getAppOptions().isScruffyEnabled();
+            if (appOptions || userOptions) {
+                if (ScruffyRequestManager.getInstance().isAvailable()) {
+                    return ScruffyApiTransport.TRANSPORT_NAME;
+                }
             }
+            return HttpApiTransport.TRANSPORT_NAME;
         }
-        return HttpApiTransport.TRANSPORT_NAME;
     }
 }
 

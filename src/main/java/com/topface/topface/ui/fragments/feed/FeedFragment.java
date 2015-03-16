@@ -558,6 +558,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             public void success(IApiResponse response) {
                 if (isAdded()) {
                     getListAdapter().removeItems(items);
+                    if (getListAdapter().getData().size() == 0) {
+                        mListView.setVisibility(View.INVISIBLE);
+                        onEmptyFeed();
+                    }
                 }
             }
 
