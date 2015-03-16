@@ -46,15 +46,12 @@
     <string name="general_search_empty_title">Na žalost, ništa nije pronađeno.</string>
     <string name="general_search_empty_text">Možete pokušati ponovo, ili izmeniti podešavanja filtera.</string>
     <string name="map_title">Karta</string>
-    <string name="settings_want_answer">Želim da mi odgovore</string>
     <string name="general_buying">Kupiti simpatije i monete</string>
     <string name="popup_version_title">Dostupna je nova verzija priloga</string>
     <string name="popup_version_message">Vreme je da obnovite svoju verziju!</string>
     <string name="leaders_select_photo_info">Odaberite najefektivniju fotografiju! Ne mogu se odabrati fotografije sa niskim rejtingom.</string>
     <string name="map_popup_address">Adresa</string>
     <string name="black_list_info">Dodali ste sagovornika u crni spisak. To se može izmeniti u svojem profilu, u podešavaniima VIP-statusa</string>
-    <string name="general_place">Mesto</string>
-    <string name="general_soon">Uskoro će biti</string>
     <string name="black_list_activation">Aktivirajte VIP-status i iskoristite crni spisak.</string>
     <string name="buying_total">Ukupno</string>
     <string name="we_dont_detect_your_city">Da bi našli ljude u blizini moramo znati gde se nalazite. Molimo vas da navedete vaš grad.</string>
@@ -84,7 +81,6 @@
     <string name="general_cancel">Odustati</string>
     <string name="general_delete_title">Ukloniti</string>
     <string name="general_dialog_loading">Učitavanje</string>
-    <string name="general_dialog_saving">Sačuvati</string>
     <string name="general_fill_button">Popuniti</string>
     <string name="general_send_full">Poslati</string>
     <string name="general_dialog_retry">Ponoviti</string>
@@ -97,7 +93,6 @@
     <string name="general_spinner_title">Odaberite radnje</string>
     <string name="general_profile_error">Greška kod učitavanja profila</string>
     <string name="general_dbl_all">Svi</string>
-    <string name="general_dbl_unread">Nepročitani</string>
     <string name="time_yesterday">Juče</string>
     <string name="time_today">Danas</string>
     <string name="general_send_button">Posl.</string>
@@ -135,16 +130,11 @@
     <string name="filter_only_beautiful">Samo lepe</string>
     <string name="filter_extra_parameters">Dodatni parametri</string>
     <string name="filter_age">Izbor dobi</string>
-    <string name="filter_online">Onlajn</string>
     <string name="filter_cities_all">Po svim gradovima</string>
     <string name="buying_header_title">Kupovina</string>
     <string name="buying_default_message">Možete slati poklone i ushićenja za monete</string>
     <string name="buying_money">Kupovina moneta</string>
-    <string name="gifts_romantic">Romantika</string>
-    <string name="gifts_friends">Prijateljstvo</string>
-    <string name="gifts_present">Čestitke</string>
     <string name="gifts_title">Odaberite poklon</string>
-    <string name="gifts_send_btn">Poslati poklon</string>
     <string name="profile_header_title">Moj profil</string>
     <string name="profile_add_album">Odabrati od postojećih</string>
     <string name="profile_add_camera">Načiniti snimak</string>
@@ -233,7 +223,6 @@
     <string name="ban_title">Čestitamo! Banovani ste</string>
     <string name="general_ready">Gotovo</string>
     <string name="buying_store_ok">Kupovina je uspešno završena</string>
-    <string name="general_close">Zatvoriti</string>
     <string name="vip_privileges">VIP privilegija</string>
     <string name="vip_rest">Pretplaćeni ste na VIP</string>
     <string name="vip_invis">Režim nevidljivosti</string>
@@ -250,7 +239,6 @@
     <string name="vip_info_blackList">Izbavljajte se od dosadnih persona uz mopoć \"crnog spiska\"</string>
     <string name="vip_info_vip">Izdvojte se pomoću svojeg VIP statusa u pretrazi i svojem profilu!</string>
     <string name="buying_vip_status">Kupiti VIP status</string>
-    <string name="buy_play_market_not_available">Play Market nije dostupan</string>
     <string name="edit_my_city">Moj grad</string>
     <string name="settings_feedback_email">Email za vezu</string>
     <string name="settings_invalid_email">Email nije tačan</string>
@@ -263,16 +251,13 @@
     <string name="general_buying_disabled">U ovom momentu kupovina nije moguća</string>
     <string name="ban_flood_detected">Veoma često šaljete upite serveru. Za dalje korišćenje priloga sačekajte.</string>
     <string name="general_maintenance">Na serveru se obavljaju tehnički radovi i vaš zahtev se ne može ispuniti. Pokušajte ponoviti kasnije</string>
-    <string name="virus_chat_likes_request_title">Pokloniti simpatije vašim prijateljima</string>
     <string name="virus_chat_btn">Dobiti simpatije</string>
-    <string name="virus_request_error">Nije uspeo pokušaj slanja simpatija vašim prijateljima</string>
     <string name="profile_ask_sent">Molba je poslata</string>
     <string name="virus_error">Tokom jednog dana vaš prijatelj može pokloniti simpatije samo 1 put! Pokušajte sutra!</string>
     <string name="popup_version_update">Obnoviti</string>
     <string name="popup_version_cancel">Potsetiti kasnije</string>
     <string name="general_version_not_supported">Vaša verzuja priloga je zastarela i više se ne podržava. Molimo vas da obnovite prilkog</string>
     <string name="default_price_format">Ukupno %2f USD</string>
-    <string name="dating_online_only">%s, samo online</string>
     <string name="leaders_pick_condition">Ne možete odabrati fotografiju čiji je rejting manji od %d%%:</string>
     <string name="general_gift">Poklon</string>
     <string name="user_actions_chat">Razgovor</string>
@@ -310,7 +295,6 @@
     <string name="password_changing">Promena lozinke</string>
     <string name="save">Sačuvati</string>
     <string name="confirmation_successfully_sent">Potvrda je poslata na e-mail koji ste naveli</string>
-    <string name="password_hint">lozinka</string>
     <string name="password_confirmation_hint">potvrda lozinke</string>
     <string name="enter_new_password">Unesite novu lozinku</string>
     <string name="enter_password_confirmation">Unesite potvrdu lozinke</string>
@@ -330,8 +314,6 @@
     <string name="you_dont_have_gifts_yet">Zasada još nemate poklone</string>
     <string name="buy_sympathies">Kupiti simpatije</string>
     <string name="upload_photos">Učitajte fotografije</string>
-    <string name="chat_no_message_title">Počnite komunikaciju!</string>
-    <string name="chat_no_message_text">Napišite poruku ili pošačjite poklon i sigurno će vam odgovoriti</string>
     <string name="user_baned">Korisnik je banovan</string>
     <string name="general_choose_city">Odaberite grad</string>
     <string name="buy_mobile_payments">Drugi načini plaćanja</string>
@@ -404,7 +386,6 @@
     <string name="general_complain_sended">Vaša žalba je poslata, puno vam hvala za pomoć</string>
     <string name="general_complain">Žalba</string>
     <string name="general_msg">Poruka</string>
-    <string name="general_no_notifications">Na žalost, obaveštenja na vašem uređaju nisu dostupna</string>
     <string name="black_list_add_short">U crni spisak</string>
     <string name="confirm_email_for_dating">Mi smo protiv spama. Potvrdite svoju poštansku adresu, kako bi se mogli upoznavati u Topface!</string>
     <string name="complain_type_swearing_msg">Prostakluk, pretnje, psovke</string>

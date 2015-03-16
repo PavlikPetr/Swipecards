@@ -74,6 +74,14 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
+    <style name="Theme.Topface.OldDarkDesign">
+        <item name="android:background">@color/bg_main</item>
+    </style>
+
+    <style name="Theme.Topface.Ban">
+        <item name="android:background">@drawable/auth_bg</item>
+    </style>
+
     <style name="Theme.Topface.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <!--Action Bar-->

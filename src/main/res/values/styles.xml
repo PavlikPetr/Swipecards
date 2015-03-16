@@ -430,7 +430,9 @@
         <item name="android:layout_alignParentRight">false</item>
     </style>
 
-    <style name="BaseGift">
+    <style name="Gift">
+        <item name="postProcessor">none</item>
+        <item name="preProcessor">squared</item>
         <item name="android:layout_width">97dp</item>
         <item name="android:layout_height">99dp</item>
         <item name="android:paddingLeft">1dp</item>
@@ -444,11 +446,7 @@
         <item name="android:gravity">center_horizontal</item>
     </style>
 
-    <style name="Gift" parent="BaseGift">
-        <item name="preProcessor">squared</item>
-    </style>
-
-    <style name="AlbumGift" parent="BaseGift">
+    <style name="AlbumGift" parent="Gift">
         <item name="postProcessor">rounded</item>
     </style>
 
@@ -920,7 +918,7 @@
 
     <style name="OverflowDropDownMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="overlapAnchor">false</item>
-        <item name="android:overlapAnchor">false</item>
+        <item name="android:overlapAnchor" tools:ignore="NewApi">false</item>
     </style>
 
     <style name="FlatButton">

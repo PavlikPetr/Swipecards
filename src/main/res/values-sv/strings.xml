@@ -4,7 +4,6 @@
     <string name="app_locale">sv_SE</string>
     <string name="general_warning">VARNING</string>
     <string name="general_ok">OK</string>
-    <string name="general_dbl_new">Nya</string>
     <string name="general_settings_abbr">Inställningar</string>
     <string name="general_disallow">Förbjud</string>
     <string name="general_allow">Tillåta</string>
@@ -18,7 +17,6 @@
     <string name="likes_background_text">Inga sympatier</string>
     <string name="visitors_background_text">Inga gäster</string>
     <string name="chat_background_text">Inga inkommande meddelanden</string>
-    <string name="general_location">Läge</string>
     <string name="filter_only_online">Endast online</string>
     <string name="filter_city_age_parameters">Ålder och stad</string>
     <string name="filter_select_city">Val av staden</string>
@@ -66,15 +64,12 @@
     <string name="general_search_empty_title">Inget hittats, tyvärr</string>
     <string name="general_search_empty_text">Du kan antingen repetera sökning eller ändra sökkriterier</string>
     <string name="map_title">Karta</string>
-    <string name="settings_want_answer">Jag vill få svar</string>
     <string name="general_buying">Köp sympatier och mynt</string>
     <string name="popup_version_title">Ny applikationsversion är tillgänglig</string>
     <string name="popup_version_message">Dags att uppgradera din version!</string>
     <string name="leaders_select_photo_info">Välj ditt bästa foto! Man får inte använda foton med låg rating</string>
     <string name="map_popup_address">Adress</string>
     <string name="black_list_info">Du har lagt till användaren i svartlistan. Detta kan ändras i din profil, nämligen i VIP-inställningar.</string>
-    <string name="general_place">Plats</string>
-    <string name="general_soon">Kommer snart</string>
     <string name="black_list_activation">Aktivera VIP-status och använd svartlistan</string>
     <string name="buying_total">Totalt</string>
     <string name="we_dont_detect_your_city">För att vi skall hitta några intressanta människor i närheten av dig, behöver vi veta var du är. Vänligen ange din stad</string>
@@ -121,7 +116,6 @@
     <string name="general_cancel">Avbryt</string>
     <string name="general_delete_title">Radera</string>
     <string name="general_dialog_loading">Ladda upp</string>
-    <string name="general_dialog_saving">Spara</string>
     <string name="general_fill_button">Fyll i</string>
     <string name="general_send_full">Skicka</string>
     <string name="general_dialog_retry">Försök igen</string>
@@ -134,7 +128,6 @@
     <string name="general_spinner_title">Välj handling</string>
     <string name="general_profile_error">Det har uppstått ett fell vid profiluppladning</string>
     <string name="general_dbl_all">Alla</string>
-    <string name="general_dbl_unread">Ej lästa</string>
     <string name="time_yesterday">Igår</string>
     <string name="time_today">Idag</string>
     <string name="general_send_button">Skicka</string>
@@ -173,7 +166,6 @@
     <string name="filter_only_beautiful">Bara snygga</string>
     <string name="filter_extra_parameters">Fler kriterier</string>
     <string name="filter_age">Ålder</string>
-    <string name="filter_online">Online</string>
     <string name="filter_cities_all">I alla städer</string>
     <string name="buying_header_title">Inköp</string>
     <plurals name="buying_gift_you_need_coins">
@@ -190,11 +182,7 @@
     </plurals>
     <string name="buying_default_message">För mynt kan du skicka gåvor och visa beundran</string>
     <string name="buying_money">Köp mynt</string>
-    <string name="gifts_romantic">Romantiska</string>
-    <string name="gifts_friends">Vänliga</string>
-    <string name="gifts_present">Gratulationer</string>
     <string name="gifts_title">Välj gåva</string>
-    <string name="gifts_send_btn">Skicka gåva</string>
     <string name="profile_header_title">Min profil</string>
     <string name="profile_add_album">Välj av de befintliga</string>
     <string name="profile_add_camera">Ta bild</string>
@@ -291,7 +279,6 @@
     <string name="ban_complain">Klaga på bannlysning</string>
     <string name="general_ready">Klart</string>
     <string name="buying_store_ok">Inköpet har framgångsrikt avklarats</string>
-    <string name="general_close">Stäng</string>
     <string name="vip_privileges">VIP-förmåner</string>
     <string name="vip_rest">Du är prenumererad på VIP</string>
     <string name="vip_invis">\"Osynlig\" funktion</string>
@@ -309,7 +296,6 @@
     <string name="vip_info_blackList">Bli av med irriterande personer med hjälp av  \"svartlista\"</string>
     <string name="vip_info_vip">VIP-status hjälper dig att ha synligare profil och dyka oftare upp i sökning</string>
     <string name="buying_vip_status">Köp VIP status</string>
-    <string name="buy_play_market_not_available">Play Market är tillgänglig</string>
     <string name="edit_my_city">Min stad</string>
     <string name="settings_feedback_email">Email för kontakter</string>
     <string name="settings_invalid_email">Inkorrekt epost-adress</string>
@@ -323,20 +309,13 @@
     <string name="general_buying_disabled">För närvarande är inköpet omöjligt</string>
     <string name="ban_flood_detected">Du skickar för många förfrågningar till servern. För att kunna använda applikationen vidare, vänta lite.</string>
     <string name="general_maintenance">Din förfrågan kan inte hanteras på grund av tekniska arbeten på servern. Vänligen försök senare</string>
-    <string name="virus_chat_likes_request_title">Skänk sympatier till vänner</string>
     <string name="virus_chat_btn">Erhålla sympatier</string>
-    <string name="virus_request_error">Det gick inte att skicka fler sympatier till vänner</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="other">Nu har du %d sympatier!</item>
-        <item quantity="one">Nu har du  %d sympati!</item>
-    </plurals>
     <string name="profile_ask_sent">Förfrågan sskickat</string>
     <string name="virus_error">En vän kan skicka dig sympatier endast en gång om dygnet! Försök i morgon!</string>
     <string name="popup_version_update">Uppgradera</string>
     <string name="popup_version_cancel">Påminn senare</string>
     <string name="general_version_not_supported">Applikationsversionen du använder har uråldrats och bör ej användas längre. Vänligen uddgradera applikationen</string>
     <string name="default_price_format">Totalt: %.2f USD</string>
-    <string name="dating_online_only">%s, endast online</string>
     <string name="leaders_pick_condition">Di kan inte vlälja foto med rating lägre än %d%%:</string>
     <string name="general_gift">Gåva</string>
     <string name="user_actions_chat">Samtal</string>
@@ -374,7 +353,6 @@
     <string name="password_changing">Ändra lösenord</string>
     <string name="save">Spara</string>
     <string name="confirmation_successfully_sent">Bekräftelsen har mailats till den adress du angivit</string>
-    <string name="password_hint">lösenord</string>
     <string name="password_confirmation_hint">Bekräfta lösenord</string>
     <string name="enter_new_password">Skriv ett nytt lösenord</string>
     <string name="enter_password_confirmation">Ange bekräftelsen</string>
@@ -394,8 +372,6 @@
     <string name="you_dont_have_gifts_yet">Du har inga gåvor än</string>
     <string name="buy_sympathies">Köp sympatier</string>
     <string name="upload_photos">Ladda upp foton</string>
-    <string name="chat_no_message_title">Börja umgås!</string>
-    <string name="chat_no_message_text">Skriv ett meddelande eller skicka en gåva och du får säkert svar</string>
     <string name="user_baned">Användaren har bannlysts</string>
     <string name="general_choose_city">Välj stad</string>
     <string name="buy_mobile_payments">Andra betalningssätt</string>
@@ -464,8 +440,6 @@
     <string name="general_complain_sended">Ditt klagomål har avsänts, tack för hjälpen</string>
     <string name="general_complain">Klagomål</string>
     <string name="general_msg">Meddelande</string>
-    <string name="general_no_notifications">Det är tyvärr omöjligt att erhålla notifikationer på din mobila enhet</string>
-    <string name="black_list_add_short">Till svartlista</string>
     <string name="confirm_email_for_dating">VI är emot spam. Bekräfta din epost-adress för att dejta på Topface!</string>
     <string name="send_confirm_link">Skicka länken för bekräftelse</string>
     <string name="complain_type_swearing_msg">Grovheter, hot, svordomar</string>
@@ -490,7 +464,6 @@
     <string name="delete_account_will_be_restored_are_you_sure">Du försöker logga in i ett raderat konto. Kontot kommer att återaktiveras vid inloggningen. Är du säker?</string>
     <string name="restore">Återaktivera</string>
     <string name="admiration_sended">Beundran har avsänts</string>
-    <string name="getjar_auth_title">Välj konto</string>
     <string name="skip">Ignorera</string>
     <string name="chat">Skriv</string>
     <plurals name="number_of_sympathies">
@@ -508,16 +481,13 @@
     </plurals>
     <string name="general_attention">OBS!</string>
     <string name="general_delete_messages">Radera meddelanden</string>
-    <string name="mutual_sympathies">Ömsesidigt</string>
     <string name="skip_all">Ignorera alla</string>
-    <string name="watching_as_list">Se i listan</string>
     <string name="settings_feedback_transaction_number">Order nr</string>
     <string name="settings_feedback_transaction_link">var kan man hitta order nr?</string>
     <string name="general_logout_error">Det gick tyvärr inte att logga ut</string>
     <string name="auth_btn_ok">Logga in via Odnokassniki.ru</string>
     <string name="other_auth">Logga in via andra applikationer</string>
     <string name="settings_feedback_transaction_number_hint">Välj order nr</string>
-    <string name="youve_earned">Du har tjänat %s</string>
     <string name="delete_visitors">Radera gäster</string>
     <string name="delete_admirations">Radera beundran</string>
     <string name="general_admirations">Beundran</string>
@@ -534,8 +504,6 @@
     <string name="photo_is_uploading">Fotot laddas upp</string>
     <string name="default_ringtone">Som standard</string>
     <string name="user_deleted_or_banned">Användaren raderad eller bannlyst</string>
-    <string name="locking_popup_title">Övergång till «%s» är begränsad</string>
-    <string name="locking_popup_message">För att få tillgång svara på inkommande sympatier eller erhåll VIP</string>
     <string name="locking_popup_button_answer">Besvara sympatier</string>
     <string name="locking_menu_message">Tillgång till vissa sidor är begränsad. För att ta bort begränsningar besvara alla inkommande sympatier eller erhåll VIP.</string>
     <string name="current_city">Aktuell stad</string>
@@ -549,7 +517,6 @@
         <item quantity="other">och ytterligare %d</item>
         <item quantity="one">och ytterligare %d</item>
     </plurals>
-    <string name="you_were_subscribed">Prenumerationen är klar</string>
     <string name="subscriptions_can_be_changed">Prenumerationen är klar. Ändringar är möjliga på Google Play</string>
     <string name="people_nearby">Personer i närheten</string>
     <string name="nobody_nearby">Det finns inte en människa i närheten!</string>
