@@ -633,10 +633,15 @@
     <style name="GalleryItem">
         <item name="preProcessor">mask</item>
         <item name="clipMask">@drawable/photo_mask</item>
-        <item name="android:scaleType">centerInside</item>
         <item name="android:background">@drawable/photo_frame_selector</item>
         <item name="android:layout_width">110dp</item>
         <item name="android:layout_height">114dp</item>
+    </style>
+
+    <style name="UsersPhotoToLeaders">
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
     </style>
 
     <style name="GalleryAddItem">
@@ -756,6 +761,12 @@
     <style name="ButtonSale" parent="Widget.Topface.Button.Big.Blue">
         <item name="android:background">@drawable/btn_sale_selector</item>
         <item name="android:paddingRight">56dp</item>
+    </style>
+
+    <style name="ButtonAddLeader" parent="FlatButton.Blue">
+        <item name="android:layout_marginLeft">6dp</item>
+        <item name="android:layout_marginRight">6dp</item>
+        <item name="android:layout_marginTop">8dp</item>
     </style>
 
     <style name="Widget.Topface.RatingBar" parent="@android:style/Widget.RatingBar">
@@ -915,9 +926,25 @@
         <item name="android:gravity">left</item>
     </style>
 
+    <style name="EditTextEnterLeaderText">
+        <item name="android:layout_marginLeft">6dp</item>
+        <item name="android:layout_marginRight">6dp</item>
+        <item name="android:layout_marginTop">36dp</item>
+        <item name="android:background">@drawable/add_leader_input</item>
+        <item name="android:hint">@string/add_leader_hint</item>
+        <item name="android:gravity">left</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:cacheColorHint">#8A8A8A</item>
+        <item name="android:shadowColor">#E6FFFFFF</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">1</item>
+        <item name="android:textColor">#030303</item>
+    </style>
+
     <style name="OverflowDropDownMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="overlapAnchor">false</item>
-        <item name="android:overlapAnchor">false</item>
+        <item name="android:overlapAnchor" tools:ignore="NewApi">false</item>
     </style>
 
     <style name="FlatButton">
