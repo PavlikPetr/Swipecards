@@ -262,7 +262,7 @@ public class AddPhotoHelper {
             return;
         }
 
-        if (!isPhotoCorrectSize(uri)) {
+        if (!isPhotoCorrectSize(uri, App.getAppOptions().getMinPhotoSize())) {
             Toast.makeText(mContext, String.format(mContext.getString(R.string.incorrect_photo_size),
                     App.getAppOptions().getMinPhotoSize().width,
                     App.getAppOptions().getMinPhotoSize().height), Toast.LENGTH_SHORT).show();
@@ -470,24 +470,20 @@ public class AddPhotoHelper {
         return options;
     }
 
-    private boolean isPhotoCorrectSize(Uri uri) {
+    private boolean isPhotoCorrectSize(Uri uri, AppOptions.MinPhotoSize minSize) {
         BitmapFactory.Options currentPhotoSize = getPhotoSizeByUri(uri);
-        AppOptions.MinPhotoSize minSize = App.getAppOptions().getMinPhotoSize();
         return currentPhotoSize != null && !(currentPhotoSize.outWidth < minSize.width ||
                 currentPhotoSize.outHeight < minSize.height);
     }
 
     public String getPath(Uri uri) {
         String picturePath;
-        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
         Cursor cursor = mContext.getContentResolver().query(uri,
-                filePathColumn, null, null, null);
+                new String[]{MediaStore.Images.Media.DATA}, null, null, null);
         if (cursor != null) {
             // получаем путь к изображению из галлереи
             cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            picturePath = cursor.getString(columnIndex);
+            picturePath = cursor.getString(0);
             cursor.close();
         } else {
             // путь к файлу, полученному с камеры

@@ -1,5 +1,6 @@
 package com.topface.topface.data;
 
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.statistics.android.StatisticsConfiguration;
 import com.topface.topface.App;
@@ -42,12 +43,7 @@ public class AppOptions extends AbstractData {
             maxPartialRequestsCount = item.optInt("maxPartialRequestsCount", DEFAULT_MAX_PARTIAL_REQUEST_COUNT);
             sessionTimeout = item.optInt("sessionTimeout", DEFAULT_SESSION_TIMEOUT);
             scruffy = item.optBoolean("scruffy", false);
-            if (item.has("minPhotoSize")) {
-                JSONObject minPhotoSizeJson = item.optJSONObject("minPhotoSize");
-                if (minPhotoSizeJson != null) {
-                    minPhotoSize = new MinPhotoSize(minPhotoSizeJson);
-                }
-            }
+            minPhotoSize =  JsonUtils.fromJson(item.optString("minPhotoSize"),MinPhotoSize.class);
             JSONObject conditionsJson = item.optJSONObject("conditions");
             if (conditionsJson != null) {
                 conditions = new Conditions(conditionsJson);
