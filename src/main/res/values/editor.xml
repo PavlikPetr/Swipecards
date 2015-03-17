@@ -7,7 +7,6 @@
     <string name="editor_fragment_error">Ошибка при выполнении действия</string>
     <string name="editor_fragment_complete">Готово</string>
     <string name="editor_api_url_title">API URL:</string>
-    <string name="editor_api_rev_hint">ревизия</string>
     <string name="editor_save_settings">Запомнить настройки</string>
     <string name="editor_title_name">Имя:</string>
     <string name="editor_title_id">Topface ID:</string>

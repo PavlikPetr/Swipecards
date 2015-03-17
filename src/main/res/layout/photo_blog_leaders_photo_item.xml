@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <com.topface.topface.ui.views.ImageViewRemote
+        android:id="@+id/ivLeadPhoto"
+        style="@style/UsersPhotoToLeaders"
+        android:layout_centerInParent="true" />
+
+    <ImageView
+        android:id="@+id/checkedPhoto"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_checked"
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/lpiCheckMark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_checked" />
+</RelativeLayout>

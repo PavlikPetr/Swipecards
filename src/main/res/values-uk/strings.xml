@@ -4,7 +4,6 @@
     <string name="app_locale">uk_UA</string>
     <string name="general_warning">ПОПЕРЕДЖЕННЯ</string>
     <string name="general_ok">OK</string>
-    <string name="general_dbl_new">Нові</string>
     <string name="general_disallow">Заборонити</string>
     <string name="general_allow">Дозволити</string>
     <string name="auth_vk_name">ВКонтакте</string>
@@ -14,7 +13,6 @@
     <string name="likes_background_text">Немає симпатій</string>
     <string name="visitors_background_text">Немає гостей</string>
     <string name="chat_background_text">Вхідних повідомлень немає</string>
-    <string name="general_location">Місцерозташування</string>
     <string name="filter_only_online">Тільки онлайн</string>
     <string name="filter_city_age_parameters">Вік та місто</string>
     <string name="filter_select_city">Вибір міста</string>
@@ -56,15 +54,12 @@
     <string name="general_search_empty_title">На жаль, нічого не знайдено</string>
     <string name="general_search_empty_text">Ви можете спробувати повторити пошук, або змінити налаштування фільтра</string>
     <string name="map_title">Карта</string>
-    <string name="settings_want_answer">Я хочу що б мені відповіли</string>
     <string name="general_buying">Купити симпатії та монети</string>
     <string name="popup_version_title">Доступна нова версія додатка</string>
     <string name="popup_version_message">Час оновити свою версію!</string>
     <string name="leaders_select_photo_info">Вибрати найефектніше фото! Фотографії з низьким рейтингом вибрати не можна</string>
     <string name="map_popup_address">Адреса</string>
     <string name="black_list_info">Ви додали співрозмовника в чорний список. Змінити це можна у своєму профілі, у налаштуваннях VIP-статусу.</string>
-    <string name="general_place">Місце</string>
-    <string name="general_soon">Скоро буде</string>
     <string name="black_list_activation">Активуйте VIP-статус і використовуйте чорний список</string>
     <string name="buying_total">Разом</string>
     <string name="we_dont_detect_your_city">Щоб знайти людей поблизу нам потрібно знати де ви знаходитеся. Будь ласка, вкажіть ваше місто.</string>
@@ -103,7 +98,6 @@
     <string name="general_cancel">Відміна</string>
     <string name="general_delete_title">Видалити</string>
     <string name="general_dialog_loading">Завантаження</string>
-    <string name="general_dialog_saving">Збереження</string>
     <string name="general_fill_button">Заповнити</string>
     <string name="general_send_full">Відіслати</string>
     <string name="general_dialog_retry">Повторити</string>
@@ -116,7 +110,6 @@
     <string name="general_spinner_title">Вибрати дію</string>
     <string name="general_profile_error">Помилка завантаження профілю</string>
     <string name="general_dbl_all">Усі</string>
-    <string name="general_dbl_unread">Непрочитані</string>
     <string name="time_yesterday">Вчора</string>
     <string name="time_today">Сьогодні</string>
     <string name="general_send_button">Відісл.</string>
@@ -154,16 +147,11 @@
     <string name="filter_only_beautiful">Тільки красиві</string>
     <string name="filter_extra_parameters">Додаткові параметри</string>
     <string name="filter_age">Вік</string>
-    <string name="filter_online">Онлайн</string>
     <string name="filter_cities_all">По всіх містах</string>
     <string name="buying_header_title">Покупки</string>
     <string name="buying_default_message">Ви можете відправляти подарунки та захоплення за монети</string>
     <string name="buying_money">Покупка монет</string>
-    <string name="gifts_romantic">Романтичні</string>
-    <string name="gifts_friends">Дружні</string>
-    <string name="gifts_present">Вітальні</string>
     <string name="gifts_title">Виберіть подарунок</string>
-    <string name="gifts_send_btn">Відправити подарунок</string>
     <string name="profile_header_title">Мій профіль</string>
     <string name="profile_add_album">Вибрати з наявних</string>
     <string name="profile_add_camera">Зробити знімок</string>
@@ -256,7 +244,6 @@
     <string name="ban_complain">Поскаржитись на бан</string>
     <string name="general_ready">Готово</string>
     <string name="buying_store_ok">Покупка успішно завершена</string>
-    <string name="general_close">Закрити</string>
     <string name="vip_privileges">VIP-привілеї</string>
     <string name="vip_rest">Ви підписані на VIP</string>
     <string name="vip_invis">Режим невидимки</string>
@@ -274,7 +261,6 @@
     <string name="vip_info_blackList">Позбавляйтеся від обридлих персон за допомогою \"чорного списку\"</string>
     <string name="vip_info_vip">Виділяйтеся за допомогою свого VIP-статусу в пошуку та своєму профілі!</string>
     <string name="buying_vip_status">Купити VIP-статус</string>
-    <string name="buy_play_market_not_available">Play Market не доступний</string>
     <string name="edit_my_city">Моє місто</string>
     <string name="settings_feedback_email">Email для зв\'язку</string>
     <string name="settings_invalid_email">Некоректний Email</string>
@@ -288,16 +274,13 @@
     <string name="general_buying_disabled">У даний момент покупка неможлива</string>
     <string name="ban_flood_detected">Ви занадто часто здійснюєте запити до сервера. Для подальшого використання додатка почекайте.</string>
     <string name="general_maintenance">На сервері проводяться технічні роботи і ваш запит не може бути виконаний. Спробуйте повторити пізніше.</string>
-    <string name="virus_chat_likes_request_title">Подарувати симпатії вашим друзям</string>
     <string name="virus_chat_btn">Отримати симпатії</string>
-    <string name="virus_request_error">Не вдалося відправити симпатій вашим друзям</string>
     <string name="profile_ask_sent">Прохання відправлено</string>
     <string name="virus_error">За добу ваш друг може подарувати симпатії тільки 1 раз! Спробуйте завтра!</string>
     <string name="popup_version_update">Оновити</string>
     <string name="popup_version_cancel">Нагадати пізніше</string>
     <string name="general_version_not_supported">Ваша версія додатку застаріла і більше не підтримується. Будь ласка, поновіть додаток</string>
     <string name="default_price_format">Разом: %.2f USD</string>
-    <string name="dating_online_only">%s, тільки онлайн</string>
     <string name="leaders_pick_condition">Ви не можете вибрати фото з рейтингом нижче %d%%:</string>
     <string name="general_gift">Подарунок</string>
     <string name="user_actions_chat">Розмова</string>
@@ -335,7 +318,6 @@
     <string name="password_changing">Зміна пароля</string>
     <string name="save">Зберегти</string>
     <string name="confirmation_successfully_sent">Підтвердження вислано на вказаний вами e-mail</string>
-    <string name="password_hint">пароль</string>
     <string name="password_confirmation_hint">підтвердження пароля</string>
     <string name="enter_new_password">Введіть новий пароль</string>
     <string name="enter_password_confirmation">Введіть підтвердження пароля</string>
@@ -355,8 +337,6 @@
     <string name="you_dont_have_gifts_yet">У вас поки немає подарунків</string>
     <string name="buy_sympathies">Купити симпатії</string>
     <string name="upload_photos">Завантажте фотографії</string>
-    <string name="chat_no_message_title">Почніть спілкування!</string>
-    <string name="chat_no_message_text">Напишіть повідомлення або відправте подарунок і вам обов\'язково відповідять</string>
     <string name="user_baned">Користувач забанений</string>
     <string name="general_choose_city">Оберіть місто</string>
     <string name="buy_mobile_payments">Інші способи оплати</string>
@@ -430,7 +410,6 @@
     <string name="general_complain_sended">Ваша скарга відправлена, велике спасибі за допомогу</string>
     <string name="general_complain">Скарга</string>
     <string name="general_msg">Повідомлення</string>
-    <string name="general_no_notifications">На жаль, повідомлення, на вашому пристрої, не доступні</string>
     <string name="black_list_add_short">У чорний список</string>
     <string name="confirm_email_for_dating">Ми проти спаму. Підтвердіть свою поштову адресу, щоб знайомиться в Topface!</string>
     <string name="complain_type_swearing_msg">Хамство, загрози, мат</string>
@@ -445,15 +424,12 @@
     <string name="delete_account_will_be_restored_are_you_sure">Ви намагаєтеся увійти в віддалений вами аккаунт. При вході аккаунт буде відновлений. Ви впевнені?</string>
     <string name="restore">Відновити</string>
     <string name="admiration_sended">Захоплення відправлено</string>
-    <string name="getjar_auth_title">Оберіть аккаунт</string>
     <string name="chat">Написати</string>
     <string name="general_attention">Увага!</string>
     <string name="general_delete_messages">Видалити повідомлення</string>
-    <string name="mutual_sympathies">Взаємно</string>
     <string name="settings_feedback_transaction_number">Номер замовлення</string>
     <string name="general_logout_error">На жаль, не вдалося вийти з аккаунта</string>
     <string name="auth_btn_ok">Увійти через Odnoklassniki</string>
-    <string name="youve_earned">Ви заробили %s</string>
     <string name="delete_visitors">Видалити гостей</string>
     <string name="delete_admirations">Видалити захоплення</string>
     <string name="general_admirations">Захоплення</string>
@@ -461,7 +437,6 @@
     <string name="current_city">Поточне місто</string>
     <string name="general_bonus">Бонус</string>
     <string name="coins_subscription">Підписка на монети</string>
-    <string name="you_were_subscribed">Підписка оформлена</string>
     <string name="cannot_get_geo">Не вдалося визначити місцерозташування</string>
     <string name="user_does_not_exist">Користувач не знайден</string>
     <string name="feedback_subject_ban">Скарга на несправедливий бан</string>

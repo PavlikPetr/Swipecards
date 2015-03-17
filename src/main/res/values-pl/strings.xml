@@ -45,15 +45,12 @@
     <string name="general_search_empty_title">Niestety niczego nie znaleziono</string>
     <string name="general_search_empty_text">Możesz spróbować powtórzyć wyszukiwanie lub zmienić ustawienia filtru</string>
     <string name="map_title">Mapa</string>
-    <string name="settings_want_answer">Chcę by mi odpowiedzieli</string>
     <string name="general_buying">Kup sympatie i monety</string>
     <string name="popup_version_title">Dostępna nowa wersja aplikacji</string>
     <string name="popup_version_message">Czas na odnowienie swojej wersji!</string>
     <string name="leaders_select_photo_info">Wybierz najbardziej efektowne zdjęcie! Zdjęcia o niskim rankingu wybrać nie można</string>
     <string name="map_popup_address">Adres</string>
     <string name="black_list_info">Rozmówca został dodany do czarnej listy. Możesz to zmienić w swoim profilu w ustawieniach VIP-statusu.</string>
-    <string name="general_place">Miejsce</string>
-    <string name="general_soon">Wkrótce będzie</string>
     <string name="black_list_activation">Aktywuj VIP-status i używaj czarnej listy</string>
     <string name="buying_total">Razem</string>
     <string name="we_dont_detect_your_city">Aby znaleźć ludzi z okolic musimy wiedzieć gdzie się znajdujesz. Prosimy o ustalenie swojego miasta</string>
@@ -83,7 +80,6 @@
     <string name="general_cancel">Cofnij</string>
     <string name="general_delete_title">Usuń</string>
     <string name="general_dialog_loading">Ładowanie</string>
-    <string name="general_dialog_saving">Zapisz</string>
     <string name="general_fill_button">Uzupełnij</string>
     <string name="general_send_full">Wyślij</string>
     <string name="general_dialog_retry">Powtórz</string>
@@ -96,7 +92,6 @@
     <string name="general_spinner_title">Wybierz działanie</string>
     <string name="general_profile_error">Błąd przy ładowaniu profilu</string>
     <string name="general_dbl_all">Wszystkie</string>
-    <string name="general_dbl_unread">Nieprzeczytane</string>
     <string name="time_yesterday">Wczoraj</string>
     <string name="time_today">Dziś</string>
     <string name="general_send_button">Wyśl.</string>
@@ -134,16 +129,11 @@
     <string name="filter_only_beautiful">Tylko piękni</string>
     <string name="filter_extra_parameters">Dodatkowe kryteria</string>
     <string name="filter_age">Wiek</string>
-    <string name="filter_online">Online</string>
     <string name="filter_cities_all">We wszystkich miastach</string>
     <string name="buying_header_title">Zakupy</string>
     <string name="buying_default_message">Możesz wysyłać prezenty i podziwy za monety</string>
     <string name="buying_money">Zakup monet</string>
-    <string name="gifts_romantic">Romantyka</string>
-    <string name="gifts_friends">Przyjaźń</string>
-    <string name="gifts_present">Gratulacje</string>
     <string name="gifts_title">Wybierz prezent</string>
-    <string name="gifts_send_btn">Wyślij prezent</string>
     <string name="profile_header_title">Mój profil</string>
     <string name="profile_add_album">Wybierz z istniejących</string>
     <string name="profile_add_camera">Zrób zdjęcie</string>
@@ -232,7 +222,6 @@
     <string name="ban_title">Gratulacje! Zostałeś/-aś zablokowany/-a</string>
     <string name="general_ready">Gotowe</string>
     <string name="buying_store_ok">Zakup przebiegł pomyślnie</string>
-    <string name="general_close">Zamknij</string>
     <string name="vip_privileges">VIP-przywileje</string>
     <string name="vip_rest">Subskrybujesz VIP</string>
     <string name="vip_invis">Status niewidoczności</string>
@@ -249,7 +238,6 @@
     <string name="vip_info_blackList">Pozbywaj się dokuczliwych osób za pomocą \"czarnej listy\"</string>
     <string name="vip_info_vip">Wyróżniaj się za pomocą swojego VIP-statusu w wyszukiwaniu i swoim profilu!</string>
     <string name="buying_vip_status">Kup VIP-status</string>
-    <string name="buy_play_market_not_available">Play Market jest niedostępny</string>
     <string name="edit_my_city">Moje miasto</string>
     <string name="settings_feedback_email">E-mail kontaktowy</string>
     <string name="settings_invalid_email">Niewłaściwy e-mail</string>
@@ -260,16 +248,13 @@
     <string name="general_reconnect_social">Nie ma dostępu do sieci socjalnej. Spróbuj ponownie później.</string>
     <string name="general_block">Zablokuj</string>
     <string name="general_buying_disabled">Teraz kupowanie jest niemożliwe</string>
-    <string name="virus_chat_likes_request_title">Wyślij sympatie swoim znajomym</string>
     <string name="virus_chat_btn">Zdobądź sympatie</string>
-    <string name="virus_request_error">Nie udało się wysłać sympatie do Twoich znajomych</string>
     <string name="profile_ask_sent">Prośba została wysłana</string>
     <string name="virus_error">Za dobę Twój znajomy może wysłać sympatie tylko 1 raz! Spróbuj jutro!</string>
     <string name="popup_version_update">Odnów</string>
     <string name="popup_version_cancel">Przypomnieć później</string>
     <string name="general_version_not_supported">Twoja wersja aplikacji nie jest aktualna. Prosimy o odnowienie aplikacji</string>
     <string name="default_price_format">Razem: %.2f USD</string>
-    <string name="dating_online_only">%s, tylko online</string>
     <string name="leaders_pick_condition">Nie możesz wybrać zdjęcie o rankingu poniżej %d%%:</string>
     <string name="general_gift">Prezent</string>
     <string name="user_actions_chat">Rozmowa</string>
@@ -307,7 +292,6 @@
     <string name="password_changing">Zmiana hasła</string>
     <string name="save">Zapisz</string>
     <string name="confirmation_successfully_sent">Potwierdzenie zostało wysłane na wskazany przez Ciebie e-mail</string>
-    <string name="password_hint">hasło</string>
     <string name="password_confirmation_hint">potwierdzenie hasła</string>
     <string name="enter_new_password">Wpisz nowe hasło</string>
     <string name="enter_password_confirmation">Wpisz potwierdzenie hasła</string>
@@ -327,8 +311,6 @@
     <string name="you_dont_have_gifts_yet">Na razie nie masz prezentów</string>
     <string name="buy_sympathies">Kup sympatie</string>
     <string name="upload_photos">Dodaj zdjęcia</string>
-    <string name="chat_no_message_title">Zacznij rozmowę!</string>
-    <string name="chat_no_message_text">Napisz wiadomość lub wyślij prezent a koniecznie dostaniesz odpowiedź</string>
     <string name="user_baned">Użytkownik został zablokowany</string>
     <string name="general_choose_city">Wybierz miasto</string>
     <string name="buy_mobile_payments">Inne sposoby opłaty</string>
@@ -401,7 +383,6 @@
     <string name="general_complain_sended">Twoja skarga została wysłana, dziękujemy za pomoc</string>
     <string name="general_complain">Skarga</string>
     <string name="general_msg">Wiadomość</string>
-    <string name="general_no_notifications">Niestety, powiadomienia na Twoim urządzeniu są niedostępne</string>
     <string name="black_list_add_short">Do czarnej listy</string>
     <string name="confirm_email_for_dating">Jesteśmy przeciwko spamowi. Potwierdź swój adres e-mail aby korzystać z Topface!</string>
     <string name="complain_type_swearing_msg">Chamstwo, groźby, przekleństwa</string>

@@ -21,7 +21,11 @@ public interface OverflowMenuUser {
 
     boolean isOpenChatAvailable();
 
+    boolean isAddToFavoritsAvailable();
+
     Boolean isMutual();
 
     void clickSendGift();
+
+    Integer getProfileId();
 }

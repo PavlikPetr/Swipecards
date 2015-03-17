@@ -29,7 +29,9 @@ public class FeedItemViewConstructor {
         // аватарка, имя, сообщение + некоторый индикатор времени
         TIME(R.layout.item_feed_layout_time),
         // аватарка, имя, сообщение, время + счетчик сообщений
-        TIME_COUNT(R.layout.item_feed_layout_time_count);
+        TIME_COUNT(R.layout.item_feed_layout_time_count),
+        // аватарка, имя, статус + сердечко
+        PHOTOBLOG(R.layout.item_feed_layout_photo_blog);
 
         private int layoutId = 0;
 
@@ -83,8 +85,9 @@ public class FeedItemViewConstructor {
 
     /**
      * создает новый объект view, выполняет его предварительную настройку
-     * @param context        контекст
-     * @param typeAndFlag    тип нужной разметки и флаги настроек
+     *
+     * @param context     контекст
+     * @param typeAndFlag тип нужной разметки и флаги настроек
      * @return вновь созднанный и настроенный View
      */
     public static View construct(Context context, TypeAndFlag typeAndFlag) {
@@ -115,8 +118,9 @@ public class FeedItemViewConstructor {
      * обновление текста существующего элемента для состояния забанен/не забанен
      * вынесено сюда, что бы не было путаницы с обновлениями элементов из разных мест
      * TextView используется напрямую так как работа с элементами идет через ViewHolder
-     * @param tv      TextView цвет текста которого надо обновить
-     * @param flag    флаг с настройкой
+     *
+     * @param tv   TextView цвет текста которого надо обновить
+     * @param flag флаг с настройкой
      */
     public static void setBanned(TextView tv, int flag) {
         if (tv != null) {
@@ -131,8 +135,9 @@ public class FeedItemViewConstructor {
      * может скрыть счетчик, если сообщений слишком мало
      * вынесено сюда, что бы не было путаницы с обновлениями из разных мест
      * TextView используется напрямую так как работа с элементами идет через ViewHolder
-     * @param counter    TextView счетчика
-     * @param amount     количество сообщений
+     *
+     * @param counter TextView счетчика
+     * @param amount  количество сообщений
      */
     public static void setCounter(TextView counter, int amount) {
         if (counter != null) {
@@ -149,8 +154,9 @@ public class FeedItemViewConstructor {
      * обновление индикатора onLine, как правило, используется для TextView,
      * содержащего имя пользователя
      * TextView используется напрямую так как работа с элементами идет через ViewHolder
-     * @param textView    TextView с именем пользователя
-     * @param isOnline    сам индикатор
+     *
+     * @param textView TextView с именем пользователя
+     * @param isOnline сам индикатор
      */
     public static void setOnline(TextView textView, boolean isOnline) {
         if (textView != null) {

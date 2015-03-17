@@ -4,7 +4,6 @@
     <string name="app_locale">es_ES</string>
     <string name="general_warning">ADVERTENCIA</string>
     <string name="general_ok">OK</string>
-    <string name="general_dbl_new">Nuevos</string>
     <string name="general_settings_abbr">Ajustes</string>
     <string name="general_disallow">Prohibir</string>
     <string name="general_allow">Permitir</string>
@@ -19,7 +18,6 @@
     <string name="likes_background_text">No hay simpatías</string>
     <string name="visitors_background_text">No hay visitantes</string>
     <string name="chat_background_text">No hay mensajes entrantes</string>
-    <string name="general_location">Ubicación</string>
     <string name="filter_only_online">Solamente en línea</string>
     <string name="filter_city_age_parameters">Edad y ciudad</string>
     <string name="filter_select_city">Seleccionar la ciudad</string>
@@ -67,15 +65,12 @@
     <string name="general_search_empty_title">Lamentablemente, no se ha encontrado nada</string>
     <string name="general_search_empty_text">Puedes intentar repetir la busqueda o cambiar las opciónes del filtro</string>
     <string name="map_title">Mapa</string>
-    <string name="settings_want_answer">Quiero que me respondan</string>
     <string name="general_buying">Comprar simpatías y monedas</string>
     <string name="popup_version_title">Está disponible una nueva versión de la aplicación</string>
     <string name="popup_version_message">¡Es hora de actualizar tu versión!</string>
     <string name="leaders_select_photo_info">¡Elige la foto más impresionante! Las fotografías con una puntuación baja no pueden ser elegidas</string>
     <string name="map_popup_address">Dirección</string>
     <string name="black_list_info">Has agregado al usuario a la lista negra. Puedes cambiarlo en tu perfil, en la configuración de estado VIP.</string>
-    <string name="general_place">Lugar</string>
-    <string name="general_soon">Pronto estará</string>
     <string name="black_list_activation">Activa tu estado VIP y usa la lista negra.</string>
     <string name="buying_total">Total</string>
     <string name="we_dont_detect_your_city">Para encontrar gente cerca, tenemos que saber dónde estás. Por favor, indica tu ciudad.</string>
@@ -127,20 +122,19 @@
     <string name="general_cancel">Cancelar</string>
     <string name="general_delete_title">Eliminar</string>
     <string name="general_dialog_loading">Cargando</string>
-    <string name="general_dialog_saving">Guardando</string>
     <string name="general_fill_button">Rellenar</string>
     <string name="general_send_full">Enviar</string>
     <string name="general_dialog_retry">Repetir</string>
     <string name="general_copy_title">Copiar</string>
     <string name="general_back">Atrás</string>
     <string name="general_server_error">Error. Intenta más tarde</string>
+    <string name="general_non_exist_photo_error">Fue imposible efectuar la acción, debido a que la fotografía fue eliminada</string>
     <string name="general_data_error">Error. Intenta una vez más</string>
     <string name="general_internet_off">Intentando recuperar la conexión a Internet. Por favor, espera.</string>
     <string name="general_msg_copied">Texto copiado</string>
     <string name="general_spinner_title">Elige la acción</string>
     <string name="general_profile_error">Error de carga del perfil</string>
     <string name="general_dbl_all">Todos</string>
-    <string name="general_dbl_unread">No leídos</string>
     <string name="time_yesterday">Ayer</string>
     <string name="time_today">Hoy</string>
     <string name="general_send_button">Enviar</string>
@@ -149,6 +143,7 @@
     <string name="general_city">Ciudad</string>
     <string name="general_dating">Encuentros</string>
     <string name="general_likes">Gusto a</string>
+    <string name="general_photoblog">Fotoblog</string>
     <string name="general_sympathies">Simpatías</string>
     <string name="general_sympathy">Simpatía</string>
     <string name="general_delight">Admiración</string>
@@ -183,7 +178,6 @@
     <string name="filter_only_beautiful">Sólo guapos</string>
     <string name="filter_extra_parameters">Parámetros adicionales</string>
     <string name="filter_age">Elegir edad</string>
-    <string name="filter_online">En línea</string>
     <string name="filter_age_start_prefix">Desde %s</string>
     <string name="filter_age_end_prefix">hasta %s</string>
     <string name="filter_cities_all">En todas las ciudades</string>
@@ -210,11 +204,7 @@
     </plurals>
     <string name="buying_default_message">Puedes enviar regalos y admiraciones pagando monedas</string>
     <string name="buying_money">Comprar monedas</string>
-    <string name="gifts_romantic">Romántica</string>
-    <string name="gifts_friends">Amistad</string>
-    <string name="gifts_present">Felicitaciones</string>
     <string name="gifts_title">Elige regalo</string>
-    <string name="gifts_send_btn">Enviar regalo</string>
     <string name="profile_header_title">Mi perfil</string>
     <string name="album_add_photo_title">Agregar foto</string>
     <string name="profile_add_album">Elegir de los existentes</string>
@@ -315,7 +305,6 @@
     <string name="ban_complain">Denunciar baneo</string>
     <string name="general_ready">Listo</string>
     <string name="buying_store_ok">Compra efectuada con éxito</string>
-    <string name="general_close">Cerrar</string>
     <string name="vip_privileges">VIP-ventajas</string>
     <string name="vip_rest">Estás suscrito al VIP</string>
     <string name="vip_invis">Modo invisible</string>
@@ -333,7 +322,6 @@
     <string name="vip_info_blackList">Evita las personas molestas con ayuda de la \"lista negra\"</string>
     <string name="vip_info_vip">¡Destaca con la ayuda de tu estado VIP en la busqueda y en tu perfil!</string>
     <string name="buying_vip_status">Comprar estado VIP</string>
-    <string name="buy_play_market_not_available">Play Market inaccesible</string>
     <string name="edit_my_city">Mi ciudad</string>
     <string name="settings_feedback_email">Email para contacto</string>
     <string name="settings_invalid_email">E-mail incorrecto</string>
@@ -349,13 +337,7 @@
         espera un poco.</string>
     <string name="general_maintenance">Trabajos técnicos están en marcha en el servidor y tu petición no puede ser ejecutada.
         Prueba de nuevo más tarde.</string>
-    <string name="virus_chat_likes_request_title">Regalar simpatías a tus amigos</string>
     <string name="virus_chat_btn">Recibir simpatías</string>
-    <string name="virus_request_error">Fallo en el envío de simpatías a tus amigos</string>
-    <plurals name="virus_request_likes_cnt">
-        <item quantity="other">¡Ahora tienes %d simpatías!</item>
-        <item quantity="one">¡Ahora tienes %d simpatía!</item>
-    </plurals>
     <string name="profile_ask_sent">Solicitud enviada</string>
     <string name="virus_error">¡Tu amigo puede regalar simpatías sólo 1 vez al día! ¡Prueba mañana!</string>
     <string name="popup_version_update">Actualizar</string>
@@ -363,7 +345,7 @@
     <string name="general_version_not_supported">Tu versión de la aplicación es absoleta y no se soporta más. Por favor,
         actualiza la aplicación</string>
     <string name="default_price_format">Total: %.2f USD</string>
-    <string name="dating_online_only">%s, solo online</string>
+    <string name="default_price_format_extended">Total: %1$.2f %2$s</string>
     <string name="leaders_pick_condition">No puedes seleccionar una foto con la puntuación más baja de %d%%:</string>
     <string name="general_gift">Regalo</string>
     <string name="user_actions_chat">Conversación</string>
@@ -402,7 +384,6 @@
     <string name="password_changing">Cambio de contraseña</string>
     <string name="save">Guardar</string>
     <string name="confirmation_successfully_sent">La confirmación fue enviada al e-mail que indicaste</string>
-    <string name="password_hint">contraseña</string>
     <string name="password_confirmation_hint">confirmación de la contraseña</string>
     <string name="enter_new_password">Introduce la contraseña nueva</string>
     <string name="enter_password_confirmation">Introduce la confirmación de la contraseña</string>
@@ -422,8 +403,6 @@
     <string name="you_dont_have_gifts_yet">De momento no tienes regalos</string>
     <string name="buy_sympathies">Comprar simpatías</string>
     <string name="upload_photos">Sube las fotografías</string>
-    <string name="chat_no_message_title">¡Empieza a comunicarse!</string>
-    <string name="chat_no_message_text">Escribe un mensaje o envía un regalo y seguro que te contestarán</string>
     <string name="user_baned">El usuario está baneado</string>
     <string name="general_choose_city">Selecciona la ciudad</string>
     <string name="buy_mobile_payments">Otras modaliidades de pago</string>
@@ -492,7 +471,6 @@
     <string name="general_complain_sended">Tu denuncia fue enviada, muchas gracias por colaborar</string>
     <string name="general_complain">Denuncia</string>
     <string name="general_msg">Mensaje</string>
-    <string name="general_no_notifications">Lamentablemente, los avisos no están disponibles en tu dispositivo</string>
     <string name="black_list_add_short">A la lista negra</string>
     <string name="confirm_email_for_dating">Luchamos contra spam. ¡Confirma tu dirección de correo para poder conocer la gente en Topface!</string>
     <string name="send_confirm_link">Enviar enlace de confirmación</string>
@@ -512,6 +490,7 @@
     <string name="or">o</string>
     <string name="settings_delete_account">Eliminar la cuenta</string>
     <string name="chat_block_not_mutual">Empezar la comunicación con un usuario es posible, si este te ha mandado una simpatía o si tienes el estado VIP</string>
+    <string name="add_to_favorite_block_not_vip">Solo los usuarios VIP pueden agregar a los favoritos desde la pantalla de citas</string>
     <string name="delete_account_are_you_sure">¿Estás completamente seguro?</string>
     <string name="delete">Eliminar</string>
     <string name="delete_account_warning">¡Atención! Estas intentando eliminar tu perfil de Topface.</string>
@@ -519,7 +498,6 @@
     <string name="delete_account_will_be_restored_are_you_sure">Estas intentando entrar a una cuenta que eliminaste. Al entrar la cuenta será restaurada. ¿Estás seguro?</string>
     <string name="restore">Recuperar</string>
     <string name="admiration_sended">Admiración enviada</string>
-    <string name="getjar_auth_title">Elige cuenta</string>
     <string name="skip">Omitir</string>
     <string name="chat">Escribir</string>
     <plurals name="number_of_sympathies">
@@ -537,16 +515,13 @@
     </plurals>
     <string name="general_attention">¡Atención!</string>
     <string name="general_delete_messages">Eliminar mensajes</string>
-    <string name="mutual_sympathies">Mutuas</string>
     <string name="skip_all">Omitir todas</string>
-    <string name="watching_as_list">Mirar en forma de lista</string>
     <string name="settings_feedback_transaction_number">Número del pedido</string>
     <string name="settings_feedback_transaction_link">¿dónde puedo encontrar el número del pedido?</string>
     <string name="general_logout_error">Lamentablemente, no se ha podido salir de la cuenta</string>
     <string name="auth_btn_ok">Entrar vía Odnoklassniki</string>
     <string name="other_auth">Entrar usando otros servicios</string>
     <string name="settings_feedback_transaction_number_hint">Introduce el número del pedido</string>
-    <string name="youve_earned">Has ganado %s</string>
     <string name="delete_visitors">Eliminar visitantes</string>
     <string name="delete_admirations">Eliminar admiraciones</string>
     <string name="general_admirations">Admiraciones</string>
@@ -563,8 +538,6 @@
     <string name="photo_is_uploading">Cargando foto</string>
     <string name="default_ringtone">Por definición</string>
     <string name="user_deleted_or_banned">El usuario está eliminado o baneado</string>
-    <string name="locking_popup_title">Paso a la sección \"%s\" está limitado</string>
-    <string name="locking_popup_message">Para acceder responde a las simpatías entrantes u obten VIP</string>
     <string name="locking_popup_button_answer">Responder a las simpatías</string>
     <string name="locking_menu_message">El acceso a algunas páginas de la aplicación está limitado. Para quitar las limitaciones responde a todas las simpatías entrantes u obtenga VIP.</string>
     <string name="current_city">Ciudad actual</string>
@@ -578,7 +551,6 @@
         <item quantity="other">y %d más</item>
         <item quantity="one">y %d más</item>
     </plurals>
-    <string name="you_were_subscribed">Suscripción tramitada</string>
     <string name="subscriptions_can_be_changed">Suscripción tramitada. Puedes cambiar las condiciones de la suscripción en Google Play</string>
     <string name="people_nearby">Gente cerca</string>
     <string name="nobody_nearby">¡No hay nadie cerca!</string>
@@ -598,8 +570,8 @@
     <string name="billing_item_already_owned">Tu anterior compra está procesandose, espera por favor</string>
     <string name="dialog">Diálogo</string>
     <string name="reply">Responder</string>
-    <string name="measurement_unit_weight">kg.</string>
-    <string name="measurement_unit_height">cm.</string>
+    <string name="measurement_unit_weight">kg</string>
+    <string name="measurement_unit_height">cm</string>
     <string name="maximum_number_of_users">Seleccionada la máxima cantidad de usuarios</string>
     <string name="logout_if_email_already_registred">Usuario con este e-mail ya existe. Si es tu e-mail, tienes que salir de esta cuenta y entrar en la %s</string>
     <string name="recover_password_instructions">A tu e-mail fue enviada una carta con las instrucciones para recuperar la contraseña</string>
@@ -621,4 +593,16 @@
     <string name="preload_photo_type_preload_off">Descpnectada</string>
     <string name="wrong_time_popup_text">Ha sido imposible establecer conexión segura con el servidor.\nEs posible que en tu dispositivo están puestas mal las fechas o la hora.</string>
     <string name="wrong_time_popup_button">Abrir opciones</string>
+    <string name="google_service_general_title">Avisos no disponibles</string>
+    <string name="google_service_disabled_title">Tienes desconectados algunos servicios Google Play que hacen falta para que los avisos funcionen.</string>
+    <string name="google_service_disabled_button">Habilitar</string>
+    <string name="google_service_missing_title">No tienes instalados algunos servicios Google Play que hacen falta para que los avisos funcionen.</string>
+    <string name="google_service_missing_button">Instalar</string>
+    <string name="google_service_version_update_required_title">Tienes instalada la antígua versión de los servicios Google Play. Para que los avisos funcionen correctamente, por favor, actualízala.</string>
+    <string name="google_service_version_update_required_button">Actualizar</string>
+    <string name="google_invalid_account_title">Comprueba los datos de tu cuenta Google o comunícate con el servicio técnico de Google.</string>
+    <string name="google_sign_in_account_title">No tienes agregada la cuenta Google, tienes que conectar, si quieres recibir avisos.</string>
+    <string name="google_sign_in_account_button">Conectar</string>
+    <string name="google_unavailable_services_title">Lamentablemente, los avisos no se soportan en tu dispositivo.</string>
+    <string name="add_leader_hint">Tu saludo…</string>
 </resources>

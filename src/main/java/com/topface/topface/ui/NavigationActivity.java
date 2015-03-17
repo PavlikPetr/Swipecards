@@ -230,10 +230,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         mMenuFragment.setOnFragmentSelected(new MenuFragment.OnFragmentSelectedListener() {
             @Override
             public void onFragmentSelected(FragmentId fragmentId) {
-                if (mDrawerLayout.getDrawerLockMode(GravityCompat.START) ==
-                        DrawerLayout.LOCK_MODE_UNLOCKED) {
-                    mDrawerLayout.closeDrawer(GravityCompat.START);
-                }
+                mDrawerLayout.closeDrawer(GravityCompat.START);
             }
         });
         if (!mMenuFragment.isAdded()) {
@@ -449,9 +446,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
      */
     public void setMenuLockMode(int lockMode, HackyDrawerLayout.IBackPressedListener listener) {
         if (mDrawerLayout != null) {
-            if (lockMode == DrawerLayout.LOCK_MODE_UNLOCKED) {
-                return;
-            }
             mDrawerLayout.setDrawerLockMode(lockMode, GravityCompat.START);
             mDrawerLayout.setBackPressedListener(listener);
         }

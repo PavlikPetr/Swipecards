@@ -19,6 +19,8 @@ import com.topface.topface.data.City;
 import com.topface.topface.ui.adapters.CitySearchViewAdapter;
 import com.topface.topface.utils.Utils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Field;
 import java.util.Calendar;
 
@@ -73,6 +75,7 @@ public class CitySearchView extends AutoCompleteTextView {
     private void getAttrs(Context context, AttributeSet attrs, int defStyle) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CitySearchAttrs, defStyle, 0);
         int requestKey = a.getInt(R.styleable.CitySearchAttrs_request_key, 1);
+        a.recycle();
         setRequestKey(requestKey);
     }
 
@@ -220,7 +223,7 @@ public class CitySearchView extends AutoCompleteTextView {
     }
 
     public interface onCityClickListener {
-        public void onClick(City city);
+        void onClick(City city);
     }
 
     public void setOnCityClickListener(onCityClickListener listener) {
@@ -282,7 +285,7 @@ public class CitySearchView extends AutoCompleteTextView {
     }
 
     @Override
-    public boolean onKeyPreIme(int keyCode, KeyEvent event) {
+    public boolean onKeyPreIme(int keyCode, @NotNull KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             mBackPressCounter++;
             if (mBackPressCounter > 1) {
@@ -323,6 +326,6 @@ public class CitySearchView extends AutoCompleteTextView {
 
     // get root height for determine softKeyboard visibility
     public interface onRootViewListener {
-        public int getHeight();
+        int getHeight();
     }
 }

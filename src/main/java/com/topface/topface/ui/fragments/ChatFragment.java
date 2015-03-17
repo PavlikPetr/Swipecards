@@ -38,6 +38,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nhaarman.listviewanimations.appearance.ChatListAnimatedAdapter;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
 import com.topface.framework.utils.Debug;
@@ -63,10 +64,10 @@ import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
-import com.topface.topface.ui.adapters.ChatListAnimatedAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.ui.adapters.HackBaseAdapterDecorator;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
@@ -111,6 +112,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String MESSAGE = "message";
     public static final String LOADED_MESSAGES = "loaded_messages";
     private static final String POPULAR_LOCK_STATE = "chat_blocked";
+    private static final String HISTORY_CHAT = "history_chat";
     private static final String SOFT_KEYBOARD_LOCK_STATE = "keyboard_state";
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
 
@@ -129,6 +131,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     };
     private String mMessage;
+    private ArrayList<History> mHistoryFeedList;
     private Handler mUpdater;
     private boolean mIsUpdating;
     private boolean mKeyboardWasShown;
@@ -188,6 +191,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     };
     private ImageButton mSendButton;
+    private ChatListAnimatedAdapter mAnimatedAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -294,9 +298,24 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         if (isAdded()) {
             if (mAdapter != null) {
                 int loadedItemsCount = 0;
-                for (History item : mAdapter.getDataCopy()) {
-                    if (item.unread) {
-                        loadedItemsCount++;
+                // если в адаптере нет элементов списка, то возможно на экране отображается блокировка,
+                // к примеру "Популярный пользователь"
+                if (mAdapter.getDataCopy().isEmpty()) {
+                    if (mHistoryFeedList != null) {
+                        for (History message : mHistoryFeedList) {
+                            int blockStage = mPopularUserLockController.block(message);
+                            // проверяем тип сообщения, если адаптер пустой по причине блокировки экрана
+                            // "FIRST_STAGE", то считаем непрочитанные сообщения в истории переписки
+                            if (blockStage == PopularUserChatController.FIRST_STAGE && message.unread) {
+                                loadedItemsCount++;
+                            }
+                        }
+                    }
+                } else {
+                    for (History item : mAdapter.getDataCopy()) {
+                        if (item.unread) {
+                            loadedItemsCount++;
+                        }
                     }
                 }
                 Intent intent = new Intent(CountersManager.UPDATE_COUNTERS);
@@ -315,6 +334,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 mKeyboardWasShown = savedInstanceState.getBoolean(SOFT_KEYBOARD_LOCK_STATE);
                 boolean wasFailed = savedInstanceState.getBoolean(WAS_FAILED);
                 ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
+                mHistoryFeedList = savedInstanceState.getParcelableArrayList(HISTORY_CHAT);
                 FeedList<History> historyData = new FeedList<>();
                 if (list != null) {
                     for (History item : list) {
@@ -348,9 +368,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 update(true, "pull to refresh");
             }
         });
-        ChatListAnimatedAdapter animatedAdapter = new ChatListAnimatedAdapter(mAdapter);
-        animatedAdapter.setAbsListView(mListView.getRefreshableView());
-        mListView.setAdapter(animatedAdapter);
+        mAnimatedAdapter = new ChatListAnimatedAdapter(new HackBaseAdapterDecorator(mAdapter));
+        mAnimatedAdapter.setAbsListView(mListView.getRefreshableView());
+        mListView.setAdapter(mAnimatedAdapter);
 
         mListView.setOnScrollListener(mAdapter);
         final ListView mListViewFromPullToRefresh = mListView.getRefreshableView();
@@ -465,6 +485,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             outState.putString(MESSAGE, mMessage);
         }
         outState.putBoolean(WAS_FAILED, wasFailed);
+        outState.putParcelableArrayList(HISTORY_CHAT, mHistoryFeedList);
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
         outState.putBoolean(SOFT_KEYBOARD_LOCK_STATE, mKeyboardWasShown);
         if (mUser != null) {
@@ -490,6 +511,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
      */
     private void deleteItem(final int position) {
         History item = mAdapter.getItem(position);
+        mAnimatedAdapter.decrementAnimationAdapter(mAdapter.getCount());
         if (item != null && (item.id == null || item.isFake())) {
             Toast.makeText(getActivity(), R.string.cant_delete_fake_item,
                     Toast.LENGTH_LONG).show();
@@ -572,6 +594,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         historyRequest.callback(new DataApiHandler<HistoryListData>() {
             @Override
             protected void success(HistoryListData data, IApiResponse response) {
+                mHistoryFeedList = data.items;
                 if (!data.items.isEmpty() && !isPopularLockOn) {
                     for (History message : data.items) {
                         mPopularUserLockController.setTexts(message.dialogTitle, message.blockText);
@@ -1020,8 +1043,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     }
 
                     @Override
+                    public boolean isAddToFavoritsAvailable() {
+                        return true;
+                    }
+
+                    @Override
                     public void clickSendGift() {
                         // empty processor. Haven't item "Send gift" in current fragment
+                    }
+
+                    @Override
+                    public Integer getProfileId() {
+                        return mUserId;
                     }
                 });
             }

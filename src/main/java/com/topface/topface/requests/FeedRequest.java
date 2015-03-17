@@ -24,7 +24,7 @@ public class FeedRequest extends LimitedApiRequest {
     public boolean leave; //Оставить сообщения не прочитанными
 
     public static enum FeedService {
-        DIALOGS, LIKES, MUTUAL, VISITORS, BLACK_LIST, BOOKMARKS, FANS, ADMIRATIONS, GEO
+        DIALOGS, LIKES, MUTUAL, VISITORS, BLACK_LIST, BOOKMARKS, FANS, ADMIRATIONS, GEO, PHOTOBLOG
     }
 
     public static class UnreadStatePair {
@@ -96,6 +96,9 @@ public class FeedRequest extends LimitedApiRequest {
                 break;
             case BLACK_LIST:
                 service = "blacklist.getList";
+                break;
+            case PHOTOBLOG:
+                service = "photofeed.getList";
                 break;
             case FANS:
                 service = "fan.getList";
