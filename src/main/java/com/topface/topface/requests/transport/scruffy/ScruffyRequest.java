@@ -5,12 +5,12 @@ import com.topface.topface.requests.transport.Headers;
 
 /**
  * Представление данных (и запрос и ответ), которое шлется в Scruffy
- * <p/>
+ * <p>
  * Кто такой Scruffy?
  * Scruffy - ws proxy для мобильного api Topface.
  *
  * @link https://github.com/Topface/scruffy
- * <p/>
+ * <p>
  * ░░░░░░░░░░░░░░░░░░░▄▄▄████████░░░░░░░░░
  * ░░░░░░░░░░░░░░░░▄▄█████████████░░░░▄███
  * ░░░░░░░░░░░░░░▄████████████████▄▄████▀░

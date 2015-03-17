@@ -82,11 +82,21 @@
         <item name="android:background">@drawable/auth_bg</item>
     </style>
 
+    <style name="Theme.Topface.RestoreAccountActivity" parent="Theme.Topface">
+        <item name="android:windowBackground">@color/bg_white</item>
+    </style>
+
     <style name="Theme.Topface.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <!--Action Bar-->
         <item name="windowActionBar">false</item>
         <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="Theme.Topface.White">
+        <item name="actionBarStyle">@style/Widget.Topface.ActionBar</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/bg_white</item>
     </style>
 
     <style name="Topface.Theme.TranslucentDialog" parent="@style/Theme.AppCompat.Light">
