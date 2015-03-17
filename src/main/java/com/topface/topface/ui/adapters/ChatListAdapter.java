@@ -118,14 +118,14 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             if (convertView != null) {
                 convertView.setTag(holder);
             }
-        } else
+        } else {
             holder = (ViewHolder) convertView.getTag();
+        }
 
         setTypeDifferences(holder, type, item);
         if (type != T_RETRY) {
             setViewInfo(holder, item);
         }
-
         return convertView;
     }
 
@@ -218,7 +218,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         parentView.scrollTo(parentView.getScrollX(), scroll);
     }
 
-    private void addSentMessage(History item) {
+    protected void addSentMessage(History item) {
         getData().addFirst(item);
         prepareDates();
         if (!item.isWaitingItem()) {
@@ -294,7 +294,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private void setTypeDifferences(ViewHolder holder, int type, final History item) {
         boolean showDate = mShowDatesList.contains(item);
-
         switch (type) {
             case T_RETRY:
                 if (item.isRepeatItem()) {

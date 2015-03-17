@@ -380,7 +380,9 @@ public class BitmapUtils {
             Debug.error("Bitmap is already recycled");
         }
 
-        clippedBitmap.recycle();
+        if (clippedBitmap != null) {
+            clippedBitmap.recycle();
+        }
         return output;
     }
 
@@ -404,12 +406,6 @@ public class BitmapUtils {
 
         final Rect src = new Rect(0, 0, resSize, resSize);
         canvas.drawBitmap(bitmap, src, src, new Paint());
-
-        if (!bitmap.isRecycled()) {
-            bitmap.recycle();
-        } else {
-            Debug.error("Bitmap is already recycled");
-        }
         return output;
     }
 
@@ -447,11 +443,6 @@ public class BitmapUtils {
             output = Bitmap.createScaledBitmap(bitmap, width, height - delta / 2, true);
         } else {
             output = Bitmap.createScaledBitmap(bitmap, width, height, true);
-        }
-        if (!bitmap.isRecycled()) {
-            bitmap.recycle();
-        } else {
-            Debug.error("Bitmap is already recycled");
         }
         return output;
     }
