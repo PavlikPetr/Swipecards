@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="76dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_profile" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:paddingTop="44dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30sp"
+        android:textColor="#000000"
+        android:paddingBottom="20dp"
+        android:gravity="center_horizontal"
+        android:text="@string/delete_account_will_be_restored_are_you_sure" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:id="@+id/restore_account"
+        style="@style/FlatButton.Blue"
+        android:text="@string/restore"
+        android:minHeight="44dp"
+        android:minWidth="236dp" />
+
+    <Button
+        android:layout_marginTop="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/FlatButton.Gray"
+        android:text="@string/general_cancel"
+        android:id="@+id/cancel_restore"
+        android:textSize="18sp"
+        android:minHeight="44dp"
+        android:minWidth="236dp" />
+
+
+</LinearLayout>

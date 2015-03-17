@@ -70,6 +70,13 @@ public class ActionBarView implements View.OnClickListener {
         setArrowUpView(null);
     }
 
+    public void setSimpleView() {
+        prepareView();
+        mActionBarView.findViewById(R.id.title_clickable).setClickable(false);
+        mIcon.setVisibility(View.GONE);
+        mTitle.setText(R.string.app_name);
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -96,8 +103,6 @@ public class ActionBarView implements View.OnClickListener {
                     mActivity.startActivity(intent);
                     mActivity.finish();
                 }
-                mActivity.startActivity(intent);
-                mActivity.finish();
             } else if (mActivity instanceof BanActivity) {
                 mActivity.onBackPressed();
             } else {

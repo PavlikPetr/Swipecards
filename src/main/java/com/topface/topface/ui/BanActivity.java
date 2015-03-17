@@ -22,7 +22,6 @@ public class BanActivity extends TrackedFragmentActivity {
     public static final int TYPE_UNKNOWN = 0;
     public static final int TYPE_BAN = 1;
     public static final int TYPE_FLOOD = 2;
-    public static final int TYPE_RESTORE = 3;
 
     public static final String INTENT_TYPE = "message_type";
     public static final String BANNING_TEXT_INTENT = "banning_intent";
@@ -69,9 +68,6 @@ public class BanActivity extends TrackedFragmentActivity {
                 arg.putLong(BanFragment.BAN_EXPIRE, banExpire);
                 fragment.setArguments(arg);
                 return fragment;
-            case TYPE_RESTORE:
-                //todo
-                break;
         }
         return null;
     }

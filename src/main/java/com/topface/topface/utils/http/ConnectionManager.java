@@ -17,6 +17,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BanActivity;
+import com.topface.topface.ui.RestoreAccountActivity;
 import com.topface.topface.ui.SslErrorActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.ui.fragments.BanFragment;
@@ -301,9 +302,8 @@ public class ConnectionManager {
     }
 
     private void showRestoreAccountActivity(IApiRequest apiRequest) {
-        Intent intent = new Intent(apiRequest.getContext(), BanActivity.class);
+        Intent intent = new Intent(apiRequest.getContext(), RestoreAccountActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_RESTORE);
         apiRequest.getContext().startActivity(intent);
     }
 
@@ -413,7 +413,7 @@ public class ConnectionManager {
 
         //Если наш пришли данные от сервера, то логируем их, если нет, то логируем объект запроса
         Debug.logJson(TAG, "RESPONSE <<< ID #" + apiRequest.getId(),
-                response != null ? response.toString() : null
+                response.toString()
         );
 
         return response;

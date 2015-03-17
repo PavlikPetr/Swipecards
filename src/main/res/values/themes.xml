@@ -82,6 +82,10 @@
         <item name="android:background">@drawable/auth_bg</item>
     </style>
 
+    <style name="Theme.Topface.RestoreAccountActivity" parent="Theme.Topface">
+        <item name="android:windowBackground">@color/bg_white</item>
+    </style>
+
     <style name="Theme.Topface.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <!--Action Bar-->
