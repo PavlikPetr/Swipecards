@@ -217,6 +217,8 @@ public class UserProfileFragment extends AbstractProfileFragment {
             showRetryBtn();
         } else if (user.banned) {
             showForBanned();
+            setProfile(user);
+            initTopMenu();
         } else if (user.deleted) {
             showForDeleted();
         } else {
@@ -384,6 +386,12 @@ public class UserProfileFragment extends AbstractProfileFragment {
                     @Override
                     public Integer getProfileId() {
                         return mProfileId;
+                    }
+
+                    @Override
+                    public Boolean isBanned() {
+                        User user = getUser();
+                        return user != null ? user.banned : null;
                     }
                 });
             }
