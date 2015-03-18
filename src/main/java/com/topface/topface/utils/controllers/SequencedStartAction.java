@@ -9,7 +9,7 @@ import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
 import java.util.ArrayList;
 
-/**
+/**Класс реализующий запуск очереди попапов. При закрытии одного, сразу появляется другой
  * Created by onikitin on 17.03.15.
  */
 public class SequencedStartAction implements IStartAction {
