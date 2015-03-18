@@ -327,7 +327,6 @@ public class Options extends AbstractData {
 
             feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
 
-
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
