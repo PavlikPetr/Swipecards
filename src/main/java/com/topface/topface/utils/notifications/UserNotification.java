@@ -137,7 +137,7 @@ public class UserNotification {
                 notification |= Notification.DEFAULT_LIGHTS;
             }
             notificationBuilder.setDefaults(notification);
-            notificationBuilder.setSound(App.getUserConfig().getRingtone());
+            notificationBuilder.setSound(App.getUserConfig().getGCMRingtone());
             notificationBuilder.setOngoing(mOngoing);
             switch (mType) {
                 case PROGRESS:

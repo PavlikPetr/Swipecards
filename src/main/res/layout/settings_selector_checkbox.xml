@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent">
+    <CheckBox
+        android:id="@+id/selector_check"
+        style="@style/WhiteButtonWithSeparator"
+        android:background="@null"
+        android:button="@null"
+        android:drawableLeft="@drawable/settings_checkbox"
+        android:drawablePadding="5dp"
+        android:paddingLeft="30dp"
+        android:checked="false"/>
+</FrameLayout>

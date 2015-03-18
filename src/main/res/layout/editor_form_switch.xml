@@ -5,31 +5,16 @@
     android:layout_height="wrap_content"
     android:gravity="center">
 
-    <ImageView
-        android:id="@+id/ivEditBackground"
-        android:tag="ivEditBackground"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
-        android:scaleType="fitXY"
-        android:layout_centerHorizontal="true"
-        android:duplicateParentState="true"/>
-
     <TextView
         android:tag="tvTitle"
         style="@style/GrayText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/ivEditBackground"
         android:layout_centerVertical="true"
         android:layout_gravity="left"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:drawablePadding="5dp"
         android:ellipsize="end"
-        android:singleLine="true"
-        android:textSize="14sp"/>
+        android:singleLine="true"/>
 
     <!-- Switch -->
 
@@ -40,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_alignRight="@id/ivEditBackground"
+        android:layout_alignParentRight="true"
         android:layout_marginRight="5dp"
         android:clickable="false"
         android:minHeight="0dp"/>

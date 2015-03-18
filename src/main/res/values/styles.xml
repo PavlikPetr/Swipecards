@@ -153,8 +153,8 @@
     </style>
 
     <style name="ItemtText">
-        <item name="android:textColor">#B8B8B8</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/light_gray</item>
+        <item name="android:textSize">13sp</item>
         <item name="android:textStyle">normal</item>
     </style>
 
@@ -925,5 +925,6 @@
         <item name="android:background">@drawable/list_like_btn</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">60dp</item>
+        <item name="android:gravity">center_vertical|start</item>
     </style>
 </resources>

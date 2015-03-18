@@ -143,6 +143,11 @@ public class OwnProfileFragment extends OwnAvatarFragment {
         addBodyPage(SettingsFragment.class.getName(), getResources().getString(R.string.settings_header_title));
     }
 
+    @Override
+    protected boolean hasUserActions() {
+        return false;
+    }
+
     private void startSettingsActivity() {
         startActivity(SettingsActivity.createIntent());
     }

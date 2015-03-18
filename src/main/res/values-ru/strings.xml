@@ -643,6 +643,7 @@
     <string name="general_complain_sended">Ваша жалоба отправлена, большое спасибо за помощь</string>
     <string name="general_complain">Жалоба</string>
     <string name="general_msg">Сообщение</string>
+    <string name="notifications">Уведомления</string>
     <string name="general_no_notifications">К сожалению, уведомления, на вашем устройстве, не доступны</string>
     <string name="black_list_add_short">В черный список</string>
     <string name="confirm_email_for_dating">Мы против спама. Подтвердите свой почтовый адрес, чтобы знакомиться в Topface!</string>
@@ -814,4 +815,13 @@
     <string name="google_sign_in_account_title">У вас не добавлен Google аккаунт, вы должны авторизоваться, если хотите получать уведомления.</string>
     <string name="google_sign_in_account_button">Авторизоваться</string>
     <string name="google_unavailable_services_title">К сожалению, уведомления не поддерживаются на вашем устройстве.</string>
+    <string-array name="receive_notifications">
+        <item name="receive_message_notification">Получать уведомление о новом сообщении</item>
+        <item name="receive_mutual_notification">Получать уведомление о новой взаимной симпатии</item>
+        <item name="receive_sympathy_notification">Получать уведомление о новой симпатии</item>
+        <item name="receive_rate_notification"></item>
+        <item name="receive_guest_notification">Получать уведомление о новом госте</item>
+    </string-array>
+    <string name="on_phone">На телефон</string>
+    <string name="on_mail">На e-mail</string>
 </resources>

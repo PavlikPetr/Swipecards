@@ -74,7 +74,6 @@ public class ProfileFormListAdapter extends BaseAdapter {
         } else {
             holder.value.setText(item.value.toLowerCase(Locale.getDefault()));
         }
-
         holder.value.setOnClickListener(mOnFillListener);
         holder.value.setTag(item);
         holder.title.setOnClickListener(mOnFillListener);

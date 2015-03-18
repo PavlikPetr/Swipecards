@@ -77,8 +77,8 @@ public class SettingsFeedbackFragment extends BaseFragment implements OnClickLis
     }
 
     private void setBackground(int resId, ViewGroup frame) {
-        ImageView background = (ImageView) frame.findViewById(R.id.ivEditBackground);
-        background.setImageResource(resId);
+//        ImageView background = (ImageView) frame.findViewById(R.id.ivEditBackground);
+//        background.setImageResource(resId);
     }
 
     private void setText(int titleId, ViewGroup frame) {

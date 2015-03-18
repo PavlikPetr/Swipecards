@@ -60,6 +60,17 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="Selector" parent="@android:style/Theme.Dialog">
+        <item name="android:checkboxStyle">@style/CheckboxLeft</item>
+    </style>
+
+    <style name="CheckboxLeft">
+        <item name="android:button">@null</item>
+        <item name="android:drawableLeft">@drawable/settings_checkbox</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:paddingLeft">30dp</item>
+    </style>
+
     <!-- Светлая тема приложения -->
     <style name="Theme.Topface.Light" parent="@style/Theme.Topface">
         <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewStyle</item>

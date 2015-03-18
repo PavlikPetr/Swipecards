@@ -1,14 +1,17 @@
 package com.topface.topface.ui.fragments;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.IUniversalUser;
@@ -56,11 +59,24 @@ public abstract class UserAvatarFragment extends BaseFragment
         setActionBarAvatar(getUniversalUser());
 
         MenuItem barActionsItem = menu.findItem(R.id.action_user_actions_list);
-        if (barActionsItem != null && mBarActions != null) {
-            barActionsItem.setChecked(mBarActions.isChecked());
+        if (hasUserActions()) {
+            if (barActionsItem != null && mBarActions != null) {
+                barActionsItem.setChecked(mBarActions.isChecked());
+            }
+            mBarActions = barActionsItem;
+            mOverflowMenu = createOverflowMenu(mBarActions);
+        } else {
+            barActionsItem.setVisible(false);
+            barActionsItem.setEnabled(false);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                DisplayMetrics metrics = App.getContext().getResources().getDisplayMetrics();
+                mBarAvatar.getActionView().setPadding(0, 0, (int) (4 * metrics.density), 0);
+            }
         }
-        mBarActions = barActionsItem;
-        mOverflowMenu = createOverflowMenu(mBarActions);
+    }
+
+    protected boolean hasUserActions() {
+        return true;
     }
 
     @Override
@@ -71,7 +87,6 @@ public abstract class UserAvatarFragment extends BaseFragment
     @Override
     public void clearContent() {
         ((ImageViewRemote) getView().findViewById(R.id.ivBarAvatar)).setPhoto(null);
-//        mNameView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
     }
 
     @Override

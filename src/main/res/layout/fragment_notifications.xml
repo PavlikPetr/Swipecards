@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_white"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp">
+
+    <include
+        android:id="@+id/notification_sympathies"
+        layout="@layout/item_edit_form_select"/>
+
+    <include
+        android:id="@+id/notification_mutuals"
+        layout="@layout/item_edit_form_select"/>
+
+    <include
+        android:id="@+id/notification_messages"
+        layout="@layout/item_edit_form_select"/>
+
+    <include
+        android:id="@+id/notification_guests"
+        layout="@layout/item_edit_form_select"/>
+
+    <CheckBox
+        android:tag="tvTitle"
+        style="@style/WhiteButtonWithSeparator"
+        android:id="@+id/notification_vibro"
+        android:drawableLeft="@null"
+        android:drawableRight="@drawable/settings_checkbox"
+        android:checked="false"/>
+
+    <CheckBox
+        android:tag="tvTitle"
+        style="@style/WhiteButtonWithSeparator"
+        android:id="@+id/notification_led"
+        android:drawableLeft="@null"
+        android:drawableRight="@drawable/settings_checkbox"
+        android:checked="false"/>
+
+    <include
+        android:id="@+id/notification_melody"
+        layout="@layout/item_edit_form_select"/>
+
+</LinearLayout>

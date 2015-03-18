@@ -217,8 +217,8 @@ public class CitySearchActivity extends BaseFragmentActivity {
             mCbMyCity.setVisibility(View.GONE);
             mMyCityTitle.setVisibility(View.GONE);
         } else {
-            ((ImageView) mCbMyCity.findViewById(R.id.ivEditBackground)).setImageDrawable(getResources().getDrawable(
-                    R.drawable.edit_big_btn_selector));
+//            ((ImageView) mCbMyCity.findViewById(R.id.ivEditBackground)).setImageDrawable(getResources().getDrawable(
+//                    R.drawable.edit_big_btn_selector));
             View checkView = mCbMyCity.findViewWithTag("ivCheck");
             if (checkView != null) checkView.setVisibility(View.VISIBLE);
 

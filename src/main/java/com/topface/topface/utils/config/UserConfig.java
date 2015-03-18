@@ -371,7 +371,7 @@ public class UserConfig extends AbstractConfig {
     /**
      * @return push notification melody name
      */
-    public Uri getRingtone() {
+    public Uri getGCMRingtone() {
         if (getStringField(getSettingsMap(), SETTINGS_GCM_RINGTONE).equals(SILENT)) {
             return null;
         }
