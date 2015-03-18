@@ -4,7 +4,8 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:background="@color/bg_main">
 
     <TextView
         android:id="@+id/tvMyCity"

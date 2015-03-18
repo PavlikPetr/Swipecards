@@ -2,17 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/LoadingLocker">
 
-    <ProgressBar
-        android:id="@+id/prsLocker"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_gravity="center" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/text"
-        style="@style/LoadingLockerText"
-        android:layout_alignTop="@id/prsLocker"
-        android:layout_toRightOf="@id/prsLocker" />
+        <ProgressBar
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
+        <TextView
+            android:id="@+id/text"
+            style="@style/LoadingLockerText"/>
+    </LinearLayout>
 </RelativeLayout>
