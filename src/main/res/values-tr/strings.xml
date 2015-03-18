@@ -130,6 +130,7 @@
     <string name="general_copy_title">Kopyalamak</string>
     <string name="general_back">Geri</string>
     <string name="general_server_error">Hata. Daha sonra yeniden deneyin</string>
+    <string name="general_non_exist_photo_error">O zamandan beri, bir eylemi gerçekleştirmek için olmadı fotoğraf kaldırıldı</string>
     <string name="general_data_error">Hata. Bir daha deneyin</string>
     <string name="general_internet_off">İnternete bağlı değil</string>
     <string name="general_msg_copied">Metin kopyalandı</string>
@@ -144,6 +145,7 @@
     <string name="general_city">Şehir</string>
     <string name="general_dating">Tanışmalar</string>
     <string name="general_likes">Ben beğeniliyorum</string>
+    <string name="general_photoblog">Photoblog</string>
     <string name="general_sympathies">Beğenleri</string>
     <string name="general_sympathy">Sempati</string>
     <string name="general_delight">Hayranlık</string>
@@ -497,6 +499,7 @@
     <string name="or">veya</string>
     <string name="settings_delete_account">Hesap silmek</string>
     <string name="chat_block_not_mutual">Kullanıcı size sempati gönderdiyse veya VİP-durumunuz varsa o zaman onunla sohbete başlayabilirsiniz</string>
+    <string name="add_to_favorite_block_not_vip">Sadece VIP kullancılar ekrandan özele ekleyebilirler</string>
     <string name="delete_account_are_you_sure">Kesinlikle emin misiniz?</string>
     <string name="delete">Silmek</string>
     <string name="delete_account_warning">Dikkat! Topface’deki profilinizi silmeye çalışıyorsunuz.</string>
@@ -616,4 +619,5 @@
     <string name="google_sign_in_account_title">Google hesabı eklemediniz. eğer bildirim almak istiyorsanız, lütfen bağlanın</string>
     <string name="google_sign_in_account_button">Oturum açın</string>
     <string name="google_unavailable_services_title">Maalesef,bildirimler telefonunuzda çalışmaz.</string>
+    <string name="add_leader_hint">Tebriksiniz …</string>
 </resources>

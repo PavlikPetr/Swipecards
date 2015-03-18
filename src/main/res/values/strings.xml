@@ -65,7 +65,6 @@
     <string name="general_search_empty_title">Sorry, no one is found.</string>
     <string name="general_search_empty_text">You can try to run the search again, or change the filter settings.</string>
     <string name="map_title">Map</string>
-    <string name="settings_want_answer">I want to get a reply.</string>
     <string name="general_buying">Coins and likes purchase</string>
     <string name="popup_version_title">New app version is available</string>
     <string name="popup_version_message">Time to update your app version!</string>
@@ -129,6 +128,7 @@
     <string name="general_copy_title">Copy</string>
     <string name="general_back">Back</string>
     <string name="general_server_error">Error. Please try again later.</string>
+    <string name="general_non_exist_photo_error">Couldn\'t proceed because the photo has been deleted</string>
     <string name="general_data_error">Error. Please try again.</string>
     <string name="general_internet_off">No Internet connection. Please try again.</string>
     <string name="general_msg_copied">Message copied</string>
@@ -143,6 +143,7 @@
     <string name="general_city">City</string>
     <string name="general_dating">Dating</string>
     <string name="general_likes">They like me</string>
+    <string name="general_photoblog">Photofeed</string>
     <string name="general_sympathies">Likes</string>
     <string name="general_sympathy">Like</string>
     <string name="general_delight">Admiration</string>
@@ -268,8 +269,8 @@
     <string name="leaders_leader_now">Now everyone will see you!</string>
     <string name="leaders_need_photo">First, select a photo.</string>
     <plurals name="leaders_price">
-        <item quantity="other">Put me here for %d coins</item>
-        <item quantity="one">Put me here for %d coin</item>
+        <item quantity="other">Place me here for %d coins</item>
+        <item quantity="one">Place me here for %d coin</item>
     </plurals>
     <string name="photo_add_or">Your photo has been added</string>
     <string name="photo_add_error">Photo upload was unsuccessful. Try again?</string>
@@ -604,4 +605,5 @@
     <string name="google_sign_in_account_title">Your Google account has not been added. You have to sign in, if you want to receive reminders.</string>
     <string name="google_sign_in_account_button">Sign in</string>
     <string name="google_unavailable_services_title">Unfortunately, the remainders are not available on your device.</string>
+    <string name="add_leader_hint">Your greeting…</string>
 </resources>
