@@ -87,12 +87,18 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         try {
-            outState.putString(PHOTOS, mUsePhotosAdapter.getAdaprerData().toJson().toString());
+            if (mUsePhotosAdapter != null) {
+                outState.putString(PHOTOS, mUsePhotosAdapter.getAdaprerData().toJson().toString());
+            }
         } catch (JSONException e) {
             Debug.error(e);
         }
-        outState.putInt(POSITION, mGridView.getFirstVisiblePosition());
-        outState.putInt(SELECTED_POSITION, mUsePhotosAdapter.getSelectedPhotoId());
+        if (mGridView != null) {
+            outState.putInt(POSITION, mGridView.getFirstVisiblePosition());
+        }
+        if (mUsePhotosAdapter != null) {
+            outState.putInt(SELECTED_POSITION, mUsePhotosAdapter.getSelectedPhotoId());
+        }
     }
 
     private Photos getPhotoLinks() {
