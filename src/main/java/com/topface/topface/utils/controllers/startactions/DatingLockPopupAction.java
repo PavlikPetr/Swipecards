@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments.profile;
+package com.topface.topface.utils.controllers.startactions;
 
 import android.support.v4.app.FragmentManager;
 
@@ -9,15 +9,17 @@ import com.topface.topface.ui.dialogs.DatingLockPopup;
 
 public class DatingLockPopupAction extends DailyPopupAction {
 
+    private int mPriority;
     private DatingLockPopup.DatingLockPopupRedirectListener mDatingLockPopupRedirect;
     private FragmentManager mFragmentManager;
     private Options.NotShown mNotShown;
 
     public DatingLockPopupAction(FragmentManager fragmentManager, int priority, DatingLockPopup.DatingLockPopupRedirectListener listener) {
-        super(App.getContext(), priority);
+        super(App.getContext());
         mFragmentManager = fragmentManager;
         mDatingLockPopupRedirect = listener;
-        mNotShown = mOptions.notShown;
+        mNotShown = getOptions().notShown;
+        mPriority  = priority;
     }
 
     @Override
@@ -40,6 +42,21 @@ public class DatingLockPopupAction extends DailyPopupAction {
     public boolean isApplicable() {
         return mNotShown.enabledDatingLockPopup
                 && isTimeoutEnded(mNotShown.datingLockPopupTimeout,
-                mUserConfig.getDatingLockPopupRedirect());
+                getUserConfig().getDatingLockPopupRedirect());
+    }
+
+    @Override
+    public int getPriority() {
+        return mPriority;
+    }
+
+    @Override
+    public String getActionName() {
+        return getClass().getSimpleName();
+    }
+
+    @Override
+    public void setStartActionCallback(OnNextActionListener startActionCallback) {
+
     }
 }

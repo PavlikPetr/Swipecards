@@ -148,7 +148,7 @@ public class Options extends AbstractData {
     public FeedNativeAd feedNativeAd = new FeedNativeAd();
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
     public NotShown notShown = new NotShown();
-    public FasebookRequests fasebookRequests = new FasebookRequests();
+    public FacebookRequests facebookRequests = new FacebookRequests();
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
 
     public Options(IApiResponse data) {
@@ -323,10 +323,7 @@ public class Options extends AbstractData {
                 notShown.parseNotShownJSON(jsonNotShown);
             }
 
-            JSONObject jsonFacebookRequest = response.optJSONObject("facebookRequests");
-            if (jsonFacebookRequest != null) {
-                fasebookRequests.parseFasebookRequestsJSON(jsonFacebookRequest);
-            }
+            facebookRequests = JsonUtils.fromJson(response.toString(),FacebookRequests.class);
 
             feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
 
@@ -642,20 +639,11 @@ public class Options extends AbstractData {
         }
     }
 
-    public static class FasebookRequests {
-        public boolean enabledRequestsOnLogin = false;
-        public boolean enabledAttempts = false;
-        public long fasebookRequestsTimeout = DateUtils.DAY_IN_SECONDS * 3;
+    public static class FacebookRequests {
+        public boolean enabledOnLogin;
+        public boolean enabledAttempts;
+        public long minDelay = DateUtils.DAY_IN_SECONDS * 3;
         public int maxAttempts;
-
-        public void parseFasebookRequestsJSON(JSONObject jsonFasebookRequests) {
-            if (jsonFasebookRequests != null) {
-                enabledRequestsOnLogin = jsonFasebookRequests.optBoolean("enabledOnLogin");
-                enabledAttempts = jsonFasebookRequests.optBoolean("enabledAttempts");
-                fasebookRequestsTimeout = jsonFasebookRequests.optLong("minDelay");
-                maxAttempts = jsonFasebookRequests.optInt("maxAttempts");
-            }
-        }
     }
 
     public static class FeedNativeAd {

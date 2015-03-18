@@ -36,8 +36,9 @@ import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.fragments.MenuFragment;
-import com.topface.topface.ui.fragments.profile.DatingLockPopupAction;
-import com.topface.topface.ui.fragments.profile.FacebookRequestWindowAction;
+import com.topface.topface.utils.controllers.SequencedStartAction;
+import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
+import com.topface.topface.utils.controllers.startactions.FacebookRequestWindowAction;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.HackyDrawerLayout;
@@ -53,11 +54,10 @@ import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.ads.FullscreenController;
-import com.topface.topface.utils.controllers.AbstractStartAction;
-import com.topface.topface.utils.controllers.IStartAction;
-import com.topface.topface.utils.controllers.StartActionNode;
+import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.controllers.startactions.InvitePopupAction;
+import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
@@ -200,10 +200,10 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 showFragment(FragmentId.TABBED_LIKES);
             }
         }));
-        StartActionNode node = new StartActionNode(AC_PRIORITY_NORMAL);
-        node.addAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
-        node.addAction(new FacebookRequestWindowAction(this, AC_PRIORITY_NORMAL));
-        startActionsController.registerAction(node);
+        SequencedStartAction sequencedStartAction = new SequencedStartAction(this,AC_PRIORITY_NORMAL);
+        sequencedStartAction.addAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
+        sequencedStartAction.addAction(new FacebookRequestWindowAction(this, AC_PRIORITY_NORMAL));
+        startActionsController.registerAction(sequencedStartAction);
         startActionsController.registerAction(mPopupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
         // fullscreen
@@ -369,7 +369,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
      * @return start action object to register
      */
     private IStartAction createAfterRegistrationStartAction(final int priority) {
-        return new AbstractStartAction() {
+        return new IStartAction() {
 
             @Override
             public void callInBackground() {
@@ -397,6 +397,11 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
             @Override
             public String getActionName() {
                 return "TakePhoto-SelectCity";
+            }
+
+            @Override
+            public void setStartActionCallback(OnNextActionListener startActionCallback) {
+
             }
 
             private boolean isTakePhotoApplicable() {

@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments.profile;
+package com.topface.topface.utils.controllers.startactions;
 
 import android.content.Context;
 
@@ -6,36 +6,21 @@ import com.topface.topface.App;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.controllers.AbstractStartAction;
 
 /**
  * Базовый класс для попапов показывающихся через определенный промежуток времени
  * Created by onikitin on 27.02.15.
  */
-public abstract class DailyPopupAction extends AbstractStartAction {
+public abstract class DailyPopupAction implements IStartAction {
 
-    public Context mContext;
-    private int mPriority;
-    public Options mOptions;
-    private String mTitle;
-    protected UserConfig mUserConfig;
+    private Context mContext;
+    private Options mOptions;
+    private UserConfig mUserConfig;
 
-    public DailyPopupAction(Context context, int priority) {
+    public DailyPopupAction(Context context) {
         mContext = context;
-        mPriority = priority;
-        mTitle = this.getClass().getSimpleName();
         mOptions = CacheProfile.getOptions();
         mUserConfig = App.getUserConfig();
-    }
-
-    @Override
-    public int getPriority() {
-        return mPriority;
-    }
-
-    @Override
-    public String getActionName() {
-        return mTitle;
     }
 
     protected boolean isTimeoutEnded(long timeOut, long lastTime) {
@@ -46,6 +31,20 @@ public abstract class DailyPopupAction extends AbstractStartAction {
         long deltaInSeconds = (currentTime - lastTime) / 1000;
         return (deltaInSeconds >= timeOut);
     }
+
+    protected Context getContext(){
+        return mContext;
+    }
+
+    protected Options getOptions() {
+        return mOptions;
+    }
+
+    protected UserConfig getUserConfig() {
+        return mUserConfig;
+    }
+
+
 
     protected abstract boolean firstStartShow();
 

@@ -9,8 +9,8 @@ import com.topface.topface.BuildConfig;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.RateAppDialog;
-import com.topface.topface.utils.controllers.AbstractStartAction;
-import com.topface.topface.utils.controllers.IStartAction;
+import com.topface.topface.utils.controllers.startactions.IStartAction;
+import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
 
 public class PopupManager {
@@ -23,7 +23,7 @@ public class PopupManager {
     }
 
     public IStartAction createOldVersionPopupStartAction(final int priority) {
-        return new AbstractStartAction() {
+        return new IStartAction() {
             @Override
             public void callInBackground() {
             }
@@ -46,6 +46,11 @@ public class PopupManager {
             @Override
             public String getActionName() {
                 return "OldVersionPopup";
+            }
+
+            @Override
+            public void setStartActionCallback(OnNextActionListener startActionCallback) {
+
             }
         };
     }
@@ -79,7 +84,7 @@ public class PopupManager {
     }
 
     public IStartAction createRatePopupStartAction(final int priority) {
-        return new AbstractStartAction() {
+        return new IStartAction() {
             @Override
             public void callInBackground() {
             }
@@ -103,6 +108,11 @@ public class PopupManager {
             @Override
             public String getActionName() {
                 return "RateAppPopup";
+            }
+
+            @Override
+            public void setStartActionCallback(OnNextActionListener startActionCallback) {
+
             }
         };
     }

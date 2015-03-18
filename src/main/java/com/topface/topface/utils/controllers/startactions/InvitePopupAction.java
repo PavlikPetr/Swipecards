@@ -11,12 +11,11 @@ import com.topface.topface.Static;
 import com.topface.topface.ui.dialogs.InvitesPopup;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.EasyTracker;
-import com.topface.topface.utils.controllers.AbstractStartAction;
 
 import java.util.ArrayList;
 
 
-public class InvitePopupAction extends AbstractStartAction {
+public class InvitePopupAction extends LinkedStartAction {
 
     private Activity mActivity;
     private int mPriority;
@@ -65,8 +64,8 @@ public class InvitePopupAction extends AbstractStartAction {
                 popup.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        if (mOnNextPopupStart != null) {
-                            mOnNextPopupStart.onStart();
+                        if (mOnNextActionListener != null) {
+                            mOnNextActionListener.onNextAction();
                         }
                     }
                 });
