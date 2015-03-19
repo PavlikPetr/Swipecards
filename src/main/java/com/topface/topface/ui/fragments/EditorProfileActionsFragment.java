@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.ModerationResponse;
@@ -231,12 +232,13 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
                 if (data.completed) {
                     Toast.makeText(getActivity(), "razbanen", Toast.LENGTH_SHORT).show();
                     showView(mLocker, false);
+                    showView(mLocker, R.id.editor_ban_unban_user, false);
                 }
             }
 
             @Override
             protected ModerationResponse parseResponse(ApiResponse response) {
-                return new ModerationResponse(response);
+                return JsonUtils.fromJson(response.toString(), ModerationResponse.class);
             }
 
             @Override

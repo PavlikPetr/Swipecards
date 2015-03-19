@@ -1,6 +1,9 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+
+import com.topface.framework.JsonUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
