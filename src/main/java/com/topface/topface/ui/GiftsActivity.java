@@ -35,12 +35,15 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     public static final int INTENT_REQUEST_GIFT = 111;
     public static final String INTENT_GIFT_PRICE = "gift_price";
     public static final String INTENT_USER_ID_TO_SEND_GIFT = "user_id_to_send_gift";
+    public static final String INTENT_IS_SUCCESS_TOAST_AVAILABLE = "is_success_toast_available";
     public static final String GIFTS_LIST = "gifts_list";
     public static final String INTENT_SEND_GIFT_ANSWER = "send_gift_answer";
 
     private ArrayList<Gift> mAllGifts = new ArrayList<>();
     private int mUserIdToSendGift;
     private boolean mRequestingGifts;
+
+    private boolean mIsSuccessToastAvailable;
 
     private GiftsListFragment mGiftListFragment;
     private RelativeLayout mLockScreen;
@@ -60,6 +63,23 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
         return result;
     }
 
+    /**
+     * Intent to start GiftsActivity for sending gift item
+     * If you need to process send gift request yourself set sendGift flag to false
+     * Ig you don't need to show toast on success gift send use isSuccessToastAvailable = false
+     *
+     * @param context                 lauch context
+     * @param userId                  profile id to send gift
+     * @param isSuccessToastAvailable show or not toast on success gift send
+     * @return intent
+     */
+    public static Intent getSendGiftIntent(Context context, int userId, boolean isSuccessToastAvailable) {
+        Intent result = new Intent(context, GiftsActivity.class);
+        result.putExtra(INTENT_USER_ID_TO_SEND_GIFT, userId);
+        result.putExtra(INTENT_IS_SUCCESS_TOAST_AVAILABLE, isSuccessToastAvailable);
+        return result;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +87,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
         setContentView(R.layout.ac_gifts);
         actionBarView.setArrowUpView(getResources().getString(R.string.profile_gifts));
         mUserIdToSendGift = getIntent().getIntExtra(INTENT_USER_ID_TO_SEND_GIFT, 0);
+        mIsSuccessToastAvailable = getIntent().getBooleanExtra(INTENT_IS_SUCCESS_TOAST_AVAILABLE, true);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.giftGrid);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (fragment == null) {
@@ -184,7 +205,9 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 resultIntent.putExtra(INTENT_SEND_GIFT_ANSWER, answer);
                 resultIntent.putExtra(INTENT_GIFT_PRICE, item.price);
                 setResult(Activity.RESULT_OK, resultIntent);
-                Toast.makeText(App.getContext(), R.string.chat_gift_out, Toast.LENGTH_SHORT).show();
+                if (mIsSuccessToastAvailable) {
+                    Toast.makeText(App.getContext(), R.string.chat_gift_out, Toast.LENGTH_SHORT).show();
+                }
                 finish();
             }
 
