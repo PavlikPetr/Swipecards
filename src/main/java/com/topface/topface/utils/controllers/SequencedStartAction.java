@@ -81,12 +81,7 @@ public class SequencedStartAction implements IStartAction {
     private void runActionQueue() {
         removeNonApplicableActions();
         for (int i = 0; i < mActions.size() - 1; i++) {
-            final IStartAction nextAction;
-            if (i < mActions.size()) {
-                nextAction = mActions.get(i + 1);
-            } else {
-                return;
-            }
+            final IStartAction nextAction = mActions.get(i + 1);
             mActions.get(i).setStartActionCallback(new OnNextActionListener() {
                 @Override
                 public void onNextAction() {
