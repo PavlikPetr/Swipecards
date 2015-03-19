@@ -426,6 +426,12 @@ public class AuthFragment extends BaseAuthFragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        mAuthorizationManager.onPause();
+    }
+
+    @Override
     protected void loadAllProfileData() {
         mNeedShowButtonsOnResume = false;
         super.loadAllProfileData();
