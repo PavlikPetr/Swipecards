@@ -26,6 +26,8 @@
         <!-- Начертание шрифта -->
         <item name="android:typeface">sans</item>
         <!-- Цвет ссылок (для TextView свойства autoLink)  -->
+        <!-- Убирает капс на Lollipop, нужен только для >5.0  -->
+        <item name="android:textAllCaps">false</item>
         <item name="android:textColorLink">#2371B9</item>
         <item name="android:editTextStyle">@style/topfaceEditText</item>
         <item name="android:autoCompleteTextViewStyle">@style/topfaceAutoCompleteEditText</item>
