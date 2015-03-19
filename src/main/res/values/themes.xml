@@ -79,7 +79,7 @@
     </style>
 
     <style name="Theme.Topface.Ban">
-        <item name="android:background">@drawable/auth_bg</item>
+        <item name="android:windowBackground">@color/bg_white</item>
     </style>
 
     <style name="Theme.Topface.RestoreAccountActivity" parent="Theme.Topface">

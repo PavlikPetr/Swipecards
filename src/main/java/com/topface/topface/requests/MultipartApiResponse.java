@@ -35,6 +35,7 @@ public class MultipartApiResponse implements IApiResponse {
     public int code = ErrorCodes.RESULT_DONT_SET;
     public String message;
     public JSONObject jsonResult;
+    public JSONObject jsonBan;
     private HashMap<String, ApiResponse> mResponses = new HashMap<>();
 
     public MultipartApiResponse(int responseCode, String contentType, String body) {
@@ -75,7 +76,7 @@ public class MultipartApiResponse implements IApiResponse {
         }
     }
 
-    private void parseResponses(LinkedList<String> parts) {
+    private void parseResponses(LinkedList<String> parts) throws JSONException {
         code = ErrorCodes.RESULT_OK;
         boolean firstResponse = true;
         for (String responseString : parts) {
@@ -85,6 +86,11 @@ public class MultipartApiResponse implements IApiResponse {
                 if (!response.isCompleted()) {
                     code = response.getResultCode();
                     message = response.getErrorMessage();
+                    if (ErrorCodes.BAN == code) {
+                        JSONObject jsonObject = new JSONObject(responseString);
+                        jsonBan = jsonObject.optJSONObject("error");
+                        return;
+                    }
                 } else {
                     //Для всех ответов кроме первого отключаем обновление счетчиков
                     if (firstResponse) {
@@ -179,7 +185,7 @@ public class MultipartApiResponse implements IApiResponse {
 
     @Override
     public JSONObject getJsonResult() {
-        return null;
+        return jsonBan;
     }
 
     /**
