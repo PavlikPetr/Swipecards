@@ -230,9 +230,9 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
             @Override
             protected void success(ModerationResponse data, IApiResponse response) {
                 if (data.completed) {
-                    Toast.makeText(getActivity(), "razbanen", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.editor_ban_unban_user_result, Toast.LENGTH_SHORT).show();
                     showView(mLocker, false);
-                    showView(mLocker, R.id.editor_ban_unban_user, false);
+                    showView(getView(), R.id.editor_ban_unban_user, false);
                 }
             }
 
