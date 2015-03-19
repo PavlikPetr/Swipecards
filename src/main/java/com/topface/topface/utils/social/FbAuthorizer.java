@@ -99,6 +99,7 @@ public class FbAuthorizer extends Authorizer {
     public FbAuthorizer(Activity activity) {
         super(activity);
         mUiHelper = new UiLifecycleHelper(activity, getStatusCallback());
+        mUiHelper.onStop();
     }
 
     @Override
