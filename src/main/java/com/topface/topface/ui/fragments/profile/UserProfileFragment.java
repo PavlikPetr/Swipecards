@@ -217,8 +217,10 @@ public class UserProfileFragment extends AbstractProfileFragment {
             showRetryBtn();
         } else if (user.banned) {
             showForBanned();
-            setProfile(user);
-            initTopMenu();
+            if (user.isEditor()) {
+                setProfile(user);
+                initTopMenu();
+            }
         } else if (user.deleted) {
             showForDeleted();
         } else {

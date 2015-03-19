@@ -10,7 +10,10 @@ import android.widget.Toast;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
+import com.topface.topface.data.ModerationResponse;
 import com.topface.topface.data.User;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ModerationPunish;
 import com.topface.topface.requests.ModerationUnban;
@@ -222,16 +225,23 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
     private void unBanUser() {
         ModerationUnban unban = new ModerationUnban(getActivity(), mUserId);
         registerRequest(unban);
-        unban.callback(new ApiHandler() {
+        unban.callback(new DataApiHandler<ModerationResponse>() {
             @Override
-            public void success(IApiResponse response) {
-                Toast.makeText(getActivity(), "razbanen", Toast.LENGTH_SHORT).show();
-                showView(mLocker, false);
+            protected void success(ModerationResponse data, IApiResponse response) {
+                if (data.completed) {
+                    Toast.makeText(getActivity(), "razbanen", Toast.LENGTH_SHORT).show();
+                    showView(mLocker, false);
+                }
+            }
+
+            @Override
+            protected ModerationResponse parseResponse(ApiResponse response) {
+                return new ModerationResponse(response);
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                Toast.makeText(getActivity(), response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), codeError, Toast.LENGTH_SHORT).show();
                 showView(mLocker, false);
             }
         }).exec();
