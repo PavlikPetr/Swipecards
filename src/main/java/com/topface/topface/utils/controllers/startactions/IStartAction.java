@@ -1,7 +1,7 @@
-package com.topface.topface.utils.controllers;
+package com.topface.topface.utils.controllers.startactions;
 
 /**
- * Use AbstractStartAction implementation for common Start Actions.
+ * Use DailyPopupAction implementation for daily popups and LinkedStartAction for popups queue.
  * One contains implemented toString() method
  */
 public interface IStartAction {
@@ -33,4 +33,6 @@ public interface IStartAction {
     int getPriority();
 
     String getActionName();
+
+    void setStartActionCallback(OnNextActionListener startActionCallback);
 }

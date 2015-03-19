@@ -29,6 +29,7 @@ import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.statistics.InviteUniqueStatistics;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ContactsActivity;
 import com.topface.topface.utils.CacheProfile;
@@ -148,6 +149,7 @@ public class ContactsFragment extends BaseFragment {
             request.callback(new ApiHandler() {
                 @Override
                 public void success(IApiResponse response) {
+                    InviteUniqueStatistics.sendContactsInvites(contacts.size());
                     boolean isPremium = response.getJsonResult().optBoolean("premium");
                     if (isPremium) {
                         EasyTracker.sendEvent("InvitesPopup", "SuccessWithChecked", "premiumTrue", (long) contacts.size());

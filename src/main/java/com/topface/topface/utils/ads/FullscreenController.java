@@ -27,8 +27,8 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.config.AppConfig;
-import com.topface.topface.utils.controllers.AbstractStartAction;
-import com.topface.topface.utils.controllers.IStartAction;
+import com.topface.topface.utils.controllers.startactions.IStartAction;
+import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
 import ru.ideast.adwired.AWView;
 import ru.ideast.adwired.events.OnNoBannerListener;
@@ -52,7 +52,7 @@ public class FullscreenController {
     private static boolean isFullScreenBannerVisible = false;
     private Activity mActivity;
 
-    private class FullscreenStartAction extends AbstractStartAction {
+    private class FullscreenStartAction implements IStartAction {
         private PageInfo startPageInfo;
         private int priority;
 
@@ -93,6 +93,11 @@ public class FullscreenController {
         @Override
         public String getActionName() {
             return "Fullscreen";
+        }
+
+        @Override
+        public void setStartActionCallback(OnNextActionListener startActionCallback) {
+
         }
     }
 

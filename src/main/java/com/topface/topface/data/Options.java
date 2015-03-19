@@ -148,6 +148,7 @@ public class Options extends AbstractData {
     public FeedNativeAd feedNativeAd = new FeedNativeAd();
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
     public NotShown notShown = new NotShown();
+    public FacebookRequests facebookRequests = new FacebookRequests();
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
 
     public Options(IApiResponse data) {
@@ -322,8 +323,9 @@ public class Options extends AbstractData {
                 notShown.parseNotShownJSON(jsonNotShown);
             }
 
-            feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
+            facebookRequests = JsonUtils.fromJson(response.toString(),FacebookRequests.class);
 
+            feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
 
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
@@ -634,6 +636,13 @@ public class Options extends AbstractData {
                 text = jsonNotShown.optString("text");
             }
         }
+    }
+
+    public static class FacebookRequests {
+        public boolean enabledOnLogin;
+        public boolean enabledAttempts;
+        public long minDelay = DateUtils.DAY_IN_SECONDS * 3;
+        public int maxAttempts;
     }
 
     public static class FeedNativeAd {
