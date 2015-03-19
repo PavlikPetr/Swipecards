@@ -9,7 +9,8 @@ import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
 import java.util.ArrayList;
 
-/**Класс реализующий запуск очереди попапов. При закрытии одного, сразу появляется другой
+/**
+ * Класс реализующий запуск очереди попапов. При закрытии одного, сразу появляется другой
  * Created by onikitin on 17.03.15.
  */
 public class SequencedStartAction implements IStartAction {
@@ -18,7 +19,7 @@ public class SequencedStartAction implements IStartAction {
     private ArrayList<IStartAction> mActions = new ArrayList<>();
     private int mPriority = -1;
 
-    public SequencedStartAction(Activity activity,int priority) {
+    public SequencedStartAction(Activity activity, int priority) {
         mPriority = priority;
         mActivity = activity;
     }
@@ -66,12 +67,23 @@ public class SequencedStartAction implements IStartAction {
         return mActions;
     }
 
+    /**
+     * Выпиливаем все действия, которые не могут быть запущены
+     */
+    private void removeNonApplicableActions() {
+        for (IStartAction action : mActions) {
+            if (!action.isApplicable()) {
+                mActions.remove(action);
+            }
+        }
+    }
+
     private void runActionQueue() {
-        for (int i = 0; i < mActions.size(); i++) {
+        removeNonApplicableActions();
+        for (int i = 0; i < mActions.size() - 1; i++) {
             final IStartAction nextAction;
-            if ( i < mActions.size()) {
-                if (i+1>=mActions.size())return;
-                nextAction = mActions.get(i+1);
+            if (i < mActions.size()) {
+                nextAction = mActions.get(i + 1);
             } else {
                 return;
             }
@@ -83,10 +95,9 @@ public class SequencedStartAction implements IStartAction {
                     }
                 }
             });
-            if (i == 0) {
-                runAction(mActions.get(i));
-            }
         }
+        //запускаем очередь
+        runAction(mActions.get(0));
     }
 
     private void runAction(final IStartAction action) {
@@ -100,7 +111,8 @@ public class SequencedStartAction implements IStartAction {
                         mActivity.isRestricted();
                         action.callOnUi();
                     }
-                });            }
+                });
+            }
         };
     }
 

@@ -10,9 +10,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created by onikitin on 18.03.15.
- */
 public class InviteFacebookFriendsRequest extends ApiRequest {
 
     public final static String SERVICE_NAME = "virus.inviteFriends";
