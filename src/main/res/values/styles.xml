@@ -933,4 +933,10 @@
     <style name="FlatButton.Blue">
         <item name="android:background">@drawable/flat_blue_btn</item>
     </style>
+
+    <style name="BanButton">
+        <item name="android:background">@drawable/ban_button_selector</item>
+        <item name="android:textColor">@color/text_white</item>
+    </style>
+
 </resources>

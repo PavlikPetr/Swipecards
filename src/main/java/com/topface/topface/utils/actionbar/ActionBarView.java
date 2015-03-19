@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.ui.BanActivity;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.gcmutils.GCMUtils;
@@ -65,6 +66,17 @@ public class ActionBarView implements View.OnClickListener {
         mTitle.setText(title);
     }
 
+    public void setArrowUpView() {
+        setArrowUpView(null);
+    }
+
+    public void setSimpleView() {
+        prepareView();
+        mActionBarView.findViewById(R.id.title_clickable).setClickable(false);
+        mIcon.setVisibility(View.GONE);
+        mTitle.setText(R.string.app_name);
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -91,6 +103,8 @@ public class ActionBarView implements View.OnClickListener {
                     mActivity.startActivity(intent);
                     mActivity.finish();
                 }
+            } else if (mActivity instanceof BanActivity) {
+                mActivity.onBackPressed();
             } else {
                 if (preFinish(mActivity)) {
                     mActivity.finish();
