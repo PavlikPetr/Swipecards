@@ -56,7 +56,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     private ViewFlipper mViewFlipper;
     private GridViewWithHeaderAndFooter mGridAlbum;
     private View mLoadingLocker;
-    private TextView mTitle;
     private View mGridFooterView;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -67,7 +66,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                         CacheProfile.photos.size() < CacheProfile.totalPhotos
                 );
             }
-            initTitleText(mTitle);
         }
     };
     private BroadcastReceiver mPhotosReceiver = new BroadcastReceiver() {
@@ -84,7 +82,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
             } else {
                 mProfilePhotoGridAdapter.addData(newPhotos, more);
             }
-            initTitleText(mTitle);
         }
     };
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
@@ -107,7 +104,8 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mProfilePhotoGridAdapter = new OwnProfileGridAdapter(getActivity().getApplicationContext(), getPhotoLinks(), CacheProfile.totalPhotos, new LoadingListAdapter.Updater() {
+        mProfilePhotoGridAdapter = new OwnProfileGridAdapter(getActivity().getApplicationContext(), getPhotoLinks(),
+                CacheProfile.totalPhotos, new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
                 sendAlbumRequest();
@@ -216,10 +214,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                 return false;
             }
         });
-
-        mTitle = (TextView) root.findViewById(R.id.usedTitle);
-
-        initTitleText(mTitle);
 
         root.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(new OnClickListener() {
             @Override
@@ -370,24 +364,11 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         return CacheProfile.photo != null && photo != null && !photo.isFake() && CacheProfile.photo.getId() != photo.getId();
     }
 
-    private void initTitleText(TextView title) {
-        if (title != null) {
-            title.setVisibility(View.VISIBLE);
-            int size = CacheProfile.totalPhotos;
-            if (size > 0) {
-                title.setText(Utils.formatPhotoQuantity(size));
-                return;
-            }
-            title.setText(R.string.upload_photos);
-        }
-    }
-
     @Override
     public void onResume() {
         getPhotoLinks();
         mProfilePhotoGridAdapter.updateData();
         mProfilePhotoGridAdapter.notifyDataSetChanged();
-        initTitleText(mTitle);
         super.onResume();
     }
 
