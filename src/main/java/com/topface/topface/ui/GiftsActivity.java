@@ -37,6 +37,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     public static final String INTENT_USER_ID_TO_SEND_GIFT = "user_id_to_send_gift";
     public static final String INTENT_IS_SUCCESS_TOAST_AVAILABLE = "is_success_toast_available";
     public static final String GIFTS_LIST = "gifts_list";
+    public static final String SUCCESS_TOAST_AVAILABLE = "success_toast_available";
     public static final String INTENT_SEND_GIFT_ANSWER = "send_gift_answer";
 
     private ArrayList<Gift> mAllGifts = new ArrayList<>();
@@ -181,12 +182,14 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(GIFTS_LIST, mAllGifts);
+        outState.putBoolean(SUCCESS_TOAST_AVAILABLE, mIsSuccessToastAvailable);
     }
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mAllGifts = savedInstanceState.getParcelableArrayList(GIFTS_LIST);
+        mIsSuccessToastAvailable = savedInstanceState.getBoolean(SUCCESS_TOAST_AVAILABLE);
     }
 
     @Override
