@@ -101,6 +101,14 @@
                 android:layout_marginBottom="10dp"
                 android:text="@string/editor_ban_change_gender" />
 
+            <Button
+                android:id="@+id/editor_ban_unban_user"
+                style="@style/Widget.Topface.Button.Big.Gray"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/editor_ban_unban_user" />
+
             <!-- Это просто текстовая информация о пользователе -->
             <TextView
                 android:id="@+id/editor_ban_profile_name"

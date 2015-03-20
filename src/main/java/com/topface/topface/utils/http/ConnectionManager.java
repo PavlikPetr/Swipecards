@@ -17,10 +17,14 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BanActivity;
+import com.topface.topface.ui.RestoreAccountActivity;
 import com.topface.topface.ui.SslErrorActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
+import com.topface.topface.ui.fragments.BanFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
+
+import org.json.JSONObject;
 
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -287,15 +291,19 @@ public class ConnectionManager {
         mStopRequestsOnBan.set(true);
         Intent intent = new Intent(apiRequest.getContext(), BanActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        JSONObject jsonObject = apiResponse.getJsonResult();
+        if (jsonObject != null) {
+            intent.putExtra(BanFragment.USER_MESSAGE, jsonObject.optString("userMessage"));
+            intent.putExtra(BanFragment.BAN_EXPIRE, jsonObject.optLong("banExpire"));
+        }
         intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_BAN);
         intent.putExtra(BanActivity.BANNING_TEXT_INTENT, apiResponse.getErrorMessage());
         apiRequest.getContext().startActivity(intent);
     }
 
     private void showRestoreAccountActivity(IApiRequest apiRequest) {
-        Intent intent = new Intent(apiRequest.getContext(), BanActivity.class);
+        Intent intent = new Intent(apiRequest.getContext(), RestoreAccountActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(BanActivity.INTENT_TYPE, BanActivity.TYPE_RESTORE);
         apiRequest.getContext().startActivity(intent);
     }
 
@@ -326,7 +334,7 @@ public class ConnectionManager {
         int errorCode = ErrorCodes.CONNECTION_ERROR;
         String[] messages = App.getContext().getResources().getStringArray(R.array.ssl_handshake_exception_messages);
         for (String message : messages) {
-            if (e.getMessage().toLowerCase().contains(message.toLowerCase())) {
+            if (e.getMessage().toLowerCase(Locale.getDefault()).contains(message.toLowerCase(Locale.getDefault()))) {
                 errorCode = ErrorCodes.HTTPS_CERTIFICATE_EXPIRED;
                 break;
             }
@@ -405,7 +413,7 @@ public class ConnectionManager {
 
         //Если наш пришли данные от сервера, то логируем их, если нет, то логируем объект запроса
         Debug.logJson(TAG, "RESPONSE <<< ID #" + apiRequest.getId(),
-                response != null ? response.toString() : null
+                response.toString()
         );
 
         return response;

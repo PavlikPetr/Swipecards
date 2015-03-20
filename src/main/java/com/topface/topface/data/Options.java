@@ -3,6 +3,7 @@ package com.topface.topface.data;
 
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import android.webkit.URLUtil;
 
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
@@ -89,6 +90,11 @@ public class Options extends AbstractData {
     public AboutApp aboutApp = new AboutApp();
 
     /**
+     * buttons add to leaders
+     */
+    public List<LeaderButton> buyLeaderButtons = new ArrayList<>();
+
+    /**
      * Стоимость вставания в лидеры
      */
     public int priceLeader = 8;
@@ -101,7 +107,7 @@ public class Options extends AbstractData {
     public long popup_timeout;
     public boolean blockUnconfirmed;
     public boolean blockChatNotMutual;
-    public boolean scruffy;
+    public Boolean scruffy = null;
     public BlockSympathy blockSympathy = new BlockSympathy();
     public BlockPeopleNearby blockPeople = new BlockPeopleNearby();
     public boolean isActivityAllowed = true; //Разрешено ли пользователю ставить лайки и совершать прочую активность
@@ -143,6 +149,7 @@ public class Options extends AbstractData {
     public FeedNativeAd feedNativeAd = new FeedNativeAd();
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
     public NotShown notShown = new NotShown();
+    public FacebookRequests facebookRequests = new FacebookRequests();
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
 
     public Options(IApiResponse data) {
@@ -171,6 +178,7 @@ public class Options extends AbstractData {
             for (PageInfo pageInfo : pagesArr) {
                 pages.put(pageInfo.name, pageInfo);
             }
+            fillLeaderButtons(response.optJSONObject("photofeed"));
             JSONObject aboutAppJson = response.optJSONObject("aboutApp");
             aboutApp = new AboutApp(aboutAppJson.optString("title"), aboutAppJson.optString("url"));
             offerwall = response.optString("offerwall");
@@ -273,8 +281,10 @@ public class Options extends AbstractData {
                 bonus.counter = bonusObject.optInt("counter");
                 bonus.timestamp = bonusObject.optLong("counterTimestamp");
                 bonus.integrationUrl = bonusObject.optString("integrationUrl");
-                bonus.buttonText = bonusObject.optString("buttonText", bonus.buttonText);
-                bonus.buttonPicture = bonusObject.optString("buttonPicture", bonus.buttonPicture);
+                bonus.buttonText = bonusObject.optString("title", bonus.buttonText);
+                String iconUrl = bonusObject.optString("iconUrl", bonus.buttonPicture);
+                // проверяем валидность ссылки на картинку. Если ссылка не валидна, то подставим дефолт
+                bonus.buttonPicture = URLUtil.isValidUrl(iconUrl) ? iconUrl : bonus.buttonPicture;
             }
             // offerwalls for
             JSONObject jsonOfferwalls = response.optJSONObject("offerwalls");
@@ -316,8 +326,9 @@ public class Options extends AbstractData {
                 notShown.parseNotShownJSON(jsonNotShown);
             }
 
-            feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
+            facebookRequests = JsonUtils.fromJson(response.toString(), FacebookRequests.class);
 
+            feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
 
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
@@ -408,6 +419,40 @@ public class Options extends AbstractData {
         public AboutApp() {
             title = App.getContext().getString(R.string.settings_topface_url);
             url = App.getContext().getString(R.string.settings_topface_url_title);
+        }
+    }
+
+    private void fillLeaderButtons(JSONObject photofeedObject) throws JSONException {
+        String buttonsArrayKey = "items";
+        if (photofeedObject == null || !photofeedObject.has(buttonsArrayKey)) {
+            return;
+        }
+        JSONArray buttonsArray = photofeedObject.getJSONArray(buttonsArrayKey);
+        if (buyLeaderButtons != null) {
+            buyLeaderButtons.clear();
+        } else {
+            buyLeaderButtons = new ArrayList<>();
+        }
+        for (int i = 0; i < buttonsArray.length(); i++) {
+            JSONObject buttonObj = buttonsArray.getJSONObject(i);
+            if (buttonObj != null) {
+                buyLeaderButtons.add(new LeaderButton(
+                        buttonObj.optString("text"),
+                        buttonObj.optInt("price"),
+                        buttonObj.optInt("count")));
+            }
+        }
+    }
+
+    public static class LeaderButton {
+        public String title;
+        public int price;
+        public int photoCount;
+
+        public LeaderButton(String title, int price, int photoCount) {
+            this.title = title;
+            this.price = price;
+            this.photoCount = photoCount;
         }
     }
 
@@ -596,6 +641,13 @@ public class Options extends AbstractData {
         }
     }
 
+    public static class FacebookRequests {
+        public boolean enabledOnLogin;
+        public boolean enabledAttempts;
+        public long minDelay = DateUtils.DAY_IN_SECONDS * 3;
+        public int maxAttempts;
+    }
+
     public static class FeedNativeAd {
         public boolean enabled;
         public String type;
@@ -629,5 +681,9 @@ public class Options extends AbstractData {
             Debug.error("Illegal value of startPage", e);
         }
         return fragmentId;
+    }
+
+    public boolean isScruffyEnabled() {
+        return scruffy != null ? scruffy : false;
     }
 }

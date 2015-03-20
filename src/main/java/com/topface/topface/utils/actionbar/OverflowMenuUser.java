@@ -26,4 +26,8 @@ public interface OverflowMenuUser {
     Boolean isMutual();
 
     void clickSendGift();
+
+    Integer getProfileId();
+
+    Boolean isBanned();
 }

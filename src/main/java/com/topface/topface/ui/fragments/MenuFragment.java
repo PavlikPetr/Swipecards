@@ -34,6 +34,7 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
+import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
 import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
@@ -57,6 +58,7 @@ import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.BONUS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.DATING;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.GEO;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.PHOTO_BLOG;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.PROFILE;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_DIALOGS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_LIKES;
@@ -126,6 +128,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             }
         }
     };
+
     private INavigationFragmentsListener mFragmentSwitchListener;
     private ListView mListView;
 
@@ -206,6 +209,8 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 R.drawable.ic_dating_selector));
         menuItems.put(TABBED_DIALOGS.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_dialog_selector));
+        menuItems.put(PHOTO_BLOG.getId(), LeftMenuAdapter.newLeftMenuItem(PHOTO_BLOG, LeftMenuAdapter.TYPE_MENU_BUTTON,
+                R.drawable.ic_photolenta));
         menuItems.put(TABBED_VISITORS.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
         menuItems.put(TABBED_LIKES.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
@@ -498,6 +503,9 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                 if (Editor.isEditor()) {
                     fragment = new EditorFragment();
                 }
+                break;
+            case PHOTO_BLOG:
+                fragment = new PhotoBlogFragment();
                 break;
             case TABBED_LIKES:
                 fragment = new TabbedLikesFragment();

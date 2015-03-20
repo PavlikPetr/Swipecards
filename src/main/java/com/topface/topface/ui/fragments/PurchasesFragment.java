@@ -63,6 +63,7 @@ public class PurchasesFragment extends BaseFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateBalanceCounters();
+            changeInfoText(getInfoText());
         }
     };
     private boolean mIsVip;
@@ -94,10 +95,8 @@ public class PurchasesFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (CacheProfile.premium && mResourcesInfo != null) {
-            mResourcesInfo.setVisibility(View.GONE);
-        } else {
-            mResourcesInfo.setVisibility(View.VISIBLE);
+        if (mResourcesInfo != null) {
+            mResourcesInfo.setVisibility(CacheProfile.premium ? View.GONE : View.VISIBLE);
         }
         updateBalanceCounters();
     }
@@ -269,8 +268,10 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     private void showNewInfo(String text) {
-        mResourcesInfo.setText(text);
-        mResourcesInfo.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down_animation));
+        if (mResourcesInfo != null) {
+            mResourcesInfo.setText(text);
+            mResourcesInfo.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down_animation));
+        }
     }
 
     private String getInfoText() {

@@ -46,15 +46,12 @@
     <string name="general_search_empty_title">Bohužiaľ, nič nebolo nájdené</string>
     <string name="general_search_empty_text">Môžete zadať nové vyhľadávanie alebo zmeniť nastavenia filtra.</string>
     <string name="map_title">Mapa</string>
-    <string name="settings_want_answer">Chcem, aby mi odpovedali</string>
     <string name="general_buying">Kúpiť sympatie a mince</string>
     <string name="popup_version_title">Je dostupná nová verzia aplikácie</string>
     <string name="popup_version_message">Je čas obnoviť svoju verziu!</string>
     <string name="leaders_select_photo_info">Vyberte najefektívnejšiu fotografiu! Fotografie z nízkym ratingom nemožno vyberať</string>
     <string name="map_popup_address">Adresa</string>
     <string name="black_list_info">Pridali ste osobu na čiarnu listiny. Môžete to zmeniť vo svojich profilových nastaveniach v časti VIP status</string>
-    <string name="general_place">Miesto</string>
-    <string name="general_soon">Čoskoro</string>
     <string name="black_list_activation">Aktivujte si VIP status a využívajte čiernu listinu</string>
     <string name="buying_total">Celkovo</string>
     <string name="we_dont_detect_your_city">Aby ste mohli nájsť ľudí, ktorí sú blízko Vás, musíme vedieť kde sa nachádzate. Zadajte prosím Vaše mesto</string>
@@ -84,7 +81,6 @@
     <string name="general_cancel">Zrušiť</string>
     <string name="general_delete_title">Vymazať</string>
     <string name="general_dialog_loading">Načítanie</string>
-    <string name="general_dialog_saving">Uloženie</string>
     <string name="general_fill_button">Vyplniť</string>
     <string name="general_send_full">Odoslať</string>
     <string name="general_dialog_retry">Opakovať</string>
@@ -97,7 +93,6 @@
     <string name="general_spinner_title">Vyberte činnosť</string>
     <string name="general_profile_error">Chyba pri načítaní profilu</string>
     <string name="general_dbl_all">Všetci</string>
-    <string name="general_dbl_unread">Neprečítané</string>
     <string name="time_yesterday">Včera</string>
     <string name="time_today">Dnes</string>
     <string name="general_send_button">Odosl.</string>
@@ -135,16 +130,11 @@
     <string name="filter_only_beautiful">Iba krásne</string>
     <string name="filter_extra_parameters">Ďalšie parametre</string>
     <string name="filter_age">Vek</string>
-    <string name="filter_online">Online</string>
     <string name="filter_cities_all">Vo všetkých mestách</string>
     <string name="buying_header_title">Nákupy</string>
     <string name="buying_default_message">Môžete odosielať darčeky a obdivy za mince</string>
     <string name="buying_money">Nákup mincí</string>
-    <string name="gifts_romantic">Romantika</string>
-    <string name="gifts_friends">Priateľstvo</string>
-    <string name="gifts_present">Gratulácie</string>
     <string name="gifts_title">Vyberte darček</string>
-    <string name="gifts_send_btn">Poslať darček</string>
     <string name="profile_header_title">Môj profil</string>
     <string name="profile_add_album">Vybrať z toho, čo je k dispozícii</string>
     <string name="profile_add_camera">Vyfotografovať</string>
@@ -233,7 +223,6 @@
     <string name="ban_title">Gratulujeme! Ste zabanovaní</string>
     <string name="general_ready">Hotovo</string>
     <string name="buying_store_ok">Nákup je úspešne dokončený</string>
-    <string name="general_close">Zatvoriť</string>
     <string name="vip_privileges">VIP privilégiá</string>
     <string name="vip_rest">Ste prihlásení na odber VIP</string>
     <string name="vip_invis">Neviditeľný režim</string>
@@ -250,7 +239,6 @@
     <string name="vip_info_blackList">Zbavte sa otravných osôb pomocou \"čiernej listiny\"</string>
     <string name="vip_info_vip">Vyniknite vďaka VIP statusu vo vyhľadávaní a vo svojom profile!</string>
     <string name="buying_vip_status">Kúpiť VIP status</string>
-    <string name="buy_play_market_not_available">Play Market nie je dostupný</string>
     <string name="edit_my_city">Moje mesto</string>
     <string name="settings_feedback_email">E-mail pre kontakt</string>
     <string name="settings_invalid_email">Nesprávny e-mail</string>
@@ -263,16 +251,13 @@
     <string name="general_buying_disabled">V tomto momente nákup nie je možný</string>
     <string name="ban_flood_detected">Príliš často zadávate otázky na server. Aby ste mohli ďalej používať aplikáciu, musíte počkať.</string>
     <string name="general_maintenance">Na serveri prebiehajú údržbárske práce a Vašu požiadavku nie je možné splniť. Skúste to neskôr.</string>
-    <string name="virus_chat_likes_request_title">Darovať sympatie Vašim priateľom</string>
     <string name="virus_chat_btn">Získať sympatie</string>
-    <string name="virus_request_error">Nepodarilo sa odoslať sympatie Vašim priateľom</string>
     <string name="profile_ask_sent">Žiadosť je odoslaná</string>
     <string name="virus_error">Za 24 hodín môže Váš priateľ darovať sympatiu iba 1 raz! Skúste zajtra!</string>
     <string name="popup_version_update">Obnoviť</string>
     <string name="popup_version_cancel">Pripomenúť neskôr</string>
     <string name="general_version_not_supported">Vaša verzia aplikácie je stará a viac nie je podporovaná. Prosím obnovte si verziu aplikácie</string>
     <string name="default_price_format">Celkovo: %.2f USD</string>
-    <string name="dating_online_only">%s, iba online</string>
     <string name="leaders_pick_condition">Nemôžete si vybrať fotografiu s hodnotením nižším ako %d%%:</string>
     <string name="general_gift">Darček</string>
     <string name="user_actions_chat">Rozhovor</string>
@@ -310,7 +295,6 @@
     <string name="password_changing">zmena hesla</string>
     <string name="save">Uložiť</string>
     <string name="confirmation_successfully_sent">Potvrdenie bolo poslané na uvedený e-mail.</string>
-    <string name="password_hint">heslo</string>
     <string name="password_confirmation_hint">potvrdenie hesla</string>
     <string name="enter_new_password">Zadajte nové heslo</string>
     <string name="enter_password_confirmation">Zadajte potvrdzujúce heslo</string>
@@ -330,8 +314,6 @@
     <string name="you_dont_have_gifts_yet">Zatiaľ nemáte darčeky</string>
     <string name="buy_sympathies">Kúpiť sympatie</string>
     <string name="upload_photos">Nahrajte fotografie</string>
-    <string name="chat_no_message_title">Začnite komunikovať!</string>
-    <string name="chat_no_message_text">Napíšte správu alebo pošlite darček a určite Vám odpovedia</string>
     <string name="user_baned">Užívateľ dostal BAN</string>
     <string name="general_choose_city">Vyberte mesto</string>
     <string name="buy_mobile_payments">Iné spôspoby platby</string>
@@ -404,7 +386,6 @@
     <string name="general_complain_sended">Vaša sťažnosť je odoslaná, ďakujeme veľmi pekne za pomoc</string>
     <string name="general_complain">Žaloba</string>
     <string name="general_msg">Správa</string>
-    <string name="general_no_notifications">Bohužiaľ, oznámenia na Vašom zariadení nie sú k dispozícii</string>
     <string name="black_list_add_short">Na čiernu listinu</string>
     <string name="confirm_email_for_dating">Sme proti spamu. Potvrďte svoju e-mailovú adresu, aby ste sa mohli zoznámiť v Topface!</string>
     <string name="complain_type_swearing_msg">Hrubosť, hrozby, nadávky</string>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.text.TextUtils;
 
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.Static;
@@ -13,6 +14,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.social.AuthToken;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -56,6 +58,9 @@ public class UserConfig extends AbstractConfig {
     public static final String TOPFACE_OFFERWALL_REDIRECT_COUNTER = "topface_offerwall_redirect_counter";
     public static final String REMAINED_DAILY_PUBNATIVE_SHOWS = "remained_feed_ad_shows";
     public static final String LAST_DAY_PUBNATIVE_SHOWN = "current_day_for_showing_feed_ad";
+    public static final String SYMPATHY_SENT_ID_ARRAY = "sympathy_sent_id_array";
+    public static final String FACEBOOK_REQUESTS_DIALOG_SKIPS = "facebook_request_dialog_skip";
+    public static final String FACEBOOK_REQUESTS_DIALOG_TIME = "facebook_request_dialog_time";
     private static final String APPSFLYER_FIRST_PAY = "appsflyer_first_purchase";
     private String mUnique;
 
@@ -125,10 +130,17 @@ public class UserConfig extends AbstractConfig {
         // Время начала текущих суток для учёта количества показов рекламы pubnative
         // Обновляется автоматически при попытке получить оставшиеся показы pubnative
         addField(settingsMap, LAST_DAY_PUBNATIVE_SHOWN, 0L);
+        // Массив id пользователей из фотоленты, которым были отправлены симпатии
+        addField(settingsMap, SYMPATHY_SENT_ID_ARRAY, "");
+
         // validate user avatar
         addField(settingsMap, IS_AVATAR_AVAILABLE, false);
         //Флаг первой покупки
         addField(settingsMap, APPSFLYER_FIRST_PAY, false);
+        // Сохраняем кол-во скипов FacebookRequest диалога
+        addField(settingsMap, FACEBOOK_REQUESTS_DIALOG_SKIPS, 0);
+        // Сохрфняем время показа FacebookRequest диалога
+        addField(settingsMap, FACEBOOK_REQUESTS_DIALOG_TIME, 0L);
     }
 
     @Override
@@ -146,6 +158,45 @@ public class UserConfig extends AbstractConfig {
                 Context.MODE_PRIVATE
         );
     }
+
+    /**
+     * Set skips amount for facebook request window
+     *
+     * @param skipNumber skips facebook request window
+     * @return true on success
+     */
+    public boolean setFacebookRequestSkip(int skipNumber) {
+        return setField(getSettingsMap(), FACEBOOK_REQUESTS_DIALOG_SKIPS, skipNumber);
+    }
+
+    /**
+     * Get skips amount
+     *
+     * @return skips
+     */
+    public int getFacebookRequestSkip() {
+        return getIntegerField(getSettingsMap(), FACEBOOK_REQUESTS_DIALOG_SKIPS);
+    }
+
+    /**
+     * Sets last time when was shown facebook request window
+     *
+     * @param lastTime facebook request window last time
+     * @return true on success
+     */
+    public boolean setFacebookRequestWindowShow(long lastTime) {
+        return setField(getSettingsMap(), FACEBOOK_REQUESTS_DIALOG_TIME, lastTime);
+    }
+
+    /**
+     * Last time when was shown facebook request window
+     *
+     * @return last time
+     */
+    public long getFacebookRequestWondowShow() {
+        return getLongField(getSettingsMap(), FACEBOOK_REQUESTS_DIALOG_TIME);
+    }
+
 
     /**
      * Return first purchase flag
@@ -499,6 +550,42 @@ public class UserConfig extends AbstractConfig {
         if (remainedShows > 0) {
             setField(getSettingsMap(), REMAINED_DAILY_PUBNATIVE_SHOWS, remainedShows - 1);
         }
+    }
+
+    /**
+     * @return List of sympathy sent from photoblog
+     */
+    public List<Integer> getSympathySentArray() {
+        String rawSubs = getStringField(getSettingsMap(), SYMPATHY_SENT_ID_ARRAY);
+        List<Integer> res = new ArrayList<>();
+        if (TextUtils.isEmpty(rawSubs)) {
+            return res;
+        }
+        for (String item : rawSubs.split(PURCHASED_SUBSCRIPTIONS_SEPARATOR)) {
+            int id = -1;
+            try {
+                id = Integer.parseInt(item);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+            res.add(id);
+        }
+
+        return res;
+    }
+
+    /**
+     * Set list of sympathy sent from photoblog
+     */
+    public void setSympathySentArray(List<Integer> array) {
+        String res = "";
+        for (int i = 0; i < array.size(); i++) {
+            res = res + Integer.toString(array.get(i));
+            if (i < array.size() - 1) {
+                res = res + PURCHASED_SUBSCRIPTIONS_SEPARATOR;
+            }
+        }
+        setField(getSettingsMap(), SYMPATHY_SENT_ID_ARRAY, res);
     }
 
     // =====================================================

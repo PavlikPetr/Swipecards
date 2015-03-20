@@ -367,7 +367,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
      *
      * @param purchase объект с данными покупки
      */
-    public void verifyPurchase(final Purchase purchase, final Context context) {
+    public void verifyPurchase(Purchase purchase, Context context) {
         if (purchase == null) {
             Debug.error("BillingFragment: purchase is empty");
             return;
@@ -378,7 +378,20 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                     " already purchased on this google account.");
             return;
         }
+        // проверяем тип покупки
+        if (TextUtils.equals(purchase.getSku(), TEST_PURCHASED_PRODUCT_ID)) {
+            // если покупка тестовая, то проверяем не был ли отправлен запрос на сервер ранее
+            if (!App.getOpenIabHelperManager().isInventoryChecked()) {
+                // сбрасываем флаг, чтобы одна тестовая покупка не отправлялась несколько раз
+                App.getOpenIabHelperManager().setInventoryChecked(true);
+                validatePurchaseRequest(purchase, context);
+            }
+        } else {
+            validatePurchaseRequest(purchase, context);
+        }
+    }
 
+    private void validatePurchaseRequest(final Purchase purchase, final Context context) {
         // Отправлем покупку на сервер для проверки и начисления
         final PurchaseRequest validateRequest = PurchaseRequest.getValidateRequest(purchase, context);
         validateRequest.callback(new DataApiHandler<Verify>() {

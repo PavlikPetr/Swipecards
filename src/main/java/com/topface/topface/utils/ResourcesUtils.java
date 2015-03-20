@@ -29,6 +29,9 @@ public class ResourcesUtils {
             case TABBED_VISITORS:
                 titleId = R.string.general_visitors;
                 break;
+            case PHOTO_BLOG:
+                titleId = R.string.general_photoblog;
+                break;
             case BONUS:
                 return CacheProfile.getOptions().bonus.buttonText;
             case GEO:

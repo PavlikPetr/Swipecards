@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/addContainer"
@@ -18,7 +18,7 @@
             android:lineSpacingExtra="8sp"
             android:textSize="12sp"
             android:layout_alignParentTop="true"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginBottom="5dp" />
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -36,7 +36,7 @@
                 android:minHeight="10dp"
                 android:textSize="12sp"
                 android:layout_alignParentRight="true"
-                android:layout_marginLeft="5dp"/>
+                android:layout_marginLeft="5dp" />
 
             <EditText
                 android:id="@+id/addInput"
@@ -44,8 +44,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/friend_email_hint"
                 android:layout_toLeftOf="@id/addButton"
-                android:padding="9dp"
-                android:textSize="12sp"/>
+                android:gravity="left|center_vertical"
+                android:textSize="12sp" />
 
         </RelativeLayout>
     </RelativeLayout>
@@ -62,7 +62,7 @@
             android:id="@+id/contactsVip"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.Topface.Button.Big.Blue"/>
+            style="@style/Widget.Topface.Button.Big.Blue" />
     </RelativeLayout>
 
     <ListView
@@ -71,11 +71,11 @@
         android:id="@+id/contactsList"
         android:cacheColorHint="#0000"
         android:layout_below="@id/addContainer"
-        android:layout_above="@id/buttonContainer"/>
+        android:layout_above="@id/buttonContainer" />
 
     <com.topface.topface.ui.views.LockerView
         android:id="@+id/clLocker"
         android:visibility="gone"
-        style="@style/LoadingLocker"/>
+        style="@style/LoadingLocker" />
 
 </RelativeLayout>

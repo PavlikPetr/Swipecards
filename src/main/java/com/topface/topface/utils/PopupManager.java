@@ -1,22 +1,16 @@
 package com.topface.topface.utils;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
-import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
-import com.topface.topface.ui.dialogs.InvitesPopup;
 import com.topface.topface.ui.dialogs.RateAppDialog;
-import com.topface.topface.utils.controllers.AbstractStartAction;
-import com.topface.topface.utils.controllers.IStartAction;
-
-import java.util.ArrayList;
+import com.topface.topface.utils.controllers.startactions.IStartAction;
+import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
 
 public class PopupManager {
@@ -29,7 +23,7 @@ public class PopupManager {
     }
 
     public IStartAction createOldVersionPopupStartAction(final int priority) {
-        return new AbstractStartAction() {
+        return new IStartAction() {
             @Override
             public void callInBackground() {
             }
@@ -52,6 +46,11 @@ public class PopupManager {
             @Override
             public String getActionName() {
                 return "OldVersionPopup";
+            }
+
+            @Override
+            public void setStartActionCallback(OnNextActionListener startActionCallback) {
+
             }
         };
     }
@@ -85,7 +84,7 @@ public class PopupManager {
     }
 
     public IStartAction createRatePopupStartAction(final int priority) {
-        return new AbstractStartAction() {
+        return new IStartAction() {
             @Override
             public void callInBackground() {
             }
@@ -110,6 +109,11 @@ public class PopupManager {
             public String getActionName() {
                 return "RateAppPopup";
             }
+
+            @Override
+            public void setStartActionCallback(OnNextActionListener startActionCallback) {
+
+            }
         };
     }
 
@@ -123,64 +127,6 @@ public class PopupManager {
             }
         });
         mCurrentDialog = rateAppDialog;
-    }
-
-    public IStartAction createInvitePopupStartAction(final int priority) {
-        return new AbstractStartAction() {
-            @Override
-            public void callInBackground() {
-                SharedPreferences preferences = App.getContext().getSharedPreferences(
-                        Static.PREFERENCES_TAG_SHARED,
-                        Context.MODE_PRIVATE
-                );
-                preferences.edit()
-                        .putLong(InvitesPopup.INVITE_POPUP_PREF_KEY, System.currentTimeMillis())
-                        .apply();
-            }
-
-            @Override
-            public void callOnUi() {
-                startInvitePopup();
-            }
-
-            @Override
-            public boolean isApplicable() {
-                return InvitesPopup.isApplicable();
-            }
-
-            @Override
-            public int getPriority() {
-                return priority;
-            }
-
-            @Override
-            public String getActionName() {
-                return "InviteContactsPopup";
-            }
-        };
-    }
-
-    private void startInvitePopup() {
-        ContactsProvider.GetContactsHandler handler = new ContactsProvider.GetContactsHandler() {
-            @Override
-            public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
-
-                InvitesPopup popup = InvitesPopup.newInstance(contacts);
-                popup.show(mActivity.getSupportFragmentManager(), InvitesPopup.TAG);
-                mCurrentDialog = popup;
-                popup.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        mCurrentDialog = null;
-                    }
-                });
-                EasyTracker.sendEvent("InvitesPopup", "Show", "", 0L);
-
-            }
-        };
-
-        ContactsProvider provider = new ContactsProvider(mActivity);
-        provider.getContacts(-1, 0, handler);
     }
 
     public AbstractDialogFragment getCurrentDialog() {

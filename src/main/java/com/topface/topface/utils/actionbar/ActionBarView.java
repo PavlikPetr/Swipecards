@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.ui.BanActivity;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -64,6 +66,17 @@ public class ActionBarView implements View.OnClickListener {
         mTitle.setText(title);
     }
 
+    public void setArrowUpView() {
+        setArrowUpView(null);
+    }
+
+    public void setSimpleView() {
+        prepareView();
+        mActionBarView.findViewById(R.id.title_clickable).setClickable(false);
+        mIcon.setVisibility(View.GONE);
+        mTitle.setText(R.string.app_name);
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -80,18 +93,31 @@ public class ActionBarView implements View.OnClickListener {
             if (mActivity instanceof NavigationActivity) {
                 mActionBarClickListener.onActionBarClick();
             } else if (mActivity.isTaskRoot() || noBackStack) {
-                Intent intent = mActivity instanceof ActionBarActivity ?
-                        ((ActionBarActivity) mActivity).getSupportParentActivityIntent() :
-                        NavUtils.getParentActivityIntent(mActivity);
-                if (noBackStack) {
-                    intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                if (preFinish(mActivity)) {
+                    Intent intent = mActivity instanceof ActionBarActivity ?
+                            ((ActionBarActivity) mActivity).getSupportParentActivityIntent() :
+                            NavUtils.getParentActivityIntent(mActivity);
+                    if (noBackStack) {
+                        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    }
+                    mActivity.startActivity(intent);
+                    mActivity.finish();
                 }
-                mActivity.startActivity(intent);
-                mActivity.finish();
+            } else if (mActivity instanceof BanActivity) {
+                mActivity.onBackPressed();
             } else {
-                mActivity.finish();
+                if (preFinish(mActivity)) {
+                    mActivity.finish();
+                }
             }
         }
+    }
+
+    private boolean preFinish(Activity activity) {
+        if (activity instanceof BaseFragmentActivity) {
+            return ((BaseFragmentActivity) activity).doPreFinish();
+        }
+        return true;
     }
 
     public void setActionBarTitle(String title) {

@@ -130,7 +130,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
 
     @Override
     protected OverflowMenu createOverflowMenu(MenuItem barActions) {
-        return new OverflowMenu(getActivity(), barActions, mRateController, mProfileId, mSavedResponse);
+        return new OverflowMenu(getActivity(), barActions, mRateController, mSavedResponse);
     }
 
     @Override
@@ -192,6 +192,10 @@ public class UserProfileFragment extends AbstractProfileFragment {
             showRetryBtn();
         } else if (user.banned) {
             showForBanned();
+            if (user.isEditor()) {
+                setProfile(user);
+                initOverflowMenuActions(getOverflowMenu());
+            }
         } else if (user.deleted) {
             showForDeleted();
         } else {
@@ -346,6 +350,17 @@ public class UserProfileFragment extends AbstractProfileFragment {
                                     GiftsActivity.INTENT_REQUEST_GIFT
                             );
                         }
+                    }
+
+                    @Override
+                    public Integer getProfileId() {
+                        return mProfileId;
+                    }
+
+                    @Override
+                    public Boolean isBanned() {
+                        User user = getUser();
+                        return user != null ? user.banned : null;
                     }
                 });
             }

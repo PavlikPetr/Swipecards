@@ -61,7 +61,7 @@ public class CacheProfile {
     public static City city;                    // город пользователя
     public static int money;                    // количество монет у пользователя
     public static int likes;                    // количество симпатий пользователя
-    public static DatingFilter dating;          //Фильтр поиска
+    public static DatingFilter dating;          // Фильтр поиска
     public static boolean paid;                 // признак платящего пользоателя
     public static boolean show_ad = true;       // флаг показа рекламы
     public static boolean premium;              // показывает есть ли у пользователя Vip статус
@@ -74,7 +74,7 @@ public class CacheProfile {
     public static boolean email;                // присутсвует ли email
     public static boolean emailGrabbed;         // был ли email введен пользователем
     public static boolean emailConfirmed;       // подтвержден ли email
-    public static int xstatus;                  //код цели знакомства пользователя, возможные варианты
+    public static int xstatus;                  // код цели знакомства пользователя, возможные варианты
     private static boolean editor;              // является ли пользователь редактором
     private static String status;               // статус пользователя
     public static boolean canInvite;            // может ли этот пользователь отправлять приглашения контактам

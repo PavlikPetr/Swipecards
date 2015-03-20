@@ -102,7 +102,9 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         Bundle args = getArguments();
-        mBodyStartPageClassName = args.getString(INTENT_START_BODY_PAGE_NAME);
+        if (args != null && args.containsKey(INTENT_START_BODY_PAGE_NAME)) {
+            mBodyStartPageClassName = args.getString(INTENT_START_BODY_PAGE_NAME);
+        }
     }
 
     @Override

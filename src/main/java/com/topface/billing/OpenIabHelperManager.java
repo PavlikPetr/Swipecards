@@ -32,13 +32,14 @@ public class OpenIabHelperManager implements IabHelper.OnIabSetupFinishedListene
     private boolean mIsInventoryReady = false;
     private boolean mIsSetupStarted = false;
     private boolean mIsSetupDone = false;
+    private boolean mIsInventoryChecked;
     private ArrayList<IOpenIabEventListener> mInventoryReceivers = new ArrayList<>();
     private Inventory mLastInventory;
 
     public interface IOpenIabEventListener {
-        public void receiveInventory(Inventory inventory);
+        void receiveInventory(Inventory inventory);
 
-        public void onOpenIabSetupFinished(boolean normaly);
+        void onOpenIabSetupFinished(boolean normaly);
     }
 
     private void init(Context context) {
@@ -225,12 +226,21 @@ public class OpenIabHelperManager implements IabHelper.OnIabSetupFinishedListene
             if (inventory != null) {
                 mIsInventoryReady = true;
                 mLastInventory = inventory;
+                setInventoryChecked(false);
                 CacheProfile.setMarketProductsDetails(ProductsDetails.createFromInventory(mLastInventory));
                 notifyInventoryReceivers();
             }
         } else {
             Debug.error("OpenIabHelperManager: onQueryInventoryFinished error: " + iabResult);
         }
+    }
+
+    public void setInventoryChecked(boolean isChecked) {
+        mIsInventoryChecked = isChecked;
+    }
+
+    public boolean isInventoryChecked() {
+        return mIsInventoryChecked;
     }
 
     public void addOpenIabEventListener(Context context, IOpenIabEventListener receiver) {

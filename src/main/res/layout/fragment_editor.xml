@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -15,39 +15,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/editor_title_name"
-            android:id="@+id/EditorInfoName"/>
+            android:id="@+id/EditorInfoName" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/editor_title_id"
             android:autoLink="web"
-            android:id="@+id/EditorInfoId"/>
+            android:id="@+id/EditorInfoId" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/EditorInfoSsid"
-            android:text="@string/editor_title_ssid"/>
+            android:text="@string/editor_title_ssid" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/EditorInfoToken"
-            android:text="@string/editor_title_token"/>
+            android:text="@string/editor_title_token" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/EditorInfoSocialNetwork"
             android:autoLink="web"
-            android:text="@string/editor_title_social_link"/>
+            android:text="@string/editor_title_social_link" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/EditorInfoEditorStatus"
-            android:text="@string/editor_title_editor_status"/>
+            android:text="@string/editor_title_editor_status" />
 
         <!-- Настройка подключения к API: URL, версия, ревизия -->
         <RelativeLayout
@@ -62,22 +62,21 @@
                 android:id="@+id/EditorApiTitle"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
-                android:text="@string/editor_api_url_title"/>
+                android:text="@string/editor_api_url_title" />
 
             <Spinner
                 android:layout_toRightOf="@id/EditorApiTitle"
                 android:id="@+id/EditorApiUrl"
                 android:layout_alignTop="@id/EditorApiUrl"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_below="@id/EditorApiUrl"
-                android:id="@+id/EditorApiCheckbox"
-                />
+                android:id="@+id/EditorApiCheckbox" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -87,8 +86,7 @@
                 android:layout_toRightOf="@id/EditorApiCheckbox"
                 android:layout_margin="5dp"
                 android:textSize="16sp"
-                android:id="@+id/EditorLoginText"
-                />
+                android:id="@+id/EditorLoginText" />
 
             <EditText
                 android:inputType="text"
@@ -96,8 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/EditorLoginText"
                 android:layout_alignTop="@id/EditorApiCheckbox"
-                android:id="@+id/EditorLogin"
-                />
+                android:id="@+id/EditorLogin" />
 
 
         </RelativeLayout>
@@ -114,14 +111,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:id="@+id/EditorModeTitle"
-                android:text="@string/editor_title_editor_mode"/>
+                android:text="@string/editor_title_editor_mode" />
 
             <Spinner
                 android:layout_toRightOf="@id/EditorModeTitle"
                 android:id="@+id/EditorMode"
                 android:layout_alignTop="@id/EditorModeTitle"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
         </RelativeLayout>
 
@@ -136,14 +133,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:id="@+id/EditorDebugTitle"
-                android:text="@string/editor_title_debug"/>
+                android:text="@string/editor_title_debug" />
 
             <Spinner
                 android:layout_toRightOf="@id/EditorDebugTitle"
                 android:id="@+id/EditorDebug"
                 android:layout_alignTop="@id/EditorDebugTitle"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
         </RelativeLayout>
 
@@ -152,21 +149,21 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            layout="@layout/editor_goprofile"/>
+            layout="@layout/editor_goprofile" />
 
         <include
             android:id="@+id/loPopupSwitcher"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            layout="@layout/editor_form_switch"/>
+            layout="@layout/editor_form_switch" />
 
         <include
             android:id="@+id/loTestNetworkSwitcher"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            layout="@layout/editor_form_switch"/>
+            layout="@layout/editor_form_switch" />
 
         <TextView
             android:layout_width="fill_parent"
@@ -176,7 +173,7 @@
             android:layout_marginRight="20dp"
             android:gravity="left"
             android:text="@string/editor_network_errors_tip"
-            android:textSize="10sp"/>
+            android:textSize="10sp" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -189,12 +186,12 @@
                 android:id="@+id/tvOfferwallTitle"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
-                android:text="@string/editor_offerwall_title"/>
+                android:text="@string/editor_offerwall_title" />
 
             <Spinner
                 android:id="@+id/spOfferwall"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <LinearLayout
@@ -205,17 +202,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/editor_emulate_connection"/>
+                android:text="@string/editor_emulate_connection" />
 
             <Spinner
                 android:id="@+id/spConnection"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/debugConnectionEnabled"/>
+                android:id="@+id/debugConnectionEnabled" />
         </LinearLayout>
 
         <Button
@@ -225,7 +222,7 @@
             android:layout_marginBottom="10dp"
             android:text="@string/editor_refresh_profile"
             android:id="@+id/EditorRefreshProfile"
-            style="@style/Widget.Topface.Button.Big.Gray"/>
+            style="@style/Widget.Topface.Button.Big.Gray" />
 
         <Button
             android:layout_width="fill_parent"
@@ -233,7 +230,7 @@
             android:layout_marginBottom="10dp"
             android:text="@string/editor_clear_search_cache"
             android:id="@+id/EditorClearSearchCache"
-            style="@style/Widget.Topface.Button.Big.Gray"/>
+            style="@style/Widget.Topface.Button.Big.Gray" />
 
         <Button
             android:layout_width="fill_parent"
@@ -241,7 +238,7 @@
             android:layout_marginBottom="10dp"
             android:text="@string/editor_clear_air_messages"
             android:id="@+id/EditorClearAirMessages"
-            style="@style/Widget.Topface.Button.Big.Gray"/>
+            style="@style/Widget.Topface.Button.Big.Gray" />
 
         <Button
             android:layout_width="fill_parent"
@@ -249,7 +246,7 @@
             android:layout_marginBottom="10dp"
             android:text="@string/editor_configure_banners"
             android:id="@+id/EditorConfigureBanners"
-            style="@style/Widget.Topface.Button.Big.Gray"/>
+            style="@style/Widget.Topface.Button.Big.Gray" />
 
         <Button
             android:layout_width="fill_parent"
@@ -257,7 +254,7 @@
             android:layout_marginBottom="10dp"
             android:text="@string/editor_send_gcm"
             android:id="@+id/EditorSendGCMToken"
-            style="@style/Widget.Topface.Button.Big.Gray"/>
+            style="@style/Widget.Topface.Button.Big.Gray" />
 
         <Button
             android:layout_width="fill_parent"
@@ -265,7 +262,7 @@
             android:layout_marginBottom="10dp"
             android:text="@string/editor_send_auth"
             android:id="@+id/EditorSendAuth"
-            style="@style/Widget.Topface.Button.Big.Gray"/>
+            style="@style/Widget.Topface.Button.Big.Gray" />
 
         <Button
             android:layout_width="fill_parent"
@@ -274,7 +271,7 @@
             android:layout_marginTop="30dp"
             android:text="@string/editor_save_settings"
             android:id="@+id/EditorSaveSettings"
-            style="@style/Widget.Topface.Button.Big.Gray"/>
+            style="@style/Widget.Topface.Button.Big.Gray" />
 
         <Button
             android:layout_width="fill_parent"
@@ -282,7 +279,7 @@
             android:layout_marginBottom="10dp"
             android:text="@string/editor_reset_settings"
             android:id="@+id/EditorResetSettings"
-            style="@style/Widget.Topface.Button.Big.Gray"/>
+            style="@style/Widget.Topface.Button.Big.Gray" />
     </LinearLayout>
 
 </ScrollView>

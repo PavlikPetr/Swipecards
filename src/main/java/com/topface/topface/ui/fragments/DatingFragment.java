@@ -374,7 +374,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
 
         // User Info
-        mUserInfoStatus = (TextView) getActivity().getLayoutInflater().inflate(R.layout.dating_user_info, null, false);
+        mUserInfoStatus = (TextView) root.findViewById(R.id.tvDatingUserStatus);
 
         // Counter
         mDatingCounter = (TextView) root.findViewById(R.id.tvDatingCounter);
@@ -729,7 +729,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             case R.id.send_gift_button: {
                 if (mCurrentUser != null) {
                     startActivityForResult(
-                            GiftsActivity.getSendGiftIntent(getActivity(), mCurrentUser.id),
+                            GiftsActivity.getSendGiftIntent(getActivity(), mCurrentUser.id, false),
                             GiftsActivity.INTENT_REQUEST_GIFT
                     );
                     EasyTracker.sendEvent("Dating", "SendGiftClick", "", 1L);
@@ -1118,6 +1118,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 registerRequest(filterRequest);
                 filterRequest.callback(new FilterHandler()).exec();
                 mNewFilter = true;
+            }
+            // открываем чат с пользователем в случае успешной отправки подарка с экрана знакомств
+        } else if (resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
+            if (mDatingInstantMessageController != null) {
+                // открываем чат с пустой строкой в footer
+                mDatingInstantMessageController.openChat(getActivity(), mCurrentUser, "");
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
