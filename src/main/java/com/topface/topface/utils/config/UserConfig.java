@@ -150,9 +150,7 @@ public class UserConfig extends AbstractConfig {
 
     @Override
     protected SharedPreferences getPreferences() {
-        if (mUnique == null) {
-            mUnique = AuthToken.getInstance().getUserTokenUniqueId();
-        }
+        mUnique = AuthToken.getInstance().getUserTokenUniqueId();
         return getContext().getSharedPreferences(
                 PROFILE_CONFIG_SETTINGS + Static.AMPERSAND + mUnique,
                 Context.MODE_PRIVATE
