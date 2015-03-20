@@ -72,6 +72,7 @@
         <!-- activity -->
         <activity
             android:name=".ui.NavigationActivity"
+            android:launchMode="singleTask"
             android:configChanges="locale|screenSize|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Topface.ActionbarOverlay"
@@ -206,7 +207,7 @@
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.NavigationActivity"/>
+                android:value=".ui.NavigationActivity" />
         </activity>
 
         <activity
