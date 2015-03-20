@@ -180,8 +180,8 @@ public class FullscreenController {
     }
 
     private void requestSmaatoFullscreen() {
-        final FullScreenBanner mFullScreenBanner = new FullScreenBanner(mActivity);
-        mFullScreenBanner.addAdListener(new AdListenerInterface() {
+        final FullScreenBanner smaatoFullScreenBanner = new FullScreenBanner(mActivity);
+        smaatoFullScreenBanner.addAdListener(new AdListenerInterface() {
             @Override
             public void onReceiveAd(AdDownloaderInterface adDownloaderInterface, ReceivedBannerInterface receivedBannerInterface) throws AdReceiveFailed {
                 if (receivedBannerInterface.getStatus() == BannerStatus.ERROR) {
@@ -191,7 +191,7 @@ public class FullscreenController {
                 }
             }
         });
-        mFullScreenBanner.setAlertBannerStateListener(new AlertBannerStateListener() {
+        smaatoFullScreenBanner.setAlertBannerStateListener(new AlertBannerStateListener() {
             @Override
             public void onWillLeaveActivity() {
 
@@ -207,9 +207,9 @@ public class FullscreenController {
                 isFullScreenBannerVisible = true;
             }
         });
-        mFullScreenBanner.setPublisherId(mActivity.getResources().getInteger(R.integer.smaato_publisher_id));
-        mFullScreenBanner.setAdSpaceId(mActivity.getResources().getInteger(R.integer.smaato_fullscreen_space_id));
-        mFullScreenBanner.asyncLoadNewBanner();
+        smaatoFullScreenBanner.setPublisherId(mActivity.getResources().getInteger(R.integer.smaato_publisher_id));
+        smaatoFullScreenBanner.setAdSpaceId(mActivity.getResources().getInteger(R.integer.smaato_fullscreen_space_id));
+        smaatoFullScreenBanner.asyncLoadNewBanner();
     }
 
     public void requestAdmobFullscreen(String id) {
