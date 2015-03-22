@@ -131,7 +131,10 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
 
     @Override
     protected void restoreState() {
-        mBodyStartPageClassName = getArguments().getString(ARG_TAG_INIT_BODY_PAGE);
+        Bundle args = getArguments();
+        if (args != null) {
+            mBodyStartPageClassName = getArguments().getString(ARG_TAG_INIT_BODY_PAGE);
+        }
     }
 
     protected void onProfileUpdated() {

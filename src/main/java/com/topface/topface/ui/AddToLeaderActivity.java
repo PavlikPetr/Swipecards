@@ -61,6 +61,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         setContentView(R.layout.ac_photoblog);
         mGridFooterView = createGridViewFooter();
         mGridView = (GridViewWithHeaderAndFooter) findViewById(R.id.user_photos_grid);
+        initAdapter(null);
         addFooterView();
         mLoadingLocker = (LockerView) findViewById(R.id.llvLeaderSending);
         Photos photos = null;
@@ -87,12 +88,12 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         try {
-            outState.putString(PHOTOS, mUsePhotosAdapter.getAdaprerData().toJson().toString());
+            outState.putString(PHOTOS, getAdapter().getAdaprerData().toJson().toString());
         } catch (JSONException e) {
             Debug.error(e);
         }
         outState.putInt(POSITION, mGridView.getFirstVisiblePosition());
-        outState.putInt(SELECTED_POSITION, mUsePhotosAdapter.getSelectedPhotoId());
+        outState.putInt(SELECTED_POSITION, getAdapter().getSelectedPhotoId());
     }
 
     private Photos getPhotoLinks() {
@@ -144,7 +145,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
     private void pressedAddToLeader(int position) {
         final Options.LeaderButton buttonData = CacheProfile.getOptions().buyLeaderButtons.get(position);
-        int selectedPhotoId = mUsePhotosAdapter.getSelectedPhotoId();
+        int selectedPhotoId = getAdapter().getSelectedPhotoId();
         if (CacheProfile.money < buttonData.price) {
             showPurchasesFragment(buttonData.price);
         } else if (selectedPhotoId != -1) {
@@ -194,20 +195,35 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         return result;
     }
 
+    private LeadersPhotoGridAdapter getAdapter() {
+        if (mUsePhotosAdapter == null) {
+            return initAdapter(null);
+        } else {
+            return mUsePhotosAdapter;
+        }
+    }
+
     private void initPhotosGrid(final Photos photos, final int position, final int selectedPosition) {
         mGridView.post(new Runnable() {
             @Override
             public void run() {
-                initAdapter(photos);
+                if (getAdapter() != null && photos != null) {
+                    getAdapter().setData(photos, photos.size() < CacheProfile.totalPhotos, false);
+                    getAdapter().setPhotoWidth(mGridView.getGridViewColumnWidth());
+                } else {
+                    initAdapter(photos);
+                }
+                mGridView.setAdapter(getAdapter());
+                mGridView.setOnScrollListener(getAdapter());
                 mGridView.setSelection(position);
-                if (mUsePhotosAdapter.getPhotoLinks().size() > 0 && selectedPosition != 0) {
-                    mUsePhotosAdapter.setSelectedPhotoId(selectedPosition);
+                if (getAdapter().getPhotoLinks().size() > 0 && selectedPosition != 0) {
+                    getAdapter().setSelectedPhotoId(selectedPosition);
                 }
             }
         });
     }
 
-    private void initAdapter(Photos photos) {
+    private LeadersPhotoGridAdapter initAdapter(Photos photos) {
         mUsePhotosAdapter = new LeadersPhotoGridAdapter(this.getApplicationContext(),
                 photos == null ? getPhotoLinks() : photos,
                 photos == null ? CacheProfile.totalPhotos : photos.size(),
@@ -217,17 +233,16 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                 sendAlbumRequest();
             }
         });
-        mGridView.setAdapter(mUsePhotosAdapter);
-        mGridView.setOnScrollListener(mUsePhotosAdapter);
+        return mUsePhotosAdapter;
     }
 
     private void sendAlbumRequest() {
-        Photos photoLinks = mUsePhotosAdapter.getAdaprerData();
+        Photos photoLinks = getAdapter().getAdaprerData();
         if (photoLinks == null || photoLinks.size() < 2) {
             return;
         }
         mGridFooterView.setVisibility(View.VISIBLE);
-        Photo photo = mUsePhotosAdapter.getItem(photoLinks.size() - 2);
+        Photo photo = getAdapter().getItem(photoLinks.size() - 2);
         int position = photo.getPosition();
         AlbumRequest request = new AlbumRequest(
                 this.getApplicationContext(),
@@ -240,8 +255,8 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
             @Override
             protected void success(AlbumPhotos data, IApiResponse response) {
-                if (mUsePhotosAdapter != null) {
-                    mUsePhotosAdapter.addPhotos(data, data.more, false);
+                if (getAdapter() != null) {
+                    getAdapter().addPhotos(data, data.more, false);
                 }
             }
 
