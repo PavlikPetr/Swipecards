@@ -2,7 +2,9 @@ package com.topface.topface.utils;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
+import com.topface.topface.App;
 import com.topface.topface.Static;
 
 public class FormItem implements Parcelable {
@@ -20,6 +22,10 @@ public class FormItem implements Parcelable {
     public static final int DATA = 3;
     public static final int STATUS = 4;
     public static final int DIVIDER = 5;
+    public static final int NAME = 6;
+    public static final int SEX = 7;
+    public static final int AGE = 8;
+    public static final int CITY = 9;
 
     public static final int NO_RESOURCE_ID = -1;
     public static final int NOT_SPECIFIED_ID = 0;
@@ -139,7 +145,7 @@ public class FormItem implements Parcelable {
             };
 
     public interface LimitInterface {
-        public int getLimit();
+        int getLimit();
     }
 
     public void setLimitInterface(LimitInterface LimitInterface) {
@@ -148,5 +154,13 @@ public class FormItem implements Parcelable {
 
     public LimitInterface getLimitInterface() {
         return mLimitInterface;
+    }
+
+    public String getTitle() {
+        if (TextUtils.isEmpty(title)) {
+            return App.getContext().getString(titleId);
+        } else {
+            return title;
+        }
     }
 }

@@ -174,7 +174,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
         initEditItem(root,
                 R.id.fepBlackList,
-                R.drawable.list_like_btn,
+                R.drawable.list_item_btn,
                 getString(R.string.vip_black_list),
                 new OnClickListener() {
                     @Override

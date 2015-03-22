@@ -3,9 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_white"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp">
+    android:background="@color/bg_white">
 
     <include
         android:id="@+id/notification_sympathies"

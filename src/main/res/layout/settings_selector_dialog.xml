@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="268dp"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/selector_dialog_title"
+        style="@style/SelectorDialogTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
 
+    <ImageView
+        android:id="@+id/selector_dialog_title_divider"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:src="@color/tab_counter_text_color_selected"
+        android:layout_below="@id/selector_dialog_title"/>
 
     <ListView
         android:id="@+id/optionsList"
         android:orientation="vertical"
-        android:layout_width="268dp"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_centerInParent="true"
         android:divider="@color/profile_divider_color"
-        android:dividerHeight="1dp"/>
+        android:dividerHeight="1dp"
+        android:layout_below="@id/selector_dialog_title_divider"/>
 </RelativeLayout>

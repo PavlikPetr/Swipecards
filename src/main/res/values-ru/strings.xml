@@ -786,11 +786,11 @@
     <string name="google_sign_in_account_button">Авторизоваться</string>
     <string name="google_unavailable_services_title">К сожалению, уведомления не поддерживаются на вашем устройстве.</string>
     <string-array name="receive_notifications">
-        <item name="receive_message_notification">Получать уведомление о новом сообщении</item>
-        <item name="receive_mutual_notification">Получать уведомление о новой взаимной симпатии</item>
-        <item name="receive_sympathy_notification">Получать уведомление о новой симпатии</item>
-        <item name="receive_rate_notification"></item>
-        <item name="receive_guest_notification">Получать уведомление о новом госте</item>
+        <item name="receive_message_notification">Получать уведомление\nо новом сообщении</item>
+        <item name="receive_mutual_notification">Получать уведомление\nо новой взаимной симпатии</item>
+        <item name="receive_sympathy_notification">Получать уведомление\nо новой симпатии</item>
+        <item name="receive_rate_notification"/>
+        <item name="receive_guest_notification">Получать уведомление\nо новом госте</item>
     </string-array>
     <string name="on_phone">На телефон</string>
     <string name="on_mail">На e-mail</string>

@@ -57,9 +57,6 @@ import java.util.Locale;
 
 public class SettingsFragment extends ProfileInnerFragment implements OnClickListener {
 
-    private EditSwitcher mSwitchVibration;
-    private EditSwitcher mSwitchLED;
-    private HashMap<String, ProgressBar> hashNotifiersProgressBars = new HashMap<>();
     private TextView mSocialNameText;
     private MarketApiManager mMarketApiManager;
 
@@ -147,26 +144,6 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                 intent = new Intent(applicationContext, SettingsContainerActivity.class);
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_ABOUT);
                 break;
-            /*case R.id.loVibration:
-                mSwitchVibration.doSwitch();
-                App.getUserConfig().setGCMVibrationEnabled(mSwitchVibration.isChecked());
-                App.getUserConfig().saveConfig();
-                Debug.log(App.getUserConfig(), "UserConfig changed");
-
-                // Send empty vibro notification to demonstrate
-                if (mSwitchVibration.isChecked()) {
-                    UserNotificationManager.getInstance().showSimpleNotification(
-                            new NotificationCompat.Builder(getActivity()).setDefaults(Notification.
-                                    DEFAULT_VIBRATE).build()
-                    );
-                }
-                break;
-            case R.id.loLED:
-                mSwitchLED.doSwitch();
-                App.getUserConfig().setLEDEnabled(mSwitchLED.isChecked());
-                App.getUserConfig().saveConfig();
-                Debug.log(App.getUserConfig(), "UserConfig changed");
-                break;*/
             case R.id.loLanguage:
                 startLanguageSelection();
                 break;

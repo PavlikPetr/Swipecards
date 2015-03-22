@@ -3,7 +3,9 @@
     android:id="@+id/loRoot"
     android:layout_width="fill_parent"
     android:minHeight="60dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp">
 
     <!-- Title -->
     <TextView

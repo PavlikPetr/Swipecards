@@ -258,7 +258,7 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
                         mEditingFinishedListener).show(fm, SelectorDialog.class.getName());
                 break;
             case R.id.notification_guests:
-                SelectorDialog.newInstance(res.getStringArray(R.array.receive_notifications)[3],
+                SelectorDialog.newInstance(res.getStringArray(R.array.receive_notifications)[4],
                         CacheProfile.NOTIFICATIONS_VISITOR,
                         mEditingFinishedListener).show(fm, SelectorDialog.class.getName());
                 break;

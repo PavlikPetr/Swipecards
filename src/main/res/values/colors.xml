@@ -66,5 +66,6 @@
     <color name="filter_fragment_divider_color">#E2E2E2</color>
     <color name="profile_divider_color">#E5E5E5</color>
     <color name="light_gray">#888888</color>
+    <color name="dialog_bg">#F3F3F3</color>
 
 </resources>

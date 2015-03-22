@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
@@ -15,16 +16,16 @@ import com.topface.topface.ui.adapters.NotificationSelectorAdapter;
 import com.topface.topface.utils.CacheProfile;
 
 /**
- * Created by saharuk on 17.03.15.
+ * Dialog for selecting from list of options
  */
-public class SelectorDialog extends AbstractDialogFragment implements View.OnClickListener {
+public class SelectorDialog extends AbstractDialogFragment {
 
     public static final String DIALOG_TITLE = "dialog_title";
     public static final String NOTIFICATION_TYPE = "notification_type";
 
-    public static interface EditingFinishedListener {
+    public interface EditingFinishedListener {
 
-        public void onEditingFinished(Profile.TopfaceNotifications notification);
+        void onEditingFinished(Profile.TopfaceNotifications notification);
     }
 
     private String mTitle;
@@ -74,23 +75,12 @@ public class SelectorDialog extends AbstractDialogFragment implements View.OnCli
     protected void initViews(View root) {
         ListView optionsList = (ListView) root.findViewById(R.id.optionsList);
         optionsList.setAdapter(mAdapter);
+        ((TextView) root.findViewById(R.id.selector_dialog_title)).setText(mTitle);
     }
 
     @Override
     public int getDialogLayoutRes() {
         return 0;
-    }
-
-    @Override
-    public Dialog getDialog() {
-        Dialog dialog = super.getDialog();
-        dialog.setTitle(mTitle);
-        return dialog;
-    }
-
-    @Override
-    public void onClick(View v) {
-
     }
 
     @Override

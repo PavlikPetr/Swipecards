@@ -1,32 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_centerVertical="true"
+    android:orientation="vertical"
+    style="@style/WhiteButtonWithSeparator"
+    android:gravity="left|center_vertical">
 
-    <LinearLayout
-        android:layout_centerVertical="true"
-        android:orientation="vertical"
-        style="@style/WhiteButtonWithSeparator"
-        android:gravity="left|center_vertical">
+    <TextView
+        android:tag="tvTitle"
+        style="@style/GrayText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="10dp"
+        android:paddingRight="10dp"
+        android:singleLine="true"
+        android:ellipsize="end" />
 
-        <TextView
-            android:tag="tvTitle"
-            style="@style/GrayText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawablePadding="10dp"
-            android:paddingRight="10dp"
-            android:singleLine="true"
-            android:ellipsize="end" />
-
-        <TextView
-            android:tag="tvText"
-            style="@style/ItemtText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:drawablePadding="10dp"
-            android:visibility="gone" />
-    </LinearLayout>
-</RelativeLayout>
+    <TextView
+        android:tag="tvText"
+        style="@style/ItemtText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:drawablePadding="10dp"
+        android:visibility="gone" />
+</LinearLayout>
