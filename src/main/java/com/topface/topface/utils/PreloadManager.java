@@ -79,7 +79,12 @@ public class PreloadManager<T extends FeedUser> {
 
     public static boolean isPreloadAllowed() {
         ConnectionChangeReceiver.ConnectionType connectionType = Utils.getConnectionType();
-        int userPreloadTypeId = App.getUserConfig().getPreloadPhotoType().getId();
+        int userPreloadTypeId;
+        if (App.getUserConfig() != null) {
+            userPreloadTypeId = App.getUserConfig().getPreloadPhotoType().getId();
+        } else {
+            return false;
+        }
         switch (connectionType) {
             case CONNECTION_OFFLINE:
                 return false;

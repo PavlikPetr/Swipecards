@@ -21,28 +21,38 @@ import java.util.Map;
  */
 public class UserConfigConverter {
 
+    public enum ConverterState {DEFAULT, PROCESS, DONE}
+
+    private OnUpdateUserConfig mUpdateUserConfig;
     private ArrayList<String> mLoginList = new ArrayList<>();
     private Map<String, ?> mOldConfidFields;
     private UserConfig mMainUserConfig;
     private String mCurrentLogin;
+    private ConverterState mConverterState = ConverterState.DEFAULT;
 
     public UserConfigConverter() {
     }
 
-    public UserConfigConverter(String mCurrentLogin) {
+    public UserConfigConverter(String mCurrentLogin, OnUpdateUserConfig updateUserConfig) {
         mOldConfidFields = getOldConfig().getAll();
         this.mCurrentLogin = mCurrentLogin;
+        mUpdateUserConfig = updateUserConfig;
     }
 
     public void convertConfig() {
+        App.getAppConfig().setUserConfigConverted();
+        mConverterState = ConverterState.PROCESS;
         new BackgroundThread() {
             @Override
             public void execute() {
                 getAllLogins();
                 separateConfig();
-                App.getAppConfig().setUserConfigConverted();
                 App.getAppConfig().saveConfig();
                 removeOldConfig();
+                if (mUpdateUserConfig != null) {
+                    mConverterState = ConverterState.DONE;
+                    mUpdateUserConfig.onUpdate();
+                }
             }
         };
     }
@@ -172,6 +182,16 @@ public class UserConfigConverter {
                 UserConfig.PROFILE_CONFIG_SETTINGS +
                         Static.AMPERSAND + login,
                 Context.MODE_PRIVATE);
+    }
+
+    public ConverterState getConverterState() {
+        return mConverterState;
+    }
+
+    interface OnUpdateUserConfig {
+
+        void onUpdate();
+
     }
 
 }
