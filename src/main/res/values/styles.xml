@@ -224,6 +224,7 @@
     <style name="EditPhotoButtonsText" parent="ButtonsText">
         <item name="android:textSize">10sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="LeftMenuButtons">
