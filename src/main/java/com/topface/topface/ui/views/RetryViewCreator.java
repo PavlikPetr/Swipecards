@@ -5,6 +5,7 @@ import android.support.annotation.ColorRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,6 +33,8 @@ public class RetryViewCreator {
         private Integer mBackgroungColor;
         private Integer mMessageFontColor;
         private Boolean mNoShadow = false;
+        private int mErrorImageVisibility;
+        private int mMessageColor;
 
         public Builder(Context context, View.OnClickListener listener) {
             mContext = context;
@@ -45,9 +48,19 @@ public class RetryViewCreator {
             return this;
         }
 
+        public Builder setMessageTextColor(int color) {
+            mMessageColor = color;
+            return this;
+        }
+
         public Builder button(String title, View.OnClickListener listener) {
             mTitles.add(title);
             mListeners.add(listener);
+            return this;
+        }
+
+        public Builder setImageVisibility(int visibility) {
+            mErrorImageVisibility = visibility;
             return this;
         }
 
@@ -74,6 +87,8 @@ public class RetryViewCreator {
         public RetryViewCreator build() {
             LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             ViewGroup retryView = (ViewGroup) mInflater.inflate(R.layout.layout_retryview, null);
+            ImageView errorImg = (ImageView) retryView.findViewById(R.id.imgError);
+            errorImg.setVisibility(mErrorImageVisibility);
             if (mBackgroungColor != null) {
                 retryView.setBackgroundColor(mBackgroungColor);
             }
@@ -82,6 +97,9 @@ public class RetryViewCreator {
             retryView.setLayoutParams(params);
 
             TextView message = (TextView) retryView.findViewById(R.id.tvMessage);
+            if (mMessageColor != 0) {
+                message.setTextColor(mMessageColor);
+            }
             if (mMessage != null) {
                 message.setText(mMessage);
             } else {
@@ -213,13 +231,13 @@ public class RetryViewCreator {
         }
 
         private IllustratedTextView generateGrayButton(ViewGroup parent) {
-            IllustratedTextView btn = (IllustratedTextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.retry_btn, null);
+            IllustratedTextView btn = (IllustratedTextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.retry_btn, parent, false);
             btn.ICON_ALIGN = TfImageSpan.ALIGN_BASELINE;
             return btn;
         }
 
         private IllustratedTextView generateBlueButton(ViewGroup parent) {
-            return (IllustratedTextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.retry_btn_blue, null);
+            return (IllustratedTextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.retry_btn_blue, parent, false);
         }
 
         public enum Type {GRAY, BLUE}
