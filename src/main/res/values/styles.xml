@@ -294,16 +294,6 @@
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="AdIndicator">
-        <item name="android:visibility">visible</item>
-        <item name="android:src">@drawable/ic_ad_flag</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_alignParentRight">true</item>
-        <item name="android:layout_alignParentTop">true</item>
-        <item name="android:layout_marginRight">6dp</item>
-    </style>
-
     <style name="ListItemEmptyText.Bold">
         <item name="android:textStyle">bold</item>
     </style>
