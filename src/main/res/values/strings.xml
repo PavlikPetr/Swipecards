@@ -468,6 +468,8 @@
     <string name="general_complain_sended">Your complaint has been submitted, much thanks for your help.</string>
     <string name="general_complain">Complaint</string>
     <string name="general_msg">Message</string>
+    <string name="notifications">Notifications</string>
+    <string name="general_no_notifications">Unfortunately, the notifications on your device are not available</string>
     <string name="black_list_add_short">To the blacklist</string>
     <string name="confirm_email_for_dating">We are against spam. Please confirm your email, so that you can meet people in Topface!</string>
     <string name="send_confirm_link">Send a link for confirmation</string>

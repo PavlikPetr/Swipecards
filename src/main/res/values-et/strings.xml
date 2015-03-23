@@ -324,6 +324,7 @@ Sa oled müksanud.</string>
     <string name="complain_type_fake_data">Inimese nimi, sugu, vanus ja foto lange kokku</string>
     <string name="general_complain">Kaebus</string>
     <string name="general_msg">Sõnum</string>
+    <string name="notifications">Teaded</string>
     <string name="black_list_add_short">Musta nimekirja</string>
     <string name="general_exit">Väljuda</string>
     <string name="general_get_dating">Tutvuda</string>

@@ -80,7 +80,27 @@ public class FormItem implements Parcelable {
         this.titleId = NO_RESOURCE_ID;
     }
 
+    public FormItem(FormItem formItem) {
+        dataId = formItem.dataId;
+        title = formItem.title;
+        type = formItem.type;
+        value = formItem.value;
+        header = formItem.header;
+        titleId = formItem.titleId;
+        mLimitInterface = formItem.mLimitInterface;
+    }
+
     public FormItem() {
+    }
+
+    public void copy(FormItem formItem) {
+        dataId = formItem.dataId;
+        title = formItem.title;
+        type = formItem.type;
+        value = formItem.value;
+        header = formItem.header;
+        titleId = formItem.titleId;
+        mLimitInterface = formItem.mLimitInterface;
     }
 
     @Override

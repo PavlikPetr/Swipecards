@@ -13,12 +13,11 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.ui.NotificationSelectorTypes;
 
 /**
- * Created by saharuk on 17.03.15.
+ * Adapter for notification options
  */
-public class NotificationSelectorAdapter extends BaseAdapter {
+public class NotificationSelectorAdapter extends AbstractSelectorAdapter<Profile.TopfaceNotifications> {
 
     private Profile.TopfaceNotifications mNotification;
-    private LayoutInflater mInflater = LayoutInflater.from(App.getContext());
 
     public NotificationSelectorAdapter(Profile.TopfaceNotifications notification) {
         mNotification = new Profile.TopfaceNotifications(notification.apns, notification.mail, notification.type);
@@ -54,7 +53,7 @@ public class NotificationSelectorAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.settings_selector_checkbox, parent, false);
+            convertView = inflate(R.layout.settings_selector_checkbox, parent);
 
             Holder holder = new Holder();
             holder.checkBox = (CheckBox) convertView.findViewById(R.id.selector_check);
@@ -74,7 +73,8 @@ public class NotificationSelectorAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public Profile.TopfaceNotifications getNotification() {
+    @Override
+    public Profile.TopfaceNotifications getData() {
         return new Profile.TopfaceNotifications(getItem(0), getItem(1), mNotification.type);
     }
 

@@ -386,6 +386,8 @@
     <string name="general_complain_sended">Vaša sťažnosť je odoslaná, ďakujeme veľmi pekne za pomoc</string>
     <string name="general_complain">Žaloba</string>
     <string name="general_msg">Správa</string>
+    <string name="notifications">Oznámenia</string>
+    <string name="general_no_notifications">Bohužiaľ, oznámenia na Vašom zariadení nie sú k dispozícii</string>
     <string name="black_list_add_short">Na čiernu listinu</string>
     <string name="confirm_email_for_dating">Sme proti spamu. Potvrďte svoju e-mailovú adresu, aby ste sa mohli zoznámiť v Topface!</string>
     <string name="complain_type_swearing_msg">Hrubosť, hrozby, nadávky</string>

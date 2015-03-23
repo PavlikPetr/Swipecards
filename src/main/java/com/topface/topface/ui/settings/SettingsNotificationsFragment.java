@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,8 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendMailNotificationsRequest;
-import com.topface.topface.ui.dialogs.SelectorDialog;
+import com.topface.topface.ui.dialogs.AbstractSelectorDialog;
+import com.topface.topface.ui.dialogs.NotificationSelectorDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.MarketApiManager;
@@ -57,7 +59,8 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
 
     private TextView mMelodyName;
 
-    private SelectorDialog.EditingFinishedListener mEditingFinishedListener = new SelectorDialog.EditingFinishedListener() {
+    private AbstractSelectorDialog.EditingFinishedListener mEditingFinishedListener =
+            new AbstractSelectorDialog.EditingFinishedListener<Profile.TopfaceNotifications>() {
         @Override
         public void onEditingFinished(Profile.TopfaceNotifications notification) {
             if (hasChanges(notification)) {
@@ -243,24 +246,24 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
         Resources res = App.getContext().getResources();
         switch (v.getId()) {
             case R.id.notification_sympathies:
-                SelectorDialog.newInstance(res.getStringArray(R.array.receive_notifications)[2],
-                        CacheProfile.NOTIFICATIONS_LIKES,
-                        mEditingFinishedListener).show(fm, SelectorDialog.class.getName());
+                NotificationSelectorDialog.newInstance(res.getStringArray(R.array.receive_notifications)[2],
+                        CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES),
+                        mEditingFinishedListener).show(fm, NotificationSelectorDialog.class.getName());
                 break;
             case R.id.notification_mutuals:
-                SelectorDialog.newInstance(res.getStringArray(R.array.receive_notifications)[1],
-                        CacheProfile.NOTIFICATIONS_SYMPATHY,
-                        mEditingFinishedListener).show(fm, SelectorDialog.class.getName());
+                NotificationSelectorDialog.newInstance(res.getStringArray(R.array.receive_notifications)[1],
+                        CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY),
+                        mEditingFinishedListener).show(fm, NotificationSelectorDialog.class.getName());
                 break;
             case R.id.notification_messages:
-                SelectorDialog.newInstance(res.getStringArray(R.array.receive_notifications)[0],
-                        CacheProfile.NOTIFICATIONS_MESSAGE,
-                        mEditingFinishedListener).show(fm, SelectorDialog.class.getName());
+                NotificationSelectorDialog.newInstance(res.getStringArray(R.array.receive_notifications)[0],
+                        CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE),
+                        mEditingFinishedListener).show(fm, NotificationSelectorDialog.class.getName());
                 break;
             case R.id.notification_guests:
-                SelectorDialog.newInstance(res.getStringArray(R.array.receive_notifications)[4],
-                        CacheProfile.NOTIFICATIONS_VISITOR,
-                        mEditingFinishedListener).show(fm, SelectorDialog.class.getName());
+                NotificationSelectorDialog.newInstance(res.getStringArray(R.array.receive_notifications)[4],
+                        CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR),
+                        mEditingFinishedListener).show(fm, NotificationSelectorDialog.class.getName());
                 break;
             case R.id.notification_melody:
                 Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);

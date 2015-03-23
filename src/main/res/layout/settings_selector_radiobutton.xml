@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="match_parent">
 
-    <CheckBox
+    <RadioButton
         android:id="@+id/selector_check"
         style="@style/WhiteButtonWithSeparator"
         android:background="@null"

@@ -383,6 +383,8 @@
     <string name="general_complain_sended">Twoja skarga została wysłana, dziękujemy za pomoc</string>
     <string name="general_complain">Skarga</string>
     <string name="general_msg">Wiadomość</string>
+    <string name="notifications">Powiadomienia</string>
+    <string name="general_no_notifications">Niestety, powiadomienia na Twoim urządzeniu są niedostępne</string>
     <string name="black_list_add_short">Do czarnej listy</string>
     <string name="confirm_email_for_dating">Jesteśmy przeciwko spamowi. Potwierdź swój adres e-mail aby korzystać z Topface!</string>
     <string name="complain_type_swearing_msg">Chamstwo, groźby, przekleństwa</string>

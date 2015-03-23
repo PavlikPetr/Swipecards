@@ -442,6 +442,8 @@
     <string name="general_complain_sended">A sua queixa foi enviada, muito obrigado pela ajuda</string>
     <string name="general_complain">Queixa</string>
     <string name="general_msg">Mensagem</string>
+    <string name="notifications">Hotificações</string>
+    <string name="general_no_notifications">Infelizmente, as notificações no seu dispositivo não estão disponíveis</string>
     <string name="black_list_add_short">Na lista negra</string>
     <string name="confirm_email_for_dating">Nós somos contra o spam. Confirme o seu endereço de email para se travar conhecimentos em Topface!</string>
     <string name="send_confirm_link">Enviar uma nota para a confirmação</string>

@@ -463,6 +463,8 @@
     <string name="general_complain_sended">Ihre Meldung wurde gesendet, vielen Dank für Ihre Hilfe</string>
     <string name="general_complain">Meldung</string>
     <string name="general_msg">Nachricht</string>
+    <string name="notifications">Benachrichtigungen</string>
+    <string name="general_no_notifications">Leider, die Benachrichtigungen auf Ihrem Gerät sind nicht verfügbar</string>
     <string name="black_list_add_short">In die schwarze Liste</string>
     <string name="confirm_email_for_dating">Wir sind gegen Spam. Bestätigen Sie Ihre E-Mail-Adresse, um in Topface sich kennen zu lernen!</string>
     <string name="send_confirm_link">Link für die Bestätigung senden</string>

@@ -386,6 +386,8 @@
     <string name="general_complain_sended">Vaša žalba je poslata, puno vam hvala za pomoć</string>
     <string name="general_complain">Žalba</string>
     <string name="general_msg">Poruka</string>
+    <string name="notifications">Saopštenja</string>
+    <string name="general_no_notifications">Na žalost, obaveštenja na vašem uređaju nisu dostupna</string>
     <string name="black_list_add_short">U crni spisak</string>
     <string name="confirm_email_for_dating">Mi smo protiv spama. Potvrdite svoju poštansku adresu, kako bi se mogli upoznavati u Topface!</string>
     <string name="complain_type_swearing_msg">Prostakluk, pretnje, psovke</string>

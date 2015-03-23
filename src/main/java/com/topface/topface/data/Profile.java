@@ -1,6 +1,8 @@
 package com.topface.topface.data;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 
@@ -377,7 +379,20 @@ public class Profile extends AbstractDataWithPhotos {
     /**
      *
      */
-    public static class TopfaceNotifications {
+    public static class TopfaceNotifications implements Parcelable {
+
+        public static final Parcelable.Creator<TopfaceNotifications> CREATOR = new Creator<TopfaceNotifications>() {
+            @Override
+            public TopfaceNotifications createFromParcel(Parcel source) {
+                return new TopfaceNotifications(source);
+            }
+
+            @Override
+            public TopfaceNotifications[] newArray(int size) {
+                return new TopfaceNotifications[size];
+            }
+        };
+
         public boolean apns;
         public boolean mail;
         public int type;
@@ -386,6 +401,24 @@ public class Profile extends AbstractDataWithPhotos {
             this.apns = apns;
             this.mail = mail;
             this.type = type;
+        }
+
+        protected TopfaceNotifications(Parcel in) {
+            apns = in.readByte() == 1;
+            mail = in.readByte() == 1;
+            type = in.readInt();
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeByte((byte) (apns ? 1 : 0));
+            dest.writeByte((byte) (mail ? 1 : 0));
+            dest.writeInt(type);
         }
     }
 

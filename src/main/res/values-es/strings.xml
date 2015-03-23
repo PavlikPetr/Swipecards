@@ -471,6 +471,8 @@
     <string name="general_complain_sended">Tu denuncia fue enviada, muchas gracias por colaborar</string>
     <string name="general_complain">Denuncia</string>
     <string name="general_msg">Mensaje</string>
+    <string name="notifications">Notificaciones</string>
+    <string name="general_no_notifications">Lamentablemente, los avisos no están disponibles en tu dispositivo</string>
     <string name="black_list_add_short">A la lista negra</string>
     <string name="confirm_email_for_dating">Luchamos contra spam. ¡Confirma tu dirección de correo para poder conocer la gente en Topface!</string>
     <string name="send_confirm_link">Enviar enlace de confirmación</string>

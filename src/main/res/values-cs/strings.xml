@@ -386,6 +386,8 @@
     <string name="general_complain_sended">Vaše stížnost je odeslána, moc děkujeme za pomoc</string>
     <string name="general_complain">Stížnost</string>
     <string name="general_msg">Zpráva</string>
+    <string name="notifications">Oznámení</string>
+    <string name="general_no_notifications">Bohužel oznámení na Vašem zařízení nejsou k dispozici</string>
     <string name="black_list_add_short">Na černou listinu</string>
     <string name="confirm_email_for_dating">Jsme proti spamu. Potvrďte svou emailovou adresu pro seznámení na Topface!</string>
     <string name="complain_type_swearing_msg">Neslušnost, vyhrožování, sprostá slova</string>
