@@ -905,6 +905,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         if (mAdapter != null && mListView != null && cancelable) {
             addSentMessage(messageItem, messageRequest);
         }
+        if (!CacheProfile.emailConfirmed) {
+            Toast.makeText(App.getContext(), R.string.confirm_email, Toast.LENGTH_SHORT).show();
+            mAdapter.removeLastItem();
+        }
         messageRequest.callback(new DataApiHandler<History>() {
             @Override
             protected void success(History data, IApiResponse response) {
