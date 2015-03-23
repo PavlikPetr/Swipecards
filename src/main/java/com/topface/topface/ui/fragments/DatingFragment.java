@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -465,7 +466,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 EasyTracker.sendEvent("EmptySearch", "ClickTryAgain", "", 0L);
                 updateData(false);
             }
-        }).message(getString(R.string.general_search_null_response_error))
+        }).setImageVisibility(View.GONE).message(getString(R.string.general_search_null_response_error))
+                .setMessageTextColor(Color.parseColor("#FFFFFF"))
                 .orientation(LinearLayout.VERTICAL)
                 .button(getString(R.string.reset_filter), new OnClickListener() {
                     @Override
