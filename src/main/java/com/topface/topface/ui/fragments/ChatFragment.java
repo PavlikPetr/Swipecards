@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -69,6 +70,7 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.HackBaseAdapterDecorator;
 import com.topface.topface.ui.adapters.IListLoader;
+import com.topface.topface.ui.dialogs.ConfirmEmailDialog;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -111,6 +113,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String INITIAL_MESSAGE = "initial_message";
     public static final String MESSAGE = "message";
     public static final String LOADED_MESSAGES = "loaded_messages";
+    public static final String CONFIGRM_EMAIL_DIALOG_TAG = "configrm_email_dialog_tag";
     private static final String POPULAR_LOCK_STATE = "chat_blocked";
     private static final String HISTORY_CHAT = "history_chat";
     private static final String SOFT_KEYBOARD_LOCK_STATE = "keyboard_state";
@@ -899,6 +902,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public boolean sendMessage(String text, final boolean cancelable) {
         final History messageItem = new History(text, IListLoader.ItemType.TEMP_MESSAGE);
         final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity());
+        if (!CacheProfile.emailConfirmed) {
+            Toast.makeText(App.getContext(), R.string.confirm_email, Toast.LENGTH_SHORT).show();
+            ConfirmEmailDialog.newInstance().show(getActivity().getSupportFragmentManager(), CONFIGRM_EMAIL_DIALOG_TAG);
+            return false;
+        }
         if (cancelable) {
             registerRequest(messageRequest);
         }
