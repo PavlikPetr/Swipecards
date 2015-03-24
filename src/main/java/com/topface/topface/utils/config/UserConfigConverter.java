@@ -106,6 +106,10 @@ public class UserConfigConverter {
 
         if (oldKey != null && oldKey.contains(mCurrentLogin)) {
             setMainUserConfig(uniqueConfig);
+        } else {
+            //на случай если есть неконвертированый ятарый конфиг, но пользователь решал создать
+            //новый акк
+            setMainUserConfig(new UserConfig(App.getContext()));
         }
         uniqueConfig.commitConfig();
     }
@@ -182,6 +186,21 @@ public class UserConfigConverter {
                 UserConfig.PROFILE_CONFIG_SETTINGS +
                         Static.AMPERSAND + login,
                 Context.MODE_PRIVATE);
+    }
+
+    /**
+     * Сравниваем с временным конфигом, и если нужно обновляем поля.
+     */
+    @SuppressWarnings("unused")
+    public void comparedWithUniqueConfig(UserConfig uniqueConfig, AbstractConfig.SettingsMap tempSettingsMap) {
+        AbstractConfig.SettingsField field;
+        for (String key : tempSettingsMap.keySet()) {
+            field = tempSettingsMap.get(key);
+            if (field.value != field.defaultValue) {
+                uniqueConfig.getSettingsMap().put(key, field);
+            }
+        }
+        uniqueConfig.saveConfig();
     }
 
     public ConverterState getConverterState() {

@@ -45,13 +45,13 @@ public class Configurations {
                         @Override
                         public void onUpdate() {
                             mUserConfig = mConfigConverter.getMainUserConfig();
-                            Debug.debug(mConfigConverter, "Config converting complite " + mUserConfig.getSettingsMap().size());
+                            Debug.debug(mConfigConverter, "Config converting complite ");
                         }
                     });
                     Debug.debug(mConfigConverter, "Converting old config");
                     mConfigConverter.convertConfig();
+                    mUserConfig = new UserConfig(mContext);
                 }
-
             } else {
                 if (!(mConfigConverter != null &&
                         mConfigConverter.getConverterState() != UserConfigConverter.ConverterState.DEFAULT)) {
