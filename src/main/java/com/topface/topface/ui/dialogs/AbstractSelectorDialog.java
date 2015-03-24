@@ -1,7 +1,6 @@
 package com.topface.topface.ui.dialogs;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -11,11 +10,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.topface.topface.R;
-import com.topface.topface.data.Profile;
 import com.topface.topface.ui.adapters.AbstractSelectorAdapter;
-import com.topface.topface.ui.adapters.NotificationSelectorAdapter;
 import com.topface.topface.ui.adapters.SelectorAdapterFactory;
-import com.topface.topface.utils.CacheProfile;
 
 /**
  * Abstract dialog for editing fields
@@ -31,6 +27,8 @@ public class AbstractSelectorDialog<T extends Parcelable> extends AbstractDialog
 
     private String mTitle;
     private AbstractSelectorAdapter mAdapter;
+    private ListView mOptionsList;
+    private TextView mTitleText;
 
     @Override
     protected void applyStyle() {
@@ -57,9 +55,10 @@ public class AbstractSelectorDialog<T extends Parcelable> extends AbstractDialog
 
     @Override
     protected void initViews(View root) {
-        ListView optionsList = (ListView) root.findViewById(R.id.optionsList);
-        optionsList.setAdapter(mAdapter);
-        ((TextView) root.findViewById(R.id.selector_dialog_title)).setText(mTitle);
+        mOptionsList = (ListView) root.findViewById(R.id.optionsList);
+        mOptionsList.setAdapter(mAdapter);
+        mTitleText = (TextView) root.findViewById(R.id.selector_dialog_title);
+        mTitleText.setText(mTitle);
     }
 
     /**
@@ -77,5 +76,13 @@ public class AbstractSelectorDialog<T extends Parcelable> extends AbstractDialog
 
     public AbstractSelectorAdapter<T> getAdapter() {
         return mAdapter;
+    }
+
+    protected ListView getOptionsList() {
+        return mOptionsList;
+    }
+
+    protected TextView getTitleText() {
+        return mTitleText;
     }
 }

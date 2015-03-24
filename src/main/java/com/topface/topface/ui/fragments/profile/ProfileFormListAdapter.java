@@ -123,6 +123,8 @@ public class ProfileFormListAdapter extends BaseAdapter {
         holder.title.setOnClickListener(mOnFillListener);
         holder.title.setTag(item);
 
+        convertView.setEnabled(!item.isEditing);
+
         return convertView;
     }
 

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -38,23 +39,35 @@ public class ProfileFormFragment extends ProfileInnerFragment {
         @Override
         public void onEditingFinished(final FormItem data) {
             for (final FormItem form: CacheProfile.forms) {
-                if (form.titleId == data.titleId && form.dataId != data.dataId) {
-                    FormInfo info = new FormInfo(App.getContext(), CacheProfile.sex, Profile.TYPE_OWN_PROFILE);
-                    ApiRequest request = info.getFormRequest(data);
-                    registerRequest(request);
-                    info.getFormRequest(data).callback(new ApiHandler() {
-                        @Override
-                        public void success(IApiResponse response) {
-                            form.copy(data);
-                            Intent intent = new Intent(CacheProfile.PROFILE_UPDATE_ACTION);
-                            LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
-                        }
+                if (form.titleId == data.titleId) {
+                    if (form.dataId != data.dataId) {
+                        FormInfo info = new FormInfo(App.getContext(), CacheProfile.sex, Profile.TYPE_OWN_PROFILE);
+                        ApiRequest request = info.getFormRequest(data);
+                        registerRequest(request);
+                        form.isEditing = true;
+                        mProfileFormListAdapter.notifyDataSetChanged();
+                        info.getFormRequest(data).callback(new ApiHandler() {
+                            @Override
+                            public void success(IApiResponse response) {
+                                form.copy(data);
+                                Intent intent = new Intent(CacheProfile.PROFILE_UPDATE_ACTION);
+                                LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+                            }
 
-                        @Override
-                        public void fail(int codeError, IApiResponse response) {
+                            @Override
+                            public void fail(int codeError, IApiResponse response) {
+                                Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT);
+                            }
 
-                        }
-                    }).exec();
+                            @Override
+                            public void always(IApiResponse response) {
+                                super.always(response);
+                                form.isEditing = false;
+                                mProfileFormListAdapter.notifyDataSetChanged();
+                            }
+                        }).exec();
+                    }
+                    break;
                 }
             }
         }

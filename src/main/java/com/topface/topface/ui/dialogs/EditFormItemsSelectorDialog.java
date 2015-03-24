@@ -1,7 +1,10 @@
 package com.topface.topface.ui.dialogs;
 
 import android.content.DialogInterface;
+import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
 
 import com.topface.topface.utils.FormItem;
 
@@ -9,6 +12,8 @@ import com.topface.topface.utils.FormItem;
  * Adapter for editing forms with choice
  */
 public class EditFormItemsSelectorDialog extends AbstractSelectorDialog<FormItem> {
+
+    public static final int WINDOW_CLOSING_DELAY = 100;
 
     public static EditFormItemsSelectorDialog newInstance(String title, FormItem notification,
                                                           final AbstractSelectorDialog.EditingFinishedListener<FormItem> editingFinishedListener) {
@@ -24,5 +29,22 @@ public class EditFormItemsSelectorDialog extends AbstractSelectorDialog<FormItem
             }
         });
         return selector;
+    }
+
+    @Override
+    protected void initViews(View root) {
+        super.initViews(root);
+        getAdapter().registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        EditFormItemsSelectorDialog.this.dismiss();
+                    }
+                }, WINDOW_CLOSING_DELAY
+                );
+            }
+        });
     }
 }

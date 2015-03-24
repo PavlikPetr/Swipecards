@@ -5,10 +5,10 @@
 
     <RadioButton
         android:id="@+id/selector_check"
-        style="@style/WhiteButtonWithSeparator"
+        style="@style/WhiteListItem"
         android:background="@null"
         android:button="@null"
-        android:drawableLeft="@drawable/settings_checkbox"
+        android:drawableLeft="@drawable/selector_radiobutton"
         android:drawablePadding="5dp"
         android:paddingLeft="30dp"
         android:checked="false"/>

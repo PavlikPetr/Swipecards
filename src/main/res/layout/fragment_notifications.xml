@@ -26,7 +26,7 @@
         style="@style/WhiteButtonWithSeparator"
         android:id="@+id/notification_vibro"
         android:drawableLeft="@null"
-        android:drawableRight="@drawable/settings_checkbox"
+        android:drawableRight="@drawable/selector_checkbox"
         android:checked="false"/>
 
     <CheckBox
@@ -34,7 +34,7 @@
         style="@style/WhiteButtonWithSeparator"
         android:id="@+id/notification_led"
         android:drawableLeft="@null"
-        android:drawableRight="@drawable/settings_checkbox"
+        android:drawableRight="@drawable/selector_checkbox"
         android:checked="false"/>
 
     <include

@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
@@ -38,6 +39,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.MarketApiManager;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.notifications.UserNotificationManager;
+import static com.topface.topface.ui.dialogs.AbstractSelectorDialog.EditingFinishedListener;
 
 /**
  * Notifications settings
@@ -59,8 +61,8 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
 
     private TextView mMelodyName;
 
-    private AbstractSelectorDialog.EditingFinishedListener mEditingFinishedListener =
-            new AbstractSelectorDialog.EditingFinishedListener<Profile.TopfaceNotifications>() {
+    private EditingFinishedListener<Profile.TopfaceNotifications> mEditingFinishedListener =
+            new EditingFinishedListener<Profile.TopfaceNotifications>() {
         @Override
         public void onEditingFinished(Profile.TopfaceNotifications notification) {
             if (hasChanges(notification)) {
@@ -283,7 +285,7 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
         getMailNotificationRequest(notification, App.getContext()).callback(new DataApiHandler<SendMailNotificationResponse>() {
             @Override
             public void fail(int codeError, IApiResponse response) {
-
+                Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT);
             }
 
             @Override

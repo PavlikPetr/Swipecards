@@ -17,6 +17,11 @@ public class FormItem implements Parcelable {
     public int titleId = NO_RESOURCE_ID;
     public int dataId = NO_RESOURCE_ID;
 
+    /**
+     * Is form item value updating right now.
+     */
+    public transient boolean isEditing;
+
     // Constants
     public static final int HEADER = 1;
     public static final int DATA = 3;
