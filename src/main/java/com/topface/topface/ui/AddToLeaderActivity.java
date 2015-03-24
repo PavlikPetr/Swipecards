@@ -34,7 +34,6 @@ import com.topface.topface.ui.adapters.LeadersPhotoGridAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.PurchasesFragment;
-import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
@@ -47,7 +46,6 @@ import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AddToLeaderActivity extends BaseFragmentActivity implements View.OnClickListener {
@@ -70,7 +68,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            AddPhotoHelper.setAddPhotoHandler(msg);
+            AddPhotoHelper.hadlePhotoMessage(msg);
         }
     };
 
@@ -136,12 +134,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
-                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY:
-                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA:
-                    if (mAddPhotoHelper != null) {
-                        mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
-                    }
-                    break;
                 case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:
                 case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG:
                     if (mAddPhotoHelper != null) {
