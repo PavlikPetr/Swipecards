@@ -217,7 +217,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
             showRetryBtn();
         } else if (user.banned) {
             showForBanned();
-            if (user.isEditor()) {
+            if (CacheProfile.isEditor()) {
                 setProfile(user);
                 initTopMenu();
             }
