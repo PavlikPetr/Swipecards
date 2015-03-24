@@ -144,9 +144,6 @@ public class OverflowMenu {
 
     public ArrayList<OverflowMenuItem> getProfileOverflowMenu(boolean isEditor, boolean isBanned) {
         ArrayList<OverflowMenuItem> result = new ArrayList<>();
-        if (isEditor) {
-            result.add(OPEN_PROFILE_FOR_EDITOR_STUB);
-        }
         if (!isBanned) {
             result.add(SEND_SYMPATHY_ACTION);
             result.add(SEND_ADMIRATION_ACTION);
@@ -155,6 +152,9 @@ public class OverflowMenu {
             result.add(ADD_TO_BLACK_LIST_ACTION);
             result.add(ADD_TO_BOOKMARK_ACTION);
             result.add(COMPLAIN_ACTION);
+        }
+        if (isEditor) {
+            result.add(OPEN_PROFILE_FOR_EDITOR_STUB);
         }
         return result;
     }
