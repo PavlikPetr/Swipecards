@@ -38,8 +38,7 @@ public class Configurations {
 
     public UserConfig getUserConfig() {
         if (mUserConfig == null) {
-            if (App.getAppConfig().isUserConfigConverted()) {
-                if (UserConfigConverter.hasOldConfig()) {
+            if (App.getAppConfig().isNeedConverting() && UserConfigConverter.hasOldConfig()) {
                     //если у пользователя старый конфиг, то конвертируем его в новые
                     mConfigConverter = new UserConfigConverter(AuthToken.getInstance().getUserTokenUniqueId(), new UserConfigConverter.OnUpdateUserConfig() {
                         @Override
@@ -51,7 +50,6 @@ public class Configurations {
                     Debug.debug(mConfigConverter, "Converting old config");
                     mConfigConverter.convertConfig();
                     mUserConfig = new TempUserConfig(mContext);
-                }
             } else {
                 if (!(mConfigConverter != null &&
                         mConfigConverter.getConverterState() != UserConfigConverter.ConverterState.DEFAULT)) {
