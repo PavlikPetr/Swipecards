@@ -98,7 +98,7 @@ public class AppConfig extends AbstractConfig {
         // social nets buttons settings. Stores value in form of JSON array. So default value is "[]"
         addField(settingsMap, SOCIAL_BUTTONS_SETTINGS, "[]");
         // преобразован старый конфиг в новый или нет
-        addField(settingsMap, CONVERT_CONFIG, false);
+        addField(settingsMap, CONVERT_CONFIG, true);
         // time when popup about notification disabled is shown in the last
         addField(settingsMap, POPUP_NOTIFICATION_DISABLE_TIME, 0L);
     }
@@ -393,7 +393,7 @@ public class AppConfig extends AbstractConfig {
     }
 
     public boolean setUserConfigConverted() {
-        return setField(getSettingsMap(), CONVERT_CONFIG, true);
+        return setField(getSettingsMap(), CONVERT_CONFIG, false);
     }
 
 }
