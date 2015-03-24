@@ -10,13 +10,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.topface.topface.R;
-import com.topface.topface.ui.adapters.AbstractSelectorAdapter;
-import com.topface.topface.ui.adapters.SelectorAdapterFactory;
+import com.topface.topface.ui.adapters.AbstractEditAdapter;
+import com.topface.topface.ui.adapters.EditAdapterFactory;
 
 /**
  * Abstract dialog for editing fields
  */
-public class AbstractSelectorDialog<T extends Parcelable> extends AbstractDialogFragment {
+public class AbstractEditDialog<T extends Parcelable> extends AbstractDialogFragment {
     public static final String DIALOG_TITLE = "dialog_title";
     public static final String DATA = "data";
 
@@ -26,13 +26,13 @@ public class AbstractSelectorDialog<T extends Parcelable> extends AbstractDialog
     }
 
     private String mTitle;
-    private AbstractSelectorAdapter mAdapter;
+    private AbstractEditAdapter mAdapter;
     private ListView mOptionsList;
     private TextView mTitleText;
 
     @Override
     protected void applyStyle() {
-        setStyle(ConfirmEmailDialog.STYLE_NO_TITLE, R.style.Selector);
+        setStyle(ConfirmEmailDialog.STYLE_NO_TITLE, R.style.EditDialog);
     }
 
     @Override
@@ -42,13 +42,13 @@ public class AbstractSelectorDialog<T extends Parcelable> extends AbstractDialog
         if (args != null) {
             mTitle = args.getString(DIALOG_TITLE);
             T data = (T) args.getParcelable(DATA);
-            mAdapter = new SelectorAdapterFactory().createSelectorFor(data);
+            mAdapter = new EditAdapterFactory().createSelectorFor(data);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.settings_selector_dialog, container, false);
+        View view = inflater.inflate(R.layout.edit_dialog, container, false);
         initViews(view);
         return view;
     }
@@ -74,7 +74,7 @@ public class AbstractSelectorDialog<T extends Parcelable> extends AbstractDialog
         return mTitle;
     }
 
-    public AbstractSelectorAdapter<T> getAdapter() {
+    public AbstractEditAdapter<T> getAdapter() {
         return mAdapter;
     }
 

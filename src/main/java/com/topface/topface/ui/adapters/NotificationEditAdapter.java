@@ -1,9 +1,7 @@
 package com.topface.topface.ui.adapters;
 
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
@@ -15,11 +13,11 @@ import com.topface.topface.ui.NotificationSelectorTypes;
 /**
  * Adapter for notification options
  */
-public class NotificationSelectorAdapter extends AbstractSelectorAdapter<Profile.TopfaceNotifications> {
+public class NotificationEditAdapter extends AbstractEditAdapter<Profile.TopfaceNotifications> {
 
     private Profile.TopfaceNotifications mNotification;
 
-    public NotificationSelectorAdapter(Profile.TopfaceNotifications notification) {
+    public NotificationEditAdapter(Profile.TopfaceNotifications notification) {
         mNotification = new Profile.TopfaceNotifications(notification.apns, notification.mail, notification.type);
     }
 
@@ -53,10 +51,10 @@ public class NotificationSelectorAdapter extends AbstractSelectorAdapter<Profile
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = inflate(R.layout.settings_selector_checkbox, parent);
+            convertView = inflate(R.layout.edit_dialog_checkbox, parent);
 
             Holder holder = new Holder();
-            holder.checkBox = (CheckBox) convertView.findViewById(R.id.selector_check);
+            holder.checkBox = (CheckBox) convertView.findViewById(R.id.editor_check);
             convertView.setTag(holder);
         }
 
@@ -76,6 +74,14 @@ public class NotificationSelectorAdapter extends AbstractSelectorAdapter<Profile
     @Override
     public Profile.TopfaceNotifications getData() {
         return new Profile.TopfaceNotifications(getItem(0), getItem(1), mNotification.type);
+    }
+
+    /**
+     * This adapter saves data automatically
+     */
+    @Override
+    public void saveData() {
+
     }
 
     private static class Holder {

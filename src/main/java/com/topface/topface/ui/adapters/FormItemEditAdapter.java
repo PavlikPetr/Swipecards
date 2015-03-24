@@ -3,10 +3,8 @@ package com.topface.topface.ui.adapters;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -18,14 +16,14 @@ import com.topface.topface.utils.FormItem;
 /**
  * Adapter for form items edit dialog
  */
-public class FormItemSelectorAdapter extends AbstractSelectorAdapter<FormItem> {
+public class FormItemEditAdapter extends AbstractEditAdapter<FormItem> {
 
     private FormItem mFormItem;
     private FormInfo mFormInfo;
     private String[] mEntries;
     private int[] mIds;
 
-    public FormItemSelectorAdapter(FormItem formItem) {
+    public FormItemEditAdapter(FormItem formItem) {
         mFormItem = new FormItem(formItem);
         mFormInfo = new FormInfo(App.getContext(), CacheProfile.sex, Profile.TYPE_OWN_PROFILE);
         mEntries = mFormInfo.getEntriesByTitleId(mFormItem.titleId);
@@ -35,6 +33,14 @@ public class FormItemSelectorAdapter extends AbstractSelectorAdapter<FormItem> {
     @Override
     public FormItem getData() {
         return mFormItem;
+    }
+
+    /**
+     * This adapter saves data automatically
+     */
+    @Override
+    public void saveData() {
+
     }
 
     @Override
@@ -57,9 +63,9 @@ public class FormItemSelectorAdapter extends AbstractSelectorAdapter<FormItem> {
         final String item = getItem(position);
 
         if (convertView == null) {
-            convertView = inflate(R.layout.settings_selector_radiobutton, parent);
+            convertView = inflate(R.layout.edit_dialog_radiobutton, parent);
             Holder holder = new Holder();
-            holder.radioButton = (RadioButton) convertView.findViewById(R.id.selector_check);
+            holder.radioButton = (RadioButton) convertView.findViewById(R.id.editor_check);
             convertView.setTag(holder);
         }
 

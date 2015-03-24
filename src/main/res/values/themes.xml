@@ -62,7 +62,7 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="Selector" parent="Theme.Topface">
+    <style name="EditDialog" parent="Theme.Topface">
         <item name="android:checkboxStyle">@style/CheckboxLeft</item>
         <item name="android:background">@color/dialog_bg</item>
         <item name="android:windowIsFloating">true</item>

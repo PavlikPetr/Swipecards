@@ -11,7 +11,7 @@ import com.topface.topface.App;
 /**
  * Abstract adapter for editing dialogs
  */
-public abstract class AbstractSelectorAdapter<T> extends BaseAdapter {
+public abstract class AbstractEditAdapter<T> extends BaseAdapter {
 
     private LayoutInflater mInflater = LayoutInflater.from(App.getContext());
 
@@ -20,4 +20,6 @@ public abstract class AbstractSelectorAdapter<T> extends BaseAdapter {
     protected View inflate(@LayoutRes int layoutId, ViewGroup parent) {
         return mInflater.inflate(layoutId, parent, false);
     }
+
+    public abstract void saveData();
 }

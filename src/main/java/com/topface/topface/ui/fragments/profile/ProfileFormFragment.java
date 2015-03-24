@@ -17,16 +17,15 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.dialogs.EditFormItemsSelectorDialog;
+import com.topface.topface.ui.dialogs.EditFormItemsEditDialog;
+import com.topface.topface.ui.dialogs.EditTextFormDialog;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
-import static com.topface.topface.ui.dialogs.AbstractSelectorDialog.EditingFinishedListener;
+import static com.topface.topface.ui.dialogs.AbstractEditDialog.EditingFinishedListener;
 
 public class ProfileFormFragment extends ProfileInnerFragment {
 
@@ -84,16 +83,20 @@ public class ProfileFormFragment extends ProfileInnerFragment {
                     Intent intent = new Intent(getActivity().getApplicationContext(), EditContainerActivity.class);
                     startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_STATUS);
                 } else if (item.dataId == FormItem.NO_RESOURCE_ID) {
-                    Intent intent = new Intent(getActivity().getApplicationContext(),
-                            EditContainerActivity.class);
-                    intent.putExtra(EditContainerActivity.INTENT_FORM_TITLE_ID, item.titleId);
-                    intent.putExtra(EditContainerActivity.INTENT_FORM_DATA_ID, item.dataId);
-                    intent.putExtra(EditContainerActivity.INTENT_FORM_DATA, item.value);
-                    if (item.getLimitInterface() != null) {
-                        intent.putExtra(EditContainerActivity.INTENT_FORM_LIMIT_VALUE, item.getLimitInterface().getLimit());
+//                    Intent intent = new Intent(getActivity().getApplicationContext(),
+//                            EditContainerActivity.class);
+//                    intent.putExtra(EditContainerActivity.INTENT_FORM_TITLE_ID, item.titleId);
+//                    intent.putExtra(EditContainerActivity.INTENT_FORM_DATA_ID, item.dataId);
+//                    intent.putExtra(EditContainerActivity.INTENT_FORM_DATA, item.value);
+//                    if (item.getLimitInterface() != null) {
+//                        intent.putExtra(EditContainerActivity.INTENT_FORM_LIMIT_VALUE, item.getLimitInterface().getLimit());
+//                    }
+//                    startActivityForResult(intent,
+//                            EditContainerActivity.INTENT_EDIT_INPUT_FORM_ITEM);
+                    if (fm != null) {
+                        EditTextFormDialog.newInstance(item.title, item, mFormEditedListener).
+                                show(fm, EditTextFormDialog.class.getName());
                     }
-                    startActivityForResult(intent,
-                            EditContainerActivity.INTENT_EDIT_INPUT_FORM_ITEM);
                 } else {
 //                    Intent intent = new Intent(getActivity().getApplicationContext(),
 //                            EditContainerActivity.class);
@@ -102,8 +105,8 @@ public class ProfileFormFragment extends ProfileInnerFragment {
 //                    intent.putExtra(EditContainerActivity.INTENT_FORM_DATA, item.value);
 //                    startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FORM_ITEM);
                     if (fm != null) {
-                        EditFormItemsSelectorDialog.newInstance(item.title, item, mFormEditedListener).
-                                show(fm, EditFormItemsSelectorDialog.class.getName());
+                        EditFormItemsEditDialog.newInstance(item.title, item, mFormEditedListener).
+                                show(fm, EditFormItemsEditDialog.class.getName());
                     }
                 }
             }
