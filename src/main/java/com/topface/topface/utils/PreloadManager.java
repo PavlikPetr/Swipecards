@@ -8,6 +8,7 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.search.UsersList;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.utils.config.UserConfig;
 
 import static com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes.ALWAYS_ON;
 import static com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes.PRELOAD_OFF;
@@ -80,8 +81,9 @@ public class PreloadManager<T extends FeedUser> {
     public static boolean isPreloadAllowed() {
         ConnectionChangeReceiver.ConnectionType connectionType = Utils.getConnectionType();
         int userPreloadTypeId;
-        if (App.getUserConfig() != null) {
-            userPreloadTypeId = App.getUserConfig().getPreloadPhotoType().getId();
+        UserConfig userConfig = App.getUserConfig();
+        if (userConfig != null) {
+            userPreloadTypeId = userConfig.getPreloadPhotoType().getId();
         } else {
             return false;
         }
