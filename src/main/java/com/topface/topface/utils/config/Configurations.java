@@ -50,7 +50,7 @@ public class Configurations {
                     });
                     Debug.debug(mConfigConverter, "Converting old config");
                     mConfigConverter.convertConfig();
-                    mUserConfig = new UserConfig(mContext);
+                    mUserConfig = new TempUserConfig(mContext);
                 }
             } else {
                 if (!(mConfigConverter != null &&
