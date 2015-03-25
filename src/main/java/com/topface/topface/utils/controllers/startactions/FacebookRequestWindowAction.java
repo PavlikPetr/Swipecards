@@ -26,19 +26,19 @@ import java.util.ArrayList;
 public class FacebookRequestWindowAction extends DailyPopupAction  {
 
     private int mPriority;
-    private Options.FacebookRequests mFasebookRequests;
+    private Options.FacebookInviteFriends mFasebookRequests;
     private OnNextActionListener mOnNextActionListener;
 
     public FacebookRequestWindowAction(Context context, int priority) {
         super(context);
         mPriority = priority;
-        mFasebookRequests = getOptions().facebookRequests;
+        mFasebookRequests = getOptions().facebookInviteFriends;
     }
 
     @Override
     protected boolean firstStartShow() {
         getUserConfig().setFacebookRequestWindowShow(System.currentTimeMillis());
-        return false;
+        return true;
     }
 
     @Override
@@ -144,18 +144,24 @@ public class FacebookRequestWindowAction extends DailyPopupAction  {
     }
 
     private boolean isFacebook() {
+        boolean b = AuthToken.getInstance().getSocialNet()
+                .equals(AuthToken.SN_FACEBOOK);
         return AuthToken.getInstance().getSocialNet()
                 .equals(AuthToken.SN_FACEBOOK);
     }
 
     private boolean isValidFacebookRequestWindowSkip() {
+        boolean b = getUserConfig().getFacebookRequestSkip()
+                <= CacheProfile.getOptions().facebookInviteFriends.maxAttempts;
         return getUserConfig().getFacebookRequestSkip()
-                <= mFasebookRequests.maxAttempts;
+                <= CacheProfile.getOptions().facebookInviteFriends.maxAttempts;
     }
 
     private boolean loginOrNotLogin() {
-        return mFasebookRequests.enabledAttempts
-                || mFasebookRequests.enabledOnLogin;
+        boolean b = CacheProfile.getOptions().facebookInviteFriends.enabledAttempts
+                || CacheProfile.getOptions().facebookInviteFriends.enabledOnLogin;
+        return CacheProfile.getOptions().facebookInviteFriends.enabledAttempts
+                || CacheProfile.getOptions().facebookInviteFriends.enabledOnLogin;
     }
 
     @Override
