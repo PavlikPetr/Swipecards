@@ -388,7 +388,7 @@ public class AppConfig extends AbstractConfig {
         resetAndSaveConfig(DATA_APP_OPTIONS);
     }
 
-    public boolean isUserConfigConverted() {
+    public boolean isNeedConverting() {
         return getBooleanField(getSettingsMap(), CONVERT_CONFIG);
     }
 
