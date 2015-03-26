@@ -3,8 +3,6 @@ package com.topface.topface.utils.controllers.startactions;
 import android.content.Context;
 
 import com.topface.topface.App;
-import com.topface.topface.data.Options;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.config.UserConfig;
 
 /**
@@ -14,12 +12,10 @@ import com.topface.topface.utils.config.UserConfig;
 public abstract class DailyPopupAction implements IStartAction {
 
     private Context mContext;
-    private Options mOptions;
     private UserConfig mUserConfig;
 
     public DailyPopupAction(Context context) {
         mContext = context;
-        mOptions = CacheProfile.getOptions();
         mUserConfig = App.getUserConfig();
     }
 
@@ -36,16 +32,9 @@ public abstract class DailyPopupAction implements IStartAction {
         return mContext;
     }
 
-    protected Options getOptions() {
-        return mOptions;
-    }
-
     protected UserConfig getUserConfig() {
         return mUserConfig;
     }
 
-
-
     protected abstract boolean firstStartShow();
-
 }

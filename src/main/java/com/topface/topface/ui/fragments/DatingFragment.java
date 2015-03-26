@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -465,7 +466,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 EasyTracker.sendEvent("EmptySearch", "ClickTryAgain", "", 0L);
                 updateData(false);
             }
-        }).message(getString(R.string.general_search_null_response_error))
+        }).setImageVisibility(View.GONE).message(getString(R.string.general_search_null_response_error))
+                .setMessageTextColor(Color.parseColor("#FFFFFF"))
                 .orientation(LinearLayout.VERTICAL)
                 .button(getString(R.string.reset_filter), new OnClickListener() {
                     @Override
@@ -729,7 +731,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             case R.id.send_gift_button: {
                 if (mCurrentUser != null) {
                     startActivityForResult(
-                            GiftsActivity.getSendGiftIntent(getActivity(), mCurrentUser.id),
+                            GiftsActivity.getSendGiftIntent(getActivity(), mCurrentUser.id, false),
                             GiftsActivity.INTENT_REQUEST_GIFT
                     );
                     EasyTracker.sendEvent("Dating", "SendGiftClick", "", 1L);
@@ -1122,7 +1124,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             // открываем чат с пользователем в случае успешной отправки подарка с экрана знакомств
         } else if (resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
             if (mDatingInstantMessageController != null) {
-                mDatingInstantMessageController.openChat(getActivity(), mCurrentUser);
+                // открываем чат с пустой строкой в footer
+                mDatingInstantMessageController.openChat(getActivity(), mCurrentUser, "");
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

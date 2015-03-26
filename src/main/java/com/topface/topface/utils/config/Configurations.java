@@ -23,6 +23,7 @@ public class Configurations {
     private BannersConfig mBannerConfig;
     private LocaleConfig mLocaleConfig;
     private Novice mNovice;
+    private UserConfigConverter mConfigConverter;
 
     public Configurations(Context context) {
         mContext = context;
@@ -37,18 +38,24 @@ public class Configurations {
 
     public UserConfig getUserConfig() {
         if (mUserConfig == null) {
-            if (App.getAppConfig().isUserConfigConverted()) {
-                boolean mHasOldConfig = UserConfigConverter.hasOldConfig();
-                if (mHasOldConfig) {
+            if (App.getAppConfig().isNeedConverting() && UserConfigConverter.hasOldConfig()) {
                     //если у пользователя старый конфиг, то конвертируем его в новые
-                    UserConfigConverter configConverter = new UserConfigConverter(AuthToken.getInstance().getUserTokenUniqueId());
-                    Debug.debug(configConverter, "Converting old config");
-                    configConverter.convertConfig();
-                    mUserConfig = configConverter.getMainUserConfig();
-                }
-
+                mConfigConverter = new UserConfigConverter(AuthToken.getInstance().getUserTokenUniqueId(), new UserConfigConverter.OnUpdateUserConfig() {
+                    @Override
+                    public void onUpdate() {
+                        mUserConfig = mConfigConverter.getMainUserConfig();
+                        Debug.debug(mConfigConverter, "Config converting complite ");
+                    }
+                });
+                Debug.debug(mConfigConverter, "Converting old config");
+                mConfigConverter.convertConfig();
+                mUserConfig = new TempUserConfig(mContext);
             } else {
-                mUserConfig = new UserConfig(mContext);
+                if (!(mConfigConverter != null &&
+                        mConfigConverter.getConverterState() != UserConfigConverter.ConverterState.DEFAULT)) {
+                    Debug.debug(mConfigConverter, "Create new config");
+                    mUserConfig = new UserConfig(mContext);
+                }
             }
         }
         return mUserConfig;

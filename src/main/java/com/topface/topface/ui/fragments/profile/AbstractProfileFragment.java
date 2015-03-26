@@ -129,8 +129,10 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
 
     @Override
     protected void restoreState() {
-        mBodyStartPageClassName = getArguments().getString(ARG_TAG_INIT_BODY_PAGE);
-        mHeaderStartPageClassName = getArguments().getString(ARG_TAG_INIT_HEADER_PAGE);
+        if (getArguments() != null) {
+            mBodyStartPageClassName = getArguments().getString(ARG_TAG_INIT_BODY_PAGE);
+            mBodyStartPageClassName = getArguments().getString(ARG_TAG_INIT_HEADER_PAGE);
+        }
     }
 
     protected void onProfileUpdated() {

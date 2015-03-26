@@ -4,5 +4,6 @@
     <string name="ad_mob_banner_bottom_mediation_unit_id" translatable="false">ca-app-pub-9530442067223936/1609366403</string>
     <integer name="smaato_publisher_id">1001000709</integer>
     <integer name="smaato_space_id">130000663</integer>
+    <integer name="smaato_fullscreen_space_id">130004130</integer>
     <integer name="smaato_autoreload_time">60</integer>
 </resources>

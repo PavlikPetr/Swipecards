@@ -62,6 +62,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
+        getSupportActionBar().show();
         super.onCreateView(inflater, container, saved);
         View root = inflater.inflate(R.layout.fragment_feedback_message, null);
         if (root == null) return null;
