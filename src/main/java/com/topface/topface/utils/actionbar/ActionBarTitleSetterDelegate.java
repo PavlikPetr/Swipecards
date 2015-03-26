@@ -1,7 +1,5 @@
 package com.topface.topface.utils.actionbar;
 
-import android.app.Activity;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.View;
@@ -16,7 +14,6 @@ import com.topface.topface.R;
  */
 public class ActionBarTitleSetterDelegate {
 
-    private Activity mActivity;
     private boolean mNoActionBar;
     private TextView mTitle;
     private TextView mSubtitle;
@@ -27,11 +24,6 @@ public class ActionBarTitleSetterDelegate {
             mTitle = (TextView) actionBar.getCustomView().findViewById(R.id.title);
             mSubtitle = (TextView) actionBar.getCustomView().findViewById(R.id.subtitle);
         }
-    }
-
-    public ActionBarTitleSetterDelegate(FragmentActivity activity, ActionBar actionBar) {
-        this(actionBar);
-        mActivity = activity;
     }
 
     public void setActionBarTitles(String title, String subtitle) {
@@ -65,7 +57,7 @@ public class ActionBarTitleSetterDelegate {
 
     public void setOnline(boolean online) {
         if (mTitle != null) {
-            mTitle.setCompoundDrawablePadding((int) mActivity.getResources().getDimension(R.dimen.padding_left_for_online_icon));
+            mTitle.setCompoundDrawablePadding((int) App.getContext().getResources().getDimension(R.dimen.padding_left_for_online_icon));
             mTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, online ? R.drawable.ico_online : 0, 0);
         }
     }
