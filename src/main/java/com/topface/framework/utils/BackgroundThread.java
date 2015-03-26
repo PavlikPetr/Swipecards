@@ -51,13 +51,9 @@ public abstract class BackgroundThread extends Thread {
     @Override
     final public void run() {
         execute();
-        complete();
     }
 
     abstract public void execute();
-
-    public void complete() {
-    }
 
     @Override
     public final synchronized void start() {

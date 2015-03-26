@@ -60,7 +60,7 @@ public class UserConfig extends AbstractConfig {
     public static final String LAST_DAY_PUBNATIVE_SHOWN = "current_day_for_showing_feed_ad";
     public static final String SYMPATHY_SENT_ID_ARRAY = "sympathy_sent_id_array";
     public static final String FACEBOOK_REQUESTS_DIALOG_SKIPS = "facebook_request_dialog_skip";
-    public static final String FACEBOOK_REQUESTS_DIALOG_TIME = "facebook_request_dialog_time_paskuda";
+    public static final String FACEBOOK_REQUESTS_DIALOG_TIME = "facebook_request_dialog_time";
     private static final String APPSFLYER_FIRST_PAY = "appsflyer_first_purchase";
     private String mUnique;
 
