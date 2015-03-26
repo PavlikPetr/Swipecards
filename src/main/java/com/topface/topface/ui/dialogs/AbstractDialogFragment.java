@@ -36,12 +36,6 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
     private DialogInterface.OnDismissListener mDismissListener;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        restoreState();
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         applyStyle();
@@ -55,10 +49,6 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
         //По стилю это у нас не диалог, а кастомный дизайн -
         //закрывает весь экран оверлеем и ниже ActionBar показывает контент
         setStyle(STYLE_NO_FRAME, R.style.Topface_Theme_TranslucentDialog);
-    }
-
-    protected void restoreState() {
-
     }
 
     @Override

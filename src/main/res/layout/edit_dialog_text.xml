@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:descendantFocusability="afterDescendants">
 
     <EditText
         android:id="@+id/editor_text"
@@ -9,11 +10,9 @@
         android:layout_width="fill_parent"
         android:layout_height="60dp"
         android:gravity="center_vertical"
-        android:imeOptions="actionSend"
-        android:inputType="textCapSentences|textMultiLine"
-        android:maxLines="5"
+        android:inputType="textCapSentences"
         android:minHeight="34dp">
 
-        <requestFocus />
+        <requestFocus/>
     </EditText>
 </FrameLayout>

@@ -48,26 +48,22 @@ public class AbstractEditDialog<T extends Parcelable> extends AbstractDialogFrag
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.edit_dialog, container, false);
+        View view = inflater.inflate(getDialogLayoutRes(), container, false);
         initViews(view);
         return view;
     }
 
     @Override
     protected void initViews(View root) {
-        mOptionsList = (ListView) root.findViewById(R.id.optionsList);
+        mOptionsList = (ListView) root.findViewById(R.id.edit_dialog_options_list);
         mOptionsList.setAdapter(mAdapter);
-        mTitleText = (TextView) root.findViewById(R.id.selector_dialog_title);
+        mTitleText = (TextView) root.findViewById(R.id.edit_dialog_title);
         mTitleText.setText(mTitle);
     }
 
-    /**
-     * This dialog uses it own layout. So no need for layout res.
-     * @return 0
-     */
     @Override
     public int getDialogLayoutRes() {
-        return 0;
+        return R.layout.edit_dialog;
     }
 
     public String getTitle() {
