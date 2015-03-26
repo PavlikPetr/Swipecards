@@ -1,6 +1,6 @@
 package com.topface.topface.utils.notifications;
 
-import com.topface.framework.utils.Debug;
+import com.topface.framework.JsonUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.SerializableToJson;
@@ -74,28 +74,25 @@ public class MessageStack extends SerializableList {
 
         @Override
         public JSONObject toJson() {
-            JSONObject object = new JSONObject();
-            try {
-                object.put("name", mName);
-                object.put("title", mTitle);
-                object.put("user_id", mUserId);
-            } catch (JSONException e) {
-                Debug.error(e);
+            String jsonString = JsonUtils.toJson(new Message(mName, mTitle, mUserId));
+            if (jsonString != null) {
+                try {
+                    return new JSONObject(jsonString);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-            return object;
+            return null;
         }
 
         @Override
         public void fromJSON(String json) {
-            try {
-                JSONObject object = new JSONObject(json);
-                mName = object.optString("name");
-                mTitle = object.optString("title");
-                mUserId = object.optInt("user_id");
-            } catch (JSONException e) {
-                Debug.error(e);
+            if (json != null) {
+                Message msg = JsonUtils.fromJson(json, Message.class);
+                mName = msg.mName;
+                mTitle = msg.mTitle;
+                mUserId = msg.mUserId;
             }
-
         }
     }
 }

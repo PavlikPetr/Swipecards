@@ -375,11 +375,7 @@ public class UserNotification {
 
     private void addSmallIcon(int imageId) {
         if (notificationBuilder != null) {
-            if (imageId == 0) {
-                notificationBuilder.setSmallIcon(getDefaultSmallIcon());
-            } else {
-                notificationBuilder.setSmallIcon(imageId);
-            }
+            notificationBuilder.setSmallIcon(imageId == 0 ? getDefaultSmallIcon() : imageId);
         }
     }
 
