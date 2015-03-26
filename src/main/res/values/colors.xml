@@ -65,5 +65,8 @@
     <!--filter fragment dividers color-->
     <color name="filter_fragment_divider_color">#E2E2E2</color>
 
-
+    <!-- main theme color -->
+    <color name="light_theme_color_primary">#03a9f4</color>
+    <color name="light_theme_color_primary_dark">#0287c3</color>
+    <color name="light_theme_color_accent">#ee4493</color>
 </resources>

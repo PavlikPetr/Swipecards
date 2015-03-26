@@ -320,6 +320,7 @@ public class AddPhotoHelper {
                     mHandler.sendMessage(msg);
                 }
                 mNotificationManager.showNotificationAsync(
+                        null,
                         mContext.getString(R.string.default_photo_upload_complete), "", false,
                         uri.toString(), 1, getIntentForNotification(), true, null, null);
                 Intent intent = new Intent(HeaderMainFragment.UPDATE_AVATAR_POSITION);

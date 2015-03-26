@@ -14,6 +14,8 @@ import java.util.LinkedList;
 
 public class MessageStack extends SerializableList {
 
+    public static final int EMPTY_USER_ID = -1;
+
     public int getRestMessages() {
         return mRestMessages;
     }
@@ -33,7 +35,7 @@ public class MessageStack extends SerializableList {
             mRestMessages++;
 
             //Добавляем строчку "и еще %d"
-            add(new Message(Utils.getQuantityString(R.plurals.general_some_more, mRestMessages, mRestMessages), Static.EMPTY));
+            add(new Message(Utils.getQuantityString(R.plurals.general_some_more, mRestMessages, mRestMessages), Static.EMPTY, EMPTY_USER_ID));
         }
     }
 
@@ -59,10 +61,12 @@ public class MessageStack extends SerializableList {
     public static class Message implements SerializableToJson {
         public String mName;
         public String mTitle;
+        public int mUserId;
 
-        public Message(String name, String title) {
+        public Message(String name, String title, int userId) {
             mName = name;
             mTitle = title;
+            mUserId = userId;
         }
 
         public Message() {
@@ -74,6 +78,7 @@ public class MessageStack extends SerializableList {
             try {
                 object.put("name", mName);
                 object.put("title", mTitle);
+                object.put("user_id", mUserId);
             } catch (JSONException e) {
                 Debug.error(e);
             }
@@ -86,6 +91,7 @@ public class MessageStack extends SerializableList {
                 JSONObject object = new JSONObject(json);
                 mName = object.optString("name");
                 mTitle = object.optString("title");
+                mUserId = object.optInt("user_id");
             } catch (JSONException e) {
                 Debug.error(e);
             }
