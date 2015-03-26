@@ -28,6 +28,8 @@ public class Static {
      */
     public static final String AUTH_FACEBOOK_ID = App.getContext().getString(R.string.app_id);
 
+    public static final String COMSCORE_C2 = "19015876";
+    public static final String COMSCORE_SECRET_KEY = "b83e932c608c2e08273eeddf01c2a70e";
 
     public static final int GIRL = 0;
     public static final int BOY = 1;
