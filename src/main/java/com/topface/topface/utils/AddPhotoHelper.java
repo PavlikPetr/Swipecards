@@ -443,7 +443,7 @@ public class AddPhotoHelper {
         takePhotoDialog.setPhotoTaker(photoTaker);
     }
 
-    public static void hadlePhotoMessage(Message msg) {
+    public static void handlePhotoMessage(Message msg) {
         if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
             Photo photo = (Photo) msg.obj;
             // ставим фото на аватарку только если она едиснтвенная
