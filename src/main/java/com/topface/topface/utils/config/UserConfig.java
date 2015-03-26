@@ -132,7 +132,6 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, LAST_DAY_PUBNATIVE_SHOWN, 0L);
         // Массив id пользователей из фотоленты, которым были отправлены симпатии
         addField(settingsMap, SYMPATHY_SENT_ID_ARRAY, "");
-
         // validate user avatar
         addField(settingsMap, IS_AVATAR_AVAILABLE, false);
         //Флаг первой покупки
@@ -150,9 +149,7 @@ public class UserConfig extends AbstractConfig {
 
     @Override
     protected SharedPreferences getPreferences() {
-        if (mUnique == null) {
-            mUnique = AuthToken.getInstance().getUserTokenUniqueId();
-        }
+        mUnique = AuthToken.getInstance().getUserTokenUniqueId();
         return getContext().getSharedPreferences(
                 PROFILE_CONFIG_SETTINGS + Static.AMPERSAND + mUnique,
                 Context.MODE_PRIVATE

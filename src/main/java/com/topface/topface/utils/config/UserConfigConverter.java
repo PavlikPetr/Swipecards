@@ -21,28 +21,38 @@ import java.util.Map;
  */
 public class UserConfigConverter {
 
+    public enum ConverterState {DEFAULT, PROCESS, DONE}
+
+    private OnUpdateUserConfig mUpdateUserConfig;
     private ArrayList<String> mLoginList = new ArrayList<>();
     private Map<String, ?> mOldConfidFields;
     private UserConfig mMainUserConfig;
     private String mCurrentLogin;
+    private ConverterState mConverterState = ConverterState.DEFAULT;
 
     public UserConfigConverter() {
     }
 
-    public UserConfigConverter(String mCurrentLogin) {
+    public UserConfigConverter(String mCurrentLogin, OnUpdateUserConfig updateUserConfig) {
         mOldConfidFields = getOldConfig().getAll();
         this.mCurrentLogin = mCurrentLogin;
+        mUpdateUserConfig = updateUserConfig;
     }
 
     public void convertConfig() {
+        App.getAppConfig().setUserConfigConverted();
+        mConverterState = ConverterState.PROCESS;
         new BackgroundThread() {
             @Override
             public void execute() {
                 getAllLogins();
                 separateConfig();
-                App.getAppConfig().setUserConfigConverted();
                 App.getAppConfig().saveConfig();
                 removeOldConfig();
+                if (mUpdateUserConfig != null) {
+                    mConverterState = ConverterState.DONE;
+                    mUpdateUserConfig.onUpdate();
+                }
             }
         };
     }
@@ -96,6 +106,10 @@ public class UserConfigConverter {
 
         if (oldKey != null && oldKey.contains(mCurrentLogin)) {
             setMainUserConfig(uniqueConfig);
+        } else {
+            //на случай если есть неконвертированый ятарый конфиг, но пользователь решал создать
+            //новый акк
+            setMainUserConfig(new UserConfig(App.getContext()));
         }
         uniqueConfig.commitConfig();
     }
@@ -172,6 +186,31 @@ public class UserConfigConverter {
                 UserConfig.PROFILE_CONFIG_SETTINGS +
                         Static.AMPERSAND + login,
                 Context.MODE_PRIVATE);
+    }
+
+    /**
+     * Сравниваем с временным конфигом, и если нужно обновляем поля.
+     */
+    @SuppressWarnings("unused")
+    public void comparedWithUniqueConfig(UserConfig uniqueConfig, AbstractConfig.SettingsMap tempSettingsMap) {
+        AbstractConfig.SettingsField field;
+        for (String key : tempSettingsMap.keySet()) {
+            field = tempSettingsMap.get(key);
+            if (field.value != field.defaultValue) {
+                uniqueConfig.getSettingsMap().put(key, field);
+            }
+        }
+        uniqueConfig.saveConfig();
+    }
+
+    public ConverterState getConverterState() {
+        return mConverterState;
+    }
+
+    interface OnUpdateUserConfig {
+
+        void onUpdate();
+
     }
 
 }

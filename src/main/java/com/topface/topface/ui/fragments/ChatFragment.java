@@ -1056,6 +1056,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     public Integer getProfileId() {
                         return mUserId;
                     }
+
+                    @Override
+                    public Boolean isBanned() {
+                        return null;
+                    }
                 });
             }
             mChatOverflowMenu.initOverfowMenu();

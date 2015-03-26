@@ -73,6 +73,7 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
             mEdConfirmationField.setHint(R.string.password_confirmation_hint);
             mEdMainField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             mEdConfirmationField.setHint(R.string.password_confirmation_hint);
+            mEdConfirmationField.setInputType(mEdMainField.getInputType());
         } else {
             mEdMainField.setHint(R.string.email);
             mEdConfirmationField.setVisibility(View.GONE);
@@ -114,7 +115,6 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSave:
-                mBtnSave.setClickable(false);
                 Utils.hideSoftKeyboard(getActivity(), mEdMainField, mEdConfirmationField);
                 if (mChangePassword) {
                     changePassword();
@@ -137,6 +137,7 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
         } else if (!password.equals(passwordConfirmation)) {
             Toast.makeText(App.getContext(), R.string.passwords_mismatched, Toast.LENGTH_LONG).show();
         } else {
+            mBtnSave.setClickable(false);
             ChangePasswordRequest request = new ChangePasswordRequest(getActivity(), mToken.getPassword(), password);
             lock();
             request.callback(new ApiHandler() {
