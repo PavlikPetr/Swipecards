@@ -112,7 +112,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String INITIAL_MESSAGE = "initial_message";
     public static final String MESSAGE = "message";
     public static final String LOADED_MESSAGES = "loaded_messages";
-    public static final String CONFIGRM_EMAIL_DIALOG_TAG = "configrm_email_dialog_tag";
+    public static final String CONFIRM_EMAIL_DIALOG_TAG = "configrm_email_dialog_tag";
     private static final String POPULAR_LOCK_STATE = "chat_blocked";
     private static final String HISTORY_CHAT = "history_chat";
     private static final String SOFT_KEYBOARD_LOCK_STATE = "keyboard_state";
@@ -904,7 +904,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         if (TextUtils.equals(AuthToken.getInstance().getSocialNet(), AuthToken.SN_TOPFACE)) {
             if (!CacheProfile.emailConfirmed) {
                 Toast.makeText(App.getContext(), R.string.confirm_email, Toast.LENGTH_SHORT).show();
-                ConfirmEmailDialog.newInstance().show(getActivity().getSupportFragmentManager(), CONFIGRM_EMAIL_DIALOG_TAG);
+                ConfirmEmailDialog.newInstance().show(getActivity().getSupportFragmentManager(), CONFIRM_EMAIL_DIALOG_TAG);
                 return false;
             }
         }
