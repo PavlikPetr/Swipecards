@@ -2,8 +2,6 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
-import com.topface.framework.JsonUtils;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,7 +9,9 @@ public class ModerationUnban extends ApiRequest {
 
     private static final String SERVICE = "moderation.unban";
 
-    /** идентификатор пользователя, которого нужно разбанить */
+    /**
+     * идентификатор пользователя, которого нужно разбанить
+     */
     private int userId;
 
     public ModerationUnban(Context context, int id) {

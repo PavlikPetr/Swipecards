@@ -40,16 +40,16 @@ public class Configurations {
         if (mUserConfig == null) {
             if (App.getAppConfig().isNeedConverting() && UserConfigConverter.hasOldConfig()) {
                     //если у пользователя старый конфиг, то конвертируем его в новые
-                    mConfigConverter = new UserConfigConverter(AuthToken.getInstance().getUserTokenUniqueId(), new UserConfigConverter.OnUpdateUserConfig() {
-                        @Override
-                        public void onUpdate() {
-                            mUserConfig = mConfigConverter.getMainUserConfig();
-                            Debug.debug(mConfigConverter, "Config converting complite ");
-                        }
-                    });
-                    Debug.debug(mConfigConverter, "Converting old config");
-                    mConfigConverter.convertConfig();
-                    mUserConfig = new TempUserConfig(mContext);
+                mConfigConverter = new UserConfigConverter(AuthToken.getInstance().getUserTokenUniqueId(), new UserConfigConverter.OnUpdateUserConfig() {
+                    @Override
+                    public void onUpdate() {
+                        mUserConfig = mConfigConverter.getMainUserConfig();
+                        Debug.debug(mConfigConverter, "Config converting complite ");
+                    }
+                });
+                Debug.debug(mConfigConverter, "Converting old config");
+                mConfigConverter.convertConfig();
+                mUserConfig = new TempUserConfig(mContext);
             } else {
                 if (!(mConfigConverter != null &&
                         mConfigConverter.getConverterState() != UserConfigConverter.ConverterState.DEFAULT)) {
