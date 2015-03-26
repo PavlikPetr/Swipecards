@@ -1,9 +1,14 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -28,9 +32,13 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.adapters.LeadersPhotoGridAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
+import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.IPhotoTakerWithDialog;
+import com.topface.topface.utils.PhotoTaker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
@@ -54,6 +62,15 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private EditText mEditText;
     private View mGridFooterView;
     private LeadersPhotoGridAdapter mUsePhotosAdapter;
+    private AddPhotoHelper mAddPhotoHelper;
+    private IPhotoTakerWithDialog mPhotoTaker;
+    private BroadcastReceiver mUpdateProfileReceiver;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            AddPhotoHelper.handlePhotoMessage(msg);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +98,50 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         new ActionBarTitleSetterDelegate(getSupportActionBar()).setActionBarTitles(R.string.general_photoblog, null);
         // init grid view and create adapter
         initPhotosGrid(photos, position, selectedPosition);
+
+        mAddPhotoHelper = new AddPhotoHelper(this);
+        mAddPhotoHelper.setOnResultHandler(mHandler);
+        mPhotoTaker = new PhotoTaker(mAddPhotoHelper, this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mUpdateProfileReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                onProfileUpdated();
+            }
+        };
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+        TakePhotoDialog takePhotoDialog = (TakePhotoDialog) mPhotoTaker.getActivityFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
+        if (CacheProfile.photo == null && takePhotoDialog == null ) {
+            mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
+        }
+
+
+    }
+
+    @Override
+    protected void onProfileUpdated() {
+        super.onProfileUpdated();
+        initPhotosGrid(CacheProfile.photos, 0, 0);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:
+                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG:
+                    if (mAddPhotoHelper != null) {
+                        mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, mAddPhotoHelper.processActivityResult(requestCode, resultCode, data, false));
+                    }
+                    break;
+            }
+        }
     }
 
     @Override
@@ -140,6 +201,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
             Utils.hideSoftKeyboard(this, mEditText);
         }
         super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mUpdateProfileReceiver);
     }
 
     private void pressedAddToLeader(int position) {
