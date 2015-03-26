@@ -26,7 +26,7 @@ public class UserConfigConverterTest extends InstrumentationTestCase {
     public void testConfigManagerSeparateOldConfig() {
         OldPreferencesGenerator oldPreferencesGenerator = new OldPreferencesGenerator(App.getContext());
         oldPreferencesGenerator.commitConfig();
-        UserConfigConverter configConverter = new UserConfigConverter("test@gmail.com",null);
+        UserConfigConverter configConverter = new UserConfigConverter("test@gmail.com", null);
         configConverter.getAllLogins();
         configConverter.separateConfig();
 

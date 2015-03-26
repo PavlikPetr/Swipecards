@@ -8,6 +8,7 @@ import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Класс реализующий запуск очереди попапов. При закрытии одного, сразу появляется другой
@@ -71,9 +72,11 @@ public class SequencedStartAction implements IStartAction {
      * Выпиливаем все действия, которые не могут быть запущены
      */
     private void removeNonApplicableActions() {
-        for (IStartAction action : mActions) {
+        Iterator<IStartAction> iterator = mActions.iterator();
+        while (iterator.hasNext()) {
+            IStartAction action = iterator.next();
             if (!action.isApplicable()) {
-                mActions.remove(action);
+                iterator.remove();
             }
         }
     }
