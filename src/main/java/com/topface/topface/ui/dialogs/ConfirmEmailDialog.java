@@ -110,7 +110,7 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
             public void success(IApiResponse response) {
                 AuthToken token = AuthToken.getInstance();
                 token.saveToken(token.getUserSocialId(), email, token.getPassword());
-                setButtonSendConfirmationPressed();
+                saveButtonSendConfirmationPressed();
                 showToastMessage(R.string.confirmation_successfully_sent);
             }
 
@@ -132,7 +132,7 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                setButtonSendConfirmationPressed();
+                saveButtonSendConfirmationPressed();
                 showToastMessage(R.string.confirmation_successfully_sent);
             }
 
@@ -214,9 +214,9 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
         Toast.makeText(App.getContext(), textId, Toast.LENGTH_SHORT).show();
     }
 
-    private void setButtonSendConfirmationPressed() {
+    private void saveButtonSendConfirmationPressed() {
         UserConfig config = App.getConfig().getUserConfig();
-        config.setSendConfirmationEmailState(true);
+        config.saveButtonSendConfirmationPressed(true);
         config.saveConfig();
     }
 

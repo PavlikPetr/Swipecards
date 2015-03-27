@@ -489,7 +489,7 @@ public class UserConfig extends AbstractConfig {
     /**
      * Set state of button email confirmation
      */
-    public void setSendConfirmationEmailState(boolean state) {
+    public void saveButtonSendConfirmationPressed(boolean state) {
         setField(getSettingsMap(), IS_BUTTON_SEND_CONFIRMATION_CLICKED, state);
     }
 

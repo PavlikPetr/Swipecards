@@ -328,7 +328,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
     private void setButtonSendConfirmationPressed() {
         UserConfig config = App.getConfig().getUserConfig();
-        config.setSendConfirmationEmailState(true);
+        config.saveButtonSendConfirmationPressed(true);
         config.saveConfig();
     }
 
