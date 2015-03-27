@@ -75,10 +75,6 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSend:
-                UserConfig config = App.getConfig().getUserConfig();
-                config.setSendConfirmationEmailState(true);
-                setButtonConfirmedVisibility(true);
-                config.saveConfig();
                 final String email = mEditEmailText.getText().toString().trim();
                 if (Utils.isValidEmail(email)) {
                     if (AuthToken.getInstance().getLogin().equals(email)) {
@@ -112,6 +108,7 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
             public void success(IApiResponse response) {
                 AuthToken token = AuthToken.getInstance();
                 token.saveToken(token.getUserSocialId(), email, token.getPassword());
+                setButtonSendConfirmationPressed();
                 showToastMessage(R.string.confirmation_successfully_sent);
             }
 
@@ -133,6 +130,7 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
+                setButtonSendConfirmationPressed();
                 showToastMessage(R.string.confirmation_successfully_sent);
             }
 
@@ -213,4 +211,11 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
     private void showToastMessage(int textId) {
         Toast.makeText(App.getContext(), textId, Toast.LENGTH_SHORT).show();
     }
+
+    private void setButtonSendConfirmationPressed() {
+        UserConfig config = App.getConfig().getUserConfig();
+        config.setSendConfirmationEmailState(true);
+        config.saveConfig();
+    }
+
 }

@@ -35,6 +35,7 @@ import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -323,6 +324,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         newFragment.show(getActivity().getSupportFragmentManager(), DeleteAccountDialog.TAG);
     }
 
+    private void setButtonSendConfirmationPressed() {
+        UserConfig config = App.getConfig().getUserConfig();
+        config.setSendConfirmationEmailState(true);
+        config.saveConfig();
+    }
+
     private void onChangeButtonClick() {
         switch (mChangeButtonAction) {
             case ACTION_RESEND_CONFIRM:
@@ -330,6 +337,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 remindRequest.callback(new ApiHandler() {
                     @Override
                     public void success(IApiResponse response) {
+                        setButtonSendConfirmationPressed();
                         Toast.makeText(App.getContext(), R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT).show();
                     }
 
@@ -349,6 +357,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                         public void success(IApiResponse response) {
                             mToken.saveToken(mToken.getUserSocialId(), email, mToken.getPassword());
                             setChangeBtnAction(ACTION_RESEND_CONFIRM);
+                            setButtonSendConfirmationPressed();
                         }
 
                         @Override
