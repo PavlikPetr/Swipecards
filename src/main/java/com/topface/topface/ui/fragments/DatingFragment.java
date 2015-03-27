@@ -6,13 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -78,7 +78,6 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
-import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
@@ -228,7 +227,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private INavigationFragmentsListener mFragmentSwitcherListener;
     private AnimationHelper mAnimationHelper;
     private AlbumLoadController mController;
-    private ActionBarTitleSetterDelegate mSetter;
     private AtomicBoolean moneyDecreased = new AtomicBoolean(false);
     private boolean mIsHide;
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -266,15 +264,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void onDetach() {
         super.onDetach();
         mFragmentSwitcherListener = null;
-        if (mSetter != null) {
-            mSetter.setOnline(false);
+        if (getTitleSetter() != null) {
+            getTitleSetter().setOnline(false);
         }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSetter = new ActionBarTitleSetterDelegate(getActivity(), ((ActionBarActivity) getActivity()).getSupportActionBar());
         mPreloadManager = new PreloadManager<>();
         // Animation
         mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
@@ -320,8 +317,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
-        if (mSetter != null) {
-            mSetter.setOnline(mCurrentUser != null && mCurrentUser.online);
+        if (getTitleSetter() != null) {
+            getTitleSetter().setOnline(mCurrentUser != null && mCurrentUser.online);
         }
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
@@ -465,7 +462,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 EasyTracker.sendEvent("EmptySearch", "ClickTryAgain", "", 0L);
                 updateData(false);
             }
-        }).message(getString(R.string.general_search_null_response_error))
+        }).setImageVisibility(View.GONE).message(getString(R.string.general_search_null_response_error))
+                .setMessageTextColor(Color.parseColor("#FFFFFF"))
                 .orientation(LinearLayout.VERTICAL)
                 .button(getString(R.string.reset_filter), new OnClickListener() {
                     @Override
@@ -729,7 +727,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             case R.id.send_gift_button: {
                 if (mCurrentUser != null) {
                     startActivityForResult(
-                            GiftsActivity.getSendGiftIntent(getActivity(), mCurrentUser.id),
+                            GiftsActivity.getSendGiftIntent(getActivity(), mCurrentUser.id, false),
                             GiftsActivity.INTENT_REQUEST_GIFT
                     );
                     EasyTracker.sendEvent("Dating", "SendGiftClick", "", 1L);
@@ -837,7 +835,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setUserOnlineStatus(SearchUser currUser) {
-        mSetter.setOnline(currUser != null && currUser.online);
+        getTitleSetter().setOnline(currUser != null && currUser.online);
     }
 
     private void setUserSex(SearchUser currUser, Resources res) {
@@ -1086,7 +1084,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mImageSwitcher.setVisibility(View.GONE);
             mCurrentUser = null;
             refreshActionBarTitles();
-            mSetter.setOnline(false);
+            getTitleSetter().setOnline(false);
             mUserInfoStatus.setText(Static.EMPTY);
         }
     }
@@ -1122,7 +1120,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             // открываем чат с пользователем в случае успешной отправки подарка с экрана знакомств
         } else if (resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
             if (mDatingInstantMessageController != null) {
-                mDatingInstantMessageController.openChat(getActivity(), mCurrentUser);
+                // открываем чат с пустой строкой в footer
+                mDatingInstantMessageController.openChat(getActivity(), mCurrentUser, "");
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -1197,7 +1196,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mImageSwitcher.setVisibility(View.GONE);
         mRetryView.setVisibility(View.VISIBLE);
         setActionBarTitles(getString(R.string.general_dating));
-        mSetter.setOnline(false);
+        getTitleSetter().setOnline(false);
         mFragmentSwitcherListener.onShowActionBar();
     }
 

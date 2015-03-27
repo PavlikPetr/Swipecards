@@ -1,99 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/bg_white"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/fieldContainer_layout"
+        <ScrollView
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="16dp"
-            android:gravity="center"
-            android:background="@drawable/edit_big_btn_selector">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-            <EditText
-                android:id="@+id/edText"
-                style="@style/ItemWhiteText"
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:background="@drawable/city_editbox_selector"
-                android:singleLine="true"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:visibility="gone"/>
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:singleLine="true"
-                android:padding="4dp"
-                android:textSize="14sp"
-                style="@style/ItemTitleText"
-                android:drawablePadding="5dp"/>
-        </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/fieldContainer_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="18dp"
+                    android:layout_marginTop="18dp"
+                    android:gravity="center">
 
-        <Button
-            android:id="@+id/btnLogout"
+                    <EditText
+                        android:id="@+id/edText"
+                        style="@style/SettingsAccountEditText"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tvText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="5dp"
+                        android:gravity="center"
+                        android:padding="4dp"
+                        android:singleLine="true"
+                        android:textColor="#333333"
+                        android:textSize="16sp" />
+                </RelativeLayout>
+
+                <Button
+                    style="@style/FlatButton.Blue"
+                    android:id="@+id/btnChange"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/change_password"
+                    android:visibility="gone" />
+
+                <Button
+                    style="@style/FlatButton.Gray"
+                    android:id="@+id/btnChangeEmail"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/change_email"
+                    android:visibility="visible" />
+
+                <Button
+                    style="@style/FlatButton.Gray"
+                    android:id="@+id/btnLogout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/settings_logout"
+                    android:visibility="visible" />
+
+                <EditText
+                    android:id="@+id/edCodeConfirmation"
+                    style="@style/SettingsAccountEditText"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="19dp"
+                    android:hint="@string/settings_code_confirmation_hint"
+                    android:visibility="gone" />
+
+                <Button
+                    style="@style/FlatButton.Gray"
+                    android:id="@+id/btnCodeSend"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_code_confirmation"
+                    android:visibility="gone" />
+
+                <Button
+                    style="@style/FlatButton.Gray"
+                    android:id="@+id/btnCodeWasSend"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/settings_email_was_confirmed"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/txtCodeWasSend"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingTop="6dp"
+                    android:text="@string/settings_email_was_confirmed_textview_text"
+                    android:textColor="#959595"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/btnDeleteAccount"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            style="@style/Widget.Topface.Button.Big.Gray"
-            android:text="@string/settings_logout"/>
-
-        <Button
-            android:id="@+id/btnChange"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/btn_gray_selector"
-            android:text="@string/settings_logout"
-            style="@style/Widget.Topface.Button.Big.Gray"
-            android:visibility="gone"/>
-
-        <Button
-            android:id="@+id/btnChangeEmail"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/btn_gray_selector"
-            android:text="@string/change_email"
-            style="@style/Widget.Topface.Button.Big.Gray"
-            android:visibility="gone"/>
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="8dp"
+            android:text="@string/settings_delete_account"
+            android:textColor="#E6333333"
+            android:textSize="16sp" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/btnDeleteAccount"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="12dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        style="@style/Widget.Topface.Button.Big.Gray"
-        android:text="@string/settings_delete_account"/>
 
     <com.topface.topface.ui.views.LockerView
         android:id="@+id/llvLogoutLoading"
         style="@style/LoadingLocker"
-        android:visibility="gone"/>
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone" />
 </RelativeLayout>

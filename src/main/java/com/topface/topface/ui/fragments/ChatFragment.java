@@ -13,7 +13,6 @@ import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -69,6 +68,7 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.HackBaseAdapterDecorator;
 import com.topface.topface.ui.adapters.IListLoader;
+import com.topface.topface.ui.dialogs.ConfirmEmailDialog;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -80,7 +80,6 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
 import com.topface.topface.utils.controllers.PopularUserChatController;
@@ -111,6 +110,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String INITIAL_MESSAGE = "initial_message";
     public static final String MESSAGE = "message";
     public static final String LOADED_MESSAGES = "loaded_messages";
+    public static final String CONFIRM_EMAIL_DIALOG_TAG = "configrm_email_dialog_tag";
     private static final String POPULAR_LOCK_STATE = "chat_blocked";
     private static final String HISTORY_CHAT = "history_chat";
     private static final String SOFT_KEYBOARD_LOCK_STATE = "keyboard_state";
@@ -159,7 +159,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
     private OverflowMenu mChatOverflowMenu;
     // Managers
-    private ActionBarTitleSetterDelegate mSetter;
     private RelativeLayout mLockScreen;
     private PopularUserChatController mPopularUserLockController;
     private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
@@ -199,7 +198,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         if (!isShowKeyboardInChat()) {
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         }
-        mSetter = new ActionBarTitleSetterDelegate(getActivity(), ((ActionBarActivity) getActivity()).getSupportActionBar());
         DateUtils.syncTime();
         setRetainInstance(true);
         String text = UserNotification.getRemoteInputMessageText(getActivity().getIntent());
@@ -629,7 +627,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
 
                 refreshActionBarTitles();
-                mSetter.setOnline(data.user.online);
+                getTitleSetter().setOnline(data.user.online);
                 wasFailed = false;
                 mUser = data.user;
                 if (!mUser.isEmpty()) {
@@ -743,8 +741,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void setOnline(boolean online) {
-        if (mSetter != null) {
-            mSetter.setOnline(online);
+        if (getTitleSetter() != null) {
+            getTitleSetter().setOnline(online);
         }
     }
 
@@ -899,6 +897,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public boolean sendMessage(String text, final boolean cancelable) {
         final History messageItem = new History(text, IListLoader.ItemType.TEMP_MESSAGE);
         final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity());
+        if (TextUtils.equals(AuthToken.getInstance().getSocialNet(), AuthToken.SN_TOPFACE)) {
+            if (!CacheProfile.emailConfirmed) {
+                Toast.makeText(App.getContext(), R.string.confirm_email, Toast.LENGTH_SHORT).show();
+                ConfirmEmailDialog.newInstance().show(getActivity().getSupportFragmentManager(), CONFIRM_EMAIL_DIALOG_TAG);
+                return false;
+            }
+        }
         if (cancelable) {
             registerRequest(messageRequest);
         }
@@ -1055,6 +1060,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     @Override
                     public Integer getProfileId() {
                         return mUserId;
+                    }
+
+                    @Override
+                    public Boolean isBanned() {
+                        return null;
                     }
                 });
             }

@@ -26,7 +26,7 @@ public class UserConfigConverterTest extends InstrumentationTestCase {
     public void testConfigManagerSeparateOldConfig() {
         OldPreferencesGenerator oldPreferencesGenerator = new OldPreferencesGenerator(App.getContext());
         oldPreferencesGenerator.commitConfig();
-        UserConfigConverter configConverter = new UserConfigConverter("test@gmail.com");
+        UserConfigConverter configConverter = new UserConfigConverter("test@gmail.com", null);
         configConverter.getAllLogins();
         configConverter.separateConfig();
 
@@ -92,10 +92,6 @@ public class UserConfigConverterTest extends InstrumentationTestCase {
                 addField(settingsMap, UserConfig.DATA_NOVICE_BUY_SYMPATHY_DATE, System.currentTimeMillis(), prefPart);
                 // flag show if "send sympathy hint" is passed
                 addField(settingsMap, UserConfig.DATA_NOVICE_SYMPATHY, true, prefPart);
-                // date of last likes closings processing
-                addField(settingsMap, UserConfig.DATA_LIKE_CLOSING_LAST_TIME, System.currentTimeMillis(), prefPart);
-                // date of last mutual closings processing
-                addField(settingsMap, UserConfig.DATA_MUTUAL_CLOSING_LAST_TIME, System.currentTimeMillis(), prefPart);
                 // список сообщений для сгруппированных нотификаций (сейчас группируются только сообщения)
                 addField(settingsMap, UserConfig.NOTIFICATIONS_MESSAGES_STACK, Static.EMPTY, prefPart);
                 // количество нотификаций, которые пишем в поле "еще %d сообщений"
