@@ -161,6 +161,8 @@
     <string name="general_spinner_title">Выберите действие</string>
     <string name="general_profile_error">Ошибка загрузки профиля</string>
     <string name="general_dbl_all">Все</string>
+    <string name="general_email_success_confirmed">E-mail успешно подтвержден</string>
+    <string name="general_email_not_confirmed">E-mail не был подтвержден</string>
 
     <string name="time_yesterday">Вчера</string>
     <string name="time_today">Сегодня</string>
@@ -683,6 +685,7 @@
     <string name="settings_feedback_transaction_number">Номер заказа</string>
     <string name="settings_feedback_transaction_link">где найти номер заказа?</string>
     <string name="general_logout_error">К сожалению, не удалось выйти из аккаунта</string>
+    <string name="settings_email_was_confirmed">Уже подтвердил</string>
     <string name="auth_btn_ok">Войти через Одноклассники</string>
     <string name="other_auth">Войти через другие сервисы</string>
     <string name="settings_feedback_transaction_number_hint">Введите номер заказа</string>

@@ -62,6 +62,7 @@ public class UserConfig extends AbstractConfig {
     public static final String FACEBOOK_REQUESTS_DIALOG_SKIPS = "facebook_request_dialog_skip";
     public static final String FACEBOOK_REQUESTS_DIALOG_TIME = "facebook_request_dialog_time";
     private static final String APPSFLYER_FIRST_PAY = "appsflyer_first_purchase";
+    private static final String IS_BUTTON_SEND_CONFIRMATION_CLICKED = "is_button_send_confirmation_clicked";
     private String mUnique;
 
     public UserConfig(Context context) {
@@ -141,6 +142,8 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, FACEBOOK_REQUESTS_DIALOG_SKIPS, 0);
         // Сохрфняем время показа FacebookRequest диалога
         addField(settingsMap, FACEBOOK_REQUESTS_DIALOG_TIME, 0L);
+        // is button send confirmation clicked by current user
+        addField(settingsMap, IS_BUTTON_SEND_CONFIRMATION_CLICKED, false);
     }
 
     @Override
@@ -478,6 +481,21 @@ public class UserConfig extends AbstractConfig {
     public void setUserAvatarAvailable(boolean enabled) {
         setField(getSettingsMap(), IS_AVATAR_AVAILABLE, enabled);
     }
+
+    /**
+     * @return true if user clicked button send confirmationF
+     */
+    public boolean isButtonSendConfirmationClicked() {
+        return getBooleanField(getSettingsMap(), IS_BUTTON_SEND_CONFIRMATION_CLICKED);
+    }
+
+    /**
+     * Set state of button email confirmation
+     */
+    public void setSendConfirmationEmailState(boolean state) {
+        setField(getSettingsMap(), IS_BUTTON_SEND_CONFIRMATION_CLICKED, state);
+    }
+
 
     /**
      * @return true if push notification enabled
