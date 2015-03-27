@@ -19,8 +19,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.topface.framework.JsonUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.BooleanEmailConfirmed;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ChangeLoginRequest;
 import com.topface.topface.requests.ConfirmRequest;
@@ -137,7 +139,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
             @Override
             protected Boolean parseResponse(ApiResponse response) {
-                return response.getJsonResult().optBoolean("emailConfirmed");
+                return JsonUtils.fromJson(response.toString(), BooleanEmailConfirmed.class).isConfirmed;
             }
 
             @Override
