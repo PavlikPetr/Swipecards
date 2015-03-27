@@ -63,7 +63,7 @@ public class UserNotification {
     private Context mContext;
     private NotificationCompat.Builder notificationBuilder;
     private NotificationCompat.WearableExtender mWearableExtender;
-    private Intent mGCMIntent;
+    private int mGCMType;
 
     public UserNotification(Context context) {
         this.mContext = context;
@@ -77,8 +77,8 @@ public class UserNotification {
         this.mType = mType;
     }
 
-    public void setGCMIntent(Intent intent) {
-        this.mGCMIntent = intent;
+    public void setGCMType(int type) {
+        this.mGCMType = type;
     }
 
     public void setImage(Bitmap image) {
@@ -385,7 +385,7 @@ public class UserNotification {
 
 
     private void setIcons() {
-        switch (GCMUtils.getType(mGCMIntent)) {
+        switch (mGCMType) {
             case GCMUtils.GCM_TYPE_MESSAGE:
                 setIcons(ONE_MESSAGE, true, true);
                 break;

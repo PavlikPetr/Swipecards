@@ -293,7 +293,7 @@ public class GCMUtils {
         if (!Ssid.isLoaded()) {
             if (type == GCM_TYPE_UPDATE || type == GCM_TYPE_PROMO) {
                 notificationManager.showNotification(
-                        extra,
+                        type,
                         title,
                         data,
                         true, null,
@@ -304,7 +304,7 @@ public class GCMUtils {
             }
         } else if (user != null && !TextUtils.isEmpty(user.photoUrl)) {
             notificationManager.showNotificationAsync(
-                    extra,
+                    type,
                     title,
                     data,
                     user,
@@ -316,7 +316,7 @@ public class GCMUtils {
             );
         } else {
             notificationManager.showNotification(
-                    extra,
+                    type,
                     title,
                     data,
                     true, null,

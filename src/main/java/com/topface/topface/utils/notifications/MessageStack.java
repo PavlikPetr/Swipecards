@@ -82,7 +82,7 @@ public class MessageStack extends SerializableList {
                     e.printStackTrace();
                 }
             }
-            return null;
+            return new JSONObject();
         }
 
         @Override

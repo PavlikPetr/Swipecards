@@ -49,30 +49,30 @@ public class UserNotificationManager {
     /*
         isTextNotification - разворачивать нотификацию как текст - true, как картинку - false
      */
-    public UserNotification showNotification(Intent extra, String title, String message, boolean isTextNotification,
+    public UserNotification showNotification(int gcmType, String title, String message, boolean isTextNotification,
                                              Bitmap icon, int unread, Intent intent, boolean doNeedReplace, User user) {
-        return showNotification(extra, title, message, isTextNotification, icon, unread, intent,
+        return showNotification(gcmType, title, message, isTextNotification, icon, unread, intent,
                 doNeedReplace, false, UserNotification.Type.STANDARD, null, user);
     }
 
     private UserNotification showNotification(String title, String message, boolean isTextNotification,
                                               Bitmap icon, int unread, Intent intent, boolean doNeedReplace, UserNotification.Type type) {
-        return showNotification(null, title, message, isTextNotification, icon, unread, intent,
+        return showNotification(0, title, message, isTextNotification, icon, unread, intent,
                 doNeedReplace, false, type, null, null);
     }
 
     private UserNotification showNotification(String title, String message, boolean isTextNotification,
                                               Bitmap icon, int unread, Intent intent, boolean doNeedReplace, boolean ongoing, UserNotification.Type type) {
-        return showNotification(null, title, message, isTextNotification, icon, unread, intent,
+        return showNotification(0, title, message, isTextNotification, icon, unread, intent,
                 doNeedReplace, ongoing, type, null, null);
     }
 
-    public void showNotificationAsync(Intent extra, final String title, final String message, User user, final boolean isTextNotification,
+    public void showNotificationAsync(int gcmType, final String title, final String message, User user, final boolean isTextNotification,
                                       String uri, final int unread, final Intent intent, final boolean doNeedReplace) {
-        showNotificationAsync(extra, title, message, isTextNotification, uri, unread, intent, doNeedReplace, null, user);
+        showNotificationAsync(gcmType, title, message, isTextNotification, uri, unread, intent, doNeedReplace, null, user);
     }
 
-    public void showNotificationAsync(final Intent extra, final String title, final String message, final boolean isTextNotification,
+    public void showNotificationAsync(final int gcmType, final String title, final String message, final boolean isTextNotification,
                                       String uri, final int unread, final Intent intent, final boolean doNeedReplace,
                                       final NotificationImageListener listener, final User user) {
         DefaultImageLoader.getInstance(mContext).getImageLoader().loadImage(uri, getTargetImageSize(), new ImageLoadingListener() {
@@ -90,9 +90,9 @@ public class UserNotificationManager {
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 if (listener != null && listener.needShowNotification()) {
-                    listener.onSuccess(showNotification(extra, title, message, isTextNotification, loadedImage, unread, intent, doNeedReplace, user));
+                    listener.onSuccess(showNotification(gcmType, title, message, isTextNotification, loadedImage, unread, intent, doNeedReplace, user));
                 } else {
-                    showNotification(extra, title, message, isTextNotification, loadedImage, unread, intent, doNeedReplace, user);
+                    showNotification(gcmType, title, message, isTextNotification, loadedImage, unread, intent, doNeedReplace, user);
                 }
             }
 
@@ -114,7 +114,7 @@ public class UserNotificationManager {
                                                         boolean ongoing,
                                                         UserNotification.NotificationAction[] actions,
                                                         int notificationId) {
-        return showNotification(null, title, message, false, icon, 0, null, notificationId, ongoing, UserNotification.Type.ACTIONS, actions, null);
+        return showNotification(0, title, message, false, icon, 0, null, notificationId, ongoing, UserNotification.Type.ACTIONS, actions, null);
     }
 
     public UserNotification showProgressNotification(String title, Bitmap icon, Intent intent) {
@@ -217,12 +217,12 @@ public class UserNotificationManager {
         });
     }
 
-    private UserNotification showNotification(Intent extra, String title, String message, boolean isTextNotification,
+    private UserNotification showNotification(int gcmType, String title, String message, boolean isTextNotification,
                                               Bitmap icon, int unread, Intent intent, boolean createNew,
                                               boolean ongoing, UserNotification.Type type, UserNotification.NotificationAction[] actions,
                                               User user) {
         return showNotification(
-                extra,
+                gcmType,
                 title,
                 message,
                 isTextNotification,
@@ -237,7 +237,7 @@ public class UserNotificationManager {
         );
     }
 
-    private UserNotification showNotification(Intent extra, String title, String message, boolean isTextNotification,
+    private UserNotification showNotification(int gcmType, String title, String message, boolean isTextNotification,
                                               Bitmap icon, int unread, Intent intent, int id,
                                               boolean ongoing, UserNotification.Type type, UserNotification.NotificationAction[] actions,
                                               User user) {
@@ -248,7 +248,7 @@ public class UserNotificationManager {
             messagesStack = saveMessageStack(message, user);
             notification.setWearReply(mContext, intent);
         }
-        notification.setGCMIntent(extra);
+        notification.setGCMType(gcmType);
         notification.setType(type);
         notification.setImage(icon);
         notification.setTitle(title);
