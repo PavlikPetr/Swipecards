@@ -15,9 +15,6 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
 
-/**
- * Created by onikitin on 27.03.15.
- */
 public class SettingsFeedbackFragment extends BaseFragment implements AdapterView.OnItemClickListener {
 
 
