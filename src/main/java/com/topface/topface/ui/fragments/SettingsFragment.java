@@ -294,6 +294,12 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
         setText(R.string.settings_help, frame);
         frame.setOnClickListener(this);
 
+        // Feedback
+        frame = (ViewGroup) root.findViewById(R.id.loFeedback);
+        setBackground(R.drawable.edit_big_btn_middle_selector, frame);
+        setText(R.string.settings_feedback, frame);
+        frame.setOnClickListener(this);
+
         // Language app
         frame = (ViewGroup) root.findViewById(R.id.loLanguage);
         setBackground(R.drawable.edit_big_btn_middle_selector, frame);
@@ -394,6 +400,10 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_ACCOUNT);
                 break;
             case R.id.loHelp:
+                intent = new Intent(applicationContext, SettingsContainerActivity.class);
+                startActivityForResult(intent, SettingsContainerActivity.INTENT_HELP);
+                break;
+            case R.id.loFeedback:
                 intent = new Intent(applicationContext, SettingsContainerActivity.class);
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_FEEDBACK);
                 break;
