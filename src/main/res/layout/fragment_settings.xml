@@ -9,9 +9,9 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <Button
+        <TextView
             android:id="@+id/loNotifications"
-            style="@style/WhiteButtonWithSeparator"
+            style="@style/WhiteListItem.Underline"
             android:text="@string/notifications"/>
 
         <include
@@ -22,24 +22,24 @@
             android:id="@+id/loAccount"
             layout="@layout/item_edit_form_select"/>
 
-        <Button
+        <TextView
             android:id="@+id/loHelp"
-            style="@style/WhiteButtonWithSeparator"
+            style="@style/WhiteListItem.Underline"
             android:text="@string/settings_help"/>
 
-        <include
+        <TextView
             android:id="@+id/loFeedback"
-            layout="@layout/item_edit_form_select"
-            style="@style/WhiteButtonWithSeparator" />
+            style="@style/WhiteListItem.Underline"
+            android:text="@string/settings_feedback"/>
 
-        <Button
+        <TextView
             android:id="@+id/loLanguage"
-            style="@style/WhiteButtonWithSeparator"
+            style="@style/WhiteListItem.Underline"
             android:text="@string/settings_select_language"/>
 
-        <Button
+        <TextView
             android:id="@+id/loAbout"
-            style="@style/WhiteButtonWithSeparator"
+            style="@style/WhiteListItem.Underline"
             android:text="@string/settings_about"/>
     </LinearLayout>
 </ScrollView>

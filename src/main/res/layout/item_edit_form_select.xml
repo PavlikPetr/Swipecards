@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_centerVertical="true"
     android:orientation="vertical"
-    style="@style/WhiteButtonWithSeparator"
+    style="@style/WhiteListItem.Underline"
     android:gravity="left|center_vertical">
 
     <TextView

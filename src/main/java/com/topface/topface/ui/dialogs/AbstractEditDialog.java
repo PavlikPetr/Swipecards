@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ public class AbstractEditDialog<T extends Parcelable> extends AbstractDialogFrag
     private AbstractEditAdapter mAdapter;
     private ListView mOptionsList;
     private TextView mTitleText;
+    private ViewStub mButtonsStub;
 
     @Override
     protected void applyStyle() {
@@ -59,6 +61,7 @@ public class AbstractEditDialog<T extends Parcelable> extends AbstractDialogFrag
         mOptionsList.setAdapter(mAdapter);
         mTitleText = (TextView) root.findViewById(R.id.edit_dialog_title);
         mTitleText.setText(mTitle);
+        mButtonsStub = (ViewStub) root.findViewById(R.id.edit_dialog_buttons_stub);
     }
 
     @Override
@@ -80,5 +83,9 @@ public class AbstractEditDialog<T extends Parcelable> extends AbstractDialogFrag
 
     protected TextView getTitleText() {
         return mTitleText;
+    }
+
+    protected ViewStub getButtonsStub() {
+        return mButtonsStub;
     }
 }

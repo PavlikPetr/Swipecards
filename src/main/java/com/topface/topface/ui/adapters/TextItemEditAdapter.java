@@ -1,14 +1,12 @@
 package com.topface.topface.ui.adapters;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.EditText;
 
-import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.Profile;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 
 /**
@@ -16,19 +14,23 @@ import com.topface.topface.utils.FormItem;
  */
 public class TextItemEditAdapter extends AbstractEditAdapter<FormItem> {
 
-    private final FormItem mFormItem;
+    private FormItem mFormItem;
+    private FormItem mOriginalItem;
+    private boolean mIsSaved;
 
     public TextItemEditAdapter(FormItem formItem) {
+        mOriginalItem = formItem;
         mFormItem = new FormItem(formItem);
     }
 
     @Override
     public FormItem getData() {
-        return mFormItem;
+        return mIsSaved ? mFormItem : mOriginalItem;
     }
 
     @Override
     public void saveData() {
+        mIsSaved = true;
     }
 
     @Override
@@ -43,26 +45,49 @@ public class TextItemEditAdapter extends AbstractEditAdapter<FormItem> {
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return mFormItem.titleId;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        String value = getItem(position);
+
         if (convertView == null) {
             convertView = inflate(R.layout.edit_dialog_text, parent);
 
             Holder holder = new Holder();
-            holder.textView = (TextView) convertView.findViewById(R.id.editor_text);
+            holder.text = (EditText) convertView.findViewById(R.id.editor_text);
+            holder.textWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    mFormItem.value = s.toString();
+                }
+            };
             convertView.setTag(holder);
         }
 
         Holder holder = (Holder) convertView.getTag();
-        holder.textView.setText(getItem(position));
+
+        holder.text.removeTextChangedListener(holder.textWatcher);
+        holder.text.setText(value);
+        holder.text.setSelection(value.length());
+        holder.text.addTextChangedListener(holder.textWatcher);
 
         return convertView;
     }
 
     private static class Holder {
-        TextView textView;
+        EditText text;
+        TextWatcher textWatcher;
     }
 }

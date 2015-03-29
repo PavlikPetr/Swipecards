@@ -36,4 +36,6 @@
 
     <dimen name="add_to_leader_spacing_value">2dp</dimen>
 
+    <dimen name="edit_dialog_button_heigh">42dp</dimen>
+
 </resources>

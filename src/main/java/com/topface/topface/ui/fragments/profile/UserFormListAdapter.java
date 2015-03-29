@@ -58,7 +58,7 @@ public class UserFormListAdapter extends BaseAdapter {
 
         FormItem item = getItem(position);
 
-        holder.mTitle.setText(item.title);
+        holder.mTitle.setText(item.getTitle());
         holder.mValue.setText(item.value);
 
         return convertView;

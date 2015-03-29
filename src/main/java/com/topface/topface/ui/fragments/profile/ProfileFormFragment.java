@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,11 @@ import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.City;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.EditFormItemsEditDialog;
 import com.topface.topface.ui.dialogs.EditTextFormDialog;
@@ -25,6 +28,11 @@ import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static com.topface.topface.ui.dialogs.AbstractEditDialog.EditingFinishedListener;
 
 public class ProfileFormFragment extends ProfileInnerFragment {
@@ -34,14 +42,19 @@ public class ProfileFormFragment extends ProfileInnerFragment {
     private ListView mFormListView;
     private FragmentManager fm;
 
+    private List<Integer> mMainFormTypes = new ArrayList<>(Arrays.asList(
+            new Integer[] {FormItem.AGE, FormItem.CITY, FormItem.NAME, FormItem.SEX, FormItem.STATUS}));
+
     private EditingFinishedListener<FormItem> mFormEditedListener = new EditingFinishedListener<FormItem>() {
         @Override
         public void onEditingFinished(final FormItem data) {
-            for (final FormItem form: CacheProfile.forms) {
-                if (form.titleId == data.titleId) {
-                    if (form.dataId != data.dataId) {
+            for (final FormItem form: mProfileFormListAdapter.getFormItems()) {
+                if (form.type == data.type && form.titleId == data.titleId) {
+                    if (form.dataId != data.dataId ||
+                            data.dataId == FormItem.NO_RESOURCE_ID && !TextUtils.equals(form.value, data.value)) {
                         FormInfo info = new FormInfo(App.getContext(), CacheProfile.sex, Profile.TYPE_OWN_PROFILE);
-                        ApiRequest request = info.getFormRequest(data);
+                        ApiRequest request = mMainFormTypes.contains(data.type) ?
+                                getSettingsRequest(data) : info.getFormRequest(data);
                         registerRequest(request);
                         form.isEditing = true;
                         mProfileFormListAdapter.notifyDataSetChanged();
@@ -79,33 +92,14 @@ public class ProfileFormFragment extends ProfileInnerFragment {
             if (formItem instanceof FormItem) {
                 FormItem item = (FormItem) formItem;
 
-                if (item.type == FormItem.STATUS) {
-                    Intent intent = new Intent(getActivity().getApplicationContext(), EditContainerActivity.class);
-                    startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_STATUS);
-                } else if (item.dataId == FormItem.NO_RESOURCE_ID) {
-//                    Intent intent = new Intent(getActivity().getApplicationContext(),
-//                            EditContainerActivity.class);
-//                    intent.putExtra(EditContainerActivity.INTENT_FORM_TITLE_ID, item.titleId);
-//                    intent.putExtra(EditContainerActivity.INTENT_FORM_DATA_ID, item.dataId);
-//                    intent.putExtra(EditContainerActivity.INTENT_FORM_DATA, item.value);
-//                    if (item.getLimitInterface() != null) {
-//                        intent.putExtra(EditContainerActivity.INTENT_FORM_LIMIT_VALUE, item.getLimitInterface().getLimit());
-//                    }
-//                    startActivityForResult(intent,
-//                            EditContainerActivity.INTENT_EDIT_INPUT_FORM_ITEM);
+                if (item.dataId == FormItem.NO_RESOURCE_ID) {
                     if (fm != null) {
-                        EditTextFormDialog.newInstance(item.title, item, mFormEditedListener).
+                        EditTextFormDialog.newInstance(item.getTitle(), item, mFormEditedListener).
                                 show(fm, EditTextFormDialog.class.getName());
                     }
                 } else {
-//                    Intent intent = new Intent(getActivity().getApplicationContext(),
-//                            EditContainerActivity.class);
-//                    intent.putExtra(EditContainerActivity.INTENT_FORM_TITLE_ID, item.titleId);
-//                    intent.putExtra(EditContainerActivity.INTENT_FORM_DATA_ID, item.dataId);
-//                    intent.putExtra(EditContainerActivity.INTENT_FORM_DATA, item.value);
-//                    startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FORM_ITEM);
                     if (fm != null) {
-                        EditFormItemsEditDialog.newInstance(item.title, item, mFormEditedListener).
+                        EditFormItemsEditDialog.newInstance(item.getTitle(), item, mFormEditedListener).
                                 show(fm, EditFormItemsEditDialog.class.getName());
                     }
                 }
@@ -159,5 +153,29 @@ public class ProfileFormFragment extends ProfileInnerFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(POSITION, mFormListView.getFirstVisiblePosition());
+    }
+
+    private SettingsRequest getSettingsRequest(FormItem formItem) {
+        SettingsRequest settingsRequest = new SettingsRequest(getActivity());
+        String value = formItem.value;
+        switch (formItem.type) {
+            case FormItem.NAME:
+                settingsRequest.name = value;
+                break;
+            case FormItem.AGE:
+                if (TextUtils.isDigitsOnly(value)) {
+                    settingsRequest.age = Integer.valueOf(value);
+                }
+                break;
+            case FormItem.SEX:
+                if (TextUtils.isDigitsOnly(value)) {
+                    settingsRequest.sex = Integer.valueOf(value);
+                }
+                break;
+            case FormItem.STATUS:
+                settingsRequest.status = value;
+                break;
+        }
+        return settingsRequest;
     }
 }

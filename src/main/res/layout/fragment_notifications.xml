@@ -23,7 +23,7 @@
 
     <CheckBox
         android:tag="tvTitle"
-        style="@style/WhiteButtonWithSeparator"
+        style="@style/WhiteListItem.Underline"
         android:id="@+id/notification_vibro"
         android:drawableLeft="@null"
         android:drawableRight="@drawable/selector_checkbox"
@@ -31,7 +31,7 @@
 
     <CheckBox
         android:tag="tvTitle"
-        style="@style/WhiteButtonWithSeparator"
+        style="@style/WhiteListItem.Underline"
         android:id="@+id/notification_led"
         android:drawableLeft="@null"
         android:drawableRight="@drawable/selector_checkbox"

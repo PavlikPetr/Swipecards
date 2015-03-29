@@ -97,13 +97,14 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         View frame;
 
         // Help
-        root.findViewById(R.id.loHelp).setOnClickListener(this);
+        View help = root.findViewById(R.id.loHelp);
+        help.setOnClickListener(this);
+        if (TextUtils.isEmpty(CacheProfile.getOptions().helpUrl)) {
+            help.setVisibility(View.GONE);
+        }
 
         // Feedback
-        frame = (ViewGroup) root.findViewById(R.id.loFeedback);
-        setBackground(R.drawable.edit_big_btn_middle_selector, frame);
-        setText(R.string.settings_feedback, frame);
-        frame.setOnClickListener(this);
+        root.findViewById(R.id.loFeedback).setOnClickListener(this);
 
         // Language app
         root.findViewById(R.id.loLanguage).setOnClickListener(this);
@@ -143,8 +144,13 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_ACCOUNT);
                 break;
             case R.id.loHelp:
-                intent = new Intent(applicationContext, SettingsContainerActivity.class);
-                startActivityForResult(intent, SettingsContainerActivity.INTENT_HELP);
+                String helpUrl = CacheProfile.getOptions().helpUrl;
+                //—сылку на помощь показываем только в случае, если сервер нам ее прислал.
+                if (!TextUtils.isEmpty(helpUrl)) {
+                    intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(helpUrl));
+                    startActivity(intent);
+                }
                 break;
             case R.id.loFeedback:
                 intent = new Intent(applicationContext, SettingsContainerActivity.class);

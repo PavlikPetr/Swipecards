@@ -10,9 +10,11 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -52,18 +54,35 @@ public class EditTextFormDialog extends AbstractEditDialog<FormItem> {
     protected void initViews(View root) {
         super.initViews(root);
         getTitleText().setTextAppearance(App.getContext(), R.style.SelectorDialogTitle_Blue);
+
+        ViewStub buttonsStub = getButtonsStub();
+        buttonsStub.setLayoutResource(R.layout.edit_dialog_buttons);
+        View buttons = buttonsStub.inflate();
+
+        Button cancelBtn = (Button) buttons.findViewById(R.id.edit_dialog_cancel);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditTextFormDialog.this.dismiss();
+            }
+        });
+        Button saveBtn = (Button) buttons.findViewById(R.id.edit_dialog_save);
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getAdapter().saveData();
+                EditTextFormDialog.this.dismiss();
+            }
+        });
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        getOptionsList().requestFocus();
+    public void onPause() {
+        closeKeyboard();
+        super.onPause();
     }
 
-
-
-    @Override
-    public void onDismiss(DialogInterface dialog) {
+    private void closeKeyboard() {
         Activity activity = getActivity();
         if (activity != null) {
             View focus = activity.getCurrentFocus();
@@ -72,6 +91,5 @@ public class EditTextFormDialog extends AbstractEditDialog<FormItem> {
                 inputMethodManager.hideSoftInputFromWindow(focus.getWindowToken(), 0);
             }
         }
-        super.onDismiss(dialog);
     }
 }
