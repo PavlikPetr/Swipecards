@@ -31,6 +31,7 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 
 public class UserNotification {
 
@@ -39,6 +40,8 @@ public class UserNotification {
     // removeAppFromTaskLocked: token=AppWindowToken{adee2558 token=Token{adf4b7d0 ActivityRecord{adee3d40 u0 com.google.android.wearable.app/com.google.android.clockwork.home.RemoteActionConfirmationActivity t1 f}}} not found.
     private static final int WEAR_REPLY_REQUEST_CODE = 593;
     public static final int ICON_SIZE = 64;
+    private static final int ONE_MESSAGE = 1;
+    private static final int FEW_MESSAGES = 2;
     public static final String NOTIFICATION_ID = "notification_id";
     private Bitmap mImage;
     private String mText;
@@ -60,6 +63,7 @@ public class UserNotification {
     private Context mContext;
     private NotificationCompat.Builder notificationBuilder;
     private NotificationCompat.WearableExtender mWearableExtender;
+    private int mGCMType;
 
     public UserNotification(Context context) {
         this.mContext = context;
@@ -71,6 +75,10 @@ public class UserNotification {
 
     public void setType(Type mType) {
         this.mType = mType;
+    }
+
+    public void setGCMType(int type) {
+        this.mGCMType = type;
     }
 
     public void setImage(Bitmap image) {
@@ -156,16 +164,10 @@ public class UserNotification {
     }
 
     private android.app.Notification generateStandard() {
-        notificationBuilder.setSmallIcon(R.drawable.ic_stat_notify);
-        setLargeIcon();
         notificationBuilder.setContentTitle(mTitle);
         notificationBuilder.setContentText(mText);
         if (mIsTextNotification) {
-            if (messages.size() <= 1) {
-                generateBigText();
-            } else {
-                generateInbox();
-            }
+            setIcons();
         } else {
             generateBigPicture();
         }
@@ -186,7 +188,7 @@ public class UserNotification {
     }
 
     private android.app.Notification generateFail() {
-        notificationBuilder.setSmallIcon(R.drawable.ic_stat_notify);
+        addSmallIcon(0);
         notificationBuilder.setContentTitle(mTitle);
         notificationBuilder.setContentText(mText);
         notificationBuilder.setAutoCancel(true);
@@ -201,7 +203,7 @@ public class UserNotification {
 
     private android.app.Notification generateProgress() {
         notificationBuilder.setDefaults(Notification.FLAG_ONLY_ALERT_ONCE);
-        notificationBuilder.setSmallIcon(android.R.drawable.stat_sys_upload);
+        addSmallIcon(android.R.drawable.stat_sys_upload);
         notificationBuilder.setVibrate(new long[]{});
         notificationBuilder.setSound(Uri.EMPTY);
         setLargeIcon();
@@ -239,7 +241,7 @@ public class UserNotification {
     }
 
     public android.app.Notification generateWithActions(NotificationAction[] actions) {
-        notificationBuilder.setSmallIcon(R.drawable.ic_stat_notify);
+        addSmallIcon(0);
         notificationBuilder.setContentTitle(mTitle)
                 .setContentText(mText)
                 .setOngoing(mOngoing);
@@ -254,7 +256,7 @@ public class UserNotification {
     private void generateBigPicture() {
         NotificationCompat.BigPictureStyle inboxStyle =
                 new NotificationCompat.BigPictureStyle(notificationBuilder.setContentTitle(mTitle));
-        Drawable blankDrawable = mContext.getResources().getDrawable(R.drawable.ic_stat_notify);
+        Drawable blankDrawable = mContext.getResources().getDrawable(getDefaultSmallIcon());
         if (blankDrawable != null) {
             Bitmap blankBitmap = ((BitmapDrawable) blankDrawable).getBitmap();
             inboxStyle.bigLargeIcon(blankBitmap);
@@ -300,7 +302,7 @@ public class UserNotification {
             putTopLevelFragment(parentIntent, intent);
             parentIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             // Gets a PendingIntent containing the entire back stack
-            resultPendingIntent = stackBuilder.getPendingIntent(requestCode, PendingIntent.FLAG_ONE_SHOT);
+            resultPendingIntent = stackBuilder.getPendingIntent(requestCode, PendingIntent.FLAG_UPDATE_CURRENT);
         } else {
             resultPendingIntent = PendingIntent.getActivity(mContext, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
@@ -314,18 +316,23 @@ public class UserNotification {
         }
     }
 
+    private void setDefaultIcon() {
+        if (notificationBuilder != null) {
+            notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(),
+                    R.drawable.ic_tf_notification));
+        }
+    }
+
     private void setLargeIcon() {
         if (mImage != null) {
-            Bitmap scaledIcon = BitmapUtils.clipAndScaleBitmap(mImage, getIconSize(mContext), getIconSize(mContext));
+            Bitmap scaledIcon = BitmapUtils.getRoundBitmap(BitmapUtils.clipAndScaleBitmap(mImage, getIconSize(mContext), getIconSize(mContext)), 1f);
             if (scaledIcon != null) {
                 notificationBuilder.setLargeIcon(scaledIcon);
             } else {
-                notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(),
-                        R.drawable.ic_stat_notify));
+                setDefaultIcon();
             }
         } else {
-            notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(),
-                    R.drawable.ic_stat_notify));
+            setDefaultIcon();
         }
     }
 
@@ -363,6 +370,100 @@ public class UserNotification {
             this.iconResId = iconResId;
             this.text = text;
             this.intent = intent;
+        }
+    }
+
+    private void addSmallIcon(int imageId) {
+        if (notificationBuilder != null) {
+            notificationBuilder.setSmallIcon(imageId == 0 ? getDefaultSmallIcon() : imageId);
+        }
+    }
+
+    private int getDefaultSmallIcon() {
+        return R.drawable.ic_stat_notify;
+    }
+
+
+    private void setIcons() {
+        switch (mGCMType) {
+            case GCMUtils.GCM_TYPE_MESSAGE:
+                setIcons(ONE_MESSAGE, true, true);
+                break;
+            case GCMUtils.GCM_TYPE_DIALOGS:
+                setIcons(ONE_MESSAGE, false, true);
+                break;
+            case GCMUtils.GCM_TYPE_GIFT:
+                setIcons(ONE_MESSAGE, true, true);
+                break;
+            case GCMUtils.GCM_TYPE_MUTUAL:
+                setIcons(ONE_MESSAGE, false, true);
+                break;
+            case GCMUtils.GCM_TYPE_LIKE:
+                setIcons(ONE_MESSAGE, false, true);
+                break;
+            case GCMUtils.GCM_TYPE_GUESTS:
+                setIcons(ONE_MESSAGE, false, true);
+                break;
+            case GCMUtils.GCM_TYPE_PEOPLE_NEARBY:
+                setIcons(ONE_MESSAGE, false, true);
+                break;
+            default:
+                setIcons(FEW_MESSAGES, false, false, SMALL_ICON_COLOR.BLUE);
+                break;
+        }
+    }
+
+    private void setSmallIconColor(int color) {
+        if (notificationBuilder != null) {
+            notificationBuilder.setColor(color);
+        }
+    }
+
+    private void setBlueSmallIcon() {
+        setSmallIconColor(App.getContext().getResources().getColor(R.color.light_theme_color_primary));
+    }
+
+    private void setPinkSmallIcon() {
+        setSmallIconColor(App.getContext().getResources().getColor(R.color.light_theme_color_accent));
+    }
+
+    private enum SMALL_ICON_COLOR {
+        PINK, BLUE
+    }
+
+    private void setIcons(int messagesCount, boolean isStackable, boolean isShowingLowerIcon) {
+        setIcons(messagesCount, isStackable, isShowingLowerIcon, SMALL_ICON_COLOR.PINK);
+    }
+
+    private void setIcons(int messagesCount, boolean isStackable, boolean isShowingLowerIcon, SMALL_ICON_COLOR smallIconColor) {
+        if (notificationBuilder != null) {
+            if (messagesCount <= ONE_MESSAGE) {
+                if (isShowingLowerIcon) {
+                    setLargeIcon();
+                }
+            } else {
+                if (isShowingLowerIcon) {
+                    setDefaultIcon();
+                }
+            }
+            addSmallIcon(0);
+            if (isStackable) {
+                generateInbox();
+            } else {
+                generateBigText();
+            }
+            setSmallIconColor(smallIconColor);
+        }
+    }
+
+    private void setSmallIconColor(SMALL_ICON_COLOR smallIconColor) {
+        switch (smallIconColor) {
+            case BLUE:
+                setBlueSmallIcon();
+                break;
+            case PINK:
+                setPinkSmallIcon();
+                break;
         }
     }
 }

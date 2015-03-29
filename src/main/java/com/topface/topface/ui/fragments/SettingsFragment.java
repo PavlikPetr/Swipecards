@@ -99,6 +99,12 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         // Help
         root.findViewById(R.id.loHelp).setOnClickListener(this);
 
+        // Feedback
+        frame = (ViewGroup) root.findViewById(R.id.loFeedback);
+        setBackground(R.drawable.edit_big_btn_middle_selector, frame);
+        setText(R.string.settings_feedback, frame);
+        frame.setOnClickListener(this);
+
         // Language app
         root.findViewById(R.id.loLanguage).setOnClickListener(this);
 
@@ -137,6 +143,10 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_ACCOUNT);
                 break;
             case R.id.loHelp:
+                intent = new Intent(applicationContext, SettingsContainerActivity.class);
+                startActivityForResult(intent, SettingsContainerActivity.INTENT_HELP);
+                break;
+            case R.id.loFeedback:
                 intent = new Intent(applicationContext, SettingsContainerActivity.class);
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_FEEDBACK);
                 break;

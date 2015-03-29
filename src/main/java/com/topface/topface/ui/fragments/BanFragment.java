@@ -62,7 +62,6 @@ public class BanFragment extends BaseFragment implements View.OnClickListener {
                 new AuthorizationManager(getActivity()).logout(getActivity());
                 break;
             case R.id.btnFeedback:
-                getSupportActionBar().show();
                 ConnectionManager.getInstance().onBanActivityFinish();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(

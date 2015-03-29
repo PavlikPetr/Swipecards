@@ -3,9 +3,9 @@
 
     <!-- Базовая тема приложения -->
     <style name="Theme.Topface" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">#03a9f4</item>
-        <item name="colorPrimaryDark">#0287c3</item>
-        <item name="colorAccent">#ee4493</item>
+        <item name="colorPrimary">@color/light_theme_color_primary</item>
+        <item name="colorPrimaryDark">@color/light_theme_color_primary_dark</item>
+        <item name="colorAccent">@color/light_theme_color_accent</item>
         <item name="android:windowContentOverlay">@null</item>
 
         <!-- overflow menu settings -->

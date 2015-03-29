@@ -244,6 +244,10 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
     }
 
+    public ActionBarTitleSetterDelegate getTitleSetter() {
+        return mTitleSetter;
+    }
+
     protected String getTitle() {
         return null;
     }

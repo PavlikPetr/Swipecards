@@ -44,7 +44,7 @@ public class LeadersPhotoGridAdapter extends ProfileGridAdapter {
         setSelectedItemOnStart(photoLinks);
     }
 
-    public void setPhotoWidth(int photoWidth){
+    public void setPhotoWidth(int photoWidth) {
         mPhotoWidth = photoWidth;
     }
 

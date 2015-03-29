@@ -66,6 +66,7 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.HackBaseAdapterDecorator;
 import com.topface.topface.ui.adapters.IListLoader;
+import com.topface.topface.ui.dialogs.ConfirmEmailDialog;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
@@ -106,6 +107,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     public static final String INITIAL_MESSAGE = "initial_message";
     public static final String MESSAGE = "message";
     public static final String LOADED_MESSAGES = "loaded_messages";
+    public static final String CONFIRM_EMAIL_DIALOG_TAG = "configrm_email_dialog_tag";
     private static final String POPULAR_LOCK_STATE = "chat_blocked";
     private static final String HISTORY_CHAT = "history_chat";
     private static final String SOFT_KEYBOARD_LOCK_STATE = "keyboard_state";
@@ -623,7 +625,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                 }
 
                 refreshActionBarTitles();
-                setOnline(data.user.online);
+                getTitleSetter().setOnline(data.user.online);
                 wasFailed = false;
                 mUser = data.user;
                 if (!mUser.isEmpty()) {
@@ -737,7 +739,9 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
 
     @Override
     public void setOnline(boolean online) {
-        super.setOnline(online);
+        if (getTitleSetter() != null) {
+            getTitleSetter().setOnline(online);
+        }
     }
 
     @Override
@@ -884,6 +888,13 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     public boolean sendMessage(String text, final boolean cancelable) {
         final History messageItem = new History(text, IListLoader.ItemType.TEMP_MESSAGE);
         final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity());
+        if (TextUtils.equals(AuthToken.getInstance().getSocialNet(), AuthToken.SN_TOPFACE)) {
+            if (!CacheProfile.emailConfirmed) {
+                Toast.makeText(App.getContext(), R.string.confirm_email, Toast.LENGTH_SHORT).show();
+                ConfirmEmailDialog.newInstance().show(getActivity().getSupportFragmentManager(), CONFIRM_EMAIL_DIALOG_TAG);
+                return false;
+            }
+        }
         if (cancelable) {
             registerRequest(messageRequest);
         }
