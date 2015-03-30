@@ -1,5 +1,6 @@
 package com.topface.topface.statistics;
 
+import com.topface.statistics.android.StatisticsConfiguration;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
 
@@ -14,7 +15,9 @@ public class DatingLockPopupStatistics {
     public static final String DATING_LOCK_POPUP_REDIRECT = "dating_lock_popup_redirect";
 
     private static void send(String key) {
-        StatisticsTracker.getInstance().setContext(App.getContext()).sendEvent(key, 1);
+        //Настраиваем треккер на отправление статистики раз в секунду
+        StatisticsConfiguration configuration = new StatisticsConfiguration(true, false, 200, 2000, "");
+        StatisticsTracker.getInstance().setConfiguration(configuration).setContext(App.getContext()).sendEvent(key, 1);
     }
 
     public static void sendDatingPopupClose() {
