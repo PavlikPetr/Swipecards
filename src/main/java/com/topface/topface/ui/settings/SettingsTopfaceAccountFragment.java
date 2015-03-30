@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,12 +42,10 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     public static final String NEED_EXIT = "NEED_EXIT";
     private View mLockerView;
     private EditText mEditText;
-    private EditText mEditTextCodeConfirmation;
     private TextView mText;
     private Button mBtnChange;
     private Button mBtnChangeEmail;
     private Button mBtnLogout;
-    private Button mBtnCodeSend;
     private Button mBtnCodeWasSend;
     private TextView mTxtCodeWasSend;
 
@@ -160,9 +157,8 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private void initTextViews(ViewGroup root) {
         Drawable icon = getResources().getDrawable(R.drawable.ic_logo);
         mEditText = (EditText) root.findViewById(R.id.edText);
-        mEditTextCodeConfirmation = (EditText) root.findViewById(R.id.edCodeConfirmation);
         mEditText.setText(mToken.getLogin());
-        mEditText.setSelection(Utils.getText(mEditText).length());
+        mEditText.setSelection(mEditText.getText().length());
         mEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -193,16 +189,13 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         if (CacheProfile.emailConfirmed) {
             mEditText.setVisibility(View.GONE);
             mText.setVisibility(View.VISIBLE);
-            mEditTextCodeConfirmation.setVisibility(View.GONE);
-            mBtnCodeSend.setVisibility(View.GONE);
             mBtnCodeWasSend.setVisibility(View.GONE);
             mTxtCodeWasSend.setVisibility(View.GONE);
         } else {
             mEditText.setVisibility(View.VISIBLE);
             mEditText.setText(mToken.getLogin());
+            mEditText.setSelection(mEditText.getText().length());
             mText.setVisibility(View.GONE);
-            mEditTextCodeConfirmation.setVisibility(View.VISIBLE);
-            mBtnCodeSend.setVisibility(View.VISIBLE);
             mBtnCodeWasSend.setVisibility(View.VISIBLE);
             mTxtCodeWasSend.setVisibility(View.VISIBLE);
         }
@@ -217,8 +210,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mBtnLogout = (Button) root.findViewById(R.id.btnLogout);
         mBtnLogout.setOnClickListener(this);
         root.findViewById(R.id.btnDeleteAccount).setOnClickListener(this);
-        mBtnCodeSend = (Button) root.findViewById(R.id.btnCodeSend);
-        mBtnCodeSend.setOnClickListener(this);
         mBtnCodeWasSend = (Button) root.findViewById(R.id.btnCodeWasSend);
         mBtnCodeWasSend.setOnClickListener(this);
         mTxtCodeWasSend = (TextView) root.findViewById(R.id.txtCodeWasSend);
@@ -276,9 +267,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             case R.id.btnDeleteAccount:
                 deleteAccount();
                 break;
-            case R.id.btnCodeSend:
-                sendCodeConfirmation();
-                break;
             case R.id.btnCodeWasSend:
                 updateProfile();
                 break;
@@ -292,26 +280,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private void onChangeEmailButtonClick() {
         Intent intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
         startActivityForResult(intent, SettingsContainerActivity.INTENT_CHANGE_EMAIL);
-    }
-
-    private void sendCodeConfirmation() {
-        Editable codeConfirmation = mEditTextCodeConfirmation.getText();
-        if (TextUtils.isEmpty(codeConfirmation)) {
-            Toast.makeText(App.getContext(), R.string.general_empty_code_confirmation, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        ConfirmRequest confirmRequest = new ConfirmRequest(getActivity(), mToken.getLogin(), codeConfirmation.toString());
-        confirmRequest.callback(new ApiHandler() {
-            @Override
-            public void success(IApiResponse response) {
-                updateProfile();
-            }
-
-            @Override
-            public void fail(int codeError, IApiResponse response) {
-                Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
-            }
-        }).exec();
     }
 
     private void updateProfile() {
