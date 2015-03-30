@@ -1,6 +1,6 @@
 package com.topface.topface.utils.notifications;
 
-import com.topface.framework.utils.Debug;
+import com.topface.framework.JsonUtils;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.SerializableToJson;
@@ -13,6 +13,8 @@ import org.json.JSONObject;
 import java.util.LinkedList;
 
 public class MessageStack extends SerializableList {
+
+    public static final int EMPTY_USER_ID = -1;
 
     public int getRestMessages() {
         return mRestMessages;
@@ -33,7 +35,7 @@ public class MessageStack extends SerializableList {
             mRestMessages++;
 
             //Добавляем строчку "и еще %d"
-            add(new Message(Utils.getQuantityString(R.plurals.general_some_more, mRestMessages, mRestMessages), Static.EMPTY));
+            add(new Message(Utils.getQuantityString(R.plurals.general_some_more, mRestMessages, mRestMessages), Static.EMPTY, EMPTY_USER_ID));
         }
     }
 
@@ -59,10 +61,12 @@ public class MessageStack extends SerializableList {
     public static class Message implements SerializableToJson {
         public String mName;
         public String mTitle;
+        public int mUserId;
 
-        public Message(String name, String title) {
+        public Message(String name, String title, int userId) {
             mName = name;
             mTitle = title;
+            mUserId = userId;
         }
 
         public Message() {
@@ -70,26 +74,25 @@ public class MessageStack extends SerializableList {
 
         @Override
         public JSONObject toJson() {
-            JSONObject object = new JSONObject();
-            try {
-                object.put("name", mName);
-                object.put("title", mTitle);
-            } catch (JSONException e) {
-                Debug.error(e);
+            String jsonString = JsonUtils.toJson(new Message(mName, mTitle, mUserId));
+            if (jsonString != null) {
+                try {
+                    return new JSONObject(jsonString);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-            return object;
+            return new JSONObject();
         }
 
         @Override
         public void fromJSON(String json) {
-            try {
-                JSONObject object = new JSONObject(json);
-                mName = object.optString("name");
-                mTitle = object.optString("title");
-            } catch (JSONException e) {
-                Debug.error(e);
+            if (json != null) {
+                Message msg = JsonUtils.fromJson(json, Message.class);
+                mName = msg.mName;
+                mTitle = msg.mTitle;
+                mUserId = msg.mUserId;
             }
-
         }
     }
 }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:background="@color/bg_main">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:background="@color/bg_white">
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -15,102 +15,98 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="8dp">
+            android:paddingTop="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
 
             <TextView
                 android:id="@+id/tvTitle"
-                style="@style/BackgroundFormTitleText"/>
+                style="@style/BackgroundFormTitleText" />
 
             <TextView
                 android:id="@+id/tvLocale"
+                android:textColor="#8A8A8A"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/incorrect_locale"
-                android:padding="8dp"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <EditText
+                style="@style/FeedbackEditText"
                 android:id="@+id/edText"
-                android:layout_width="fill_parent"
+                android:paddingTop="24dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_marginLeft="8dp"
-                android:gravity="top|left"
                 android:inputType="textMultiLine"
                 android:padding="10dp"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:minLines="5"
                 android:singleLine="false"
-                android:textSize="14sp"
                 android:focusable="true"
-                android:focusableInTouchMode="true"/>
+                android:hint="@string/enter_text"
+                android:focusableInTouchMode="true" />
 
             <TextView
-                android:paddingTop="8dp"
+                style="@style/FeedbackTextView"
                 android:id="@+id/tvEmailTitle"
-                style="@style/BackgroundFormTitleText"
                 android:text="@string/settings_feedback_email"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
             <EditText
+                style="@style/FeedbackEditText"
                 android:id="@+id/edEmail"
-                android:layout_width="fill_parent"
                 android:layout_height="34dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginLeft="8dp"
-                android:gravity="top|left|center_horizontal"
+                android:layout_marginTop="20dp"
                 android:inputType="textEmailAddress"
                 android:paddingTop="8dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
                 android:paddingBottom="8dp"
                 android:singleLine="true"
-                android:textSize="14sp"
                 android:hint="@string/general_input_email"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
             <TextView
-                android:paddingTop="8dp"
+                style="@style/FeedbackTextView"
                 android:id="@+id/tvTransactionIdTitle"
-                style="@style/BackgroundFormTitleText"
                 android:text="@string/settings_feedback_transaction_number"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <EditText
+                style="@style/FeedbackEditText"
                 android:id="@+id/edTransactionId"
-                android:layout_width="fill_parent"
                 android:layout_height="34dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginLeft="8dp"
-                android:gravity="top|left"
+                android:layout_marginTop="20dp"
                 android:inputType="text"
                 android:paddingTop="8dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
                 android:paddingBottom="8dp"
-                android:textSize="14sp"
                 android:hint="@string/settings_feedback_transaction_number_hint"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tvTransactionIdInfoLink"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_gravity="left"
                 android:text="@string/settings_feedback_transaction_link"
                 android:textColor="#697DFF"
-                android:visibility="gone"/>
+                android:visibility="gone" />
+
+            <Button
+                style="@style/FlatButton.Blue"
+                android:id="@+id/sendFeedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/send_feedback"
+                android:textSize="16sp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="20dp"
+                android:minWidth="286dp"
+                android:minHeight="40dp"
+                android:layout_gravity="center_horizontal" />
+
         </LinearLayout>
     </ScrollView>
 
     <com.topface.topface.ui.views.LockerView
         android:id="@+id/fbLoadingLocker"
         style="@style/LoadingLocker"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </RelativeLayout>
