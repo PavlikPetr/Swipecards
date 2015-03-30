@@ -231,12 +231,10 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         if (CacheProfile.emailConfirmed) {
             mBtnLogout.setVisibility(View.VISIBLE);
             mBtnChangeEmail.setVisibility(View.VISIBLE);
-//            fieldContainer.setBackgroundResource(R.drawable.edit_big_btn_selector);
             setChangeBtnAction(ACTION_CHANGE_PASSWORD);
         } else {
             mBtnLogout.setVisibility(View.GONE);
             mBtnChangeEmail.setVisibility(View.GONE);
-//            fieldContainer.setBackgroundResource(android.R.color.transparent);
             if (mChangeEmail) {
                 setChangeBtnAction(ACTION_CHANGE_EMAIL);
             } else {
@@ -326,7 +324,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         newFragment.show(getActivity().getSupportFragmentManager(), DeleteAccountDialog.TAG);
     }
 
-    private void setButtonSendConfirmationPressed() {
+    private void setEmailConfirmSent() {
         UserConfig config = App.getConfig().getUserConfig();
         config.saveButtonSendConfirmationPressed(true);
         config.saveConfig();
@@ -339,7 +337,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 remindRequest.callback(new ApiHandler() {
                     @Override
                     public void success(IApiResponse response) {
-                        setButtonSendConfirmationPressed();
+                        setEmailConfirmSent();
                         Toast.makeText(App.getContext(), R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT).show();
                     }
 
@@ -359,7 +357,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                         public void success(IApiResponse response) {
                             mToken.saveToken(mToken.getUserSocialId(), email, mToken.getPassword());
                             setChangeBtnAction(ACTION_RESEND_CONFIRM);
-                            setButtonSendConfirmationPressed();
+                            setEmailConfirmSent();
                         }
 
                         @Override
