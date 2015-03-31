@@ -100,7 +100,9 @@ public class ActionBarView implements View.OnClickListener {
                     if (noBackStack) {
                         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     }
-                    mActivity.startActivity(intent);
+                    if (intent != null) {
+                        mActivity.startActivity(intent);
+                    }
                     mActivity.finish();
                 }
             } else if (mActivity instanceof BanActivity) {
