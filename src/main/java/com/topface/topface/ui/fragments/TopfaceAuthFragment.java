@@ -79,6 +79,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         super.onResume();
         removeRedAlert();
         mPassword.setText("");
+        mPassword.clearFocus();
     }
 
     @Override
