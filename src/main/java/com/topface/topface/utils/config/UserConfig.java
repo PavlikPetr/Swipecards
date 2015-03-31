@@ -62,6 +62,7 @@ public class UserConfig extends AbstractConfig {
     public static final String FACEBOOK_REQUESTS_DIALOG_SKIPS = "facebook_request_dialog_skip";
     public static final String FACEBOOK_REQUESTS_DIALOG_TIME = "facebook_request_dialog_time";
     private static final String APPSFLYER_FIRST_PAY = "appsflyer_first_purchase";
+    private static final String IS_EMAIL_CONFIRM_SENT = "is_button_send_confirmation_clicked";
     private String mUnique;
 
     public UserConfig(Context context) {
@@ -132,7 +133,6 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, LAST_DAY_PUBNATIVE_SHOWN, 0L);
         // Массив id пользователей из фотоленты, которым были отправлены симпатии
         addField(settingsMap, SYMPATHY_SENT_ID_ARRAY, "");
-
         // validate user avatar
         addField(settingsMap, IS_AVATAR_AVAILABLE, false);
         //Флаг первой покупки
@@ -141,6 +141,8 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, FACEBOOK_REQUESTS_DIALOG_SKIPS, 0);
         // Сохрфняем время показа FacebookRequest диалога
         addField(settingsMap, FACEBOOK_REQUESTS_DIALOG_TIME, 0L);
+        // is button send confirmation clicked by current user
+        addField(settingsMap, IS_EMAIL_CONFIRM_SENT, false);
     }
 
     @Override
@@ -150,9 +152,7 @@ public class UserConfig extends AbstractConfig {
 
     @Override
     protected SharedPreferences getPreferences() {
-        if (mUnique == null) {
-            mUnique = AuthToken.getInstance().getUserTokenUniqueId();
-        }
+        mUnique = AuthToken.getInstance().getUserTokenUniqueId();
         return getContext().getSharedPreferences(
                 PROFILE_CONFIG_SETTINGS + Static.AMPERSAND + mUnique,
                 Context.MODE_PRIVATE
@@ -478,6 +478,21 @@ public class UserConfig extends AbstractConfig {
     public void setUserAvatarAvailable(boolean enabled) {
         setField(getSettingsMap(), IS_AVATAR_AVAILABLE, enabled);
     }
+
+    /**
+     * @return true if user clicked button send confirmationF
+     */
+    public boolean isButtonSendConfirmationClicked() {
+        return getBooleanField(getSettingsMap(), IS_EMAIL_CONFIRM_SENT);
+    }
+
+    /**
+     * Set state of button email confirmation
+     */
+    public void saveButtonSendConfirmationPressed(boolean state) {
+        setField(getSettingsMap(), IS_EMAIL_CONFIRM_SENT, state);
+    }
+
 
     /**
      * @return true if push notification enabled

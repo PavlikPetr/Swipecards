@@ -32,7 +32,7 @@ public abstract class AbstractConfig {
     /**
      * Получаем значения полей из SharedPreferences
      */
-    protected final void initData() {
+    protected void initData() {
         if (canInitData()) {
             SharedPreferences preferences = getPreferences();
             for (SettingsField field : getSettingsMap(true).values()) {

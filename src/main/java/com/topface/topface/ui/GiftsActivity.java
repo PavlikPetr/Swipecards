@@ -44,6 +44,8 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     private int mUserIdToSendGift;
     private boolean mRequestingGifts;
 
+    private boolean mIsSuccessToastAvailable;
+
     private GiftsListFragment mGiftListFragment;
     private RelativeLayout mLockScreen;
     private RetryViewCreator mRetryView;

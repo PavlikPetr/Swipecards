@@ -3,6 +3,7 @@ package com.topface.topface.data;
 
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import android.webkit.URLUtil;
 
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
@@ -148,7 +149,7 @@ public class Options extends AbstractData {
     public FeedNativeAd feedNativeAd = new FeedNativeAd();
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
     public NotShown notShown = new NotShown();
-    public FacebookRequests facebookRequests = new FacebookRequests();
+    public FacebookInviteFriends facebookInviteFriends = new FacebookInviteFriends();
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
 
     public Options(IApiResponse data) {
@@ -280,8 +281,10 @@ public class Options extends AbstractData {
                 bonus.counter = bonusObject.optInt("counter");
                 bonus.timestamp = bonusObject.optLong("counterTimestamp");
                 bonus.integrationUrl = bonusObject.optString("integrationUrl");
-                bonus.buttonText = bonusObject.optString("buttonText", bonus.buttonText);
-                bonus.buttonPicture = bonusObject.optString("buttonPicture", bonus.buttonPicture);
+                bonus.buttonText = bonusObject.optString("title", bonus.buttonText);
+                String iconUrl = bonusObject.optString("iconUrl", bonus.buttonPicture);
+                // проверяем валидность ссылки на картинку. Если ссылка не валидна, то подставим дефолт
+                bonus.buttonPicture = URLUtil.isValidUrl(iconUrl) ? iconUrl : bonus.buttonPicture;
             }
             // offerwalls for
             JSONObject jsonOfferwalls = response.optJSONObject("offerwalls");
@@ -323,7 +326,7 @@ public class Options extends AbstractData {
                 notShown.parseNotShownJSON(jsonNotShown);
             }
 
-            facebookRequests = JsonUtils.fromJson(response.toString(),FacebookRequests.class);
+            facebookInviteFriends = JsonUtils.fromJson(response.optString("facebookInviteFriends"), FacebookInviteFriends.class);
 
             feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
 
@@ -638,7 +641,7 @@ public class Options extends AbstractData {
         }
     }
 
-    public static class FacebookRequests {
+    public static class FacebookInviteFriends {
         public boolean enabledOnLogin;
         public boolean enabledAttempts;
         public long minDelay = DateUtils.DAY_IN_SECONDS * 3;

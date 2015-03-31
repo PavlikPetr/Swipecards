@@ -12,7 +12,6 @@ import com.topface.framework.JsonUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.InviteFacebookFriendsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -26,25 +25,22 @@ import java.util.ArrayList;
 public class FacebookRequestWindowAction extends DailyPopupAction  {
 
     private int mPriority;
-    private Options.FacebookRequests mFasebookRequests;
     private OnNextActionListener mOnNextActionListener;
 
     public FacebookRequestWindowAction(Context context, int priority) {
         super(context);
         mPriority = priority;
-        mFasebookRequests = getOptions().facebookRequests;
     }
 
     @Override
     protected boolean firstStartShow() {
-        getUserConfig().setFacebookRequestWindowShow(System.currentTimeMillis());
-        return false;
+        return true;
     }
 
     @Override
     public boolean isApplicable() {
         return loginOrNotLogin() && isFacebook() && isValidFacebookRequestWindowSkip()
-                && isTimeoutEnded(mFasebookRequests.minDelay,
+                && isTimeoutEnded(CacheProfile.getOptions().facebookInviteFriends.minDelay,
                 getUserConfig().getFacebookRequestWondowShow());
     }
 
@@ -95,7 +91,7 @@ public class FacebookRequestWindowAction extends DailyPopupAction  {
                 } else {
                     //в bundle id запроса и id пользователей которым были посланы реквесты.
                     InviteUniqueStatistics.sendFacebookInvites(bundle.keySet().size() - 1);
-                    getUserConfig().setFacebookRequestSkip(mFasebookRequests.maxAttempts + 1);
+                    getUserConfig().setFacebookRequestSkip(CacheProfile.getOptions().facebookInviteFriends.maxAttempts + 1);
                     sendFacebooknInvitesRequest(getFriendsId(bundle));
                 }
             }
@@ -150,12 +146,12 @@ public class FacebookRequestWindowAction extends DailyPopupAction  {
 
     private boolean isValidFacebookRequestWindowSkip() {
         return getUserConfig().getFacebookRequestSkip()
-                <= mFasebookRequests.maxAttempts;
+                <= CacheProfile.getOptions().facebookInviteFriends.maxAttempts;
     }
 
     private boolean loginOrNotLogin() {
-        return mFasebookRequests.enabledAttempts
-                || mFasebookRequests.enabledOnLogin;
+        return CacheProfile.getOptions().facebookInviteFriends.enabledAttempts
+                || CacheProfile.getOptions().facebookInviteFriends.enabledOnLogin;
     }
 
     @Override

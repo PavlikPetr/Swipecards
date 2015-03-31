@@ -40,8 +40,12 @@ public class LeadersPhotoGridAdapter extends ProfileGridAdapter {
     public LeadersPhotoGridAdapter(Context context, Photos photoLinks, int photoLinksSize, int photoWidth, LoadingListAdapter.Updater callback) {
         super(photoLinks, photoLinksSize, callback);
         mInflater = LayoutInflater.from(context);
-        mPhotoWidth = photoWidth;
+        setPhotoWidth(photoWidth);
         setSelectedItemOnStart(photoLinks);
+    }
+
+    public void setPhotoWidth(int photoWidth) {
+        mPhotoWidth = photoWidth;
     }
 
     public View getView(final int position, View convertView, ViewGroup parent) {

@@ -137,6 +137,7 @@
     <string name="general_spinner_title">Pasirinkite veiksmą</string>
     <string name="general_profile_error">Profilio užkrovimo klaida</string>
     <string name="general_dbl_all">Visi</string>
+    <string name="general_dbl_unread">Neperskaityti</string>
     <string name="time_yesterday">Vakar</string>
     <string name="time_today">Šiandien</string>
     <string name="general_send_button">Išsiųsti</string>
@@ -383,12 +384,12 @@
     <string name="gallery">Galerija</string>
     <string name="no_photo_take_photo">Su jumis niekas negali susipažinti! Padarykite fotografiją arba pasirinkite esamą iš albumo</string>
     <string name="photo_for_avatar">Fotografija paruošta siuntimui į profilį! Tai jūsų pirmoji fotografija ir ji bus naudojama kaip jūsų avataras.</string>
-    <string name="change_email">Pakeisti el. paštą</string>
     <string name="send_confirmation_email">Išsiųsti patvirtinimą el. paštu</string>
     <string name="change_password">Pakeisti slaptažodį</string>
     <string name="password_changing">Slaptažodžio keitimas</string>
     <string name="save">Išsaugoti</string>
     <string name="confirmation_successfully_sent">Patvirtinimas išsiųstas jūsų nurodytu el. pašto adresu</string>
+    <string name="password_hint">slaptažodis</string>
     <string name="password_confirmation_hint">slaptažodžio patvirtinimas</string>
     <string name="enter_new_password">Įveskite naują slaptažodį</string>
     <string name="enter_password_confirmation">Įveskite slaptažodžio patvirtinimą</string>
@@ -504,7 +505,6 @@
     <string name="delete">Pašalinti</string>
     <string name="delete_account_warning">Dėmesio! Jūs mėginate pašalinti savo Topface profilį.</string>
     <string name="delete_account_error">Apgailestaujame, pašalinti jūsų paskyrą nepavyko. Jūs galite pakartoti dar kartą.</string>
-    <string name="delete_account_will_be_restored_are_you_sure">Jūs mėginate įeiti į paskyrą, kurią pašalinote. Įeinant paskyra bus atstatyta. Ar esate įsitikinę?</string>
     <string name="restore">Atstatyti</string>
     <string name="admiration_sended">Susižavėjimas išsiųstas</string>
     <string name="skip">Praleisti</string>

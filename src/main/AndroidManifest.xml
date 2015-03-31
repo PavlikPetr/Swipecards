@@ -72,6 +72,7 @@
         <!-- activity -->
         <activity
             android:name=".ui.NavigationActivity"
+            android:launchMode="singleTask"
             android:configChanges="locale|screenSize|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Topface.ActionbarOverlay"

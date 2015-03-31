@@ -3,8 +3,8 @@ package com.topface.topface.utils.controllers.startactions;
 import android.support.v4.app.FragmentManager;
 
 import com.topface.topface.App;
-import com.topface.topface.data.Options;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
+import com.topface.topface.utils.CacheProfile;
 
 
 public class DatingLockPopupAction extends DailyPopupAction {
@@ -12,13 +12,11 @@ public class DatingLockPopupAction extends DailyPopupAction {
     private int mPriority;
     private DatingLockPopup.DatingLockPopupRedirectListener mDatingLockPopupRedirect;
     private FragmentManager mFragmentManager;
-    private Options.NotShown mNotShown;
 
     public DatingLockPopupAction(FragmentManager fragmentManager, int priority, DatingLockPopup.DatingLockPopupRedirectListener listener) {
         super(App.getContext());
         mFragmentManager = fragmentManager;
         mDatingLockPopupRedirect = listener;
-        mNotShown = getOptions().notShown;
         mPriority  = priority;
     }
 
@@ -40,8 +38,8 @@ public class DatingLockPopupAction extends DailyPopupAction {
 
     @Override
     public boolean isApplicable() {
-        return mNotShown.enabledDatingLockPopup
-                && isTimeoutEnded(mNotShown.datingLockPopupTimeout,
+        return CacheProfile.getOptions().notShown.enabledDatingLockPopup
+                && isTimeoutEnded(CacheProfile.getOptions().notShown.datingLockPopupTimeout,
                 getUserConfig().getDatingLockPopupRedirect());
     }
 

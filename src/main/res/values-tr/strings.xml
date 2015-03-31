@@ -137,6 +137,7 @@
     <string name="general_spinner_title">Adımınızı seçin</string>
     <string name="general_profile_error">Profil yükleme hatası</string>
     <string name="general_dbl_all">Bütün</string>
+    <string name="general_dbl_unread">Okunmamış</string>
     <string name="time_yesterday">Dün</string>
     <string name="time_today">Bugün</string>
     <string name="general_send_button">Gönder</string>
@@ -382,12 +383,12 @@
     <string name="gallery">Galeri</string>
     <string name="no_photo_take_photo">Sizinle kimse tanışamıyor! Fotoğraf çekin veya mevcut albümden seçin</string>
     <string name="photo_for_avatar">Fotoğraf profilinize yüklenmek için hazırdır! Bu sizin ilk fotoğrafınız ve o profil resmi olarak kullanılacaktır.</string>
-    <string name="change_email">E-mail değiştirmek</string>
     <string name="send_confirmation_email">E-maile onay göndermek</string>
     <string name="change_password">Parola değiştirmek</string>
     <string name="password_changing">Parolanın değiştirilmesi</string>
     <string name="save">Kaydetmek</string>
     <string name="confirmation_successfully_sent">Gösterdiğiniz e-mailinize onay gönderildi</string>
+    <string name="password_hint">parola</string>
     <string name="password_confirmation_hint">parolanın onaylanması</string>
     <string name="enter_new_password">Yeni parolaya girin</string>
     <string name="enter_password_confirmation">Parolayı tekrar yazın</string>
@@ -504,7 +505,6 @@
     <string name="delete">Silmek</string>
     <string name="delete_account_warning">Dikkat! Topface’deki profilinizi silmeye çalışıyorsunuz.</string>
     <string name="delete_account_error">Maalesef, hesabınız silinemedi. Bir daha deneyebilirsiniz.</string>
-    <string name="delete_account_will_be_restored_are_you_sure">Tarafınızdan silinmiş hesabınıza girmeye çalışıyorsunuz. Girdiğinizde hesabınız yeniden düzenlenecek. Emin misiniz?</string>
     <string name="restore">Kurtarmak</string>
     <string name="admiration_sended">Hayranlık gönderilmiştir</string>
     <string name="skip">Geç</string>

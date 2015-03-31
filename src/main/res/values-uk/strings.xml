@@ -110,6 +110,7 @@
     <string name="general_spinner_title">Вибрати дію</string>
     <string name="general_profile_error">Помилка завантаження профілю</string>
     <string name="general_dbl_all">Усі</string>
+    <string name="general_dbl_unread">Непрочитані</string>
     <string name="time_yesterday">Вчора</string>
     <string name="time_today">Сьогодні</string>
     <string name="general_send_button">Відісл.</string>
@@ -312,12 +313,12 @@
     <string name="gallery">Галерея</string>
     <string name="no_photo_take_photo">З вами ніхто не може познайомиться! Зробіть фото або виберіть наявне з альбому</string>
     <string name="photo_for_avatar">Фотографія готова до відправки в профіль! Це ваша перша фотографія і вона буде використовуватися як ваша аватарка.</string>
-    <string name="change_email">Змінити e-mail</string>
     <string name="send_confirmation_email">Вислати підтвердження на e-mail</string>
     <string name="change_password">Змінити пароль</string>
     <string name="password_changing">Зміна пароля</string>
     <string name="save">Зберегти</string>
     <string name="confirmation_successfully_sent">Підтвердження вислано на вказаний вами e-mail</string>
+    <string name="password_hint">пароль</string>
     <string name="password_confirmation_hint">підтвердження пароля</string>
     <string name="enter_new_password">Введіть новий пароль</string>
     <string name="enter_password_confirmation">Введіть підтвердження пароля</string>
@@ -421,7 +422,6 @@
     <string name="delete">Видалити</string>
     <string name="delete_account_warning">Увага! Ви намагаєтеся видалити свій профіль в Topface.</string>
     <string name="delete_account_error">На жаль, видалити ваш аккаунт не вдалося. Ви можете повторити ще раз.</string>
-    <string name="delete_account_will_be_restored_are_you_sure">Ви намагаєтеся увійти в віддалений вами аккаунт. При вході аккаунт буде відновлений. Ви впевнені?</string>
     <string name="restore">Відновити</string>
     <string name="admiration_sended">Захоплення відправлено</string>
     <string name="chat">Написати</string>

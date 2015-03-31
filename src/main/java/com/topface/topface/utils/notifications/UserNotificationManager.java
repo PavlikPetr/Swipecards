@@ -49,30 +49,30 @@ public class UserNotificationManager {
     /*
         isTextNotification - разворачивать нотификацию как текст - true, как картинку - false
      */
-    public UserNotification showNotification(String title, String message, boolean isTextNotification,
+    public UserNotification showNotification(int gcmType, String title, String message, boolean isTextNotification,
                                              Bitmap icon, int unread, Intent intent, boolean doNeedReplace, User user) {
-        return showNotification(title, message, isTextNotification, icon, unread, intent,
+        return showNotification(gcmType, title, message, isTextNotification, icon, unread, intent,
                 doNeedReplace, false, UserNotification.Type.STANDARD, null, user);
     }
 
     private UserNotification showNotification(String title, String message, boolean isTextNotification,
                                               Bitmap icon, int unread, Intent intent, boolean doNeedReplace, UserNotification.Type type) {
-        return showNotification(title, message, isTextNotification, icon, unread, intent,
+        return showNotification(0, title, message, isTextNotification, icon, unread, intent,
                 doNeedReplace, false, type, null, null);
     }
 
     private UserNotification showNotification(String title, String message, boolean isTextNotification,
                                               Bitmap icon, int unread, Intent intent, boolean doNeedReplace, boolean ongoing, UserNotification.Type type) {
-        return showNotification(title, message, isTextNotification, icon, unread, intent,
+        return showNotification(0, title, message, isTextNotification, icon, unread, intent,
                 doNeedReplace, ongoing, type, null, null);
     }
 
-    public void showNotificationAsync(final String title, final String message, User user, final boolean isTextNotification,
+    public void showNotificationAsync(int gcmType, final String title, final String message, User user, final boolean isTextNotification,
                                       String uri, final int unread, final Intent intent, final boolean doNeedReplace) {
-        showNotificationAsync(title, message, isTextNotification, uri, unread, intent, doNeedReplace, null, user);
+        showNotificationAsync(gcmType, title, message, isTextNotification, uri, unread, intent, doNeedReplace, null, user);
     }
 
-    public void showNotificationAsync(final String title, final String message, final boolean isTextNotification,
+    public void showNotificationAsync(final int gcmType, final String title, final String message, final boolean isTextNotification,
                                       String uri, final int unread, final Intent intent, final boolean doNeedReplace,
                                       final NotificationImageListener listener, final User user) {
         DefaultImageLoader.getInstance(mContext).getImageLoader().loadImage(uri, getTargetImageSize(), new ImageLoadingListener() {
@@ -90,9 +90,9 @@ public class UserNotificationManager {
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 if (listener != null && listener.needShowNotification()) {
-                    listener.onSuccess(showNotification(title, message, isTextNotification, loadedImage, unread, intent, doNeedReplace, user));
+                    listener.onSuccess(showNotification(gcmType, title, message, isTextNotification, loadedImage, unread, intent, doNeedReplace, user));
                 } else {
-                    showNotification(title, message, isTextNotification, loadedImage, unread, intent, doNeedReplace, user);
+                    showNotification(gcmType, title, message, isTextNotification, loadedImage, unread, intent, doNeedReplace, user);
                 }
             }
 
@@ -114,7 +114,7 @@ public class UserNotificationManager {
                                                         boolean ongoing,
                                                         UserNotification.NotificationAction[] actions,
                                                         int notificationId) {
-        return showNotification(title, message, false, icon, 0, null, notificationId, ongoing, UserNotification.Type.ACTIONS, actions, null);
+        return showNotification(0, title, message, false, icon, 0, null, notificationId, ongoing, UserNotification.Type.ACTIONS, actions, null);
     }
 
     public UserNotification showProgressNotification(String title, Bitmap icon, Intent intent) {
@@ -217,11 +217,12 @@ public class UserNotificationManager {
         });
     }
 
-    private UserNotification showNotification(String title, String message, boolean isTextNotification,
+    private UserNotification showNotification(int gcmType, String title, String message, boolean isTextNotification,
                                               Bitmap icon, int unread, Intent intent, boolean createNew,
                                               boolean ongoing, UserNotification.Type type, UserNotification.NotificationAction[] actions,
                                               User user) {
         return showNotification(
+                gcmType,
                 title,
                 message,
                 isTextNotification,
@@ -236,7 +237,7 @@ public class UserNotificationManager {
         );
     }
 
-    private UserNotification showNotification(String title, String message, boolean isTextNotification,
+    private UserNotification showNotification(int gcmType, String title, String message, boolean isTextNotification,
                                               Bitmap icon, int unread, Intent intent, int id,
                                               boolean ongoing, UserNotification.Type type, UserNotification.NotificationAction[] actions,
                                               User user) {
@@ -247,6 +248,7 @@ public class UserNotificationManager {
             messagesStack = saveMessageStack(message, user);
             notification.setWearReply(mContext, intent);
         }
+        notification.setGCMType(gcmType);
         notification.setType(type);
         notification.setImage(icon);
         notification.setTitle(title);
@@ -287,7 +289,7 @@ public class UserNotificationManager {
         UserConfig config = App.getUserConfig();
         MessageStack messagesStack = config.getNotificationMessagesStack();
         if (user != null) {
-            messagesStack.addFirst(new MessageStack.Message(user.name, message));
+            messagesStack.addFirst(new MessageStack.Message(user.name, message, user.id));
             config.setNotificationMessagesStack(messagesStack);
             config.saveConfig();
         }
@@ -321,14 +323,14 @@ public class UserNotificationManager {
         mNotificationManager.cancelAll();
     }
 
-    public static interface NotificationImageListener {
-        public void onSuccess(UserNotification notification);
+    public interface NotificationImageListener {
+        void onSuccess(UserNotification notification);
 
-        public void onFail();
+        void onFail();
 
         //Нужно, если в каких-то случаях, после асинхронной загрузки фото,
         //нотификацию показывать уже не надо. Если в любом случае надо, можно
         //передать этот listener null или поставить у этого метода return true;
-        public boolean needShowNotification();
+        boolean needShowNotification();
     }
 }
