@@ -83,9 +83,7 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
             for (int i = 0; i < parcelableArray.length; i++) {
                 this.photos.add(i, (Photo) parcelableArray[i]);
             }
-//            this.photos = Arrays.copyOf(parcelableArray, parcelableArray.length, Photos.class);
         }
-//        this.photos = in.readParcelableArray(Photos.class.getClassLoader());
         this.photosCount = in.readInt();
         this.premium = in.readByte() != 0;
         this.banned = in.readByte() != 0;

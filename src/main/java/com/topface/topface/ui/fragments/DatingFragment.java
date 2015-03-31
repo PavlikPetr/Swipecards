@@ -276,9 +276,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             mCurrentUser = savedInstanceState.getParcelable(CURRENT_USER);
-//            fillUserInfo((SearchUser) savedInstanceState.getParcelable(CURRENT_USER));
         }
-        mSetter = new ActionBarTitleSetterDelegate(getActivity(), ((ActionBarActivity) getActivity()).getSupportActionBar());
         mPreloadManager = new PreloadManager<>();
         // Animation
         mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);

@@ -50,8 +50,6 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     private RelativeLayout mLockScreen;
     private RetryViewCreator mRetryView;
 
-    private boolean mIsSuccessToastAvailable;
-
     /**
      * Intent to start GiftsActivity for sending gift item
      * If you need to process send gift request yourself set sendGift flag to false

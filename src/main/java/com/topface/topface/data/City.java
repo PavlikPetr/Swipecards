@@ -41,9 +41,9 @@ public class City extends AbstractData implements SerializableToJson, Cloneable,
     }
 
     protected City(Parcel in) {
-        id = in.readInt();
-        name = in.readString();
-        full = in.readString();
+        this.id = in.readInt();
+        this.name = in.readString();
+        this.full = in.readString();
     }
 
     public City(int id, String name, String full) {

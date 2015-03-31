@@ -263,7 +263,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         mNeedTitles = needTitles;
     }
 
-    public static enum FragmentId {
+    public enum FragmentId {
         VIP_PROFILE(0),
         PROFILE(1),
         DATING(2, true),

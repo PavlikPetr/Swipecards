@@ -237,19 +237,11 @@ public class SettingsFragment extends BaseFragment implements OnClickListener, O
     }
 
     private boolean isMailAvailable(int key) {
-        if (CacheProfile.notifications != null && CacheProfile.notifications.get(key) != null) {
-            return CacheProfile.notifications.get(key).mail;
-        } else {
-            return false;
-        }
+        return CacheProfile.notifications != null && CacheProfile.notifications.get(key) != null && CacheProfile.notifications.get(key).mail;
     }
 
     private boolean isGcmAvailable(int key) {
-        if (CacheProfile.notifications != null && CacheProfile.notifications.get(key) != null) {
-            return CacheProfile.notifications.get(key).apns;
-        } else {
-            return false;
-        }
+        return CacheProfile.notifications != null && CacheProfile.notifications.get(key) != null && CacheProfile.notifications.get(key).apns;
     }
 
     private void initViews(View root) {
