@@ -15,9 +15,7 @@ import android.widget.TextView;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.ui.BanActivity;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -104,13 +102,9 @@ public class ActionBarView implements View.OnClickListener {
                     mActivity.startActivity(intent);
                     mActivity.finish();
                 }
-            } else if (mActivity instanceof BanActivity) {
-                mActivity.onBackPressed();
-            } else if (mActivity instanceof ChatActivity) {
-                mActivity.onBackPressed();
             } else {
                 if (preFinish(mActivity)) {
-                    mActivity.finish();
+                    mActivity.onBackPressed();
                 }
             }
         }
