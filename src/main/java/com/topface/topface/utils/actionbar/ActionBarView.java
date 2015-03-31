@@ -17,6 +17,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.BanActivity;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -105,6 +106,8 @@ public class ActionBarView implements View.OnClickListener {
                 }
             } else if (mActivity instanceof BanActivity) {
                 mActivity.onBackPressed();
+            } else if (mActivity instanceof ChatActivity) {
+                mActivity.onBackPressed();
             } else {
                 if (preFinish(mActivity)) {
                     mActivity.finish();
@@ -114,10 +117,7 @@ public class ActionBarView implements View.OnClickListener {
     }
 
     private boolean preFinish(Activity activity) {
-        if (activity instanceof BaseFragmentActivity) {
-            return ((BaseFragmentActivity) activity).doPreFinish();
-        }
-        return true;
+        return !(activity instanceof BaseFragmentActivity) || ((BaseFragmentActivity) activity).doPreFinish();
     }
 
     public void setActionBarTitle(String title) {
@@ -133,6 +133,6 @@ public class ActionBarView implements View.OnClickListener {
     }
 
     public interface ActionBarClickListener {
-        public void onActionBarClick();
+        void onActionBarClick();
     }
 }

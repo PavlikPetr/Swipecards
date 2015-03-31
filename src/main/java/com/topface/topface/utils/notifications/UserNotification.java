@@ -287,7 +287,7 @@ public class UserNotification {
     }
 
     private PendingIntent generatePendingIntent(Intent intent) {
-        return generatePendingIntent(intent, 0);
+        return generatePendingIntent(intent, mGCMType);
     }
 
     private PendingIntent generatePendingIntent(Intent intent, int requestCode) {
