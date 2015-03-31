@@ -89,6 +89,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
 
+    private static final String CURRENT_USER = "current_user";
+
     AtomicBoolean isAdmirationFailed = new AtomicBoolean(false);
     private KeyboardListenerLayout mRoot;
     private TextView mResourcesLikes;
@@ -274,6 +276,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            mCurrentUser = savedInstanceState.getParcelable(CURRENT_USER);
+//            fillUserInfo((SearchUser) savedInstanceState.getParcelable(CURRENT_USER));
+        }
         mSetter = new ActionBarTitleSetterDelegate(getActivity(), ((ActionBarActivity) getActivity()).getSupportActionBar());
         mPreloadManager = new PreloadManager<>();
         // Animation
@@ -292,10 +298,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         };
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mRateReceiver, new IntentFilter(RateController.USER_RATED));
+
     }
 
     protected void inBackroundThread() {
         mNovice = App.getNovice();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(CURRENT_USER, mCurrentUser);
+        outState.setClassLoader(SearchUser.class.getClassLoader());
     }
 
     @Override
@@ -307,6 +321,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         initViews(mRoot);
         initEmptySearchDialog(mRoot);
         initImageSwitcher(mRoot);
+        if (mCurrentUser != null) {
+            fillUserInfo(mCurrentUser);
+        }
         return mRoot;
     }
 
@@ -729,7 +746,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             case R.id.send_gift_button: {
                 if (mCurrentUser != null) {
                     startActivityForResult(
-                            GiftsActivity.getSendGiftIntent(getActivity(), mCurrentUser.id),
+                            GiftsActivity.getSendGiftIntent(getActivity(), mCurrentUser.id, false),
                             GiftsActivity.INTENT_REQUEST_GIFT
                     );
                     EasyTracker.sendEvent("Dating", "SendGiftClick", "", 1L);
@@ -1122,7 +1139,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             // открываем чат с пользователем в случае успешной отправки подарка с экрана знакомств
         } else if (resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
             if (mDatingInstantMessageController != null) {
-                mDatingInstantMessageController.openChat(getActivity(), mCurrentUser);
+                // открываем чат с пустой строкой в footer
+                mDatingInstantMessageController.openChat(getActivity(), mCurrentUser, "");
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
