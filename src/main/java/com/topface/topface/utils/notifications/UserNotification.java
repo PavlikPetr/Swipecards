@@ -325,7 +325,7 @@ public class UserNotification {
 
     private void setLargeIcon() {
         if (mImage != null) {
-            Bitmap scaledIcon = BitmapUtils.getRoundBitmap(BitmapUtils.clipAndScaleBitmap(mImage, getIconSize(mContext), getIconSize(mContext)), 1f);
+            Bitmap scaledIcon = getLargeIconBitmap();
             if (scaledIcon != null) {
                 notificationBuilder.setLargeIcon(scaledIcon);
             } else {
@@ -333,6 +333,16 @@ public class UserNotification {
             }
         } else {
             setDefaultIcon();
+        }
+    }
+
+    private Bitmap getLargeIconBitmap() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // скругляем аватарку для отображения на lollipop и старше
+            return BitmapUtils.getRoundBitmap(BitmapUtils.clipAndScaleBitmap(mImage, getIconSize(mContext), getIconSize(mContext)), 1f);
+        } else {
+            // все остальные будут отображать квадратную аватарку
+            return BitmapUtils.clipAndScaleBitmap(mImage, getIconSize(mContext), getIconSize(mContext));
         }
     }
 
