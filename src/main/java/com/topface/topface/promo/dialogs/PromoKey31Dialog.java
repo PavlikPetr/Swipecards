@@ -23,7 +23,11 @@ public class PromoKey31Dialog extends PromoDialog {
 
     @Override
     protected String getMessage() {
-        int count = getPremiumEntity().getCount();
+        Options.PromoPopupEntity premiumEntity = getPremiumEntity();
+        int count = 0;
+        if (premiumEntity != null) {
+            count = premiumEntity.getCount();
+        }
         return Utils.getQuantityString(getPluralForm(), count, count);
     }
 
