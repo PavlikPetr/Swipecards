@@ -53,6 +53,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private static final String PHOTOS = "PHOTOS";
     private static final String POSITION = "POSITION";
     private static final String SELECTED_POSITION = "SELECTED_POSITION";
+    private static final String ALREADY_SHOWN = "ALREADY_SHOWN";
 
     public final static int ADD_TO_LEADER_ACTIVITY_ID = 1;
     private static final int MAX_SYMBOL_COUNT = 120;
@@ -83,6 +84,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         Photos photos = null;
         int position = 0;
         int selectedPosition = 0;
+        boolean alreadyShown = false;
         if (savedInstanceState != null) {
             try {
                 photos = new Photos(
@@ -92,6 +94,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
             }
             position = savedInstanceState.getInt(POSITION, 0);
             selectedPosition = savedInstanceState.getInt(SELECTED_POSITION, 0);
+            alreadyShown = savedInstanceState.getBoolean(ALREADY_SHOWN);
         }
         mGridView.addHeaderView(getHeaderView());
         // add title to actionbar
@@ -99,9 +102,16 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         // init grid view and create adapter
         initPhotosGrid(photos, position, selectedPosition);
 
-        mAddPhotoHelper = new AddPhotoHelper(this);
-        mAddPhotoHelper.setOnResultHandler(mHandler);
-        mPhotoTaker = new PhotoTaker(mAddPhotoHelper, this);
+        if (!alreadyShown) {
+            mAddPhotoHelper = new AddPhotoHelper(this);
+            mAddPhotoHelper.setOnResultHandler(mHandler);
+            mPhotoTaker = new PhotoTaker(mAddPhotoHelper, this);
+            LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+            TakePhotoDialog takePhotoDialog = (TakePhotoDialog) mPhotoTaker.getActivityFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
+            if (CacheProfile.photo == null && takePhotoDialog == null ) {
+                mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
+            }
+        }
     }
 
     @Override
@@ -113,14 +123,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                 onProfileUpdated();
             }
         };
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
-        TakePhotoDialog takePhotoDialog = (TakePhotoDialog) mPhotoTaker.getActivityFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
-        if (CacheProfile.photo == null && takePhotoDialog == null ) {
-            mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
-        }
-
-
     }
 
     @Override
@@ -154,6 +156,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         }
         outState.putInt(POSITION, mGridView.getFirstVisiblePosition());
         outState.putInt(SELECTED_POSITION, mUsePhotosAdapter.getSelectedPhotoId());
+        outState.putBoolean(ALREADY_SHOWN, true);
     }
 
     private Photos getPhotoLinks() {
