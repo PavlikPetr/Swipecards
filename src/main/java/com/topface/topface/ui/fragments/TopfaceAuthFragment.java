@@ -182,7 +182,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     @Override
     protected void processAuthError(int codeError, ApiRequest request) {
         super.processAuthError(codeError, request);
-        mPassword.setTransformationMethod(new PasswordTransformationMethod());
+//        mPassword.setTransformationMethod(new PasswordTransformationMethod());
         switch (codeError) {
             case ErrorCodes.INCORRECT_LOGIN:
             case ErrorCodes.UNKNOWN_SOCIAL_USER:
