@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -275,8 +276,11 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
 
     private void removeRedAlert() {
         if (mRedAlertView.getVisibility() == View.VISIBLE) {
-            mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
-                    android.R.anim.fade_out));
+            Animation animation = AnimationUtils.loadAnimation(getActivity(),
+                    android.R.anim.fade_out);
+            if (animation != null) {
+                mRedAlertView.setAnimation(animation);
+            }
             mRedAlertView.setVisibility(View.INVISIBLE);
             mWelcomeView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
                     android.R.anim.fade_in));
