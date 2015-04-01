@@ -219,7 +219,7 @@ public abstract class AbstractConfig {
     /**
      * Types for SettingsField
      */
-    public static enum FieldType {
+    public enum FieldType {
         String, Integer, Boolean, Long, List, Unknown
     }
 
