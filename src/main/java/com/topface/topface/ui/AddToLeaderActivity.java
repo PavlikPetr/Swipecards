@@ -64,8 +64,12 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private View mGridFooterView;
     private LeadersPhotoGridAdapter mUsePhotosAdapter;
     private AddPhotoHelper mAddPhotoHelper;
-    private IPhotoTakerWithDialog mPhotoTaker;
-    private BroadcastReceiver mUpdateProfileReceiver;
+    private BroadcastReceiver mUpdateProfileReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onProfileUpdated();
+        }
+    };
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -103,10 +107,10 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         initPhotosGrid(photos, position, selectedPosition);
 
         if (!alreadyShown) {
-            mAddPhotoHelper = new AddPhotoHelper(this);
+            mAddPhotoHelper = getAddPhotoHelper();
             mAddPhotoHelper.setOnResultHandler(mHandler);
-            mPhotoTaker = new PhotoTaker(mAddPhotoHelper, this);
-            LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+            IPhotoTakerWithDialog mPhotoTaker = new PhotoTaker(mAddPhotoHelper, this);
+
             TakePhotoDialog takePhotoDialog = (TakePhotoDialog) mPhotoTaker.getActivityFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
             if (CacheProfile.photo == null && takePhotoDialog == null ) {
                 mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
@@ -117,12 +121,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     @Override
     public void onResume() {
         super.onResume();
-        mUpdateProfileReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                onProfileUpdated();
-            }
-        };
+        LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
 
     @Override
@@ -139,7 +138,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                 case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:
                 case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG:
                     if (mAddPhotoHelper != null) {
-                        mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, mAddPhotoHelper.processActivityResult(requestCode, resultCode, data, false));
+                        mAddPhotoHelper.showTakePhotoDialog(new PhotoTaker(mAddPhotoHelper, this), mAddPhotoHelper.processActivityResult(requestCode, resultCode, data, false));
                     }
                     break;
             }
@@ -339,5 +338,12 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
     private View createGridViewFooter() {
         return ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.gridview_footer_progress_bar, null, false);
+    }
+
+    private AddPhotoHelper getAddPhotoHelper() {
+        if (mAddPhotoHelper == null) {
+            mAddPhotoHelper = new AddPhotoHelper(this);
+        }
+        return mAddPhotoHelper;
     }
 }
