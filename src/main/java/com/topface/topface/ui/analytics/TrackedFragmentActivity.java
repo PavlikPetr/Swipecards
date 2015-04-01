@@ -70,8 +70,8 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onPause() {
+        super.onPause();
         StatisticsTracker.getInstance().activityStop(this);
     }
 }
