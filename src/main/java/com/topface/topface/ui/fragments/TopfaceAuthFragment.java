@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
@@ -296,7 +297,10 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
 
     private void removeRedAlert() {
         if (mWrongPasswordAlertView != null && mWrongPasswordAlertView.getVisibility() == View.VISIBLE) {
-            mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
+            Animation animation = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
+            if (animation != null) {
+                mWrongPasswordAlertView.setAnimation(animation);
+            }
             mWrongPasswordAlertView.setVisibility(View.GONE);
             mWrongDataTextView.setVisibility(View.GONE);
         }
