@@ -12,7 +12,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.ad.Advertising;
 import com.topface.topface.utils.ad.NativeAd;
-import com.topface.topface.utils.social.AuthToken;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -23,6 +22,7 @@ import java.util.List;
 public class PubnativeAdvertising extends Advertising {
 
     private static final String REQUEST = "http://api.pubnative.net/api/partner/v2/promotions/native?";
+    private static final String ODNOKLASSNIKI = "ok";
 
     private PubnativeInfo mPubnativeInfo;
 
@@ -46,7 +46,7 @@ public class PubnativeAdvertising extends Advertising {
         try {
             PubnativeResponse pubnativeResponse = JsonUtils.fromJson(response, PubnativeResponse.class);
             if (pubnativeResponse != null
-                    && TextUtils.equals(pubnativeResponse.getStatus(), AuthToken.SN_ODNOKLASSNIKI)) {
+                    && TextUtils.equals(pubnativeResponse.getStatus(), ODNOKLASSNIKI)) {
                 PubnativeAd[] ads = pubnativeResponse.getAds();
                 if (ads != null) {
                     for (PubnativeAd ad : ads) {
