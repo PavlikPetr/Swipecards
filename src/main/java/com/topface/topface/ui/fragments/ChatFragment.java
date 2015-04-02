@@ -890,7 +890,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     Toast.LENGTH_SHORT).show();
             return false;
         }
-        editText.clear();
+        // вынужденная мера, Editable.clear() некорректно обрабатывается клавиатурой Lg G3
+        mEditBox.setText("");
         return sendMessage(editString, true);
     }
 
