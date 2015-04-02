@@ -12,6 +12,8 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.social.AuthToken;
 
+import com.comscore.analytics.comScore;
+
 public class TrackedFragmentActivity extends ActionBarActivity {
 
 
@@ -29,6 +31,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         AppEventsLogger.activateApp(this, Static.AUTH_FACEBOOK_ID);
+        comScore.onEnterForeground();
     }
 
     public static HitBuilders.AppViewBuilder setCustomMeticsAndDimensions() {
@@ -51,6 +54,12 @@ public class TrackedFragmentActivity extends ActionBarActivity {
             tags.setToStatistics(builder);
         }
         return builder;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        comScore.onExitForeground();
     }
 
     @Override
