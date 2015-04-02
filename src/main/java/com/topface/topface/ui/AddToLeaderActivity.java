@@ -58,6 +58,10 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     public final static int ADD_TO_LEADER_ACTIVITY_ID = 1;
     private static final int MAX_SYMBOL_COUNT = 120;
 
+    private int mPosition;
+    private int mSelectedPosition;
+    private boolean mIsPhotoDialogShown;
+
     private GridViewWithHeaderAndFooter mGridView;
     private LockerView mLoadingLocker;
     private EditText mEditText;
@@ -86,9 +90,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         addFooterView();
         mLoadingLocker = (LockerView) findViewById(R.id.llvLeaderSending);
         Photos photos = null;
-        int position = 0;
-        int selectedPosition = 0;
-        boolean alreadyShown = false;
         if (savedInstanceState != null) {
             try {
                 photos = new Photos(
@@ -96,17 +97,17 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
             } catch (JSONException e) {
                 Debug.error(e);
             }
-            position = savedInstanceState.getInt(POSITION, 0);
-            selectedPosition = savedInstanceState.getInt(SELECTED_POSITION, 0);
-            alreadyShown = savedInstanceState.getBoolean(ALREADY_SHOWN);
+            mPosition = savedInstanceState.getInt(POSITION, 0);
+            mSelectedPosition = savedInstanceState.getInt(SELECTED_POSITION, 0);
+            mIsPhotoDialogShown = savedInstanceState.getBoolean(ALREADY_SHOWN);
         }
         mGridView.addHeaderView(getHeaderView());
         // add title to actionbar
         new ActionBarTitleSetterDelegate(getSupportActionBar()).setActionBarTitles(R.string.general_photoblog, null);
         // init grid view and create adapter
-        initPhotosGrid(photos, position, selectedPosition);
+        initPhotosGrid(photos, mPosition, mSelectedPosition);
 
-        if (!alreadyShown) {
+        if (!mIsPhotoDialogShown) {
             mAddPhotoHelper = getAddPhotoHelper();
             mAddPhotoHelper.setOnResultHandler(mHandler);
             IPhotoTakerWithDialog mPhotoTaker = new PhotoTaker(mAddPhotoHelper, this);
@@ -153,9 +154,9 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         } catch (JSONException e) {
             Debug.error(e);
         }
-        outState.putInt(POSITION, mGridView.getFirstVisiblePosition());
-        outState.putInt(SELECTED_POSITION, mUsePhotosAdapter.getSelectedPhotoId());
-        outState.putBoolean(ALREADY_SHOWN, true);
+        outState.putInt(POSITION, mPosition);
+        outState.putInt(SELECTED_POSITION, mSelectedPosition);
+        outState.putBoolean(ALREADY_SHOWN, mIsPhotoDialogShown);
     }
 
     private Photos getPhotoLinks() {
@@ -202,6 +203,9 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         if (mEditText != null) {
             Utils.hideSoftKeyboard(this, mEditText);
         }
+        mPosition = mGridView.getFirstVisiblePosition();
+        mSelectedPosition = mUsePhotosAdapter.getSelectedPhotoId();
+        mIsPhotoDialogShown = true;
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mUpdateProfileReceiver);
     }
