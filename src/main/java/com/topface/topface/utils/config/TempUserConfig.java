@@ -10,7 +10,7 @@ import android.content.Context;
 public class TempUserConfig extends UserConfig {
 
     public TempUserConfig(Context context) {
-        super(context);
+        super(null, context);
     }
 
     @Override
