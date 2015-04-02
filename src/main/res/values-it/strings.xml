@@ -135,6 +135,7 @@
     <string name="general_spinner_title">Scegli l’azione</string>
     <string name="general_profile_error">Errore durante il caricamento del profilo</string>
     <string name="general_dbl_all">Tutti</string>
+    <string name="general_dbl_unread">Non letti</string>
     <string name="time_yesterday">Ieri</string>
     <string name="time_today">Oggi</string>
     <string name="general_send_button">Inv.</string>
@@ -375,12 +376,12 @@
     <string name="gallery">Galleria</string>
     <string name="no_photo_take_photo">Nessuno può conoscerti! Scatta una foto o scegline una dall’album</string>
     <string name="photo_for_avatar">La foto è pronta per essere inviata! Questa è la tua prima foto e sarà il tuo avatar.</string>
-    <string name="change_email">Cambia e-mail</string>
     <string name="send_confirmation_email">Invia conferma all’indirizzo e-mail</string>
     <string name="change_password">Cambia password</string>
     <string name="password_changing">Modifica password</string>
     <string name="save">Salvare</string>
     <string name="confirmation_successfully_sent">All’indirizzo e-mail da te indicato è stata inviata la conferma</string>
+    <string name="password_hint">password</string>
     <string name="password_confirmation_hint">conferma password</string>
     <string name="enter_new_password">Inserisci la nuova password</string>
     <string name="enter_password_confirmation">Inserisci la conferma di password</string>
@@ -494,7 +495,6 @@
     <string name="delete">Cancella</string>
     <string name="delete_account_warning">Attenzione! Stai cercando di cancellare il tuo account in Topface.</string>
     <string name="delete_account_error">Purtroppo non siamo riusciti a cancellare il tuo account. Riprova.</string>
-    <string name="delete_account_will_be_restored_are_you_sure">Stai cercando di accedere all’account che hai cancellato. Accedendovi verrà ripristinato. Vuoi farlo?</string>
     <string name="restore">Ripristinare</string>
     <string name="admiration_sended">L’ammirazione è stata inviata</string>
     <string name="skip">Salta</string>
@@ -592,6 +592,7 @@
     <string name="preload_photo_type_preload_off">Spenta</string>
     <string name="wrong_time_popup_text">Non siamo riusciti a stabilire una connessione sicura.\nProbabilmente il tuo dispositivo mostra una data o l’ora scorretta.</string>
     <string name="wrong_time_popup_button">Aprire i parametri</string>
+    <string name="go_tf">Ti invio un “Regalo a sorpresa!”</string>
     <string name="google_service_general_title">Notifiche non disponibili</string>
     <string name="google_service_disabled_title">Hai disabilitato i Servizi Google Play che servono per il corretto funzionamento di notifiche.</string>
     <string name="google_service_disabled_button">Abilita</string>

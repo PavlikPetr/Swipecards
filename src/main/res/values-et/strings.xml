@@ -82,6 +82,7 @@
     <string name="general_spinner_title">Vali toiming</string>
     <string name="general_profile_error">Konto laadimise viga</string>
     <string name="general_dbl_all">Kõik</string>
+    <string name="general_dbl_unread">Lugemata</string>
     <string name="time_yesterday">Eile</string>
     <string name="time_today">Täna</string>
     <string name="general_send_button">Saata</string>
@@ -259,10 +260,10 @@ Sa oled müksanud.</string>
     <string name="general_error_try_again_later">Ei ole võimalik Topface\'iga liituda. Proovi korrata katse hiljem.</string>
     <string name="search_city_by_name">Linna otsing nimetuse järgi</string>
     <string name="gallery">Galerii</string>
-    <string name="change_email">Vahetada e-posti aadress</string>
     <string name="change_password">Muuta salasõna</string>
     <string name="password_changing">Salasõna muutmine</string>
     <string name="save">Salvestada</string>
+    <string name="password_hint">salasõna</string>
     <string name="password_confirmation_hint">salasõna kinnitus</string>
     <string name="enter_new_password">Sisesta uus salasõna</string>
     <string name="enter_password_confirmation">Sisesta salasõna kinnitus</string>

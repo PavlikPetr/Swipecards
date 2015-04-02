@@ -6,11 +6,14 @@ import android.text.TextUtils;
 import com.facebook.AppEventsLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.Static;
 import com.topface.topface.data.ExperimentTags;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.social.AuthToken;
+
+import com.comscore.analytics.comScore;
 
 public class TrackedFragmentActivity extends ActionBarActivity {
 
@@ -18,6 +21,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     @Override
     public void onStart() {
         super.onStart();
+        StatisticsTracker.getInstance().activityStart(this);
         if (isTrackable()) {
             Tracker tracker = EasyTracker.getTracker();
             tracker.setScreenName(getTrackName());
@@ -29,6 +33,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         AppEventsLogger.activateApp(this, Static.AUTH_FACEBOOK_ID);
+        comScore.onEnterForeground();
     }
 
     public static HitBuilders.AppViewBuilder setCustomMeticsAndDimensions() {
@@ -54,6 +59,13 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        comScore.onExitForeground();
+        StatisticsTracker.getInstance().activityStop(this);
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         EasyTracker.getTracker().send(new HitBuilders.AppViewBuilder().set(EasyTracker.SESSION_CONTROL, "end").build());
@@ -66,5 +78,4 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     protected String getTrackName() {
         return ((Object) this).getClass().getSimpleName().replace("Activity", "");
     }
-
 }

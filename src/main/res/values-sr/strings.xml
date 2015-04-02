@@ -93,6 +93,7 @@
     <string name="general_spinner_title">Odaberite radnje</string>
     <string name="general_profile_error">Greška kod učitavanja profila</string>
     <string name="general_dbl_all">Svi</string>
+    <string name="general_dbl_unread">Nepročitani</string>
     <string name="time_yesterday">Juče</string>
     <string name="time_today">Danas</string>
     <string name="general_send_button">Posl.</string>
@@ -289,12 +290,12 @@
     <string name="gallery">Galerija</string>
     <string name="no_photo_take_photo">Sa vama se niko ne može upoznati! Napravite fotografiju ili odaberite postojeću iz albuma</string>
     <string name="photo_for_avatar">Fotografija je spremna za slanje u profil! To je vaša prva fotografija i ona će se koristiti kao vaš avatar.</string>
-    <string name="change_email">Promeniti e-mail</string>
     <string name="send_confirmation_email">Poslati potvrdu na e-mail</string>
     <string name="change_password">Promeniti lozinku</string>
     <string name="password_changing">Promena lozinke</string>
     <string name="save">Sačuvati</string>
     <string name="confirmation_successfully_sent">Potvrda je poslata na e-mail koji ste naveli</string>
+    <string name="password_hint">lozinka</string>
     <string name="password_confirmation_hint">potvrda lozinke</string>
     <string name="enter_new_password">Unesite novu lozinku</string>
     <string name="enter_password_confirmation">Unesite potvrdu lozinke</string>
@@ -409,7 +410,6 @@
     <string name="delete">Udaljiti</string>
     <string name="delete_account_warning">Pažnja! Vi pokušavate da uklonite svoj profil u Topface.</string>
     <string name="delete_account_error">Na žalost nije uspeo pokušaj uklanjanja vašeg akaunta. možete pokušati još jednom.</string>
-    <string name="delete_account_will_be_restored_are_you_sure">Pokušavate da uđete u akaunt koji ste uklonili. Prilikom ulaska akaunt će se obnoviti. Da li ste sigurni da to želite?</string>
     <string name="restore">Obnoviti</string>
     <string name="admiration_sended">Divljenje je poslato</string>
     <string name="auth_btn_ok">Ući preko Odnoklassniki</string>

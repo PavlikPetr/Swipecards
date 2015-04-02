@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.ui.BanActivity;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.gcmutils.GCMUtils;
@@ -77,7 +76,6 @@ public class ActionBarView implements View.OnClickListener {
         mTitle.setText(R.string.app_name);
     }
 
-
     @Override
     public void onClick(View v) {
         if (mActionBar != null) {
@@ -100,24 +98,21 @@ public class ActionBarView implements View.OnClickListener {
                     if (noBackStack) {
                         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     }
-                    mActivity.startActivity(intent);
+                    if (intent != null) {
+                        mActivity.startActivity(intent);
+                    }
                     mActivity.finish();
                 }
-            } else if (mActivity instanceof BanActivity) {
-                mActivity.onBackPressed();
             } else {
                 if (preFinish(mActivity)) {
-                    mActivity.finish();
+                    mActivity.onBackPressed();
                 }
             }
         }
     }
 
     private boolean preFinish(Activity activity) {
-        if (activity instanceof BaseFragmentActivity) {
-            return ((BaseFragmentActivity) activity).doPreFinish();
-        }
-        return true;
+        return !(activity instanceof BaseFragmentActivity) || ((BaseFragmentActivity) activity).doPreFinish();
     }
 
     public void setActionBarTitle(String title) {
@@ -133,6 +128,6 @@ public class ActionBarView implements View.OnClickListener {
     }
 
     public interface ActionBarClickListener {
-        public void onActionBarClick();
+        void onActionBarClick();
     }
 }

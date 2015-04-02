@@ -135,6 +135,7 @@
     <string name="general_spinner_title">Elige la acción</string>
     <string name="general_profile_error">Error de carga del perfil</string>
     <string name="general_dbl_all">Todos</string>
+    <string name="general_dbl_unread">No leídos</string>
     <string name="time_yesterday">Ayer</string>
     <string name="time_today">Hoy</string>
     <string name="general_send_button">Enviar</string>
@@ -378,12 +379,12 @@
     <string name="gallery">Galería</string>
     <string name="no_photo_take_photo">¡Nadie puede conocerte! Haz una foto o elige una de un álbum existente</string>
     <string name="photo_for_avatar">¡La fotografía está lista para el envío al perfil! Es tu primera fotografía y va a ser usada como tu avatar.</string>
-    <string name="change_email">Cambiar e-mail</string>
     <string name="send_confirmation_email">Mandar la confirmación al e-mail</string>
     <string name="change_password">Cambiar la contraseña</string>
     <string name="password_changing">Cambio de contraseña</string>
     <string name="save">Guardar</string>
     <string name="confirmation_successfully_sent">La confirmación fue enviada al e-mail que indicaste</string>
+    <string name="password_hint">contraseña</string>
     <string name="password_confirmation_hint">confirmación de la contraseña</string>
     <string name="enter_new_password">Introduce la contraseña nueva</string>
     <string name="enter_password_confirmation">Introduce la confirmación de la contraseña</string>
@@ -497,7 +498,6 @@
     <string name="delete">Eliminar</string>
     <string name="delete_account_warning">¡Atención! Estas intentando eliminar tu perfil de Topface.</string>
     <string name="delete_account_error">Lamentablemente, no fue posible eliminar tu cuenta. Puedes repetir el proceso otra vez.</string>
-    <string name="delete_account_will_be_restored_are_you_sure">Estas intentando entrar a una cuenta que eliminaste. Al entrar la cuenta será restaurada. ¿Estás seguro?</string>
     <string name="restore">Recuperar</string>
     <string name="admiration_sended">Admiración enviada</string>
     <string name="skip">Omitir</string>
@@ -595,6 +595,7 @@
     <string name="preload_photo_type_preload_off">Descpnectada</string>
     <string name="wrong_time_popup_text">Ha sido imposible establecer conexión segura con el servidor.\nEs posible que en tu dispositivo están puestas mal las fechas o la hora.</string>
     <string name="wrong_time_popup_button">Abrir opciones</string>
+    <string name="go_tf">¡Te envío un Regalo Sorpresa!</string>
     <string name="google_service_general_title">Avisos no disponibles</string>
     <string name="google_service_disabled_title">Tienes desconectados algunos servicios Google Play que hacen falta para que los avisos funcionen.</string>
     <string name="google_service_disabled_button">Habilitar</string>

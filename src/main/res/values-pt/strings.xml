@@ -129,6 +129,7 @@
     <string name="general_spinner_title">Seleccione uma ação</string>
     <string name="general_profile_error">Erro no carregamento de perfil</string>
     <string name="general_dbl_all">Todos</string>
+    <string name="general_dbl_unread">Não lidos</string>
     <string name="time_yesterday">Ontem</string>
     <string name="time_today">Hoje</string>
     <string name="general_send_button">Enviar</string>
@@ -349,12 +350,12 @@
     <string name="gallery">Galeria</string>
     <string name="no_photo_take_photo">Ninguém pode travar conhecimento consigo! Faça uma nova foto ou selecione uma das que existem no álbum</string>
     <string name="photo_for_avatar">A foto está pronta para ser enviada ao perfil! Esta é sua primeira foto  e ela será usada como seu avatar.</string>
-    <string name="change_email">Trocar e-mail</string>
     <string name="send_confirmation_email">Enviar a confirmação para e-mail</string>
     <string name="change_password">Alterar palavra-passe</string>
     <string name="password_changing">Alteração de palavra-passe</string>
     <string name="save">Guardar</string>
     <string name="confirmation_successfully_sent">Confirmação enviada para e-mail indicado por você</string>
+    <string name="password_hint">palavra-passe</string>
     <string name="password_confirmation_hint">confirmação de palavra-passe</string>
     <string name="enter_new_password">Introduza uma nova palavra-passe</string>
     <string name="enter_password_confirmation">Introduza a confirmação de palavra-passe</string>
@@ -467,7 +468,6 @@
     <string name="delete">Eliminar</string>
     <string name="delete_account_warning">Atenção! Você está tentando eliminar o seu perfil em Topface.</string>
     <string name="delete_account_error">Infelizmente não foi possível eliminar a sua conta. Você pode tentar mais uma vez.</string>
-    <string name="delete_account_will_be_restored_are_you_sure">Você está tentando entrar na sua conta remota. Ao entrar, a conta será restaurada. Você tem certeza?</string>
     <string name="restore">Restaurar</string>
     <string name="admiration_sended">Admiração foi enviada</string>
     <string name="skip">deixar passar</string>
