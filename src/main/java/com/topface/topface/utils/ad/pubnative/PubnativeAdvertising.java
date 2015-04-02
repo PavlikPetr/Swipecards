@@ -22,7 +22,7 @@ import java.util.List;
 public class PubnativeAdvertising extends Advertising {
 
     private static final String REQUEST = "http://api.pubnative.net/api/partner/v2/promotions/native?";
-    private static final String ODNOKLASSNIKI = "ok";
+    private static final String OK = "ok";
 
     private PubnativeInfo mPubnativeInfo;
 
@@ -46,7 +46,7 @@ public class PubnativeAdvertising extends Advertising {
         try {
             PubnativeResponse pubnativeResponse = JsonUtils.fromJson(response, PubnativeResponse.class);
             if (pubnativeResponse != null
-                    && TextUtils.equals(pubnativeResponse.getStatus(), ODNOKLASSNIKI)) {
+                    && TextUtils.equals(pubnativeResponse.getStatus(), OK)) {
                 PubnativeAd[] ads = pubnativeResponse.getAds();
                 if (ads != null) {
                     for (PubnativeAd ad : ads) {
