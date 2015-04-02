@@ -9,18 +9,14 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
+        <include
+            android:id="@+id/loAccount"
+            layout="@layout/item_edit_form_select"/>
+
         <TextView
             android:id="@+id/loNotifications"
             style="@style/WhiteListItem.Underline"
             android:text="@string/notifications"/>
-
-        <include
-            android:id="@+id/loPreloadPhoto"
-            layout="@layout/item_edit_form_select"/>
-
-        <include
-            android:id="@+id/loAccount"
-            layout="@layout/item_edit_form_select"/>
 
         <TextView
             android:id="@+id/loHelp"
@@ -36,6 +32,10 @@
             android:id="@+id/loLanguage"
             style="@style/WhiteListItem.Underline"
             android:text="@string/settings_select_language"/>
+
+        <include
+            android:id="@+id/loPreloadPhoto"
+            layout="@layout/item_edit_form_select"/>
 
         <TextView
             android:id="@+id/loAbout"

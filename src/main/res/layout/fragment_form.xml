@@ -63,7 +63,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:cacheColorHint="#00000000"
-        android:divider="@color/gray_divider"
+        android:divider="@drawable/gray_list_divider"
         android:dividerHeight="1dp"
         android:fadeScrollbars="true"
         android:fadingEdge="none"

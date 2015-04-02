@@ -1,5 +1,7 @@
 package com.topface.topface.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
@@ -13,8 +15,20 @@ import org.json.JSONObject;
 
 import java.util.LinkedList;
 
-public class City extends AbstractData implements SerializableToJson, Cloneable {
+public class City extends AbstractData implements SerializableToJson, Cloneable, Parcelable {
     public final static int ALL_CITIES = 0;
+
+    public static final Parcelable.Creator<City> CREATOR = new Creator<City>() {
+        @Override
+        public City createFromParcel(Parcel source) {
+            return new City(source);
+        }
+
+        @Override
+        public City[] newArray(int size) {
+            return new City[size];
+        }
+    };
 
     /**
      * уникальных код города
@@ -42,6 +56,12 @@ public class City extends AbstractData implements SerializableToJson, Cloneable 
         this.id = id;
         this.name = name;
         this.full = full;
+    }
+
+    protected City(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        full = in.readString();
     }
 
     protected void fillData(JSONObject city) {
@@ -102,5 +122,17 @@ public class City extends AbstractData implements SerializableToJson, Cloneable 
 
     public String getFullName() {
         return TextUtils.isEmpty(full) ? getName() : full;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(full);
     }
 }

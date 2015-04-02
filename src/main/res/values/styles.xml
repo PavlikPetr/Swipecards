@@ -975,6 +975,10 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="GrayText.Small">
+        <item name="android:textSize">13sp</item>
+    </style>
+
     <style name="WhiteText">
         <item name="android:textColor">@color/text_white</item>
         <item name="android:textSize">16sp</item>
@@ -982,10 +986,10 @@
 
     <style name="WhiteListItem" parent="GrayText">
         <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_height">@dimen/form_item_height</item>
         <item name="android:gravity">center_vertical|start</item>
-        <item name="android:paddingLeft">8dp</item>
-        <item name="android:paddingRight">8dp</item>
+        <item name="android:paddingLeft">@dimen/item_side_padding</item>
+        <item name="android:paddingRight">@dimen/item_side_padding</item>
     </style>
 
     <style name="WhiteListItem.Underline">

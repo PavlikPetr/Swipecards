@@ -1,5 +1,7 @@
 package com.topface.topface.ui.adapters;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -9,6 +11,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.ui.NotificationSelectorTypes;
+import com.topface.topface.utils.MarketApiManager;
 
 /**
  * Adapter for notification options
@@ -16,9 +19,16 @@ import com.topface.topface.ui.NotificationSelectorTypes;
 public class NotificationEditAdapter extends AbstractEditAdapter<Profile.TopfaceNotifications> {
 
     private Profile.TopfaceNotifications mNotification;
+    private boolean mIsPhoneNotificationEnabled = new MarketApiManager().isMarketApiAvailable();
+    private int mMainColor;
+    private int mDisabledColor;
 
-    public NotificationEditAdapter(Profile.TopfaceNotifications notification) {
+    public NotificationEditAdapter(Context context, Profile.TopfaceNotifications notification) {
+        super(context);
         mNotification = new Profile.TopfaceNotifications(notification.apns, notification.mail, notification.type);
+        Resources resources = App.getContext().getResources();
+        mMainColor = resources.getColor(R.color.text_color_gray);
+        mDisabledColor = resources.getColor(R.color.text_color_gray_transparent);
     }
 
     @Override
@@ -29,7 +39,7 @@ public class NotificationEditAdapter extends AbstractEditAdapter<Profile.Topface
     @Override
     public Boolean getItem(int position) {
         if (position == 0) {
-            return mNotification.apns;
+            return mNotification.apns && mIsPhoneNotificationEnabled;
         } else {
             return mNotification.mail;
         }
@@ -51,7 +61,7 @@ public class NotificationEditAdapter extends AbstractEditAdapter<Profile.Topface
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = inflate(R.layout.edit_dialog_checkbox, parent);
+            convertView = inflate(parent);
 
             Holder holder = new Holder();
             holder.checkBox = (CheckBox) convertView.findViewById(R.id.editor_check);
@@ -66,7 +76,22 @@ public class NotificationEditAdapter extends AbstractEditAdapter<Profile.Topface
                 setItem(position, isChecked);
             }
         });
-        holder.checkBox.setChecked(getItem(position));
+        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        if (position == 0 && !mIsPhoneNotificationEnabled) {
+            holder.checkBox.setChecked(false);
+            holder.checkBox.setEnabled(false);
+            holder.checkBox.setTextColor(mDisabledColor);
+        } else {
+            holder.checkBox.setChecked(getItem(position));
+            holder.checkBox.setEnabled(true);
+            holder.checkBox.setTextColor(mMainColor);
+        }
 
         return convertView;
     }
@@ -82,6 +107,11 @@ public class NotificationEditAdapter extends AbstractEditAdapter<Profile.Topface
     @Override
     public void saveData() {
 
+    }
+
+    @Override
+    protected int getItemLayoutRes() {
+        return R.layout.edit_dialog_checkbox;
     }
 
     private static class Holder {

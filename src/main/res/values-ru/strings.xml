@@ -515,6 +515,7 @@
     <string name="change_password">Изменить пароль</string>
     <string name="password_changing">Изменение пароля</string>
     <string name="save">Сохранить</string>
+    <string name="saving_in_progress">Cохранение...</string>
     <string name="confirmation_successfully_sent">Подтверждение выслано на указанный вами e-mail</string>
     <string name="password_hint">пароль</string>
     <string name="password_confirmation_hint">подтверждение пароля</string>

@@ -29,12 +29,12 @@ import com.topface.topface.utils.Utils;
  */
 public class EditTextFormDialog extends AbstractEditDialog<FormItem> {
 
-    public static EditTextFormDialog newInstance(String title, FormItem notification,
+    public static EditTextFormDialog newInstance(String title, FormItem text,
                                                  final AbstractEditDialog.EditingFinishedListener<FormItem> editingFinishedListener) {
         final EditTextFormDialog editor = new EditTextFormDialog();
         Bundle args = new Bundle();
         args.putString(DIALOG_TITLE, title);
-        args.putParcelable(DATA, notification);
+        args.putParcelable(DATA, text);
         editor.setArguments(args);
         editor.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -55,25 +55,31 @@ public class EditTextFormDialog extends AbstractEditDialog<FormItem> {
         super.initViews(root);
         getTitleText().setTextAppearance(App.getContext(), R.style.SelectorDialogTitle_Blue);
 
-        ViewStub buttonsStub = getButtonsStub();
-        buttonsStub.setLayoutResource(R.layout.edit_dialog_buttons);
-        View buttons = buttonsStub.inflate();
+        if (isButtonsVisible()) {
+            ViewStub buttonsStub = getButtonsStub();
+            buttonsStub.setLayoutResource(R.layout.edit_dialog_buttons);
+            View buttons = buttonsStub.inflate();
 
-        Button cancelBtn = (Button) buttons.findViewById(R.id.edit_dialog_cancel);
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditTextFormDialog.this.dismiss();
-            }
-        });
-        Button saveBtn = (Button) buttons.findViewById(R.id.edit_dialog_save);
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getAdapter().saveData();
-                EditTextFormDialog.this.dismiss();
-            }
-        });
+            Button cancelBtn = (Button) buttons.findViewById(R.id.edit_dialog_cancel);
+            cancelBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EditTextFormDialog.this.dismiss();
+                }
+            });
+            Button saveBtn = (Button) buttons.findViewById(R.id.edit_dialog_save);
+            saveBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getAdapter().saveData();
+                    EditTextFormDialog.this.dismiss();
+                }
+            });
+        }
+    }
+
+    protected boolean isButtonsVisible() {
+        return true;
     }
 
     @Override

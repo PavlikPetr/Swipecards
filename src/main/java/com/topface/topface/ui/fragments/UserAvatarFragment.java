@@ -39,6 +39,12 @@ public abstract class UserAvatarFragment extends BaseFragment
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        setOnline(false);
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         if (mOverflowMenu != null) {

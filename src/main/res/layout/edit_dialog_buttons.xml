@@ -5,12 +5,12 @@
     <ImageView
         android:id="@+id/edit_dialog_buttons_top"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:src="@color/edit_dialog_buttons_divider"/>
 
     <ImageView
         android:id="@+id/edit_dialog_center"
-        android:layout_width="2dp"
+        android:layout_width="1dp"
         android:layout_height="@dimen/edit_dialog_button_heigh"
         android:layout_centerHorizontal="true"
         android:src="@color/edit_dialog_buttons_divider"

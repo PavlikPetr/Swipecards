@@ -32,7 +32,7 @@ import java.util.List;
 public class Products extends AbstractData {
     public static final String INTENT_UPDATE_PRODUCTS = "com.topface.topface.action.UPDATE_PRODUCTS";
 
-    public static enum ProductType {
+    public enum ProductType {
         COINS("coins"),
         LIKES("likes"),
         PREMIUM("premium", true),
@@ -278,7 +278,7 @@ public class Products extends AbstractData {
                     bgResource = R.drawable.btn_blue_selector;
                     break;
                 case 2:
-                    bgResource = R.drawable.btn_blue_disabled;
+                    bgResource = R.drawable.btn_blue_shape_disabled;
                     break;
                 case 0:
                 default:
@@ -404,7 +404,7 @@ public class Products extends AbstractData {
     }
 
     public interface BuyButtonClickListener {
-        public void onClick(String id);
+        void onClick(String id);
     }
 
     private static ProductType getProductTypeByName(String name) {

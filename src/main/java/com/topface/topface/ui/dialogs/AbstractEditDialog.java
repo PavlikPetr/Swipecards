@@ -27,7 +27,7 @@ public class AbstractEditDialog<T extends Parcelable> extends AbstractDialogFrag
     }
 
     private String mTitle;
-    private AbstractEditAdapter mAdapter;
+    private AbstractEditAdapter<T> mAdapter;
     private ListView mOptionsList;
     private TextView mTitleText;
     private ViewStub mButtonsStub;
@@ -38,13 +38,14 @@ public class AbstractEditDialog<T extends Parcelable> extends AbstractDialogFrag
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         Bundle args = getArguments();
         if (args != null) {
             mTitle = args.getString(DIALOG_TITLE);
-            T data = (T) args.getParcelable(DATA);
-            mAdapter = new EditAdapterFactory().createSelectorFor(data);
+            T data = args.getParcelable(DATA);
+            mAdapter = new EditAdapterFactory().createAdapterFor(activity, data);
         }
     }
 

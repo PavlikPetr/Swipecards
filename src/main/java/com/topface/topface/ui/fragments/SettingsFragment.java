@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendMailNotificationsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.dialogs.AboutDialog;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelector;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.ui.edit.EditProfileActivity;
@@ -113,7 +115,11 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         root.findViewById(R.id.loAbout).setOnClickListener(this);
 
         // Notifications
-        root.findViewById(R.id.loNotifications).setOnClickListener(this);
+        if (!CacheProfile.email && !mMarketApiManager.isMarketApiAvailable()) {
+            mLoNotifications.setVisibility(View.GONE);
+        } else {
+            mLoNotifications.setOnClickListener(this);
+        }
 
         //Preload photo
         frame = root.findViewById(R.id.loPreloadPhoto);
@@ -145,7 +151,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                 break;
             case R.id.loHelp:
                 String helpUrl = CacheProfile.getOptions().helpUrl;
-                //Ссылку на помощь показываем только в случае, если сервер нам ее прислал.
+                //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
                 if (!TextUtils.isEmpty(helpUrl)) {
                     intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse(helpUrl));
@@ -157,8 +163,11 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_FEEDBACK);
                 break;
             case R.id.loAbout:
-                intent = new Intent(applicationContext, SettingsContainerActivity.class);
-                startActivityForResult(intent, SettingsContainerActivity.INTENT_ABOUT);
+                FragmentManager fm = getChildFragmentManager();
+                if (fm != null) {
+                    AboutDialog.newInstance(App.getContext().getString(R.string.settings_about)).
+                            show(fm, AboutDialog.class.getName());
+                }
                 break;
             case R.id.loLanguage:
                 startLanguageSelection();
@@ -288,9 +297,9 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
             textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vk, 0, 0, 0);
         } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_tf, 0, 0, 0);
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_tf_settings, 0, 0, 0);
         } else if (authToken.getSocialNet().equals(AuthToken.SN_ODNOKLASSNIKI)) {
-            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ico_ok_settings, 0, 0, 0);
+            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_ok, 0, 0, 0);
         }
     }
 

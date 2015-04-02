@@ -38,4 +38,8 @@
 
     <dimen name="edit_dialog_button_heigh">42dp</dimen>
 
+    <dimen name="form_item_height">60dp</dimen>
+
+    <dimen name="item_side_padding">8dp</dimen>
+
 </resources>

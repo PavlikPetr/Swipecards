@@ -106,6 +106,7 @@ public class FormItem implements Parcelable {
         header = formItem.header;
         titleId = formItem.titleId;
         mLimitInterface = formItem.mLimitInterface;
+        isEditing = formItem.isEditing;
     }
 
     @Override

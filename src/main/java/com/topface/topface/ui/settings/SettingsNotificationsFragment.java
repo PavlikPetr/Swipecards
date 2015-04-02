@@ -48,6 +48,7 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
 
     private MarketApiManager mMarketApiManager;
     private UserConfig mUserConfig = App.getUserConfig();
+    private String mSavingText = App.getContext().getString(R.string.saving_in_progress);
 
     private View mLoLikes;
     private View mLoMutual;
@@ -179,8 +180,14 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
         ((TextView) frame.findViewWithTag("tvTitle")).setText(titleId);
     }
 
-    private void setText(int titleId, View frame) {
-        ((TextView) frame.findViewWithTag("tvText")).setText(titleId);
+    private void setText(String text, View frame) {
+        TextView textView = (TextView) frame.findViewWithTag("tvText");
+        if (TextUtils.isEmpty(text)) {
+            textView.setVisibility(View.GONE);
+        } else {
+            textView.setText(text);
+            textView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setText(Profile.TopfaceNotifications notification, View frame) {
@@ -196,14 +203,7 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
                 textBuilder.append(context.getString(R.string.on_mail));
             }
         }
-        String text = textBuilder.toString();
-        TextView textView = (TextView) frame.findViewWithTag("tvText");
-        if (TextUtils.isEmpty(text)) {
-            textView.setVisibility(View.GONE);
-        } else {
-            textView.setText(text);
-            textView.setVisibility(View.VISIBLE);
-        }
+        setText(textBuilder.toString(), frame);
     }
 
     private void setNotificationState() {
@@ -279,11 +279,15 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
         final View view = getViewByNotificationType(notification.type);
         if (view != null) {
             view.setEnabled(false);
+            setText(mSavingText, view);
         }
         getMailNotificationRequest(notification, App.getContext()).callback(new DataApiHandler<SendMailNotificationResponse>() {
             @Override
             public void fail(int codeError, IApiResponse response) {
-                Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT);
+                if (getView() != null) {
+                    setText(CacheProfile.notifications.get(notification.type), view);
+                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT);
+                }
             }
 
             @Override
@@ -292,7 +296,7 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
                     CacheProfile.notifications.put(notification.type, notification);
                     CacheProfile.sendUpdateProfileBroadcast();
                     if (getView() != null) {
-                        setText(notification, getViewByNotificationType(notification.type));
+                        setText(notification, view);
                     }
                 }
             }

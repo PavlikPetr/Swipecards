@@ -1,10 +1,12 @@
 package com.topface.topface.ui.adapters;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.RadioButton;
+import android.widget.Button;
+import android.widget.CheckedTextView;
+import android.widget.TextView;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -23,11 +25,12 @@ public class FormItemEditAdapter extends AbstractEditAdapter<FormItem> {
     private String[] mEntries;
     private int[] mIds;
 
-    public FormItemEditAdapter(FormItem formItem) {
+    public FormItemEditAdapter(Context context, FormItem formItem) {
+        super(context);
         mFormItem = new FormItem(formItem);
         mFormInfo = new FormInfo(App.getContext(), CacheProfile.sex, Profile.TYPE_OWN_PROFILE);
-        mEntries = mFormInfo.getEntriesByTitleId(mFormItem.titleId);
-        mIds = mFormInfo.getIdsByTitleId(mFormItem.titleId);
+        mEntries = createEntries(mFormItem);
+        mIds = createIds(mFormItem);
     }
 
     @Override
@@ -41,6 +44,11 @@ public class FormItemEditAdapter extends AbstractEditAdapter<FormItem> {
     @Override
     public void saveData() {
 
+    }
+
+    @Override
+    protected int getItemLayoutRes() {
+        return R.layout.edit_dialog_radiobutton;
     }
 
     @Override
@@ -63,24 +71,22 @@ public class FormItemEditAdapter extends AbstractEditAdapter<FormItem> {
         final String item = getItem(position);
 
         if (convertView == null) {
-            convertView = inflate(R.layout.edit_dialog_radiobutton, parent);
+            convertView = inflate(parent);
             Holder holder = new Holder();
-            holder.radioButton = (RadioButton) convertView.findViewById(R.id.editor_check);
+            holder.item = (CheckedTextView) convertView.findViewById(R.id.editor_check);
             convertView.setTag(holder);
         }
 
-        Holder holder = (Holder) convertView.getTag();
-        holder.radioButton.setOnCheckedChangeListener(null);
+        final Holder holder = (Holder) convertView.getTag();
+        holder.item.setOnClickListener(null);
 
-        holder.radioButton.setText(item);
-        holder.radioButton.setChecked(TextUtils.equals(item, mFormItem.value));
-        holder.radioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.item.setText(item);
+        holder.item.setChecked(TextUtils.equals(item, mFormItem.value));
+        holder.item.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    mFormItem.dataId = mIds[position];
-                    mFormItem.value = item;
-                }
+            public void onClick(View v) {
+                mFormItem.dataId = mIds[position];
+                mFormItem.value = item;
                 notifyDataSetChanged();
             }
         });
@@ -88,7 +94,15 @@ public class FormItemEditAdapter extends AbstractEditAdapter<FormItem> {
         return convertView;
     }
 
+    protected String[] createEntries(FormItem formItem) {
+        return mFormInfo.getEntriesByTitleId(formItem.titleId);
+    }
+
+    protected int[] createIds(FormItem formItem) {
+        return mFormInfo.getIdsByTitleId(formItem.titleId);
+    }
+
     private static class Holder {
-        RadioButton radioButton;
+        CheckedTextView item;
     }
 }

@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.profile;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,17 +15,19 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.topface.framework.JsonUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.dialogs.EditFormItemsEditDialog;
 import com.topface.topface.ui.dialogs.EditTextFormDialog;
-import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
@@ -58,7 +61,7 @@ public class ProfileFormFragment extends ProfileInnerFragment {
                         registerRequest(request);
                         form.isEditing = true;
                         mProfileFormListAdapter.notifyDataSetChanged();
-                        info.getFormRequest(data).callback(new ApiHandler() {
+                        request.callback(new ApiHandler() {
                             @Override
                             public void success(IApiResponse response) {
                                 form.copy(data);
@@ -92,7 +95,11 @@ public class ProfileFormFragment extends ProfileInnerFragment {
             if (formItem instanceof FormItem) {
                 FormItem item = (FormItem) formItem;
 
-                if (item.dataId == FormItem.NO_RESOURCE_ID) {
+                if (item.type == FormItem.CITY) {
+                    Intent intent = new Intent(getActivity(), CitySearchActivity.class);
+                    intent.putExtra(Static.INTENT_REQUEST_KEY, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
+                    startActivityForResult(intent, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
+                } else if (item.dataId == FormItem.NO_RESOURCE_ID && item.type != FormItem.SEX) {
                     if (fm != null) {
                         EditTextFormDialog.newInstance(item.getTitle(), item, mFormEditedListener).
                                 show(fm, EditTextFormDialog.class.getName());
@@ -155,6 +162,17 @@ public class ProfileFormFragment extends ProfileInnerFragment {
         outState.putInt(POSITION, mFormListView.getFirstVisiblePosition());
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY &&
+                resultCode == Activity.RESULT_OK) {
+            City city = data.getParcelableExtra(CitySearchActivity.INTENT_CITY);
+            mFormEditedListener.onEditingFinished(
+                    new FormItem(R.string.general_city, JsonUtils.toJson(city), FormItem.CITY));
+        }
+    }
+
     private SettingsRequest getSettingsRequest(FormItem formItem) {
         SettingsRequest settingsRequest = new SettingsRequest(getActivity());
         String value = formItem.value;
@@ -168,12 +186,13 @@ public class ProfileFormFragment extends ProfileInnerFragment {
                 }
                 break;
             case FormItem.SEX:
-                if (TextUtils.isDigitsOnly(value)) {
-                    settingsRequest.sex = Integer.valueOf(value);
-                }
+                settingsRequest.sex = formItem.dataId;
                 break;
             case FormItem.STATUS:
                 settingsRequest.status = value;
+                break;
+            case FormItem.CITY:
+                settingsRequest.cityid = JsonUtils.fromJson(value, City.class).id;
                 break;
         }
         return settingsRequest;
