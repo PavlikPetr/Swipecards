@@ -32,6 +32,7 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
     private View mLockerView;
     private EditText mEdMainField;
     private EditText mEdConfirmationField;
+    private EditText mOldPassword;
     private Button mBtnSave;
     private AuthToken mToken = AuthToken.getInstance();
     private boolean mNeedExit;
@@ -62,6 +63,7 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
 
         mEdMainField = (EditText) root.findViewById(R.id.edMainField);
         mEdConfirmationField = (EditText) root.findViewById(R.id.edConfirmationField);
+        mOldPassword = (EditText) root.findViewById(R.id.edOldPassword);
 
         mBtnSave = (Button) root.findViewById(R.id.btnSave);
         if (mNeedExit) {
@@ -73,6 +75,9 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
             mEdConfirmationField.setHint(R.string.password_confirmation_hint);
             mEdMainField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             mEdConfirmationField.setHint(R.string.password_confirmation_hint);
+            mEdConfirmationField.setInputType(mEdMainField.getInputType());
+            mOldPassword.setHint(R.string.enter_old_password);
+            mOldPassword.setInputType(mEdMainField.getInputType());
         } else {
             mEdMainField.setHint(R.string.email);
             mEdConfirmationField.setVisibility(View.GONE);
@@ -114,7 +119,6 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSave:
-                mBtnSave.setClickable(false);
                 Utils.hideSoftKeyboard(getActivity(), mEdMainField, mEdConfirmationField);
                 if (mChangePassword) {
                     changePassword();
@@ -130,14 +134,19 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
     private void changePassword() {
         final String password = mEdMainField.getText().toString();
         final String passwordConfirmation = mEdConfirmationField.getText().toString();
+        final String oldPassword = mOldPassword.getText().toString();
         if (password.trim().length() <= 0) {
             Toast.makeText(App.getContext(), R.string.enter_new_password, Toast.LENGTH_LONG).show();
+        } else if (oldPassword.trim().length() <= 0) {
+            Toast.makeText(App.getContext(), R.string.enter_old_password, Toast.LENGTH_LONG).show();
         } else if (passwordConfirmation.trim().length() <= 0) {
             Toast.makeText(App.getContext(), R.string.enter_password_confirmation, Toast.LENGTH_LONG).show();
         } else if (!password.equals(passwordConfirmation)) {
             Toast.makeText(App.getContext(), R.string.passwords_mismatched, Toast.LENGTH_LONG).show();
+        } else if (!oldPassword.equals(mToken.getPassword())) {
+            Toast.makeText(App.getContext(), R.string.old_password_mismatched, Toast.LENGTH_LONG).show();
         } else {
-            ChangePasswordRequest request = new ChangePasswordRequest(getActivity(), mToken.getPassword(), password);
+            ChangePasswordRequest request = new ChangePasswordRequest(getActivity(), oldPassword, password);
             lock();
             request.callback(new ApiHandler() {
                 @Override
@@ -148,6 +157,8 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
                         CacheProfile.onPasswordChanged(getContext());
                         mEdMainField.getText().clear();
                         mEdConfirmationField.getText().clear();
+                        mOldPassword.getText().clear();
+                        mBtnSave.setClickable(false);
                         if (mNeedExit) {
                             logout();
                         }
@@ -185,6 +196,7 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
                         mToken.saveToken(mToken.getUserSocialId(), email, mToken.getPassword());
                         App.getConfig().rebuildUserConfig(oldEmail);
                         mEdMainField.getText().clear();
+                        mBtnSave.setClickable(false);
                     }
                 }
 
