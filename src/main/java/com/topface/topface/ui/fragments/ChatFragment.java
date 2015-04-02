@@ -198,7 +198,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         super.onCreate(savedInstanceState);
         Utils.showSoftKeyboard(getActivity(), null);
         if (!isShowKeyboardInChat()) {
-            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         }
         mSetter = new ActionBarTitleSetterDelegate(getActivity(), ((ActionBarActivity) getActivity()).getSupportActionBar());
         DateUtils.syncTime();
@@ -212,7 +212,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
         // do not recreate Adapter cause of setRetainInstance(true)
         if (mAdapter == null) {
             mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
@@ -271,7 +270,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
         mEditBox.setOnEditorActionListener(mEditorActionListener);
         mEditBox.addTextChangedListener(mTextWatcher);
-
         //LockScreen
         initLockScreen(root);
         if (savedInstanceState != null) {
