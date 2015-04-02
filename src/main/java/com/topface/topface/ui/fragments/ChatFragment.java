@@ -196,7 +196,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Utils.showSoftKeyboard(getActivity(), null);
         if (!isShowKeyboardInChat()) {
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         }
