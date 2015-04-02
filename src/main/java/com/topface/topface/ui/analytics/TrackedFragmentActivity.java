@@ -3,6 +3,7 @@ package com.topface.topface.ui.analytics;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 
+import com.comscore.analytics.comScore;
 import com.facebook.AppEventsLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -12,8 +13,6 @@ import com.topface.topface.data.ExperimentTags;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.social.AuthToken;
-
-import com.comscore.analytics.comScore;
 
 public class TrackedFragmentActivity extends ActionBarActivity {
 
@@ -59,12 +58,6 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        comScore.onExitForeground();
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
         EasyTracker.getTracker().send(new HitBuilders.AppViewBuilder().set(EasyTracker.SESSION_CONTROL, "end").build());
@@ -81,6 +74,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        comScore.onExitForeground();
         StatisticsTracker.getInstance().activityStop(this);
     }
 }
