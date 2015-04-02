@@ -110,11 +110,9 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         if (!mIsPhotoDialogShown) {
             mAddPhotoHelper = getAddPhotoHelper();
             mAddPhotoHelper.setOnResultHandler(mHandler);
-            IPhotoTakerWithDialog mPhotoTaker = new PhotoTaker(mAddPhotoHelper, this);
-
-            TakePhotoDialog takePhotoDialog = (TakePhotoDialog) mPhotoTaker.getActivityFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
+            TakePhotoDialog takePhotoDialog = (TakePhotoDialog) getSupportFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
             if (CacheProfile.photo == null && takePhotoDialog == null ) {
-                mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
+                mAddPhotoHelper.showTakePhotoDialog(new PhotoTaker(mAddPhotoHelper, this), null);
             }
         }
     }
