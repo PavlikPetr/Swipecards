@@ -76,7 +76,6 @@ public class ActionBarView implements View.OnClickListener {
         mTitle.setText(R.string.app_name);
     }
 
-
     @Override
     public void onClick(View v) {
         if (mActionBar != null) {
