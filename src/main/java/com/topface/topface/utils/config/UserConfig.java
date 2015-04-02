@@ -70,6 +70,10 @@ public class UserConfig extends AbstractConfig {
         mUnique = uniqueKey;
     }
 
+    public String getUnique() {
+        return mUnique;
+    }
+
     @Override
     protected void addField(SettingsMap settingsMap, String key, Object defaultValue) {
         super.addField(settingsMap, key, defaultValue);

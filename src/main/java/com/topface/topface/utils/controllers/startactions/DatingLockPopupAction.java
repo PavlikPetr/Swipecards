@@ -40,7 +40,7 @@ public class DatingLockPopupAction extends DailyPopupAction {
     public boolean isApplicable() {
         return CacheProfile.getOptions().notShown.enabledDatingLockPopup
                 && isTimeoutEnded(CacheProfile.getOptions().notShown.datingLockPopupTimeout,
-                getUserConfig().getDatingLockPopupRedirect());
+                App.getUserConfig().getDatingLockPopupRedirect());
     }
 
     @Override

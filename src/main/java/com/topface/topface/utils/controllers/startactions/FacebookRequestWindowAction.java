@@ -41,7 +41,7 @@ public class FacebookRequestWindowAction extends DailyPopupAction  {
     public boolean isApplicable() {
         return loginOrNotLogin() && isFacebook() && isValidFacebookRequestWindowSkip()
                 && isTimeoutEnded(CacheProfile.getOptions().facebookInviteFriends.minDelay,
-                getUserConfig().getFacebookRequestWondowShow());
+                App.getUserConfig().getFacebookRequestWondowShow());
     }
 
     @Override
@@ -61,8 +61,8 @@ public class FacebookRequestWindowAction extends DailyPopupAction  {
 
     @Override
     public void callInBackground() {
-        getUserConfig().setFacebookRequestWindowShow(System.currentTimeMillis());
-        getUserConfig().saveConfig();
+        App.getUserConfig().setFacebookRequestWindowShow(System.currentTimeMillis());
+        App.getUserConfig().saveConfig();
     }
 
     @Override
@@ -87,11 +87,11 @@ public class FacebookRequestWindowAction extends DailyPopupAction  {
                     if (mOnNextActionListener != null) {
                         mOnNextActionListener.onNextAction();
                     }
-                    getUserConfig().setFacebookRequestSkip(getUserConfig().getFacebookRequestSkip() + 1);
+                    App.getUserConfig().setFacebookRequestSkip(App.getUserConfig().getFacebookRequestSkip() + 1);
                 } else {
                     //в bundle id запроса и id пользователей которым были посланы реквесты.
                     InviteUniqueStatistics.sendFacebookInvites(bundle.keySet().size() - 1);
-                    getUserConfig().setFacebookRequestSkip(CacheProfile.getOptions().facebookInviteFriends.maxAttempts + 1);
+                    App.getUserConfig().setFacebookRequestSkip(CacheProfile.getOptions().facebookInviteFriends.maxAttempts + 1);
                     sendFacebooknInvitesRequest(getFriendsId(bundle));
                 }
             }
@@ -145,7 +145,7 @@ public class FacebookRequestWindowAction extends DailyPopupAction  {
     }
 
     private boolean isValidFacebookRequestWindowSkip() {
-        return getUserConfig().getFacebookRequestSkip()
+        return App.getUserConfig().getFacebookRequestSkip()
                 <= CacheProfile.getOptions().facebookInviteFriends.maxAttempts;
     }
 
