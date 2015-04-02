@@ -68,7 +68,9 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     @Override
     protected void onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mOfferwallOpenedReceiver);
-        mTopfaceOfferwallRedirect.setComplited(false);
+        if (mTopfaceOfferwallRedirect != null) {
+            mTopfaceOfferwallRedirect.setComplited(false);
+        }
         super.onDestroy();
     }
 

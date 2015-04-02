@@ -12,7 +12,6 @@ public class AdProvidersFactory {
     public static final String BANNER_TOPFACE = "TOPFACE";
     public static final String BANNER_ADMOB = "ADMOB";
     public static final String BANNER_ADMOB_MEDIATION = "ADMOB_MEDIATION";
-    public static final String BANNER_ADWIRED = "ADWIRED";
     public static final String BANNER_SMAATO = "SMAATO";
     public static final String BANNER_GAG = "GAG";
     public static final String BANNER_NONE = "NONE";
@@ -20,7 +19,6 @@ public class AdProvidersFactory {
             BANNER_TOPFACE,
             BANNER_ADMOB,
             BANNER_ADMOB_MEDIATION,
-            BANNER_ADWIRED,
             BANNER_SMAATO,
             BANNER_GAG,
             BANNER_NONE
@@ -36,8 +34,6 @@ public class AdProvidersFactory {
         switch (banner) {
             case BANNER_ADMOB:
                 return new AdMobProvider();
-            case BANNER_ADWIRED:
-                return new AdWiredProvider();
             case BANNER_SMAATO:
                 return new SmaatoProvider();
             case BANNER_TOPFACE:

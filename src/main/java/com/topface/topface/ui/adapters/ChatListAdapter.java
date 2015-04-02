@@ -439,8 +439,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     @SuppressWarnings("deprecation")
     public void copyText(String text) {
         ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-        clipboard.setText(text);
-        Toast.makeText(mContext, R.string.general_msg_copied, Toast.LENGTH_SHORT).show();
+        if (clipboard != null) {
+            clipboard.setText(text);
+            Toast.makeText(mContext, R.string.general_msg_copied, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void removeItem(int position) {

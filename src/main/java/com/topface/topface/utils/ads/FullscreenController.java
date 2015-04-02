@@ -37,14 +37,8 @@ import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
-import ru.ideast.adwired.AWView;
-import ru.ideast.adwired.events.OnNoBannerListener;
-import ru.ideast.adwired.events.OnStartListener;
-import ru.ideast.adwired.events.OnStopListener;
-
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_MEDIATION;
-import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADWIRED;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_NONE;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_SMAATO;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_TOPFACE;
@@ -170,9 +164,6 @@ public class FullscreenController {
                 case BANNER_SMAATO:
                     requestSmaatoFullscreen();
                     break;
-                case BANNER_ADWIRED:
-                    requestAdwiredFullscreen();
-                    break;
                 case BANNER_TOPFACE:
                     requestTopfaceFullscreen();
                     break;
@@ -258,40 +249,6 @@ public class FullscreenController {
                 addLastFullscreenShowedTime();
             }
         });
-    }
-
-    private void requestAdwiredFullscreen() {
-        try {
-            if (!CacheProfile.isEmpty()) {
-                AWView adwiredView = (AWView) mActivity.getLayoutInflater().inflate(R.layout.banner_adwired, null);
-                final ViewGroup bannerContainer = getFullscreenBannerContainer();
-                bannerContainer.addView(adwiredView);
-                bannerContainer.setVisibility(View.VISIBLE);
-                adwiredView.setVisibility(View.VISIBLE);
-                adwiredView.setOnNoBannerListener(new OnNoBannerListener() {
-                    @Override
-                    public void onNoBanner() {
-                        requestFallbackFullscreen();
-                    }
-                });
-                adwiredView.setOnStopListener(new OnStopListener() {
-                    @Override
-                    public void onStop() {
-                        hideFullscreenBanner(bannerContainer);
-                    }
-                });
-                adwiredView.setOnStartListener(new OnStartListener() {
-                    @Override
-                    public void onStart() {
-                        isFullScreenBannerVisible = true;
-                        addLastFullscreenShowedTime();
-                    }
-                });
-                adwiredView.request('0');
-            }
-        } catch (Exception ex) {
-            Debug.error(ex);
-        }
     }
 
     private void requestTopfaceFullscreen() {
