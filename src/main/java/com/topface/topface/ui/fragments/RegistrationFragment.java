@@ -275,8 +275,10 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
 
     private void removeRedAlert() {
         if (mRedAlertView.getVisibility() == View.VISIBLE) {
-            mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
-                    android.R.anim.fade_out));
+            if (isAdded()) {
+                mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
+                        android.R.anim.fade_out));
+            }
             mRedAlertView.setVisibility(View.INVISIBLE);
             mWelcomeView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
                     android.R.anim.fade_in));
