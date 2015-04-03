@@ -8,7 +8,8 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:background="#FFF">
 
         <TextView
             android:id="@+id/tvText"
@@ -19,14 +20,17 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"/>
+            android:layout_marginRight="16dp"
+            android:fontFamily="Roboto Light"
+            android:textColor="#333333"
+            android:textSize="17sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvText"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="17dp"
+            android:layout_marginTop="24dp"
             android:orientation="horizontal"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp">
@@ -38,16 +42,21 @@
                 android:layout_height="wrap_content"
                 android:text="@string/buy_resources"
                 style="@style/Widget.Topface.Button.Big.Blue"
-                android:minWidth="210dp"/>
+                android:minWidth="240dp"
+                android:minHeight="44dp"
+                android:textSize="18sp"
+                android:fontFamily="Roboto Regular"
+                android:textColor="#FFF" />
         </LinearLayout>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/likes_back_icon"
+            android:src="@drawable/ic_sympathy_back"
             android:layout_above="@id/tvText"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="18dp"/>
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="40dp" />
 
     </RelativeLayout>
 

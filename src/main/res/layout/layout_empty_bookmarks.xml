@@ -4,20 +4,30 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:clickable="true"
-                android:orientation="vertical">
+                android:orientation="vertical"
+    android:background="#FFF">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_star"
+        android:layout_above="@id/tvText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="40dp" />
 
     <TextView
         android:id="@+id/tvText"
         style="@style/ListItemEmptyText"
-        android:layout_width="wrap_content"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_centerInParent="true"
         android:layout_marginLeft="16dp"
-        android:drawableTop="@drawable/favorite"
-        android:drawablePadding="18dp"
         android:layout_marginRight="16dp"
         android:gravity="center"
-        android:text="@string/add_bookmarks_to_be_connected"/>
+        android:lineSpacingExtra="20sp"
+        android:text="@string/add_bookmarks_to_be_connected"
+        android:textColor="#333333"
+        android:textSize="17sp" />
 
 </RelativeLayout>

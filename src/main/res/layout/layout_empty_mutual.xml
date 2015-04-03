@@ -3,7 +3,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:clickable="true">
+                android:clickable="true"
+    android:background="#FFF">
 
     <TextView
         android:id="@+id/tvText"
@@ -13,49 +14,57 @@
         style="@style/ListItemEmptyText"
         android:layout_centerInParent="true"
         android:gravity="center"
+        android:lineSpacingExtra="20sp"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"/>
+        android:layout_marginRight="16dp"
+        android:fontFamily="Roboto Light"
+        android:textColor="#333333"
+        android:textSize="17sp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvText"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="17dp"
-        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp">
-
-        <Button
-            android:id="@+id/btnGetDating"
-            android:layout_width="0dip"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="@string/general_get_dating"
-            style="@style/Widget.Topface.Button.Big.Gray"
-            android:singleLine="true"
-            android:layout_marginRight="3dp"
-            android:minWidth="210dp"/>
+        android:layout_marginRight="8dp"
+        android:id="@+id/linearLayout2">
 
         <Button
             android:id="@+id/btnRefill"
-            android:layout_width="0dip"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/buy_resources"
             style="@style/Widget.Topface.Button.Big.Blue"
             android:singleLine="true"
-            android:layout_marginRight="3dp"
-            android:minWidth="210dp"/>
+            android:minWidth="240dp"
+            android:layout_marginBottom="12dp"
+            android:minHeight="44dp" />
+
+        <Button
+            android:id="@+id/btnGetDating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/general_get_dating"
+            style="@style/Widget.Topface.Button.Big.Gray"
+            android:singleLine="true"
+            android:minWidth="240dp"
+            android:layout_below="@+id/linearLayout2"
+            android:layout_alignLeft="@+id/linearLayout2"
+            android:layout_alignStart="@+id/linearLayout2"
+            android:minHeight="44dp" />
 
     </LinearLayout>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/mutual_back_icon"
+        android:src="@drawable/ic_mutual"
         android:layout_above="@id/tvText"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="18dp"/>
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="40dp"/>
 
 </RelativeLayout>
