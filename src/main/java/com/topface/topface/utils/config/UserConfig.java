@@ -70,8 +70,18 @@ public class UserConfig extends AbstractConfig {
         mUnique = uniqueKey;
     }
 
+    private void setUnique(String mUnique) {
+        this.mUnique = mUnique;
+    }
+
     public String getUnique() {
         return mUnique;
+    }
+
+    public void updateConfig(String unique) {
+        setUnique(unique);
+        initData();
+        saveConfig();
     }
 
     @Override

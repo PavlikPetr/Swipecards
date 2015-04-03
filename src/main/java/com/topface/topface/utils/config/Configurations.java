@@ -43,8 +43,6 @@ public class Configurations {
      * общий конфиг запустит процеес деления конфига. Если пользователь перелогинился , то создастся
      * новый конфиг и заполниться данными из конфига, если конфига нет то создается новый пустой.
      * <p/>
-     * Не вызывать метод до логина пользователся, иначе создастся файл конфига с неверным именем
-     * (т.к. токен будет пуст) и могут потеряться данные.
      *
      * @return config for current user
      */
@@ -56,24 +54,25 @@ public class Configurations {
                     @Override
                     public void onUpdate() {
                         mUserConfig = mConfigConverter.getMainUserConfig();
-                        Debug.debug(mConfigConverter, "Config1 converting complite ");
+                        Debug.debug(mConfigConverter, "MainUserConfig converting complite ");
                     }
                 });
-                Debug.debug(mConfigConverter, "Converting old config1");
+                Debug.debug(mConfigConverter, "Converting old MainUserConfig");
                 mConfigConverter.convertConfig();
+                //на время деления конфига созадаем временную заглушку
                 mUserConfig = new TempUserConfig(mContext);
             } else {
                 if (!(mConfigConverter != null &&
                         mConfigConverter.getConverterState() != UserConfigConverter.ConverterState.DEFAULT)) {
-                    Debug.debug(mConfigConverter, "Create new config1");
+                    Debug.debug(mConfigConverter, "Create new MainUserConfig");
                     mUserConfig = new UserConfig(null, mContext);
                 }
             }
         } else {
             if (!TextUtils.isEmpty(AuthToken.getInstance().getUserTokenUniqueId()) &&
                     !AuthToken.getInstance().getUserTokenUniqueId().equals(mUserConfig.getUnique())) {
-                Debug.debug(mConfigConverter, "Create new config1 after equals");
-                mUserConfig = new UserConfig(AuthToken.getInstance().getUserTokenUniqueId(), mContext);
+                Debug.debug(mConfigConverter, "Updste MainUserConfig after equals");
+                mUserConfig.updateConfig(AuthToken.getInstance().getUserTokenUniqueId());
             }
         }
         return mUserConfig;

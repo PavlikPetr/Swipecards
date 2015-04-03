@@ -2,6 +2,9 @@ package com.topface.topface.utils.controllers.startactions;
 
 import android.content.Context;
 
+import com.topface.topface.App;
+import com.topface.topface.utils.config.UserConfig;
+
 /**
  * Базовый класс для попапов показывающихся через определенный промежуток времени
  * Created by onikitin on 27.02.15.
@@ -9,9 +12,11 @@ import android.content.Context;
 public abstract class DailyPopupAction implements IStartAction {
 
     private Context mContext;
+    private UserConfig mUserConfig;
 
     public DailyPopupAction(Context context) {
         mContext = context;
+        mUserConfig = App.getUserConfig();
     }
 
     protected boolean isTimeoutEnded(long timeOut, long lastTime) {
@@ -25,6 +30,10 @@ public abstract class DailyPopupAction implements IStartAction {
 
     protected Context getContext(){
         return mContext;
+    }
+
+    protected UserConfig getUserConfig() {
+        return mUserConfig;
     }
 
     protected abstract boolean firstStartShow();
