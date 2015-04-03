@@ -1,11 +1,15 @@
 package com.topface.topface.ui.fragments.profile;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.topface.framework.JsonUtils;
@@ -13,6 +17,11 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
+import com.topface.topface.data.FeedGift;
+import com.topface.topface.data.Gift;
+import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.ui.adapters.GiftsAdapter;
+import com.topface.topface.ui.adapters.GiftsStripAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
 
@@ -21,8 +30,16 @@ import java.util.Locale;
 
 public class ProfileFormListAdapter extends BaseAdapter {
 
+    private static final int GIFTS_TYPE = 0;
+    private static final int FORM_TYPE = 1;
+
+    private static final int TYPE_COUNT = 2;
+
+    private GiftsStripAdapter mGiftsAdapter;
+
     // Data
     private LayoutInflater mInflater;
+    private float mGiftSize;
     private LinkedList<FormItem> mProfileForms = new LinkedList<>();
     private View.OnClickListener mOnFillListener;
 
@@ -31,7 +48,9 @@ public class ProfileFormListAdapter extends BaseAdapter {
     private int mMainValueColor = App.getContext().getResources().getColor(R.color.text_color_gray);
 
     public ProfileFormListAdapter(Context context) {
+        mGiftsAdapter = new GiftsStripAdapter(context, new FeedList<FeedGift>(), null);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mGiftSize = context.getResources().getDimension(R.dimen.form_gift_size);
         refillData();
     }
 
@@ -78,6 +97,12 @@ public class ProfileFormListAdapter extends BaseAdapter {
 
             // real forms
             mProfileForms.addAll(CacheProfile.forms);
+
+            for (Gift gift : CacheProfile.gifts) {
+                FeedGift item = new FeedGift();
+                item.gift = gift;
+                mGiftsAdapter.add(item);
+            }
         }
     }
 
@@ -87,12 +112,35 @@ public class ProfileFormListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mProfileForms.size();
+        int size = mProfileForms.size();
+        if (mGiftsAdapter.isEmpty()) {
+            return size;
+        } else {
+            return size + 1;
+        }
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return TYPE_COUNT;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return !mGiftsAdapter.isEmpty() && position == 0 ? GIFTS_TYPE : FORM_TYPE;
     }
 
     @Override
     public FormItem getItem(int position) {
-        return mProfileForms.get(position);
+        if (mGiftsAdapter.isEmpty()) {
+            return mProfileForms.get(position);
+        } else {
+            if (position == 0) {
+                return null;
+            } else {
+                return mProfileForms.get(position - 1);
+            }
+        }
     }
 
     @Override
@@ -103,10 +151,21 @@ public class ProfileFormListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
+        FormItem item = getItem(position);
+        int type = getItemViewType(position);
+
         if (convertView == null) {
             holder = new ViewHolder();
 
-            convertView = mInflater.inflate(R.layout.item_user_list, parent, false);
+            switch (type) {
+                case FORM_TYPE:
+                    convertView = mInflater.inflate(R.layout.item_user_list, parent, false);
+                    break;
+                case GIFTS_TYPE:
+                    convertView = mInflater.inflate(R.layout.form_gifts, parent, false);
+                    break;
+            }
+
             holder.value = (TextView) convertView.findViewById(R.id.tvValue);
             holder.title = (TextView) convertView.findViewById(R.id.tvTitle);
 
@@ -115,9 +174,20 @@ public class ProfileFormListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        FormItem item = getItem(position);
-        String itemTitle = item.getTitle();
+        if (type == GIFTS_TYPE) {
+            LinearLayout giftsStrip = (LinearLayout) convertView;
+            giftsStrip.removeAllViews();
+            int giftsNumber = giftsStrip.getWidth() / (int) mGiftSize;
 
+            for (int i = 0; i < mGiftsAdapter.getCount() && i < giftsNumber; i++) {
+                View giftView = mGiftsAdapter.getView(i, null, giftsStrip);
+                giftView.setLayoutParams(new ViewGroup.LayoutParams((int) mGiftSize, (int) mGiftSize));
+                giftsStrip.addView(giftView);
+            }
+            return giftsStrip;
+        }
+
+        String itemTitle = item.getTitle();
         holder.title.setText(itemTitle);
         if (TextUtils.isEmpty(item.value)) {
             holder.value.setText(R.string.form_not_specified);

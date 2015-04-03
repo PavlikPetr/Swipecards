@@ -42,4 +42,6 @@
 
     <dimen name="item_side_padding">8dp</dimen>
 
+    <dimen name="form_gift_size">55dp</dimen>
+
 </resources>

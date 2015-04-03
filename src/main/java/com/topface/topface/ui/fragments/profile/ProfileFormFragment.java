@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -20,12 +21,16 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
+import com.topface.topface.data.FeedGift;
+import com.topface.topface.data.Gift;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.CitySearchActivity;
+import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.dialogs.EditFormItemsEditDialog;
 import com.topface.topface.ui.dialogs.EditTextFormDialog;
 import com.topface.topface.utils.CacheProfile;
@@ -138,7 +143,6 @@ public class ProfileFormFragment extends ProfileInnerFragment {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_form, container, false);
         mFormListView = (ListView) root.findViewById(R.id.fragmentFormList);
         mFormListView.setAdapter(mProfileFormListAdapter);
-
         return root;
     }
 

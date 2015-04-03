@@ -1,6 +1,8 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.StyleRes;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -53,7 +55,7 @@ public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsLis
         FeedGift item = getItem(position);
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.profile_item_gift_grid, null, false);
+            convertView = mInflater.inflate(getGiftItemLayoutRes(), null, false);
             holder = new ViewHolder();
             holder.giftImage = (ImageViewRemote) convertView.findViewById(R.id.profileGiftImage);
             convertView.setTag(holder);
@@ -67,6 +69,11 @@ public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsLis
             holder.giftImage.setRemoteSrc(item.gift.link);
         }
         return convertView;
+    }
+
+    @LayoutRes
+    protected int getGiftItemLayoutRes() {
+        return R.layout.profile_item_gift_grid;
     }
 
     protected int getLoaderRetrierLayout() {
