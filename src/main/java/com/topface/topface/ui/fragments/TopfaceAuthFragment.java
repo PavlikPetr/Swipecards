@@ -297,7 +297,9 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
 
     private void removeRedAlert() {
         if (mWrongPasswordAlertView != null && mWrongPasswordAlertView.getVisibility() == View.VISIBLE) {
-            mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
+            if (isAdded()) {
+                mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
+            }
             mWrongPasswordAlertView.setVisibility(View.GONE);
             mWrongDataTextView.setVisibility(View.GONE);
         }
