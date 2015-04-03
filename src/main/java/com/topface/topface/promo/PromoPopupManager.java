@@ -89,6 +89,10 @@ public class PromoPopupManager {
                 break;
         }
 
+        if (fragment != null && fragment.getPremiumEntity() == null) {
+            return null;
+        }
+
         return fragment;
     }
 
