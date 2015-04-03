@@ -180,7 +180,7 @@ public class AddPhotoHelper {
         boolean noSuitableActivity = intent.resolveActivity(mActivity.getPackageManager()) == null;
         int requestCode = withDialog || noSuitableActivity ? GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG :
                 GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY;
-        if (mFragment != null) {
+        if (mFragment.isAdded()) {
             if (mFragment instanceof ProfilePhotoFragment) {
                 mFragment.getParentFragment().startActivityForResult(intent, requestCode);
             } else {
