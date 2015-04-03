@@ -58,13 +58,6 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        comScore.onExitForeground();
-        StatisticsTracker.getInstance().activityStop(this);
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
         EasyTracker.getTracker().send(new HitBuilders.AppViewBuilder().set(EasyTracker.SESSION_CONTROL, "end").build());
@@ -76,5 +69,12 @@ public class TrackedFragmentActivity extends ActionBarActivity {
 
     protected String getTrackName() {
         return ((Object) this).getClass().getSimpleName().replace("Activity", "");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        comScore.onExitForeground();
+        StatisticsTracker.getInstance().activityStop(this);
     }
 }
