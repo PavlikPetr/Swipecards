@@ -36,9 +36,6 @@ import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.fragments.MenuFragment;
-import com.topface.topface.utils.controllers.SequencedStartAction;
-import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
-import com.topface.topface.utils.controllers.startactions.FacebookRequestWindowAction;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.HackyDrawerLayout;
@@ -54,8 +51,11 @@ import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.ads.FullscreenController;
-import com.topface.topface.utils.controllers.startactions.IStartAction;
+import com.topface.topface.utils.controllers.SequencedStartAction;
 import com.topface.topface.utils.controllers.StartActionsController;
+import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
+import com.topface.topface.utils.controllers.startactions.FacebookRequestWindowAction;
+import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.InvitePopupAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.gcmutils.GCMUtils;
@@ -468,7 +468,9 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
             }
             Debug.log("Current User ID:" + CacheProfile.getProfile().uid);
         }
-        mDrawerToggle.syncState();
+        if (mDrawerToggle != null) {
+            mDrawerToggle.syncState();
+        }
 
         /*
         Initialize Topface offerwall here to be able to start it quickly instead of PurchasesActivity
