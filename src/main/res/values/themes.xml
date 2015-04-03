@@ -113,6 +113,7 @@
     <style name="Topface.Theme.TransparentActionBarActivity" parent="@style/Theme.AppCompat">
         <item name="actionBarStyle">@style/Widget.Topface.TransparentActionBar</item>
         <item name="windowActionBarOverlay">true</item>
+        <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@color/album_background</item>
     </style>
 
