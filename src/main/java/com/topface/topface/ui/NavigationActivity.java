@@ -84,6 +84,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         @Override
         public void onProfileLink(int profileID) {
             startActivity(UserProfileActivity.createIntent(profileID, NavigationActivity.this));
+            getIntent().setData(null);
         }
 
         @Override
@@ -95,11 +96,13 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 intent.putExtra(SettingsContainerActivity.CONFIRMATION_CODE, code);
                 startActivity(intent);
             }
+            getIntent().setData(null);
         }
 
         @Override
         public void onOfferWall() {
             OfferwallsManager.startOfferwall(NavigationActivity.this);
+            getIntent().setData(null);
         }
     };
     private boolean mIsActionBarHidden;
