@@ -228,6 +228,16 @@
         </activity>
 
         <activity
+            android:name=".ui.OwnGiftsActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Topface.Gifts">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
             android:name=".ui.ComplainsActivity"
             android:parentActivityName=".ui.NavigationActivity"
             android:screenOrientation="portrait">

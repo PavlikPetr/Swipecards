@@ -10,63 +10,32 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.topface.topface.R;
+import com.topface.topface.data.FeedGift;
+import com.topface.topface.data.Gift;
+import com.topface.topface.data.Profile;
+import com.topface.topface.ui.GiftsActivity;
+import com.topface.topface.ui.adapters.GiftsStripAdapter;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class UserFormListAdapter extends BaseAdapter {
-
-    private LayoutInflater mInflater;
-    private LinkedList<FormItem> mUserForms;
+public class UserFormListAdapter extends AbstractFormListAdapter {
 
     public UserFormListAdapter(Context context) {
-        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mUserForms = new LinkedList<>();
+        super(context);
     }
 
     @Override
-    public int getCount() {
-        return mUserForms != null ? mUserForms.size() : 0;
+    protected LinkedList<FormItem> prepareForm(LinkedList<FormItem> forms) {
+        return removeEmptyForms((LinkedList<FormItem>) forms.clone());
     }
 
     @Override
-    public FormItem getItem(int position) {
-        return mUserForms != null ? mUserForms.get(position) : null;
-    }
+    protected void configureHolder(ViewHolder holder, FormItem item) {
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView == null) {
-            holder = new ViewHolder();
-
-            convertView = mInflater.inflate(R.layout.item_user_list, parent, false);
-            holder.mTitle = (TextView) convertView.findViewById(R.id.tvTitle);
-            holder.mValue = (TextView) convertView.findViewById(R.id.tvValue);
-
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        FormItem item = getItem(position);
-
-        holder.mTitle.setText(item.getTitle());
-        holder.mValue.setText(item.value);
-
-        return convertView;
-    }
-
-    @SuppressWarnings("unchecked")
-    public void setUserData(LinkedList<FormItem> forms) {
-        mUserForms = removeEmptyForms((LinkedList<FormItem>) forms.clone());
     }
 
     private LinkedList<FormItem> removeEmptyForms(LinkedList<FormItem> userForms) {
@@ -78,24 +47,6 @@ public class UserFormListAdapter extends BaseAdapter {
             }
         }
         return userForms;
-    }
-
-    public ArrayList<FormItem> saveState() {
-        return mUserForms != null ? new ArrayList<>(mUserForms) : null;
-    }
-
-    @SuppressWarnings({"unchecked", "unused"})
-    public void restoreState(ArrayList<Parcelable> userForms) {
-        mUserForms = new LinkedList<>();
-        for (Parcelable form : userForms) {
-            mUserForms.add((FormItem) form);
-        }
-    }
-
-    // class ViewHolder
-    private static class ViewHolder {
-        public TextView mTitle;
-        public TextView mValue;
     }
 
 }

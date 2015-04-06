@@ -2,9 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:paddingTop="4dp"
-    android:paddingBottom="4dp">
+    android:orientation="vertical">
 
     <com.topface.topface.ui.views.ImageViewRemote
         android:id="@+id/profileGiftImage"
