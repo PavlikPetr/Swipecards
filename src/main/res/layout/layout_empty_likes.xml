@@ -8,8 +8,7 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="#FFF">
+        android:layout_height="fill_parent">
 
         <TextView
             android:id="@+id/tvText"
@@ -18,22 +17,17 @@
             android:text="@string/likes_can_help_you"
             style="@style/ListItemEmptyText"
             android:layout_centerInParent="true"
-            android:gravity="center"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:fontFamily="Roboto Light"
-            android:textColor="#333333"
-            android:textSize="17sp" />
+            android:gravity="center" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvText"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="24dp"
             android:orientation="horizontal"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp">
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="24dp" >
 
             <Button
                 android:id="@+id/btnStartRate"
@@ -41,12 +35,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/buy_resources"
-                style="@style/Widget.Topface.Button.Big.Blue"
-                android:minWidth="240dp"
-                android:minHeight="44dp"
-                android:textSize="18sp"
-                android:fontFamily="Roboto Regular"
-                android:textColor="#FFF" />
+                style="@style/Widget.Topface.Button.Big.Blue" />
         </LinearLayout>
 
         <ImageView
@@ -119,7 +108,6 @@
             android:layout_height="wrap_content"
             android:text="@string/buying_vip_status"
             style="@style/Widget.Topface.Button.Big.Blue"
-            android:minWidth="210dp"
             android:layout_marginTop="16dp"/>
 
     </LinearLayout>

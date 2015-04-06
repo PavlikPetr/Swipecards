@@ -5,8 +5,7 @@
               android:layout_height="fill_parent"
               android:gravity="center"
               android:orientation="vertical"
-              android:clickable="true"
-    android:background="#FFF">
+              android:clickable="true">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -21,15 +20,7 @@
         android:layout_height="wrap_content"
         android:text="@string/buy_status_and_watch_your_fans"
         style="@style/ListItemEmptyText"
-        android:gravity="center"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:fontFamily="Roboto Light"
-        android:textColor="#333333"
-        android:textSize="17sp"
-        android:lineSpacingExtra="20sp"
-        android:minWidth="240dp"
-        android:maxWidth="240dp" />
+        android:gravity="center" />
 
     <Button
         android:id="@+id/btnBuyVip"
@@ -38,10 +29,6 @@
         android:text="@string/buying_vip_status"
         style="@style/Widget.Topface.Button.Big.Blue"
         android:layout_marginTop="24dp"
-        android:singleLine="true"
-        android:textColor="#FFF"
-        android:textSize="18sp"
-        android:minWidth="240dp"
-        android:minHeight="44dp" />
+        android:singleLine="true" />
 
 </LinearLayout>

@@ -4,8 +4,7 @@
              android:id="@+id/vfEmptyViews"
              android:layout_width="fill_parent"
              android:layout_height="fill_parent"
-             android:clickable="true"
-    android:background="#FFF">
+             android:clickable="true">
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -18,24 +17,17 @@
             android:text="@string/likes_can_help_you"
             style="@style/ListItemEmptyText"
             android:layout_centerInParent="true"
-            android:gravity="center"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:fontFamily="Roboto Light"
-            android:textColor="#333333"
-            android:textSize="17sp" />
+            android:gravity="center" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvText"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="24dp"
             android:orientation="horizontal"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:minWidth="240dp"
-            android:minHeight="44dp">
+            android:layout_marginTop="24dp">
 
             <Button
                 android:id="@+id/btnStartRate"
@@ -43,11 +35,7 @@
                 android:layout_weight="1"
                 android:layout_height="44dp"
                 android:text="@string/buy_resources"
-                style="@style/Widget.Topface.Button.Big.Blue"
-                android:minWidth="240dp"
-                android:textSize="18sp"
-                android:textColor="#FFF"
-                android:fontFamily="Roboto Regular" />
+                style="@style/Widget.Topface.Button.Big.Blue" />
         </LinearLayout>
 
         <ImageView

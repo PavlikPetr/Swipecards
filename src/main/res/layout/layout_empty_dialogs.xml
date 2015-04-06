@@ -3,8 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:clickable="true"
-    android:background="#FFF">
+                android:clickable="true">
 
     <TextView
         android:id="@+id/tvText"
@@ -13,16 +12,8 @@
         android:text="@string/nobody_chat_with_you_sympathies_will_help"
         style="@style/ListItemEmptyText"
         android:gravity="center"
-        android:textColor="#ff333333"
-        android:textSize="17sp"
-        android:lineSpacingExtra="20sp"
-        android:fontFamily="Roboto Light"
         android:elegantTextHeight="false"
-        android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/linearLayout"
-        android:layout_alignStart="@+id/linearLayout"
-        android:layout_alignRight="@+id/linearLayout"
-        android:layout_alignEnd="@+id/linearLayout" />
+        android:layout_centerVertical="true" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -33,7 +24,6 @@
         android:orientation="vertical"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:background="#FFF"
         android:id="@+id/linearLayout">
 
         <Button
@@ -43,11 +33,7 @@
             android:layout_height="44dp"
             android:text="@string/buy_resources"
             style="@style/Widget.Topface.Button.Big.Blue"
-            android:singleLine="true"
-            android:minWidth="240dp"
-            android:fontFamily="Roboto Regular"
-            android:textColor="#FFF"
-            android:textSize="18sp" />/>
+            android:singleLine="true" />
 
         <Button
             android:id="@+id/btnStartRate"
@@ -57,13 +43,7 @@
             android:text="@string/general_get_dating"
             style="@style/Widget.Topface.Button.Big.Gray"
             android:singleLine="true"
-            android:minWidth="240dp"
-            android:fontFamily="Roboto Regular"
-            android:layout_marginTop="12dp"
-            android:textColor="#FFF"
-            android:textSize="18sp" />
-
-
+            android:layout_marginTop="12dp" />
 
     </LinearLayout>
 
