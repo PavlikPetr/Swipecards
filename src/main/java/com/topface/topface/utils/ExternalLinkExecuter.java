@@ -23,6 +23,8 @@ public class ExternalLinkExecuter {
         if (intent != null) {
 
             Uri data = intent.getData();
+            // чистим данные интента после первого успешного перехода по линку
+            intent.setData(null);
             if (data != null) {
                 String scheme = data.getScheme();
                 if (TextUtils.equals(context.getString(R.string.default_sheme), scheme)) {
@@ -74,11 +76,11 @@ public class ExternalLinkExecuter {
 
     public interface OnExternalLinkListener {
 
-        public void onProfileLink(int profileID);
+        void onProfileLink(int profileID);
 
-        public void onConfirmLink(String code);
+        void onConfirmLink(String code);
 
-        public void onOfferWall();
+        void onOfferWall();
     }
 
 }
