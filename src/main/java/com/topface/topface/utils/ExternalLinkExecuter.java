@@ -23,8 +23,6 @@ public class ExternalLinkExecuter {
         if (intent != null) {
 
             Uri data = intent.getData();
-            // чистим данные интента после первого успешного перехода по линку
-            intent.setData(null);
             if (data != null) {
                 String scheme = data.getScheme();
                 if (TextUtils.equals(context.getString(R.string.default_sheme), scheme)) {
