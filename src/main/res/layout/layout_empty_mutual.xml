@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/buy_resources"
-            style="@style/Widget.Topface.Button.Big.Blue"
+            style="@style/FlatButton.Blue"
             android:singleLine="true"
             android:layout_marginBottom="12dp" />
 
@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/general_get_dating"
-            style="@style/Widget.Topface.Button.Big.Gray"
+            style="@style/FlatButton.Gray"
             android:singleLine="true" />
 
     </LinearLayout>

@@ -735,22 +735,16 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="Widget.Topface.Button.Big.ForEmptyList">
-        <item name="android:minHeight">44dp</item>
-        <item name="android:minWidth">240dp</item>
-        <item name="android:fontFamily">Roboto Regular</item>
-    </style>
-
     // наследуются стили Widget
 
     <style name="Widget.Topface" />
 
-    <style name="Widget.Topface.Button.Big.Gray" parent="Widget.Topface.Button.Big.ForEmptyList">
+    <style name="Widget.Topface.Button.Big.Gray" parent="Widget.Topface.Button.Big">
         <item name="android:background">@drawable/btn_gray_selector</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
-    <style name="Widget.Topface.Button.Big.Blue" parent="Widget.Topface.Button.Big.ForEmptyList">
+    <style name="Widget.Topface.Button.Big.Blue" parent="Widget.Topface.Button.Big">
         <item name="android:background">@drawable/btn_blue_selector</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
@@ -952,7 +946,9 @@
     <style name="FlatButton">
         <item name="android:textColor">@color/text_white</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:minHeight">40dp</item>
+        <item name="android:minHeight">44dp</item>
+        <item name="android:minWidth">240dp</item>
+        <item name="android:fontFamily">Roboto Regular</item>
     </style>
 
     <style name="FlatButton.Gray">

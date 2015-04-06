@@ -35,7 +35,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/buy_resources"
-                style="@style/Widget.Topface.Button.Big.Blue" />
+                style="@style/FlatButton.Blue" />
         </LinearLayout>
 
         <ImageView

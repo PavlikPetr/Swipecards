@@ -14,7 +14,7 @@
             android:id="@+id/buy_coins_button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.Topface.Button.Big.Blue"
+            style="@style/FlatButton.Blue"
             android:layout_marginTop="16dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -43,7 +43,7 @@
         android:id="@+id/buy_vip_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.Topface.Button.Big.Blue"
+        style="@style/FlatButton.Blue"
         android:layout_margin="8dp"
         android:text="@string/buying_vip_status"
         />
