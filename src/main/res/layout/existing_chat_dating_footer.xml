@@ -13,7 +13,8 @@
         style="@style/Widget.Topface.Button.Big.Blue"
         android:layout_weight="1"
         android:textSize="13sp"
-        android:padding="0dp" />
+        android:padding="0dp"
+        android:layout_marginRight="3dp"/>
 
     <Button
         android:layout_width="0dp"
@@ -23,6 +24,7 @@
         style="@style/Widget.Topface.Button.Big.Gray"
         android:layout_weight="1"
         android:textSize="13sp"
-        android:padding="0dp" />
+        android:padding="0dp"
+        android:layout_marginLeft="3dp"/>
 
 </LinearLayout>

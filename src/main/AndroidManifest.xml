@@ -168,10 +168,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Topface.NoActionBar" />
         <activity
+            android:label="@string/edit_my_city"
             android:name=".ui.CitySearchActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Topface.OldDarkDesign"
-            android:windowSoftInputMode="stateHidden" />
+            android:theme="@style/Theme.Topface.Light"
+            android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".ui.fragments.profile.PhotoSwitcherActivity"
             android:theme="@style/Topface.Theme.TransparentActionBarActivity" />

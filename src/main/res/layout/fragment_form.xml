@@ -1,73 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
-
-    <RelativeLayout
-        android:id="@+id/loUserTitle"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/ivState"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:src="@drawable/user_cell" />
-
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/ivState"
-            android:singleLine="true"
-            android:textColor="#B8B8B8"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
-            android:src="@drawable/im_item_arrow" />
-    </RelativeLayout>
-
-    <include
-        android:id="@+id/ivDivider"
-        layout="@layout/item_divider"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+    android:layout_height="fill_parent">
 
     <LinearLayout
         android:id="@+id/loEmptyForm"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal">
 
         <TextView
             android:id="@+id/tvEmptyForm"
-            style="@style/BackgroundTitleText"
+            style="@style/GrayText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
             android:gravity="center"
             android:text="@string/profile_empty_form" />
 
         <Button
+            style="@style/FlatGrayButton"
             android:id="@+id/btnEmptyForm"
-            style="@style/Widget.Topface.Button.Big.Gray"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="224dp"
+            android:layout_height="40dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="26dp"
+            android:layout_marginTop="20dp"
             android:text="@string/profile_ask_form" />
 
         <RelativeLayout
@@ -83,6 +45,7 @@
         </RelativeLayout>
 
         <TextView
+            style="@style/GrayText"
             android:id="@+id/emptyFormSuccess"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -91,9 +54,6 @@
             android:layout_marginTop="26dp"
             android:gravity="center"
             android:text="@string/profile_ask_sent"
-            android:textColor="#B8B8B8"
-            android:textSize="16sp"
-            android:textStyle="bold"
             android:visibility="gone" />
 
     </LinearLayout>
@@ -103,10 +63,10 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:cacheColorHint="#00000000"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
+        android:divider="@drawable/gray_list_divider"
+        android:dividerHeight="1dp"
         android:fadeScrollbars="true"
         android:fadingEdge="none"
-        android:listSelector="@android:color/transparent" />
+        android:listSelector="@android:color/transparent"/>
 
-</LinearLayout>
+</RelativeLayout>

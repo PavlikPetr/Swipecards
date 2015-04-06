@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
@@ -48,12 +49,17 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mGridAdapter = new GiftsAdapter(getActivity(), new FeedList<FeedGift>(), getUpdaterCallback());
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_grid, null);
         mGridView = (GridView) root.findViewById(R.id.usedGrid);
         mGridView.setAnimationCacheEnabled(false);
         mGridView.setScrollingCacheEnabled(true);
-        mGridAdapter = new GiftsAdapter(getActivity(), new FeedList<FeedGift>(), getUpdaterCallback());
         mGridView.setAdapter(mGridAdapter);
         mGridView.setOnScrollListener(mGridAdapter);
         mTitle = (TextView) root.findViewById(R.id.usedTitle);

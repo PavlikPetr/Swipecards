@@ -454,6 +454,8 @@
     <string name="general_complain_sended">Σας ευχαριστούμε, το παράπονό σας θα εξεταστεί στο προσεχές μέλλον</string>
     <string name="general_complain">Η αναφορά</string>
     <string name="general_msg">Μήνυμα</string>
+    <string name="notifications">Ειδοποιήσεις</string>
+    <string name="general_no_notifications">Δυστυχώς, η κοινοποίησης στη συσκευή σας δεν είναι διαθέσιμες</string>
     <string name="black_list_add_short">Στη μαύρη λίστα</string>
     <string name="confirm_email_for_dating">Είμαστε αντίθετοι με την τοποθέτηση  spam.Επιβεβαιώστε το email  για να εξοικείωσετε στο Topface!</string>
     <string name="send_confirm_link">Στείλτε ένα σύνδεσμο για την επιβεβαίωση</string>

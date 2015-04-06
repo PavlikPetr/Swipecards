@@ -369,6 +369,8 @@
     <string name="general_complain_sended">당신의 불만 사항이 접수 되었습니다. 도움을 주셔서 대단히 감사합니다.</string>
     <string name="general_complain">불만</string>
     <string name="general_msg">메세지</string>
+    <string name="notifications">알림</string>
+    <string name="general_no_notifications">유감스럽게도  통지서 받기 설정을 이용 불가능으로 해놓으셨습니다.</string>
     <string name="black_list_add_short">블랙 리스트로</string>
     <string name="confirm_email_for_dating">톱페이스에서는 스팸을 금지하고 있습니다. Topface를 계속 사용하기 위해서 자신의 이메일을 확인 해주십시오.</string>
     <string name="complain_type_swearing_msg">비방, 욕설, 위협</string>

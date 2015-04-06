@@ -20,6 +20,7 @@
             <flag name="mask" value="3" />
             <flag name="leftMenuClip" value="4" />
             <flag name="squared" value="5" />
+            <flag name="cropped" value="6" />
         </attr>
         <attr name="preProcessor">
             <flag name="none" value="0" />
@@ -28,6 +29,7 @@
             <flag name="mask" value="3" />
             <flag name="leftMenuClip" value="4" />
             <flag name="squared" value="5" />
+            <flag name="cropped" value="6" />
         </attr>
     </declare-styleable>
 

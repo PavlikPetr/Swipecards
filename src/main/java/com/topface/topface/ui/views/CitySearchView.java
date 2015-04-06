@@ -3,6 +3,8 @@ package com.topface.topface.ui.views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -10,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.ListAdapter;
 import android.widget.ListPopupWindow;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
@@ -34,6 +37,8 @@ public class CitySearchView extends AutoCompleteTextView {
     public static final int CITY_SEARCH_AFTER_REGISTRATION = 102;
 
     private static final int DELAY_VALUE = 200;
+
+    private static final String BACK_PRESSED_COUNT = "back_pressed_count";
 
     private Context mContext;
     private CitySearchViewAdapter mAdapter;
@@ -77,6 +82,11 @@ public class CitySearchView extends AutoCompleteTextView {
         int requestKey = a.getInt(R.styleable.CitySearchAttrs_request_key, 1);
         a.recycle();
         setRequestKey(requestKey);
+    }
+
+    @Override
+    public CitySearchViewAdapter getAdapter() {
+        return mAdapter;
     }
 
     private void setRequestKey(int key) {
@@ -163,14 +173,16 @@ public class CitySearchView extends AutoCompleteTextView {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                     getMyAdapter().notifyDataSetChanged();
                 }
-                mBackPressCounter = 0;
+                if (mBackPressCounter > 1) {
+                    mBackPressCounter = 1;
+                }
                 if (TextUtils.isEmpty(CitySearchView.this.getText()) &
                         // remove incorect calling onDismiss
                         (Calendar.getInstance().getTimeInMillis() - mGetFocusTime) > DELAY_VALUE) {
-                    CitySearchView.this.setFocusable(false);
-                    Utils.hideSoftKeyboard(mContext, CitySearchView.this);
                     if (mLastCheckedCity != null) {
                         CitySearchView.this.setMyText(mLastCheckedCity.getFullName());
+                        CitySearchView.this.setFocusable(false);
+                        Utils.hideSoftKeyboard(mContext, CitySearchView.this);
                     }
                 }
             }
@@ -191,6 +203,14 @@ public class CitySearchView extends AutoCompleteTextView {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 CitySearchView.this.setFocusableInTouchMode(true);
+                if (isFocused() && !CitySearchView.this.isPopupShowing()) {
+                    post(new Runnable() {
+                        @Override
+                        public void run() {
+                            CitySearchView.this.showDropDown();
+                        }
+                    });
+                }
                 return false;
             }
         });
@@ -286,20 +306,13 @@ public class CitySearchView extends AutoCompleteTextView {
 
     @Override
     public boolean onKeyPreIme(int keyCode, @NotNull KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
             mBackPressCounter++;
             if (mBackPressCounter > 1) {
                 return super.onKeyPreIme(keyCode, event);
             } else {
-
-                if (mScreenHeight == getCurentScreenHeight()) {
-                    CitySearchView.this.setFocusable(false);
-                    return true;
-                } else {
-                    Utils.hideSoftKeyboard(mContext, this);
-                    return true;
-                }
-
+                Utils.hideSoftKeyboard(mContext, this);
+                return true;
             }
         }
         return super.onKeyPreIme(keyCode, event);
