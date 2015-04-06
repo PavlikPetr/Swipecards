@@ -74,7 +74,6 @@
             android:name=".ui.NavigationActivity"
             android:configChanges="locale|screenSize|orientation"
             android:screenOrientation="portrait"
-            android:launchMode="singleTop"
             android:theme="@style/Theme.Topface.ActionbarOverlay"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
