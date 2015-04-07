@@ -14,7 +14,7 @@
         android:layout_gravity="left"
         android:drawablePadding="5dp"
         android:ellipsize="end"
-        android:singleLine="true"/>
+        android:singleLine="true" />
 
     <!-- Switch -->
 
@@ -28,7 +28,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="5dp"
         android:clickable="false"
-        android:minHeight="0dp"/>
+        android:minHeight="0dp" />
 
     <ProgressBar
         android:tag="vsiLoadBar"
@@ -39,6 +39,6 @@
         android:layout_marginRight="40dp"
         style="@style/TopFaceProgressBar.Small"
         android:visibility="gone"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
 </RelativeLayout>

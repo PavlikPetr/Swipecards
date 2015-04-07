@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/purchaseLayout"
+    android:id="@+id/purchaseLayout"
     android:layout_width="fill_parent"
+    android:background="#cccccc"
     android:layout_height="fill_parent">
 
     <com.topface.IllustratedTextView.IllustratedTextView
         android:id="@+id/payReason"
         android:layout_width="fill_parent"
+        style="@style/GrayText"
         android:layout_height="wrap_content"
         android:layout_below="@+id/purchasesTabs"
         android:gravity="center"
-        android:padding="10dp"
-        android:textSize="16sp" />
+        android:padding="10dp" />
 
 
-    <com.viewpagerindicator.TabPageIndicator
+    <com.topface.topface.ui.views.slidingtab.SlidingTabLayout
         android:id="@id/purchasesTabs"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bg_main" />
+        android:background="@color/tab_background" />
 
 
     <android.support.v4.view.ViewPager

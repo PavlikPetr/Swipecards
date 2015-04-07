@@ -24,10 +24,10 @@ import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
+import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
-import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -125,27 +125,29 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     private void initViews(View root, Bundle savedInstanceState) {
-        TabPageIndicator tabIndicator = (TabPageIndicator) root.findViewById(R.id.purchasesTabs);
+        SlidingTabLayout tabIndicator = (SlidingTabLayout) root.findViewById(R.id.purchasesTabs);
+        tabIndicator.setUseWeightProportions(true);
+        tabIndicator.setCustomTabView(R.layout.tab_indicator, R.id.tab_title);
         mPager = (ViewPager) root.findViewById(R.id.purchasesPager);
 
         Bundle args = getArguments();
 
         mIsVip = args.getBoolean(IS_VIP_PRODUCTS, false);
 
-        LinkedList<Options.Tab> tabs;
+        Options.TabsList tabs;
         mResourcesInfo = (TextView) root.findViewById(R.id.payReason);
         //Для того, что бы при изменении текста плавно менялся лейаут, без скачков
         Utils.enableLayoutChangingTransition((ViewGroup) root.findViewById(R.id.purchaseLayout));
         if (mIsVip) {
-            tabs = new LinkedList<>(CacheProfile.getOptions().premiumTabs);
+            tabs = CacheProfile.getOptions().premiumTabs;
         } else {
-            tabs = new LinkedList<>(CacheProfile.getOptions().otherTabs);
+            tabs = CacheProfile.getOptions().otherTabs;
         }
         mResourcesInfo.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down_animation));
 
-        removeExcessTabs(tabs); //Убираем табы в которых нет продуктов и бонусную вкладку, если фрагмент для покупки випа
+        removeExcessTabs(tabs.list); //Убираем табы в которых нет продуктов и бонусную вкладку, если фрагмент для покупки випа
 
-        mPagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs);
+        mPagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs.list);
         mPager.setAdapter(mPagerAdapter);
         tabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private TopfaceOfferwallRedirect mTopfaceOfferwallRedirect = CacheProfile.getOptions().topfaceOfferwallRedirect;

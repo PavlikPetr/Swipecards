@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.webkit.URLUtil;
 
+import com.google.gson.annotations.SerializedName;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -34,6 +35,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -128,8 +130,8 @@ public class Options extends AbstractData {
     public String gagTypeFullscreen = AdProvidersFactory.BANNER_NONE;
     public String helpUrl;
 
-    public LinkedList<Tab> otherTabs = new LinkedList<>();
-    public LinkedList<Tab> premiumTabs = new LinkedList<>();
+    public TabsList otherTabs = new TabsList();
+    public TabsList premiumTabs = new TabsList();
 
     /**
      * Ключ эксперимента под который попадает данный пользователь (передаем его в GA)
@@ -191,8 +193,8 @@ public class Options extends AbstractData {
             if (payments != null) {
                 JSONObject other = payments.optJSONObject("other");
                 JSONObject premium = payments.optJSONObject("premium");
-                fillTabs(other, otherTabs);
-                fillTabs(premium, premiumTabs);
+                otherTabs = JsonUtils.fromJson(other.toString(), TabsList.class);
+                premiumTabs = JsonUtils.fromJson(premium.toString(), TabsList.class);
             }
 
             JSONObject contactsInvite = response.optJSONObject("inviteContacts");
@@ -340,14 +342,6 @@ public class Options extends AbstractData {
             Debug.error(cacheToPreferences ? "Options from preferences" : "Options response is null");
         }
 
-    }
-
-    private void fillTabs(JSONObject other, LinkedList<Tab> tabs) {
-        JSONArray tabsArray = other.optJSONArray("tabs");
-        for (int i = 0; i < tabsArray.length(); i++) {
-            JSONObject tabObject = tabsArray.optJSONObject(i);
-            tabs.add(new Tab(tabObject.optString("name"), tabObject.optString("type")));
-        }
     }
 
     private void fillOffers(List<Offerwalls.Offer> list, JSONArray offersArrObj) throws JSONException {
@@ -575,6 +569,19 @@ public class Options extends AbstractData {
         public String buttonPicture = null;// по умолчанию кнопка отображается с картинкой ic_bonus_1
     }
 
+    public static class TabsList {
+        @SerializedName("tabs")
+        public LinkedList<Tab> list;
+
+        public TabsList(LinkedList<Tab> list) {
+            this.list = list;
+        }
+
+        public TabsList() {
+            list = new LinkedList<>();
+        }
+    }
+
     public static class Tab {
         public static final String GPLAY = "google-play";
         public static final String AMAZON = "amazon";
@@ -601,8 +608,17 @@ public class Options extends AbstractData {
         public String type;
 
         public Tab(String name, String type) {
-            this.name = name;
+            this.name = name.toUpperCase(Locale.getDefault());
             this.type = type;
+        }
+
+        public Tab(Tab tab) {
+            this.name = tab.name.toUpperCase(Locale.getDefault());
+            this.type = tab.type;
+        }
+
+        public String getUpperCaseName() {
+            return name.toUpperCase(Locale.getDefault());
         }
     }
 

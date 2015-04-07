@@ -54,7 +54,7 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mTabs.get(position).name;
+        return mTabs.get(position).getUpperCaseName();
     }
 
     @Override
