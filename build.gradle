@@ -1,9 +1,29 @@
+def versionProps = new Properties()
+def versionPropsFile = file('version.properties')
+if (!versionPropsFile.canRead()) {
+    throw new GradleException("Could not read version.properties! Create file in project root")
+}
+versionProps.load(new FileInputStream(versionPropsFile))
+
 def getGitHeadSha() {
     return 'git rev-parse --short HEAD'.execute().text.trim();
 }
 
 def getTimestamp() {
     return new Date().getTime();
+}
+
+def getQaVersion(versionProps) {
+    def versionQaBuild = versionProps['VERSION_QA_BUILD'].toInteger()
+    return versionQaBuild;
+}
+
+def incrementQaBuildVersion(versionProps, versionPropsFile) {
+    if (project.gradle.startParameter.taskNames.contains("assembleGoogleQa") && versionProps != null) {
+        def versionQaBuild = versionProps['VERSION_QA_BUILD'].toInteger() + 1
+        versionProps['VERSION_QA_BUILD'] = versionQaBuild.toString()
+        versionProps.store(versionPropsFile.newWriter(), null)
+    }
 }
 
 buildscript {
@@ -98,6 +118,8 @@ android {
         //пишем время сборки и SHA текущего комита, это нужно для идентификации сборки
         qa.initWith(buildTypes.debug)
         qa {
+            incrementQaBuildVersion(versionProps, versionPropsFile);
+            versionNameSuffix ".${getQaVersion(versionProps)}-qa"
             buildConfigField "long", "BUILD_TIME", "${getTimestamp()}L";
             buildConfigField "String", "GIT_HEAD_SHA", "\"${getGitHeadSha()}\"";
         }

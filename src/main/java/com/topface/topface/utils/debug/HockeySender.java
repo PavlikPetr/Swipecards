@@ -23,13 +23,18 @@ import java.util.List;
 public class HockeySender implements ReportSender {
     public static String BASE_URL = "https://rink.hockeyapp.net/api/2/apps/";
     public static String CRASHES_PATH = "/crashes";
+    private final boolean mIsDebug;
+
+    public HockeySender(boolean debug) {
+        mIsDebug = debug;
+    }
 
     private String createCrashLog(CrashReportData report) {
         Date now = new Date();
         StringBuilder log = new StringBuilder();
 
         log.append("Package: ").append(report.get(ReportField.PACKAGE_NAME)).append("\n");
-        log.append("Version: ").append(report.get(ReportField.APP_VERSION_CODE)).append("\n");
+        log.append("Version: ").append(getVersion(report)).append("\n");
         log.append("Android: ").append(report.get(ReportField.ANDROID_VERSION)).append("\n");
         log.append("Manufacturer: ").append(android.os.Build.MANUFACTURER).append("\n");
         log.append("Model: ").append(report.get(ReportField.PHONE_MODEL)).append("\n");
@@ -38,6 +43,10 @@ public class HockeySender implements ReportSender {
         log.append(report.get(ReportField.STACK_TRACE));
 
         return log.toString();
+    }
+
+    private String getVersion(CrashReportData report) {
+        return mIsDebug ? report.get(ReportField.APP_VERSION_NAME) : report.get(ReportField.APP_VERSION_CODE);
     }
 
     @Override
