@@ -29,33 +29,16 @@ import java.util.Locale;
  * Abstract class for own and user's form adapters
  */
 public abstract class AbstractFormListAdapter extends BaseAdapter {
-    private static final int GIFTS_TYPE = 0;
-    private static final int FORM_TYPE = 1;
-
-    private static final int TYPE_COUNT = 2;
-
-    private GiftsStripAdapter mGiftsAdapter;
-
     // Data
     private LayoutInflater mInflater;
-    private float mGiftSize;
     private LinkedList<FormItem> mForms = new LinkedList<>();
-    private View.OnClickListener mOnGiftsClickListener;
 
-    public AbstractFormListAdapter(Context context, GiftsStripAdapter giftsAdapter) {
-        mGiftsAdapter = giftsAdapter;
+    public AbstractFormListAdapter(Context context) {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mGiftSize = context.getResources().getDimension(R.dimen.form_gift_size);
     }
 
-    public void setUserData(LinkedList<FormItem> forms, Profile.Gifts gifts) {
-        mForms = prepareForm(forms);
-        mGiftsAdapter.getData().clear();
-        for (Gift gift: gifts) {
-            FeedGift feedGift = new FeedGift();
-            feedGift.gift = gift;
-            mGiftsAdapter.add(feedGift);
-        }
+    public void setUserData(LinkedList<FormItem> forms) {
+        mForms = prepareForm(new LinkedList<FormItem>(forms));
     }
 
     protected abstract LinkedList<FormItem> prepareForm(LinkedList<FormItem> forms);
@@ -66,35 +49,12 @@ public abstract class AbstractFormListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        int size = mForms.size();
-        if (mGiftsAdapter.isEmpty()) {
-            return size;
-        } else {
-            return size + 1;
-        }
-    }
-
-    @Override
-    public int getViewTypeCount() {
-        return TYPE_COUNT;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return !mGiftsAdapter.isEmpty() && position == 0 ? GIFTS_TYPE : FORM_TYPE;
+        return mForms.size();
     }
 
     @Override
     public FormItem getItem(int position) {
-        if (mGiftsAdapter.isEmpty()) {
-            return mForms.get(position);
-        } else {
-            if (position == 0) {
-                return null;
-            } else {
-                return mForms.get(position - 1);
-            }
-        }
+        return mForms.get(position);
     }
 
     @Override
@@ -106,19 +66,11 @@ public abstract class AbstractFormListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         FormItem item = getItem(position);
-        int type = getItemViewType(position);
 
         if (convertView == null) {
             holder = new ViewHolder();
 
-            switch (type) {
-                case FORM_TYPE:
-                    convertView = mInflater.inflate(R.layout.item_user_list, parent, false);
-                    break;
-                case GIFTS_TYPE:
-                    convertView = mInflater.inflate(R.layout.form_gifts, parent, false);
-                    break;
-            }
+            convertView = mInflater.inflate(R.layout.item_user_list, parent, false);
 
             holder.value = (TextView) convertView.findViewById(R.id.tvValue);
             holder.title = (TextView) convertView.findViewById(R.id.tvTitle);
@@ -126,25 +78,6 @@ public abstract class AbstractFormListAdapter extends BaseAdapter {
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
-        }
-
-        if (type == GIFTS_TYPE) {
-            final LinearLayout giftsStrip = (LinearLayout) convertView;
-            giftsStrip.removeAllViews();
-            final int visibleGiftsNumber = (parent.getWidth() - giftsStrip.getPaddingLeft() -
-                    giftsStrip.getPaddingRight()) / (int) mGiftSize;
-
-            mGiftsAdapter.registerDataSetObserver(new DataSetObserver() {
-                @Override
-                public void onChanged() {
-                    fillGiftsStrip(giftsStrip, visibleGiftsNumber);
-                }
-            });
-            fillGiftsStrip(giftsStrip, visibleGiftsNumber);
-            if (mOnGiftsClickListener != null) {
-                giftsStrip.setOnClickListener(mOnGiftsClickListener);
-            }
-            return giftsStrip;
         }
 
         String itemTitle = item.getTitle();
@@ -165,26 +98,7 @@ public abstract class AbstractFormListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void fillGiftsStrip(LinearLayout giftsStrip, int visibleGiftsNumber) {
-        int giftsCount = mGiftsAdapter.getCount();
-        for (int i = 0; i < giftsCount && i < visibleGiftsNumber; i++) {
-            View giftView = mGiftsAdapter.getView(i, null, giftsStrip);
-            giftView.setLayoutParams(new ViewGroup.LayoutParams((int) mGiftSize, (int) mGiftSize));
-            giftsStrip.addView(giftView);
-        }
-        if (giftsCount > visibleGiftsNumber) {
-            TextView giftsCounter = (TextView) mInflater.inflate(R.layout.remained_gifts_counter,
-                    giftsStrip, false);
-            giftsCounter.setText("+" + (giftsCount - visibleGiftsNumber));
-            giftsStrip.addView(giftsCounter);
-        }
-    }
-
     protected abstract void configureHolder(ViewHolder holder, FormItem item);
-
-    protected void setOnGiftsClickListener(View.OnClickListener clickListener) {
-        mOnGiftsClickListener = clickListener;
-    }
 
     public ArrayList<FormItem> saveState() {
         return mForms != null ? new ArrayList<>(mForms) : null;
@@ -196,6 +110,10 @@ public abstract class AbstractFormListAdapter extends BaseAdapter {
         for (Parcelable form : userForms) {
             mForms.add((FormItem) form);
         }
+    }
+
+    public boolean isFormEmpty() {
+        return mForms.isEmpty();
     }
 
     // class ViewHolder

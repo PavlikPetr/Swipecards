@@ -11,8 +11,8 @@ import java.util.LinkedList;
 
 public class UserFormListAdapter extends AbstractFormListAdapter {
 
-    public UserFormListAdapter(Context context, GiftsStripAdapter giftsAdapter) {
-        super(context, giftsAdapter);
+    public UserFormListAdapter(Context context) {
+        super(context);
     }
 
     @Override

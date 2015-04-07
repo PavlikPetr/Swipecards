@@ -37,7 +37,7 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
     private ArrayList<String> BODY_PAGES_TITLES = new ArrayList<>();
     private ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<>();
     private UserPhotoFragment mUserPhotoFragment;
-    private UserFormFragment mUserFormFragment;
+    private AbstractFormFragment mFormFragment;
     private boolean mIsChatAvailable;
     private boolean mIsAddToFavoritsAvailable;
     private Profile mProfile = null;
@@ -50,8 +50,8 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
         public void bindFragment(Fragment fragment) {
             if (fragment instanceof UserPhotoFragment) {
                 mUserPhotoFragment = (UserPhotoFragment) fragment;
-            } else if (fragment instanceof UserFormFragment) {
-                mUserFormFragment = (UserFormFragment) fragment;
+            } else if (fragment instanceof AbstractFormFragment) {
+                mFormFragment = (AbstractFormFragment) fragment;
             } else if (fragment instanceof UpdatableGiftsFragment) {
                 mGiftFragment = (UpdatableGiftsFragment) fragment;
             }
@@ -171,8 +171,8 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
         if (mUserPhotoFragment != null && profile instanceof User) {
             mUserPhotoFragment.setUserData((User) profile);
         }
-        if (mUserFormFragment != null && profile instanceof User) {
-            mUserFormFragment.setUserData((User) profile);
+        if (mFormFragment != null) {
+            mFormFragment.setUserData(profile);
         }
     }
 
@@ -219,7 +219,7 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
     @Override
     public void clearContent() {
         if (mUserPhotoFragment != null) mUserPhotoFragment.clearContent();
-        if (mUserFormFragment != null) mUserFormFragment.clearContent();
+        if (mFormFragment != null) mFormFragment.clearContent();
     }
 
     @Override

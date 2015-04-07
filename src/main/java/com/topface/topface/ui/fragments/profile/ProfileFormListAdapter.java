@@ -21,8 +21,8 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
     private int mMainValueColor;
     private View.OnClickListener mOnEditListener;
 
-    public ProfileFormListAdapter(Context context, GiftsStripAdapter giftsAdapter) {
-        super(context, giftsAdapter);
+    public ProfileFormListAdapter(Context context) {
+        super(context);
         mSavingText = context.getString(R.string.saving_in_progress);
         mSavingColor = context.getResources().getColor(R.color.text_color_gray_transparent);
         mMainValueColor = context.getResources().getColor(R.color.text_color_gray);
