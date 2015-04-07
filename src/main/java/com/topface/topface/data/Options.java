@@ -14,7 +14,6 @@ import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.data.experiments.AutoOpenGallery;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
-import com.topface.topface.data.experiments.InstantMessageFromSearch;
 import com.topface.topface.data.experiments.InstantMessagesForNewbies;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.IApiResponse;
@@ -55,6 +54,7 @@ public class Options extends AbstractData {
     public static final String PREMIUM_MESSAGES_POPUP_SHOW_TIME = "premium_messages_popup_last_show";
     public static final String PREMIUM_VISITORS_POPUP_SHOW_TIME = "premium_visitors_popup_last_show";
     public static final String PREMIUM_ADMIRATION_POPUP_SHOW_TIME = "premium_admirations_popup_last_show";
+    protected static final String INSTANT_MSG = "instantMessageFromSearch";
 
     /**
      * Настройки для каждого типа страниц
@@ -145,7 +145,7 @@ public class Options extends AbstractData {
 
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
     public TopfaceOfferwallRedirect topfaceOfferwallRedirect = new TopfaceOfferwallRedirect();
-    public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
+    public InstantMessageFromSearch instantMessageFromSearch;
     public FeedNativeAd feedNativeAd = new FeedNativeAd();
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
     public NotShown notShown = new NotShown();
@@ -313,7 +313,7 @@ public class Options extends AbstractData {
 
             topfaceOfferwallRedirect.init(response);
 
-            instantMessageFromSearch.init(response);
+            instantMessageFromSearch = JsonUtils.fromJson(response.optString(INSTANT_MSG), InstantMessageFromSearch.class);
 
             autoOpenGallery.init(response);
 
@@ -670,6 +670,17 @@ public class Options extends AbstractData {
 
         public int getPosition() {
             return random.nextInt(positionMax - positionMin + 1) + positionMin;
+        }
+    }
+
+    public class InstantMessageFromSearch {
+        public String text;
+
+        public void setText(String text) {
+            this.text = text;
+        }
+        public String getText() {
+            return text;
         }
     }
 
