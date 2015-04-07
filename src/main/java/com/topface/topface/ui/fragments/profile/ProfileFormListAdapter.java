@@ -1,32 +1,18 @@
 package com.topface.topface.ui.fragments.profile;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.text.TextUtils;
-import android.util.DisplayMetrics;
-import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.topface.framework.JsonUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
-import com.topface.topface.data.FeedGift;
-import com.topface.topface.data.Gift;
-import com.topface.topface.ui.adapters.FeedList;
-import com.topface.topface.ui.adapters.GiftsAdapter;
 import com.topface.topface.ui.adapters.GiftsStripAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
 
 import java.util.LinkedList;
-import java.util.Locale;
 
 public class ProfileFormListAdapter extends AbstractFormListAdapter {
 
@@ -35,8 +21,8 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
     private int mMainValueColor;
     private View.OnClickListener mOnEditListener;
 
-    public ProfileFormListAdapter(Context context) {
-        super(context);
+    public ProfileFormListAdapter(Context context, GiftsStripAdapter giftsAdapter) {
+        super(context, giftsAdapter);
         mSavingText = context.getString(R.string.saving_in_progress);
         mSavingColor = context.getResources().getColor(R.color.text_color_gray_transparent);
         mMainValueColor = context.getResources().getColor(R.color.text_color_gray);

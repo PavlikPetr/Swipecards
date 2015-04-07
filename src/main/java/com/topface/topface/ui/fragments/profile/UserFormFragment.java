@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,8 +14,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.BasePendingInit;
+import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
@@ -23,10 +25,11 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.StandardMessageSendRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.GiftsActivity;
+import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.ui.adapters.GiftsStripAdapter;
 import com.topface.topface.utils.FormItem;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 
 public class UserFormFragment extends ProfileInnerFragment implements OnClickListener {
@@ -40,6 +43,7 @@ public class UserFormFragment extends ProfileInnerFragment implements OnClickLis
     private LinkedList<FormItem> mForms;
     private Profile.Gifts mGifts;
     private UserFormListAdapter mUserFormListAdapter;
+    private GiftsStripAdapter mGiftAdapter;
     private ViewGroup mEmptyFormLayout;
     private Button mAskToFillForm;
     private ProgressBar mPgb;
@@ -50,14 +54,15 @@ public class UserFormFragment extends ProfileInnerFragment implements OnClickLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserFormListAdapter = new UserFormListAdapter(getActivity());
+        mGiftAdapter = new GiftsStripAdapter(getActivity(), new FeedList<FeedGift>(), null);
+        mUserFormListAdapter = new UserFormListAdapter(getActivity(), mGiftAdapter);
         mUserFormListAdapter.setOnGiftsClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isAdded()) {
                     Activity activity = getActivity();
                     Intent intent = GiftsActivity.getSendGiftIntent(activity, mUserId);
-                    activity.startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
+                    getParentFragment().startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
                 }
             }
         });
@@ -83,17 +88,53 @@ public class UserFormFragment extends ProfileInnerFragment implements OnClickLis
             setUserData(mUserId, mForms, mGifts);
         } else if (savedInstanceState != null) {
             ArrayList<Parcelable> parcelableArrayList = savedInstanceState.getParcelableArrayList(FORM_ITEMS);
-            ArrayList<Gift> parcelableGifts = savedInstanceState.<Gift>getParcelableArrayList(FORM_GIFTS);
+            ArrayList<Gift> parcelableGifts = savedInstanceState.getParcelableArrayList(FORM_GIFTS);
             if (parcelableArrayList != null && parcelableGifts != null) {
                 Profile.Gifts gifts = new Profile.Gifts();
                 gifts.addAll(parcelableGifts);
+
                 setUserData(savedInstanceState.getInt(USER_ID, 0),
                         parcelableArrayList, gifts);
+
                 mListQuestionnaire.setSelection(savedInstanceState.getInt(POSITION, 0));
             }
         }
 
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        UserProfileFragment fragment = getUserProfileFragment();
+        if (fragment != null) {
+            ArrayList<FeedGift> newGifts = fragment.getNewGifts();
+            if (newGifts != null && newGifts.size() > 0) {
+                ArrayList<FeedGift> adapterGifts = mGiftAdapter.getData();
+                adapterGifts.addAll(0, newGifts);
+                mGiftAdapter.notifyDataSetChanged();
+                clearNewGiftsArray();
+            }
+        }
+    }
+
+    private UserProfileFragment getUserProfileFragment() {
+        Fragment fragment = getParentFragment();
+        if (fragment instanceof UserProfileFragment) {
+            return  (UserProfileFragment) fragment;
+        } else {
+            Debug.error("Fragment not equals UserProfileFragment");
+            return null;
+        }
+    }
+
+    private boolean clearNewGiftsArray() {
+        UserProfileFragment fragment = getUserProfileFragment();
+        if (fragment != null) {
+            fragment.clearNewFeedGift();
+            return true;
+        }
+        return false;
     }
 
     @Override

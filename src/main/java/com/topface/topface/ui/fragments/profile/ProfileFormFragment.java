@@ -20,6 +20,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
+import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.IApiResponse;
@@ -27,6 +28,8 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.OwnGiftsActivity;
+import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.ui.adapters.GiftsStripAdapter;
 import com.topface.topface.ui.dialogs.EditFormItemsEditDialog;
 import com.topface.topface.ui.dialogs.EditTextFormDialog;
 import com.topface.topface.utils.CacheProfile;
@@ -128,7 +131,8 @@ public class ProfileFormFragment extends ProfileInnerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mProfileFormListAdapter = new ProfileFormListAdapter(getActivity());
+        mProfileFormListAdapter = new ProfileFormListAdapter(getActivity(),
+                new GiftsStripAdapter(getActivity(), new FeedList<FeedGift>(), null));
         mProfileFormListAdapter.setOnGiftsClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

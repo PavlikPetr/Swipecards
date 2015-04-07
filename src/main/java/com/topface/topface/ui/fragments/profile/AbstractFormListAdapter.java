@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.profile;
 
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -13,15 +14,11 @@ import android.widget.TextView;
 import com.topface.framework.JsonUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.Profile;
-import com.topface.topface.requests.GiftsRequest;
-import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsStripAdapter;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
 
 import java.util.ArrayList;
@@ -29,7 +26,7 @@ import java.util.LinkedList;
 import java.util.Locale;
 
 /**
- * Created by saharuk on 06.04.15.
+ * Abstract class for own and user's form adapters
  */
 public abstract class AbstractFormListAdapter extends BaseAdapter {
     private static final int GIFTS_TYPE = 0;
@@ -43,18 +40,16 @@ public abstract class AbstractFormListAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private float mGiftSize;
     private LinkedList<FormItem> mForms = new LinkedList<>();
-    private Profile.Gifts mGifts;
     private View.OnClickListener mOnGiftsClickListener;
 
-    public AbstractFormListAdapter(Context context) {
-        mGiftsAdapter = new GiftsStripAdapter(context, new FeedList<FeedGift>(), null);
+    public AbstractFormListAdapter(Context context, GiftsStripAdapter giftsAdapter) {
+        mGiftsAdapter = giftsAdapter;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mGiftSize = context.getResources().getDimension(R.dimen.form_gift_size);
     }
 
     public void setUserData(LinkedList<FormItem> forms, Profile.Gifts gifts) {
         mForms = prepareForm(forms);
-        mGifts = gifts;
         mGiftsAdapter.getData().clear();
         for (Gift gift: gifts) {
             FeedGift feedGift = new FeedGift();
@@ -134,25 +129,18 @@ public abstract class AbstractFormListAdapter extends BaseAdapter {
         }
 
         if (type == GIFTS_TYPE) {
-            LinearLayout giftsStrip = (LinearLayout) convertView;
+            final LinearLayout giftsStrip = (LinearLayout) convertView;
             giftsStrip.removeAllViews();
-            int giftsNumber = (parent.getWidth() - giftsStrip.getPaddingLeft() -
+            final int visibleGiftsNumber = (parent.getWidth() - giftsStrip.getPaddingLeft() -
                     giftsStrip.getPaddingRight()) / (int) mGiftSize;
 
-            int giftsCount = mGiftsAdapter.getCount();
-            for (int i = 0; i < giftsCount && i < giftsNumber; i++) {
-                View giftView = mGiftsAdapter.getView(i, null, giftsStrip);
-                giftView.setLayoutParams(new ViewGroup.LayoutParams((int) mGiftSize, (int) mGiftSize));
-                giftsStrip.addView(giftView);
-            }
-            if (giftsCount > giftsNumber) {
-                TextView giftsCounter = (TextView) mInflater.inflate(R.layout.remained_gifts_counter,
-                        giftsStrip, false);
-                giftsCounter.setText("+" + (giftsCount - giftsNumber));
-                giftsStrip.addView(giftsCounter);
-            } else if (giftsCount < giftsNumber && mGifts.more) {
-
-            }
+            mGiftsAdapter.registerDataSetObserver(new DataSetObserver() {
+                @Override
+                public void onChanged() {
+                    fillGiftsStrip(giftsStrip, visibleGiftsNumber);
+                }
+            });
+            fillGiftsStrip(giftsStrip, visibleGiftsNumber);
             if (mOnGiftsClickListener != null) {
                 giftsStrip.setOnClickListener(mOnGiftsClickListener);
             }
@@ -175,6 +163,21 @@ public abstract class AbstractFormListAdapter extends BaseAdapter {
         configureHolder(holder, item);
 
         return convertView;
+    }
+
+    private void fillGiftsStrip(LinearLayout giftsStrip, int visibleGiftsNumber) {
+        int giftsCount = mGiftsAdapter.getCount();
+        for (int i = 0; i < giftsCount && i < visibleGiftsNumber; i++) {
+            View giftView = mGiftsAdapter.getView(i, null, giftsStrip);
+            giftView.setLayoutParams(new ViewGroup.LayoutParams((int) mGiftSize, (int) mGiftSize));
+            giftsStrip.addView(giftView);
+        }
+        if (giftsCount > visibleGiftsNumber) {
+            TextView giftsCounter = (TextView) mInflater.inflate(R.layout.remained_gifts_counter,
+                    giftsStrip, false);
+            giftsCounter.setText("+" + (giftsCount - visibleGiftsNumber));
+            giftsStrip.addView(giftsCounter);
+        }
     }
 
     protected abstract void configureHolder(ViewHolder holder, FormItem item);
