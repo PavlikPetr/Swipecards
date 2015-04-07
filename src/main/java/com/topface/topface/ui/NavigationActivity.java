@@ -36,9 +36,6 @@ import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.fragments.MenuFragment;
-import com.topface.topface.utils.controllers.SequencedStartAction;
-import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
-import com.topface.topface.utils.controllers.startactions.FacebookRequestWindowAction;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.HackyDrawerLayout;
@@ -54,8 +51,11 @@ import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.ads.FullscreenController;
-import com.topface.topface.utils.controllers.startactions.IStartAction;
+import com.topface.topface.utils.controllers.SequencedStartAction;
 import com.topface.topface.utils.controllers.StartActionsController;
+import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
+import com.topface.topface.utils.controllers.startactions.FacebookRequestWindowAction;
+import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.InvitePopupAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.gcmutils.GCMUtils;
@@ -84,6 +84,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         @Override
         public void onProfileLink(int profileID) {
             startActivity(UserProfileActivity.createIntent(profileID, NavigationActivity.this));
+            getIntent().setData(null);
         }
 
         @Override
@@ -95,11 +96,13 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 intent.putExtra(SettingsContainerActivity.CONFIRMATION_CODE, code);
                 startActivity(intent);
             }
+            getIntent().setData(null);
         }
 
         @Override
         public void onOfferWall() {
             OfferwallsManager.startOfferwall(NavigationActivity.this);
+            getIntent().setData(null);
         }
     };
     private boolean mIsActionBarHidden;
@@ -158,6 +161,8 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         if (intent.getBooleanExtra(INTENT_EXIT, false)) {
             finish();
         }
+        //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
+        new ExternalLinkExecuter(mListener).execute(this, intent);
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_navigation);
@@ -177,9 +182,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
             mPendingNextIntent = intent;
         }
-        //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
-        new ExternalLinkExecuter(mListener).execute(this, getIntent());
-
     }
 
     @Override
@@ -200,7 +202,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 showFragment(FragmentId.TABBED_LIKES);
             }
         }));
-        SequencedStartAction sequencedStartAction = new SequencedStartAction(this,AC_PRIORITY_NORMAL);
+        SequencedStartAction sequencedStartAction = new SequencedStartAction(this, AC_PRIORITY_NORMAL);
         sequencedStartAction.addAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
         sequencedStartAction.addAction(new FacebookRequestWindowAction(this, AC_PRIORITY_NORMAL));
         startActionsController.registerAction(sequencedStartAction);
@@ -336,6 +338,8 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         } else {
             LocaleConfig.localeChangeInitiated = false;
         }
+        //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
+        new ExternalLinkExecuter(mListener).execute(this, getIntent());
         App.checkProfileUpdate();
         if (mNotificationController != null) {
             mNotificationController.refreshNotificator();
@@ -468,7 +472,9 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
             }
             Debug.log("Current User ID:" + CacheProfile.getProfile().uid);
         }
-        mDrawerToggle.syncState();
+        if (mDrawerToggle != null) {
+            mDrawerToggle.syncState();
+        }
 
         /*
         Initialize Topface offerwall here to be able to start it quickly instead of PurchasesActivity

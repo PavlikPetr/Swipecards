@@ -65,15 +65,23 @@ public class UserConfig extends AbstractConfig {
     private static final String IS_EMAIL_CONFIRM_SENT = "is_button_send_confirmation_clicked";
     private String mUnique;
 
-    public UserConfig(Context context) {
-        super(context);
-        AuthToken token = AuthToken.getInstance();
-        mUnique = token.getUserTokenUniqueId();
-    }
-
     public UserConfig(String uniqueKey, Context context) {
         super(context);
         mUnique = uniqueKey;
+    }
+
+    private void setUnique(String mUnique) {
+        this.mUnique = mUnique;
+    }
+
+    public String getUnique() {
+        return mUnique;
+    }
+
+    public void updateConfig(String unique) {
+        setUnique(unique);
+        initData();
+        saveConfig();
     }
 
     @Override
@@ -152,7 +160,9 @@ public class UserConfig extends AbstractConfig {
 
     @Override
     protected SharedPreferences getPreferences() {
-        mUnique = AuthToken.getInstance().getUserTokenUniqueId();
+        if (mUnique == null) {
+            mUnique = AuthToken.getInstance().getUserTokenUniqueId();
+        }
         return getContext().getSharedPreferences(
                 PROFILE_CONFIG_SETTINGS + Static.AMPERSAND + mUnique,
                 Context.MODE_PRIVATE

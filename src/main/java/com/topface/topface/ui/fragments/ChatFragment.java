@@ -881,7 +881,8 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                     Toast.LENGTH_SHORT).show();
             return false;
         }
-        editText.clear();
+        // вынужденная мера, Editable.clear() некорректно обрабатывается клавиатурой Lg G3
+        mEditBox.setText("");
         return sendMessage(editString, true);
     }
 

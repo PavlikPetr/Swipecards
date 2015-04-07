@@ -135,8 +135,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public void startActivityForResult(Intent intent, int requestCode) {
         if (requestCode != -1) {
             intent.putExtra(Static.INTENT_REQUEST_KEY, requestCode);
+            super.startActivityForResult(intent, requestCode);
         }
-        super.startActivityForResult(intent, requestCode);
     }
 
     @Override

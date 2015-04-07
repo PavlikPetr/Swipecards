@@ -148,17 +148,7 @@ public class AddPhotoHelper {
                 intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.album_add_photo_title));
 
                 if (Utils.isIntentAvailable(mContext, intent.getAction())) {
-                    if (mFragment != null) {
-                        if (mFragment.isAdded()) {
-                            if (mFragment instanceof ProfilePhotoFragment) {
-                                mFragment.getParentFragment().startActivityForResult(intent, requestCode);
-                            } else {
-                                mFragment.startActivityForResult(intent, requestCode);
-                            }
-                        }
-                    } else {
-                        mActivity.startActivityForResult(intent, requestCode);
-                    }
+                    startAddPhotoActivity(intent, requestCode);
                 }
 
 
@@ -180,14 +170,20 @@ public class AddPhotoHelper {
         boolean noSuitableActivity = intent.resolveActivity(mActivity.getPackageManager()) == null;
         int requestCode = withDialog || noSuitableActivity ? GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG :
                 GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY;
+        startAddPhotoActivity(intent, requestCode);
+    }
+
+    private void startAddPhotoActivity(Intent intent, int requestCode) {
         if (mFragment != null) {
-            if (mFragment instanceof ProfilePhotoFragment) {
-                mFragment.getParentFragment().startActivityForResult(intent, requestCode);
+            if (mFragment.isAdded()) {
+                if (mFragment instanceof ProfilePhotoFragment) {
+                    mFragment.getParentFragment().startActivityForResult(intent, requestCode);
+                } else {
+                    mFragment.startActivityForResult(intent, requestCode);
+                }
             } else {
-                mFragment.startActivityForResult(intent, requestCode);
+                mActivity.startActivityForResult(intent, requestCode);
             }
-        } else {
-            mActivity.startActivityForResult(intent, requestCode);
         }
     }
 

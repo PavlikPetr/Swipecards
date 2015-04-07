@@ -109,7 +109,7 @@ public class UserConfigConverter {
         } else {
             //на случай если есть неконвертированый ятарый конфиг, но пользователь решал создать
             //новый акк
-            setMainUserConfig(new UserConfig(App.getContext()));
+            setMainUserConfig(new UserConfig(null, App.getContext()));
         }
         uniqueConfig.commitConfig();
     }

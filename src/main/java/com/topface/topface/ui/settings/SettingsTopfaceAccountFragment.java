@@ -284,6 +284,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     }
 
     private void updateProfile() {
+        mText.setText(mToken.getLogin());
         requestEmailConfirmedFlag(true);
     }
 

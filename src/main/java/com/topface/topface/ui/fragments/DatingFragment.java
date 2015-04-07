@@ -851,7 +851,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setUserOnlineStatus(SearchUser currUser) {
-        getTitleSetter().setOnline(currUser != null && currUser.online);
+        if (getTitleSetter() != null) {
+            getTitleSetter().setOnline(currUser != null && currUser.online);
+        }
     }
 
     private void setUserSex(SearchUser currUser, Resources res) {

@@ -263,6 +263,7 @@
     <string name="settings_logout">Log out</string>
     <string name="settings_code_confirmation">Send confirmation code</string>
     <string name="settings_email_was_confirmed">Already confirmed</string>
+    <string name="settings_email_was_confirmed_textview_text">If you have already confirmed your email through the web</string>
     <string name="settings_code_confirmation_hint">Confirmation code</string>
     <string name="settings_logout_msg">Do you really want to log out?</string>
     <string name="settings_error_message">Error message</string>
