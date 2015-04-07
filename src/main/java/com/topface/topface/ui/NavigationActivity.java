@@ -161,6 +161,8 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         if (intent.getBooleanExtra(INTENT_EXIT, false)) {
             finish();
         }
+        //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
+        new ExternalLinkExecuter(mListener).execute(this, intent);
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_navigation);
@@ -180,9 +182,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
             mPendingNextIntent = intent;
         }
-        //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
-        new ExternalLinkExecuter(mListener).execute(this, getIntent());
-
     }
 
     @Override
