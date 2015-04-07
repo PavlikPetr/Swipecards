@@ -74,11 +74,11 @@ public class ExternalLinkExecuter {
 
     public interface OnExternalLinkListener {
 
-        public void onProfileLink(int profileID);
+        void onProfileLink(int profileID);
 
-        public void onConfirmLink(String code);
+        void onConfirmLink(String code);
 
-        public void onOfferWall();
+        void onOfferWall();
     }
 
 }

@@ -262,7 +262,8 @@ public class Products extends AbstractData {
             case 2:
             case 0:
             default:
-                color = context.getResources().getColor(R.color.text_light_gray);
+                // пришлось поменять на белый, потому что с новым дизайном серых кнопок не видно надписей
+                color = context.getResources().getColor(R.color.text_white);
                 break;
         }
         return color;

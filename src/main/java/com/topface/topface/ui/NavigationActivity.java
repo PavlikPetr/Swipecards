@@ -84,6 +84,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         @Override
         public void onProfileLink(int profileID) {
             startActivity(UserProfileActivity.createIntent(profileID, NavigationActivity.this));
+            getIntent().setData(null);
         }
 
         @Override
@@ -95,11 +96,13 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 intent.putExtra(SettingsContainerActivity.CONFIRMATION_CODE, code);
                 startActivity(intent);
             }
+            getIntent().setData(null);
         }
 
         @Override
         public void onOfferWall() {
             OfferwallsManager.startOfferwall(NavigationActivity.this);
+            getIntent().setData(null);
         }
     };
     private boolean mIsActionBarHidden;
@@ -200,7 +203,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 showFragment(FragmentId.TABBED_LIKES);
             }
         }));
-        SequencedStartAction sequencedStartAction = new SequencedStartAction(this,AC_PRIORITY_NORMAL);
+        SequencedStartAction sequencedStartAction = new SequencedStartAction(this, AC_PRIORITY_NORMAL);
         sequencedStartAction.addAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
         sequencedStartAction.addAction(new FacebookRequestWindowAction(this, AC_PRIORITY_NORMAL));
         startActionsController.registerAction(sequencedStartAction);
@@ -336,6 +339,8 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         } else {
             LocaleConfig.localeChangeInitiated = false;
         }
+        //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
+        new ExternalLinkExecuter(mListener).execute(this, getIntent());
         App.checkProfileUpdate();
         if (mNotificationController != null) {
             mNotificationController.refreshNotificator();
