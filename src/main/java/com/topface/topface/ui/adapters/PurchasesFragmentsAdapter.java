@@ -54,26 +54,28 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mTabs.get(position).name;
+        return mTabs.get(position).getUpperCaseName();
     }
 
     @Override
     public Fragment getItem(int position) {
         Fragment fragment = null;
         String from = mArguments.getString(OpenIabFragment.ARG_TAG_SOURCE);
+        String text = mArguments.getString(OpenIabFragment.ARG_RESOURCE_INFO_TEXT);
+        int visibility = mArguments.getInt(OpenIabFragment.ARG_RESOURCE_INFO_VISIBILITY);
         switch (mTabs.get(position).type) {
             case Options.Tab.GPLAY:
                 if (!mIsVip) {
-                    fragment = MarketBuyingFragment.newInstance(from);
+                    fragment = MarketBuyingFragment.newInstance(from, text, visibility);
                 } else {
-                    fragment = VipBuyFragment.newInstance(true, from);
+                    fragment = VipBuyFragment.newInstance(true, from, text, visibility);
                 }
                 break;
             case Options.Tab.AMAZON:
                 if (!mIsVip) {
-                    fragment = AmazonBuyingFragment.newInstance(from);
+                    fragment = AmazonBuyingFragment.newInstance(from, text, visibility);
                 } else {
-                    fragment = VipBuyFragment.newInstance(true, from);
+                    fragment = VipBuyFragment.newInstance(true, from, text, visibility);
                 }
                 break;
             case Options.Tab.BONUS:
@@ -83,16 +85,16 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
                 break;
             case Options.Tab.PWALL:
                 if (!mIsVip) {
-                    fragment = PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.DIRECT);
+                    fragment = PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.DIRECT, text, visibility);
                 } else {
-                    fragment = VipPaymentWallBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.DIRECT);
+                    fragment = VipPaymentWallBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.DIRECT, text, visibility);
                 }
                 break;
             case Options.Tab.PWALL_MOBILE:
                 if (!mIsVip) {
-                    fragment = PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.MOBILE);
+                    fragment = PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.MOBILE, text, visibility);
                 } else {
-                    fragment = VipPaymentWallBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.MOBILE);
+                    fragment = VipPaymentWallBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.MOBILE, text, visibility);
                 }
                 break;
             default:

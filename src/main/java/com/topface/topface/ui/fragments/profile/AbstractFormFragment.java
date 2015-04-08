@@ -223,7 +223,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
     private UserProfileFragment getUserProfileFragment() {
         Fragment fragment = getParentFragment();
         if (fragment instanceof UserProfileFragment) {
-            return  (UserProfileFragment) fragment;
+            return (UserProfileFragment) fragment;
         } else {
             Debug.error("Fragment not equals UserProfileFragment");
             return null;
@@ -250,7 +250,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         mFormAdapter.setUserData(mForms);
         mFormAdapter.notifyDataSetChanged();
         mGiftAdapter.getData().clear();
-        for (Gift gift: gifts) {
+        for (Gift gift : gifts) {
             FeedGift feedGift = new FeedGift();
             feedGift.gift = gift;
             mGiftAdapter.add(feedGift);

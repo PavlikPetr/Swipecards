@@ -27,11 +27,11 @@
         android:dividerHeight="1dp"
         android:layout_below="@id/edit_dialog_title_divider"
         android:scrollbars="none"
-        android:descendantFocusability="afterDescendants"/>
+        android:descendantFocusability="afterDescendants" />
 
     <ViewStub
         android:id="@+id/edit_dialog_buttons_stub"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edit_dialog_options_list"/>
+        android:layout_below="@id/edit_dialog_options_list" />
 </RelativeLayout>

@@ -26,6 +26,16 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
 
     public abstract Options.PromoPopupEntity getPremiumEntity();
 
+    @Override
+    protected boolean isModalDialog() {
+        return false;
+    }
+
+    @Override
+    public boolean isUnderActionBar() {
+        return true;
+    }
+
     /**
      * @return id строки из ресурсов, которую нужно показать на кнопке удаления
      */

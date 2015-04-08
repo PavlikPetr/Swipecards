@@ -15,7 +15,7 @@
         android:paddingLeft="@dimen/item_side_padding"
         android:paddingRight="@dimen/item_side_padding"
         android:ellipsize="end"
-        android:singleLine="true"/>
+        android:singleLine="true" />
 
     <!-- Switch -->
 

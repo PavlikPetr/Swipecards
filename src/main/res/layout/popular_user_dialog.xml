@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/popular_user_title"
-        style="@style/ItemTitleText"
+        style="@style/ItemTitleTextBlack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -23,7 +23,8 @@
         android:gravity="center"
         android:paddingBottom="16dp"
         android:paddingTop="16dp"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        android:textColor="#000000" />
 
     <Button
         android:id="@+id/unlock_message_sent"

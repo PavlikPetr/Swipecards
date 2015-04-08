@@ -468,7 +468,7 @@ public class App extends Application {
 
     private void initAcra() {
         ACRA.init(this);
-        ACRA.getErrorReporter().setReportSender(new HockeySender(BuildConfig.DEBUG));
+        ACRA.getErrorReporter().setReportSender(new HockeySender());
     }
 
     private void initComScore() {

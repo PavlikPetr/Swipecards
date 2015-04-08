@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.webkit.URLUtil;
 
+import com.google.gson.annotations.SerializedName;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -14,7 +15,6 @@ import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.data.experiments.AutoOpenGallery;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
-import com.topface.topface.data.experiments.InstantMessageFromSearch;
 import com.topface.topface.data.experiments.InstantMessagesForNewbies;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.IApiResponse;
@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -55,6 +56,7 @@ public class Options extends AbstractData {
     public static final String PREMIUM_MESSAGES_POPUP_SHOW_TIME = "premium_messages_popup_last_show";
     public static final String PREMIUM_VISITORS_POPUP_SHOW_TIME = "premium_visitors_popup_last_show";
     public static final String PREMIUM_ADMIRATION_POPUP_SHOW_TIME = "premium_admirations_popup_last_show";
+    protected static final String INSTANT_MSG = "instantMessageFromSearch";
 
     /**
      * Настройки для каждого типа страниц
@@ -128,8 +130,8 @@ public class Options extends AbstractData {
     public String gagTypeFullscreen = AdProvidersFactory.BANNER_NONE;
     public String helpUrl;
 
-    public LinkedList<Tab> otherTabs = new LinkedList<>();
-    public LinkedList<Tab> premiumTabs = new LinkedList<>();
+    public TabsList otherTabs = new TabsList();
+    public TabsList premiumTabs = new TabsList();
 
     /**
      * Ключ эксперимента под который попадает данный пользователь (передаем его в GA)
@@ -145,7 +147,7 @@ public class Options extends AbstractData {
 
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
     public TopfaceOfferwallRedirect topfaceOfferwallRedirect = new TopfaceOfferwallRedirect();
-    public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
+    public InstantMessageFromSearch instantMessageFromSearch;
     public FeedNativeAd feedNativeAd = new FeedNativeAd();
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
     public NotShown notShown = new NotShown();
@@ -191,8 +193,8 @@ public class Options extends AbstractData {
             if (payments != null) {
                 JSONObject other = payments.optJSONObject("other");
                 JSONObject premium = payments.optJSONObject("premium");
-                fillTabs(other, otherTabs);
-                fillTabs(premium, premiumTabs);
+                otherTabs = JsonUtils.fromJson(other.toString(), TabsList.class);
+                premiumTabs = JsonUtils.fromJson(premium.toString(), TabsList.class);
             }
 
             JSONObject contactsInvite = response.optJSONObject("inviteContacts");
@@ -313,7 +315,7 @@ public class Options extends AbstractData {
 
             topfaceOfferwallRedirect.init(response);
 
-            instantMessageFromSearch.init(response);
+            instantMessageFromSearch = JsonUtils.fromJson(response.optString(INSTANT_MSG), InstantMessageFromSearch.class);
 
             autoOpenGallery.init(response);
 
@@ -340,14 +342,6 @@ public class Options extends AbstractData {
             Debug.error(cacheToPreferences ? "Options from preferences" : "Options response is null");
         }
 
-    }
-
-    private void fillTabs(JSONObject other, LinkedList<Tab> tabs) {
-        JSONArray tabsArray = other.optJSONArray("tabs");
-        for (int i = 0; i < tabsArray.length(); i++) {
-            JSONObject tabObject = tabsArray.optJSONObject(i);
-            tabs.add(new Tab(tabObject.optString("name"), tabObject.optString("type")));
-        }
     }
 
     private void fillOffers(List<Offerwalls.Offer> list, JSONArray offersArrObj) throws JSONException {
@@ -575,6 +569,19 @@ public class Options extends AbstractData {
         public String buttonPicture = null;// по умолчанию кнопка отображается с картинкой ic_bonus_1
     }
 
+    public static class TabsList {
+        @SerializedName("tabs")
+        public LinkedList<Tab> list;
+
+        public TabsList(LinkedList<Tab> list) {
+            this.list = list;
+        }
+
+        public TabsList() {
+            list = new LinkedList<>();
+        }
+    }
+
     public static class Tab {
         public static final String GPLAY = "google-play";
         public static final String AMAZON = "amazon";
@@ -603,6 +610,10 @@ public class Options extends AbstractData {
         public Tab(String name, String type) {
             this.name = name;
             this.type = type;
+        }
+
+        public String getUpperCaseName() {
+            return name.toUpperCase(Locale.getDefault());
         }
     }
 
@@ -670,6 +681,18 @@ public class Options extends AbstractData {
 
         public int getPosition() {
             return random.nextInt(positionMax - positionMin + 1) + positionMin;
+        }
+    }
+
+    public class InstantMessageFromSearch {
+        public String text;
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public String getText() {
+            return text;
         }
     }
 

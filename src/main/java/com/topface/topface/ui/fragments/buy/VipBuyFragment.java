@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,31 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     };
     private LinearLayout mBuyVipViewsContainer;
     private LinearLayout mEditPremiumContainer;
+    private TextView mResourceInfo;
+    private String mResourceInfoText;
+    private int mResourceInfoVisibility;
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null) {
+                getDataFromIntent(intent.getExtras());
+            }
+        }
+    };
+
+    private void getDataFromIntent(Bundle args) {
+        if (args != null) {
+            if (args.containsKey(ARG_RESOURCE_INFO_TEXT)) {
+                mResourceInfoText = args.getString(ARG_RESOURCE_INFO_TEXT);
+                setResourceInfoText();
+            }
+
+            if (args.containsKey(ARG_RESOURCE_INFO_VISIBILITY)) {
+                mResourceInfoVisibility = args.getInt(ARG_RESOURCE_INFO_VISIBILITY);
+                setResourceInfoVisibility();
+            }
+        }
+    }
 
     /**
      * Создает новый инстанс фрагмента покупки VIP
@@ -56,9 +82,15 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
      * @param from          параметр для статистики покупок, что бы определить откуда пользователь пришел
      * @return Фрагмент покупки VIP
      */
-    public static VipBuyFragment newInstance(boolean needActionBar, String from) {
+    public static VipBuyFragment newInstance(boolean needActionBar, String from, String text, int visibility) {
         VipBuyFragment fragment = new VipBuyFragment();
         Bundle args = new Bundle();
+        if (!TextUtils.isEmpty(text)) {
+            args.putString(ARG_RESOURCE_INFO_TEXT, text);
+        }
+        if (visibility != 0) {
+            args.putInt(ARG_RESOURCE_INFO_VISIBILITY, visibility);
+        }
         args.putBoolean(ACTION_BAR_CONST, needActionBar);
         if (from != null) {
             args.putString(ARG_TAG_SOURCE, from);
@@ -71,12 +103,15 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setNeedTitles(false);
+        getDataFromIntent(getArguments());
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(OpenIabFragment.UPDATE_RESOURCE_INFO));
         mInvisSwitcher.setProgressState(false, CacheProfile.invisible);
         switchLayouts();
     }
@@ -85,12 +120,16 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_buy_premium, null);
+        mResourceInfo = (TextView) view.findViewById(R.id.payReasonFragmentBuyPremium);
+        setResourceInfoText();
+        setResourceInfoVisibility();
         initViews(view);
         initActionBar();
         return view;
@@ -269,6 +308,18 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     public void onPurchased(Purchase product) {
         switchLayouts();
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(VIP_PURCHASED_INTENT));
+    }
+
+    private void setResourceInfoText() {
+        if (mResourceInfo != null) {
+            mResourceInfo.setText(mResourceInfoText);
+        }
+    }
+
+    private void setResourceInfoVisibility() {
+        if (mResourceInfo != null) {
+            mResourceInfo.setVisibility(mResourceInfoVisibility);
+        }
     }
 
     @Override

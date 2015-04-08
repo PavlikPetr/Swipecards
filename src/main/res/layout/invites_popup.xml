@@ -11,7 +11,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
-        android:background="@drawable/popup_invite_text_bg">
+        android:background="@color/bg_white">
 
         <TextView
             android:id="@+id/invitesTitle"
@@ -19,9 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:gravity="center"
-            android:textColor="#FFFFFF"
             android:textSize="14sp"
-            android:textStyle="bold"
+            style="@style/TitleBlackText"
             android:minHeight="50dp"/>
 
         <RelativeLayout
@@ -49,8 +48,8 @@
                     android:layout_centerVertical="true"
                     android:gravity="center"
                     android:layout_height="wrap_content"
-                    android:textColor="#FFFFFF"
                     android:textSize="14sp"
+                    style="@style/TitleBlackText"
                     android:text="@string/invite_friends_title"
                     android:layout_toRightOf="@id/sendAllContacts"/>
             </RelativeLayout>

@@ -257,13 +257,12 @@ public class Products extends AbstractData {
         int color;
         switch (showType) {
             case 1:
-                color = context.getResources().getColor(R.color.text_white);
+                color = context.getResources().getColor(R.color.text_color_gray);
                 break;
             case 2:
             case 0:
             default:
-                // пришлось поменять на белый, потому что с новым дизайном серых кнопок не видно надписей
-                color = context.getResources().getColor(R.color.text_white);
+                color = context.getResources().getColor(R.color.text_color_gray);
                 break;
         }
         return color;
@@ -271,21 +270,17 @@ public class Products extends AbstractData {
 
     private static int getBuyButtonBackground(boolean discount, int showType) {
         int bgResource;
-        if (discount) {
-            bgResource = R.drawable.btn_sale_selector;
-        } else {
-            switch (showType) {
-                case 1:
-                    bgResource = R.drawable.btn_blue_selector;
-                    break;
-                case 2:
-                    bgResource = R.drawable.btn_blue_shape_disabled;
-                    break;
-                case 0:
-                default:
-                    bgResource = R.drawable.btn_gray_selector;
-                    break;
-            }
+        switch (showType) {
+            case 1:
+                bgResource = discount ? R.drawable.btn_sale_blue_selector : R.drawable.btn_blue_selector;
+                break;
+            case 2:
+                bgResource = discount ? R.drawable.btn_sale_blue_disabled : R.drawable.btn_blue_shape_disabled;
+                break;
+            case 0:
+            default:
+                bgResource = discount ? R.drawable.btn_sale_gray_selector : R.drawable.btn_gray_selector;
+                break;
         }
         return bgResource;
     }

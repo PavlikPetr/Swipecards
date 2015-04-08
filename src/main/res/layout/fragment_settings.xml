@@ -11,35 +11,35 @@
 
         <include
             android:id="@+id/loAccount"
-            layout="@layout/item_edit_form_select"/>
+            layout="@layout/item_edit_form_select" />
 
         <TextView
             android:id="@+id/loNotifications"
             style="@style/WhiteListItem.Underline"
-            android:text="@string/notifications"/>
+            android:text="@string/notifications" />
 
         <TextView
             android:id="@+id/loHelp"
             style="@style/WhiteListItem.Underline"
-            android:text="@string/settings_help"/>
+            android:text="@string/settings_help" />
 
         <TextView
             android:id="@+id/loFeedback"
             style="@style/WhiteListItem.Underline"
-            android:text="@string/settings_feedback"/>
+            android:text="@string/settings_feedback" />
 
         <TextView
             android:id="@+id/loLanguage"
             style="@style/WhiteListItem.Underline"
-            android:text="@string/settings_select_language"/>
+            android:text="@string/settings_select_language" />
 
         <include
             android:id="@+id/loPreloadPhoto"
-            layout="@layout/item_edit_form_select"/>
+            layout="@layout/item_edit_form_select" />
 
         <TextView
             android:id="@+id/loAbout"
             style="@style/WhiteListItem.Underline"
-            android:text="@string/settings_about"/>
+            android:text="@string/settings_about" />
     </LinearLayout>
 </ScrollView>

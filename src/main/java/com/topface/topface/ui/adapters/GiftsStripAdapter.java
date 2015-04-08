@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
-import com.topface.topface.ui.views.ImageViewRemote;
 
 /**
  * Adapter for gifts int user's form

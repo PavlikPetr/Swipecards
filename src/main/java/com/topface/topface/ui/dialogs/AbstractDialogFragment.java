@@ -52,12 +52,21 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
 
     @StyleRes
     protected int getDialogStyleResId() {
-        return R.style.Topface_Theme_TranslucentDialog;
+        if (isModalDialog()) {
+            return R.style.Topface_Theme_TranslucentDialog;
+        } else {
+            return R.style.Theme_Topface_NoActionBar;
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.dialog_base, container, false);
+        View root;
+        if (isModalDialog()) {
+            root = inflater.inflate(R.layout.dialog_modal, container, false);
+        } else {
+            root = inflater.inflate(R.layout.dialog_base, container, false);
+        }
         if (isUnderActionBar()) {
             root.setPadding(0, mNeedActionBarIndent ? mActionBarSize : 0, 0, 0);
         }
@@ -121,14 +130,16 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
         super.startActivityForResult(intent, requestCode);
     }
 
-    public abstract int getDialogLayoutRes();
+    protected abstract boolean isModalDialog();
+
+    protected abstract int getDialogLayoutRes();
 
     protected final void setNeedActionBarIndent(boolean value) {
         mNeedActionBarIndent = value;
     }
 
     public boolean isUnderActionBar() {
-        return true;
+        return false;
     }
 
 }

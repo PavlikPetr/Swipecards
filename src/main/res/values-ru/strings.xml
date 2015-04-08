@@ -801,7 +801,7 @@
         <item name="receive_message_notification">Получать уведомление\nо новом сообщении</item>
         <item name="receive_mutual_notification">Получать уведомление\nо новой взаимной симпатии</item>
         <item name="receive_sympathy_notification">Получать уведомление\nо новой симпатии</item>
-        <item name="receive_rate_notification"/>
+        <item name="receive_rate_notification" />
         <item name="receive_guest_notification">Получать уведомление\nо новом госте</item>
     </string-array>
     <string name="on_phone">На телефон</string>

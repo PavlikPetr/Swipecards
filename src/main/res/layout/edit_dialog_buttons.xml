@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <View
         android:id="@+id/edit_dialog_buttons_top"
@@ -23,7 +24,7 @@
         android:layout_below="@id/edit_dialog_buttons_top"
         android:layout_toLeftOf="@id/edit_dialog_center"
         android:background="@null"
-        android:text="@string/general_cancel"/>
+        android:text="@string/general_cancel" />
 
     <Button
         android:id="@+id/edit_dialog_save"
@@ -32,6 +33,6 @@
         android:layout_below="@id/edit_dialog_buttons_top"
         android:layout_toRightOf="@id/edit_dialog_center"
         android:background="@null"
-        android:text="@string/save"/>
+        android:text="@string/save" />
 
 </RelativeLayout>

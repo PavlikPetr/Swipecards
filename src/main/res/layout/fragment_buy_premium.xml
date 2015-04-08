@@ -8,6 +8,10 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
+        <com.topface.IllustratedTextView.IllustratedTextView
+            android:id="@+id/payReasonFragmentBuyPremium"
+            style="@style/PayReasonView" />
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
@@ -30,7 +34,7 @@
                 style="@style/GrayText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/vip_state_off"/>
+                android:text="@string/vip_state_off" />
 
             <ViewStub
                 android:id="@+id/EditorTestStub"

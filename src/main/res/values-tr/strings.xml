@@ -623,5 +623,6 @@
     <string name="google_sign_in_account_title">Google hesabı eklemediniz. eğer bildirim almak istiyorsanız, lütfen bağlanın</string>
     <string name="google_sign_in_account_button">Oturum açın</string>
     <string name="google_unavailable_services_title">Maalesef,bildirimler telefonunuzda çalışmaz.</string>
+    <string name="on_phone">telefona</string>
     <string name="add_leader_hint">Tebriksiniz …</string>
 </resources>

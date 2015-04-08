@@ -18,7 +18,7 @@ public class EditFormItemsEditDialog extends AbstractEditDialog<FormItem> {
     public static final int WINDOW_CLOSING_DELAY = 100;
 
     public static EditFormItemsEditDialog newInstance(String title, FormItem notification,
-                                                          final AbstractEditDialog.EditingFinishedListener<FormItem> editingFinishedListener) {
+                                                      final AbstractEditDialog.EditingFinishedListener<FormItem> editingFinishedListener) {
         final EditFormItemsEditDialog selector = new EditFormItemsEditDialog();
         Bundle selectorArgs = new Bundle();
         selectorArgs.putString(DIALOG_TITLE, title);

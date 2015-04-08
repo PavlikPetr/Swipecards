@@ -22,13 +22,13 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:gravity="left|top"
+        style="@style/topfaceEditText.Holo"
+        android:gravity="left|bottom"
         android:padding="8dp"
         android:textSize="15sp"
         android:minLines="2"
         android:maxLines="5"
-        android:linksClickable="false"
-        style="@style/topfaceEditText" />
+        android:linksClickable="false" />
 
     <Button
         android:id="@+id/btnSend"
