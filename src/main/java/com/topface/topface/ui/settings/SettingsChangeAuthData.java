@@ -135,16 +135,18 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
         final String password = mEdMainField.getText().toString();
         final String passwordConfirmation = mEdConfirmationField.getText().toString();
         final String oldPassword = mOldPassword.getText().toString();
-        if (password.trim().length() <= 0) {
-            Toast.makeText(App.getContext(), R.string.enter_new_password, Toast.LENGTH_LONG).show();
-        } else if (oldPassword.trim().length() <= 0) {
+        if (oldPassword.trim().length() <= 0) {
             Toast.makeText(App.getContext(), R.string.enter_old_password, Toast.LENGTH_LONG).show();
+        } else if (password.trim().length() <= 0) {
+            Toast.makeText(App.getContext(), R.string.enter_new_password, Toast.LENGTH_LONG).show();
         } else if (passwordConfirmation.trim().length() <= 0) {
             Toast.makeText(App.getContext(), R.string.enter_password_confirmation, Toast.LENGTH_LONG).show();
         } else if (!password.equals(passwordConfirmation)) {
             Toast.makeText(App.getContext(), R.string.passwords_mismatched, Toast.LENGTH_LONG).show();
         } else if (!oldPassword.equals(mToken.getPassword())) {
             Toast.makeText(App.getContext(), R.string.old_password_mismatched, Toast.LENGTH_LONG).show();
+        } else if (oldPassword.equals(password)) {
+            Toast.makeText(App.getContext(), R.string.passwords_matched, Toast.LENGTH_LONG).show();
         } else {
             ChangePasswordRequest request = new ChangePasswordRequest(getActivity(), oldPassword, password);
             lock();
