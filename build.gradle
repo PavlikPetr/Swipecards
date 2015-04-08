@@ -4,14 +4,7 @@ if (!versionPropsFile.canRead()) {
     throw new GradleException("Could not read version.properties! Create file in project root")
 }
 versionProps.load(new FileInputStream(versionPropsFile))
-
-def getGitHeadSha() {
-    return 'git rev-parse --short HEAD'.execute().text.trim();
-}
-
-def getTimestamp() {
-    return new Date().getTime();
-}
+incrementQaBuildVersion(versionProps, versionPropsFile);
 
 def getQaVersion(versionProps) {
     def versionQaBuild = versionProps['VERSION_QA_BUILD'].toInteger()
@@ -24,6 +17,14 @@ def incrementQaBuildVersion(versionProps, versionPropsFile) {
         versionProps['VERSION_QA_BUILD'] = versionQaBuild.toString()
         versionProps.store(versionPropsFile.newWriter(), null)
     }
+}
+
+def getGitHeadSha() {
+    return 'git rev-parse --short HEAD'.execute().text.trim();
+}
+
+def getTimestamp() {
+    return new Date().getTime();
 }
 
 buildscript {
@@ -81,13 +82,12 @@ android {
         //noinspection GroovyAssignabilityCheck
         targetSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
 
-        versionCode Integer.parseInt(rootProject.VERSION_CODE)
+        versionCode Integer.parseInt(rootProject.VERSION_CODE) + getQaVersion(versionProps)
         versionName rootProject.VERSION_NAME
 
         testApplicationId "com.topface.topface.test"
 
         testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
-
 
         buildConfigField "long", "BUILD_TIME", "0L";
         buildConfigField "String", "GIT_HEAD_SHA", "null";
@@ -118,7 +118,6 @@ android {
         //пишем время сборки и SHA текущего комита, это нужно для идентификации сборки
         qa.initWith(buildTypes.debug)
         qa {
-            incrementQaBuildVersion(versionProps, versionPropsFile);
             versionNameSuffix ".${getQaVersion(versionProps)}-qa"
             buildConfigField "long", "BUILD_TIME", "${getTimestamp()}L";
             buildConfigField "String", "GIT_HEAD_SHA", "\"${getGitHeadSha()}\"";
