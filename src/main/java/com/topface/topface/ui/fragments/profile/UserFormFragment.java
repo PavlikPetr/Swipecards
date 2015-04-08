@@ -58,8 +58,8 @@ public class UserFormFragment extends AbstractFormFragment implements OnClickLis
     }
 
     @Override
-    public void setUserData(int userId, LinkedList<FormItem> forms, Profile.Gifts gifts) {
-        super.setUserData(userId, forms, gifts);
+    public void setUserData(int userId, LinkedList<FormItem> forms, Profile.Gifts gifts, int giftsCount) {
+        super.setUserData(userId, forms, gifts, giftsCount);
         if (getFormAdapter().isFormEmpty()) {
             mEmptyFormLayout.setVisibility(View.VISIBLE);
         }
