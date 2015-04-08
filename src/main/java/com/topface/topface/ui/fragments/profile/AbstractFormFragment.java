@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.profile;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.os.Bundle;
@@ -47,6 +48,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
     private TextView mGiftsCounter;
     private GiftsStripAdapter mGiftAdapter;
     private float mGiftSize;
+    private float mGiftsCounterSize;
     private int mVisibleGiftsNumber;
     private int mUserId;
     private LinkedList<FormItem> mForms;
@@ -70,9 +72,11 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mGiftAdapter = new GiftsStripAdapter(getActivity(), new FeedList<FeedGift>(), null);
-        mFormAdapter = createFormAdapter(getActivity());
-        mGiftSize = getActivity().getResources().getDimension(R.dimen.form_gift_size);
+        Activity activity = getActivity();
+        mGiftAdapter = new GiftsStripAdapter(activity, new FeedList<FeedGift>(), null);
+        mFormAdapter = createFormAdapter(activity);
+        mGiftSize = activity.getResources().getDimension(R.dimen.form_gift_size);
+        mGiftsCounterSize = activity.getResources().getDimension(R.dimen.form_gift_counter_size);
         mMetrics = getActivity().getResources().getDisplayMetrics();
     }
 
@@ -93,7 +97,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
             }
         });
         mVisibleGiftsNumber = (mMetrics.widthPixels - mGiftsHeader.getPaddingLeft() -
-                mGiftsHeader.getPaddingRight() - (int) (mGiftSize / 4)) / (int) mGiftSize;
+                mGiftsHeader.getPaddingRight() - (int) mGiftsCounterSize) / (int) mGiftSize;
         mGiftAdapter.registerDataSetObserver(mGiftsObserver);
 
         mListQuestionnaire.addHeaderView(giftsHeaderWrapper);
@@ -259,8 +263,8 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
     }
 
     private boolean isNotEnoughGifts() {
-        int giftsSize = mGiftAdapter.getCount();
-        return giftsSize < mVisibleGiftsNumber && giftsSize < mGiftsCount;
+        int giftsCnt = mGiftAdapter.getCount();
+        return giftsCnt < mVisibleGiftsNumber && giftsCnt < mGiftsCount;
     }
 
     private void requestGifts() {
