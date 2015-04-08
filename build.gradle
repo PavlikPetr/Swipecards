@@ -6,6 +6,19 @@ if (!versionPropsFile.canRead()) {
 versionProps.load(new FileInputStream(versionPropsFile))
 incrementQaBuildVersion(versionProps, versionPropsFile);
 
+def getVersionCode(versionProps) {
+    def versionCode = versionProps['VERSION_CODE'].toInteger()
+    if (project.gradle.startParameter.taskNames.contains("assembleGoogleQa")) {
+        versionCode = versionCode + getQaVersion(versionProps)
+    }
+    return versionCode;
+}
+
+def getVersionName(versionProps) {
+    def versionName = versionProps['VERSION_NAME']
+    return versionName;
+}
+
 def getQaVersion(versionProps) {
     def versionQaBuild = versionProps['VERSION_QA_BUILD'].toInteger()
     return versionQaBuild;
@@ -82,8 +95,8 @@ android {
         //noinspection GroovyAssignabilityCheck
         targetSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
 
-        versionCode Integer.parseInt(rootProject.VERSION_CODE) + getQaVersion(versionProps)
-        versionName rootProject.VERSION_NAME
+        versionCode getVersionCode(versionProps)
+        versionName getVersionName(versionProps)
 
         testApplicationId "com.topface.topface.test"
 
