@@ -57,7 +57,8 @@ public class ActionBarTitleSetterDelegate {
 
     public void setOnline(boolean online) {
         if (mTitle != null) {
-            mTitle.setCompoundDrawablePadding((int) App.getContext().getResources().getDimension(R.dimen.padding_left_for_online_icon));
+            mTitle.setCompoundDrawablePadding((int) App.getContext().getResources().
+                    getDimension(R.dimen.padding_left_for_online_icon));
             mTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, online ? R.drawable.ico_online : 0, 0);
         }
     }

@@ -481,6 +481,8 @@
     <string name="general_complain_sended">Şikâyetiniz gönderildi, yardımınız için teşekkürler</string>
     <string name="general_complain">Şikâyet</string>
     <string name="general_msg">Mesaj</string>
+    <string name="notifications">Bildirimler</string>
+    <string name="general_no_notifications">Maalesef, cihazınızda bildirimler uygulanmıyor</string>
     <string name="black_list_add_short">Kara listeye</string>
     <string name="confirm_email_for_dating">Biz spama karşıyız. Topface’de tanışmak için posta adresinizi onaylayın!</string>
     <string name="send_confirm_link">Onaylama için link göndermek</string>
@@ -621,5 +623,6 @@
     <string name="google_sign_in_account_title">Google hesabı eklemediniz. eğer bildirim almak istiyorsanız, lütfen bağlanın</string>
     <string name="google_sign_in_account_button">Oturum açın</string>
     <string name="google_unavailable_services_title">Maalesef,bildirimler telefonunuzda çalışmaz.</string>
+    <string name="on_phone">telefona</string>
     <string name="add_leader_hint">Tebriksiniz …</string>
 </resources>

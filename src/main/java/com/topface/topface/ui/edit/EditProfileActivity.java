@@ -197,10 +197,6 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
             case R.id.tvEditCity:
                 selectCity();
                 break;
-            case R.id.ivProfilePhoto:
-                startActivityForResult(new Intent(getApplicationContext(), EditContainerActivity.class),
-                        EditContainerActivity.INTENT_EDIT_PROFILE_PHOTO);
-                break;
         }
     }
 
@@ -239,14 +235,6 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     mAdapter.notifyDataSetChanged();
                     break;
                 case EditContainerActivity.INTENT_EDIT_INPUT_FORM_ITEM:
-                    mAdapter.notifyDataSetChanged();
-                    break;
-                case EditContainerActivity.INTENT_EDIT_PROFILE_PHOTO:
-                    mProfilePhoto.setPhoto(CacheProfile.photo);
-                    mAdapter.notifyDataSetChanged();
-                    break;
-                case EditContainerActivity.INTENT_EDIT_ALBUM:
-                    mProfilePhoto.setPhoto(CacheProfile.photo);
                     mAdapter.notifyDataSetChanged();
                     break;
                 case CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY:
@@ -497,8 +485,6 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
         @Override
         void onClick() {
-            Intent intent = new Intent(getApplicationContext(), EditContainerActivity.class);
-            startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_ALBUM);
         }
     }
 

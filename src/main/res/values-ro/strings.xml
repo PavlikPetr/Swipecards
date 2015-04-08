@@ -371,6 +371,8 @@
     <string name="general_complain_sended">Plangerea Dmv a fost trimisa, va multumim pentru ajutor</string>
     <string name="general_complain">Plangere</string>
     <string name="general_msg">Mesaj</string>
+    <string name="notifications">Informari</string>
+    <string name="general_no_notifications">Din pacate, instiintarile, pe instalatia Dmv nu sunt accesibile</string>
     <string name="black_list_add_short">In lista neagra</string>
     <string name="confirm_email_for_dating">Noi suntem contra la spam. Va rugam sa confirmati adresa electronica a Dmv, pentru a face cunostinta in Topface!</string>
     <string name="complain_type_swearing_msg">Amenintari, injuraturi, purtare urata</string>

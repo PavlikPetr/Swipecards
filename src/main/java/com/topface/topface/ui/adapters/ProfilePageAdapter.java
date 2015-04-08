@@ -12,8 +12,6 @@ import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.buy.VipPaymentWallBuyFragment;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
-import com.topface.topface.ui.fragments.profile.HeaderMainFragment;
-import com.topface.topface.ui.fragments.profile.HeaderStatusFragment;
 import com.viewpagerindicator.PageIndicator;
 
 import java.util.ArrayList;
@@ -66,12 +64,7 @@ public class ProfilePageAdapter extends HackyFragmentStatePagerAdapter {
         try {
             String fragmentClassName = mFragmentsClasses.get(position);
             //create fragments
-            if (fragmentClassName.equals(HeaderMainFragment.class.getName())) {
-                fragment = HeaderMainFragment.newInstance(mProfileUpdater.getProfile());
-            } else if (fragmentClassName.equals(HeaderStatusFragment.class.getName())) {
-                fragment = HeaderStatusFragment.newInstance(mProfileUpdater.getProfile(), mProfileUpdater.getProfileType());
-
-            } else if (fragmentClassName.equals(VipBuyFragment.class.getName())) {
+            if (fragmentClassName.equals(VipBuyFragment.class.getName())) {
                 //Если это платежи через Google Play, но у нас не поддерживаются Google Play Services,
                 //то вместо покупок через GP показываем покупки через PaymentWall
                 if (BuildConfig.MARKET_API_TYPE == MarketApiType.GOOGLE_PLAY && !App.isGmsEnabled()) {

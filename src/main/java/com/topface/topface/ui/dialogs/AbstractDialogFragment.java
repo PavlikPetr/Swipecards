@@ -1,5 +1,6 @@
 package com.topface.topface.ui.dialogs;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -44,14 +45,21 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
         } else {
             setStyle(STYLE_NO_FRAME, R.style.Theme_Topface_NoActionBar);
         }
+        applyStyle();
         final TypedArray styledAttributes = getActivity().getTheme().obtainStyledAttributes(
                 new int[]{R.attr.actionBarSize});
         mActionBarSize = (int) styledAttributes.getDimension(0, 0);
         styledAttributes.recycle();
     }
 
+    protected void applyStyle() {
+        //По стилю это у нас не диалог, а кастомный дизайн -
+        //закрывает весь экран оверлеем и ниже ActionBar показывает контент
+        setStyle(STYLE_NO_FRAME, R.style.Topface_Theme_TranslucentDialog);
+    }
+
     @Override
-    public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root;
         if (isModalDialog()) {
             root = inflater.inflate(R.layout.dialog_modal, container, false);

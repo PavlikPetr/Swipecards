@@ -477,6 +477,8 @@
     <string name="general_complain_sended">Il tuo reclamo è stato inviato, grazie per il tuo aiuto</string>
     <string name="general_complain">Reclamo</string>
     <string name="general_msg">Massaggio</string>
+    <string name="notifications">Notifiche</string>
+    <string name="general_no_notifications">Purtroppo, per il tuo dispositivo gli avvisi non sono disponibili</string>
     <string name="black_list_add_short">Nella black list</string>
     <string name="confirm_email_for_dating">Siamo contrari allo spam. Conferma il tuo e-mail per chattare su Topface!</string>
     <string name="send_confirm_link">Invia il link di conferma</string>
@@ -613,5 +615,7 @@
     <string name="google_sign_in_account_title">Non hai aggiunto l’account Google, devi accedervi per ricevere le notifiche.</string>
     <string name="google_sign_in_account_button">Accedere</string>
     <string name="google_unavailable_services_title">Purtroppo il tuo dispositivo non supporta l’invio di notifiche.</string>
+    <string name="on_phone">Sul cellulare</string>
+    <string name="on_mail">Sull’e-mail</string>
     <string name="add_leader_hint">Il tuo saluto…</string>
 </resources>

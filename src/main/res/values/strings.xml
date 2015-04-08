@@ -477,6 +477,8 @@
     <string name="general_complain_sended">Your complaint has been submitted, much thanks for your help.</string>
     <string name="general_complain">Complaint</string>
     <string name="general_msg">Message</string>
+    <string name="notifications">Notifications</string>
+    <string name="general_no_notifications">Unfortunately, the notifications on your device are not available</string>
     <string name="black_list_add_short">To the blacklist</string>
     <string name="confirm_email_for_dating">We are against spam. Please confirm your email, so that you can meet people in Topface!</string>
     <string name="send_confirm_link">Send a link for confirmation</string>
@@ -617,5 +619,7 @@
     <string name="google_sign_in_account_title">Your Google account has not been added. You have to sign in, if you want to receive reminders.</string>
     <string name="google_sign_in_account_button">Sign in</string>
     <string name="google_unavailable_services_title">Unfortunately, the remainders are not available on your device.</string>
+    <string name="on_phone">To mobile</string>
+    <string name="on_mail">To email</string>
     <string name="add_leader_hint">Your greeting…</string>
 </resources>

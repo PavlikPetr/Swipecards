@@ -481,6 +481,8 @@
     <string name="general_complain_sended">Jūsų skundas išsiųstas, labai dėkojame už pagalbą</string>
     <string name="general_complain">Skundas</string>
     <string name="general_msg">Pranešimas</string>
+    <string name="notifications">Pranešimai</string>
+    <string name="general_no_notifications">Deja, jūsų įrenginyje pranešimai neprieinami</string>
     <string name="black_list_add_short">Į juodąjį sąrašą</string>
     <string name="confirm_email_for_dating">Mes esame prieš brukalą. Patvirtinkite savo el. pašto adresą, kad pažindintis Topface!</string>
     <string name="send_confirm_link">Išsiųsti nuorodą patvirtinimui</string>

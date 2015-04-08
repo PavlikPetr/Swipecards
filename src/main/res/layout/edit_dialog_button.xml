@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/edit_dialog_buttons_top"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:src="@color/edit_dialog_buttons_divider"/>
+
+    <Button
+        android:id="@+id/edit_dialog_ok"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/edit_dialog_button_heigh"
+        android:layout_below="@id/edit_dialog_buttons_top"
+        android:background="@null"
+        android:text="@string/general_ok"/>
+
+</RelativeLayout>
