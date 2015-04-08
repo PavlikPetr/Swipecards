@@ -239,29 +239,25 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
                     break;
                 case CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY:
                     Bundle extras = data.getExtras();
-                    try {
-                        if (extras != null) {
-                            final City city = new City(new JSONObject(extras.getString(CitySearchActivity.INTENT_CITY)));
-                            SettingsRequest request = new SettingsRequest(this);
-                            request.cityid = city.id;
-                            request.callback(new ApiHandler() {
+                    if (extras != null) {
+                        final City city = extras.getParcelable(CitySearchActivity.INTENT_CITY);
+                        SettingsRequest request = new SettingsRequest(this);
+                        request.cityid = city.id;
+                        request.callback(new ApiHandler() {
 
-                                @Override
-                                public void success(IApiResponse response) {
-                                    CacheProfile.city = city;
-                                    CacheProfile.sendUpdateProfileBroadcast();
-                                    mEditCity.setText(city.name);
-                                }
+                            @Override
+                            public void success(IApiResponse response) {
+                                CacheProfile.city = city;
+                                CacheProfile.sendUpdateProfileBroadcast();
+                                mEditCity.setText(city.name);
+                            }
 
-                                @Override
-                                public void fail(int codeError, IApiResponse response) {
-                                    Toast toast = Toast.makeText(EditProfileActivity.this, R.string.profile_update_error, Toast.LENGTH_SHORT);
-                                    toast.show();
-                                }
-                            }).exec();
-                        }
-                    } catch (JSONException e) {
-                        Debug.error(e);
+                            @Override
+                            public void fail(int codeError, IApiResponse response) {
+                                Toast toast = Toast.makeText(EditProfileActivity.this, R.string.profile_update_error, Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                        }).exec();
                     }
                 default:
                     break;
