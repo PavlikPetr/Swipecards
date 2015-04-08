@@ -37,8 +37,8 @@
         <item name="android:windowBackground">@color/bg_holo</item>
         <item name="android:progressBarStyle">@style/TopFaceProgressBar</item>
         <!-- Стилизованные кнопки -->
-        <item name="blueButtonStyle">@style/Widget.Topface.Button.Big.Blue</item>
-        <item name="grayButtonStyle">@style/Widget.Topface.Button.Big.Gray</item>
+        <item name="blueButtonStyle">@style/BlueBonusButton</item>
+        <item name="grayButtonStyle">@style/GrayBonusButton</item>
 
         <!-- ActionBar  -->
         <item name="actionBarStyle">@style/Widget.Topface.ActionBar</item>

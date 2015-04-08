@@ -8,6 +8,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
+        <com.topface.IllustratedTextView.IllustratedTextView
+            android:id="@+id/payReasonFragmentBuy"
+            style="@style/PayReasonView" />
 
         <ViewStub
             android:id="@+id/EditorTestStub"
