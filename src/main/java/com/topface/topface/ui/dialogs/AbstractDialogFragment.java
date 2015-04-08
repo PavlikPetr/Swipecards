@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -38,17 +39,20 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        applyStyle();
+
+        //По стилю это у нас не диалог, а кастомный дизайн -
+        //закрывает весь экран оверлеем и ниже ActionBar показывает контент
+        setStyle(STYLE_NO_FRAME, getDialogStyleResId());
+
         final TypedArray styledAttributes = getActivity().getTheme().obtainStyledAttributes(
                 new int[]{R.attr.actionBarSize});
         mActionBarSize = (int) styledAttributes.getDimension(0, 0);
         styledAttributes.recycle();
     }
 
-    protected void applyStyle() {
-        //По стилю это у нас не диалог, а кастомный дизайн -
-        //закрывает весь экран оверлеем и ниже ActionBar показывает контент
-        setStyle(STYLE_NO_FRAME, R.style.Topface_Theme_TranslucentDialog);
+    @StyleRes
+    protected int getDialogStyleResId() {
+        return R.style.Topface_Theme_TranslucentDialog;
     }
 
     @Override

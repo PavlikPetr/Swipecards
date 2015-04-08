@@ -464,7 +464,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
     }
 
     @Override
-    protected IUniversalUser getUniversalUser() {
+    protected IUniversalUser createUniversalUser() {
         return UniversalUserFactory.create(getProfile());
     }
 

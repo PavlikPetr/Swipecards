@@ -5,11 +5,11 @@ import com.topface.topface.Static;
 /**
  * Universal user from FeedUser
  */
-public class UniversalFeedUser implements IUniversalUser {
+public class UniversalFeedUserWrapper implements IUniversalUser {
 
     private FeedUser mFeedUser;
 
-    UniversalFeedUser(FeedUser feedUser) {
+    UniversalFeedUserWrapper(FeedUser feedUser) {
         mFeedUser = feedUser;
     }
 

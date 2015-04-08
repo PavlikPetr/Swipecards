@@ -151,7 +151,6 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                 break;
             case R.id.loHelp:
                 String helpUrl = CacheProfile.getOptions().helpUrl;
-                //������ �� ������ ���������� ������ � ������, ���� ������ ��� �� �������.
                 if (!TextUtils.isEmpty(helpUrl)) {
                     intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse(helpUrl));

@@ -158,6 +158,7 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
 
     protected void setProfile(Profile profile) {
         mProfile = profile;
+        invalidateUniversalUser();
         setActionBarAvatar(getUniversalUser());
         refreshActionBarTitles();
         if (mUserPhotoFragment != null && profile instanceof User) {

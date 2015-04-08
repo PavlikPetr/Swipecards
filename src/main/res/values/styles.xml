@@ -888,6 +888,10 @@
         <item name="android:hint">@string/general_city</item>
         <item name="android:textColorHint">#8A8A8A</item>
         <item name="android:background">@drawable/input_field_selector</item>
+        <item name="android:lines">1</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:selectAllOnFocus">true</item>
+        <item name="android:singleLine">true</item>
     </style>
 
     <style name="AutoCompleteTextViewStyle" parent="@style/Widget.AppCompat.AutoCompleteTextView">

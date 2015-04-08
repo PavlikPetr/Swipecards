@@ -202,7 +202,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     }
 
     @Override
-    protected IUniversalUser getUniversalUser() {
+    protected IUniversalUser createUniversalUser() {
         return UniversalUserFactory.create(getProfile());
     }
 

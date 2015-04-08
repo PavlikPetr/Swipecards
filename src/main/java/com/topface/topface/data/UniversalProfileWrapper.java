@@ -5,11 +5,11 @@ import com.topface.topface.Static;
 /**
  * Uneversal user from profile
  */
-public class UniversalProfile implements IUniversalUser {
+public class UniversalProfileWrapper implements IUniversalUser {
 
     private Profile mProfile;
 
-    UniversalProfile(Profile profile) {
+    UniversalProfileWrapper(Profile profile) {
         mProfile = profile;
     }
 

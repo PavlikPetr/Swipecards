@@ -46,8 +46,8 @@ public class EditTextFormDialog extends AbstractEditDialog<FormItem> {
     }
 
     @Override
-    protected void applyStyle() {
-        setStyle(ConfirmEmailDialog.STYLE_NO_TITLE, R.style.EditDialog_Text);
+    protected int getDialogStyleResId() {
+        return R.style.EditDialog_Text;
     }
 
     @Override

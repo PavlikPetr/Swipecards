@@ -9,11 +9,11 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
-    <ImageView
+    <View
         android:id="@+id/edit_dialog_title_divider"
         android:layout_width="fill_parent"
         android:layout_height="2dp"
-        android:src="@color/tab_counter_text_color_selected"
+        android:background="@color/tab_counter_text_color_selected"
         android:layout_below="@id/edit_dialog_title"/>
 
     <ListView
