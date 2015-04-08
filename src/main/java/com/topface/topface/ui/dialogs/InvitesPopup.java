@@ -94,6 +94,11 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
     }
 
     @Override
+    protected boolean isModalDialog() {
+        return false;
+    }
+
+    @Override
     public int getDialogLayoutRes() {
         return R.layout.invites_popup;
     }

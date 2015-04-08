@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments.profile;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.topface.topface.ui.adapters.GiftsStripAdapter;
 import com.topface.topface.utils.FormItem;
 
 import java.util.Iterator;

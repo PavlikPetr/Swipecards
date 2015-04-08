@@ -16,6 +16,6 @@
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        my:request_key="CITY_SEARCH_AFTER_REGISTRATION"/>
+        my:request_key="CITY_SEARCH_AFTER_REGISTRATION" />
 
 </FrameLayout>

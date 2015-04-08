@@ -1,7 +1,7 @@
 package com.topface.topface.ui.dialogs;
 
 import android.app.Dialog;
-import android.support.v4.app.DialogFragment;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -27,9 +27,13 @@ public class FilterListDialog extends AbstractDialogFragment {
     }
 
     public static FilterListDialog newInstance() {
-        FilterListDialog dialog = new FilterListDialog();
-        dialog.setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Panel);
-        return dialog;
+        return new FilterListDialog();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(STYLE_NO_FRAME, R.style.Theme_Topface_NoActionBar_Filterlist);
     }
 
     @Override
@@ -45,6 +49,11 @@ public class FilterListDialog extends AbstractDialogFragment {
                 closeDialog();
             }
         });
+    }
+
+    @Override
+    protected boolean isModalDialog() {
+        return false;
     }
 
     private void setAdapter() {

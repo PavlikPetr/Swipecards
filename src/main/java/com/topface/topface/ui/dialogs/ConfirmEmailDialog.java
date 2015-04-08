@@ -24,7 +24,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.social.AuthToken;
 
-public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnClickListener {
+public class ConfirmEmailDialog extends AbstractDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "Topface_ConfirmEmailDialog_Tag";
     private EditText mEditEmailText;
@@ -33,7 +33,7 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
     private ProgressBar mProgressBar;
 
     @Override
-    protected void initContentViews(View root) {
+    protected void initViews(View root) {
         getDialog().setCanceledOnTouchOutside(false);
         mConfirmButton = (Button) root.findViewById(R.id.btnSend);
         mConfirmed = (Button) root.findViewById(R.id.btnConfirmed);
@@ -49,7 +49,12 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
     }
 
     @Override
-    protected int getContentLayoutResId() {
+    protected boolean isModalDialog() {
+        return true;
+    }
+
+    @Override
+    public int getDialogLayoutRes() {
         return R.layout.dialog_confirm_email;
     }
 
@@ -59,11 +64,6 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
         Utils.hideSoftKeyboard(getActivity(), mEditEmailText);
     }
 
-
-    @Override
-    protected void onCloseButtonClick(View v) {
-        closeDialog();
-    }
 
     @Override
     public void onResume() {

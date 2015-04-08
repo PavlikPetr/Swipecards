@@ -11,5 +11,5 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:inputType="textCapSentences"
-        android:layout_margin="15dp"/>
+        android:layout_margin="15dp" />
 </FrameLayout>

@@ -27,7 +27,7 @@ import static com.topface.topface.ui.settings.FeedbackMessageFragment.FeedbackTy
  * Created by kirussell on 25.12.13.
  * User can rate an app through this dialog
  */
-public class RateAppDialog extends AbstractModalDialog implements View.OnClickListener,
+public class RateAppDialog extends AbstractDialogFragment implements View.OnClickListener,
         DialogInterface.OnCancelListener {
     public static final String TAG = "RateAppDialog";
     public static final String RATING_POPUP = "RATING_POPUP";
@@ -40,12 +40,11 @@ public class RateAppDialog extends AbstractModalDialog implements View.OnClickLi
         super.onCreate(savedInstanceState);
         //Закрыть диалог можно
         setCancelable(true);
-        setCloseButton(false);
         EasyTracker.sendEvent("RatePopup", "FeaturePopup", "Show", 1L);
     }
 
     @Override
-    protected void initContentViews(View root) {
+    protected void initViews(View root) {
         getDialog().setOnCancelListener(this);
         mRatingBar = (RatingBar) root.findViewById(R.id.ratingBarStarts);
         root.findViewById(R.id.btnRate).setOnClickListener(this);
@@ -54,13 +53,13 @@ public class RateAppDialog extends AbstractModalDialog implements View.OnClickLi
     }
 
     @Override
-    protected int getContentLayoutResId() {
-        return R.layout.dialog_rate_app;
+    protected boolean isModalDialog() {
+        return true;
     }
 
     @Override
-    protected final void onCloseButtonClick(View v) {
-        // nothing to do, there is no close button
+    protected int getDialogLayoutRes() {
+        return R.layout.dialog_rate_app;
     }
 
     @Override

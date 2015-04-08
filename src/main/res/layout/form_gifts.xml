@@ -13,5 +13,5 @@
         android:paddingTop="16dp"
         android:paddingBottom="8dp"
         android:gravity="center_vertical"
-        android:layout_gravity="center_vertical"/>
+        android:layout_gravity="center_vertical" />
 </LinearLayout>
