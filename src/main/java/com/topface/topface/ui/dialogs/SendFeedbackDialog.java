@@ -24,7 +24,7 @@ import com.topface.topface.utils.Utils;
  * Dialog for user feedback with configurable title and feedback subject name
  * Use newInstance(int titleResId, String feedbackSubject) method to create dialog
  */
-public class SendFeedbackDialog extends AbstractModalDialog implements View.OnClickListener {
+public class SendFeedbackDialog extends AbstractDialogFragment implements View.OnClickListener {
 
     private static final String ARG_TITLE_RES_ID = "feedback_dialog_title_res_id";
     private static final String ARG_FEEDBACK_SUBJECT = "feedback_dialog_subject_res_id";
@@ -49,7 +49,7 @@ public class SendFeedbackDialog extends AbstractModalDialog implements View.OnCl
     }
 
     @Override
-    protected void initContentViews(View root) {
+    protected void initViews(View root) {
         getDialog().setOnCancelListener(this);
         // init views
         TextView titleView = (TextView) root.findViewById(R.id.tvTitle);
@@ -64,14 +64,13 @@ public class SendFeedbackDialog extends AbstractModalDialog implements View.OnCl
     }
 
     @Override
-    protected int getContentLayoutResId() {
-        return R.layout.dialog_input;
+    protected boolean isModalDialog() {
+        return true;
     }
 
     @Override
-    protected void onCloseButtonClick(View v) {
-        Utils.hideSoftKeyboard(getActivity(), mEdMessage);
-        getDialog().cancel();
+    protected int getDialogLayoutRes() {
+        return R.layout.dialog_input;
     }
 
     @Override

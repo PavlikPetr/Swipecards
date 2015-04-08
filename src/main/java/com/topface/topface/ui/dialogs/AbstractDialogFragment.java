@@ -39,7 +39,11 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
         super.onCreate(savedInstanceState);
         //По стилю это у нас не диалог, а кастомный дизайн -
         //закрывает весь экран оверлеем и ниже ActionBar показывает контент
-        setStyle(STYLE_NO_FRAME, R.style.Topface_Theme_TranslucentDialog);
+        if (isModalDialog()) {
+            setStyle(STYLE_NO_FRAME, R.style.Topface_Theme_TranslucentDialog);
+        } else {
+            setStyle(STYLE_NO_FRAME, R.style.Theme_Topface_NoActionBar);
+        }
         final TypedArray styledAttributes = getActivity().getTheme().obtainStyledAttributes(
                 new int[]{R.attr.actionBarSize});
         mActionBarSize = (int) styledAttributes.getDimension(0, 0);
@@ -48,7 +52,12 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
 
     @Override
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.dialog_base, container, false);
+        View root;
+        if (isModalDialog()) {
+            root = inflater.inflate(R.layout.dialog_modal, container, false);
+        } else {
+            root = inflater.inflate(R.layout.dialog_base, container, false);
+        }
         if (isUnderActionBar()) {
             root.setPadding(0, mNeedActionBarIndent ? mActionBarSize : 0, 0, 0);
         }
@@ -112,14 +121,16 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
         super.startActivityForResult(intent, requestCode);
     }
 
-    public abstract int getDialogLayoutRes();
+    protected abstract boolean isModalDialog();
+
+    protected abstract int getDialogLayoutRes();
 
     protected final void setNeedActionBarIndent(boolean value) {
         mNeedActionBarIndent = value;
     }
 
     public boolean isUnderActionBar() {
-        return true;
+        return false;
     }
 
 }

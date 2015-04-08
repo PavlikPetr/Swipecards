@@ -20,9 +20,14 @@ import com.topface.topface.utils.EasyTracker;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LeadersDialog extends AbstractModalDialog {
+public class LeadersDialog extends AbstractDialogFragment {
 
     private Leader user;
+
+    /**
+     * WARNING !!!
+     * После перехода на белый дизайн попап из-за ненадобности не теститовался.
+     */
 
     public static LeadersDialog newInstance(Leader user) {
         LeadersDialog dialog = new LeadersDialog();
@@ -37,7 +42,7 @@ public class LeadersDialog extends AbstractModalDialog {
     }
 
     @Override
-    protected void initContentViews(View root) {
+    protected void initViews(View root) {
         Bundle arguments = getArguments();
         String userJsonString = arguments.getString("user");
         try {
@@ -84,13 +89,13 @@ public class LeadersDialog extends AbstractModalDialog {
     }
 
     @Override
-    protected int getContentLayoutResId() {
-        return R.layout.leaders_dialog;
+    protected boolean isModalDialog() {
+        return true;
     }
 
     @Override
-    protected void onCloseButtonClick(View v) {
-        getDialog().dismiss();
+    protected int getDialogLayoutRes() {
+        return R.layout.leaders_dialog;
     }
 
     private void openChat() {
@@ -98,4 +103,5 @@ public class LeadersDialog extends AbstractModalDialog {
         getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT);
         EasyTracker.sendEvent("Leaders", "Dialog", "Chat", 1L);
     }
+
 }
