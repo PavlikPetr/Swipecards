@@ -49,6 +49,7 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean inBlackList;
     public LinkedList<FormItem> forms = new LinkedList<>();
     public Gifts gifts = new Gifts();
+    public int giftsCount;
     public SparseArrayCompat<TopfaceNotifications> notifications = new SparseArrayCompat<>();
     public boolean email;
     public boolean emailGrabbed;
@@ -118,6 +119,7 @@ public class Profile extends AbstractDataWithPhotos {
             parseNotifications(profile, resp);
             parseForm(profile, resp, App.getContext());
             initPhotos(resp, profile);
+            profile.giftsCount = resp.optInt("giftsCount");
             //TODO clarify parameter: canBecomeLeader
         } catch (Exception e) {
             Debug.error("Profile Wrong response parsing: ", e);

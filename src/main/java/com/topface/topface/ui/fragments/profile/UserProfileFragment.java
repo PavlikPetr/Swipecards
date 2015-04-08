@@ -37,7 +37,6 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
-import com.topface.topface.ui.fragments.gift.UserGiftsFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
@@ -64,6 +63,12 @@ public class UserProfileFragment extends AbstractProfileFragment {
     private ApiResponse mSavedResponse = null;
     // controllers
     private RateController mRateController;
+    private boolean mIsChatAvailable;
+    private boolean mIsAddToFavoritsAvailable;
+
+    private User mRequestedUser;
+    private IApiResponse mUserResponse;
+    private FeedListData<FeedGift> mRequestedGifts;
 
     @Override
     public void onAttach(Activity activity) {
@@ -157,17 +162,33 @@ public class UserProfileFragment extends AbstractProfileFragment {
         return profileId == mLastLoadedProfileId;
     }
 
+    protected boolean isChatAvailable() {
+        return mIsChatAvailable;
+    }
+
+    public void setIsChatAvailable(boolean isChatAvailable) {
+        mIsChatAvailable = isChatAvailable;
+    }
+
+    protected boolean isAddToFavoriteAvailable() {
+        return mIsAddToFavoritsAvailable;
+    }
+
+    public void setIsAddToFavoritsAvailable(boolean isAddToFavoritsAvailable) {
+        mIsAddToFavoritsAvailable = isAddToFavoritsAvailable;
+    }
+
     private void getUserProfile(final int profileId) {
         if (isLoaded(profileId)) return;
         mLockScreen.setVisibility(View.GONE);
         mLoaderView.setVisibility(View.VISIBLE);
         if (mSavedResponse == null) {
             UserRequest userRequest = new UserRequest(profileId, getActivity());
-            registerRequest(userRequest);
             userRequest.callback(new DataApiHandler<User>() {
                 @Override
                 protected void success(User user, IApiResponse response) {
-                    onSuccess(user, response);
+                    mRequestedUser = user;
+                    mUserResponse = response;
                 }
 
                 @Override
@@ -187,7 +208,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
             FeedGiftsRequest giftsRequest = new FeedGiftsRequest(getActivity());
             giftsRequest.uid = profileId;
             giftsRequest.limit = 10;
-            registerRequest(giftsRequest);
             giftsRequest.callback(new DataApiHandler<FeedListData<FeedGift>>() {
 
                 @Override
@@ -197,12 +217,12 @@ public class UserProfileFragment extends AbstractProfileFragment {
 
                 @Override
                 protected void success(FeedListData<FeedGift> data, IApiResponse response) {
-
+                    mRequestedGifts = data;
                 }
 
                 @Override
                 protected FeedListData<FeedGift> parseResponse(ApiResponse response) {
-                    return null;
+                    return new FeedListData<>(response.getJsonResult(), FeedGift.class);
                 }
             });
             ApiRequest userAndGiftsRequest = new ParallelApiRequest(getActivity()).
@@ -210,12 +230,20 @@ public class UserProfileFragment extends AbstractProfileFragment {
                     callback(new ApiHandler() {
                         @Override
                         public void success(IApiResponse response) {
-
+                            if (mRequestedGifts != null) {
+                                mRequestedUser.gifts.clear();
+                                for (FeedGift feedGift : mRequestedGifts.items) {
+                                    mRequestedUser.gifts.add(feedGift.gift);
+                                }
+                            }
+                            onSuccess(mRequestedUser, mUserResponse);
                         }
 
                         @Override
                         public void fail(int codeError, IApiResponse response) {
-
+                            if (mRequestedUser != null && mUserResponse != null) {
+                                onSuccess(mRequestedUser, mUserResponse);
+                            }
                         }
                     });
             registerRequest(userAndGiftsRequest);
@@ -382,15 +410,10 @@ public class UserProfileFragment extends AbstractProfileFragment {
 
                     @Override
                     public void clickSendGift() {
-                        UserGiftsFragment giftsFragment = getGiftFragment();
-                        if (giftsFragment != null && giftsFragment.getActivity() != null) {
-                            giftsFragment.sendGift();
-                        } else {
-                            startActivityForResult(
-                                    GiftsActivity.getSendGiftIntent(getActivity(), mProfileId),
-                                    GiftsActivity.INTENT_REQUEST_GIFT
-                            );
-                        }
+                        startActivityForResult(
+                                GiftsActivity.getSendGiftIntent(getActivity(), mProfileId),
+                                GiftsActivity.INTENT_REQUEST_GIFT
+                        );
                     }
 
                     @Override
@@ -418,11 +441,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
     @Override
     public void onPageSelected(int i) {
         closeOverflowMenu();
-    }
-
-    @Override
-    protected UserGiftsFragment getGiftFragment() {
-        return (UserGiftsFragment) super.getGiftFragment();
     }
 
     private BroadcastReceiver mGiftReceiver = new BroadcastReceiver() {
