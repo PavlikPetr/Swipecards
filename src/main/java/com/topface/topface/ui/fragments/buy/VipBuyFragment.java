@@ -10,14 +10,12 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.topface.billing.OpenIabFragment;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.Products;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
@@ -25,7 +23,6 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.statistics.PushButtonVipUniqueStatistics;
 import com.topface.topface.ui.BlackListActivity;
-import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
@@ -160,19 +157,11 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     private void initEditVipViews(View root) {
         mEditPremiumContainer = (LinearLayout) root.findViewById(R.id.editPremiumContainer);
-        ImageButton editVip = (ImageButton) root.findViewById(R.id.fepVipEdit);
-        editVip.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editSubscriptions();
-            }
-        });
 
         RelativeLayout invisLayout =
                 initEditItem(root,
                         R.id.fepInvis,
-                        R.drawable.edit_big_btn_selector,
-                        R.drawable.ic_vip_invisible_min,
+                        R.drawable.list_like_btn_normal,
                         getString(R.string.vip_invis),
                         new OnClickListener() {
                             @Override
@@ -185,8 +174,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
         initEditItem(root,
                 R.id.fepBlackList,
-                R.drawable.edit_big_btn_top_selector,
-                R.drawable.ic_vip_blacklist_min,
+                R.drawable.list_item_btn,
                 getString(R.string.vip_black_list),
                 new OnClickListener() {
                     @Override
@@ -195,35 +183,21 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
                     }
                 }
         );
-
-        initEditItem(root,
-                R.id.fepProfileBG,
-                R.drawable.edit_big_btn_bottom_selector,
-                R.drawable.ic_vip_profile_bg,
-                getString(R.string.vip_profile_bg),
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        goToBgPick();
-                    }
-                }
-        );
     }
 
-    private RelativeLayout initEditItem(View root, int ID, int bgId, int bgLeftId, String text, OnClickListener listener) {
-        RelativeLayout layout = initLayouts(root, ID, bgId, bgLeftId, text);
+    private RelativeLayout initEditItem(View root, int ID, int bgId, String text, OnClickListener listener) {
+        RelativeLayout layout = initLayouts(root, ID, bgId, text);
         layout.setOnClickListener(listener);
         return layout;
     }
 
-    private RelativeLayout initLayouts(View root, int ID, int bgId, int bgLeftId, String text) {
+    private RelativeLayout initLayouts(View root, int ID, int bgId, String text) {
         RelativeLayout layout = (RelativeLayout) root.findViewById(ID);
 
         TextView layoutText = (TextView) layout.findViewWithTag("tvTitle");
         if (layoutText != null) {
             layoutText.setText(text);
             layout.setBackgroundResource(bgId);
-            layoutText.setCompoundDrawablesWithIntrinsicBounds(bgLeftId, 0, 0, 0);
         }
         return layout;
     }
@@ -261,12 +235,6 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     private void goToBlackList() {
         Intent intent = new Intent(getActivity(), BlackListActivity.class);
-        startActivity(intent);
-    }
-
-    private void goToBgPick() {
-        Intent intent = new Intent(getActivity(), EditContainerActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, EditContainerActivity.INTENT_EDIT_BACKGROUND);
         startActivity(intent);
     }
 

@@ -14,23 +14,22 @@
         android:layout_marginTop="6dp"
         android:visibility="gone" />
 
-    <com.topface.topface.ui.GridViewWithHeaderAndFooter
+    <com.topface.topface.ui.views.AccurateGridViewWithFooterAndHeader
         android:id="@+id/usedGrid"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@id/usedTitle"
         android:layout_margin="0px"
         android:background="@android:color/transparent"
-        android:columnWidth="110dp"
         android:fadeScrollbars="true"
         android:fadingEdge="none"
         android:gravity="center"
-        android:horizontalSpacing="0px"
+        android:horizontalSpacing="@dimen/add_to_leader_spacing_value"
         android:listSelector="@android:color/transparent"
-        android:numColumns="auto_fit"
-        android:padding="0px"
+        android:numColumns="@integer/add_to_leader_column_count"
+        android:padding="@dimen/add_to_leader_spacing_value"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="0px" />
+        android:verticalSpacing="@dimen/add_to_leader_spacing_value" />
 
     <LinearLayout
         android:id="@+id/loInfo"

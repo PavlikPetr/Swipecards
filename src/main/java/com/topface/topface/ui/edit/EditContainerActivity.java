@@ -25,10 +25,8 @@ public class EditContainerActivity extends BaseFragmentActivity {
     public static final int INTENT_EDIT_NAME_AGE = 101;
     public static final int INTENT_EDIT_STATUS = 102;
     public static final int INTENT_EDIT_BACKGROUND = 103;
-    public static final int INTENT_EDIT_ALBUM = 104;
     public static final int INTENT_EDIT_FORM_ITEM = 105;
     public static final int INTENT_EDIT_INPUT_FORM_ITEM = 106;
-    public static final int INTENT_EDIT_PROFILE_PHOTO = 107;
     public static final int INTENT_EDIT_AGE = 108;
 
     public static final int INTENT_EDIT_FILTER = 201;
@@ -76,9 +74,6 @@ public class EditContainerActivity extends BaseFragmentActivity {
                 }
                 mFragment = EditFormItemInputFragment.newInstance(titleId, data);
                 break;
-            case INTENT_EDIT_ALBUM:
-                mFragment = new EditProfilePhotoFragment();
-                break;
             case INTENT_EDIT_FILTER:
                 mFragment = new FilterFragment();
                 break;
@@ -88,9 +83,6 @@ public class EditContainerActivity extends BaseFragmentActivity {
                 data = intent.getStringExtra(INTENT_FORM_DATA);
                 mFragment = FilterChooseFormItemFragment.newInstance(titleId, dataId, data,
                         FilterFragment.mTargetUser.sex, FilterFragment.mTargetUser.getType());
-                break;
-            case INTENT_EDIT_PROFILE_PHOTO:
-                mFragment = new EditProfilePhotoFragment();
                 break;
             case INTENT_EDIT_AGE:
                 mFragment = EditAgeFragment.newInstance(

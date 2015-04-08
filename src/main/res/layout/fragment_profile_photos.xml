@@ -9,37 +9,19 @@
         android:layout_height="fill_parent"
         android:inAnimation="@android:anim/fade_in">
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
+        <com.topface.topface.ui.views.AccurateGridViewWithFooterAndHeader
+            android:id="@+id/usedGrid"
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:orientation="vertical"
-            android:paddingTop="8dp">
-
-            <TextView
-                android:id="@+id/usedTitle"
-                style="@style/BackgroundTitleText"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp" />
-
-            <com.topface.topface.ui.GridViewWithHeaderAndFooter
-                android:id="@+id/usedGrid"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_below="@id/usedTitle"
-                android:layout_margin="0px"
-                android:background="@android:color/transparent"
-                android:columnWidth="110dp"
-                android:fadeScrollbars="true"
-                android:fadingEdge="none"
-                android:horizontalSpacing="0px"
-                android:listSelector="@android:color/transparent"
-                android:numColumns="auto_fit"
-                android:padding="0dp"
-                android:stretchMode="columnWidth"
-                android:verticalSpacing="0px" />
-
-        </RelativeLayout>
+            android:layout_margin="0px"
+            android:background="@android:color/transparent"
+            android:fadeScrollbars="true"
+            android:fadingEdge="none"
+            android:horizontalSpacing="@dimen/add_to_leader_spacing_value"
+            android:listSelector="@android:color/transparent"
+            android:numColumns="@integer/add_to_leader_column_count"
+            android:padding="@dimen/add_to_leader_spacing_value"
+            android:verticalSpacing="@dimen/add_to_leader_spacing_value" />
 
         <ScrollView
             android:layout_width="fill_parent"

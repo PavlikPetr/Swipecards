@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +16,23 @@ import android.widget.RelativeLayout;
 
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
+import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Gift;
+import com.topface.topface.data.IUniversalUser;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.SendGiftAnswer;
+import com.topface.topface.data.UniversalUserFactory;
 import com.topface.topface.data.User;
+import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.FeedGiftsRequest;
+import com.topface.topface.requests.GiftsRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.GiftsActivity;
@@ -53,14 +59,12 @@ public class UserProfileFragment extends AbstractProfileFragment {
     private RelativeLayout mLockScreen;
     private RetryViewCreator mRetryView;
     private View mLoaderView;
-    private MenuItem mBarActions;
     private ArrayList<FeedGift> mNewGifts;
     private View mOutsideView;
     // for profile forwarding
     private ApiResponse mSavedResponse = null;
     // controllers
     private RateController mRateController;
-    private OverflowMenu mProfileOverflowMenu;
 
     @Override
     public void onAttach(Activity activity) {
@@ -90,7 +94,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
         mOutsideView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                closeProfileActions();
+                closeOverflowMenu();
                 mOutsideView.setVisibility(View.GONE);
             }
         });
@@ -108,9 +112,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (mProfileOverflowMenu != null) {
-            mProfileOverflowMenu.onDestroy();
-        }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mGiftReceiver);
     }
 
@@ -126,7 +127,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
         super.initBody();
         addBodyPage(UserPhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
         addBodyPage(UserFormFragment.class.getName(), getResources().getString(R.string.profile_form));
-        addBodyPage(UserGiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
     }
 
     @Override
@@ -135,19 +135,8 @@ public class UserProfileFragment extends AbstractProfileFragment {
     }
 
     @Override
-    protected Integer getOptionsMenuRes() {
-        return R.menu.actions_user_profile;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        MenuItem barActionsItem = menu.findItem(R.id.action_user_actions_list);
-        if (barActionsItem != null && mBarActions != null) {
-            barActionsItem.setChecked(mBarActions.isChecked());
-        }
-        mBarActions = barActionsItem;
-        mProfileOverflowMenu = new OverflowMenu(getActivity(), mBarActions, mRateController, mSavedResponse);
+    protected OverflowMenu createOverflowMenu(MenuItem barActions) {
+        return new OverflowMenu(getActivity(), barActions, mRateController, mSavedResponse);
     }
 
     @Override
@@ -161,15 +150,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (mProfileOverflowMenu != null) {
-            mProfileOverflowMenu.onMenuClicked(item);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected String getTitle() {
+    protected String getDefaultTitle() {
         return getString(R.string.general_profile);
     }
 
@@ -203,7 +184,43 @@ public class UserProfileFragment extends AbstractProfileFragment {
                         showRetryBtn();
                     }
                 }
-            }).exec();
+            });
+            FeedGiftsRequest giftsRequest = new FeedGiftsRequest(getActivity());
+            giftsRequest.uid = profileId;
+            giftsRequest.limit = 10;
+            registerRequest(giftsRequest);
+            giftsRequest.callback(new DataApiHandler<FeedListData<FeedGift>>() {
+
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+
+                }
+
+                @Override
+                protected void success(FeedListData<FeedGift> data, IApiResponse response) {
+
+                }
+
+                @Override
+                protected FeedListData<FeedGift> parseResponse(ApiResponse response) {
+                    return null;
+                }
+            });
+            ApiRequest userAndGiftsRequest = new ParallelApiRequest(getActivity()).
+                    addRequest(userRequest).addRequest(giftsRequest).
+                    callback(new ApiHandler() {
+                        @Override
+                        public void success(IApiResponse response) {
+
+                        }
+
+                        @Override
+                        public void fail(int codeError, IApiResponse response) {
+
+                        }
+                    });
+            registerRequest(userAndGiftsRequest);
+            userAndGiftsRequest.exec();
         } else {
             onSuccess(new User(mProfileId, mSavedResponse), mSavedResponse);
         }
@@ -219,23 +236,14 @@ public class UserProfileFragment extends AbstractProfileFragment {
             showForBanned();
             if (CacheProfile.isEditor()) {
                 setProfile(user);
-                initTopMenu();
+                initOverflowMenuActions(getOverflowMenu());
             }
         } else if (user.deleted) {
             showForDeleted();
         } else {
             setProfile(user);
-            initTopMenu();
-            if (mHeaderMainFragment != null) {
-                mHeaderMainFragment.setOnline(user.online);
-            }
+            initOverflowMenuActions(getOverflowMenu());
             mLoaderView.setVisibility(View.INVISIBLE);
-            if (getProfileType() == Profile.TYPE_USER_PROFILE) {
-                String status = user.getStatus();
-                if (status == null || TextUtils.isEmpty(status)) {
-                    mHeaderPagerAdapter.removeItem(HeaderStatusFragment.class.getName());
-                }
-            }
         }
         mLastLoadedProfileId = mProfileId;
     }
@@ -247,8 +255,8 @@ public class UserProfileFragment extends AbstractProfileFragment {
     private void saveResponseForEditor(ApiResponse response) {
         if (CacheProfile.isEditor()) {
             mSavedResponse = response;
-            if (mProfileOverflowMenu != null) {
-                mProfileOverflowMenu.setSavedResponse(mSavedResponse);
+            if (hasOverflowMenu()) {
+                getOverflowMenu().setSavedResponse(mSavedResponse);
             }
         }
     }
@@ -290,10 +298,11 @@ public class UserProfileFragment extends AbstractProfileFragment {
         }
     }
 
-    private void initTopMenu() {
-        if (mProfileOverflowMenu != null) {
-            if (mProfileOverflowMenu.getOverflowMenuFieldsListener() == null) {
-                mProfileOverflowMenu.setOverflowMenuFieldsListener(new OverflowMenuUser() {
+    @Override
+    protected void initOverflowMenuActions(OverflowMenu overflowMenu) {
+        if (overflowMenu != null) {
+            if (overflowMenu.getOverflowMenuFieldsListener() == null) {
+                overflowMenu.setOverflowMenuFieldsListener(new OverflowMenuUser() {
                     @Override
                     public void setBlackListValue(Boolean value) {
                         Profile profile = getProfile();
@@ -397,26 +406,19 @@ public class UserProfileFragment extends AbstractProfileFragment {
                     }
                 });
             }
-            mProfileOverflowMenu.initOverfowMenu();
-        }
-    }
-
-    private void closeProfileActions() {
-        if (mBarActions != null && mBarActions.isChecked()) {
-            onOptionsItemSelected(mBarActions);
-            mOutsideView.setVisibility(View.GONE);
+            getOverflowMenu().initOverfowMenu();
         }
     }
 
     @Override
     protected void onStartActivity() {
         super.onStartActivity();
-        closeProfileActions();
+        closeOverflowMenu();
     }
 
     @Override
     public void onPageSelected(int i) {
-        closeProfileActions();
+        closeOverflowMenu();
     }
 
     @Override
@@ -441,6 +443,11 @@ public class UserProfileFragment extends AbstractProfileFragment {
                 }
                 break;
         }
+    }
+
+    @Override
+    protected IUniversalUser getUniversalUser() {
+        return UniversalUserFactory.create(getProfile());
     }
 
     public ArrayList<FeedGift> getNewGifts() {

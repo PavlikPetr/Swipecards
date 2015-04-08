@@ -379,6 +379,8 @@
     <string name="general_complain_sended">Votre plainte est envoyée</string>
     <string name="general_complain">Plainte</string>
     <string name="general_msg">Message</string>
+    <string name="notifications">Notifications</string>
+    <string name="general_no_notifications">Malheureusement, les notifications ne sont pas accessibles sur votre appareil</string>
     <string name="black_list_add_short">A la liste noire</string>
     <string name="confirm_email_for_dating">Nous sommes contre le spam. Confirmez votre adresse e-mail pour faire connaissance sur Topface!</string>
     <string name="complain_type_swearing_msg">Goujaterie, menaces, gros mots</string>

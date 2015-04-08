@@ -446,4 +446,11 @@ public class BitmapUtils {
         }
         return output;
     }
+
+    public static Bitmap cropBitmap(Bitmap bitmap) {
+        int srcWidth = bitmap.getWidth();
+        int srcHeight = bitmap.getHeight();
+        int size = srcHeight > srcWidth ? srcWidth : srcHeight;
+        return Bitmap.createBitmap(bitmap, 0, 0, size, size);
+    }
 }

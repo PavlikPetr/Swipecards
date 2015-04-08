@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -61,11 +62,11 @@ public class ComplainsFragment extends BaseFragment {
     private void initItem(View root, final ComplainRequest.ClassNames className, final ComplainRequest.TypesNames typeName, int bgId) {
         ComplainItem item = getItemIdByClassAndType(className, typeName);
         if (item != null) {
-            RelativeLayout frame = (RelativeLayout) root.findViewById(item.id);
+            ViewGroup frame = (ViewGroup) root.findViewById(item.id);
             if (canHideItem(className)) {
                 frame.setVisibility(View.GONE);
             } else {
-                ((ImageView) frame.findViewWithTag("ivEditBackground")).setImageResource(bgId);
+//                ((ImageView) frame.findViewWithTag("ivEditBackground")).setImageResource(bgId);
                 setText(item.title, frame, className);
                 frame.setOnClickListener(new View.OnClickListener() {
                     @Override

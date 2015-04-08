@@ -158,7 +158,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     }
 
     private void initTextViews(ViewGroup root) {
-        Drawable icon = getResources().getDrawable(R.drawable.ic_logo);
+        Drawable icon = getResources().getDrawable(R.drawable.ic_logo_account);
         mEditText = (EditText) root.findViewById(R.id.edText);
         mEditText.setText(mToken.getLogin());
         mEditText.setSelection(mEditText.getText().length());

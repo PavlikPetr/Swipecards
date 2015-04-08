@@ -441,6 +441,8 @@
     <string name="general_complain_sended">Ditt klagomål har avsänts, tack för hjälpen</string>
     <string name="general_complain">Klagomål</string>
     <string name="general_msg">Meddelande</string>
+    <string name="notifications">Notifikationer</string>
+    <string name="general_no_notifications">Det är tyvärr omöjligt att erhålla notifikationer på din mobila enhet</string>
     <string name="black_list_add_short">Till svartlista</string>
     <string name="confirm_email_for_dating">VI är emot spam. Bekräfta din epost-adress för att dejta på Topface!</string>
     <string name="send_confirm_link">Skicka länken för bekräftelse</string>

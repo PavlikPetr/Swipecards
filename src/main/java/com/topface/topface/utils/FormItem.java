@@ -2,7 +2,9 @@ package com.topface.topface.utils;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
+import com.topface.topface.App;
 import com.topface.topface.Static;
 
 public class FormItem implements Parcelable {
@@ -11,21 +13,27 @@ public class FormItem implements Parcelable {
     public String title;
     public String value;
     public FormItem header;
-    public boolean equal;
 
     public int titleId = NO_RESOURCE_ID;
     public int dataId = NO_RESOURCE_ID;
+
+    /**
+     * Is form item value updating right now.
+     */
+    public transient boolean isEditing;
 
     // Constants
     public static final int HEADER = 1;
     public static final int DATA = 3;
     public static final int STATUS = 4;
     public static final int DIVIDER = 5;
+    public static final int NAME = 6;
+    public static final int SEX = 7;
+    public static final int AGE = 8;
+    public static final int CITY = 9;
 
     public static final int NO_RESOURCE_ID = -1;
     public static final int NOT_SPECIFIED_ID = 0;
-
-    private static FormItem divider = null;
 
     private LimitInterface mLimitInterface;
 
@@ -36,14 +44,12 @@ public class FormItem implements Parcelable {
         this.type = type;
         this.value = Static.EMPTY;
         this.dataId = NO_RESOURCE_ID;
-        this.equal = false;
     }
 
     public FormItem(int titleId, int dataId, int type) {
         this.titleId = titleId;
         this.dataId = dataId;
         this.type = type;
-        this.equal = false;
         this.value = Static.EMPTY;
     }
 
@@ -51,7 +57,6 @@ public class FormItem implements Parcelable {
         this.titleId = titleId;
         this.dataId = dataId;
         this.type = type;
-        this.equal = false;
         this.header = header;
         this.value = Static.EMPTY;
     }
@@ -61,7 +66,6 @@ public class FormItem implements Parcelable {
         this.value = data == null ? Static.EMPTY : data;
         this.dataId = NO_RESOURCE_ID;
         this.type = type;
-        this.equal = false;
     }
 
     public FormItem(int titleId, String data, int type, FormItem header) {
@@ -69,27 +73,40 @@ public class FormItem implements Parcelable {
         this.value = data == null ? Static.EMPTY : data;
         this.dataId = NO_RESOURCE_ID;
         this.type = type;
-        this.equal = false;
         this.header = header;
     }
 
+    @SuppressWarnings("unused")
     private FormItem(int type) {
         this.type = type;
         this.value = Static.EMPTY;
         this.dataId = NO_RESOURCE_ID;
         this.title = Static.EMPTY;
         this.titleId = NO_RESOURCE_ID;
-        this.equal = false;
+    }
+
+    public FormItem(FormItem formItem) {
+        dataId = formItem.dataId;
+        title = formItem.title;
+        type = formItem.type;
+        value = formItem.value;
+        header = formItem.header;
+        titleId = formItem.titleId;
+        mLimitInterface = formItem.mLimitInterface;
     }
 
     public FormItem() {
     }
 
-    public static FormItem getDivider() {
-        if (divider == null) {
-            FormItem.divider = new FormItem(DIVIDER);
-        }
-        return divider;
+    public void copy(FormItem formItem) {
+        dataId = formItem.dataId;
+        title = formItem.title;
+        type = formItem.type;
+        value = formItem.value;
+        header = formItem.header;
+        titleId = formItem.titleId;
+        mLimitInterface = formItem.mLimitInterface;
+        isEditing = formItem.isEditing;
     }
 
     @Override
@@ -102,7 +119,6 @@ public class FormItem implements Parcelable {
         dest.writeInt(type);
         dest.writeString(title);
         dest.writeString(value);
-        dest.writeInt(equal ? 1 : 0);
         dest.writeInt(titleId);
         dest.writeInt(dataId);
         dest.writeParcelable(header, flags);
@@ -116,7 +132,6 @@ public class FormItem implements Parcelable {
                     (formItem.title == null ? title == null : formItem.title.equals(title)) &&
                     (formItem.value == null ? value == null : formItem.value.equals(value)) &&
                     (formItem.header == null ? header == null : formItem.header.equals(header)) &&
-                    formItem.equal == equal &&
                     formItem.titleId == titleId &&
                     formItem.dataId == dataId;
         } else {
@@ -131,7 +146,6 @@ public class FormItem implements Parcelable {
         hash = hash * 31 + (title == null ? 0 : title.hashCode());
         hash = hash * 31 + (value == null ? 0 : value.hashCode());
         hash = hash * 31 + (header == null ? 0 : header.hashCode());
-        hash = hash * 31 + (equal ? 1 : 0);
         hash = hash * 31 + titleId;
         hash = hash * 31 + dataId;
         return hash;
@@ -145,7 +159,6 @@ public class FormItem implements Parcelable {
                     result.type = in.readInt();
                     result.title = in.readString();
                     result.value = in.readString();
-                    result.equal = in.readInt() == 1;
                     result.titleId = in.readInt();
                     result.dataId = in.readInt();
                     result.header = in.readParcelable(FormItem.class.getClassLoader());
@@ -158,7 +171,7 @@ public class FormItem implements Parcelable {
             };
 
     public interface LimitInterface {
-        public int getLimit();
+        int getLimit();
     }
 
     public void setLimitInterface(LimitInterface LimitInterface) {
@@ -167,5 +180,13 @@ public class FormItem implements Parcelable {
 
     public LimitInterface getLimitInterface() {
         return mLimitInterface;
+    }
+
+    public String getTitle() {
+        if (TextUtils.isEmpty(title)) {
+            return App.getContext().getString(titleId);
+        } else {
+            return title;
+        }
     }
 }

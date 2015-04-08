@@ -411,6 +411,8 @@
     <string name="general_complain_sended">Ваша скарга відправлена, велике спасибі за допомогу</string>
     <string name="general_complain">Скарга</string>
     <string name="general_msg">Повідомлення</string>
+    <string name="notifications">Повідомлення</string>
+    <string name="general_no_notifications">На жаль, повідомлення, на вашому пристрої, не доступні</string>
     <string name="black_list_add_short">У чорний список</string>
     <string name="confirm_email_for_dating">Ми проти спаму. Підтвердіть свою поштову адресу, щоб знайомиться в Topface!</string>
     <string name="complain_type_swearing_msg">Хамство, загрози, мат</string>
