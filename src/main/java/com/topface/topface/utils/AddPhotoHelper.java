@@ -186,11 +186,14 @@ public class AddPhotoHelper {
                 mActivity.startActivityForResult(intent, requestCode);
             }
         } else {
-            TakePhotoDialog takePhotoDialog = (TakePhotoDialog) ((FragmentActivity) mActivity).getSupportFragmentManager()
-                    .findFragmentByTag(TakePhotoDialog.TAG);
-            if (takePhotoDialog != null) {
-                mActivity.startActivityForResult(intent, requestCode);
+            if (mActivity != null) {
+                TakePhotoDialog takePhotoDialog = (TakePhotoDialog) ((FragmentActivity) mActivity).getSupportFragmentManager()
+                        .findFragmentByTag(TakePhotoDialog.TAG);
+                if (takePhotoDialog != null) {
+                    mActivity.startActivityForResult(intent, requestCode);
+                }
             }
+
         }
     }
 
