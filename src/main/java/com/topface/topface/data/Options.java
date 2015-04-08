@@ -608,13 +608,8 @@ public class Options extends AbstractData {
         public String type;
 
         public Tab(String name, String type) {
-            this.name = name.toUpperCase(Locale.getDefault());
+            this.name = name;
             this.type = type;
-        }
-
-        public Tab(Tab tab) {
-            this.name = tab.name.toUpperCase(Locale.getDefault());
-            this.type = tab.type;
         }
 
         public String getUpperCaseName() {
