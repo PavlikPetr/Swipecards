@@ -615,5 +615,7 @@
     <string name="google_sign_in_account_title">Non hai aggiunto l’account Google, devi accedervi per ricevere le notifiche.</string>
     <string name="google_sign_in_account_button">Accedere</string>
     <string name="google_unavailable_services_title">Purtroppo il tuo dispositivo non supporta l’invio di notifiche.</string>
+    <string name="on_phone">Sul cellulare</string>
+    <string name="on_mail">Sull’e-mail</string>
     <string name="add_leader_hint">Il tuo saluto…</string>
 </resources>
