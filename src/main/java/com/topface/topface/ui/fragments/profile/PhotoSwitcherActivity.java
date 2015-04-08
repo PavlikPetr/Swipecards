@@ -290,7 +290,10 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     private void initViews(int position, int photosCount) {
-
+        if (mPhotoLinks.size() == 0) {
+            finish();
+            return;
+        }
         int rest = photosCount - mPhotoLinks.size();
         for (int i = 0; i < rest; i++) {
             mPhotoLinks.add(new Photo());
