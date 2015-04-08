@@ -12,7 +12,7 @@ public class CropProcessor implements BitmapProcessor {
     @Override
     public Bitmap process(Bitmap bitmap) {
         if (bitmap != null) {
-            bitmap = BitmapUtils.cropBitmap(bitmap);
+            bitmap = BitmapUtils.squareCrop(bitmap);
         }
         return bitmap;
     }

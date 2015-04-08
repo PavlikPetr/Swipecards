@@ -339,6 +339,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                 }
                 mAdapter.setData(historyData);
                 mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
+                invalidateUniversalUser();
                 initOverflowMenuActions(getOverflowMenu());
                 if (wasFailed) {
                     mLockScreen.setVisibility(View.VISIBLE);
@@ -599,6 +600,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                             mIsUpdating = false;
                             wasFailed = false;
                             mUser = data.user;
+                            invalidateUniversalUser();
                             if (!mUser.isEmpty()) {
                                 onUserLoaded(mUser);
                                 initOverflowMenuActions(getOverflowMenu());
@@ -628,6 +630,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                 getTitleSetter().setOnline(data.user.online);
                 wasFailed = false;
                 mUser = data.user;
+                invalidateUniversalUser();
                 if (!mUser.isEmpty()) {
                     onUserLoaded(mUser);
                     initOverflowMenuActions(getOverflowMenu());
@@ -745,7 +748,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     }
 
     @Override
-    protected IUniversalUser getUniversalUser() {
+    protected IUniversalUser createUniversalUser() {
         return UniversalUserFactory.create(mUser);
     }
 

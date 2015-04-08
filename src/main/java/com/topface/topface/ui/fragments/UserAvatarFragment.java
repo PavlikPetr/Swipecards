@@ -31,6 +31,7 @@ public abstract class UserAvatarFragment extends BaseFragment
     private MenuItem mBarActions;
     private ActionBarTitleSetterDelegate mSetter;
     private OverflowMenu mOverflowMenu;
+    private IUniversalUser mUniversalUser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -126,7 +127,18 @@ public abstract class UserAvatarFragment extends BaseFragment
         }
     }
 
-    protected abstract IUniversalUser getUniversalUser();
+    public final IUniversalUser getUniversalUser() {
+        if (mUniversalUser == null) {
+            mUniversalUser = createUniversalUser();
+        }
+        return mUniversalUser;
+    }
+
+    protected abstract IUniversalUser createUniversalUser();
+
+    public final void invalidateUniversalUser() {
+        mUniversalUser = null;
+    }
 
     protected OverflowMenu getOverflowMenu() {
         return mOverflowMenu;
@@ -167,7 +179,6 @@ public abstract class UserAvatarFragment extends BaseFragment
     public void closeOverflowMenu() {
         if (mBarActions != null && mBarActions.isChecked()) {
             onOptionsItemSelected(mBarActions);
-//            mOutsideView.setVisibility(View.GONE);
         }
     }
 

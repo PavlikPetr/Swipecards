@@ -3,19 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <View
         android:id="@+id/edit_dialog_buttons_top"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:src="@color/edit_dialog_buttons_divider" />
+        android:background="@color/edit_dialog_buttons_divider"/>
 
-    <ImageView
+    <View
         android:id="@+id/edit_dialog_center"
         android:layout_width="1dp"
         android:layout_height="@dimen/edit_dialog_button_heigh"
         android:layout_centerHorizontal="true"
-        android:src="@color/edit_dialog_buttons_divider"
-        android:layout_below="@id/edit_dialog_buttons_top" />
+        android:background="@color/edit_dialog_buttons_divider"
+        android:layout_below="@id/edit_dialog_buttons_top"/>
 
     <Button
         android:id="@+id/edit_dialog_cancel"

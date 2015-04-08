@@ -275,7 +275,7 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
         }
     }
 
-    private void updateNotifaicationSettings(final Profile.TopfaceNotifications notification) {
+    private void updateNotificationSettings(final Profile.TopfaceNotifications notification) {
         final View view = getViewByNotificationType(notification.type);
         if (view != null) {
             view.setEnabled(false);

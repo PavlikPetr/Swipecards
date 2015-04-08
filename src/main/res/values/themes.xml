@@ -64,7 +64,7 @@
 
     <style name="EditDialog" parent="Theme.Topface">
         <item name="android:checkboxStyle">@style/CheckboxLeft</item>
-        <item name="android:background">@color/dialog_bg</item>
+        <item name="android:background">@color/bg_white</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowCloseOnTouchOutside" tools:ignore="NewApi">true</item>
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>

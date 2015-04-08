@@ -3,11 +3,11 @@ package com.topface.topface.data;
 /**
  * Universal user from User class
  */
-public class UniversalUser extends UniversalProfile {
+public class UniversalUserWrapper extends UniversalProfileWrapper {
 
     private User mUser;
 
-    UniversalUser(User user) {
+    UniversalUserWrapper(User user) {
         super(user);
         mUser = user;
     }

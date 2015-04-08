@@ -33,8 +33,8 @@ public class AbstractEditDialog<T extends Parcelable> extends AbstractDialogFrag
     private ViewStub mButtonsStub;
 
     @Override
-    protected void applyStyle() {
-        setStyle(ConfirmEmailDialog.STYLE_NO_TITLE, R.style.EditDialog);
+    protected int getDialogStyleResId() {
+        return R.style.EditDialog;
     }
 
     @Override
