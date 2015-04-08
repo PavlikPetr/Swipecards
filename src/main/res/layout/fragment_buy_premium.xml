@@ -8,6 +8,10 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
+        <com.topface.IllustratedTextView.IllustratedTextView
+            android:id="@+id/payReasonFragmentBuyPremium"
+            style="@style/PayReasonView" />
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"

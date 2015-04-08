@@ -68,9 +68,9 @@ public class ProfilePageAdapter extends HackyFragmentStatePagerAdapter {
                 //Если это платежи через Google Play, но у нас не поддерживаются Google Play Services,
                 //то вместо покупок через GP показываем покупки через PaymentWall
                 if (BuildConfig.MARKET_API_TYPE == MarketApiType.GOOGLE_PLAY && !App.isGmsEnabled()) {
-                    fragment = VipPaymentWallBuyFragment.newInstance(false, "ProfileTab", PaymentWallProducts.TYPE.DIRECT);
+                    fragment = VipPaymentWallBuyFragment.newInstance(false, "ProfileTab", PaymentWallProducts.TYPE.DIRECT, null, 0);
                 } else {
-                    fragment = VipBuyFragment.newInstance(false, "ProfileTab");
+                    fragment = VipBuyFragment.newInstance(false, "ProfileTab", null, 0);
                 }
             } else {
                 Class fragmentClass = Class.forName(fragmentClassName);

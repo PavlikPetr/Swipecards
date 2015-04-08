@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:orientation="vertical"
-                tools:background="@drawable/btn_gray_selector"
-                android:layout_width="fill_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:background="@drawable/btn_gray_selector"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content">
 
     <RelativeLayout
@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:paddingLeft="10dp"
             android:gravity="center"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true" />
 
         <ProgressBar
             android:id="@+id/marketWaiter"
@@ -38,7 +38,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_below="@id/itContainer"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true" />
 
     <TextView
         style="@style/GrayText"
@@ -47,20 +47,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:paddingLeft="10dp"
+        android:layout_marginRight="4dp"
         android:textSize="13sp"
         android:background="@drawable/bg_economy"
         android:layout_below="@id/itContainer"
         android:layout_toLeftOf="@id/middle"
-        android:gravity="center"/>
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/itValue"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="4dp"
         android:layout_marginTop="8dp"
         android:textColor="@color/text_light_gray"
         android:textSize="13sp"
         android:layout_below="@id/itContainer"
-        android:layout_toRightOf="@id/middle"/>
+        android:layout_toRightOf="@id/middle" />
 </RelativeLayout>

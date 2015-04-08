@@ -164,6 +164,12 @@
         <item name="android:textStyle">normal</item>
     </style>
 
+    <style name="ItemGrayText">
+        <item name="android:textColor">@color/text_color_gray</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
     <style name="AccountEditText" parent="ItemWhiteText">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -749,6 +755,14 @@
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
+    <style name="BlueBonusButton" parent="Widget.Topface.Button.Big.Blue">
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="GrayBonusButton" parent="Widget.Topface.Button.Big.Gray">
+        <item name="android:textStyle">normal</item>
+    </style>
+
     <style name="Widget.Topface.Button.Big.Blue" parent="Widget.Topface.Button.Big">
         <item name="android:background">@drawable/btn_blue_selector</item>
         <item name="android:textColor">#FFFFFF</item>
@@ -760,7 +774,7 @@
     </style>
 
     <style name="ButtonSale" parent="Widget.Topface.Button.Big.Blue">
-        <item name="android:background">@drawable/btn_sale_selector</item>
+        <item name="android:background">@drawable/btn_sale_blue_selector</item>
         <item name="android:paddingRight">56dp</item>
     </style>
 
@@ -953,7 +967,7 @@
         <item name="android:textSize">18sp</item>
         <item name="android:minHeight">44dp</item>
         <item name="android:minWidth">240dp</item>
-        <item name="android:fontFamily">Roboto Regular</item>
+        <item name="android:fontFamily" tools:ignore="NewApi">Roboto Regular</item>
     </style>
 
     <style name="FlatButton.Gray">
@@ -1057,5 +1071,12 @@
 
     <style name="ComplainsTitle" parent="WhiteBackgroundTitle">
         <item name="android:paddingTop">0dp</item>
+    </style>
+
+    <style name="PayReasonView" parent="GrayText">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">10dp</item>
     </style>
 </resources>

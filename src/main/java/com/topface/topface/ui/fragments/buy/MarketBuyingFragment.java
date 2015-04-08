@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments.buy;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -22,13 +23,19 @@ import static com.topface.topface.data.Products.BuyButtonClickListener;
 
 public class MarketBuyingFragment extends CoinsBuyingFragment {
 
-    public static MarketBuyingFragment newInstance(String from) {
+    public static MarketBuyingFragment newInstance(String from, String text, int visibility) {
         MarketBuyingFragment buyingFragment = new MarketBuyingFragment();
-        if (from != null) {
-            Bundle args = new Bundle();
-            args.putString(ARG_TAG_SOURCE, from);
-            buyingFragment.setArguments(args);
+        Bundle args = new Bundle();
+        if (!TextUtils.isEmpty(text)) {
+            args.putString(ARG_RESOURCE_INFO_TEXT, text);
         }
+        if (visibility != 0) {
+            args.putInt(ARG_RESOURCE_INFO_VISIBILITY, visibility);
+        }
+        if (from != null) {
+            args.putString(ARG_TAG_SOURCE, from);
+        }
+        buyingFragment.setArguments(args);
         return buyingFragment;
     }
 
