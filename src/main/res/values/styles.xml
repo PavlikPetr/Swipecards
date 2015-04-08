@@ -1050,9 +1050,9 @@
         <item name="android:layout_marginTop">20dp</item>
     </style>
 
-    <style name="FeedbackEditText" parent="WhiteBackgroundEdit"/>
+    <style name="FeedbackEditText" parent="WhiteBackgroundEdit" />
 
-    <style name="FeedbackTextView" parent="WhiteBackgroundTitle"/>
+    <style name="FeedbackTextView" parent="WhiteBackgroundTitle" />
 
     <style name="ComplainsHeader" parent="FormTitleText">
         <item name="android:layout_width">fill_parent</item>

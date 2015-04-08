@@ -41,12 +41,12 @@ public class ProfileFormFragment extends AbstractFormFragment {
     private FragmentManager mFragmentManager;
 
     private List<Integer> mMainFormTypes = new ArrayList<>(Arrays.asList(
-            new Integer[] {FormItem.AGE, FormItem.CITY, FormItem.NAME, FormItem.SEX, FormItem.STATUS}));
+            new Integer[]{FormItem.AGE, FormItem.CITY, FormItem.NAME, FormItem.SEX, FormItem.STATUS}));
 
     private EditingFinishedListener<FormItem> mFormEditedListener = new EditingFinishedListener<FormItem>() {
         @Override
         public void onEditingFinished(final FormItem data) {
-            for (final FormItem form: mProfileFormListAdapter.getFormItems()) {
+            for (final FormItem form : mProfileFormListAdapter.getFormItems()) {
                 if (form.type == data.type && form.titleId == data.titleId) {
                     if (form.dataId != data.dataId ||
                             data.dataId == FormItem.NO_RESOURCE_ID && !TextUtils.equals(form.value, data.value)) {

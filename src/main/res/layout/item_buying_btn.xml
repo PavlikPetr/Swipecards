@@ -38,7 +38,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_below="@id/itContainer"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true" />
 
     <TextView
         style="@style/GrayText"
@@ -51,7 +51,7 @@
         android:background="@drawable/bg_economy"
         android:layout_below="@id/itContainer"
         android:layout_toLeftOf="@id/middle"
-        android:gravity="center"/>
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/itValue"
@@ -62,5 +62,5 @@
         android:textColor="@color/text_light_gray"
         android:textSize="13sp"
         android:layout_below="@id/itContainer"
-        android:layout_toRightOf="@id/middle"/>
+        android:layout_toRightOf="@id/middle" />
 </RelativeLayout>

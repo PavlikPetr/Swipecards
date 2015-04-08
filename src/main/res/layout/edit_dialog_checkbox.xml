@@ -11,5 +11,5 @@
         android:drawableLeft="@drawable/selector_checkbox"
         android:drawablePadding="5dp"
         android:paddingLeft="30dp"
-        android:checked="false"/>
+        android:checked="false" />
 </FrameLayout>

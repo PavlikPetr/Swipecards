@@ -679,6 +679,7 @@ public class Options extends AbstractData {
         public void setText(String text) {
             this.text = text;
         }
+
         public String getText() {
             return text;
         }

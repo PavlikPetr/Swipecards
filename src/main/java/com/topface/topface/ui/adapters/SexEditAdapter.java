@@ -22,6 +22,6 @@ public class SexEditAdapter extends FormItemEditAdapter {
 
     @Override
     protected int[] createIds(FormItem formItem) {
-        return new int[] {1, 0};
+        return new int[]{1, 0};
     }
 }

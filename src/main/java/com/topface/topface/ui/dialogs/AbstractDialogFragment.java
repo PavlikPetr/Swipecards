@@ -1,6 +1,5 @@
 package com.topface.topface.ui.dialogs;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -38,13 +37,6 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //По стилю это у нас не диалог, а кастомный дизайн -
-        //закрывает весь экран оверлеем и ниже ActionBar показывает контент
-        if (isModalDialog()) {
-            setStyle(STYLE_NO_FRAME, R.style.Topface_Theme_TranslucentDialog);
-        } else {
-            setStyle(STYLE_NO_FRAME, R.style.Theme_Topface_NoActionBar);
-        }
         applyStyle();
         final TypedArray styledAttributes = getActivity().getTheme().obtainStyledAttributes(
                 new int[]{R.attr.actionBarSize});
@@ -55,7 +47,11 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
     protected void applyStyle() {
         //По стилю это у нас не диалог, а кастомный дизайн -
         //закрывает весь экран оверлеем и ниже ActionBar показывает контент
-        setStyle(STYLE_NO_FRAME, R.style.Topface_Theme_TranslucentDialog);
+        if (isModalDialog()) {
+            setStyle(STYLE_NO_FRAME, R.style.Topface_Theme_TranslucentDialog);
+        } else {
+            setStyle(STYLE_NO_FRAME, R.style.Theme_Topface_NoActionBar);
+        }
     }
 
     @Override

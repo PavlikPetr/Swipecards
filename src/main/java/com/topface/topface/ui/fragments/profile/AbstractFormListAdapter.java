@@ -1,24 +1,18 @@
 package com.topface.topface.ui.fragments.profile;
 
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.topface.framework.JsonUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
-import com.topface.topface.data.FeedGift;
-import com.topface.topface.data.Gift;
-import com.topface.topface.data.Profile;
-import com.topface.topface.ui.adapters.GiftsStripAdapter;
 import com.topface.topface.utils.FormItem;
 
 import java.util.ArrayList;
@@ -87,7 +81,7 @@ public abstract class AbstractFormListAdapter extends BaseAdapter {
         } else if (App.getContext().getResources().getString(R.string.form_main_about_status_2).equals(itemTitle) ||
                 item.type == FormItem.NAME || item.type == FormItem.STATUS) {
             holder.value.setText(item.value);
-        } else if (item.type == FormItem.CITY ) {
+        } else if (item.type == FormItem.CITY) {
             holder.value.setText(JsonUtils.fromJson(item.value, City.class).name);
         } else {
             holder.value.setText(item.value.toLowerCase(Locale.getDefault()));

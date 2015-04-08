@@ -10,11 +10,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
 import com.topface.topface.ui.views.CitySearchView;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class CitySearchActivity extends BaseFragmentActivity {
     // Constants

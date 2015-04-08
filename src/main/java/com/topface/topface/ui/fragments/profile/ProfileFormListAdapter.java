@@ -8,7 +8,6 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
-import com.topface.topface.ui.adapters.GiftsStripAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
 

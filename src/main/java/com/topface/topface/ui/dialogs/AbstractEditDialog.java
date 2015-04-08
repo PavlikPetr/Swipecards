@@ -66,6 +66,11 @@ public class AbstractEditDialog<T extends Parcelable> extends AbstractDialogFrag
     }
 
     @Override
+    protected boolean isModalDialog() {
+        return true;
+    }
+
+    @Override
     public int getDialogLayoutRes() {
         return R.layout.edit_dialog;
     }
@@ -78,6 +83,7 @@ public class AbstractEditDialog<T extends Parcelable> extends AbstractDialogFrag
         return mAdapter;
     }
 
+    @SuppressWarnings("unused")
     protected ListView getOptionsList() {
         return mOptionsList;
     }

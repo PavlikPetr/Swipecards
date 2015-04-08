@@ -12,11 +12,11 @@
         <!-- Фото -->
         <TextView
             android:id="@+id/loPhotoHeader"
-            style="@style/ComplainsHeader"/>
+            style="@style/ComplainsHeader" />
 
         <TextView
             android:id="@+id/typePorn"
-            style="@style/WhiteListItem.Underline"/>
+            style="@style/WhiteListItem.Underline" />
 
         <TextView
             android:id="@+id/typeEro"

@@ -11,7 +11,7 @@ import com.topface.topface.data.Profile;
 public class NotificationEditDialog extends AbstractEditDialog<Profile.TopfaceNotifications> {
 
     public static NotificationEditDialog newInstance(String title, Profile.TopfaceNotifications notification,
-                                             final AbstractEditDialog.EditingFinishedListener<Profile.TopfaceNotifications> editingFinishedListener) {
+                                                     final AbstractEditDialog.EditingFinishedListener<Profile.TopfaceNotifications> editingFinishedListener) {
         final NotificationEditDialog selector = new NotificationEditDialog();
         Bundle selectorArgs = new Bundle();
         selectorArgs.putString(DIALOG_TITLE, title);

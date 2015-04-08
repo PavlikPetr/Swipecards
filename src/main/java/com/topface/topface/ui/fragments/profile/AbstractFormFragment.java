@@ -1,8 +1,6 @@
 package com.topface.topface.ui.fragments.profile;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -21,8 +19,6 @@ import com.topface.topface.data.BasePendingInit;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.Profile;
-import com.topface.topface.data.User;
-import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsStripAdapter;
 import com.topface.topface.utils.FormItem;
@@ -56,7 +52,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         @Override
         public void onChanged() {
             View root = getView();
-            if (root  != null) {
+            if (root != null) {
                 fillGiftsStrip();
             }
         }
@@ -117,7 +113,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
             setUserDataPending(mPendingUserInit.getData());
         }
 
-        if (mPendingUserInit.getCanSet())     fillGiftsStrip();
+        if (mPendingUserInit.getCanSet()) fillGiftsStrip();
     }
 
     protected abstract void onGiftsClick();
@@ -199,7 +195,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
     private UserProfileFragment getUserProfileFragment() {
         Fragment fragment = getParentFragment();
         if (fragment instanceof UserProfileFragment) {
-            return  (UserProfileFragment) fragment;
+            return (UserProfileFragment) fragment;
         } else {
             Debug.error("Fragment not equals UserProfileFragment");
             return null;
@@ -224,7 +220,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         mFormAdapter.setUserData(mForms);
         mFormAdapter.notifyDataSetChanged();
         mGiftAdapter.getData().clear();
-        for (Gift gift: gifts) {
+        for (Gift gift : gifts) {
             FeedGift feedGift = new FeedGift();
             feedGift.gift = gift;
             mGiftAdapter.add(feedGift);

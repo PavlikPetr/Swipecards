@@ -7,9 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.topface.topface.App;
-import com.topface.topface.R;
-
 /**
  * Abstract adapter for editing dialogs
  */
