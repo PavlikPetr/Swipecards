@@ -1,3 +1,37 @@
+def versionProps = new Properties()
+def versionPropsFile = file('version.properties')
+if (!versionPropsFile.canRead()) {
+    throw new GradleException("Could not read version.properties! Create file in project root")
+}
+versionProps.load(new FileInputStream(versionPropsFile))
+incrementQaBuildVersion(versionProps, versionPropsFile);
+
+def getVersionCode(versionProps) {
+    def versionCode = versionProps['VERSION_CODE'].toInteger()
+    if (project.gradle.startParameter.taskNames.contains("assembleGoogleQa")) {
+        versionCode = versionCode + getQaVersion(versionProps)
+    }
+    return versionCode;
+}
+
+def getVersionName(versionProps) {
+    def versionName = versionProps['VERSION_NAME']
+    return versionName;
+}
+
+def getQaVersion(versionProps) {
+    def versionQaBuild = versionProps['VERSION_QA_BUILD'].toInteger()
+    return versionQaBuild;
+}
+
+def incrementQaBuildVersion(versionProps, versionPropsFile) {
+    if (project.gradle.startParameter.taskNames.contains("assembleGoogleQa") && versionProps != null) {
+        def versionQaBuild = versionProps['VERSION_QA_BUILD'].toInteger() + 1
+        versionProps['VERSION_QA_BUILD'] = versionQaBuild.toString()
+        versionProps.store(versionPropsFile.newWriter(), null)
+    }
+}
+
 def getGitHeadSha() {
     return 'git rev-parse --short HEAD'.execute().text.trim();
 }
@@ -61,13 +95,12 @@ android {
         //noinspection GroovyAssignabilityCheck
         targetSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
 
-        versionCode Integer.parseInt(rootProject.VERSION_CODE)
-        versionName rootProject.VERSION_NAME
+        versionCode getVersionCode(versionProps)
+        versionName getVersionName(versionProps)
 
         testApplicationId "com.topface.topface.test"
 
         testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
-
 
         buildConfigField "long", "BUILD_TIME", "0L";
         buildConfigField "String", "GIT_HEAD_SHA", "null";
@@ -98,6 +131,7 @@ android {
         //пишем время сборки и SHA текущего комита, это нужно для идентификации сборки
         qa.initWith(buildTypes.debug)
         qa {
+            versionNameSuffix ".${getQaVersion(versionProps)}-qa"
             buildConfigField "long", "BUILD_TIME", "${getTimestamp()}L";
             buildConfigField "String", "GIT_HEAD_SHA", "\"${getGitHeadSha()}\"";
         }

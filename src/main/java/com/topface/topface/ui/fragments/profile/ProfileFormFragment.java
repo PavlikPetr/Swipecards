@@ -9,11 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.topface.framework.JsonUtils;
@@ -21,16 +17,13 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
-import com.topface.topface.data.FeedGift;
-import com.topface.topface.data.Gift;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.CitySearchActivity;
-import com.topface.topface.ui.adapters.FeedList;
-import com.topface.topface.ui.adapters.GiftsAdapter;
+import com.topface.topface.ui.OwnGiftsActivity;
 import com.topface.topface.ui.dialogs.EditFormItemsEditDialog;
 import com.topface.topface.ui.dialogs.EditTextFormDialog;
 import com.topface.topface.utils.CacheProfile;
@@ -43,12 +36,9 @@ import java.util.List;
 
 import static com.topface.topface.ui.dialogs.AbstractEditDialog.EditingFinishedListener;
 
-public class ProfileFormFragment extends ProfileInnerFragment {
+public class ProfileFormFragment extends AbstractFormFragment {
 
-    private static final String POSITION = "POSITION";
-
-    private ListView mFormListView;
-    private FragmentManager fm;
+    private FragmentManager mFragmentManager;
 
     private List<Integer> mMainFormTypes = new ArrayList<>(Arrays.asList(
             new Integer[] {FormItem.AGE, FormItem.CITY, FormItem.NAME, FormItem.SEX, FormItem.STATUS}));
@@ -105,14 +95,14 @@ public class ProfileFormFragment extends ProfileInnerFragment {
                     intent.putExtra(Static.INTENT_REQUEST_KEY, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
                     startActivityForResult(intent, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
                 } else if (item.dataId == FormItem.NO_RESOURCE_ID && item.type != FormItem.SEX) {
-                    if (fm != null) {
+                    if (mFragmentManager != null) {
                         EditTextFormDialog.newInstance(item.getTitle(), item, mFormEditedListener).
-                                show(fm, EditTextFormDialog.class.getName());
+                                show(mFragmentManager, EditTextFormDialog.class.getName());
                     }
                 } else {
-                    if (fm != null) {
+                    if (mFragmentManager != null) {
                         EditFormItemsEditDialog.newInstance(item.getTitle(), item, mFormEditedListener).
-                                show(fm, EditFormItemsEditDialog.class.getName());
+                                show(mFragmentManager, EditFormItemsEditDialog.class.getName());
                     }
                 }
             }
@@ -123,7 +113,7 @@ public class ProfileFormFragment extends ProfileInnerFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (mProfileFormListAdapter != null) {
-                mProfileFormListAdapter.refillData();
+                mProfileFormListAdapter.setUserData(CacheProfile.forms);
                 mProfileFormListAdapter.notifyDataSetChanged();
             }
         }
@@ -132,38 +122,29 @@ public class ProfileFormFragment extends ProfileInnerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mProfileFormListAdapter = new ProfileFormListAdapter(getActivity());
-        mProfileFormListAdapter.setOnFillListener(mOnFillClickListener);
+
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
-        fm = getChildFragmentManager();
+        mFragmentManager = getChildFragmentManager();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_form, container, false);
-        mFormListView = (ListView) root.findViewById(R.id.fragmentFormList);
-        mFormListView.setAdapter(mProfileFormListAdapter);
-        return root;
+    protected AbstractFormListAdapter createFormAdapter(Context context) {
+        mProfileFormListAdapter = new ProfileFormListAdapter(context);
+        mProfileFormListAdapter.setOnEditListener(mOnFillClickListener);
+        return mProfileFormListAdapter;
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (savedInstanceState != null) {
-            mFormListView.setSelection(savedInstanceState.getInt(POSITION, 0));
-        }
+    protected void onGiftsClick() {
+        Activity activity = getActivity();
+        Intent intent = new Intent(activity, OwnGiftsActivity.class);
+        activity.startActivity(intent);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(POSITION, mFormListView.getFirstVisiblePosition());
     }
 
     @Override

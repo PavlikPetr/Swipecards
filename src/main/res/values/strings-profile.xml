@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="profile_form_status_male_0">Love and serious relationship</string>
-    <string name="profile_form_status_male_1">\"No strings attached\" relationship</string>
-    <string name="profile_form_status_male_2">Friendship</string>
-    <string name="profile_form_status_male_3">I\'m here for likes</string>
-    <string name="profile_form_status_male_4">I\'m here to chat</string>
-    <string name="profile_form_status_female_0">Love and serious relationship</string>
-    <string name="profile_form_status_female_1">\"No strings attached\" relationship</string>
-    <string name="profile_form_status_female_2">Friendship</string>
-    <string name="profile_form_status_female_3">I\'m here for likes</string>
-    <string name="profile_form_status_female_4">I\'m here to chat</string>
+    <string name="profile_form_status_male_0">To find my own true love</string>
+    <string name="profile_form_status_male_1">To find friends with benefits</string>
+    <string name="profile_form_status_male_2">To make friends</string>
+    <string name="profile_form_status_male_3">To get tons of likes</string>
+    <string name="profile_form_status_male_4">I\'m here to chat away</string>
+    <string name="profile_form_status_female_0">To find my own true love</string>
+    <string name="profile_form_status_female_1">To find friends with benefits</string>
+    <string name="profile_form_status_female_2">To make friends</string>
+    <string name="profile_form_status_female_3">To get tons of likes</string>
+    <string name="profile_form_status_female_4">I\'m here to chat away</string>
     <string name="profile_form_education_male_0">High school diploma</string>
     <string name="profile_form_education_male_1">College student</string>
     <string name="profile_form_education_male_2">BA or above</string>
@@ -159,7 +159,7 @@
     <string name="profile_form_car_male_1">No</string>
     <string name="profile_form_car_female_0">Yes</string>
     <string name="profile_form_car_female_1">No</string>
-    <string name="form_main_status_0">What are you looking for?</string>
+    <string name="form_main_status_0">Why are you here?</string>
     <string name="form_main_character_0">Personality</string>
     <string name="form_main_character_1">Personality</string>
     <string name="form_main_character_2">Your personality</string>

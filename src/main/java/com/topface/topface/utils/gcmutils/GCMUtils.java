@@ -350,7 +350,7 @@ public class GCMUtils {
                 // on Api version 8 unread counter will have the same keys as common requests
                 counterManager.setEntitiesCounters(
                         countersJson.optInt("unread_likes"),
-                        countersJson.optInt("unread_sympaties"),
+                        countersJson.optInt("unread_symphaties"),
                         countersJson.optInt("unread_messages"),
                         countersJson.optInt("unread_visitors"),
                         countersJson.optInt("unread_fans"),

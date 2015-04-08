@@ -11,9 +11,14 @@
         android:layout_height="wrap_content"
         android:text="@string/nobody_chat_with_you_sympathies_will_help"
         style="@style/ListItemEmptyText"
-        android:gravity="center"
-        android:elegantTextHeight="false"
-        android:layout_centerVertical="true" />
+        android:singleLine="false"
+        android:textAlignment="center"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/linearLayout"
+        android:layout_alignStart="@+id/linearLayout"
+        android:layout_alignRight="@+id/linearLayout"
+        android:layout_alignEnd="@+id/linearLayout"
+        android:gravity="center" />
 
     <LinearLayout
         android:layout_width="wrap_content"

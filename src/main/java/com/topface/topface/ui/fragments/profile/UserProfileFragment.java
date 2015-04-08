@@ -16,17 +16,23 @@ import android.widget.RelativeLayout;
 
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
+import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.IUniversalUser;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.UniversalUserFactory;
 import com.topface.topface.data.User;
+import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.FeedGiftsRequest;
+import com.topface.topface.requests.GiftsRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.GiftsActivity;
@@ -178,7 +184,43 @@ public class UserProfileFragment extends AbstractProfileFragment {
                         showRetryBtn();
                     }
                 }
-            }).exec();
+            });
+            FeedGiftsRequest giftsRequest = new FeedGiftsRequest(getActivity());
+            giftsRequest.uid = profileId;
+            giftsRequest.limit = 10;
+            registerRequest(giftsRequest);
+            giftsRequest.callback(new DataApiHandler<FeedListData<FeedGift>>() {
+
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+
+                }
+
+                @Override
+                protected void success(FeedListData<FeedGift> data, IApiResponse response) {
+
+                }
+
+                @Override
+                protected FeedListData<FeedGift> parseResponse(ApiResponse response) {
+                    return null;
+                }
+            });
+            ApiRequest userAndGiftsRequest = new ParallelApiRequest(getActivity()).
+                    addRequest(userRequest).addRequest(giftsRequest).
+                    callback(new ApiHandler() {
+                        @Override
+                        public void success(IApiResponse response) {
+
+                        }
+
+                        @Override
+                        public void fail(int codeError, IApiResponse response) {
+
+                        }
+                    });
+            registerRequest(userAndGiftsRequest);
+            userAndGiftsRequest.exec();
         } else {
             onSuccess(new User(mProfileId, mSavedResponse), mSavedResponse);
         }

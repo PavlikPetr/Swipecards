@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.topface.topface.R;
@@ -39,9 +37,9 @@ public class ComplainsFragment extends BaseFragment {
     }
 
     private void setHeaders(View root) {
-        setText(R.string.complain_photo_header, (ViewGroup) root.findViewById(R.id.loPhotoHeader), ComplainRequest.ClassNames.PHOTO);
-        setText(R.string.complain_info_header, (ViewGroup) root.findViewById(R.id.loInfoHeader), ComplainRequest.ClassNames.USER);
-        setText(R.string.complain_msg_header, (ViewGroup) root.findViewById(R.id.loMsgHeader), ComplainRequest.ClassNames.PRIVATE_MSG);
+        setText(R.string.complain_photo_header, (TextView) root.findViewById(R.id.loPhotoHeader), ComplainRequest.ClassNames.PHOTO);
+        setText(R.string.complain_info_header, (TextView) root.findViewById(R.id.loInfoHeader), ComplainRequest.ClassNames.USER);
+        setText(R.string.complain_msg_header, (TextView) root.findViewById(R.id.loMsgHeader), ComplainRequest.ClassNames.PRIVATE_MSG);
     }
 
     private void initItems(View root) {
@@ -61,13 +59,12 @@ public class ComplainsFragment extends BaseFragment {
     private void initItem(View root, final ComplainRequest.ClassNames className, final ComplainRequest.TypesNames typeName, int bgId) {
         ComplainItem item = getItemIdByClassAndType(className, typeName);
         if (item != null) {
-            RelativeLayout frame = (RelativeLayout) root.findViewById(item.id);
+            TextView text = (TextView) root.findViewById(item.id);
             if (canHideItem(className)) {
-                frame.setVisibility(View.GONE);
+                text.setVisibility(View.GONE);
             } else {
-                ((ImageView) frame.findViewWithTag("ivEditBackground")).setImageResource(bgId);
-                setText(item.title, frame, className);
-                frame.setOnClickListener(new View.OnClickListener() {
+                setText(item.title, text, className);
+                text.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         startActivity(ComplainsMessageActivity.createIntent(getActivity(), userId, feedId, className, typeName));
@@ -101,11 +98,11 @@ public class ComplainsFragment extends BaseFragment {
         return null;
     }
 
-    private void setText(int titleId, ViewGroup frame, ComplainRequest.ClassNames className) {
+    private void setText(int titleId, TextView text, ComplainRequest.ClassNames className) {
         if (canHideItem(className)) {
-            frame.setVisibility(View.GONE);
+            text.setVisibility(View.GONE);
         } else {
-            ((TextView) frame.findViewWithTag("tvTitle")).setText(titleId);
+            text.setText(titleId);
         }
     }
 

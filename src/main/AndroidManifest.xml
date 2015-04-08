@@ -127,27 +127,12 @@
                     android:pathPrefix="/confirm"
                     android:scheme="https" />
 
-                />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
                     android:host="@string/offerwall_host"
                     android:scheme="@string/default_sheme" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/default_sheme" />
 
-                <data android:scheme="@string/default_sheme"
-
-                    />
             </intent-filter>
         </activity>
 
@@ -221,6 +206,16 @@
             android:name=".ui.OwnProfileActivity"
             android:parentActivityName=".ui.NavigationActivity"
             android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.OwnGiftsActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Topface.Gifts">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />

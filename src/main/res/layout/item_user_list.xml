@@ -5,7 +5,8 @@
     android:minHeight="60dp"
     android:layout_height="wrap_content"
     android:paddingLeft="8dp"
-    android:paddingRight="8dp">
+    android:paddingRight="8dp"
+    android:gravity="center_vertical">
 
     <!-- Title -->
     <TextView
