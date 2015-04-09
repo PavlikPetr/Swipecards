@@ -71,7 +71,7 @@ public class SequencedStartAction implements IStartAction {
     /**
      * Выпиливаем все действия, которые не могут быть запущены
      */
-    private void removeNonApplicableActions() {
+    protected void removeNonApplicableActions() {
         Iterator<IStartAction> iterator = mActions.iterator();
         while (iterator.hasNext()) {
             IStartAction action = iterator.next();

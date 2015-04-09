@@ -51,19 +51,16 @@ import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.ads.FullscreenController;
-import com.topface.topface.utils.controllers.SequencedStartAction;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
 import com.topface.topface.utils.controllers.startactions.FacebookRequestWindowAction;
+import com.topface.topface.utils.controllers.startactions.FacebookSequencedStartAction;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.InvitePopupAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -202,7 +199,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 showFragment(FragmentId.TABBED_LIKES);
             }
         }));
-        SequencedStartAction sequencedStartAction = new SequencedStartAction(this, AC_PRIORITY_NORMAL);
+        FacebookSequencedStartAction sequencedStartAction = new FacebookSequencedStartAction(this, AC_PRIORITY_NORMAL);
         sequencedStartAction.addAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
         sequencedStartAction.addAction(new FacebookRequestWindowAction(this, AC_PRIORITY_NORMAL));
         startActionsController.registerAction(sequencedStartAction);

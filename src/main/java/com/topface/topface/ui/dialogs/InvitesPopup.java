@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,7 +16,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.ContactsActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
@@ -50,8 +48,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
             ((NavigationActivity) activity).setPopupVisible(true);
         }
         TextView invitesTitle = (TextView) root.findViewById(R.id.invitesTitle);
-        invitesTitle.setText(Utils.getQuantityString(R.plurals.get_vip_for_invites_plurals,
-                CacheProfile.getOptions().contacts_count, CacheProfile.getOptions().contacts_count));
+        invitesTitle.setText(R.string.get_vip_free);
         if (getArguments() != null) {
             contacts = getArguments().getParcelableArrayList(CONTACTS);
         } else {
@@ -59,20 +56,6 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
         }
         invitesTitle.setOnClickListener(this);
         root.findViewById(R.id.ivClose).setOnClickListener(this);
-        final CheckBox invitesCheckBox = (CheckBox) root.findViewById(R.id.sendAllContacts);
-        if (contacts.size() < CacheProfile.getOptions().contacts_count) {
-            invitesCheckBox.setChecked(false);
-            invitesCheckBox.setVisibility(View.GONE);
-        } else {
-            invitesCheckBox.setVisibility(View.VISIBLE);
-        }
-        View invitesText = root.findViewById(R.id.checkboxContainer);
-        invitesText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                invitesCheckBox.setChecked(!invitesCheckBox.isChecked());
-            }
-        });
         mLocker = root.findViewById(R.id.ipLocker);
         final Button sendContacts = (Button) root.findViewById(R.id.sendContacts);
         sendContacts.setText(Utils.getQuantityString(R.plurals.vip_status_period_btn,
@@ -80,17 +63,19 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
         sendContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!invitesCheckBox.isChecked()) {
-                    EasyTracker.sendEvent("InvitesPopup", "SendContactsBtnClick", "", 0L);
-                    startActivity(ContactsActivity.createIntent(contacts));
-                    ((BaseFragmentActivity) activity).close(InvitesPopup.this);
-                } else {
                     EasyTracker.sendEvent("InvitesPopup", "SendContactsBtnClick", "", 1L);
                     sendInvitesRequest();
+                if (isAdded()) {
+                    ((BaseFragmentActivity) getActivity()).close(InvitesPopup.this);
                 }
             }
         });
 
+    }
+
+    @Override
+    public boolean isUnderActionBar() {
+        return true;
     }
 
     @Override
