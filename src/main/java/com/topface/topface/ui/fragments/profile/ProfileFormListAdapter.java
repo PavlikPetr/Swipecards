@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.profile;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.topface.framework.JsonUtils;
@@ -47,13 +48,26 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
                     CacheProfile.sex = formItem.dataId;
                 }
             });
-            forms.add(new FormItem(R.string.edit_age, String.valueOf(CacheProfile.age), FormItem.AGE) {
+            FormItem ageItem = new FormItem(R.string.edit_age, String.valueOf(CacheProfile.age), FormItem.AGE) {
                 @Override
                 public void copy(FormItem formItem) {
+
                     super.copy(formItem);
-                    CacheProfile.age = Integer.valueOf(formItem.value);
+                    CacheProfile.age = TextUtils.isEmpty(formItem.value) ? 0 : Integer.valueOf(formItem.value);
+                }
+            };
+            ageItem.setValueLimitInterface(new FormItem.ValueLimitInterface() {
+                @Override
+                public int getMinValue() {
+                    return App.getAppOptions().getUserAgeMin();
+                }
+
+                @Override
+                public int getMaxValue() {
+                    return App.getAppOptions().getUserAgeMax();
                 }
             });
+            forms.add(ageItem);
             forms.add(new FormItem(R.string.general_city, JsonUtils.toJson(CacheProfile.city), FormItem.CITY) {
                 @Override
                 public void copy(FormItem formItem) {

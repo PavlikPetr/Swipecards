@@ -148,6 +148,18 @@ public class FormInfo {
         else return entries;
     }
 
+    public static int getInputType(FormItem formItem) {
+        int titleId = formItem.titleId;
+        switch (titleId) {
+            case R.string.edit_age:
+            case R.array.form_main_height:
+            case R.array.form_main_weight:
+                return InputType.TYPE_CLASS_NUMBER;
+            default:
+                return InputType.TYPE_TEXT_FLAG_CAP_SENTENCES;
+        }
+    }
+
     public int[] getIdsByTitleId(int titleId) {
         switch (titleId) {
             case R.array.form_main_status:

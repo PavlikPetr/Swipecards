@@ -43,6 +43,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.UserProfileActivity;
+import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.ImageSwitcherLooped;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -512,10 +513,19 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                     CacheProfile.photos.removeById(currentPhoto.getId());
                 }
                 CacheProfile.totalPhotos -= mDeletedPhotos.size();
+
+                int decrementAvaPos = 0;
+                for (Photo deleted : mDeletedPhotos) {
+                    if (deleted.position < CacheProfile.photo.position) {
+                        decrementAvaPos++;
+                    }
+                }
+
                 LocalBroadcastManager.getInstance(PhotoSwitcherActivity.this).sendBroadcast(new Intent(DEFAULT_UPDATE_PHOTOS_INTENT)
                         .putExtra(INTENT_PHOTOS, CacheProfile.photos)
                         .putExtra(INTENT_MORE, CacheProfile.photos.size() < CacheProfile.totalPhotos - mDeletedPhotos.size())
-                        .putExtra(INTENT_CLEAR, true));
+                        .putExtra(INTENT_CLEAR, true)
+                        .putExtra(OwnAvatarFragment.DECREMENT_AVATAR_POSITION, decrementAvaPos));
                 mDeletedPhotos.clear();
             }
 
@@ -753,8 +763,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
 
-    public static interface IUserProfileReceiver {
-        public void onReceiveUserProfile(User user);
+    public interface IUserProfileReceiver {
+        void onReceiveUserProfile(User user);
     }
 
     private class PhotosManager {

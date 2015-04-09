@@ -166,7 +166,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
                 settingsRequest.name = value;
                 break;
             case FormItem.AGE:
-                if (TextUtils.isDigitsOnly(value)) {
+                if (TextUtils.isDigitsOnly(value) && !TextUtils.isEmpty(value)) {
                     settingsRequest.age = Integer.valueOf(value);
                 }
                 break;

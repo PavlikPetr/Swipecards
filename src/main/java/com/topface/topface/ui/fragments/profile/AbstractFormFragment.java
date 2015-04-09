@@ -301,7 +301,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
     }
 
     private void setUserDataPending(Profile user) {
-        setUserData(user.uid, user.forms, user.gifts, user.giftsCount);
+        setUserData(user.uid, user.forms, user.gifts, user.gifts.count);
     }
 
     public int getUserId() {

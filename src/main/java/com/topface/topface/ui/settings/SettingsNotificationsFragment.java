@@ -65,7 +65,7 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
                 @Override
                 public void onEditingFinished(Profile.TopfaceNotifications notification) {
                     if (hasChanges(notification)) {
-                        updateNotifaicationSettings(notification);
+                        updateNotificationSettings(notification);
                     }
                 }
             };
