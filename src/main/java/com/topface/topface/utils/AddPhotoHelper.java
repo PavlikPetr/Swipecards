@@ -12,6 +12,7 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
@@ -184,6 +185,15 @@ public class AddPhotoHelper {
             } else {
                 mActivity.startActivityForResult(intent, requestCode);
             }
+        } else {
+            if (mActivity != null) {
+                TakePhotoDialog takePhotoDialog = (TakePhotoDialog) ((FragmentActivity) mActivity).getSupportFragmentManager()
+                        .findFragmentByTag(TakePhotoDialog.TAG);
+                if (takePhotoDialog != null) {
+                    mActivity.startActivityForResult(intent, requestCode);
+                }
+            }
+
         }
     }
 
