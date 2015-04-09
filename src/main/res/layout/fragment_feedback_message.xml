@@ -37,7 +37,8 @@
                 android:paddingTop="24dp"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
-                android:padding="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:singleLine="false"
                 android:focusable="true"
                 android:hint="@string/enter_text"
@@ -54,8 +55,6 @@
                 android:id="@+id/edEmail"
                 android:layout_height="34dp"
                 android:inputType="textEmailAddress"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
                 android:singleLine="true"
                 android:hint="@string/general_input_email"
                 android:visibility="visible" />
@@ -71,8 +70,6 @@
                 android:id="@+id/edTransactionId"
                 android:layout_height="34dp"
                 android:inputType="text"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
                 android:hint="@string/settings_feedback_transaction_number_hint"
                 android:visibility="gone" />
 
