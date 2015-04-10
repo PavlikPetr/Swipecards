@@ -388,6 +388,7 @@
     <string name="change_password">Cambia password</string>
     <string name="password_changing">Modifica password</string>
     <string name="save">Salvare</string>
+    <string name="saving_in_progress">Salvataggio…</string>
     <string name="confirmation_successfully_sent">All’indirizzo e-mail da te indicato è stata inviata la conferma</string>
     <string name="password_hint">password</string>
     <string name="password_confirmation_hint">conferma password</string>
