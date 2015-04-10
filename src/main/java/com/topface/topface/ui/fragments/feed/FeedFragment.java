@@ -867,7 +867,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     @Override
     protected void onUpdateStart(boolean isPushUpdating) {
-        onFilledFeed();
+        if (!getListAdapter().isEmpty()) {
+            onFilledFeed();
+        }
         if (!isPushUpdating) {
             mListView.setVisibility(View.INVISIBLE);
             mBackgroundController.show();
