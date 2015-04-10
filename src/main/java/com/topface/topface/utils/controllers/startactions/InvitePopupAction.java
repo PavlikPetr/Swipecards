@@ -47,11 +47,7 @@ public class InvitePopupAction extends LinkedStartAction {
 
     @Override
     public boolean isApplicable() {
-        if (isFacebook()) {
-            return true;
-        } else {
-            return InvitesPopup.isApplicable() && getContactsCount() >= CacheProfile.getOptions().contacts_count;
-        }
+        return isFacebook() || InvitesPopup.isApplicable() && getContactsCount() >= CacheProfile.getOptions().contacts_count;
     }
 
     @Override
