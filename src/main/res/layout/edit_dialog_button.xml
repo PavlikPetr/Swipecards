@@ -7,7 +7,7 @@
         android:id="@+id/edit_dialog_buttons_top"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/edit_dialog_buttons_divider"/>
+        android:background="@color/edit_dialog_buttons_divider" />
 
     <Button
         android:id="@+id/edit_dialog_ok"

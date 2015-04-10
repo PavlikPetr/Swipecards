@@ -176,7 +176,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
     }
 
     public interface OnCloseListener {
-        public void onClose();
+        void onClose();
     }
 
     @Override
