@@ -1,47 +1,27 @@
 package com.topface.topface.ui.fragments;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.topface.framework.utils.BackgroundThread;
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.Options;
-import com.topface.topface.data.Profile;
-import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.SendMailNotificationsRequest;
-import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.AboutDialog;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelector;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
-import com.topface.topface.ui.edit.EditProfileActivity;
-import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.CacheProfile;
@@ -49,12 +29,9 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.MarketApiManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
-import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-import java.util.HashMap;
 import java.util.Locale;
 
 public class SettingsFragment extends ProfileInnerFragment implements OnClickListener {
@@ -151,7 +128,6 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                 break;
             case R.id.loHelp:
                 String helpUrl = CacheProfile.getOptions().helpUrl;
-                //������ �� ������ ���������� ������ � ������, ���� ������ ��� �� �������.
                 if (!TextUtils.isEmpty(helpUrl)) {
                     intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse(helpUrl));

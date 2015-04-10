@@ -37,13 +37,13 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.MarketApiManager;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.notifications.UserNotificationManager;
+
 import static com.topface.topface.ui.dialogs.AbstractEditDialog.EditingFinishedListener;
 
 /**
  * Notifications settings
  */
-public class SettingsNotificationsFragment extends BaseFragment implements View.OnClickListener
-{
+public class SettingsNotificationsFragment extends BaseFragment implements View.OnClickListener {
     public static final int REQUEST_CODE_RINGTONE = 333;
 
     private MarketApiManager mMarketApiManager;
@@ -62,13 +62,13 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
 
     private EditingFinishedListener<Profile.TopfaceNotifications> mEditingFinishedListener =
             new EditingFinishedListener<Profile.TopfaceNotifications>() {
-        @Override
-        public void onEditingFinished(Profile.TopfaceNotifications notification) {
-            if (hasChanges(notification)) {
-                updateNotifaicationSettings(notification);
-            }
-        }
-    };
+                @Override
+                public void onEditingFinished(Profile.TopfaceNotifications notification) {
+                    if (hasChanges(notification)) {
+                        updateNotificationSettings(notification);
+                    }
+                }
+            };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -275,7 +275,7 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
         }
     }
 
-    private void updateNotifaicationSettings(final Profile.TopfaceNotifications notification) {
+    private void updateNotificationSettings(final Profile.TopfaceNotifications notification) {
         final View view = getViewByNotificationType(notification.type);
         if (view != null) {
             view.setEnabled(false);

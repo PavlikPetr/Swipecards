@@ -7,15 +7,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.topface.topface.App;
-import com.topface.topface.R;
-
 /**
  * Abstract adapter for editing dialogs
  */
 public abstract class AbstractEditAdapter<T> extends BaseAdapter {
 
+    public interface OnDataChangeListener<T> {
+        void onDataChanged(T data);
+    }
+
     private LayoutInflater mInflater;
+    private OnDataChangeListener<T> mDataChangeListener;
 
     public AbstractEditAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -31,4 +33,12 @@ public abstract class AbstractEditAdapter<T> extends BaseAdapter {
 
     @LayoutRes
     protected abstract int getItemLayoutRes();
+
+    public void setDataChangeListener(OnDataChangeListener listener) {
+        mDataChangeListener = listener;
+    }
+
+    public OnDataChangeListener<T> getDataChangeListener() {
+        return mDataChangeListener;
+    }
 }

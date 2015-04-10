@@ -15,7 +15,6 @@ import com.topface.topface.data.User;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.fragments.UserAvatarFragment;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
-import com.topface.topface.ui.fragments.gift.UpdatableGiftsFragment;
 import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.Utils;
 
@@ -33,13 +32,10 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
     protected static final String ARG_TAG_INIT_BODY_PAGE = "profile_start_body_class";
     private static final String CURRENT_BODY_PAGE = "CURRENT_BODY_PAGE";
     // state
-    private UpdatableGiftsFragment mGiftFragment;
     private ArrayList<String> BODY_PAGES_TITLES = new ArrayList<>();
     private ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<>();
     private UserPhotoFragment mUserPhotoFragment;
     private AbstractFormFragment mFormFragment;
-    private boolean mIsChatAvailable;
-    private boolean mIsAddToFavoritsAvailable;
     private Profile mProfile = null;
     ProfileInnerUpdater mProfileUpdater = new ProfileInnerUpdater() {
         @Override
@@ -52,8 +48,6 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
                 mUserPhotoFragment = (UserPhotoFragment) fragment;
             } else if (fragment instanceof AbstractFormFragment) {
                 mFormFragment = (AbstractFormFragment) fragment;
-            } else if (fragment instanceof UpdatableGiftsFragment) {
-                mGiftFragment = (UpdatableGiftsFragment) fragment;
             }
         }
 
@@ -163,33 +157,15 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
 
     protected void setProfile(Profile profile) {
         mProfile = profile;
+        invalidateUniversalUser();
         setActionBarAvatar(getUniversalUser());
         refreshActionBarTitles();
-        if (mGiftFragment != null) {
-            mGiftFragment.setProfile(profile);
-        }
         if (mUserPhotoFragment != null && profile instanceof User) {
             mUserPhotoFragment.setUserData((User) profile);
         }
         if (mFormFragment != null) {
             mFormFragment.setUserData(profile);
         }
-    }
-
-    protected boolean isChatAvailable() {
-        return mIsChatAvailable;
-    }
-
-    public void setIsChatAvailable(boolean isChatAvailable) {
-        mIsChatAvailable = isChatAvailable;
-    }
-
-    protected boolean isAddToFavoriteAvailable() {
-        return mIsAddToFavoritsAvailable;
-    }
-
-    public void setIsAddToFavoritsAvailable(boolean isAddToFavoritsAvailable) {
-        mIsAddToFavoritsAvailable = isAddToFavoritsAvailable;
     }
 
     private void initBodyPages(View root) {
@@ -265,9 +241,5 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
         Profile getProfile();
 
         int getProfileType();
-    }
-
-    protected UpdatableGiftsFragment getGiftFragment() {
-        return mGiftFragment;
     }
 }

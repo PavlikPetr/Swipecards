@@ -18,10 +18,13 @@ import com.topface.topface.utils.MarketApiManager;
  */
 public class NotificationEditAdapter extends AbstractEditAdapter<Profile.TopfaceNotifications> {
 
+    private static final int NOTIFICATION_OPTIONS_COUNT = 2;
+
     private Profile.TopfaceNotifications mNotification;
     private boolean mIsPhoneNotificationEnabled = new MarketApiManager().isMarketApiAvailable();
     private int mMainColor;
     private int mDisabledColor;
+    private Boolean[] mItems;
 
     public NotificationEditAdapter(Context context, Profile.TopfaceNotifications notification) {
         super(context);
@@ -29,28 +32,21 @@ public class NotificationEditAdapter extends AbstractEditAdapter<Profile.Topface
         Resources resources = App.getContext().getResources();
         mMainColor = resources.getColor(R.color.text_color_gray);
         mDisabledColor = resources.getColor(R.color.text_color_gray_transparent);
+        mItems = new Boolean[] {mNotification.apns && mIsPhoneNotificationEnabled, mNotification.mail};
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return NOTIFICATION_OPTIONS_COUNT;
     }
 
     @Override
     public Boolean getItem(int position) {
-        if (position == 0) {
-            return mNotification.apns && mIsPhoneNotificationEnabled;
-        } else {
-            return mNotification.mail;
-        }
+        return mItems[position];
     }
 
     private void setItem(int position, boolean value) {
-        if (position == 0) {
-            mNotification.apns = value;
-        } else {
-            mNotification.mail = value;
-        }
+        mItems[position] = value;
     }
 
     @Override
@@ -98,7 +94,7 @@ public class NotificationEditAdapter extends AbstractEditAdapter<Profile.Topface
 
     @Override
     public Profile.TopfaceNotifications getData() {
-        return new Profile.TopfaceNotifications(getItem(0), getItem(1), mNotification.type);
+        return new Profile.TopfaceNotifications(mItems[0], mItems[1], mNotification.type);
     }
 
     /**

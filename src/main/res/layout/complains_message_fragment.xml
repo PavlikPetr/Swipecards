@@ -13,7 +13,7 @@
     <EditText
         android:id="@+id/etDescription"
         android:layout_below="@id/tvReason"
-        style="@style/ComplainsMessageEdit"/>
+        style="@style/ComplainsMessageEdit" />
 
     <com.topface.topface.ui.views.LockerView
         android:id="@+id/complainLocker"

@@ -44,4 +44,6 @@
 
     <dimen name="form_gift_size">55dp</dimen>
 
+    <dimen name="form_gift_counter_size">18dp</dimen>
+
 </resources>

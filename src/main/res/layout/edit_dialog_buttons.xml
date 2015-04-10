@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <ImageView
+    <View
         android:id="@+id/edit_dialog_buttons_top"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:src="@color/edit_dialog_buttons_divider"/>
+        android:background="@color/edit_dialog_buttons_divider"/>
 
-    <ImageView
+    <View
         android:id="@+id/edit_dialog_center"
         android:layout_width="1dp"
         android:layout_height="@dimen/edit_dialog_button_heigh"
         android:layout_centerHorizontal="true"
-        android:src="@color/edit_dialog_buttons_divider"
+        android:background="@color/edit_dialog_buttons_divider"
         android:layout_below="@id/edit_dialog_buttons_top"/>
 
     <Button
@@ -23,7 +24,7 @@
         android:layout_below="@id/edit_dialog_buttons_top"
         android:layout_toLeftOf="@id/edit_dialog_center"
         android:background="@null"
-        android:text="@string/general_cancel"/>
+        android:text="@string/general_cancel" />
 
     <Button
         android:id="@+id/edit_dialog_save"
@@ -32,6 +33,6 @@
         android:layout_below="@id/edit_dialog_buttons_top"
         android:layout_toRightOf="@id/edit_dialog_center"
         android:background="@null"
-        android:text="@string/save"/>
+        android:text="@string/save" />
 
 </RelativeLayout>

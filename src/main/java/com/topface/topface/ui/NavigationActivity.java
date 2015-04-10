@@ -62,9 +62,6 @@ import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -523,25 +520,21 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 case CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY:
                     if (data != null) {
                         Bundle extras = data.getExtras();
-                        try {
-                            if (extras != null) {
-                                final City city = new City(new JSONObject(extras.getString(CitySearchActivity.INTENT_CITY)));
-                                SettingsRequest request = new SettingsRequest(this);
-                                request.cityid = city.id;
-                                request.callback(new ApiHandler() {
-                                    @Override
-                                    public void success(IApiResponse response) {
-                                        CacheProfile.city = city;
-                                        CacheProfile.sendUpdateProfileBroadcast();
-                                    }
+                        if (extras != null) {
+                            final City city = extras.getParcelable(CitySearchActivity.INTENT_CITY);
+                            SettingsRequest request = new SettingsRequest(this);
+                            request.cityid = city.id;
+                            request.callback(new ApiHandler() {
+                                @Override
+                                public void success(IApiResponse response) {
+                                    CacheProfile.city = city;
+                                    CacheProfile.sendUpdateProfileBroadcast();
+                                }
 
-                                    @Override
-                                    public void fail(int codeError, IApiResponse response) {
-                                    }
-                                }).exec();
-                            }
-                        } catch (JSONException e) {
-                            Debug.error(e);
+                                @Override
+                                public void fail(int codeError, IApiResponse response) {
+                                }
+                            }).exec();
                         }
                     }
                     break;

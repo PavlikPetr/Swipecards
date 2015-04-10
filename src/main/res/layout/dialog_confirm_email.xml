@@ -23,6 +23,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
+        style="@style/topfaceEditText.Holo"
         android:gravity="left"
         android:layout_marginTop="10dp"
         android:padding="10dp"

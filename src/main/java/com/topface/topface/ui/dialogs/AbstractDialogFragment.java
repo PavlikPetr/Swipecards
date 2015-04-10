@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -38,22 +39,34 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        applyStyle();
+
+        //По стилю это у нас не диалог, а кастомный дизайн -
+        //закрывает весь экран оверлеем и ниже ActionBar показывает контент
+        setStyle(STYLE_NO_FRAME, getDialogStyleResId());
+
         final TypedArray styledAttributes = getActivity().getTheme().obtainStyledAttributes(
                 new int[]{R.attr.actionBarSize});
         mActionBarSize = (int) styledAttributes.getDimension(0, 0);
         styledAttributes.recycle();
     }
 
-    protected void applyStyle() {
-        //По стилю это у нас не диалог, а кастомный дизайн -
-        //закрывает весь экран оверлеем и ниже ActionBar показывает контент
-        setStyle(STYLE_NO_FRAME, R.style.Topface_Theme_TranslucentDialog);
+    @StyleRes
+    protected int getDialogStyleResId() {
+        if (isModalDialog()) {
+            return R.style.Topface_Theme_TranslucentDialog;
+        } else {
+            return R.style.Theme_Topface_NoActionBar;
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.dialog_base, container, false);
+        View root;
+        if (isModalDialog()) {
+            root = inflater.inflate(R.layout.dialog_modal, container, false);
+        } else {
+            root = inflater.inflate(R.layout.dialog_base, container, false);
+        }
         if (isUnderActionBar()) {
             root.setPadding(0, mNeedActionBarIndent ? mActionBarSize : 0, 0, 0);
         }
@@ -117,14 +130,16 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
         super.startActivityForResult(intent, requestCode);
     }
 
-    public abstract int getDialogLayoutRes();
+    protected abstract boolean isModalDialog();
+
+    protected abstract int getDialogLayoutRes();
 
     protected final void setNeedActionBarIndent(boolean value) {
         mNeedActionBarIndent = value;
     }
 
     public boolean isUnderActionBar() {
-        return true;
+        return false;
     }
 
 }

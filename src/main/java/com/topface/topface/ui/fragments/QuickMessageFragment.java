@@ -72,6 +72,11 @@ public class QuickMessageFragment extends AbstractDialogFragment implements View
     }
 
     @Override
+    protected boolean isModalDialog() {
+        return true;
+    }
+
+    @Override
     public int getDialogLayoutRes() {
         return R.layout.fragment_quick_message;
     }

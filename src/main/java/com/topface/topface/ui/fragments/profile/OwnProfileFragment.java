@@ -22,7 +22,6 @@ import com.topface.topface.data.IUniversalUser;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.UniversalUserFactory;
-import com.topface.topface.ui.SettingsActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
@@ -148,8 +147,9 @@ public class OwnProfileFragment extends OwnAvatarFragment {
         return false;
     }
 
-    private void startSettingsActivity() {
-        startActivity(SettingsActivity.createIntent());
+    @Override
+    protected Profile getProfile() {
+        return CacheProfile.getProfile();
     }
 
     @Override
@@ -202,7 +202,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     }
 
     @Override
-    protected IUniversalUser getUniversalUser() {
+    protected IUniversalUser createUniversalUser() {
         return UniversalUserFactory.create(getProfile());
     }
 

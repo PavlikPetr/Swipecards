@@ -1,26 +1,17 @@
 package com.topface.topface.ui.dialogs;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.ui.adapters.AbstractEditAdapter;
+import com.topface.topface.ui.adapters.TextFormEditAdapter;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
 
@@ -39,6 +30,7 @@ public class EditTextFormDialog extends AbstractEditDialog<FormItem> {
         editor.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
+                editor.closeKeyboard();
                 editingFinishedListener.onEditingFinished(editor.getAdapter().getData());
             }
         });
@@ -46,14 +38,15 @@ public class EditTextFormDialog extends AbstractEditDialog<FormItem> {
     }
 
     @Override
-    protected void applyStyle() {
-        setStyle(ConfirmEmailDialog.STYLE_NO_TITLE, R.style.EditDialog_Text);
+    protected int getDialogStyleResId() {
+        return R.style.EditDialog_Text;
     }
 
     @Override
     protected void initViews(View root) {
         super.initViews(root);
         getTitleText().setTextAppearance(App.getContext(), R.style.SelectorDialogTitle_Blue);
+        final TextView limitText = getLimitText();
 
         if (isButtonsVisible()) {
             ViewStub buttonsStub = getButtonsStub();
@@ -71,8 +64,26 @@ public class EditTextFormDialog extends AbstractEditDialog<FormItem> {
             saveBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getAdapter().saveData();
-                    EditTextFormDialog.this.dismiss();
+                    TextFormEditAdapter adapter = getAdapter();
+                    FormItem formItem = new FormItem(adapter.getData());
+                    formItem.value = adapter.getItem(0);
+                    if (formItem.isValueValid()) {
+                        getAdapter().saveData();
+                        EditTextFormDialog.this.dismiss();
+                    } else {
+                        Toast.makeText(App.getContext(), R.string.retry_cancel_editing_bad_value, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
+        FormItem data = getAdapter().getData();
+        if (data.getTextLimitInterface() != null) {
+            limitText.setText(data.value.length() + "/" + data.getTextLimitInterface().getLimit());
+            getAdapter().setDataChangeListener(new AbstractEditAdapter.OnDataChangeListener<FormItem>() {
+                @Override
+                public void onDataChanged(FormItem data) {
+                    limitText.setText(data.value.length() + "/" + data.getTextLimitInterface().getLimit());
                 }
             });
         }
@@ -89,13 +100,14 @@ public class EditTextFormDialog extends AbstractEditDialog<FormItem> {
     }
 
     private void closeKeyboard() {
-        Activity activity = getActivity();
-        if (activity != null) {
-            View focus = activity.getCurrentFocus();
-            if (focus != null) {
-                InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(focus.getWindowToken(), 0);
-            }
+        View view = getView();
+        if (view != null) {
+            Utils.hideSoftKeyboard(App.getContext(), view.getApplicationWindowToken());
         }
+    }
+
+    @Override
+    public TextFormEditAdapter getAdapter() {
+        return (TextFormEditAdapter) super.getAdapter();
     }
 }

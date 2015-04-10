@@ -13,8 +13,14 @@ import com.topface.topface.utils.FormItem;
  */
 public class EditAdapterFactory {
 
-    public AbstractEditAdapter createAdapterFor(Context context, Object data) {
-        if (data instanceof  Profile.TopfaceNotifications) {
+    /**
+     * @param context Activity
+     * @param data    Data you want to edit
+     * @return adapter with available edit options for data
+     */
+    public AbstractEditAdapter createAdapterFor(Context context,
+                                                Object data) {
+        if (data instanceof Profile.TopfaceNotifications) {
             return new NotificationEditAdapter(context, (Profile.TopfaceNotifications) data);
         } else if (data instanceof FormItem) {
             FormItem formItem = (FormItem) data;

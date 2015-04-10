@@ -7,13 +7,13 @@ public class UniversalUserFactory {
 
     public static IUniversalUser create(Profile profile) {
         if (profile instanceof User) {
-            return new UniversalUser((User) profile);
+            return new UniversalUserWrapper((User) profile);
         } else {
-            return new UniversalProfile(profile);
+            return new UniversalProfileWrapper(profile);
         }
     }
 
     public static IUniversalUser create(FeedUser feedUser) {
-        return new UniversalFeedUser(feedUser);
+        return new UniversalFeedUserWrapper(feedUser);
     }
 }

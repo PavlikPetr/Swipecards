@@ -35,7 +35,8 @@ public class FormItem implements Parcelable {
     public static final int NO_RESOURCE_ID = -1;
     public static final int NOT_SPECIFIED_ID = 0;
 
-    private LimitInterface mLimitInterface;
+    private TextLimitInterface mTextLimitInterface;
+    private ValueLimitInterface mValueLimitInterface;
 
     //private static final long serialVersionUID = 1883262786634798671L;    
 
@@ -92,7 +93,8 @@ public class FormItem implements Parcelable {
         value = formItem.value;
         header = formItem.header;
         titleId = formItem.titleId;
-        mLimitInterface = formItem.mLimitInterface;
+        mTextLimitInterface = formItem.mTextLimitInterface;
+        mValueLimitInterface = formItem.mValueLimitInterface;
     }
 
     public FormItem() {
@@ -105,7 +107,8 @@ public class FormItem implements Parcelable {
         value = formItem.value;
         header = formItem.header;
         titleId = formItem.titleId;
-        mLimitInterface = formItem.mLimitInterface;
+        mTextLimitInterface = formItem.mTextLimitInterface;
+        mValueLimitInterface = formItem.mValueLimitInterface;
         isEditing = formItem.isEditing;
     }
 
@@ -170,16 +173,30 @@ public class FormItem implements Parcelable {
                 }
             };
 
-    public interface LimitInterface {
+    public interface TextLimitInterface {
         int getLimit();
     }
 
-    public void setLimitInterface(LimitInterface LimitInterface) {
-        mLimitInterface = LimitInterface;
+    public interface ValueLimitInterface {
+        int getMinValue();
+
+        int getMaxValue();
     }
 
-    public LimitInterface getLimitInterface() {
-        return mLimitInterface;
+    public void setTextLimitInterface(TextLimitInterface TextLimitInterface) {
+        mTextLimitInterface = TextLimitInterface;
+    }
+
+    public TextLimitInterface getTextLimitInterface() {
+        return mTextLimitInterface;
+    }
+
+    public void setValueLimitInterface(ValueLimitInterface valueLimitInterface) {
+        mValueLimitInterface = valueLimitInterface;
+    }
+
+    public ValueLimitInterface getValueLimitInterface() {
+        return mValueLimitInterface;
     }
 
     public String getTitle() {
@@ -188,5 +205,20 @@ public class FormItem implements Parcelable {
         } else {
             return title;
         }
+    }
+
+    public boolean isValueValid() {
+        if (mTextLimitInterface != null && value.length() > mTextLimitInterface.getLimit()) {
+            return false;
+        } else if (mValueLimitInterface != null) {
+            if (TextUtils.isEmpty(value)) {
+                return false;
+            }
+            if (TextUtils.isDigitsOnly(value)) {
+                int val = Integer.parseInt(value);
+                return val >= mValueLimitInterface.getMinValue() && val <= mValueLimitInterface.getMaxValue();
+            }
+        }
+        return true;
     }
 }

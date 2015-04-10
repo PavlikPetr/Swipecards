@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -341,8 +340,9 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                                 intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, newPhotos);
                                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
                                 Intent changeAvatarPosIntent = new Intent(OwnAvatarFragment.UPDATE_AVATAR_POSITION);
-                                changeAvatarPosIntent.putExtra(OwnAvatarFragment.DECREMENT_AVATAR_POSITION, true);
-                                changeAvatarPosIntent.putExtra(OwnAvatarFragment.POSITION, position);
+                                if (position < CacheProfile.photo.position) {
+                                    changeAvatarPosIntent.putExtra(OwnAvatarFragment.DECREMENT_AVATAR_POSITION, 1);
+                                }
                                 LocalBroadcastManager.getInstance(App.getContext())
                                         .sendBroadcast(changeAvatarPosIntent);
                             }

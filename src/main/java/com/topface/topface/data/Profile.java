@@ -178,7 +178,7 @@ public class Profile extends AbstractDataWithPhotos {
             String aboutStatus = TextUtils.isEmpty(as.trim()) ? null : as;
             formItem = new FormItem(R.array.form_main_about_status, aboutStatus,
                     FormItem.DATA, headerItem);
-            formItem.setLimitInterface(new FormItem.LimitInterface() {
+            formItem.setTextLimitInterface(new FormItem.TextLimitInterface() {
                 @Override
                 public int getLimit() {
                     return App.getAppOptions().getUserAboutMeMaxLength();
@@ -191,6 +191,17 @@ public class Profile extends AbstractDataWithPhotos {
             int h = form.optInt("height");
             String height = (h == 0) ? null : Integer.toString(form.optInt("height"));
             formItem = new FormItem(R.array.form_main_height, height, FormItem.DATA, headerItem);
+            formItem.setValueLimitInterface(new FormItem.ValueLimitInterface() {
+                @Override
+                public int getMinValue() {
+                    return App.getAppOptions().getUserHeightMin();
+                }
+
+                @Override
+                public int getMaxValue() {
+                    return App.getAppOptions().getUserHeightMax();
+                }
+            });
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
 
@@ -198,6 +209,17 @@ public class Profile extends AbstractDataWithPhotos {
             int w = form.optInt("weight");
             String weight = w == 0 ? null : Integer.toString(form.optInt("weight"));
             formItem = new FormItem(R.array.form_main_weight, weight, FormItem.DATA, headerItem);
+            formItem.setValueLimitInterface(new FormItem.ValueLimitInterface() {
+                @Override
+                public int getMinValue() {
+                    return App.getAppOptions().getUserWeightMin();
+                }
+
+                @Override
+                public int getMaxValue() {
+                    return App.getAppOptions().getUserWeightMax();
+                }
+            });
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
 
@@ -315,6 +337,7 @@ public class Profile extends AbstractDataWithPhotos {
         JSONObject jsonGifts = resp.optJSONObject("gifts");
         JSONArray arrGifts = jsonGifts.optJSONArray("items");
         profile.gifts.more = jsonGifts.optBoolean("more");
+        profile.gifts.count = jsonGifts.optInt("count");
         if (arrGifts == null) return;
         for (int i = 0; i < arrGifts.length(); i++) {
             JSONObject itemGift = arrGifts.getJSONObject(i);
@@ -424,6 +447,7 @@ public class Profile extends AbstractDataWithPhotos {
 
     public static class Gifts extends ArrayList<Gift> {
         public boolean more;
+        public int count;
 
         public Gifts() {
             more = false;

@@ -2,7 +2,6 @@ package com.topface.topface.ui.fragments.profile;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -19,10 +18,13 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.BasePendingInit;
 import com.topface.topface.data.FeedGift;
+import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.Profile;
-import com.topface.topface.data.User;
-import com.topface.topface.ui.GiftsActivity;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.FeedGiftsRequest;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsStripAdapter;
 import com.topface.topface.utils.FormItem;
@@ -39,14 +41,19 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
     private static final String FORM_GIFTS = "FORM_GIFTS";
     private static final String POSITION = "POSITION";
     private static final String USER_ID = "USER_ID";
+    private static final String GIFTS_COUNT = "GIFTS_COUNT";
 
     private AbstractFormListAdapter mFormAdapter;
     private LinearLayout mGiftsHeader;
+    private TextView mGiftsCounter;
     private GiftsStripAdapter mGiftAdapter;
     private float mGiftSize;
+    private float mGiftsCounterSize;
+    private int mVisibleGiftsNumber;
     private int mUserId;
     private LinkedList<FormItem> mForms;
     private Profile.Gifts mGifts;
+    private int mGiftsCount;
     private ListView mListQuestionnaire;
     private DisplayMetrics mMetrics;
 
@@ -56,7 +63,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         @Override
         public void onChanged() {
             View root = getView();
-            if (root  != null) {
+            if (root  != null && mGiftsHeader != null) {
                 fillGiftsStrip();
             }
         }
@@ -65,10 +72,11 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mGiftAdapter = new GiftsStripAdapter(getActivity(), new FeedList<FeedGift>(), null);
-        mGiftAdapter.registerDataSetObserver(mGiftsObserver);
-        mFormAdapter = createFormAdapter(getActivity());
-        mGiftSize = getActivity().getResources().getDimension(R.dimen.form_gift_size);
+        Activity activity = getActivity();
+        mGiftAdapter = new GiftsStripAdapter(activity, new FeedList<FeedGift>(), null);
+        mFormAdapter = createFormAdapter(activity);
+        mGiftSize = activity.getResources().getDimension(R.dimen.form_gift_size);
+        mGiftsCounterSize = activity.getResources().getDimension(R.dimen.form_gift_counter_size);
         mMetrics = getActivity().getResources().getDisplayMetrics();
     }
 
@@ -88,24 +96,30 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
                 }
             }
         });
+        mVisibleGiftsNumber = (mMetrics.widthPixels - mGiftsHeader.getPaddingLeft() -
+                mGiftsHeader.getPaddingRight() - (int) mGiftsCounterSize) / (int) mGiftSize;
+        mGiftAdapter.registerDataSetObserver(mGiftsObserver);
+
         mListQuestionnaire.addHeaderView(giftsHeaderWrapper);
         mListQuestionnaire.setAdapter(mFormAdapter);
 
         if (mForms != null) {
-            setUserData(mUserId, mForms, mGifts);
+            setUserData(mUserId, mForms, mGifts, mGiftsCount);
         } else if (savedInstanceState != null) {
             ArrayList<Parcelable> parcelableArrayList = savedInstanceState.getParcelableArrayList(FORM_ITEMS);
             ArrayList<Gift> parcelableGifts = savedInstanceState.getParcelableArrayList(FORM_GIFTS);
+            int giftsCount = savedInstanceState.getInt(GIFTS_COUNT);
             if (parcelableArrayList != null && parcelableGifts != null) {
                 Profile.Gifts gifts = new Profile.Gifts();
                 gifts.addAll(parcelableGifts);
 
                 setUserData(savedInstanceState.getInt(USER_ID, 0),
-                        parcelableArrayList, gifts);
+                        parcelableArrayList, gifts, giftsCount);
 
                 mListQuestionnaire.setSelection(savedInstanceState.getInt(POSITION, 0));
             }
         }
+
         return root;
     }
 
@@ -115,9 +129,8 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         mPendingUserInit.setCanSet(true);
         if (mPendingUserInit.getCanSet()) {
             setUserDataPending(mPendingUserInit.getData());
+            fillGiftsStrip();
         }
-
-        if (mPendingUserInit.getCanSet())     fillGiftsStrip();
     }
 
     protected abstract void onGiftsClick();
@@ -153,25 +166,24 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         outState.putParcelableArrayList(FORM_ITEMS, mFormAdapter.saveState());
         outState.putParcelableArrayList(FORM_GIFTS, mGifts);
         outState.putInt(POSITION, mListQuestionnaire.getFirstVisiblePosition());
+        outState.putInt(GIFTS_COUNT, mGiftsCount);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mPendingUserInit.setCanSet(false);
+        mGiftAdapter.unregisterDataSetObserver(mGiftsObserver);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mGiftAdapter.unregisterDataSetObserver(mGiftsObserver);
     }
 
     private void fillGiftsStrip() {
         if (isAdded()) {
             LayoutInflater inflater = LayoutInflater.from(getActivity());
-            final int visibleGiftsNumber = (mMetrics.widthPixels - mGiftsHeader.getPaddingLeft() -
-                    mGiftsHeader.getPaddingRight() - (int) (mGiftSize / 4)) / (int) mGiftSize;
 
             if (!mGiftAdapter.isEmpty()) {
                 mGiftsHeader.setVisibility(View.VISIBLE);
@@ -180,18 +192,30 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
                 return;
             }
 
-            int giftsCount = mGiftAdapter.getCount();
-            mGiftsHeader.removeAllViews();
-            for (int i = 0; i < giftsCount && i < visibleGiftsNumber; i++) {
-                View giftView = mGiftAdapter.getView(i, null, mGiftsHeader);
-                giftView.setLayoutParams(new ViewGroup.LayoutParams((int) mGiftSize, (int) mGiftSize));
-                mGiftsHeader.addView(giftView);
+            int giftsCount = mGiftsCount == 0 ? mGiftAdapter.getCount() : mGiftsCount;
+            int viewsNumber = mGiftsHeader.getChildCount();
+            for (int i = (giftsCount < mVisibleGiftsNumber ? giftsCount : mVisibleGiftsNumber) - 1; i >= 0; i--) {
+                View giftView;
+                if (viewsNumber > i) {
+                    giftView = mGiftAdapter.getView(i, mGiftsHeader.getChildAt(i), mGiftsHeader);
+                } else {
+                    giftView = mGiftAdapter.getView(i, null, mGiftsHeader);
+                    giftView.setLayoutParams(new ViewGroup.LayoutParams((int) mGiftSize, (int) mGiftSize));
+                }
+
+                if (giftView.getParent() == null) {
+                    mGiftsHeader.addView(giftView, 0);
+                }
             }
-            if (giftsCount > visibleGiftsNumber) {
-                TextView giftsCounter = (TextView) inflater.inflate(R.layout.remained_gifts_counter,
-                        mGiftsHeader, false);
-                giftsCounter.setText("+" + (giftsCount - visibleGiftsNumber));
-                mGiftsHeader.addView(giftsCounter);
+            if (giftsCount > mVisibleGiftsNumber) {
+                if (mGiftsCounter == null) {
+                    mGiftsCounter = (TextView) inflater.inflate(R.layout.remained_gifts_counter,
+                            mGiftsHeader, false);
+                }
+                mGiftsCounter.setText("+" + (giftsCount - mVisibleGiftsNumber));
+                if (mGiftsCounter.getParent() == null) {
+                    mGiftsHeader.addView(mGiftsCounter);
+                }
             }
         }
     }
@@ -199,7 +223,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
     private UserProfileFragment getUserProfileFragment() {
         Fragment fragment = getParentFragment();
         if (fragment instanceof UserProfileFragment) {
-            return  (UserProfileFragment) fragment;
+            return (UserProfileFragment) fragment;
         } else {
             Debug.error("Fragment not equals UserProfileFragment");
             return null;
@@ -217,31 +241,67 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
 
     protected abstract AbstractFormListAdapter createFormAdapter(Context context);
 
-    public void setUserData(int userId, LinkedList<FormItem> forms, Profile.Gifts gifts) {
+    public void setUserData(int userId, LinkedList<FormItem> forms, Profile.Gifts gifts, int giftsCount) {
         mUserId = userId;
         mForms = forms;
         mGifts = gifts;
+        mGiftsCount = giftsCount;
+
         mFormAdapter.setUserData(mForms);
         mFormAdapter.notifyDataSetChanged();
         mGiftAdapter.getData().clear();
-        for (Gift gift: gifts) {
+        for (Gift gift : gifts) {
             FeedGift feedGift = new FeedGift();
             feedGift.gift = gift;
             mGiftAdapter.add(feedGift);
         }
         mGiftAdapter.notifyDataSetChanged();
+
+        if (isNotEnoughGifts()) {
+            requestGifts();
+        }
     }
 
-    private void setUserData(int userId, ArrayList<Parcelable> forms, Profile.Gifts gifts) {
+    private boolean isNotEnoughGifts() {
+        int giftsCnt = mGiftAdapter.getCount();
+        return giftsCnt < mVisibleGiftsNumber && giftsCnt < mGiftsCount;
+    }
+
+    private void requestGifts() {
+        FeedGiftsRequest giftsRequest = new FeedGiftsRequest(getActivity());
+        giftsRequest.uid = mUserId;
+        giftsRequest.limit = mVisibleGiftsNumber;
+        registerRequest(giftsRequest);
+        giftsRequest.callback(new DataApiHandler<FeedListData<FeedGift>>() {
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+
+            }
+
+            @Override
+            protected void success(FeedListData<FeedGift> data, IApiResponse response) {
+                mGiftAdapter.setData(data.items, false);
+                mGiftAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            protected FeedListData<FeedGift> parseResponse(ApiResponse response) {
+                return new FeedListData<>(response.getJsonResult(), FeedGift.class);
+            }
+        }).exec();
+    }
+
+    private void setUserData(int userId, ArrayList<Parcelable> forms, Profile.Gifts gifts, int giftsCount) {
         LinkedList<FormItem> llForms = new LinkedList<>();
         for (Parcelable form : forms) {
             llForms.add((FormItem) form);
         }
-        setUserData(userId, llForms, gifts);
+        setUserData(userId, llForms, gifts, giftsCount);
     }
 
     private void setUserDataPending(Profile user) {
-        setUserData(user.uid, user.forms, user.gifts);
+        setUserData(user.uid, user.forms, user.gifts, user.gifts.count);
     }
 
     public int getUserId() {
