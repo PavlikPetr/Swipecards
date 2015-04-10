@@ -3,7 +3,6 @@ package com.topface.topface.ui.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.HackyFragmentStatePagerAdapter;
-import android.view.View;
 
 import com.topface.billing.MarketApiType;
 import com.topface.framework.utils.Debug;
@@ -71,9 +70,9 @@ public class ProfilePageAdapter extends HackyFragmentStatePagerAdapter {
                 //Если это платежи через Google Play, но у нас не поддерживаются Google Play Services,
                 //то вместо покупок через GP показываем покупки через PaymentWall
                 if (BuildConfig.MARKET_API_TYPE == MarketApiType.GOOGLE_PLAY && !new GoogleMarketApiManager().isMarketApiAvailable()) {
-                    fragment = VipPaymentWallBuyFragment.newInstance(false, "ProfileTab", PaymentWallProducts.TYPE.DIRECT, App.getContext().getString(R.string.vip_state_off), View.VISIBLE);
+                    fragment = VipPaymentWallBuyFragment.newInstance(false, "ProfileTab", PaymentWallProducts.TYPE.DIRECT, App.getContext().getString(R.string.vip_state_off));
                 } else {
-                    fragment = VipBuyFragment.newInstance(false, "ProfileTab", App.getContext().getString(R.string.vip_state_off), View.VISIBLE);
+                    fragment = VipBuyFragment.newInstance(false, "ProfileTab", App.getContext().getString(R.string.vip_state_off));
                 }
             } else {
                 Class fragmentClass = Class.forName(fragmentClassName);

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,6 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     private View mCoinsSubscriptionButton;
     private TextView mResourceInfo;
     private String mResourceInfoText;
-    private int mResourceInfoVisibility;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -48,15 +48,9 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     private void getDataFromIntent(Bundle args) {
         if (args != null) {
             mFrom = args.getString(ARG_TAG_SOURCE);
-
             if (args.containsKey(ARG_RESOURCE_INFO_TEXT)) {
                 mResourceInfoText = args.getString(ARG_RESOURCE_INFO_TEXT);
                 setResourceInfoText();
-            }
-
-            if (args.containsKey(ARG_RESOURCE_INFO_VISIBILITY)) {
-                mResourceInfoVisibility = args.getInt(ARG_RESOURCE_INFO_VISIBILITY);
-                setResourceInfoVisibility();
             }
         }
     }
@@ -73,12 +67,7 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     private void setResourceInfoText() {
         if (mResourceInfo != null) {
             mResourceInfo.setText(mResourceInfoText);
-        }
-    }
-
-    private void setResourceInfoVisibility() {
-        if (mResourceInfo != null) {
-            mResourceInfo.setVisibility(mResourceInfoVisibility);
+            mResourceInfo.setVisibility(TextUtils.isEmpty(mResourceInfoText) ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -100,7 +89,6 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
         @SuppressLint("InflateParams") View root = inflater.inflate(R.layout.fragment_buy, null);
         mResourceInfo = (TextView) root.findViewById(R.id.payReasonFragmentBuy);
         setResourceInfoText();
-        setResourceInfoVisibility();
         initButtons(root);
         return root;
     }
