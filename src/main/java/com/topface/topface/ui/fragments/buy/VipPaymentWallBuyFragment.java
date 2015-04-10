@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments.buy;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.view.View;
 
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
@@ -14,7 +13,7 @@ import com.topface.topface.utils.CacheProfile;
 
 public class VipPaymentWallBuyFragment extends VipBuyFragment {
 
-    public static VipPaymentWallBuyFragment newInstance(boolean needActionBar, String from, PaymentWallProducts.TYPE type, String text, int visibility) {
+    public static VipPaymentWallBuyFragment newInstance(boolean needActionBar, String from, PaymentWallProducts.TYPE type, String text) {
         VipPaymentWallBuyFragment fragment = new VipPaymentWallBuyFragment();
         Bundle args = new Bundle();
         args.putBoolean(ACTION_BAR_CONST, needActionBar);
@@ -22,7 +21,6 @@ public class VipPaymentWallBuyFragment extends VipBuyFragment {
         if (!TextUtils.isEmpty(text)) {
             args.putString(ARG_RESOURCE_INFO_TEXT, text);
         }
-        args.putInt(ARG_RESOURCE_INFO_VISIBILITY, visibility != -1 ? visibility : View.GONE);
         if (from != null) {
             args.putString(ARG_TAG_SOURCE, from);
         }

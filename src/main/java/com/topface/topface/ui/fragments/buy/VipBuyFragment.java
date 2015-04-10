@@ -51,7 +51,6 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     private LinearLayout mEditPremiumContainer;
     private TextView mResourceInfo;
     private String mResourceInfoText;
-    private int mResourceInfoVisibility;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -67,11 +66,6 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
                 mResourceInfoText = args.getString(ARG_RESOURCE_INFO_TEXT);
                 setResourceInfoText();
             }
-
-            if (args.containsKey(ARG_RESOURCE_INFO_VISIBILITY)) {
-                mResourceInfoVisibility = args.getInt(ARG_RESOURCE_INFO_VISIBILITY);
-                setResourceInfoVisibility();
-            }
         }
     }
 
@@ -82,13 +76,12 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
      * @param from          параметр для статистики покупок, что бы определить откуда пользователь пришел
      * @return Фрагмент покупки VIP
      */
-    public static VipBuyFragment newInstance(boolean needActionBar, String from, String text, int visibility) {
+    public static VipBuyFragment newInstance(boolean needActionBar, String from, String text) {
         VipBuyFragment fragment = new VipBuyFragment();
         Bundle args = new Bundle();
         if (!TextUtils.isEmpty(text)) {
             args.putString(ARG_RESOURCE_INFO_TEXT, text);
         }
-        args.putInt(ARG_RESOURCE_INFO_VISIBILITY, visibility != -1 ? visibility : View.GONE);
         args.putBoolean(ACTION_BAR_CONST, needActionBar);
         if (from != null) {
             args.putString(ARG_TAG_SOURCE, from);
@@ -127,7 +120,6 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         View view = inflater.inflate(R.layout.fragment_buy_premium, null);
         mResourceInfo = (TextView) view.findViewById(R.id.payReasonFragmentBuyPremium);
         setResourceInfoText();
-        setResourceInfoVisibility();
         initViews(view);
         initActionBar();
         return view;
@@ -313,12 +305,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     private void setResourceInfoText() {
         if (mResourceInfo != null) {
             mResourceInfo.setText(mResourceInfoText);
-        }
-    }
-
-    private void setResourceInfoVisibility() {
-        if (mResourceInfo != null) {
-            mResourceInfo.setVisibility(mResourceInfoVisibility);
+            mResourceInfo.setVisibility(TextUtils.isEmpty(mResourceInfoText) ? View.GONE : View.VISIBLE);
         }
     }
 

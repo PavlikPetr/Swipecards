@@ -20,13 +20,12 @@ public class PaymentWallBuyingFragment extends CoinsBuyingFragment {
 
     public static final String PAGE_TYPE = "page_type";
 
-    public static CoinsBuyingFragment newInstance(String from, PaymentWallProducts.TYPE type, String text, int visibility) {
+    public static CoinsBuyingFragment newInstance(String from, PaymentWallProducts.TYPE type, String text) {
         PaymentWallBuyingFragment buyingFragment = new PaymentWallBuyingFragment();
         Bundle args = new Bundle();
         if (!TextUtils.isEmpty(text)) {
             args.putString(ARG_RESOURCE_INFO_TEXT, text);
         }
-        args.putInt(ARG_RESOURCE_INFO_VISIBILITY, visibility != -1 ? visibility : View.GONE);
         if (from != null) {
             args.putString(ARG_TAG_SOURCE, from);
         }

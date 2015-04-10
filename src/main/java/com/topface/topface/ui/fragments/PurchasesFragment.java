@@ -49,7 +49,7 @@ public class PurchasesFragment extends BaseFragment {
     private BroadcastReceiver mVipPurchasedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            setResourceInfoVisibility(View.GONE);
+            setResourceInfoText(null);
         }
     };
     private TextView mCurCoins;
@@ -64,7 +64,6 @@ public class PurchasesFragment extends BaseFragment {
     };
     private boolean mIsVip;
     private String mResourceInfoText;
-    private int mResourceInfoVisibility = -1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,7 +92,7 @@ public class PurchasesFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        setResourceInfoVisibility(CacheProfile.premium ? View.GONE : View.VISIBLE);
+        setResourceInfoText(CacheProfile.premium ? null : getInfoText());
         updateBalanceCounters();
     }
 
@@ -129,7 +128,6 @@ public class PurchasesFragment extends BaseFragment {
         Bundle args = getArguments();
         mIsVip = args.getBoolean(IS_VIP_PRODUCTS, false);
         args.putString(OpenIabFragment.ARG_RESOURCE_INFO_TEXT, mResourceInfoText == null ? getInfoText() : mResourceInfoText);
-        args.putInt(OpenIabFragment.ARG_RESOURCE_INFO_VISIBILITY, mResourceInfoVisibility == -1 ? View.VISIBLE : mResourceInfoVisibility);
 
         Options.TabsList tabs;
         //Для того, что бы при изменении текста плавно менялся лейаут, без скачков
@@ -305,24 +303,9 @@ public class PurchasesFragment extends BaseFragment {
         setResourceInfoText(getInfoText());
     }
 
-    private void setResourceInfoVisibility(int visibility) {
-        mResourceInfoVisibility = visibility;
-        sendResourceInfoVisibilityBroadcast();
-    }
-
-    private void sendResourceInfoVisibilityBroadcast() {
-        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(getUpdateResourceInfoTextIntent(mResourceInfoVisibility));
-    }
-
     private Intent getUpdateResourceInfoTextIntent(String text) {
         Intent intent = new Intent(OpenIabFragment.UPDATE_RESOURCE_INFO);
         intent.putExtra(OpenIabFragment.ARG_RESOURCE_INFO_TEXT, text);
-        return intent;
-    }
-
-    private Intent getUpdateResourceInfoTextIntent(int visibility) {
-        Intent intent = new Intent(OpenIabFragment.UPDATE_RESOURCE_INFO);
-        intent.putExtra(OpenIabFragment.ARG_RESOURCE_INFO_VISIBILITY, visibility);
         return intent;
     }
 }
