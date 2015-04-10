@@ -609,6 +609,7 @@
     <string name="go_tf">I\'m sending you a Mystery Box!</string>
     <string name="enter_text">Enter text</string>
     <string name="send_feedback">Send message</string>
+    <string name="get_vip_free">Get free VIP</string>
     <string name="google_service_general_title">Reminders are not available</string>
     <string name="google_service_disabled_title">You have Google Play disabled. You need to enable it to receive reminders.</string>
     <string name="google_service_disabled_button">Enable</string>
