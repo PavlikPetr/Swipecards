@@ -29,9 +29,7 @@ public class MarketBuyingFragment extends CoinsBuyingFragment {
         if (!TextUtils.isEmpty(text)) {
             args.putString(ARG_RESOURCE_INFO_TEXT, text);
         }
-        if (visibility != 0) {
-            args.putInt(ARG_RESOURCE_INFO_VISIBILITY, visibility);
-        }
+        args.putInt(ARG_RESOURCE_INFO_VISIBILITY, visibility != -1 ? visibility : View.GONE);
         if (from != null) {
             args.putString(ARG_TAG_SOURCE, from);
         }

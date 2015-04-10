@@ -88,9 +88,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         if (!TextUtils.isEmpty(text)) {
             args.putString(ARG_RESOURCE_INFO_TEXT, text);
         }
-        if (visibility != 0) {
-            args.putInt(ARG_RESOURCE_INFO_VISIBILITY, visibility);
-        }
+        args.putInt(ARG_RESOURCE_INFO_VISIBILITY, visibility != -1 ? visibility : View.GONE);
         args.putBoolean(ACTION_BAR_CONST, needActionBar);
         if (from != null) {
             args.putString(ARG_TAG_SOURCE, from);
@@ -152,9 +150,11 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
             if (CacheProfile.premium) {
                 mEditPremiumContainer.setVisibility(View.VISIBLE);
                 mBuyVipViewsContainer.setVisibility(View.GONE);
+                mResourceInfo.setVisibility(View.GONE);
             } else {
                 mEditPremiumContainer.setVisibility(View.GONE);
                 mBuyVipViewsContainer.setVisibility(View.VISIBLE);
+                mResourceInfo.setVisibility(View.VISIBLE);
             }
         }
     }

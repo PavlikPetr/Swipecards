@@ -3,15 +3,18 @@ package com.topface.topface.ui.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.HackyFragmentStatePagerAdapter;
+import android.view.View;
 
 import com.topface.billing.MarketApiType;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
+import com.topface.topface.R;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.buy.VipPaymentWallBuyFragment;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
+import com.topface.topface.utils.GoogleMarketApiManager;
 import com.viewpagerindicator.PageIndicator;
 
 import java.util.ArrayList;
@@ -67,10 +70,10 @@ public class ProfilePageAdapter extends HackyFragmentStatePagerAdapter {
             if (fragmentClassName.equals(VipBuyFragment.class.getName())) {
                 //Если это платежи через Google Play, но у нас не поддерживаются Google Play Services,
                 //то вместо покупок через GP показываем покупки через PaymentWall
-                if (BuildConfig.MARKET_API_TYPE == MarketApiType.GOOGLE_PLAY && !App.isGmsEnabled()) {
-                    fragment = VipPaymentWallBuyFragment.newInstance(false, "ProfileTab", PaymentWallProducts.TYPE.DIRECT, null, 0);
+                if (BuildConfig.MARKET_API_TYPE == MarketApiType.GOOGLE_PLAY && !new GoogleMarketApiManager().isMarketApiAvailable()) {
+                    fragment = VipPaymentWallBuyFragment.newInstance(false, "ProfileTab", PaymentWallProducts.TYPE.DIRECT, App.getContext().getString(R.string.vip_state_off), View.VISIBLE);
                 } else {
-                    fragment = VipBuyFragment.newInstance(false, "ProfileTab", null, 0);
+                    fragment = VipBuyFragment.newInstance(false, "ProfileTab", App.getContext().getString(R.string.vip_state_off), View.VISIBLE);
                 }
             } else {
                 Class fragmentClass = Class.forName(fragmentClassName);

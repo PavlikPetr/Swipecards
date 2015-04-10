@@ -32,7 +32,7 @@ public abstract class AbstractFormListAdapter extends BaseAdapter {
     }
 
     public void setUserData(LinkedList<FormItem> forms) {
-        mForms = prepareForm(new LinkedList<FormItem>(forms));
+        mForms = prepareForm(new LinkedList<>(forms));
     }
 
     protected abstract LinkedList<FormItem> prepareForm(LinkedList<FormItem> forms);
