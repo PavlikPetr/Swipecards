@@ -12,7 +12,12 @@ import android.widget.BaseAdapter;
  */
 public abstract class AbstractEditAdapter<T> extends BaseAdapter {
 
+    public interface OnDataChangeListener<T> {
+        void onDataChanged(T data);
+    }
+
     private LayoutInflater mInflater;
+    private OnDataChangeListener<T> mDataChangeListener;
 
     public AbstractEditAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -28,4 +33,12 @@ public abstract class AbstractEditAdapter<T> extends BaseAdapter {
 
     @LayoutRes
     protected abstract int getItemLayoutRes();
+
+    public void setDataChangeListener(OnDataChangeListener listener) {
+        mDataChangeListener = listener;
+    }
+
+    public OnDataChangeListener<T> getDataChangeListener() {
+        return mDataChangeListener;
+    }
 }

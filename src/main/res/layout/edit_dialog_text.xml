@@ -5,7 +5,7 @@
     android:descendantFocusability="afterDescendants">
 
     <EditText
-        android:id="@+id/city_search"
+        android:id="@+id/edit_dialog_text"
         style="@style/topfaceEditText.Holo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -5,9 +5,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -207,7 +209,9 @@ public class UserProfileFragment extends AbstractProfileFragment {
             });
             FeedGiftsRequest giftsRequest = new FeedGiftsRequest(getActivity());
             giftsRequest.uid = profileId;
-            giftsRequest.limit = 10;
+            Resources res = getActivity().getResources();
+            DisplayMetrics metrics = res.getDisplayMetrics();
+            giftsRequest.limit = (int) (metrics.widthPixels / res.getDimension(R.dimen.form_gift_size));
             giftsRequest.callback(new DataApiHandler<FeedListData<FeedGift>>() {
 
                 @Override

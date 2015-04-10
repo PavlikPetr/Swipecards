@@ -30,6 +30,7 @@ public class AbstractEditDialog<T extends Parcelable> extends AbstractDialogFrag
     private AbstractEditAdapter<T> mAdapter;
     private ListView mOptionsList;
     private TextView mTitleText;
+    private TextView mLimitText;
     private ViewStub mButtonsStub;
 
     @Override
@@ -62,6 +63,7 @@ public class AbstractEditDialog<T extends Parcelable> extends AbstractDialogFrag
         mOptionsList.setAdapter(mAdapter);
         mTitleText = (TextView) root.findViewById(R.id.edit_dialog_title);
         mTitleText.setText(mTitle);
+        mLimitText = (TextView) root.findViewById(R.id.edit_dialog_limit);
         mButtonsStub = (ViewStub) root.findViewById(R.id.edit_dialog_buttons_stub);
     }
 
@@ -90,6 +92,10 @@ public class AbstractEditDialog<T extends Parcelable> extends AbstractDialogFrag
 
     protected TextView getTitleText() {
         return mTitleText;
+    }
+
+    protected TextView getLimitText() {
+        return mLimitText;
     }
 
     protected ViewStub getButtonsStub() {

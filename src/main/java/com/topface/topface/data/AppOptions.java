@@ -117,6 +117,14 @@ public class AppOptions extends AbstractData {
         return conditions.userAboutMeMaxLength;
     }
 
+    public int getUserAgeMin() {
+        return conditions.userAgeMin;
+    }
+
+    public int getUserAgeMax() {
+        return conditions.userAgeMax;
+    }
+
     public boolean isScruffyEnabled() {
         return scruffy != null ? scruffy : false;
     }
@@ -149,6 +157,8 @@ public class AppOptions extends AbstractData {
         int userWeightMax = 999;
         int userHeightMin = 1;
         int userHeightMax = 999;
+        int userAgeMin = 16;
+        int userAgeMax = 99;
 
         Conditions() {
         }

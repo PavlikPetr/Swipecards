@@ -162,9 +162,6 @@
             android:name=".ui.fragments.profile.PhotoSwitcherActivity"
             android:theme="@style/Topface.Theme.TransparentActionBarActivity" />
         <activity
-            android:name=".ui.edit.EditProfileActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.edit.EditContainerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Topface.Light" />
@@ -223,15 +220,6 @@
 
         <activity
             android:name=".ui.ComplainsActivity"
-            android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.NavigationActivity" />
-        </activity>
-
-        <activity
-            android:name=".ui.SettingsActivity"
             android:parentActivityName=".ui.NavigationActivity"
             android:screenOrientation="portrait">
             <meta-data

@@ -62,9 +62,6 @@ import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
