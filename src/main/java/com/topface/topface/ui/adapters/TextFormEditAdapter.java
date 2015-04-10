@@ -60,6 +60,7 @@ public class TextFormEditAdapter extends AbstractEditAdapter<FormItem> {
     }
 
     @Override
+    @SuppressWarnings("unused")
     public View getView(int position, View convertView, ViewGroup parent) {
         String value = getItem(position);
 

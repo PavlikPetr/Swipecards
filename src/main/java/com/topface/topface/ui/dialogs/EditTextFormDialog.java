@@ -1,11 +1,9 @@
 package com.topface.topface.ui.dialogs;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewStub;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +13,7 @@ import com.topface.topface.R;
 import com.topface.topface.ui.adapters.AbstractEditAdapter;
 import com.topface.topface.ui.adapters.TextFormEditAdapter;
 import com.topface.topface.utils.FormItem;
+import com.topface.topface.utils.Utils;
 
 /**
  * Dialog for editing text form items
@@ -31,6 +30,7 @@ public class EditTextFormDialog extends AbstractEditDialog<FormItem> {
         editor.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
+                editor.closeKeyboard();
                 editingFinishedListener.onEditingFinished(editor.getAdapter().getData());
             }
         });
@@ -100,13 +100,9 @@ public class EditTextFormDialog extends AbstractEditDialog<FormItem> {
     }
 
     private void closeKeyboard() {
-        Activity activity = getActivity();
-        if (activity != null) {
-            View focus = activity.getCurrentFocus();
-            if (focus != null) {
-                InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(focus.getWindowToken(), 0);
-            }
+        View view = getView();
+        if (view != null) {
+            Utils.hideSoftKeyboard(App.getContext(), view.getApplicationWindowToken());
         }
     }
 
