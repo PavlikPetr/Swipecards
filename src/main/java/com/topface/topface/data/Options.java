@@ -105,7 +105,7 @@ public class Options extends AbstractData {
     public String offerwall = OfferwallsManager.SPONSORPAY;
 
     public int premium_period;
-    public int contacts_count = 10;
+    public int contacts_count = Integer.MAX_VALUE;
     public long popup_timeout;
     public boolean blockUnconfirmed;
     public boolean blockChatNotMutual;

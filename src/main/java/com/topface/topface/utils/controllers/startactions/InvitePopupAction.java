@@ -4,13 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.ui.dialogs.InvitesPopup;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
 
@@ -43,7 +47,7 @@ public class InvitePopupAction extends LinkedStartAction {
 
     @Override
     public boolean isApplicable() {
-        return InvitesPopup.isApplicable();
+        return isFacebook() || InvitesPopup.isApplicable() && getContactsCount() >= CacheProfile.getOptions().contacts_count;
     }
 
     @Override
@@ -55,6 +59,19 @@ public class InvitePopupAction extends LinkedStartAction {
     public String getActionName() {
         return getClass().getSimpleName();
     }
+
+    private boolean isFacebook() {
+        return AuthToken.getInstance().getSocialNet()
+                .equals(AuthToken.SN_FACEBOOK);
+    }
+
+    private int getContactsCount() {
+        Cursor cursor = mActivity.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        int contacts_count = cursor.getCount();
+        cursor.close();
+        return contacts_count;
+    }
+
 
     private void startInvitePopup() {
         ContactsProvider.GetContactsHandler handler = new ContactsProvider.GetContactsHandler() {

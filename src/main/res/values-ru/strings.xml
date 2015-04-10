@@ -782,6 +782,7 @@
     <string name="go_tf">Отправляю тебе "Подарок-сюрприз!"</string>
     <string name="enter_text">Введите текст</string>
     <string name="send_feedback">Отправить сообщение</string>
+    <string name="get_vip_free">Получи VIP бесплатно</string>
 
 
     <!-- ServicesManager-->
