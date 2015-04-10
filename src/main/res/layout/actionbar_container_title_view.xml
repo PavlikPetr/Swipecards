@@ -58,12 +58,8 @@
 
         <TextView
             android:id="@+id/coins_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawablePadding="6dp"
-            android:paddingRight="14dp"
-            android:drawableRight="@drawable/ic_coins"
-            android:textSize="24sp" />
+            style="@style/CoinsTextView"
+            android:paddingRight="14dp" />
 
         <TextView
             android:id="@+id/likes_textview"

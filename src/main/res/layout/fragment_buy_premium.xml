@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_height="fill_parent"
-            android:layout_width="fill_parent">
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent">
 
     <LinearLayout
         android:orientation="vertical"
@@ -28,25 +28,19 @@
                 style="@style/TitleWhiteText"
                 android:text="@string/general_buying_disabled"
                 android:visibility="gone"
-                android:layout_margin="5dp"/>
-
-            <TextView
-                style="@style/GrayText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/vip_state_off"/>
+                android:layout_margin="5dp" />
 
             <ViewStub
                 android:id="@+id/EditorTestStub"
                 android:layout="@layout/fragment_buy_editor"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:id="@+id/fbpBtnContainer"
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -61,14 +55,14 @@
                 style="@style/WhiteListItem.Underline"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/form_item_height"
-                layout="@layout/vip_item_edit_form_switch"/>
+                layout="@layout/vip_item_edit_form_switch" />
 
             <include
                 android:id="@+id/fepBlackList"
                 style="@style/WhiteListItem.Underline"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/form_item_height"
-                layout="@layout/vip_item_edit_form_select"/>
+                layout="@layout/vip_item_edit_form_select" />
 
         </LinearLayout>
     </LinearLayout>

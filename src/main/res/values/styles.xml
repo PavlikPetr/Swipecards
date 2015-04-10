@@ -1053,9 +1053,9 @@
         <item name="android:layout_marginTop">20dp</item>
     </style>
 
-    <style name="FeedbackEditText" parent="WhiteBackgroundEdit"/>
+    <style name="FeedbackEditText" parent="WhiteBackgroundEdit" />
 
-    <style name="FeedbackTextView" parent="WhiteBackgroundTitle"/>
+    <style name="FeedbackTextView" parent="WhiteBackgroundTitle" />
 
     <style name="ComplainsHeader" parent="FormTitleText">
         <item name="android:layout_width">fill_parent</item>
@@ -1074,9 +1074,18 @@
     </style>
 
     <style name="PayReasonView" parent="GrayText">
+        <item name="android:visibility">gone</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
         <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="CoinsTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawablePadding">6dp</item>
+        <item name="android:drawableRight">@drawable/ic_coins</item>
+        <item name="android:textSize">24sp</item>
     </style>
 </resources>

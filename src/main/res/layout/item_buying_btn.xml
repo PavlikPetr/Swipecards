@@ -12,7 +12,7 @@
         android:layout_height="50dp"
         android:layout_width="fill_parent"
         android:padding="5dp"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="12dp">
 
         <TextView
             style="@style/WhiteText"

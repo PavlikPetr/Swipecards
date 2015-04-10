@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.topface.billing.OpenIabFragment;
 import com.topface.statistics.android.Slices;
 import com.topface.statistics.android.StatisticsTracker;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
@@ -26,6 +25,7 @@ import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
 import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.Utils;
 
 import java.util.Iterator;
@@ -64,7 +64,7 @@ public class PurchasesFragment extends BaseFragment {
     };
     private boolean mIsVip;
     private String mResourceInfoText;
-    private int mResourceInfoVisibility;
+    private int mResourceInfoVisibility = -1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -127,17 +127,19 @@ public class PurchasesFragment extends BaseFragment {
         mPager = (ViewPager) root.findViewById(R.id.purchasesPager);
 
         Bundle args = getArguments();
-        args.putString(OpenIabFragment.ARG_RESOURCE_INFO_TEXT, mResourceInfoText == null ? getInfoText() : mResourceInfoText);
-        args.putInt(OpenIabFragment.ARG_RESOURCE_INFO_VISIBILITY, mResourceInfoVisibility == 0 ? View.VISIBLE : mResourceInfoVisibility);
         mIsVip = args.getBoolean(IS_VIP_PRODUCTS, false);
+        args.putString(OpenIabFragment.ARG_RESOURCE_INFO_TEXT, mResourceInfoText == null ? getInfoText() : mResourceInfoText);
+        args.putInt(OpenIabFragment.ARG_RESOURCE_INFO_VISIBILITY, mResourceInfoVisibility == -1 ? View.VISIBLE : mResourceInfoVisibility);
 
         Options.TabsList tabs;
         //Для того, что бы при изменении текста плавно менялся лейаут, без скачков
         Utils.enableLayoutChangingTransition((ViewGroup) root.findViewById(R.id.purchaseLayout));
         if (mIsVip) {
-            tabs = CacheProfile.getOptions().premiumTabs;
+            tabs = new Options.TabsList();
+            tabs.list.addAll(CacheProfile.getOptions().premiumTabs.list);
         } else {
-            tabs = CacheProfile.getOptions().otherTabs;
+            tabs = new Options.TabsList();
+            tabs.list.addAll(CacheProfile.getOptions().otherTabs.list);
         }
 
         removeExcessTabs(tabs.list); //Убираем табы в которых нет продуктов и бонусную вкладку, если фрагмент для покупки випа
@@ -191,7 +193,7 @@ public class PurchasesFragment extends BaseFragment {
                     break;
             }
             //Удаляем вкладку Google Play, если не доступны Play Services
-            if (TextUtils.equals(tab.type, Options.Tab.GPLAY) && !App.isGmsEnabled()) {
+            if (TextUtils.equals(tab.type, Options.Tab.GPLAY) && !new GoogleMarketApiManager().isMarketApiAvailable()) {
                 iterator.remove();
             } else {
                 Products products = getProductsByTab(tab);
