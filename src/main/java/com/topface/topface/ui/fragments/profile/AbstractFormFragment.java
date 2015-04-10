@@ -63,7 +63,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         @Override
         public void onChanged() {
             View root = getView();
-            if (root  != null && mGiftsHeader != null) {
+            if (root != null && mGiftsHeader != null) {
                 fillGiftsStrip();
             }
         }

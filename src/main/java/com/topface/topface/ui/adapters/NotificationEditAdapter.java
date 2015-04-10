@@ -32,7 +32,7 @@ public class NotificationEditAdapter extends AbstractEditAdapter<Profile.Topface
         Resources resources = App.getContext().getResources();
         mMainColor = resources.getColor(R.color.text_color_gray);
         mDisabledColor = resources.getColor(R.color.text_color_gray_transparent);
-        mItems = new Boolean[] {mNotification.apns && mIsPhoneNotificationEnabled, mNotification.mail};
+        mItems = new Boolean[]{mNotification.apns && mIsPhoneNotificationEnabled, mNotification.mail};
     }
 
     @Override

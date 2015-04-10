@@ -53,7 +53,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Editor;
-import com.topface.topface.utils.GMSUtils;
+import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.ad.NativeAdManager;
@@ -500,7 +500,7 @@ public class App extends Application {
 
     public static boolean isGmsEnabled() {
         if (mIsGmsSupported == null) {
-            mIsGmsSupported = GMSUtils.checkPlayServices(getContext());
+            mIsGmsSupported = new GoogleMarketApiManager().isMarketApiAvailable();
         }
         return mIsGmsSupported;
     }
