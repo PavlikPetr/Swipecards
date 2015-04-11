@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +42,6 @@ public class CoinsSubscriptionsFragment extends OpenIabFragment {
     private List<View> mButtonsViews = new ArrayList<>();
     private TextView mResourceInfo;
     private String mResourceInfoText;
-    private int mResourceInfoVisibility;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -49,10 +49,6 @@ public class CoinsSubscriptionsFragment extends OpenIabFragment {
                 if (intent.hasExtra(ARG_RESOURCE_INFO_TEXT)) {
                     mResourceInfoText = intent.getExtras().getString(ARG_RESOURCE_INFO_TEXT);
                     setResourceInfoText();
-                }
-                if (intent.hasExtra(ARG_RESOURCE_INFO_VISIBILITY)) {
-                    mResourceInfoVisibility = intent.getExtras().getInt(ARG_RESOURCE_INFO_VISIBILITY);
-                    setResourceInfoVisibility();
                 }
             }
         }
@@ -83,7 +79,6 @@ public class CoinsSubscriptionsFragment extends OpenIabFragment {
         mContainer = (LinearLayout) root.findViewById(R.id.loContainer);
         mResourceInfo = (TextView) root.findViewById(R.id.payReasonFragmentCoinsSubsription);
         setResourceInfoText();
-        setResourceInfoVisibility();
         Products products = getProducts();
         if (products != null) {
             CoinsSubscriptionInfo info = products.info.coinsSubscription;
@@ -190,15 +185,9 @@ public class CoinsSubscriptionsFragment extends OpenIabFragment {
     private void setResourceInfoText() {
         if (mResourceInfo != null) {
             mResourceInfo.setText(mResourceInfoText);
+            mResourceInfo.setVisibility(TextUtils.isEmpty(mResourceInfoText) ? View.GONE : View.VISIBLE);
         }
     }
-
-    private void setResourceInfoVisibility() {
-        if (mResourceInfo != null) {
-            mResourceInfo.setVisibility(mResourceInfoVisibility);
-        }
-    }
-
 
     @Override
     public void onInAppBillingSupported() {

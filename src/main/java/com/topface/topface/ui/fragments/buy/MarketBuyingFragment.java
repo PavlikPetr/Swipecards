@@ -23,13 +23,12 @@ import static com.topface.topface.data.Products.BuyButtonClickListener;
 
 public class MarketBuyingFragment extends CoinsBuyingFragment {
 
-    public static MarketBuyingFragment newInstance(String from, String text, int visibility) {
+    public static MarketBuyingFragment newInstance(String from, String text) {
         MarketBuyingFragment buyingFragment = new MarketBuyingFragment();
         Bundle args = new Bundle();
         if (!TextUtils.isEmpty(text)) {
             args.putString(ARG_RESOURCE_INFO_TEXT, text);
         }
-        args.putInt(ARG_RESOURCE_INFO_VISIBILITY, visibility != -1 ? visibility : View.GONE);
         if (from != null) {
             args.putString(ARG_TAG_SOURCE, from);
         }
