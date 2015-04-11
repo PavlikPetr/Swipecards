@@ -28,6 +28,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsStripAdapter;
 import com.topface.topface.utils.FormItem;
+import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

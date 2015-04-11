@@ -3,8 +3,10 @@ package com.topface.topface.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
@@ -15,7 +17,6 @@ import com.topface.topface.utils.Utils;
 public class CitySearchActivity extends BaseFragmentActivity {
     // Constants
     public static final int INTENT_CITY_SEARCH_ACTIVITY = 100;
-    public static final int INTENT_CITY_SEARCH_FROM_FILTER_ACTIVITY = 101;
     public static final int INTENT_CITY_SEARCH_AFTER_REGISTRATION = 102;
     public static final String INTENT_CITY = "city";
 
@@ -45,23 +46,17 @@ public class CitySearchActivity extends BaseFragmentActivity {
                 return mRoot.getHeight();
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Utils.showSoftKeyboard(this, null);
+        mCitySearch.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mCitySearch.showDropDown();
+            }
+        });
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Utils.hideSoftKeyboard(this, mCitySearch);
-    }
-
-    @Override
-    protected void onDestroy() {
-        Debug.log(this, "-onDestroy");
-        super.onDestroy();
+        Utils.hideSoftKeyboard(this, getCurrentFocus().getWindowToken());
     }
 }
