@@ -5,13 +5,14 @@
               android:layout_height="fill_parent"
               android:gravity="center"
               android:orientation="vertical"
-              android:clickable="true">
+              android:clickable="true"
+              android:layout_weight="0.6">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_guitar"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginBottom="20dp"/>
 
     <TextView
         android:id="@+id/tvText"
@@ -19,7 +20,8 @@
         android:layout_height="wrap_content"
         android:text="@string/buy_status_and_watch_your_fans"
         style="@style/ListItemEmptyText"
-        android:gravity="center" />
+        android:gravity="center"
+        android:minWidth="270dp"/>
 
     <Button
         android:id="@+id/btnBuyVip"
