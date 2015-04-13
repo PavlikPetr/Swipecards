@@ -7,19 +7,22 @@ import android.widget.BaseAdapter;
 
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
+import com.topface.topface.ui.GridViewWithHeaderAndFooter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
-public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScrollListener {
+public class PhotoGridAdapter extends BaseAdapter
+        implements AbsListView.OnScrollListener, GridViewWithHeaderAndFooter.IGridSizes {
     private final LoadingListAdapter.Updater mUpdater;
     private final AlbumLoadController mLoadController;
     private Photos mPhotoLinks;
     private boolean needLoadNewItems = false;
+    private int mGridWidth;
 
-    public ProfileGridAdapter(Photos photoLinks,
-                              int totalPhotos,
-                              LoadingListAdapter.Updater callback) {
+    public PhotoGridAdapter(Photos photoLinks,
+                            int totalPhotos,
+                            LoadingListAdapter.Updater callback) {
         mPhotoLinks = new Photos();
         mUpdater = callback;
         if (photoLinks != null) {
@@ -94,7 +97,7 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
         return mPhotoLinks != null ? mPhotoLinks.size() : 0;
     }
 
-    public Photos getAdaprerData() {
+    public Photos getAdapterData() {
         return mPhotoLinks;
     }
 
@@ -114,11 +117,6 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
     @Override
     public Photo getItem(int position) {
         return mPhotoLinks.get(position);
-    }
-
-    public Photo getLastItem() {
-        // cause there is no loader item
-        return mPhotoLinks.get(mPhotoLinks.size() - 1);
     }
 
     @Override
@@ -144,5 +142,14 @@ public class ProfileGridAdapter extends BaseAdapter implements AbsListView.OnScr
                 mUpdater.onUpdate();
             }
         }
+    }
+
+    @Override
+    public void setColumnWidth(int width) {
+        mGridWidth = width;
+    }
+
+    protected int getGridItemWidth() {
+        return mGridWidth;
     }
 }

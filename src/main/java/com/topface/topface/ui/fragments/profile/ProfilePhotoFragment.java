@@ -50,7 +50,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     private static final String POSITION = "POSITION";
     private static final String FLIPPER_VISIBLE_CHILD = "FLIPPER_VISIBLE_CHILD";
 
-    private OwnProfileGridAdapter mProfilePhotoGridAdapter;
+    private OwnPhotoGridAdapter mProfilePhotoGridAdapter;
 
     private ViewFlipper mViewFlipper;
     private GridViewWithHeaderAndFooter mGridAlbum;
@@ -100,25 +100,12 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         }
     };
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mProfilePhotoGridAdapter = new OwnProfileGridAdapter(getActivity().getApplicationContext(), getPhotoLinks(),
-                CacheProfile.totalPhotos, new LoadingListAdapter.Updater() {
-            @Override
-            public void onUpdate() {
-                sendAlbumRequest();
-            }
-        });
-
-    }
-
     private View createGridViewFooter() {
         return ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.gridview_footer_progress_bar, null, false);
     }
 
     private void sendAlbumRequest() {
-        Photos photoLinks = mProfilePhotoGridAdapter.getAdaprerData();
+        Photos photoLinks = mProfilePhotoGridAdapter.getAdapterData();
         if (photoLinks == null || photoLinks.size() < 2) {
             return;
         }
@@ -184,6 +171,14 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
 
         mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
 
+        mGridAlbum = (GridViewWithHeaderAndFooter) root.findViewById(R.id.usedGrid);
+        mProfilePhotoGridAdapter = new OwnPhotoGridAdapter(getActivity().getApplicationContext(), getPhotoLinks(),
+                CacheProfile.totalPhotos, new LoadingListAdapter.Updater() {
+            @Override
+            public void onUpdate() {
+                sendAlbumRequest();
+            }
+        });
         int position = 0;
         if (savedInstanceState != null) {
             try {
@@ -195,22 +190,25 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
             position = savedInstanceState.getInt(POSITION, 0);
             mViewFlipper.setDisplayedChild(savedInstanceState.getInt(FLIPPER_VISIBLE_CHILD, 0));
         }
-
-        mGridAlbum = (GridViewWithHeaderAndFooter) root.findViewById(R.id.usedGrid);
         addFooterView();
-        mGridAlbum.setAdapter(mProfilePhotoGridAdapter);
         mGridAlbum.setSelection(position);
         mGridAlbum.setOnItemClickListener(mOnItemClickListener);
         mGridAlbum.setOnScrollListener(mProfilePhotoGridAdapter);
         mGridAlbum.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Photo item = (Photo) parent.getItemAtPosition(position);
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position11, long id) {
+                Photo item = (Photo) parent.getItemAtPosition(position11);
                 if (needDialog(item)) {
-                    startPhotoDialog(item, position - 1);
+                    startPhotoDialog(item, position11 - 1);
                     return true;
                 }
                 return false;
+            }
+        });
+        mGridAlbum.post(new Runnable() {
+            @Override
+            public void run() {
+                mGridAlbum.setAdapter(mProfilePhotoGridAdapter);
             }
         });
 
@@ -247,6 +245,12 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         return root;
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+    }
+
     private void addFooterView() {
         if (mGridAlbum != null) {
             if (mGridAlbum.getFooterViewCount() == 0) {
@@ -260,7 +264,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         try {
-            outState.putString(PHOTOS, mProfilePhotoGridAdapter.getAdaprerData().toJson().toString());
+            outState.putString(PHOTOS, mProfilePhotoGridAdapter.getAdapterData().toJson().toString());
         } catch (JSONException e) {
             Debug.error(e);
         }

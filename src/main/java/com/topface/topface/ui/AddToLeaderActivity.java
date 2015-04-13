@@ -88,7 +88,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         try {
-            outState.putString(PHOTOS, getAdapter().getAdaprerData().toJson().toString());
+            outState.putString(PHOTOS, getAdapter().getAdapterData().toJson().toString());
         } catch (JSONException e) {
             Debug.error(e);
         }
@@ -207,17 +207,17 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         mGridView.post(new Runnable() {
             @Override
             public void run() {
-                if (getAdapter() != null && photos != null) {
-                    getAdapter().setData(photos, photos.size() < CacheProfile.totalPhotos, false);
-                    getAdapter().setPhotoWidth(mGridView.getGridViewColumnWidth());
+                LeadersPhotoGridAdapter adapter = getAdapter();
+                if (adapter != null && photos != null) {
+                    adapter.setData(photos, photos.size() < CacheProfile.totalPhotos, false);
                 } else {
                     initAdapter(photos);
                 }
-                mGridView.setAdapter(getAdapter());
-                mGridView.setOnScrollListener(getAdapter());
+                mGridView.setAdapter(adapter);
+                mGridView.setOnScrollListener(adapter);
                 mGridView.setSelection(position);
-                if (getAdapter().getPhotoLinks().size() > 0 && selectedPosition != 0) {
-                    getAdapter().setSelectedPhotoId(selectedPosition);
+                if (adapter != null && adapter.getPhotoLinks().size() > 0 && selectedPosition != 0) {
+                    adapter.setSelectedPhotoId(selectedPosition);
                 }
             }
         });
@@ -237,7 +237,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     }
 
     private void sendAlbumRequest() {
-        Photos photoLinks = getAdapter().getAdaprerData();
+        Photos photoLinks = getAdapter().getAdapterData();
         if (photoLinks == null || photoLinks.size() < 2) {
             return;
         }

@@ -33,4 +33,8 @@ public class AccurateGridViewWithFooterAndHeader extends GridViewWithHeaderAndFo
         lp.height = size;
         return lp;
     }
+
+    public Class getBaseGridViewClass() {
+        return getClass().getSuperclass().getSuperclass();
+    }
 }
