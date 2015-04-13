@@ -628,7 +628,7 @@
     <string name="general_complain">Жалоба</string>
     <string name="general_msg">Сообщение</string>
     <string name="notifications">Уведомления</string>
-    <string name="general_no_notifications">К сожалению, уведомления, на вашем устройстве, не доступны</string>
+    <string name="general_no_notifications">К сожалению, уведомления, на вашем устройстве, недоступны</string>
     <string name="black_list_add_short">В черный список</string>
     <string name="confirm_email_for_dating">Мы против спама. Подтвердите свой почтовый адрес, чтобы знакомиться в Topface!</string>
 
@@ -787,10 +787,10 @@
 
     <!-- ServicesManager-->
     <!-- Google -->
-    <string name="google_service_general_title">Уведомления не доступны</string>
+    <string name="google_service_general_title">Уведомления недоступны</string>
     <string name="google_service_disabled_title">У вас отключены Сервисы Google Play, которые необходимы для работы уведомлений.</string>
     <string name="google_service_disabled_button">Включить</string>
-    <string name="google_service_missing_title">У вас не устанвлены Сервисы Google Play, которые необходимы для работы уведомлений.</string>
+    <string name="google_service_missing_title">У вас не установлены Сервисы Google Play, которые необходимы для работы уведомлений.</string>
     <string name="google_service_missing_button">Установить</string>
     <string name="google_service_version_update_required_title">У вас установлена старая версия Сервисов Google Play, для корректной работы уведомлений, пожалуйста, обновите.</string>
     <string name="google_service_version_update_required_button">Обновить</string>
