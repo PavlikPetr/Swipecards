@@ -150,6 +150,8 @@ public abstract class UserAvatarFragment extends BaseFragment
 
     protected abstract OverflowMenu createOverflowMenu(MenuItem barActions);
 
+    protected abstract void initOverflowMenuActions(OverflowMenu overflowMenu);
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mOverflowMenu != null) {
