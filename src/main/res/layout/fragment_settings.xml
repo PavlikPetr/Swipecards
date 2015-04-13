@@ -13,6 +13,10 @@
             android:id="@+id/loAccount"
             layout="@layout/item_edit_form_select" />
 
+        <include
+            android:id="@+id/loNoNotifications"
+            layout="@layout/item_settings_no_notifications" />
+
         <TextView
             android:id="@+id/loNotifications"
             style="@style/WhiteListItem.Underline"

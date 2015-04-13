@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.topface.framework.utils.BackgroundThread;
@@ -42,6 +43,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
     private View mLoNotifications;
 
     private TextView preloadPhotoName;
+    private ViewGroup mNoNotificationViewGroup;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -49,8 +51,6 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         View view = inflater.inflate(R.layout.fragment_settings, null);
 
         mMarketApiManager = new MarketApiManager();
-
-        mLoNotifications = view.findViewById(R.id.loNotifications);
 
         // Account
         initAccountViews(view);
@@ -75,6 +75,20 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
     private void initViews(View root) {
         View frame;
 
+        // Notifications
+        mLoNotifications = root.findViewById(R.id.loNotifications);
+        mNoNotificationViewGroup = (ViewGroup) root.findViewById(R.id.loNoNotifications);
+        mNoNotificationViewGroup.findViewById(R.id.buttonNoNotificationsSetServices)
+                .setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mMarketApiManager != null) {
+                            mMarketApiManager.onProblemResolve();
+                        }
+                    }
+                });
+        setNotificationsState();
+
         // Help
         View help = root.findViewById(R.id.loHelp);
         help.setOnClickListener(this);
@@ -90,13 +104,6 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
 
         // About
         root.findViewById(R.id.loAbout).setOnClickListener(this);
-
-        // Notifications
-        if (!CacheProfile.email && !mMarketApiManager.isMarketApiAvailable()) {
-            mLoNotifications.setVisibility(View.GONE);
-        } else {
-            mLoNotifications.setOnClickListener(this);
-        }
 
         //Preload photo
         frame = root.findViewById(R.id.loPreloadPhoto);
@@ -115,6 +122,26 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         getSocialAccountIcon(mSocialNameText);
         mSocialNameText.setVisibility(View.VISIBLE);
         frame.setOnClickListener(this);
+    }
+
+    private void setNotificationsState() {
+        boolean isMarketApiAvailable = mMarketApiManager.isMarketApiAvailable();
+        if ((!isMarketApiAvailable && mMarketApiManager.isMarketApiSupportByUs()) ||
+                (!isMarketApiAvailable && !CacheProfile.email)) {
+            TextView text = (TextView) mNoNotificationViewGroup.findViewById(R.id.textNoNotificationDescription);
+            text.setVisibility(mMarketApiManager.isTitleVisible() ? View.VISIBLE : View.GONE);
+            text.setText(mMarketApiManager.getTitleTextId());
+            Button button = (Button) mNoNotificationViewGroup.findViewById(R.id.buttonNoNotificationsSetServices);
+            button.setVisibility(mMarketApiManager.isButtonVisible() ? View.VISIBLE : View.GONE);
+            if (mMarketApiManager.isButtonVisible()) {
+                button.setText(mMarketApiManager.getButtonTextId());
+            }
+            mNoNotificationViewGroup.setVisibility(View.VISIBLE);
+            mLoNotifications.setVisibility(View.GONE);
+        } else {
+            mNoNotificationViewGroup.setVisibility(View.GONE);
+            mLoNotifications.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -285,6 +312,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         if (mMarketApiManager != null) {
             mMarketApiManager.onResume();
         }
+        setNotificationsState();
         AuthToken authToken = AuthToken.getInstance();
         if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             mSocialNameText.setText(authToken.getLogin());

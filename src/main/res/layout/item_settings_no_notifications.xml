@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/WhiteListItem.Underline"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:gravity="left|center_vertical"
+    android:orientation="vertical"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp">
+
+    <TextView
+        android:id="@+id/textNoNotificationTitle"
+        style="@style/GrayText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="4dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="@string/google_service_general_title"/>
+
+    <TextView
+        android:id="@+id/textNoNotificationDescription"
+        style="@style/ItemText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="4dp"
+        android:singleLine="false"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/buttonNoNotificationsSetServices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/FlatButton.Gray"
+        android:layout_marginTop="@dimen/base_indent"
+        android:layout_marginBottom="@dimen/base_indent"/>
+
+</LinearLayout>
