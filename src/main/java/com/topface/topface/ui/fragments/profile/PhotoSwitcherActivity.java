@@ -43,7 +43,6 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.UserProfileActivity;
-import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.ImageSwitcherLooped;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -509,23 +508,25 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
+                // removes photos
                 for (Photo currentPhoto : mDeletedPhotos) {
                     CacheProfile.photos.removeById(currentPhoto.getId());
                 }
                 CacheProfile.totalPhotos -= mDeletedPhotos.size();
-
-                int decrementAvaPos = 0;
+                // decrements position
+                int decrementPositionBy = 0;
                 for (Photo deleted : mDeletedPhotos) {
-                    if (deleted.position < CacheProfile.photo.position) {
-                        decrementAvaPos++;
+                    if (deleted.position < CacheProfile.photo.position && CacheProfile.photo.position > 0) {
+                        decrementPositionBy--;
                     }
                 }
-
+                CacheProfile.incrementPhotoPosition(decrementPositionBy, false);
+                // broadcasting
                 LocalBroadcastManager.getInstance(PhotoSwitcherActivity.this).sendBroadcast(new Intent(DEFAULT_UPDATE_PHOTOS_INTENT)
                         .putExtra(INTENT_PHOTOS, CacheProfile.photos)
                         .putExtra(INTENT_MORE, CacheProfile.photos.size() < CacheProfile.totalPhotos - mDeletedPhotos.size())
-                        .putExtra(INTENT_CLEAR, true)
-                        .putExtra(OwnAvatarFragment.DECREMENT_AVATAR_POSITION, decrementAvaPos));
+                        .putExtra(INTENT_CLEAR, true));
+                // clearing
                 mDeletedPhotos.clear();
             }
 

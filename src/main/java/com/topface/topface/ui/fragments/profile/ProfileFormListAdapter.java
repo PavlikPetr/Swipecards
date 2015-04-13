@@ -33,13 +33,26 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
         forms.clear();
         if (CacheProfile.forms != null) {
             // fake forms for profile main data
-            forms.add(new FormItem(R.string.edit_name, CacheProfile.first_name, FormItem.NAME) {
+            FormItem nameItem = new FormItem(R.string.edit_name, CacheProfile.first_name, FormItem.NAME) {
                 @Override
                 public void copy(FormItem formItem) {
                     super.copy(formItem);
                     CacheProfile.first_name = formItem.value;
                 }
+            };
+            nameItem.setValueLimitInterface(new FormItem.ValueLimitInterface() {
+
+                @Override
+                public int getMinValue() {
+                    return 1;
+                }
+
+                @Override
+                public int getMaxValue() {
+                    return Integer.MAX_VALUE;
+                }
             });
+            forms.add(nameItem);
             String sex = App.getContext().getString(CacheProfile.sex == Static.BOY ? R.string.boy : R.string.girl);
             forms.add(new FormItem(R.string.general_sex, sex, FormItem.SEX) {
                 @Override

@@ -40,8 +40,8 @@ public abstract class UserAvatarFragment extends BaseFragment
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
         setOnline(false);
     }
 
@@ -149,8 +149,6 @@ public abstract class UserAvatarFragment extends BaseFragment
     }
 
     protected abstract OverflowMenu createOverflowMenu(MenuItem barActions);
-
-    protected abstract void initOverflowMenuActions(OverflowMenu overflowMenu);
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
