@@ -94,10 +94,6 @@ public class PubnativeAd extends NativeAd {
         });
 
         if (!mIsShown) {
-            UserConfig userConfig = App.getUserConfig();
-            userConfig.decreaseRemainedPubnativeShows();
-            userConfig.saveConfig();
-
             if (!BuildConfig.DEBUG) {
                 new BackgroundThread() {
                     @Override
@@ -121,8 +117,13 @@ public class PubnativeAd extends NativeAd {
                     response = HttpUtils.httpGetRequest(beacon.getUrl());
                 }
                 if (response != null) {
+                    UserConfig userConfig = App.getUserConfig();
+                    userConfig.decreaseRemainedPubnativeShows();
+                    userConfig.saveConfig();
                     Debug.log("NativeAd: Impression beacon sent for pubnative ad " + title);
                     TopfaceAdStatistics.sendPubnativeImpression();
+                } else {
+                    TopfaceAdStatistics.sendPubnativeImpressionFailed();
                 }
                 break;
             }
