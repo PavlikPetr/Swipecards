@@ -391,6 +391,7 @@
     <string name="change_password">Cambiar la contraseña</string>
     <string name="password_changing">Cambio de contraseña</string>
     <string name="save">Guardar</string>
+    <string name="saving_in_progress">Guardando…</string>
     <string name="confirmation_successfully_sent">La confirmación fue enviada al e-mail que indicaste</string>
     <string name="password_hint">contraseña</string>
     <string name="password_confirmation_hint">confirmación de la contraseña</string>
@@ -607,6 +608,7 @@
     <string name="go_tf">¡Te envío un Regalo Sorpresa!</string>
     <string name="enter_text">Introduce el texto</string>
     <string name="send_feedback">Enviar mensaje</string>
+    <string name="get_vip_free">Recibe VIP gratis</string>
     <string name="google_service_general_title">Avisos no disponibles</string>
     <string name="google_service_disabled_title">Tienes desconectados algunos servicios Google Play que hacen falta para que los avisos funcionen.</string>
     <string name="google_service_disabled_button">Habilitar</string>
