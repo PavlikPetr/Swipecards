@@ -26,7 +26,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.SerializableToJson;
-import com.topface.topface.data.experiments.FeedScreans;
+import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.AddPhotoHelper;
@@ -311,7 +311,7 @@ public class UserNotification {
     private void putTopLevelFragment(Intent parentIntent, Intent targetIntent) {
         String componentName = targetIntent.getComponent().getClassName();
         if (TextUtils.equals(componentName, ChatActivity.class.getCanonicalName())) {
-            FeedScreans.equipMessageAllIntent(parentIntent);
+            FeedScreensIntent.equipMessageAllIntent(parentIntent);
         }
     }
 

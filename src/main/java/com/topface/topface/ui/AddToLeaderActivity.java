@@ -19,7 +19,7 @@ import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
-import com.topface.topface.data.experiments.FeedScreans;
+import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.requests.AddPhotoFeedRequest;
 import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiResponse;
@@ -295,7 +295,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     @Override
     public Intent getSupportParentActivityIntent() {
         Intent intent = super.getSupportParentActivityIntent();
-        FeedScreans.equipPhotoFeedIntent(intent);
+        FeedScreensIntent.equipPhotoFeedIntent(intent);
         return intent;
     }
 }
