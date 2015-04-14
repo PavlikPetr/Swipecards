@@ -19,6 +19,7 @@ import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
+import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.requests.AddPhotoFeedRequest;
 import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiResponse;
@@ -289,5 +290,12 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
     private View createGridViewFooter() {
         return ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.gridview_footer_progress_bar, null, false);
+    }
+
+    @Override
+    public Intent getSupportParentActivityIntent() {
+        Intent intent = super.getSupportParentActivityIntent();
+        FeedScreensIntent.equipPhotoFeedIntent(intent);
+        return intent;
     }
 }

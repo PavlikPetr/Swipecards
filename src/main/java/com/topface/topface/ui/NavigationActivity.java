@@ -26,7 +26,6 @@ import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.requests.IApiResponse;
@@ -37,19 +36,16 @@ import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
-import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.CustomViewNotificationController;
-import com.topface.topface.utils.ExternalLinkExecuter;
 import com.topface.topface.utils.IActionbarNotifier;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.PhotoTaker;
 import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
@@ -71,37 +67,11 @@ import static com.topface.topface.utils.controllers.StartActionsController.AC_PR
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
 
-public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener, ActionBarView.ActionBarClickListener {
-    public static final String FROM_AUTH = "com.topface.topface.AUTH";
+public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener {
     public static final String INTENT_EXIT = "EXIT";
     public static final String PAGE_SWITCH = "Page switch: ";
 
     private Intent mPendingNextIntent;
-    ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
-        @Override
-        public void onProfileLink(int profileID) {
-            startActivity(UserProfileActivity.createIntent(profileID, NavigationActivity.this));
-            getIntent().setData(null);
-        }
-
-        @Override
-        public void onConfirmLink(String code) {
-            AuthToken token = AuthToken.getInstance();
-            if (!token.isEmpty() && token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-                Intent intent = new Intent(NavigationActivity.this, SettingsContainerActivity.class);
-                intent.putExtra(Static.INTENT_REQUEST_KEY, SettingsContainerActivity.INTENT_ACCOUNT);
-                intent.putExtra(SettingsContainerActivity.CONFIRMATION_CODE, code);
-                startActivity(intent);
-            }
-            getIntent().setData(null);
-        }
-
-        @Override
-        public void onOfferWall() {
-            OfferwallsManager.startOfferwall(NavigationActivity.this);
-            getIntent().setData(null);
-        }
-    };
     private boolean mIsActionBarHidden;
     private View mContentFrame;
     private MenuFragment mMenuFragment;
@@ -139,7 +109,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         super.initActionBar(actionBar);
         if (actionBar != null) {
             actionBarView.setLeftMenuView();
-            actionBarView.setActionBarClickListener(this);
             actionBar.setDisplayUseLogoEnabled(false);
             actionBar.setDisplayShowCustomEnabled(true);
             mNotificationController = new CustomViewNotificationController(actionBar);
@@ -158,8 +127,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         if (intent.getBooleanExtra(INTENT_EXIT, false)) {
             finish();
         }
-        //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
-        new ExternalLinkExecuter(mListener).execute(this, intent);
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_navigation);
@@ -317,9 +284,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
-        new ExternalLinkExecuter(mListener).execute(this, intent);
-
         if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
             showFragment(intent);
         }
@@ -335,8 +299,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         } else {
             LocaleConfig.localeChangeInitiated = false;
         }
-        //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
-        new ExternalLinkExecuter(mListener).execute(this, getIntent());
         App.checkProfileUpdate();
         if (mNotificationController != null) {
             mNotificationController.refreshNotificator();
@@ -615,7 +577,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     }
 
     @Override
-    public void onActionBarClick() {
+    public void onUpClick() {
         toggleDrawerLayout();
     }
 }
