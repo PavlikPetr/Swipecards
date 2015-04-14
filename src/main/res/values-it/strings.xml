@@ -605,6 +605,7 @@
     <string name="go_tf">Ti invio un “Regalo a sorpresa!”</string>
     <string name="enter_text">Inserisci il testo</string>
     <string name="send_feedback">Invia il messaggio</string>
+    <string name="get_vip_free">Ricevi VIP gratis</string>
     <string name="google_service_general_title">Notifiche non disponibili</string>
     <string name="google_service_disabled_title">Hai disabilitato i Servizi Google Play che servono per il corretto funzionamento di notifiche.</string>
     <string name="google_service_disabled_button">Abilita</string>
