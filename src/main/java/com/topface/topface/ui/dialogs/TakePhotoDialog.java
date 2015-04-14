@@ -40,7 +40,6 @@ public class TakePhotoDialog extends AbstractDialogFragment implements View.OnCl
 
     @Override
     protected void initViews(View root) {
-        getDialog().setCanceledOnTouchOutside(false);
         mText = (TextView) root.findViewById(R.id.tvText);
         mPhotoLayout = root.findViewById(R.id.loPhoto);
         mPhoto = (ImageView) mPhotoLayout.findViewById(R.id.ivPhoto);

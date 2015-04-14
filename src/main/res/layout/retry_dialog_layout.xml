@@ -29,5 +29,6 @@
         android:layout_marginTop="45dp"
         android:layout_centerHorizontal="true"
         android:text="@string/general_internet_off"
-        android:layout_below="@id/sat" />
+        android:layout_below="@id/sat"
+        android:textColor="@color/bg_white"/>
 </RelativeLayout>
