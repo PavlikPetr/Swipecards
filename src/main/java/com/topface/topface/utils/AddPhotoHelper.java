@@ -14,7 +14,6 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -36,7 +35,6 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
@@ -329,10 +327,7 @@ public class AddPhotoHelper {
                         0,
                         mContext.getString(R.string.default_photo_upload_complete), "", false,
                         uri.toString(), 1, getIntentForNotification(), true, null, null);
-                Intent intent = new Intent(OwnAvatarFragment.UPDATE_AVATAR_POSITION);
-                intent.putExtra(OwnAvatarFragment.INCREMENT_AVATAR_POSITION, true);
-                LocalBroadcastManager.getInstance(App.getContext())
-                        .sendBroadcast(intent);
+                CacheProfile.incrementPhotoPosition(1);
             }
 
             @Override

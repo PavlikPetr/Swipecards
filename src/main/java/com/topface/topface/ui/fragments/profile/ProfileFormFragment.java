@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -93,7 +94,12 @@ public class ProfileFormFragment extends AbstractFormFragment {
                 if (item.type == FormItem.CITY) {
                     Intent intent = new Intent(getActivity(), CitySearchActivity.class);
                     intent.putExtra(Static.INTENT_REQUEST_KEY, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
-                    startActivityForResult(intent, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
+                    Fragment parent = getParentFragment();
+                    if (parent != null) {
+                        parent.startActivityForResult(intent, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
+                    } else {
+                        startActivityForResult(intent, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
+                    }
                 } else if (item.dataId == FormItem.NO_RESOURCE_ID && item.type != FormItem.SEX) {
                     if (mFragmentManager != null) {
                         EditTextFormDialog.newInstance(item.getTitle(), item, mFormEditedListener).

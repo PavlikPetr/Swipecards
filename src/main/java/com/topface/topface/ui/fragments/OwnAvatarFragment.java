@@ -11,35 +11,22 @@ import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
+import com.topface.topface.utils.CacheProfile;
 
 /**
  * Fragment with own photo updating photo data on adding/removing photos
  */
 public abstract class OwnAvatarFragment extends AbstractProfileFragment {
 
-    public static final String INCREMENT_AVATAR_POSITION = "incrementAvatarPosition";
-    public static final String DECREMENT_AVATAR_POSITION = "decrementAvatarPosition";
-    public static final String POSITION = "position";
     public static final String UPDATE_AVATAR_POSITION = "com.topface.topface.updateAvatarPosition";
 
     private Photo mAvatarVal;
 
-    private BroadcastReceiver mAvatarPositionReciver = new BroadcastReceiver() {
+    private BroadcastReceiver mAvatarPositionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (mAvatarVal != null) {
-                boolean increment = intent.getBooleanExtra(INCREMENT_AVATAR_POSITION, false);
-                int decrement = intent.getIntExtra(DECREMENT_AVATAR_POSITION, 0);
-                if (increment) {
-                    mAvatarVal.position += 1;
-                    return;
-                }
-                Profile profile = getProfile();
-                if (decrement > 0 && profile != null) {
-                    mAvatarVal.position -= decrement;
-                    profile.photosCount -= decrement;
-                }
-            }
+            mAvatarVal = CacheProfile.photo;
+            setProfile(CacheProfile.getProfile());
         }
     };
 
@@ -49,14 +36,14 @@ public abstract class OwnAvatarFragment extends AbstractProfileFragment {
         IntentFilter filter = new IntentFilter(UPDATE_AVATAR_POSITION);
         filter.addAction(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
         LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(mAvatarPositionReciver, filter);
+                .registerReceiver(mAvatarPositionReceiver, filter);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(mAvatarPositionReciver);
+                .unregisterReceiver(mAvatarPositionReceiver);
     }
 
     @Override
