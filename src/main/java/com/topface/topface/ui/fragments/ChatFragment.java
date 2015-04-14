@@ -683,7 +683,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
 
     private void showKeyboardOnLargeScreen() {
         if (isShowKeyboardInChat() && mKeyboardWasShown) {
-            Utils.showSoftKeyboard(getActivity(), mEditBox);
+            Utils.showSoftKeyboard(getActivity(), null);
         }
     }
 
