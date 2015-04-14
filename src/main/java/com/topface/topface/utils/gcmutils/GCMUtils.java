@@ -19,7 +19,7 @@ import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.SerializableToJson;
-import com.topface.topface.data.experiments.MessagesWithTabs;
+import com.topface.topface.data.experiments.FeedScreans;
 import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -487,7 +487,7 @@ public class GCMUtils {
             case GCM_TYPE_DIALOGS:
                 lastNotificationType = GCM_TYPE_DIALOGS;
                 i = new Intent(context, NavigationActivity.class);
-                MessagesWithTabs.equipNavigationActivityIntent(i);
+                FeedScreans.equipMessageAllIntent(i);
                 break;
             case GCM_TYPE_PROMO:
             default:

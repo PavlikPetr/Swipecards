@@ -26,7 +26,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.SerializableToJson;
-import com.topface.topface.data.experiments.MessagesWithTabs;
+import com.topface.topface.data.experiments.FeedScreans;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.AddPhotoHelper;
@@ -300,7 +300,6 @@ public class UserNotification {
             // Put extra for NavigationActivity to open parent page of intents's component
             Intent parentIntent = stackBuilder.editIntentAt(0);
             putTopLevelFragment(parentIntent, intent);
-            parentIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             // Gets a PendingIntent containing the entire back stack
             resultPendingIntent = stackBuilder.getPendingIntent(requestCode, PendingIntent.FLAG_UPDATE_CURRENT);
         } else {
@@ -312,7 +311,7 @@ public class UserNotification {
     private void putTopLevelFragment(Intent parentIntent, Intent targetIntent) {
         String componentName = targetIntent.getComponent().getClassName();
         if (TextUtils.equals(componentName, ChatActivity.class.getCanonicalName())) {
-            MessagesWithTabs.equipNavigationActivityIntent(parentIntent);
+            FeedScreans.equipMessageAllIntent(parentIntent);
         }
     }
 
