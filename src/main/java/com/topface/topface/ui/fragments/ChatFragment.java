@@ -830,7 +830,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
         super.onPause();
         LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(mNewMessageReceiver);
         stopTimer();
-        Utils.hideSoftKeyboard(getActivity(), mEditBox);
+        Utils.hideSoftKeyboard(getActivity(), getActivity().getCurrentFocus().getWindowToken());
     }
 
     @Override
