@@ -25,7 +25,6 @@ public class DeleteAccountDialog extends AbstractDialogFragment implements View.
 
     @Override
     protected void initViews(View root) {
-        getDialog().setCanceledOnTouchOutside(false);
         root.findViewById(R.id.btnCancel).setOnClickListener(this);
         mBtnOk = (Button)root.findViewById(R.id.btnOk);
         mBtnOk.setOnClickListener(this);

@@ -1105,8 +1105,4 @@
         <item name="android:drawableRight">@drawable/ic_coins</item>
         <item name="android:textSize">24sp</item>
     </style>
-
-    <style name="AlertDialogStyle">
-        <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
 </resources>

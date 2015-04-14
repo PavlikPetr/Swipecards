@@ -39,7 +39,6 @@
         <!-- Стилизованные кнопки -->
         <item name="blueButtonStyle">@style/BlueBonusButton</item>
         <item name="grayButtonStyle">@style/GrayBonusButton</item>
-        <item name="android:alertDialogTheme">@style/AlertDialogStyle</item>
         <!-- ActionBar  -->
         <item name="actionBarStyle">@style/Widget.Topface.ActionBar</item>
         <item name="actionBarItemBackground">@drawable/bg_semitransparent_black_selector</item>
