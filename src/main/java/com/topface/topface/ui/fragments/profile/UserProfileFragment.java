@@ -390,6 +390,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
                             intent.putExtra(ChatFragment.INTENT_USER_ID, profile.uid);
                             intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, profile.getNameAndAge());
                             intent.putExtra(ChatFragment.INTENT_USER_SEX, profile.sex);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.putExtra(ChatFragment.INTENT_USER_CITY, profile.city == null ? "" : profile.city.name);
                             return intent;
                         }

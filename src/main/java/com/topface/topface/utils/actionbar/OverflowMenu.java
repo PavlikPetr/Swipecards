@@ -530,6 +530,7 @@ public class OverflowMenu {
         if (openChatIntent == null) {
             return;
         }
+        mActivity.finish();
         mActivity.startActivityForResult(openChatIntent, ChatActivity.INTENT_CHAT);
     }
 
