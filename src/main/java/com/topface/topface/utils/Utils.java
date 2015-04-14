@@ -212,7 +212,7 @@ public class Utils {
             InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
             for (EditText edText : edTexts) {
                 if (edText != null) {
-                    imm.hideSoftInputFromWindow(edText.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    imm.hideSoftInputFromWindow(edText.getWindowToken(), 0);
                 }
             }
         }
