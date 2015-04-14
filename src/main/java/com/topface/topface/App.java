@@ -183,8 +183,12 @@ public class App extends Application {
         return request;
     }
 
-    public static void sendUserOptionsRequest() {
-        getUserOptionsRequest().exec();
+    public static void sendUserOptionsAndPurchasesRequest() {
+        new ParallelApiRequest(App.getContext())
+                .addRequest(getUserOptionsRequest())
+                .addRequest(getPaymentwallProductsRequest())
+                .addRequest(getProductsRequest())
+                .exec();
     }
 
     private static ApiRequest getUserOptionsRequest() {
