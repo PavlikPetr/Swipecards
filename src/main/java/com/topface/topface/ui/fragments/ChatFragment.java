@@ -683,7 +683,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
 
     private void showKeyboardOnLargeScreen() {
         if (isShowKeyboardInChat() && mKeyboardWasShown) {
-            Utils.showSoftKeyboard(getActivity(), null);
+            Utils.showSoftKeyboard(getActivity(), mEditBox);
         }
     }
 
@@ -830,7 +830,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
         super.onPause();
         LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(mNewMessageReceiver);
         stopTimer();
-        Utils.hideSoftKeyboard(getActivity(), getActivity().getCurrentFocus().getWindowToken());
+        Utils.hideSoftKeyboard(getActivity(), mEditBox);
     }
 
     @Override
