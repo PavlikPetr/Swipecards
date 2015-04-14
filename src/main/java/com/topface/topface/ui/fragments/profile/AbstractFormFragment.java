@@ -183,8 +183,6 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
 
     private void fillGiftsStrip() {
         if (isAdded()) {
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-
             if (!mGiftAdapter.isEmpty()) {
                 mGiftsHeader.setVisibility(View.VISIBLE);
             } else {
@@ -207,22 +205,22 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
                     mGiftsHeader.addView(giftView, 0);
                 }
             }
-            if (giftsCount > mVisibleGiftsNumber) {
-                if (mGiftsCounter == null) {
-                    mGiftsCounter = (TextView) inflater.inflate(R.layout.remained_gifts_counter,
-                            mGiftsHeader, false);
-                }
-                if (mGiftsCount < 0) {
-                    mGiftsCounter.setText(R.string.more);
-                } else {
-                    mGiftsCounter.setText("+" + (giftsCount - mVisibleGiftsNumber));
-                }
 
-                if (mGiftsCounter.getParent() == null) {
-                    mGiftsHeader.addView(mGiftsCounter);
-                }
+            if (mGiftsCount < 0 && giftsCount == mVisibleGiftsNumber) {
+                getGiftsCounterTextView().setText(R.string.more);
+            } else if (giftsCount > mVisibleGiftsNumber) {
+                getGiftsCounterTextView().setText("+" + (giftsCount - mVisibleGiftsNumber));
             }
         }
+    }
+
+    private TextView getGiftsCounterTextView() {
+        if (mGiftsCounter == null) {
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            mGiftsCounter = (TextView) (inflater.inflate(R.layout.remained_gifts_counter,
+                    mGiftsHeader, true)).findViewById(R.id.textGiftsCounter);
+        }
+        return mGiftsCounter;
     }
 
     private UserProfileFragment getUserProfileFragment() {
