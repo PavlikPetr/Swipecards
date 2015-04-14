@@ -11,13 +11,6 @@ import android.view.animation.AnimationUtils;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
-import com.smaato.soma.AdDownloaderInterface;
-import com.smaato.soma.AdListenerInterface;
-import com.smaato.soma.AlertBannerStateListener;
-import com.smaato.soma.FullScreenBanner;
-import com.smaato.soma.ReceivedBannerInterface;
-import com.smaato.soma.bannerutilities.constant.BannerStatus;
-import com.smaato.soma.exception.AdReceiveFailed;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -40,7 +33,6 @@ import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_MEDIATION;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_NONE;
-import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_SMAATO;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_TOPFACE;
 
 /**
@@ -161,9 +153,6 @@ public class FullscreenController {
                 case BANNER_ADMOB_MEDIATION:
                     requestAdmobFullscreen(ADMOB_INTERSTITIAL_MEDIATION_ID);
                     break;
-                case BANNER_SMAATO:
-                    requestSmaatoFullscreen();
-                    break;
                 case BANNER_TOPFACE:
                     requestTopfaceFullscreen();
                     break;
@@ -173,39 +162,6 @@ public class FullscreenController {
         } catch (Exception e) {
             Debug.error("Request fullscreen error", e);
         }
-    }
-
-    private void requestSmaatoFullscreen() {
-        final FullScreenBanner smaatoFullScreenBanner = new FullScreenBanner(mActivity);
-        smaatoFullScreenBanner.addAdListener(new AdListenerInterface() {
-            @Override
-            public void onReceiveAd(AdDownloaderInterface adDownloaderInterface, ReceivedBannerInterface receivedBannerInterface) throws AdReceiveFailed {
-                if (receivedBannerInterface.getStatus() == BannerStatus.ERROR) {
-                    requestFallbackFullscreen();
-                } else {
-                    addLastFullscreenShowedTime();
-                }
-            }
-        });
-        smaatoFullScreenBanner.setAlertBannerStateListener(new AlertBannerStateListener() {
-            @Override
-            public void onWillLeaveActivity() {
-
-            }
-
-            @Override
-            public void onWillCancelAlert() {
-                isFullScreenBannerVisible = false;
-            }
-
-            @Override
-            public void onWillShowBanner() {
-                isFullScreenBannerVisible = true;
-            }
-        });
-        smaatoFullScreenBanner.setPublisherId(mActivity.getResources().getInteger(R.integer.smaato_publisher_id));
-        smaatoFullScreenBanner.setAdSpaceId(mActivity.getResources().getInteger(R.integer.smaato_fullscreen_space_id));
-        smaatoFullScreenBanner.asyncLoadNewBanner();
     }
 
     public void requestAdmobFullscreen(String id) {
