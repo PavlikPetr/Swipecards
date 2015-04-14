@@ -28,7 +28,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsStripAdapter;
 import com.topface.topface.utils.FormItem;
-import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -193,7 +192,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
                 return;
             }
 
-            int giftsCount = mGiftsCount == 0 ? mGiftAdapter.getCount() : mGiftsCount;
+            int giftsCount = mGiftsCount <= 0 ? mGiftAdapter.getCount() : mGiftsCount;
             int viewsNumber = mGiftsHeader.getChildCount();
             for (int i = (giftsCount < mVisibleGiftsNumber ? giftsCount : mVisibleGiftsNumber) - 1; i >= 0; i--) {
                 View giftView;
@@ -213,7 +212,12 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
                     mGiftsCounter = (TextView) inflater.inflate(R.layout.remained_gifts_counter,
                             mGiftsHeader, false);
                 }
-                mGiftsCounter.setText("+" + (giftsCount - mVisibleGiftsNumber));
+                if (mGiftsCount < 0) {
+                    mGiftsCounter.setText(R.string.more);
+                } else {
+                    mGiftsCounter.setText("+" + (giftsCount - mVisibleGiftsNumber));
+                }
+
                 if (mGiftsCounter.getParent() == null) {
                     mGiftsHeader.addView(mGiftsCounter);
                 }

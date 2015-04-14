@@ -337,7 +337,7 @@ public class Profile extends AbstractDataWithPhotos {
         JSONObject jsonGifts = resp.optJSONObject("gifts");
         JSONArray arrGifts = jsonGifts.optJSONArray("items");
         profile.gifts.more = jsonGifts.optBoolean("more");
-        profile.gifts.count = jsonGifts.optInt("count");
+        profile.gifts.count = jsonGifts.optInt("count", -1);
         if (arrGifts == null) return;
         for (int i = 0; i < arrGifts.length(); i++) {
             JSONObject itemGift = arrGifts.getJSONObject(i);
