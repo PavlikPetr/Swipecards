@@ -4,7 +4,8 @@
     android:id="@+id/loInvitesPopup"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/black_60_percent">
 
     <RelativeLayout
         android:id="@+id/loDialog"
