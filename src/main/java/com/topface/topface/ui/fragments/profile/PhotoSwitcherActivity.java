@@ -177,8 +177,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     public static Intent getPhotoSwitcherIntent(Profile.Gifts gifts, int position, int userId, int photosCount, Photos photos) {
         Intent intent = new Intent(App.getContext(), PhotoSwitcherActivity.class);
         intent.putExtra(INTENT_USER_ID, userId);
-        //Если первый элемент - это фейковая фотка, то смещаем позицию показа
-        intent.putExtra(INTENT_ALBUM_POS, position);
+        // если позиция невалидная смещаем до последней в "колоде" хуяк-хуяк и в продакшн
+        intent.putExtra(INTENT_ALBUM_POS, position >= photosCount ? photosCount - 1 : position);
         intent.putExtra(INTENT_PHOTOS_COUNT, photosCount);
         intent.putExtra(INTENT_PHOTOS_FILLED, true);
         intent.putParcelableArrayListExtra(INTENT_PHOTOS, photos);

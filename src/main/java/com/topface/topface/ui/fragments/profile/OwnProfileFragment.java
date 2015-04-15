@@ -147,11 +147,6 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     }
 
     @Override
-    protected Profile getProfile() {
-        return CacheProfile.getProfile();
-    }
-
-    @Override
     protected String getDefaultTitle() {
         return getString(R.string.profile_header_title);
     }
