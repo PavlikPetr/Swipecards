@@ -27,11 +27,8 @@
 
     <Button
         android:id="@+id/btnBuyVip"
-        style="@style/FlatButton.Blue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/FlatButton.Blue.Emptyfeed"
         android:layout_below="@+id/tvText"
         android:layout_centerHorizontal="true"
-        android:singleLine="true"
         android:text="@string/buying_vip_status" />
 </RelativeLayout>
