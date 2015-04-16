@@ -193,8 +193,8 @@ public class Options extends AbstractData {
             if (payments != null) {
                 JSONObject other = payments.optJSONObject("other");
                 JSONObject premium = payments.optJSONObject("premium");
-                otherTabs = JsonUtils.fromJson(other.toString(), TabsList.class);
-                premiumTabs = JsonUtils.fromJson(premium.toString(), TabsList.class);
+                otherTabs = JsonUtils.optFromJson(other.toString(), TabsList.class, new TabsList());
+                premiumTabs = JsonUtils.optFromJson(premium.toString(), TabsList.class, new TabsList());
             }
 
             JSONObject contactsInvite = response.optJSONObject("inviteContacts");
@@ -315,7 +315,8 @@ public class Options extends AbstractData {
 
             topfaceOfferwallRedirect.init(response);
 
-            instantMessageFromSearch = JsonUtils.fromJson(response.optString(INSTANT_MSG), InstantMessageFromSearch.class);
+            instantMessageFromSearch = JsonUtils.optFromJson(response.optString(INSTANT_MSG),
+                    InstantMessageFromSearch.class, new InstantMessageFromSearch());
 
             autoOpenGallery.init(response);
 
@@ -328,7 +329,8 @@ public class Options extends AbstractData {
                 notShown.parseNotShownJSON(jsonNotShown);
             }
 
-            facebookInviteFriends = JsonUtils.fromJson(response.optString("facebookInviteFriends"), FacebookInviteFriends.class);
+            facebookInviteFriends = JsonUtils.optFromJson(response.optString("facebookInviteFriends"),
+                    FacebookInviteFriends.class, new FacebookInviteFriends());
 
             feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
 
