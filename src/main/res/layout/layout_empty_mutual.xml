@@ -1,57 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:clickable="true">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:clickable="true">
 
     <TextView
         android:id="@+id/tvText"
+        style="@style/ListItemEmptyText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/rate_and_have_mutual_or_buy_and_chat"
-        style="@style/ListItemEmptyText"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
         android:maxWidth="290dp"
-        android:gravity="center" />
+        android:text="@string/nobody_chat_with_you_sympathies_will_help" />
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvText"
         android:layout_centerHorizontal="true"
-        android:orientation="vertical"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="24dp"
-        android:id="@+id/linearLayout2">
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/btnRefill"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/buy_resources"
-            style="@style/FlatButton.Blue"
-            android:singleLine="true"
-            android:layout_marginBottom="12dp" />
+            style="@style/FlatButton.Blue.Emptyfeed"
+            android:layout_weight="1"
+            android:text="@string/buy_resources" />
 
         <Button
             android:id="@+id/btnGetDating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/general_get_dating"
-            style="@style/FlatButton.Gray"
-            android:singleLine="true" />
+            style="@style/FlatButton.Gray.Emptyfeed"
+            android:layout_marginTop="12dp"
+            android:layout_weight="1"
+            android:text="@string/general_get_dating" />
 
     </LinearLayout>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_mutual"
         android:layout_above="@id/tvText"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="40dp"/>
+        android:src="@drawable/ic_mutual" />
 
 </RelativeLayout>

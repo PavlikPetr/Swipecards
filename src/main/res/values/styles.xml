@@ -985,6 +985,20 @@
         <item name="android:fontFamily" tools:ignore="NewApi">Roboto Regular</item>
     </style>
 
+    <style name="FlatButton.Emptyfeed" parent="FlatButton">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="FlatButton.Gray.Emptyfeed" parent="FlatButton.Emptyfeed">
+        <item name="android:background">@drawable/flat_gray_btn</item>
+    </style>
+
+    <style name="FlatButton.Blue.Emptyfeed" parent="FlatButton.Emptyfeed">
+        <item name="android:background">@drawable/flat_blue_btn</item>
+    </style>
+
     <style name="FlatButton.Gray">
         <item name="android:background">@drawable/flat_gray_btn</item>
     </style>

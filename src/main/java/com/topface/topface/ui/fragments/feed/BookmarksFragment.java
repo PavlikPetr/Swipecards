@@ -17,6 +17,7 @@ import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.ui.adapters.BookmarksListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CountersManager;
 
 import org.json.JSONObject;
@@ -97,6 +98,12 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
 
     @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
+        inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MenuFragment.selectFragment(FragmentId.DATING);
+            }
+        });
     }
 
     @Override
