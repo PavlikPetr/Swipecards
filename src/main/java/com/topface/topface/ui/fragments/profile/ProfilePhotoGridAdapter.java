@@ -44,6 +44,8 @@ public class ProfilePhotoGridAdapter extends PhotoGridAdapter {
         if (convertView == null) {
             if (type == T_ADD_BTN) {
                 convertView = mInflater.inflate(R.layout.item_user_gallery_add_btn, null, false);
+                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(getGridItemWidth(), getGridItemWidth());
+                convertView.setLayoutParams(lp);
                 return convertView;
             } else {
                 convertView = mInflater.inflate(R.layout.item_user_gallery, null, false);

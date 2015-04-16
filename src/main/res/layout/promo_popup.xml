@@ -4,7 +4,8 @@
                 android:id="@+id/loInvitesPopup"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/black_60_percent">
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -52,7 +53,6 @@
             android:layout_alignTop="@id/fakeView"
             android:id="@+id/buyVip"
             android:text="@string/buying_vip_status"
-            android:layout_marginLeft="1dp"
             android:layout_marginRight="2dp"
             android:padding="6dp"
             android:ellipsize="end"
@@ -69,7 +69,6 @@
             android:text="@string/general_delete_messages"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="2dp"
-            android:layout_marginRight="1dp"
             android:padding="6dp"
             android:ellipsize="end"
             android:singleLine="true"

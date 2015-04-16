@@ -23,6 +23,7 @@
 
     <TextView
         android:id="@+id/tab_counter"
-        style="@style/TabIndicatorHoloStyle.Counter" />
+        style="@style/TabIndicatorHoloStyle.Counter"
+        android:visibility="gone"/>
     </LinearLayout>
 </FrameLayout>

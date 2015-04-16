@@ -147,7 +147,7 @@ public class Options extends AbstractData {
 
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
     public TopfaceOfferwallRedirect topfaceOfferwallRedirect = new TopfaceOfferwallRedirect();
-    public InstantMessageFromSearch instantMessageFromSearch;
+    public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
     public FeedNativeAd feedNativeAd = new FeedNativeAd();
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
     public NotShown notShown = new NotShown();
@@ -685,7 +685,7 @@ public class Options extends AbstractData {
     }
 
     public class InstantMessageFromSearch {
-        public String text;
+        public String text = Static.EMPTY;
 
         public void setText(String text) {
             this.text = text;

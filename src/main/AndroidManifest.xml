@@ -80,6 +80,11 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.ExternalLinkActivity"
+            android:parentActivityName=".ui.NavigationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -93,6 +98,10 @@
                     android:scheme="http" />
 
                 <data
+                    android:host="topface.com"
+                    android:scheme="http" />
+
+                <data
                     android:host="topface.ru"
                     android:pathPattern="/profile"
                     android:scheme="http" />
@@ -126,16 +135,27 @@
                     android:host="topface.ru"
                     android:pathPrefix="/confirm"
                     android:scheme="https" />
-
-                <data
-                    android:host="@string/offerwall_host"
-                    android:scheme="@string/default_sheme" />
-
-                <data android:scheme="@string/default_sheme" />
 
             </intent-filter>
-        </activity>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="topface" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="offerwall"
+                    android:scheme="topface" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".ui.AddToLeaderActivity"
@@ -167,7 +187,12 @@
             android:theme="@style/Theme.Topface.Light" />
         <activity
             android:name=".ui.settings.SettingsContainerActivity"
-            android:screenOrientation="portrait" />
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
         <activity
             android:name=".ui.BanActivity"
             android:theme="@style/Theme.Topface.Ban"

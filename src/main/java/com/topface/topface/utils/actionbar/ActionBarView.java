@@ -1,13 +1,8 @@
 package com.topface.topface.utils.actionbar;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
 import android.support.annotation.StringRes;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,8 +11,6 @@ import android.widget.TextView;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.utils.gcmutils.GCMUtils;
 
 /**
  * Created by onikitin on 26.01.15.
@@ -31,7 +24,6 @@ public class ActionBarView implements View.OnClickListener {
     private ImageView mIcon;
     private View mActionBarView;
     private Activity mActivity;
-    private ActionBarClickListener mActionBarClickListener;
 
     public ActionBarView(ActionBar actionBar, Activity activity) {
         mActionBar = actionBar;
@@ -85,34 +77,10 @@ public class ActionBarView implements View.OnClickListener {
             }
         }
         if (mActionBarView != null) {
-            Bundle extras = mActivity.getIntent().getExtras();
-            boolean isFromNotification = extras != null && extras.getBoolean(GCMUtils.NOTIFICATION_INTENT, false);
-            boolean noBackStack = isFromNotification && Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB;
-            if (mActivity instanceof NavigationActivity) {
-                mActionBarClickListener.onActionBarClick();
-            } else if (mActivity.isTaskRoot() || noBackStack) {
-                if (preFinish(mActivity)) {
-                    Intent intent = mActivity instanceof ActionBarActivity ?
-                            ((ActionBarActivity) mActivity).getSupportParentActivityIntent() :
-                            NavUtils.getParentActivityIntent(mActivity);
-                    if (noBackStack) {
-                        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    }
-                    if (intent != null) {
-                        mActivity.startActivity(intent);
-                    }
-                    mActivity.finish();
-                }
-            } else {
-                if (preFinish(mActivity)) {
-                    mActivity.onBackPressed();
-                }
+            if (mActivity instanceof BaseFragmentActivity) {
+                ((BaseFragmentActivity) mActivity).onUpClick();
             }
         }
-    }
-
-    private boolean preFinish(Activity activity) {
-        return !(activity instanceof BaseFragmentActivity) || ((BaseFragmentActivity) activity).doPreFinish();
     }
 
     public void setActionBarTitle(String title) {
@@ -121,13 +89,5 @@ public class ActionBarView implements View.OnClickListener {
 
     public void setActionBarTitle(@StringRes int titleId) {
         setActionBarTitle(App.getContext().getResources().getString(titleId));
-    }
-
-    public void setActionBarClickListener(ActionBarClickListener listener) {
-        mActionBarClickListener = listener;
-    }
-
-    public interface ActionBarClickListener {
-        void onActionBarClick();
     }
 }

@@ -25,6 +25,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.utils.config.SessionConfig;
 
 import org.json.JSONException;
@@ -483,6 +484,19 @@ public class CacheProfile {
                         )
                         && !CacheProfile.wasCityAsked
         );
+    }
+
+    public static void incrementPhotoPosition(int diff, boolean needBroadcast) {
+        CacheProfile.photo.position += diff;
+        if (needBroadcast) {
+            Intent intent = new Intent(OwnAvatarFragment.UPDATE_AVATAR_POSITION);
+            LocalBroadcastManager.getInstance(App.getContext())
+                    .sendBroadcast(intent);
+        }
+    }
+
+    public static void incrementPhotoPosition(int diff) {
+        incrementPhotoPosition(diff, true);
     }
 
 }

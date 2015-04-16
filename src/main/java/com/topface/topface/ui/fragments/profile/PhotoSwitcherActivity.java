@@ -43,7 +43,6 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.UserProfileActivity;
-import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.ImageSwitcherLooped;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -178,8 +177,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     public static Intent getPhotoSwitcherIntent(Profile.Gifts gifts, int position, int userId, int photosCount, Photos photos) {
         Intent intent = new Intent(App.getContext(), PhotoSwitcherActivity.class);
         intent.putExtra(INTENT_USER_ID, userId);
-        //Если первый элемент - это фейковая фотка, то смещаем позицию показа
-        intent.putExtra(INTENT_ALBUM_POS, position);
+        // если позиция невалидная смещаем до последней в "колоде" хуяк-хуяк и в продакшн
+        intent.putExtra(INTENT_ALBUM_POS, position >= photosCount ? photosCount - 1 : position);
         intent.putExtra(INTENT_PHOTOS_COUNT, photosCount);
         intent.putExtra(INTENT_PHOTOS_FILLED, true);
         intent.putParcelableArrayListExtra(INTENT_PHOTOS, photos);
@@ -509,23 +508,25 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
+                // removes photos
                 for (Photo currentPhoto : mDeletedPhotos) {
                     CacheProfile.photos.removeById(currentPhoto.getId());
                 }
                 CacheProfile.totalPhotos -= mDeletedPhotos.size();
-
-                int decrementAvaPos = 0;
+                // decrements position
+                int decrementPositionBy = 0;
                 for (Photo deleted : mDeletedPhotos) {
-                    if (deleted.position < CacheProfile.photo.position) {
-                        decrementAvaPos++;
+                    if (deleted.position < CacheProfile.photo.position && CacheProfile.photo.position > 0) {
+                        decrementPositionBy--;
                     }
                 }
-
+                CacheProfile.incrementPhotoPosition(decrementPositionBy, false);
+                // broadcasting
                 LocalBroadcastManager.getInstance(PhotoSwitcherActivity.this).sendBroadcast(new Intent(DEFAULT_UPDATE_PHOTOS_INTENT)
                         .putExtra(INTENT_PHOTOS, CacheProfile.photos)
                         .putExtra(INTENT_MORE, CacheProfile.photos.size() < CacheProfile.totalPhotos - mDeletedPhotos.size())
-                        .putExtra(INTENT_CLEAR, true)
-                        .putExtra(OwnAvatarFragment.DECREMENT_AVATAR_POSITION, decrementAvaPos));
+                        .putExtra(INTENT_CLEAR, true));
+                // clearing
                 mDeletedPhotos.clear();
             }
 

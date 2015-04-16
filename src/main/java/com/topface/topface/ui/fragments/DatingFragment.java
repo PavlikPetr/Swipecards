@@ -1176,7 +1176,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         }
                         mLoadedCount += newPhotos.size();
 
-
                         if (mImageSwitcher.getSelectedPosition() > mLoadedCount + mController.getItemsOffsetByConnectionType()) {
                             sendAlbumRequest(data);
                         }

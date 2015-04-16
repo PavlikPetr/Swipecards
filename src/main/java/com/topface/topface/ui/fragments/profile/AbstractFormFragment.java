@@ -28,7 +28,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsStripAdapter;
 import com.topface.topface.utils.FormItem;
-import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -184,8 +183,6 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
 
     private void fillGiftsStrip() {
         if (isAdded()) {
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-
             if (!mGiftAdapter.isEmpty()) {
                 mGiftsHeader.setVisibility(View.VISIBLE);
             } else {
@@ -193,7 +190,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
                 return;
             }
 
-            int giftsCount = mGiftsCount == 0 ? mGiftAdapter.getCount() : mGiftsCount;
+            int giftsCount = mGiftsCount <= 0 ? mGiftAdapter.getCount() : mGiftsCount;
             int viewsNumber = mGiftsHeader.getChildCount();
             for (int i = (giftsCount < mVisibleGiftsNumber ? giftsCount : mVisibleGiftsNumber) - 1; i >= 0; i--) {
                 View giftView;
@@ -208,17 +205,22 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
                     mGiftsHeader.addView(giftView, 0);
                 }
             }
-            if (giftsCount > mVisibleGiftsNumber) {
-                if (mGiftsCounter == null) {
-                    mGiftsCounter = (TextView) inflater.inflate(R.layout.remained_gifts_counter,
-                            mGiftsHeader, false);
-                }
-                mGiftsCounter.setText("+" + (giftsCount - mVisibleGiftsNumber));
-                if (mGiftsCounter.getParent() == null) {
-                    mGiftsHeader.addView(mGiftsCounter);
-                }
+
+            if (mGiftsCount == -1 && giftsCount >= mVisibleGiftsNumber) {
+                getGiftsCounterTextView().setText(R.string.more);
+            } else if (giftsCount > mVisibleGiftsNumber) {
+                getGiftsCounterTextView().setText("+" + (giftsCount - mVisibleGiftsNumber));
             }
         }
+    }
+
+    private TextView getGiftsCounterTextView() {
+        if (mGiftsCounter == null) {
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            mGiftsCounter = (TextView) (inflater.inflate(R.layout.remained_gifts_counter,
+                    mGiftsHeader, true)).findViewById(R.id.textGiftsCounter);
+        }
+        return mGiftsCounter;
     }
 
     private UserProfileFragment getUserProfileFragment() {

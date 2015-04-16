@@ -21,7 +21,6 @@ public class ExternalLinkExecuter {
 
     public void execute(Context context, Intent intent) {
         if (intent != null) {
-
             Uri data = intent.getData();
             if (data != null) {
                 String scheme = data.getScheme();
@@ -29,6 +28,7 @@ public class ExternalLinkExecuter {
                     String host = data.getHost();
                     if (TextUtils.equals(context.getString(R.string.offerwall_host), host)) {
                         listener.onOfferWall();
+                        return;
                     } else {
                         RedirectStatistics.send(host);
                     }
@@ -38,11 +38,14 @@ public class ExternalLinkExecuter {
                         String path = data.getPath();
                         String[] splittedPath = path.split("/");
 
-                        executeLinkAction(splittedPath);
+                        if (executeLinkAction(splittedPath)) {
+                            return;
+                        }
                     }
                 }
             }
         }
+        listener.onNothingToShow();
     }
 
     private boolean checkHost(Uri data) {
@@ -54,12 +57,13 @@ public class ExternalLinkExecuter {
         return false;
     }
 
-    private void executeLinkAction(String[] splittedPath) {
+    private boolean executeLinkAction(String[] splittedPath) {
         Pattern profilePattern = Pattern.compile("profile");
         Pattern confirmPattern = Pattern.compile("confirm.*");
 
         if (profilePattern.matcher(splittedPath[1]).matches() && splittedPath.length >= 3) {
             listener.onProfileLink(Integer.parseInt(splittedPath[2]));
+            return true;
         } else if (confirmPattern.matcher(splittedPath[1]).matches()) {
 
             Pattern codePattern = Pattern.compile("[0-9]+-[0-f]+-[0-9]*");
@@ -67,9 +71,11 @@ public class ExternalLinkExecuter {
             if (matcher.find()) {
                 String code = matcher.group();
                 listener.onConfirmLink(code);
+                return true;
             }
 
         }
+        return false;
     }
 
     public interface OnExternalLinkListener {
@@ -79,6 +85,8 @@ public class ExternalLinkExecuter {
         void onConfirmLink(String code);
 
         void onOfferWall();
+
+        void onNothingToShow();
     }
 
 }

@@ -77,6 +77,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
 
         // Notifications
         mLoNotifications = root.findViewById(R.id.loNotifications);
+        mLoNotifications.setOnClickListener(this);
         mNoNotificationViewGroup = (ViewGroup) root.findViewById(R.id.loNoNotifications);
         mNoNotificationViewGroup.findViewById(R.id.buttonNoNotificationsSetServices)
                 .setOnClickListener(new OnClickListener() {

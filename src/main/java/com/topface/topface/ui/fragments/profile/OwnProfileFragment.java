@@ -83,7 +83,6 @@ public class OwnProfileFragment extends OwnAvatarFragment {
             }
         };
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
-        setProfile(CacheProfile.getProfile());
         TakePhotoDialog takePhotoDialog = (TakePhotoDialog) mPhotoTaker.getActivityFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
         if (CacheProfile.photo == null && mAddPhotoHelper != null && takePhotoDialog == null && !App.getConfig().getUserConfig().isUserAvatarAvailable()) {
             mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
@@ -120,11 +119,6 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     @Override
     protected boolean hasUserActions() {
         return false;
-    }
-
-    @Override
-    protected Profile getProfile() {
-        return CacheProfile.getProfile();
     }
 
     @Override

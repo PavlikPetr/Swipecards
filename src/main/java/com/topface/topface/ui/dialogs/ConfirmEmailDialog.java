@@ -34,7 +34,6 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
 
     @Override
     protected void initViews(View root) {
-        getDialog().setCanceledOnTouchOutside(false);
         mConfirmButton = (Button) root.findViewById(R.id.btnSend);
         mConfirmed = (Button) root.findViewById(R.id.btnConfirmed);
         mConfirmed.setOnClickListener(this);

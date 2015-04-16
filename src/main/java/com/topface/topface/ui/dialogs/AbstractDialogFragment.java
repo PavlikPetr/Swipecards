@@ -63,6 +63,7 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
         View root;
         if (isModalDialog()) {
             root = inflater.inflate(R.layout.dialog_modal, container, false);
+            setCanceledOnTouchOutside(true);
         } else {
             root = inflater.inflate(R.layout.dialog_base, container, false);
         }
@@ -82,6 +83,10 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
         if (mDismissListener != null) {
             mDismissListener.onDismiss(dialog);
         }
+    }
+
+    public void setCanceledOnTouchOutside(boolean outside) {
+        getDialog().setCanceledOnTouchOutside(outside);
     }
 
     /**

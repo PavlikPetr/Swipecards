@@ -18,7 +18,7 @@ public class FacebookSequencedStartAction extends SequencedStartAction {
             if (isFacebookAction(startAction.getActionName())) {
                 return startAction.isApplicable();
             } else if (!isFacebook() && isInviteAction(startAction.getActionName())) {
-                startAction.isApplicable();
+                return startAction.isApplicable();
             }
         }
         return false;
