@@ -14,10 +14,12 @@
         android:src="@drawable/ic_guest" />
 
     <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="centerInside"
+        android:layout_centerInParent="true"
         android:id="@+id/tvText"
         style="@style/ListItemEmptyText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginBottom="24dp"

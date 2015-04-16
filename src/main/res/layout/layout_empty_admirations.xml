@@ -16,6 +16,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             android:text="@string/likes_can_help_you" />
 
@@ -26,7 +28,6 @@
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="24dp"
             android:orientation="horizontal">
 
             <Button
@@ -41,8 +42,6 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/tvText"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="40dp"
             android:src="@drawable/ic_admiration" />
 
     </RelativeLayout>
