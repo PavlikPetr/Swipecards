@@ -160,7 +160,6 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
                         mEdMainField.getText().clear();
                         mEdConfirmationField.getText().clear();
                         mOldPassword.getText().clear();
-                        mBtnSave.setClickable(false);
                         if (mNeedExit) {
                             logout();
                         }
@@ -198,7 +197,6 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
                         mToken.saveToken(mToken.getUserSocialId(), email, mToken.getPassword());
                         App.getConfig().rebuildUserConfig(oldEmail);
                         mEdMainField.getText().clear();
-                        mBtnSave.setClickable(false);
                     }
                 }
 
@@ -214,12 +212,10 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
                 @Override
                 public void always(IApiResponse response) {
                     super.always(response);
-                    mBtnSave.setClickable(true);
                 }
             }).exec();
         } else {
             Toast.makeText(getActivity(), R.string.settings_invalid_email, Toast.LENGTH_LONG).show();
-            mBtnSave.setClickable(true);
         }
     }
 
