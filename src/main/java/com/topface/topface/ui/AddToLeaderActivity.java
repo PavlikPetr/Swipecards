@@ -377,11 +377,4 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         FeedScreensIntent.equipPhotoFeedIntent(intent);
         return intent;
     }
-
-    private AddPhotoHelper getAddPhotoHelper() {
-        if (mAddPhotoHelper == null) {
-            mAddPhotoHelper = new AddPhotoHelper(this);
-        }
-        return mAddPhotoHelper;
-    }
 }
