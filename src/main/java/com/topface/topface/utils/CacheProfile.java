@@ -487,11 +487,13 @@ public class CacheProfile {
     }
 
     public static void incrementPhotoPosition(int diff, boolean needBroadcast) {
-        CacheProfile.photo.position += diff;
-        if (needBroadcast) {
-            Intent intent = new Intent(OwnAvatarFragment.UPDATE_AVATAR_POSITION);
-            LocalBroadcastManager.getInstance(App.getContext())
-                    .sendBroadcast(intent);
+        if (CacheProfile.photo != null) {
+            CacheProfile.photo.position += diff;
+            if (needBroadcast) {
+                Intent intent = new Intent(OwnAvatarFragment.UPDATE_AVATAR_POSITION);
+                LocalBroadcastManager.getInstance(App.getContext())
+                        .sendBroadcast(intent);
+            }
         }
     }
 

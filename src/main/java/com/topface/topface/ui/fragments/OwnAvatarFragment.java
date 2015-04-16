@@ -49,9 +49,11 @@ public abstract class OwnAvatarFragment extends AbstractProfileFragment {
     @Override
     public void onAvatarClick() {
         Profile profile = getProfile();
-        startActivity(PhotoSwitcherActivity.
-                getPhotoSwitcherIntent(profile.gifts, profile.photo.position,
-                        profile.uid, profile.photosCount,
-                        profile.photos));
+        if (profile != null && profile.photo != null) {
+            startActivity(PhotoSwitcherActivity.
+                    getPhotoSwitcherIntent(profile.gifts, profile.photo.position,
+                            profile.uid, profile.photosCount,
+                            profile.photos));
+        }
     }
 }
