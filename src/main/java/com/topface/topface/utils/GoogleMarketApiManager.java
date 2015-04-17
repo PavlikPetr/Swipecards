@@ -59,8 +59,9 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
     }
 
     private void checkServices() {
+        int state = GooglePlayServicesUtil.isGooglePlayServicesAvailable(App.getContext());
         // check google account, because isGooglePlayServicesAvailable return SUCCESS when user unsigned
-        mResultCode = isGoogleAccountExists() ? GooglePlayServicesUtil.isGooglePlayServicesAvailable(App.getContext()) : ConnectionResult.SIGN_IN_REQUIRED;
+        mResultCode = state == ConnectionResult.SUCCESS && !isGoogleAccountExists() ? ConnectionResult.SIGN_IN_REQUIRED : state;
         mIsServicesAvailable = mResultCode == ConnectionResult.SUCCESS;
         decryptingErrorCode();
     }
