@@ -44,8 +44,7 @@ public class ProfilePhotoGridAdapter extends PhotoGridAdapter {
         if (convertView == null) {
             if (type == T_ADD_BTN) {
                 convertView = mInflater.inflate(R.layout.item_user_gallery_add_btn, null, false);
-                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(getGridItemWidth(), getGridItemWidth());
-                convertView.findViewById(R.id.ivPhoto).setLayoutParams(lp);
+                fixAddButtonLayoutParams(convertView);
                 return convertView;
             } else {
                 convertView = mInflater.inflate(R.layout.item_user_gallery, null, false);
@@ -57,12 +56,18 @@ public class ProfilePhotoGridAdapter extends PhotoGridAdapter {
             }
         } else {
             if (type == T_ADD_BTN) {
+                fixAddButtonLayoutParams(convertView);
                 return convertView;
             }
             holder = (ViewHolder) convertView.getTag();
         }
         holder.photo.setPhoto(getItem(position));
         return convertView;
+    }
+
+    private void fixAddButtonLayoutParams(View convertView) {
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(getGridItemWidth(), getGridItemWidth());
+        convertView.findViewById(R.id.ivPhoto).setLayoutParams(lp);
     }
 
     @Override
