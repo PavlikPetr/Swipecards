@@ -8,24 +8,24 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
-        <com.topface.IllustratedTextView.IllustratedTextView
-            android:id="@+id/payReasonFragmentBuyPremium"
-            style="@style/PayReasonView" />
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/fbpContainer"
-            android:paddingTop="12dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp">
+
+            <com.topface.IllustratedTextView.IllustratedTextView
+                android:id="@+id/payReasonFragmentBuyPremium"
+                style="@style/PayReasonView" />
 
             <TextView
                 android:id="@+id/fbpBuyingDisabled"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                style="@style/TitleWhiteText"
+                style="@style/TitleGrayText"
                 android:text="@string/general_buying_disabled"
                 android:visibility="gone"
                 android:layout_margin="5dp" />

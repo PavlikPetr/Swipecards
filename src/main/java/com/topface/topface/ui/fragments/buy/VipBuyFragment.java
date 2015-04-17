@@ -142,11 +142,9 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
             if (CacheProfile.premium) {
                 mEditPremiumContainer.setVisibility(View.VISIBLE);
                 mBuyVipViewsContainer.setVisibility(View.GONE);
-                mResourceInfo.setVisibility(View.GONE);
             } else {
                 mEditPremiumContainer.setVisibility(View.GONE);
                 mBuyVipViewsContainer.setVisibility(View.VISIBLE);
-                mResourceInfo.setVisibility(View.VISIBLE);
             }
         }
     }

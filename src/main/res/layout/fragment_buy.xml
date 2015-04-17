@@ -29,7 +29,7 @@
                 android:id="@+id/fbBuyingDisabled"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                style="@style/TitleWhiteText"
+                style="@style/TitleGrayText"
                 android:text="@string/general_buying_disabled"
                 android:visibility="gone" />
 
