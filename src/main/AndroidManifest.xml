@@ -333,7 +333,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="ok192696576"
+                    android:host="ok125879808"
                     android:scheme="okauth" />
 
             </intent-filter>
