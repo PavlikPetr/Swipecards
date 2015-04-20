@@ -52,12 +52,11 @@ import java.util.List;
 
 public class AddToLeaderActivity extends BaseFragmentActivity implements View.OnClickListener {
 
+    public final static int ADD_TO_LEADER_ACTIVITY_ID = 1;
     private static final String PHOTOS = "PHOTOS";
     private static final String POSITION = "POSITION";
     private static final String SELECTED_POSITION = "SELECTED_POSITION";
     private static final String ALREADY_SHOWN = "ALREADY_SHOWN";
-
-    public final static int ADD_TO_LEADER_ACTIVITY_ID = 1;
     private static final int MAX_SYMBOL_COUNT = 120;
 
     private int mPosition;
@@ -126,6 +125,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
             mAddPhotoHelper = initAddPhotoHelper();
             if (CacheProfile.photo == null && takePhotoDialog == null ) {
                 mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
+                mIsPhotoDialogShown = true;
             }
         }
     }
@@ -145,6 +145,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                 case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG:
                     if (mAddPhotoHelper != null) {
                         mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, mAddPhotoHelper.processActivityResult(requestCode, resultCode, data, false));
+                        mIsPhotoDialogShown = true;
                     }
                 break;
             }
@@ -227,7 +228,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                         @Override
                         public void success(IApiResponse response) {
                             setResult(Activity.RESULT_OK, new Intent());
-                            Toast.makeText(AddToLeaderActivity.this, R.string.leaders_leader_now, Toast.LENGTH_SHORT).show();
+
                             finish();
                         }
 

@@ -49,7 +49,9 @@ public class BitmapUtils {
             return -1;
         }
         cursor.moveToFirst();
-        return cursor.getInt(0);
+        int result = cursor.getInt(0);
+        cursor.close();
+        return result;
     }
 
     public static BitmapFactory.Options readImageFileOptions(Context context, Uri uri) {

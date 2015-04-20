@@ -58,6 +58,7 @@ public class PhotoTaker implements IPhotoTakerWithDialog {
             public void success(IApiResponse response) {
                 CacheProfile.photo = photo;
                 App.sendProfileRequest();
+                Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
             }
 
             @Override
