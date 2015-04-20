@@ -210,7 +210,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
                 getGiftsCounterTextView().setText(R.string.more);
             } else if (giftsCount > mVisibleGiftsNumber) {
                 int counter = (giftsCount - mVisibleGiftsNumber);
-                getGiftsCounterTextView().setText(counter > 99 ? "+" + counter : "99+");
+                getGiftsCounterTextView().setText(counter <= 99 ? "+" + counter : "99+");
             }
         }
     }

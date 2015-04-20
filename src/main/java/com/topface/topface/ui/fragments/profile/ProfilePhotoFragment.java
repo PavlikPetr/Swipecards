@@ -82,7 +82,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if (position == 0) {
                 mViewFlipper.setDisplayedChild(1);
-            } else {
+            } else if (position < CacheProfile.totalPhotos) {
                 startActivity(PhotoSwitcherActivity.getPhotoSwitcherIntent(
                         null,
                         position - 1,
@@ -93,6 +93,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
             }
         }
     };
+
     private View createGridViewFooter() {
         return ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.gridview_footer_progress_bar, null, false);
     }
@@ -320,7 +321,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                                 intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, newPhotos);
                                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
                                 if (position < CacheProfile.photo.position) {
-                                   CacheProfile.incrementPhotoPosition(-1);
+                                    CacheProfile.incrementPhotoPosition(-1);
                                 }
                             }
 

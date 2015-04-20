@@ -1,7 +1,9 @@
 package com.topface.topface.ui.dialogs;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.Button;
@@ -92,18 +94,22 @@ public class EditTextFormDialog extends AbstractEditDialog<FormItem> {
         return true;
     }
 
+    @NonNull
     @Override
-    public void onPause() {
-        // fucking keyboard hack 99% hidings
-        Utils.hideSoftKeyboard(getActivity(), getActivity().getCurrentFocus().getWindowToken());
-        super.onPause();
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new Dialog(getActivity(), getTheme()) {
+            @Override
+            public void dismiss() {
+                hideKeyboard(this);
+                super.dismiss();
+            }
+        };
     }
 
-    @Override
-    public void onDismiss(final DialogInterface dialog) {
-        // fucking keyboard hack 99% hidings
-        Utils.hideSoftKeyboard(getActivity(), getActivity().getCurrentFocus().getWindowToken());
-        super.onDismiss(dialog);
+    private void hideKeyboard(Dialog dialog) {
+        if (dialog != null) {
+            Utils.hideSoftKeyboard(getActivity(), dialog.getCurrentFocus().getWindowToken());
+        }
     }
 
     @Override
