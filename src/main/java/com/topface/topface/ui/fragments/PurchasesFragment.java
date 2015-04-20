@@ -42,6 +42,7 @@ public class PurchasesFragment extends BaseFragment {
     public static final int TYPE_LEADERS = 2;
     public static final int TYPE_UNLOCK_SYMPATHIES = 3;
     public static final int TYPE_ADMIRATION = 4;
+    public static final int TYPE_PEOPLE_NEARBY = 5;
     public static final String ARG_ITEM_PRICE = "quantity_of_coins";
     private static final String SKIP_BONUS = "SKIP_BONUS";
     private ViewPager mPager;
