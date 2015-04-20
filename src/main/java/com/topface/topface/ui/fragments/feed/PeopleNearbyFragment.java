@@ -86,6 +86,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                 }
             }).exec();
         } else {
+            getListView().setVisibility(View.GONE);
             onEmptyFeed(ErrorCodes.CANNOT_GET_GEO);
         }
     }

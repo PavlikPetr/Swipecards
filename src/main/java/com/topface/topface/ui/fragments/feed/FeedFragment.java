@@ -836,7 +836,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             initEmptyFeedView(mInflated, errorCode);
         }
         if (mInflated != null) {
-            mInflated.setVisibility(mListAdapter != null && mListAdapter.isEmpty() ? View.VISIBLE : View.GONE);
+            if (errorCode == ErrorCodes.CANNOT_GET_GEO) {
+                mInflated.setVisibility(View.VISIBLE);
+            } else {
+                mInflated.setVisibility(mListAdapter != null && mListAdapter.isEmpty() ? View.VISIBLE : View.GONE);
+            }
             initEmptyFeedView(mInflated, errorCode);
         }
         mBackgroundController.hide();
