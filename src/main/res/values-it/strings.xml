@@ -620,4 +620,5 @@
     <string name="on_phone">Sul cellulare</string>
     <string name="on_mail">Sull’e-mail</string>
     <string name="add_leader_hint">Il tuo saluto…</string>
+    <string name="more">ancora</string>
 </resources>

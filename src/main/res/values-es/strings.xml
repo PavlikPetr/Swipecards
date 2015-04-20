@@ -623,4 +623,5 @@
     <string name="on_phone">Al teléfono</string>
     <string name="on_mail">A e-mail</string>
     <string name="add_leader_hint">Tu saludo…</string>
+    <string name="more">más</string>
 </resources>
