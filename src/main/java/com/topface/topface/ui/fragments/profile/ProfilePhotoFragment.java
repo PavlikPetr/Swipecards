@@ -362,7 +362,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     }
 
     private void initData() {
-        if (mProfilePhotoGridAdapter != null) {
+        if (mProfilePhotoGridAdapter != null && CacheProfile.photos != null) {
             mProfilePhotoGridAdapter.setData(
                     CacheProfile.photos,
                     CacheProfile.photos.size() < CacheProfile.totalPhotos

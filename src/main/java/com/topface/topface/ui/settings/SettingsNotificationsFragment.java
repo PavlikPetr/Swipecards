@@ -246,22 +246,22 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
         Resources res = App.getContext().getResources();
         switch (v.getId()) {
             case R.id.notification_sympathies:
-                NotificationEditDialog.newInstance(res.getStringArray(R.array.receive_notifications)[2],
+                NotificationEditDialog.newInstance(res.getString(R.string.receive_sympathy_notification),
                         CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES),
                         mEditingFinishedListener).show(fm, NotificationEditDialog.class.getName());
                 break;
             case R.id.notification_mutuals:
-                NotificationEditDialog.newInstance(res.getStringArray(R.array.receive_notifications)[1],
+                NotificationEditDialog.newInstance(res.getString(R.string.receive_mutual_notification),
                         CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY),
                         mEditingFinishedListener).show(fm, NotificationEditDialog.class.getName());
                 break;
             case R.id.notification_messages:
-                NotificationEditDialog.newInstance(res.getStringArray(R.array.receive_notifications)[0],
+                NotificationEditDialog.newInstance(res.getString(R.string.receive_message_notification),
                         CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE),
                         mEditingFinishedListener).show(fm, NotificationEditDialog.class.getName());
                 break;
             case R.id.notification_guests:
-                NotificationEditDialog.newInstance(res.getStringArray(R.array.receive_notifications)[4],
+                NotificationEditDialog.newInstance(res.getString(R.string.receive_guest_notification),
                         CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR),
                         mEditingFinishedListener).show(fm, NotificationEditDialog.class.getName());
                 break;
