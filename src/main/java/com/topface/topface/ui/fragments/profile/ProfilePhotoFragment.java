@@ -82,7 +82,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if (position == 0) {
                 mViewFlipper.setDisplayedChild(1);
-            } else if (position < CacheProfile.totalPhotos) {
+            } else if (position <= CacheProfile.totalPhotos) {
                 startActivity(PhotoSwitcherActivity.getPhotoSwitcherIntent(
                         null,
                         position - 1,

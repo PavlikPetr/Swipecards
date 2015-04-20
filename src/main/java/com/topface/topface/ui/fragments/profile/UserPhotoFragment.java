@@ -44,17 +44,19 @@ public class UserPhotoFragment extends ProfileInnerFragment {
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-            Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(mPendingUserInit.getData().gifts,
-                    position,
-                    mUserId,
-                    mPhotosCount,
-                    mUserPhotoGridAdapter
-            );
-            Fragment parentFrag = getParentFragment();
-            if (parentFrag != null) {
-                parentFrag.startActivity(intent);
-            } else {
-                startActivity(intent);
+            if (position < mPhotosCount) {
+                Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(mPendingUserInit.getData().gifts,
+                        position,
+                        mUserId,
+                        mPhotosCount,
+                        mUserPhotoGridAdapter
+                );
+                Fragment parentFrag = getParentFragment();
+                if (parentFrag != null) {
+                    parentFrag.startActivity(intent);
+                } else {
+                    startActivity(intent);
+                }
             }
         }
     };
