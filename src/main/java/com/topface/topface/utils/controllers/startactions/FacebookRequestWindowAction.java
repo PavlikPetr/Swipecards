@@ -109,9 +109,7 @@ public class FacebookRequestWindowAction extends DailyPopupAction  {
                     App.sendProfileAndOptionsRequests(new ApiHandler() {
                         @Override
                         public void success(IApiResponse response) {
-                            if (getContext() != null) {
-                                Toast.makeText(getContext(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), Toast.LENGTH_SHORT).show();
-                            }
+                            Toast.makeText(App.getContext(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
