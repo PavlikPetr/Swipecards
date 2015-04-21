@@ -118,7 +118,6 @@ public class Profile extends AbstractDataWithPhotos {
             parseNotifications(profile, resp);
             parseForm(profile, resp, App.getContext());
             initPhotos(resp, profile);
-            //TODO clarify parameter: canBecomeLeader
         } catch (Exception e) {
             Debug.error("Profile Wrong response parsing: ", e);
         }
@@ -141,6 +140,7 @@ public class Profile extends AbstractDataWithPhotos {
             formItem = new FormItem(R.array.form_main_status, profile.xstatus,
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
+            formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter());
             profile.forms.add(formItem);
 
             // 2 character position 0
@@ -160,12 +160,11 @@ public class Profile extends AbstractDataWithPhotos {
             formInfo.fillFormItem(headerItem);
 
             // 11 breast position 7
-            if (profile.sex == Static.GIRL) {
-                formItem = new FormItem(R.array.form_physique_breast, form.optInt("breastId"),
-                        FormItem.DATA, headerItem);
-                formInfo.fillFormItem(formItem);
-                profile.forms.add(formItem);
-            }
+            formItem = new FormItem(R.array.form_physique_breast, form.optInt("breastId"),
+                    FormItem.DATA, headerItem);
+            formItem.setOnlyForWomen(true);
+            formInfo.fillFormItem(formItem);
+            profile.forms.add(formItem);
 
             // 6 fitness position 2
             formItem = new FormItem(R.array.form_physique_fitness, form.optInt("fitnessId"),
@@ -178,12 +177,7 @@ public class Profile extends AbstractDataWithPhotos {
             String aboutStatus = TextUtils.isEmpty(as.trim()) ? null : as;
             formItem = new FormItem(R.array.form_main_about_status, aboutStatus,
                     FormItem.DATA, headerItem);
-            formItem.setTextLimitInterface(new FormItem.TextLimitInterface() {
-                @Override
-                public int getLimit() {
-                    return App.getAppOptions().getUserAboutMeMaxLength();
-                }
-            });
+            formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter(App.getAppOptions().getUserAboutMeMaxLength()));
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
 
@@ -291,6 +285,7 @@ public class Profile extends AbstractDataWithPhotos {
             formItem = new FormItem(R.array.form_habits_restaurants, restraunts, FormItem.DATA,
                     headerItem);
             formInfo.fillFormItem(formItem);
+            formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter());
             profile.forms.add(formItem);
 
             // 24 HEADER -= DETAIL =-
@@ -303,6 +298,7 @@ public class Profile extends AbstractDataWithPhotos {
             formItem = new FormItem(R.array.form_detail_about_dating, datingDetails,
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
+            formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter());
             profile.forms.add(formItem);
 
             // 26 achievements position 16
@@ -311,9 +307,8 @@ public class Profile extends AbstractDataWithPhotos {
             formItem = new FormItem(R.array.form_detail_archievements, achievments,
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
+            formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter());
             profile.forms.add(formItem);
-
-            //TODO clarify parameters: car,jobId,countries,statusId,valuables,childrenId,aspirations,job
         }
     }
 

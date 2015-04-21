@@ -9,7 +9,9 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
+import com.topface.topface.data.Profile;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 
 import java.util.LinkedList;
@@ -30,6 +32,7 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
 
     @Override
     protected LinkedList<FormItem> prepareForm(LinkedList<FormItem> forms) {
+        FormInfo formInfo = new FormInfo(App.getContext(), CacheProfile.sex, Profile.TYPE_OWN_PROFILE);
         forms.clear();
         if (CacheProfile.forms != null) {
             // fake forms for profile main data
@@ -88,16 +91,23 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
                     CacheProfile.city = JsonUtils.fromJson(formItem.value, City.class);
                 }
             });
-            forms.add(new FormItem(R.string.edit_status, CacheProfile.getStatus(), FormItem.STATUS) {
+            FormItem statusItem = new FormItem(R.string.edit_status, CacheProfile.getStatus(), FormItem.STATUS) {
                 @Override
                 public void copy(FormItem formItem) {
                     super.copy(formItem);
                     CacheProfile.setStatus(formItem.value);
                 }
-            });
+            };
+            statusItem.setTextLimitInterface(new FormItem.DefaultTextLimiter());
+            forms.add(statusItem);
 
             // real forms
-            forms.addAll(CacheProfile.forms);
+            for (FormItem item : CacheProfile.forms) {
+                if (!(item.isOnlyForWomen() && CacheProfile.sex == Static.BOY)) {
+                    formInfo.fillFormItem(item);
+                    forms.add(item);
+                }
+            }
         }
 
         return forms;

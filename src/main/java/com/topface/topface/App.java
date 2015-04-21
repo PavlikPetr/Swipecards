@@ -185,6 +185,7 @@ public class App extends Application {
 
     public static void sendUserOptionsAndPurchasesRequest() {
         new ParallelApiRequest(App.getContext())
+                .addRequest(getProfileRequest(ProfileRequest.P_ALL))
                 .addRequest(getUserOptionsRequest())
                 .addRequest(getPaymentwallProductsRequest())
                 .addRequest(getProductsRequest())
