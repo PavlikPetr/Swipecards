@@ -137,7 +137,7 @@ public class AddPhotoHelper {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(mContext, R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                                Utils.showErrorMessage();
                             }
                         });
                         return;
@@ -265,9 +265,9 @@ public class AddPhotoHelper {
         }
 
         if (!isPhotoCorrectSize(uri)) {
-            Toast.makeText(mContext, String.format(mContext.getString(R.string.incorrect_photo_size),
+            Utils.showToastNotification(String.format(mContext.getString(R.string.incorrect_photo_size),
                     minPhotoSize.width,
-                    minPhotoSize.height), Toast.LENGTH_SHORT).show();
+                    minPhotoSize.height), Toast.LENGTH_SHORT);
             return;
         }
         // если начинаем грузить аватарку, то выставляем флаг, чтобы resumeFragment не вызвал показ попапа
@@ -275,7 +275,7 @@ public class AddPhotoHelper {
             App.getConfig().getUserConfig().setUserAvatarAvailable(true);
             App.getConfig().getUserConfig().saveConfig();
         }
-        Toast.makeText(mContext, R.string.photo_is_uploading, Toast.LENGTH_SHORT).show();
+        Utils.showToastNotification(R.string.photo_is_uploading, Toast.LENGTH_SHORT);
         showProgressDialog();
         mNotificationManager = UserNotificationManager.getInstance();
 
@@ -390,15 +390,15 @@ public class AddPhotoHelper {
     private void showErrorMessage(int codeError) {
         switch (codeError) {
             case ErrorCodes.INCORRECT_PHOTO_DATA:
-                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo), Toast.LENGTH_LONG).show();
+                Utils.showToastNotification(mContext.getString(R.string.incorrect_photo), Toast.LENGTH_LONG);
                 break;
             case ErrorCodes.INCORRECT_PHOTO_FORMAT:
-                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_format), Toast.LENGTH_LONG).show();
+                Utils.showToastNotification(mContext.getString(R.string.incorrect_photo_format), Toast.LENGTH_LONG);
                 break;
             case ErrorCodes.INCORRECT_PHOTO_SIZES:
-                Toast.makeText(mContext, String.format(mContext.getString(R.string.incorrect_photo_size),
+                Utils.showToastNotification(String.format(mContext.getString(R.string.incorrect_photo_size),
                         minPhotoSize.width,
-                        minPhotoSize.height), Toast.LENGTH_SHORT).show();
+                        minPhotoSize.height), Toast.LENGTH_SHORT);
                 break;
         }
     }
@@ -441,30 +441,6 @@ public class AddPhotoHelper {
         takePhotoDialog.setPhotoTaker(photoTaker);
     }
 
-    public static class PhotoNotificationListener implements UserNotificationManager.NotificationImageListener {
-        public boolean needShowNotification = true;
-        private UserNotification notification;
-
-        @Override
-        public void onSuccess(UserNotification notification) {
-            this.notification = notification;
-        }
-
-        public int getId() {
-
-            return notification == null ? -1 : notification.getId();
-        }
-
-        @Override
-        public void onFail() {
-        }
-
-        @Override
-        public boolean needShowNotification() {
-            return needShowNotification;
-        }
-    }
-
     private BitmapFactory.Options getPhotoSizeByUri(Uri uri) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -492,6 +468,30 @@ public class AddPhotoHelper {
             picturePath = uri.getEncodedPath();
         }
         return picturePath;
+    }
+
+    public static class PhotoNotificationListener implements UserNotificationManager.NotificationImageListener {
+        public boolean needShowNotification = true;
+        private UserNotification notification;
+
+        @Override
+        public void onSuccess(UserNotification notification) {
+            this.notification = notification;
+        }
+
+        public int getId() {
+
+            return notification == null ? -1 : notification.getId();
+        }
+
+        @Override
+        public void onFail() {
+        }
+
+        @Override
+        public boolean needShowNotification() {
+            return needShowNotification;
+        }
     }
 }
 

@@ -14,6 +14,7 @@ import com.topface.topface.data.User;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ModerationPunish;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,22 +28,6 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
     private User mUser = null;
     private View mFullInfo = null;
     private View mLocker = null;
-
-    public class BanAction {
-        public static final String SPAM_MSG = "TWO_MONTHS_SPAM";
-
-        public static final String SPAM_PHOTO = "TWO_MONTHS_PHOTO_SPAM";
-        public static final String FAKE = "ONE_WEEK_PHOTO_FAKE";
-        public static final String CENSOR = "TWO_DAYS_ABUSE";
-        public static final String PORN = "TWO_MONTHS_PHOTO_PORNO";
-        public static final String PORN_ALBUM = "TWO_MONTHS_PHOTO_PORNO_ALBUM";
-        public static final String DEL_PHOTO = "REMOVE_PHOTO";
-        public static final String DEL_PHOTO_ALL = "REMOVE_ALL_PHOTO";
-        public static final String DEL_STATUS = "REMOVE_SHORT";
-        public static final String DEL_ABOUT = "REMOVE_ABOUT";
-        public static final String CHANGE_GENDER = "SWITCH_SEX";
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -198,15 +183,31 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
         punish.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                Toast.makeText(getActivity(), R.string.editor_ban_result_ok, Toast.LENGTH_SHORT).show();
+                Utils.showToastNotification(R.string.editor_ban_result_ok, Toast.LENGTH_SHORT);
                 showView(mLocker, false);
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                Toast.makeText(getActivity(), response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                Utils.showToastNotification(response.getErrorMessage(), Toast.LENGTH_SHORT);
                 showView(mLocker, false);
             }
         }).exec();
+    }
+
+    public class BanAction {
+        public static final String SPAM_MSG = "TWO_MONTHS_SPAM";
+
+        public static final String SPAM_PHOTO = "TWO_MONTHS_PHOTO_SPAM";
+        public static final String FAKE = "ONE_WEEK_PHOTO_FAKE";
+        public static final String CENSOR = "TWO_DAYS_ABUSE";
+        public static final String PORN = "TWO_MONTHS_PHOTO_PORNO";
+        public static final String PORN_ALBUM = "TWO_MONTHS_PHOTO_PORNO_ALBUM";
+        public static final String DEL_PHOTO = "REMOVE_PHOTO";
+        public static final String DEL_PHOTO_ALL = "REMOVE_ALL_PHOTO";
+        public static final String DEL_STATUS = "REMOVE_SHORT";
+        public static final String DEL_ABOUT = "REMOVE_ABOUT";
+        public static final String CHANGE_GENDER = "SWITCH_SEX";
+
     }
 }

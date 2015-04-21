@@ -42,11 +42,10 @@ import java.util.List;
 
 public class AddToLeaderActivity extends BaseFragmentActivity implements View.OnClickListener {
 
+    public final static int ADD_TO_LEADER_ACTIVITY_ID = 1;
     private static final String PHOTOS = "PHOTOS";
     private static final String POSITION = "POSITION";
     private static final String SELECTED_POSITION = "SELECTED_POSITION";
-
-    public final static int ADD_TO_LEADER_ACTIVITY_ID = 1;
     private static final int MAX_SYMBOL_COUNT = 120;
 
     private GridViewWithHeaderAndFooter mGridView;
@@ -154,7 +153,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                         @Override
                         public void success(IApiResponse response) {
                             setResult(Activity.RESULT_OK, new Intent());
-                            Toast.makeText(AddToLeaderActivity.this, R.string.leaders_leader_now, Toast.LENGTH_SHORT).show();
+                            Utils.showToastNotification(R.string.leaders_leader_now, Toast.LENGTH_SHORT);
                             finish();
                         }
 
@@ -166,14 +165,14 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                                     showPurchasesFragment(buttonData.price);
                                     break;
                                 default:
-                                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                                    Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                                     break;
                             }
                         }
                     }).exec();
 
         } else {
-            Toast.makeText(AddToLeaderActivity.this, R.string.leaders_need_photo, Toast.LENGTH_SHORT).show();
+            Utils.showToastNotification(R.string.leaders_need_photo, Toast.LENGTH_SHORT);
         }
     }
 

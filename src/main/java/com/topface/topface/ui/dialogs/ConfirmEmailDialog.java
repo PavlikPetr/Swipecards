@@ -24,6 +24,12 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
     private Button mConfirmButton;
     private ProgressBar mProgressBar;
 
+    public static ConfirmEmailDialog newInstance() {
+        ConfirmEmailDialog dialog = new ConfirmEmailDialog();
+        dialog.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Theme_Topface);
+        return dialog;
+    }
+
     @Override
     protected void initContentViews(View root) {
         getDialog().setCanceledOnTouchOutside(false);
@@ -47,8 +53,6 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
         super.onPause();
         Utils.hideSoftKeyboard(getActivity(), mEditEmailText);
     }
-
-
 
     @Override
     protected void onCloseButtonClick(View v) {
@@ -75,7 +79,7 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
                         changeEmailAndSendConfirmation(email);
                     }
                 } else {
-                    Toast.makeText(App.getContext(), R.string.incorrect_email, Toast.LENGTH_SHORT).show();
+                    Utils.showToastNotification(R.string.incorrect_email, Toast.LENGTH_SHORT);
                 }
                 break;
 
@@ -90,14 +94,14 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
             public void success(IApiResponse response) {
                 AuthToken token = AuthToken.getInstance();
                 token.saveToken(token.getUserSocialId(), email, token.getPassword());
-                Toast.makeText(App.getContext(), R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT).show();
+                Utils.showToastNotification(R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT);
                 closeDialog();
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
                 onRequestEnd();
-                Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
             }
         }).exec();
     }
@@ -108,14 +112,14 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                Toast.makeText(App.getContext(), R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT).show();
+                Utils.showToastNotification(R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT);
                 closeDialog();
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
                 onRequestEnd();
-                Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
             }
         }).exec();
     }
@@ -124,12 +128,6 @@ public class ConfirmEmailDialog extends AbstractModalDialog implements View.OnCl
         Utils.hideSoftKeyboard(getActivity(), mEditEmailText);
         final Dialog dialog = getDialog();
         if (dialog != null) dismiss();
-    }
-
-    public static ConfirmEmailDialog newInstance() {
-        ConfirmEmailDialog dialog = new ConfirmEmailDialog();
-        dialog.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Theme_Topface);
-        return dialog;
     }
 
     private void onRequestStart() {

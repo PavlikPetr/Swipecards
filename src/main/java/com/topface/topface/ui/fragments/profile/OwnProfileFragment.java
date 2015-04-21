@@ -28,6 +28,7 @@ import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.PhotoTaker;
+import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -60,14 +61,14 @@ public class OwnProfileFragment extends AbstractProfileFragment {
                 LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                 // оповещаем всех об изменениях
                 CacheProfile.sendUpdateProfileBroadcast();
-                Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
+                Utils.showToastNotification(R.string.photo_add_or, Toast.LENGTH_SHORT);
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
                 // если загрузка аватраки не завершилась успехом, то сбрасываем флаг
                 if (CacheProfile.photos.size() == 0) {
                     App.getConfig().getUserConfig().setUserAvatarAvailable(false);
                     App.getConfig().getUserConfig().saveConfig();
                 }
-                Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+                Utils.showToastNotification(R.string.photo_add_error, Toast.LENGTH_SHORT);
             }
         }
     };
