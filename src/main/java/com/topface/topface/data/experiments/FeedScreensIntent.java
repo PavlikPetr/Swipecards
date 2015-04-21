@@ -16,6 +16,11 @@ public class FeedScreensIntent {
         equipFeedIntent(intent, TABBED_DIALOGS, DialogsFragment.class.getName());
     }
 
+    public static void equipNotificationIntent(Intent intent) {
+        equipMessageAllIntent(intent);
+        intent.putExtra(GCMUtils.NOTIFICATION_INTENT, true);
+    }
+
     public static void equipPhotoFeedIntent(Intent intent) {
         equipFeedIntent(intent, PHOTO_BLOG, PhotoBlogFragment.class.getName());
     }
