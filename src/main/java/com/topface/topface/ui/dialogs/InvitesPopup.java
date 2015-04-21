@@ -98,12 +98,8 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
                 if (isPremium) {
                     EasyTracker.sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumTrue", (long) contacts.size());
                     EasyTracker.sendEvent("InvitesPopup", "PremiumReceived", "", (long) CacheProfile.getOptions().premium_period);
-                    if (getActivity() != null) {
-
-                        Toast.makeText(getActivity(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), Toast.LENGTH_LONG).show();
-                        CacheProfile.canInvite = false;
-                        ((BaseFragmentActivity) getActivity()).close(InvitesPopup.this);
-                    }
+                    Toast.makeText(App.getContext(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), Toast.LENGTH_LONG).show();
+                    CacheProfile.canInvite = false;
                 } else {
                     EasyTracker.sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumFalse", (long) contacts.size());
                     Toast.makeText(getActivity(), getString(R.string.invalid_contacts), Toast.LENGTH_LONG).show();
