@@ -26,17 +26,16 @@ public class FormItem implements Parcelable {
     public static final int HEADER = 1;
     public static final int DATA = 3;
     public static final int STATUS = 4;
-    public static final int DIVIDER = 5;
     public static final int NAME = 6;
     public static final int SEX = 7;
     public static final int AGE = 8;
     public static final int CITY = 9;
 
     public static final int NO_RESOURCE_ID = -1;
-    public static final int NOT_SPECIFIED_ID = 0;
 
     private TextLimitInterface mTextLimitInterface;
     private ValueLimitInterface mValueLimitInterface;
+    private boolean mOnlyForWomen = false;
 
     //private static final long serialVersionUID = 1883262786634798671L;    
 
@@ -110,6 +109,7 @@ public class FormItem implements Parcelable {
         mTextLimitInterface = formItem.mTextLimitInterface;
         mValueLimitInterface = formItem.mValueLimitInterface;
         isEditing = formItem.isEditing;
+        mOnlyForWomen = formItem.mOnlyForWomen;
     }
 
     @Override
@@ -220,5 +220,31 @@ public class FormItem implements Parcelable {
             }
         }
         return true;
+    }
+
+    public void setOnlyForWomen(boolean onlyForWomen) {
+        mOnlyForWomen = onlyForWomen;
+    }
+
+    public boolean isOnlyForWomen() {
+        return mOnlyForWomen;
+    }
+
+    public static class DefaultTextLimiter implements TextLimitInterface {
+
+        private final int mLimit;
+
+        public DefaultTextLimiter(){
+            mLimit = App.getAppOptions().getUserStringSettingMaxLength();
+        }
+
+        public DefaultTextLimiter(int limit) {
+            mLimit = limit;
+        }
+
+        @Override
+        public int getLimit() {
+            return mLimit;
+        }
     }
 }

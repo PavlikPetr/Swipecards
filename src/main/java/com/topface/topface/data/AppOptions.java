@@ -85,6 +85,10 @@ public class AppOptions extends AbstractData {
         return conditions;
     }
 
+    public int getUserStringSettingMaxLength() {
+        return conditions.userStringSettingMaxLength;
+    }
+
     public MinPhotoSize getMinPhotoSize() {
         if (minPhotoSize != null) {
             return minPhotoSize;
@@ -107,10 +111,6 @@ public class AppOptions extends AbstractData {
 
     public int getUserHeightMax() {
         return conditions.userHeightMax;
-    }
-
-    public int getUserStatusMaxLength() {
-        return conditions.userStatusMaxLength;
     }
 
     public int getUserAboutMeMaxLength() {
@@ -151,6 +151,7 @@ public class AppOptions extends AbstractData {
     }
 
     private class Conditions {
+        int userStringSettingMaxLength = 1024;
         int userAboutMeMaxLength = 1024;
         int userStatusMaxLength = 1024;
         int userWeightMin = 1;
@@ -164,12 +165,15 @@ public class AppOptions extends AbstractData {
         }
 
         Conditions(JSONObject json) {
+            userStringSettingMaxLength = json.optInt("userStringSettingMaxLength", 1024);
             userAboutMeMaxLength = json.optInt("userAboutMeMaxLength", 1024);
             userStatusMaxLength = json.optInt("userStatusMaxLength", 1024);
             userWeightMin = json.optInt("userWeightMin", 1);
             userWeightMax = json.optInt("userWeightMax", 999);
             userHeightMin = json.optInt("userHeightMin", 1);
             userHeightMax = json.optInt("userHeightMax", 999);
+            userAgeMin = json.optInt("userHeightMax", 16);
+            userAgeMax = json.optInt("userHeightMax", 99);
         }
     }
 

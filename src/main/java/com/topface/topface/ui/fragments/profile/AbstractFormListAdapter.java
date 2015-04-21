@@ -17,7 +17,6 @@ import com.topface.topface.utils.FormItem;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Locale;
 
 /**
  * Abstract class for own and user's form adapters
@@ -84,7 +83,7 @@ public abstract class AbstractFormListAdapter extends BaseAdapter {
         } else if (item.type == FormItem.CITY) {
             holder.value.setText(JsonUtils.fromJson(item.value, City.class).name);
         } else {
-            holder.value.setText(item.value.toLowerCase(Locale.getDefault()));
+            holder.value.setText(item.value);
         }
 
         configureHolder(holder, item);
