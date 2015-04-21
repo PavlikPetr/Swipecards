@@ -79,12 +79,13 @@ public class EditTextFormDialog extends AbstractEditDialog<FormItem> {
         }
 
         FormItem data = getAdapter().getData();
-        if (data.getTextLimitInterface() != null) {
-            limitText.setText(data.value.length() + "/" + data.getTextLimitInterface().getLimit());
+        final FormItem.TextLimitInterface limiter = data.getTextLimitInterface();
+        if (limiter != null && limiter.isVisible()) {
+            limitText.setText(data.value.length() + "/" + limiter.getLimit());
             getAdapter().setDataChangeListener(new AbstractEditAdapter.OnDataChangeListener<FormItem>() {
                 @Override
                 public void onDataChanged(FormItem data) {
-                    limitText.setText(data.value.length() + "/" + data.getTextLimitInterface().getLimit());
+                    limitText.setText(data.value.length() + "/" + limiter.getLimit());
                 }
             });
         }

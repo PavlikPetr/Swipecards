@@ -140,7 +140,6 @@ public class Profile extends AbstractDataWithPhotos {
             formItem = new FormItem(R.array.form_main_status, profile.xstatus,
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
-            formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter());
             profile.forms.add(formItem);
 
             // 2 character position 0

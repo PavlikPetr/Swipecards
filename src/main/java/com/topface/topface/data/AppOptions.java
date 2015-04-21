@@ -125,6 +125,10 @@ public class AppOptions extends AbstractData {
         return conditions.userAgeMax;
     }
 
+    public int getUserStatusMaxLength() {
+        return  conditions.userStatusMaxLength;
+    }
+
     public boolean isScruffyEnabled() {
         return scruffy != null ? scruffy : false;
     }
@@ -172,8 +176,8 @@ public class AppOptions extends AbstractData {
             userWeightMax = json.optInt("userWeightMax", 999);
             userHeightMin = json.optInt("userHeightMin", 1);
             userHeightMax = json.optInt("userHeightMax", 999);
-            userAgeMin = json.optInt("userHeightMax", 16);
-            userAgeMax = json.optInt("userHeightMax", 99);
+            userAgeMin = json.optInt("userAgeMin", 16);
+            userAgeMax = json.optInt("userAgeMax", 99);
         }
     }
 

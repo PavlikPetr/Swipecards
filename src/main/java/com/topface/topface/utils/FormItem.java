@@ -94,6 +94,7 @@ public class FormItem implements Parcelable {
         titleId = formItem.titleId;
         mTextLimitInterface = formItem.mTextLimitInterface;
         mValueLimitInterface = formItem.mValueLimitInterface;
+        mOnlyForWomen = formItem.mOnlyForWomen;
     }
 
     public FormItem() {
@@ -125,6 +126,7 @@ public class FormItem implements Parcelable {
         dest.writeInt(titleId);
         dest.writeInt(dataId);
         dest.writeParcelable(header, flags);
+        dest.writeByte((byte) (mOnlyForWomen ? 1 : 0));
     }
 
     @Override
@@ -136,7 +138,8 @@ public class FormItem implements Parcelable {
                     (formItem.value == null ? value == null : formItem.value.equals(value)) &&
                     (formItem.header == null ? header == null : formItem.header.equals(header)) &&
                     formItem.titleId == titleId &&
-                    formItem.dataId == dataId;
+                    formItem.dataId == dataId &&
+                    formItem.mOnlyForWomen == mOnlyForWomen;
         } else {
             return false;
         }
@@ -151,6 +154,7 @@ public class FormItem implements Parcelable {
         hash = hash * 31 + (header == null ? 0 : header.hashCode());
         hash = hash * 31 + titleId;
         hash = hash * 31 + dataId;
+        hash = hash * 31 + (mOnlyForWomen ? 1 : 0);
         return hash;
     }
 
@@ -165,6 +169,7 @@ public class FormItem implements Parcelable {
                     result.titleId = in.readInt();
                     result.dataId = in.readInt();
                     result.header = in.readParcelable(FormItem.class.getClassLoader());
+                    result.mOnlyForWomen = in.readByte() != 0;
                     return result;
                 }
 
@@ -175,6 +180,8 @@ public class FormItem implements Parcelable {
 
     public interface TextLimitInterface {
         int getLimit();
+
+        boolean isVisible();
     }
 
     public interface ValueLimitInterface {
@@ -245,6 +252,11 @@ public class FormItem implements Parcelable {
         @Override
         public int getLimit() {
             return mLimit;
+        }
+
+        @Override
+        public boolean isVisible() {
+            return true;
         }
     }
 }

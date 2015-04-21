@@ -43,16 +43,10 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
                     CacheProfile.first_name = formItem.value;
                 }
             };
-            nameItem.setValueLimitInterface(new FormItem.ValueLimitInterface() {
-
+            nameItem.setTextLimitInterface(new FormItem.DefaultTextLimiter(){
                 @Override
-                public int getMinValue() {
-                    return 1;
-                }
-
-                @Override
-                public int getMaxValue() {
-                    return Integer.MAX_VALUE;
+                public boolean isVisible() {
+                    return false;
                 }
             });
             forms.add(nameItem);
@@ -98,7 +92,7 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
                     CacheProfile.setStatus(formItem.value);
                 }
             };
-            statusItem.setTextLimitInterface(new FormItem.DefaultTextLimiter());
+            statusItem.setTextLimitInterface(new FormItem.DefaultTextLimiter(App.getAppOptions().getUserStatusMaxLength()));
             forms.add(statusItem);
 
             // real forms
