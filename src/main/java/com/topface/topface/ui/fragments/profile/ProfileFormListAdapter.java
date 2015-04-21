@@ -36,6 +36,16 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
         forms.clear();
         if (CacheProfile.forms != null) {
             // fake forms for profile main data
+            FormItem statusItem = new FormItem(R.string.edit_status, CacheProfile.getStatus(), FormItem.STATUS) {
+                @Override
+                public void copy(FormItem formItem) {
+                    super.copy(formItem);
+                    CacheProfile.setStatus(formItem.value);
+                }
+            };
+            statusItem.setTextLimitInterface(new FormItem.DefaultTextLimiter(App.getAppOptions().getUserStatusMaxLength()));
+            forms.add(statusItem);
+
             FormItem nameItem = new FormItem(R.string.edit_name, CacheProfile.first_name, FormItem.NAME) {
                 @Override
                 public void copy(FormItem formItem) {
@@ -50,6 +60,7 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
                 }
             });
             forms.add(nameItem);
+
             String sex = App.getContext().getString(CacheProfile.sex == Static.BOY ? R.string.boy : R.string.girl);
             forms.add(new FormItem(R.string.general_sex, sex, FormItem.SEX) {
                 @Override
@@ -58,6 +69,7 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
                     CacheProfile.sex = formItem.dataId;
                 }
             });
+
             FormItem ageItem = new FormItem(R.string.edit_age, String.valueOf(CacheProfile.age), FormItem.AGE) {
                 @Override
                 public void copy(FormItem formItem) {
@@ -78,6 +90,7 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
                 }
             });
             forms.add(ageItem);
+
             forms.add(new FormItem(R.string.general_city, JsonUtils.toJson(CacheProfile.city), FormItem.CITY) {
                 @Override
                 public void copy(FormItem formItem) {
@@ -85,15 +98,6 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
                     CacheProfile.city = JsonUtils.fromJson(formItem.value, City.class);
                 }
             });
-            FormItem statusItem = new FormItem(R.string.edit_status, CacheProfile.getStatus(), FormItem.STATUS) {
-                @Override
-                public void copy(FormItem formItem) {
-                    super.copy(formItem);
-                    CacheProfile.setStatus(formItem.value);
-                }
-            };
-            statusItem.setTextLimitInterface(new FormItem.DefaultTextLimiter(App.getAppOptions().getUserStatusMaxLength()));
-            forms.add(statusItem);
 
             // real forms
             for (FormItem item : CacheProfile.forms) {
