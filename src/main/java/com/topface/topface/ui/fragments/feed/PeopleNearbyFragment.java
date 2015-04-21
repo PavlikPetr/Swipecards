@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGeo;
 import com.topface.topface.data.FeedListData;
@@ -97,7 +96,8 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                 @Override
                 public void onLocationChanged(Location location) {
                     sendPeopleNearbyRequest(location, isHistoryLoad, makeItemsRead);
-                    Debug.log("", "Location Updated");
+                    //mGeoLocationManager.compareWithBestLocation(location);
+                    //Debug.log("", "Location Updated");
                 }
             };
         }
