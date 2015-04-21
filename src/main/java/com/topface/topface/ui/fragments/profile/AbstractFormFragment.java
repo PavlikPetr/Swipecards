@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.BasePendingInit;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.FeedListData;
@@ -42,6 +43,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
     private static final String POSITION = "POSITION";
     private static final String USER_ID = "USER_ID";
     private static final String GIFTS_COUNT = "GIFTS_COUNT";
+    private static final String USER_STATUS = "USER_STATUS";
 
     private AbstractFormListAdapter mFormAdapter;
     private LinearLayout mGiftsHeader;
@@ -56,6 +58,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
     private int mGiftsCount;
     private ListView mListQuestionnaire;
     private DisplayMetrics mMetrics;
+    private String mStatus;
 
     private BasePendingInit<Profile> mPendingUserInit = new BasePendingInit<>();
 
@@ -104,7 +107,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         mListQuestionnaire.setAdapter(mFormAdapter);
 
         if (mForms != null) {
-            setUserData(mUserId, mForms, mGifts, mGiftsCount);
+            setUserData(mStatus, mUserId, mForms, mGifts, mGiftsCount);
         } else if (savedInstanceState != null) {
             ArrayList<Parcelable> parcelableArrayList = savedInstanceState.getParcelableArrayList(FORM_ITEMS);
             ArrayList<Gift> parcelableGifts = savedInstanceState.getParcelableArrayList(FORM_GIFTS);
@@ -113,8 +116,11 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
                 Profile.Gifts gifts = new Profile.Gifts();
                 gifts.addAll(parcelableGifts);
 
-                setUserData(savedInstanceState.getInt(USER_ID, 0),
-                        parcelableArrayList, gifts, giftsCount);
+                setUserData(
+                        savedInstanceState.getString(USER_STATUS, Static.EMPTY),
+                        savedInstanceState.getInt(USER_ID, 0),
+                        parcelableArrayList, gifts, giftsCount
+                );
 
                 mListQuestionnaire.setSelection(savedInstanceState.getInt(POSITION, 0));
             }
@@ -167,6 +173,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         outState.putParcelableArrayList(FORM_GIFTS, mGifts);
         outState.putInt(POSITION, mListQuestionnaire.getFirstVisiblePosition());
         outState.putInt(GIFTS_COUNT, mGiftsCount);
+        outState.putString(USER_STATUS, mStatus);
     }
 
     @Override
@@ -245,13 +252,14 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
 
     protected abstract AbstractFormListAdapter createFormAdapter(Context context);
 
-    public void setUserData(int userId, LinkedList<FormItem> forms, Profile.Gifts gifts, int giftsCount) {
+    public void setUserData(String status, int userId, LinkedList<FormItem> forms, Profile.Gifts gifts, int giftsCount) {
+        mStatus = status;
         mUserId = userId;
         mForms = forms;
         mGifts = gifts;
         mGiftsCount = giftsCount;
 
-        mFormAdapter.setUserData(mForms);
+        mFormAdapter.setUserData(mStatus, mForms);
         mFormAdapter.notifyDataSetChanged();
         mGiftAdapter.getData().clear();
         for (Gift gift : gifts) {
@@ -296,16 +304,16 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         }).exec();
     }
 
-    private void setUserData(int userId, ArrayList<Parcelable> forms, Profile.Gifts gifts, int giftsCount) {
+    private void setUserData(String status, int userId, ArrayList<Parcelable> forms, Profile.Gifts gifts, int giftsCount) {
         LinkedList<FormItem> llForms = new LinkedList<>();
         for (Parcelable form : forms) {
             llForms.add((FormItem) form);
         }
-        setUserData(userId, llForms, gifts, giftsCount);
+        setUserData(status, userId, llForms, gifts, giftsCount);
     }
 
     private void setUserDataPending(Profile user) {
-        setUserData(user.uid, user.forms, user.gifts, user.gifts.count);
+        setUserData(user.getStatus(), user.uid, user.forms, user.gifts, user.gifts.count);
     }
 
     public int getUserId() {

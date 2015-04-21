@@ -31,7 +31,7 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
     }
 
     @Override
-    protected LinkedList<FormItem> prepareForm(LinkedList<FormItem> forms) {
+    protected LinkedList<FormItem> prepareForm(String status, LinkedList<FormItem> forms) {
         FormInfo formInfo = new FormInfo(App.getContext(), CacheProfile.sex, Profile.TYPE_OWN_PROFILE);
         forms.clear();
         if (CacheProfile.forms != null) {

@@ -119,7 +119,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (mProfileFormListAdapter != null) {
-                mProfileFormListAdapter.setUserData(CacheProfile.forms);
+                mProfileFormListAdapter.setUserData(CacheProfile.getStatus(), CacheProfile.forms);
                 mProfileFormListAdapter.notifyDataSetChanged();
             }
         }

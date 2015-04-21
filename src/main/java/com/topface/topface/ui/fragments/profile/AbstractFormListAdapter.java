@@ -30,11 +30,11 @@ public abstract class AbstractFormListAdapter extends BaseAdapter {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void setUserData(LinkedList<FormItem> forms) {
-        mForms = prepareForm(new LinkedList<>(forms));
+    public void setUserData(String status, LinkedList<FormItem> forms) {
+        mForms = prepareForm(status, new LinkedList<>(forms));
     }
 
-    protected abstract LinkedList<FormItem> prepareForm(LinkedList<FormItem> forms);
+    protected abstract LinkedList<FormItem> prepareForm(String status, LinkedList<FormItem> forms);
 
     public LinkedList<FormItem> getFormItems() {
         return mForms;

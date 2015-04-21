@@ -32,16 +32,12 @@ public class UserFormFragment extends AbstractFormFragment implements OnClickLis
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
-
         mEmptyFormLayout = (ViewGroup) root.findViewById(R.id.loEmptyForm);
-
         mAskToFillForm =
                 (Button) mEmptyFormLayout.findViewById(R.id.btnEmptyForm);
         mAskToFillForm.setOnClickListener(this);
-
         mPgb = (ProgressBar) mEmptyFormLayout.findViewById(R.id.pgbProgress);
         mSuccessText = (TextView) mEmptyFormLayout.findViewById(R.id.emptyFormSuccess);
-
         return root;
     }
 
@@ -58,8 +54,8 @@ public class UserFormFragment extends AbstractFormFragment implements OnClickLis
     }
 
     @Override
-    public void setUserData(int userId, LinkedList<FormItem> forms, Profile.Gifts gifts, int giftsCount) {
-        super.setUserData(userId, forms, gifts, giftsCount);
+    public void setUserData(String status, int userId, LinkedList<FormItem> forms, Profile.Gifts gifts, int giftsCount) {
+        super.setUserData(status, userId, forms, gifts, giftsCount);
         if (getFormAdapter().isFormEmpty()) {
             mEmptyFormLayout.setVisibility(View.VISIBLE);
         }

@@ -3,6 +3,9 @@ package com.topface.topface.ui.fragments.profile;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.topface.topface.App;
+import com.topface.topface.R;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
 
 import java.util.Iterator;
@@ -15,8 +18,21 @@ public class UserFormListAdapter extends AbstractFormListAdapter {
     }
 
     @Override
-    protected LinkedList<FormItem> prepareForm(LinkedList<FormItem> forms) {
-        return removeEmptyForms((LinkedList<FormItem>) forms.clone());
+    protected LinkedList<FormItem> prepareForm(String status, LinkedList<FormItem> forms) {
+        LinkedList<FormItem> result = new LinkedList<>();
+        if (!TextUtils.isEmpty(status)) {
+            FormItem statusItem = new FormItem(R.string.edit_status, status, FormItem.STATUS) {
+                @Override
+                public void copy(FormItem formItem) {
+                    super.copy(formItem);
+                    CacheProfile.setStatus(formItem.value);
+                }
+            };
+            statusItem.setTextLimitInterface(new FormItem.DefaultTextLimiter(App.getAppOptions().getUserStatusMaxLength()));
+            result.add(statusItem);
+        }
+        result.addAll(removeEmptyForms((LinkedList<FormItem>) forms.clone()));
+        return result;
     }
 
     @Override
