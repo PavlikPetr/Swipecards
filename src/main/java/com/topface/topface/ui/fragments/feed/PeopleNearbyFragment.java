@@ -1,11 +1,17 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
+import android.location.LocationManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGeo;
 import com.topface.topface.data.FeedListData;
@@ -34,6 +40,28 @@ import java.util.List;
 
 public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     protected View mEmptyFeedView;
+    private GeoLocationManager mGeoLocationManager;
+    private BroadcastReceiver mGeoStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (mGeoLocationManager.isGPSEnabled() || mGeoLocationManager.isNetworkEnabled()) {
+                mGeoLocationManager.startLocationListener();
+            }
+        }
+    };
+
+    @Override
+    public void onResume() {
+        getActivity().registerReceiver(mGeoStateReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        getActivity().unregisterReceiver(mGeoStateReceiver);
+        mGeoLocationManager.stopLocationListener();
+        super.onDestroy();
+    }
 
     @Override
     protected int[] getTypesForGCM() {
@@ -64,10 +92,21 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     protected void updateData(boolean isPullToRefreshUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
         mIsUpdating = true;
         onUpdateStart(isPullToRefreshUpdating || isHistoryLoad);
-        Location location = GeoLocationManager.getLastKnownLocation(getActivity());
+        if (mGeoLocationManager == null) {
+            mGeoLocationManager = new GeoLocationManager(getActivity()) {
+                @Override
+                public void onLocationChanged(Location location) {
+                    sendPeopleNearbyRequest(location, isHistoryLoad, makeItemsRead);
+                    Debug.log("", "Location Updated");
+                }
+            };
+        }
+        sendPeopleNearbyRequest(mGeoLocationManager.getLastKnownLocation(), isHistoryLoad, makeItemsRead);
+    }
+
+    private void sendPeopleNearbyRequest(Location location, final boolean isHistoryLoad, final boolean makeItemsRead) {
         if (location != null) {
             PeopleNearbyRequest request = new PeopleNearbyRequest(getActivity(), location.getLatitude(), location.getLongitude());
-
             request.callback(new DataApiHandler<FeedListData<FeedGeo>>() {
 
                 @Override
