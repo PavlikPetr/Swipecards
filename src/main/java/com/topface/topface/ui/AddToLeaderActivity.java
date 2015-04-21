@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -110,7 +111,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
             mAddPhotoHelper = getAddPhotoHelper();
             mAddPhotoHelper.setOnResultHandler(mHandler);
             TakePhotoDialog takePhotoDialog = (TakePhotoDialog) getSupportFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
-            if (CacheProfile.photo == null && takePhotoDialog == null ) {
+            if (CacheProfile.photo == null && takePhotoDialog == null) {
                 mAddPhotoHelper.showTakePhotoDialog(new PhotoTaker(mAddPhotoHelper, this), null);
             }
         }

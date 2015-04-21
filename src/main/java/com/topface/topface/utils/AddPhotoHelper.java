@@ -100,6 +100,35 @@ public class AddPhotoHelper {
         PATH_TO_FILE = StorageUtils.getCacheDirectory(mContext).getPath() + "/topface_profile/";
     }
 
+    public static void handlePhotoMessage(Message msg) {
+        if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
+            Photo photo = (Photo) msg.obj;
+            // ставим фото на аватарку только если она едиснтвенная
+            if (CacheProfile.photos.size() == 0) {
+                CacheProfile.photo = photo;
+            }
+            // добавляется фото в начало списка
+            CacheProfile.photos.addFirst(photo);
+            //Увеличиваем общее количество фотографий юзера
+            CacheProfile.totalPhotos += 1;
+            ArrayList<Photo> photosForAdd = new ArrayList<>();
+            photosForAdd.add(photo);
+            Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
+            intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photosForAdd);
+            LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+            // оповещаем всех об изменениях
+            CacheProfile.sendUpdateProfileBroadcast();
+            Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
+        } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
+            // если загрузка аватраки не завершилась успехом, то сбрасываем флаг
+            if (CacheProfile.photos.size() == 0) {
+                App.getConfig().getUserConfig().setUserAvatarAvailable(false);
+                App.getConfig().getUserConfig().saveConfig();
+            }
+            Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public void showProgressDialog() {
         if (mProgressView != null) {
             mProgressView.setVisibility(View.VISIBLE);
@@ -388,7 +417,6 @@ public class AddPhotoHelper {
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
 
-
     private void showErrorMessage(int codeError) {
         switch (codeError) {
             case ErrorCodes.INCORRECT_PHOTO_DATA:
@@ -441,35 +469,6 @@ public class AddPhotoHelper {
             }
         });
         takePhotoDialog.setPhotoTaker(photoTaker);
-    }
-
-    public static void handlePhotoMessage(Message msg) {
-        if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
-            Photo photo = (Photo) msg.obj;
-            // ставим фото на аватарку только если она едиснтвенная
-            if (CacheProfile.photos.size() == 0) {
-                CacheProfile.photo = photo;
-            }
-            // добавляется фото в начало списка
-            CacheProfile.photos.addFirst(photo);
-            //Увеличиваем общее количество фотографий юзера
-            CacheProfile.totalPhotos += 1;
-            ArrayList<Photo> photosForAdd = new ArrayList<>();
-            photosForAdd.add(photo);
-            Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photosForAdd);
-            LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
-            // оповещаем всех об изменениях
-            CacheProfile.sendUpdateProfileBroadcast();
-            Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
-        } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
-            // если загрузка аватраки не завершилась успехом, то сбрасываем флаг
-            if (CacheProfile.photos.size() == 0) {
-                App.getConfig().getUserConfig().setUserAvatarAvailable(false);
-                App.getConfig().getUserConfig().saveConfig();
-            }
-            Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
-        }
     }
 
     private BitmapFactory.Options getPhotoSizeByUri(Uri uri) {

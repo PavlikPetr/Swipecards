@@ -136,17 +136,17 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
         final String passwordConfirmation = mEdConfirmationField.getText().toString();
         final String oldPassword = mOldPassword.getText().toString();
         if (oldPassword.trim().length() <= 0) {
-            Toast.makeText(App.getContext(), R.string.enter_old_password, Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.enter_old_password, Toast.LENGTH_LONG);
         } else if (password.trim().length() <= 0) {
-            Toast.makeText(App.getContext(), R.string.enter_new_password, Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.enter_new_password, Toast.LENGTH_LONG);
         } else if (passwordConfirmation.trim().length() <= 0) {
             Utils.showToastNotification(R.string.enter_password_confirmation, Toast.LENGTH_LONG);
         } else if (!password.equals(passwordConfirmation)) {
-            Toast.makeText(App.getContext(), R.string.passwords_mismatched, Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.passwords_mismatched, Toast.LENGTH_LONG);
         } else if (!oldPassword.equals(mToken.getPassword())) {
-            Toast.makeText(App.getContext(), R.string.old_password_mismatched, Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.old_password_mismatched, Toast.LENGTH_LONG);
         } else if (oldPassword.equals(password)) {
-            Toast.makeText(App.getContext(), R.string.passwords_matched, Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.passwords_matched, Toast.LENGTH_LONG);
         } else {
             ChangePasswordRequest request = new ChangePasswordRequest(getActivity(), oldPassword, password);
             lock();
