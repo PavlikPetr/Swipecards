@@ -21,6 +21,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
 
@@ -63,8 +64,8 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
         sendContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    EasyTracker.sendEvent("InvitesPopup", "SendContactsBtnClick", "", 1L);
-                    sendInvitesRequest();
+                EasyTracker.sendEvent("InvitesPopup", "SendContactsBtnClick", "", 1L);
+                sendInvitesRequest();
                 if (isAdded()) {
                     ((BaseFragmentActivity) getActivity()).close(InvitesPopup.this);
                 }
@@ -98,7 +99,10 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
                 if (isPremium) {
                     EasyTracker.sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumTrue", (long) contacts.size());
                     EasyTracker.sendEvent("InvitesPopup", "PremiumReceived", "", (long) CacheProfile.getOptions().premium_period);
-                    Toast.makeText(App.getContext(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), Toast.LENGTH_LONG).show();
+                    if (!AuthToken.getInstance().getSocialNet()
+                            .equals(AuthToken.SN_FACEBOOK)) {
+                        Toast.makeText(App.getContext(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), Toast.LENGTH_LONG).show();
+                    }
                     CacheProfile.canInvite = false;
                 } else {
                     EasyTracker.sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumFalse", (long) contacts.size());
