@@ -1117,6 +1117,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 filterRequest.callback(new FilterHandler()).exec();
                 mNewFilter = true;
             }
+            // открываем чат с пользователем в случае успешной отправки подарка с экрана знакомств
+        } else if (resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
+            if (mDatingInstantMessageController != null) {
+                mDatingInstantMessageController.openChat(getActivity(), mCurrentUser);
+            }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }

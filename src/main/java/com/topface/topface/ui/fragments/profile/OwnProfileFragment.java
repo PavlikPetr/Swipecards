@@ -14,11 +14,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
 import com.topface.topface.ui.SettingsActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
@@ -29,8 +26,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.PhotoTaker;
 import com.topface.topface.utils.Utils;
-
-import java.util.ArrayList;
 
 /**
  * Created by kirussell on 18.03.14.
@@ -44,32 +39,7 @@ public class OwnProfileFragment extends AbstractProfileFragment {
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
-                Photo photo = (Photo) msg.obj;
-                // ставим фото на аватарку только если она едиснтвенная
-                if (CacheProfile.photos.size() == 0) {
-                    CacheProfile.photo = photo;
-                }
-                // добавляется фото в начало списка
-                CacheProfile.photos.addFirst(photo);
-                //Увеличиваем общее количество фотографий юзера
-                CacheProfile.totalPhotos += 1;
-                ArrayList<Photo> photosForAdd = new ArrayList<>();
-                photosForAdd.add(photo);
-                Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
-                intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photosForAdd);
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
-                // оповещаем всех об изменениях
-                CacheProfile.sendUpdateProfileBroadcast();
-                Utils.showToastNotification(R.string.photo_add_or, Toast.LENGTH_SHORT);
-            } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
-                // если загрузка аватраки не завершилась успехом, то сбрасываем флаг
-                if (CacheProfile.photos.size() == 0) {
-                    App.getConfig().getUserConfig().setUserAvatarAvailable(false);
-                    App.getConfig().getUserConfig().saveConfig();
-                }
-                Utils.showToastNotification(R.string.photo_add_error, Toast.LENGTH_SHORT);
-            }
+            AddPhotoHelper.handlePhotoMessage(msg);
         }
     };
 
