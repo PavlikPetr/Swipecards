@@ -22,6 +22,7 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.ChatLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
@@ -59,11 +60,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         }
     }
 
-    @Override
-    protected LoadController initLoadController() {
-        return new ChatLoadController();
-    }
-
     public static int getItemType(History item) {
         boolean output = (item.target == FeedDialog.OUTPUT_USER_MESSAGE);
         switch (item.type) {
@@ -76,6 +72,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             default:
                 return output ? T_USER : T_FRIEND;
         }
+    }
+
+    @Override
+    protected LoadController initLoadController() {
+        return new ChatLoadController();
     }
 
     @Override
@@ -440,7 +441,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     public void copyText(String text) {
         ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
         clipboard.setText(text);
-        Toast.makeText(mContext, R.string.general_msg_copied, Toast.LENGTH_SHORT).show();
+        Utils.showToastNotification(R.string.general_msg_copied, Toast.LENGTH_SHORT);
     }
 
     public void removeItem(int position) {

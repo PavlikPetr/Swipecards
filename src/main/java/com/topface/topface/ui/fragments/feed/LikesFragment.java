@@ -110,7 +110,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                     mRateController.onLike(item.user.id, 0, null);
                     ((FeedLike) item).mutualed = true;
                     getListAdapter().notifyDataSetChanged();
-                    Toast.makeText(getActivity(), R.string.general_mutual, Toast.LENGTH_SHORT).show();
+                    Utils.showToastNotification(R.string.general_mutual, Toast.LENGTH_SHORT);
                 }
             }
         }

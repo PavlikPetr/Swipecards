@@ -75,8 +75,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     public static final String FROM_AUTH = "com.topface.topface.AUTH";
     public static final String INTENT_EXIT = "EXIT";
     public static final String PAGE_SWITCH = "Page switch: ";
-
-    private Intent mPendingNextIntent;
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
         public void onProfileLink(int profileID) {
@@ -99,6 +97,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
             OfferwallsManager.startOfferwall(NavigationActivity.this);
         }
     };
+    private Intent mPendingNextIntent;
     private boolean mIsActionBarHidden;
     private View mContentFrame;
     private MenuFragment mMenuFragment;
@@ -420,7 +419,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 }
             }, 3000);
             mBackPressedOnce.set(true);
-            Toast.makeText(App.getContext(), R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT).show();
+            Utils.showToastNotification(R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT);
             isPopupVisible = false;
         } else {
             super.onBackPressed();

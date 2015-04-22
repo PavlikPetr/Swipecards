@@ -15,6 +15,7 @@ import com.topface.offerwall.publisher.TFOfferwallSDK;
 import com.topface.topface.R;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.offerwalls.supersonicads.SupersonicWallActivity;
 
 import java.util.Random;
@@ -43,8 +44,8 @@ public class OfferwallsManager {
     };
 
     public static final String SPONSORPAY_APP_ID = "11625";
-    private static final int SPONSORPAY_OFFERWALL_REQUEST_CODE = 856;
     public static final String SPONSORPAY_SECURITY_TOKEN = "0a4c64db64ed3c1ca14a5e5d81aaa23c";
+    private static final int SPONSORPAY_OFFERWALL_REQUEST_CODE = 856;
 
     private static String getOfferWallType() {
         return CacheProfile.getOptions().offerwall;
@@ -70,7 +71,7 @@ public class OfferwallsManager {
         offerwall = offerwall == null ? "" : offerwall;
 
         if (CacheProfile.uid <= 0) {
-            Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_SHORT).show();
+            Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
             return;
         }
 

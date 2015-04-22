@@ -136,17 +136,17 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
         final String passwordConfirmation = mEdConfirmationField.getText().toString();
         final String oldPassword = mOldPassword.getText().toString();
         if (oldPassword.trim().length() <= 0) {
-            Toast.makeText(App.getContext(), R.string.enter_old_password, Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.enter_old_password, Toast.LENGTH_LONG);
         } else if (password.trim().length() <= 0) {
-            Toast.makeText(App.getContext(), R.string.enter_new_password, Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.enter_new_password, Toast.LENGTH_LONG);
         } else if (passwordConfirmation.trim().length() <= 0) {
-            Toast.makeText(App.getContext(), R.string.enter_password_confirmation, Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.enter_password_confirmation, Toast.LENGTH_LONG);
         } else if (!password.equals(passwordConfirmation)) {
-            Toast.makeText(App.getContext(), R.string.passwords_mismatched, Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.passwords_mismatched, Toast.LENGTH_LONG);
         } else if (!oldPassword.equals(mToken.getPassword())) {
-            Toast.makeText(App.getContext(), R.string.old_password_mismatched, Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.old_password_mismatched, Toast.LENGTH_LONG);
         } else if (oldPassword.equals(password)) {
-            Toast.makeText(App.getContext(), R.string.passwords_matched, Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.passwords_matched, Toast.LENGTH_LONG);
         } else {
             ChangePasswordRequest request = new ChangePasswordRequest(getActivity(), oldPassword, password);
             lock();
@@ -154,7 +154,7 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
                 @Override
                 public void success(IApiResponse response) {
                     if (response.isCompleted()) {
-                        Toast.makeText(App.getContext(), R.string.passwords_changed, Toast.LENGTH_LONG).show();
+                        Utils.showToastNotification(R.string.passwords_changed, Toast.LENGTH_LONG);
                         mToken.saveToken(mToken.getUserSocialId(), mToken.getLogin(), password);
                         CacheProfile.onPasswordChanged(getContext());
                         mEdMainField.getText().clear();
@@ -168,7 +168,7 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
 
                 @Override
                 public void fail(int codeError, IApiResponse response) {
-                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                    Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                 }
 
                 @Override
@@ -192,7 +192,7 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
                 @Override
                 public void success(IApiResponse response) {
                     if (response.isCompleted()) {
-                        Toast.makeText(App.getContext(), R.string.confirmation_successfully_sent, Toast.LENGTH_LONG).show();
+                        Utils.showToastNotification(R.string.confirmation_successfully_sent, Toast.LENGTH_LONG);
                         App.sendProfileAndOptionsRequests();
                         mToken.saveToken(mToken.getUserSocialId(), email, mToken.getPassword());
                         App.getConfig().rebuildUserConfig(oldEmail);
@@ -205,7 +205,7 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
                     if (ErrorCodes.USER_ALREADY_REGISTERED == codeError) {
                         showLogoutPopup(email);
                     } else {
-                        Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                        Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                     }
                 }
 

@@ -42,6 +42,22 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
         return popup;
     }
 
+    public static boolean isApplicable() {
+        if (CacheProfile.canInvite) {
+            final SharedPreferences preferences = App.getContext().getSharedPreferences(
+                    Static.PREFERENCES_TAG_SHARED,
+                    Context.MODE_PRIVATE
+            );
+            long date_start = preferences.getLong(INVITE_POPUP_PREF_KEY, 1);
+            long date_now = System.currentTimeMillis();
+
+            if ((date_now - date_start) >= CacheProfile.getOptions().popup_timeout) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     protected void initViews(View root) {
         root.setClickable(true);
@@ -110,13 +126,13 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
                     EasyTracker.sendEvent("InvitesPopup", "PremiumReceived", "", (long) CacheProfile.getOptions().premium_period);
                     if (getActivity() != null) {
 
-                        Toast.makeText(getActivity(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), Toast.LENGTH_LONG).show();
+                        Utils.showToastNotification(Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), Toast.LENGTH_LONG);
                         CacheProfile.canInvite = false;
                         ((BaseFragmentActivity) getActivity()).close(InvitesPopup.this);
                     }
                 } else {
                     EasyTracker.sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumFalse", (long) contacts.size());
-                    Toast.makeText(getActivity(), getString(R.string.invalid_contacts), Toast.LENGTH_LONG).show();
+                    Utils.showToastNotification(getString(R.string.invalid_contacts), Toast.LENGTH_LONG);
                 }
             }
 
@@ -133,22 +149,6 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
                 }
             }
         }).exec();
-    }
-
-    public static boolean isApplicable() {
-        if (CacheProfile.canInvite) {
-            final SharedPreferences preferences = App.getContext().getSharedPreferences(
-                    Static.PREFERENCES_TAG_SHARED,
-                    Context.MODE_PRIVATE
-            );
-            long date_start = preferences.getLong(INVITE_POPUP_PREF_KEY, 1);
-            long date_now = System.currentTimeMillis();
-
-            if ((date_now - date_start) >= CacheProfile.getOptions().popup_timeout) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override

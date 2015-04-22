@@ -10,6 +10,7 @@ import com.topface.topface.R;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.BanFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarView;
 
 import java.util.Timer;
@@ -26,10 +27,8 @@ public class BanActivity extends TrackedFragmentActivity {
     public static final String INTENT_TYPE = "message_type";
     public static final String BANNING_TEXT_INTENT = "banning_intent";
     public static final String INTENT_FLOOD_TIME = "flood_time";
-
-    private static final long DEFAULT_FLOOD_WAIT_TIME = 60L;
     public static final String FLOOD = "flood";
-
+    private static final long DEFAULT_FLOOD_WAIT_TIME = 60L;
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
 
     @Override
@@ -90,7 +89,8 @@ public class BanActivity extends TrackedFragmentActivity {
                 }
             }, 3000);
             mBackPressedOnce.set(true);
-            Toast.makeText(this, R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT).show();
+            Utils.showToastNotification(R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT);
+
         } else {
             Intent intent = new Intent(getApplicationContext(), NavigationActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

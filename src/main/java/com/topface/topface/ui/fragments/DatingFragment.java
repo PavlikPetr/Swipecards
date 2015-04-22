@@ -78,6 +78,7 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
@@ -121,6 +122,24 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     };
     private DatingInstantMessageController mDatingInstantMessageController;
+    private BroadcastReceiver mOptionsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            UserConfig userConfig = App.getUserConfig();
+            /*
+            Если нет стандартного сообщения в конфиге, устанавливаем из опций
+             */
+            if (
+                    mDatingInstantMessageController != null &&
+                            TextUtils.isEmpty(userConfig.getDatingMessage())
+                    ) {
+                InstantMessageFromSearch message = CacheProfile.getOptions().instantMessageFromSearch;
+                mDatingInstantMessageController.setInstantMessageText(message.getText());
+                userConfig.setDatingMessage(message.getText());
+                userConfig.saveConfig();
+            }
+        }
+    };
     private Drawable singleMutual;
     private Drawable singleDelight;
     private Drawable doubleMutual;
@@ -180,27 +199,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         public void onPageScrollStateChanged(int arg0) {
         }
     };
-
-
-    private BroadcastReceiver mOptionsReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            UserConfig userConfig = App.getUserConfig();
-            /*
-            Если нет стандартного сообщения в конфиге, устанавливаем из опций
-             */
-            if (
-                    mDatingInstantMessageController != null &&
-                            TextUtils.isEmpty(userConfig.getDatingMessage())
-                    ) {
-                InstantMessageFromSearch message = CacheProfile.getOptions().instantMessageFromSearch;
-                mDatingInstantMessageController.setInstantMessageText(message.getText());
-                userConfig.setDatingMessage(message.getText());
-                userConfig.saveConfig();
-            }
-        }
-    };
-
     private boolean mNewFilter;
     private OnUsersListEventsListener mSearchListener = new OnUsersListEventsListener() {
         @Override
@@ -1234,7 +1232,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         @Override
         public void fail(int codeError, IApiResponse response) {
             showEmptySearchDialog();
-            Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_LONG);
         }
 
         @Override

@@ -516,8 +516,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         History item = mAdapter.getItem(position);
         mAnimatedAdapter.decrementAnimationAdapter(mAdapter.getCount());
         if (item != null && (item.id == null || item.isFake())) {
-            Toast.makeText(getActivity(), R.string.cant_delete_fake_item,
-                    Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.cant_delete_fake_item, Toast.LENGTH_LONG);
             return;
         } else if (item == null) {
             return;
@@ -890,9 +889,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             return false;
         }
         if (editText.length() > mMaxMessageSize) {
-            Toast.makeText(getActivity(),
-                    String.format(getString(R.string.message_too_long), mMaxMessageSize),
-                    Toast.LENGTH_SHORT).show();
+            Utils.showToastNotification(String.format(getString(R.string.message_too_long), mMaxMessageSize), Toast.LENGTH_SHORT);
             return false;
         }
         editText.clear();
@@ -940,7 +937,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     return;
                 }
                 if (mAdapter != null && cancelable) {
-                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                    Utils.showErrorMessage();
                     mAdapter.showRetrySendMessage(messageItem, messageRequest);
                 }
             }
@@ -1091,8 +1088,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                 createIntent(mUserId, mUser.photosCount, mUser.photo, getActivity());
                         startActivity(profileIntent);
                     } else {
-                        Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
-                                Toast.LENGTH_LONG).show();
+                        Utils.showToastNotification(R.string.user_deleted_or_banned, Toast.LENGTH_LONG);
                     }
                 }
                 return true;

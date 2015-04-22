@@ -26,6 +26,7 @@ import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.PhotoTaker;
+import com.topface.topface.utils.Utils;
 
 /**
  * Created by kirussell on 18.03.14.

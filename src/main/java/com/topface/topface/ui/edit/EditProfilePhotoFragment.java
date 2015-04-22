@@ -58,26 +58,6 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
 
     private EditProfileGridAdapter mPhotoGridAdapter;
     private int mLastSelectedAsMainId;
-    private int mSelectedAsMainId;
-
-    private GridViewWithHeaderAndFooter mPhotoGridView;
-    private Photos mPhotoLinks;
-
-    private AddPhotoHelper mAddPhotoHelper;
-
-    private View mGridFooterView;
-
-    private ViewFlipper mViewFlipper;
-    private View mLoadingLocker;
-    private boolean mOperationsFinished = true;
-    private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (position == 0) {
-                mViewFlipper.setDisplayedChild(1);
-            }
-        }
-    };
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -103,7 +83,7 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                 CacheProfile.totalPhotos += 1;
 
                 mPhotoLinks.addFirst(photo);
-                Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
+                Utils.showToastNotification(R.string.photo_add_or, Toast.LENGTH_SHORT);
                 if (activity == null) {
                     Intent intent = new Intent(CacheProfile.PROFILE_UPDATE_ACTION);
                     LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
@@ -111,7 +91,23 @@ public class EditProfilePhotoFragment extends AbstractEditFragment {
                     activity.setResult(Activity.RESULT_OK);
                 }
             } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
-                Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+                Utils.showToastNotification(R.string.photo_add_error, Toast.LENGTH_SHORT);
+            }
+        }
+    };
+    private int mSelectedAsMainId;
+    private GridViewWithHeaderAndFooter mPhotoGridView;
+    private Photos mPhotoLinks;
+    private AddPhotoHelper mAddPhotoHelper;
+    private View mGridFooterView;
+    private ViewFlipper mViewFlipper;
+    private View mLoadingLocker;
+    private boolean mOperationsFinished = true;
+    private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (position == 0) {
+                mViewFlipper.setDisplayedChild(1);
             }
         }
     };
