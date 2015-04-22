@@ -311,7 +311,7 @@ public class UserNotification {
     private void putTopLevelFragment(Intent parentIntent, Intent targetIntent) {
         String componentName = targetIntent.getComponent().getClassName();
         if (TextUtils.equals(componentName, ChatActivity.class.getCanonicalName())) {
-            FeedScreensIntent.equipMessageAllIntent(parentIntent);
+            FeedScreensIntent.equipNotificationIntent(parentIntent);
         }
     }
 

@@ -444,7 +444,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     @Override
     public void supportNavigateUpTo(Intent upIntent) {
-        if (!isTaskRoot()) {
+        if (!isTaskRoot() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             finish();
         } else {
             upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
