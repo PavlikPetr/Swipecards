@@ -2,6 +2,7 @@ package com.topface.topface.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -15,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -230,7 +232,7 @@ public class AddPhotoHelper {
                     } else {
                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
                         String filename = preferences.getString(FILENAME_CONST, "");
-                        if (!filename.isEmpty()) {
+                        if (!TextUtils.isEmpty(filename)) {
                             File outputDirectory = new File(PATH_TO_FILE);
                             //noinspection ResultOfMethodCallIgnored
                             if (outputDirectory.exists()) {
@@ -444,6 +446,20 @@ public class AddPhotoHelper {
             }
         });
         takePhotoDialog.setPhotoTaker(photoTaker);
+        takePhotoDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                setOnResultHandler(new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        super.handleMessage(msg);
+                        if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
+                            handlePhotoMessage(msg);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     public static void handlePhotoMessage(Message msg) {
@@ -465,14 +481,14 @@ public class AddPhotoHelper {
             // оповещаем всех об изменениях
             CacheProfile.sendUpdateProfileBroadcast();
             Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
-            } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
+        } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
             // если загрузка аватраки не завершилась успехом, то сбрасываем флаг
-             if (CacheProfile.photos.size() == 0) {
+            if (CacheProfile.photos.size() == 0) {
                 App.getConfig().getUserConfig().setUserAvatarAvailable(false);
                 App.getConfig().getUserConfig().saveConfig();
-             }
-            Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
             }
+            Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static class PhotoNotificationListener implements UserNotificationManager.NotificationImageListener {
