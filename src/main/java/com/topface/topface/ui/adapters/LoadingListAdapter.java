@@ -59,7 +59,6 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
 
     @Override
     public int getCount() {
-
         return mData != null ? mData.size() : 0;
     }
 
