@@ -43,8 +43,10 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     private BroadcastReceiver mGeoStateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (mGeoLocationManager.isGPSEnabled() || mGeoLocationManager.isNetworkEnabled()) {
+            if (mGeoLocationManager.getEnabledProvider() != GeoLocationManager.NavigationType.DISABLE) {
                 mGeoLocationManager.startLocationListener();
+            } else {
+                mGeoLocationManager.stopLocationListener();
             }
         }
     };
@@ -94,10 +96,8 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         if (mGeoLocationManager == null) {
             mGeoLocationManager = new GeoLocationManager(getActivity()) {
                 @Override
-                public void onLocationChanged(Location location) {
+                public void onUserLocationChanged(Location location) {
                     sendPeopleNearbyRequest(location, isHistoryLoad, makeItemsRead);
-                    //mGeoLocationManager.compareWithBestLocation(location);
-                    //Debug.log("", "Location Updated");
                 }
             };
         }

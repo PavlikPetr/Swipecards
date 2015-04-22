@@ -1,31 +1,40 @@
 package com.topface.topface.utils.geo;
 
 import android.content.Context;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
 
+/**
+ * При запуске экрана "Ближайших" проверяем какие из провайдеров включены у пользователя.
+ * На каждый из обнаруженных регистрируем лисентер в PeopleNearbyFragment. Отписываем  лисентеры
+ * там же, если выходим из экрана ближайших или находясь в этом экране выключаем ВСЮ навигацию
+ */
 public abstract class GeoLocationManager {
 
-    private static final int UPDATE_TIME = 20000;// * 60 * 2;;
-    private static final float UPDATE_RANGE = 0.5f;
+    private static final int UPDATE_TIME = 1000 * 60 * 2;
+    private static final float UPDATE_RANGE = 10f;
     private LocationManager mLocationManager;
     private Location mBestLocation;
+
+    public enum NavigationType {GPS_ONLY, NETWORK_ONLY, ALL, DISABLE}
 
     private ChangeLocationListener mNetworkLocationListener = new ChangeLocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-            compareWithBestLocation("Network", location);
+            Debug.log(this, "Receive location from GPS");
+            compareWithBestLocation(location);
+            onUserLocationChanged(location);
         }
     };
 
     private ChangeLocationListener mGPSLocationListener = new ChangeLocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-            compareWithBestLocation("GPS", location);
+            Debug.log(this, "Receive location from Network");
+            onUserLocationChanged(location);
+            compareWithBestLocation(location);
         }
     };
 
@@ -34,57 +43,67 @@ public abstract class GeoLocationManager {
         startLocationListener();
     }
 
-    public void compareWithBestLocation(String s, Location location) {
-        if (location == null) {
-            return;
-        }
-        long oldLocationTime = mBestLocation.getTime();
-        long currentLOcationTime = location.getTime();
-        float oldLocationAccuracy = mBestLocation.getAccuracy();
-        float currentLOcationAccuracy = location.getAccuracy();
-        ///"|||oldLocationTime "+oldLocationTime+"|||currentLOcationTime " + currentLOcationTime
-        Debug.log("", "Location Updated " + s + "|||distance " + mBestLocation.distanceTo(location) +
-                "|||oldLocationAccuracy " + oldLocationAccuracy + "|||currentLOcationAccuracy " + currentLOcationAccuracy);
-    }
-
     public Location getLastKnownLocation() {
         mBestLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         return mBestLocation;
     }
 
-    public boolean isGPSEnabled() {
+    private boolean isGPSEnabled() {
         return mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
-    public boolean isNetworkEnabled() {
+    private boolean isNetworkEnabled() {
         return mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
-    private String getBestProvider() {
+    public NavigationType getEnabledProvider() {
         if (isGPSEnabled() && isNetworkEnabled()) {
-            Criteria criteria = new Criteria();
-            criteria.setAccuracy(Criteria.ACCURACY_MEDIUM);
-            return mLocationManager.getBestProvider(criteria, true);
-        } else if (isGPSEnabled()) {
-            return LocationManager.GPS_PROVIDER;
+            return NavigationType.ALL;
         } else if (isNetworkEnabled()) {
-            return LocationManager.NETWORK_PROVIDER;
+            return NavigationType.NETWORK_ONLY;
+        } else if (isGPSEnabled()) {
+            return NavigationType.GPS_ONLY;
+        } else {
+            return NavigationType.DISABLE;
         }
-        return null;
     }
 
-    protected abstract void onLocationChanged(Location location);
+    protected abstract void onUserLocationChanged(Location location);
 
     public void startLocationListener() {
-        String provider = getBestProvider();
-        if (!TextUtils.isEmpty(provider)) {
-            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, UPDATE_TIME, UPDATE_RANGE, mNetworkLocationListener);
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, UPDATE_TIME, UPDATE_RANGE, mGPSLocationListener);
+        Debug.log(this, "Geoloc attach listeners");
+        switch (getEnabledProvider()) {
+            case ALL:
+            case GPS_ONLY:
+                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, UPDATE_TIME, UPDATE_RANGE, mGPSLocationListener);
+                if (getEnabledProvider() != NavigationType.ALL) {
+                    break;
+                }
+            case NETWORK_ONLY:
+                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, UPDATE_TIME, UPDATE_RANGE, mNetworkLocationListener);
+                break;
         }
+
     }
 
     public void stopLocationListener() {
+        Debug.log(this, "Geoloc remove listeners");
         mLocationManager.removeUpdates(mNetworkLocationListener);
         mLocationManager.removeUpdates(mGPSLocationListener);
+    }
+
+
+    private Location compareWithBestLocation(Location location) {
+        if (location == null) {
+            return mBestLocation;
+        }
+        //GPS точку принимаем только в том случае если ее точность больше чем у Network
+        if (location.getProvider().equals(LocationManager.GPS_PROVIDER) &&
+                mBestLocation.getAccuracy() > location.getAccuracy()) {
+            mBestLocation = location;
+            return mBestLocation;
+        } else {
+            return mBestLocation;
+        }
     }
 }
