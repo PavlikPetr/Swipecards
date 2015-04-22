@@ -808,4 +808,11 @@
 
     <string name="add_leader_hint">Ваше приветствие&#8230;</string>
     <string name="more">еще</string>
+
+    <!--invite frends by sms-->
+    <string name="invite">Пригласить</string>
+    <string name="sent">Отправлено</string>
+    <string name="premium_for_invitations">Пригласите 3 друга и после их регистрации в Topface вы получите вип на сутки!</string>
+    <string name="sms_invite_title">Получите вип на сутки!</string>
+    <string name="sms_invite_subtitle">Получите вип на сутки!</string>
 </resources>

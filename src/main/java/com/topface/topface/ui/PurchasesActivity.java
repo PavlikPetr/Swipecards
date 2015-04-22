@@ -25,6 +25,9 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
+import java.util.List;
+import java.util.Random;
+
 public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
     /**
@@ -214,6 +217,19 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
                 getFragment().forceBonusScreen(mBonusRedirect.getText());
     }
 
+    private boolean showSMSInvite() {
+        /*
+        First check if redirection to topface offers is on. If no check redirection to bonus tab
+         */
+        if ((isTopfaceOfferwallRedirectEnabled() && mTopfaceOfferwallRedirect.isExpOnClose()) ||
+                mTopfaceOfferwallRedirect.isCompleted()) {
+            return false;
+        }
+        return mBonusRedirect != null &&
+                mBonusRedirect.isEnabled() &&
+                getFragment().forceBonusScreen(mBonusRedirect.getText());
+    }
+
     private static boolean isTopfaceOfferwallRedirectEnabled() {
         return mTopfaceOfferwallRedirect != null && mTopfaceOfferwallRedirect.isEnabled();
     }
@@ -240,4 +256,22 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
             super.onBackPressed();
         }
     }
+
+    private int getRandomPosByProbability(List<Integer> probabilityArray) {
+        int sum = 0;
+        for (int value : probabilityArray) {
+            sum += value;
+        }
+        int randomValue = new Random().nextInt(sum);
+        sum = 0;
+        for (int i = 0; i < probabilityArray.size(); i++) {
+            int currentValue = probabilityArray.get(i);
+            if (randomValue >= sum && randomValue < probabilityArray.get(i)) {
+                return i;
+            }
+            sum += currentValue;
+        }
+        return probabilityArray.size() - 1;
+    }
+
 }

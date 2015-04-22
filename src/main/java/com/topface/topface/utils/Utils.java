@@ -358,5 +358,4 @@ public class Utils {
         }
         return ConnectionChangeReceiver.getConnectionType();
     }
-
 }
