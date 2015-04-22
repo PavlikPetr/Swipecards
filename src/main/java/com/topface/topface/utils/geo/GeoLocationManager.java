@@ -2,7 +2,9 @@ package com.topface.topface.utils.geo;
 
 import android.content.Context;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 
 import com.topface.framework.utils.Debug;
 
@@ -17,7 +19,6 @@ public abstract class GeoLocationManager {
     private static final float UPDATE_RANGE = 10f;
     private LocationManager mLocationManager;
     private Location mBestLocation;
-
     public enum NavigationType {GPS_ONLY, NETWORK_ONLY, ALL, DISABLE}
 
     private ChangeLocationListener mNetworkLocationListener = new ChangeLocationListener() {
@@ -106,4 +107,27 @@ public abstract class GeoLocationManager {
             return mBestLocation;
         }
     }
+
+    /**
+     * Пустая реализация интерфейсa. Избавляемся от неиспользуемых методов.
+     */
+    private abstract class ChangeLocationListener implements LocationListener {
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            Debug.log(GeoLocationManager.class, "Enabled " + provider);
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            Debug.log(GeoLocationManager.class, "Disabled " + provider);
+        }
+    }
+
 }

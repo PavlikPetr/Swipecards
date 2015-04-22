@@ -43,6 +43,9 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     private BroadcastReceiver mGeoStateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (mGeoLocationManager == null) {
+                return;
+            }
             if (mGeoLocationManager.getEnabledProvider() != GeoLocationManager.NavigationType.DISABLE) {
                 mGeoLocationManager.startLocationListener();
             } else {
