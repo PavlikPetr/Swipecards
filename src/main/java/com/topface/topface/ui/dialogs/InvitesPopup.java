@@ -48,7 +48,8 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
             ((NavigationActivity) activity).setPopupVisible(true);
         }
         TextView invitesTitle = (TextView) root.findViewById(R.id.invitesTitle);
-        invitesTitle.setText(R.string.get_vip_free);
+        int neededContact = CacheProfile.getOptions().contacts_count;
+        invitesTitle.setText(Utils.getQuantityString(R.plurals.get_vip_for_invites_plurals, neededContact, neededContact));
         if (getArguments() != null) {
             contacts = getArguments().getParcelableArrayList(CONTACTS);
         } else {
