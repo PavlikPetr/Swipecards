@@ -45,7 +45,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     private static final String APP_START_LABEL_FORM = "gcm_%d_%s";
     public ActionBarView actionBarView;
     private boolean mIndeterminateSupported = false;
-    private LinkedList<ApiRequest> mRequests = new LinkedList<>();
+    private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
     private BroadcastReceiver mReauthReceiver;
     private boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
@@ -452,7 +452,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     @Override
     public void supportNavigateUpTo(Intent upIntent) {
-        if (!isTaskRoot() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (!isTaskRoot()) {
             finish();
         } else {
             upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
