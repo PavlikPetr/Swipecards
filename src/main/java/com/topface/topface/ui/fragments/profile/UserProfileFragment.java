@@ -125,6 +125,9 @@ public class UserProfileFragment extends AbstractProfileFragment {
     public void onResume() {
         super.onResume();
         getUserProfile(mProfileId);
+        if (CacheProfile.premium) {
+            setIsChatAvailable(true);
+        }
         mOutsideView.setVisibility(View.GONE);
     }
 
