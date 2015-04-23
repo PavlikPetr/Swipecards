@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.Static;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
@@ -106,8 +107,13 @@ public class SequencedStartAction implements IStartAction {
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mActivity.isRestricted();
-                        action.callOnUi();
+                        boolean running = true;
+                        if (mActivity instanceof BaseFragmentActivity) {
+                            running = ((BaseFragmentActivity) mActivity).isRunning();
+                        }
+                        if (running && !mActivity.isFinishing()) {
+                            action.callOnUi();
+                        }
                     }
                 });
             }

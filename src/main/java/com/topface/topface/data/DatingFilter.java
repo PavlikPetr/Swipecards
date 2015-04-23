@@ -18,8 +18,8 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
 
     public static final String DATING_ONLY_ONLINE_FIELD = "datingOnline";
 
-    public static final int MAX_AGE = 80;
-    public static final int MIN_AGE = 16;
+    public static int MAX_AGE = 99;
+    public static int MIN_AGE = 16;
     public static final int DIFF_AGE = 4;
 
     public City city = new City();

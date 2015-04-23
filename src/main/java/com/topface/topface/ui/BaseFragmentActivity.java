@@ -56,6 +56,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             onProfileUpdated();
         }
     };
+    private boolean mRunning;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,10 +83,17 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     public void onStart() {
         super.onStart();
+        mRunning = true;
         //Странный глюк на некоторых устройствах (воспроизводится например на HTC One V),
         // из-за которого показывается лоадер в ActionBar
         // этот метод можно использовать только после setContent
         setSupportProgressBarIndeterminateVisibility(false);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mRunning = false;
     }
 
     @Override
@@ -451,5 +459,9 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             startActivity(upIntent);
             finish();
         }
+    }
+
+    public boolean isRunning() {
+        return mRunning;
     }
 }
