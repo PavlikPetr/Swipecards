@@ -620,6 +620,10 @@
     <string name="google_sign_in_account_title">No tienes agregada la cuenta Google, tienes que conectar, si quieres recibir avisos.</string>
     <string name="google_sign_in_account_button">Conectar</string>
     <string name="google_unavailable_services_title">Lamentablemente, los avisos no se soportan en tu dispositivo.</string>
+    <string name="receive_message_notification">Recibir notificación\nsobre mensaje nuevo</string>
+    <string name="receive_mutual_notification">Recibir notificación\nsobre simpatía mutua nueva</string>
+    <string name="receive_sympathy_notification">Recibir notificación\nsobre simpatía nueva</string>
+    <string name="receive_guest_notification">Recibir notificación\nsobre visitante nuevo</string>
     <string name="on_phone">Al teléfono</string>
     <string name="on_mail">A e-mail</string>
     <string name="add_leader_hint">Tu saludo…</string>

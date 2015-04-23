@@ -41,7 +41,7 @@
     <string name="locking_screen_advice">Respond to all incoming likes</string>
     <string name="locking_screen_advice2">Get rid of all the limits</string>
     <string name="general_bookmarks_is_deleted">User deleted from favorites</string>
-    <string name="general_blacklist_is_deleted">User is deleted from the blacklist</string>
+    <string name="general_blacklist_is_deleted">User is deleted from the Blacklist</string>
     <string name="invite_friends_title_short">Invite all friends to Topface</string>
     <string name="general_bookmarks_add_short">To favorites</string>
     <string name="general_complaint">Complain</string>
@@ -52,7 +52,7 @@
     <string name="dating_prev_button_ext">Previous</string>
     <string name="dating_skip_button_ext">Next</string>
     <string name="profile_services">Services</string>
-    <string name="black_list_add">Add to the blacklist</string>
+    <string name="black_list_add">Add to the Blacklist</string>
     <string name="vip_invisible_mode">Invisibility mode</string>
     <string name="buying_profile_coins">Your account</string>
     <string name="vip_info_title">VIP-privileges</string>
@@ -70,8 +70,8 @@
     <string name="popup_version_message">Time to update your app version!</string>
     <string name="leaders_select_photo_info">Select the most impressive photo! You cannot select a photo with a low rating.</string>
     <string name="map_popup_address">Address</string>
-    <string name="black_list_info">You added someone to your blacklist. You can change this in your profile or in your VIP-status settings.</string>
-    <string name="black_list_activation">Activate your VIP-status and use the blacklist.</string>
+    <string name="black_list_info">You\'ve added someone to your Blacklist. You can change this in your profile or in your VIP-status settings.</string>
+    <string name="black_list_activation">Activate your VIP-status and use the Blacklist.</string>
     <string name="buying_total">Total</string>
     <string name="we_dont_detect_your_city">To find people nearby, we need to know where you are. Please indicate your city.</string>
     <string name="confirm_email">Please confirm the email</string>
@@ -320,8 +320,8 @@
     <string name="vip_profile_bg">Background image</string>
     <string name="vip_status">VIP-status</string>
     <string name="black_list_title">Blacklist</string>
-    <string name="black_list_empty">Your blacklist is empty.</string>
-    <string name="black_list_delete">Delete from the blacklist</string>
+    <string name="black_list_empty">Your Blacklist is empty.</string>
+    <string name="black_list_delete">Delete from the Blacklist</string>
     <string name="vip_buy_vip">Purchase VIP-status</string>
     <string name="vip_state_off">Your VIP-status is not activated.</string>
     <string name="vip_info_guest">Find out who got interested in you - view your guests!</string>
@@ -480,7 +480,7 @@
     <string name="general_msg">Message</string>
     <string name="notifications">Notifications</string>
     <string name="general_no_notifications">Unfortunately, the notifications on your device are not available</string>
-    <string name="black_list_add_short">To the blacklist</string>
+    <string name="black_list_add_short">To the Blacklist</string>
     <string name="confirm_email_for_dating">We are against spam. Please confirm your email, so that you can meet people in Topface!</string>
     <string name="send_confirm_link">Send a link for confirmation</string>
     <string name="complain_type_swearing_msg">Offensive behavior, improper language, threats</string>
@@ -621,6 +621,11 @@
     <string name="google_sign_in_account_title">Your Google account has not been added. You have to sign in, if you want to receive reminders.</string>
     <string name="google_sign_in_account_button">Sign in</string>
     <string name="google_unavailable_services_title">Unfortunately, the remainders are not available on your device.</string>
+    <string name="receive_message_notification">Get notified about\na new message</string>
+    <string name="receive_mutual_notification">Get notified about\na new mutual like</string>
+    <string name="receive_sympathy_notification">Get notified about\na new like</string>
+    <string name="receive_rate_notification">delete</string>
+    <string name="receive_guest_notification">Get notified about\na new guest</string>
     <string name="on_phone">To mobile</string>
     <string name="on_mail">To email</string>
     <string name="add_leader_hint">Your greeting…</string>
