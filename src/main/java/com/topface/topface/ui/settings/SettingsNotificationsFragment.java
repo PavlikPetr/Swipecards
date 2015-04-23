@@ -286,7 +286,7 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
             public void fail(int codeError, IApiResponse response) {
                 if (getView() != null) {
                     setText(CacheProfile.notifications.get(notification.type), view);
-                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT);
+                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                 }
             }
 

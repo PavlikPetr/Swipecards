@@ -67,7 +67,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
 
                             @Override
                             public void fail(int codeError, IApiResponse response) {
-                                Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT);
+                                Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
