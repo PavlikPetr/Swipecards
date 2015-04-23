@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -55,9 +56,9 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     };
 
     @Override
-    public void onResume() {
+    public void onCreate(Bundle savedInstanceState) {
         getActivity().registerReceiver(mGeoStateReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
-        super.onResume();
+        super.onCreate(savedInstanceState);
     }
 
     @Override
