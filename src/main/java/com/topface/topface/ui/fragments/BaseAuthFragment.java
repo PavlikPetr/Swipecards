@@ -170,7 +170,9 @@ public abstract class BaseAuthFragment extends BaseFragment {
 
         if (whetherToShowRetrier(codeError)) {
             showRetrier();
-            mPassword.setTransformationMethod(new PasswordTransformationMethod());
+            if (mPassword != null) {
+                mPassword.setTransformationMethod(new PasswordTransformationMethod());
+            }
             hideProgress();
         } else {
             showButtons();

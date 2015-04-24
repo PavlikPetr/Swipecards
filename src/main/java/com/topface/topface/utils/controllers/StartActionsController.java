@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.BuildConfig;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 
 import java.util.LinkedList;
@@ -102,8 +103,13 @@ public class StartActionsController {
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mActivity.isRestricted();
-                action.callOnUi();
+                boolean running = true;
+                if (mActivity instanceof BaseFragmentActivity) {
+                    running = ((BaseFragmentActivity) mActivity).isRunning();
+                }
+                if (running && !mActivity.isFinishing()) {
+                    action.callOnUi();
+                }
             }
         });
         Debug.log(TAG, "===>process chosen action - " + action.toString());

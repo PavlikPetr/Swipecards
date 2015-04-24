@@ -79,17 +79,12 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUserConfig = App.getUserConfig();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         App.getOpenIabHelperManager().addOpenIabEventListener(getActivity(), this);
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
         App.getOpenIabHelperManager().removeOpenIabEventListener(this);
     }
 

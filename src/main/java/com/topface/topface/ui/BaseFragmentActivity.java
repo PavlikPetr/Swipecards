@@ -45,7 +45,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     private static final String APP_START_LABEL_FORM = "gcm_%d_%s";
     public ActionBarView actionBarView;
     private boolean mIndeterminateSupported = false;
-    private LinkedList<ApiRequest> mRequests = new LinkedList<>();
+    private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
     private BroadcastReceiver mReauthReceiver;
     private boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
@@ -56,6 +56,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
             onProfileUpdated();
         }
     };
+    private boolean mRunning;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,10 +83,17 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     public void onStart() {
         super.onStart();
+        mRunning = true;
         //Странный глюк на некоторых устройствах (воспроизводится например на HTC One V),
         // из-за которого показывается лоадер в ActionBar
         // этот метод можно использовать только после setContent
         setSupportProgressBarIndeterminateVisibility(false);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mRunning = false;
     }
 
     @Override
@@ -444,12 +452,16 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     @Override
     public void supportNavigateUpTo(Intent upIntent) {
-        if (!isTaskRoot() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (!isTaskRoot()) {
             finish();
         } else {
             upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(upIntent);
             finish();
         }
+    }
+
+    public boolean isRunning() {
+        return mRunning;
     }
 }

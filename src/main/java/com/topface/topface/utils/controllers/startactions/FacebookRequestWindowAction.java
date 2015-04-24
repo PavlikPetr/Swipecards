@@ -41,7 +41,7 @@ public class FacebookRequestWindowAction extends DailyPopupAction  {
     public boolean isApplicable() {
         return loginOrNotLogin() && isFacebook() && isValidFacebookRequestWindowSkip()
                 && isTimeoutEnded(CacheProfile.getOptions().facebookInviteFriends.minDelay,
-                getUserConfig().getFacebookRequestWondowShow());
+                getUserConfig().getFacebookRequestWindowShow());
     }
 
     @Override
@@ -71,32 +71,33 @@ public class FacebookRequestWindowAction extends DailyPopupAction  {
     }
 
     private void buildRequestWindow() {
-        Session session;
-        session = Session.getActiveSession();
+        Session session = Session.getActiveSession();
         if (session == null) {
             session = Session.openActiveSessionFromCache(getContext());
         }
-        Bundle params = new Bundle();
-        params.putString("message", getContext().getResources().getString(R.string.go_tf));
-        WebDialog.RequestsDialogBuilder dialogBuilder =
-                new WebDialog.RequestsDialogBuilder(getContext(), session, params);
-        dialogBuilder.setOnCompleteListener(new WebDialog.OnCompleteListener() {
-            @Override
-            public void onComplete(Bundle bundle, FacebookException e) {
-                if (e instanceof FacebookOperationCanceledException) {
-                    if (mOnNextActionListener != null) {
-                        mOnNextActionListener.onNextAction();
+        if (session != null) {
+            Bundle params = new Bundle();
+            params.putString("message", getContext().getResources().getString(R.string.go_tf));
+            WebDialog.RequestsDialogBuilder dialogBuilder =
+                    new WebDialog.RequestsDialogBuilder(getContext(), session, params);
+            dialogBuilder.setOnCompleteListener(new WebDialog.OnCompleteListener() {
+                @Override
+                public void onComplete(Bundle bundle, FacebookException e) {
+                    if (e instanceof FacebookOperationCanceledException) {
+                        if (mOnNextActionListener != null) {
+                            mOnNextActionListener.onNextAction();
+                        }
+                        getUserConfig().setFacebookRequestSkip(getUserConfig().getFacebookRequestSkip() + 1);
+                    } else {
+                        //в bundle id запроса и id пользователей которым были посланы реквесты.
+                        InviteUniqueStatistics.sendFacebookInvites(bundle.keySet().size() - 1);
+                        getUserConfig().setFacebookRequestSkip(CacheProfile.getOptions().facebookInviteFriends.maxAttempts + 1);
+                        sendFacebooknInvitesRequest(getFriendsId(bundle));
                     }
-                    getUserConfig().setFacebookRequestSkip(getUserConfig().getFacebookRequestSkip() + 1);
-                } else {
-                    //в bundle id запроса и id пользователей которым были посланы реквесты.
-                    InviteUniqueStatistics.sendFacebookInvites(bundle.keySet().size() - 1);
-                    getUserConfig().setFacebookRequestSkip(CacheProfile.getOptions().facebookInviteFriends.maxAttempts + 1);
-                    sendFacebooknInvitesRequest(getFriendsId(bundle));
                 }
-            }
-        });
-        dialogBuilder.build().show();
+            });
+            dialogBuilder.build().show();
+        }
     }
 
     private void sendFacebooknInvitesRequest(ArrayList<String> friendsId) {

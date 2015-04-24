@@ -208,7 +208,7 @@ public class UserConfig extends AbstractConfig {
      *
      * @return last time
      */
-    public long getFacebookRequestWondowShow() {
+    public long getFacebookRequestWindowShow() {
         return getLongField(getSettingsMap(), FACEBOOK_REQUESTS_DIALOG_TIME);
     }
 

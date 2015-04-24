@@ -178,6 +178,8 @@ public class AppOptions extends AbstractData {
             userHeightMax = json.optInt("userHeightMax", 999);
             userAgeMin = json.optInt("userAgeMin", 16);
             userAgeMax = json.optInt("userAgeMax", 99);
+            DatingFilter.MIN_AGE = userAgeMin;
+            DatingFilter.MAX_AGE = userAgeMax;
         }
     }
 

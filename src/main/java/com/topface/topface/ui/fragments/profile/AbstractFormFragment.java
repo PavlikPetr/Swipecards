@@ -200,16 +200,18 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
             int giftsCount = mGiftsCount <= 0 ? mGiftAdapter.getCount() : mGiftsCount;
             int viewsNumber = mGiftsHeader.getChildCount();
             for (int i = (giftsCount < mVisibleGiftsNumber ? giftsCount : mVisibleGiftsNumber) - 1; i >= 0; i--) {
-                View giftView;
-                if (viewsNumber > i) {
-                    giftView = mGiftAdapter.getView(i, mGiftsHeader.getChildAt(i), mGiftsHeader);
-                } else {
-                    giftView = mGiftAdapter.getView(i, null, mGiftsHeader);
-                    giftView.setLayoutParams(new ViewGroup.LayoutParams((int) mGiftSize, (int) mGiftSize));
-                }
+                if (i < mGiftAdapter.getCount()) {
+                    View giftView;
+                    if (viewsNumber > i) {
+                        giftView = mGiftAdapter.getView(i, mGiftsHeader.getChildAt(i), mGiftsHeader);
+                    } else {
+                        giftView = mGiftAdapter.getView(i, null, mGiftsHeader);
+                        giftView.setLayoutParams(new ViewGroup.LayoutParams((int) mGiftSize, (int) mGiftSize));
+                    }
 
-                if (giftView.getParent() == null) {
-                    mGiftsHeader.addView(giftView, 0);
+                    if (giftView.getParent() == null) {
+                        mGiftsHeader.addView(giftView, 0);
+                    }
                 }
             }
 
@@ -285,6 +287,8 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         giftsRequest.limit = mVisibleGiftsNumber;
         if (mGiftAdapter.getCount() > 0) {
             giftsRequest.from = mGiftAdapter.getItem(mGiftAdapter.getCount() - 1).gift.feedId;
+        } else {
+            giftsRequest.limit = mGiftsCount > 3*mVisibleGiftsNumber ? 3*mVisibleGiftsNumber : mGiftsCount;
         }
         registerRequest(giftsRequest);
         giftsRequest.callback(new DataApiHandler<FeedListData<FeedGift>>() {

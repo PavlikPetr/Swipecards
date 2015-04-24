@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="268dp"
     android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/edit_dialog_title"
-        style="@style/SelectorDialogTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true" />
 
     <TextView
         android:id="@+id/edit_dialog_limit"
@@ -17,7 +11,19 @@
         android:textSize="18sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        tools:text='1024/1024'/>
+
+    <TextView
+        android:id="@+id/edit_dialog_title"
+        style="@style/SelectorDialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/edit_dialog_limit"
+        android:maxLines="2"
+        android:ellipsize="end"
+        tools:text='Very long long text to fill all that gap and overlay on limit text'/>
 
     <View
         android:id="@+id/edit_dialog_title_divider"

@@ -13,6 +13,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedPhotoBlog;
+import com.topface.topface.data.FeedUser;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ad.NativeAd;
@@ -148,9 +149,12 @@ public class PhotoBlogListAdapter extends FeedAdapter<FeedPhotoBlog> {
         for (int i = 0; i < mSympathySentArray.size(); i++) {
             boolean isNeverUsed = true;
             for (int j = 0; j < currentData.size(); j++) {
-                if (currentData.get(j).user.id == mSympathySentArray.get(i)) {
-                    isNeverUsed = false;
-                    break;
+                FeedUser user = currentData.get(j).user;
+                if (user != null) {
+                    if (user.id == mSympathySentArray.get(i)) {
+                        isNeverUsed = false;
+                        break;
+                    }
                 }
             }
             if (isNeverUsed) {
