@@ -5,6 +5,16 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/edit_dialog_limit"
+        style="@style/SelectorDialogTitle"
+        android:textColor="@color/text_color_gray_transparent"
+        android:textSize="18sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        tools:text='1024/1024'/>
+
+    <TextView
         android:id="@+id/edit_dialog_title"
         style="@style/SelectorDialogTitle"
         android:layout_width="wrap_content"
@@ -14,16 +24,6 @@
         android:maxLines="2"
         android:ellipsize="end"
         tools:text='Very long long text to fill all that gap and overlay on limit text'/>
-
-    <TextView
-        android:id="@+id/edit_dialog_limit"
-        style="@style/SelectorDialogTitle"
-        android:textColor="@color/text_color_gray_transparent"
-        android:textSize="18sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        tools:text='1024/1024'/>
 
     <View
         android:id="@+id/edit_dialog_title_divider"
