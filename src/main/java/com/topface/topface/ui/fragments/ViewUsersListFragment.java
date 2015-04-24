@@ -41,6 +41,7 @@ import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -57,18 +58,6 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
 
     private UsersList<T> mUsersList;
     private PreloadManager<SearchUser> mPreloadManager;
-
-    private boolean mUpdateInProcess;
-    private int mLoadedCount;
-    private boolean mNeedMore;
-    private boolean mCanSendAlbumReq = true;
-    private T mCurrentUser;
-    private RateController mRateController;
-    private AtomicBoolean mFragmentPaused = new AtomicBoolean(false);
-    private boolean mDataReturnedOnce = false;
-
-    private boolean more = true;
-
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -78,6 +67,15 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
             }
         }
     };
+    private boolean mUpdateInProcess;
+    private int mLoadedCount;
+    private boolean mNeedMore;
+    private boolean mCanSendAlbumReq = true;
+    private T mCurrentUser;
+    private RateController mRateController;
+    private AtomicBoolean mFragmentPaused = new AtomicBoolean(false);
+    private boolean mDataReturnedOnce = false;
+    private boolean more = true;
     private String mLastFeedItemId;
 
     @Override
@@ -363,8 +361,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
                     FragmentActivity activity = getActivity();
                     if (activity != null) {
                         UsersList.log("load error: " + response.getErrorMessage());
-                        Toast.makeText(activity, App.getContext().getString(R.string.general_data_error),
-                                Toast.LENGTH_SHORT).show();
+                        Utils.showErrorMessage();
                     }
                     unlockControls();
                     onUpdateFail(isAddition);

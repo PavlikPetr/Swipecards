@@ -20,6 +20,7 @@ import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.BannersConfig;
 
 public class EditorBannersFragment extends BaseFragment implements View.OnClickListener {
@@ -95,7 +96,7 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
     }
 
     private void showCompleteMessage() {
-        Toast.makeText(getActivity(), getActivity().getString(R.string.editor_fragment_complete), Toast.LENGTH_SHORT).show();
+        Utils.showToastNotification(getActivity().getString(R.string.editor_fragment_complete), Toast.LENGTH_SHORT);
     }
 
     @Override

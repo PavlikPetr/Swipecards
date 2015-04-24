@@ -1,9 +1,14 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,9 +33,13 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.adapters.LeadersPhotoGridAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
+import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.views.LockerView;
+import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.IPhotoTakerWithDialog;
+import com.topface.topface.utils.PhotoTaker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
@@ -42,18 +51,35 @@ import java.util.List;
 
 public class AddToLeaderActivity extends BaseFragmentActivity implements View.OnClickListener {
 
+    public final static int ADD_TO_LEADER_ACTIVITY_ID = 1;
     private static final String PHOTOS = "PHOTOS";
     private static final String POSITION = "POSITION";
     private static final String SELECTED_POSITION = "SELECTED_POSITION";
-
-    public final static int ADD_TO_LEADER_ACTIVITY_ID = 1;
+    private static final String ALREADY_SHOWN = "ALREADY_SHOWN";
     private static final int MAX_SYMBOL_COUNT = 120;
+
+    private int mPosition;
+    private int mSelectedPosition;
+    private boolean mIsPhotoDialogShown;
 
     private GridViewWithHeaderAndFooter mGridView;
     private LockerView mLoadingLocker;
     private EditText mEditText;
     private View mGridFooterView;
     private LeadersPhotoGridAdapter mUsePhotosAdapter;
+    private AddPhotoHelper mAddPhotoHelper;
+    private BroadcastReceiver mUpdateProfileReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onProfileUpdated();
+        }
+    };
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            AddPhotoHelper.handlePhotoMessage(msg);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +90,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         addFooterView();
         mLoadingLocker = (LockerView) findViewById(R.id.llvLeaderSending);
         Photos photos = null;
-        int position = 0;
-        int selectedPosition = 0;
         if (savedInstanceState != null) {
             try {
                 photos = new Photos(
@@ -73,14 +97,51 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
             } catch (JSONException e) {
                 Debug.error(e);
             }
-            position = savedInstanceState.getInt(POSITION, 0);
-            selectedPosition = savedInstanceState.getInt(SELECTED_POSITION, 0);
+            mPosition = savedInstanceState.getInt(POSITION, 0);
+            mSelectedPosition = savedInstanceState.getInt(SELECTED_POSITION, 0);
+            mIsPhotoDialogShown = savedInstanceState.getBoolean(ALREADY_SHOWN);
         }
         mGridView.addHeaderView(getHeaderView());
         // add title to actionbar
         new ActionBarTitleSetterDelegate(getSupportActionBar()).setActionBarTitles(R.string.general_photoblog, null);
         // init grid view and create adapter
-        initPhotosGrid(photos, position, selectedPosition);
+        initPhotosGrid(photos, mPosition, mSelectedPosition);
+
+        if (!mIsPhotoDialogShown) {
+            mAddPhotoHelper = getAddPhotoHelper();
+            mAddPhotoHelper.setOnResultHandler(mHandler);
+            TakePhotoDialog takePhotoDialog = (TakePhotoDialog) getSupportFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
+            if (CacheProfile.photo == null && takePhotoDialog == null) {
+                mAddPhotoHelper.showTakePhotoDialog(new PhotoTaker(mAddPhotoHelper, this), null);
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+    }
+
+    @Override
+    protected void onProfileUpdated() {
+        super.onProfileUpdated();
+        initPhotosGrid(CacheProfile.photos, 0, 0);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:
+                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG:
+                    if (mAddPhotoHelper != null) {
+                        mAddPhotoHelper.showTakePhotoDialog(new PhotoTaker(mAddPhotoHelper, this), mAddPhotoHelper.processActivityResult(requestCode, resultCode, data, false));
+                    }
+                    break;
+            }
+        }
     }
 
     @Override
@@ -91,8 +152,9 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         } catch (JSONException e) {
             Debug.error(e);
         }
-        outState.putInt(POSITION, mGridView.getFirstVisiblePosition());
-        outState.putInt(SELECTED_POSITION, mUsePhotosAdapter.getSelectedPhotoId());
+        outState.putInt(POSITION, mPosition);
+        outState.putInt(SELECTED_POSITION, mSelectedPosition);
+        outState.putBoolean(ALREADY_SHOWN, mIsPhotoDialogShown);
     }
 
     private Photos getPhotoLinks() {
@@ -139,7 +201,11 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         if (mEditText != null) {
             Utils.hideSoftKeyboard(this, mEditText);
         }
+        mPosition = mGridView.getFirstVisiblePosition();
+        mSelectedPosition = mUsePhotosAdapter.getSelectedPhotoId();
+        mIsPhotoDialogShown = true;
         super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mUpdateProfileReceiver);
     }
 
     private void pressedAddToLeader(int position) {
@@ -154,7 +220,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                         @Override
                         public void success(IApiResponse response) {
                             setResult(Activity.RESULT_OK, new Intent());
-                            Toast.makeText(AddToLeaderActivity.this, R.string.leaders_leader_now, Toast.LENGTH_SHORT).show();
+                            Utils.showToastNotification(R.string.leaders_leader_now, Toast.LENGTH_SHORT);
                             finish();
                         }
 
@@ -166,14 +232,14 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                                     showPurchasesFragment(buttonData.price);
                                     break;
                                 default:
-                                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                                    Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                                     break;
                             }
                         }
                     }).exec();
 
         } else {
-            Toast.makeText(AddToLeaderActivity.this, R.string.leaders_need_photo, Toast.LENGTH_SHORT).show();
+            Utils.showToastNotification(R.string.leaders_need_photo, Toast.LENGTH_SHORT);
         }
     }
 
@@ -274,5 +340,12 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
     private View createGridViewFooter() {
         return ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.gridview_footer_progress_bar, null, false);
+    }
+
+    private AddPhotoHelper getAddPhotoHelper() {
+        if (mAddPhotoHelper == null) {
+            mAddPhotoHelper = new AddPhotoHelper(this);
+        }
+        return mAddPhotoHelper;
     }
 }

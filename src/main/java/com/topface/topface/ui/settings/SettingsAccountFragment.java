@@ -19,6 +19,7 @@ import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -85,7 +86,7 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
                                 FragmentActivity activity = getActivity();
                                 if (activity != null) {
                                     mLockerView.setVisibility(View.GONE);
-                                    Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_LONG).show();
+                                    Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_LONG);
                                     AuthorizationManager.showRetryLogoutDialog(activity, logoutRequest);
                                 }
                             }

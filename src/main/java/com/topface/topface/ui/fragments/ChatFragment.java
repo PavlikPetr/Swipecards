@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -69,6 +70,7 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.HackBaseAdapterDecorator;
 import com.topface.topface.ui.adapters.IListLoader;
+import com.topface.topface.ui.dialogs.ConfirmEmailDialog;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -111,6 +113,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String INITIAL_MESSAGE = "initial_message";
     public static final String MESSAGE = "message";
     public static final String LOADED_MESSAGES = "loaded_messages";
+    public static final String CONFIGRM_EMAIL_DIALOG_TAG = "configrm_email_dialog_tag";
     private static final String POPULAR_LOCK_STATE = "chat_blocked";
     private static final String HISTORY_CHAT = "history_chat";
     private static final String SOFT_KEYBOARD_LOCK_STATE = "keyboard_state";
@@ -196,9 +199,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Utils.showSoftKeyboard(getActivity(), null);
         if (!isShowKeyboardInChat()) {
-            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         }
         mSetter = new ActionBarTitleSetterDelegate(getActivity(), ((ActionBarActivity) getActivity()).getSupportActionBar());
         DateUtils.syncTime();
@@ -212,7 +214,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
         // do not recreate Adapter cause of setRetainInstance(true)
         if (mAdapter == null) {
             mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
@@ -271,7 +272,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
         mEditBox.setOnEditorActionListener(mEditorActionListener);
         mEditBox.addTextChangedListener(mTextWatcher);
-
         //LockScreen
         initLockScreen(root);
         if (savedInstanceState != null) {
@@ -516,8 +516,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         History item = mAdapter.getItem(position);
         mAnimatedAdapter.decrementAnimationAdapter(mAdapter.getCount());
         if (item != null && (item.id == null || item.isFake())) {
-            Toast.makeText(getActivity(), R.string.cant_delete_fake_item,
-                    Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.cant_delete_fake_item, Toast.LENGTH_LONG);
             return;
         } else if (item == null) {
             return;
@@ -890,9 +889,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             return false;
         }
         if (editText.length() > mMaxMessageSize) {
-            Toast.makeText(getActivity(),
-                    String.format(getString(R.string.message_too_long), mMaxMessageSize),
-                    Toast.LENGTH_SHORT).show();
+            Utils.showToastNotification(String.format(getString(R.string.message_too_long), mMaxMessageSize), Toast.LENGTH_SHORT);
             return false;
         }
         editText.clear();
@@ -902,6 +899,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public boolean sendMessage(String text, final boolean cancelable) {
         final History messageItem = new History(text, IListLoader.ItemType.TEMP_MESSAGE);
         final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity());
+        if (!CacheProfile.emailConfirmed) {
+            Toast.makeText(App.getContext(), R.string.confirm_email, Toast.LENGTH_SHORT).show();
+            ConfirmEmailDialog.newInstance().show(getActivity().getSupportFragmentManager(), CONFIGRM_EMAIL_DIALOG_TAG);
+            return false;
+        }
         if (cancelable) {
             registerRequest(messageRequest);
         }
@@ -935,7 +937,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     return;
                 }
                 if (mAdapter != null && cancelable) {
-                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                    Utils.showErrorMessage();
                     mAdapter.showRetrySendMessage(messageItem, messageRequest);
                 }
             }
@@ -1086,8 +1088,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                                 createIntent(mUserId, mUser.photosCount, mUser.photo, getActivity());
                         startActivity(profileIntent);
                     } else {
-                        Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
-                                Toast.LENGTH_LONG).show();
+                        Utils.showToastNotification(R.string.user_deleted_or_banned, Toast.LENGTH_LONG);
                     }
                 }
                 return true;

@@ -508,10 +508,13 @@
     <string name="password_changing">Изменение пароля</string>
     <string name="save">Сохранить</string>
     <string name="confirmation_successfully_sent">Подтверждение выслано на указанный вами e-mail</string>
-    <string name="password_confirmation_hint">подтверждение пароля</string>
+    <string name="password_confirmation_hint">Подтверждение пароля</string>
     <string name="enter_new_password">Введите новый пароль</string>
+    <string name="enter_old_password">Введите старый пароль</string>
     <string name="enter_password_confirmation">Введите подтверждение пароля</string>
     <string name="passwords_mismatched">Пароли не совпадают</string>
+    <string name="old_password_mismatched">Неверный старый пароль</string>
+    <string name="passwords_matched">Новый и старый пароли совпадают</string>
     <string name="passwords_changed">Пароль изменен</string>
 
     <string name="take_photo">Сделать фото</string>
@@ -614,7 +617,7 @@
     <string name="complain_type_swearing_profile">Поля «статус», «о себе» содержат хамство, мат, ссылки на соц. сети</string>
     <string name="complain_type_fake_data">Имя, пол, возраст и фотография человека не совпадают</string>
     <string name="complain_description">Расскажите о причине жалобы подробней</string>
-    <string name="general_complain_sended">Ваша жалоба отправлена, большое спасибо за помощь</string>
+    <string name="general_complain_sended">Ваша жалоба отправлена, большое спасибо за помощь.</string>
     <string name="general_complain">Жалоба</string>
     <string name="general_msg">Сообщение</string>
     <string name="black_list_add_short">В черный список</string>
@@ -757,10 +760,10 @@
     <string name="pull_to_refresh_release_label">Отпустите для обновления…</string>
     <string name="messaging_block_buy_vip">Для продолжения диалога необходим VIP\u2011статус</string>
     <string name="pull_to_refresh_refreshing_label">Загрузка…</string>
-    <string name="user_added_to_black_list">Пользователь добавлен в черный список</string>
-    <string name="user_deleted_from_black_list">Пользователь удален из черного списка</string>
-    <string name="user_added_to_bookmark">Пользователь добавлен в избранные</string>
-    <string name="user_deleted_from_bookmark">Пользователь удален из избранных</string>
+    <string name="user_added_to_black_list">Пользователь добавлен в черный список.</string>
+    <string name="user_deleted_from_black_list">Пользователь удален из черного списка.</string>
+    <string name="user_added_to_bookmark">Пользователь добавлен в избранные.</string>
+    <string name="user_deleted_from_bookmark">Пользователь удален из избранных.</string>
     <string name="preload_photo_type_wifi_3g">WiFi и 3G</string>
     <string name="preload_photo_type_wifi">Только WiFi</string>
     <string name="preload_photo_type_always_on">Включена всегда</string>

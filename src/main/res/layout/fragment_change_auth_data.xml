@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -11,63 +11,80 @@
 
         <TextView
             android:id="@+id/setPasswordText"
-            android:layout_marginTop="10dp"
-            android:textSize="16sp"
-            android:layout_marginLeft="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
             android:text="@string/general_set_password"
-            android:visibility="gone"/>
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/edOldPassword"
+            style="@style/ItemWhiteText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/city_editbox_selector"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:singleLine="true"
+            android:textColorHint="#5F5F5F" />
 
         <EditText
             android:id="@+id/edMainField"
             style="@style/ItemWhiteText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:gravity="left|center_vertical"
+            android:layout_marginTop="16dp"
             android:background="@drawable/city_editbox_selector"
-            android:singleLine="true"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:textColorHint="#5F5F5F"/>
+            android:gravity="left|center_vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:singleLine="true"
+            android:textColorHint="#5F5F5F" />
 
         <EditText
             android:id="@+id/edConfirmationField"
             style="@style/ItemWhiteText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:gravity="left|center_vertical"
+            android:layout_marginTop="16dp"
             android:background="@drawable/city_editbox_selector"
-            android:singleLine="true"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:textColorHint="#5F5F5F"
-            android:inputType="textPassword"/>
+            android:gravity="left|center_vertical"
+            android:inputType="textPassword"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:singleLine="true"
+            android:textColorHint="#5F5F5F" />
 
         <Button
             android:id="@+id/btnSave"
+            style="@style/ButtonGrayText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/btn_light_gray_selector"
-            android:text="@string/save"
-            style="@style/ButtonGrayText"/>
+            android:text="@string/save" />
     </LinearLayout>
 
     <com.topface.topface.ui.views.LockerView
         android:id="@+id/llvLogoutLoading"
         style="@style/LoadingLocker"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </RelativeLayout>

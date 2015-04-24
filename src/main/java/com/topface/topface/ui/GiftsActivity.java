@@ -184,7 +184,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 resultIntent.putExtra(INTENT_SEND_GIFT_ANSWER, answer);
                 resultIntent.putExtra(INTENT_GIFT_PRICE, item.price);
                 setResult(Activity.RESULT_OK, resultIntent);
-                Toast.makeText(App.getContext(), R.string.chat_gift_out, Toast.LENGTH_SHORT).show();
+                Utils.showToastNotification(R.string.chat_gift_out, Toast.LENGTH_SHORT);
                 finish();
             }
 

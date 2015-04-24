@@ -56,7 +56,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     private GridViewWithHeaderAndFooter mGridAlbum;
     private View mLoadingLocker;
     private TextView mTitle;
-    private View mGridFooterView;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -86,6 +85,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
             initTitleText(mTitle);
         }
     };
+    private View mGridFooterView;
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -315,8 +315,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                                         errorStringResource = R.string.general_server_error;
                                         break;
                                 }
-                                Toast.makeText(getActivity(), errorStringResource, Toast.LENGTH_SHORT)
-                                        .show();
+                                Utils.showToastNotification(errorStringResource, Toast.LENGTH_SHORT);
                             }
 
                             @Override

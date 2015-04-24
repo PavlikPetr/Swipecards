@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -66,7 +67,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     }
 
     private void onFatalError() {
-        Toast.makeText(this, R.string.general_data_error, Toast.LENGTH_SHORT).show();
+        Utils.showErrorMessage();
         setResult(RESULT_ERROR);
         finish();
     }

@@ -267,8 +267,7 @@ public class EditProfileActivity extends BaseFragmentActivity implements OnClick
 
                                 @Override
                                 public void fail(int codeError, IApiResponse response) {
-                                    Toast toast = Toast.makeText(EditProfileActivity.this, R.string.profile_update_error, Toast.LENGTH_SHORT);
-                                    toast.show();
+                                    Utils.showToastNotification(R.string.profile_update_error, Toast.LENGTH_SHORT);
                                 }
                             }).exec();
                         }

@@ -80,7 +80,7 @@ public class ComplainsMessageFragment extends BaseFragment {
             @Override
             public void success(IApiResponse response) {
                 if (getActivity() != null) {
-                    Toast.makeText(getActivity(), R.string.general_complain_sended, Toast.LENGTH_SHORT).show();
+                    Utils.showToastNotification(R.string.general_complain_sended, Toast.LENGTH_SHORT);
                     getActivity().finish();
                 }
             }
