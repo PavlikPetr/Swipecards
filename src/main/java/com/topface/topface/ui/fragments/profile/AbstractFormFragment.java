@@ -115,9 +115,9 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
             if (parcelableArrayList != null && parcelableGifts != null) {
                 Profile.Gifts gifts = new Profile.Gifts();
                 gifts.addAll(parcelableGifts);
-
+                String status = savedInstanceState.getString(USER_STATUS);
                 setUserData(
-                        savedInstanceState.getString(USER_STATUS, Static.EMPTY),
+                        status != null ? status : Static.EMPTY,
                         savedInstanceState.getInt(USER_ID, 0),
                         parcelableArrayList, gifts, giftsCount
                 );
@@ -283,6 +283,9 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         FeedGiftsRequest giftsRequest = new FeedGiftsRequest(getActivity());
         giftsRequest.uid = mUserId;
         giftsRequest.limit = mVisibleGiftsNumber;
+        if (mGiftAdapter.getCount() > 0) {
+            giftsRequest.from = mGiftAdapter.getItem(mGiftAdapter.getCount() - 1).gift.feedId;
+        }
         registerRequest(giftsRequest);
         giftsRequest.callback(new DataApiHandler<FeedListData<FeedGift>>() {
 
@@ -293,7 +296,13 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
 
             @Override
             protected void success(FeedListData<FeedGift> data, IApiResponse response) {
-                mGiftAdapter.setData(data.items, false);
+                for (int i = 0; i < mVisibleGiftsNumber - mGiftAdapter.getCount(); i++) {
+                    if (i < data.items.size()) {
+                        mGiftAdapter.add(data.items.get(i));
+                    } else {
+                        break;
+                    }
+                }
                 mGiftAdapter.notifyDataSetChanged();
             }
 

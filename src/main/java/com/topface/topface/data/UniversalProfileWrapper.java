@@ -60,7 +60,11 @@ public class UniversalProfileWrapper implements IUniversalUser {
 
     @Override
     public Profile.Gifts getGifts() {
-        return mProfile.gifts;
+        if (mProfile != null) {
+            return mProfile.gifts;
+        } else {
+            return new Profile.Gifts();
+        }
     }
 
     @Override

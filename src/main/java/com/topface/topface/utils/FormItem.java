@@ -36,6 +36,7 @@ public class FormItem implements Parcelable {
     private TextLimitInterface mTextLimitInterface;
     private ValueLimitInterface mValueLimitInterface;
     private boolean mOnlyForWomen = false;
+    private boolean mIsCanBeEmpty = true;
 
     //private static final long serialVersionUID = 1883262786634798671L;    
 
@@ -95,6 +96,7 @@ public class FormItem implements Parcelable {
         mTextLimitInterface = formItem.mTextLimitInterface;
         mValueLimitInterface = formItem.mValueLimitInterface;
         mOnlyForWomen = formItem.mOnlyForWomen;
+        mIsCanBeEmpty = formItem.mIsCanBeEmpty;
     }
 
     public FormItem() {
@@ -111,6 +113,7 @@ public class FormItem implements Parcelable {
         mValueLimitInterface = formItem.mValueLimitInterface;
         isEditing = formItem.isEditing;
         mOnlyForWomen = formItem.mOnlyForWomen;
+        mIsCanBeEmpty = formItem.mIsCanBeEmpty;
     }
 
     @Override
@@ -127,6 +130,7 @@ public class FormItem implements Parcelable {
         dest.writeInt(dataId);
         dest.writeParcelable(header, flags);
         dest.writeByte((byte) (mOnlyForWomen ? 1 : 0));
+        dest.writeByte((byte) (mIsCanBeEmpty ? 1 : 0));
     }
 
     @Override
@@ -155,6 +159,7 @@ public class FormItem implements Parcelable {
         hash = hash * 31 + titleId;
         hash = hash * 31 + dataId;
         hash = hash * 31 + (mOnlyForWomen ? 1 : 0);
+        hash = hash * 31 + (mIsCanBeEmpty ? 1 : 0);
         return hash;
     }
 
@@ -170,6 +175,7 @@ public class FormItem implements Parcelable {
                     result.dataId = in.readInt();
                     result.header = in.readParcelable(FormItem.class.getClassLoader());
                     result.mOnlyForWomen = in.readByte() != 0;
+                    result.mIsCanBeEmpty = in.readByte() != 0;
                     return result;
                 }
 
@@ -215,7 +221,8 @@ public class FormItem implements Parcelable {
     }
 
     public boolean isValueValid() {
-        if (mTextLimitInterface != null && value.length() > mTextLimitInterface.getLimit()) {
+        if (mTextLimitInterface != null && value.length() > mTextLimitInterface.getLimit() ||
+                !mIsCanBeEmpty && TextUtils.isEmpty(value)) {
             return false;
         } else if (mValueLimitInterface != null) {
             if (TextUtils.isEmpty(value)) {
@@ -235,6 +242,10 @@ public class FormItem implements Parcelable {
 
     public boolean isOnlyForWomen() {
         return mOnlyForWomen;
+    }
+
+    public void setCanBeEmpty(boolean canBeEmpty) {
+        mIsCanBeEmpty = canBeEmpty;
     }
 
     public static class DefaultTextLimiter implements TextLimitInterface {

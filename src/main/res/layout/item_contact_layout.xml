@@ -45,7 +45,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/invite" />
+            android:maxWidth="104dp"
+            android:singleLine="false" />
 
         <TextView
             android:id="@+id/contact_invited_text"
@@ -53,8 +54,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:drawableLeft="@drawable/ic_done"
-            android:text="@string/sent" />
+            android:maxWidth="104dp"
+            android:singleLine="false" />
     </RelativeLayout>
 
 </LinearLayout>

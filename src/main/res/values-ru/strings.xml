@@ -810,9 +810,13 @@
     <string name="more">еще</string>
 
     <!--invite frends by sms-->
-    <string name="invite">Пригласить</string>
-    <string name="sent">Отправлено</string>
     <string name="premium_for_invitations">Пригласите 3 друга и после их регистрации в Topface вы получите вип на сутки!</string>
     <string name="sms_invite_title">Получите вип на сутки!</string>
     <string name="sms_invite_subtitle">Получите вип на сутки!</string>
+
+    <!--phones number statuses-->
+    <string name="status_can_send_confirmation">Пригласить</string>
+    <string name="status_invilid_phone_number">Номер не валиден</string>
+    <string name="status_confirmation_was_sent">Приглашение отправлено</string>
+    <string name="status_user_registered">Пользователь зарегистрирован</string>
 </resources>

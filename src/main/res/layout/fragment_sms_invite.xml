@@ -5,12 +5,6 @@
     android:layout_height="fill_parent"
     android:background="@color/bg_white">
 
-    <ProgressBar
-        android:id="@+id/content_list_progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
-
     <ListView
         android:id="@+id/content_list"
         android:layout_width="fill_parent"
@@ -21,5 +15,11 @@
         android:fadeScrollbars="true"
         android:fadingEdge="none"
         android:listSelector="@android:color/transparent" />
+
+    <ProgressBar
+        android:id="@+id/content_list_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
 
 </RelativeLayout>

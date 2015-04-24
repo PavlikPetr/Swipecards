@@ -54,11 +54,6 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
         public Profile getProfile() {
             return mProfile;
         }
-
-        @Override
-        public int getProfileType() {
-            return AbstractProfileFragment.this.getProfileType();
-        }
     };
     private String mBodyStartPageClassName;
     private int mStartBodyPage = 0;
@@ -106,7 +101,7 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
         super.onCreateView(inflater, container, savedInstanceState);
         final View root = inflater.inflate(R.layout.fragment_profile, null);
         initBodyPages(root);
-// start pages initialization
+        // start pages initialization
         int startBodyPage = mBodyPagerAdapter.getFragmentIndexByClassName(mBodyStartPageClassName);
         if (startBodyPage != -1) {
             mStartBodyPage = startBodyPage;
@@ -175,7 +170,7 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
         mBodyPagerAdapter = new ProfilePageAdapter(getChildFragmentManager(), BODY_PAGES_CLASS_NAMES,
                 BODY_PAGES_TITLES, mProfileUpdater);
         mBodyPager.setAdapter(mBodyPagerAdapter);
-//Tabs for Body
+        //Tabs for Body
         mTabIndicator = (SlidingTabLayout) root.findViewById(R.id.tpiTabs);
         mTabIndicator.setUseWeightProportions(true);
         mTabIndicator.setCustomTabView(R.layout.tab_indicator, R.id.tab_title);
@@ -239,7 +234,5 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
         void bindFragment(Fragment fragment);
 
         Profile getProfile();
-
-        int getProfileType();
     }
 }

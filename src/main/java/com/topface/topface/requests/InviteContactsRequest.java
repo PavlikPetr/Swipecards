@@ -40,7 +40,7 @@ public class InviteContactsRequest extends ConfirmedApiRequest {
         phones = new ArrayList<ContactsProvider.Contact>();
 
         for (ContactsProvider.Contact contact : contacts) {
-            if (contact.isEmail()) {
+            if (contact.hasEmail()) {
                 emails.add(contact);
             } else {
                 phones.add(contact);

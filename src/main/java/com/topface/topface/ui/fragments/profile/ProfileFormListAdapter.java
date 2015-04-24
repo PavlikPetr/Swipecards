@@ -59,6 +59,7 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
                     return false;
                 }
             });
+            nameItem.setCanBeEmpty(false);
             forms.add(nameItem);
 
             String sex = App.getContext().getString(CacheProfile.sex == Static.BOY ? R.string.boy : R.string.girl);
