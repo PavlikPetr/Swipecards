@@ -19,6 +19,7 @@ import com.topface.topface.requests.transport.HttpApiTransport;
 import com.topface.topface.requests.transport.IApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
 import com.topface.topface.utils.http.ConnectionManager;
+import com.topface.topface.utils.http.HttpUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -321,6 +322,10 @@ public abstract class ApiRequest implements IApiRequest {
         }
     }
 
+    public String getUserAgent() {
+        return HttpUtils.getUserAgent();
+    }
+
     public static interface IConnectionConfigureListener {
         void onConfigureEnd();
 
@@ -329,7 +334,7 @@ public abstract class ApiRequest implements IApiRequest {
 
     @Override
     public Headers getHeaders() {
-        return new Headers(getId(), getContentType());
+        return new Headers(getId(), getContentType(), getUserAgent());
     }
 
     @Override

@@ -98,7 +98,7 @@ public class FbAuthorizer extends Authorizer {
 
     public FbAuthorizer(Activity activity) {
         super(activity);
-        mUiHelper = new UiLifecycleHelper(activity, getStatusCallback());
+        mUiHelper = new UiLifecycleHelper(activity, null);
         mUiHelper.onStop();
     }
 
@@ -131,23 +131,24 @@ public class FbAuthorizer extends Authorizer {
     @Override
     public void authorize() {
         Session session = Session.getActiveSession();
-        if (session.isOpened() || session.isClosed()) {
-            Session.openActiveSession(getActivity(), true, Arrays.asList(FB_PERMISSIONS), getStatusCallback());
-        } else {
-            Session.getActiveSession().openForRead(new Session.OpenRequest(getActivity())
+        if (session != null && !session.isOpened() && !session.isClosed()) {
+            session.openForRead(new Session.OpenRequest(getActivity())
                     .setPermissions(Arrays.asList(FB_PERMISSIONS)).setCallback(getStatusCallback()));
+        } else {
+            Session.openActiveSession(getActivity(), true, Arrays.asList(FB_PERMISSIONS), getStatusCallback());
         }
     }
 
     @Override
     public void logout() {
         Session session = Session.getActiveSession();
-        if (session == null) {
-            session = Session.openActiveSessionFromCache(getActivity());
-        }
         if (session != null) {
             session.closeAndClearTokenInformation();
+            if (mStatusCallback != null) {
+                session.removeCallback(mStatusCallback);
+            }
         }
+        Session.setActiveSession(null);
     }
 
     @Override

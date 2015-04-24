@@ -600,7 +600,7 @@ public class OverflowMenu {
                 new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
     }
 
-    public void onDestroy() {
+    public void onReleaseOverflowMenu() {
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(mUpdateActionsReceiver);
         mOverflowMenuFields = null;
         mActivity = null;

@@ -46,14 +46,6 @@ public abstract class UserAvatarFragment extends BaseFragment
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (mOverflowMenu != null) {
-            mOverflowMenu.onDestroy();
-        }
-    }
-
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         MenuItem item = menu.findItem(R.id.action_profile);
@@ -80,6 +72,15 @@ public abstract class UserAvatarFragment extends BaseFragment
                 mBarAvatar.getActionView().setPadding(0, 0, (int) (4 * metrics.density), 0);
             }
         }
+    }
+
+    @Override
+    public void onDestroyOptionsMenu() {
+        super.onDestroyOptionsMenu();
+        if (mOverflowMenu != null) {
+            mOverflowMenu.onReleaseOverflowMenu();
+        }
+
     }
 
     protected boolean hasUserActions() {
