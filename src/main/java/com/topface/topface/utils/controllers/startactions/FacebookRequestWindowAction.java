@@ -88,6 +88,10 @@ public class FacebookRequestWindowAction extends DailyPopupAction  {
                             mOnNextActionListener.onNextAction();
                         }
                         getUserConfig().setFacebookRequestSkip(getUserConfig().getFacebookRequestSkip() + 1);
+                    } else if (e != null || bundle == null || bundle.keySet() == null){
+                        if (mOnNextActionListener != null) {
+                            mOnNextActionListener.onNextAction();
+                        }
                     } else {
                         //в bundle id запроса и id пользователей которым были посланы реквесты.
                         InviteUniqueStatistics.sendFacebookInvites(bundle.keySet().size() - 1);

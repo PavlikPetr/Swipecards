@@ -592,7 +592,7 @@ public class OverflowMenu {
     }
 
     private Boolean isBanned() {
-        return getOverflowMenuFieldsListener() == null ? null : getOverflowMenuFieldsListener().isBanned();
+        return getOverflowMenuFieldsListener() == null ? false : getOverflowMenuFieldsListener().isBanned();
     }
 
     private void registerBroadcastReceiver() {

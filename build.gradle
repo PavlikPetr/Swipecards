@@ -187,7 +187,7 @@ dependencies {
     compile fileTree(dir: 'libs', exclude: 'amazon/*.jar', include: '*.jar')
 
     //Library for WebSocket and other network requests
-    compile 'com.koushikdutta.async:androidasync:2.0.5'
+    compile 'com.koushikdutta.async:androidasync:2.1.3'
     //Topface sub libs
     compile project(':libs:IllustratedTextView')
     compile project(':libs:statistics-android')
