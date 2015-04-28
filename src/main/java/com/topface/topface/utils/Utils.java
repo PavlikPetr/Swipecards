@@ -86,6 +86,28 @@ public class Utils {
         }
     }
 
+    public static void showToastNotification(int stringId, int duration) {
+        Context context = App.getContext();
+        if (context != null && (duration == 0 || duration == 1)) {
+            Toast.makeText(
+                    context,
+                    stringId,
+                    duration
+            ).show();
+        }
+    }
+
+    public static void showToastNotification(String text, int duration) {
+        Context context = App.getContext();
+        if (context != null && (duration == 0 || duration == 1)) {
+            Toast.makeText(
+                    context,
+                    text,
+                    duration
+            ).show();
+        }
+    }
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     @SuppressWarnings("deprecation")
     public static Point getSrceenSize(Context context) {

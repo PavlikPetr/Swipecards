@@ -141,7 +141,7 @@ public class AddPhotoHelper {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(mContext, R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                                Utils.showErrorMessage();
                             }
                         });
                         return;
@@ -274,9 +274,9 @@ public class AddPhotoHelper {
         }
 
         if (!isPhotoCorrectSize(uri)) {
-            Toast.makeText(mContext, String.format(mContext.getString(R.string.incorrect_photo_size),
+            Utils.showToastNotification(String.format(mContext.getString(R.string.incorrect_photo_size),
                     minPhotoSize.width,
-                    minPhotoSize.height), Toast.LENGTH_SHORT).show();
+                    minPhotoSize.height), Toast.LENGTH_SHORT);
             return;
         }
         // если начинаем грузить аватарку, то выставляем флаг, чтобы resumeFragment не вызвал показ попапа
@@ -284,7 +284,7 @@ public class AddPhotoHelper {
             App.getConfig().getUserConfig().setUserAvatarAvailable(true);
             App.getConfig().getUserConfig().saveConfig();
         }
-        Toast.makeText(mContext, R.string.photo_is_uploading, Toast.LENGTH_SHORT).show();
+        Utils.showToastNotification(R.string.photo_is_uploading, Toast.LENGTH_SHORT);
         showProgressDialog();
         mNotificationManager = UserNotificationManager.getInstance();
 
@@ -393,19 +393,18 @@ public class AddPhotoHelper {
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
 
-
     private void showErrorMessage(int codeError) {
         switch (codeError) {
             case ErrorCodes.INCORRECT_PHOTO_DATA:
-                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo), Toast.LENGTH_LONG).show();
+                Utils.showToastNotification(mContext.getString(R.string.incorrect_photo), Toast.LENGTH_LONG);
                 break;
             case ErrorCodes.INCORRECT_PHOTO_FORMAT:
-                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_format), Toast.LENGTH_LONG).show();
+                Utils.showToastNotification(mContext.getString(R.string.incorrect_photo_format), Toast.LENGTH_LONG);
                 break;
             case ErrorCodes.INCORRECT_PHOTO_SIZES:
-                Toast.makeText(mContext, String.format(mContext.getString(R.string.incorrect_photo_size),
+                Utils.showToastNotification(String.format(mContext.getString(R.string.incorrect_photo_size),
                         minPhotoSize.width,
-                        minPhotoSize.height), Toast.LENGTH_SHORT).show();
+                        minPhotoSize.height), Toast.LENGTH_SHORT);
                 break;
         }
     }

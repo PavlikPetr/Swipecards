@@ -77,6 +77,8 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
@@ -193,7 +195,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     mDatingInstantMessageController != null &&
                             TextUtils.isEmpty(userConfig.getDatingMessage())
                     ) {
-                Options.InstantMessageFromSearch message = CacheProfile.getOptions().instantMessageFromSearch;
+                InstantMessageFromSearch message = CacheProfile.getOptions().instantMessageFromSearch;
                 mDatingInstantMessageController.setInstantMessageText(message.getText());
                 userConfig.setDatingMessage(message.getText());
                 userConfig.saveConfig();
@@ -1249,7 +1251,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         @Override
         public void fail(int codeError, IApiResponse response) {
             showEmptySearchDialog();
-            Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_LONG);
         }
 
         @Override

@@ -8,14 +8,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileDeleteRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 public class DeleteAccountDialog extends AbstractDialogFragment implements View.OnClickListener {
@@ -26,7 +25,7 @@ public class DeleteAccountDialog extends AbstractDialogFragment implements View.
     @Override
     protected void initViews(View root) {
         root.findViewById(R.id.btnCancel).setOnClickListener(this);
-        mBtnOk = (Button)root.findViewById(R.id.btnOk);
+        mBtnOk = (Button) root.findViewById(R.id.btnOk);
         mBtnOk.setOnClickListener(this);
         ((ImageViewRemote) root.findViewById(R.id.ivAvatar)).setPhoto(CacheProfile.photo);
         ((TextView) root.findViewById(R.id.tvProfile)).setText(CacheProfile.getUserNameAgeString());
@@ -51,7 +50,7 @@ public class DeleteAccountDialog extends AbstractDialogFragment implements View.
                 break;
             case R.id.btnOk:
                 mBtnOk.setClickable(false);
-                AlertDialog.Builder builder =  new AlertDialog.Builder(getActivity())
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.settings_delete_account)
                         .setMessage(R.string.delete_account_are_you_sure)
                         .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
@@ -76,8 +75,7 @@ public class DeleteAccountDialog extends AbstractDialogFragment implements View.
 
                                     @Override
                                     public void fail(int codeError, IApiResponse response) {
-                                        Toast.makeText(App.getContext(), R.string.delete_account_error, Toast.LENGTH_SHORT)
-                                                .show();
+                                        Utils.showToastNotification(R.string.delete_account_error, Toast.LENGTH_SHORT);
                                     }
 
                                     @Override
@@ -95,14 +93,14 @@ public class DeleteAccountDialog extends AbstractDialogFragment implements View.
                                 closeDialog();
                             }
                         });
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                                mBtnOk.setClickable(true);
-                            }
-                        });
-                        alertDialog.show();
+                AlertDialog alertDialog = builder.create();
+                alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        mBtnOk.setClickable(true);
+                    }
+                });
+                alertDialog.show();
                 break;
         }
     }

@@ -35,6 +35,23 @@ public class QuickMessageFragment extends AbstractDialogFragment implements View
     private View mLoader;
     private boolean mActionBarIsShowing;
 
+    /**
+     * Создает новый инстанс фрагмента, добавляя нужные аргументы
+     *
+     * @param userId   id пользователя, которому будет отправлено сообщение
+     * @param listener листенер событий отправки сообщений или отмены
+     * @return фрагмент отправки сообщений
+     */
+    public static QuickMessageFragment newInstance(int userId, OnQuickMessageSentListener listener) {
+        QuickMessageFragment fragment = new QuickMessageFragment();
+        fragment.setListener(listener);
+        Bundle args = new Bundle();
+        args.putInt(ARG_USER_ID, userId);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -145,7 +162,7 @@ public class QuickMessageFragment extends AbstractDialogFragment implements View
                 hideLoader();
                 //Возвращаем текст
                 if (isAdded()) {
-                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                    Utils.showErrorMessage();
                     editText.append(editString);
                 }
             }
@@ -167,23 +184,6 @@ public class QuickMessageFragment extends AbstractDialogFragment implements View
         mMessageBox.setVisibility(View.VISIBLE);
         mMessage.setText(text);
 
-    }
-
-    /**
-     * Создает новый инстанс фрагмента, добавляя нужные аргументы
-     *
-     * @param userId   id пользователя, которому будет отправлено сообщение
-     * @param listener листенер событий отправки сообщений или отмены
-     * @return фрагмент отправки сообщений
-     */
-    public static QuickMessageFragment newInstance(int userId, OnQuickMessageSentListener listener) {
-        QuickMessageFragment fragment = new QuickMessageFragment();
-        fragment.setListener(listener);
-        Bundle args = new Bundle();
-        args.putInt(ARG_USER_ID, userId);
-        fragment.setArguments(args);
-
-        return fragment;
     }
 
     public void setListener(OnQuickMessageSentListener listener) {

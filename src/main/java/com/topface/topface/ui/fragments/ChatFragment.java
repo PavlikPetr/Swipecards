@@ -513,8 +513,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
         History item = mAdapter.getItem(position);
         mAnimatedAdapter.decrementAnimationAdapter(mAdapter.getCount());
         if (item != null && (item.id == null || item.isFake())) {
-            Toast.makeText(getActivity(), R.string.cant_delete_fake_item,
-                    Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.cant_delete_fake_item, Toast.LENGTH_LONG);
             return;
         } else if (item == null) {
             return;
@@ -879,9 +878,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
             return false;
         }
         if (editText.length() > mMaxMessageSize) {
-            Toast.makeText(getActivity(),
-                    String.format(getString(R.string.message_too_long), mMaxMessageSize),
-                    Toast.LENGTH_SHORT).show();
+            Utils.showToastNotification(String.format(getString(R.string.message_too_long), mMaxMessageSize), Toast.LENGTH_SHORT);
             return false;
         }
         // вынужденная мера, Editable.clear() некорректно обрабатывается клавиатурой Lg G3
@@ -932,7 +929,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                     return;
                 }
                 if (mAdapter != null && cancelable) {
-                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                    Utils.showErrorMessage();
                     mAdapter.showRetrySendMessage(messageItem, messageRequest);
                 }
             }
