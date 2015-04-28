@@ -56,6 +56,9 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     public static final int BUYING_REQUEST = 1001;
     public static final String TEST_PURCHASED_PRODUCT_ID = "android.test.purchased";
     private static final String APP_STORE_NAME = "&storename";
+    public static final String ARG_RESOURCE_INFO_TEXT = "resource_info_text";
+    public static final String UPDATE_RESOURCE_INFO = "com.topface.topface.UPDATE_RESOURCE_INFO";
+
     /**
      * Результат запроса из OpenIAB: Пользователь отменил покупку
      */

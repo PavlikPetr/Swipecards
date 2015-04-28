@@ -49,7 +49,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     private ViewFlipper mViewFlipper;
     private GridViewWithHeaderAndFooter mGridAlbum;
     private View mLoadingLocker;
-    private TextView mTitle;
     private View mGridFooterView;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override

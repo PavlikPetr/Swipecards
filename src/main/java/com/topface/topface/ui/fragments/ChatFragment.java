@@ -160,9 +160,6 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
     private String mUserCity;
     private String mUserNameAndAge;
-    private int mUserSex;
-    private MenuItem mBarAvatar;
-    private MenuItem mBarActions;
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -213,7 +210,6 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
         Bundle args = getArguments();
         mItemId = args.getString(INTENT_ITEM_ID);
         mUserId = args.getInt(INTENT_USER_ID, -1);
-        mUserSex = args.getInt(INTENT_USER_SEX, Static.BOY);
         mUserCity = args.getString(INTENT_USER_CITY);
         mUserNameAndAge = args.getString(INTENT_USER_NAME_AND_AGE);
         mInitialMessage = args.getString(INITIAL_MESSAGE);
@@ -786,7 +782,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                 EasyTracker.sendEvent("Chat", "SendGiftClick", "", 1L);
                 break;
             case R.id.action_user_actions_list:
-                onOptionsItemSelected(mBarActions);
+                onOptionsItemSelected(getBarActionsMenuItem());
                 break;
             default:
                 super.onClick(v);
