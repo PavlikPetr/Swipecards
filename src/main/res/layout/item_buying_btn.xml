@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:orientation="vertical"
-                tools:background="@drawable/btn_gray_selector"
-                android:layout_width="fill_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:background="@drawable/btn_gray_selector"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content">
 
     <RelativeLayout
@@ -12,18 +12,17 @@
         android:layout_height="50dp"
         android:layout_width="fill_parent"
         android:padding="5dp"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="12dp">
 
         <TextView
+            style="@style/WhiteText"
             tools:text="@string/buy_mobile_payments"
             android:id="@+id/itText"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:paddingLeft="10dp"
-            android:textSize="16sp"
-            android:textStyle="bold"
             android:gravity="center"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true" />
 
         <ProgressBar
             android:id="@+id/marketWaiter"
@@ -34,33 +33,36 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <View
+        android:id="@+id/middle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_below="@id/itContainer"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        style="@style/GrayText"
+        android:id="@+id/itEconomy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"
+        android:paddingLeft="9dp"
+        android:paddingRight="9dp"
+        android:layout_marginRight="4dp"
+        android:textSize="13sp"
+        android:background="@drawable/bg_economy"
         android:layout_below="@id/itContainer"
-        android:layout_marginTop="2dp"
-        android:gravity="center">
+        android:layout_toLeftOf="@id/middle"
+        android:gravity="center" />
 
-        <TextView
-            android:id="@+id/itEconomy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:paddingLeft="10dp"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp"
-            android:background="@drawable/plate_sale" />
-
-        <TextView
-            android:id="@+id/itValue"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:paddingRight="10dp"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp" />
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/itValue"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/text_light_gray"
+        android:textSize="13sp"
+        android:layout_below="@id/itContainer"
+        android:layout_toRightOf="@id/middle" />
 </RelativeLayout>

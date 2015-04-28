@@ -27,20 +27,13 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.config.AppConfig;
-import com.topface.topface.utils.controllers.AbstractStartAction;
-import com.topface.topface.utils.controllers.IStartAction;
-
-import ru.ideast.adwired.AWView;
-import ru.ideast.adwired.events.OnNoBannerListener;
-import ru.ideast.adwired.events.OnStartListener;
-import ru.ideast.adwired.events.OnStopListener;
+import com.topface.topface.utils.controllers.startactions.IStartAction;
+import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_MEDIATION;
-import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADWIRED;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_NONE;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_TOPFACE;
-
 
 /**
  */
@@ -52,7 +45,7 @@ public class FullscreenController {
     private static boolean isFullScreenBannerVisible = false;
     private Activity mActivity;
 
-    private class FullscreenStartAction extends AbstractStartAction {
+    private class FullscreenStartAction implements IStartAction {
         private PageInfo startPageInfo;
         private int priority;
 
@@ -93,6 +86,11 @@ public class FullscreenController {
         @Override
         public String getActionName() {
             return "Fullscreen";
+        }
+
+        @Override
+        public void setStartActionCallback(OnNextActionListener startActionCallback) {
+
         }
     }
 
@@ -155,9 +153,6 @@ public class FullscreenController {
                 case BANNER_ADMOB_MEDIATION:
                     requestAdmobFullscreen(ADMOB_INTERSTITIAL_MEDIATION_ID);
                     break;
-                case BANNER_ADWIRED:
-                    requestAdwiredFullscreen();
-                    break;
                 case BANNER_TOPFACE:
                     requestTopfaceFullscreen();
                     break;
@@ -210,40 +205,6 @@ public class FullscreenController {
                 addLastFullscreenShowedTime();
             }
         });
-    }
-
-    private void requestAdwiredFullscreen() {
-        try {
-            if (!CacheProfile.isEmpty()) {
-                AWView adwiredView = (AWView) mActivity.getLayoutInflater().inflate(R.layout.banner_adwired, null);
-                final ViewGroup bannerContainer = getFullscreenBannerContainer();
-                bannerContainer.addView(adwiredView);
-                bannerContainer.setVisibility(View.VISIBLE);
-                adwiredView.setVisibility(View.VISIBLE);
-                adwiredView.setOnNoBannerListener(new OnNoBannerListener() {
-                    @Override
-                    public void onNoBanner() {
-                        requestFallbackFullscreen();
-                    }
-                });
-                adwiredView.setOnStopListener(new OnStopListener() {
-                    @Override
-                    public void onStop() {
-                        hideFullscreenBanner(bannerContainer);
-                    }
-                });
-                adwiredView.setOnStartListener(new OnStartListener() {
-                    @Override
-                    public void onStart() {
-                        isFullScreenBannerVisible = true;
-                        addLastFullscreenShowedTime();
-                    }
-                });
-                adwiredView.request('0');
-            }
-        } catch (Exception ex) {
-            Debug.error(ex);
-        }
     }
 
     private void requestTopfaceFullscreen() {

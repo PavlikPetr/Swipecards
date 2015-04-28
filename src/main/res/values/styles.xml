@@ -113,6 +113,12 @@
         <item name="android:textStyle">normal</item>
     </style>
 
+    <style name="ItemTitleTextBlack">
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
     <style name="CharactersCount" parent="ItemTitleText">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -138,8 +144,14 @@
         <item name="android:textSize">13sp</item>
     </style>
 
-    <style name="TitleWhiteText" parent="ItemTitleText">
+    <style name="TitleGrayText" parent="ItemTitleText">
         <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_color_gray</item>
+    </style>
+
+    <style name="TitleBlackText" parent="ItemTitleText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/list_text_black</item>
     </style>
 
     <style name="VipItemTitleWhiteText">
@@ -152,16 +164,34 @@
         <item name="android:textColor">#9FCCF3</item>
     </style>
 
-    <style name="ItemtText">
-        <item name="android:textColor">#B8B8B8</item>
-        <item name="android:textSize">14sp</item>
+    <style name="ItemText">
+        <item name="android:textColor">@color/light_gray</item>
+        <item name="android:textSize">13sp</item>
         <item name="android:textStyle">normal</item>
     </style>
 
     <style name="ItemWhiteText">
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">@color/list_text_black</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="ItemGrayText">
+        <item name="android:textColor">@color/text_color_gray</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="AccountEditText" parent="ItemWhiteText">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/city_editbox_selector</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingRight">4dp</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
     </style>
 
     <style name="DatingButtonsText">
@@ -224,6 +254,7 @@
     <style name="EditPhotoButtonsText" parent="ButtonsText">
         <item name="android:textSize">10sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps" tools:ignore="NewApi">false</item>
     </style>
 
     <style name="LeftMenuButtons">
@@ -289,19 +320,13 @@
     </style>
 
     <style name="ListItemEmptyText">
-        <item name="android:textColor">@color/list_text_gray</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">"sans-serif-light"</item>
+        <item name="android:textColor">@color/text_color_gray</item>
+        <item name="android:textSize">17sp</item>
         <item name="android:textStyle">normal</item>
-    </style>
-
-    <style name="AdIndicator">
-        <item name="android:visibility">visible</item>
-        <item name="android:src">@drawable/ic_ad_flag</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_alignParentRight">true</item>
-        <item name="android:layout_alignParentTop">true</item>
-        <item name="android:layout_marginRight">6dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:maxWidth">240dp</item>
     </style>
 
     <style name="ListItemEmptyText.Bold">
@@ -446,6 +471,16 @@
         <item name="android:gravity">center_horizontal</item>
     </style>
 
+    <style name="Gift.Strip">
+        <item name="android:layout_width">@dimen/form_gift_size</item>
+        <item name="android:layout_height">@dimen/form_gift_size</item>
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingRight">2dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:layout_margin">0dp</item>
+    </style>
+
     <style name="AlbumGift" parent="Gift">
         <item name="postProcessor">rounded</item>
     </style>
@@ -544,8 +579,6 @@
     </style>
 
     <style name="ProfileAvatar">
-        <item name="preProcessor">mask</item>
-        <item name="clipMask">@drawable/photo_mask</item>
         <item name="border">@drawable/photo_border</item>
         <item name="android:layout_marginRight">6dp</item>
         <item name="android:layout_marginLeft">6dp</item>
@@ -619,11 +652,9 @@
     </style>
 
     <style name="GalleryItem">
-        <item name="preProcessor">mask</item>
-        <item name="clipMask">@drawable/photo_mask</item>
-        <item name="android:background">@drawable/photo_frame_selector</item>
-        <item name="android:layout_width">110dp</item>
-        <item name="android:layout_height">114dp</item>
+        <item name="postProcessor">cropped</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
     </style>
 
     <style name="UsersPhotoToLeaders">
@@ -634,8 +665,8 @@
 
     <style name="GalleryAddItem">
         <item name="android:src">@drawable/profile_add_photo_selector</item>
-        <item name="android:layout_width">110dp</item>
-        <item name="android:layout_height">114dp</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
     </style>
 
     <style name="TopItem">
@@ -711,9 +742,10 @@
         <item name="android:paddingRight">15dp</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">center</item>
+        <item name="android:textAllCaps" tools:ignore="NewApi">false</item>
     </style>
 
     <style name="Widget.Topface.Button">
@@ -736,6 +768,14 @@
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
+    <style name="BlueBonusButton" parent="Widget.Topface.Button.Big.Blue">
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="GrayBonusButton" parent="Widget.Topface.Button.Big.Gray">
+        <item name="android:textStyle">normal</item>
+    </style>
+
     <style name="Widget.Topface.Button.Big.Blue" parent="Widget.Topface.Button.Big">
         <item name="android:background">@drawable/btn_blue_selector</item>
         <item name="android:textColor">#FFFFFF</item>
@@ -747,7 +787,7 @@
     </style>
 
     <style name="ButtonSale" parent="Widget.Topface.Button.Big.Blue">
-        <item name="android:background">@drawable/btn_sale_selector</item>
+        <item name="android:background">@drawable/btn_sale_blue_selector</item>
         <item name="android:paddingRight">56dp</item>
     </style>
 
@@ -875,6 +915,10 @@
         <item name="android:hint">@string/general_city</item>
         <item name="android:textColorHint">#8A8A8A</item>
         <item name="android:background">@drawable/input_field_selector</item>
+        <item name="android:lines">1</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:selectAllOnFocus">true</item>
+        <item name="android:singleLine">true</item>
     </style>
 
     <style name="AutoCompleteTextViewStyle" parent="@style/Widget.AppCompat.AutoCompleteTextView">
@@ -898,6 +942,20 @@
         <item name="android:listSelector">@drawable/top_menu_list_selector</item>
         <item name="android:background">@color/edit_form_selector_background_color_release_state
         </item>
+    </style>
+
+    <style name="SettingsAccountEditText">
+        <item name="android:paddingLeft">6dp</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/edittext_holo_selector</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">#333333</item>
+        <item name="android:textColorHint">#8A8A8A</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">left</item>
     </style>
 
     <style name="EditTextEnterLeaderText">
@@ -924,6 +982,23 @@
     <style name="FlatButton">
         <item name="android:textColor">@color/text_white</item>
         <item name="android:textSize">18sp</item>
+        <item name="android:minHeight">44dp</item>
+        <item name="android:minWidth">240dp</item>
+        <item name="android:fontFamily" tools:ignore="NewApi">Roboto Regular</item>
+    </style>
+
+    <style name="FlatButton.Emptyfeed" parent="FlatButton">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="FlatButton.Gray.Emptyfeed" parent="FlatButton.Emptyfeed">
+        <item name="android:background">@drawable/flat_gray_btn</item>
+    </style>
+
+    <style name="FlatButton.Blue.Emptyfeed" parent="FlatButton.Emptyfeed">
+        <item name="android:background">@drawable/flat_blue_btn</item>
     </style>
 
     <style name="FlatButton.Gray">
@@ -939,4 +1014,111 @@
         <item name="android:textColor">@color/text_white</item>
     </style>
 
+    <style name="ProfileText">
+        <item name="android:textColor">@color/text_color_gray</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="FormTitleText">
+        <item name="android:textColor">@color/list_unread_counter_background</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="FlatGrayButton">
+        <item name="android:background">@drawable/flat_gray_btn</item>
+        <item name="android:textColor">@color/text_white</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="GrayText">
+        <item name="android:textColor">@color/text_color_gray</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="GrayText.Small">
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="WhiteText">
+        <item name="android:textColor">@color/text_white</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="WhiteListItem" parent="GrayText">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">@dimen/form_item_height</item>
+        <item name="android:gravity">center_vertical|start</item>
+        <item name="android:paddingLeft">@dimen/item_side_padding</item>
+        <item name="android:paddingRight">@dimen/item_side_padding</item>
+    </style>
+
+    <style name="WhiteListItem.Underline">
+        <item name="android:background">@drawable/list_item_btn</item>
+    </style>
+
+    <style name="SelectorDialogTitle" parent="GrayText">
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:paddingBottom">12dp</item>
+    </style>
+
+    <style name="SelectorDialogTitle.Blue">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/default_line_indicator_selected_color</item>
+    </style>
+
+    <style name="WhiteBackgroundTitle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#8A8A8A</item>
+        <item name="android:paddingTop">26dp</item>
+    </style>
+
+    <style name="WhiteBackgroundEdit" parent="topfaceEditText.Holo">
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">top|left</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="FeedbackEditText" parent="WhiteBackgroundEdit" />
+
+    <style name="FeedbackTextView" parent="WhiteBackgroundTitle" />
+
+    <style name="ComplainsHeader" parent="FormTitleText">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="ComplainsMessageEdit" parent="WhiteBackgroundEdit">
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:hint">@string/complain_description</item>
+    </style>
+
+    <style name="ComplainsTitle" parent="WhiteBackgroundTitle">
+        <item name="android:paddingTop">0dp</item>
+    </style>
+
+    <style name="PayReasonView" parent="GrayText">
+        <item name="android:visibility">gone</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="CoinsTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawablePadding">6dp</item>
+        <item name="android:drawableRight">@drawable/ic_coins</item>
+        <item name="android:textSize">24sp</item>
+    </style>
 </resources>

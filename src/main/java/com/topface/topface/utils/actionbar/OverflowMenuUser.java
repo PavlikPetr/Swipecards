@@ -28,4 +28,6 @@ public interface OverflowMenuUser {
     void clickSendGift();
 
     Integer getProfileId();
+
+    Boolean isBanned();
 }

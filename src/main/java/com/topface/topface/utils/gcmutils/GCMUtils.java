@@ -18,10 +18,13 @@ import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
-import com.topface.topface.data.experiments.MessagesWithTabs;
+import com.topface.topface.data.SerializableToJson;
+import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
@@ -30,12 +33,16 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -286,6 +293,7 @@ public class GCMUtils {
         if (!Ssid.isLoaded()) {
             if (type == GCM_TYPE_UPDATE || type == GCM_TYPE_PROMO) {
                 notificationManager.showNotification(
+                        type,
                         title,
                         data,
                         true, null,
@@ -296,6 +304,7 @@ public class GCMUtils {
             }
         } else if (user != null && !TextUtils.isEmpty(user.photoUrl)) {
             notificationManager.showNotificationAsync(
+                    type,
                     title,
                     data,
                     user,
@@ -307,6 +316,7 @@ public class GCMUtils {
             );
         } else {
             notificationManager.showNotification(
+                    type,
                     title,
                     data,
                     true, null,
@@ -318,6 +328,9 @@ public class GCMUtils {
     }
 
     public static int getType(Intent extra) {
+        if (extra == null) {
+            return GCM_TYPE_UNKNOWN;
+        }
         String typeString = extra.getStringExtra("type");
         try {
             return typeString != null ? Integer.parseInt(typeString) : GCM_TYPE_UNKNOWN;
@@ -337,7 +350,7 @@ public class GCMUtils {
                 // on Api version 8 unread counter will have the same keys as common requests
                 counterManager.setEntitiesCounters(
                         countersJson.optInt("unread_likes"),
-                        countersJson.optInt("unread_sympaties"),
+                        countersJson.optInt("unread_symphaties"),
                         countersJson.optInt("unread_messages"),
                         countersJson.optInt("unread_visitors"),
                         countersJson.optInt("unread_fans"),
@@ -393,6 +406,21 @@ public class GCMUtils {
         return unread;
     }
 
+    private static int getUsersCountInMessageStack(User user) {
+        UserConfig config = App.getUserConfig();
+        MessageStack messagesStack = config.getNotificationMessagesStack();
+        Set<Integer> uniqueIds = new HashSet<>();
+        for (SerializableToJson item : messagesStack) {
+            MessageStack.Message message = (MessageStack.Message) item;
+            if (message.mUserId != MessageStack.EMPTY_USER_ID) {
+                uniqueIds.add(message.mUserId);
+            }
+        }
+        // add last received gcm user id
+        uniqueIds.add(user.id);
+        return uniqueIds.size();
+    }
+
     private static Intent getIntentByType(Context context, int type, User user) {
         Intent i = null;
         switch (type) {
@@ -401,7 +429,16 @@ public class GCMUtils {
                 if (showMessage) {
                     if (user.id != 0) {
                         lastNotificationType = GCM_TYPE_MESSAGE;
-                        i = ChatActivity.createIntent(context, user);
+                        if (getUsersCountInMessageStack(user) > 1) {
+                            // create intent to open Dialogs
+                            i = new Intent(context, NavigationActivity.class);
+                            i.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.TABBED_DIALOGS);
+                            i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, DialogsFragment.class.getName());
+                            // add the same request code like Chat intent
+                            i.putExtra(Static.INTENT_REQUEST_KEY, ChatActivity.INTENT_CHAT);
+                        } else {
+                            i = ChatActivity.createIntent(context, user);
+                        }
                     } else {
                         i = new Intent(context, NavigationActivity.class);
                     }
@@ -450,7 +487,7 @@ public class GCMUtils {
             case GCM_TYPE_DIALOGS:
                 lastNotificationType = GCM_TYPE_DIALOGS;
                 i = new Intent(context, NavigationActivity.class);
-                MessagesWithTabs.equipNavigationActivityIntent(i);
+                FeedScreensIntent.equipMessageAllIntent(i);
                 break;
             case GCM_TYPE_PROMO:
             default:

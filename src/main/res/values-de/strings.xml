@@ -134,6 +134,7 @@
     <string name="general_spinner_title">Wählen Sie die Aktion</string>
     <string name="general_profile_error">Fehler bei der Ladung des Profils</string>
     <string name="general_dbl_all">Alle</string>
+    <string name="general_dbl_unread">Ungelesene</string>
     <string name="time_yesterday">Gestern</string>
     <string name="time_today">Heute</string>
     <string name="general_send_button">Send</string>
@@ -369,12 +370,12 @@
     <string name="gallery">Galerie</string>
     <string name="no_photo_take_photo">Man kann Sie nicht kennen lernen! Machen Sie ein Foto oder laden ein aus dem Album ein</string>
     <string name="photo_for_avatar">Ihr Foto ist schon bereit zur Absendung in den Profil! Das Ihr erstes Foto und es wird als Ihr Avatar benutzt.</string>
-    <string name="change_email">E-Mail ändern</string>
     <string name="send_confirmation_email">Die Bestätigung auf die E-Mail-Adresse senden</string>
     <string name="change_password">Passwort ändern</string>
     <string name="password_changing">Passwort ändern</string>
     <string name="save">Speichern</string>
     <string name="confirmation_successfully_sent">Die Bestätigung wurde auf Ihre E-Mail-Adresse gesendet</string>
+    <string name="password_hint">Passwort</string>
     <string name="password_confirmation_hint">Passwort bestätigen</string>
     <string name="enter_new_password">Geben Sie ein neues Passwort ein</string>
     <string name="enter_password_confirmation">Geben Sie eine Passwortbestätigung ein</string>
@@ -463,6 +464,8 @@
     <string name="general_complain_sended">Ihre Meldung wurde gesendet, vielen Dank für Ihre Hilfe</string>
     <string name="general_complain">Meldung</string>
     <string name="general_msg">Nachricht</string>
+    <string name="notifications">Benachrichtigungen</string>
+    <string name="general_no_notifications">Leider, die Benachrichtigungen auf Ihrem Gerät sind nicht verfügbar</string>
     <string name="black_list_add_short">In die schwarze Liste</string>
     <string name="confirm_email_for_dating">Wir sind gegen Spam. Bestätigen Sie Ihre E-Mail-Adresse, um in Topface sich kennen zu lernen!</string>
     <string name="send_confirm_link">Link für die Bestätigung senden</string>
@@ -485,7 +488,6 @@
     <string name="delete">Löschen</string>
     <string name="delete_account_warning">Achtung! Sie versuchen Ihren Profil in Topface zu löschen.</string>
     <string name="delete_account_error">Leider, wurde Ihr Account nicht gelöscht. Sie können noch einmal versuchen.</string>
-    <string name="delete_account_will_be_restored_are_you_sure">Sie versuchen in von Ihnen gelöschten Profil einloggen. Beim Einloggen wrid Ihr Account wiederhergestellt. Sind Sie sicher?</string>
     <string name="restore">Wiederherstellen</string>
     <string name="admiration_sended">Bewunderung ist gesendet</string>
     <string name="skip">Überspringen</string>

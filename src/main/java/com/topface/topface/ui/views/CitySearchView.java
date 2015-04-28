@@ -79,6 +79,11 @@ public class CitySearchView extends AutoCompleteTextView {
         setRequestKey(requestKey);
     }
 
+    @Override
+    public CitySearchViewAdapter getAdapter() {
+        return mAdapter;
+    }
+
     private void setRequestKey(int key) {
         switch (key) {
             case 0:
@@ -163,14 +168,16 @@ public class CitySearchView extends AutoCompleteTextView {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                     getMyAdapter().notifyDataSetChanged();
                 }
-                mBackPressCounter = 0;
+                if (mBackPressCounter > 1) {
+                    mBackPressCounter = 1;
+                }
                 if (TextUtils.isEmpty(CitySearchView.this.getText()) &
                         // remove incorect calling onDismiss
                         (Calendar.getInstance().getTimeInMillis() - mGetFocusTime) > DELAY_VALUE) {
-                    CitySearchView.this.setFocusable(false);
-                    Utils.hideSoftKeyboard(mContext, CitySearchView.this);
                     if (mLastCheckedCity != null) {
                         CitySearchView.this.setMyText(mLastCheckedCity.getFullName());
+                        CitySearchView.this.setFocusable(false);
+                        Utils.hideSoftKeyboard(mContext, CitySearchView.this);
                     }
                 }
             }
@@ -191,6 +198,14 @@ public class CitySearchView extends AutoCompleteTextView {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 CitySearchView.this.setFocusableInTouchMode(true);
+                if (isFocused() && !CitySearchView.this.isPopupShowing()) {
+                    post(new Runnable() {
+                        @Override
+                        public void run() {
+                            CitySearchView.this.showDropDown();
+                        }
+                    });
+                }
                 return false;
             }
         });
@@ -286,20 +301,13 @@ public class CitySearchView extends AutoCompleteTextView {
 
     @Override
     public boolean onKeyPreIme(int keyCode, @NotNull KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
             mBackPressCounter++;
             if (mBackPressCounter > 1) {
                 return super.onKeyPreIme(keyCode, event);
             } else {
-
-                if (mScreenHeight == getCurentScreenHeight()) {
-                    CitySearchView.this.setFocusable(false);
-                    return true;
-                } else {
-                    Utils.hideSoftKeyboard(mContext, this);
-                    return true;
-                }
-
+                Utils.hideSoftKeyboard(mContext, this);
+                return true;
             }
         }
         return super.onKeyPreIme(keyCode, event);
@@ -310,13 +318,6 @@ public class CitySearchView extends AutoCompleteTextView {
             int screenHeight = mOnRootViewListener.getHeight();
             mScreenHeight = mScreenHeight < screenHeight ? screenHeight : mScreenHeight;
         }
-    }
-
-    private int getCurentScreenHeight() {
-        if (mOnRootViewListener != null) {
-            return mOnRootViewListener.getHeight();
-        }
-        return 0;
     }
 
     public void setOnRootViewListener(onRootViewListener rootViewListener) {

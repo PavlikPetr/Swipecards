@@ -265,7 +265,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
             return super.getNumColumns();
         } else {
             try {
-                Field numColumns = getClass().getSuperclass().getDeclaredField("mNumColumns");
+                Field numColumns = getBaseGridViewClass().getDeclaredField("mNumColumns");
                 numColumns.setAccessible(true);
                 return numColumns.getInt(this);
             } catch (Exception e) {
@@ -283,7 +283,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
             return super.getColumnWidth();
         } else {
             try {
-                Field numColumns = getClass().getSuperclass().getDeclaredField("mColumnWidth");
+                Field numColumns = getBaseGridViewClass().getDeclaredField("mColumnWidth");
                 numColumns.setAccessible(true);
                 return numColumns.getInt(this);
             } catch (NoSuchFieldException e) {
@@ -292,6 +292,10 @@ public class GridViewWithHeaderAndFooter extends GridView {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public Class getBaseGridViewClass() {
+        return getClass().getSuperclass();
     }
 
     @Override
@@ -354,6 +358,9 @@ public class GridViewWithHeaderAndFooter extends GridView {
 
     @Override
     public void setAdapter(ListAdapter adapter) {
+        if (adapter instanceof IGridSizes) {
+            ((IGridSizes) adapter).setColumnWidth(getGridViewColumnWidth());
+        }
         if (mHeaderViewInfos.size() > 0 || mFooterViewInfos.size() > 0) {
             HeaderViewGridAdapter headerViewGridAdapter = new HeaderViewGridAdapter(mHeaderViewInfos, mFooterViewInfos, adapter);
             int numColumns = getNumColumnsCompatible();
@@ -816,5 +823,9 @@ public class GridViewWithHeaderAndFooter extends GridView {
         super.onSizeChanged(w, h, oldw, oldh);
         setColumnWidth(getGridViewColumnWidth());
         setNumColumns(getGridViewNumColumns());
+    }
+
+    public interface IGridSizes {
+        void setColumnWidth(int width);
     }
 }

@@ -50,8 +50,7 @@ public class RestoreAccountActivity extends TrackedFragmentActivity implements V
                         }).exec();
                 break;
             case R.id.cancel_restore:
-                AuthToken.getInstance().removeToken();
-                finish();
+                new AuthorizationManager(this).logout(this);
                 break;
         }
     }

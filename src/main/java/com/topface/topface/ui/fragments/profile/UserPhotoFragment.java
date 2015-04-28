@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
@@ -22,7 +21,6 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.GridViewWithHeaderAndFooter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
-import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
 import org.json.JSONArray;
@@ -38,7 +36,6 @@ public class UserPhotoFragment extends ProfileInnerFragment {
     private int mUserId;
     private int mPhotosCount;
     private UserPhotoGridAdapter mUserPhotoGridAdapter;
-    private TextView mTitle;
     private Photos mPhotoLinks;
     private LoadingListAdapter.Updater mUpdater;
     private GridViewWithHeaderAndFooter mGridAlbum;
@@ -47,17 +44,19 @@ public class UserPhotoFragment extends ProfileInnerFragment {
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-            Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(mPendingUserInit.getData().gifts,
-                    position,
-                    mUserId,
-                    mPhotosCount,
-                    mUserPhotoGridAdapter
-            );
-            Fragment parentFrag = getParentFragment();
-            if (parentFrag != null) {
-                parentFrag.startActivity(intent);
-            } else {
-                startActivity(intent);
+            if (position < mPhotosCount) {
+                Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(mPendingUserInit.getData().gifts,
+                        position,
+                        mUserId,
+                        mPhotosCount,
+                        mUserPhotoGridAdapter
+                );
+                Fragment parentFrag = getParentFragment();
+                if (parentFrag != null) {
+                    parentFrag.startActivity(intent);
+                } else {
+                    startActivity(intent);
+                }
             }
         }
     };
@@ -113,12 +112,6 @@ public class UserPhotoFragment extends ProfileInnerFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_grid, container, false);
         mGridFooterView = createGridViewFooter();
-        // title
-        mTitle = (TextView) root.findViewById(R.id.usedTitle);
-        if (mPhotoLinks == null) {
-            mTitle.setText(Utils.formatPhotoQuantity(0));
-        }
-        mTitle.setVisibility(View.VISIBLE);
         // album
         mGridAlbum = (GridViewWithHeaderAndFooter) root.findViewById(R.id.usedGrid);
 
@@ -143,7 +136,6 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         if (mUserPhotoGridAdapter != null) {
             mGridAlbum.setOnScrollListener(mUserPhotoGridAdapter);
         }
-        initTitle(mPhotoLinks);
         return root;
     }
 
@@ -205,7 +197,6 @@ public class UserPhotoFragment extends ProfileInnerFragment {
 
 
     private void setPhotos(Photos photos) {
-        initTitle(photos);
         if (mUserPhotoGridAdapter == null) {
             mUserPhotoGridAdapter = new UserPhotoGridAdapter(getActivity().getApplicationContext(),
                     photos,
@@ -214,18 +205,11 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         }
     }
 
-    private void initTitle(Photos photos) {
-        if (mTitle != null && photos != null) {
-            mTitle.setText(Utils.formatPhotoQuantity(mPhotosCount));
-        }
-    }
-
     @Override
     public void clearContent() {
         if (mPhotoLinks != null) {
             mPhotoLinks.clear();
         }
-        initTitle(mPhotoLinks);
         if (mUserPhotoGridAdapter != null) {
             mUserPhotoGridAdapter.notifyDataSetChanged();
         }

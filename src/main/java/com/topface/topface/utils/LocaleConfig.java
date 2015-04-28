@@ -113,7 +113,7 @@ public class LocaleConfig {
                 @Override
                 public void success(IApiResponse response) {
                     DatingInstantMessageController.resetMessage();
-                    App.sendUserOptionsRequest();
+                    App.sendUserOptionsAndPurchasesRequest();
                     NavigationActivity.restartNavigationActivity(activity);
                 }
 

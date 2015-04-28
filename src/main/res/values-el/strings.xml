@@ -128,6 +128,7 @@
     <string name="general_spinner_title">Επιλέξτε μια δράση</string>
     <string name="general_profile_error">Λάθους τη φόρτωση του προφίλ</string>
     <string name="general_dbl_all">\'Ολα</string>
+    <string name="general_dbl_unread">Αδιάβαστος</string>
     <string name="time_yesterday">Χτες</string>
     <string name="time_today">σήμερα</string>
     <string name="general_send_button">Στείλ.</string>
@@ -136,11 +137,14 @@
     <string name="general_city">Πόλη</string>
     <string name="general_dating">Εξοικείωσεις</string>
     <string name="general_likes">Αρέσουμε</string>
+    <string name="general_photoblog">Photoblog</string>
+    <string name="general_sympathies">Συμπάθειες</string>
     <string name="general_sympathy">Συμπάθεια</string>
     <string name="general_delight">Θαυμασμός</string>
     <string name="general_mutual">Αμοιβαία</string>
     <string name="general_dialogs">Διάλογο</string>
     <string name="general_visitors">Οι επισκέπτες</string>
+    <string name="general_visitors_tab_views">προβολές</string>
     <string name="general_profile">Προφίλ</string>
     <string name="general_settings">Ρυθμίσεις</string>
     <string name="auth_btn_vk">Εισάγετε με Vkontakte</string>
@@ -156,16 +160,20 @@
     <string name="chat_like_out">Έχετε στείλει μια συμπάθεια</string>
     <string name="chat_mutual_in">Σας έχουν στείλει το θαυμασμό</string>
     <string name="chat_mutual_out">Έχετε στείλει το θαυμασμό</string>
+    <string name="chat_wish_in">Κάποιος σας έστειλε μια Μυστική Επιθυμία</string>
     <string name="chat_wish_out">Έχετε στείλει μια μυστική επιθυμία.</string>
     <string name="chat_sexuality_in">Σεξουαλικότητα σας είναι ευπρόσδεκτη.</string>
     <string name="chat_sexuality_out">Έχετε αξιολογηθεί τη σεξουαλικότητα.</string>
     <string name="chat_wink_in">\'Εκανε ένα κλείσιμο ματιού για σας.</string>
     <string name="chat_wink_out">Έχετε κλείσει το μάτι.</string>
+    <string name="filter_search">Αναζήτηση</string>
     <string name="filter_filter">Φίλτρο</string>
     <string name="filter_age_string">Από %1$d έως %2$d</string>
     <string name="filter_only_beautiful">Μόνο όμορφες</string>
     <string name="filter_extra_parameters">Περισσότερες Επιλογές Αναζήτησης</string>
     <string name="filter_age">Ηλικία</string>
+    <string name="filter_age_start_prefix">Από %s</string>
+    <string name="filter_age_end_prefix">μέχρι %s</string>
     <string name="filter_cities_all">Σε όλες οι πόλεις</string>
     <string name="buying_header_title">Αγορά</string>
     <plurals name="buying_gift_you_need_coins">
@@ -173,17 +181,21 @@
         <item quantity="one">Για να στείλετε ένα δώρο, μπορείτε να αγοράσετε %d κέρμα</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
-        <item quantity="other">Για να δείτε ποιος σας αρέσει, να αγοράσει άλλα %d νομίσματα</item>
+        <item quantity="other">Για να δείτε ποιος σας αρέσει, να αγοράσει άλλα %d κέρματα</item>
         <item quantity="one">Για να δείτε ποιος σας αρέσει, μπορείτε να αγοράσετε %d κέρμα</item>
     </plurals>
     <plurals name="buying_leaders_you_need_coins">
         <item quantity="other">Σε όλους εσάς έχετε δει, έχετε αγοράσει %d νομίσματα</item>
         <item quantity="one">Σε όλους εσάς έχετε δει, έχετε αγοράσει %d κέρμα</item>
     </plurals>
+    <plurals name="buying_you_need_coins">
+        <item quantity="one">Δεν έχετε αρκετά %d κέρμα</item>
+    </plurals>
     <string name="buying_default_message">Μπορείτε να στείλετε τα δώρα και το θαυμασμό για τα κέρματα</string>
     <string name="buying_money">Αγορά κερμάτων</string>
     <string name="gifts_title">Επιλέξτε ένα δώρο</string>
     <string name="profile_header_title">Το προφίλ μου</string>
+    <string name="album_add_photo_title">Προσθέστε τη μια φωτογραφία</string>
     <string name="profile_add_album">Επιλέξτε από τις διαθέσιμες</string>
     <string name="profile_add_camera">Τραβήξτε μια εικόνα</string>
     <string name="profile_photo">Φωτογραφία</string>
@@ -316,6 +328,7 @@
     <string name="popup_version_cancel">Υπενθύμιση αργότερα</string>
     <string name="general_version_not_supported">Δική σας έκδοση της εφαρμογής είναι ξεπερασμένη και δεν υποστηρίζεται πλέον. Σας παρακαλούμε να ενημερώστε την εφαρμογή</string>
     <string name="default_price_format">Στη συνολική: %.2f USD</string>
+    <string name="default_price_format_extended">Στη συνολική: %1$.2f %2$s</string>
     <string name="leaders_pick_condition">Δεν μπορείτε να επιλέξετε μια φωτογραφία με βαθμολογία κάτω από %d%%:</string>
     <string name="general_gift">Το δώρω</string>
     <string name="user_actions_chat">Συνομιλία</string>
@@ -348,12 +361,12 @@
     <string name="gallery">Έκθεση</string>
     <string name="no_photo_take_photo">Με εσάς, δεν μπορεί κανείς να εξοικειωθεί! Τραβήξτε μια φωτογραφία ή κατεβάστε διαθέσιμη από το άλμπουμ</string>
     <string name="photo_for_avatar">Η φωτογραφία είναι έτοιμη να σταλεί στο προφίλ σας! Αυτή είναι η πρώτη φωτογραφία σας και θα χρησιμοποιηθεί ως avatar.</string>
-    <string name="change_email">Αλλάξτε e-mail</string>
     <string name="send_confirmation_email">Στείλτε ένα επιβεβαίωση στο e-mail</string>
     <string name="change_password">Αλλάξτε τον κωδικό</string>
     <string name="password_changing">Αλλαγή κωδικού</string>
     <string name="save">Αποθήκευση</string>
     <string name="confirmation_successfully_sent">Η επιβεβαίωση θα αποσταλεί στο e-mail σας</string>
+    <string name="password_hint">το κωδικό</string>
     <string name="password_confirmation_hint">επιβεβαίωση κωδικού</string>
     <string name="enter_new_password">Εισάγετε τον νέο κωδικό</string>
     <string name="enter_password_confirmation">Επιβεβαίωση κωδικού</string>
@@ -441,6 +454,8 @@
     <string name="general_complain_sended">Σας ευχαριστούμε, το παράπονό σας θα εξεταστεί στο προσεχές μέλλον</string>
     <string name="general_complain">Η αναφορά</string>
     <string name="general_msg">Μήνυμα</string>
+    <string name="notifications">Ειδοποιήσεις</string>
+    <string name="general_no_notifications">Δυστυχώς, η κοινοποίησης στη συσκευή σας δεν είναι διαθέσιμες</string>
     <string name="black_list_add_short">Στη μαύρη λίστα</string>
     <string name="confirm_email_for_dating">Είμαστε αντίθετοι με την τοποθέτηση  spam.Επιβεβαιώστε το email  για να εξοικείωσετε στο Topface!</string>
     <string name="send_confirm_link">Στείλτε ένα σύνδεσμο για την επιβεβαίωση</string>
@@ -459,11 +474,11 @@
     <string name="or">ή</string>
     <string name="settings_delete_account">Διαγραφή του λογαριασμού σας</string>
     <string name="chat_block_not_mutual">Για να ξεκινήσετε συνομιλία με τον χρήστη μπορείτε, αν αυτός σας στείλει μια συμπάθεια ή αν έχετε VIP-κατάσταση</string>
+    <string name="add_to_favorite_block_not_vip">Μόνο τα VIP χρήστες μπορούν να προσθέσουν νέες επαφές από \"Εξοικείωσεις\" στα αγαπημένα τους</string>
     <string name="delete_account_are_you_sure">Είστε σίγουροι?</string>
     <string name="delete">Αφαιρέστε</string>
     <string name="delete_account_warning">Προσοχή! θέλετε να διαγράψετε το προφίλ σας?</string>
     <string name="delete_account_error">Σφάλμα κατά τη διαγραφή του λογαριασμού. Προσπαθήστε να επαναλάβετε τη δράση αργότερα.</string>
-    <string name="delete_account_will_be_restored_are_you_sure">Προσπαθείτε να εισάγεται έναν λογαριασμό που έχετε διαγράψει. Κατά την είσοδο ο λογαριασμός θα επανέλθει. Θέλετε να συνεχίσετε?</string>
     <string name="restore">Αποκαταστήστε</string>
     <string name="admiration_sended">Θαυμασμός εστάλη.</string>
     <string name="skip">Παραλείψετε</string>
@@ -537,4 +552,12 @@
     <string name="billing_item_already_owned">Προηγούμενη αγορά σας είναι σε επεξεργασία, παρακαλώ περιμένετε</string>
     <string name="dialog">Μηνύματα</string>
     <string name="reply">Απαντήστε</string>
+    <string name="measurement_unit_weight">kg</string>
+    <string name="measurement_unit_height">cm</string>
+    <string name="email_changing">Αλλαγή e-mail</string>
+    <string name="google_service_disabled_button">Ενεργοποίηση</string>
+    <string name="google_service_missing_button">Εγκαταστήστε</string>
+    <string name="google_service_version_update_required_button">Ανανεώστε</string>
+    <string name="google_sign_in_account_title">Δεν έχετε προσθέσει το λογαριασμό Google, θα πρέπει να εγγραφείτεб αν θέλετε να ενημερώνεστε.</string>
+    <string name="add_leader_hint">Χαιρετισμό σας …</string>
 </resources>

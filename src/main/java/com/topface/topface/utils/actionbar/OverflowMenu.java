@@ -142,15 +142,17 @@ public class OverflowMenu {
         return result;
     }
 
-    public ArrayList<OverflowMenuItem> getProfileOverflowMenu(boolean isEditor) {
+    public ArrayList<OverflowMenuItem> getProfileOverflowMenu(boolean isEditor, boolean isBanned) {
         ArrayList<OverflowMenuItem> result = new ArrayList<>();
-        result.add(SEND_SYMPATHY_ACTION);
-        result.add(SEND_ADMIRATION_ACTION);
-        result.add(OPEN_CHAT_ACTION);
-        result.add(SEND_GIFT_ACTION);
-        result.add(ADD_TO_BLACK_LIST_ACTION);
-        result.add(ADD_TO_BOOKMARK_ACTION);
-        result.add(COMPLAIN_ACTION);
+        if (!isBanned) {
+            result.add(SEND_SYMPATHY_ACTION);
+            result.add(SEND_ADMIRATION_ACTION);
+            result.add(OPEN_CHAT_ACTION);
+            result.add(SEND_GIFT_ACTION);
+            result.add(ADD_TO_BLACK_LIST_ACTION);
+            result.add(ADD_TO_BOOKMARK_ACTION);
+            result.add(COMPLAIN_ACTION);
+        }
         if (isEditor) {
             result.add(OPEN_PROFILE_FOR_EDITOR_STUB);
         }
@@ -177,7 +179,7 @@ public class OverflowMenu {
             Boolean isInBlackList = isInBlackList();
             Boolean isSympathySent = isSympathySent();
             mBarActions.getSubMenu().clear();
-            ArrayList<OverflowMenuItem> overflowMenuItemArray = getProfileOverflowMenu(CacheProfile.isEditor());
+            ArrayList<OverflowMenuItem> overflowMenuItemArray = getProfileOverflowMenu(CacheProfile.isEditor(), isBanned());
             for (int i = 0; i < overflowMenuItemArray.size(); i++) {
                 OverflowMenuItem item = overflowMenuItemArray.get(i);
                 Integer resourceId = null;
@@ -198,12 +200,14 @@ public class OverflowMenu {
                 }
                 mBarActions.getSubMenu().add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mActivity.getString(resourceId) : "");
             }
-            if (isInBlackList != null) {
-                mBarActions.getSubMenu().findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!isInBlackList);
-            }
-            if (isSympathySent != null && isSympathySent) {
-                mBarActions.getSubMenu().findItem(SEND_SYMPATHY_ACTION.getId()).setEnabled(false);
-                mBarActions.getSubMenu().findItem(SEND_ADMIRATION_ACTION.getId()).setEnabled(false);
+            if (overflowMenuItemArray.size() > 1) {
+                if (isInBlackList != null) {
+                    mBarActions.getSubMenu().findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!isInBlackList);
+                }
+                if (isSympathySent != null && isSympathySent) {
+                    mBarActions.getSubMenu().findItem(SEND_SYMPATHY_ACTION.getId()).setEnabled(false);
+                    mBarActions.getSubMenu().findItem(SEND_ADMIRATION_ACTION.getId()).setEnabled(false);
+                }
             }
         }
     }
@@ -587,12 +591,16 @@ public class OverflowMenu {
         return getOverflowMenuFieldsListener() == null ? null : getOverflowMenuFieldsListener().getProfileId();
     }
 
+    private Boolean isBanned() {
+        return getOverflowMenuFieldsListener() == null ? false : getOverflowMenuFieldsListener().isBanned();
+    }
+
     private void registerBroadcastReceiver() {
         LocalBroadcastManager.getInstance(mActivity).registerReceiver(mUpdateActionsReceiver,
                 new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
     }
 
-    public void onDestroy() {
+    public void onReleaseOverflowMenu() {
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(mUpdateActionsReceiver);
         mOverflowMenuFields = null;
         mActivity = null;

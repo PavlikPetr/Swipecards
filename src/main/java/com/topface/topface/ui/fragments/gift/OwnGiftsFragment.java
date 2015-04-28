@@ -1,7 +1,9 @@
 package com.topface.topface.ui.fragments.gift;
 
+import android.os.Bundle;
 import android.view.View;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.ui.PurchasesActivity;
@@ -10,6 +12,17 @@ import com.topface.topface.ui.PurchasesActivity;
  * Fragment displaying your own gifts
  */
 public class OwnGiftsFragment extends UpdatableGiftsFragment {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setNeedTitles(true);
+    }
+
+    @Override
+    protected String getTitle() {
+        return App.getContext().getString(R.string.profile_gifts);
+    }
 
     @Override
     protected void postGiftsLoadInfoUpdate(Profile.Gifts gifts) {

@@ -92,6 +92,7 @@
     <string name="general_spinner_title">Choisissez l\'action</string>
     <string name="general_profile_error">Erreur de sauvegarde des données</string>
     <string name="general_dbl_all">Tous</string>
+    <string name="general_dbl_unread">Non lus</string>
     <string name="time_yesterday">Hier</string>
     <string name="time_today">Aujourd\'hui</string>
     <string name="general_send_button">Env.</string>
@@ -285,12 +286,12 @@
     <string name="gallery">Galerie</string>
     <string name="no_photo_take_photo">Personne ne peut faire connaissanc avec vous! Prenez une photo ou choisissez une photo de l\'album</string>
     <string name="photo_for_avatar">La photographie est prête à être envoyée à votre profil! C\'est votre première photo et elle sera utilisée comme l\'avatar.</string>
-    <string name="change_email">Changer l\'e-mail</string>
     <string name="send_confirmation_email">Envoyer l confirmation sur l\'e-mail</string>
     <string name="change_password">Changer le mot de passe</string>
     <string name="password_changing">Changement du mot de passe</string>
     <string name="save">Sauver</string>
     <string name="confirmation_successfully_sent">La confirmation est envoyée sur l\'e-mail</string>
+    <string name="password_hint">mot de passe</string>
     <string name="password_confirmation_hint">confirmation du mot de passe</string>
     <string name="enter_new_password">Saisissez un nouveau motb de passe</string>
     <string name="enter_password_confirmation">Saisissez la confirmation du mot de passe</string>
@@ -378,6 +379,8 @@
     <string name="general_complain_sended">Votre plainte est envoyée</string>
     <string name="general_complain">Plainte</string>
     <string name="general_msg">Message</string>
+    <string name="notifications">Notifications</string>
+    <string name="general_no_notifications">Malheureusement, les notifications ne sont pas accessibles sur votre appareil</string>
     <string name="black_list_add_short">A la liste noire</string>
     <string name="confirm_email_for_dating">Nous sommes contre le spam. Confirmez votre adresse e-mail pour faire connaissance sur Topface!</string>
     <string name="complain_type_swearing_msg">Goujaterie, menaces, gros mots</string>
@@ -398,7 +401,6 @@
     <string name="delete">Supprimer</string>
     <string name="delete_account_warning">Attention! Vous essayez de supprimer votre profil sur Topface.</string>
     <string name="delete_account_error">Malheureusement on n\'a pas réussi à supprimer voter compte. Vous pouvez répéter encore une fois.</string>
-    <string name="delete_account_will_be_restored_are_you_sure">Vous essayez d\'entrer à votre compte supprimé. Le compte sera rétabli. Vous êtes sûr?</string>
     <string name="restore">Rétablir</string>
     <string name="admiration_sended">Le ravissement est envoyé</string>
     <string name="skip">Laisser passer</string>

@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
+        <com.topface.IllustratedTextView.IllustratedTextView
+            android:id="@+id/payReasonFragmentBuy"
+            style="@style/PayReasonView" />
 
         <ViewStub
             android:id="@+id/EditorTestStub"
             android:layout="@layout/fragment_buy_editor"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -26,24 +29,24 @@
                 android:id="@+id/fbBuyingDisabled"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                style="@style/TitleWhiteText"
+                style="@style/TitleGrayText"
                 android:text="@string/general_buying_disabled"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/likes_title"
+                style="@style/GrayText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="2dp"
-                android:text="@string/buying_sympathies"
-                android:textSize="16sp"/>
+                android:text="@string/buying_sympathies" />
 
             <LinearLayout
                 android:id="@+id/fbLikes"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"/>
+                android:orientation="vertical" />
 
             <!-- Money -->
             <TextView
@@ -51,16 +54,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                style="@style/GrayText"
                 android:layout_marginBottom="2dp"
-                android:text="@string/buying_money"
-                android:textSize="16sp"/>
+                android:text="@string/buying_money" />
 
             <LinearLayout
                 android:id="@+id/fbCoins"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

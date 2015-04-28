@@ -36,8 +36,9 @@ public class TopfaceOfferwallRedirect extends BaseExperiment {
 
     private boolean mExpOnOpen;
     private boolean mExpOnClose;
-    private UserConfig mUserConfig = App.getUserConfig();
     private boolean mIsCompleted;
+    private UserConfig mUserConfig = App.getUserConfig();
+
 
     public TopfaceOfferwallRedirect() {
     }

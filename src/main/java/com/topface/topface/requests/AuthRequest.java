@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.social.AuthToken;
@@ -91,6 +92,9 @@ public class AuthRequest extends PrimalAuthRequest {
                 .put("token", mToken);
         if (mAppsflyer != null) {
             data.put("appsflyer", mAppsflyer.toJsonWithConversions(App.getConversionHolder()));
+        }
+        if (TextUtils.equals(mPlatform, AuthToken.SN_ODNOKLASSNIKI)) {
+            data.put("socialAppId", Static.AUTH_OK_ID);
         }
         return data;
     }

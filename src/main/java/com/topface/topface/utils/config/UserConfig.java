@@ -59,18 +59,29 @@ public class UserConfig extends AbstractConfig {
     public static final String REMAINED_DAILY_PUBNATIVE_SHOWS = "remained_feed_ad_shows";
     public static final String LAST_DAY_PUBNATIVE_SHOWN = "current_day_for_showing_feed_ad";
     public static final String SYMPATHY_SENT_ID_ARRAY = "sympathy_sent_id_array";
+    public static final String FACEBOOK_REQUESTS_DIALOG_SKIPS = "facebook_request_dialog_skip";
+    public static final String FACEBOOK_REQUESTS_DIALOG_TIME = "facebook_request_dialog_time";
     private static final String APPSFLYER_FIRST_PAY = "appsflyer_first_purchase";
+    private static final String IS_EMAIL_CONFIRM_SENT = "is_button_send_confirmation_clicked";
     private String mUnique;
-
-    public UserConfig(Context context) {
-        super(context);
-        AuthToken token = AuthToken.getInstance();
-        mUnique = token.getUserTokenUniqueId();
-    }
 
     public UserConfig(String uniqueKey, Context context) {
         super(context);
         mUnique = uniqueKey;
+    }
+
+    private void setUnique(String mUnique) {
+        this.mUnique = mUnique;
+    }
+
+    public String getUnique() {
+        return mUnique;
+    }
+
+    public void updateConfig(String unique) {
+        setUnique(unique);
+        initData();
+        saveConfig();
     }
 
     @Override
@@ -130,11 +141,16 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, LAST_DAY_PUBNATIVE_SHOWN, 0L);
         // Массив id пользователей из фотоленты, которым были отправлены симпатии
         addField(settingsMap, SYMPATHY_SENT_ID_ARRAY, "");
-
         // validate user avatar
         addField(settingsMap, IS_AVATAR_AVAILABLE, false);
         //Флаг первой покупки
         addField(settingsMap, APPSFLYER_FIRST_PAY, false);
+        // Сохраняем кол-во скипов FacebookRequest диалога
+        addField(settingsMap, FACEBOOK_REQUESTS_DIALOG_SKIPS, 0);
+        // Сохрфняем время показа FacebookRequest диалога
+        addField(settingsMap, FACEBOOK_REQUESTS_DIALOG_TIME, 0L);
+        // is button send confirmation clicked by current user
+        addField(settingsMap, IS_EMAIL_CONFIRM_SENT, false);
     }
 
     @Override
@@ -152,6 +168,45 @@ public class UserConfig extends AbstractConfig {
                 Context.MODE_PRIVATE
         );
     }
+
+    /**
+     * Set skips amount for facebook request window
+     *
+     * @param skipNumber skips facebook request window
+     * @return true on success
+     */
+    public boolean setFacebookRequestSkip(int skipNumber) {
+        return setField(getSettingsMap(), FACEBOOK_REQUESTS_DIALOG_SKIPS, skipNumber);
+    }
+
+    /**
+     * Get skips amount
+     *
+     * @return skips
+     */
+    public int getFacebookRequestSkip() {
+        return getIntegerField(getSettingsMap(), FACEBOOK_REQUESTS_DIALOG_SKIPS);
+    }
+
+    /**
+     * Sets last time when was shown facebook request window
+     *
+     * @param lastTime facebook request window last time
+     * @return true on success
+     */
+    public boolean setFacebookRequestWindowShow(long lastTime) {
+        return setField(getSettingsMap(), FACEBOOK_REQUESTS_DIALOG_TIME, lastTime);
+    }
+
+    /**
+     * Last time when was shown facebook request window
+     *
+     * @return last time
+     */
+    public long getFacebookRequestWindowShow() {
+        return getLongField(getSettingsMap(), FACEBOOK_REQUESTS_DIALOG_TIME);
+    }
+
 
     /**
      * Return first purchase flag
@@ -377,7 +432,7 @@ public class UserConfig extends AbstractConfig {
     /**
      * @return push notification melody name
      */
-    public Uri getRingtone() {
+    public Uri getGCMRingtone() {
         if (getStringField(getSettingsMap(), SETTINGS_GCM_RINGTONE).equals(SILENT)) {
             return null;
         }
@@ -433,6 +488,21 @@ public class UserConfig extends AbstractConfig {
     public void setUserAvatarAvailable(boolean enabled) {
         setField(getSettingsMap(), IS_AVATAR_AVAILABLE, enabled);
     }
+
+    /**
+     * @return true if user clicked button send confirmationF
+     */
+    public boolean isButtonSendConfirmationClicked() {
+        return getBooleanField(getSettingsMap(), IS_EMAIL_CONFIRM_SENT);
+    }
+
+    /**
+     * Set state of button email confirmation
+     */
+    public void saveButtonSendConfirmationPressed(boolean state) {
+        setField(getSettingsMap(), IS_EMAIL_CONFIRM_SENT, state);
+    }
+
 
     /**
      * @return true if push notification enabled

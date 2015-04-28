@@ -57,6 +57,8 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
     private TextView mWelcomeView;
     private ProgressBar mProgressBar;
     private Button mBtnRegister;
+    private ImageButton mDownArrow;
+    private View mBirthdayView;
 
     private Date mBirthday;
     private int mYear;
@@ -125,9 +127,9 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
     }
 
     private void initBirthdayViews(View root) {
-        View birthday = root.findViewById(R.id.loBirthday);
-        mBirthdayText = (TextView) birthday.findViewById(R.id.tvBirthday);
-        ImageButton downArrow = (ImageButton) birthday.findViewById(R.id.ibBirthday);
+        mBirthdayView = root.findViewById(R.id.loBirthday);
+        mBirthdayText = (TextView) mBirthdayView.findViewById(R.id.tvBirthday);
+        mDownArrow = (ImageButton) mBirthdayView.findViewById(R.id.ibBirthday);
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,9 +138,9 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
                 datePicker.show(getChildFragmentManager(), DatePickerFragment.TAG);
             }
         };
-        birthday.setOnClickListener(clickListener);
+        mBirthdayView.setOnClickListener(clickListener);
         mBirthdayText.setOnClickListener(clickListener);
-        downArrow.setOnClickListener(clickListener);
+        mDownArrow.setOnClickListener(clickListener);
 
     }
 
@@ -153,6 +155,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
             public void onClick(View v) {
                 removeRedAlert();
                 hideButtons();
+                setEditing(false);
                 Utils.hideSoftKeyboard(getActivity(), mEdEmail, mEdName);
                 sendRegistrationRequest();
             }
@@ -173,10 +176,12 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
         final String password = Utils.getText(mEdPassword);
         int sex = mSexController.getSex();
 
+        setEditing(false);
         if (TextUtils.isEmpty(emailLogin) || TextUtils.isEmpty(name) || sex == -1 || mBirthday == null
                 || password.trim().length() == 0) {
             redAlert(R.string.empty_fields);
             showButtons();
+            setEditing(true);
         } else {
             RegisterRequest request = new RegisterRequest(getActivity().getApplicationContext(), emailLogin, password, name,
                     DateUtils.getSeconds(mBirthday), sex);
@@ -238,6 +243,7 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
                 @Override
                 public void always(IApiResponse response) {
                     showButtons();
+                    setEditing(true);
                 }
             });
             request.exec();
@@ -275,8 +281,10 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
 
     private void removeRedAlert() {
         if (mRedAlertView.getVisibility() == View.VISIBLE) {
-            mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
-                    android.R.anim.fade_out));
+            if (isAdded()) {
+                mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
+                        android.R.anim.fade_out));
+            }
             mRedAlertView.setVisibility(View.INVISIBLE);
             mWelcomeView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
                     android.R.anim.fade_in));
@@ -316,6 +324,16 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
             mBtnRegister.setVisibility(View.INVISIBLE);
             mProgressBar.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void setEditing(boolean enable) {
+        mEdEmail.setEnabled(enable);
+        mEdName.setEnabled(enable);
+        mEdPassword.setEnabled(enable);
+        mBirthdayText.setEnabled(enable);
+        mDownArrow.setEnabled(enable);
+        mBirthdayView.setEnabled(enable);
+        mSexController.setEdtiting(enable);
     }
 
     private static class SexController {
@@ -369,5 +387,9 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
             return mSex;
         }
 
+        public void setEdtiting(boolean enable) {
+            mBoy.setEnabled(enable);
+            mGirl.setEnabled(enable);
+        }
     }
 }

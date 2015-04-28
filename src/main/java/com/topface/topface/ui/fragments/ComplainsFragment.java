@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.topface.topface.R;
@@ -39,35 +37,34 @@ public class ComplainsFragment extends BaseFragment {
     }
 
     private void setHeaders(View root) {
-        setText(R.string.complain_photo_header, (ViewGroup) root.findViewById(R.id.loPhotoHeader), ComplainRequest.ClassNames.PHOTO);
-        setText(R.string.complain_info_header, (ViewGroup) root.findViewById(R.id.loInfoHeader), ComplainRequest.ClassNames.USER);
-        setText(R.string.complain_msg_header, (ViewGroup) root.findViewById(R.id.loMsgHeader), ComplainRequest.ClassNames.PRIVATE_MSG);
+        setText(R.string.complain_photo_header, (TextView) root.findViewById(R.id.loPhotoHeader), ComplainRequest.ClassNames.PHOTO);
+        setText(R.string.complain_info_header, (TextView) root.findViewById(R.id.loInfoHeader), ComplainRequest.ClassNames.USER);
+        setText(R.string.complain_msg_header, (TextView) root.findViewById(R.id.loMsgHeader), ComplainRequest.ClassNames.PRIVATE_MSG);
     }
 
     private void initItems(View root) {
-        initItem(root, ComplainRequest.ClassNames.PHOTO, ComplainRequest.TypesNames.PORN, R.drawable.edit_big_btn_top_selector);
-        initItem(root, ComplainRequest.ClassNames.PHOTO, ComplainRequest.TypesNames.ERO, R.drawable.edit_big_btn_middle_selector);
-        initItem(root, ComplainRequest.ClassNames.PHOTO, ComplainRequest.TypesNames.FAKE_PHOTO, R.drawable.edit_big_btn_middle_selector);
-        initItem(root, ComplainRequest.ClassNames.PHOTO, ComplainRequest.TypesNames.FAKE_USER, R.drawable.edit_big_btn_bottom_selector);
+        initItem(root, ComplainRequest.ClassNames.PHOTO, ComplainRequest.TypesNames.PORN);
+        initItem(root, ComplainRequest.ClassNames.PHOTO, ComplainRequest.TypesNames.ERO);
+        initItem(root, ComplainRequest.ClassNames.PHOTO, ComplainRequest.TypesNames.FAKE_PHOTO);
+        initItem(root, ComplainRequest.ClassNames.PHOTO, ComplainRequest.TypesNames.FAKE_USER);
 
-        initItem(root, ComplainRequest.ClassNames.PRIVATE_MSG, ComplainRequest.TypesNames.SPAM, R.drawable.edit_big_btn_top_selector);
-        initItem(root, ComplainRequest.ClassNames.PRIVATE_MSG, ComplainRequest.TypesNames.SWEARING, R.drawable.edit_big_btn_bottom_selector);
+        initItem(root, ComplainRequest.ClassNames.PRIVATE_MSG, ComplainRequest.TypesNames.SPAM);
+        initItem(root, ComplainRequest.ClassNames.PRIVATE_MSG, ComplainRequest.TypesNames.SWEARING);
 
-        initItem(root, ComplainRequest.ClassNames.USER, ComplainRequest.TypesNames.SPAM, R.drawable.edit_big_btn_top_selector);
-        initItem(root, ComplainRequest.ClassNames.USER, ComplainRequest.TypesNames.FAKE_DATA, R.drawable.edit_big_btn_middle_selector);
-        initItem(root, ComplainRequest.ClassNames.USER, ComplainRequest.TypesNames.SWEARING, R.drawable.edit_big_btn_bottom_selector);
+        initItem(root, ComplainRequest.ClassNames.USER, ComplainRequest.TypesNames.SPAM);
+        initItem(root, ComplainRequest.ClassNames.USER, ComplainRequest.TypesNames.FAKE_DATA);
+        initItem(root, ComplainRequest.ClassNames.USER, ComplainRequest.TypesNames.SWEARING);
     }
 
-    private void initItem(View root, final ComplainRequest.ClassNames className, final ComplainRequest.TypesNames typeName, int bgId) {
+    private void initItem(View root, final ComplainRequest.ClassNames className, final ComplainRequest.TypesNames typeName) {
         ComplainItem item = getItemIdByClassAndType(className, typeName);
         if (item != null) {
-            RelativeLayout frame = (RelativeLayout) root.findViewById(item.id);
+            TextView text = (TextView) root.findViewById(item.id);
             if (canHideItem(className)) {
-                frame.setVisibility(View.GONE);
+                text.setVisibility(View.GONE);
             } else {
-                ((ImageView) frame.findViewWithTag("ivEditBackground")).setImageResource(bgId);
-                setText(item.title, frame, className);
-                frame.setOnClickListener(new View.OnClickListener() {
+                setText(item.title, text, className);
+                text.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         startActivity(ComplainsMessageActivity.createIntent(getActivity(), userId, feedId, className, typeName));
@@ -101,11 +98,11 @@ public class ComplainsFragment extends BaseFragment {
         return null;
     }
 
-    private void setText(int titleId, ViewGroup frame, ComplainRequest.ClassNames className) {
+    private void setText(int titleId, TextView text, ComplainRequest.ClassNames className) {
         if (canHideItem(className)) {
-            frame.setVisibility(View.GONE);
+            text.setVisibility(View.GONE);
         } else {
-            ((TextView) frame.findViewWithTag("tvTitle")).setText(titleId);
+            text.setText(titleId);
         }
     }
 

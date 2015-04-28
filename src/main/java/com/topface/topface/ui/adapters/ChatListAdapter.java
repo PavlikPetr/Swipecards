@@ -111,7 +111,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         final ViewHolder holder;
         final int type = getItemViewType(position);
         final History item = getItem(position);
-
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = inflateConvertView(holder, type, item);
@@ -121,7 +120,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
         setTypeDifferences(holder, type, item);
         if (type != T_RETRY) {
             setViewInfo(holder, item);
@@ -290,7 +288,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 mShowDatesList.add(currItem);
             }
         }
-
     }
 
     private void setTypeDifferences(ViewHolder holder, int type, final History item) {
@@ -317,12 +314,13 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 holder.message.setVisibility(View.GONE);
                 break;
         }
-
-        if (showDate) {
-            holder.dateDivider.setVisibility(View.VISIBLE);
-            holder.dateDividerText.setText(item.createdRelative);
-        } else {
-            holder.dateDivider.setVisibility(View.GONE);
+        if (holder != null && holder.dateDivider != null) {
+            if (showDate) {
+                holder.dateDivider.setVisibility(View.VISIBLE);
+                holder.dateDividerText.setText(item.createdRelative);
+            } else {
+                holder.dateDivider.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -439,8 +437,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     @SuppressWarnings("deprecation")
     public void copyText(String text) {
         ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-        clipboard.setText(text);
-        Toast.makeText(mContext, R.string.general_msg_copied, Toast.LENGTH_SHORT).show();
+        if (clipboard != null) {
+            clipboard.setText(text);
+            Toast.makeText(mContext, R.string.general_msg_copied, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void removeItem(int position) {
