@@ -1,5 +1,7 @@
 package com.topface.topface.data;
 
+import com.topface.framework.JsonUtils;
+
 import org.json.JSONObject;
 
 public class HistoryListData extends FeedListData<History> {
@@ -12,7 +14,7 @@ public class HistoryListData extends FeedListData<History> {
 
     @Override
     protected void fillData(JSONObject data) {
+        this.user = JsonUtils.fromJson(data.optJSONObject("user"), FeedUser.class);
         super.fillData(data);
-        this.user = new FeedUser(data.optJSONObject("user"));
     }
 }

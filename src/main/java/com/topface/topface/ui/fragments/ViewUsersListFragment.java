@@ -470,7 +470,7 @@ public abstract class ViewUsersListFragment<T extends FeedUser> extends BaseFrag
         int rest = currUser.photosCount - currUser.photos.size();
 
         for (int i = 0; i < rest; i++) {
-            currUser.photos.add(new Photo());
+            currUser.photos.add(Photo.getFakePhoto());
         }
     }
 

@@ -1,5 +1,6 @@
 package com.topface.topface.data;
 
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.ApiResponse;
 
@@ -24,7 +25,7 @@ public class AddedPhoto extends AbstractData {
         if (data != null) {
             try {
                 hash = data.optString("hash");
-                photo = new Photo(data.optJSONObject("photo"));
+                photo = JsonUtils.fromJson(data.optJSONObject("photo"), Photo.class);
             } catch (Exception e) {
                 Debug.error("Verify: Wrong response parsing", e);
             }

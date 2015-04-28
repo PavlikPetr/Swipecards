@@ -43,6 +43,7 @@ import com.topface.topface.data.NoviceLikes;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.search.CachableSearchList;
 import com.topface.topface.data.search.OnUsersListEventsListener;
 import com.topface.topface.data.search.SearchUser;
@@ -835,7 +836,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         refreshActionBarTitles();
         lockControls();
         //Устанавливаем статус пользователя.
-        mUserInfoStatus.setText(currUser.getStatus());
+        mUserInfoStatus.setText(Profile.normilizeStatus(currUser.getStatus()));
 
         Resources res = getResources();
 
@@ -881,9 +882,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mLoadedCount = currUser.photos.getRealPhotosCount();
         mNeedMore = currUser.photosCount > mLoadedCount;
         int rest = currUser.photosCount - currUser.photos.size();
-
         for (int i = 0; i < rest; i++) {
-            currUser.photos.add(new Photo());
+            currUser.photos.add(Photo.getFakePhoto());
         }
     }
 
@@ -1138,7 +1138,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         } else if (resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
             if (mDatingInstantMessageController != null) {
                 // открываем чат с пустой строкой в footer
-                mDatingInstantMessageController.openChat(getActivity(), mCurrentUser, "");
+                mDatingInstantMessageController.openChat(getActivity(), mCurrentUser);
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

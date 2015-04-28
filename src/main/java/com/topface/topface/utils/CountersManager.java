@@ -6,7 +6,6 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.topface.topface.App;
 import com.topface.topface.requests.BannerRequest;
-import com.topface.topface.requests.LeadersRequest;
 
 import org.json.JSONObject;
 
@@ -24,7 +23,7 @@ public class CountersManager {
 
     private Context mContext;
 
-    private final static String[] DeniedMethod = {BannerRequest.SERVICE_NAME, LeadersRequest.SERVICE_NAME};
+    private final static String DeniedMethod = BannerRequest.SERVICE_NAME;
 
     public final static String NULL_METHOD = "null_method";
     public final static String CHANGED_BY_GCM = "gcm_changed";
@@ -196,11 +195,6 @@ public class CountersManager {
     }
 
     private boolean checkMethodIsDenyed(String method) {
-        for (String denyed : DeniedMethod) {
-            if (denyed.equals(method)) {
-                return true;
-            }
-        }
-        return false;
+        return DeniedMethod.equals(method);
     }
 }

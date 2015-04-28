@@ -3,6 +3,7 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.topface.framework.JsonUtils;
 import com.topface.topface.utils.ad.NativeAd;
 
 import org.json.JSONObject;
@@ -38,7 +39,7 @@ public class BlackListItem extends FeedItem implements Parcelable {
 
     public void fillData(JSONObject item) {
         //В черном списке нас интересует только юзер, все остальные поля не нужны
-        this.user = new FeedUser(item.optJSONObject("user"));
+        this.user = JsonUtils.fromJson(item.optJSONObject("user"), FeedUser.class);
         this.id = Integer.toString(item.optInt("id"));
     }
 }

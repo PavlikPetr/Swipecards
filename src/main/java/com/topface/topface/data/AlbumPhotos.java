@@ -1,5 +1,6 @@
 package com.topface.topface.data;
 
+import com.topface.framework.JsonUtils;
 import com.topface.topface.requests.ApiResponse;
 
 /**
@@ -9,12 +10,9 @@ import com.topface.topface.requests.ApiResponse;
 public class AlbumPhotos extends Photos {
 
     public final boolean more;
-    @SuppressWarnings("unused")
-    private final int count;
 
     public AlbumPhotos(ApiResponse response) {
-        super(response.getJsonResult().optJSONArray("items"));
+        super(JsonUtils.fromJson(response.getJsonResult().optJSONArray("items"), Photos.class));
         more = response.getJsonResult().optBoolean("more");
-        count = response.getJsonResult().optInt("count");
     }
 }

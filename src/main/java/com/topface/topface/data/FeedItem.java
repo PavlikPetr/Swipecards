@@ -3,6 +3,7 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.ad.NativeAd;
@@ -80,11 +81,7 @@ abstract public class FeedItem extends LoaderData implements Parcelable {
         unreadCounter = in.readInt();
         String usr = in.readString();
         if (!usr.equals(NULL_USER)) {
-            try {
-                user = new FeedUser(new JSONObject(usr));
-            } catch (JSONException e) {
-                Debug.error(e);
-            }
+            user = JsonUtils.fromJson(usr, FeedUser.class);
         }
         mNativeAd = in.readParcelable(NativeAd.class.getClassLoader());
     }
@@ -107,7 +104,11 @@ abstract public class FeedItem extends LoaderData implements Parcelable {
         this.target = item.optInt("target");
         this.unread = item.optBoolean("unread");
         this.unreadCounter = item.optInt("unreadCount");
-        this.user = new FeedUser(item.optJSONObject("user"), this);
+        JSONObject json = item.optJSONObject("user");
+        if (json != null) {
+            this.user = JsonUtils.fromJson(json, FeedUser.class);
+            this.user.setFeedItemId(id);
+        }
     }
 
     /**

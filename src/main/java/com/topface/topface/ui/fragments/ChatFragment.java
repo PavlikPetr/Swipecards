@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.nhaarman.listviewanimations.appearance.ChatListAnimatedAdapter;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -83,8 +84,6 @@ import com.topface.topface.utils.controllers.PopularUserChatController;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.social.AuthToken;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -160,9 +159,6 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
     private String mUserCity;
     private String mUserNameAndAge;
-    private int mUserSex;
-    private MenuItem mBarAvatar;
-    private MenuItem mBarActions;
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -213,7 +209,6 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
         Bundle args = getArguments();
         mItemId = args.getString(INTENT_ITEM_ID);
         mUserId = args.getInt(INTENT_USER_ID, -1);
-        mUserSex = args.getInt(INTENT_USER_SEX, Static.BOY);
         mUserCity = args.getString(INTENT_USER_CITY);
         mUserNameAndAge = args.getString(INTENT_USER_NAME_AND_AGE);
         mInitialMessage = args.getString(INITIAL_MESSAGE);
@@ -338,7 +333,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                     }
                 }
                 mAdapter.setData(historyData);
-                mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
+                mUser = JsonUtils.fromJson(savedInstanceState.getString(FRIEND_FEED_USER), FeedUser.class);
                 invalidateUniversalUser();
                 initOverflowMenuActions(getOverflowMenu());
                 if (wasFailed) {
@@ -786,9 +781,6 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                 );
                 EasyTracker.sendEvent("Chat", "SendGiftClick", "", 1L);
                 break;
-            case R.id.action_user_actions_list:
-                onOptionsItemSelected(mBarActions);
-                break;
             default:
                 super.onClick(v);
                 break;
@@ -973,13 +965,13 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                     @Override
                     public void setBlackListValue(Boolean value) {
                         if (mUser != null) {
-                            mUser.blocked = value != null ? value : !mUser.blocked;
+                            mUser.inBlacklist = value != null ? value : !mUser.inBlacklist;
                         }
                     }
 
                     @Override
                     public Boolean getBlackListValue() {
-                        return mUser != null ? mUser.blocked : null;
+                        return mUser != null ? mUser.inBlacklist : null;
                     }
 
                     @Override

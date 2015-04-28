@@ -28,11 +28,6 @@ public class UsersListCacheManager extends PreferencesCacheManager {
         mItemClass = itemClass;
     }
 
-    public void changeCacheKeyTo(String key, Class itemClass) {
-        mCacheKey = key;
-        mItemClass = itemClass;
-    }
-
     public final void setCache(final UsersList usersList) {
         new BackgroundThread() {
             @Override
@@ -68,6 +63,7 @@ public class UsersListCacheManager extends PreferencesCacheManager {
         return parseCacheData(super.getCache(mCacheKey));
     }
 
+    @SuppressWarnings("unused")
     @Nullable
     public UsersList getCacheAndRemove() {
         UsersList result = parseCacheData(super.getCache(mCacheKey));

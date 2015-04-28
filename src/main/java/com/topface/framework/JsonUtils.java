@@ -2,9 +2,12 @@ package com.topface.framework;
 
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 /**
  * Класс для работы с Json
- * Следует использовать только его, ан случай если мы решим поменять парсер
+ * Следует использовать только его, на случай если мы решим поменять парсер
  */
 public class JsonUtils {
     private static Gson mGson;
@@ -15,6 +18,14 @@ public class JsonUtils {
 
     public static <T> T fromJson(String json, Class<T> classOfT) {
         return getGson().fromJson(json, classOfT);
+    }
+
+    public static <T> T fromJson(JSONObject json, Class<T> classOfT) {
+        return getGson().fromJson(json.toString(), classOfT);
+    }
+
+    public static <T> T fromJson(JSONArray json, Class<T> classOfT) {
+        return getGson().fromJson(json.toString(), classOfT);
     }
 
     private static Gson getGson() {
@@ -28,4 +39,5 @@ public class JsonUtils {
         T obj = fromJson(json, classOfT);
         return obj == null ? defaultObj : obj;
     }
+
 }

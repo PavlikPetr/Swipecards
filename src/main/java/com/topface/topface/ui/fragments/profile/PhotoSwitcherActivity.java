@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.topface.framework.JsonUtils;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -53,7 +54,6 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -296,7 +296,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         }
         int rest = photosCount - mPhotoLinks.size();
         for (int i = 0; i < rest; i++) {
-            mPhotoLinks.add(new Photo());
+            mPhotoLinks.add(Photo.getFakePhoto());
         }
         // Gallery
         // stub is needed, because sometimes(while gallery is waiting for user profile load)
@@ -357,11 +357,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         super.onRestoreInstanceState(savedInstanceState);
         mPhotoAlbumControlVisibility = savedInstanceState.getInt(CONTROL_VISIBILITY, View.GONE);
         mOwnPhotosControlVisibility = savedInstanceState.getInt(OWN_PHOTOS_CONTROL_VISIBILITY, View.GONE);
-        try {
-            mDeletedPhotos = new Photos(new JSONArray(savedInstanceState.getString(DELETED_PHOTOS)));
-        } catch (JSONException e) {
-            Debug.error(e);
-        }
+        mDeletedPhotos = JsonUtils.fromJson(savedInstanceState.getString(DELETED_PHOTOS), Photos.class);
     }
 
     @Override
