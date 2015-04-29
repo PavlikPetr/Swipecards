@@ -724,10 +724,10 @@ public class Options extends AbstractData {
         public static final String FEED_NEWBIE = "NEWBIE";
         public static final String FEED = "NORMAL";
 
-        public boolean enabled = true;
+        public boolean enabled;
         public int count = 0;
         public long period = 0;
-        public String adGroup = FEED;
+        public String adGroup = "";
 
         public boolean canShow() {
             UserConfig config = App.getUserConfig();
