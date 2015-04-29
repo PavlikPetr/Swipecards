@@ -35,8 +35,6 @@ public class CitySearchView extends AutoCompleteTextView {
 
     private static final int DELAY_VALUE = 200;
 
-    private static final String BACK_PRESSED_COUNT = "back_pressed_count";
-
     private Context mContext;
     private CitySearchViewAdapter mAdapter;
     private onCityClickListener cityClickListener;
@@ -320,13 +318,6 @@ public class CitySearchView extends AutoCompleteTextView {
             int screenHeight = mOnRootViewListener.getHeight();
             mScreenHeight = mScreenHeight < screenHeight ? screenHeight : mScreenHeight;
         }
-    }
-
-    private int getCurentScreenHeight() {
-        if (mOnRootViewListener != null) {
-            return mOnRootViewListener.getHeight();
-        }
-        return 0;
     }
 
     public void setOnRootViewListener(onRootViewListener rootViewListener) {

@@ -85,6 +85,8 @@ import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.social.AuthToken;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
@@ -333,7 +335,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                     }
                 }
                 mAdapter.setData(historyData);
-                mUser = JsonUtils.fromJson(savedInstanceState.getString(FRIEND_FEED_USER), FeedUser.class);
+                mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
                 invalidateUniversalUser();
                 initOverflowMenuActions(getOverflowMenu());
                 if (wasFailed) {
@@ -508,8 +510,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
         History item = mAdapter.getItem(position);
         mAnimatedAdapter.decrementAnimationAdapter(mAdapter.getCount());
         if (item != null && (item.id == null || item.isFake())) {
-            Toast.makeText(getActivity(), R.string.cant_delete_fake_item,
-                    Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.cant_delete_fake_item, Toast.LENGTH_LONG);
             return;
         } else if (item == null) {
             return;
@@ -781,6 +782,9 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                 );
                 EasyTracker.sendEvent("Chat", "SendGiftClick", "", 1L);
                 break;
+            case R.id.action_user_actions_list:
+                onOptionsItemSelected(getBarActionsMenuItem());
+                break;
             default:
                 super.onClick(v);
                 break;
@@ -871,9 +875,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
             return false;
         }
         if (editText.length() > mMaxMessageSize) {
-            Toast.makeText(getActivity(),
-                    String.format(getString(R.string.message_too_long), mMaxMessageSize),
-                    Toast.LENGTH_SHORT).show();
+            Utils.showToastNotification(String.format(getString(R.string.message_too_long), mMaxMessageSize), Toast.LENGTH_SHORT);
             return false;
         }
         // вынужденная мера, Editable.clear() некорректно обрабатывается клавиатурой Lg G3
@@ -924,7 +926,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                     return;
                 }
                 if (mAdapter != null && cancelable) {
-                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                    Utils.showErrorMessage();
                     mAdapter.showRetrySendMessage(messageItem, messageRequest);
                 }
             }
@@ -965,13 +967,13 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                     @Override
                     public void setBlackListValue(Boolean value) {
                         if (mUser != null) {
-                            mUser.inBlacklist = value != null ? value : !mUser.inBlacklist;
+                            mUser.blocked = value != null ? value : !mUser.blocked;
                         }
                     }
 
                     @Override
                     public Boolean getBlackListValue() {
-                        return mUser != null ? mUser.inBlacklist : null;
+                        return mUser != null ? mUser.blocked : null;
                     }
 
                     @Override

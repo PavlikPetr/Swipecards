@@ -53,6 +53,7 @@ import static com.topface.topface.utils.notifications.UserNotificationManager.ge
  */
 public class EditorFragment extends BaseFragment implements View.OnClickListener {
     public static final String API_STAGE_TF = "https://api-%s.stage.tf/";
+    private static final int NETWORK_ERROR_NOTIFICATION_ID = 800;
     private Spinner mApiUrl;
     private Spinner mOfferwallTypeChoose;
     private AppConfig mAppConfig;
@@ -63,8 +64,6 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     private EditSwitcher switcher;
     private long standard_timeout;
     private EditSwitcher switcherTestNetwork;
-
-    private static final int NETWORK_ERROR_NOTIFICATION_ID = 800;
     private CheckBox mCustomApiCheckBox;
     private EditText mCustomApi;
     private Spinner mConnectionTypeChoose;
@@ -425,13 +424,13 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 new AuthRequest(AuthToken.getInstance().getTokenInfo(), getActivity()).callback(new ApiHandler() {
                     @Override
                     public void success(IApiResponse response) {
-                        Toast.makeText(getActivity(), R.string.general_ready, Toast.LENGTH_LONG).show();
+                        Utils.showToastNotification(R.string.general_ready, Toast.LENGTH_LONG);
                         AuthorizationManager.saveAuthInfo(response);
                     }
 
                     @Override
                     public void fail(int codeError, IApiResponse response) {
-                        Toast.makeText(App.getContext(), R.string.general_error, Toast.LENGTH_LONG).show();
+                        Utils.showToastNotification(R.string.general_error, Toast.LENGTH_LONG);
                     }
                 }).exec();
                 break;
@@ -444,11 +443,11 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void showCompleteMessage() {
-        Toast.makeText(getActivity(), getActivity().getString(R.string.editor_fragment_complete), Toast.LENGTH_SHORT).show();
+        Utils.showToastNotification(getActivity().getString(R.string.editor_fragment_complete), Toast.LENGTH_SHORT);
     }
 
     private void showError() {
-        Toast.makeText(getActivity(), getActivity().getString(R.string.editor_fragment_error), Toast.LENGTH_SHORT).show();
+        Utils.showToastNotification(getActivity().getString(R.string.editor_fragment_error), Toast.LENGTH_SHORT);
     }
 
     private void setConfigValues() {

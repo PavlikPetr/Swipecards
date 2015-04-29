@@ -205,5 +205,7 @@ public abstract class UserAvatarFragment extends BaseFragment
         }
     }
 
-
+    protected MenuItem getBarActionsMenuItem() {
+        return mBarActions;
+    }
 }

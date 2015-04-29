@@ -86,13 +86,24 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     protected PullToRefreshListView mListView;
     protected FeedAdapter<T> mListAdapter;
-    private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
     protected boolean mIsUpdating;
+    protected View mLockView;
+    private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
     private RetryViewCreator mRetryView;
     private RelativeLayout mContainer;
-    protected View mLockView;
-
     private BroadcastReceiver mReadItemReceiver;
+    private BannersController mBannersController;
+    private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (!CacheProfile.show_ad) {
+                getListAdapter().removeAdItems();
+            }
+        }
+    };
+    private boolean isDeletable = true;
+    private ViewStub mEmptyScreenStub;
+    private boolean needUpdate = false;
     private BroadcastReceiver mBlacklistedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -127,23 +138,89 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             }
         }
     };
-
-    private BannersController mBannersController;
-    private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
+    private ActionMode mActionMode;
+    private ActionMode.Callback mActionActivityCallback = new ActionMode.Callback() {
         @Override
-        public void onReceive(Context context, Intent intent) {
-            if (!CacheProfile.show_ad) {
-                getListAdapter().removeAdItems();
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mActionMode = mode;
+            FeedAdapter<T> adapter = getListAdapter();
+            adapter.setMultiSelectionListener(new MultiselectionController.IMultiSelectionListener() {
+                @Override
+                public void onSelected(int size, boolean overlimit) {
+                    if (overlimit) {
+                        Utils.showToastNotification(R.string.maximum_number_of_users, Toast.LENGTH_LONG);
+                    }
+                    if (mActionMode != null) {
+                        mActionMode.setTitle(Utils.getQuantityString(R.plurals.selected, size, size));
+                    }
+                }
+            });
+            adapter.notifyDataSetChanged();
+            menu.clear();
+            getActivity().getMenuInflater().inflate(getContextMenuLayoutRes(), menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            boolean result = true;
+            FeedAdapter<T> adapter = getListAdapter();
+            switch (item.getItemId()) {
+                case R.id.delete_list_item:
+                    onDeleteFeedItems(getSelectedFeedIds(adapter), adapter.getSelectedItems());
+                    break;
+                case R.id.add_to_black_list:
+                    onAddToBlackList(adapter.getSelectedUsersIds());
+                    break;
+                default:
+                    result = false;
             }
+            if (result) {
+                if (mActionMode != null) mActionMode.finish();
+            }
+
+            return result;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            getListAdapter().finishMultiSelection();
+            mActionMode = null;
         }
     };
-
-    private boolean isDeletable = true;
-    private ViewStub mEmptyScreenStub;
-    private boolean needUpdate = false;
-
-    private ActionMode mActionMode;
     private FeedRequest.UnreadStatePair mLastUnreadState = new FeedRequest.UnreadStatePair();
+    private View mInflated;
+
+    protected static void initButtonForBlockedScreen(Button button, String buttonText, View.OnClickListener listener) {
+        initButtonForBlockedScreen(null, null, button, buttonText, listener);
+    }
+
+    protected static void initButtonForBlockedScreen(TextView textView, String text,
+                                                     Button button, String buttonText,
+                                                     View.OnClickListener listener) {
+        if (textView != null) {
+            if (TextUtils.isEmpty(text)) {
+                textView.setVisibility(View.GONE);
+            } else {
+                textView.setVisibility(View.VISIBLE);
+                textView.setText(text);
+            }
+        }
+
+        if (TextUtils.isEmpty(buttonText)) {
+            // Не показываем кнопку без текста
+            button.setVisibility(View.GONE);
+        } else {
+            button.setVisibility(View.VISIBLE);
+            button.setText(buttonText);
+            button.setOnClickListener(listener);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -339,7 +416,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     private void initListView(View view) {
-        // ListView    	
+        // ListView
 
         mListView = (PullToRefreshListView) view.findViewById(R.id.lvFeedList);
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
@@ -447,61 +524,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             mActionMode.finish();
         }
     }
-
-    private ActionMode.Callback mActionActivityCallback = new ActionMode.Callback() {
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mActionMode = mode;
-            FeedAdapter<T> adapter = getListAdapter();
-            adapter.setMultiSelectionListener(new MultiselectionController.IMultiSelectionListener() {
-                @Override
-                public void onSelected(int size, boolean overlimit) {
-                    if (overlimit) {
-                        Toast.makeText(App.getContext(), R.string.maximum_number_of_users, Toast.LENGTH_LONG).show();
-                    }
-                    if (mActionMode != null) {
-                        mActionMode.setTitle(Utils.getQuantityString(R.plurals.selected, size, size));
-                    }
-                }
-            });
-            adapter.notifyDataSetChanged();
-            menu.clear();
-            getActivity().getMenuInflater().inflate(getContextMenuLayoutRes(), menu);
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            boolean result = true;
-            FeedAdapter<T> adapter = getListAdapter();
-            switch (item.getItemId()) {
-                case R.id.delete_list_item:
-                    onDeleteFeedItems(getSelectedFeedIds(adapter), adapter.getSelectedItems());
-                    break;
-                case R.id.add_to_black_list:
-                    onAddToBlackList(adapter.getSelectedUsersIds());
-                    break;
-                default:
-                    result = false;
-            }
-            if (result) {
-                if (mActionMode != null) mActionMode.finish();
-            }
-
-            return result;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            getListAdapter().finishMultiSelection();
-            mActionMode = null;
-        }
-    };
 
     /**
      * В данный момент у нас проблема с id в диалогах, поэтому в DialogsFragment этот метод переопределен
@@ -829,8 +851,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (stub != null) stub.setVisibility(View.GONE);
     }
 
-    private View mInflated;
-
     protected void onEmptyFeed(int errorCode) {
         ViewStub stub = getEmptyFeedViewStub();
         if (mInflated == null && stub != null) {
@@ -930,32 +950,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             if (counters > 0) {
                 updateData(true, false);
             }
-        }
-    }
-
-    protected static void initButtonForBlockedScreen(Button button, String buttonText, View.OnClickListener listener) {
-        initButtonForBlockedScreen(null, null, button, buttonText, listener);
-    }
-
-    protected static void initButtonForBlockedScreen(TextView textView, String text,
-                                                     Button button, String buttonText,
-                                                     View.OnClickListener listener) {
-        if (textView != null) {
-            if (TextUtils.isEmpty(text)) {
-                textView.setVisibility(View.GONE);
-            } else {
-                textView.setVisibility(View.VISIBLE);
-                textView.setText(text);
-            }
-        }
-
-        if (TextUtils.isEmpty(buttonText)) {
-            // Не показываем кнопку без текста
-            button.setVisibility(View.GONE);
-        } else {
-            button.setVisibility(View.VISIBLE);
-            button.setText(buttonText);
-            button.setOnClickListener(listener);
         }
     }
 

@@ -30,6 +30,7 @@ import com.topface.topface.ui.TopfaceAuthActivity;
 import com.topface.topface.utils.AuthButtonsController;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import com.topface.topface.utils.social.Authorizer;
@@ -41,7 +42,7 @@ public class AuthFragment extends BaseAuthFragment {
 
     public static final String REAUTH_INTENT = "com.topface.topface.action.AUTH";
     public static final String BTNS_HIDDEN = "BtnsHidden";
-
+    private static final String MAIN_BUTTONS_GA_TAG = "LoginButtonsTest";
     private View mLogo;
     private Button mFBButton;
     private Button mVKButton;
@@ -53,7 +54,6 @@ public class AuthFragment extends BaseAuthFragment {
     private Button mOKButton;
     private AuthButtonsController mBtnsController;
     private LinearLayout mOtherSocialNetworksButton;
-    private static final String MAIN_BUTTONS_GA_TAG = "LoginButtonsTest";
     private boolean mAdditionalButtonsScreen = false;
     private boolean mBtnsHidden;
 
@@ -77,7 +77,7 @@ public class AuthFragment extends BaseAuthFragment {
                         auth(AuthToken.getInstance());
                         break;
                     case Authorizer.TOKEN_FAILED:
-                        Toast.makeText(getActivity(), R.string.general_reconnect_social, Toast.LENGTH_SHORT).show();
+                        Utils.showToastNotification(R.string.general_reconnect_social, Toast.LENGTH_SHORT);
                     case Authorizer.TOKEN_NOT_READY:
                         hideProgress();
                         showButtons();

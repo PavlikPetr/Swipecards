@@ -29,7 +29,6 @@ import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.actionbar.ActionBarView;
-import com.topface.topface.utils.actionbar.ButtonUpClickListener;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.IRequestClient;
@@ -38,14 +37,14 @@ import com.topface.topface.utils.social.AuthToken;
 import java.util.LinkedList;
 import java.util.Locale;
 
-public class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient, ButtonUpClickListener {
+public class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient {
 
     public static final String AUTH_TAG = "AUTH";
     public static final String IGNORE_NOTIFICATION_INTENT = "IGNORE_NOTIFICATION_INTENT";
     private static final String APP_START_LABEL_FORM = "gcm_%d_%s";
     public ActionBarView actionBarView;
     private boolean mIndeterminateSupported = false;
-    private LinkedList<ApiRequest> mRequests = new LinkedList<ApiRequest>();
+    private LinkedList<ApiRequest> mRequests = new LinkedList<>();
     private BroadcastReceiver mReauthReceiver;
     private boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
@@ -436,7 +435,6 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     }
 
-    @Override
     public void onUpClick() {
         if (doPreFinish()) {
             if (!onSupportNavigateUp()) {

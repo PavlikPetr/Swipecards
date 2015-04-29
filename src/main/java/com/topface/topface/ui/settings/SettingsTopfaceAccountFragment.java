@@ -80,7 +80,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             request.callback(new ApiHandler() {
                 @Override
                 public void success(IApiResponse response) {
-                    Toast.makeText(App.getContext(), R.string.email_confirmed, Toast.LENGTH_SHORT).show();
+                    Utils.showToastNotification(R.string.email_confirmed, Toast.LENGTH_SHORT);
                     CacheProfile.emailConfirmed = true;
                     if (isAdded()) {
                         setViewsState();
@@ -89,7 +89,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
                 @Override
                 public void fail(int codeError, IApiResponse response) {
-                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                    Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                 }
 
                 @Override
@@ -307,12 +307,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                     @Override
                     public void success(IApiResponse response) {
                         setEmailConfirmSent();
-                        Toast.makeText(App.getContext(), R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT).show();
+                        Utils.showToastNotification(R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT);
                     }
 
                     @Override
                     public void fail(int codeError, IApiResponse response) {
-                        Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                        Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                     }
                 }).exec();
                 break;
@@ -334,7 +334,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                             if (ErrorCodes.USER_ALREADY_REGISTERED == codeError) {
                                 showLogoutPopup(email);
                             } else {
-                                Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                                Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                             }
                         }
 
@@ -345,7 +345,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                         }
                     }).exec();
                 } else {
-                    Toast.makeText(App.getContext(), R.string.incorrect_email, Toast.LENGTH_SHORT).show();
+                    Utils.showToastNotification(R.string.incorrect_email, Toast.LENGTH_SHORT);
                 }
                 break;
             case ACTION_CHANGE_PASSWORD:

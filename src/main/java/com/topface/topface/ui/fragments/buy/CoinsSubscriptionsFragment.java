@@ -26,6 +26,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.Utils;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
@@ -112,8 +113,7 @@ public class CoinsSubscriptionsFragment extends OpenIabFragment {
                         public void onClick(String id) {
                             if (curBtn instanceof Products.SubscriptionBuyButton) {
                                 if (((Products.SubscriptionBuyButton) curBtn).activated) {
-                                    Toast.makeText(getActivity(), R.string.subscriptions_can_be_changed, Toast.LENGTH_SHORT)
-                                            .show();
+                                    Utils.showToastNotification(R.string.subscriptions_can_be_changed, Toast.LENGTH_SHORT);
                                     return;
                                 }
                             }

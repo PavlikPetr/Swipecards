@@ -183,7 +183,6 @@ public class PurchasesFragment extends BaseFragment {
     private void removeExcessTabs(LinkedList<Options.Tab> tabs) {
         boolean isVip = getArguments().getBoolean(IS_VIP_PRODUCTS, false);
         Options.Tab pwallMobileTab = null;
-        Options.Tab fortimoTab = null;
         for (Iterator<Options.Tab> iterator = tabs.iterator(); iterator.hasNext(); ) {
             Options.Tab tab = iterator.next();
             switch (tab.type) {
@@ -203,9 +202,6 @@ public class PurchasesFragment extends BaseFragment {
                     }
                 }
             }
-        }
-        if (tabs.contains(fortimoTab)) {
-            tabs.remove(pwallMobileTab);
         }
     }
 

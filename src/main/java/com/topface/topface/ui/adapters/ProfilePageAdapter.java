@@ -25,12 +25,6 @@ public class ProfilePageAdapter extends HackyFragmentStatePagerAdapter {
     private AbstractProfileFragment.ProfileInnerUpdater mProfileUpdater;
     private PageIndicator mPageIndicator;
 
-    public ProfilePageAdapter(FragmentManager fm, ArrayList<String> fragmentsClasses, AbstractProfileFragment.ProfileInnerUpdater profileUpdater) {
-        super(fm);
-        mFragmentsClasses = fragmentsClasses;
-        mProfileUpdater = profileUpdater;
-    }
-
     public ProfilePageAdapter(FragmentManager fm, ArrayList<String> fragmentsClasses, ArrayList<String> fragmentTitles, AbstractProfileFragment.ProfileInnerUpdater profileUpdater) {
         super(fm);
         mFragmentsClasses = fragmentsClasses;
@@ -84,24 +78,5 @@ public class ProfilePageAdapter extends HackyFragmentStatePagerAdapter {
             Debug.error(ex);
         }
         return fragment;
-    }
-
-    public void removeItem(int position) {
-        mFragmentsClasses.remove(position);
-        if (position >= 0 && position < mFragmentsTitles.size())
-            mFragmentsTitles.remove(position);
-        notifyDataSetChanged();
-        if (mPageIndicator != null) mPageIndicator.notifyDataSetChanged();
-    }
-
-    public void removeItem(String className) {
-        int position = getFragmentIndexByClassName(className);
-        if (position >= 0 && position < getCount()) {
-            removeItem(position);
-        }
-    }
-
-    public void setPageIndicator(PageIndicator indicator) {
-        mPageIndicator = indicator;
     }
 }

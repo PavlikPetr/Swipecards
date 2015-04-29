@@ -143,11 +143,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
     }
 
     @Override
-    protected int getProfileType() {
-        return Profile.TYPE_USER_PROFILE;
-    }
-
-    @Override
     protected OverflowMenu createOverflowMenu(MenuItem barActions) {
         return new OverflowMenu(getActivity(), barActions, mRateController, mSavedResponse);
     }

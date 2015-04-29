@@ -132,11 +132,6 @@ public class OwnProfileFragment extends OwnAvatarFragment {
         }
     }
 
-    @Override
-    protected int getProfileType() {
-        return Profile.TYPE_OWN_PROFILE;
-    }
-
     private void initAddPhotoHelper() {
         mAddPhotoHelper = new AddPhotoHelper(this, null);
         mAddPhotoHelper.setOnResultHandler(mHandler);

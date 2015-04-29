@@ -394,7 +394,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 }
             }, 3000);
             mBackPressedOnce.set(true);
-            Toast.makeText(App.getContext(), R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT).show();
+            Utils.showToastNotification(R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT);
             isPopupVisible = false;
         } else {
             super.onBackPressed();

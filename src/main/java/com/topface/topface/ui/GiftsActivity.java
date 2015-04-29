@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.SendGiftAnswer;
@@ -207,9 +206,9 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra(INTENT_SEND_GIFT_ANSWER, answer);
                 resultIntent.putExtra(INTENT_GIFT_PRICE, item.price);
-                setResult(Activity.RESULT_OK, resultIntent);
+                setResult(Activity.RESULT_OK, resultIntent);                
                 if (mIsSuccessToastAvailable) {
-                    Toast.makeText(App.getContext(), R.string.chat_gift_out, Toast.LENGTH_SHORT).show();
+                    Utils.showToastNotification(R.string.chat_gift_out, Toast.LENGTH_SHORT);
                 }
                 finish();
             }

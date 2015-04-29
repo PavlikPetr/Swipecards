@@ -30,6 +30,7 @@ import com.topface.topface.ui.adapters.PhotoBlogListAdapter;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.Utils;
 
 import org.json.JSONObject;
 
@@ -91,7 +92,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
                             @Override
                             public void onRateCompleted(int mutualId) {
                                 if (getActivity() != null) {
-                                    Toast.makeText(getActivity(), R.string.sympathy_sended, Toast.LENGTH_SHORT).show();
+                                    Utils.showToastNotification(R.string.sympathy_sended, Toast.LENGTH_SHORT);
                                 }
                             }
 
@@ -102,7 +103,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
                                     mAdapter.removeSympathySentId(item.user.id);
                                 }
                                 if (getActivity() != null) {
-                                    Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                                    Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                                 }
                             }
                         }

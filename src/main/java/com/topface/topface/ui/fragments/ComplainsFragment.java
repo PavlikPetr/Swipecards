@@ -43,20 +43,20 @@ public class ComplainsFragment extends BaseFragment {
     }
 
     private void initItems(View root) {
-        initItem(root, ComplainRequest.ClassNames.PHOTO, ComplainRequest.TypesNames.PORN, R.drawable.edit_big_btn_top_selector);
-        initItem(root, ComplainRequest.ClassNames.PHOTO, ComplainRequest.TypesNames.ERO, R.drawable.edit_big_btn_middle_selector);
-        initItem(root, ComplainRequest.ClassNames.PHOTO, ComplainRequest.TypesNames.FAKE_PHOTO, R.drawable.edit_big_btn_middle_selector);
-        initItem(root, ComplainRequest.ClassNames.PHOTO, ComplainRequest.TypesNames.FAKE_USER, R.drawable.edit_big_btn_bottom_selector);
+        initItem(root, ComplainRequest.ClassNames.PHOTO, ComplainRequest.TypesNames.PORN);
+        initItem(root, ComplainRequest.ClassNames.PHOTO, ComplainRequest.TypesNames.ERO);
+        initItem(root, ComplainRequest.ClassNames.PHOTO, ComplainRequest.TypesNames.FAKE_PHOTO);
+        initItem(root, ComplainRequest.ClassNames.PHOTO, ComplainRequest.TypesNames.FAKE_USER);
 
-        initItem(root, ComplainRequest.ClassNames.PRIVATE_MSG, ComplainRequest.TypesNames.SPAM, R.drawable.edit_big_btn_top_selector);
-        initItem(root, ComplainRequest.ClassNames.PRIVATE_MSG, ComplainRequest.TypesNames.SWEARING, R.drawable.edit_big_btn_bottom_selector);
+        initItem(root, ComplainRequest.ClassNames.PRIVATE_MSG, ComplainRequest.TypesNames.SPAM);
+        initItem(root, ComplainRequest.ClassNames.PRIVATE_MSG, ComplainRequest.TypesNames.SWEARING);
 
-        initItem(root, ComplainRequest.ClassNames.USER, ComplainRequest.TypesNames.SPAM, R.drawable.edit_big_btn_top_selector);
-        initItem(root, ComplainRequest.ClassNames.USER, ComplainRequest.TypesNames.FAKE_DATA, R.drawable.edit_big_btn_middle_selector);
-        initItem(root, ComplainRequest.ClassNames.USER, ComplainRequest.TypesNames.SWEARING, R.drawable.edit_big_btn_bottom_selector);
+        initItem(root, ComplainRequest.ClassNames.USER, ComplainRequest.TypesNames.SPAM);
+        initItem(root, ComplainRequest.ClassNames.USER, ComplainRequest.TypesNames.FAKE_DATA);
+        initItem(root, ComplainRequest.ClassNames.USER, ComplainRequest.TypesNames.SWEARING);
     }
 
-    private void initItem(View root, final ComplainRequest.ClassNames className, final ComplainRequest.TypesNames typeName, int bgId) {
+    private void initItem(View root, final ComplainRequest.ClassNames className, final ComplainRequest.TypesNames typeName) {
         ComplainItem item = getItemIdByClassAndType(className, typeName);
         if (item != null) {
             TextView text = (TextView) root.findViewById(item.id);

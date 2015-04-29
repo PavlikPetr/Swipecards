@@ -110,38 +110,36 @@ public class MultipartApiResponse implements IApiResponse {
         //Если подключение не пустое и код ответа правильный
         if (inputStream != null && HttpUtils.isCorrectResponseCode(responseCode)) {
             //Если нужно, разархивируем поток из Gzip
-            if (inputStream != null) {
-                BufferedInputStream is = new BufferedInputStream(new FlushedInputStream(inputStream), HttpUtils.BUFFER_SIZE);
-                String boundary = getBoundary(contentType);
-                if (TextUtils.isEmpty(boundary)) {
-                    //В дебаг режиме еще читаем ответ сервера, что бы понять в чем проблема и куда делся boundary
-                    if (BuildConfig.DEBUG) {
-                        try {
-                            Debug.error("Boundary not found in response:\n" + getStringFromInputStream(is));
-                        } catch (Exception e) {
-                            Debug.error(e);
-                        }
+            BufferedInputStream is = new BufferedInputStream(new FlushedInputStream(inputStream), HttpUtils.BUFFER_SIZE);
+            String boundary = getBoundary(contentType);
+            if (TextUtils.isEmpty(boundary)) {
+                //В дебаг режиме еще читаем ответ сервера, что бы понять в чем проблема и куда делся boundary
+                if (BuildConfig.DEBUG) {
+                    try {
+                        Debug.error("Boundary not found in response:\n" + getStringFromInputStream(is));
+                    } catch (Exception e) {
+                        Debug.error(e);
                     }
-                    setError(ErrorCodes.WRONG_RESPONSE, "Boundary not found");
-                    return null;
                 }
-                MultipartStream multipartStream = new MultipartStream(is, boundary.getBytes());
-                boolean nextPart = multipartStream.skipPreamble();
-                while (nextPart) {
-                    //NOTE: здесь можно проверять еще и заголовки, но пока и так сойдет
-                    //Читаем данные ответа
-                    ByteArrayOutputStream data = new ByteArrayOutputStream();
-                    multipartStream.readHeaders();
-                    multipartStream.readBodyData(data);
-
-                    //Добавляем в массив объектов, попутно
-                    parts.add(new String(data.toByteArray()));
-
-                    nextPart = multipartStream.readBoundary();
-                }
-                inputStream.close();
-                is.close();
+                setError(ErrorCodes.WRONG_RESPONSE, "Boundary not found");
+                return null;
             }
+            MultipartStream multipartStream = new MultipartStream(is, boundary.getBytes());
+            boolean nextPart = multipartStream.skipPreamble();
+            while (nextPart) {
+                //NOTE: здесь можно проверять еще и заголовки, но пока и так сойдет
+                //Читаем данные ответа
+                ByteArrayOutputStream data = new ByteArrayOutputStream();
+                multipartStream.readHeaders();
+                multipartStream.readBodyData(data);
+
+                //Добавляем в массив объектов, попутно
+                parts.add(new String(data.toByteArray()));
+
+                nextPart = multipartStream.readBoundary();
+            }
+            inputStream.close();
+            is.close();
         }
 
         return parts;

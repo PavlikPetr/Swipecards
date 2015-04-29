@@ -34,7 +34,7 @@ public abstract class AbstractEditAdapter<T> extends BaseAdapter {
     @LayoutRes
     protected abstract int getItemLayoutRes();
 
-    public void setDataChangeListener(OnDataChangeListener listener) {
+    public void setDataChangeListener(OnDataChangeListener<T> listener) {
         mDataChangeListener = listener;
     }
 

@@ -67,11 +67,7 @@ public class PhotoTaker implements IPhotoTakerWithDialog {
                     if (CacheProfile.photos != null && CacheProfile.photos.contains(photo)) {
                         CacheProfile.photos.remove(photo);
                     }
-                    Toast.makeText(
-                            mActivity,
-                            App.getContext().getString(R.string.general_wrong_photo_upload),
-                            Toast.LENGTH_LONG
-                    ).show();
+                    Utils.showToastNotification(App.getContext().getString(R.string.general_wrong_photo_upload), Toast.LENGTH_LONG);
                 }
             }
 
@@ -84,7 +80,7 @@ public class PhotoTaker implements IPhotoTakerWithDialog {
 
     @Override
     public void onTakePhotoDialogSentFailure() {
-        Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
+        Utils.showToastNotification(R.string.photo_add_error, Toast.LENGTH_SHORT);
     }
 
     @Override
