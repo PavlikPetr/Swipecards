@@ -724,7 +724,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingProfile: {
                 if (mCurrentUser != null && getActivity() != null) {
-                    Intent intent = UserProfileActivity.createIntent(mCurrentUser.id, getActivity(), isChatAvailable(), isAddToFavoritsAvailable());
+                    Intent intent = UserProfileActivity.createIntent(null, mCurrentUser.id, null, isChatAvailable()
+                            , isAddToFavoritsAvailable(), mCurrentUser.firstName + ", " + mCurrentUser.age, mCurrentUser.city.name);
                     startActivityForResult(intent, UserProfileActivity.INTENT_USER_PROFILE);
                     EasyTracker.sendEvent("Dating", "Additional", "Profile", 1L);
                 }

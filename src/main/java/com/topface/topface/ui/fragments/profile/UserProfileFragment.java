@@ -71,6 +71,8 @@ public class UserProfileFragment extends AbstractProfileFragment {
     private User mRequestedUser;
     private IApiResponse mUserResponse;
     private FeedListData<FeedGift> mRequestedGifts;
+    private String mUserNameAndAge;
+    private String mUserCity;
 
     @Override
     public void onAttach(Activity activity) {
@@ -78,6 +80,8 @@ public class UserProfileFragment extends AbstractProfileFragment {
         Bundle args = getArguments();
         mProfileId = args.getInt(AbstractProfileFragment.INTENT_UID, 0);
         mItemId = args.getString(AbstractProfileFragment.INTENT_ITEM_ID);
+        mUserNameAndAge = args.getString(ChatFragment.INTENT_USER_NAME_AND_AGE);
+        mUserCity = args.getString(ChatFragment.INTENT_USER_CITY);
         String s = args.getString(EditorProfileActionsFragment.PROFILE_RESPONSE);
         if (!TextUtils.isEmpty(s)) {
             mSavedResponse = new ApiResponse(s);
@@ -161,6 +165,19 @@ public class UserProfileFragment extends AbstractProfileFragment {
     @Override
     protected String getDefaultTitle() {
         return getString(R.string.general_profile);
+    }
+
+    @Override
+    protected String getSubtitle() {
+        return mUserCity;
+    }
+
+    @Override
+    protected String getTitle() {
+        if (TextUtils.isEmpty(mUserNameAndAge)) {
+            return getDefaultTitle();
+        }
+        return mUserNameAndAge;
     }
 
     private boolean isLoaded(int profileId) {

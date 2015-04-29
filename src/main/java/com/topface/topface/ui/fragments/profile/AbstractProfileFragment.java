@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.profile;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,12 +23,9 @@ import java.util.List;
 public abstract class AbstractProfileFragment extends UserAvatarFragment implements ViewPager.OnPageChangeListener {
     public static final String INTENT_UID = "intent_profile_uid";
     public static final String INTENT_ITEM_ID = "intent_profile_item_id";
-    public static final String INTENT_CALLING_FRAGMENT = "intent_profile_calling_fragment";
     public static final String INTENT_IS_CHAT_AVAILABLE = "intent_profile_is_chat_available";
     public static final String INTENT_IS_ADD_TO_FAVORITS_AVAILABLE = "intent_profile_is_add_to_favorits_available";
-    public static final String INTENT_START_BODY_PAGE_NAME = "intent_start_body_page";
     public static final String ADD_PHOTO_INTENT = "com.topface.topface.ADD_PHOTO_INTENT";
-    protected static final String ARG_TAG_INIT_BODY_PAGE = "profile_start_body_class";
     private static final String CURRENT_BODY_PAGE = "CURRENT_BODY_PAGE";
     // state
     private ArrayList<String> BODY_PAGES_TITLES = new ArrayList<>();
@@ -55,11 +51,8 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
             return mProfile;
         }
     };
-    private String mBodyStartPageClassName;
-    private int mStartBodyPage = 0;
     // views
     private ViewPager mBodyPager;
-    private ProfilePageAdapter mBodyPagerAdapter;
     private SlidingTabLayout mTabIndicator;
 
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
@@ -88,25 +81,11 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
     };
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(INTENT_START_BODY_PAGE_NAME)) {
-            mBodyStartPageClassName = args.getString(INTENT_START_BODY_PAGE_NAME);
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View root = inflater.inflate(R.layout.fragment_profile, null);
         initBodyPages(root);
         // start pages initialization
-        int startBodyPage = mBodyPagerAdapter.getFragmentIndexByClassName(mBodyStartPageClassName);
-        if (startBodyPage != -1) {
-            mStartBodyPage = startBodyPage;
-        }
-        mBodyPager.setCurrentItem(mStartBodyPage);
         return root;
     }
 
@@ -115,14 +94,6 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
         super.onViewCreated(view, savedInstanceState);
         if (savedInstanceState != null) {
             mBodyPager.setCurrentItem(savedInstanceState.getInt(CURRENT_BODY_PAGE, 0));
-        }
-    }
-
-    @Override
-    protected void restoreState() {
-        Bundle args = getArguments();
-        if (args != null) {
-            mBodyStartPageClassName = getArguments().getString(ARG_TAG_INIT_BODY_PAGE);
         }
     }
 
@@ -167,7 +138,7 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
         initBody();
         mBodyPager = (ViewPager) root.findViewById(R.id.vpFragments);
         mBodyPager.setSaveEnabled(false);
-        mBodyPagerAdapter = new ProfilePageAdapter(getChildFragmentManager(), BODY_PAGES_CLASS_NAMES,
+        ProfilePageAdapter mBodyPagerAdapter = new ProfilePageAdapter(getChildFragmentManager(), BODY_PAGES_CLASS_NAMES,
                 BODY_PAGES_TITLES, mProfileUpdater);
         mBodyPager.setAdapter(mBodyPagerAdapter);
         //Tabs for Body
@@ -199,6 +170,7 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
         Utils.activityResultToNestedFragments(getChildFragmentManager(), requestCode, resultCode, data);
     }
 
+    @SuppressWarnings("unused")
     protected abstract int getProfileType();
 
     protected void onStartActivity() {

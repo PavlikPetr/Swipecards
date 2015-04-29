@@ -14,12 +14,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.IUniversalUser;
-import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.UniversalUserFactory;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
@@ -31,8 +29,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.PhotoTaker;
 import com.topface.topface.utils.actionbar.OverflowMenu;
-
-import java.util.ArrayList;
 
 /**
  * Created by kirussell on 18.03.14.
@@ -51,18 +47,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     };
 
     public static OwnProfileFragment newInstance() {
-        OwnProfileFragment fragment = new OwnProfileFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public static OwnProfileFragment newInstance(String startBodyPageClassName) {
-        OwnProfileFragment fragment = new OwnProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_TAG_INIT_BODY_PAGE, startBodyPageClassName);
-        fragment.setArguments(args);
-        return fragment;
+        return new OwnProfileFragment();
     }
 
     @Override
