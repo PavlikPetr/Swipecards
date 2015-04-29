@@ -85,8 +85,6 @@ import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.social.AuthToken;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
@@ -335,7 +333,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                     }
                 }
                 mAdapter.setData(historyData);
-                mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
+                mUser = JsonUtils.fromJson(savedInstanceState.getString(FRIEND_FEED_USER), FeedUser.class);
                 invalidateUniversalUser();
                 initOverflowMenuActions(getOverflowMenu());
                 if (wasFailed) {
@@ -967,13 +965,13 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                     @Override
                     public void setBlackListValue(Boolean value) {
                         if (mUser != null) {
-                            mUser.blocked = value != null ? value : !mUser.blocked;
+                            mUser.inBlacklist = value != null ? value : !mUser.inBlacklist;
                         }
                     }
 
                     @Override
                     public Boolean getBlackListValue() {
-                        return mUser != null ? mUser.blocked : null;
+                        return mUser != null ? mUser.inBlacklist : null;
                     }
 
                     @Override

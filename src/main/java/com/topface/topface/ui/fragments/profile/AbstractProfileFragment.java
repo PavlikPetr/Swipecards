@@ -170,9 +170,6 @@ public abstract class AbstractProfileFragment extends UserAvatarFragment impleme
         Utils.activityResultToNestedFragments(getChildFragmentManager(), requestCode, resultCode, data);
     }
 
-    @SuppressWarnings("unused")
-    protected abstract int getProfileType();
-
     protected void onStartActivity() {
     }
 

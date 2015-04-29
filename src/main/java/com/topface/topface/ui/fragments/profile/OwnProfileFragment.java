@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.IUniversalUser;
-import com.topface.topface.data.Profile;
 import com.topface.topface.data.UniversalUserFactory;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
