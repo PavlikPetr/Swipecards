@@ -9,12 +9,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.Banner;
 import com.topface.topface.requests.ApiResponse;
@@ -38,8 +35,8 @@ import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER
 /**
  */
 public class FullscreenController {
-
     private static final String TAG = "FullscreenController";
+
     private static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-9530442067223936/9732921207";
     private static final String ADMOB_INTERSTITIAL_MEDIATION_ID = "ca-app-pub-9530442067223936/9498586400";
     private static boolean isFullScreenBannerVisible = false;
@@ -165,20 +162,7 @@ public class FullscreenController {
     }
 
     public void requestAdmobFullscreen(String id) {
-        // Создание межстраничного объявления.
-        final InterstitialAd interstitial = new InterstitialAd(mActivity);
-        interstitial.setAdUnitId(id);
-        // Создание запроса объявления.
-        AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-        adRequestBuilder.setGender(
-                CacheProfile.getProfile().sex == Static.BOY ?
-                        AdRequest.GENDER_MALE :
-                        AdRequest.GENDER_FEMALE
-        );
-        // Запуск загрузки межстраничного объявления.
-        interstitial.loadAd(adRequestBuilder.build());
-        // AdListener будет использовать обратные вызовы, указанные ниже.
-        interstitial.setAdListener(new AdListener() {
+        AdmobInterstitialUtils.requestAdmobFullscreen(mActivity, id, new AdListener() {
             @Override
             public void onAdClosed() {
                 isFullScreenBannerVisible = false;
@@ -201,7 +185,6 @@ public class FullscreenController {
 
             @Override
             public void onAdLoaded() {
-                interstitial.show();
                 addLastFullscreenShowedTime();
             }
         });

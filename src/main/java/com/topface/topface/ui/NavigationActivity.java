@@ -46,6 +46,7 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.PhotoTaker;
 import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
@@ -439,6 +440,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         Initialize Topface offerwall here to be able to start it quickly instead of PurchasesActivity
          */
         OfferwallsManager.initTfOfferwall(this, null);
+        AdmobInterstitialUtils.preloadInterstitials(this);
     }
 
     @Override
@@ -454,6 +456,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
         mDrawerToggle = null;
         super.onDestroy();
+        AdmobInterstitialUtils.releaseInterstitials();
     }
 
     @Override

@@ -63,6 +63,8 @@ public class UserConfig extends AbstractConfig {
     public static final String FACEBOOK_REQUESTS_DIALOG_TIME = "facebook_request_dialog_time";
     private static final String APPSFLYER_FIRST_PAY = "appsflyer_first_purchase";
     private static final String IS_EMAIL_CONFIRM_SENT = "is_button_send_confirmation_clicked";
+    private static final String INTERSTITIAL_IN_FEEDS_COUNTER = "interstitial_in_feed_counter";
+    private static final String INTERSTITIAL_IN_FEEDS_FIRST_SHOW_TIME = "interstitial_in_feed_first_show_time";
     private String mUnique;
 
     public UserConfig(String uniqueKey, Context context) {
@@ -151,6 +153,10 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, FACEBOOK_REQUESTS_DIALOG_TIME, 0L);
         // is button send confirmation clicked by current user
         addField(settingsMap, IS_EMAIL_CONFIRM_SENT, false);
+        // interstitials' shows counter in feeds
+        addField(settingsMap, INTERSTITIAL_IN_FEEDS_COUNTER, 0);
+        // interstitials' first show time
+        addField(settingsMap, INTERSTITIAL_IN_FEEDS_FIRST_SHOW_TIME, 0L);
     }
 
     @Override
@@ -611,6 +617,28 @@ public class UserConfig extends AbstractConfig {
             }
         }
         setField(getSettingsMap(), SYMPATHY_SENT_ID_ARRAY, res);
+    }
+
+    public int incrementInterstitialInFeedsCounter() {
+        int counter = getIntegerField(getSettingsMap(), INTERSTITIAL_IN_FEEDS_COUNTER);
+        setField(getSettingsMap(), INTERSTITIAL_IN_FEEDS_COUNTER, ++counter);
+        return counter;
+    }
+
+    public void resetInterstitialInFeedsCounter() {
+        setField(getSettingsMap(), INTERSTITIAL_IN_FEEDS_COUNTER, 0);
+    }
+
+    public int getInterstitialsInFeedCounter() {
+        return getIntegerField(getSettingsMap(), INTERSTITIAL_IN_FEEDS_COUNTER);
+    }
+
+    public void setInterstitialsInFeedFirstShow(long timestamp) {
+        setField(getSettingsMap(), INTERSTITIAL_IN_FEEDS_FIRST_SHOW_TIME, timestamp);
+    }
+
+    public long getInterstitialsInFeedFirstShow() {
+        return getLongField(getSettingsMap(), INTERSTITIAL_IN_FEEDS_FIRST_SHOW_TIME);
     }
 
     // =====================================================

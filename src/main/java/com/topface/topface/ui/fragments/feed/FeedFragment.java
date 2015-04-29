@@ -331,7 +331,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         return new int[]{GCMUtils.GCM_TYPE_UNKNOWN};
     }
 
-    abstract protected int getTypeForCounters();
+    abstract protected int getFeedType();
 
     protected int getLayout() {
         return R.layout.fragment_feed;
@@ -924,7 +924,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     private void updateDataAfterReceivingCounters(String lastMethod) {
         if (!lastMethod.equals(CountersManager.NULL_METHOD) && lastMethod.equals(getRequest().getServiceName())) {
-            int counters = CountersManager.getInstance(getActivity()).getCounter(getTypeForCounters());
+            int counters = CountersManager.getInstance(getActivity()).getCounter(getFeedType());
             if (counters > 0) {
                 updateData(true, false);
             }

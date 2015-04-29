@@ -38,6 +38,7 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONObject;
@@ -99,7 +100,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected int getTypeForCounters() {
+    protected int getFeedType() {
         return CountersManager.LIKES;
     }
 
@@ -356,4 +357,21 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         return GCMUtils.GCM_LIKE_UPDATE;
     }
 
+    @Override
+    protected void onFeedItemClick(FeedItem item) {
+        super.onFeedItemClick(item);
+        showInterstitial();
+    }
+
+    @Override
+    public void onAvatarClick(FeedLike item, View view) {
+        super.onAvatarClick(item, view);
+        showInterstitial();
+    }
+
+    private void showInterstitial() {
+        if (getFeedType() == CountersManager.LIKES) {
+            AdmobInterstitialUtils.requestPreloadedInterstitial(getActivity());
+        }
+    }
 }
