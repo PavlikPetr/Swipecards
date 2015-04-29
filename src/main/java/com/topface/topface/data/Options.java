@@ -335,7 +335,7 @@ public class Options extends AbstractData {
 
             feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
 
-            interstitial = JsonUtils.optFromJson(response.optString("interstitials"),
+            interstitial = JsonUtils.optFromJson(response.optString("interstitial"),
                     InterstitialInFeeds.class, interstitial);
 
         } catch (Exception e) {
