@@ -32,7 +32,7 @@ public class AdmobInterstitialUtils {
 
     public static void preloadInterstitials(final Activity activity) {
         if (needPreload()) {
-            Options.InterstitialInFeeds interstitialInFeed = CacheProfile.getOptions().getInterstitialsInFeeds();
+            Options.InterstitialInFeeds interstitialInFeed = CacheProfile.getOptions().interstitial;
             if (interstitialInFeed.canShow()) {
                 AdListener listener = new SimpleAdListener() {
                     @Override

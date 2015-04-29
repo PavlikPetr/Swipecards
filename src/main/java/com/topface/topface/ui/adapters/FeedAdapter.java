@@ -611,7 +611,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     public boolean isNeedFeedAd() {
-        return CacheProfile.show_ad && NativeAdManager.hasAvailableAd()
-                && !CacheProfile.getOptions().interstitial.enabled;
+        return CacheProfile.show_ad && NativeAdManager.hasAvailableAd();
     }
 }

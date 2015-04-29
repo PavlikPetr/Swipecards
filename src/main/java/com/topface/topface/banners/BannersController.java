@@ -1,6 +1,7 @@
 package com.topface.topface.banners;
 
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
+import com.topface.topface.utils.CacheProfile;
 
 /**
  * Controls banners injection for given page
@@ -11,6 +12,11 @@ public class BannersController {
 
     public BannersController(IPageWithAds page) {
         super();
+        if (page.getPageName() == PageInfo.PageName.LIKES_TABS) {
+            if (CacheProfile.getOptions().interstitial.canShow()) {
+                return;
+            }
+        }
         getFeedBannerController().injectBanner(page);
     }
 

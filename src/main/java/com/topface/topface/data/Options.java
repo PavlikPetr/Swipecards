@@ -406,10 +406,6 @@ public class Options extends AbstractData {
         return false;
     }
 
-    public InterstitialInFeeds getInterstitialsInFeeds() {
-        return interstitial;
-    }
-
     public static class AboutApp {
         public String title;
         public String url;
