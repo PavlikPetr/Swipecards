@@ -21,6 +21,7 @@ import android.widget.FrameLayout;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
@@ -129,16 +130,23 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
      */
     @SuppressWarnings("deprecation")
     private void setWindowOptions() {
+        Window window = getWindow();
         // supportRequestWindowFeature() вызывать только до setContent(),
         // метод setSupportProgressBarIndeterminateVisibility(boolean) вызывать строго после setContent();
         mIndeterminateSupported = supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         // для корректного отображения картинок
-        getWindow().setFormat(PixelFormat.RGBA_8888);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
+        window.setFormat(PixelFormat.RGBA_8888);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DITHER);
         // добавляем анимацию открытия нового activity
         // иногда еще надо совсем _не_ анимировать, поэтому флаг оставлен
         if (!mNeedAnimate) {
             overridePendingTransition(0, 0);
+        }
+        // status bar color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(getResources().getColor(R.color.status_bar_color));
         }
     }
 
