@@ -123,6 +123,7 @@ public class TextFormEditAdapter extends AbstractEditAdapter<FormItem> {
 
         holder.text.removeTextChangedListener(holder.textWatcher);
         holder.text.setText(value);
+
         holder.text.setSelection(value != null ? value.length() : 0);
         holder.text.addTextChangedListener(holder.textWatcher);
 

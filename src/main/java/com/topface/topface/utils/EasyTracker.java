@@ -27,6 +27,7 @@ public class EasyTracker {
             mTracker = analytics.newTracker(context.getString(R.string.ga_trackingId));
             mTracker.enableExceptionReporting(resources.getBoolean(R.bool.ga_reportUncaughtExceptions));
             mTracker.enableAutoActivityTracking(resources.getBoolean(R.bool.ga_autoActivityTracking));
+            mTracker.setSampleRate(0.5);
         }
         return mTracker;
     }

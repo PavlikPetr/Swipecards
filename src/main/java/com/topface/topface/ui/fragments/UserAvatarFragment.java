@@ -172,10 +172,12 @@ public abstract class UserAvatarFragment extends BaseFragment
 
     public void onAvatarClick() {
         IUniversalUser user = getUniversalUser();
-        if (!user.isEmpty()) {
-            startActivity(PhotoSwitcherActivity.
-                    getPhotoSwitcherIntent(user.getGifts(), user.getPhoto().position,
-                            user.getId(), user.getPhotosCount(), user.getPhotos()));
+        if (user != null && !user.isEmpty()) {
+            startActivity(
+                    PhotoSwitcherActivity.getPhotoSwitcherIntent(user.getGifts(),
+                            user.getPhoto() != null ? user.getPhoto().position : 0,
+                            user.getId(), user.getPhotosCount(), user.getPhotos())
+            );
         }
     }
 

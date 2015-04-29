@@ -9,7 +9,9 @@ import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Класс реализующий запуск очереди попапов. При закрытии одного, сразу появляется другой
@@ -18,7 +20,7 @@ import java.util.Iterator;
 public class SequencedStartAction implements IStartAction {
 
     private Activity mActivity;
-    private ArrayList<IStartAction> mActions = new ArrayList<>();
+    private List<IStartAction> mActions = Collections.synchronizedList(new ArrayList<IStartAction>());
     private int mPriority = -1;
 
     public SequencedStartAction(Activity activity, int priority) {
@@ -65,7 +67,7 @@ public class SequencedStartAction implements IStartAction {
         mActions.add(action);
     }
 
-    public ArrayList<IStartAction> getActions() {
+    public List<IStartAction> getActions() {
         return mActions;
     }
 
