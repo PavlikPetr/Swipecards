@@ -727,7 +727,7 @@ public class Options extends AbstractData {
         public boolean enabled = true;
         public int count = 0;
         public long period = 0;
-        public String adGroup = "";
+        public String adGroup = FEED;
 
         public boolean canShow() {
             UserConfig config = App.getUserConfig();
@@ -738,7 +738,7 @@ public class Options extends AbstractData {
                 if (diff > period * 1000) {
                     config.resetInterstitialInFeedsCounter();
                 }
-                return enabled && (config.getInterstitialsInFeedCounter() < count);
+                return enabled || (count > 0 && (config.getInterstitialsInFeedCounter() < count));
             }
         }
     }
