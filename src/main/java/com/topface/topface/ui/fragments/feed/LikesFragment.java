@@ -15,7 +15,6 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.topface.framework.utils.BackgroundThread;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
@@ -59,6 +58,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             updateTitleWithCounter();
         }
     };
+
+    @Override
+    protected boolean isReadFeedItems() {
+        return true;
+    }
 
     @Override
     public void onResume() {
@@ -350,7 +354,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     private void sendLikeReadRequest(String id) {
         if (!TextUtils.isEmpty(id)) {
-            ReadLikeRequest request = new ReadLikeRequest(App.getContext(), Integer.valueOf(id));
+            ReadLikeRequest request = new ReadLikeRequest(getActivity(), Integer.valueOf(id));
             request.exec();
         }
     }

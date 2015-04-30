@@ -669,7 +669,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             if (isPullToRefreshUpdating && firstItem != null) {
                 request.from = firstItem.id;
             }
-
+            request.leave = isReadFeedItems();
             request.callback(new DataApiHandler<FeedListData<T>>() {
 
                 @Override
@@ -700,6 +700,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 }
             }).exec();
         }
+    }
+
+    protected boolean isReadFeedItems() {
+        return false;
     }
 
     protected void processFailUpdate(int codeError, boolean isHistoryLoad, FeedAdapter<T> adapter, boolean isPullToRefreshUpdating) {
