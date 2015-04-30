@@ -39,6 +39,7 @@ import com.topface.topface.banners.BannersController;
 import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.FeedItem;
+import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
@@ -47,6 +48,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.ReadLikeRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
@@ -477,6 +479,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 } else {
                     T item = (T) parent.getItemAtPosition(position);
                     if (item != null) {
+                        if (item instanceof FeedLike) {
+                            sendLikeReadRequest(Integer.valueOf(item.id));
+                        }
                         if (!mIsUpdating && item.isRetrier()) {
                             updateUI(new Runnable() {
                                 public void run() {
@@ -512,6 +517,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             }
 
         };
+    }
+
+    protected void sendLikeReadRequest(int id) {
+        if (this instanceof LikesFragment) {
+            ReadLikeRequest request = new ReadLikeRequest(App.getContext(), id);
+            request.exec();
+        }
     }
 
     protected int getMultiSelectionLimit() {
