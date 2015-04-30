@@ -1,7 +1,10 @@
 package com.topface.topface.ui.fragments;
 
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.topface.framework.JsonUtils;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.utils.ContactsProvider;
 
@@ -20,39 +22,84 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 public class SMSInviteFragment extends ContentListFragment {
-    private final static int ONE_REQUEST_CONTACTS_LIMIT = 100;
-    private ArrayList<ContactsProvider.Contact> mContactsArray;
+    public static final String PHONE_NUMBER = "phone_number";
+    public static final String SMS_TEXT = "sms_text";
+    private static final String ALL_READ_CONTACTS = "all_read_contacts";
+    private static final String UPDATABLE_STATE = "updatable_state";
+    private static final String OFFSET_POSITION = "offset_position";
+    private static final String SCROLL_POSITION = "scroll_position";
+    private static final String NO_CONTACTS_VISIBILITY = "no_contacts_visibility";
+    private final static int ONE_REQUEST_CONTACTS_LIMIT = 10;
+    private static final int SMS_REQUEST_CODE = 20;
     Set<String> mInvitedIds;
-    private boolean isUpdatable;
+    private boolean isUpdatable = false;
+    private boolean isInProgress;
+    private int mOffsetPosition;
+    private int mLastContactBoxSize;
+    private TextView mNoContactsAvailable;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        isUpdatable = true;
         super.onViewCreated(view, savedInstanceState);
-        mInvitedIds = App.getUserConfig().getInvitedContactsBySms();
+        mNoContactsAvailable = (TextView) view.findViewById(R.id.no_contacts_available);
+        isUpdatable = true;
+        mOffsetPosition = 0;
+        ArrayList<ContactsProvider.Contact> contacts = new ArrayList<>();
+        int scrolledPosition = 0;
+        if (savedInstanceState != null) {
+            contacts = savedInstanceState.getParcelableArrayList(ALL_READ_CONTACTS);
+            isUpdatable = savedInstanceState.getBoolean(UPDATABLE_STATE);
+            mOffsetPosition = savedInstanceState.getInt(OFFSET_POSITION);
+            scrolledPosition = savedInstanceState.getInt(SCROLL_POSITION);
+            setNoContactsVisibility(savedInstanceState.getBoolean(NO_CONTACTS_VISIBILITY, false));
+        } else {
+            getContactsWithPhone();
+        }
+        setAdapter(new ContactsAdapter(contacts));
+        getListView().setSelection(scrolledPosition);
+    }
 
-        showProgress(true);
-        getContactsWithPhone();
-        setAdapter(new ContactsAdapter(getAllFilteredContacts()));
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (getAdapter() != null) {
+            outState.putParcelableArrayList(ALL_READ_CONTACTS, ((ContactsAdapter) getAdapter()).getAllData());
+        }
+        outState.putBoolean(UPDATABLE_STATE, isUpdatable);
+        outState.putInt(OFFSET_POSITION, mOffsetPosition);
+        if (getListView() != null) {
+            outState.putInt(SCROLL_POSITION, getListView().getFirstVisiblePosition());
+        }
+        outState.putBoolean(NO_CONTACTS_VISIBILITY, isNoContactsVisible());
     }
 
     private void getContactsWithPhone() {
+        if (!isUpdatable || isInProgress) {
+            if (!isInProgress) {
+                showProgress(false);
+            }
+            return;
+        }
+        isInProgress = true;
+        showProgress(true);
         ContactsProvider.GetContactsHandler handler = new ContactsProvider.GetContactsHandler() {
             @Override
             public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
+                mLastContactBoxSize = contacts.size();
                 if (contacts.size() == 0) {
                     isUpdatable = false;
+                    showProgress(false);
+                    showNoContactsIfNeeded();
+                } else {
+                    validateContactsOnServer(contacts);
                 }
-                validateContactsOnServer(contacts);
             }
         };
         ContactsProvider provider = new ContactsProvider(getActivity());
-        provider.getContactsWithPhones(ONE_REQUEST_CONTACTS_LIMIT, getAllFilteredContacts().size(), handler);
+        provider.getContactsWithPhones(ONE_REQUEST_CONTACTS_LIMIT, mOffsetPosition, handler);
     }
 
     private void validateContactsOnServer(final ArrayList<ContactsProvider.Contact> contacts) {
@@ -93,7 +140,7 @@ public class SMSInviteFragment extends ContentListFragment {
     private JSONObject createFakeResponse(ArrayList<ContactsProvider.Contact> contacts) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("items", createJsonArray(contacts));
-        jsonObject.put("sentCount", 3);
+        jsonObject.put("sentCount", 4);
         jsonObject.put("registeredCount", 1);
         return jsonObject;
     }
@@ -103,7 +150,8 @@ public class SMSInviteFragment extends ContentListFragment {
         for (ContactsProvider.Contact contact : contacts) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("phone", contact.getPhone());
-            jsonObject.put("status", new Random().nextInt(3));
+//            jsonObject.put("status", new Random().nextInt(3));
+            jsonObject.put("status", 0);
             res.put(jsonObject);
         }
         return res;
@@ -124,18 +172,13 @@ public class SMSInviteFragment extends ContentListFragment {
     }
 
     private void addContacts(ArrayList<ContactsProvider.Contact> contacts) {
+        mOffsetPosition += mLastContactBoxSize;
         showProgress(false);
-        getAllFilteredContacts().addAll(contacts);
         if (getAdapter() != null) {
+            ((ContactsAdapter) getAdapter()).addContacts(contacts);
             getAdapter().notifyDataSetChanged();
         }
-    }
-
-    private ArrayList<ContactsProvider.Contact> getAllFilteredContacts() {
-        if (mContactsArray == null) {
-            mContactsArray = new ArrayList<>();
-        }
-        return mContactsArray;
+        isInProgress = false;
     }
 
     @Override
@@ -145,9 +188,9 @@ public class SMSInviteFragment extends ContentListFragment {
 
     private class ContactsAdapter extends BaseAdapter {
 
-        List<ContactsProvider.Contact> contacts;
+        ArrayList<ContactsProvider.Contact> contacts;
 
-        ContactsAdapter(List<ContactsProvider.Contact> contacts) {
+        ContactsAdapter(ArrayList<ContactsProvider.Contact> contacts) {
             this.contacts = contacts;
         }
 
@@ -159,6 +202,14 @@ public class SMSInviteFragment extends ContentListFragment {
         @Override
         public ContactsProvider.Contact getItem(int position) {
             return contacts != null ? contacts.get(position) : null;
+        }
+
+        public void addContacts(ArrayList<ContactsProvider.Contact> contacts) {
+            this.contacts.addAll(contacts);
+        }
+
+        public ArrayList<ContactsProvider.Contact> getAllData() {
+            return contacts;
         }
 
         @Override
@@ -201,7 +252,7 @@ public class SMSInviteFragment extends ContentListFragment {
                     holder.invite.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-//                        sendContact(contact);
+                            sendContact(contact);
                         }
                     });
                     break;
@@ -238,7 +289,7 @@ public class SMSInviteFragment extends ContentListFragment {
     @Override
     protected void needToLoad() {
         super.needToLoad();
-
+        getContactsWithPhone();
     }
 
     public enum PHONES_STATUSES {
@@ -293,6 +344,11 @@ public class SMSInviteFragment extends ContentListFragment {
                     i--;
                 }
             }
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return contacts;
         }
     }
@@ -300,10 +356,43 @@ public class SMSInviteFragment extends ContentListFragment {
     private void showProgress(boolean visibility) {
         if (getAdapter() == null || getAdapter().getCount() == 0) {
             showMainProgressBar(visibility);
-            showFooterProgressBar(!visibility);
+            showFooterProgressBar(false);
         } else {
-            showMainProgressBar(!visibility);
-            showFooterProgressBar(visibility);
+            showMainProgressBar(false);
+            if (isUpdatable) {
+                showFooterProgressBar(visibility);
+            } else {
+                showFooterProgressBar(false);
+            }
         }
+    }
+
+    private void sendContact(ContactsProvider.Contact contact) {
+        Intent sentIntent = new Intent(CatchSMSActions.FILTER_SMS_SENT);
+        String num = "+79990362102";
+        String text = "hi";
+        sentIntent.putExtra(PHONE_NUMBER, num);
+        sentIntent.putExtra(SMS_TEXT, text);
+        PendingIntent sentPI = PendingIntent.getBroadcast(getActivity(), 0,
+                sentIntent, 0);
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage(num, null, text, sentPI, null);
+    }
+
+    private void setNoContactsVisibility(boolean visibility) {
+        if (mNoContactsAvailable != null) {
+            mNoContactsAvailable.setVisibility(visibility ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private void showNoContactsIfNeeded() {
+        if (getAdapter() != null) {
+            ArrayList<ContactsProvider.Contact> contacts = ((ContactsAdapter) getAdapter()).getAllData();
+            setNoContactsVisibility(null == contacts || contacts.size() == 0);
+        }
+    }
+
+    private boolean isNoContactsVisible() {
+        return mNoContactsAvailable != null && mNoContactsAvailable.getVisibility() == View.VISIBLE;
     }
 }

@@ -42,19 +42,18 @@
         <Button
             android:id="@+id/contact_invite_button"
             style="@style/Widget.Topface.Button.Blue"
-            android:layout_width="wrap_content"
+            android:layout_width="104dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:maxWidth="104dp"
             android:singleLine="false" />
 
         <TextView
             android:id="@+id/contact_invited_text"
             style="@style/ListMessageText"
-            android:layout_width="wrap_content"
+            android:layout_width="104dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:maxWidth="104dp"
+            android:gravity="center"
             android:singleLine="false" />
     </RelativeLayout>
 

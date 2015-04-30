@@ -811,6 +811,7 @@
 
     <!--invite frends by sms-->
     <string name="premium_for_invitations">Пригласите 3 друга и после их регистрации в Topface вы получите вип на сутки!</string>
+    <string name="no_contacts_available">На устройстве нет контактов, доступных к отображению</string>
     <string name="sms_invite_title">Получите вип на сутки!</string>
     <string name="sms_invite_subtitle">Получите вип на сутки!</string>
 

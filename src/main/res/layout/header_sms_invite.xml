@@ -13,9 +13,6 @@
         android:src="@drawable/ic_add_friend" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/premium_for_invitations"
-        android:textColor="#1F1F1F"
-        android:textSize="14sp" />
+        style="@style/SMSInviteText"
+        android:text="@string/premium_for_invitations" />
 </LinearLayout>

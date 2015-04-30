@@ -58,7 +58,10 @@ public abstract class ContentListFragment extends BaseFragment {
     }
 
     protected void needToLoad() {
+    }
 
+    public ListView getListView() {
+        return mContentList;
     }
 
     protected void setListShown(boolean show) {
@@ -66,7 +69,6 @@ public abstract class ContentListFragment extends BaseFragment {
             throw new IllegalStateException("Views are not initialized yet. Call after onViewCreated()");
         }
         mContentList.setVisibility(show ? View.VISIBLE : View.GONE);
-        showMainProgressBar(!show);
     }
 
     protected void setAdapter(BaseAdapter adapter) {
@@ -84,7 +86,9 @@ public abstract class ContentListFragment extends BaseFragment {
     }
 
     public void showFooterProgressBar(boolean visibility) {
-        mFooterView.setVisibility(visibility ? View.VISIBLE : View.GONE);
+        if (mFooterView != null) {
+            mFooterView.setVisibility(visibility ? View.VISIBLE : View.GONE);
+        }
     }
 
 

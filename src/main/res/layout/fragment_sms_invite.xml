@@ -20,6 +20,15 @@
         android:id="@+id/content_list_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/no_contacts_available"
+        style="@style/SMSInviteText"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="@string/no_contacts_available"
+        android:visibility="gone" />
 
 </RelativeLayout>
