@@ -87,7 +87,6 @@ public class FeedRequest extends LimitedApiRequest {
                 break;
             case LIKES:
                 service = "like.getList";
-                leave = true;
                 break;
             case MUTUAL:
                 service = "mutual.getList";
