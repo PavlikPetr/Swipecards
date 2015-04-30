@@ -556,7 +556,6 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
         if (mIsUpdating) {
             return;
         }
-        mIsUpdating = true;
         final boolean isPopularLockOn;
         isPopularLockOn = mAdapter != null &&
                 !mAdapter.isEmpty() &&

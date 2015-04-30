@@ -181,8 +181,9 @@ dependencies {
     compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
     compile rootProject.ANDROID_BUILD_SUPPORT_APPCOMPAT_VERSION
     //Google play services
-    compile "com.google.android.gms:play-services-base:6.5.87"
-    compile "com.google.android.gms:play-services-ads:6.5.87"
+    compile "com.google.android.gms:play-services-base:7.3.0"
+    compile "com.google.android.gms:play-services-gcm:7.3.0"
+    compile "com.google.android.gms:play-services-ads:7.3.0"
     //All jar libs
     compile fileTree(dir: 'libs', exclude: 'amazon/*.jar', include: '*.jar')
 
