@@ -29,12 +29,14 @@ class AdMobProvider extends AbstractAdsProvider {
         createView(page);
         setCallback(callbacks);
         loadAdMob();
-        ((RefreshablePageWithAds) page).setRefresher(new IRefresher() {
-            @Override
-            public void refreshBanner() {
-                loadAdMob();
-            }
-        });
+        if (page instanceof RefreshablePageWithAds) {
+            ((RefreshablePageWithAds) page).setRefresher(new IRefresher() {
+                @Override
+                public void refreshBanner() {
+                    loadAdMob();
+                }
+            });
+        }
         return true;
     }
 
