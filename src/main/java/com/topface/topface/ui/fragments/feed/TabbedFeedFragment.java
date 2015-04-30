@@ -185,7 +185,9 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     @Override
     public void onResume() {
         super.onResume();
-        mRefresher.refreshBanner();
+        if (mRefresher != null) {
+            mRefresher.refreshBanner();
+        }
     }
 
     @Override
@@ -221,7 +223,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     private IRefresher mRefresher;
 
     @Override
-    public void setRefresh(IRefresher refresher) {
+    public void setRefresher(IRefresher refresher) {
         mRefresher = refresher;
     }
 }
