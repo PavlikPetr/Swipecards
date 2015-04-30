@@ -32,6 +32,7 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.RemindRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -122,6 +123,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
     private void requestEmailConfirmedFlag(final boolean isShowEmailConfirmMessage) {
         ProfileRequest profileRequest = new ProfileRequest(getActivity());
+        ((NavigationActivity) getActivity()).registerRequest(profileRequest);
         profileRequest.part = ProfileRequest.P_EMAIL_CONFIRMED;
         profileRequest.callback(new DataApiHandler<Boolean>() {
 
