@@ -513,8 +513,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         mOnAvatarClickListener = listener;
     }
 
-    public static interface OnAvatarClickListener<T> {
-        public void onAvatarClick(T item, View view);
+    public interface OnAvatarClickListener<T> {
+        void onAvatarClick(T item, View view);
     }
 
     public List<String> getSelectedFeedIds() {

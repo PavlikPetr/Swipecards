@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -25,6 +26,7 @@ import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.ReadLikeRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
@@ -55,6 +57,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             updateTitleWithCounter();
         }
     };
+
+    @Override
+    protected boolean isReadFeedItems() {
+        return true;
+    }
 
     @Override
     public void onResume() {
@@ -330,6 +337,27 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         ivTwo.setVisibility(visibility);
         ivThree.setVisibility(visibility);
     }
+
+    @Override
+    public void onAvatarClick(FeedLike item, View view) {
+        super.onAvatarClick(item, view);
+        sendLikeReadRequest(item.id);
+    }
+
+    @Override
+    protected void onFeedItemClick(FeedItem item) {
+        super.onFeedItemClick(item);
+        sendLikeReadRequest(item.id);
+
+    }
+
+    private void sendLikeReadRequest(String id) {
+        if (!TextUtils.isEmpty(id)) {
+            ReadLikeRequest request = new ReadLikeRequest(getActivity(), Integer.valueOf(id));
+            request.exec();
+        }
+    }
+
 
     @Override
     protected int getEmptyFeedLayout() {
