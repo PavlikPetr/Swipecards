@@ -23,29 +23,18 @@
 
         <EditText
             android:id="@+id/edOldPassword"
-            style="@style/ItemWhiteText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:gravity="left|center_vertical"
-            android:background="@drawable/city_editbox_selector"
-            android:singleLine="true"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:textColorHint="#5F5F5F" />
+            style="@style/SettingsAccountEditText"
+            android:gravity="left|center_vertical" />
 
         <EditText
             android:id="@+id/edMainField"
+            android:layout_marginTop="16dp"
             style="@style/SettingsAccountEditText"
             android:gravity="left|center_vertical" />
 
         <EditText
             android:id="@+id/edConfirmationField"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="16dp"
             style="@style/SettingsAccountEditText"
             android:gravity="left|center_vertical" />
 
