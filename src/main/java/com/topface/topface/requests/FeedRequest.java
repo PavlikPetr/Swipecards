@@ -23,7 +23,7 @@ public class FeedRequest extends LimitedApiRequest {
     private FeedService mService;
     public boolean leave; //Оставить сообщения не прочитанными
 
-    public static enum FeedService {
+    public enum FeedService {
         DIALOGS, LIKES, MUTUAL, VISITORS, BLACK_LIST, BOOKMARKS, FANS, ADMIRATIONS, GEO, PHOTOBLOG
     }
 
@@ -87,6 +87,7 @@ public class FeedRequest extends LimitedApiRequest {
                 break;
             case LIKES:
                 service = "like.getList";
+                leave = true;
                 break;
             case MUTUAL:
                 service = "mutual.getList";
