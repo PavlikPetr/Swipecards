@@ -254,16 +254,18 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sendLikeReadRequest(Integer.valueOf(item.id));
+                    sendLikeReadRequest(item.id);
                     mOnAvatarClickListener.onAvatarClick(item, v);
                 }
             });
         }
     }
 
-    private void sendLikeReadRequest(int id) {
-        ReadLikeRequest request = new ReadLikeRequest(getContext(), id);
-        request.exec();
+    private void sendLikeReadRequest(String id) {
+        if (this instanceof LikesListAdapter && !TextUtils.isEmpty(id)) {
+            ReadLikeRequest request = new ReadLikeRequest(getContext(), Integer.valueOf(id));
+            request.exec();
+        }
     }
 
     @SuppressWarnings("deprecation")
@@ -520,8 +522,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         mOnAvatarClickListener = listener;
     }
 
-    public static interface OnAvatarClickListener<T> {
-        public void onAvatarClick(T item, View view);
+    public interface OnAvatarClickListener<T> {
+        void onAvatarClick(T item, View view);
     }
 
     public List<String> getSelectedFeedIds() {
