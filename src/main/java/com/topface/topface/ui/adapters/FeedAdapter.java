@@ -20,7 +20,6 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
-import com.topface.topface.requests.ReadLikeRequest;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
 import com.topface.topface.ui.views.FeedItemViewConstructor.TypeAndFlag;
@@ -254,17 +253,9 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sendLikeReadRequest(item.id);
                     mOnAvatarClickListener.onAvatarClick(item, v);
                 }
             });
-        }
-    }
-
-    private void sendLikeReadRequest(String id) {
-        if (this instanceof LikesListAdapter && !TextUtils.isEmpty(id)) {
-            ReadLikeRequest request = new ReadLikeRequest(getContext(), Integer.valueOf(id));
-            request.exec();
         }
     }
 

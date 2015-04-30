@@ -47,7 +47,6 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.ReadLikeRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
@@ -478,7 +477,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 } else {
                     T item = (T) parent.getItemAtPosition(position);
                     if (item != null) {
-                        sendLikeReadRequest(item.id);
                         if (!mIsUpdating && item.isRetrier()) {
                             updateUI(new Runnable() {
                                 public void run() {
@@ -514,13 +512,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             }
 
         };
-    }
-
-    protected void sendLikeReadRequest(String id) {
-        if (this instanceof LikesFragment && !TextUtils.isEmpty(id)) {
-            ReadLikeRequest request = new ReadLikeRequest(App.getContext(), Integer.valueOf(id));
-            request.exec();
-        }
     }
 
     protected int getMultiSelectionLimit() {
