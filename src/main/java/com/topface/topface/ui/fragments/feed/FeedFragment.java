@@ -39,7 +39,6 @@ import com.topface.topface.banners.BannersController;
 import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.FeedItem;
-import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
@@ -402,9 +401,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 } else {
                     T item = (T) parent.getItemAtPosition(position);
                     if (item != null) {
-                        if (item instanceof FeedLike) {
-                            sendLikeReadRequest(Integer.valueOf(item.id));
-                        }
+                        sendLikeReadRequest(item.id);
                         if (!mIsUpdating && item.isRetrier()) {
                             updateUI(new Runnable() {
                                 public void run() {
@@ -442,9 +439,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         };
     }
 
-    protected void sendLikeReadRequest(int id) {
-        if (this instanceof LikesFragment) {
-            ReadLikeRequest request = new ReadLikeRequest(App.getContext(), id);
+    protected void sendLikeReadRequest(String id) {
+        if (this instanceof LikesFragment && !TextUtils.isEmpty(id)) {
+            ReadLikeRequest request = new ReadLikeRequest(App.getContext(), Integer.valueOf(id));
             request.exec();
         }
     }
