@@ -131,7 +131,6 @@ public class AdmobInterstitialUtils {
             ((SimpleAdListener) listener).setInterstitial(interstitial);
         }
         // Запуск загрузки межстраничного объявления.
-        adRequestBuilder.addTestDevice("24DF4BFFBC0337711CE34EA5C00D34EB");
         interstitial.loadAd(adRequestBuilder.build());
         return interstitial;
     }
