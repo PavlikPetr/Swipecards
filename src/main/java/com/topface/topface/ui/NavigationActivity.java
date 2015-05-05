@@ -34,6 +34,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
+import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
@@ -306,6 +307,10 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+
+        if (CacheProfile.age != 0) {
+            SetAgeDialog.newInstance().show(this.getSupportFragmentManager(), SetAgeDialog.TAG);
+        }
     }
 
     @Override
