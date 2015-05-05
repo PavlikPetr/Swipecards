@@ -8,6 +8,10 @@ import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
 
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.MarkSMSInviteRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
+
 /**
  * Created by ppetr on 27.04.15.
  * catch here status of sms send
@@ -23,7 +27,7 @@ public class CatchSMSActions extends BroadcastReceiver {
         if (FILTER_SMS_SENT.equals(filter)) {
             switch (getResultCode()) {
                 case Activity.RESULT_OK:
-                    parseMessage(intent);
+                    parseMessage(context, intent);
                     break;
                 case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
                     break;
@@ -37,13 +41,26 @@ public class CatchSMSActions extends BroadcastReceiver {
         }
     }
 
-    private void parseMessage(Intent intent) {
+    private void parseMessage(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
             String text = bundle.getString(SMSInviteFragment.SMS_TEXT);
-            String phone = bundle.getString(SMSInviteFragment.PHONE_NUMBER);
+            String phone = bundle.getString(SMSInviteFragment.SMS_PHONE_NUMBER);
+            int id = bundle.getInt(SMSInviteFragment.SMS_ID);
             Log.e("TOPFACETEST", "text " + text);
             Log.e("TOPFACETEST", "phone " + phone);
+            Log.e("TOPFACETEST", "id " + id);
+            new MarkSMSInviteRequest(context, id).callback(new ApiHandler() {
+                @Override
+                public void success(IApiResponse response) {
+                    //TODO здесь ловим успешное подтверждение отправки смс
+                }
+
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+
+                }
+            }).exec();
         }
     }
 }

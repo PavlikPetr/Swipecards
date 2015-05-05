@@ -13,6 +13,7 @@
         android:src="@drawable/ic_add_friend" />
 
     <TextView
+        android:id="@+id/sms_invite_header"
         style="@style/SMSInviteText"
         android:text="@string/premium_for_invitations" />
 </LinearLayout>
