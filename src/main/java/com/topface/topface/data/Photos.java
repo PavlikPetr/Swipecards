@@ -1,8 +1,6 @@
 package com.topface.topface.data;
 
 
-import com.topface.framework.utils.Debug;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -10,11 +8,6 @@ import java.util.ArrayList;
 
 @SuppressWarnings("serial")
 public class Photos extends ArrayList<Photo> implements SerializableToJsonArray {
-
-    public Photos(JSONArray photos) {
-        super();
-        addAll(parse(photos));
-    }
 
     public Photos(Photos photos) {
         super();
@@ -25,21 +18,6 @@ public class Photos extends ArrayList<Photo> implements SerializableToJsonArray 
 
     public Photos() {
         super();
-    }
-
-    public static Photos parse(JSONArray photoArray) {
-        Photos photos = new Photos();
-        if (photoArray != null) {
-            for (int i = 0; i < photoArray.length(); i++) {
-                try {
-                    photos.add(new Photo(photoArray.getJSONObject(i)));
-                } catch (JSONException e) {
-                    Debug.error("Photo parse error", e);
-                }
-            }
-        }
-
-        return photos;
     }
 
     /**
@@ -81,6 +59,7 @@ public class Photos extends ArrayList<Photo> implements SerializableToJsonArray 
      *
      * @param photoId id фоторгафии
      */
+    @SuppressWarnings("unused")
     public int getPhotoIndexById(int photoId) {
         for (int i = 0; i < size(); i++) {
             if (this.get(i) != null && photoId == this.get(i).getId()) {

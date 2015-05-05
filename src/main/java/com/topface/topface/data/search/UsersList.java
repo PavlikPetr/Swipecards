@@ -2,6 +2,7 @@ package com.topface.topface.data.search;
 
 import android.text.TextUtils;
 
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
@@ -26,6 +27,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
     /**
      * Определяет за сколько пользователей до конца списка нужно предзагружать список
      */
+    @SuppressWarnings("unused")
     public static final int USERS_FOR_PRELOAD_CNT = 6;
 
     /**
@@ -169,7 +171,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
         if (users != null) {
             for (int i = 0; i < users.length(); i++) {
                 try {
-                    add(mClass.getConstructor(JSONObject.class).newInstance(users.optJSONObject(i)));
+                    add(JsonUtils.fromJson(users.optJSONObject(i).toString(), mClass));
                 } catch (Exception e) {
                     Debug.error(e);
                 }

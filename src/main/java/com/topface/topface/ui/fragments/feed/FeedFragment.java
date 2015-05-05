@@ -40,6 +40,7 @@ import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.data.FeedUser;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListAddRequest;
@@ -622,7 +623,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     protected void onFeedItemClick(FeedItem item) {
         //Open chat activity
         if (!item.user.isEmpty()) {
-            Intent intent = ChatActivity.createIntent(getActivity(), item.user, item.id);
+            FeedUser user = item.user;
+            Intent intent = ChatActivity.createIntent(user.id,user.getNameAndAge(),user.city.name,null,false);
             getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT);
         }
     }

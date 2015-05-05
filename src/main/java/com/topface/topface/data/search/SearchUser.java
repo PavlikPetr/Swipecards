@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.topface.topface.data.FeedUser;
-import com.topface.topface.data.Profile;
 import com.topface.topface.data.SerializableToJson;
 
 import org.json.JSONException;
@@ -12,29 +11,17 @@ import org.json.JSONObject;
 
 public class SearchUser extends FeedUser implements SerializableToJson, Parcelable {
     /**
-     * статус пользователя
-     */
-    protected String status;
-    /**
      * флаг возможности отправки взаимной симпатии
      */
     public boolean isMutualPossible;
 
     // Flags
-    public boolean skipped;
-    public boolean rated;
+    public boolean skipped = false;
+    public boolean rated = false;
 
-    public SearchUser(JSONObject user) {
-        super(user);
-    }
-
-    @Override
-    public void fillData(JSONObject user) {
-        super.fillData(user);
-
-        status = Profile.normilizeStatus(user.optString("status"));
-        isMutualPossible = user.optBoolean("isMutualPossible");
-        rated = user.optBoolean("rated", false);
+    //Для GSON
+    @SuppressWarnings("unused")
+    public SearchUser() {
     }
 
     @Override

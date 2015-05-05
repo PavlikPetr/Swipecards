@@ -16,6 +16,7 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedPhotoBlog;
 import com.topface.topface.data.FeedPhotoBlogListData;
+import com.topface.topface.data.FeedUser;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -132,7 +133,8 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     protected void onFeedItemClick(FeedItem item) {
         if (isNotYourOwnId(item.user.id)) {
             if (!item.user.isEmpty()) {
-                Intent intent = ChatActivity.createIntent(getActivity(), item.user, item.id);
+                FeedUser user = item.user;
+                Intent intent = ChatActivity.createIntent(user.id,user.getNameAndAge(),user.city.name,null,false);
                 getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT);
             }
         } else {

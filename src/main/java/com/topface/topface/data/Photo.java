@@ -3,15 +3,14 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
-import com.topface.topface.requests.ApiResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -114,25 +113,24 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     /**
      * идентификатор фотографии пользователя
      */
+    @SerializedName("id")
     protected int mId;
     private Pattern mPattern;
-
-    public int mLiked;
-
+    public int liked;
     public boolean canBecomeLeader;
     public int position;
 
     public Photo(int id, HashMap<String, String> links, int position, int liked) {
         this.mId = id;
         this.links = links;
-        this.mLiked = liked;
+        this.liked = liked;
         this.position = position;
         initIntervals();
     }
 
     public Photo(Photo photo) {
         this.mId = photo.mId;
-        this.mLiked = photo.mLiked;
+        this.liked = photo.liked;
         this.links = photo.links;
         this.canBecomeLeader = photo.canBecomeLeader;
         this.position = photo.position;
@@ -146,46 +144,14 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         intervals.put(new Interval(new Size(193, 193), new Size(256, 256)), SIZE_256);
     }
 
-    //Конструктор по умолчанию создает фэйковую фотку
     public Photo() {
-        isFakePhoto = true;
         links = new HashMap<>();
         initIntervals();
-    }
-
-    public Photo(ApiResponse response) {
-        fillData(response.jsonResult.optJSONObject("photo"));
     }
 
     @Override
     public boolean isFake() {
         return isFakePhoto;
-    }
-
-    protected void fillData(JSONObject photoItem) {
-        if (photoItem != null && photoItem.has("id")) {
-            mId = photoItem.optInt("id");
-            JSONObject linksJson = photoItem.optJSONObject("links");
-            if (linksJson != null) {
-                @SuppressWarnings("rawtypes")
-                Iterator photoKeys = linksJson.keys();
-                links = new HashMap<>();
-
-                while (photoKeys.hasNext()) {
-                    String key = photoKeys.next().toString();
-                    links.put(key, linksJson.optString(key));
-                }
-            }
-            canBecomeLeader = photoItem.optBoolean("canBecomeLeader");
-            mLiked = photoItem.optInt("liked");
-            position = photoItem.optInt("position", 0);
-            //TODO clarify parameter: added
-            initIntervals();
-        } else if (photoItem != null && photoItem.has("fake")) {
-            isFakePhoto = photoItem.optBoolean("fake");
-            links = new HashMap<>();
-            initIntervals();
-        }
     }
 
     /**
@@ -194,16 +160,6 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
      * Всегда присутствует ключ “original”, представляющий ссылку на исходное загруженное пользователем изображение
      */
     protected HashMap<String, String> links;
-
-    public static Photo parse(JSONObject photoItem) {
-        return new Photo(photoItem);
-    }
-
-    public Photo(JSONObject data) {
-        if (data != null) {
-            fillData(data);
-        }
-    }
 
     /**
      * Возвращает наиболее подходящий размер фотографии из уже существующих
@@ -416,7 +372,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(mId);
         dest.writeInt(links.size());
-        dest.writeInt(mLiked);
+        dest.writeInt(liked);
         dest.writeInt(position);
         for (String key : links.keySet()) {
             dest.writeString(key);
@@ -438,9 +394,6 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
                     for (int i = 0; i < hashSize; i++) {
                         links.put(in.readString(), in.readString());
                     }
-
-//                    for (int i = 0; i < hash)
-
                     return new Photo(id, links, pos, liked);
                 }
 
@@ -454,7 +407,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         JSONObject json = new JSONObject();
         if (!isFakePhoto) {
             json.put("id", mId);
-            json.put("liked", mLiked);
+            json.put("liked", liked);
             json.put("position", position);
             JSONObject jsonLinks = new JSONObject();
             if (links != null) {
@@ -467,7 +420,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
             }
             json.put("links", jsonLinks);
         } else {
-            json.put("fake", isFakePhoto);
+            json.put("fake", true);
         }
         return json;
     }
@@ -489,4 +442,12 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         }
         return false;
     }
+
+    //Создаем фейковую фоточку
+    public static Photo createFakePhoto() {
+        Photo photo = new Photo();
+        photo.isFakePhoto = true;
+        return photo;
+    }
+
 }
