@@ -120,7 +120,7 @@ public class UserPhotoFragment extends ProfileInnerFragment {
             mUserId = savedInstanceState.getInt(USER_ID, 0);
             mPhotosCount = savedInstanceState.getInt(PHOTOS_COUNT, 0);
             String linksString = savedInstanceState.getString(PHOTO_LINKS);
-            mPhotoLinks = linksString != null ? JsonUtils.fromJson(linksString, Photos.class) : new Photos();
+            mPhotoLinks = JsonUtils.optFromJson(linksString, Photos.class, new Photos());
             setPhotos(mPhotoLinks);
             position = savedInstanceState.getInt(POSITION, 0);
         }

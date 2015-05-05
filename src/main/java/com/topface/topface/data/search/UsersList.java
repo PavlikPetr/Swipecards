@@ -171,7 +171,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
         if (users != null) {
             for (int i = 0; i < users.length(); i++) {
                 try {
-                    add(JsonUtils.fromJson(users.optJSONObject(i), mClass));
+                    add(JsonUtils.fromJson(users.optJSONObject(i).toString(), mClass));
                 } catch (Exception e) {
                     Debug.error(e);
                 }

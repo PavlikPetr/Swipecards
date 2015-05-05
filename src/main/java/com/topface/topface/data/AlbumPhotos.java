@@ -12,7 +12,7 @@ public class AlbumPhotos extends Photos {
     public final boolean more;
 
     public AlbumPhotos(ApiResponse response) {
-        super(JsonUtils.fromJson(response.getJsonResult().optJSONArray("items"), Photos.class));
+        super(JsonUtils.fromJson(response.getJsonResult().optJSONArray("items").toString(), Photos.class));
         more = response.getJsonResult().optBoolean("more");
     }
 }

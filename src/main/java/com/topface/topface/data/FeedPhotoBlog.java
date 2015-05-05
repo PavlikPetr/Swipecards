@@ -40,7 +40,7 @@ public class FeedPhotoBlog extends FeedItem implements Parcelable {
 
     @Override
     public void fillData(JSONObject item) {
-        this.user = JsonUtils.fromJson(item, FeedUser.class);
+        this.user = JsonUtils.fromJson(item.toString(), FeedUser.class);
     }
 
 }

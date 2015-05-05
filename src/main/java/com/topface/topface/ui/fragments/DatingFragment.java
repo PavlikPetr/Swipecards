@@ -885,7 +885,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mNeedMore = currUser.photosCount > mLoadedCount;
         int rest = currUser.photosCount - currUser.photos.size();
         for (int i = 0; i < rest; i++) {
-            currUser.photos.add(Photo.getFakePhoto());
+            currUser.photos.add(Photo.createFakePhoto());
         }
     }
 

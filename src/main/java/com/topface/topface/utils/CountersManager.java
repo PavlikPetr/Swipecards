@@ -23,8 +23,6 @@ public class CountersManager {
 
     private Context mContext;
 
-    private final static String DeniedMethod = BannerRequest.SERVICE_NAME;
-
     public final static String NULL_METHOD = "null_method";
     public final static String CHANGED_BY_GCM = "gcm_changed";
     public final static String METHOD_INTENT_STRING = "method";
@@ -195,6 +193,6 @@ public class CountersManager {
     }
 
     private boolean checkMethodIsDenyed(String method) {
-        return DeniedMethod.equals(method);
+        return BannerRequest.SERVICE_NAME.equals(method);
     }
 }

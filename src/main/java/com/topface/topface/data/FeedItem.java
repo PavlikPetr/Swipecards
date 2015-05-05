@@ -106,7 +106,7 @@ abstract public class FeedItem extends LoaderData implements Parcelable {
         this.unreadCounter = item.optInt("unreadCount");
         JSONObject json = item.optJSONObject("user");
         if (json != null) {
-            this.user = JsonUtils.fromJson(json, FeedUser.class);
+            this.user = JsonUtils.fromJson(json.toString(), FeedUser.class);
             this.user.setFeedItemId(id);
         }
     }

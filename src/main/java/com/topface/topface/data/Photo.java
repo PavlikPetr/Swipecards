@@ -444,14 +444,10 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     }
 
     //Создаем фейковую фоточку
-    public static Photo getFakePhoto() {
+    public static Photo createFakePhoto() {
         Photo photo = new Photo();
-        photo.setPhotoAsFake();
+        photo.isFakePhoto = true;
         return photo;
-    }
-
-    public void setPhotoAsFake() {
-        isFakePhoto = true;
     }
 
 }

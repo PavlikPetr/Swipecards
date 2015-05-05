@@ -289,7 +289,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         }
         int rest = photosCount - mPhotoLinks.size();
         for (int i = 0; i < rest; i++) {
-            mPhotoLinks.add(Photo.getFakePhoto());
+            mPhotoLinks.add(Photo.createFakePhoto());
         }
         // Gallery
         // stub is needed, because sometimes(while gallery is waiting for user profile load)

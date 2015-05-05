@@ -15,7 +15,7 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
 
     public static final int INTENT_USER_PROFILE = 6;
 
-    public static Intent createIntent(ApiResponse response, int userId, String itemId, boolean isChatAvailable, boolean isAddToFavoritsAvailable, String nameAndAge, String city) {
+    public static Intent createIntent(ApiResponse response, int userId, String itemId, boolean isChatAvailable, boolean isAddToFavoritesAvailable, String nameAndAge, String city) {
         Intent intent = new Intent(App.getContext(), UserProfileActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, nameAndAge);
         intent.putExtra(ChatFragment.INTENT_USER_CITY, city);
@@ -24,7 +24,7 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
         }
         intent.putExtra(AbstractProfileFragment.INTENT_UID, userId);
         intent.putExtra(AbstractProfileFragment.INTENT_IS_CHAT_AVAILABLE, isChatAvailable);
-        intent.putExtra(AbstractProfileFragment.INTENT_IS_ADD_TO_FAVORITS_AVAILABLE, isAddToFavoritsAvailable);
+        intent.putExtra(AbstractProfileFragment.INTENT_IS_ADD_TO_FAVORITS_AVAILABLE, isAddToFavoritesAvailable);
         if (!TextUtils.isEmpty(itemId)) {
             intent.putExtra(AbstractProfileFragment.INTENT_ITEM_ID, itemId);
         }
