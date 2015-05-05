@@ -164,8 +164,10 @@ public class UserNotification {
     }
 
     private android.app.Notification generateStandard() {
+        addSmallIcon(0);
         notificationBuilder.setContentTitle(mTitle);
         notificationBuilder.setContentText(mText);
+        setLargeIcon();
         if (mIsTextNotification) {
             setIcons();
         } else {
