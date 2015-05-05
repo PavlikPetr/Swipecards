@@ -343,12 +343,14 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     public void onAvatarClick(FeedLike item, View view) {
         super.onAvatarClick(item, view);
         sendLikeReadRequest(item.id);
+        showInterstitial();
     }
 
     @Override
     protected void onFeedItemClick(FeedItem item) {
         super.onFeedItemClick(item);
         sendLikeReadRequest(item.id);
+        showInterstitial();
 
     }
 
@@ -383,18 +385,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected String getGcmUpdateAction() {
         return GCMUtils.GCM_LIKE_UPDATE;
-    }
-
-    @Override
-    protected void onFeedItemClick(FeedItem item) {
-        super.onFeedItemClick(item);
-        showInterstitial();
-    }
-
-    @Override
-    public void onAvatarClick(FeedLike item, View view) {
-        super.onAvatarClick(item, view);
-        showInterstitial();
     }
 
     private void showInterstitial() {
