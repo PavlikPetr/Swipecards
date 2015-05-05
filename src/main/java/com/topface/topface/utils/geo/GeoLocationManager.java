@@ -7,6 +7,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 
 /**
  * При запуске экрана "Ближайших" проверяем какие из провайдеров включены у пользователя.
@@ -106,6 +107,11 @@ public abstract class GeoLocationManager {
         } else {
             return mBestLocation;
         }
+    }
+
+    public static Location getCurrentLocation() {
+        LocationManager locationManager = (LocationManager) App.getContext().getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
     }
 
     /**

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -64,6 +63,7 @@ import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.DebugEmailSender;
 import com.topface.topface.utils.debug.HockeySender;
+import com.topface.topface.utils.geo.GeoLocationManager;
 
 import org.acra.ACRA;
 import org.acra.ACRAConfiguration;
@@ -455,8 +455,7 @@ public class App extends Application {
         new BackgroundThread(Thread.MIN_PRIORITY) {
             @Override
             public void execute() {
-                LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-                mCurLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                mCurLocation = GeoLocationManager.getCurrentLocation();
                 if (mCurLocation != null) {
                     Looper.prepare();
                     SettingsRequest settingsRequest = new SettingsRequest(getContext());
