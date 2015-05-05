@@ -42,7 +42,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     }
 
     @Override
-    protected int getTypeForCounters() {
+    protected int getFeedType() {
         return CountersManager.GEO;
     }
 

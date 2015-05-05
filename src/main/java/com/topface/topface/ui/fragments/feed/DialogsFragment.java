@@ -135,7 +135,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected int getTypeForCounters() {
+    protected int getFeedType() {
         return CountersManager.DIALOGS;
     }
 

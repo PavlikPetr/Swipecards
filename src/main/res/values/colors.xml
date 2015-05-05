@@ -77,4 +77,5 @@
     <color name="light_theme_color_accent">#ee4493</color>
 
     <color name="edit_dialog_buttons_divider">#DCDCDC</color>
+    <color name="status_bar_color">#282828</color>
 </resources>

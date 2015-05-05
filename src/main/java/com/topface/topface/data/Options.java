@@ -153,6 +153,7 @@ public class Options extends AbstractData {
     public NotShown notShown = new NotShown();
     public FacebookInviteFriends facebookInviteFriends = new FacebookInviteFriends();
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
+    public InterstitialInFeeds interstitial= new InterstitialInFeeds();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -333,6 +334,9 @@ public class Options extends AbstractData {
                     FacebookInviteFriends.class, new FacebookInviteFriends());
 
             feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
+
+            interstitial = JsonUtils.optFromJson(response.optString("interstitial"),
+                    InterstitialInFeeds.class, interstitial);
 
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
@@ -710,5 +714,28 @@ public class Options extends AbstractData {
 
     public boolean isScruffyEnabled() {
         return scruffy != null ? scruffy : false;
+    }
+
+    public class InterstitialInFeeds {
+        public static final String FEED_NEWBIE = "NEWBIE";
+        public static final String FEED = "NORMAL";
+
+        public boolean enabled;
+        public int count = 0;
+        public long period = 0;
+        public String adGroup = "";
+
+        public boolean canShow() {
+            UserConfig config = App.getUserConfig();
+            if (config == null) {
+                return enabled;
+            } else {
+                long diff = System.currentTimeMillis() - config.getInterstitialsInFeedFirstShow();
+                if (diff > period * 1000) {
+                    config.resetInterstitialInFeedsCounter();
+                }
+                return enabled || (count > 0 && (config.getInterstitialsInFeedCounter() < count));
+            }
+        }
     }
 }

@@ -551,7 +551,6 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
         if (mIsUpdating) {
             return;
         }
-        mIsUpdating = true;
         final boolean isPopularLockOn;
         isPopularLockOn = mAdapter != null &&
                 !mAdapter.isEmpty() &&
@@ -643,8 +642,6 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                         if (!data.more && !pullToRefresh) mAdapter.forceStopLoader();
                     }
                 }
-                mIsUpdating = false;
-
                 if (mLockScreen != null && mLockScreen.getVisibility() == View.VISIBLE) {
                     mLockScreen.setVisibility(View.GONE);
                 }
@@ -662,7 +659,6 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                     mLockScreen.setVisibility(View.VISIBLE);
                 }
                 wasFailed = true;
-                mIsUpdating = false;
             }
 
             @Override
@@ -672,7 +668,9 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                 if (pullToRefresh && mListView != null) {
                     mListView.onRefreshComplete();
                 }
+                mIsUpdating = false;
             }
+
         }).exec();
     }
 

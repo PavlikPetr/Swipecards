@@ -317,6 +317,8 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                                 }
                                 intent.putExtra(PhotoSwitcherActivity.INTENT_CLEAR, true);
                                 intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, newPhotos);
+                                intent.putExtra(PhotoSwitcherActivity.INTENT_MORE,
+                                        CacheProfile.photos.size() < CacheProfile.totalPhotos);
                                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
                                 if (position < CacheProfile.photo.position) {
                                     CacheProfile.incrementPhotoPosition(-1);
