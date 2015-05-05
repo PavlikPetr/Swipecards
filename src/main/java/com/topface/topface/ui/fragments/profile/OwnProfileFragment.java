@@ -17,22 +17,23 @@ import android.view.ViewGroup;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.Profile;
-import com.topface.topface.ui.SettingsActivity;
+import com.topface.topface.data.IUniversalUser;
+import com.topface.topface.data.UniversalUserFactory;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
+import com.topface.topface.ui.fragments.OwnAvatarFragment;
+import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
-import com.topface.topface.ui.fragments.gift.OwnGiftsFragment;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.PhotoTaker;
-import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.actionbar.OverflowMenu;
 
 /**
  * Created by kirussell on 18.03.14.
  * Profile fragment for current authorized client with ui for customization of user settings
  */
-public class OwnProfileFragment extends AbstractProfileFragment {
+public class OwnProfileFragment extends OwnAvatarFragment {
     private AddPhotoHelper mAddPhotoHelper;
     private BroadcastReceiver mAddPhotoReceiver;
     private BroadcastReceiver mUpdateProfileReceiver;
@@ -77,7 +78,6 @@ public class OwnProfileFragment extends AbstractProfileFragment {
             }
         };
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
-        setProfile(CacheProfile.getProfile());
         TakePhotoDialog takePhotoDialog = (TakePhotoDialog) mPhotoTaker.getActivityFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
         if (CacheProfile.photo == null && mAddPhotoHelper != null && takePhotoDialog == null && !App.getConfig().getUserConfig().isUserAvatarAvailable()) {
             mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
@@ -108,31 +108,16 @@ public class OwnProfileFragment extends AbstractProfileFragment {
         addBodyPage(ProfilePhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
         addBodyPage(ProfileFormFragment.class.getName(), getResources().getString(R.string.profile_form));
         addBodyPage(VipBuyFragment.class.getName(), getResources().getString(R.string.vip_status));
-        addBodyPage(OwnGiftsFragment.class.getName(), getResources().getString(R.string.profile_gifts));
+        addBodyPage(SettingsFragment.class.getName(), getResources().getString(R.string.settings_header_title));
     }
 
     @Override
-    protected Integer getOptionsMenuRes() {
-        return R.menu.actions_my_profile;
+    protected boolean hasUserActions() {
+        return false;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                startSettingsActivity();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void startSettingsActivity() {
-        startActivity(SettingsActivity.createIntent());
-    }
-
-    @Override
-    protected String getTitle() {
+    protected String getDefaultTitle() {
         return getString(R.string.profile_header_title);
     }
 
@@ -157,11 +142,6 @@ public class OwnProfileFragment extends AbstractProfileFragment {
         }
     }
 
-    @Override
-    protected int getProfileType() {
-        return Profile.TYPE_OWN_PROFILE;
-    }
-
     private void initAddPhotoHelper() {
         mAddPhotoHelper = new AddPhotoHelper(this, null);
         mAddPhotoHelper.setOnResultHandler(mHandler);
@@ -178,5 +158,20 @@ public class OwnProfileFragment extends AbstractProfileFragment {
             }
         };
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mAddPhotoReceiver, new IntentFilter(ADD_PHOTO_INTENT));
+    }
+
+    @Override
+    protected IUniversalUser createUniversalUser() {
+        return UniversalUserFactory.create(getProfile());
+    }
+
+    @Override
+    protected OverflowMenu createOverflowMenu(MenuItem barActions) {
+        return new OverflowMenu(getActivity(), barActions);
+    }
+
+    @Override
+    protected void initOverflowMenuActions(OverflowMenu overflowMenu) {
+        overflowMenu.initOverfowMenu();
     }
 }

@@ -17,11 +17,13 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
     public static final String CONFIRMATION_CODE = "confirmation";
 
     public static final int INTENT_ACCOUNT = 201;
-    public static final int INTENT_FEEDBACK = 202;
     public static final int INTENT_ABOUT = 203;
     public static final int INTENT_SEND_FEEDBACK = 204;
     public static final int INTENT_CHANGE_PASSWORD = 205;
     public static final int INTENT_CHANGE_EMAIL = 206;
+    public static final int INTENT_NOTIFICATIONS = 207;
+    public static final int INTENT_FEEDBACK = 208;
+
     private String mConfirmCode;
 
     public static Intent getFeedbackMessageIntent(Context context, FeedbackMessageFragment.FeedbackType feedbackType) {
@@ -65,6 +67,10 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
                                 FeedbackMessageFragment.INTENT_FEEDBACK_TYPE
                         )
                 );
+                break;
+            case INTENT_NOTIFICATIONS:
+                fragment = new SettingsNotificationsFragment();
+                break;
             default:
                 break;
         }

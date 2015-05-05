@@ -12,7 +12,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.topface.topface.R;
 import com.topface.topface.data.City;
@@ -155,8 +154,8 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
         }
         if (mRequestKey == CitySearchView.CITY_SEARCH_FROM_FILTER_ACTIVITY) {
             mDataList.add(mDefaultCity);
+            mDataList.add(getUserCity());
         }
-        mDataList.add(getUserCity());
         if (citiesList != null) {
             mDataList.addAll(citiesList);
         }

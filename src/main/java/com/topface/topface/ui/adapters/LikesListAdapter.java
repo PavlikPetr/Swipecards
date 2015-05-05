@@ -13,7 +13,9 @@ import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ad.NativeAd;
+import com.topface.topface.utils.ad.NativeAdManager;
 
 public class LikesListAdapter extends FeedAdapter<FeedLike> {
 
@@ -96,5 +98,11 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
                 return new FeedLike(nativeAd);
             }
         };
+    }
+
+    @Override
+    public boolean isNeedFeedAd() {
+        return CacheProfile.show_ad && NativeAdManager.hasAvailableAd()
+                && !CacheProfile.getOptions().interstitial.canShow();
     }
 }

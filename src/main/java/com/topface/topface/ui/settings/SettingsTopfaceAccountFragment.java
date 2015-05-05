@@ -18,8 +18,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.topface.framework.JsonUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.BooleanEmailConfirmed;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ChangeLoginRequest;
 import com.topface.topface.requests.ConfirmRequest;
@@ -30,29 +32,35 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.RemindRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
 public class SettingsTopfaceAccountFragment extends BaseFragment implements OnClickListener {
 
     public static final String NEED_EXIT = "NEED_EXIT";
-    private static final int ACTION_RESEND_CONFIRM = 0;
-    private static final int ACTION_CHANGE_EMAIL = 1;
-    private static final int ACTION_CHANGE_PASSWORD = 2;
-    private int mChangeButtonAction = ACTION_CHANGE_PASSWORD;
-    private final AuthToken mToken = AuthToken.getInstance();
-    RelativeLayout fieldContainer;
     private View mLockerView;
     private EditText mEditText;
     private TextView mText;
     private Button mBtnChange;
     private Button mBtnChangeEmail;
     private Button mBtnLogout;
-    private Button mBtnDelete;
+    private Button mBtnCodeWasSend;
+    private TextView mTxtCodeWasSend;
+
+    RelativeLayout fieldContainer;
+
+    private final AuthToken mToken = AuthToken.getInstance();
+
+    private static final int ACTION_RESEND_CONFIRM = 0;
+    private static final int ACTION_CHANGE_EMAIL = 1;
+    private static final int ACTION_CHANGE_PASSWORD = 2;
+    private int mChangeButtonAction = ACTION_CHANGE_PASSWORD;
     private boolean mChangeEmail = false;
 
     @Override
@@ -94,7 +102,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 }
             }).exec();
         } else {
-            requestEmailConfirmedFlag();
+            requestEmailConfirmedFlag(false);
         }
 
         initTextViews(root);
@@ -113,23 +121,24 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         return getString(R.string.settings_account);
     }
 
-    private void requestEmailConfirmedFlag() {
+    private void requestEmailConfirmedFlag(final boolean isShowEmailConfirmMessage) {
         ProfileRequest profileRequest = new ProfileRequest(getActivity());
+        ((NavigationActivity) getActivity()).registerRequest(profileRequest);
         profileRequest.part = ProfileRequest.P_EMAIL_CONFIRMED;
         profileRequest.callback(new DataApiHandler<Boolean>() {
-            @Override
-            public void success(IApiResponse response) {
-            }
 
             @Override
             protected void success(Boolean isEmailConfirmed, IApiResponse response) {
                 CacheProfile.emailConfirmed = isEmailConfirmed;
+                if (isShowEmailConfirmMessage) {
+                    onProfileUpdated();
+                }
                 setViewsState();
             }
 
             @Override
             protected Boolean parseResponse(ApiResponse response) {
-                return response.getJsonResult().optBoolean("emailConfirmed");
+                return JsonUtils.fromJson(response.toString(), BooleanEmailConfirmed.class).isConfirmed;
             }
 
             @Override
@@ -151,10 +160,10 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     }
 
     private void initTextViews(ViewGroup root) {
-        Drawable icon = getResources().getDrawable(R.drawable.tf_logo_account);
+        Drawable icon = getResources().getDrawable(R.drawable.ic_logo_account);
         mEditText = (EditText) root.findViewById(R.id.edText);
         mEditText.setText(mToken.getLogin());
-        mEditText.setSelection(Utils.getText(mEditText).length());
+        mEditText.setSelection(mEditText.getText().length());
         mEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -185,10 +194,15 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         if (CacheProfile.emailConfirmed) {
             mEditText.setVisibility(View.GONE);
             mText.setVisibility(View.VISIBLE);
+            mBtnCodeWasSend.setVisibility(View.GONE);
+            mTxtCodeWasSend.setVisibility(View.GONE);
         } else {
             mEditText.setVisibility(View.VISIBLE);
             mEditText.setText(mToken.getLogin());
+            mEditText.setSelection(mEditText.getText().length());
             mText.setVisibility(View.GONE);
+            mBtnCodeWasSend.setVisibility(View.VISIBLE);
+            mTxtCodeWasSend.setVisibility(View.VISIBLE);
         }
     }
 
@@ -200,20 +214,20 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mBtnChangeEmail.setOnClickListener(this);
         mBtnLogout = (Button) root.findViewById(R.id.btnLogout);
         mBtnLogout.setOnClickListener(this);
-        mBtnDelete = (Button) root.findViewById(R.id.btnDeleteAccount);
-        mBtnDelete.setOnClickListener(this);
+        root.findViewById(R.id.btnDeleteAccount).setOnClickListener(this);
+        mBtnCodeWasSend = (Button) root.findViewById(R.id.btnCodeWasSend);
+        mBtnCodeWasSend.setOnClickListener(this);
+        mTxtCodeWasSend = (TextView) root.findViewById(R.id.txtCodeWasSend);
     }
 
     private void setButtonsState() {
         if (CacheProfile.emailConfirmed) {
             mBtnLogout.setVisibility(View.VISIBLE);
             mBtnChangeEmail.setVisibility(View.VISIBLE);
-            fieldContainer.setBackgroundResource(R.drawable.edit_big_btn_selector);
             setChangeBtnAction(ACTION_CHANGE_PASSWORD);
         } else {
             mBtnLogout.setVisibility(View.GONE);
             mBtnChangeEmail.setVisibility(View.GONE);
-            fieldContainer.setBackgroundResource(android.R.color.transparent);
             if (mChangeEmail) {
                 setChangeBtnAction(ACTION_CHANGE_EMAIL);
             } else {
@@ -256,6 +270,9 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             case R.id.btnDeleteAccount:
                 deleteAccount();
                 break;
+            case R.id.btnCodeWasSend:
+                updateProfile();
+                break;
             case R.id.btnChangeEmail:
                 onChangeEmailButtonClick();
             default:
@@ -268,9 +285,20 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         startActivityForResult(intent, SettingsContainerActivity.INTENT_CHANGE_EMAIL);
     }
 
+    private void updateProfile() {
+        mText.setText(mToken.getLogin());
+        requestEmailConfirmedFlag(true);
+    }
+
     private void deleteAccount() {
         DeleteAccountDialog newFragment = DeleteAccountDialog.newInstance();
         newFragment.show(getActivity().getSupportFragmentManager(), DeleteAccountDialog.TAG);
+    }
+
+    private void setEmailConfirmSent() {
+        UserConfig config = App.getConfig().getUserConfig();
+        config.saveButtonSendConfirmationPressed(true);
+        config.saveConfig();
     }
 
     private void onChangeButtonClick() {
@@ -280,6 +308,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 remindRequest.callback(new ApiHandler() {
                     @Override
                     public void success(IApiResponse response) {
+                        setEmailConfirmSent();
                         Utils.showToastNotification(R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT);
                     }
 
@@ -299,6 +328,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                         public void success(IApiResponse response) {
                             mToken.saveToken(mToken.getUserSocialId(), email, mToken.getPassword());
                             setChangeBtnAction(ACTION_RESEND_CONFIRM);
+                            setEmailConfirmSent();
                         }
 
                         @Override
@@ -414,5 +444,13 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     public void onDestroy() {
         super.onDestroy();
         Utils.hideSoftKeyboard(getActivity(), mEditText);
+    }
+
+    private void onProfileUpdated() {
+        if (CacheProfile.emailConfirmed) {
+            Toast.makeText(App.getContext(), R.string.general_email_success_confirmed, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(App.getContext(), R.string.general_email_not_confirmed, Toast.LENGTH_SHORT).show();
+        }
     }
 }

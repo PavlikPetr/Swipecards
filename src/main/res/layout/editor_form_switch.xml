@@ -1,34 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
-
-    <ImageView
-        android:id="@+id/ivEditBackground"
-        android:tag="ivEditBackground"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
-        android:scaleType="fitXY"
-        android:layout_centerHorizontal="true"
-        android:duplicateParentState="true"/>
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
 
     <TextView
         android:tag="tvTitle"
-        style="@style/ItemTitleText"
+        style="@style/GrayText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/ivEditBackground"
         android:layout_centerVertical="true"
         android:layout_gravity="left"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:drawablePadding="5dp"
         android:ellipsize="end"
-        android:singleLine="true"
-        android:textSize="14sp"/>
+        android:singleLine="true" />
 
     <!-- Switch -->
 
@@ -39,22 +25,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_alignRight="@id/ivEditBackground"
+        android:layout_alignParentRight="true"
         android:layout_marginRight="5dp"
         android:clickable="false"
-        android:textSize="12sp"
-        android:gravity="center"
-        android:singleLine="true"
-        android:minHeight="0dp"/>
+        android:minHeight="0dp" />
 
     <ProgressBar
         android:tag="vsiLoadBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignRight="@id/cbSwitch"
         android:layout_centerVertical="true"
-        android:layout_marginRight="38dp"
+        android:layout_marginRight="40dp"
         style="@style/TopFaceProgressBar.Small"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        tools:visibility="visible" />
 
 </RelativeLayout>

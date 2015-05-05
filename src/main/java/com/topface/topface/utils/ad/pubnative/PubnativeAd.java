@@ -17,6 +17,7 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.TopfaceAdStatistics;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ad.NativeAd;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.http.HttpUtils;
@@ -85,16 +86,14 @@ public class PubnativeAd extends NativeAd {
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(click_url));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                App.getContext().startActivity(intent);
-                TopfaceAdStatistics.sendPubnativeClick();
+                if (Utils.isCallableIntent(intent, App.getContext())) {
+                    App.getContext().startActivity(intent);
+                    TopfaceAdStatistics.sendPubnativeClick();
+                }
             }
         });
 
         if (!mIsShown) {
-            UserConfig userConfig = App.getUserConfig();
-            userConfig.decreaseRemainedPubnativeShows();
-            userConfig.saveConfig();
-
             if (!BuildConfig.DEBUG) {
                 new BackgroundThread() {
                     @Override
@@ -118,8 +117,13 @@ public class PubnativeAd extends NativeAd {
                     response = HttpUtils.httpGetRequest(beacon.getUrl());
                 }
                 if (response != null) {
+                    UserConfig userConfig = App.getUserConfig();
+                    userConfig.decreaseRemainedPubnativeShows();
+                    userConfig.saveConfig();
                     Debug.log("NativeAd: Impression beacon sent for pubnative ad " + title);
                     TopfaceAdStatistics.sendPubnativeImpression();
+                } else {
+                    TopfaceAdStatistics.sendPubnativeImpressionFailed();
                 }
                 break;
             }

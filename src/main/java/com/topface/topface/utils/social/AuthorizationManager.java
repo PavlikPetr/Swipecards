@@ -56,6 +56,12 @@ public class AuthorizationManager {
         }
     }
 
+    public void onPause() {
+        for (Authorizer authorizer : mAuthorizers.values()) {
+            authorizer.onPause();
+        }
+    }
+
     public void onDestroy() {
         for (Authorizer authorizer : mAuthorizers.values()) {
             authorizer.onDestroy();

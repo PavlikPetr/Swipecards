@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;

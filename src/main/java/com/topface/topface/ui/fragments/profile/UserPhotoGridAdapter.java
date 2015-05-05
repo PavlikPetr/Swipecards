@@ -4,13 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.topface.topface.R;
 import com.topface.topface.data.Photos;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
 
-public class UserPhotoGridAdapter extends ProfileGridAdapter {
+public class UserPhotoGridAdapter extends PhotoGridAdapter {
     // Data
     private LayoutInflater mInflater;
 
@@ -26,6 +27,8 @@ public class UserPhotoGridAdapter extends ProfileGridAdapter {
             convertView = mInflater.inflate(R.layout.item_user_gallery, null, false);
             holder = new ViewHolder();
             holder.photo = (ImageViewRemote) convertView.findViewById(R.id.ivPhoto);
+            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(getGridItemWidth(), getGridItemWidth());
+            holder.photo.setLayoutParams(lp);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();

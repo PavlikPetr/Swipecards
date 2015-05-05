@@ -55,6 +55,10 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     public static final String ARG_TAG_SOURCE = "from_value";
     public static final int BUYING_REQUEST = 1001;
     public static final String TEST_PURCHASED_PRODUCT_ID = "android.test.purchased";
+    private static final String APP_STORE_NAME = "&storename";
+    public static final String ARG_RESOURCE_INFO_TEXT = "resource_info_text";
+    public static final String UPDATE_RESOURCE_INFO = "com.topface.topface.UPDATE_RESOURCE_INFO";
+
     /**
      * Результат запроса из OpenIAB: Пользователь отменил покупку
      */
@@ -67,7 +71,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
      * Результат запроса из OpenIAB: Товар уже куплен, но не потрачен
      */
     public static final int PURCHASE_ERROR_ITEM_ALREADY_OWNED = 7;
-    private static final String APP_STORE_NAME = "&storename";
+
     private boolean mHasDeferredPurchase = false;
     private View mDeferredPurchaseButton;
     private UserConfig mUserConfig;
@@ -111,17 +115,12 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUserConfig = App.getUserConfig();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         App.getOpenIabHelperManager().addOpenIabEventListener(getActivity(), this);
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
         App.getOpenIabHelperManager().removeOpenIabEventListener(this);
     }
 

@@ -23,4 +23,9 @@ public class JsonUtils {
         }
         return mGson;
     }
+
+    public static <T> T optFromJson(String json, Class<T> classOfT, T defaultObj) {
+        T obj = fromJson(json, classOfT);
+        return obj == null ? defaultObj : obj;
+    }
 }

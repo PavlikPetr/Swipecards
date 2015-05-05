@@ -170,15 +170,15 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     private ImageButton mDeleteButton;
     private UserProfileLoader mUserProfileLoader;
 
-    public static Intent getPhotoSwitcherIntent(Profile.Gifts gifts, int position, int userId, int photosCount, ProfileGridAdapter adapter) {
+    public static Intent getPhotoSwitcherIntent(Profile.Gifts gifts, int position, int userId, int photosCount, PhotoGridAdapter adapter) {
         return getPhotoSwitcherIntent(gifts, position, userId, photosCount, adapter.getPhotos());
     }
 
     public static Intent getPhotoSwitcherIntent(Profile.Gifts gifts, int position, int userId, int photosCount, Photos photos) {
         Intent intent = new Intent(App.getContext(), PhotoSwitcherActivity.class);
         intent.putExtra(INTENT_USER_ID, userId);
-        //Если первый элемент - это фейковая фотка, то смещаем позицию показа
-        intent.putExtra(INTENT_ALBUM_POS, position);
+        // если позиция невалидная смещаем до последней в "колоде" хуяк-хуяк и в продакшн
+        intent.putExtra(INTENT_ALBUM_POS, position >= photosCount ? photosCount - 1 : position);
         intent.putExtra(INTENT_PHOTOS_COUNT, photosCount);
         intent.putExtra(INTENT_PHOTOS_FILLED, true);
         intent.putParcelableArrayListExtra(INTENT_PHOTOS, photos);
@@ -290,7 +290,10 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     private void initViews(int position, int photosCount) {
-
+        if (mPhotoLinks.size() == 0) {
+            finish();
+            return;
+        }
         int rest = photosCount - mPhotoLinks.size();
         for (int i = 0; i < rest; i++) {
             mPhotoLinks.add(new Photo());
@@ -505,14 +508,25 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
+                // removes photos
                 for (Photo currentPhoto : mDeletedPhotos) {
                     CacheProfile.photos.removeById(currentPhoto.getId());
                 }
                 CacheProfile.totalPhotos -= mDeletedPhotos.size();
+                // decrements position
+                int decrementPositionBy = 0;
+                for (Photo deleted : mDeletedPhotos) {
+                    if (deleted.position < CacheProfile.photo.position && CacheProfile.photo.position > 0) {
+                        decrementPositionBy--;
+                    }
+                }
+                CacheProfile.incrementPhotoPosition(decrementPositionBy, false);
+                // broadcasting
                 LocalBroadcastManager.getInstance(PhotoSwitcherActivity.this).sendBroadcast(new Intent(DEFAULT_UPDATE_PHOTOS_INTENT)
                         .putExtra(INTENT_PHOTOS, CacheProfile.photos)
                         .putExtra(INTENT_MORE, CacheProfile.photos.size() < CacheProfile.totalPhotos - mDeletedPhotos.size())
                         .putExtra(INTENT_CLEAR, true));
+                // clearing
                 mDeletedPhotos.clear();
             }
 
@@ -748,8 +762,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
 
-    public static interface IUserProfileReceiver {
-        public void onReceiveUserProfile(User user);
+    public interface IUserProfileReceiver {
+        void onReceiveUserProfile(User user);
     }
 
     private class PhotosManager {

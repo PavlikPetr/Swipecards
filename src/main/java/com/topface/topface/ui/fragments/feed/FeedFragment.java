@@ -408,7 +408,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         return new int[]{GCMUtils.GCM_TYPE_UNKNOWN};
     }
 
-    abstract protected int getTypeForCounters();
+    abstract protected int getFeedType();
 
     protected int getLayout() {
         return R.layout.fragment_feed;
@@ -691,7 +691,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             if (isPullToRefreshUpdating && firstItem != null) {
                 request.from = firstItem.id;
             }
-
+            request.leave = isReadFeedItems();
             request.callback(new DataApiHandler<FeedListData<T>>() {
 
                 @Override
@@ -722,6 +722,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 }
             }).exec();
         }
+    }
+
+    protected boolean isReadFeedItems() {
+        return false;
     }
 
     protected void processFailUpdate(int codeError, boolean isHistoryLoad, FeedAdapter<T> adapter, boolean isPullToRefreshUpdating) {
@@ -887,7 +891,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     @Override
     protected void onUpdateStart(boolean isPushUpdating) {
-        onFilledFeed();
+        if (!getListAdapter().isEmpty()) {
+            onFilledFeed();
+        }
         if (!isPushUpdating) {
             mListView.setVisibility(View.INVISIBLE);
             mBackgroundController.show();
@@ -942,7 +948,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     private void updateDataAfterReceivingCounters(String lastMethod) {
         if (!lastMethod.equals(CountersManager.NULL_METHOD) && lastMethod.equals(getRequest().getServiceName())) {
-            int counters = CountersManager.getInstance(getActivity()).getCounter(getTypeForCounters());
+            int counters = CountersManager.getInstance(getActivity()).getCounter(getFeedType());
             if (counters > 0) {
                 updateData(true, false);
             }

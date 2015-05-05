@@ -4,13 +4,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileDeleteRequest;
@@ -20,20 +18,13 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-public class DeleteAccountDialog extends AbstractModalDialog implements View.OnClickListener {
+public class DeleteAccountDialog extends AbstractDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "com.topface.topface.ui.dialogs.DeleteAccountDialog_TAG";
     private Button mBtnOk;
 
-    public static DeleteAccountDialog newInstance() {
-        DeleteAccountDialog dialog = new DeleteAccountDialog();
-        dialog.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Theme_Topface);
-        return dialog;
-    }
-
     @Override
-    protected void initContentViews(View root) {
-        getDialog().setCanceledOnTouchOutside(false);
+    protected void initViews(View root) {
         root.findViewById(R.id.btnCancel).setOnClickListener(this);
         mBtnOk = (Button) root.findViewById(R.id.btnOk);
         mBtnOk.setOnClickListener(this);
@@ -43,13 +34,13 @@ public class DeleteAccountDialog extends AbstractModalDialog implements View.OnC
     }
 
     @Override
-    protected int getContentLayoutResId() {
-        return R.layout.dialog_delete_account;
+    protected boolean isModalDialog() {
+        return true;
     }
 
     @Override
-    protected void onCloseButtonClick(View v) {
-        closeDialog();
+    protected int getDialogLayoutRes() {
+        return R.layout.dialog_delete_account;
     }
 
     @Override
@@ -118,5 +109,9 @@ public class DeleteAccountDialog extends AbstractModalDialog implements View.OnC
     private void closeDialog() {
         final Dialog dialog = getDialog();
         if (dialog != null) dialog.dismiss();
+    }
+
+    public static DeleteAccountDialog newInstance() {
+        return new DeleteAccountDialog();
     }
 }

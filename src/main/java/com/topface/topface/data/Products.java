@@ -32,7 +32,7 @@ import java.util.List;
 public class Products extends AbstractData {
     public static final String INTENT_UPDATE_PRODUCTS = "com.topface.topface.action.UPDATE_PRODUCTS";
 
-    public static enum ProductType {
+    public enum ProductType {
         COINS("coins"),
         LIKES("likes"),
         PREMIUM("premium", true),
@@ -257,12 +257,12 @@ public class Products extends AbstractData {
         int color;
         switch (showType) {
             case 1:
-                color = context.getResources().getColor(R.color.text_white);
+                color = context.getResources().getColor(R.color.text_color_gray);
                 break;
             case 2:
             case 0:
             default:
-                color = context.getResources().getColor(R.color.text_light_gray);
+                color = context.getResources().getColor(R.color.text_color_gray);
                 break;
         }
         return color;
@@ -270,21 +270,17 @@ public class Products extends AbstractData {
 
     private static int getBuyButtonBackground(boolean discount, int showType) {
         int bgResource;
-        if (discount) {
-            bgResource = R.drawable.btn_sale_selector;
-        } else {
-            switch (showType) {
-                case 1:
-                    bgResource = R.drawable.btn_blue_selector;
-                    break;
-                case 2:
-                    bgResource = R.drawable.btn_blue_disabled;
-                    break;
-                case 0:
-                default:
-                    bgResource = R.drawable.btn_gray_selector;
-                    break;
-            }
+        switch (showType) {
+            case 1:
+                bgResource = discount ? R.drawable.btn_sale_blue_selector : R.drawable.btn_blue_selector;
+                break;
+            case 2:
+                bgResource = discount ? R.drawable.btn_sale_blue_disabled : R.drawable.btn_blue_shape_disabled;
+                break;
+            case 0:
+            default:
+                bgResource = discount ? R.drawable.btn_sale_gray_selector : R.drawable.btn_gray_selector;
+                break;
         }
         return bgResource;
     }
@@ -311,11 +307,9 @@ public class Products extends AbstractData {
         // title text
         TextView tvTitle = (TextView) view.findViewById(R.id.itText);
         tvTitle.setText(title);
-        tvTitle.setTextColor(color);
         // value text
         TextView tvValue = (TextView) view.findViewById(R.id.itValue);
         tvValue.setText(value);
-        tvValue.setTextColor(color);
         // economy text
         TextView tvEconomy = (TextView) view.findViewById(R.id.itEconomy);
         tvEconomy.setTextColor(color);
@@ -406,7 +400,7 @@ public class Products extends AbstractData {
     }
 
     public interface BuyButtonClickListener {
-        public void onClick(String id);
+        void onClick(String id);
     }
 
     private static ProductType getProductTypeByName(String name) {

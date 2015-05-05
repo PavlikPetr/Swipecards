@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:my="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/filter_scroll"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -56,11 +56,7 @@
                     style="@style/CitySearchView"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:selectAllOnFocus="true"
-                    android:singleLine="true"
-                    my:request_key="CITY_SEARCH_FROM_FILTER_ACTIVITY" />
+                    app:request_key="CITY_SEARCH_FROM_FILTER_ACTIVITY" />
 
             </LinearLayout>
 

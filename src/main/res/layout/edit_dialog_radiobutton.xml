@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent">
+
+    <CheckedTextView
+        android:id="@+id/editor_check"
+        style="@style/WhiteListItem"
+        android:background="@drawable/filter_light_edit_form_dialog_background_color_selector"
+        android:drawablePadding="5dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:checked="false" />
+</FrameLayout>

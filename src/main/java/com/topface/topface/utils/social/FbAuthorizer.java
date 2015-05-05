@@ -21,68 +21,85 @@ import java.util.Arrays;
  */
 public class FbAuthorizer extends Authorizer {
 
-    private String[] FB_PERMISSIONS = {"user_photos", "email", "offline_access", "user_birthday"};
+    private String[] FB_PERMISSIONS = {"user_photos", "email", "offline_access", "user_birthday", "public_profile", "user_location"};
 
     private UiLifecycleHelper mUiHelper;
-    private Session.StatusCallback mStatusCallback = new Session.StatusCallback() {
-        @Override
-        public void call(final Session session, SessionState state, Exception exception) {
-            final Intent intent = new Intent(AUTH_TOKEN_READY_ACTION);
+    private Request mRequest;
+    private Session.StatusCallback mStatusCallback;
 
-            switch (state) {
-                case OPENED:
-                case OPENED_TOKEN_UPDATED:
-                    Request request = Request.newMeRequest(session, new Request.GraphUserCallback() {
-                        @Override
-                        public void onCompleted(GraphUser user, Response response) {
-                            if (user != null) {
-                                if (AuthToken.getInstance().isEmpty()) {
-                                    AuthToken.getInstance().saveToken(
-                                            AuthToken.SN_FACEBOOK,
-                                            user.getId(),
-                                            session.getAccessToken(),
-                                            session.getExpirationDate().toString()
-                                    );
+    private Request getRequest(final Session session, final Intent intent) {
+        if (mRequest == null) {
+            mRequest = Request.newMeRequest(session, new Request.GraphUserCallback() {
+                @Override
+                public void onCompleted(GraphUser user, Response response) {
+                    if (user != null) {
+                        if (AuthToken.getInstance().isEmpty()) {
+                            AuthToken.getInstance().saveToken(
+                                    AuthToken.SN_FACEBOOK,
+                                    user.getId(),
+                                    session.getAccessToken(),
+                                    session.getExpirationDate().toString()
+                            );
 
-                                    String name = user.getFirstName() + " " + user.getLastName();
-                                    SessionConfig sessionConfig = App.getSessionConfig();
-                                    sessionConfig.setSocialAccountName(name);
-                                    sessionConfig.saveConfig();
+                            String name = user.getFirstName() + " " + user.getLastName();
+                            SessionConfig sessionConfig = App.getSessionConfig();
+                            sessionConfig.setSocialAccountName(name);
+                            sessionConfig.saveConfig();
 
-                                    intent.putExtra(TOKEN_STATUS, TOKEN_READY);
-                                }
-                            } else if (AuthToken.getInstance().isEmpty()) {
-                                intent.putExtra(TOKEN_STATUS, TOKEN_FAILED);
-                            }
-                            broadcastAuthTokenStatus(intent);
+                            intent.putExtra(TOKEN_STATUS, TOKEN_READY);
                         }
-                    });
-                    request.executeAsync();
-                    break;
-                case CREATED:
-                case OPENING:
-                case CREATED_TOKEN_LOADED:
-                    intent.putExtra(TOKEN_STATUS, TOKEN_PREPARING);
-                    break;
-                case CLOSED_LOGIN_FAILED:
-                    if (exception instanceof FacebookOperationCanceledException) {
-                        intent.putExtra(TOKEN_STATUS, TOKEN_NOT_READY);
-                    } else {
+                    } else if (AuthToken.getInstance().isEmpty()) {
                         intent.putExtra(TOKEN_STATUS, TOKEN_FAILED);
                     }
-                    break;
-                default:
-                    intent.putExtra(TOKEN_STATUS, TOKEN_NOT_READY);
-                    break;
-            }
-
-            broadcastAuthTokenStatus(intent);
+                    broadcastAuthTokenStatus(intent);
+                }
+            });
+        } else {
+            mRequest.setSession(session);
         }
-    };
+        return mRequest;
+    }
+
+    private Session.StatusCallback getStatusCallback() {
+        if (mStatusCallback == null) {
+            mStatusCallback = new Session.StatusCallback() {
+                @Override
+                public void call(Session session, SessionState state, Exception exception) {
+                    Intent intent = new Intent(AUTH_TOKEN_READY_ACTION);
+
+                    switch (state) {
+                        case OPENED:
+                        case OPENED_TOKEN_UPDATED:
+                            getRequest(session, intent).executeAsync();
+                            break;
+                        case CREATED:
+                        case OPENING:
+                        case CREATED_TOKEN_LOADED:
+                            intent.putExtra(TOKEN_STATUS, TOKEN_PREPARING);
+                            break;
+                        case CLOSED_LOGIN_FAILED:
+                            if (exception instanceof FacebookOperationCanceledException) {
+                                intent.putExtra(TOKEN_STATUS, TOKEN_NOT_READY);
+                            } else {
+                                intent.putExtra(TOKEN_STATUS, TOKEN_FAILED);
+                            }
+                            break;
+                        default:
+                            intent.putExtra(TOKEN_STATUS, TOKEN_NOT_READY);
+                            break;
+                    }
+
+                    broadcastAuthTokenStatus(intent);
+                }
+            };
+        }
+        return mStatusCallback;
+    }
 
     public FbAuthorizer(Activity activity) {
         super(activity);
-        mUiHelper = new UiLifecycleHelper(activity, mStatusCallback);
+        mUiHelper = new UiLifecycleHelper(activity, null);
+        mUiHelper.onStop();
     }
 
     @Override
@@ -107,28 +124,31 @@ public class FbAuthorizer extends Authorizer {
     public void onDestroy() {
         super.onDestroy();
         mUiHelper.onDestroy();
+        mStatusCallback = null;
+        mRequest = null;
     }
 
     @Override
     public void authorize() {
         Session session = Session.getActiveSession();
-        if (session.isOpened() || session.isClosed()) {
-            Session.openActiveSession(getActivity(), true, Arrays.asList(FB_PERMISSIONS), mStatusCallback);
+        if (session != null && !session.isOpened() && !session.isClosed()) {
+            session.openForRead(new Session.OpenRequest(getActivity())
+                    .setPermissions(Arrays.asList(FB_PERMISSIONS)).setCallback(getStatusCallback()));
         } else {
-            Session.getActiveSession().openForRead(new Session.OpenRequest(getActivity())
-                    .setPermissions(Arrays.asList(FB_PERMISSIONS)).setCallback(mStatusCallback));
+            Session.openActiveSession(getActivity(), true, Arrays.asList(FB_PERMISSIONS), getStatusCallback());
         }
     }
 
     @Override
     public void logout() {
         Session session = Session.getActiveSession();
-        if (session == null) {
-            session = Session.openActiveSessionFromCache(getActivity());
-        }
         if (session != null) {
             session.closeAndClearTokenInformation();
+            if (mStatusCallback != null) {
+                session.removeCallback(mStatusCallback);
+            }
         }
+        Session.setActiveSession(null);
     }
 
     @Override

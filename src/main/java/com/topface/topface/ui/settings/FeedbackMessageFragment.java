@@ -10,7 +10,6 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -35,7 +34,7 @@ import com.topface.topface.utils.social.AuthToken;
 import java.util.List;
 import java.util.Locale;
 
-public class FeedbackMessageFragment extends AbstractEditFragment {
+public class FeedbackMessageFragment extends AbstractEditFragment implements View.OnClickListener {
 
     public static final String INTENT_FEEDBACK_TYPE = "feedback_message_type";
     private EditText mEditText;
@@ -62,6 +61,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
+        getSupportActionBar().show();
         super.onCreateView(inflater, container, saved);
         View root = inflater.inflate(R.layout.fragment_feedback_message, null);
         if (root == null) return null;
@@ -76,6 +76,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         if (language.equals("en") || language.equals("ru")) {
             incorrectLocaleTv.setVisibility(View.GONE);
         }
+        root.findViewById(R.id.sendFeedback).setOnClickListener(this);
         mEditText = (EditText) root.findViewById(R.id.edText);
         mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         mEditText.addTextChangedListener(new TextWatcher() {
@@ -256,18 +257,9 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
     }
 
     @Override
-    protected Integer getOptionsMenuRes() {
-        return R.menu.actions_send;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_send:
-                saveChanges(new Handler());
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+    public void onClick(View v) {
+        if (v.getId() == R.id.sendFeedback) {
+            saveChanges(new Handler());
         }
     }
 

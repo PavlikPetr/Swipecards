@@ -10,8 +10,8 @@ import com.topface.topface.promo.dialogs.PromoKey31Dialog;
 import com.topface.topface.promo.dialogs.PromoKey71Dialog;
 import com.topface.topface.promo.dialogs.PromoKey81Dialog;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.controllers.AbstractStartAction;
-import com.topface.topface.utils.controllers.IStartAction;
+import com.topface.topface.utils.controllers.startactions.IStartAction;
+import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
 import static com.topface.topface.data.Options.PromoPopupEntity.AIR_ADMIRATIONS;
 import static com.topface.topface.data.Options.PromoPopupEntity.AIR_MESSAGES;
@@ -89,6 +89,10 @@ public class PromoPopupManager {
                 break;
         }
 
+        if (fragment != null && fragment.getPremiumEntity() == null) {
+            return null;
+        }
+
         return fragment;
     }
 
@@ -97,7 +101,7 @@ public class PromoPopupManager {
     }
 
     public IStartAction createPromoPopupStartAction(final int priority) {
-        return new AbstractStartAction() {
+        return new IStartAction() {
             @Override
             public void callInBackground() {
             }
@@ -124,6 +128,11 @@ public class PromoPopupManager {
             @Override
             public String getActionName() {
                 return "PromoPopup";
+            }
+
+            @Override
+            public void setStartActionCallback(OnNextActionListener startActionCallback) {
+
             }
         };
     }

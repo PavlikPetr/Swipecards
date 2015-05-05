@@ -135,6 +135,10 @@
     <string name="general_spinner_title">Scegli l’azione</string>
     <string name="general_profile_error">Errore durante il caricamento del profilo</string>
     <string name="general_dbl_all">Tutti</string>
+    <string name="general_dbl_unread">Non letti</string>
+    <string name="general_empty_code_confirmation">Inserisci il codice di conferma</string>
+    <string name="general_email_success_confirmed">L’e-mail è stata confermata con successo</string>
+    <string name="general_email_not_confirmed">L’e-mail non è stata confermata</string>
     <string name="time_yesterday">Ieri</string>
     <string name="time_today">Oggi</string>
     <string name="general_send_button">Inv.</string>
@@ -257,6 +261,10 @@
     <string name="settings_rights_reserved">Topface \nTutti i diritti sono riservati</string>
     <string name="settings_extra">Si può trovare l’info dettagliata su</string>
     <string name="settings_logout">Logout</string>
+    <string name="settings_code_confirmation">Invia il codice di conferma</string>
+    <string name="settings_email_was_confirmed">Già confermata</string>
+    <string name="settings_email_was_confirmed_textview_text">Se hai già confermato l’e-mail dal pc</string>
+    <string name="settings_code_confirmation_hint">Codice di conferma</string>
     <string name="settings_logout_msg">Vuoi veramente uscire?</string>
     <string name="settings_error_message">Messaggio di errore</string>
     <string name="settings_ask_developer">Domanda agli sviluppatori</string>
@@ -375,12 +383,14 @@
     <string name="gallery">Galleria</string>
     <string name="no_photo_take_photo">Nessuno può conoscerti! Scatta una foto o scegline una dall’album</string>
     <string name="photo_for_avatar">La foto è pronta per essere inviata! Questa è la tua prima foto e sarà il tuo avatar.</string>
-    <string name="change_email">Cambia e-mail</string>
+    <string name="change_email">Cambiare l’e-mail</string>
     <string name="send_confirmation_email">Invia conferma all’indirizzo e-mail</string>
     <string name="change_password">Cambia password</string>
     <string name="password_changing">Modifica password</string>
     <string name="save">Salvare</string>
+    <string name="saving_in_progress">Salvataggio…</string>
     <string name="confirmation_successfully_sent">All’indirizzo e-mail da te indicato è stata inviata la conferma</string>
+    <string name="password_hint">password</string>
     <string name="password_confirmation_hint">conferma password</string>
     <string name="enter_new_password">Inserisci la nuova password</string>
     <string name="enter_password_confirmation">Inserisci la conferma di password</string>
@@ -468,6 +478,8 @@
     <string name="general_complain_sended">Il tuo reclamo è stato inviato, grazie per il tuo aiuto</string>
     <string name="general_complain">Reclamo</string>
     <string name="general_msg">Massaggio</string>
+    <string name="notifications">Notifiche</string>
+    <string name="general_no_notifications">Purtroppo, per il tuo dispositivo gli avvisi non sono disponibili</string>
     <string name="black_list_add_short">Nella black list</string>
     <string name="confirm_email_for_dating">Siamo contrari allo spam. Conferma il tuo e-mail per chattare su Topface!</string>
     <string name="send_confirm_link">Invia il link di conferma</string>
@@ -492,7 +504,7 @@
     <string name="delete">Cancella</string>
     <string name="delete_account_warning">Attenzione! Stai cercando di cancellare il tuo account in Topface.</string>
     <string name="delete_account_error">Purtroppo non siamo riusciti a cancellare il tuo account. Riprova.</string>
-    <string name="delete_account_will_be_restored_are_you_sure">Stai cercando di accedere all’account che hai cancellato. Accedendovi verrà ripristinato. Vuoi farlo?</string>
+    <string name="delete_account_will_be_restored_are_you_sure">Stai cercando di accedere all\'account cancellato. Accedendovi verrà ripristinato.</string>
     <string name="restore">Ripristinare</string>
     <string name="admiration_sended">L’ammirazione è stata inviata</string>
     <string name="skip">Salta</string>
@@ -590,6 +602,10 @@
     <string name="preload_photo_type_preload_off">Spenta</string>
     <string name="wrong_time_popup_text">Non siamo riusciti a stabilire una connessione sicura.\nProbabilmente il tuo dispositivo mostra una data o l’ora scorretta.</string>
     <string name="wrong_time_popup_button">Aprire i parametri</string>
+    <string name="go_tf">Ti invio un “Regalo a sorpresa!”</string>
+    <string name="enter_text">Inserisci il testo</string>
+    <string name="send_feedback">Invia il messaggio</string>
+    <string name="get_vip_free">Ricevi VIP gratis</string>
     <string name="google_service_general_title">Notifiche non disponibili</string>
     <string name="google_service_disabled_title">Hai disabilitato i Servizi Google Play che servono per il corretto funzionamento di notifiche.</string>
     <string name="google_service_disabled_button">Abilita</string>
@@ -601,5 +617,12 @@
     <string name="google_sign_in_account_title">Non hai aggiunto l’account Google, devi accedervi per ricevere le notifiche.</string>
     <string name="google_sign_in_account_button">Accedere</string>
     <string name="google_unavailable_services_title">Purtroppo il tuo dispositivo non supporta l’invio di notifiche.</string>
+    <string name="receive_message_notification">Ricevere notifiche\ndei nuovi messaggi</string>
+    <string name="receive_mutual_notification">Ricevere notifiche\ndelle nuove simpatie reciproche</string>
+    <string name="receive_sympathy_notification">Ricevere notifiche\ndelle nuove simpatie</string>
+    <string name="receive_guest_notification">Ricevere notifiche\ndei nuovi visitatori</string>
+    <string name="on_phone">Sul cellulare</string>
+    <string name="on_mail">Sull’e-mail</string>
     <string name="add_leader_hint">Il tuo saluto…</string>
+    <string name="more">ancora</string>
 </resources>

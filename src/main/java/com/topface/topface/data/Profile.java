@@ -1,6 +1,8 @@
 package com.topface.topface.data;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 
@@ -9,7 +11,6 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Novice;
@@ -91,7 +92,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.firstName = normalizeName(Utils.optString(resp, "firstName"));
             profile.city = new City(resp.optJSONObject("city"));
             profile.premium = resp.optBoolean("premium");
-            profile.background = resp.optInt("bg", ProfileBackgrounds.DEFAULT_BACKGROUND_ID);
+            profile.background = ProfileBackgrounds.DEFAULT_BACKGROUND_ID;
             profile.photosCount = resp.optInt("photosCount");
             profile.xstatus = resp.optInt("xstatus");
 
@@ -117,7 +118,6 @@ public class Profile extends AbstractDataWithPhotos {
             parseNotifications(profile, resp);
             parseForm(profile, resp, App.getContext());
             initPhotos(resp, profile);
-            //TODO clarify parameter: canBecomeLeader
         } catch (Exception e) {
             Debug.error("Profile Wrong response parsing: ", e);
         }
@@ -132,243 +132,151 @@ public class Profile extends AbstractDataWithPhotos {
             FormItem headerItem;
             FormItem formItem;
 
-            boolean isUserProfile = false;
-            if (profile instanceof User) {
-                isUserProfile = true;
-                ((User) profile).formMatches = 0;
-            }
-
             // 1 HEADER -= MAIN =-
             headerItem = new FormItem(R.string.form_main, FormItem.HEADER);
             formInfo.fillFormItem(headerItem);
-            profile.forms.add(headerItem);
 
             // 1.2 xstatus position -1
             formItem = new FormItem(R.array.form_main_status, profile.xstatus,
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                formItem.equal = profile.xstatus == CacheProfile.xstatus;
-                if (formItem.dataId > 0) {
-                    profile.forms.add(formItem);
-                    if (formItem.equal) {
-                        ((User) profile).formMatches++;
-                    }
-                }
-            } else {
-                profile.forms.add(formItem);
-            }
+            profile.forms.add(formItem);
 
             // 2 character position 0
             formItem = new FormItem(R.array.form_main_character, form.optInt("characterId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                compareFormItemData(formItem, profile,
-                        form.optBoolean("characterSimilarity", false));
-            } else {
-                profile.forms.add(formItem);
-            }
+            profile.forms.add(formItem);
 
             // 3 communication position 1
             formItem = new FormItem(R.array.form_main_communication,
                     form.optInt("communicationId"), FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                compareFormItemData(formItem, profile,
-                        form.optBoolean("communicationSimilarity", false));
-            } else {
-                profile.forms.add(formItem);
-            }
-
-            // 4 DIVIDER
-            profile.forms.add(FormItem.getDivider());
+            profile.forms.add(formItem);
 
             // 5 HEADER -= PHYSIQUE =-
             headerItem = new FormItem(R.string.form_physique, FormItem.HEADER);
             formInfo.fillFormItem(headerItem);
-            profile.forms.add(headerItem);
 
             // 11 breast position 7
-            if (profile.sex == Static.GIRL) {
-                formItem = new FormItem(R.array.form_physique_breast, form.optInt("breastId"),
-                        FormItem.DATA, headerItem);
-                formInfo.fillFormItem(formItem);
-                if (isUserProfile) {
-                    compareFormItemData(formItem, profile, false);
-                } else {
-                    profile.forms.add(formItem);
-                }
-            }
+            formItem = new FormItem(R.array.form_physique_breast, form.optInt("breastId"),
+                    FormItem.DATA, headerItem);
+            formItem.setOnlyForWomen(true);
+            formInfo.fillFormItem(formItem);
+            profile.forms.add(formItem);
 
             // 6 fitness position 2
             formItem = new FormItem(R.array.form_physique_fitness, form.optInt("fitnessId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                compareFormItemData(formItem, profile,
-                        form.optBoolean("fitnessSimilarity", false));
-            } else {
-                profile.forms.add(formItem);
-            }
+            profile.forms.add(formItem);
 
             // about status
             String as = form.optString("status");
             String aboutStatus = TextUtils.isEmpty(as.trim()) ? null : as;
             formItem = new FormItem(R.array.form_main_about_status, aboutStatus,
                     FormItem.DATA, headerItem);
-            formItem.setLimitInterface(new FormItem.LimitInterface() {
-                @Override
-                public int getLimit() {
-                    return App.getAppOptions().getUserAboutMeMaxLength();
-                }
-            });
+            formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter(App.getAppOptions().getUserAboutMeMaxLength()));
             formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                if (aboutStatus != null)
-                    profile.forms.add(formItem);
-            } else {
-                profile.forms.add(formItem);
-            }
+            profile.forms.add(formItem);
 
             // 7 height position 3
             int h = form.optInt("height");
             String height = (h == 0) ? null : Integer.toString(form.optInt("height"));
             formItem = new FormItem(R.array.form_main_height, height, FormItem.DATA, headerItem);
+            formItem.setValueLimitInterface(new FormItem.ValueLimitInterface() {
+                @Override
+                public int getMinValue() {
+                    return App.getAppOptions().getUserHeightMin();
+                }
+
+                @Override
+                public int getMaxValue() {
+                    return App.getAppOptions().getUserHeightMax();
+                }
+            });
             formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                compareFormItemData(formItem, profile,
-                        form.optBoolean("heightSimilarity", false));
-            } else {
-                profile.forms.add(formItem);
-            }
+            profile.forms.add(formItem);
 
             // 8 weight position 4
             int w = form.optInt("weight");
             String weight = w == 0 ? null : Integer.toString(form.optInt("weight"));
             formItem = new FormItem(R.array.form_main_weight, weight, FormItem.DATA, headerItem);
+            formItem.setValueLimitInterface(new FormItem.ValueLimitInterface() {
+                @Override
+                public int getMinValue() {
+                    return App.getAppOptions().getUserWeightMin();
+                }
+
+                @Override
+                public int getMaxValue() {
+                    return App.getAppOptions().getUserWeightMax();
+                }
+            });
             formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                compareFormItemData(formItem, profile,
-                        form.optBoolean("weightSimilarity", false));
-            } else {
-                profile.forms.add(formItem);
-            }
+            profile.forms.add(formItem);
 
             // 9 hair position 5
             formItem = new FormItem(R.array.form_physique_hairs, form.optInt("hairId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                compareFormItemData(formItem, profile,
-                        form.optBoolean("hairSimilarity", false));
-            } else {
-                profile.forms.add(formItem);
-            }
+            profile.forms.add(formItem);
 
             // 10 eye position 6
             formItem = new FormItem(R.array.form_physique_eyes, form.optInt("eyeId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                compareFormItemData(formItem, profile,
-                        form.optBoolean("eyeSimilarity", false));
-            } else {
-                profile.forms.add(formItem);
-            }
-
-            // 11 DIVIDER
-            profile.forms.add(FormItem.getDivider());
+            profile.forms.add(formItem);
 
             // 12 HEADER -= SOCIAL =-
             headerItem = new FormItem(R.string.form_social, FormItem.HEADER);
             formInfo.fillFormItem(headerItem);
-            profile.forms.add(headerItem);
 
             // 13 marriage position 7
             formItem = new FormItem(R.array.form_social_marriage, form.optInt("marriageId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                compareFormItemData(formItem, profile,
-                        form.optBoolean("marriageSimilarity", false));
-            } else {
-                profile.forms.add(formItem);
-            }
+            profile.forms.add(formItem);
 
             // 14 education position 8
             formItem = new FormItem(R.array.form_social_education, form.optInt("educationId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                compareFormItemData(formItem, profile,
-                        form.optBoolean("educationSimilarity", false));
-            } else {
-                profile.forms.add(formItem);
-            }
+            profile.forms.add(formItem);
 
             // 15 finances position 9
             formItem = new FormItem(R.array.form_social_finances, form.optInt("financesId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                compareFormItemData(formItem, profile,
-                        form.optBoolean("financesSimilarity", false));
-            } else {
-                profile.forms.add(formItem);
-            }
+            profile.forms.add(formItem);
 
             // 16 residence position 10
             formItem = new FormItem(R.array.form_social_residence, form.optInt("residenceId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                compareFormItemData(formItem, profile,
-                        form.optBoolean("residenceSimilarity", false));
-            } else {
-                profile.forms.add(formItem);
-            }
+            profile.forms.add(formItem);
 
             // 17 car vs car_id position 11
             formItem = new FormItem(R.array.form_social_car, form.optInt("carId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                compareFormItemData(formItem, profile,
-                        form.optBoolean("carSimilarity", false));
-            } else {
-                profile.forms.add(formItem);
-            }
-
-            // 18 DIVIDER
-            profile.forms.add(FormItem.getDivider());
+            profile.forms.add(formItem);
 
             // 19 HEADER -= HABITS =-
             headerItem = new FormItem(R.string.form_habits, FormItem.HEADER);
             formInfo.fillFormItem(headerItem);
-            profile.forms.add(headerItem);
 
             // 20 smoking position 12
             formItem = new FormItem(R.array.form_habits_smoking, form.optInt("smokingId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                compareFormItemData(formItem, profile,
-                        form.optBoolean("smokingSimilarity", false));
-            } else {
-                profile.forms.add(formItem);
-            }
+            profile.forms.add(formItem);
 
             // 21 alcohol position 13
             formItem = new FormItem(R.array.form_habits_alcohol, form.optInt("alcoholId"),
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                compareFormItemData(formItem, profile,
-                        form.optBoolean("alcoholSimilarity", false));
-            } else {
-                profile.forms.add(formItem);
-            }
+            profile.forms.add(formItem);
 
             // 22 restaurants position 14
             String rest = form.optString("restaurants").trim();
@@ -376,19 +284,12 @@ public class Profile extends AbstractDataWithPhotos {
             formItem = new FormItem(R.array.form_habits_restaurants, restraunts, FormItem.DATA,
                     headerItem);
             formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                if (restraunts != null) profile.forms.add(formItem);
-            } else {
-                profile.forms.add(formItem);
-            }
-
-            // 23 DIVIDER
-            profile.forms.add(FormItem.getDivider());
+            formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter());
+            profile.forms.add(formItem);
 
             // 24 HEADER -= DETAIL =-
             headerItem = new FormItem(R.string.form_detail, FormItem.HEADER);
             formInfo.fillFormItem(headerItem);
-            profile.forms.add(headerItem);
 
             // 25 first_dating position 15
             String dd = form.optString("firstDating").trim();
@@ -396,11 +297,8 @@ public class Profile extends AbstractDataWithPhotos {
             formItem = new FormItem(R.array.form_detail_about_dating, datingDetails,
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                if (datingDetails != null) profile.forms.add(formItem);
-            } else {
-                profile.forms.add(formItem);
-            }
+            formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter());
+            profile.forms.add(formItem);
 
             // 26 achievements position 16
             String ach = form.optString("achievements").trim();
@@ -408,16 +306,8 @@ public class Profile extends AbstractDataWithPhotos {
             formItem = new FormItem(R.array.form_detail_archievements, achievments,
                     FormItem.DATA, headerItem);
             formInfo.fillFormItem(formItem);
-            if (isUserProfile) {
-                if (achievments != null) profile.forms.add(formItem);
-            } else {
-                profile.forms.add(formItem);
-            }
-
-            // 27 DIVIDER
-            profile.forms.add(FormItem.getDivider());
-
-            //TODO clarify parameters: car,jobId,countries,statusId,valuables,childrenId,aspirations,job
+            formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter());
+            profile.forms.add(formItem);
         }
     }
 
@@ -441,6 +331,7 @@ public class Profile extends AbstractDataWithPhotos {
         JSONObject jsonGifts = resp.optJSONObject("gifts");
         JSONArray arrGifts = jsonGifts.optJSONArray("items");
         profile.gifts.more = jsonGifts.optBoolean("more");
+        profile.gifts.count = jsonGifts.optInt("count", -1);
         if (arrGifts == null) return;
         for (int i = 0; i < arrGifts.length(); i++) {
             JSONObject itemGift = arrGifts.getJSONObject(i);
@@ -451,17 +342,6 @@ public class Profile extends AbstractDataWithPhotos {
                     itemGift.optString("link")
             );
             profile.gifts.add(gift);
-        }
-    }
-
-    private static void compareFormItemData(FormItem item, Profile profile,
-                                            boolean matches) {
-        item.equal = matches;
-        if (!TextUtils.isEmpty(item.value)) {
-            profile.forms.add(item);
-            if (item.equal) {
-                ((User) profile).formMatches++;
-            }
         }
     }
 
@@ -516,7 +396,20 @@ public class Profile extends AbstractDataWithPhotos {
     /**
      *
      */
-    public static class TopfaceNotifications {
+    public static class TopfaceNotifications implements Parcelable {
+
+        public static final Parcelable.Creator<TopfaceNotifications> CREATOR = new Creator<TopfaceNotifications>() {
+            @Override
+            public TopfaceNotifications createFromParcel(Parcel source) {
+                return new TopfaceNotifications(source);
+            }
+
+            @Override
+            public TopfaceNotifications[] newArray(int size) {
+                return new TopfaceNotifications[size];
+            }
+        };
+
         public boolean apns;
         public boolean mail;
         public int type;
@@ -526,10 +419,29 @@ public class Profile extends AbstractDataWithPhotos {
             this.mail = mail;
             this.type = type;
         }
+
+        protected TopfaceNotifications(Parcel in) {
+            apns = in.readByte() == 1;
+            mail = in.readByte() == 1;
+            type = in.readInt();
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeByte((byte) (apns ? 1 : 0));
+            dest.writeByte((byte) (mail ? 1 : 0));
+            dest.writeInt(type);
+        }
     }
 
     public static class Gifts extends ArrayList<Gift> {
         public boolean more;
+        public int count;
 
         public Gifts() {
             more = false;

@@ -35,6 +35,7 @@ public class MultipartApiResponse implements IApiResponse {
     public int code = ErrorCodes.RESULT_DONT_SET;
     public String message;
     public JSONObject jsonResult;
+    public JSONObject jsonBan;
     private HashMap<String, ApiResponse> mResponses = new HashMap<>();
 
     public MultipartApiResponse(int responseCode, String contentType, String body) {
@@ -75,7 +76,7 @@ public class MultipartApiResponse implements IApiResponse {
         }
     }
 
-    private void parseResponses(LinkedList<String> parts) {
+    private void parseResponses(LinkedList<String> parts) throws JSONException {
         code = ErrorCodes.RESULT_OK;
         boolean firstResponse = true;
         for (String responseString : parts) {
@@ -85,6 +86,11 @@ public class MultipartApiResponse implements IApiResponse {
                 if (!response.isCompleted()) {
                     code = response.getResultCode();
                     message = response.getErrorMessage();
+                    if (ErrorCodes.BAN == code) {
+                        JSONObject jsonObject = new JSONObject(responseString);
+                        jsonBan = jsonObject.optJSONObject("error");
+                        return;
+                    }
                 } else {
                     //Для всех ответов кроме первого отключаем обновление счетчиков
                     if (firstResponse) {
@@ -104,38 +110,36 @@ public class MultipartApiResponse implements IApiResponse {
         //Если подключение не пустое и код ответа правильный
         if (inputStream != null && HttpUtils.isCorrectResponseCode(responseCode)) {
             //Если нужно, разархивируем поток из Gzip
-            if (inputStream != null) {
-                BufferedInputStream is = new BufferedInputStream(new FlushedInputStream(inputStream), HttpUtils.BUFFER_SIZE);
-                String boundary = getBoundary(contentType);
-                if (TextUtils.isEmpty(boundary)) {
-                    //В дебаг режиме еще читаем ответ сервера, что бы понять в чем проблема и куда делся boundary
-                    if (BuildConfig.DEBUG) {
-                        try {
-                            Debug.error("Boundary not found in response:\n" + getStringFromInputStream(is));
-                        } catch (Exception e) {
-                            Debug.error(e);
-                        }
+            BufferedInputStream is = new BufferedInputStream(new FlushedInputStream(inputStream), HttpUtils.BUFFER_SIZE);
+            String boundary = getBoundary(contentType);
+            if (TextUtils.isEmpty(boundary)) {
+                //В дебаг режиме еще читаем ответ сервера, что бы понять в чем проблема и куда делся boundary
+                if (BuildConfig.DEBUG) {
+                    try {
+                        Debug.error("Boundary not found in response:\n" + getStringFromInputStream(is));
+                    } catch (Exception e) {
+                        Debug.error(e);
                     }
-                    setError(ErrorCodes.WRONG_RESPONSE, "Boundary not found");
-                    return null;
                 }
-                MultipartStream multipartStream = new MultipartStream(is, boundary.getBytes());
-                boolean nextPart = multipartStream.skipPreamble();
-                while (nextPart) {
-                    //NOTE: здесь можно проверять еще и заголовки, но пока и так сойдет
-                    //Читаем данные ответа
-                    ByteArrayOutputStream data = new ByteArrayOutputStream();
-                    multipartStream.readHeaders();
-                    multipartStream.readBodyData(data);
-
-                    //Добавляем в массив объектов, попутно
-                    parts.add(new String(data.toByteArray()));
-
-                    nextPart = multipartStream.readBoundary();
-                }
-                inputStream.close();
-                is.close();
+                setError(ErrorCodes.WRONG_RESPONSE, "Boundary not found");
+                return null;
             }
+            MultipartStream multipartStream = new MultipartStream(is, boundary.getBytes());
+            boolean nextPart = multipartStream.skipPreamble();
+            while (nextPart) {
+                //NOTE: здесь можно проверять еще и заголовки, но пока и так сойдет
+                //Читаем данные ответа
+                ByteArrayOutputStream data = new ByteArrayOutputStream();
+                multipartStream.readHeaders();
+                multipartStream.readBodyData(data);
+
+                //Добавляем в массив объектов, попутно
+                parts.add(new String(data.toByteArray()));
+
+                nextPart = multipartStream.readBoundary();
+            }
+            inputStream.close();
+            is.close();
         }
 
         return parts;
@@ -179,7 +183,7 @@ public class MultipartApiResponse implements IApiResponse {
 
     @Override
     public JSONObject getJsonResult() {
-        return null;
+        return jsonBan;
     }
 
     /**

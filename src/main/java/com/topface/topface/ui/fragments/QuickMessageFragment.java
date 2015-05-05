@@ -11,9 +11,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.History;
 import com.topface.topface.requests.ApiResponse;
@@ -86,6 +84,11 @@ public class QuickMessageFragment extends AbstractDialogFragment implements View
         mEditBox = (EditText) root.findViewById(R.id.edChatBox);
         mLoader = root.findViewById(R.id.quickMessageLoader);
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+    }
+
+    @Override
+    protected boolean isModalDialog() {
+        return true;
     }
 
     @Override

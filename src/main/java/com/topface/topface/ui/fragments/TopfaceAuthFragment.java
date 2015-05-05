@@ -79,6 +79,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         super.onResume();
         removeRedAlert();
         mPassword.setText("");
+        mPassword.clearFocus();
     }
 
     @Override
@@ -181,7 +182,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     @Override
     protected void processAuthError(int codeError, ApiRequest request) {
         super.processAuthError(codeError, request);
-
+//        mPassword.setTransformationMethod(new PasswordTransformationMethod());
         switch (codeError) {
             case ErrorCodes.INCORRECT_LOGIN:
             case ErrorCodes.UNKNOWN_SOCIAL_USER:
@@ -296,7 +297,9 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
 
     private void removeRedAlert() {
         if (mWrongPasswordAlertView != null && mWrongPasswordAlertView.getVisibility() == View.VISIBLE) {
-            mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
+            if (isAdded()) {
+                mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
+            }
             mWrongPasswordAlertView.setVisibility(View.GONE);
             mWrongDataTextView.setVisibility(View.GONE);
         }

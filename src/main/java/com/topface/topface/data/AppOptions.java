@@ -85,6 +85,10 @@ public class AppOptions extends AbstractData {
         return conditions;
     }
 
+    public int getUserStringSettingMaxLength() {
+        return conditions.userStringSettingMaxLength;
+    }
+
     public MinPhotoSize getMinPhotoSize() {
         if (minPhotoSize != null) {
             return minPhotoSize;
@@ -109,12 +113,20 @@ public class AppOptions extends AbstractData {
         return conditions.userHeightMax;
     }
 
-    public int getUserStatusMaxLength() {
-        return conditions.userStatusMaxLength;
-    }
-
     public int getUserAboutMeMaxLength() {
         return conditions.userAboutMeMaxLength;
+    }
+
+    public int getUserAgeMin() {
+        return conditions.userAgeMin;
+    }
+
+    public int getUserAgeMax() {
+        return conditions.userAgeMax;
+    }
+
+    public int getUserStatusMaxLength() {
+        return  conditions.userStatusMaxLength;
     }
 
     public boolean isScruffyEnabled() {
@@ -143,23 +155,31 @@ public class AppOptions extends AbstractData {
     }
 
     private class Conditions {
+        int userStringSettingMaxLength = 1024;
         int userAboutMeMaxLength = 1024;
         int userStatusMaxLength = 1024;
         int userWeightMin = 1;
         int userWeightMax = 999;
         int userHeightMin = 1;
         int userHeightMax = 999;
+        int userAgeMin = 16;
+        int userAgeMax = 99;
 
         Conditions() {
         }
 
         Conditions(JSONObject json) {
+            userStringSettingMaxLength = json.optInt("userStringSettingMaxLength", 1024);
             userAboutMeMaxLength = json.optInt("userAboutMeMaxLength", 1024);
             userStatusMaxLength = json.optInt("userStatusMaxLength", 1024);
             userWeightMin = json.optInt("userWeightMin", 1);
             userWeightMax = json.optInt("userWeightMax", 999);
             userHeightMin = json.optInt("userHeightMin", 1);
             userHeightMax = json.optInt("userHeightMax", 999);
+            userAgeMin = json.optInt("userAgeMin", 16);
+            userAgeMax = json.optInt("userAgeMax", 99);
+            DatingFilter.MIN_AGE = userAgeMin;
+            DatingFilter.MAX_AGE = userAgeMax;
         }
     }
 

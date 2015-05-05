@@ -15,6 +15,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.appsflyer.AppsFlyerLib;
+import com.comscore.analytics.comScore;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.topface.billing.OpenIabHelperManager;
 import com.topface.framework.imageloader.DefaultImageLoader;
@@ -52,7 +53,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Editor;
-import com.topface.topface.utils.GMSUtils;
+import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.ad.NativeAdManager;
@@ -61,14 +62,10 @@ import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.Configurations;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.debug.DebugEmailSender;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.geo.GeoLocationManager;
 
 import org.acra.ACRA;
-import org.acra.ACRAConfiguration;
-import org.acra.ACRAConfigurationException;
-import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -186,8 +183,13 @@ public class App extends Application {
         return request;
     }
 
-    public static void sendUserOptionsRequest() {
-        getUserOptionsRequest().exec();
+    public static void sendUserOptionsAndPurchasesRequest() {
+        new ParallelApiRequest(App.getContext())
+                .addRequest(getProfileRequest(ProfileRequest.P_ALL))
+                .addRequest(getUserOptionsRequest())
+                .addRequest(getPaymentwallProductsRequest())
+                .addRequest(getProductsRequest())
+                .exec();
     }
 
     private static ApiRequest getUserOptionsRequest() {
@@ -392,6 +394,8 @@ public class App extends Application {
         mAppsFlyerConversionHolder = new AppsFlyerData.ConversionHolder();
         AppsFlyerLib.registerConversionListener(mContext, new AppsFlyerData.ConversionListener(mAppsFlyerConversionHolder));
 
+        initComScore();
+
         final Handler handler = new Handler();
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
         new BackgroundThread() {
@@ -468,27 +472,14 @@ public class App extends Application {
     }
 
     private void initAcra() {
-        if (!BuildConfig.DEBUG) {
-            ACRA.init(this);
-            ACRA.getErrorReporter().setReportSender(new HockeySender());
-        } else {
-            //Если дебажим приложение, то показываем диалог и отправляем на email вместо Hockeyapp
-            try {
-                //Что бы такая схема работала, сперва выставляем конфиг
-                ACRAConfiguration acraConfig = ACRA.getConfig();
-                acraConfig.setResDialogTitle(R.string.crash_dialog_title);
-                acraConfig.setResDialogText(R.string.crash_dialog_text);
-                acraConfig.setResDialogCommentPrompt(R.string.crash_dialog_comment_prompt);
-                acraConfig.setMode(ReportingInteractionMode.DIALOG);
-                ACRA.setConfig(acraConfig);
-                //Потом инитим
-                ACRA.init(this);
-                //И потом выставляем ReportSender
-                ACRA.getErrorReporter().setReportSender(new DebugEmailSender(this));
-            } catch (ACRAConfigurationException e) {
-                Debug.error("Acra init error", e);
-            }
-        }
+        ACRA.init(this);
+        ACRA.getErrorReporter().setReportSender(new HockeySender());
+    }
+
+    private void initComScore() {
+        comScore.setAppContext(mContext);
+        comScore.setCustomerC2(Static.COMSCORE_C2);
+        comScore.setPublisherSecret(Static.COMSCORE_SECRET_KEY);
     }
 
     private void checkKeepAlive() {
@@ -514,7 +505,7 @@ public class App extends Application {
 
     public static boolean isGmsEnabled() {
         if (mIsGmsSupported == null) {
-            mIsGmsSupported = GMSUtils.checkPlayServices(getContext());
+            mIsGmsSupported = new GoogleMarketApiManager().isMarketApiAvailable();
         }
         return mIsGmsSupported;
     }

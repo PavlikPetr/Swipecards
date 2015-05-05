@@ -66,10 +66,6 @@ public class Utils {
         return (int) (System.currentTimeMillis() / 1000L);
     }
 
-    public static String formatPhotoQuantity(int quantity) {
-        return Utils.getQuantityString(R.plurals.photo, quantity, (int) quantity);
-    }
-
     public static String getQuantityString(int id, int quantity, Object... formatArgs) {
         try {
             mPluralResources = new PluralResources(App.getContext().getResources());
@@ -243,7 +239,7 @@ public class Utils {
     public static void hideSoftKeyboard(Context context, IBinder windowToken) {
         if (context != null) {
             InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(windowToken, 0);
+            imm.hideSoftInputFromWindow(windowToken, InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
 

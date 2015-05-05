@@ -148,7 +148,7 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
         } else if (oldPassword.equals(password)) {
             Utils.showToastNotification(R.string.passwords_matched, Toast.LENGTH_LONG);
         } else {
-            ChangePasswordRequest request = new ChangePasswordRequest(getActivity(), oldPassword, password);
+            ChangePasswordRequest request = new ChangePasswordRequest(getActivity(), mToken.getPassword(), password);
             lock();
             request.callback(new ApiHandler() {
                 @Override

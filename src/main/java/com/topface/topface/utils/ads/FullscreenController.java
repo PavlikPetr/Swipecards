@@ -9,12 +9,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.Banner;
 import com.topface.topface.requests.ApiResponse;
@@ -27,32 +24,25 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.config.AppConfig;
-import com.topface.topface.utils.controllers.AbstractStartAction;
-import com.topface.topface.utils.controllers.IStartAction;
-
-import ru.ideast.adwired.AWView;
-import ru.ideast.adwired.events.OnNoBannerListener;
-import ru.ideast.adwired.events.OnStartListener;
-import ru.ideast.adwired.events.OnStopListener;
+import com.topface.topface.utils.controllers.startactions.IStartAction;
+import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_MEDIATION;
-import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADWIRED;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_NONE;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_TOPFACE;
-
 
 /**
  */
 public class FullscreenController {
-
     private static final String TAG = "FullscreenController";
+
     private static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-9530442067223936/9732921207";
     private static final String ADMOB_INTERSTITIAL_MEDIATION_ID = "ca-app-pub-9530442067223936/9498586400";
     private static boolean isFullScreenBannerVisible = false;
     private Activity mActivity;
 
-    private class FullscreenStartAction extends AbstractStartAction {
+    private class FullscreenStartAction implements IStartAction {
         private PageInfo startPageInfo;
         private int priority;
 
@@ -93,6 +83,11 @@ public class FullscreenController {
         @Override
         public String getActionName() {
             return "Fullscreen";
+        }
+
+        @Override
+        public void setStartActionCallback(OnNextActionListener startActionCallback) {
+
         }
     }
 
@@ -155,9 +150,6 @@ public class FullscreenController {
                 case BANNER_ADMOB_MEDIATION:
                     requestAdmobFullscreen(ADMOB_INTERSTITIAL_MEDIATION_ID);
                     break;
-                case BANNER_ADWIRED:
-                    requestAdwiredFullscreen();
-                    break;
                 case BANNER_TOPFACE:
                     requestTopfaceFullscreen();
                     break;
@@ -170,20 +162,7 @@ public class FullscreenController {
     }
 
     public void requestAdmobFullscreen(String id) {
-        // Создание межстраничного объявления.
-        final InterstitialAd interstitial = new InterstitialAd(mActivity);
-        interstitial.setAdUnitId(id);
-        // Создание запроса объявления.
-        AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
-        adRequestBuilder.setGender(
-                CacheProfile.getProfile().sex == Static.BOY ?
-                        AdRequest.GENDER_MALE :
-                        AdRequest.GENDER_FEMALE
-        );
-        // Запуск загрузки межстраничного объявления.
-        interstitial.loadAd(adRequestBuilder.build());
-        // AdListener будет использовать обратные вызовы, указанные ниже.
-        interstitial.setAdListener(new AdListener() {
+        AdmobInterstitialUtils.requestAdmobFullscreen(mActivity, id, new AdListener() {
             @Override
             public void onAdClosed() {
                 isFullScreenBannerVisible = false;
@@ -206,44 +185,9 @@ public class FullscreenController {
 
             @Override
             public void onAdLoaded() {
-                interstitial.show();
                 addLastFullscreenShowedTime();
             }
         });
-    }
-
-    private void requestAdwiredFullscreen() {
-        try {
-            if (!CacheProfile.isEmpty()) {
-                AWView adwiredView = (AWView) mActivity.getLayoutInflater().inflate(R.layout.banner_adwired, null);
-                final ViewGroup bannerContainer = getFullscreenBannerContainer();
-                bannerContainer.addView(adwiredView);
-                bannerContainer.setVisibility(View.VISIBLE);
-                adwiredView.setVisibility(View.VISIBLE);
-                adwiredView.setOnNoBannerListener(new OnNoBannerListener() {
-                    @Override
-                    public void onNoBanner() {
-                        requestFallbackFullscreen();
-                    }
-                });
-                adwiredView.setOnStopListener(new OnStopListener() {
-                    @Override
-                    public void onStop() {
-                        hideFullscreenBanner(bannerContainer);
-                    }
-                });
-                adwiredView.setOnStartListener(new OnStartListener() {
-                    @Override
-                    public void onStart() {
-                        isFullScreenBannerVisible = true;
-                        addLastFullscreenShowedTime();
-                    }
-                });
-                adwiredView.request('0');
-            }
-        } catch (Exception ex) {
-            Debug.error(ex);
-        }
     }
 
     private void requestTopfaceFullscreen() {

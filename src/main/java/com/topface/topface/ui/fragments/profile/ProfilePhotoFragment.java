@@ -14,11 +14,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.AlbumPhotos;
@@ -39,35 +37,28 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.util.ArrayList;
 
 public class ProfilePhotoFragment extends ProfileInnerFragment {
 
-    private static final String PHOTOS = "PHOTOS";
     private static final String POSITION = "POSITION";
     private static final String FLIPPER_VISIBLE_CHILD = "FLIPPER_VISIBLE_CHILD";
 
-    private OwnProfileGridAdapter mProfilePhotoGridAdapter;
+    private OwnPhotoGridAdapter mProfilePhotoGridAdapter;
 
     private ViewFlipper mViewFlipper;
     private GridViewWithHeaderAndFooter mGridAlbum;
     private View mLoadingLocker;
-    private TextView mTitle;
+    private View mGridFooterView;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (isAdded() && getView() != null && CacheProfile.photos != null && mProfilePhotoGridAdapter != null) {
-                mProfilePhotoGridAdapter.setData(
-                        CacheProfile.photos,
-                        CacheProfile.photos.size() < CacheProfile.totalPhotos
-                );
+                initData();
             }
-            initTitleText(mTitle);
         }
     };
+
     private BroadcastReceiver mPhotosReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -82,16 +73,15 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
             } else {
                 mProfilePhotoGridAdapter.addData(newPhotos, more);
             }
-            initTitleText(mTitle);
+            mProfilePhotoGridAdapter.notifyDataSetChanged();
         }
     };
-    private View mGridFooterView;
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if (position == 0) {
                 mViewFlipper.setDisplayedChild(1);
-            } else {
+            } else if (position <= CacheProfile.totalPhotos) {
                 startActivity(PhotoSwitcherActivity.getPhotoSwitcherIntent(
                         null,
                         position - 1,
@@ -103,24 +93,12 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         }
     };
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mProfilePhotoGridAdapter = new OwnProfileGridAdapter(getActivity().getApplicationContext(), getPhotoLinks(), CacheProfile.totalPhotos, new LoadingListAdapter.Updater() {
-            @Override
-            public void onUpdate() {
-                sendAlbumRequest();
-            }
-        });
-
-    }
-
     private View createGridViewFooter() {
         return ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.gridview_footer_progress_bar, null, false);
     }
 
     private void sendAlbumRequest() {
-        Photos photoLinks = mProfilePhotoGridAdapter.getAdaprerData();
+        Photos photoLinks = mProfilePhotoGridAdapter.getAdapterData();
         if (photoLinks == null || photoLinks.size() < 2) {
             return;
         }
@@ -163,7 +141,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
 
     private Photos getPhotoLinks() {
         Photos photoLinks = new Photos();
-        photoLinks.clear();
         if (CacheProfile.photos != null) {
             photoLinks.addAll(CacheProfile.photos);
         }
@@ -186,39 +163,42 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
 
         mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
 
+        mGridAlbum = (GridViewWithHeaderAndFooter) root.findViewById(R.id.usedGrid);
+        mProfilePhotoGridAdapter = new OwnPhotoGridAdapter(getActivity().getApplicationContext(), getPhotoLinks(),
+                CacheProfile.totalPhotos, new LoadingListAdapter.Updater() {
+            @Override
+            public void onUpdate() {
+                sendAlbumRequest();
+            }
+        });
+
+        initData();
         int position = 0;
         if (savedInstanceState != null) {
-            try {
-                mProfilePhotoGridAdapter.setData(new Photos(
-                        new JSONArray(savedInstanceState.getString(PHOTOS))), false);
-            } catch (JSONException e) {
-                Debug.error(e);
-            }
             position = savedInstanceState.getInt(POSITION, 0);
             mViewFlipper.setDisplayedChild(savedInstanceState.getInt(FLIPPER_VISIBLE_CHILD, 0));
         }
-
-        mGridAlbum = (GridViewWithHeaderAndFooter) root.findViewById(R.id.usedGrid);
         addFooterView();
-        mGridAlbum.setAdapter(mProfilePhotoGridAdapter);
         mGridAlbum.setSelection(position);
         mGridAlbum.setOnItemClickListener(mOnItemClickListener);
         mGridAlbum.setOnScrollListener(mProfilePhotoGridAdapter);
         mGridAlbum.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Photo item = (Photo) parent.getItemAtPosition(position);
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position11, long id) {
+                Photo item = (Photo) parent.getItemAtPosition(position11);
                 if (needDialog(item)) {
-                    startPhotoDialog(item, position - 1);
+                    startPhotoDialog(item, position11 - 1);
                     return true;
                 }
                 return false;
             }
         });
-
-        mTitle = (TextView) root.findViewById(R.id.usedTitle);
-
-        initTitleText(mTitle);
+        mGridAlbum.post(new Runnable() {
+            @Override
+            public void run() {
+                mGridAlbum.setAdapter(mProfilePhotoGridAdapter);
+            }
+        });
 
         root.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(new OnClickListener() {
             @Override
@@ -249,7 +229,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                 new IntentFilter(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT)
         );
 
-
         return root;
     }
 
@@ -265,11 +244,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        try {
-            outState.putString(PHOTOS, mProfilePhotoGridAdapter.getAdaprerData().toJson().toString());
-        } catch (JSONException e) {
-            Debug.error(e);
-        }
         outState.putInt(POSITION, mGridAlbum.getFirstVisiblePosition());
         outState.putInt(FLIPPER_VISIBLE_CHILD, mViewFlipper.getDisplayedChild());
     }
@@ -343,12 +317,12 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                                 }
                                 intent.putExtra(PhotoSwitcherActivity.INTENT_CLEAR, true);
                                 intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, newPhotos);
+                                intent.putExtra(PhotoSwitcherActivity.INTENT_MORE,
+                                        CacheProfile.photos.size() < CacheProfile.totalPhotos);
                                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
-                                Intent changeAvatarPosIntent = new Intent(HeaderMainFragment.UPDATE_AVATAR_POSITION);
-                                changeAvatarPosIntent.putExtra(HeaderMainFragment.DECREMENT_AVATAR_POSITION, true);
-                                changeAvatarPosIntent.putExtra(HeaderMainFragment.POSITION, position);
-                                LocalBroadcastManager.getInstance(App.getContext())
-                                        .sendBroadcast(changeAvatarPosIntent);
+                                if (position < CacheProfile.photo.position) {
+                                    CacheProfile.incrementPhotoPosition(-1);
+                                }
                             }
 
                             @Override
@@ -368,24 +342,10 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         return CacheProfile.photo != null && photo != null && !photo.isFake() && CacheProfile.photo.getId() != photo.getId();
     }
 
-    private void initTitleText(TextView title) {
-        if (title != null) {
-            title.setVisibility(View.VISIBLE);
-            int size = CacheProfile.totalPhotos;
-            if (size > 0) {
-                title.setText(Utils.formatPhotoQuantity(size));
-                return;
-            }
-            title.setText(R.string.upload_photos);
-        }
-    }
-
     @Override
     public void onResume() {
-        getPhotoLinks();
         mProfilePhotoGridAdapter.updateData();
         mProfilePhotoGridAdapter.notifyDataSetChanged();
-        initTitleText(mTitle);
         super.onResume();
     }
 
@@ -399,5 +359,14 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
         super.onDestroyView();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPhotosReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileUpdateReceiver);
+    }
+
+    private void initData() {
+        if (mProfilePhotoGridAdapter != null && CacheProfile.photos != null) {
+            mProfilePhotoGridAdapter.setData(
+                    CacheProfile.photos,
+                    CacheProfile.photos.size() < CacheProfile.totalPhotos
+            );
+        }
     }
 }

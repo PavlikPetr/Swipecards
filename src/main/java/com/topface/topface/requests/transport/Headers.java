@@ -15,9 +15,13 @@ public class Headers {
     @SerializedName("Scruffy-Id")
     public String scruffyId;
 
-    public Headers(String scruffyId, String contentType) {
+    @SerializedName("User-Agent")
+    public String userAgent;
+
+    public Headers(String scruffyId, String contentType, String userAgent) {
         this.scruffyId = scruffyId;
         this.contentType = contentType;
+        this.userAgent = userAgent;
     }
 
 }

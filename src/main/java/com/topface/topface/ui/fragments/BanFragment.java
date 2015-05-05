@@ -31,6 +31,7 @@ public class BanFragment extends BaseFragment implements View.OnClickListener {
         super.onCreateView(inflater, container, savedInstanceState);
         View root;
         root = initView(inflater);
+        getSupportActionBar().setShowHideAnimationEnabled(false);
         return root;
     }
 
@@ -64,7 +65,6 @@ public class BanFragment extends BaseFragment implements View.OnClickListener {
                 NavigationActivity.restartNavigationActivity(getActivity());
                 break;
             case R.id.btnFeedback:
-                getSupportActionBar().show();
                 ConnectionManager.getInstance().onBanActivityFinish();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(
