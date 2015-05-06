@@ -20,7 +20,7 @@ import java.util.List;
 public class SequencedStartAction implements IStartAction {
 
     private Activity mActivity;
-    private List<IStartAction> mActions = Collections.synchronizedList(new ArrayList<IStartAction>());
+    private List<IStartAction> mActions = Collections.synchronizedList(new ArrayList<>());
     private int mPriority = -1;
 
     public SequencedStartAction(Activity activity, int priority) {
@@ -41,7 +41,7 @@ public class SequencedStartAction implements IStartAction {
     @Override
     public boolean isApplicable() {
         boolean isApplicable = false;
-        //если в списке дейвствий есть хотя бы одно готовой к запуску, то true
+        //если в списке дейвствий есть хотя бы одно готовое к запуску, то true
         for (IStartAction startAction : mActions) {
             isApplicable = isApplicable || startAction.isApplicable();
         }
@@ -75,11 +75,13 @@ public class SequencedStartAction implements IStartAction {
      * Выпиливаем все действия, которые не могут быть запущены
      */
     protected void removeNonApplicableActions() {
-        Iterator<IStartAction> iterator = mActions.iterator();
-        while (iterator.hasNext()) {
-            IStartAction action = iterator.next();
-            if (!action.isApplicable()) {
-                iterator.remove();
+        synchronized (mActions) {
+            Iterator<IStartAction> iterator = mActions.iterator();
+            while (iterator.hasNext()) {
+                IStartAction action = iterator.next();
+                if (!action.isApplicable()) {
+                    iterator.remove();
+                }
             }
         }
     }
