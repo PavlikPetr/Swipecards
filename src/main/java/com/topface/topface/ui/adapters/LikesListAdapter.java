@@ -38,6 +38,9 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
         convertView = super.getContentView(position, convertView, viewGroup);
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
         final FeedLike like = getItem(position);
+        if (!like.unread) {
+            convertView.setSelected(true);
+        }
         if (holder != null) {
             holder.heart.setImageResource(like.mutualed ? R.drawable.im_item_dbl_mutual_heart :
                     (like.highrate ? R.drawable.im_item_mutual_heart_top : R.drawable.im_item_mutual_heart));
@@ -48,6 +51,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
 
                 @Override
                 public void onClick(View v) {
+                    like.unread = false;
                     if (mMutualListener != null) {
                         mMutualListener.onMutual(like);
                     }
