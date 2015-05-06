@@ -15,7 +15,6 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,14 +37,12 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -465,18 +462,13 @@ public class AddPhotoHelper {
         if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
             Photo photo = (Photo) msg.obj;
             // ставим фото на аватарку только если она едиснтвенная
-                if (CacheProfile.photos.size() == 0) {
-                    CacheProfile.photo = photo;
-                }
+            if (CacheProfile.photos.size() == 0) {
+                CacheProfile.photo = photo;
+            }
             // добавляется фото в начало списка
             CacheProfile.photos.addFirst(photo);
             // Увеличиваем общее количество фотографий юзера
             CacheProfile.totalPhotos += 1;
-            ArrayList<Photo> photosForAdd = new ArrayList<>();
-            photosForAdd.add(photo);
-            Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photosForAdd);
-            LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
             // оповещаем всех об изменениях
             CacheProfile.sendUpdateProfileBroadcast();
             Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();

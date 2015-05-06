@@ -141,4 +141,20 @@ public class Photos extends ArrayList<Photo> implements SerializableToJsonArray 
         }
         return result;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof Photos) {
+            if (this.size() != ((Photos) o).size()) {
+                return false;
+            }
+            for (int i = 0; i < this.size(); i++) {
+                if (!(this.get(i).equals(((Photos) o).get(i)))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 }
