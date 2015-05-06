@@ -28,7 +28,7 @@ public class AdmobInterstitialUtils {
 
     private static final int PRELOAD_COUNT = 2;
     private static final AtomicInteger mPreloadingInterstitialsCount = new AtomicInteger(0);
-    private static final List<InterstitialAd> loadedInterstitials = Collections.synchronizedList(new ArrayList<>(PRELOAD_COUNT));
+    private static final List<InterstitialAd> loadedInterstitials = Collections.synchronizedList(new ArrayList<InterstitialAd>(PRELOAD_COUNT));
 
     public static void preloadInterstitials(final Activity activity) {
         if (needPreload()) {
