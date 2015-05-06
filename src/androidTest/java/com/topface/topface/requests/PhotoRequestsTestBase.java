@@ -33,7 +33,7 @@ public class PhotoRequestsTestBase extends AbstractThreadTest {
 
     private void setTestApiUrl() {
         AppConfig config = App.getAppConfig();
-        config.setApiUrl("http://api-mkrasilnikov.stage.tf/", config.getApiRevision());
+        config.setApiUrl("http://api-mkrasilnikov.stage.tf/");
     }
 
     protected File createTestImage() throws IOException {
@@ -66,7 +66,7 @@ public class PhotoRequestsTestBase extends AbstractThreadTest {
 
     private void restoreApiUrl() {
         AppConfig config = App.getAppConfig();
-        config.setApiUrl("http://api-mkrasilnikov.stage.tf/", config.getApiRevision());
+        config.setApiUrl("http://api-mkrasilnikov.stage.tf/");
     }
 
     protected String getTestName() {

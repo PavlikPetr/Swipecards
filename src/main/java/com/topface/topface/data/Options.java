@@ -86,6 +86,11 @@ public class Options extends AbstractData {
     public boolean hidePreviewDialog;
 
     /**
+     * Флаг непоказа восхищений
+     */
+    public boolean isHideAdmiration = false;
+
+    /**
      * title и url для экрана "О программе"
      * по умолчанию отобразим "topface.com" с переходом на "http://topface.com", если сервер не пришлет другое значение
      */
@@ -153,7 +158,7 @@ public class Options extends AbstractData {
     public NotShown notShown = new NotShown();
     public FacebookInviteFriends facebookInviteFriends = new FacebookInviteFriends();
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
-    public InterstitialInFeeds interstitial= new InterstitialInFeeds();
+    public InterstitialInFeeds interstitial = new InterstitialInFeeds();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());

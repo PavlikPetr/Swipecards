@@ -31,8 +31,10 @@ public class PromoPopupManager {
             return true;
         } else if (showPromoPopup(AIR_VISITORS) && CacheProfile.getOptions().premiumVisitors != null) {
             return true;
-        } else if (showPromoPopup(AIR_ADMIRATIONS) && CacheProfile.getOptions().premiumAdmirations != null) {
-            return true;
+        } else if (!CacheProfile.getOptions().isHideAdmiration) {
+            if (showPromoPopup(AIR_ADMIRATIONS) && CacheProfile.getOptions().premiumAdmirations != null) {
+                return true;
+            }
         }
         return false;
     }

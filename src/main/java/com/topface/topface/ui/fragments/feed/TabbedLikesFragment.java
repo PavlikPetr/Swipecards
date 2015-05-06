@@ -11,7 +11,9 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
     protected void onBeforeCountersUpdate() {
         updatePageCounter(LikesFragment.class.getName(), CacheProfile.unread_likes);
         updatePageCounter(MutualFragment.class.getName(), CacheProfile.unread_mutual);
-        updatePageCounter(AdmirationFragment.class.getName(), CacheProfile.unread_admirations);
+        if (!CacheProfile.getOptions().isHideAdmiration) {
+            updatePageCounter(AdmirationFragment.class.getName(), CacheProfile.unread_admirations);
+        }
     }
 
     @Override
@@ -23,7 +25,9 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
     protected void addPages() {
         addBodyPage(LikesFragment.class.getName(), getString(R.string.general_likes), CacheProfile.unread_likes);
         addBodyPage(MutualFragment.class.getName(), getString(R.string.general_mutual), CacheProfile.unread_mutual);
-        addBodyPage(AdmirationFragment.class.getName(), getString(R.string.general_admirations), CacheProfile.unread_admirations);
+        if (!CacheProfile.getOptions().isHideAdmiration) {
+            addBodyPage(AdmirationFragment.class.getName(), getString(R.string.general_admirations), CacheProfile.unread_admirations);
+        }
     }
 
     @Override
