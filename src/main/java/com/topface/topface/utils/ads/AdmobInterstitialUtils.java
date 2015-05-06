@@ -151,7 +151,7 @@ public class AdmobInterstitialUtils {
     }
 
     public static boolean canShowInterstitialAds() {
-        return loadedInterstitials.isEmpty();
+        return !loadedInterstitials.isEmpty();
     }
 
     private static void notifyShow() {
