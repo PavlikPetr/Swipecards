@@ -192,11 +192,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
         root.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(this);
         root.findViewById(R.id.btnCancel).setOnClickListener(this);
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
-                mPhotosReceiver,
-                new IntentFilter(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT)
-        );
-
         return root;
     }
 
@@ -302,19 +297,23 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
 
     @Override
     public void onResume() {
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
+                mPhotosReceiver,
+                new IntentFilter(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT)
+        );
         mProfilePhotoGridAdapter.updateData();
         super.onResume();
     }
 
     @Override
     public void onPause() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPhotosReceiver);
         super.onPause();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPhotosReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileUpdateReceiver);
     }
 
