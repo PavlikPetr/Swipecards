@@ -95,6 +95,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
             @Override
             public void onMutual(FeedItem item) {
+                item.unread = false;
                 LikesFragment.this.onMutual(item);
             }
         });
