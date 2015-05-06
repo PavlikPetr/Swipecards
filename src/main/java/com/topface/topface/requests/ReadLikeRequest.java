@@ -12,17 +12,22 @@ public class ReadLikeRequest extends ApiRequest {
 
     private int mId;
     public final static String SERVICE_NAME = "like.read";
+    private boolean mInterstitialShown;
 
-    public ReadLikeRequest(Context context, int id) {
+    public ReadLikeRequest(Context context, int id, boolean interstitialShown) {
         super(context);
         mId = id;
+        mInterstitialShown = interstitialShown;
     }
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
         jsonArray.put(mId);
-        return new JSONObject().put("ids", jsonArray);
+        jsonObject.put("ids", jsonArray);
+        jsonObject.put("interstitialShown", mInterstitialShown);
+        return jsonObject;
     }
 
     @Override
