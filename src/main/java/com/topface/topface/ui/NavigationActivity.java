@@ -48,6 +48,7 @@ import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
+import com.topface.topface.utils.controllers.SequencedStartAction;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
 import com.topface.topface.utils.controllers.startactions.FacebookRequestWindowAction;
@@ -68,7 +69,7 @@ import static com.topface.topface.utils.controllers.StartActionsController.AC_PR
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
 
-public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener {
+public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener, SequencedStartAction.IUiRunner {
     public static final String INTENT_EXIT = "EXIT";
     public static final String PAGE_SWITCH = "Page switch: ";
 
@@ -81,6 +82,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     private boolean isPopupVisible = false;
     private boolean mActionBarOverlayed = false;
     private int mInitialTopMargin = 0;
+    @SuppressWarnings("deprecation")
     private ActionBarDrawerToggle mDrawerToggle;
     private IActionbarNotifier mNotificationController;
     private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
@@ -188,6 +190,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         CacheProfile.needShowBonusCounter = lastTime < CacheProfile.getOptions().bonus.timestamp;
     }
 
+    @SuppressWarnings("deprecation")
     private void initDrawerLayout() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         mMenuFragment = (MenuFragment) fragmentManager.findFragmentById(R.id.fragment_menu);
