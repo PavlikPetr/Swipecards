@@ -17,13 +17,13 @@ import java.util.List;
  */
 public class SequencedStartAction implements IStartAction {
 
-    private IActivityEmulator mActivityEmulator;
+    private IUiRunner mUiRunner;
     private List<IStartAction> mActions = Collections.synchronizedList(new ArrayList<IStartAction>());
     private int mPriority = -1;
 
-    public SequencedStartAction(IActivityEmulator activityEmulator, int priority) {
+    public SequencedStartAction(IUiRunner uiRunner, int priority) {
         mPriority = priority;
-        mActivityEmulator = activityEmulator;
+        mUiRunner = uiRunner;
     }
 
     @Override
@@ -108,14 +108,14 @@ public class SequencedStartAction implements IStartAction {
             @Override
             public void execute() {
                 action.callInBackground();
-                mActivityEmulator.runOnUiThread(new Runnable() {
+                mUiRunner.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         boolean running = true;
-                        if (mActivityEmulator instanceof BaseFragmentActivity) {
-                            running = ((BaseFragmentActivity) mActivityEmulator).isRunning();
+                        if (mUiRunner instanceof BaseFragmentActivity) {
+                            running = ((BaseFragmentActivity) mUiRunner).isRunning();
                         }
-                        if (running && !mActivityEmulator.isFinishing()) {
+                        if (running && !mUiRunner.isFinishing()) {
                             action.callOnUi();
                         }
                     }
@@ -137,9 +137,8 @@ public class SequencedStartAction implements IStartAction {
         return stringBuilder.toString();
     }
 
-    public interface IActivityEmulator {
+    public interface IUiRunner {
         void runOnUiThread(Runnable runnable);
-
         boolean isFinishing();
     }
 }

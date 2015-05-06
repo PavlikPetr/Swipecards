@@ -6,8 +6,8 @@ import com.topface.topface.utils.social.AuthToken;
 public class FacebookSequencedStartAction extends SequencedStartAction {
 
 
-    public FacebookSequencedStartAction(IActivityEmulator mActivityEmulator, int priority) {
-        super(mActivityEmulator, priority);
+    public FacebookSequencedStartAction(IUiRunner uiRunner, int priority) {
+        super(uiRunner, priority);
     }
 
     @Override

@@ -1,20 +1,21 @@
 package com.topface.topface.multithread;
 
-import android.test.InstrumentationTestCase;
-
 import com.topface.framework.utils.BackgroundThread;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.utils.controllers.SequencedStartAction;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
+
+import junit.framework.TestCase;
 
 /**
  * Тест для проверки метода removeNonApplicableActions в SequencedStartAction на предмет
  * java.util.ConcurrentModificationException
  * Created by onikitin on 06.05.15.
  */
-public class SequencedStartActionConcurrentTest extends InstrumentationTestCase {
+public class SequencedStartActionConcurrentTest extends TestCase {
 
-    private SequencedStartAction mStartActionsController = new SequencedStartAction(new SequencedStartAction.IActivityEmulator() {
+    private SequencedStartAction mSequencedStartAction = new SequencedStartAction(new SequencedStartAction.IUiRunner() {
         @Override
         public void runOnUiThread(Runnable runnable) {
 
@@ -27,21 +28,23 @@ public class SequencedStartActionConcurrentTest extends InstrumentationTestCase 
     }, 1);
 
     private final static int ACTION_COUNT = 5000;
-    private final static int THREAD_COUNT = 5;
+    private final static int THREAD_COUNT = 2;
 
 
     public void testStartSequencedStartActionConcurrentTest() {
         for (int i = 0; i <= ACTION_COUNT; i++) {
-            mStartActionsController.addAction(getNewAction());
+            mSequencedStartAction.addAction(getNewAction());
         }
         for (int i = 0; i <= THREAD_COUNT; i++) {
             startThread();
         }
         try {
-            Thread.sleep(10000);
+            Debug.debug(this, "Sleep start");
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        Debug.debug(this, "Test " + this.getName() + " complete");
     }
 
     private IStartAction getNewAction() {
@@ -82,7 +85,7 @@ public class SequencedStartActionConcurrentTest extends InstrumentationTestCase 
         new BackgroundThread() {
             @Override
             public void execute() {
-                mStartActionsController.callInBackground();
+                mSequencedStartAction.callInBackground();
             }
         };
     }
