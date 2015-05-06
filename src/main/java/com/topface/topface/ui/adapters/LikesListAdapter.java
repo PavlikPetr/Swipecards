@@ -51,7 +51,6 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
 
                 @Override
                 public void onClick(View v) {
-                    like.unread = false;
                     if (mMutualListener != null) {
                         mMutualListener.onMutual(like);
                     }
