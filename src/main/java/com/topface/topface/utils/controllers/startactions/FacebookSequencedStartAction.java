@@ -1,15 +1,13 @@
 package com.topface.topface.utils.controllers.startactions;
 
-import android.app.Activity;
-
 import com.topface.topface.utils.controllers.SequencedStartAction;
 import com.topface.topface.utils.social.AuthToken;
 
 public class FacebookSequencedStartAction extends SequencedStartAction {
 
 
-    public FacebookSequencedStartAction(Activity activity, int priority) {
-        super(activity, priority);
+    public FacebookSequencedStartAction(IActivityEmulator mActivityEmulator, int priority) {
+        super(mActivityEmulator, priority);
     }
 
     @Override
