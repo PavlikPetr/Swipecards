@@ -1,7 +1,5 @@
 package com.topface.topface.utils.controllers;
 
-import android.app.Activity;
-
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -19,13 +17,13 @@ import java.util.List;
  */
 public class SequencedStartAction implements IStartAction {
 
-    private Activity mActivity;
-    private List<IStartAction> mActions = Collections.synchronizedList(new ArrayList<>());
+    private IActivityEmulator mActivityEmulator;
+    private List<IStartAction> mActions = Collections.synchronizedList(new ArrayList<IStartAction>());
     private int mPriority = -1;
 
-    public SequencedStartAction(Activity activity, int priority) {
+    public SequencedStartAction(IActivityEmulator activityEmulator, int priority) {
         mPriority = priority;
-        mActivity = activity;
+        mActivityEmulator = activityEmulator;
     }
 
     @Override
@@ -100,7 +98,9 @@ public class SequencedStartAction implements IStartAction {
             });
         }
         //запускаем очередь
-        runAction(mActions.get(0));
+        if (!mActions.isEmpty()) {
+            runAction(mActions.get(0));
+        }
     }
 
     private void runAction(final IStartAction action) {
@@ -108,14 +108,14 @@ public class SequencedStartAction implements IStartAction {
             @Override
             public void execute() {
                 action.callInBackground();
-                mActivity.runOnUiThread(new Runnable() {
+                mActivityEmulator.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         boolean running = true;
-                        if (mActivity instanceof BaseFragmentActivity) {
-                            running = ((BaseFragmentActivity) mActivity).isRunning();
+                        if (mActivityEmulator instanceof BaseFragmentActivity) {
+                            running = ((BaseFragmentActivity) mActivityEmulator).isRunning();
                         }
-                        if (running && !mActivity.isFinishing()) {
+                        if (running && !mActivityEmulator.isFinishing()) {
                             action.callOnUi();
                         }
                     }
@@ -137,4 +137,9 @@ public class SequencedStartAction implements IStartAction {
         return stringBuilder.toString();
     }
 
+    public interface IActivityEmulator {
+        void runOnUiThread(Runnable runnable);
+
+        boolean isFinishing();
+    }
 }
