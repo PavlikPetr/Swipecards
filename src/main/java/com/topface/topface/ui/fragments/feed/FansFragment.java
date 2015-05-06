@@ -32,14 +32,14 @@ public class FansFragment extends BookmarksFragment {
     @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
         Button btnBuyVip = (Button) inflated.findViewById(R.id.btnBuyVip);
-        TextView textView = ((TextView) inflated.findViewById(R.id.tvText));
         if (CacheProfile.premium) {
-            textView.setText(App.getContext().getString(R.string.buy_more_sympathies));
+            ((TextView) inflated.findViewById(R.id.tvText)).
+                    setText(App.getContext().getString(R.string.buy_more_sympathies));
             btnBuyVip.setText(App.getContext().getString(R.string.buy_sympathies));
             btnBuyVip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivityForResult(getPurchasesActivityIntent(), PurchasesActivity.INTENT_BUY_VIP);
+                    startActivity(PurchasesActivity.createBuyingIntent(FANS));
                 }
             });
         } else {
@@ -51,12 +51,6 @@ public class FansFragment extends BookmarksFragment {
                 }
             });
         }
-
-    }
-
-    private Intent getPurchasesActivityIntent() {
-        return CacheProfile.premium ? PurchasesActivity.createBuyingIntent(FANS)
-                : PurchasesActivity.createVipBuyIntent(null, FANS);
     }
 
     @Override
