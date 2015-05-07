@@ -12,6 +12,7 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.topface.topface.App;
+import com.topface.topface.Static;
 import com.topface.topface.utils.config.SessionConfig;
 
 import java.util.Arrays;
@@ -131,6 +132,10 @@ public class FbAuthorizer extends Authorizer {
     @Override
     public void authorize() {
         Session session = Session.getActiveSession();
+        if (App.getAppConfig().getStageChecked()) {
+            session = new Session.Builder(App.getContext()).setApplicationId(Static.STAGE_AUTH_FACEBOOK_ID).build();
+            Session.setActiveSession(session);
+        }
         if (session != null && !session.isOpened() && !session.isClosed()) {
             session.openForRead(new Session.OpenRequest(getActivity())
                     .setPermissions(Arrays.asList(FB_PERMISSIONS)).setCallback(getStatusCallback()));
