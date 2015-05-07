@@ -58,5 +58,7 @@
 -keep class org.acra.** { *; }
 
 # Topface
--keep com.topface.topface.data.** { *; }
+-keep class com.topface.topface.data.** { *; }
 -dontwarn com.topface.topface.data.**
+-keep class com.topface.topface.ui.fragments.feed.** { *; }
+-dontwarn com.topface.topface.ui.fragments.feed.**
