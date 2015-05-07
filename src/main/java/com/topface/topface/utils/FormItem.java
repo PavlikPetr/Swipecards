@@ -2,7 +2,9 @@ package com.topface.topface.utils;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
+import com.topface.topface.App;
 import com.topface.topface.Static;
 
 public class FormItem implements Parcelable {
@@ -11,23 +13,30 @@ public class FormItem implements Parcelable {
     public String title;
     public String value;
     public FormItem header;
-    public boolean equal;
 
     public int titleId = NO_RESOURCE_ID;
     public int dataId = NO_RESOURCE_ID;
+
+    /**
+     * Is form item value updating right now.
+     */
+    public transient boolean isEditing;
 
     // Constants
     public static final int HEADER = 1;
     public static final int DATA = 3;
     public static final int STATUS = 4;
-    public static final int DIVIDER = 5;
+    public static final int NAME = 6;
+    public static final int SEX = 7;
+    public static final int AGE = 8;
+    public static final int CITY = 9;
 
     public static final int NO_RESOURCE_ID = -1;
-    public static final int NOT_SPECIFIED_ID = 0;
 
-    private static FormItem divider = null;
-
-    private LimitInterface mLimitInterface;
+    private TextLimitInterface mTextLimitInterface;
+    private ValueLimitInterface mValueLimitInterface;
+    private boolean mOnlyForWomen = false;
+    private boolean mIsCanBeEmpty = true;
 
     //private static final long serialVersionUID = 1883262786634798671L;    
 
@@ -36,14 +45,12 @@ public class FormItem implements Parcelable {
         this.type = type;
         this.value = Static.EMPTY;
         this.dataId = NO_RESOURCE_ID;
-        this.equal = false;
     }
 
     public FormItem(int titleId, int dataId, int type) {
         this.titleId = titleId;
         this.dataId = dataId;
         this.type = type;
-        this.equal = false;
         this.value = Static.EMPTY;
     }
 
@@ -51,7 +58,6 @@ public class FormItem implements Parcelable {
         this.titleId = titleId;
         this.dataId = dataId;
         this.type = type;
-        this.equal = false;
         this.header = header;
         this.value = Static.EMPTY;
     }
@@ -61,7 +67,6 @@ public class FormItem implements Parcelable {
         this.value = data == null ? Static.EMPTY : data;
         this.dataId = NO_RESOURCE_ID;
         this.type = type;
-        this.equal = false;
     }
 
     public FormItem(int titleId, String data, int type, FormItem header) {
@@ -69,27 +74,46 @@ public class FormItem implements Parcelable {
         this.value = data == null ? Static.EMPTY : data;
         this.dataId = NO_RESOURCE_ID;
         this.type = type;
-        this.equal = false;
         this.header = header;
     }
 
+    @SuppressWarnings("unused")
     private FormItem(int type) {
         this.type = type;
         this.value = Static.EMPTY;
         this.dataId = NO_RESOURCE_ID;
         this.title = Static.EMPTY;
         this.titleId = NO_RESOURCE_ID;
-        this.equal = false;
+    }
+
+    public FormItem(FormItem formItem) {
+        dataId = formItem.dataId;
+        title = formItem.title;
+        type = formItem.type;
+        value = formItem.value;
+        header = formItem.header;
+        titleId = formItem.titleId;
+        mTextLimitInterface = formItem.mTextLimitInterface;
+        mValueLimitInterface = formItem.mValueLimitInterface;
+        mOnlyForWomen = formItem.mOnlyForWomen;
+        mIsCanBeEmpty = formItem.mIsCanBeEmpty;
     }
 
     public FormItem() {
     }
 
-    public static FormItem getDivider() {
-        if (divider == null) {
-            FormItem.divider = new FormItem(DIVIDER);
-        }
-        return divider;
+    public void copy(FormItem formItem) {
+        dataId = formItem.dataId;
+        title = formItem.title;
+        type = formItem.type;
+        value = formItem.value;
+        header = formItem.header;
+        titleId = formItem.titleId;
+        mTextLimitInterface = formItem.mTextLimitInterface;
+        mValueLimitInterface = formItem.mValueLimitInterface;
+        isEditing = formItem.isEditing;
+        mOnlyForWomen = formItem.mOnlyForWomen;
+        mIsCanBeEmpty = formItem.mIsCanBeEmpty;
     }
 
     @Override
@@ -102,10 +126,11 @@ public class FormItem implements Parcelable {
         dest.writeInt(type);
         dest.writeString(title);
         dest.writeString(value);
-        dest.writeInt(equal ? 1 : 0);
         dest.writeInt(titleId);
         dest.writeInt(dataId);
         dest.writeParcelable(header, flags);
+        dest.writeByte((byte) (mOnlyForWomen ? 1 : 0));
+        dest.writeByte((byte) (mIsCanBeEmpty ? 1 : 0));
     }
 
     @Override
@@ -116,9 +141,9 @@ public class FormItem implements Parcelable {
                     (formItem.title == null ? title == null : formItem.title.equals(title)) &&
                     (formItem.value == null ? value == null : formItem.value.equals(value)) &&
                     (formItem.header == null ? header == null : formItem.header.equals(header)) &&
-                    formItem.equal == equal &&
                     formItem.titleId == titleId &&
-                    formItem.dataId == dataId;
+                    formItem.dataId == dataId &&
+                    formItem.mOnlyForWomen == mOnlyForWomen;
         } else {
             return false;
         }
@@ -131,9 +156,10 @@ public class FormItem implements Parcelable {
         hash = hash * 31 + (title == null ? 0 : title.hashCode());
         hash = hash * 31 + (value == null ? 0 : value.hashCode());
         hash = hash * 31 + (header == null ? 0 : header.hashCode());
-        hash = hash * 31 + (equal ? 1 : 0);
         hash = hash * 31 + titleId;
         hash = hash * 31 + dataId;
+        hash = hash * 31 + (mOnlyForWomen ? 1 : 0);
+        hash = hash * 31 + (mIsCanBeEmpty ? 1 : 0);
         return hash;
     }
 
@@ -145,10 +171,11 @@ public class FormItem implements Parcelable {
                     result.type = in.readInt();
                     result.title = in.readString();
                     result.value = in.readString();
-                    result.equal = in.readInt() == 1;
                     result.titleId = in.readInt();
                     result.dataId = in.readInt();
                     result.header = in.readParcelable(FormItem.class.getClassLoader());
+                    result.mOnlyForWomen = in.readByte() != 0;
+                    result.mIsCanBeEmpty = in.readByte() != 0;
                     return result;
                 }
 
@@ -157,15 +184,90 @@ public class FormItem implements Parcelable {
                 }
             };
 
-    public interface LimitInterface {
-        public int getLimit();
+    public interface TextLimitInterface {
+        int getLimit();
+
+        boolean isVisible();
     }
 
-    public void setLimitInterface(LimitInterface LimitInterface) {
-        mLimitInterface = LimitInterface;
+    public interface ValueLimitInterface {
+        int getMinValue();
+
+        int getMaxValue();
     }
 
-    public LimitInterface getLimitInterface() {
-        return mLimitInterface;
+    public void setTextLimitInterface(TextLimitInterface TextLimitInterface) {
+        mTextLimitInterface = TextLimitInterface;
+    }
+
+    public TextLimitInterface getTextLimitInterface() {
+        return mTextLimitInterface;
+    }
+
+    public void setValueLimitInterface(ValueLimitInterface valueLimitInterface) {
+        mValueLimitInterface = valueLimitInterface;
+    }
+
+    public ValueLimitInterface getValueLimitInterface() {
+        return mValueLimitInterface;
+    }
+
+    public String getTitle() {
+        if (TextUtils.isEmpty(title)) {
+            return App.getContext().getString(titleId);
+        } else {
+            return title;
+        }
+    }
+
+    public boolean isValueValid() {
+        if (mTextLimitInterface != null && value.length() > mTextLimitInterface.getLimit() ||
+                !mIsCanBeEmpty && TextUtils.isEmpty(value)) {
+            return false;
+        } else if (mValueLimitInterface != null) {
+            if (TextUtils.isEmpty(value)) {
+                return false;
+            }
+            if (TextUtils.isDigitsOnly(value)) {
+                int val = Integer.parseInt(value);
+                return val >= mValueLimitInterface.getMinValue() && val <= mValueLimitInterface.getMaxValue();
+            }
+        }
+        return true;
+    }
+
+    public void setOnlyForWomen(boolean onlyForWomen) {
+        mOnlyForWomen = onlyForWomen;
+    }
+
+    public boolean isOnlyForWomen() {
+        return mOnlyForWomen;
+    }
+
+    public void setCanBeEmpty(boolean canBeEmpty) {
+        mIsCanBeEmpty = canBeEmpty;
+    }
+
+    public static class DefaultTextLimiter implements TextLimitInterface {
+
+        private final int mLimit;
+
+        public DefaultTextLimiter(){
+            mLimit = App.getAppOptions().getUserStringSettingMaxLength();
+        }
+
+        public DefaultTextLimiter(int limit) {
+            mLimit = limit;
+        }
+
+        @Override
+        public int getLimit() {
+            return mLimit;
+        }
+
+        @Override
+        public boolean isVisible() {
+            return true;
+        }
     }
 }

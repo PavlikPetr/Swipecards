@@ -5,15 +5,12 @@ import android.content.res.Resources;
 import android.text.InputType;
 
 import com.topface.framework.utils.Debug;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.QuestionaryRequest;
 import com.topface.topface.requests.SettingsRequest;
-
-import java.util.List;
 
 /* понять и простить за эту хуйню */
 public class FormInfo {
@@ -29,34 +26,6 @@ public class FormInfo {
         mSex = sex;
         mProfileType = profileType;
         mContext = context;
-    }
-
-    // =============================== Common methods ===============================
-    public void fillFormItem(List<FormItem> items) {
-        FormItem breastItem = null;
-        FormItem physiqueHeaderItem = null;
-        int physiqueIndex = -1;
-        for (int i = 0; i < items.size(); i++) {
-            FormItem item = items.get(i);
-            if (item.titleId == R.array.form_physique_breast) {
-                breastItem = item;
-            } else {
-                if (item.titleId == R.string.form_physique) {
-                    physiqueHeaderItem = item;
-                    physiqueIndex = i;
-                }
-                fillFormItem(item);
-            }
-        }
-
-        if (mSex == Static.BOY) {
-            if (breastItem != null) items.remove(breastItem);
-        } else if (mSex == Static.GIRL) {
-            breastItem = new FormItem(R.array.form_physique_breast, 0,
-                    FormItem.DATA, physiqueHeaderItem);
-            fillFormItem(breastItem);
-            items.add(physiqueIndex + 1, breastItem);
-        }
     }
 
     public void fillFormItem(FormItem formItem) {
@@ -142,10 +111,16 @@ public class FormInfo {
         }
     }
 
-    public String[] getEntriesByTitleId(int titleId, String[] defaultEntries) {
-        String[] entries = getEntriesByTitleId(titleId);
-        if (entries == null) return defaultEntries;
-        else return entries;
+    public static int getInputType(FormItem formItem) {
+        int titleId = formItem.titleId;
+        switch (titleId) {
+            case R.string.edit_age:
+            case R.array.form_main_height:
+            case R.array.form_main_weight:
+                return InputType.TYPE_CLASS_NUMBER;
+            default:
+                return InputType.TYPE_TEXT_FLAG_CAP_SENTENCES;
+        }
     }
 
     public int[] getIdsByTitleId(int titleId) {
@@ -183,7 +158,7 @@ public class FormInfo {
         }
     }
 
-    public ApiRequest getFormRequest(int titleId, int selectedValueId, String selectedValue) {
+    private ApiRequest getFormRequest(FormItem item, int titleId, int selectedValueId, String selectedValue) {
         if (titleId == R.array.form_main_status) {
             SettingsRequest request = new SettingsRequest(mContext);
             request.xstatus = selectedValueId;
@@ -241,6 +216,7 @@ public class FormInfo {
                 } catch (Exception e) {
                     result.height = 0;
                 }
+                item.value = result.height == 0 ? Static.EMPTY : String.valueOf(result.height);
                 break;
             case R.array.form_main_weight:
                 try {
@@ -248,6 +224,7 @@ public class FormInfo {
                 } catch (Exception e) {
                     result.weight = 0;
                 }
+                item.value = result.weight == 0 ? Static.EMPTY : String.valueOf(result.weight);
                 break;
             case R.array.form_habits_restaurants:
                 result.restaurants = selectedValue;
@@ -264,80 +241,7 @@ public class FormInfo {
     }
 
     public ApiRequest getFormRequest(FormItem item) {
-        return getFormRequest(item.titleId, item.dataId, item.value);
-    }
-
-    public int getInputType(int titleId) {
-        int result;
-        switch (titleId) {
-            case R.array.form_main_height:
-                result = InputType.TYPE_CLASS_NUMBER;
-                break;
-            case R.array.form_main_weight:
-                result = InputType.TYPE_CLASS_NUMBER;
-                break;
-            default:
-                result = InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE;
-                break;
-        }
-
-        return result;
-    }
-
-    public String getHintText(Context context, int titleId) {
-        switch (titleId) {
-            case R.array.form_main_height:
-                return context.getResources().getString(R.string.measurement_unit_height);
-            case R.array.form_main_weight:
-                return context.getResources().getString(R.string.measurement_unit_weight);
-            default:
-                return "";
-        }
-    }
-
-    public boolean isCounterVisible(int titleId) {
-        switch (titleId) {
-            case R.array.form_main_about_status:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    public int getMaxCharacters(int titleId) {
-        int result;
-        switch (titleId) {
-            case R.array.form_main_height:
-                result = 3;
-                break;
-            case R.array.form_main_weight:
-                result = 3;
-                break;
-            default:
-                result = App.getAppOptions().getUserAboutMeMaxLength();
-                break;
-        }
-        return result;
-    }
-
-    public int getMinValue(int titleId) {
-        switch (titleId) {
-            case R.array.form_main_height:
-                return App.getAppOptions().getUserHeightMin();
-            case R.array.form_main_weight:
-                return App.getAppOptions().getUserWeightMin();
-        }
-        return Integer.MIN_VALUE;
-    }
-
-    public int getMaxValue(int titleId) {
-        switch (titleId) {
-            case R.array.form_main_height:
-                return App.getAppOptions().getUserHeightMax();
-            case R.array.form_main_weight:
-                return App.getAppOptions().getUserWeightMax();
-        }
-        return Integer.MAX_VALUE;
+        return getFormRequest(item, item.titleId, item.dataId, item.value);
     }
 
     // =============================== Form Titles ===============================

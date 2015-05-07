@@ -16,6 +16,7 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedPhotoBlog;
 import com.topface.topface.data.FeedPhotoBlogListData;
+import com.topface.topface.data.FeedUser;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -29,6 +30,7 @@ import com.topface.topface.ui.adapters.PhotoBlogListAdapter;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.Utils;
 
 import org.json.JSONObject;
 
@@ -90,7 +92,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
                             @Override
                             public void onRateCompleted(int mutualId) {
                                 if (getActivity() != null) {
-                                    Toast.makeText(getActivity(), R.string.sympathy_sended, Toast.LENGTH_SHORT).show();
+                                    Utils.showToastNotification(R.string.sympathy_sended, Toast.LENGTH_SHORT);
                                 }
                             }
 
@@ -101,7 +103,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
                                     mAdapter.removeSympathySentId(item.user.id);
                                 }
                                 if (getActivity() != null) {
-                                    Toast.makeText(getActivity(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                                    Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                                 }
                             }
                         }
@@ -131,7 +133,8 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     protected void onFeedItemClick(FeedItem item) {
         if (isNotYourOwnId(item.user.id)) {
             if (!item.user.isEmpty()) {
-                Intent intent = ChatActivity.createIntent(getActivity(), item.user, item.id);
+                FeedUser user = item.user;
+                Intent intent = ChatActivity.createIntent(user.id,user.getNameAndAge(),user.city.name,null,false);
                 getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT);
             }
         } else {
@@ -154,7 +157,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     }
 
     @Override
-    protected int getTypeForCounters() {
+    protected int getFeedType() {
         return -1;
     }
 

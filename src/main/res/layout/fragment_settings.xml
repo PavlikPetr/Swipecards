@@ -9,114 +9,41 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
+        <include
+            android:id="@+id/loAccount"
+            layout="@layout/item_edit_form_select" />
+
+        <include
+            android:id="@+id/loNoNotifications"
+            layout="@layout/item_settings_no_notifications" />
+
         <TextView
-            android:id="@+id/btnProfileEdit"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@drawable/edit_big_btn_selector"
-            android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="@string/settings_edit_profile"
-            android:textSize="14sp" />
+            android:id="@+id/loNotifications"
+            style="@style/WhiteListItem.Underline"
+            android:text="@string/notifications" />
 
-        <include
-            android:id="@+id/loNotificationsHeader"
-            layout="@layout/item_edit_profile_form_header"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp" />
+        <TextView
+            android:id="@+id/loHelp"
+            style="@style/WhiteListItem.Underline"
+            android:text="@string/settings_help" />
 
-        <include
-            android:id="@+id/tvNoNotification"
-            layout="@layout/services_manager_layout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp" />
+        <TextView
+            android:id="@+id/loFeedback"
+            style="@style/WhiteListItem.Underline"
+            android:text="@string/settings_feedback" />
 
-        <include
-            android:id="@+id/loLikes"
-            layout="@layout/item_edit_form_notifier"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-        <include
-            android:id="@+id/loMutual"
-            layout="@layout/item_edit_form_notifier"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-        <include
-            android:id="@+id/loChat"
-            layout="@layout/item_edit_form_notifier"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-        <include
-            android:id="@+id/loGuests"
-            layout="@layout/item_edit_form_notifier"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp" />
-
-        <include
-            android:id="@+id/loVibration"
-            layout="@layout/editor_form_switch"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-        <include
-            android:id="@+id/loLED"
-            layout="@layout/editor_form_switch"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-        <include
-            android:id="@+id/loMelody"
-            layout="@layout/item_edit_form_select"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp" />
+        <TextView
+            android:id="@+id/loLanguage"
+            style="@style/WhiteListItem.Underline"
+            android:text="@string/settings_select_language" />
 
         <include
             android:id="@+id/loPreloadPhoto"
-            layout="@layout/item_edit_form_select"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp" />
+            layout="@layout/item_edit_form_select" />
 
-        <include
-            layout="@layout/item_divider"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginBottom="20dp" />
-
-        <include
-            android:id="@+id/loAccount"
-            layout="@layout/item_edit_form_select"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-        <include
-            android:id="@+id/loHelp"
-            layout="@layout/item_edit_form_select"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-        <include
-            android:id="@+id/loLanguage"
-            layout="@layout/item_edit_form_select"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-        <include
+        <TextView
             android:id="@+id/loAbout"
-            layout="@layout/item_edit_form_select"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp" />
+            style="@style/WhiteListItem.Underline"
+            android:text="@string/settings_about" />
     </LinearLayout>
 </ScrollView>

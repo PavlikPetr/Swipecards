@@ -17,6 +17,7 @@ public class TopfaceAdStatistics {
     private static final String TF_MOBILE_NATIVE_AD_SHOW = "mobile_tf_native_ad_show";
     private static final String TF_MOBILE_NATIVE_AD_CLICK = "mobile_tf_native_ad_click";
     private static final String PUBNATIVE = "pubnative";
+    private static final String TF_MOBILE_NATIVE_SHOW_FAILED = "mobile_tf_native_ad_show_failed";
 
     private static void send(String key, String name) {
         StatisticsTracker.getInstance()
@@ -52,5 +53,9 @@ public class TopfaceAdStatistics {
 
     public static void sendPubnativeClick() {
         send(TF_MOBILE_NATIVE_AD_CLICK, PUBNATIVE);
+    }
+
+    public static void sendPubnativeImpressionFailed() {
+        send(TF_MOBILE_NATIVE_SHOW_FAILED, PUBNATIVE);
     }
 }

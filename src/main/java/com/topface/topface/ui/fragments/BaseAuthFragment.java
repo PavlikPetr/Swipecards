@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
@@ -34,6 +36,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
     private boolean mHasAuthorized = false;
     private RetryViewCreator mRetryView;
     private BroadcastReceiver mConnectionChangeListener;
+    private EditText mPassword;
 
     @Override
     public void onResume() {
@@ -66,6 +69,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
 
         ViewGroup rootLayout = (ViewGroup) root.findViewById(getRootId());
         rootLayout.addView(retryView.getView());
+        mPassword = (EditText) root.findViewById(R.id.edPassword);
 
         mConnectionChangeListener = new BroadcastReceiver() {
             @Override
@@ -97,8 +101,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
     }
 
     private void showNoInternetToast() {
-        Toast.makeText(App.getContext(), R.string.general_internet_off, Toast.LENGTH_SHORT)
-                .show();
+        Utils.showToastNotification(R.string.general_internet_off, Toast.LENGTH_SHORT);
     }
 
     protected void auth(final AuthToken token) {
@@ -166,6 +169,9 @@ public abstract class BaseAuthFragment extends BaseFragment {
 
         if (whetherToShowRetrier(codeError)) {
             showRetrier();
+            if (mPassword != null) {
+                mPassword.setTransformationMethod(new PasswordTransformationMethod());
+            }
             hideProgress();
         } else {
             showButtons();

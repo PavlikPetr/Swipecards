@@ -44,8 +44,7 @@ public class RetryDialog extends AlertDialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.retry_dialog_layout);
         ((TextView) findViewById(R.id.retryDialogMessage)).setText(mMessage);
-
-
+        getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         ImageView satelite = (ImageView) findViewById(R.id.sat);
         Animation anim = new RotateAnimation(0f, 358f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
 

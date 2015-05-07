@@ -2,13 +2,18 @@ package com.topface.topface.ui.fragments.buy;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
@@ -29,6 +34,26 @@ import java.util.List;
 public abstract class CoinsBuyingFragment extends OpenIabFragment {
     private LinkedList<View> purchaseButtons = new LinkedList<>();
     private View mCoinsSubscriptionButton;
+    private TextView mResourceInfo;
+    private String mResourceInfoText;
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null) {
+                getDataFromIntent(intent.getExtras());
+            }
+        }
+    };
+
+    private void getDataFromIntent(Bundle args) {
+        if (args != null) {
+            mFrom = args.getString(ARG_TAG_SOURCE);
+            if (args.containsKey(ARG_RESOURCE_INFO_TEXT)) {
+                mResourceInfoText = args.getString(ARG_RESOURCE_INFO_TEXT);
+                setResourceInfoText();
+            }
+        }
+    }
 
     private String mFrom;
 
@@ -36,16 +61,34 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setNeedTitles(false);
-        Bundle args = getArguments();
-        if (args != null) {
-            mFrom = args.getString(ARG_TAG_SOURCE);
+        getDataFromIntent(getArguments());
+    }
+
+    private void setResourceInfoText() {
+        if (mResourceInfo != null) {
+            mResourceInfo.setText(mResourceInfoText);
+            mResourceInfo.setVisibility(TextUtils.isEmpty(mResourceInfoText) ? View.GONE : View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(OpenIabFragment.UPDATE_RESOURCE_INFO));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         @SuppressLint("InflateParams") View root = inflater.inflate(R.layout.fragment_buy, null);
+        mResourceInfo = (TextView) root.findViewById(R.id.payReasonFragmentBuy);
+        setResourceInfoText();
         initButtons(root);
         return root;
     }

@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 
 /**
  * Класс для работы с Json
- * Следует использовать только его, ан случай если мы решим поменять парсер
+ * Следует использовать только его, на случай если мы решим поменять парсер
  */
 public class JsonUtils {
     private static Gson mGson;
@@ -22,5 +22,10 @@ public class JsonUtils {
             mGson = new Gson();
         }
         return mGson;
+    }
+
+    public static <T> T optFromJson(String json, Class<T> classOfT, T defaultObj) {
+        T obj = fromJson(json, classOfT);
+        return obj == null ? defaultObj : obj;
     }
 }

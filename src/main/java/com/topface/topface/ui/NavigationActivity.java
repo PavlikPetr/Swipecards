@@ -26,7 +26,6 @@ import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.requests.IApiResponse;
@@ -36,31 +35,30 @@ import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.fragments.MenuFragment;
-import com.topface.topface.ui.fragments.profile.DatingLockPopupAction;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
-import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.CustomViewNotificationController;
-import com.topface.topface.utils.ExternalLinkExecuter;
 import com.topface.topface.utils.IActionbarNotifier;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.PhotoTaker;
 import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.actionbar.ActionBarView;
+import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
-import com.topface.topface.utils.controllers.AbstractStartAction;
-import com.topface.topface.utils.controllers.IStartAction;
+import com.topface.topface.utils.controllers.SequencedStartAction;
 import com.topface.topface.utils.controllers.StartActionsController;
+import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
+import com.topface.topface.utils.controllers.startactions.FacebookRequestWindowAction;
+import com.topface.topface.utils.controllers.startactions.FacebookSequencedStartAction;
+import com.topface.topface.utils.controllers.startactions.IStartAction;
+import com.topface.topface.utils.controllers.startactions.InvitePopupAction;
+import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -71,34 +69,11 @@ import static com.topface.topface.utils.controllers.StartActionsController.AC_PR
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
 
-public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener, ActionBarView.ActionBarClickListener {
-    public static final String FROM_AUTH = "com.topface.topface.AUTH";
+public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener, SequencedStartAction.IUiRunner {
     public static final String INTENT_EXIT = "EXIT";
     public static final String PAGE_SWITCH = "Page switch: ";
 
     private Intent mPendingNextIntent;
-    ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
-        @Override
-        public void onProfileLink(int profileID) {
-            startActivity(UserProfileActivity.createIntent(profileID, NavigationActivity.this));
-        }
-
-        @Override
-        public void onConfirmLink(String code) {
-            AuthToken token = AuthToken.getInstance();
-            if (!token.isEmpty() && token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-                Intent intent = new Intent(NavigationActivity.this, SettingsContainerActivity.class);
-                intent.putExtra(Static.INTENT_REQUEST_KEY, SettingsContainerActivity.INTENT_ACCOUNT);
-                intent.putExtra(SettingsContainerActivity.CONFIRMATION_CODE, code);
-                startActivity(intent);
-            }
-        }
-
-        @Override
-        public void onOfferWall() {
-            OfferwallsManager.startOfferwall(NavigationActivity.this);
-        }
-    };
     private boolean mIsActionBarHidden;
     private View mContentFrame;
     private MenuFragment mMenuFragment;
@@ -107,6 +82,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     private boolean isPopupVisible = false;
     private boolean mActionBarOverlayed = false;
     private int mInitialTopMargin = 0;
+    @SuppressWarnings("deprecation")
     private ActionBarDrawerToggle mDrawerToggle;
     private IActionbarNotifier mNotificationController;
     private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
@@ -136,7 +112,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         super.initActionBar(actionBar);
         if (actionBar != null) {
             actionBarView.setLeftMenuView();
-            actionBarView.setActionBarClickListener(this);
             actionBar.setDisplayUseLogoEnabled(false);
             actionBar.setDisplayShowCustomEnabled(true);
             mNotificationController = new CustomViewNotificationController(actionBar);
@@ -174,9 +149,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
             mPendingNextIntent = intent;
         }
-        //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
-        new ExternalLinkExecuter(mListener).execute(this, getIntent());
-
     }
 
     @Override
@@ -197,9 +169,12 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 showFragment(FragmentId.TABBED_LIKES);
             }
         }));
+        FacebookSequencedStartAction sequencedStartAction = new FacebookSequencedStartAction(this, AC_PRIORITY_NORMAL);
+        sequencedStartAction.addAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
+        sequencedStartAction.addAction(new FacebookRequestWindowAction(this, AC_PRIORITY_NORMAL));
+        startActionsController.registerAction(sequencedStartAction);
         startActionsController.registerAction(mPopupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
-        startActionsController.registerAction(mPopupManager.createInvitePopupStartAction(AC_PRIORITY_LOW));
         // fullscreen
         if (mFullscreenController != null) {
             startActionsController.registerMandatoryAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
@@ -215,6 +190,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         CacheProfile.needShowBonusCounter = lastTime < CacheProfile.getOptions().bonus.timestamp;
     }
 
+    @SuppressWarnings("deprecation")
     private void initDrawerLayout() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         mMenuFragment = (MenuFragment) fragmentManager.findFragmentById(R.id.fragment_menu);
@@ -312,9 +288,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        //Если перешли в приложение по ссылке, то этот класс смотрит что за ссылка и делает то что нужно
-        new ExternalLinkExecuter(mListener).execute(this, intent);
-
         if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
             showFragment(intent);
         }
@@ -363,7 +336,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
      * @return start action object to register
      */
     private IStartAction createAfterRegistrationStartAction(final int priority) {
-        return new AbstractStartAction() {
+        return new IStartAction() {
 
             @Override
             public void callInBackground() {
@@ -393,6 +366,11 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 return "TakePhoto-SelectCity";
             }
 
+            @Override
+            public void setStartActionCallback(OnNextActionListener startActionCallback) {
+
+            }
+
             private boolean isTakePhotoApplicable() {
                 return !AuthToken.getInstance().isEmpty() && (CacheProfile.photo == null)
                         && !App.getConfig().getUserConfig().isUserAvatarAvailable();
@@ -420,7 +398,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 }
             }, 3000);
             mBackPressedOnce.set(true);
-            Toast.makeText(App.getContext(), R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT).show();
+            Utils.showToastNotification(R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT);
             isPopupVisible = false;
         } else {
             super.onBackPressed();
@@ -457,12 +435,15 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
             }
             Debug.log("Current User ID:" + CacheProfile.getProfile().uid);
         }
-        mDrawerToggle.syncState();
+        if (mDrawerToggle != null) {
+            mDrawerToggle.syncState();
+        }
 
         /*
         Initialize Topface offerwall here to be able to start it quickly instead of PurchasesActivity
          */
         OfferwallsManager.initTfOfferwall(this, null);
+        AdmobInterstitialUtils.preloadInterstitials(this);
     }
 
     @Override
@@ -478,6 +459,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
         mDrawerToggle = null;
         super.onDestroy();
+        AdmobInterstitialUtils.releaseInterstitials();
     }
 
     @Override
@@ -506,25 +488,21 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 case CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY:
                     if (data != null) {
                         Bundle extras = data.getExtras();
-                        try {
-                            if (extras != null) {
-                                final City city = new City(new JSONObject(extras.getString(CitySearchActivity.INTENT_CITY)));
-                                SettingsRequest request = new SettingsRequest(this);
-                                request.cityid = city.id;
-                                request.callback(new ApiHandler() {
-                                    @Override
-                                    public void success(IApiResponse response) {
-                                        CacheProfile.city = city;
-                                        CacheProfile.sendUpdateProfileBroadcast();
-                                    }
+                        if (extras != null) {
+                            final City city = extras.getParcelable(CitySearchActivity.INTENT_CITY);
+                            SettingsRequest request = new SettingsRequest(this);
+                            request.cityid = city.id;
+                            request.callback(new ApiHandler() {
+                                @Override
+                                public void success(IApiResponse response) {
+                                    CacheProfile.city = city;
+                                    CacheProfile.sendUpdateProfileBroadcast();
+                                }
 
-                                    @Override
-                                    public void fail(int codeError, IApiResponse response) {
-                                    }
-                                }).exec();
-                            }
-                        } catch (JSONException e) {
-                            Debug.error(e);
+                                @Override
+                                public void fail(int codeError, IApiResponse response) {
+                                }
+                            }).exec();
                         }
                     }
                     break;
@@ -605,7 +583,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     }
 
     @Override
-    public void onActionBarClick() {
+    public void onUpClick() {
         toggleDrawerLayout();
     }
 }

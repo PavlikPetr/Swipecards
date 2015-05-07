@@ -1,6 +1,7 @@
 package com.topface.topface.utils.config;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -23,6 +24,7 @@ public class Configurations {
     private BannersConfig mBannerConfig;
     private LocaleConfig mLocaleConfig;
     private Novice mNovice;
+    private UserConfigConverter mConfigConverter;
 
     public Configurations(Context context) {
         mContext = context;
@@ -35,20 +37,42 @@ public class Configurations {
         return mAppConfig;
     }
 
+
+    /**
+     * Возвращет конфиг текущего пользователя, если конфига нет создает новый. Если есть старый
+     * общий конфиг запустит процеес деления конфига. Если пользователь перелогинился , то создастся
+     * новый конфиг и заполниться данными из конфига, если конфига нет то создается новый пустой.
+     * <p/>
+     *
+     * @return config for current user
+     */
     public UserConfig getUserConfig() {
         if (mUserConfig == null) {
-            if (App.getAppConfig().isUserConfigConverted()) {
-                boolean mHasOldConfig = UserConfigConverter.hasOldConfig();
-                if (mHasOldConfig) {
+            if (App.getAppConfig().isNeedConverting() && UserConfigConverter.hasOldConfig()) {
                     //если у пользователя старый конфиг, то конвертируем его в новые
-                    UserConfigConverter configConverter = new UserConfigConverter(AuthToken.getInstance().getUserTokenUniqueId());
-                    Debug.debug(configConverter, "Converting old config");
-                    configConverter.convertConfig();
-                    mUserConfig = configConverter.getMainUserConfig();
-                }
-
+                mConfigConverter = new UserConfigConverter(AuthToken.getInstance().getUserTokenUniqueId(), new UserConfigConverter.OnUpdateUserConfig() {
+                    @Override
+                    public void onUpdate() {
+                        mUserConfig = mConfigConverter.getMainUserConfig();
+                        Debug.debug(mConfigConverter, "MainUserConfig converting complite ");
+                    }
+                });
+                Debug.debug(mConfigConverter, "Converting old MainUserConfig");
+                mConfigConverter.convertConfig();
+                //на время деления конфига созадаем временную заглушку
+                mUserConfig = new TempUserConfig(mContext);
             } else {
-                mUserConfig = new UserConfig(mContext);
+                if (!(mConfigConverter != null &&
+                        mConfigConverter.getConverterState() != UserConfigConverter.ConverterState.DEFAULT)) {
+                    Debug.debug(mConfigConverter, "Create new MainUserConfig");
+                    mUserConfig = new UserConfig(null, mContext);
+                }
+            }
+        } else {
+            if (!TextUtils.isEmpty(AuthToken.getInstance().getUserTokenUniqueId()) &&
+                    !AuthToken.getInstance().getUserTokenUniqueId().equals(mUserConfig.getUnique())) {
+                Debug.debug(mConfigConverter, "Updste MainUserConfig after equals");
+                mUserConfig.updateConfig(AuthToken.getInstance().getUserTokenUniqueId());
             }
         }
         return mUserConfig;

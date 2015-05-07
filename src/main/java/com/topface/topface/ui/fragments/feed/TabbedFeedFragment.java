@@ -16,8 +16,9 @@ import android.view.ViewGroup;
 
 import com.topface.topface.R;
 import com.topface.topface.banners.BannersController;
-import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.banners.PageInfo;
+import com.topface.topface.banners.RefreshablePageWithAds;
+import com.topface.topface.banners.ad_providers.IRefresher;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
@@ -31,7 +32,7 @@ import java.util.Locale;
 /**
  * base class for feeds with tabs
  */
-public abstract class TabbedFeedFragment extends BaseFragment implements IPageWithAds {
+public abstract class TabbedFeedFragment extends BaseFragment implements RefreshablePageWithAds {
     public static final String HAS_FEED_AD = "com.topface.topface.has_feed_ad";
     public static final String EXTRA_OPEN_PAGE = "openTabbedFeedAt";
     private static final String LAST_OPENED_PAGE = "last_opened_page";
@@ -41,8 +42,6 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
     private ArrayList<String> mPagesTitles = new ArrayList<>();
     private ArrayList<Integer> mPagesCounters = new ArrayList<>();
     private BannersController mBannersController;
-
-    private TabbedFeedPageAdapter mBodyPagerAdapter;
 
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -110,11 +109,11 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
         addPages();
         mPager = (ViewPager) root.findViewById(R.id.pager);
         mPager.setSaveEnabled(false);
-        mBodyPagerAdapter = new TabbedFeedPageAdapter(getChildFragmentManager(),
+        TabbedFeedPageAdapter bodyPagerAdapter = new TabbedFeedPageAdapter(getChildFragmentManager(),
                 mPagesClassNames,
                 mPagesTitles,
                 mPagesCounters);
-        mPager.setAdapter(mBodyPagerAdapter);
+        mPager.setAdapter(bodyPagerAdapter);
 
         mSlidingTabLayout = (SlidingTabLayout) root.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setUseWeightProportions(true);
@@ -181,7 +180,14 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
         if (mBannersController != null) {
             mBannersController.onDestroy();
         }
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mRefresher != null) {
+            mRefresher.refreshBanner();
+        }
     }
 
     @Override
@@ -212,5 +218,12 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
             return (ViewGroup) getView().findViewById(R.id.banner_container_for_tabbed_feeds);
         }
         return null;
+    }
+
+    private IRefresher mRefresher;
+
+    @Override
+    public void setRefresher(IRefresher refresher) {
+        mRefresher = refresher;
     }
 }

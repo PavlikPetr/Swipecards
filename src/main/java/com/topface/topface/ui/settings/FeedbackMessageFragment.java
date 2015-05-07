@@ -10,7 +10,6 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -35,7 +34,7 @@ import com.topface.topface.utils.social.AuthToken;
 import java.util.List;
 import java.util.Locale;
 
-public class FeedbackMessageFragment extends AbstractEditFragment {
+public class FeedbackMessageFragment extends AbstractEditFragment implements View.OnClickListener {
 
     public static final String INTENT_FEEDBACK_TYPE = "feedback_message_type";
     private EditText mEditText;
@@ -62,6 +61,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
+        getSupportActionBar().show();
         super.onCreateView(inflater, container, saved);
         View root = inflater.inflate(R.layout.fragment_feedback_message, null);
         if (root == null) return null;
@@ -76,6 +76,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         if (language.equals("en") || language.equals("ru")) {
             incorrectLocaleTv.setVisibility(View.GONE);
         }
+        root.findViewById(R.id.sendFeedback).setOnClickListener(this);
         mEditText = (EditText) root.findViewById(R.id.edText);
         mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         mEditText.addTextChangedListener(new TextWatcher() {
@@ -190,7 +191,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
 
         //Если текст сообщения пустой, то не отправляем сообщение
         if (TextUtils.isEmpty(feedbackText)) {
-            Toast.makeText(App.getContext(), R.string.empty_fields, Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.empty_fields, Toast.LENGTH_LONG);
             return;
         }
 
@@ -208,9 +209,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
                         finishRequestSend();
 
                         mEditText.setText(Static.EMPTY);
-                        Toast.makeText(App.getContext(),
-                                R.string.settings_feedback_success_msg,
-                                Toast.LENGTH_SHORT).show();
+                        Utils.showToastNotification(R.string.settings_feedback_success_msg, Toast.LENGTH_SHORT);
                         getActivity().finish();
                     }
                 }
@@ -219,16 +218,14 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
                 public void fail(int codeError, IApiResponse response) {
                     finishRequestSend();
                     if (response.isCodeEqual(ErrorCodes.TOO_MANY_MESSAGES)) {
-                        Toast.makeText(App.getContext(), R.string.ban_flood_detected,
-                                Toast.LENGTH_SHORT).show();
+                        Utils.showToastNotification(R.string.ban_flood_detected, Toast.LENGTH_SHORT);
                     } else {
-                        Toast.makeText(App.getContext(), R.string.general_data_error,
-                                Toast.LENGTH_SHORT).show();
+                        Utils.showErrorMessage();
                     }
                 }
             }).exec();
         } else {
-            Toast.makeText(App.getContext(), R.string.settings_invalid_email, Toast.LENGTH_SHORT).show();
+            Utils.showToastNotification(R.string.settings_invalid_email, Toast.LENGTH_SHORT);
             mEditEmail.requestFocus();
         }
     }
@@ -260,18 +257,9 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
     }
 
     @Override
-    protected Integer getOptionsMenuRes() {
-        return R.menu.actions_send;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_send:
-                saveChanges(new Handler());
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+    public void onClick(View v) {
+        if (v.getId() == R.id.sendFeedback) {
+            saveChanges(new Handler());
         }
     }
 
@@ -325,10 +313,6 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
 
         public Report(FeedbackType type) {
             setType(type);
-        }
-
-        public void setType(FeedbackType type) {
-            this.type = type;
         }
 
         public String getSubject() {
@@ -392,6 +376,10 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
 
         public FeedbackType getType() {
             return type;
+        }
+
+        public void setType(FeedbackType type) {
+            this.type = type;
         }
 
         public String getEmail() {

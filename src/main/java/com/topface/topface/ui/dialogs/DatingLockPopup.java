@@ -38,6 +38,11 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
     }
 
     @Override
+    protected boolean isModalDialog() {
+        return false;
+    }
+
+    @Override
     public boolean isUnderActionBar() {
         return false;
     }
@@ -79,6 +84,6 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
     }
 
     public interface DatingLockPopupRedirectListener {
-        public void onRedirect();
+        void onRedirect();
     }
 }

@@ -5,19 +5,17 @@
 
     <TextView
         android:tag="tvTitle"
-        style="@style/ItemTitleText"
+        style="@style/GrayText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:gravity="center_vertical"
         android:layout_gravity="left"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:drawablePadding="5dp"
+        android:paddingLeft="@dimen/item_side_padding"
+        android:paddingRight="@dimen/item_side_padding"
         android:ellipsize="end"
-        android:singleLine="true"
-        android:textSize="14sp"/>
+        android:singleLine="true" />
 
     <!-- Switch -->
 
@@ -30,7 +28,7 @@
         android:layout_alignParentRight="true"
         android:background="@drawable/edit_switch"
         android:button="@android:color/transparent"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="12dp"
         android:clickable="false"
         android:textSize="12sp"
         android:minHeight="0dp"/>

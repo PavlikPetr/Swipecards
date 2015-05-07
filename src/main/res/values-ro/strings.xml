@@ -87,6 +87,7 @@
     <string name="general_spinner_title">Alegeti actiunea</string>
     <string name="general_profile_error">Eroare la incarcarea profilului</string>
     <string name="general_dbl_all">Toate</string>
+    <string name="general_dbl_unread">Necitite</string>
     <string name="time_yesterday">Ieri</string>
     <string name="time_today">Azi</string>
     <string name="general_send_button">Trim.</string>
@@ -283,12 +284,12 @@
     <string name="gallery">Galerie</string>
     <string name="no_photo_take_photo">Cu Dmv nimeni nu poate face cunostinta! Faceti o poza sau alegeti din album</string>
     <string name="photo_for_avatar">Poza este gata pentru trimitere in profil! Este prima poza a Dmv si va fi folosita in calitate de avatar.</string>
-    <string name="change_email">Schimba e-mailul</string>
     <string name="send_confirmation_email">Trimite confirmare pe e-mail</string>
     <string name="change_password">Schimba parola</string>
     <string name="password_changing">Schimbare de parola</string>
     <string name="save">Salvare</string>
     <string name="confirmation_successfully_sent">Confirmarea a fost trimesa la e-mailul indicat de Dmv</string>
+    <string name="password_hint">parola</string>
     <string name="password_confirmation_hint">confirmare parola</string>
     <string name="enter_new_password">Introduceti parola noua</string>
     <string name="enter_password_confirmation">Introduceti confirmarea parolei</string>
@@ -370,6 +371,8 @@
     <string name="general_complain_sended">Plangerea Dmv a fost trimisa, va multumim pentru ajutor</string>
     <string name="general_complain">Plangere</string>
     <string name="general_msg">Mesaj</string>
+    <string name="notifications">Informari</string>
+    <string name="general_no_notifications">Din pacate, instiintarile, pe instalatia Dmv nu sunt accesibile</string>
     <string name="black_list_add_short">In lista neagra</string>
     <string name="confirm_email_for_dating">Noi suntem contra la spam. Va rugam sa confirmati adresa electronica a Dmv, pentru a face cunostinta in Topface!</string>
     <string name="complain_type_swearing_msg">Amenintari, injuraturi, purtare urata</string>
@@ -386,7 +389,6 @@
     <string name="delete">Sterge</string>
     <string name="delete_account_warning">Atentie! Dmv incercati sa stergeti profilul sau in Topface.</string>
     <string name="delete_account_error">Din pacate nu am reusit sa stergem acauntul Dmv. Puteti sa mai faceti o incercare mai tarziu.</string>
-    <string name="delete_account_will_be_restored_are_you_sure">Dmv incercati sa intrati in acauntul sters de Dmv. La intrare acauntul va fi restabilit. Sunteti increzut?</string>
     <string name="restore">Restabileste</string>
     <string name="admiration_sended">Admirare trimisa</string>
     <string name="auth_btn_ok">Intra prin Odnoklassniki</string>

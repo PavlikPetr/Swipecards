@@ -12,7 +12,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.topface.topface.R;
 import com.topface.topface.data.City;
@@ -23,6 +22,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.views.CitySearchView;
+import com.topface.topface.utils.Utils;
 
 import java.util.LinkedList;
 import java.util.Timer;
@@ -37,13 +37,10 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
     private final static int EMPTY_ID = -1;
     // delay before show loader
     private final static int MY_TIMER_VALUE = 500;
-
+    private final Context mContext;
     private Timer mTimer;
-
     private City mDefaultCity;
     private City mUserCity;
-
-    private final Context mContext;
     private int mRequestKey;
 
     private volatile CitiesRequest mFindCityByPrefRequest;
@@ -51,8 +48,6 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
 
     private LinkedList<City> mTopCitiesList;
     private LinkedList<City> mDataList;
-
-    private enum RequestType {DEFAULT_CITIES_REQUEST, CITIES_BY_PREFF_REQUEST}
 
     public CitySearchViewAdapter(Context context, int requestKey) {
         mContext = context;
@@ -159,8 +154,8 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
         }
         if (mRequestKey == CitySearchView.CITY_SEARCH_FROM_FILTER_ACTIVITY) {
             mDataList.add(mDefaultCity);
+            mDataList.add(getUserCity());
         }
-        mDataList.add(getUserCity());
         if (citiesList != null) {
             mDataList.addAll(citiesList);
         }
@@ -209,7 +204,7 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
             @Override
             public void fail(int codeError, IApiResponse response) {
                 clearRequest(RequestType.DEFAULT_CITIES_REQUEST);
-                Toast.makeText(mContext, R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                Utils.showErrorMessage();
             }
         }).exec();
     }
@@ -287,15 +282,15 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
         });
     }
 
-    public void setUserCity(City city) {
-        mUserCity = city;
-    }
-
     private City getUserCity() {
         if (mUserCity == null || mUserCity.isEmpty()) {
             mUserCity = mDefaultCity;
         }
         return mUserCity;
+    }
+
+    public void setUserCity(City city) {
+        mUserCity = city;
     }
 
     private void removeRequest(RequestType type) {
@@ -318,7 +313,6 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
     private void clearRequest(RequestType type) {
         registerRequest(type, null);
     }
-
 
     private CitiesRequest getCurrentRequest(RequestType type) {
         CitiesRequest currentRequest = null;
@@ -349,11 +343,6 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
         stopTimer();
     }
 
-    protected static class CitySearchHolder {
-        public TextView cityName;
-        public ProgressBar progress;
-    }
-
     private void initTimer() {
         stopTimer();
         mTimer = new Timer();
@@ -369,5 +358,12 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
         if (mTimer != null) {
             mTimer.cancel();
         }
+    }
+
+    private enum RequestType {DEFAULT_CITIES_REQUEST, CITIES_BY_PREFF_REQUEST}
+
+    protected static class CitySearchHolder {
+        public TextView cityName;
+        public ProgressBar progress;
     }
 }

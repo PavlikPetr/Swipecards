@@ -10,11 +10,8 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -22,8 +19,6 @@ import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,6 +37,7 @@ import android.widget.Toast;
 import com.nhaarman.listviewanimations.appearance.ChatListAnimatedAdapter;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -50,7 +46,9 @@ import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.History;
 import com.topface.topface.data.HistoryListData;
+import com.topface.topface.data.IUniversalUser;
 import com.topface.topface.data.SendGiftAnswer;
+import com.topface.topface.data.UniversalUserFactory;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -62,7 +60,6 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
-import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
@@ -73,7 +70,6 @@ import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.dialogs.ConfirmEmailDialog;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
-import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
@@ -82,7 +78,6 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
 import com.topface.topface.utils.controllers.PopularUserChatController;
@@ -90,13 +85,11 @@ import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.social.AuthToken;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
 
-public class ChatFragment extends BaseFragment implements View.OnClickListener, IUserOnlineListener {
+public class ChatFragment extends UserAvatarFragment implements View.OnClickListener {
 
     public static final int LIMIT = 50;
 
@@ -113,7 +106,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public static final String INITIAL_MESSAGE = "initial_message";
     public static final String MESSAGE = "message";
     public static final String LOADED_MESSAGES = "loaded_messages";
-    public static final String CONFIGRM_EMAIL_DIALOG_TAG = "configrm_email_dialog_tag";
+    public static final String CONFIRM_EMAIL_DIALOG_TAG = "configrm_email_dialog_tag";
     private static final String POPULAR_LOCK_STATE = "chat_blocked";
     private static final String HISTORY_CHAT = "history_chat";
     private static final String SOFT_KEYBOARD_LOCK_STATE = "keyboard_state";
@@ -160,17 +153,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     };
     private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
-    private OverflowMenu mChatOverflowMenu;
     // Managers
-    private ActionBarTitleSetterDelegate mSetter;
     private RelativeLayout mLockScreen;
     private PopularUserChatController mPopularUserLockController;
     private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
     private String mUserCity;
     private String mUserNameAndAge;
-    private int mUserSex;
-    private MenuItem mBarAvatar;
-    private MenuItem mBarActions;
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -202,7 +190,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         if (!isShowKeyboardInChat()) {
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         }
-        mSetter = new ActionBarTitleSetterDelegate(getActivity(), ((ActionBarActivity) getActivity()).getSupportActionBar());
         DateUtils.syncTime();
         setRetainInstance(true);
         String text = UserNotification.getRemoteInputMessageText(getActivity().getIntent());
@@ -222,7 +209,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         Bundle args = getArguments();
         mItemId = args.getString(INTENT_ITEM_ID);
         mUserId = args.getInt(INTENT_USER_ID, -1);
-        mUserSex = args.getInt(INTENT_USER_SEX, Static.BOY);
         mUserCity = args.getString(INTENT_USER_CITY);
         mUserNameAndAge = args.getString(INTENT_USER_NAME_AND_AGE);
         mInitialMessage = args.getString(INITIAL_MESSAGE);
@@ -347,8 +333,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     }
                 }
                 mAdapter.setData(historyData);
-                mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
-                initOverflowMenu();
+                mUser = JsonUtils.fromJson(savedInstanceState.getString(FRIEND_FEED_USER), FeedUser.class);
+                invalidateUniversalUser();
+                initOverflowMenuActions(getOverflowMenu());
                 if (wasFailed) {
                     mLockScreen.setVisibility(View.VISIBLE);
                 } else {
@@ -473,6 +460,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     @Override
+    protected String getDefaultTitle() {
+        return mUserNameAndAge;
+    }
+
+    @Override
     protected String getSubtitle() {
         if (TextUtils.isEmpty(mUserCity)) {
             return Static.EMPTY;
@@ -516,8 +508,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         History item = mAdapter.getItem(position);
         mAnimatedAdapter.decrementAnimationAdapter(mAdapter.getCount());
         if (item != null && (item.id == null || item.isFake())) {
-            Toast.makeText(getActivity(), R.string.cant_delete_fake_item,
-                    Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.cant_delete_fake_item, Toast.LENGTH_LONG);
             return;
         } else if (item == null) {
             return;
@@ -542,9 +533,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onDestroy() {
         release();
-        if (mChatOverflowMenu != null) {
-            mChatOverflowMenu.onDestroy();
-        }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPopularUserLockController);
         Debug.log(this, "-onDestroy");
         super.onDestroy();
@@ -562,7 +550,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         if (mIsUpdating) {
             return;
         }
-        mIsUpdating = true;
         final boolean isPopularLockOn;
         isPopularLockOn = mAdapter != null &&
                 !mAdapter.isEmpty() &&
@@ -606,9 +593,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                             mIsUpdating = false;
                             wasFailed = false;
                             mUser = data.user;
+                            invalidateUniversalUser();
                             if (!mUser.isEmpty()) {
                                 onUserLoaded(mUser);
-                                initOverflowMenu();
+                                initOverflowMenuActions(getOverflowMenu());
                             }
                             return;
                         } else if (blockStage == PopularUserChatController.SECOND_STAGE) {
@@ -632,12 +620,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 }
 
                 refreshActionBarTitles();
-                mSetter.setOnline(data.user.online);
+                getTitleSetter().setOnline(data.user.online);
                 wasFailed = false;
                 mUser = data.user;
+                invalidateUniversalUser();
                 if (!mUser.isEmpty()) {
                     onUserLoaded(mUser);
-                    initOverflowMenu();
+                    initOverflowMenuActions(getOverflowMenu());
                 }
                 if (mAdapter != null) {
                     if (!data.items.isEmpty()) {
@@ -652,8 +641,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         if (!data.more && !pullToRefresh) mAdapter.forceStopLoader();
                     }
                 }
-                mIsUpdating = false;
-
                 if (mLockScreen != null && mLockScreen.getVisibility() == View.VISIBLE) {
                     mLockScreen.setVisibility(View.GONE);
                 }
@@ -671,7 +658,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     mLockScreen.setVisibility(View.VISIBLE);
                 }
                 wasFailed = true;
-                mIsUpdating = false;
             }
 
             @Override
@@ -681,7 +667,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 if (pullToRefresh && mListView != null) {
                     mListView.onRefreshComplete();
                 }
+                mIsUpdating = false;
             }
+
         }).exec();
     }
 
@@ -741,29 +729,24 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             setOnline(user.online);
         }
         // ставим фото пользователя в иконку в actionbar
-        setActionBarAvatar(user);
+        setActionBarAvatar(getUniversalUser());
     }
 
     @Override
     public void setOnline(boolean online) {
-        if (mSetter != null) {
-            mSetter.setOnline(online);
+        if (getTitleSetter() != null) {
+            getTitleSetter().setOnline(online);
         }
     }
 
-    private void setActionBarAvatar(FeedUser user) {
-        if (mBarAvatar == null) return;
-        if (user != null && !user.banned && !user.deleted && user.photo != null && !user.photo.isEmpty()) {
-            ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar)
-                    .findViewById(R.id.ivBarAvatar))
-                    .setPhoto(user.photo);
-        } else {
-            ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar)
-                    .findViewById(R.id.ivBarAvatar))
-                    .setImageResource(mUserSex == Static.GIRL ?
-                            R.drawable.feed_banned_female_avatar :
-                            R.drawable.feed_banned_male_avatar);
-        }
+    @Override
+    protected IUniversalUser createUniversalUser() {
+        return UniversalUserFactory.create(mUser);
+    }
+
+    @Override
+    protected OverflowMenu createOverflowMenu(MenuItem barActions) {
+        return new OverflowMenu(getActivity(), barActions);
     }
 
     private void release() {
@@ -795,13 +778,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 );
                 EasyTracker.sendEvent("Chat", "SendGiftClick", "", 1L);
                 break;
-            case R.id.ivBarAvatar:
-                onOptionsItemSelected(mBarAvatar);
-                break;
             case R.id.action_user_actions_list:
-                onOptionsItemSelected(mBarActions);
+                onOptionsItemSelected(getBarActionsMenuItem());
                 break;
             default:
+                super.onClick(v);
                 break;
         }
     }
@@ -890,22 +871,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             return false;
         }
         if (editText.length() > mMaxMessageSize) {
-            Toast.makeText(getActivity(),
-                    String.format(getString(R.string.message_too_long), mMaxMessageSize),
-                    Toast.LENGTH_SHORT).show();
+            Utils.showToastNotification(String.format(getString(R.string.message_too_long), mMaxMessageSize), Toast.LENGTH_SHORT);
             return false;
         }
-        editText.clear();
+        // вынужденная мера, Editable.clear() некорректно обрабатывается клавиатурой Lg G3
+        mEditBox.setText("");
         return sendMessage(editString, true);
     }
 
     public boolean sendMessage(String text, final boolean cancelable) {
         final History messageItem = new History(text, IListLoader.ItemType.TEMP_MESSAGE);
         final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity());
-        if (!CacheProfile.emailConfirmed) {
-            Toast.makeText(App.getContext(), R.string.confirm_email, Toast.LENGTH_SHORT).show();
-            ConfirmEmailDialog.newInstance().show(getActivity().getSupportFragmentManager(), CONFIGRM_EMAIL_DIALOG_TAG);
-            return false;
+        if (TextUtils.equals(AuthToken.getInstance().getSocialNet(), AuthToken.SN_TOPFACE)) {
+            if (!CacheProfile.emailConfirmed) {
+                Toast.makeText(App.getContext(), R.string.confirm_email, Toast.LENGTH_SHORT).show();
+                ConfirmEmailDialog.newInstance().show(getActivity().getSupportFragmentManager(), CONFIRM_EMAIL_DIALOG_TAG);
+                return false;
+            }
         }
         if (cancelable) {
             registerRequest(messageRequest);
@@ -940,7 +922,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     return;
                 }
                 if (mAdapter != null && cancelable) {
-                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                    Utils.showErrorMessage();
                     mAdapter.showRetrySendMessage(messageItem, messageRequest);
                 }
             }
@@ -974,38 +956,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        MenuItem item = menu.findItem(R.id.action_profile);
-        if (item != null && mBarAvatar != null) {
-            item.setChecked(mBarAvatar.isChecked());
-        }
-        mBarAvatar = item;
-        MenuItemCompat.getActionView(mBarAvatar).findViewById(R.id.ivBarAvatar).setOnClickListener(this);
-        setActionBarAvatar(mUser);
-
-        MenuItem barActionsItem = menu.findItem(R.id.action_user_actions_list);
-        if (barActionsItem != null && mBarActions != null) {
-            barActionsItem.setChecked(mBarActions.isChecked());
-        }
-        mBarActions = barActionsItem;
-        mChatOverflowMenu = new OverflowMenu(getActivity(), mBarActions);
-    }
-
-    private void initOverflowMenu() {
-        if (mChatOverflowMenu != null) {
-            if (mChatOverflowMenu.getOverflowMenuFieldsListener() == null) {
-                mChatOverflowMenu.setOverflowMenuFieldsListener(new OverflowMenuUser() {
+    protected void initOverflowMenuActions(OverflowMenu overflowMenu) {
+        if (overflowMenu != null) {
+            if (overflowMenu.getOverflowMenuFieldsListener() == null) {
+                overflowMenu.setOverflowMenuFieldsListener(new OverflowMenuUser() {
                     @Override
                     public void setBlackListValue(Boolean value) {
                         if (mUser != null) {
-                            mUser.blocked = value != null ? value : !mUser.blocked;
+                            mUser.inBlacklist = value != null ? value : !mUser.inBlacklist;
                         }
                     }
 
                     @Override
                     public Boolean getBlackListValue() {
-                        return mUser != null ? mUser.blocked : null;
+                        return mUser != null ? mUser.inBlacklist : null;
                     }
 
                     @Override
@@ -1064,43 +1028,32 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     public Integer getProfileId() {
                         return mUserId;
                     }
+
+                    @Override
+                    public Boolean isBanned() {
+                        return null;
+                    }
                 });
             }
-            mChatOverflowMenu.initOverfowMenu();
+            overflowMenu.initOverfowMenu();
         }
     }
 
     @Override
-    protected Integer getOptionsMenuRes() {
-        return R.menu.actions_chat;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (mChatOverflowMenu != null) {
-            mChatOverflowMenu.onMenuClicked(item);
-        }
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case R.id.action_profile:
-                if (mUser != null) {
-                    if (!(mUser.deleted || mUser.banned)) {
-                        Intent profileIntent = CacheProfile.
-                                getOptions().
-                                autoOpenGallery.
-                                createIntent(mUserId, mUser.photosCount, mUser.photo, getActivity());
-                        startActivity(profileIntent);
-                    } else {
-                        Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
-                                Toast.LENGTH_LONG).show();
-                    }
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+    public void onAvatarClick() {
+        if (mUser != null) {
+            if (!(mUser.deleted || mUser.banned)) {
+                Intent profileIntent = CacheProfile.
+                        getOptions().
+                        autoOpenGallery.
+                        createIntent(mUserId, mUser.photosCount, mUser.photo, getActivity());
+                startActivity(profileIntent);
+            } else {
+                Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
+                        Toast.LENGTH_LONG).show();
+            }
         }
     }
-
 
     private boolean isShowKeyboardInChat() {
         DisplayMetrics displayMetrics = Device.getDisplayMetrics(App.getContext());

@@ -32,7 +32,6 @@ import com.topface.topface.data.Products;
 import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
-import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
 import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
@@ -478,8 +477,6 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         BaseFragment fragment;
         switch (id) {
             case VIP_PROFILE:
-                fragment = OwnProfileFragment.newInstance(VipBuyFragment.class.getName());
-                break;
             case PROFILE:
                 fragment = OwnProfileFragment.newInstance();
                 break;
@@ -561,7 +558,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         mListView.setClickable(clickable);
     }
 
-    public static interface OnFragmentSelectedListener {
-        public void onFragmentSelected(FragmentId fragmentId);
+    public interface OnFragmentSelectedListener {
+        void onFragmentSelected(FragmentId fragmentId);
     }
 }

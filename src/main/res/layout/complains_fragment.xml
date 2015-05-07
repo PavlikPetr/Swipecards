@@ -10,82 +10,55 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
         <!-- Фото -->
-        <include
+        <TextView
             android:id="@+id/loPhotoHeader"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            layout="@layout/item_edit_profile_form_header" />
+            style="@style/ComplainsHeader" />
 
-        <include
+        <TextView
             android:id="@+id/typePorn"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/item_edit_form_select" />
+            style="@style/WhiteListItem.Underline" />
 
-        <include
+        <TextView
             android:id="@+id/typeEro"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/item_edit_form_select" />
+            style="@style/WhiteListItem.Underline" />
 
-        <include
+        <TextView
             android:id="@+id/typePicture"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/item_edit_form_select" />
+            style="@style/WhiteListItem.Underline" />
 
-        <include
+        <TextView
             android:id="@+id/typeFake"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/item_edit_form_select" />
+            style="@style/WhiteListItem.Underline" />
 
         <!-- сообщения -->
-        <include
+        <TextView
             android:id="@+id/loMsgHeader"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            layout="@layout/item_edit_profile_form_header" />
+            style="@style/ComplainsHeader" />
 
-        <include
+        <TextView
             android:id="@+id/typeSpam"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/item_edit_form_select" />
+            style="@style/WhiteListItem.Underline" />
 
-        <include
+        <TextView
             android:id="@+id/typeSwear"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/item_edit_form_select" />
+            style="@style/WhiteListItem.Underline" />
 
         <!-- информация -->
-        <include
+        <TextView
             android:id="@+id/loInfoHeader"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            layout="@layout/item_edit_profile_form_header" />
+            style="@style/ComplainsHeader" />
 
-        <include
+        <TextView
             android:id="@+id/typeCommercial"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/item_edit_form_select" />
+            style="@style/WhiteListItem.Underline" />
 
-        <include
+        <TextView
             android:id="@+id/typeFakeData"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/item_edit_form_select" />
+            style="@style/WhiteListItem.Underline" />
 
-        <include
+        <TextView
             android:id="@+id/typeSwearData"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/item_edit_form_select" />
+            style="@style/WhiteListItem.Underline" />
     </LinearLayout>
 
 </ScrollView>

@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.profile;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,40 +12,26 @@ import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
-import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.gift.UpdatableGiftsFragment;
-import com.topface.topface.ui.views.DarkenImageView;
+import com.topface.topface.ui.fragments.UserAvatarFragment;
+import com.topface.topface.ui.fragments.feed.FeedFragment;
+import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.http.ProfileBackgrounds;
-import com.viewpagerindicator.CirclePageIndicator;
-import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public abstract class AbstractProfileFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
+public abstract class AbstractProfileFragment extends UserAvatarFragment implements ViewPager.OnPageChangeListener {
     public static final String INTENT_UID = "intent_profile_uid";
     public static final String INTENT_ITEM_ID = "intent_profile_item_id";
-    public static final String INTENT_CALLING_FRAGMENT = "intent_profile_calling_fragment";
     public static final String INTENT_IS_CHAT_AVAILABLE = "intent_profile_is_chat_available";
     public static final String INTENT_IS_ADD_TO_FAVORITS_AVAILABLE = "intent_profile_is_add_to_favorits_available";
-    public static final String INTENT_START_BODY_PAGE_NAME = "intent_start_body_page";
     public static final String ADD_PHOTO_INTENT = "com.topface.topface.ADD_PHOTO_INTENT";
-    protected static final String ARG_TAG_INIT_BODY_PAGE = "profile_start_body_class";
-    protected static final String ARG_TAG_INIT_HEADER_PAGE = "profile_start_header_class";
     private static final String CURRENT_BODY_PAGE = "CURRENT_BODY_PAGE";
-    private static final String CURRENT_HEADER_PAGE = "CURRENT_HEADER_PAGE";
     // state
-    protected HeaderMainFragment mHeaderMainFragment;
-    protected ProfilePageAdapter mHeaderPagerAdapter;
-    private UpdatableGiftsFragment mGiftFragment;
     private ArrayList<String> BODY_PAGES_TITLES = new ArrayList<>();
     private ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<>();
-    private ArrayList<String> HEADER_PAGES_CLASS_NAMES = new ArrayList<>();
-    private HeaderStatusFragment mHeaderStatusFragment;
     private UserPhotoFragment mUserPhotoFragment;
-    private UserFormFragment mUserFormFragment;
-    private boolean mIsChatAvailable;
-    private boolean mIsAddToFavoritsAvailable;
+    private AbstractFormFragment mFormFragment;
     private Profile mProfile = null;
     ProfileInnerUpdater mProfileUpdater = new ProfileInnerUpdater() {
         @Override
@@ -55,66 +40,52 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
         }
 
         public void bindFragment(Fragment fragment) {
-            if (fragment instanceof HeaderMainFragment) {
-                mHeaderMainFragment = (HeaderMainFragment) fragment;
-            } else if (fragment instanceof HeaderStatusFragment) {
-                mHeaderStatusFragment = (HeaderStatusFragment) fragment;
-            } else if (fragment instanceof UserPhotoFragment) {
+            if (fragment instanceof UserPhotoFragment) {
                 mUserPhotoFragment = (UserPhotoFragment) fragment;
-            } else if (fragment instanceof UserFormFragment) {
-                mUserFormFragment = (UserFormFragment) fragment;
-            } else if (fragment instanceof UpdatableGiftsFragment) {
-                mGiftFragment = (UpdatableGiftsFragment) fragment;
+            } else if (fragment instanceof AbstractFormFragment) {
+                mFormFragment = (AbstractFormFragment) fragment;
             }
         }
 
         public Profile getProfile() {
             return mProfile;
         }
-
-        @Override
-        public int getProfileType() {
-            return AbstractProfileFragment.this.getProfileType();
-        }
     };
-    private String mBodyStartPageClassName;
-    private String mHeaderStartPageClassName;
-    private int mStartBodyPage = 0;
-    private int mStartHeaderPage = 0;
     // views
     private ViewPager mBodyPager;
-    private ProfilePageAdapter mBodyPagerAdapter;
-    private ViewPager mHeaderPager;
-    private TabPageIndicator mTabIndicator;
-    private DarkenImageView mBackgroundView;
+    private SlidingTabLayout mTabIndicator;
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(INTENT_START_BODY_PAGE_NAME)) {
-            mBodyStartPageClassName = args.getString(INTENT_START_BODY_PAGE_NAME);
+    private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
         }
-    }
+
+        @Override
+        public void onPageSelected(int position) {
+            List<Fragment> fragments = getChildFragmentManager().getFragments();
+            if (fragments != null) {
+                for (Fragment fragment : fragments) {
+                    if (fragment instanceof FeedFragment) {
+                        // clean multiselection, when switching tabs
+                        ((FeedFragment) fragment).finishMultiSelection();
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View root = inflater.inflate(R.layout.fragment_profile, null);
-        mBackgroundView = (DarkenImageView) root.findViewById(R.id.profile_background_image);
-        initHeaderPages(root);
         initBodyPages(root);
-// start pages initialization
-        int startBodyPage = mBodyPagerAdapter.getFragmentIndexByClassName(mBodyStartPageClassName);
-        if (startBodyPage != -1) {
-            mStartBodyPage = startBodyPage;
-        }
-        int startHeaderPage = mHeaderPagerAdapter.getFragmentIndexByClassName(mHeaderStartPageClassName);
-        if (startHeaderPage != -1) {
-            mStartHeaderPage = startHeaderPage;
-        }
-        mHeaderPager.setCurrentItem(mStartHeaderPage);
-        mBodyPager.setCurrentItem(mStartBodyPage);
+        // start pages initialization
         return root;
     }
 
@@ -123,14 +94,7 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
         super.onViewCreated(view, savedInstanceState);
         if (savedInstanceState != null) {
             mBodyPager.setCurrentItem(savedInstanceState.getInt(CURRENT_BODY_PAGE, 0));
-            mHeaderPager.setCurrentItem(savedInstanceState.getInt(CURRENT_HEADER_PAGE, 0));
         }
-    }
-
-    @Override
-    protected void restoreState() {
-        mBodyStartPageClassName = getArguments().getString(ARG_TAG_INIT_BODY_PAGE);
-        mHeaderStartPageClassName = getArguments().getString(ARG_TAG_INIT_HEADER_PAGE);
     }
 
     protected void onProfileUpdated() {
@@ -145,14 +109,12 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
             mTabIndicator = null;
         }
         mBodyPager = null;
-        mHeaderPager = null;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(CURRENT_BODY_PAGE, mBodyPager.getCurrentItem());
-        outState.putInt(CURRENT_HEADER_PAGE, mHeaderPager.getCurrentItem());
     }
 
     protected Profile getProfile() {
@@ -160,118 +122,46 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
     }
 
     protected void setProfile(Profile profile) {
-        int previousBackground = mProfile != null ? mProfile.background : -1;
         mProfile = profile;
-        if (mProfile != null && previousBackground != mProfile.background && mBackgroundView != null) {
-            mBackgroundView.setImageResource(
-                    ProfileBackgrounds.getBackgroundResource(getActivity(), mProfile.background)
-            );
-        }
-        if (mHeaderMainFragment != null) {
-            mHeaderMainFragment.setProfile(profile);
-        }
-        if (mHeaderStatusFragment != null) {
-            mHeaderStatusFragment.setProfile(profile);
-        }
-        if (mGiftFragment != null) {
-            mGiftFragment.setProfile(profile);
-        }
+        invalidateUniversalUser();
+        setActionBarAvatar(getUniversalUser());
+        refreshActionBarTitles();
         if (mUserPhotoFragment != null && profile instanceof User) {
             mUserPhotoFragment.setUserData((User) profile);
         }
-        if (mUserFormFragment != null && profile instanceof User) {
-            mUserFormFragment.setUserData((User) profile);
+        if (mFormFragment != null) {
+            mFormFragment.setUserData(profile);
         }
-    }
-
-    protected boolean isChatAvailable() {
-        return mIsChatAvailable;
-    }
-
-    public void setIsChatAvailable(boolean isChatAvailable) {
-        mIsChatAvailable = isChatAvailable;
-    }
-
-    protected boolean isAddToFavoriteAvailable() {
-        return mIsAddToFavoritsAvailable;
-    }
-
-    public void setIsAddToFavoritsAvailable(boolean isAddToFavoritsAvailable) {
-        mIsAddToFavoritsAvailable = isAddToFavoritsAvailable;
-    }
-
-    private void initHeaderPages(View root) {
-        addHeaderPage(HeaderMainFragment.class.getName());
-        addHeaderPage(HeaderStatusFragment.class.getName());
-        mHeaderPager = (ViewPager) root.findViewById(R.id.vpHeaderFragments);
-//Мы отключаем сохранеие state у фрагментов, т.к. мы устанавливаем данные в методе getItem() адаптера,
-//что приводит к пустым фрагментам. Поэтому мы не пытаемся сохранять и восстанавливать состояние фрагмента
-        mHeaderPager.setSaveEnabled(false);
-        mHeaderPagerAdapter = new ProfilePageAdapter(getChildFragmentManager(),
-                HEADER_PAGES_CLASS_NAMES, mProfileUpdater);
-        mHeaderPager.setAdapter(mHeaderPagerAdapter);
-//Tabs for header
-        CirclePageIndicator circleIndicator = (CirclePageIndicator) root.findViewById(R.id.cpiHeaderTabs);
-        circleIndicator.setViewPager(mHeaderPager);
-        circleIndicator.setSnap(true);
-        mHeaderPagerAdapter.setPageIndicator(circleIndicator);
-        circleIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                AbstractProfileFragment.this.onPageScrolled(position, positionOffset, positionOffsetPixels);
-// when positionOffset is near 1.0f ViewPager changes position and sets positionOffset to 0
-                if (position <= 0) {
-                    mBackgroundView.setDarkenFrameOpacity(positionOffset);
-                }
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                AbstractProfileFragment.this.onPageSelected(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                AbstractProfileFragment.this.onPageScrollStateChanged(state);
-            }
-        });
     }
 
     private void initBodyPages(View root) {
         initBody();
         mBodyPager = (ViewPager) root.findViewById(R.id.vpFragments);
         mBodyPager.setSaveEnabled(false);
-        mBodyPagerAdapter = new ProfilePageAdapter(getChildFragmentManager(), BODY_PAGES_CLASS_NAMES,
+        ProfilePageAdapter mBodyPagerAdapter = new ProfilePageAdapter(getChildFragmentManager(), BODY_PAGES_CLASS_NAMES,
                 BODY_PAGES_TITLES, mProfileUpdater);
         mBodyPager.setAdapter(mBodyPagerAdapter);
-//Tabs for Body
-        mTabIndicator = (TabPageIndicator) root.findViewById(R.id.tpiTabs);
+        //Tabs for Body
+        mTabIndicator = (SlidingTabLayout) root.findViewById(R.id.tpiTabs);
+        mTabIndicator.setUseWeightProportions(true);
+        mTabIndicator.setCustomTabView(R.layout.tab_indicator, R.id.tab_title);
         mTabIndicator.setViewPager(mBodyPager);
-        mBodyPagerAdapter.setPageIndicator(mTabIndicator);
+        mTabIndicator.setOnPageChangeListener(mPageChangeListener);
         mTabIndicator.setOnPageChangeListener(this);
     }
 
     protected void initBody() {
     }
 
-    private void addHeaderPage(String className) {
-        HEADER_PAGES_CLASS_NAMES.add(className);
-    }
-
     protected void addBodyPage(String className, String pageTitle) {
-        BODY_PAGES_TITLES.add(pageTitle);
+        BODY_PAGES_TITLES.add(pageTitle.toUpperCase());
         BODY_PAGES_CLASS_NAMES.add(className);
     }
 
     @Override
     public void clearContent() {
-        if (mHeaderPager != null) {
-            mHeaderPager.setCurrentItem(0);
-        }
-        if (mHeaderMainFragment != null) mHeaderMainFragment.clearContent();
-        if (mHeaderStatusFragment != null) mHeaderStatusFragment.clearContent();
         if (mUserPhotoFragment != null) mUserPhotoFragment.clearContent();
-        if (mUserFormFragment != null) mUserFormFragment.clearContent();
+        if (mFormFragment != null) mFormFragment.clearContent();
     }
 
     @Override
@@ -279,8 +169,6 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
         super.onActivityResult(requestCode, resultCode, data);
         Utils.activityResultToNestedFragments(getChildFragmentManager(), requestCode, resultCode, data);
     }
-
-    protected abstract int getProfileType();
 
     protected void onStartActivity() {
     }
@@ -315,11 +203,5 @@ public abstract class AbstractProfileFragment extends BaseFragment implements Vi
         void bindFragment(Fragment fragment);
 
         Profile getProfile();
-
-        int getProfileType();
-    }
-
-    protected UpdatableGiftsFragment getGiftFragment() {
-        return mGiftFragment;
     }
 }

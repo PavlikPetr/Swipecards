@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.utils.Utils;
 
 @SuppressWarnings("UnusedDeclaration")
 public abstract class AbstractEditFragment extends BaseFragment {
@@ -79,8 +80,7 @@ public abstract class AbstractEditFragment extends BaseFragment {
         Activity activity = getActivity();
         if (activity != null) {
             activity.setResult(Activity.RESULT_CANCELED);
-            Toast toast = Toast.makeText(getActivity(), R.string.profile_update_error, Toast.LENGTH_SHORT);
-            toast.show();
+            Utils.showToastNotification(R.string.profile_update_error, Toast.LENGTH_SHORT);
         }
         finishRequestSend();
     }

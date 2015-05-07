@@ -11,23 +11,22 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.topface.billing.OpenIabFragment;
 import com.topface.statistics.android.Slices;
 import com.topface.statistics.android.StatisticsTracker;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
+import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.Utils;
-import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -43,17 +42,15 @@ public class PurchasesFragment extends BaseFragment {
     public static final int TYPE_LEADERS = 2;
     public static final int TYPE_UNLOCK_SYMPATHIES = 3;
     public static final int TYPE_ADMIRATION = 4;
+    public static final int TYPE_PEOPLE_NEARBY = 5;
     public static final String ARG_ITEM_PRICE = "quantity_of_coins";
     private static final String SKIP_BONUS = "SKIP_BONUS";
     private ViewPager mPager;
     private PurchasesFragmentsAdapter mPagerAdapter;
-    private TextView mResourcesInfo;
     private BroadcastReceiver mVipPurchasedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (mResourcesInfo != null) {
-                mResourcesInfo.setVisibility(View.GONE);
-            }
+            setResourceInfoText(null);
         }
     };
     private TextView mCurCoins;
@@ -63,10 +60,11 @@ public class PurchasesFragment extends BaseFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateBalanceCounters();
-            changeInfoText(getInfoText());
+            setResourceInfoText();
         }
     };
     private boolean mIsVip;
+    private String mResourceInfoText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,9 +93,7 @@ public class PurchasesFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (mResourcesInfo != null) {
-            mResourcesInfo.setVisibility(CacheProfile.premium ? View.GONE : View.VISIBLE);
-        }
+        setResourceInfoText(CacheProfile.premium ? null : getInfoText());
         updateBalanceCounters();
     }
 
@@ -113,7 +109,7 @@ public class PurchasesFragment extends BaseFragment {
             int bonusTabIndex = mPagerAdapter.getTabIndex(Options.Tab.BONUS);
             if (mPagerAdapter.hasTab(Options.Tab.BONUS) && mPager.getCurrentItem() != bonusTabIndex) {
                 mPager.setCurrentItem(bonusTabIndex);
-                changeInfoText(infoText);
+                setResourceInfoText(infoText);
                 return true;
             }
         }
@@ -125,27 +121,29 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     private void initViews(View root, Bundle savedInstanceState) {
-        TabPageIndicator tabIndicator = (TabPageIndicator) root.findViewById(R.id.purchasesTabs);
+        SlidingTabLayout tabIndicator = (SlidingTabLayout) root.findViewById(R.id.purchasesTabs);
+        tabIndicator.setUseWeightProportions(true);
+        tabIndicator.setCustomTabView(R.layout.tab_indicator, R.id.tab_title);
         mPager = (ViewPager) root.findViewById(R.id.purchasesPager);
 
         Bundle args = getArguments();
-
         mIsVip = args.getBoolean(IS_VIP_PRODUCTS, false);
+        args.putString(OpenIabFragment.ARG_RESOURCE_INFO_TEXT, mResourceInfoText == null ? getInfoText() : mResourceInfoText);
 
-        LinkedList<Options.Tab> tabs;
-        mResourcesInfo = (TextView) root.findViewById(R.id.payReason);
+        Options.TabsList tabs;
         //Для того, что бы при изменении текста плавно менялся лейаут, без скачков
         Utils.enableLayoutChangingTransition((ViewGroup) root.findViewById(R.id.purchaseLayout));
         if (mIsVip) {
-            tabs = new LinkedList<>(CacheProfile.getOptions().premiumTabs);
+            tabs = new Options.TabsList();
+            tabs.list.addAll(CacheProfile.getOptions().premiumTabs.list);
         } else {
-            tabs = new LinkedList<>(CacheProfile.getOptions().otherTabs);
+            tabs = new Options.TabsList();
+            tabs.list.addAll(CacheProfile.getOptions().otherTabs.list);
         }
-        mResourcesInfo.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down_animation));
 
-        removeExcessTabs(tabs); //Убираем табы в которых нет продуктов и бонусную вкладку, если фрагмент для покупки випа
+        removeExcessTabs(tabs.list); //Убираем табы в которых нет продуктов и бонусную вкладку, если фрагмент для покупки випа
 
-        mPagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs);
+        mPagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs.list);
         mPager.setAdapter(mPagerAdapter);
         tabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private TopfaceOfferwallRedirect mTopfaceOfferwallRedirect = CacheProfile.getOptions().topfaceOfferwallRedirect;
@@ -157,7 +155,7 @@ public class PurchasesFragment extends BaseFragment {
 
             @Override
             public void onPageSelected(int position) {
-                changeInfoText(getInfoText());
+                setResourceInfoText();
                 if (position == mPagerAdapter.getTabIndex(Options.Tab.BONUS)) {
                     if (mTopfaceOfferwallRedirect != null && mTopfaceOfferwallRedirect.isEnabled()) {
                         StatisticsTracker.getInstance().sendEvent("bonuses_opened",
@@ -170,12 +168,11 @@ public class PurchasesFragment extends BaseFragment {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
         tabIndicator.setViewPager(mPager);
         initBalanceCounters(getSupportActionBar().getCustomView());
-        changeInfoText(getInfoText());
+        setResourceInfoText();
         if (savedInstanceState != null) {
             mPager.setCurrentItem(savedInstanceState.getInt(LAST_PAGE, 0));
         } else {
@@ -186,7 +183,6 @@ public class PurchasesFragment extends BaseFragment {
     private void removeExcessTabs(LinkedList<Options.Tab> tabs) {
         boolean isVip = getArguments().getBoolean(IS_VIP_PRODUCTS, false);
         Options.Tab pwallMobileTab = null;
-        Options.Tab fortimoTab = null;
         for (Iterator<Options.Tab> iterator = tabs.iterator(); iterator.hasNext(); ) {
             Options.Tab tab = iterator.next();
             switch (tab.type) {
@@ -195,7 +191,7 @@ public class PurchasesFragment extends BaseFragment {
                     break;
             }
             //Удаляем вкладку Google Play, если не доступны Play Services
-            if (TextUtils.equals(tab.type, Options.Tab.GPLAY) && !App.isGmsEnabled()) {
+            if (TextUtils.equals(tab.type, Options.Tab.GPLAY) && !new GoogleMarketApiManager().isMarketApiAvailable()) {
                 iterator.remove();
             } else {
                 Products products = getProductsByTab(tab);
@@ -206,9 +202,6 @@ public class PurchasesFragment extends BaseFragment {
                     }
                 }
             }
-        }
-        if (tabs.contains(fortimoTab)) {
-            tabs.remove(pwallMobileTab);
         }
     }
 
@@ -239,38 +232,6 @@ public class PurchasesFragment extends BaseFragment {
         if (mCurCoins != null && mCurLikes != null) {
             mCurCoins.setText(Integer.toString(CacheProfile.money));
             mCurLikes.setText(Integer.toString(CacheProfile.likes));
-        }
-    }
-
-    private void changeInfoText(final String text) {
-        if (!mResourcesInfo.getText().toString().equals(text)) {
-            if (mResourcesInfo.getText().length() == 0) {
-                showNewInfo(text);
-            } else {
-                Animation pullUpAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.pull_up);
-                pullUpAnimation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        showNewInfo(text);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-                    }
-                });
-                mResourcesInfo.startAnimation(pullUpAnimation);
-            }
-        }
-    }
-
-    private void showNewInfo(String text) {
-        if (mResourcesInfo != null) {
-            mResourcesInfo.setText(text);
-            mResourcesInfo.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down_animation));
         }
     }
 
@@ -326,4 +287,22 @@ public class PurchasesFragment extends BaseFragment {
         return mIsVip;
     }
 
+    private void setResourceInfoText(String text) {
+        mResourceInfoText = text;
+        sendResourceInfoTextBroadcast();
+    }
+
+    private void sendResourceInfoTextBroadcast() {
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(getUpdateResourceInfoTextIntent(mResourceInfoText));
+    }
+
+    private void setResourceInfoText() {
+        setResourceInfoText(getInfoText());
+    }
+
+    private Intent getUpdateResourceInfoTextIntent(String text) {
+        Intent intent = new Intent(OpenIabFragment.UPDATE_RESOURCE_INFO);
+        intent.putExtra(OpenIabFragment.ARG_RESOURCE_INFO_TEXT, text);
+        return intent;
+    }
 }

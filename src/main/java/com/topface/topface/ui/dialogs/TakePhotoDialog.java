@@ -14,7 +14,7 @@ import com.topface.framework.imageloader.BitmapUtils;
 import com.topface.topface.R;
 import com.topface.topface.utils.IPhotoTakerWithDialog;
 
-public class TakePhotoDialog extends AbstractModalDialog implements View.OnClickListener {
+public class TakePhotoDialog extends AbstractDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "Topface_TakePhotoDialog_Tag";
 
@@ -39,8 +39,7 @@ public class TakePhotoDialog extends AbstractModalDialog implements View.OnClick
     }
 
     @Override
-    protected void initContentViews(View root) {
-        getDialog().setCanceledOnTouchOutside(false);
+    protected void initViews(View root) {
         mText = (TextView) root.findViewById(R.id.tvText);
         mPhotoLayout = root.findViewById(R.id.loPhoto);
         mPhoto = (ImageView) mPhotoLayout.findViewById(R.id.ivPhoto);
@@ -53,7 +52,12 @@ public class TakePhotoDialog extends AbstractModalDialog implements View.OnClick
     }
 
     @Override
-    public int getContentLayoutResId() {
+    protected boolean isModalDialog() {
+        return true;
+    }
+
+    @Override
+    public int getDialogLayoutRes() {
         return R.layout.dialog_take_photo;
     }
 
@@ -164,14 +168,6 @@ public class TakePhotoDialog extends AbstractModalDialog implements View.OnClick
         if (mScaledBitmap != null) {
             mScaledBitmap.recycle();
         }
-    }
-
-    @Override
-    protected void onCloseButtonClick(View v) {
-        if (mPhotoTaker != null) {
-            mPhotoTaker.onTakePhotoDialogDismiss();
-        }
-        dismiss();
     }
 
     /**

@@ -2,6 +2,7 @@ package com.topface.topface.utils.debug;
 
 import android.content.Context;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.utils.CacheProfile;
 
 import org.acra.ACRA;
@@ -43,6 +44,7 @@ public class HockeySender implements ReportSender {
     @Override
     public void send(Context context, CrashReportData report) throws ReportSenderException {
         String log = createCrashLog(report);
+        Debug.log("HockeyAppSender", log);
         String url = BASE_URL + ACRA.getConfig().formUri() + CRASHES_PATH;
 
         try {

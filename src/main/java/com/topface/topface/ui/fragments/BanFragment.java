@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.BanActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.settings.FeedbackMessageFragment;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -30,6 +31,7 @@ public class BanFragment extends BaseFragment implements View.OnClickListener {
         super.onCreateView(inflater, container, savedInstanceState);
         View root;
         root = initView(inflater);
+        getSupportActionBar().setShowHideAnimationEnabled(false);
         return root;
     }
 
@@ -58,10 +60,11 @@ public class BanFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.logout_text:
+                ConnectionManager.getInstance().onBanActivityFinish();
                 new AuthorizationManager(getActivity()).logout(getActivity());
+                NavigationActivity.restartNavigationActivity(getActivity());
                 break;
             case R.id.btnFeedback:
-                getSupportActionBar().show();
                 ConnectionManager.getInstance().onBanActivityFinish();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(

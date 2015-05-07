@@ -71,7 +71,7 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     }
 
     @Override
-    protected int getTypeForCounters() {
+    protected int getFeedType() {
         return CountersManager.SYMPATHY;
     }
 

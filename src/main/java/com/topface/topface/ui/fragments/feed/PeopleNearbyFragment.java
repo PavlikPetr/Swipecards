@@ -28,6 +28,7 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
+import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.gcmutils.GCMUtils;
@@ -74,7 +75,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     }
 
     @Override
-    protected int getTypeForCounters() {
+    protected int getFeedType() {
         return CountersManager.GEO;
     }
 
@@ -232,7 +233,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     private void openBuyScreenOnBlockedGeo(Options.BlockPeopleNearby blockPeopleNearby) {
         startActivity(
-                PurchasesActivity.createBuyingIntent("PeoplePaidNearby", blockPeopleNearby.price)
+                PurchasesActivity.createBuyingIntent("PeoplePaidNearby", PurchasesFragment.TYPE_PEOPLE_NEARBY, blockPeopleNearby.price)
         );
     }
 

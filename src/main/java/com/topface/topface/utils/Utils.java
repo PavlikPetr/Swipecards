@@ -66,10 +66,6 @@ public class Utils {
         return (int) (System.currentTimeMillis() / 1000L);
     }
 
-    public static String formatPhotoQuantity(int quantity) {
-        return Utils.getQuantityString(R.plurals.photo, quantity, (int) quantity);
-    }
-
     public static String getQuantityString(int id, int quantity, Object... formatArgs) {
         try {
             mPluralResources = new PluralResources(App.getContext().getResources());
@@ -86,6 +82,28 @@ public class Utils {
                     context,
                     R.string.general_data_error,
                     Toast.LENGTH_SHORT
+            ).show();
+        }
+    }
+
+    public static void showToastNotification(int stringId, int duration) {
+        Context context = App.getContext();
+        if (context != null && (duration == 0 || duration == 1)) {
+            Toast.makeText(
+                    context,
+                    stringId,
+                    duration
+            ).show();
+        }
+    }
+
+    public static void showToastNotification(String text, int duration) {
+        Context context = App.getContext();
+        if (context != null && (duration == 0 || duration == 1)) {
+            Toast.makeText(
+                    context,
+                    text,
+                    duration
             ).show();
         }
     }
@@ -221,7 +239,7 @@ public class Utils {
     public static void hideSoftKeyboard(Context context, IBinder windowToken) {
         if (context != null) {
             InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(windowToken, 0);
+            imm.hideSoftInputFromWindow(windowToken, InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
 

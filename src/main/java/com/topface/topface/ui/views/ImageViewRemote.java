@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.topface.framework.imageloader.ImageViewRemoteTemplate;
+import com.topface.framework.imageloader.processor.CropProcessor;
 import com.topface.framework.imageloader.processor.RoundCornersProcessor;
 import com.topface.framework.imageloader.processor.RoundProcessor;
 import com.topface.framework.imageloader.processor.SquareProcessor;
@@ -21,6 +22,7 @@ public class ImageViewRemote extends ImageViewRemoteTemplate implements SquarePr
     private static final int POST_PROCESSOR_MASK = 3;
     private static final int POST_PROCESSOR_LEFTMENUCLIP = 4;
     private static final int POST_PROCESSOR_SQUARED = 5;
+    private static final int POST_PROCESSOR_CROPED = 6;
 
     public ImageViewRemote(Context context) {
         super(context);
@@ -85,6 +87,8 @@ public class ImageViewRemote extends ImageViewRemoteTemplate implements SquarePr
                     return new LeftMenuClipProcessor();
                 case POST_PROCESSOR_SQUARED:
                     return new SquareProcessor(this);
+                case POST_PROCESSOR_CROPED:
+                    return new CropProcessor();
                 default:
                     return null;
             }

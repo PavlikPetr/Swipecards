@@ -1,6 +1,7 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -13,9 +14,6 @@ import com.topface.topface.utils.loadcontollers.FeedLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
 public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsListView.OnScrollListener {
-
-    public static final int T_SEND_BTN = 3;
-    public static final int T_COUNT = 4;
 
     public class ViewHolder {
         ImageViewRemote giftImage;
@@ -32,28 +30,13 @@ public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsLis
 
 
     @Override
-    public int getViewTypeCount() {
-        return T_COUNT;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        FeedGift item = getItem(position);
-        if (item != null && item.gift != null && item.gift.type == Gift.SEND_BTN) {
-            return T_SEND_BTN;
-        } else {
-            return super.getItemViewType(position);
-        }
-    }
-
-    @Override
     protected View getContentView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
         FeedGift item = getItem(position);
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.profile_item_gift_grid, null, false);
+            convertView = mInflater.inflate(getGiftItemLayoutRes(), null, false);
             holder = new ViewHolder();
             holder.giftImage = (ImageViewRemote) convertView.findViewById(R.id.profileGiftImage);
             convertView.setTag(holder);
@@ -67,6 +50,11 @@ public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsLis
             holder.giftImage.setRemoteSrc(item.gift.link);
         }
         return convertView;
+    }
+
+    @LayoutRes
+    protected int getGiftItemLayoutRes() {
+        return R.layout.profile_item_gift_grid;
     }
 
     protected int getLoaderRetrierLayout() {

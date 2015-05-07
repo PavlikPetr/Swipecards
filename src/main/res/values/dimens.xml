@@ -36,4 +36,16 @@
 
     <dimen name="add_to_leader_spacing_value">2dp</dimen>
 
+    <dimen name="edit_dialog_button_heigh">42dp</dimen>
+
+    <dimen name="form_item_height">60dp</dimen>
+
+    <dimen name="item_side_padding">8dp</dimen>
+
+    <dimen name="form_gift_size">55dp</dimen>
+
+    <dimen name="form_gift_counter_size">18dp</dimen>
+
+    <dimen name="base_indent">8dp</dimen>
+
 </resources>

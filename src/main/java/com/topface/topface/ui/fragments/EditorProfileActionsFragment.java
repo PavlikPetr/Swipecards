@@ -8,12 +8,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
+import com.topface.topface.data.ModerationResponse;
 import com.topface.topface.data.User;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ModerationPunish;
+import com.topface.topface.requests.ModerationUnban;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -89,6 +95,9 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
                 showView(root, R.id.editor_ban_profile_social, false);
                 showView(root, R.id.editor_ban_profile_social_id, false);
             }
+            if (!mUser.banned) {
+                showView(root, R.id.editor_ban_unban_user, false);
+            }
             initFullInfo(root);
         }
     }
@@ -105,6 +114,8 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
         root.findViewById(R.id.editor_ban_del_status).setOnClickListener(this);
         root.findViewById(R.id.editor_ban_fake).setOnClickListener(this);
         root.findViewById(R.id.editor_ban_porn).setOnClickListener(this);
+        root.findViewById(R.id.editor_ban_unban_user).setOnClickListener(this);
+
     }
 
     private void initFullInfo(View root) {
@@ -188,6 +199,9 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
             case R.id.editor_ban_spam_photo:
                 banUser(BanAction.SPAM_PHOTO);
                 break;
+            case R.id.editor_ban_unban_user:
+                unBanUser();
+                break;
         }
     }
 
@@ -198,13 +212,39 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
         punish.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                Toast.makeText(getActivity(), R.string.editor_ban_result_ok, Toast.LENGTH_SHORT).show();
+                Utils.showToastNotification(R.string.editor_ban_result_ok, Toast.LENGTH_SHORT);
                 showView(mLocker, false);
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
                 Toast.makeText(getActivity(), response.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                showView(mLocker, false);
+            }
+        }).exec();
+    }
+
+    private void unBanUser() {
+        ModerationUnban unban = new ModerationUnban(getActivity(), mUserId);
+        registerRequest(unban);
+        unban.callback(new DataApiHandler<ModerationResponse>() {
+            @Override
+            protected void success(ModerationResponse data, IApiResponse response) {
+                if (data.completed) {
+                    Toast.makeText(getActivity(), R.string.editor_ban_unban_user_result, Toast.LENGTH_SHORT).show();
+                    showView(mLocker, false);
+                    showView(getView(), R.id.editor_ban_unban_user, false);
+                }
+            }
+
+            @Override
+            protected ModerationResponse parseResponse(ApiResponse response) {
+                return JsonUtils.fromJson(response.toString(), ModerationResponse.class);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+                Utils.showToastNotification(response.getErrorMessage(), Toast.LENGTH_SHORT);
                 showView(mLocker, false);
             }
         }).exec();

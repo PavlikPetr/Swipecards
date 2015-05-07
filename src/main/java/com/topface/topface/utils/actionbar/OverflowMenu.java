@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
@@ -27,6 +26,7 @@ import com.topface.topface.ui.EditorProfileActionsActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -96,44 +96,6 @@ public class OverflowMenu {
         registerBroadcastReceiver();
     }
 
-    private enum OverflowMenuType {CHAT_OVERFLOW_MENU, PROFILE_OVERFLOW_MENU}
-
-    public enum OverflowMenuItem {
-        SEND_GIFT_ACTION(1, R.string.general_gift),
-        SEND_SYMPATHY_ACTION(2, R.string.general_sympathy),
-        SEND_ADMIRATION_ACTION(3, R.string.general_delight),
-        OPEN_CHAT_ACTION(4, R.string.user_actions_chat),
-        ADD_TO_BLACK_LIST_ACTION(5, R.string.black_list_add_short, R.string.black_list_delete),
-        COMPLAIN_ACTION(6, R.string.general_complain),
-        ADD_TO_BOOKMARK_ACTION(7, R.string.general_bookmarks_add, R.string.general_bookmarks_delete),
-        OPEN_PROFILE_FOR_EDITOR_STUB(8, R.string.editor_profile_admin);
-        private int mId;
-        private int mFirstResourceId;
-        private int mSecondResourceId;
-
-        OverflowMenuItem(int id, int firstResource) {
-            this(id, firstResource, firstResource);
-        }
-
-        OverflowMenuItem(int id, int firstResource, int secondResource) {
-            mId = id;
-            mFirstResourceId = firstResource;
-            mSecondResourceId = secondResource;
-        }
-
-        public int getId() {
-            return mId;
-        }
-
-        public int getFirstResourceId() {
-            return mFirstResourceId;
-        }
-
-        public int getSecondResourceId() {
-            return mSecondResourceId;
-        }
-    }
-
     public ArrayList<OverflowMenuItem> getChatOverflowMenu() {
         ArrayList<OverflowMenuItem> result = new ArrayList<>();
         result.add(ADD_TO_BLACK_LIST_ACTION);
@@ -142,15 +104,17 @@ public class OverflowMenu {
         return result;
     }
 
-    public ArrayList<OverflowMenuItem> getProfileOverflowMenu(boolean isEditor) {
+    public ArrayList<OverflowMenuItem> getProfileOverflowMenu(boolean isEditor, boolean isBanned) {
         ArrayList<OverflowMenuItem> result = new ArrayList<>();
-        result.add(SEND_SYMPATHY_ACTION);
-        result.add(SEND_ADMIRATION_ACTION);
-        result.add(OPEN_CHAT_ACTION);
-        result.add(SEND_GIFT_ACTION);
-        result.add(ADD_TO_BLACK_LIST_ACTION);
-        result.add(ADD_TO_BOOKMARK_ACTION);
-        result.add(COMPLAIN_ACTION);
+        if (!isBanned) {
+            result.add(SEND_SYMPATHY_ACTION);
+            result.add(SEND_ADMIRATION_ACTION);
+            result.add(OPEN_CHAT_ACTION);
+            result.add(SEND_GIFT_ACTION);
+            result.add(ADD_TO_BLACK_LIST_ACTION);
+            result.add(ADD_TO_BOOKMARK_ACTION);
+            result.add(COMPLAIN_ACTION);
+        }
         if (isEditor) {
             result.add(OPEN_PROFILE_FOR_EDITOR_STUB);
         }
@@ -177,7 +141,7 @@ public class OverflowMenu {
             Boolean isInBlackList = isInBlackList();
             Boolean isSympathySent = isSympathySent();
             mBarActions.getSubMenu().clear();
-            ArrayList<OverflowMenuItem> overflowMenuItemArray = getProfileOverflowMenu(CacheProfile.isEditor());
+            ArrayList<OverflowMenuItem> overflowMenuItemArray = getProfileOverflowMenu(CacheProfile.isEditor(), isBanned());
             for (int i = 0; i < overflowMenuItemArray.size(); i++) {
                 OverflowMenuItem item = overflowMenuItemArray.get(i);
                 Integer resourceId = null;
@@ -198,12 +162,14 @@ public class OverflowMenu {
                 }
                 mBarActions.getSubMenu().add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mActivity.getString(resourceId) : "");
             }
-            if (isInBlackList != null) {
-                mBarActions.getSubMenu().findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!isInBlackList);
-            }
-            if (isSympathySent != null && isSympathySent) {
-                mBarActions.getSubMenu().findItem(SEND_SYMPATHY_ACTION.getId()).setEnabled(false);
-                mBarActions.getSubMenu().findItem(SEND_ADMIRATION_ACTION.getId()).setEnabled(false);
+            if (overflowMenuItemArray.size() > 1) {
+                if (isInBlackList != null) {
+                    mBarActions.getSubMenu().findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!isInBlackList);
+                }
+                if (isSympathySent != null && isSympathySent) {
+                    mBarActions.getSubMenu().findItem(SEND_SYMPATHY_ACTION.getId()).setEnabled(false);
+                    mBarActions.getSubMenu().findItem(SEND_ADMIRATION_ACTION.getId()).setEnabled(false);
+                }
             }
         }
     }
@@ -305,7 +271,7 @@ public class OverflowMenu {
                     public void onRateCompleted(int mutualId) {
                         setSympathySentState(true, true);
                         if (mActivity != null) {
-                            Toast.makeText(App.getContext(), R.string.sympathy_sended, Toast.LENGTH_SHORT).show();
+                            Utils.showToastNotification(R.string.sympathy_sended, Toast.LENGTH_SHORT);
                         }
                     }
 
@@ -314,7 +280,7 @@ public class OverflowMenu {
                     public void onRateFailed(int userId, int mutualId) {
                         setSympathySentState(false, true);
                         if (mActivity != null) {
-                            Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                            Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                         }
                         initOverfowMenu();
                     }
@@ -339,7 +305,7 @@ public class OverflowMenu {
                     public void onRateCompleted(int mutualId) {
                         setSympathySentState(true, true);
                         if (mActivity != null) {
-                            Toast.makeText(App.getContext(), R.string.admiration_sended, Toast.LENGTH_SHORT).show();
+                            Utils.showToastNotification(R.string.admiration_sended, Toast.LENGTH_SHORT);
                         }
                     }
 
@@ -489,19 +455,19 @@ public class OverflowMenu {
     }
 
     private void showBlackListToast(boolean value) {
-        Toast.makeText(mActivity.getApplicationContext(),
-                value ?
-                        R.string.user_added_to_black_list :
-                        R.string.user_deleted_from_black_list,
-                Toast.LENGTH_SHORT).show();
+        if (value) {
+            Utils.showToastNotification(R.string.user_added_to_black_list, Toast.LENGTH_SHORT);
+        } else {
+            Utils.showToastNotification(R.string.user_deleted_from_black_list, Toast.LENGTH_SHORT);
+        }
     }
 
     private void showBookmarkToast(boolean value) {
-        Toast.makeText(mActivity.getApplicationContext(),
-                value ?
-                        R.string.user_added_to_bookmark :
-                        R.string.user_deleted_from_bookmark,
-                Toast.LENGTH_SHORT).show();
+        if (value) {
+            Utils.showToastNotification(R.string.user_added_to_bookmark, Toast.LENGTH_SHORT);
+        } else {
+            Utils.showToastNotification(R.string.user_deleted_from_bookmark, Toast.LENGTH_SHORT);
+        }
     }
 
     private void setBookmarkedState(Boolean value) {
@@ -543,12 +509,12 @@ public class OverflowMenu {
         mSavedResponse = apiResponse;
     }
 
-    public void setOverflowMenuFieldsListener(OverflowMenuUser overflowMenuFieldsListener) {
-        mOverflowMenuFields = overflowMenuFieldsListener;
-    }
-
     public OverflowMenuUser getOverflowMenuFieldsListener() {
         return mOverflowMenuFields;
+    }
+
+    public void setOverflowMenuFieldsListener(OverflowMenuUser overflowMenuFieldsListener) {
+        mOverflowMenuFields = overflowMenuFieldsListener;
     }
 
     private Boolean isBookmarked() {
@@ -587,14 +553,56 @@ public class OverflowMenu {
         return getOverflowMenuFieldsListener() == null ? null : getOverflowMenuFieldsListener().getProfileId();
     }
 
+    private Boolean isBanned() {
+        return getOverflowMenuFieldsListener() == null ? false : getOverflowMenuFieldsListener().isBanned();
+    }
+
     private void registerBroadcastReceiver() {
         LocalBroadcastManager.getInstance(mActivity).registerReceiver(mUpdateActionsReceiver,
                 new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
     }
 
-    public void onDestroy() {
+    public void onReleaseOverflowMenu() {
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(mUpdateActionsReceiver);
         mOverflowMenuFields = null;
         mActivity = null;
+    }
+
+    private enum OverflowMenuType {CHAT_OVERFLOW_MENU, PROFILE_OVERFLOW_MENU}
+
+    public enum OverflowMenuItem {
+        SEND_GIFT_ACTION(1, R.string.general_gift),
+        SEND_SYMPATHY_ACTION(2, R.string.general_sympathy),
+        SEND_ADMIRATION_ACTION(3, R.string.general_delight),
+        OPEN_CHAT_ACTION(4, R.string.user_actions_chat),
+        ADD_TO_BLACK_LIST_ACTION(5, R.string.black_list_add_short, R.string.black_list_delete),
+        COMPLAIN_ACTION(6, R.string.general_complain),
+        ADD_TO_BOOKMARK_ACTION(7, R.string.general_bookmarks_add, R.string.general_bookmarks_delete),
+        OPEN_PROFILE_FOR_EDITOR_STUB(8, R.string.editor_profile_admin);
+        private int mId;
+        private int mFirstResourceId;
+        private int mSecondResourceId;
+
+        OverflowMenuItem(int id, int firstResource) {
+            this(id, firstResource, firstResource);
+        }
+
+        OverflowMenuItem(int id, int firstResource, int secondResource) {
+            mId = id;
+            mFirstResourceId = firstResource;
+            mSecondResourceId = secondResource;
+        }
+
+        public int getId() {
+            return mId;
+        }
+
+        public int getFirstResourceId() {
+            return mFirstResourceId;
+        }
+
+        public int getSecondResourceId() {
+            return mSecondResourceId;
+        }
     }
 }

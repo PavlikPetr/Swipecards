@@ -28,6 +28,7 @@ import java.util.LinkedList;
 
 public abstract class BaseFragment extends TrackedFragment implements IRequestClient {
 
+    private static final String STATE_NEED_TITLES = "STATE_NEED_TITLES";
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
 
     private ActionBar mSupportActionBar;
@@ -40,6 +41,9 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         restoreState();
         setHasOptionsMenu(needOptionsMenu());
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            mNeedTitles = savedInstanceState.getBoolean(STATE_NEED_TITLES, true);
+        }
     }
 
     protected boolean needOptionsMenu() {
@@ -54,13 +58,19 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         refreshActionBarTitles();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(STATE_NEED_TITLES, mNeedTitles);
+    }
+
     private void clearPreviousState() {
         mSupportActionBar = null;
         mTitleSetter = null;
     }
 
     public void refreshActionBarTitles() {
-        if (mNeedTitles) setActionBarTitles(getTitle(), getSubtitle());
+        setActionBarTitles(getTitle(), getSubtitle());
     }
 
     @SuppressWarnings("unused")
@@ -135,8 +145,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public void startActivityForResult(Intent intent, int requestCode) {
         if (requestCode != -1) {
             intent.putExtra(Static.INTENT_REQUEST_KEY, requestCode);
+            super.startActivityForResult(intent, requestCode);
         }
-        super.startActivityForResult(intent, requestCode);
     }
 
     @Override
@@ -220,28 +230,32 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected void setActionBarTitles(String title, String subtitle) {
-        if (mTitleSetter != null) {
+        if (mTitleSetter != null && mNeedTitles) {
             mTitleSetter.setActionBarTitles(title, subtitle);
         }
     }
 
     @SuppressWarnings("UnusedDeclaration")
     protected void setActionBarTitles(int title, int subtitle) {
-        if (mTitleSetter != null) {
+        if (mTitleSetter != null  && mNeedTitles) {
             mTitleSetter.setActionBarTitles(title, subtitle);
         }
     }
 
     protected void setActionBarTitles(String title) {
-        if (mTitleSetter != null) {
+        if (mTitleSetter != null  && mNeedTitles) {
             mTitleSetter.setActionBarTitles(title, null);
         }
     }
 
     protected void setActionBarTitles(int title) {
-        if (mTitleSetter != null) {
+        if (mTitleSetter != null  && mNeedTitles) {
             mTitleSetter.setActionBarTitles(title, null);
         }
+    }
+
+    public ActionBarTitleSetterDelegate getTitleSetter() {
+        return mTitleSetter;
     }
 
     protected String getTitle() {
@@ -259,7 +273,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         mNeedTitles = needTitles;
     }
 
-    public static enum FragmentId {
+    public enum FragmentId {
         VIP_PROFILE(0),
         PROFILE(1),
         DATING(2, true),

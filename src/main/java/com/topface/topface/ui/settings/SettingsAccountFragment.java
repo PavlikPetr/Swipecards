@@ -19,6 +19,7 @@ import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -41,7 +42,7 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
         } else if (token.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
             icon = getResources().getDrawable(R.drawable.vk_logo_account);
         } else if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-            icon = getResources().getDrawable(R.drawable.tf_logo_account);
+            icon = getResources().getDrawable(R.drawable.ic_logo_account);
         } else if (token.getSocialNet().equals(AuthToken.SN_ODNOKLASSNIKI)) {
             icon = getResources().getDrawable(R.drawable.ico_ok_account);
         }
@@ -85,7 +86,7 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
                                 FragmentActivity activity = getActivity();
                                 if (activity != null) {
                                     mLockerView.setVisibility(View.GONE);
-                                    Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_LONG).show();
+                                    Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_LONG);
                                     AuthorizationManager.showRetryLogoutDialog(activity, logoutRequest);
                                 }
                             }

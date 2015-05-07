@@ -25,25 +25,13 @@ public class LocaleConfig {
 
     private static final String SYSTEM_LOCALE = "com.topface.topface_system_locale";
     private static final String APPLICATION_LOCALE = "com.topface.topface_application_locale";
-
+    public static boolean localeChangeInitiated = false;
     private Context mContext;
     private String mSystemLocale;
     private String mApplicationLocale;
-    public static boolean localeChangeInitiated = false;
 
     public LocaleConfig(Context context) {
         mContext = context;
-    }
-
-    public boolean fetchToSystemLocale() {
-        Locale currentSystemLocale = new Locale(Locale.getDefault().getLanguage());
-        Locale savedSystemLocale = new Locale(getSystemLocale());
-        if (!savedSystemLocale.equals(currentSystemLocale)) {
-            setSystemLocale(currentSystemLocale.getLanguage());
-            setApplicationLocale(currentSystemLocale.getLanguage());
-            return true;
-        }
-        return false;
     }
 
     public static void updateConfiguration(Context baseContext) {
@@ -51,38 +39,6 @@ public class LocaleConfig {
         android.content.res.Configuration conf = res.getConfiguration();
         conf.locale = new Locale(App.getLocaleConfig().getApplicationLocale());
         res.updateConfiguration(conf, res.getDisplayMetrics());
-    }
-
-    public String getSystemLocale() {
-        if (mSystemLocale == null) {
-            mSystemLocale = getPreferences().getString(SYSTEM_LOCALE, Locale.getDefault().getLanguage());
-        }
-        return mSystemLocale;
-    }
-
-    public String getApplicationLocale() {
-        if (mApplicationLocale == null) {
-            mApplicationLocale = getPreferences().getString(APPLICATION_LOCALE, Locale.getDefault().getLanguage());
-        }
-        return mApplicationLocale;
-    }
-
-    public void setSystemLocale(String locale) {
-        mSystemLocale = locale;
-        getPreferences().edit().putString(SYSTEM_LOCALE, mSystemLocale).apply();
-    }
-
-    public void setApplicationLocale(String locale) {
-        mApplicationLocale = locale;
-        setSystemLocale(Locale.getDefault().getLanguage());
-        getPreferences().edit().putString(APPLICATION_LOCALE, mApplicationLocale).apply();
-    }
-
-    private SharedPreferences getPreferences() {
-        return mContext.getSharedPreferences(
-                AppConfig.BASE_CONFIG_SETTINGS,
-                Context.MODE_PRIVATE
-        );
     }
 
     public static String getServerLocale(Activity activity, String selectedLocale) {
@@ -113,13 +69,13 @@ public class LocaleConfig {
                 @Override
                 public void success(IApiResponse response) {
                     DatingInstantMessageController.resetMessage();
-                    App.sendUserOptionsRequest();
+                    App.sendUserOptionsAndPurchasesRequest();
                     NavigationActivity.restartNavigationActivity(activity);
                 }
 
                 @Override
                 public void fail(int codeError, IApiResponse response) {
-                    Toast.makeText(activity, R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                    Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                 }
 
                 @Override
@@ -132,5 +88,48 @@ public class LocaleConfig {
             progress.dismiss();
             NavigationActivity.restartNavigationActivity(activity);
         }
+    }
+
+    public boolean fetchToSystemLocale() {
+        Locale currentSystemLocale = new Locale(Locale.getDefault().getLanguage());
+        Locale savedSystemLocale = new Locale(getSystemLocale());
+        if (!savedSystemLocale.equals(currentSystemLocale)) {
+            setSystemLocale(currentSystemLocale.getLanguage());
+            setApplicationLocale(currentSystemLocale.getLanguage());
+            return true;
+        }
+        return false;
+    }
+
+    public String getSystemLocale() {
+        if (mSystemLocale == null) {
+            mSystemLocale = getPreferences().getString(SYSTEM_LOCALE, Locale.getDefault().getLanguage());
+        }
+        return mSystemLocale;
+    }
+
+    public void setSystemLocale(String locale) {
+        mSystemLocale = locale;
+        getPreferences().edit().putString(SYSTEM_LOCALE, mSystemLocale).apply();
+    }
+
+    public String getApplicationLocale() {
+        if (mApplicationLocale == null) {
+            mApplicationLocale = getPreferences().getString(APPLICATION_LOCALE, Locale.getDefault().getLanguage());
+        }
+        return mApplicationLocale;
+    }
+
+    public void setApplicationLocale(String locale) {
+        mApplicationLocale = locale;
+        setSystemLocale(Locale.getDefault().getLanguage());
+        getPreferences().edit().putString(APPLICATION_LOCALE, mApplicationLocale).apply();
+    }
+
+    private SharedPreferences getPreferences() {
+        return mContext.getSharedPreferences(
+                AppConfig.BASE_CONFIG_SETTINGS,
+                Context.MODE_PRIVATE
+        );
     }
 }

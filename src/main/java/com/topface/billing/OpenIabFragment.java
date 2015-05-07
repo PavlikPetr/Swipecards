@@ -56,6 +56,9 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     public static final int BUYING_REQUEST = 1001;
     public static final String TEST_PURCHASED_PRODUCT_ID = "android.test.purchased";
     private static final String APP_STORE_NAME = "&storename";
+    public static final String ARG_RESOURCE_INFO_TEXT = "resource_info_text";
+    public static final String UPDATE_RESOURCE_INFO = "com.topface.topface.UPDATE_RESOURCE_INFO";
+
     /**
      * Результат запроса из OpenIAB: Пользователь отменил покупку
      */
@@ -73,21 +76,51 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     private View mDeferredPurchaseButton;
     private UserConfig mUserConfig;
 
+    /**
+     * Дада, это супер грязный хак для работы Google Play In-App Billing внутри фрагмента
+     * см. http://stackoverflow.com/questions/23238360/implementing-android-in-app-purchase-with-fragments
+     * <p/>
+     * Если вы хотите добавить в вашу активити BillingFragment, то нужно вызывать этот метод внутри onActivityResult,
+     * передав все параметры из него.
+     * <p/>
+     * Если же вы хотите использовать BillingFragment вложенным в другой фрагмент, то придется еще и прокинуть
+     * onActivityResult в фрагмент предка, но данный метод умеет это делать автоматически, если вы
+     * вызовите этот метод в активити и последним параметром parentFragmentClass
+     * укажите родительский фрагмент, внутри которого находится BillingFragment
+     * см. пример в PurchaseActivity.onActivityResult
+     *
+     * @param manager             FragmentManager, в котором нужно найти фрагмент, для поиска фрагментов нужно передавать getChildFragmentManager
+     * @param requestCode         параметр requestCode из onActivityResult
+     * @param resultCode          параметр resultCode из onActivityResult
+     * @param data                параметр data из onActivityResult
+     * @param parentFragmentClass клас родительского фрагмента, где содержится BillingFragment, если не задан,
+     *                            то будем искать в manager именно BillinFragment. Если же задан, то сперва найдем
+     *                            соответсвующий параметру parentFragment фрагмент и будем искать в его ChildFragmentManager
+     */
+    public static boolean processRequestCode(FragmentManager manager, int requestCode, int resultCode, Intent data, Class<? extends Fragment> parentFragmentClass) {
+        List<Fragment> fragments = manager.getFragments();
+        for (Fragment fragment : fragments) {
+            if (parentFragmentClass != null && parentFragmentClass.isInstance(fragment)) {
+                //Да, вам не показалось, это рекурсивный вызов, но с пустым последним парметром
+                return processRequestCode(fragment.getChildFragmentManager(), requestCode, resultCode, data, null);
+            } else if (fragment instanceof OpenIabFragment && ((OpenIabFragment) fragment).getRequestCode() == requestCode) {
+                fragment.onActivityResult(requestCode, resultCode, data);
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUserConfig = App.getUserConfig();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         App.getOpenIabHelperManager().addOpenIabEventListener(getActivity(), this);
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
         App.getOpenIabHelperManager().removeOpenIabEventListener(this);
     }
 
@@ -106,7 +139,6 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             mDeferredPurchaseButton.findViewById(R.id.itContainer).setEnabled(true);
         }
     }
-
 
     /**
      * Колбэк окончания "использования" (consume) продукта.
@@ -495,43 +527,8 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     @Override
     public void onPurchased(Purchase product) {
         if (isAdded()) {
-            Toast.makeText(getActivity(), R.string.buying_store_ok, Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.buying_store_ok, Toast.LENGTH_LONG);
         }
-    }
-
-    /**
-     * Дада, это супер грязный хак для работы Google Play In-App Billing внутри фрагмента
-     * см. http://stackoverflow.com/questions/23238360/implementing-android-in-app-purchase-with-fragments
-     * <p/>
-     * Если вы хотите добавить в вашу активити BillingFragment, то нужно вызывать этот метод внутри onActivityResult,
-     * передав все параметры из него.
-     * <p/>
-     * Если же вы хотите использовать BillingFragment вложенным в другой фрагмент, то придется еще и прокинуть
-     * onActivityResult в фрагмент предка, но данный метод умеет это делать автоматически, если вы
-     * вызовите этот метод в активити и последним параметром parentFragmentClass
-     * укажите родительский фрагмент, внутри которого находится BillingFragment
-     * см. пример в PurchaseActivity.onActivityResult
-     *
-     * @param manager             FragmentManager, в котором нужно найти фрагмент, для поиска фрагментов нужно передавать getChildFragmentManager
-     * @param requestCode         параметр requestCode из onActivityResult
-     * @param resultCode          параметр resultCode из onActivityResult
-     * @param data                параметр data из onActivityResult
-     * @param parentFragmentClass клас родительского фрагмента, где содержится BillingFragment, если не задан,
-     *                            то будем искать в manager именно BillinFragment. Если же задан, то сперва найдем
-     *                            соответсвующий параметру parentFragment фрагмент и будем искать в его ChildFragmentManager
-     */
-    public static boolean processRequestCode(FragmentManager manager, int requestCode, int resultCode, Intent data, Class<? extends Fragment> parentFragmentClass) {
-        List<Fragment> fragments = manager.getFragments();
-        for (Fragment fragment : fragments) {
-            if (parentFragmentClass != null && parentFragmentClass.isInstance(fragment)) {
-                //Да, вам не показалось, это рекурсивный вызов, но с пустым последним парметром
-                return processRequestCode(fragment.getChildFragmentManager(), requestCode, resultCode, data, null);
-            } else if (fragment instanceof OpenIabFragment && ((OpenIabFragment) fragment).getRequestCode() == requestCode) {
-                fragment.onActivityResult(requestCode, resultCode, data);
-                return true;
-            }
-        }
-        return false;
     }
 
     protected int getRequestCode() {

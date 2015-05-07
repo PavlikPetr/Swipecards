@@ -41,7 +41,7 @@
     <string name="locking_screen_advice">Respond to all incoming likes</string>
     <string name="locking_screen_advice2">Get rid of all the limits</string>
     <string name="general_bookmarks_is_deleted">User deleted from favorites</string>
-    <string name="general_blacklist_is_deleted">User is deleted from the blacklist</string>
+    <string name="general_blacklist_is_deleted">User is deleted from the Blacklist</string>
     <string name="invite_friends_title_short">Invite all friends to Topface</string>
     <string name="general_bookmarks_add_short">To favorites</string>
     <string name="general_complaint">Complain</string>
@@ -52,7 +52,7 @@
     <string name="dating_prev_button_ext">Previous</string>
     <string name="dating_skip_button_ext">Next</string>
     <string name="profile_services">Services</string>
-    <string name="black_list_add">Add to the blacklist</string>
+    <string name="black_list_add">Add to the Blacklist</string>
     <string name="vip_invisible_mode">Invisibility mode</string>
     <string name="buying_profile_coins">Your account</string>
     <string name="vip_info_title">VIP-privileges</string>
@@ -70,8 +70,8 @@
     <string name="popup_version_message">Time to update your app version!</string>
     <string name="leaders_select_photo_info">Select the most impressive photo! You cannot select a photo with a low rating.</string>
     <string name="map_popup_address">Address</string>
-    <string name="black_list_info">You added someone to your blacklist. You can change this in your profile or in your VIP-status settings.</string>
-    <string name="black_list_activation">Activate your VIP-status and use the blacklist.</string>
+    <string name="black_list_info">You\'ve added someone to your Blacklist. You can change this in your profile or in your VIP-status settings.</string>
+    <string name="black_list_activation">Activate your VIP-status and use the Blacklist.</string>
     <string name="buying_total">Total</string>
     <string name="we_dont_detect_your_city">To find people nearby, we need to know where you are. Please indicate your city.</string>
     <string name="confirm_email">Please confirm the email</string>
@@ -112,7 +112,7 @@
     <string name="pincode_auth_input">You need to enter your login and password.</string>
     <string name="pincode_will_be_reset">If the authorization is successful, all app settings will be reset.</string>
     <plurals name="pincode_interval">
-        <item quantity="zero">Right after logging out</item>
+        <item quantity="zero">right away</item>
         <item quantity="other">%d min</item>
         <item quantity="one">%d min</item>
     </plurals>
@@ -135,6 +135,10 @@
     <string name="general_spinner_title">Choose an action</string>
     <string name="general_profile_error">Error loading profile</string>
     <string name="general_dbl_all">All</string>
+    <string name="general_dbl_unread">Unread</string>
+    <string name="general_empty_code_confirmation">Enter confirmation code</string>
+    <string name="general_email_success_confirmed">Your email was successfully confirmed</string>
+    <string name="general_email_not_confirmed">Your email wasn\'t confirmed</string>
     <string name="time_yesterday">Yesterday</string>
     <string name="time_today">Today</string>
     <string name="general_send_button">Send</string>
@@ -166,8 +170,8 @@
     <string name="chat_like_out">Like is sent.</string>
     <string name="chat_mutual_in">You have received an admiration.</string>
     <string name="chat_mutual_out">You have sent an admiration.</string>
-    <string name="chat_wish_in">Someone has sent you their Secret Desire</string>
-    <string name="chat_wish_out">Secret Wish is sent.</string>
+    <string name="chat_wish_in">Someone has sent you their Secret Desire.</string>
+    <string name="chat_wish_out">Secret Desire is sent.</string>
     <string name="chat_sexuality_in">Your sexuality has been rated.</string>
     <string name="chat_sexuality_out">You have rated a sexuality.</string>
     <string name="chat_wink_in">You have received a wink.</string>
@@ -183,20 +187,20 @@
     <string name="filter_cities_all">All cities</string>
     <string name="buying_header_title">Purchases</string>
     <plurals name="buying_gift_you_need_coins">
-        <item quantity="other">To be able to send a gift, buy %d more coins</item>
-        <item quantity="one">To be able to send a gift, buy %d more coin</item>
+        <item quantity="other">To be able to send a gift, get %d more coins</item>
+        <item quantity="one">To be able to send a gift, get %d more coin</item>
     </plurals>
     <plurals name="buying_admiration_you_need_coins">
-        <item quantity="other">To send an admiration, buy %d more coins</item>
-        <item quantity="one">To send an admiration, buy %d more coin</item>
+        <item quantity="other">To send an admiration, get %d more coins</item>
+        <item quantity="one">To send an admiration, get %d more coin</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
-        <item quantity="other">To be able to see who likes you, buy %d more coins</item>
-        <item quantity="one">To be able to see who likes you, buy %d more coin</item>
+        <item quantity="other">To be able to see who likes you, get %d more coins</item>
+        <item quantity="one">To be able to see who likes you, get %d more coin</item>
     </plurals>
     <plurals name="buying_leaders_you_need_coins">
-        <item quantity="other">To be able to be seen by everyone, buy %d more coins</item>
-        <item quantity="one">To be able to be seen by everyone, buy %d more coin</item>
+        <item quantity="other">To be able to be seen by everyone, get %d more coins</item>
+        <item quantity="one">To be able to be seen by everyone, get %d more coin</item>
     </plurals>
     <plurals name="buying_you_need_coins">
         <item quantity="other">You are short of %d coins</item>
@@ -209,7 +213,7 @@
     <string name="album_add_photo_title">Add a photo</string>
     <string name="profile_add_album">Choose from the library</string>
     <string name="profile_add_camera">Take a photo</string>
-    <string name="profile_photo">Photo</string>
+    <string name="profile_photo">Photos</string>
     <string name="profile_form">Profile form</string>
     <string name="profile_gifts">Gifts</string>
     <string name="profile_actions">Actions</string>
@@ -257,6 +261,10 @@
     <string name="settings_rights_reserved">Topface \nAll rights reserved.</string>
     <string name="settings_extra">You can find more information on</string>
     <string name="settings_logout">Log out</string>
+    <string name="settings_code_confirmation">Send confirmation code</string>
+    <string name="settings_email_was_confirmed">Already confirmed</string>
+    <string name="settings_email_was_confirmed_textview_text">If you have already confirmed your email through the web</string>
+    <string name="settings_code_confirmation_hint">Confirmation code</string>
     <string name="settings_logout_msg">Do you really want to log out?</string>
     <string name="settings_error_message">Error message</string>
     <string name="settings_ask_developer">Ask our developers</string>
@@ -281,7 +289,7 @@
     </plurals>
     <string name="novice_sympathy">Send likes only to those\nwho really attract you.\nYou just might find someone special!</string>
     <string name="general_edit_profile_message">Please, fill in all the necessary fields in you profile.</string>
-    <string name="general_search_null_response_error">Not found. Try to change the filters.</string>
+    <string name="general_search_null_response_error">No one is found. Try to change the filters.</string>
     <string name="change_filters">Change filters</string>
     <string name="reset_filter">Reset</string>
     <string name="general_sex">Sex</string>
@@ -312,8 +320,8 @@
     <string name="vip_profile_bg">Background image</string>
     <string name="vip_status">VIP-status</string>
     <string name="black_list_title">Blacklist</string>
-    <string name="black_list_empty">Your blacklist is empty.</string>
-    <string name="black_list_delete">Delete from the blacklist</string>
+    <string name="black_list_empty">Your Blacklist is empty.</string>
+    <string name="black_list_delete">Delete from the Blacklist</string>
     <string name="vip_buy_vip">Purchase VIP-status</string>
     <string name="vip_state_off">Your VIP-status is not activated.</string>
     <string name="vip_info_guest">Find out who got interested in you - view your guests!</string>
@@ -321,7 +329,7 @@
     <string name="vip_info_message">Get more attention - your messages will stand out in the general background!</string>
     <string name="vip_info_blackList">Get rid of pesky persons with the help of  the \"Blacklist\"</string>
     <string name="vip_info_vip">With a VIP-status you will stand out of the crowd in the \"dating\" section, as well as in your profile.</string>
-    <string name="buying_vip_status">Buy VIP-status</string>
+    <string name="buying_vip_status">Get a VIP-status</string>
     <string name="edit_my_city">My city</string>
     <string name="settings_feedback_email">Enter your email to get a reply from us.</string>
     <string name="settings_invalid_email">Invalid email</string>
@@ -375,12 +383,14 @@
     <string name="gallery">Photo gallery</string>
     <string name="no_photo_take_photo">No one can meet you! Take a photo or choose one from your photo gallery.</string>
     <string name="photo_for_avatar">Your photo is ready to be sent to your profile! This is your first uploaded one, which will be used as your profile photo.</string>
-    <string name="change_email">Change the email</string>
+    <string name="change_email">Change email</string>
     <string name="send_confirmation_email">Send a confirmational email</string>
     <string name="change_password">Change password</string>
     <string name="password_changing">Change password</string>
     <string name="save">Save</string>
+    <string name="saving_in_progress">Saving…</string>
     <string name="confirmation_successfully_sent">Confirmation was successfully sent to your email.</string>
+    <string name="password_hint">password</string>
     <string name="password_confirmation_hint">Password confirmation</string>
     <string name="enter_new_password">Enter your new password</string>
     <string name="enter_old_password">Enter your old password</string>
@@ -442,10 +452,10 @@
         <item quantity="other">Get free VIP for %d invitations</item>
         <item quantity="one">Get free VIP for %d invitation</item>
     </plurals>
-    <string name="buy_status_and_watch_your_fans">Buy VIP-status and find out who added you to their favorites.</string>
+    <string name="buy_status_and_watch_your_fans">Get a VIP-status and find out who added you to their favorites.</string>
     <string name="add_bookmarks_to_be_connected">Add new acquaintances to this section and you will never lose touch with them.</string>
     <string name="nobody_chat_with_you_sympathies_will_help">No one has written to you yet. The likes will help you find someone to chat with.</string>
-    <string name="rate_and_have_mutual_or_buy_and_chat">Send likes to the people you would like to get to know better, and get mutual likes! Or buy likes and start chatting with those who already like you!</string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">Send likes and get ones and start chating right now</string>
     <string name="with_vip_find_your_visitors">With a VIP-status you can find out who checked out your page.</string>
     <string name="on_avatar">Set as your profile picture</string>
     <string name="your_avatar">Profile picture</string>
@@ -470,7 +480,9 @@
     <string name="general_complain_sended">Your complaint has been submitted, much thanks for your help.</string>
     <string name="general_complain">Complaint</string>
     <string name="general_msg">Message</string>
-    <string name="black_list_add_short">To the blacklist</string>
+    <string name="notifications">Notifications</string>
+    <string name="general_no_notifications">Unfortunately, the notifications on your device are not available</string>
+    <string name="black_list_add_short">To the Blacklist</string>
     <string name="confirm_email_for_dating">We are against spam. Please confirm your email, so that you can meet people in Topface!</string>
     <string name="send_confirm_link">Send a link for confirmation</string>
     <string name="complain_type_swearing_msg">Offensive behavior, improper language, threats</string>
@@ -494,7 +506,7 @@
     <string name="delete">Delete</string>
     <string name="delete_account_warning">Attention! You are trying to delete your profile in Topface.</string>
     <string name="delete_account_error">Unfortunately, your attempt to delete your account has failed. You can try it again.</string>
-    <string name="delete_account_will_be_restored_are_you_sure">You are trying to log in to your deleted account. If you log in, your account will be restored. Are you sure?</string>
+    <string name="delete_account_will_be_restored_are_you_sure">You are trying to log in to a deleted account. The account will be restored after you log in.</string>
     <string name="restore">Restore</string>
     <string name="admiration_sended">Admiration is sent.</string>
     <string name="skip">Skip</string>
@@ -581,7 +593,7 @@
     <string name="email_changing">Email change</string>
     <string name="hint_faces_filter">Change search options and meet new interesting people.</string>
     <string name="hint_faces_buy_like">The more likes you have, the more often you get rated. Don\'t forget to refill the likes balance.</string>
-    <string name="hint_myprofile_buy_vip">Buy VIP-status and enjoy unlimited communication</string>
+    <string name="hint_myprofile_buy_vip">Get a VIP-status and enjoy unlimited communication</string>
     <string name="pull_to_refresh_pull_label">Pull to refresh…</string>
     <string name="pull_to_refresh_release_label">Let go to refresh…</string>
     <string name="messaging_block_buy_vip">To continue the dialogue you need to have a VIP\u2011status</string>
@@ -596,6 +608,10 @@
     <string name="preload_photo_type_preload_off">Off</string>
     <string name="wrong_time_popup_text">Cannot establish a safe connection.\nMaybe the date or time settings on your device have been set incorrectly.</string>
     <string name="wrong_time_popup_button">View settings</string>
+    <string name="go_tf">I\'m sending you a Mystery Box!</string>
+    <string name="enter_text">Enter text</string>
+    <string name="send_feedback">Send message</string>
+    <string name="get_vip_free">Get free VIP</string>
     <string name="google_service_general_title">Reminders are not available</string>
     <string name="google_service_disabled_title">You have Google Play disabled. You need to enable it to receive reminders.</string>
     <string name="google_service_disabled_button">Enable</string>
@@ -607,5 +623,13 @@
     <string name="google_sign_in_account_title">Your Google account has not been added. You have to sign in, if you want to receive reminders.</string>
     <string name="google_sign_in_account_button">Sign in</string>
     <string name="google_unavailable_services_title">Unfortunately, the remainders are not available on your device.</string>
+    <string name="receive_message_notification">Get notified about\na new message</string>
+    <string name="receive_mutual_notification">Get notified about\na new mutual like</string>
+    <string name="receive_sympathy_notification">Get notified about\na new like</string>
+    <string name="receive_rate_notification">delete</string>
+    <string name="receive_guest_notification">Get notified about\na new guest</string>
+    <string name="on_phone">To mobile</string>
+    <string name="on_mail">To email</string>
     <string name="add_leader_hint">Your greeting…</string>
+    <string name="more">more</string>
 </resources>

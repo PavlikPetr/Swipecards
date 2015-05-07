@@ -49,7 +49,9 @@ public class BitmapUtils {
             return -1;
         }
         cursor.moveToFirst();
-        return cursor.getInt(0);
+        int result = cursor.getInt(0);
+        cursor.close();
+        return result;
     }
 
     public static BitmapFactory.Options readImageFileOptions(Context context, Uri uri) {
@@ -272,8 +274,9 @@ public class BitmapUtils {
 
             // буль, длинная фото или высокая
             boolean LAND = false;
-            if (srcWidth >= srcHeight)
+            if (srcWidth >= srcHeight) {
                 LAND = true;
+            }
 
             // коффициент сжатия фотографии
             float ratio = Math.max(((float) dstWidth) / srcWidth, ((float) dstHeight) / srcHeight);
@@ -333,59 +336,6 @@ public class BitmapUtils {
         return output;
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    public static Bitmap getRoundedBitmap(Bitmap bitmap, int dstWidth, int dstHeight) {
-        if (bitmap == null)
-            return null;
-
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-
-        if (dstWidth < dstHeight)
-            //noinspection SuspiciousNameCombination
-            dstHeight = dstWidth;
-        else
-            //noinspection SuspiciousNameCombination
-            dstWidth = dstHeight;
-
-        Bitmap output = Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ARGB_8888);
-
-        Bitmap clippedBitmap;
-        if (width == dstWidth && height == dstHeight) {
-            clippedBitmap = clipBitmap(bitmap);
-        } else {
-            //noinspection SuspiciousNameCombination
-            clippedBitmap = clipAndScaleBitmap(bitmap, dstWidth, dstWidth);
-        }
-
-        Canvas canvas = new Canvas(output);
-
-        @SuppressWarnings("SuspiciousNameCombination")
-        Rect rect = new Rect(0, 0, dstWidth, dstWidth);
-
-        Paint paint = new Paint();
-
-        paint.setAntiAlias(true);
-        paint.setColor(0xff424242);
-        canvas.drawARGB(0, 0, 0, 0);
-
-        canvas.drawCircle(dstWidth / 2, dstWidth / 2, dstWidth / 2, paint);
-
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
-        canvas.drawBitmap(clippedBitmap, rect, rect, paint);
-
-        if (!bitmap.isRecycled()) {
-            bitmap.recycle();
-        } else {
-            Debug.error("Bitmap is already recycled");
-        }
-
-        if (clippedBitmap != null) {
-            clippedBitmap.recycle();
-        }
-        return output;
-    }
-
     public static Bitmap getScaleAndRoundBitmapIn(Bitmap bitmap, float radiusMult) {
         return getScaleAndRoundBitmap(bitmap, radiusMult);
     }
@@ -412,17 +362,12 @@ public class BitmapUtils {
     public static Bitmap getRoundBitmap(Bitmap bitmap, float radiusMult) {
         final int bitmapWidth = bitmap.getWidth();
         final int bitmapHeight = bitmap.getHeight();
-
         int multWidth = (int) (((bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
-
         @SuppressWarnings("SuspiciousNameCombination")
         Bitmap output = Bitmap.createBitmap(multWidth, multWidth, Bitmap.Config.ARGB_8888);
-
         Canvas canvas = new Canvas(output);
-
         final Rect src = new Rect(0, 0, bitmapWidth, bitmapHeight);
         final Rect dst = new Rect((multWidth - bitmapWidth) / 2, (multWidth - bitmapHeight) / 2, (multWidth + bitmapWidth) / 2, (multWidth - bitmapHeight) / 2 + bitmapHeight);
-
         Paint circlePaint = new Paint();
         circlePaint.setAntiAlias(true);
         circlePaint.setColor(App.getContext().getResources().getColor(R.color.bg_white));
@@ -434,16 +379,39 @@ public class BitmapUtils {
         return Bitmap.createScaledBitmap(output, bitmap.getWidth(), bitmap.getWidth(), true);
     }
 
-    public static Bitmap squareBitmap(Bitmap bitmap, int width, int height) {
+    public static Bitmap squareBitmap(Bitmap bitmap, int width) {
+        return getScaledBitmapInsideSquare(bitmap, width, 1.0f);
+    }
+
+    private static Bitmap getScaledBitmapInsideSquare(Bitmap bitmap, final int destSize, float radiusMult) {
+        final int bitmapWidth = bitmap.getWidth();
+        final int bitmapHeight = bitmap.getHeight();
+
+        int size = (int) (((bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
+        Bitmap output = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        final Rect src = new Rect(0, 0, bitmapWidth, bitmapHeight);
+        final Rect dst = new Rect((size - bitmapWidth) / 2, (size - bitmapHeight) / 2, (size + bitmapWidth) / 2, (size - bitmapHeight) / 2 + bitmapHeight);
+        Paint canvasPaint = new Paint();
+        canvasPaint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        canvas.drawBitmap(bitmap, src, dst, canvasPaint);
+        Bitmap scaledBitmap;
+        if (size != destSize) {
+            scaledBitmap = Bitmap.createScaledBitmap(output, destSize, destSize, true);
+            if (!output.isRecycled()) {
+                output.recycle();
+            }
+        } else {
+            scaledBitmap = output;
+        }
+        return scaledBitmap;
+    }
+
+    public static Bitmap squareCrop(Bitmap bitmap) {
         int srcWidth = bitmap.getWidth();
         int srcHeight = bitmap.getHeight();
-        Bitmap output;
-        if (srcHeight != srcWidth) {
-            int delta = Math.abs(srcHeight - srcWidth);
-            output = Bitmap.createScaledBitmap(bitmap, width, height - delta / 2, true);
-        } else {
-            output = Bitmap.createScaledBitmap(bitmap, width, height, true);
-        }
-        return output;
+        int size = srcHeight > srcWidth ? srcWidth : srcHeight;
+        return Bitmap.createBitmap(bitmap, 0, 0, size, size);
     }
 }

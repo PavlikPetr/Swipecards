@@ -11,7 +11,7 @@ import com.topface.topface.R;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.utils.EasyTracker;
 
-public class PopularUserDialog extends AbstractModalDialog {
+public class PopularUserDialog extends AbstractDialogFragment {
 
     private static final String DIALOG_TITLE_ARG = "DIALOG_TITLE_ARG";
     private static final String BLOCK_TEXT_ARG = "BLOCK_TEXT_ARG";
@@ -54,7 +54,7 @@ public class PopularUserDialog extends AbstractModalDialog {
     }
 
     @Override
-    protected void initContentViews(View root) {
+    protected void initViews(View root) {
         TextView title = (TextView) root.findViewById(R.id.popular_user_title);
         TextView message = (TextView) root.findViewById(R.id.popular_user_message);
 
@@ -80,23 +80,24 @@ public class PopularUserDialog extends AbstractModalDialog {
     }
 
     @Override
+    protected boolean isModalDialog() {
+        return true;
+    }
+
+    @Override
+    public boolean isUnderActionBar() {
+        return false;
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_OPENED, isOpened);
     }
 
     @Override
-    protected int getContentLayoutResId() {
+    protected int getDialogLayoutRes() {
         return R.layout.popular_user_dialog;
-    }
-
-    @Override
-    protected void onCloseButtonClick(View v) {
-        isOpened = false;
-        Dialog d = getDialog();
-        if (d != null) {
-            d.dismiss();
-        }
     }
 
     public boolean isOpened() {

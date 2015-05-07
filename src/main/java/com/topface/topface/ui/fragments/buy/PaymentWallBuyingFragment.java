@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.buy;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -19,14 +20,19 @@ public class PaymentWallBuyingFragment extends CoinsBuyingFragment {
 
     public static final String PAGE_TYPE = "page_type";
 
-    public static CoinsBuyingFragment newInstance(String from, PaymentWallProducts.TYPE type) {
+    public static CoinsBuyingFragment newInstance(String from, PaymentWallProducts.TYPE type, String text) {
         PaymentWallBuyingFragment buyingFragment = new PaymentWallBuyingFragment();
-        if (from != null) {
-            Bundle args = new Bundle();
-            args.putString(ARG_TAG_SOURCE, from);
-            args.putInt(PAGE_TYPE, type.ordinal());
-            buyingFragment.setArguments(args);
+        Bundle args = new Bundle();
+        if (!TextUtils.isEmpty(text)) {
+            args.putString(ARG_RESOURCE_INFO_TEXT, text);
         }
+        if (from != null) {
+            args.putString(ARG_TAG_SOURCE, from);
+        }
+        if (type != null) {
+            args.putInt(PAGE_TYPE, type.ordinal());
+        }
+        buyingFragment.setArguments(args);
         return buyingFragment;
     }
 

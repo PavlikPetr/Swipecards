@@ -18,9 +18,9 @@ public class Static {
      */
     public static final String REV = "20121019010";
     public static final String AUTH_VK_ID = "2664589";
-    public static final String AUTH_OK_ID = "192696576";
-    public static final String OK_SECRET_KEY = "A9872F0F0DA2EA47EB876D85";
-    public static final String OK_PUBLIC_KEY = "CBACFNHMABABABABA";
+    public static final String AUTH_OK_ID = "125879808";
+    public static final String OK_SECRET_KEY = "D54CFE092BA6F1FEA2C21BD3";
+    public static final String OK_PUBLIC_KEY = "CBAHMBIIABABABABA";
     //Это id нашего забаненого приложения
     //public static final String AUTH_FACEBOOK_ID = "161347997227885";
     /**
@@ -28,6 +28,8 @@ public class Static {
      */
     public static final String AUTH_FACEBOOK_ID = App.getContext().getString(R.string.app_id);
 
+    public static final String COMSCORE_C2 = "19015876";
+    public static final String COMSCORE_SECRET_KEY = "b83e932c608c2e08273eeddf01c2a70e";
 
     public static final int GIRL = 0;
     public static final int BOY = 1;
