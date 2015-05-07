@@ -77,6 +77,10 @@ public class VkAuthorizer extends Authorizer {
         super(activity);
     }
 
+    public static String getVkId() {
+        return App.getAppConfig().getStageChecked() ? Static.STAGE_AUTH_VK_ID : Static.AUTH_VK_ID;
+    }
+
     @Override
     public void authorize() {
         VKSdk.authorize(VK_SCOPE);
@@ -85,7 +89,7 @@ public class VkAuthorizer extends Authorizer {
     @Override
     public void logout() {
         VKUIHelper.onCreate(getActivity());
-        VKSdk.initialize(vkSdkListener, Static.AUTH_VK_ID);
+        VKSdk.initialize(vkSdkListener, getVkId());
         VKSdk.logout();
     }
 
@@ -93,7 +97,7 @@ public class VkAuthorizer extends Authorizer {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         VKUIHelper.onCreate(getActivity());
-        VKSdk.initialize(vkSdkListener, Static.AUTH_VK_ID);
+        VKSdk.initialize(vkSdkListener, getVkId());
     }
 
     @Override
