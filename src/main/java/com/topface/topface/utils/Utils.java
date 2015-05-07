@@ -22,7 +22,9 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Display;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -358,5 +360,29 @@ public class Utils {
         }
         return ConnectionChangeReceiver.getConnectionType();
     }
+
+    public static void addOnGlobalLayoutListener(final View view, final ViewTreeObserver.OnGlobalLayoutListener listener) {
+        ViewTreeObserver vto = view.getViewTreeObserver();
+        if (vto != null && vto.isAlive()) {
+            view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    listener.onGlobalLayout();
+                    ViewTreeObserver vto = view.getViewTreeObserver();
+                    if (vto != null && vto.isAlive()) {
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                            //noinspection deprecation
+                            vto.removeGlobalOnLayoutListener(this);
+                        } else {
+                            vto.removeOnGlobalLayoutListener(this);
+                        }
+                    }
+
+                }
+            });
+        }
+
+    }
+
 
 }
