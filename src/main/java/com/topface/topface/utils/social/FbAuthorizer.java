@@ -28,8 +28,7 @@ public class FbAuthorizer extends Authorizer {
     private Session.StatusCallback mStatusCallback;
 
     private Request getRequest(final Session session, final Intent intent) {
-        if (mRequest == null) {
-            mRequest = Request.newMeRequest(session, new Request.GraphUserCallback() {
+        mRequest = Request.newMeRequest(session, new Request.GraphUserCallback() {
                 @Override
                 public void onCompleted(GraphUser user, Response response) {
                     if (user != null) {
@@ -54,9 +53,6 @@ public class FbAuthorizer extends Authorizer {
                     broadcastAuthTokenStatus(intent);
                 }
             });
-        } else {
-            mRequest.setSession(session);
-        }
         return mRequest;
     }
 

@@ -46,18 +46,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     };
 
     public static OwnProfileFragment newInstance() {
-        OwnProfileFragment fragment = new OwnProfileFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public static OwnProfileFragment newInstance(String startBodyPageClassName) {
-        OwnProfileFragment fragment = new OwnProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_TAG_INIT_BODY_PAGE, startBodyPageClassName);
-        fragment.setArguments(args);
-        return fragment;
+        return new OwnProfileFragment();
     }
 
     @Override

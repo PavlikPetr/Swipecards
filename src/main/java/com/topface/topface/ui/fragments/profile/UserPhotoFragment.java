@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.AlbumPhotos;
@@ -23,7 +24,6 @@ import com.topface.topface.ui.GridViewWithHeaderAndFooter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 public class UserPhotoFragment extends ProfileInnerFragment {
@@ -119,14 +119,9 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         if (savedInstanceState != null) {
             mUserId = savedInstanceState.getInt(USER_ID, 0);
             mPhotosCount = savedInstanceState.getInt(PHOTOS_COUNT, 0);
-            try {
-                String linksString = savedInstanceState.getString(PHOTO_LINKS);
-                mPhotoLinks = linksString != null ? new Photos(new JSONArray(linksString)) : new Photos();
-            } catch (JSONException e) {
-                Debug.error(e);
-            }
+            String linksString = savedInstanceState.getString(PHOTO_LINKS);
+            mPhotoLinks = JsonUtils.optFromJson(linksString, Photos.class, new Photos());
             setPhotos(mPhotoLinks);
-//            addFooterView();
             position = savedInstanceState.getInt(POSITION, 0);
         }
         addFooterView();

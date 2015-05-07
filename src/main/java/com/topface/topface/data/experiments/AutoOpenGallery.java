@@ -20,7 +20,7 @@ public class AutoOpenGallery extends BaseExperiment {
         if (isEnabled() && photosCount > 0) {
             return PhotoSwitcherActivity.getPhotoSwitcherIntent(userId, preloadPhoto, context);
         } else {
-            return UserProfileActivity.createIntent(userId, context);
+            return UserProfileActivity.createIntent(null, userId, null, false, false, null, null);
         }
     }
 
@@ -28,7 +28,7 @@ public class AutoOpenGallery extends BaseExperiment {
         if (isEnabled() && photosCount > 0) {
             return PhotoSwitcherActivity.getPhotoSwitcherIntent(itemId, userId, preloadPhoto, context);
         } else {
-            return UserProfileActivity.createIntent(userId, itemId, context, true, true);
+            return UserProfileActivity.createIntent(null, userId, itemId, true, true, null, null);
         }
     }
 }

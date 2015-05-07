@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.topface.framework.JsonUtils;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -53,7 +54,6 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -186,20 +186,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         return intent;
     }
 
-    public static Intent getPhotoSwitcherIntent(int userId, Class callingClass, Photo preloadPhoto, Context context) {
-        Intent intent = new Intent(context, PhotoSwitcherActivity.class);
-        intent.putExtra(INTENT_USER_ID, userId);
-        intent.putExtra(INTENT_FILL_PROFILE_ON_BACK, true);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        if (preloadPhoto != null) {
-            intent.putExtra(INTENT_PRELOAD_PHOTO, preloadPhoto);
-        }
-        if (callingClass != null) {
-            intent.putExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT, callingClass.getName());
-        }
-        return intent;
-    }
-
     public static Intent getPhotoSwitcherIntent(String itemId, int userId, Photo preloadPhoto, Context context) {
         Intent intent = getPhotoSwitcherIntent(userId, preloadPhoto, context);
         if (itemId != null) {
@@ -210,7 +196,14 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     public static Intent getPhotoSwitcherIntent(int userId, Photo preloadPhoto, Context context) {
-        return getPhotoSwitcherIntent(userId, null, preloadPhoto, context);
+        Intent intent = new Intent(context, PhotoSwitcherActivity.class);
+        intent.putExtra(INTENT_USER_ID, userId);
+        intent.putExtra(INTENT_FILL_PROFILE_ON_BACK, true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        if (preloadPhoto != null) {
+            intent.putExtra(INTENT_PRELOAD_PHOTO, preloadPhoto);
+        }
+        return intent;
     }
 
     @Override
@@ -296,7 +289,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         }
         int rest = photosCount - mPhotoLinks.size();
         for (int i = 0; i < rest; i++) {
-            mPhotoLinks.add(new Photo());
+            mPhotoLinks.add(Photo.createFakePhoto());
         }
         // Gallery
         // stub is needed, because sometimes(while gallery is waiting for user profile load)
@@ -357,11 +350,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         super.onRestoreInstanceState(savedInstanceState);
         mPhotoAlbumControlVisibility = savedInstanceState.getInt(CONTROL_VISIBILITY, View.GONE);
         mOwnPhotosControlVisibility = savedInstanceState.getInt(OWN_PHOTOS_CONTROL_VISIBILITY, View.GONE);
-        try {
-            mDeletedPhotos = new Photos(new JSONArray(savedInstanceState.getString(DELETED_PHOTOS)));
-        } catch (JSONException e) {
-            Debug.error(e);
-        }
+        mDeletedPhotos = JsonUtils.fromJson(savedInstanceState.getString(DELETED_PHOTOS), Photos.class);
     }
 
     @Override
@@ -380,25 +369,9 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         // if profile was not loaded at this moment - we will open UserProfileActivity
         // without chached info
         Intent intent = getIntent();
-        String callingClassName = intent.getStringExtra(AbstractProfileFragment.INTENT_CALLING_FRAGMENT);
         String itemId = intent.getStringExtra(AbstractProfileFragment.INTENT_ITEM_ID);
-
-        if (lastResponse != null) {
-            startActivity(UserProfileActivity.createIntent(
-                            lastResponse,
-                            mUid,
-                            itemId,
-                            callingClassName,
-                            this)
-            );
-        } else {
-            startActivity(UserProfileActivity.createIntent(
-                            mUid,
-                            itemId,
-                            callingClassName,
-                            this)
-            );
-        }
+        startActivity(UserProfileActivity.createIntent(lastResponse != null ? lastResponse : null,
+                mUid, itemId, false, false, null, null));
         finish();
     }
 

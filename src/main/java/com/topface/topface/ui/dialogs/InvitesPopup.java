@@ -97,12 +97,12 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
             public void success(IApiResponse response) {
                 boolean isPremium = response.getJsonResult().optBoolean("premium");
                 if (isPremium) {
-                    EasyTracker.sendEvent("InvitesPopup", "SuccessWithNotChecked", 
+                    EasyTracker.sendEvent("InvitesPopup", "SuccessWithNotChecked",
                             "premiumTrue", (long) contacts.size());
-                    EasyTracker.sendEvent("InvitesPopup", "PremiumReceived", 
+                    EasyTracker.sendEvent("InvitesPopup", "PremiumReceived",
                             "", (long) CacheProfile.getOptions().premium_period);
                     Utils.showToastNotification(
-                            Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), 
+                            Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period),
                             Toast.LENGTH_LONG
                     );
                     CacheProfile.canInvite = false;
