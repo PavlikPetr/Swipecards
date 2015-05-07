@@ -344,6 +344,8 @@ public class AddPhotoHelper {
             public void fail(int codeError, IApiResponse response) {
                 if (mHandler != null) {
                     mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
+                } else {
+                    Utils.showToastNotification(mContext.getString(R.string.photo_add_error), Toast.LENGTH_LONG);
                 }
                 photoAddRequest.cancel();
                 showErrorMessage(codeError);
