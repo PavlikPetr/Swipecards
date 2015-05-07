@@ -485,6 +485,8 @@
     <string name="girl">девушка</string>
     <string name="start_communication">Начать общение</string>
     <string name="birthdate">ДР</string>
+    <string name="birthdate_confirm">Пожалуйста, укажите ваш возраст, иначе вы не сможете познакомиться</string>
+    <string name="set_birthdate">Указать возраст</string>
     <string name="welcome_to_topface">Добро пожаловать в Topface!</string>
 
     <string name="incorrect_email">Неправильно введен e-mail</string>

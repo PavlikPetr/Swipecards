@@ -368,6 +368,8 @@
     <string name="girl">girl</string>
     <string name="start_communication">Start a chat</string>
     <string name="birthdate">BD</string>
+    <string name="birthdate_confirm">Please enter your age, otherwise you will not be able to start dating</string>
+    <string name="set_birthdate">Set birthday</string>
     <string name="welcome_to_topface">Welcome to Topface!</string>
     <string name="incorrect_email">Invalid email</string>
     <string name="incorrect_login">Invalid login</string>
