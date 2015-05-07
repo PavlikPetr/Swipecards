@@ -22,8 +22,8 @@ public class SetAgeDialog extends AbstractDialogFragment implements View.OnClick
 
     @Override
     protected void initViews(View root) {
-        Button mBtnTakePhoto = (Button) root.findViewById(R.id.setBirthday);
-        mBtnTakePhoto.setOnClickListener(this);
+        Button setBirthdayButton = (Button) root.findViewById(R.id.setBirthday);
+        setBirthdayButton.setOnClickListener(this);
     }
 
     @Override
@@ -45,10 +45,11 @@ public class SetAgeDialog extends AbstractDialogFragment implements View.OnClick
             @Override
             public void onEditingFinished(FormItem data) {
                 item.copy(data);
+                CacheProfile.sendUpdateProfileBroadcast();
             }
         };
         EditTextFormDialog.newInstance(item.getTitle(), item, formEditedListener).show(fm, EditTextFormDialog.class.getName());
-        CacheProfile.sendUpdateProfileBroadcast();
+
     }
 
     private void closeDialog() {
