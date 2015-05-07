@@ -6,16 +6,15 @@
 
     <TextView
         android:id="@+id/edit_dialog_limit"
+        style="@style/SelectorDialogTitle"
         android:textColor="@color/text_color_gray_transparent"
         android:textSize="18sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         tools:text='1024/1024'
-        android:paddingTop="20dp"
-        android:paddingBottom="12dp"
-        android:paddingLeft="1dp"
-        android:paddingRight="1dp" />
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp" />
 
     <TextView
         android:id="@+id/edit_dialog_title"
