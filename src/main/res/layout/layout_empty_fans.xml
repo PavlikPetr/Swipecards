@@ -28,7 +28,7 @@
         android:text="@string/buy_status_and_watch_your_fans" />
 
     <Button
-        android:id="@+id/btnBuyVip"
+        android:id="@+id/btnBuy"
         style="@style/FlatButton.Blue.Emptyfeed"
         android:layout_below="@+id/tvText"
         android:layout_centerHorizontal="true"

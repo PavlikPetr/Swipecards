@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -31,19 +30,21 @@ public class FansFragment extends BookmarksFragment {
 
     @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
-        Button btnBuyVip = (Button) inflated.findViewById(R.id.btnBuyVip);
+        Button buttonBuy = (Button) inflated.findViewById(R.id.btnBuy);
+        TextView message = ((TextView) inflated.findViewById(R.id.tvText));
         if (CacheProfile.premium) {
-            ((TextView) inflated.findViewById(R.id.tvText)).
-                    setText(App.getContext().getString(R.string.buy_more_sympathies));
-            btnBuyVip.setText(App.getContext().getString(R.string.buy_sympathies));
-            btnBuyVip.setOnClickListener(new View.OnClickListener() {
+            message.setText(R.string.buy_more_sympathies);
+            buttonBuy.setText(R.string.buy_sympathies);
+            buttonBuy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     startActivity(PurchasesActivity.createBuyingIntent(FANS));
                 }
             });
         } else {
-            btnBuyVip.setOnClickListener(new View.OnClickListener() {
+            message.setText(R.string.likes_buy_vip);
+            buttonBuy.setText(R.string.buying_vip_status);
+            buttonBuy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = PurchasesActivity.createVipBuyIntent(null, FANS);
