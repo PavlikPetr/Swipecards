@@ -56,3 +56,7 @@
 -keepattributes *Annotation*
 # Keep all the ACRA classes
 -keep class org.acra.** { *; }
+
+# Topface
+-keep com.topface.topface.data.** { *; }
+-dontwarn com.topface.topface.data.**
