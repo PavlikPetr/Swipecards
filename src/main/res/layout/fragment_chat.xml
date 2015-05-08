@@ -38,16 +38,16 @@
 
         <ViewStub
             android:id="@+id/famousBlockerStub"
-            android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:inflatedId="@+id/famousBlocker"
             android:layout="@layout/layout_popular_user_blocker" />
     </RelativeLayout>
 
     <include
         android:id="@id/loChatFooterSend"
-        layout="@layout/chat_footer_send_holo"
+        layout="@layout/chat_footer_send"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" />

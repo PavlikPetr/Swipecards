@@ -225,7 +225,7 @@ public class DatingInstantMessageController {
 
     public void openChat(FragmentActivity activity, SearchUser user) {
         if (user != null) {
-            Intent intent = ChatActivity.createIntent(user.id,user.getNameAndAge(),user.city.name,null,false);
+            Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, false);
             activity.startActivityForResult(intent, ChatActivity.INTENT_CHAT);
             EasyTracker.sendEvent("Dating", "Additional", "Chat", 1L);
         }
