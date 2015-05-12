@@ -355,8 +355,8 @@
     <string name="password_changing">Alteração de palavra-passe</string>
     <string name="save">Guardar</string>
     <string name="confirmation_successfully_sent">Confirmação enviada para e-mail indicado por você</string>
+    <string name="password_confirmation_hint">Confirmação de palavra-passe</string>
     <string name="password_hint">palavra-passe</string>
-    <string name="password_confirmation_hint">confirmação de palavra-passe</string>
     <string name="enter_new_password">Introduza uma nova palavra-passe</string>
     <string name="enter_password_confirmation">Introduza a confirmação de palavra-passe</string>
     <string name="passwords_mismatched">Palavras-passe não coincidem</string>
