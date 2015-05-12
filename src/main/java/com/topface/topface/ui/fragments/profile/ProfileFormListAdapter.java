@@ -112,6 +112,28 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
         return forms;
     }
 
+    public static FormItem getAgeItem() {
+        FormItem ageItem = new FormItem(R.string.edit_age, String.valueOf(CacheProfile.age), FormItem.AGE) {
+            @Override
+            public void copy(FormItem formItem) {
+                super.copy(formItem);
+                CacheProfile.age = TextUtils.isEmpty(formItem.value) ? 0 : Integer.valueOf(formItem.value);
+            }
+        };
+        ageItem.setValueLimitInterface(new FormItem.ValueLimitInterface() {
+            @Override
+            public int getMinValue() {
+                return App.getAppOptions().getUserAgeMin();
+            }
+
+            @Override
+            public int getMaxValue() {
+                return App.getAppOptions().getUserAgeMax();
+            }
+        });
+        return ageItem;
+    }
+
     public void setOnEditListener(View.OnClickListener onEditListener) {
         mOnEditListener = onEditListener;
     }

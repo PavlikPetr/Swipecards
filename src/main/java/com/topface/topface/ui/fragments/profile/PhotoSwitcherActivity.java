@@ -475,37 +475,36 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
     public void deletePhotoRequest() {
         if (mDeletedPhotos.isEmpty()) return;
+        final Photos photos = (Photos) CacheProfile.photos.clone();
+        final int totalPhotos = CacheProfile.totalPhotos;
+        for (Photo currentPhoto : mDeletedPhotos) {
+            CacheProfile.photos.removeById(currentPhoto.getId());
+        }
+        CacheProfile.totalPhotos -= mDeletedPhotos.size();
+        int decrementPositionBy = 0;
+        for (Photo deleted : mDeletedPhotos) {
+            if (deleted.position < CacheProfile.photo.position && CacheProfile.photo.position > 0) {
+                decrementPositionBy--;
+            }
+        }
+        final int avatarPosition = decrementPositionBy * (-1);
+        CacheProfile.incrementPhotoPosition(decrementPositionBy, false);
 
         PhotoDeleteRequest request = new PhotoDeleteRequest(this);
         request.photos = mDeletedPhotos.getIdsArray();
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                // removes photos
-                for (Photo currentPhoto : mDeletedPhotos) {
-                    CacheProfile.photos.removeById(currentPhoto.getId());
-                }
-                CacheProfile.totalPhotos -= mDeletedPhotos.size();
-                // decrements position
-                int decrementPositionBy = 0;
-                for (Photo deleted : mDeletedPhotos) {
-                    if (deleted.position < CacheProfile.photo.position && CacheProfile.photo.position > 0) {
-                        decrementPositionBy--;
-                    }
-                }
-                CacheProfile.incrementPhotoPosition(decrementPositionBy, false);
-                // broadcasting
-                LocalBroadcastManager.getInstance(PhotoSwitcherActivity.this).sendBroadcast(new Intent(DEFAULT_UPDATE_PHOTOS_INTENT)
-                        .putExtra(INTENT_PHOTOS, CacheProfile.photos)
-                        .putExtra(INTENT_MORE, CacheProfile.photos.size() < CacheProfile.totalPhotos - mDeletedPhotos.size())
-                        .putExtra(INTENT_CLEAR, true));
-                // clearing
                 mDeletedPhotos.clear();
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
                 Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
+                CacheProfile.photos = photos;
+                CacheProfile.totalPhotos = totalPhotos;
+                CacheProfile.incrementPhotoPosition(avatarPosition, false);
+                LocalBroadcastManager.getInstance(PhotoSwitcherActivity.this).sendBroadcast(new Intent(DEFAULT_UPDATE_PHOTOS_INTENT));
             }
         }).exec();
     }
@@ -620,13 +619,10 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 for (Photo photo : newPhotos) {
                     mPhotoLinks.set(photo.getPosition(), photo);
                 }
+                CacheProfile.photos = mPhotoLinks;
 
                 if (mImageSwitcher != null) {
                     mImageSwitcher.getAdapter().notifyDataSetChanged();
-                    LocalBroadcastManager.getInstance(PhotoSwitcherActivity.this).sendBroadcast(new Intent(DEFAULT_UPDATE_PHOTOS_INTENT)
-                            .putExtra(INTENT_PHOTOS, newPhotos)
-                            .putExtra(INTENT_MORE, newPhotos.more)
-                            .putExtra(INTENT_CLEAR, true));
                 }
             }
 

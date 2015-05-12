@@ -375,8 +375,8 @@
     <string name="password_changing">Passwort ändern</string>
     <string name="save">Speichern</string>
     <string name="confirmation_successfully_sent">Die Bestätigung wurde auf Ihre E-Mail-Adresse gesendet</string>
+    <string name="password_confirmation_hint">Passwort Bestätigung</string>
     <string name="password_hint">Passwort</string>
-    <string name="password_confirmation_hint">Passwort bestätigen</string>
     <string name="enter_new_password">Geben Sie ein neues Passwort ein</string>
     <string name="enter_password_confirmation">Geben Sie eine Passwortbestätigung ein</string>
     <string name="passwords_mismatched">Passwörter fallen nicht zusammen</string>
