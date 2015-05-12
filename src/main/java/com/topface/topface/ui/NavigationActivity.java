@@ -311,7 +311,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
 
-        if (CacheProfile.age == 0) {
+        if (CacheProfile.age <= 15) {
             SetAgeDialog.newInstance().show(this.getSupportFragmentManager(), SetAgeDialog.TAG);
         }
     }
