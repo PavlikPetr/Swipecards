@@ -41,8 +41,6 @@
         android:dividerHeight="1dp"
         android:layout_below="@id/edit_dialog_title_divider"
         android:scrollbars="none"
-        android:maxLines="2"
-        android:ellipsize="end"
         android:descendantFocusability="afterDescendants" />
 
     <ViewStub
