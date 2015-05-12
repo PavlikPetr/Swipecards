@@ -138,7 +138,6 @@
     <string name="general_dbl_unread">Unread</string>
     <string name="general_empty_code_confirmation">Enter confirmation code</string>
     <string name="general_email_success_confirmed">Your email was successfully confirmed</string>
-    <string name="general_email_not_confirmed">Your email wasn\'t confirmed</string>
     <string name="time_yesterday">Yesterday</string>
     <string name="time_today">Today</string>
     <string name="general_send_button">Send</string>
@@ -606,7 +605,6 @@
     <string name="preload_photo_type_preload_off">Off</string>
     <string name="wrong_time_popup_text">Cannot establish a safe connection.\nMaybe the date or time settings on your device have been set incorrectly.</string>
     <string name="wrong_time_popup_button">View settings</string>
-    <string name="go_tf">I\'m sending you a Mystery Box!</string>
     <string name="enter_text">Enter text</string>
     <string name="send_feedback">Send message</string>
     <string name="get_vip_free">Get free VIP</string>
