@@ -214,7 +214,7 @@
     <string name="profile_add_album">Choose from the library</string>
     <string name="profile_add_camera">Take a photo</string>
     <string name="profile_photo">Photos</string>
-    <string name="profile_form">Profile form</string>
+    <string name="profile_form">About me</string>
     <string name="profile_gifts">Gifts</string>
     <string name="profile_actions">Actions</string>
     <string name="profile_empty_form">The user hasn\'t filled in the profile yet.</string>
@@ -390,13 +390,11 @@
     <string name="save">Save</string>
     <string name="saving_in_progress">Saving…</string>
     <string name="confirmation_successfully_sent">Confirmation was successfully sent to your email.</string>
+    <string name="password_confirmation_hint">Confirm password</string>
     <string name="password_hint">password</string>
-    <string name="password_confirmation_hint">Password confirmation</string>
     <string name="enter_new_password">Enter your new password</string>
-    <string name="enter_old_password">Enter your old password</string>
     <string name="enter_password_confirmation">Confirm your password</string>
     <string name="passwords_mismatched">Passwords do not match</string>
-    <string name="old_password_mismatched">Wrong old password</string>
     <string name="passwords_changed">Password is changed</string>
     <string name="take_photo">Take a photo</string>
     <string name="take_another_photo">Another photo</string>

@@ -214,7 +214,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             }
 
             // установка имени
-            holder.name.setText(item.user.first_name);
+            holder.name.setText(item.user.firstName);
             if ((item.user.deleted || item.user.banned)) {
                 flag |= FeedItemViewConstructor.Flag.BANNED;
             }
@@ -224,7 +224,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             String age = "";
             if (item.user.age > 0) {
                 age = String.valueOf(item.user.age);
-                if (!TextUtils.isEmpty(item.user.first_name)) {
+                if (!TextUtils.isEmpty(item.user.firstName)) {
                     age = ", " + age;
                 }
             }

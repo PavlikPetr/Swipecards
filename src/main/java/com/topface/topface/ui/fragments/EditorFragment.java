@@ -200,10 +200,8 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
             public void onClick(View v) {
                 try {
                     getActivity().startActivity(
-                            UserProfileActivity.createIntent(
-                                    Integer.parseInt(profileId.getText().toString()),
-                                    getActivity()
-                            )
+                            UserProfileActivity.createIntent(null,
+                                    Integer.parseInt(profileId.getText().toString()), null, true, true, null, null)
                     );
                 } catch (Exception e) {
                     Debug.error(e);
@@ -305,7 +303,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         mCustomApi.addTextChangedListener(watcher);
 
         //Создаем стандартный адаптер
-        @SuppressWarnings("unchecked") ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
+        @SuppressWarnings("unchecked") ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(
                 getActivity(),
                 android.R.layout.simple_spinner_item,
                 Utils.sparsArrayToArrayList(mApiUrlsMap)

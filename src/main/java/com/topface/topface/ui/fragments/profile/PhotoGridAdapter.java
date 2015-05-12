@@ -41,12 +41,13 @@ public class PhotoGridAdapter extends BaseAdapter
     }
 
     public void updateData() {
-        if (CacheProfile.photo != null) {
-            Photos photos = (Photos) CacheProfile.photos.clone();
-            photos.removeAll(mPhotoLinks);
-            mPhotoLinks.addAll(1, photos);
-            notifyDataSetChanged();
+        if (isNeedUpadate()) {
+            setData((Photos) CacheProfile.photos.clone(), CacheProfile.photos.size() != CacheProfile.totalPhotos, true);
         }
+    }
+
+    private boolean isNeedUpadate() {
+        return !(getPhotos().equals(CacheProfile.photos));
     }
 
     public void setData(Photos photoLinks, boolean needMore) {
@@ -56,7 +57,7 @@ public class PhotoGridAdapter extends BaseAdapter
     public void setData(Photos photoLinks, boolean needMore, boolean isAddPhotoButtonEnabled) {
         mPhotoLinks.clear();
         if (isAddPhotoButtonEnabled && !(!photoLinks.isEmpty() && photoLinks.get(0).isFake())) {
-            mPhotoLinks.add(0, new Photo());
+            mPhotoLinks.add(0, Photo.createFakePhoto());
         }
         addPhotos(photoLinks, needMore, false);
     }
@@ -90,6 +91,13 @@ public class PhotoGridAdapter extends BaseAdapter
 
         needLoadNewItems = needMore;
         notifyDataSetChanged();
+    }
+
+    public void removePhoto(Photo photo) {
+        if (null != mPhotoLinks) {
+            mPhotoLinks.remove(photo);
+            notifyDataSetChanged();
+        }
     }
 
     @Override

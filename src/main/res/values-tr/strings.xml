@@ -138,6 +138,9 @@
     <string name="general_profile_error">Profil yükleme hatası</string>
     <string name="general_dbl_all">Bütün</string>
     <string name="general_dbl_unread">Okunmamış</string>
+    <string name="general_empty_code_confirmation">Dogrulama kodunu giriniz</string>
+    <string name="general_email_success_confirmed">E-posta başarıyla doğrulandı</string>
+    <string name="general_email_not_confirmed">E-posta teyiti edilmemiştir</string>
     <string name="time_yesterday">Dün</string>
     <string name="time_today">Bugün</string>
     <string name="general_send_button">Gönder</string>
@@ -264,6 +267,9 @@
     <string name="settings_rights_reserved">Topface \nTüm hakları saklıdır.</string>
     <string name="settings_extra">Daha detaylı bilgi şurada bulabilirsiniz</string>
     <string name="settings_logout">Hesaptan çıkmak</string>
+    <string name="settings_code_confirmation">Doğrulama kodunu gönderin</string>
+    <string name="settings_email_was_confirmed">zaten doğruladı</string>
+    <string name="settings_code_confirmation_hint">onay kodu</string>
     <string name="settings_logout_msg">Gerçekten çıkmak istiyor musunuz?</string>
     <string name="settings_error_message">Hata mesajı</string>
     <string name="settings_ask_developer">Geliştiricilere soru</string>
@@ -388,9 +394,10 @@
     <string name="change_password">Parola değiştirmek</string>
     <string name="password_changing">Parolanın değiştirilmesi</string>
     <string name="save">Kaydetmek</string>
+    <string name="saving_in_progress">Tasarruf …</string>
     <string name="confirmation_successfully_sent">Gösterdiğiniz e-mailinize onay gönderildi</string>
+    <string name="password_confirmation_hint">Parola onaylaması</string>
     <string name="password_hint">parola</string>
-    <string name="password_confirmation_hint">parolanın onaylanması</string>
     <string name="enter_new_password">Yeni parolaya girin</string>
     <string name="enter_password_confirmation">Parolayı tekrar yazın</string>
     <string name="passwords_mismatched">Parolalar eşleşmedi</string>
@@ -611,7 +618,10 @@
     <string name="preload_photo_type_preload_off">Kapalı</string>
     <string name="wrong_time_popup_text">Sunucunuza güveli bir bağlantı kurulamadı/nMuhtemelen tarih ve saat bilgisayarınızda ayarlanmadı.</string>
     <string name="wrong_time_popup_button">Ayarları açın</string>
+    <string name="go_tf">Sana Sürpriz-hediye gönderiyorum</string>
+    <string name="enter_text">mesajınızı girin</string>
     <string name="send_feedback">mesaj göndermek</string>
+    <string name="get_vip_free">VIP bedava kazanın</string>
     <string name="google_service_general_title">İkaz mevcut değildir</string>
     <string name="google_service_disabled_title">Google Play servisleri bildirimleri kapamak için gereklidir.</string>
     <string name="google_service_disabled_button">Açmak</string>
@@ -624,5 +634,7 @@
     <string name="google_sign_in_account_button">Oturum açın</string>
     <string name="google_unavailable_services_title">Maalesef,bildirimler telefonunuzda çalışmaz.</string>
     <string name="on_phone">telefona</string>
+    <string name="on_mail">e-postaya</string>
     <string name="add_leader_hint">Tebriksiniz …</string>
+    <string name="more">daha</string>
 </resources>
