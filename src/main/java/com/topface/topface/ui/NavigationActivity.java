@@ -49,11 +49,8 @@ import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
-import com.topface.topface.utils.controllers.SequencedStartAction;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
-import com.topface.topface.utils.controllers.startactions.FacebookRequestWindowAction;
-import com.topface.topface.utils.controllers.startactions.FacebookSequencedStartAction;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.InvitePopupAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
@@ -70,7 +67,7 @@ import static com.topface.topface.utils.controllers.StartActionsController.AC_PR
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
 
-public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener, SequencedStartAction.IUiRunner {
+public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener {
     public static final String INTENT_EXIT = "EXIT";
     public static final String PAGE_SWITCH = "Page switch: ";
 
@@ -170,10 +167,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 showFragment(FragmentId.TABBED_LIKES);
             }
         }));
-        FacebookSequencedStartAction sequencedStartAction = new FacebookSequencedStartAction(this, AC_PRIORITY_NORMAL);
-        sequencedStartAction.addAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
-        sequencedStartAction.addAction(new FacebookRequestWindowAction(this, AC_PRIORITY_NORMAL));
-        startActionsController.registerAction(sequencedStartAction);
+        startActionsController.registerAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
         // fullscreen
