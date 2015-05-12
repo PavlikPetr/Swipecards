@@ -358,7 +358,7 @@
     <string name="sign_in">Sign in</string>
     <string name="create_account">Create an account</string>
     <string name="email">Email</string>
-    <string name="password">Password</string>
+    <string name="password">New password</string>
     <string name="error_login_password">Incorrect login/password</string>
     <string name="recover_password">Recover the password</string>
     <string name="recovering_password">Password recovery</string>
