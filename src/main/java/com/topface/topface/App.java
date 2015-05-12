@@ -199,6 +199,7 @@ public class App extends Application {
                     protected void success(Options data, IApiResponse response) {
                         LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Options.OPTIONS_RECEIVED_ACTION));
                         mUserOptionsObtainedFromServer = true;
+                        NativeAdManager.init();
                     }
 
                     @Override
@@ -230,7 +231,6 @@ public class App extends Application {
                         }
                         CacheProfile.setProfile(data, response.getJsonResult(), part);
                         CacheProfile.sendUpdateProfileBroadcast();
-                        NativeAdManager.init();
                     }
 
                     @Override

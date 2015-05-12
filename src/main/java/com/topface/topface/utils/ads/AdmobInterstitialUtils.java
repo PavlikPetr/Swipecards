@@ -26,7 +26,7 @@ public class AdmobInterstitialUtils {
     private static final String ADMOB_INTERSTITIAL_FEED = "ca-app-pub-9530442067223936/3710793209";
     private static final String ADMOB_INTERSTITIAL_FEED_NEWBIE = "ca-app-pub-9530442067223936/2234060003";
 
-    private static final int PRELOAD_COUNT = 2;
+    private static final int PRELOAD_COUNT = 1;
     private static final AtomicInteger mPreloadingInterstitialsCount = new AtomicInteger(0);
     private static final List<InterstitialAd> loadedInterstitials = Collections.synchronizedList(new ArrayList<InterstitialAd>(PRELOAD_COUNT));
 
