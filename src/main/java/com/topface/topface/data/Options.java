@@ -151,7 +151,6 @@ public class Options extends AbstractData {
     public FeedNativeAd feedNativeAd = new FeedNativeAd();
     public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
     public NotShown notShown = new NotShown();
-    public FacebookInviteFriends facebookInviteFriends = new FacebookInviteFriends();
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
     public InterstitialInFeeds interstitial= new InterstitialInFeeds();
 
@@ -329,12 +328,7 @@ public class Options extends AbstractData {
             if (jsonNotShown != null) {
                 notShown.parseNotShownJSON(jsonNotShown);
             }
-
-            facebookInviteFriends = JsonUtils.optFromJson(response.optString("facebookInviteFriends"),
-                    FacebookInviteFriends.class, new FacebookInviteFriends());
-
             feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
-
             interstitial = JsonUtils.optFromJson(response.optString("interstitial"),
                     InterstitialInFeeds.class, interstitial);
 
@@ -656,13 +650,6 @@ public class Options extends AbstractData {
                 text = jsonNotShown.optString("text");
             }
         }
-    }
-
-    public static class FacebookInviteFriends {
-        public boolean enabledOnLogin;
-        public boolean enabledAttempts;
-        public long minDelay = DateUtils.DAY_IN_SECONDS * 3;
-        public int maxAttempts;
     }
 
     public static class FeedNativeAd {
