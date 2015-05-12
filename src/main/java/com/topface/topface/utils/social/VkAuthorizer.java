@@ -23,55 +23,57 @@ public class VkAuthorizer extends Authorizer {
 
     private String[] VK_SCOPE = new String[]{"notify", "photos", "offline"};
 
-    private VKSdkListener vkSdkListener = new VKSdkListener() {
+    private VKSdkListener getVkSdkListener() {
+        return new VKSdkListener() {
 
-        @Override
-        public void onCaptchaError(VKError vkError) {
-            Debug.log("VkAuthorizer: captcha error");
-        }
+            @Override
+            public void onCaptchaError(VKError vkError) {
+                Debug.log("VkAuthorizer: captcha error");
+            }
 
-        @Override
-        public void onTokenExpired(VKAccessToken vkAccessToken) {
-            Debug.log("VkAuthorizer: token expired");
-        }
+            @Override
+            public void onTokenExpired(VKAccessToken vkAccessToken) {
+                Debug.log("VkAuthorizer: token expired");
+            }
 
-        @Override
-        public void onAccessDenied(VKError vkError) {
-            Debug.log("VkAuthorizer: access denied");
-        }
+            @Override
+            public void onAccessDenied(VKError vkError) {
+                Debug.log("VkAuthorizer: access denied");
+            }
 
-        @Override
-        public void onReceiveNewToken(VKAccessToken newToken) {
-            Debug.log("VkAuthorizer: receive new token");
-            super.onReceiveNewToken(newToken);
-            String tokenKey = newToken.accessToken;
-            String userId = newToken.userId;
-            int expiresIn = newToken.expiresIn;
-            AuthToken authToken = AuthToken.getInstance();
-            authToken.saveToken(AuthToken.SN_VKONTAKTE, userId, tokenKey, String.valueOf(expiresIn));
-            AuthToken.getVkName(userId, new Handler(new Handler.Callback() {
-                @Override
-                public boolean handleMessage(Message msg) {
-                    SessionConfig sessionConfig = App.getSessionConfig();
-                    sessionConfig.setSocialAccountName((String) msg.obj);
-                    sessionConfig.saveConfig();
-                    return true;
-                }
-            }));
-        }
+            @Override
+            public void onReceiveNewToken(VKAccessToken newToken) {
+                Debug.log("VkAuthorizer: receive new token");
+                super.onReceiveNewToken(newToken);
+                String tokenKey = newToken.accessToken;
+                String userId = newToken.userId;
+                int expiresIn = newToken.expiresIn;
+                AuthToken authToken = AuthToken.getInstance();
+                authToken.saveToken(AuthToken.SN_VKONTAKTE, userId, tokenKey, String.valueOf(expiresIn));
+                AuthToken.getVkName(userId, new Handler(new Handler.Callback() {
+                    @Override
+                    public boolean handleMessage(Message msg) {
+                        SessionConfig sessionConfig = App.getSessionConfig();
+                        sessionConfig.setSocialAccountName((String) msg.obj);
+                        sessionConfig.saveConfig();
+                        return true;
+                    }
+                }));
+            }
 
-        @Override
-        public void onAcceptUserToken(VKAccessToken token) {
-            Debug.log("VkAuthorizer: accept user token");
-            super.onAcceptUserToken(token);
-        }
+            @Override
+            public void onAcceptUserToken(VKAccessToken token) {
+                Debug.log("VkAuthorizer: accept user token");
+                super.onAcceptUserToken(token);
+            }
 
-        @Override
-        public void onRenewAccessToken(VKAccessToken token) {
-            Debug.log("VkAuthorizer: renew access token");
-            super.onRenewAccessToken(token);
-        }
+            @Override
+            public void onRenewAccessToken(VKAccessToken token) {
+                Debug.log("VkAuthorizer: renew access token");
+                super.onRenewAccessToken(token);
+            }
     };
+    }
 
     public VkAuthorizer(Activity activity) {
         super(activity);
@@ -85,15 +87,16 @@ public class VkAuthorizer extends Authorizer {
     @Override
     public void logout() {
         VKUIHelper.onCreate(getActivity());
-        VKSdk.initialize(vkSdkListener, Static.AUTH_VK_ID);
+        VKSdk.initialize(getVkSdkListener(), Static.AUTH_VK_ID);
         VKSdk.logout();
+        VKUIHelper.onDestroy(getActivity());
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         VKUIHelper.onCreate(getActivity());
-        VKSdk.initialize(vkSdkListener, Static.AUTH_VK_ID);
+        VKSdk.initialize(getVkSdkListener(), Static.AUTH_VK_ID);
     }
 
     @Override
