@@ -23,7 +23,7 @@ public class VkAuthorizer extends Authorizer {
 
     private String[] VK_SCOPE = new String[]{"notify", "photos", "offline"};
 
-    private VKSdkListener getVkSdkListener() {
+    private VKSdkListener createVkSdkListener() {
         return new VKSdkListener() {
 
             @Override
@@ -87,7 +87,7 @@ public class VkAuthorizer extends Authorizer {
     @Override
     public void logout() {
         VKUIHelper.onCreate(getActivity());
-        VKSdk.initialize(getVkSdkListener(), Static.AUTH_VK_ID);
+        VKSdk.initialize(createVkSdkListener(), Static.AUTH_VK_ID);
         VKSdk.logout();
         VKUIHelper.onDestroy(getActivity());
     }
@@ -96,7 +96,7 @@ public class VkAuthorizer extends Authorizer {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         VKUIHelper.onCreate(getActivity());
-        VKSdk.initialize(getVkSdkListener(), Static.AUTH_VK_ID);
+        VKSdk.initialize(createVkSdkListener(), Static.AUTH_VK_ID);
     }
 
     @Override
