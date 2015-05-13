@@ -17,6 +17,7 @@
     <!-- new redesign colors -->
     <color name="bg_holo">#F1F1F1</color>
     <color name="bg_white">#FFFFFF</color>
+    <color name="action_bar_color">#455A64</color>
     <color name="bg_light_blue">#EAF8FF</color>
     <color name="blue_60_percent">#99AEE5FD</color>
     <color name="black_60_percent">#99000000</color>

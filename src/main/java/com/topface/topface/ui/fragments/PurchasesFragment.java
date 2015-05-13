@@ -280,7 +280,7 @@ public class PurchasesFragment extends BaseFragment {
 
     @Override
     protected String getTitle() {
-        return getString(R.string.buying_header_title);
+        return getString(R.string.purchase_header_title);
     }
 
     public boolean isVipProducts() {

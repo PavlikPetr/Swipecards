@@ -119,8 +119,8 @@ public abstract class UserAvatarFragment extends BaseFragment
             ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar)
                     .findViewById(R.id.ivBarAvatar))
                     .setImageResource(user.getSex() == Static.GIRL ?
-                            R.drawable.feed_banned_female_avatar :
-                            R.drawable.feed_banned_male_avatar);
+                            R.drawable.rounded_avatar_female :
+                            R.drawable.rounded_avatar_male);
         } else {
             ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar)
                     .findViewById(R.id.ivBarAvatar))

@@ -53,7 +53,7 @@ public class ActionBarView implements View.OnClickListener {
 
     public void setArrowUpView(String title) {
         prepareView();
-        mIcon.setImageResource(R.drawable.ic_up_arrow);
+        mIcon.setImageResource(R.drawable.ic_arrow_up);
         mTitle.setText(title);
     }
 

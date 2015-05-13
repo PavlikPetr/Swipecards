@@ -8,27 +8,27 @@
 
     <LinearLayout
         android:id="@+id/title_clickable"
+        style="@style/ActionBarTitle"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
-        android:background="?attr/actionBarItemBackground"
         android:orientation="horizontal"
-        android:paddingRight="10dp">
+        android:paddingRight="3dp">
 
         <ImageView
             android:id="@+id/up_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:paddingLeft="5dp"
-            android:src="@drawable/ic_up_arrow_with_padding" />
+            android:paddingLeft="16dp"
+            android:src="@drawable/ic_arrow_up" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:gravity="center_vertical"
-            android:paddingLeft="5dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="32dp">
 
             <TextView
                 android:id="@+id/title"
@@ -51,23 +51,22 @@
         android:id="@+id/resources_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="8dp"
+        android:layout_marginRight="16dp"
+        android:layout_toRightOf="@id/title_clickable"
         android:visibility="gone">
 
         <TextView
             android:id="@+id/coins_textview"
             style="@style/CoinsTextView"
-            android:paddingRight="14dp" />
+            android:paddingRight="8dp" />
 
         <TextView
             android:id="@+id/likes_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:drawablePadding="6dp"
-            android:drawableRight="@drawable/ic_heart_small"
+            android:drawablePadding="2dp"
+            android:drawableRight="@drawable/ic_heart_nav_bar"
             android:textSize="24sp" />
     </LinearLayout>
 </RelativeLayout>

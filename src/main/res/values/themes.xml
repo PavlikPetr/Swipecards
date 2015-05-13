@@ -43,7 +43,7 @@
         <item name="actionBarStyle">@style/Widget.Topface.ActionBar</item>
         <item name="actionBarItemBackground">@drawable/bg_semitransparent_black_selector</item>
         <item name="selectableItemBackground">@drawable/bg_semitransparent_black_selector</item>
-        <item name="actionBarSize">@dimen/action_bar_size</item>
+        <item name="actionBarSize">?android:attr/actionBarSize</item>
         <!-- Action Mode (CAB)-->
         <item name="actionModeBackground">@color/bg_action_mode</item>
         <item name="actionModeCloseDrawable">@drawable/ic_check</item>
