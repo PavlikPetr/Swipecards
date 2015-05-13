@@ -2,7 +2,6 @@ package com.topface.topface.ui.edit;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.util.SparseArrayCompat;
