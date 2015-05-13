@@ -20,8 +20,6 @@ public abstract class GeoLocationManager {
     private static final float UPDATE_RANGE = 10f;
     private LocationManager mLocationManager;
     private Location mBestLocation;
-    public enum NavigationType {GPS_ONLY, NETWORK_ONLY, ALL, DISABLE}
-
     private ChangeLocationListener mNetworkLocationListener = new ChangeLocationListener() {
         @Override
         public void onLocationChanged(Location location) {
@@ -30,7 +28,6 @@ public abstract class GeoLocationManager {
             onUserLocationChanged(location);
         }
     };
-
     private ChangeLocationListener mGPSLocationListener = new ChangeLocationListener() {
         @Override
         public void onLocationChanged(Location location) {
@@ -43,6 +40,11 @@ public abstract class GeoLocationManager {
     public GeoLocationManager(Context context) {
         mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         startLocationListener();
+    }
+
+    public static Location getCurrentLocation() {
+        LocationManager locationManager = (LocationManager) App.getContext().getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
     }
 
     public Location getLastKnownLocation() {
@@ -99,6 +101,9 @@ public abstract class GeoLocationManager {
         if (location == null) {
             return mBestLocation;
         }
+        if (mBestLocation == null) {
+            return location;
+        }
         //GPS точку принимаем только в том случае если ее точность больше чем у Network
         if (location.getProvider().equals(LocationManager.GPS_PROVIDER) &&
                 mBestLocation.getAccuracy() > location.getAccuracy()) {
@@ -109,10 +114,7 @@ public abstract class GeoLocationManager {
         }
     }
 
-    public static Location getCurrentLocation() {
-        LocationManager locationManager = (LocationManager) App.getContext().getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-    }
+    public enum NavigationType {GPS_ONLY, NETWORK_ONLY, ALL, DISABLE}
 
     /**
      * Пустая реализация интерфейсa. Избавляемся от неиспользуемых методов.
