@@ -465,7 +465,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         } else {
             mLoFilterShowOff.setVisibility(View.GONE);
             mLoFilterFinance.setVisibility(View.VISIBLE);
-            mLoFilterMarriage.setTag(R.array.profile_form_marriage_male);
         }
         /* понять и простить за эту х...ю, так уж FormInfo реализован */
         mFormInfo = new FormInfo(App.getContext(), mFilter.sex, Profile.TYPE_OWN_PROFILE);
