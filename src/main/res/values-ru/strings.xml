@@ -476,7 +476,7 @@
     <string name="sign_in">Войти</string>
     <string name="create_account">Создать аккаунт</string>
     <string name="email">E-mail</string>
-    <string name="password">Новый пароль</string>
+    <string name="password">Пароль</string>
     <string name="error_login_password">Неправильная пара логин/пароль</string>
     <string name="recover_password">Восстановить пароль</string>
     <string name="recovering_password">Восстановление пароля</string>
