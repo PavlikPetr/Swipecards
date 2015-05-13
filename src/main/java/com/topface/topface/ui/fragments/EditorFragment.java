@@ -77,11 +77,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
 
         mApiUrlsMap = new SparseArray<>();
         mApiUrlsMap.put(0, Static.API_URL);
-        mApiUrlsMap.put(1, Static.API_ALPHA_URL);
-        mApiUrlsMap.put(2, Static.API_BETA_URL);
-        mApiUrlsMap.put(3, Static.API_GAMMA_URL);
-        mApiUrlsMap.put(4, Static.API_DELTA_URL);
-        mApiUrlsMap.put(5, Static.API_500_ERROR_URL);
+        mApiUrlsMap.put(1, Static.API_500_ERROR_URL);
     }
 
     @Override
