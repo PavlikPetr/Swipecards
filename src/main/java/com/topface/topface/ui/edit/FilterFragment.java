@@ -2,6 +2,7 @@ package com.topface.topface.ui.edit;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.util.SparseArrayCompat;
@@ -18,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
@@ -464,7 +466,11 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         } else {
             mLoFilterShowOff.setVisibility(View.GONE);
             mLoFilterFinance.setVisibility(View.VISIBLE);
+            mLoFilterMarriage.setTag(R.array.profile_form_marriage_male);
         }
+        /* понять и простить за эту х...ю, так уж FormInfo реализован */
+        mFormInfo = new FormInfo(App.getContext(), mFilter.sex, Profile.TYPE_OWN_PROFILE);
+        setText(mFormInfo.getEntry(R.array.form_social_marriage, mFilter.marriage), mLoFilterMarriage);
     }
 
     // show dialog
