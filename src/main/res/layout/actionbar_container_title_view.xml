@@ -13,7 +13,7 @@
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
         android:orientation="horizontal"
-        android:paddingRight="3dp">
+        android:paddingRight="10dp">
 
         <ImageView
             android:id="@+id/up_icon"
@@ -59,7 +59,7 @@
         <TextView
             android:id="@+id/coins_textview"
             style="@style/CoinsTextView"
-            android:paddingRight="8dp" />
+            android:paddingRight="11dp" />
 
         <TextView
             android:id="@+id/likes_textview"
