@@ -131,7 +131,7 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
         json.put("age", age);
         json.put("online", online);
         json.put("city", city != null ? city.toJson() : Static.EMPTY);
-        json.put("photo", photo != null ? photo.toJson() : Static.EMPTY);
+        json.put("photo", photo != null ? photo.toJson() : new Photo().toJson());
         json.put("premium", premium);
         json.put("bookmarked", bookmarked);
         json.put("inBlacklist", blocked);

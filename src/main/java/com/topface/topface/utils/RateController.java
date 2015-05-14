@@ -120,17 +120,17 @@ public class RateController {
      * Interface for UI callbacks
      */
     public interface OnRateControllerListener {
-        public void successRate();
+        void successRate();
 
-        public void failRate();
+        void failRate();
     }
 
     /**
      * Interface for api request callbacks
      */
     public interface OnRateRequestListener {
-        public void onRateCompleted(int mutualId);
+        void onRateCompleted(int mutualId);
 
-        public void onRateFailed(int userId, int mutualId);
+        void onRateFailed(int userId, int mutualId);
     }
 }
