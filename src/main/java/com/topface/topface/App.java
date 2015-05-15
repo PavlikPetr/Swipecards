@@ -459,7 +459,7 @@ public class App extends Application {
         new BackgroundThread(Thread.MIN_PRIORITY) {
             @Override
             public void execute() {
-                mCurLocation = GeoLocationManager.getLastKnownLocation(mContext);
+                mCurLocation = GeoLocationManager.getCurrentLocation();
                 if (mCurLocation != null) {
                     Looper.prepare();
                     SettingsRequest settingsRequest = new SettingsRequest(getContext());

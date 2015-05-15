@@ -6,13 +6,11 @@
 
     <TextView
         android:id="@+id/edit_dialog_limit"
-        style="@style/SelectorDialogTitle"
-        android:textColor="@color/text_color_gray_transparent"
-        android:textSize="18sp"
+        style="@style/SelectorDialogCounter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        tools:text='1024/1024'/>
+        tools:text='1024/1024' />
 
     <TextView
         android:id="@+id/edit_dialog_title"

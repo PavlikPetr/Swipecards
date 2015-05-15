@@ -1060,6 +1060,13 @@
         <item name="android:paddingBottom">12dp</item>
     </style>
 
+    <style name="SelectorDialogCounter" parent="SelectorDialogTitle">
+        <item name="android:paddingRight">0dp</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/text_color_gray_transparent</item>
+    </style>
+
     <style name="SelectorDialogTitle.Blue">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/default_line_indicator_selected_color</item>

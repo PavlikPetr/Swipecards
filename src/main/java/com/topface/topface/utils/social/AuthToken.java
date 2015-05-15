@@ -108,7 +108,7 @@ public class AuthToken {
             @Override
             public void onAccessDenied(VKError vkError) {
             }
-        }, Static.AUTH_VK_ID);
+        }, VkAuthorizer.getVkId());
         new BackgroundThread() {
             @Override
             public void execute() {

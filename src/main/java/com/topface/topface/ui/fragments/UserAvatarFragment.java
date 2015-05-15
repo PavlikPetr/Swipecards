@@ -43,6 +43,9 @@ public abstract class UserAvatarFragment extends BaseFragment
     public void onDestroy() {
         super.onDestroy();
         setOnline(false);
+        if (mOverflowMenu != null) {
+            mOverflowMenu.onReleaseOverflowMenu();
+        }
     }
 
     @Override
@@ -72,15 +75,6 @@ public abstract class UserAvatarFragment extends BaseFragment
                 mBarAvatar.getActionView().setPadding(0, 0, (int) (4 * metrics.density), 0);
             }
         }
-    }
-
-    @Override
-    public void onDestroyOptionsMenu() {
-        super.onDestroyOptionsMenu();
-        if (mOverflowMenu != null) {
-            mOverflowMenu.onReleaseOverflowMenu();
-        }
-
     }
 
     protected boolean hasUserActions() {

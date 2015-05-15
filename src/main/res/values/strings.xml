@@ -138,7 +138,6 @@
     <string name="general_dbl_unread">Unread</string>
     <string name="general_empty_code_confirmation">Enter confirmation code</string>
     <string name="general_email_success_confirmed">Your email was successfully confirmed</string>
-    <string name="general_email_not_confirmed">Your email wasn\'t confirmed</string>
     <string name="time_yesterday">Yesterday</string>
     <string name="time_today">Today</string>
     <string name="general_send_button">Send</string>
@@ -214,7 +213,7 @@
     <string name="profile_add_album">Choose from the library</string>
     <string name="profile_add_camera">Take a photo</string>
     <string name="profile_photo">Photos</string>
-    <string name="profile_form">Profile form</string>
+    <string name="profile_form">About me</string>
     <string name="profile_gifts">Gifts</string>
     <string name="profile_actions">Actions</string>
     <string name="profile_empty_form">The user hasn\'t filled in the profile yet.</string>
@@ -390,13 +389,11 @@
     <string name="save">Save</string>
     <string name="saving_in_progress">Saving…</string>
     <string name="confirmation_successfully_sent">Confirmation was successfully sent to your email.</string>
+    <string name="password_confirmation_hint">Confirm password</string>
     <string name="password_hint">password</string>
-    <string name="password_confirmation_hint">Password confirmation</string>
     <string name="enter_new_password">Enter your new password</string>
-    <string name="enter_old_password">Enter your old password</string>
     <string name="enter_password_confirmation">Confirm your password</string>
     <string name="passwords_mismatched">Passwords do not match</string>
-    <string name="old_password_mismatched">Wrong old password</string>
     <string name="passwords_changed">Password is changed</string>
     <string name="take_photo">Take a photo</string>
     <string name="take_another_photo">Another photo</string>
@@ -608,7 +605,6 @@
     <string name="preload_photo_type_preload_off">Off</string>
     <string name="wrong_time_popup_text">Cannot establish a safe connection.\nMaybe the date or time settings on your device have been set incorrectly.</string>
     <string name="wrong_time_popup_button">View settings</string>
-    <string name="go_tf">I\'m sending you a Mystery Box!</string>
     <string name="enter_text">Enter text</string>
     <string name="send_feedback">Send message</string>
     <string name="get_vip_free">Get free VIP</string>

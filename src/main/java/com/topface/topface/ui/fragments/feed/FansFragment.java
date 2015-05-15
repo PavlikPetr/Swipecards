@@ -2,6 +2,8 @@ package com.topface.topface.ui.fragments.feed;
 
 import android.content.Intent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -13,6 +15,9 @@ import java.util.List;
 
 
 public class FansFragment extends BookmarksFragment {
+
+    public static final String FANS = "Fans";
+
     @Override
     protected String getTitle() {
         return getString(R.string.general_fans);
@@ -25,23 +30,28 @@ public class FansFragment extends BookmarksFragment {
 
     @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
-        View btnBuyVip = inflated.findViewById(R.id.btnBuyVip);
+        Button buttonBuy = (Button) inflated.findViewById(R.id.btnBuy);
+        TextView message = ((TextView) inflated.findViewById(R.id.tvText));
         if (CacheProfile.premium) {
-            inflated.findViewById(R.id.tvText).setVisibility(View.GONE);
-            btnBuyVip.setVisibility(View.GONE);
-        } else {
-            inflated.findViewById(R.id.tvText).setVisibility(View.VISIBLE);
-            btnBuyVip.setVisibility(View.VISIBLE);
-            btnBuyVip.setOnClickListener(new View.OnClickListener() {
+            message.setText(R.string.buy_more_sympathies);
+            buttonBuy.setText(R.string.buy_sympathies);
+            buttonBuy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = PurchasesActivity.createVipBuyIntent(null, "Fans");
+                    startActivity(PurchasesActivity.createBuyingIntent(FANS));
+                }
+            });
+        } else {
+            message.setText(R.string.likes_buy_vip);
+            buttonBuy.setText(R.string.buying_vip_status);
+            buttonBuy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = PurchasesActivity.createVipBuyIntent(null, FANS);
                     startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
                 }
             });
         }
-
-
     }
 
     @Override
