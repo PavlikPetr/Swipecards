@@ -19,6 +19,7 @@ import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -78,6 +79,7 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
                             @Override
                             public void success(IApiResponse response) {
                                 new AuthorizationManager(getActivity()).logout(getActivity());
+                                TabbedDialogsFragment.setTabsDefaultPosition();
                             }
 
                             @Override
