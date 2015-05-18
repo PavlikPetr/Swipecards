@@ -116,6 +116,7 @@ public class AuthorizationManager {
     public void logout(Activity activity) {
         Ssid.remove();
         UserNotificationManager.getInstance().removeNotifications();
+        TabbedDialogsFragment.setTabsDefaultPosition();
         AuthToken authToken = AuthToken.getInstance();
         for (Authorizer authorizer : mAuthorizers.values()) {
             authorizer.logout();
