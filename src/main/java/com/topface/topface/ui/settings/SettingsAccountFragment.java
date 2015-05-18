@@ -79,7 +79,6 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
                             @Override
                             public void success(IApiResponse response) {
                                 new AuthorizationManager(getActivity()).logout(getActivity());
-                                TabbedDialogsFragment.setTabsDefaultPosition();
                             }
 
                             @Override
