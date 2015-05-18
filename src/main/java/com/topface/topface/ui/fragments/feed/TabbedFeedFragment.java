@@ -47,6 +47,17 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
 
     private TabbedFeedPageAdapter mBodyPagerAdapter;
 
+    protected static int mVisitorsastOpenedPage = 0;
+    protected static int mLikesLastOpenedPage = 0;
+    protected static int mDialogsLastOpenedPage = 0;
+
+    public static void setTabsDefaultPosition(){
+        mVisitorsastOpenedPage = 0;
+        mLikesLastOpenedPage = 0;
+        mDialogsLastOpenedPage = 0;
+    }
+
+
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

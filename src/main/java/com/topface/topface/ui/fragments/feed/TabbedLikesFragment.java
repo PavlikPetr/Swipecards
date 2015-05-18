@@ -5,7 +5,6 @@ import com.topface.topface.banners.PageInfo;
 import com.topface.topface.utils.CacheProfile;
 
 public class TabbedLikesFragment extends TabbedFeedFragment {
-    private static int mLastOpenedPage = 0;
 
     @Override
     protected void onBeforeCountersUpdate() {
@@ -28,12 +27,12 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
 
     @Override
     protected int getLastOpenedPage() {
-        return mLastOpenedPage;
+        return mLikesLastOpenedPage;
     }
 
     @Override
     protected void setLastOpenedPage(int lastOpenedPage) {
-        mLastOpenedPage = lastOpenedPage;
+        mLikesLastOpenedPage = lastOpenedPage;
     }
 
     @Override
