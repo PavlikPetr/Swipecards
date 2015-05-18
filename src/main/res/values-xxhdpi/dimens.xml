@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="chat_date_line_size">2px</dimen>
+    <dimen name="tab_bar_default_bottom_border_height">2px</dimen>
 </resources>

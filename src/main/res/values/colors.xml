@@ -26,9 +26,9 @@
 
     <color name="tab_counter_text_color_selected">#33B5E5</color>
     <color name="tab_counter_text_color_not_selected">#9933B5E5</color>
-    <color name="tab_text_color_selected">#3D3D3D</color>
-    <color name="tab_text_color_not_selected">#993D3D3D</color>
-    <color name="tab_background">#ebebeb</color>
+    <color name="tab_text_color_selected">#03A9F4</color>
+    <color name="tab_text_color_not_selected">#66000000</color>
+    <color name="tab_background">#fafafa</color>
     <color name="tab_divider_color">@color/tab_text_color_selected</color>
 
     <!-- for holo feeds -->
@@ -74,9 +74,8 @@
 
     <!-- main theme color -->
     <color name="light_theme_color_primary">#03a9f4</color>
-    <color name="light_theme_color_primary_dark">#0287c3</color>
+    <color name="light_theme_color_primary_dark">#33434D</color>
     <color name="light_theme_color_accent">#ee4493</color>
 
     <color name="edit_dialog_buttons_divider">#DCDCDC</color>
-    <color name="status_bar_color">#282828</color>
 </resources>

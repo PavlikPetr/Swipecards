@@ -13,7 +13,7 @@
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
         android:orientation="horizontal"
-        android:paddingRight="10dp">
+        android:paddingRight="15dp">
 
         <ImageView
             android:id="@+id/up_icon"

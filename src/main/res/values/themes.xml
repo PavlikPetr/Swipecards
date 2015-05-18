@@ -48,7 +48,7 @@
         <item name="actionModeBackground">@color/bg_action_mode</item>
         <item name="actionModeCloseDrawable">@drawable/ic_check</item>
 
-        <item name="android:windowDrawsSystemBarBackgrounds" tools:ignore="NewApi">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds" tools:ignore="NewApi">true</item>
     </style>
 
     <!-- transparent activity theme -->
