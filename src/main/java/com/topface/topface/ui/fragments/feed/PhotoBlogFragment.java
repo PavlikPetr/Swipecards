@@ -24,7 +24,6 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.AddToLeaderActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.OwnProfileActivity;
-import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.PhotoBlogListAdapter;
 import com.topface.topface.ui.views.RetryViewCreator;
@@ -120,7 +119,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
                 adapter.onSelection(item);
             } else {
                 if (isNotYourOwnId(item.user.id)) {
-                    startActivity(UserProfileActivity.createIntent(null, item.user.id, item.id, false, false, Utils.getNameAndAge(item.user.firstName, item.user.age), item.user.city.getName()));
+                    startActivity(CacheProfile.getOptions().autoOpenGallery.createIntent(item.user.id, item.user.photosCount, item.id, item.user.photo, getActivity()));
                 } else {
                     openOwnProfile();
                 }
