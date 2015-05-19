@@ -8,6 +8,11 @@
         <item name="subtitleTextStyle">@style/Widget.Topface.ActionBar.Subtitle</item>
         <item name="contentInsetStart">0dp</item>
         <item name="background">@drawable/bg_actionbar</item>
+        <item name="android:exitFadeDuration" tools:ignore="NewApi">0</item>
+        <item name="android:enterFadeDuration" tools:ignore="NewApi">0</item>
+        <item name="android:animationDuration">0</item>
+        <item name="android:animateFirstView" tools:ignore="NewApi">false</item>
+        <item name="android:animateLayoutChanges" tools:ignore="NewApi">false</item>
     </style>
 
     <style name="Widget.Topface.TransparentActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
@@ -320,7 +325,7 @@
     </style>
 
     <style name="ListItemEmptyText">
-        <item name="android:fontFamily">"sans-serif-light"</item>
+        <item name="android:fontFamily" tools:ignore="NewApi">"sans-serif-light"</item>
         <item name="android:textColor">@color/text_color_gray</item>
         <item name="android:textSize">17sp</item>
         <item name="android:textStyle">normal</item>

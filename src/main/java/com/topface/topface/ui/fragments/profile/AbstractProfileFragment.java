@@ -12,7 +12,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
-import com.topface.topface.ui.fragments.UserAvatarFragment;
+import com.topface.topface.ui.fragments.AnimatedFragment;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.Utils;
@@ -20,7 +20,7 @@ import com.topface.topface.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractProfileFragment extends UserAvatarFragment implements ViewPager.OnPageChangeListener {
+public abstract class AbstractProfileFragment extends AnimatedFragment implements ViewPager.OnPageChangeListener {
     public static final String INTENT_UID = "intent_profile_uid";
     public static final String INTENT_ITEM_ID = "intent_profile_item_id";
     public static final String INTENT_IS_CHAT_AVAILABLE = "intent_profile_is_chat_available";

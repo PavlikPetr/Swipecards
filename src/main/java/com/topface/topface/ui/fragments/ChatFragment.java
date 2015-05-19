@@ -90,7 +90,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
 
-public class ChatFragment extends UserAvatarFragment implements View.OnClickListener {
+public class ChatFragment extends AnimatedFragment implements View.OnClickListener {
 
     public static final int LIMIT = 50;
 
@@ -139,6 +139,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     private String mItemId;
     private String mInitialMessage;
     private boolean wasFailed = false;
+
     TimerTask mUpdaterTask = new TimerTask() {
         @Override
         public void run() {
@@ -229,7 +230,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        final KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
+        KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
         root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
             @SuppressWarnings("ConstantConditions")
             @Override
@@ -539,11 +540,11 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
         super.onDestroy();
     }
 
-    private void update(final boolean pullToRefresh, String type) {
+    private void update(boolean pullToRefresh, String type) {
         update(pullToRefresh, false, type);
     }
 
-    private void update(final boolean scrollRefresh) {
+    private void update(boolean scrollRefresh) {
         update(false, scrollRefresh, "scroll refresh");
     }
 
@@ -665,6 +666,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
             public void always(IApiResponse response) {
                 super.always(response);
                 mBackgroundController.hide();
+                requestExecuted();
                 if (pullToRefresh && mListView != null) {
                     mListView.onRefreshComplete();
                 }
@@ -1065,5 +1067,4 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
             mEditBox.setSelection(message.length());
         }
     }
-
 }

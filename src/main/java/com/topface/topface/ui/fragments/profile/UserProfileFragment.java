@@ -221,6 +221,12 @@ public class UserProfileFragment extends AbstractProfileFragment {
                         showRetryBtn();
                     }
                 }
+
+                @Override
+                public void always(IApiResponse response) {
+                    super.always(response);
+                    requestExecuted();
+                }
             });
             FeedGiftsRequest giftsRequest = new FeedGiftsRequest(getActivity());
             giftsRequest.uid = profileId;
