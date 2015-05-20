@@ -23,7 +23,7 @@ public abstract class GeoLocationManager {
     private ChangeLocationListener mNetworkLocationListener = new ChangeLocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-            Debug.log(this, "Receive location from GPS");
+            Debug.log(this, "Receive location from Network");
             compareWithBestLocation(location);
             onUserLocationChanged(mBestLocation);
         }
@@ -31,7 +31,7 @@ public abstract class GeoLocationManager {
     private ChangeLocationListener mGPSLocationListener = new ChangeLocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-            Debug.log(this, "Receive location from Network");
+            Debug.log(this, "Receive location from GPS");
             compareWithBestLocation(location);
             onUserLocationChanged(mBestLocation);
         }
