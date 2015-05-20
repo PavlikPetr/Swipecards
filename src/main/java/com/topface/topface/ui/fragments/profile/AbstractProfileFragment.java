@@ -137,6 +137,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     private void initBodyPages(View root) {
         initBody();
         mBodyPager = (ViewPager) root.findViewById(R.id.vpFragments);
+        setAnimatedView(mBodyPager);
         mBodyPager.setSaveEnabled(false);
         ProfilePageAdapter mBodyPagerAdapter = new ProfilePageAdapter(getChildFragmentManager(), BODY_PAGES_CLASS_NAMES,
                 BODY_PAGES_TITLES, mProfileUpdater);

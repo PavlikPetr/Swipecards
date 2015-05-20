@@ -99,7 +99,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
             LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
         }
         mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_PROFILE);
-        mLoaderView = root.findViewById(R.id.llvProfileLoading);
+        mLoaderView = root.findViewById(R.id.viewPagerLoader);
         mOutsideView = root.findViewById(R.id.outsideView);
         mOutsideView.setOnClickListener(new View.OnClickListener() {
             @Override

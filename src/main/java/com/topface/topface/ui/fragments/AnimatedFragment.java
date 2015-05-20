@@ -1,10 +1,8 @@
 package com.topface.topface.ui.fragments;
 
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 
 import com.topface.topface.data.IUniversalUser;
 import com.topface.topface.utils.actionbar.OverflowMenu;
@@ -14,35 +12,23 @@ import com.topface.topface.utils.actionbar.OverflowMenu;
  * animated fragment on start
  */
 public class AnimatedFragment extends UserAvatarFragment {
-    private static final int WHITE_SCREEN_DELAY = 1000;
     private static final int MAIN_SCREEN_ANIMATION_DURATION = 300;
+    private boolean isAnimationNeedToShow;
 
     private View mView;
-    private AlphaAnimation mMainScreenAlphaAnimation;
-
-    CountDownTimer mWhiteScreenTimer = new CountDownTimer(WHITE_SCREEN_DELAY, WHITE_SCREEN_DELAY) {
-        @Override
-        public void onTick(long millisUntilFinished) {
-
-        }
-
-        @Override
-        public void onFinish() {
-            showMainViewWithAnimation();
-        }
-    };
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mView = null;
-        // показ "белого экрана" и анимируем основную view только при первом запуске фрагмента
-        if (null == savedInstanceState) {
+        if (null == mView) {
             mView = view;
+        }
+        // показ "белого экрана" и анимируем основную view только при первом запуске фрагмента
+        isAnimationNeedToShow = savedInstanceState == null;
+        if (isAnimationNeedToShow) {
             startWhiteScreenTimer();
         }
         super.onViewCreated(view, savedInstanceState);
     }
-
 
     @Override
     protected IUniversalUser createUniversalUser() {
@@ -70,22 +56,23 @@ public class AnimatedFragment extends UserAvatarFragment {
     }
 
     private void startWhiteScreenTimer() {
-        if (null != mView) {
+        if (null != mView && isAnimationNeedToShow) {
             mView.setAlpha(0);
-            mWhiteScreenTimer.cancel();
-            mWhiteScreenTimer.start();
             mView.animate().setDuration(MAIN_SCREEN_ANIMATION_DURATION);
         }
     }
 
     private void stopWhiteScreenTimer() {
-        mWhiteScreenTimer.cancel();
         showMainViewWithAnimation();
     }
 
     private void showMainViewWithAnimation() {
-        if (null != mView) {
+        if (null != mView && isAnimationNeedToShow) {
             mView.animate().alpha(1);
         }
+    }
+
+    public void setAnimatedView(View view) {
+        mView = view;
     }
 }

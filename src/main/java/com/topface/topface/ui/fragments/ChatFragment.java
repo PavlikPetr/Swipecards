@@ -231,6 +231,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
+        setAnimatedView(root.findViewById(R.id.allView));
         root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
             @SuppressWarnings("ConstantConditions")
             @Override
