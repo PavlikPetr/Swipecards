@@ -205,4 +205,9 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
 
         Profile getProfile();
     }
+
+    @Override
+    protected boolean isAnimationRequire() {
+        return false;
+    }
 }

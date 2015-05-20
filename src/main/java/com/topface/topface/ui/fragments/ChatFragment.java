@@ -1068,4 +1068,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             mEditBox.setSelection(message.length());
         }
     }
+
+    @Override
+    protected boolean isAnimationRequire() {
+        return true;
+    }
 }

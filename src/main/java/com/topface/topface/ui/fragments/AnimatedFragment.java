@@ -11,7 +11,7 @@ import com.topface.topface.utils.actionbar.OverflowMenu;
  * Created by ppetr on 19.05.15.
  * animated fragment on start
  */
-public class AnimatedFragment extends UserAvatarFragment {
+public abstract class AnimatedFragment extends UserAvatarFragment {
     private static final int MAIN_SCREEN_ANIMATION_DURATION = 300;
     private boolean isAnimationNeedToShow;
 
@@ -24,7 +24,7 @@ public class AnimatedFragment extends UserAvatarFragment {
         }
         // показ "белого экрана" и анимируем основную view только при первом запуске фрагмента
         isAnimationNeedToShow = savedInstanceState == null;
-        if (isAnimationNeedToShow) {
+        if (isAnimationNeedToShow && isAnimationRequire()) {
             startWhiteScreenTimer();
         }
         super.onViewCreated(view, savedInstanceState);
@@ -56,7 +56,7 @@ public class AnimatedFragment extends UserAvatarFragment {
     }
 
     private void startWhiteScreenTimer() {
-        if (null != mView && isAnimationNeedToShow) {
+        if (null != mView && isAnimationNeedToShow && isAnimationRequire()) {
             mView.setAlpha(0);
             mView.animate().setDuration(MAIN_SCREEN_ANIMATION_DURATION);
         }
@@ -67,7 +67,7 @@ public class AnimatedFragment extends UserAvatarFragment {
     }
 
     private void showMainViewWithAnimation() {
-        if (null != mView && isAnimationNeedToShow) {
+        if (null != mView && isAnimationNeedToShow && isAnimationRequire()) {
             mView.animate().alpha(1);
         }
     }
@@ -75,4 +75,6 @@ public class AnimatedFragment extends UserAvatarFragment {
     public void setAnimatedView(View view) {
         mView = view;
     }
+
+    protected abstract boolean isAnimationRequire();
 }

@@ -535,4 +535,9 @@ public class UserProfileFragment extends AbstractProfileFragment {
         }
         return feedGift;
     }
+
+    @Override
+    protected boolean isAnimationRequire() {
+        return true;
+    }
 }
