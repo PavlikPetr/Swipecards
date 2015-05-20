@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
@@ -465,6 +466,9 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             mLoFilterShowOff.setVisibility(View.GONE);
             mLoFilterFinance.setVisibility(View.VISIBLE);
         }
+        /* понять и простить за эту х...ю, так уж FormInfo реализован */
+        mFormInfo = new FormInfo(App.getContext(), mFilter.sex, Profile.TYPE_OWN_PROFILE);
+        setText(mFormInfo.getEntry(R.array.form_social_marriage, mFilter.marriage), mLoFilterMarriage);
     }
 
     // show dialog

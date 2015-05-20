@@ -61,6 +61,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -1043,11 +1044,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     public void onAvatarClick() {
         if (mUser != null) {
             if (!(mUser.deleted || mUser.banned)) {
-                Intent profileIntent = CacheProfile.
-                        getOptions().
-                        autoOpenGallery.
-                        createIntent(mUserId, mUser.photosCount, mUser.photo, getActivity());
-                startActivity(profileIntent);
+                startActivity(UserProfileActivity.createIntent(null, mUserId, mUser.feedItemId, false, false, Utils.getNameAndAge(mUser.firstName, mUser.age), mUser.city.getName()));
             } else {
                 Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
                         Toast.LENGTH_LONG).show();
