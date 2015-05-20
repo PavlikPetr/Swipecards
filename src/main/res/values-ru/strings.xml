@@ -227,6 +227,7 @@
     <string name="filter_cities_all">По всем городам</string>
 
     <!-- Buying -->
+    <string name="purchase_header_title">Баланс:</string>
     <string name="buying_header_title">Покупки</string>
     <plurals name="buying_gift_you_need_coins">
         <item quantity="one">Чтобы отправить подарок, купите еще %d монету</item>
