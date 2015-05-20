@@ -501,7 +501,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         // то возникнет ситуация, что сервер не может валидировать покупку.
         // Поэтому мы тратим такую покупку после ошибки, если это тестовая покупка
         DeveloperPayload developerPayload = validateRequest.getDeveloperPayload();
-        if (developerPayload != null && TextUtils.equals(developerPayload.sku, TEST_PURCHASED_PRODUCT_ID)) {
+        if (developerPayload != null && TextUtils.equals(purchase.getSku(), TEST_PURCHASED_PRODUCT_ID)) {
             App.getOpenIabHelperManager().consumeAsync(purchase, OpenIabFragment.this);
             return true;
         }
