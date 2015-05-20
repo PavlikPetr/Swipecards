@@ -78,11 +78,7 @@ public class Utils {
     public static void showErrorMessage() {
         Context context = App.getContext();
         if (context != null) {
-            Toast.makeText(
-                    context,
-                    R.string.general_data_error,
-                    Toast.LENGTH_SHORT
-            ).show();
+            Utils.showToastNotification(R.string.general_data_error, Toast.LENGTH_SHORT);
         }
     }
 

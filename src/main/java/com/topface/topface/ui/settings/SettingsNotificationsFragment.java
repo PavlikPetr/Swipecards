@@ -35,6 +35,7 @@ import com.topface.topface.ui.dialogs.NotificationEditDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.MarketApiManager;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
@@ -286,7 +287,7 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
             public void fail(int codeError, IApiResponse response) {
                 if (getView() != null) {
                     setText(CacheProfile.notifications.get(notification.type), view);
-                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                    Utils.showToastNotification(R.string.general_data_error, Toast.LENGTH_SHORT);
                 }
             }
 

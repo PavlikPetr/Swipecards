@@ -360,7 +360,7 @@
     </plurals>
 
     <!-- Add photo -->
-    <string name="photo_add_or">Фотография добавлена</string>
+    <string name="photo_add_or">Фотография добавлена.</string>
     <string name="photo_add_error">Не удалось добавить фотографию.</string>
 
     <plurals name="photo">
