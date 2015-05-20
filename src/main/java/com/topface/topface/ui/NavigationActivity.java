@@ -26,6 +26,7 @@ import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.City;
 import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.requests.IApiResponse;
@@ -304,7 +305,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
-        if (CacheProfile.age <= 15) {
+        if (CacheProfile.age <= App.getAppOptions().getUserAgeMin()) {
             SetAgeDialog.newInstance().show(this.getSupportFragmentManager(), SetAgeDialog.TAG);
         }
     }
