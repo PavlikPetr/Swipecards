@@ -226,7 +226,6 @@
         <item quantity="other">%d фотографій</item>
         <item quantity="one">%d фотографія</item>
     </plurals>
-    <string name="novice_sympathy">Відправляйте симпатії тим, хто вам\nдійсно подобається,\nщоб почати приємне знайомство</string>
     <string name="general_edit_profile_message">Будь ласка, заповніть необхідні поля анкети</string>
     <string name="general_search_null_response_error">Нічого не знайдено. Спробуйте змінити фільтри</string>
     <string name="change_filters">Змінити фільтри</string>
@@ -268,8 +267,6 @@
     <string name="chat_write_message">Написати повідомлення</string>
     <string name="dating_message">Повідомлення…</string>
     <string name="buying_sympathies">Покупка симпатій</string>
-    <string name="novice_sympathies_bonus">- Ви отримуєте %1$d симпатій у\nподарунок! Це означає, що ви\nточно сподобаєтеся %2$d людям, \nякі висловлять вам свою симпатію</string>
-    <string name="novice_buy_sympathies">Якщо ви хочете гарантовано\nотримувати симпатії,\nпридбайте їх прямо зараз!</string>
     <string name="general_reconnect_social">Неможливо підключитися до соцмережі. Повторіть спробу пізніше.</string>
     <string name="general_block">Блокувати</string>
     <string name="general_buying_disabled">У даний момент покупка неможлива</string>

@@ -292,7 +292,6 @@
         <item quantity="other">%d fotoğraf</item>
         <item quantity="one">%d fotoğraf</item>
     </plurals>
-    <string name="novice_sympathy">Hoş bir tanışma başlamak \niçin \ngerçekten hoşlandığınız kişilere sempati gönderin</string>
     <string name="general_edit_profile_message">Lütfen, anketin gerekli boşlukları doldurun</string>
     <string name="general_search_null_response_error">Hiçbir şey bulunamadı. Filtreleri değiştirmeyi deneyin</string>
     <string name="change_filters">Filtreleri değiştirmek</string>
@@ -341,8 +340,6 @@
     <string name="chat_write_message">Mesaj yazmak</string>
     <string name="dating_message">Mesaj…</string>
     <string name="buying_sympathies">Sempati satın alımı</string>
-    <string name="novice_sympathies_bonus">Siz %1$d \nhediye olarak kazandınız! – Bu demek ki %2$d kişi sizi \nkesinlikle beğenir ve sempatileri size \ngösterir.</string>
-    <string name="novice_buy_sympathies">Sempati garanti olarak\nalmak istiyorsanız hemen şimdi \nsatın alın!</string>
     <string name="general_reconnect_social">Sosyal ağa bağlanamıyor. Daha sonra tekrar deneyin.</string>
     <string name="general_block">Engellemek</string>
     <string name="general_buying_disabled">Şu anda alışveriş mümkün değildir</string>

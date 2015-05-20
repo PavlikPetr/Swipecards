@@ -266,7 +266,6 @@
         <item quantity="other">%d φωτογραφίες</item>
         <item quantity="one">%d φωτογραφία</item>
     </plurals>
-    <string name="novice_sympathy">Στείλτε συμπάθεια για εκείνους που \nσας αρέσει πραγματικά\ nγια να ξεκινήσετε μια ευχάριστη γνωριμία</string>
     <string name="general_edit_profile_message">Παρακαλούμε συμπληρώστε τα απαιτούμενα πεδία του ερωτηματολόγιο</string>
     <string name="general_search_null_response_error">Τίποτα δεν βρέθηκε. Προσπαθήστε να αλλάξετε τα φίλτρα</string>
     <string name="change_filters">Αλλάξτε τα φίλτρα</string>
@@ -314,8 +313,6 @@
     <string name="chat_write_message">Στείλτε ένα μήνυμα</string>
     <string name="dating_message">Μήνυμα…</string>
     <string name="buying_sympathies">Αγορά τις συμπάθειες</string>
-    <string name="novice_sympathies_bonus">Παίρνετε %1$d συμπάθειες για\nδωρεάν!  Αυτό σημαίνει ότι, εσέις\n θα αρέσετε ακριβώς για %2$d τους ανθρώπους,\nοποίοι θα εκφράζουν την συμπάθεια για σας</string>
-    <string name="novice_buy_sympathies">Αν θέλετε να είστε εγγυημένος για\nνα λαμβάνετε συμπάθειες,\nνα τις αγοράσετε τώρα!</string>
     <string name="general_reconnect_social">Δεν είναι δυνατή η σύνδεση με κοινωνικά δίκτυα. Παρακαλώ δοκιμάστε ξανά αργότερα.</string>
     <string name="general_block">Αποκλεισμός</string>
     <string name="general_buying_disabled">Αγορά αυτή τη στιγμή δεν μπορεί να γίνει</string>

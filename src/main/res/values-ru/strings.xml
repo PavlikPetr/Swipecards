@@ -370,10 +370,6 @@
         <item quantity="many">%d фотографий</item>
         <item quantity="other">%d фотографий</item>
     </plurals>
-    <!-- Novice -->
-    <string name="novice_sympathy">
-        Отправляйте симпатии тем, кто вам\nдействительно нравится,\nчтобы начать приятное знакомство
-    </string>
 
     <string name="general_edit_profile_message">Пожалуйста, заполните необходимые поля анкеты</string>
 
@@ -439,13 +435,6 @@
     <string name="dating_message">Сообщение…</string>
 
     <string name="buying_sympathies">Покупка симпатии</string>
-
-    <string name="novice_sympathies_bonus">Вы получаете %1$d симпатии в\nподарок! Это означает, что вы\nточно
-        понравитесь %2$d людям,\nкоторые выразят вам свою симпатию
-    </string>
-    <string name="novice_buy_sympathies">Если вы хотите гарантированно\nполучать симпатии,\nприобретайте их прямо
-        сейчас!
-    </string>
 
     <string name="general_reconnect_social">Невозможно подключиться к соцсети. Повторите попытку позже.</string>
     <string name="general_block">Блокировать</string>

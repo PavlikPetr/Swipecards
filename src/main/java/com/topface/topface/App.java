@@ -298,10 +298,6 @@ public class App extends Application {
         return getConfig().getBannerConfig();
     }
 
-    public static Novice getNovice() {
-        return getConfig().getNovice();
-    }
-
     public static AppOptions getAppOptions() {
         if (mAppOptions == null) {
             AppConfig config = App.getAppConfig();

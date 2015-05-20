@@ -49,7 +49,7 @@ public class Configurations {
     public UserConfig getUserConfig() {
         if (mUserConfig == null) {
             if (App.getAppConfig().isNeedConverting() && UserConfigConverter.hasOldConfig()) {
-                    //если у пользователя старый конфиг, то конвертируем его в новые
+                //если у пользователя старый конфиг, то конвертируем его в новые
                 mConfigConverter = new UserConfigConverter(AuthToken.getInstance().getUserTokenUniqueId(), new UserConfigConverter.OnUpdateUserConfig() {
                     @Override
                     public void onUpdate() {
@@ -104,13 +104,6 @@ public class Configurations {
             mLocaleConfig = new LocaleConfig(mContext);
         }
         return mLocaleConfig;
-    }
-
-    public Novice getNovice() {
-        if (mNovice == null) {
-            mNovice = new Novice();
-        }
-        return mNovice;
     }
 
     public void onAuthTokenReceived() {
