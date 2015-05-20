@@ -1,8 +1,10 @@
 package com.topface.topface.utils.actionbar;
 
 import android.app.Activity;
+import android.os.Build;
 import android.support.annotation.StringRes;
 import android.support.v7.app.ActionBar;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,6 +39,11 @@ public class ActionBarView implements View.OnClickListener {
         mSubtitle = (TextView) mActionBarView.findViewById(R.id.subtitle);
         mIcon = (ImageView) mActionBarView.findViewById(R.id.up_icon);
         mActionBarView.findViewById(R.id.title_clickable).setOnClickListener(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            TypedValue tempVal = new TypedValue();
+            mActivity.getResources().getValue(R.dimen.actionbar_elevation, tempVal, true);
+            mActionBar.setElevation(tempVal.getFloat());
+        }
     }
 
     public void setLeftMenuView() {
@@ -53,7 +60,7 @@ public class ActionBarView implements View.OnClickListener {
 
     public void setArrowUpView(String title) {
         prepareView();
-        mIcon.setImageResource(R.drawable.ic_up_arrow);
+        mIcon.setImageResource(R.drawable.ic_arrow_up);
         mTitle.setText(title);
     }
 

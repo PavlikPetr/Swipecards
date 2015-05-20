@@ -12,7 +12,7 @@
         tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/action_user_actions_list"
-        android:icon="@drawable/user_profile_actions_button_selector"
+        android:icon="@drawable/ic_menu"
         android:orderInCategory="11111"
         android:title="@string/profile_actions"
         appcompat:showAsAction="always"

@@ -8,10 +8,10 @@
     <dimen name="popular_dialog_text_margin">36dp</dimen>
 
     <!--set padding left value for icon "online" inside actionBar-->
-    <dimen name="padding_left_for_online_icon">4dp</dimen>
+    <dimen name="padding_left_for_online_icon">8dp</dimen>
 
-    <dimen name="action_bar_title_size">18sp</dimen>
-    <dimen name="action_bar_subtitle_size">14sp</dimen>
+    <dimen name="action_bar_title_size">20sp</dimen>
+    <dimen name="action_bar_subtitle_size">13sp</dimen>
 
     <!-- for chat -->
     <dimen name="chat_balloon_max_width">260dp</dimen>
@@ -32,8 +32,6 @@
 
     <dimen name="edit_text_min_height">30dp</dimen>
 
-    <dimen name="action_bar_size">48dp</dimen>
-
     <dimen name="add_to_leader_spacing_value">2dp</dimen>
 
     <dimen name="edit_dialog_button_heigh">42dp</dimen>
@@ -47,5 +45,11 @@
     <dimen name="form_gift_counter_size">18dp</dimen>
 
     <dimen name="base_indent">8dp</dimen>
+
+    <dimen name="avatar_rounded_padding">2dp</dimen>
+
+    <item name="actionbar_elevation" format="float" type="dimen">0.0</item>
+
+    <dimen name="tab_bar_default_bottom_border_height">1px</dimen>
 
 </resources>
