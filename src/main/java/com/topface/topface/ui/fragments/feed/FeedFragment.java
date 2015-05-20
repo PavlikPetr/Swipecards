@@ -625,7 +625,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         //Open chat activity
         if (!item.user.isEmpty()) {
             FeedUser user = item.user;
-            Intent intent = ChatActivity.createIntent(user.id,user.getNameAndAge(),user.city.name,null,false);
+            Intent intent = ChatActivity.createIntent(user.id,user.getNameAndAge(),user.city.name,null, user.photo, false);
             getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT);
         }
     }
@@ -636,7 +636,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             if (adapter.isMultiSelectionMode()) {
                 adapter.onSelection(item);
             } else {
-                startActivity(UserProfileActivity.createIntent(null, item.user.id, item.id, false, false, Utils.getNameAndAge(item.user.firstName, item.user.age), item.user.city.getName()));
+                startActivity(UserProfileActivity.createIntent(null, item.user.photo, item.user.id, item.id, false, false, Utils.getNameAndAge(item.user.firstName, item.user.age), item.user.city.getName()));
             }
         }
     }

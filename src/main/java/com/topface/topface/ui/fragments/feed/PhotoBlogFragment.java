@@ -122,7 +122,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
                 adapter.onSelection(item);
             } else {
                 if (isNotYourOwnId(item.user.id)) {
-                    startActivity(UserProfileActivity.createIntent(null, item.user.id, item.id, false, false, Utils.getNameAndAge(item.user.firstName, item.user.age), item.user.city.getName()));
+                    startActivity(UserProfileActivity.createIntent(null, item.user.photo, item.user.id, item.id, false, false, Utils.getNameAndAge(item.user.firstName, item.user.age), item.user.city.getName()));
                 } else {
                     openOwnProfile();
                 }
@@ -135,7 +135,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
         if (isNotYourOwnId(item.user.id)) {
             if (!item.user.isEmpty()) {
                 FeedUser user = item.user;
-                Intent intent = ChatActivity.createIntent(user.id,user.getNameAndAge(),user.city.name,null,false);
+                Intent intent = ChatActivity.createIntent(user.id,user.getNameAndAge(),user.city.name,null, user.photo, false);
                 getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT);
             }
         } else {

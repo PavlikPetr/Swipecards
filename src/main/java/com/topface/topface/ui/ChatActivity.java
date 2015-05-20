@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Photo;
 import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.ui.fragments.ChatFragment;
 
@@ -34,7 +35,7 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
         return new ChatFragment();
     }
 
-    public static Intent createIntent(int id, String nameAndAge, String city, String feedItemId, boolean fromGcm) {
+    public static Intent createIntent(int id, String nameAndAge, String city, String feedItemId, Photo photo, boolean fromGcm) {
         Intent intent = new Intent(App.getContext(), ChatActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_ID, id);
         intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, nameAndAge);
@@ -44,6 +45,9 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
         }
         if (fromGcm) {
             intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_CHAT);
+        }
+        if(photo!=null){
+            intent.putExtra(ChatFragment.INTENT_AVATAR, photo);
         }
         return intent;
     }

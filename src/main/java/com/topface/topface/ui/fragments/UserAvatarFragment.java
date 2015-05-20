@@ -15,6 +15,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.IUniversalUser;
+import com.topface.topface.data.Photo;
 import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -104,6 +105,15 @@ public abstract class UserAvatarFragment extends BaseFragment
         if (mSetter != null) {
             IUniversalUser user = getUniversalUser();
             mSetter.setOnline(user.isOnline());
+        }
+    }
+
+
+    protected void setThrownActionBarAvatar(Photo photo) {
+        if (mBarAvatar != null) {
+            ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar)
+                    .findViewById(R.id.ivBarAvatar))
+                    .setPhoto(photo);
         }
     }
 

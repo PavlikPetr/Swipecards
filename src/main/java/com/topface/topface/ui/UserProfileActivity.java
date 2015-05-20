@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.topface.topface.App;
 import com.topface.topface.Static;
+import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
@@ -15,7 +16,7 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
 
     public static final int INTENT_USER_PROFILE = 6;
 
-    public static Intent createIntent(ApiResponse response, int userId, String itemId, boolean isChatAvailable, boolean isAddToFavoritesAvailable, String nameAndAge, String city) {
+    public static Intent createIntent(ApiResponse response, Photo photo, int userId, String itemId, boolean isChatAvailable, boolean isAddToFavoritesAvailable, String nameAndAge, String city) {
         Intent intent = new Intent(App.getContext(), UserProfileActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, nameAndAge);
         intent.putExtra(ChatFragment.INTENT_USER_CITY, city);
@@ -27,6 +28,9 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
         intent.putExtra(AbstractProfileFragment.INTENT_IS_ADD_TO_FAVORITS_AVAILABLE, isAddToFavoritesAvailable);
         if (!TextUtils.isEmpty(itemId)) {
             intent.putExtra(AbstractProfileFragment.INTENT_ITEM_ID, itemId);
+        }
+        if(photo != null){
+            intent.putExtra(ChatFragment.INTENT_AVATAR,photo);
         }
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_USER_PROFILE);
         return intent;

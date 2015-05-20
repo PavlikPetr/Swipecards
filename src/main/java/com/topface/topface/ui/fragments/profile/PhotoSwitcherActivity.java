@@ -62,8 +62,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
     public static final String ADD_NEW_GIFT = "add_new_gift";
 
-    public static final String INTENT_MORE = "more";
-    public static final String INTENT_CLEAR = "clear";
     public static final String DEFAULT_UPDATE_PHOTOS_INTENT = "com.topface.topface.updatePhotos";
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_ALBUM_POS = "album_position";
@@ -183,26 +181,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         intent.putExtra(INTENT_PHOTOS_FILLED, true);
         intent.putParcelableArrayListExtra(INTENT_PHOTOS, photos);
         intent.putParcelableArrayListExtra(INTENT_GIFT, gifts);
-        return intent;
-    }
-
-    public static Intent getPhotoSwitcherIntent(String itemId, int userId, Photo preloadPhoto, Context context) {
-        Intent intent = getPhotoSwitcherIntent(userId, preloadPhoto, context);
-        if (itemId != null) {
-            // for forwarding feed id to profile fragment
-            intent.putExtra(AbstractProfileFragment.INTENT_ITEM_ID, itemId);
-        }
-        return intent;
-    }
-
-    public static Intent getPhotoSwitcherIntent(int userId, Photo preloadPhoto, Context context) {
-        Intent intent = new Intent(context, PhotoSwitcherActivity.class);
-        intent.putExtra(INTENT_USER_ID, userId);
-        intent.putExtra(INTENT_FILL_PROFILE_ON_BACK, true);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        if (preloadPhoto != null) {
-            intent.putExtra(INTENT_PRELOAD_PHOTO, preloadPhoto);
-        }
         return intent;
     }
 
@@ -370,7 +348,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         // without chached info
         Intent intent = getIntent();
         String itemId = intent.getStringExtra(AbstractProfileFragment.INTENT_ITEM_ID);
-        startActivity(UserProfileActivity.createIntent(lastResponse != null ? lastResponse : null,
+        startActivity(UserProfileActivity.createIntent(lastResponse != null ? lastResponse : null, null,
                 mUid, itemId, false, false, null, null));
         finish();
     }

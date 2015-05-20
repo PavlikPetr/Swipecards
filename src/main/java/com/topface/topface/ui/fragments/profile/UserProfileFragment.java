@@ -11,6 +11,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.IUniversalUser;
+import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.UniversalUserFactory;
@@ -73,6 +76,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
     private FeedListData<FeedGift> mRequestedGifts;
     private String mUserNameAndAge;
     private String mUserCity;
+    private Photo mPhoto;
 
     @Override
     public void onAttach(Activity activity) {
@@ -82,6 +86,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
         mItemId = args.getString(AbstractProfileFragment.INTENT_ITEM_ID);
         mUserNameAndAge = args.getString(ChatFragment.INTENT_USER_NAME_AND_AGE);
         mUserCity = args.getString(ChatFragment.INTENT_USER_CITY);
+        mPhoto = args.getParcelable(ChatFragment.INTENT_AVATAR);
         String s = args.getString(EditorProfileActionsFragment.PROFILE_RESPONSE);
         if (!TextUtils.isEmpty(s)) {
             mSavedResponse = new ApiResponse(s);
@@ -117,6 +122,12 @@ public class UserProfileFragment extends AbstractProfileFragment {
         }).build();
         mLockScreen.addView(mRetryView.getView());
         return root;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        setThrownActionBarAvatar(mPhoto);
     }
 
     @Override
@@ -407,12 +418,9 @@ public class UserProfileFragment extends AbstractProfileFragment {
                     public Intent getOpenChatIntent() {
                         Profile profile = getProfile();
                         if (profile != null) {
-                            Intent intent = new Intent(getActivity(), ChatActivity.class);
-                            intent.putExtra(ChatFragment.INTENT_USER_ID, profile.uid);
-                            intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, profile.getNameAndAge());
-                            intent.putExtra(ChatFragment.INTENT_USER_SEX, profile.sex);
-                            intent.putExtra(ChatFragment.INTENT_USER_CITY, profile.city == null ? "" : profile.city.name);
-                            return intent;
+                            return ChatActivity.createIntent(profile.uid, profile.getNameAndAge(),
+                                    profile.city == null ? "" : profile.city.name,
+                                    null, profile.photo,false);
                         }
                         return null;
                     }
