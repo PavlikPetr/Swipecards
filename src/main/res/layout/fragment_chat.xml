@@ -59,9 +59,9 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="@dimen/tab_bar_default_bottom_border_height"
             android:layout_above="@+id/loChatFooterSend"
-            android:background="@drawable/chat_line_above_input_holo" />
+            android:background="#12000000" />
 
         <ViewStub
             android:id="@+id/chat_actions_stub"
