@@ -99,7 +99,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
             LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
         }
         mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_PROFILE);
-        mLoaderView = root.findViewById(R.id.llvProfileLoading);
+        mLoaderView = root.findViewById(R.id.viewPagerLoader);
         mOutsideView = root.findViewById(R.id.outsideView);
         mOutsideView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,6 +220,12 @@ public class UserProfileFragment extends AbstractProfileFragment {
                     } else {
                         showRetryBtn();
                     }
+                }
+
+                @Override
+                public void always(IApiResponse response) {
+                    super.always(response);
+                    requestExecuted();
                 }
             });
             FeedGiftsRequest giftsRequest = new FeedGiftsRequest(getActivity());
@@ -528,5 +534,10 @@ public class UserProfileFragment extends AbstractProfileFragment {
             }
         }
         return feedGift;
+    }
+
+    @Override
+    protected boolean isAnimationRequire() {
+        return true;
     }
 }
