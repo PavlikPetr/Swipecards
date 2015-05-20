@@ -25,15 +25,15 @@ public abstract class GeoLocationManager {
         public void onLocationChanged(Location location) {
             Debug.log(this, "Receive location from GPS");
             compareWithBestLocation(location);
-            onUserLocationChanged(location);
+            onUserLocationChanged(mBestLocation);
         }
     };
     private ChangeLocationListener mGPSLocationListener = new ChangeLocationListener() {
         @Override
         public void onLocationChanged(Location location) {
             Debug.log(this, "Receive location from Network");
-            onUserLocationChanged(location);
             compareWithBestLocation(location);
+            onUserLocationChanged(mBestLocation);
         }
     };
 
@@ -97,20 +97,18 @@ public abstract class GeoLocationManager {
     }
 
 
-    private Location compareWithBestLocation(Location location) {
+    private void compareWithBestLocation(Location location) {
         if (location == null) {
-            return mBestLocation;
+            return;
         }
         if (mBestLocation == null) {
-            return location;
+            mBestLocation = location;
+            return;
         }
         //GPS точку принимаем только в том случае если ее точность больше чем у Network
         if (location.getProvider().equals(LocationManager.GPS_PROVIDER) &&
                 mBestLocation.getAccuracy() > location.getAccuracy()) {
             mBestLocation = location;
-            return mBestLocation;
-        } else {
-            return mBestLocation;
         }
     }
 
