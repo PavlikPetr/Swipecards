@@ -17,11 +17,13 @@ import com.topface.topface.R;
 public class FeedItemViewConstructor {
     // минимальное количество непрочитанных сообщений для отображения (включительно)
     private static final int MIN_MSG_AMOUNT_TO_SHOW = 2;
+    static private int MAX_MESSAGES_IN_CHAT_ITEM = 99;
+    static private String OVER_99_MESSAGES = "99+";
 
     /**
      * типовые разметки элементов
      */
-    public static enum Type {
+    public enum Type {
         // аватарка, имя, сообщение
         SIMPLE(R.layout.item_feed_layout_simple),
         // аватарка, имя, сообщение + сердечко
@@ -142,7 +144,8 @@ public class FeedItemViewConstructor {
     public static void setCounter(TextView counter, int amount) {
         if (counter != null) {
             if (amount >= MIN_MSG_AMOUNT_TO_SHOW) {
-                counter.setText(Integer.toString(amount));
+                counter.setText(amount > MAX_MESSAGES_IN_CHAT_ITEM ?
+                        OVER_99_MESSAGES : Integer.toString(amount));
                 counter.setVisibility(View.VISIBLE);
             } else {
                 counter.setVisibility(View.GONE);
