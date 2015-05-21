@@ -26,7 +26,7 @@ public class PreloadPhotoSelector {
         for (int i = 0; i < preloadPhotoTypesArray.length; i++) {
             preloadPhotoTypesArray[i] = mContext.getString(PreloadPhotoSelectorTypes.values()[i].getName());
         }
-        setDialogBtnBacground(new AlertDialog.Builder(mContext)
+        setDialogBtnBackground(new AlertDialog.Builder(mContext)
                 .setTitle(R.string.settings_select_preload_photo_type)
                 .setSingleChoiceItems(preloadPhotoTypesArray, selectedTypeIndex, null)
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -47,7 +47,7 @@ public class PreloadPhotoSelector {
                 }).show());
     }
 
-    private void setDialogBtnBacground(AlertDialog dialog) {
+    private void setDialogBtnBackground(AlertDialog dialog) {
         dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setBackgroundResource(R.drawable.btn_profile_dialog_selector);
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundResource(R.drawable.btn_profile_dialog_selector);
     }

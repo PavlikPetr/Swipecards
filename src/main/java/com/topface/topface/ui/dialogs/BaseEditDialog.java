@@ -17,7 +17,7 @@ import com.topface.topface.ui.adapters.EditAdapterFactory;
 /**
  * Abstract dialog for editing fields
  */
-abstract public class AbstractEditDialog<T extends Parcelable> extends AbstractDialogFragment {
+public class BaseEditDialog<T extends Parcelable> extends AbstractDialogFragment {
     public static final String DIALOG_TITLE = "dialog_title";
     public static final String DATA = "data";
 

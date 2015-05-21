@@ -207,7 +207,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
             }
         }
         final int selectedLocaleIndexFinal = selectedLocaleIndex;
-        setDialogBtnBacground(new AlertDialog.Builder(getActivity())
+        setDialogBtnBackground(new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.settings_select_language)
                 .setSingleChoiceItems(languages, selectedLocaleIndex, null)
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -223,7 +223,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                             dialogLocales.dismiss();
                             return;
                         }
-                        setDialogBtnBacground(new AlertDialog.Builder(getActivity())
+                        setDialogBtnBackground(new AlertDialog.Builder(getActivity())
                                 .setTitle(R.string.settings_select_language)
                                 .setMessage(R.string.restart_to_change_locale)
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -246,7 +246,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
 
     }
 
-    private void setDialogBtnBacground(AlertDialog dialog) {
+    private void setDialogBtnBackground(AlertDialog dialog) {
         dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setBackgroundResource(R.drawable.btn_profile_dialog_selector);
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundResource(R.drawable.btn_profile_dialog_selector);
     }

@@ -11,7 +11,7 @@ import com.topface.topface.R;
 /**
  * Dialog with info about application.
  */
-public class AboutDialog extends AbstractEditDialog {
+public class AboutDialog extends BaseEditDialog {
     public static AboutDialog newInstance(String title) {
         final AboutDialog editor = new AboutDialog();
         Bundle args = new Bundle();

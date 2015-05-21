@@ -13,12 +13,12 @@ import com.topface.topface.utils.FormItem;
 /**
  * Adapter for editing forms with choice
  */
-public class EditFormItemsEditDialog extends AbstractEditDialog<FormItem> {
+public class EditFormItemsEditDialog extends BaseEditDialog<FormItem> {
 
     public static final int WINDOW_CLOSING_DELAY = 100;
 
     public static EditFormItemsEditDialog newInstance(String title, FormItem notification,
-                                                      final AbstractEditDialog.EditingFinishedListener<FormItem> editingFinishedListener) {
+                                                      final BaseEditDialog.EditingFinishedListener<FormItem> editingFinishedListener) {
         final EditFormItemsEditDialog selector = new EditFormItemsEditDialog();
         Bundle selectorArgs = new Bundle();
         selectorArgs.putString(DIALOG_TITLE, title);
