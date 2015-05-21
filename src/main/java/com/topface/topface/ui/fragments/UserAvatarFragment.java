@@ -86,6 +86,7 @@ public abstract class UserAvatarFragment extends BaseFragment
         return R.menu.actions_avatar;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void clearContent() {
         ((ImageViewRemote) getView().findViewById(R.id.ivBarAvatar)).setPhoto(null);
