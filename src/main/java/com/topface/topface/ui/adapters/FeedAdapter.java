@@ -24,7 +24,6 @@ import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
 import com.topface.topface.ui.views.FeedItemViewConstructor.TypeAndFlag;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ad.NativeAd;
 import com.topface.topface.utils.ad.NativeAdManager;
 import com.topface.topface.utils.loadcontollers.FeedLoadController;
@@ -612,6 +611,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     public boolean isNeedFeedAd() {
-        return CacheProfile.show_ad && NativeAdManager.hasAvailableAd();
+        return false;
     }
 }

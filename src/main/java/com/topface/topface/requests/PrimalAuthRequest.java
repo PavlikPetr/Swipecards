@@ -30,6 +30,7 @@ public abstract class PrimalAuthRequest extends ApiRequest {
     private Integer mGooglePlayServicesVersion; // версия google play services
     private String mClientType; // тип клиента
     private String mLocale; // локаль обращающегося клиента
+    private int mDpi; // локаль обращающегося клиента
 
 
     public PrimalAuthRequest(Context context) {
@@ -44,6 +45,7 @@ public abstract class PrimalAuthRequest extends ApiRequest {
         mGooglePlayServicesVersion = Utils.getGooglePlayServicesVersion();
         mClientType = BuildConfig.MARKET_API_TYPE.getClientType();
         mLocale = getClientLocale();
+        mDpi = getDpi();
     }
 
     protected abstract String getClientLocale();
@@ -63,7 +65,9 @@ public abstract class PrimalAuthRequest extends ApiRequest {
                 .put("codeVersion", mCodeVersion)
                 .put("clientType", mClientType)
                 .put("locale", mLocale)
-                .put("clientCarrier", Utils.getCarrierName());
+                .put("clientCarrier", Utils.getCarrierName())
+                .put("screenDensity", Utils.getCarrierName())
+                .put("dpi", mDpi);
 
         if (!TextUtils.isEmpty(mAdId)) {
             data.put("adId", mAdId);
@@ -87,4 +91,7 @@ public abstract class PrimalAuthRequest extends ApiRequest {
         return data;
     }
 
+    public int getDpi() {
+        return App.getContext().getResources().getDisplayMetrics().densityDpi;
+    }
 }

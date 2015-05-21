@@ -105,4 +105,9 @@ public class AdmirationFragment extends LikesFragment {
     protected int getUnreadCounter() {
         return CacheProfile.unread_admirations;
     }
+
+    @Override
+    protected boolean isReadFeedItems() {
+        return false;
+    }
 }

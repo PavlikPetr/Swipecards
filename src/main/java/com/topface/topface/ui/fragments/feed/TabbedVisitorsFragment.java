@@ -5,7 +5,6 @@ import com.topface.topface.banners.PageInfo;
 import com.topface.topface.utils.CacheProfile;
 
 public class TabbedVisitorsFragment extends TabbedFeedFragment {
-    private static int mLastOpenedPage = 0;
 
     @Override
     protected String getTitle() {
@@ -26,12 +25,12 @@ public class TabbedVisitorsFragment extends TabbedFeedFragment {
 
     @Override
     protected int getLastOpenedPage() {
-        return mLastOpenedPage;
+        return mVisitorsastOpenedPage;
     }
 
     @Override
     protected void setLastOpenedPage(int lastOpenedPage) {
-        mLastOpenedPage = lastOpenedPage;
+        mVisitorsastOpenedPage = lastOpenedPage;
     }
 
     @Override

@@ -18,6 +18,7 @@ import com.topface.topface.data.Auth;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.controllers.StartActionsController;
@@ -116,6 +117,7 @@ public class AuthorizationManager {
     public void logout(Activity activity) {
         Ssid.remove();
         UserNotificationManager.getInstance().removeNotifications();
+        TabbedDialogsFragment.setTabsDefaultPosition();
         AuthToken authToken = AuthToken.getInstance();
         for (Authorizer authorizer : mAuthorizers.values()) {
             authorizer.logout();

@@ -47,8 +47,4 @@ public class BlackListAdapter extends FeedAdapter<BlackListItem> {
         return LIMIT;
     }
 
-    @Override
-    public boolean isNeedFeedAd() {
-        return false;
-    }
 }
