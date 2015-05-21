@@ -46,7 +46,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     private BannersController mBannersController;
 
     private TabbedFeedPageAdapter mBodyPagerAdapter;
-
+    
     protected static int mVisitorsastOpenedPage = 0;
     protected static int mLikesLastOpenedPage = 0;
     protected static int mDialogsLastOpenedPage = 0;
@@ -124,11 +124,11 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         addPages();
         mPager = (ViewPager) root.findViewById(R.id.pager);
         mPager.setSaveEnabled(false);
-        TabbedFeedPageAdapter bodyPagerAdapter = new TabbedFeedPageAdapter(getChildFragmentManager(),
+        mBodyPagerAdapter = new TabbedFeedPageAdapter(getChildFragmentManager(),
                 mPagesClassNames,
                 mPagesTitles,
                 mPagesCounters);
-        mPager.setAdapter(bodyPagerAdapter);
+        mPager.setAdapter(mBodyPagerAdapter);
 
         mSlidingTabLayout = (SlidingTabLayout) root.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setUseWeightProportions(true);

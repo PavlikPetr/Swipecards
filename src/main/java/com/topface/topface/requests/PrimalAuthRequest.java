@@ -66,8 +66,7 @@ public abstract class PrimalAuthRequest extends ApiRequest {
                 .put("clientType", mClientType)
                 .put("locale", mLocale)
                 .put("clientCarrier", Utils.getCarrierName())
-                .put("screenDensity", Utils.getCarrierName())
-                .put("dpi", mDpi);
+                .put("screenDensity", mDpi);
 
         if (!TextUtils.isEmpty(mAdId)) {
             data.put("adId", mAdId);

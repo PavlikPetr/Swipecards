@@ -61,9 +61,12 @@ public class InvitePopupAction extends LinkedStartAction {
 
     private int getContactsCount() {
         Cursor cursor = mActivity.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-        int contactsCount = cursor.getCount();
-        cursor.close();
-        return contactsCount;
+        int contacts_count = 0;
+        if (cursor != null) {
+            contacts_count = cursor.getCount();
+            cursor.close();
+        }
+        return contacts_count;
     }
 
 
