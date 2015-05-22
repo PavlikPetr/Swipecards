@@ -597,11 +597,11 @@ public class UserConfig extends AbstractConfig {
         return getLongField(getSettingsMap(), INTERSTITIAL_IN_FEEDS_FIRST_SHOW_TIME);
     }
 
-    public static boolean isShowSympathiesBonus() {
+    public static boolean isSetSympathiesBonus() {
         return giveNoviceLikes;
     }
 
-    public static void completeShowNoviceSympathiesBonus() {
+    public static void completeSetNoviceSympathiesBonus() {
         giveNoviceLikes = false;
     }
 

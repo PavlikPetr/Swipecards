@@ -785,7 +785,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             hideEmptySearchDialog();
             fillUserInfo(user);
             unlockControls();
-            showForNovice();
+            setLikesForNovice();
             if (mDatingInstantMessageController != null) {
                 mDatingInstantMessageController.displayMessageField();
             }
@@ -907,8 +907,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    private void showForNovice() {
-        if (UserConfig.isShowSympathiesBonus()) {
+    private void setLikesForNovice() {
+        if (UserConfig.isSetSympathiesBonus()) {
             NoviceLikesRequest noviceLikesRequest = new NoviceLikesRequest(getActivity());
             registerRequest(noviceLikesRequest);
             noviceLikesRequest.callback(new DataApiHandler<NoviceLikes>() {
@@ -918,7 +918,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     if (noviceLikes.increment > 0) {
                         showControls();
                         updateResources();
-                        UserConfig.completeShowNoviceSympathiesBonus();
+                        UserConfig.completeSetNoviceSympathiesBonus();
                         setEnableInputButtons(true);
                     }
                 }
