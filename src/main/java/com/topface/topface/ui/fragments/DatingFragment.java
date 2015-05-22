@@ -38,6 +38,7 @@ import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.DatingFilter;
+import com.topface.topface.data.NoviceLikes;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
@@ -51,6 +52,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.FilterRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.NoviceLikesRequest;
 import com.topface.topface.requests.ResetFilterRequest;
 import com.topface.topface.requests.SearchRequest;
 import com.topface.topface.requests.SendLikeRequest;
@@ -71,6 +73,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
@@ -103,6 +106,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private ImageSwitcher mImageSwitcher;
     private CachableSearchList<SearchUser> mUserSearchList;
     private ProgressBar mProgressBar;
+    private Novice mNovice;
     private AlphaAnimation mAlphaAnimation;
     private RelativeLayout mDatingLoveBtnLayout;
     private RetryViewCreator mRetryView;
@@ -281,6 +285,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mRateController.setOnRateControllerUiListener(this);
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mRateReceiver, new IntentFilter(RateController.USER_RATED));
+        getNovice();
 
     }
 
@@ -784,6 +789,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             hideEmptySearchDialog();
             fillUserInfo(user);
             unlockControls();
+            showForNovice();
             if (mDatingInstantMessageController != null) {
                 mDatingInstantMessageController.displayMessageField();
             }
@@ -903,6 +909,42 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mDatingCounter.setText("-/-");
             mDatingCounter.setVisibility(View.GONE);
         }
+    }
+
+    private void showForNovice() {
+        if (mNovice.isShowSympathiesBonus()) {
+            NoviceLikesRequest noviceLikesRequest = new NoviceLikesRequest(getActivity());
+            registerRequest(noviceLikesRequest);
+            noviceLikesRequest.callback(new DataApiHandler<NoviceLikes>() {
+
+                @Override
+                protected void success(NoviceLikes noviceLikes, IApiResponse response) {
+                    if (noviceLikes.increment > 0) {
+                        showControls();
+                        Novice.giveNoviceLikesQuantity = noviceLikes.increment;
+                        updateResources();
+                        mNovice.completeShowNoviceSympathiesBonus();
+                        setEnableInputButtons(true);
+                    }
+                }
+
+                @Override
+                protected NoviceLikes parseResponse(ApiResponse response) {
+                    return NoviceLikes.parse(response);
+                }
+
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+                }
+            }).exec();
+        }
+    }
+
+    private Novice getNovice() {
+        if (mNovice == null) {
+            mNovice = new Novice();
+        }
+        return mNovice;
     }
 
     @Override
