@@ -41,7 +41,7 @@ public class SetAgeDialog extends AbstractDialogFragment implements View.OnClick
         closeDialog();
         FragmentManager fm = getFragmentManager();
         final FormItem item = ProfileFormListAdapter.getAgeItem();
-        AbstractEditDialog.EditingFinishedListener<FormItem> formEditedListener = new AbstractEditDialog.EditingFinishedListener<FormItem>() {
+        BaseEditDialog.EditingFinishedListener<FormItem> formEditedListener = new BaseEditDialog.EditingFinishedListener<FormItem>() {
             @Override
             public void onEditingFinished(FormItem data) {
                 item.copy(data);

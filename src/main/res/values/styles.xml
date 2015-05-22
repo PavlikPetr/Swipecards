@@ -1129,4 +1129,11 @@
     <style name="ActionBarTitle">
         <item name="android:background">?attr/actionBarItemBackground</item>
     </style>
+
+    <style name="ProfileEditDialogBth">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/edit_dialog_button_heigh</item>
+        <item name="android:background">@drawable/btn_profile_dialog_selector</item>
+        <item name="android:layout_below">@id/edit_dialog_buttons_top</item>
+    </style>
 </resources>

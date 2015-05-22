@@ -39,7 +39,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
-import static com.topface.topface.ui.dialogs.AbstractEditDialog.EditingFinishedListener;
+import static com.topface.topface.ui.dialogs.BaseEditDialog.EditingFinishedListener;
 
 /**
  * Notifications settings
