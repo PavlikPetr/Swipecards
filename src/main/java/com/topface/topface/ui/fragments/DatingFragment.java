@@ -605,7 +605,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 //Иначе при старте приложения, пока список пользователей не запросился показывается сообщение об ошибки
                 mUserSearchList.setOnEmptyListListener(mSearchListener);
             }
-
+            setLikesForNovice();
             updateFilterData();
         }
 
@@ -785,7 +785,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             hideEmptySearchDialog();
             fillUserInfo(user);
             unlockControls();
-            setLikesForNovice();
             if (mDatingInstantMessageController != null) {
                 mDatingInstantMessageController.displayMessageField();
             }
@@ -908,7 +907,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setLikesForNovice() {
-        if (UserConfig.isSetSympathiesBonus()) {
+        if (Profile.isSetSympathiesBonus()) {
             NoviceLikesRequest noviceLikesRequest = new NoviceLikesRequest(getActivity());
             registerRequest(noviceLikesRequest);
             noviceLikesRequest.callback(new DataApiHandler<NoviceLikes>() {
@@ -918,7 +917,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     if (noviceLikes.increment > 0) {
                         showControls();
                         updateResources();
-                        UserConfig.completeSetNoviceSympathiesBonus();
+                        Profile.completeSetNoviceSympathiesBonus();
                         setEnableInputButtons(true);
                     }
                 }

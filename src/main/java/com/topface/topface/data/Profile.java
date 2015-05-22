@@ -65,6 +65,7 @@ public class Profile extends AbstractDataWithPhotos {
     protected String status; // статус пользователя
     // Флаг того, является ли пользоветль редактором
     private boolean mEditor;
+    public static boolean giveNoviceLikes = false;
 
     public Profile() {
         super();
@@ -100,7 +101,7 @@ public class Profile extends AbstractDataWithPhotos {
             //поправим потом, с новой системой парсинга запросво
             //NOTE: Добавлять поля, нужные исключительно для профиля текущего юзера только в это условие!
             if (!(profile instanceof User)) {
-                UserConfig.giveNoviceLikes = !resp.optBoolean("noviceLikes", true);
+                giveNoviceLikes = !resp.optBoolean("noviceLikes", true);
                 profile.dating = new DatingFilter(resp.optJSONObject("dating"));
                 profile.email = resp.optBoolean("email");
                 profile.emailGrabbed = resp.optBoolean("emailGrabbed");
@@ -446,5 +447,13 @@ public class Profile extends AbstractDataWithPhotos {
         public Gifts() {
             more = false;
         }
+    }
+
+    public static boolean isSetSympathiesBonus() {
+        return giveNoviceLikes;
+    }
+
+    public static void completeSetNoviceSympathiesBonus() {
+        giveNoviceLikes = false;
     }
 }
