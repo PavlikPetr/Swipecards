@@ -907,7 +907,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setLikesForNovice() {
-        if (Profile.isSetSympathiesBonus()) {
+        if (CacheProfile.isSetSympathiesBonus()) {
             NoviceLikesRequest noviceLikesRequest = new NoviceLikesRequest(getActivity());
             registerRequest(noviceLikesRequest);
             noviceLikesRequest.callback(new DataApiHandler<NoviceLikes>() {
@@ -917,7 +917,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     if (noviceLikes.increment > 0) {
                         showControls();
                         updateResources();
-                        Profile.completeSetNoviceSympathiesBonus();
+                        CacheProfile.completeSetNoviceSympathiesBonus();
                         setEnableInputButtons(true);
                     }
                 }
