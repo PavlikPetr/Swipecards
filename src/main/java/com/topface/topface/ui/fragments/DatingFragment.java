@@ -73,7 +73,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.LocaleConfig;
-import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
@@ -106,7 +105,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private ImageSwitcher mImageSwitcher;
     private CachableSearchList<SearchUser> mUserSearchList;
     private ProgressBar mProgressBar;
-    private Novice mNovice;
     private AlphaAnimation mAlphaAnimation;
     private RelativeLayout mDatingLoveBtnLayout;
     private RetryViewCreator mRetryView;
@@ -285,8 +283,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mRateController.setOnRateControllerUiListener(this);
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mRateReceiver, new IntentFilter(RateController.USER_RATED));
-        getNovice();
-
     }
 
     @Override
@@ -912,7 +908,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void showForNovice() {
-        if (mNovice.isShowSympathiesBonus()) {
+        if (UserConfig.isShowSympathiesBonus()) {
             NoviceLikesRequest noviceLikesRequest = new NoviceLikesRequest(getActivity());
             registerRequest(noviceLikesRequest);
             noviceLikesRequest.callback(new DataApiHandler<NoviceLikes>() {
@@ -921,9 +917,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 protected void success(NoviceLikes noviceLikes, IApiResponse response) {
                     if (noviceLikes.increment > 0) {
                         showControls();
-                        Novice.giveNoviceLikesQuantity = noviceLikes.increment;
                         updateResources();
-                        mNovice.completeShowNoviceSympathiesBonus();
+                        UserConfig.completeShowNoviceSympathiesBonus();
                         setEnableInputButtons(true);
                     }
                 }
@@ -938,13 +933,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
             }).exec();
         }
-    }
-
-    private Novice getNovice() {
-        if (mNovice == null) {
-            mNovice = new Novice();
-        }
-        return mNovice;
     }
 
     @Override

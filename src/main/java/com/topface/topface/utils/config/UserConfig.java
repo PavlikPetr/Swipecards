@@ -64,6 +64,7 @@ public class UserConfig extends AbstractConfig {
     private static final String INTERSTITIAL_IN_FEEDS_COUNTER = "interstitial_in_feed_counter";
     private static final String INTERSTITIAL_IN_FEEDS_FIRST_SHOW_TIME = "interstitial_in_feed_first_show_time";
     private String mUnique;
+    public static boolean giveNoviceLikes = false;
 
     public UserConfig(String uniqueKey, Context context) {
         super(context);
@@ -594,6 +595,14 @@ public class UserConfig extends AbstractConfig {
 
     public long getInterstitialsInFeedFirstShow() {
         return getLongField(getSettingsMap(), INTERSTITIAL_IN_FEEDS_FIRST_SHOW_TIME);
+    }
+
+    public static boolean isShowSympathiesBonus() {
+        return giveNoviceLikes;
+    }
+
+    public static void completeShowNoviceSympathiesBonus() {
+        giveNoviceLikes = false;
     }
 
     // =====================================================

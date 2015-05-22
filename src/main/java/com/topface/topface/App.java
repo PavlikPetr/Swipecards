@@ -55,7 +55,6 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
-import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.ad.NativeAdManager;
 import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.config.AppConfig;
