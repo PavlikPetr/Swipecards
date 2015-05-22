@@ -209,7 +209,6 @@
         <item quantity="other">%d fotografií</item>
         <item quantity="one">%d fotografií</item>
     </plurals>
-    <string name="novice_sympathy">Posielajte sympatie iba ľuďom, ktorý sa Vám\nnaozaj páčia\n - a môžete začať príjemnú známosť</string>
     <string name="general_edit_profile_message">Prosím, vyplňte všetky povinné polia dotazníka</string>
     <string name="general_search_null_response_error">Nič nenájdené. Skúste zmeniť nastavenia filtrov.</string>
     <string name="change_filters">Zmeniť filtre</string>
@@ -245,8 +244,6 @@
     <string name="settings_invalid_email">Nesprávny e-mail</string>
     <string name="chat_write_message">Napísať správu</string>
     <string name="buying_sympathies">Nákup sympatií</string>
-    <string name="novice_sympathies_bonus">Získavate %1$d sympatií ako \n darček! Znamená to, že sa \nurčite budete páčiť %2$d ľuďom, \n kotrí Vám vyjadria svoju sympatiu</string>
-    <string name="novice_buy_sympathies">Ak chcete zaručene \ndostávať sympatie,  \nkúpte ich hneď teraz!</string>
     <string name="general_reconnect_social">Pripojenie k sieti nie je možné. Pokus skúste zopakovať neskôr.</string>
     <string name="general_block">Blokovať</string>
     <string name="general_buying_disabled">V tomto momente nákup nie je možný</string>

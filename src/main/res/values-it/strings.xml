@@ -286,7 +286,6 @@
         <item quantity="other">%d foto</item>
         <item quantity="one">%d foto</item>
     </plurals>
-    <string name="novice_sympathy">Invia le simpatie solo alle persone che ti\npiacciono veramente\nper iniziare una piacevole relazione</string>
     <string name="general_edit_profile_message">Per favore riempi i campi obbligatori del questionario</string>
     <string name="general_search_null_response_error">La ricerca non ha prodotto risultati. Prova a cambiare i filtri</string>
     <string name="change_filters">Cambiare filtri</string>
@@ -335,8 +334,6 @@
     <string name="chat_write_message">Scrivi un messaggio</string>
     <string name="dating_message">Messaggio…</string>
     <string name="buying_sympathies">Acquisto simpatie</string>
-    <string name="novice_sympathies_bonus">Riceverai %1$d simpatie in\nregalo! Significa che\ndi sicuro piacerai a %2$d persone\nche ti dimostreranno la loro simpatia</string>
-    <string name="novice_buy_sympathies">Se vuoi ricevere\nle simpatie sicure,\nacquistale ora!</string>
     <string name="general_reconnect_social">Impossibile collegarsi alla rete sociale. Riprova più tardi.</string>
     <string name="general_block">Blocca</string>
     <string name="general_buying_disabled">Attualmente è impossibile effettuare l’acquisto</string>
