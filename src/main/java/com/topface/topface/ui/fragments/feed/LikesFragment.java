@@ -243,8 +243,18 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             @Override
             public void onClick(View v) {
                 if (experiment.enabled) {
-                    getFragmentManager().beginTransaction()
-                            .add(new TransparentMarketFragment(), TransparentMarketFragment.class.getSimpleName()).commit();
+                    final TransparentMarketFragment fragment = new TransparentMarketFragment();
+                    fragment.setOnPurchaseCompliteAction(new TransparentMarketFragment.onPurchaseCompliteAction() {
+                        @Override
+                        public void onPurchaseAction() {
+                            if (isAdded()) {
+                                updateData(false, true);
+                                getChildFragmentManager().beginTransaction().remove(fragment).commit();
+                            }
+                        }
+                    });
+                    getChildFragmentManager().beginTransaction()
+                            .add(fragment, TransparentMarketFragment.class.getSimpleName()).commit();
                     return;
                 }
                 if (CacheProfile.money >= blockSympathyOptions.price) {

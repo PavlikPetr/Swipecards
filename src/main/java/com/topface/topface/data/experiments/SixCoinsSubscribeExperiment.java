@@ -7,8 +7,11 @@ package com.topface.topface.data.experiments;
  */
 public class SixCoinsSubscribeExperiment {
 
-    public String id;
+    //id покупки
+    public String productId;
+    //подписка или разовая покупка
     public boolean subscription;
+    //текст для кнопки
     public String text;
     public boolean enabled;
 

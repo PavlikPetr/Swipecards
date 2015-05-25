@@ -312,7 +312,8 @@ public class Options extends AbstractData {
             // experiments init
             forceOfferwallRedirect.init(response);
             sixCoinsSubscribeExperiment = JsonUtils.
-                    fromJson(new JSONObject().getJSONObject("sixCoinsExperiment").toString(), SixCoinsSubscribeExperiment.class);
+                    optFromJson(new JSONObject().getJSONObject("sixCoinsExperiment").toString(),
+                            SixCoinsSubscribeExperiment.class, new SixCoinsSubscribeExperiment());
             topfaceOfferwallRedirect.init(response);
 
             instantMessageFromSearch = JsonUtils.optFromJson(response.optString(INSTANT_MSG),
