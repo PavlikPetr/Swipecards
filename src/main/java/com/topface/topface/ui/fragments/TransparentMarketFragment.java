@@ -10,7 +10,7 @@ import org.onepf.oms.appstore.googleUtils.Purchase;
 
 public class TransparentMarketFragment extends MarketBuyingFragment {
 
-    private onPurchaseCompliteAction mPurchaseCompliteAction;
+    private onPurchaseCompleteAction mPurchaseCompleteAction;
 
     public void onOpenIabSetupFinished(boolean normaly) {
         super.onOpenIabSetupFinished(normaly);
@@ -34,14 +34,14 @@ public class TransparentMarketFragment extends MarketBuyingFragment {
     @Override
     public void onPurchased(Purchase product) {
         super.onPurchased(product);
-        mPurchaseCompliteAction.onPurchaseAction();
+        mPurchaseCompleteAction.onPurchaseAction();
     }
 
-    public void setOnPurchaseCompliteAction(onPurchaseCompliteAction purchaseCompliteAction) {
-        this.mPurchaseCompliteAction = purchaseCompliteAction;
+    public void setOnPurchaseCompleteAction(onPurchaseCompleteAction purchaseCompliteAction) {
+        this.mPurchaseCompleteAction = purchaseCompliteAction;
     }
 
-    public interface onPurchaseCompliteAction {
+    public interface onPurchaseCompleteAction {
         void onPurchaseAction();
     }
 }

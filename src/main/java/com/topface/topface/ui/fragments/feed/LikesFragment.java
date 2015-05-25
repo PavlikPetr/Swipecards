@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.View;
@@ -243,8 +244,9 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             @Override
             public void onClick(View v) {
                 if (experiment.enabled) {
-                    final TransparentMarketFragment fragment = new TransparentMarketFragment();
-                    fragment.setOnPurchaseCompliteAction(new TransparentMarketFragment.onPurchaseCompliteAction() {
+                    Fragment f = getChildFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
+                    final TransparentMarketFragment fragment = f == null ? new TransparentMarketFragment() : (TransparentMarketFragment) f;
+                    fragment.setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseCompleteAction() {
                         @Override
                         public void onPurchaseAction() {
                             if (isAdded()) {
