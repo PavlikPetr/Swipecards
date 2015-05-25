@@ -636,7 +636,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             if (adapter.isMultiSelectionMode()) {
                 adapter.onSelection(item);
             } else {
-                startActivity(UserProfileActivity.createIntent(null, item.user.photo, item.user.id, item.id, false, false, Utils.getNameAndAge(item.user.firstName, item.user.age), item.user.city.getName()));
+                startActivity(UserProfileActivity.createIntent(null, item.user.photo, item.user.id, item.id, false, CacheProfile.premium, Utils.getNameAndAge(item.user.firstName, item.user.age), item.user.city.getName()));
             }
         }
     }
