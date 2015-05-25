@@ -24,6 +24,7 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.EditorProfileActionsActivity;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
@@ -359,6 +360,9 @@ public class OverflowMenu {
                         public void success(IApiResponse response) {
                             super.success(response);
                             showBlackListToast(false);
+                            LocalBroadcastManager.getInstance(mActivity).
+                                    sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS)
+                                            .putExtra(DialogsFragment.PUSH_UPDATING, false));
                         }
 
                         @Override
@@ -378,6 +382,9 @@ public class OverflowMenu {
                         public void success(IApiResponse response) {
                             super.success(response);
                             showBlackListToast(true);
+                            LocalBroadcastManager.getInstance(mActivity).
+                                    sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS)
+                                            .putExtra(DialogsFragment.PUSH_UPDATING, false));
                         }
 
                         @Override

@@ -30,13 +30,17 @@ import java.util.List;
 public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     public static final String REFRESH_DIALOGS = "refresh_dialogs";
+    public static final String PUSH_UPDATING = "push_updating";
+
 
     private boolean mNeedRefresh = false;
+    private boolean mPushUpdating = true;
 
     private BroadcastReceiver mRefreshReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             mNeedRefresh = true;
+            mPushUpdating = intent.getBooleanExtra(PUSH_UPDATING, true);
         }
     };
 
@@ -57,7 +61,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
         //Проверяем флаг, нужно ли обновлять диалоги
         if (mNeedRefresh) {
-            updateData(true, false);
+            updateData(mPushUpdating, false);
             mNeedRefresh = false;
         }
     }
