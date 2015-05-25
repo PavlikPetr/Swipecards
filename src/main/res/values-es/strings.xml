@@ -138,6 +138,7 @@
     <string name="general_dbl_unread">No leídos</string>
     <string name="general_empty_code_confirmation">Introduce el código de confirmación</string>
     <string name="general_email_success_confirmed">E-mail confirmado con éxito</string>
+    <string name="general_email_not_confirmed">E-mail no fue confirmado</string>
     <string name="time_yesterday">Ayer</string>
     <string name="time_today">Hoy</string>
     <string name="general_send_button">Enviar</string>
@@ -367,6 +368,8 @@
     <string name="girl">chica</string>
     <string name="start_communication">Empezar comunicación</string>
     <string name="birthdate">Cumpleaños</string>
+    <string name="birthdate_confirm">Por favor, indica tu edad, de lo contrario no podrás conocer a nadie</string>
+    <string name="set_birthdate">Indicar edad</string>
     <string name="welcome_to_topface">¡Bienvenido a Topface!</string>
     <string name="incorrect_email">E-mail incorrecto</string>
     <string name="incorrect_login">Login incorrecto</string>
@@ -392,8 +395,11 @@
     <string name="password_confirmation_hint">Confirmar contraseña</string>
     <string name="password_hint">contraseña</string>
     <string name="enter_new_password">Introduce la contraseña nueva</string>
+    <string name="enter_old_password">Introduce contraseña antigua</string>
     <string name="enter_password_confirmation">Introduce la confirmación de la contraseña</string>
     <string name="passwords_mismatched">Contraseñas no concuerdan</string>
+    <string name="old_password_mismatched">Contraseña antigua erronea</string>
+    <string name="passwords_matched">Contraseñas concuerdan.</string>
     <string name="passwords_changed">Contraseña modificada</string>
     <string name="take_photo">Hacer foto</string>
     <string name="take_another_photo">Otra foto</string>
@@ -604,6 +610,7 @@
     <string name="enter_text">Introduce el texto</string>
     <string name="send_feedback">Enviar mensaje</string>
     <string name="get_vip_free">Recibe VIP gratis</string>
+    <string name="buy_more_sympathies">\"Consigue más simpatías, házte más popular\"</string>
     <string name="google_service_general_title">Avisos no disponibles</string>
     <string name="google_service_disabled_title">Tienes desconectados algunos servicios Google Play que hacen falta para que los avisos funcionen.</string>
     <string name="google_service_disabled_button">Habilitar</string>

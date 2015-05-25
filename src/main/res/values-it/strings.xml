@@ -138,6 +138,7 @@
     <string name="general_dbl_unread">Non letti</string>
     <string name="general_empty_code_confirmation">Inserisci il codice di conferma</string>
     <string name="general_email_success_confirmed">L’e-mail è stata confermata con successo</string>
+    <string name="general_email_not_confirmed">L’e-mail non è stata confermata.</string>
     <string name="time_yesterday">Ieri</string>
     <string name="time_today">Oggi</string>
     <string name="general_send_button">Inv.</string>
@@ -364,6 +365,8 @@
     <string name="girl">ragazza</string>
     <string name="start_communication">Inizia a chattare</string>
     <string name="birthdate">Compleanno</string>
+    <string name="birthdate_confirm">Per favore indica la tua età altrimenti non potrai fare nuove conoscenze</string>
+    <string name="set_birthdate">Indicare l’età</string>
     <string name="welcome_to_topface">Benvenuti in Topface!</string>
     <string name="incorrect_email">E-mail errata</string>
     <string name="incorrect_login">Login errato</string>
@@ -389,8 +392,11 @@
     <string name="password_confirmation_hint">Conferma la password</string>
     <string name="password_hint">password</string>
     <string name="enter_new_password">Inserisci la nuova password</string>
+    <string name="enter_old_password">Inserisci la password attuale.</string>
     <string name="enter_password_confirmation">Inserisci la conferma di password</string>
     <string name="passwords_mismatched">Password errata</string>
+    <string name="old_password_mismatched">La password attuale è errata.</string>
+    <string name="passwords_matched">La nuova password è identica a quella attuale.</string>
     <string name="passwords_changed">Password modificata</string>
     <string name="take_photo">Scatta la foto</string>
     <string name="take_another_photo">Altra foto</string>
@@ -601,6 +607,7 @@
     <string name="enter_text">Inserisci il testo</string>
     <string name="send_feedback">Invia il messaggio</string>
     <string name="get_vip_free">Ricevi VIP gratis</string>
+    <string name="buy_more_sympathies">“Ricevi più simpatie, diventa più popolare”</string>
     <string name="google_service_general_title">Notifiche non disponibili</string>
     <string name="google_service_disabled_title">Hai disabilitato i Servizi Google Play che servono per il corretto funzionamento di notifiche.</string>
     <string name="google_service_disabled_button">Abilita</string>
