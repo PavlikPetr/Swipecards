@@ -286,7 +286,6 @@
         <item quantity="other">%d fotografías</item>
         <item quantity="one">%d fotografía</item>
     </plurals>
-    <string name="novice_sympathy">Envía simpatías a aquellos\nquienes realmente te gustan para\nempezar una relación satisfactoria</string>
     <string name="general_edit_profile_message">Por favor, rellena los campos obligatorios de tu perfil</string>
     <string name="general_search_null_response_error">Nada fue encontrado. Prueba cambiar los filtros de busqueda</string>
     <string name="change_filters">Cambiar filtros</string>
@@ -335,8 +334,6 @@
     <string name="chat_write_message">Escribir mensaje</string>
     <string name="dating_message">Mensaje…</string>
     <string name="buying_sympathies">Compra de simpatías</string>
-    <string name="novice_sympathies_bonus">¡Recibes %1$d simpatías de\nregalo! Esto significa que\nseguro les gustarás a las %2$d personas,\nque te mostrarán su simpatía</string>
-    <string name="novice_buy_sympathies">Si quieres\nrecibir simpatías\nde forma garantizada ¡cómpralas ahora mismo!</string>
     <string name="general_reconnect_social">Imposible de conectar a la red social. Prueba de nuevo más tarde.</string>
     <string name="general_block">Bloquear</string>
     <string name="general_buying_disabled">Ahora mismo la compra es imposible</string>

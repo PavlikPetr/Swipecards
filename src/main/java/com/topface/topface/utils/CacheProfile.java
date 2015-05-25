@@ -81,6 +81,7 @@ public class CacheProfile {
     public static boolean canInvite;            // может ли этот пользователь отправлять приглашения контактам
     public static Profile.Gifts gifts = new Profile.Gifts(); // массив подарков пользователя
     public static SparseArrayCompat<Profile.TopfaceNotifications> notifications;
+    public static boolean giveNoviceLikes = false;
 
     // State
     public static long profileUpdateTime;               // время последнего вызова setProfile(...)
@@ -499,6 +500,14 @@ public class CacheProfile {
 
     public static void incrementPhotoPosition(int diff) {
         incrementPhotoPosition(diff, true);
+    }
+
+    public static boolean isSetSympathiesBonus() {
+        return giveNoviceLikes;
+    }
+
+    public static void completeSetNoviceSympathiesBonus() {
+        giveNoviceLikes = false;
     }
 
 }

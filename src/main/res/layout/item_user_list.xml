@@ -14,7 +14,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="3dp"
-        android:singleLine="true" />
+        android:maxLines="2"
+        android:ellipsize="end" />
 
     <!-- Value -->
     <TextView

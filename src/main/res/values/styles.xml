@@ -1061,7 +1061,7 @@
     </style>
 
     <style name="SelectorDialogCounter" parent="SelectorDialogTitle">
-        <item name="android:paddingRight">0dp</item>
+        <item name="android:paddingRight">10dp</item>
         <item name="android:paddingLeft">0dp</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/text_color_gray_transparent</item>
@@ -1128,5 +1128,12 @@
 
     <style name="ActionBarTitle">
         <item name="android:background">?attr/actionBarItemBackground</item>
+    </style>
+
+    <style name="ProfileEditDialogBth">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/edit_dialog_button_heigh</item>
+        <item name="android:background">@drawable/btn_profile_dialog_selector</item>
+        <item name="android:layout_below">@id/edit_dialog_buttons_top</item>
     </style>
 </resources>
