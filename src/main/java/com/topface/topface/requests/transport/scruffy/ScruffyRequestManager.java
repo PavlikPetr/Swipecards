@@ -185,7 +185,7 @@ public class ScruffyRequestManager {
             if (!apiRequest.isCanceled()) {
                 try {
                     String requestString = new ScruffyRequest(
-                            apiRequest.getHeaders(),
+                            apiRequest.getHeaders("Scruffy"),
                             apiRequest.getRequestBodyData()
                     ).toString();
 

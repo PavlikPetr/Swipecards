@@ -41,7 +41,7 @@ public interface IApiRequest {
 
     boolean isNeedAuth();
 
-    public Headers getHeaders();
+    public Headers getHeaders(String transport);
 
     public void sendHandlerMessage(IApiResponse response);
 
