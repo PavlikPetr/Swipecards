@@ -15,6 +15,7 @@ import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.InstantMessagesForNewbies;
+import com.topface.topface.data.experiments.SixCoinsSubscribeExperiment;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
@@ -143,7 +144,7 @@ public class Options extends AbstractData {
 
     public boolean unlockAllForPremium;
     public int maxMessageSize;
-
+    public SixCoinsSubscribeExperiment sixCoinsSubscribeExperiment = new SixCoinsSubscribeExperiment();
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
     public TopfaceOfferwallRedirect topfaceOfferwallRedirect = new TopfaceOfferwallRedirect();
     public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
@@ -310,7 +311,8 @@ public class Options extends AbstractData {
 
             // experiments init
             forceOfferwallRedirect.init(response);
-
+            sixCoinsSubscribeExperiment = JsonUtils.
+                    fromJson(new JSONObject().getJSONObject("sixCoinsExperiment").toString(), SixCoinsSubscribeExperiment.class);
             topfaceOfferwallRedirect.init(response);
 
             instantMessageFromSearch = JsonUtils.optFromJson(response.optString(INSTANT_MSG),

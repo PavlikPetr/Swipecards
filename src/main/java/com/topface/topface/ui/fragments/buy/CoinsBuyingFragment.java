@@ -151,6 +151,8 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
         if (mCoinsSubscriptionButton != null) {
             purchaseButtons.add(mCoinsSubscriptionButton);
         }
+        //Устанавливаем тестовые покупки
+        setTestPaymentsState(App.getUserConfig().getTestPaymentFlag());
         // coins items buttons also coinsSubscriptionsMasked buttons
         for (final Products.BuyButton curButton : coinsProducts) {
             View btnView = Products.setBuyButton(coinsButtonsContainer, curButton, getActivity(),

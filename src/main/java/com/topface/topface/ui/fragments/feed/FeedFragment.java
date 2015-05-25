@@ -671,7 +671,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
      */
     protected abstract int getUnreadCounter();
 
-    protected void updateData(boolean isPushUpdating, boolean makeItemsRead) {
+    public void updateData(boolean isPushUpdating, boolean makeItemsRead) {
         updateData(isPushUpdating, false, makeItemsRead);
     }
 

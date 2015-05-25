@@ -63,6 +63,7 @@ public class UserConfig extends AbstractConfig {
     private static final String IS_EMAIL_CONFIRM_SENT = "is_button_send_confirmation_clicked";
     private static final String INTERSTITIAL_IN_FEEDS_COUNTER = "interstitial_in_feed_counter";
     private static final String INTERSTITIAL_IN_FEEDS_FIRST_SHOW_TIME = "interstitial_in_feed_first_show_time";
+    private static final String TEST_PAYMENT_ENABLED = "test_payment_enabled";
     private String mUnique;
 
     public UserConfig(String uniqueKey, Context context) {
@@ -151,6 +152,8 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, INTERSTITIAL_IN_FEEDS_COUNTER, 0);
         // interstitials' first show time
         addField(settingsMap, INTERSTITIAL_IN_FEEDS_FIRST_SHOW_TIME, 0L);
+        // test payment mark
+        addField(settingsMap, TEST_PAYMENT_ENABLED, false);
     }
 
     @Override
@@ -167,6 +170,14 @@ public class UserConfig extends AbstractConfig {
                 PROFILE_CONFIG_SETTINGS + Static.AMPERSAND + mUnique,
                 Context.MODE_PRIVATE
         );
+    }
+
+    public boolean getTestPaymentFlag() {
+        return getBooleanField(getSettingsMap(), TEST_PAYMENT_ENABLED);
+    }
+
+    public boolean setTestPaymentFlag(boolean testPaymentMark) {
+        return setField(getSettingsMap(), TEST_PAYMENT_ENABLED, testPaymentMark);
     }
 
     /**

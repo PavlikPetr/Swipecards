@@ -223,6 +223,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
 
     protected abstract Products getProducts();
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -240,8 +241,8 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                         (ViewGroup) layout.findViewById(R.id.EditorTestBuyCheckBox),
                         getResources().getString(R.string.editor_test_buy)
                 );
-                //Выставляем значение по умолчанию
-                checkBox.setChecked(isTestPurchasesEnabled());
+                //Выставляем значение из конфига
+                checkBox.setChecked(App.getUserConfig().getTestPaymentFlag());
 
                 layout.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -251,6 +252,8 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                                 checkBox.doSwitch()
                         );
                         setTestPaymentsState(checkBox.isChecked());
+                        App.getUserConfig().setTestPaymentFlag(checkBox.isChecked());
+                        App.getUserConfig().saveConfig();
                     }
                 });
             }
@@ -278,7 +281,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         }
     }
 
-    private void buyNow(Products.BuyButton btn) {
+    public void buyNow(Products.BuyButton btn) {
         if (btn.id != null) {
             if (btn.type.isSubscription() && !isTestPurchasesEnabled()) {
                 buySubscription(btn.id);
@@ -288,6 +291,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void buyDeferred(final Products.BuyButton btn) {
         if (mDeferredPurchaseButton != null) {
             stopWaiting();
@@ -356,6 +360,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         return payload.toJson();
     }
 
+    @SuppressWarnings("unused")
     protected void editSubscriptions() {
         Utils.goToMarket(getActivity());
     }

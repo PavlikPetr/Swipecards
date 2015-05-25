@@ -21,6 +21,7 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.experiments.SixCoinsSubscribeExperiment;
 import com.topface.topface.requests.BuyLikesAccessRequest;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
@@ -34,6 +35,7 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
 import com.topface.topface.ui.fragments.PurchasesFragment;
+import com.topface.topface.ui.fragments.TransparentMarketFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -235,9 +237,16 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     private void initBuyCoinsButton(final View inflated, final Options.BlockSympathy blockSympathyOptions, View currentView) {
         final Button btnBuy = (Button) currentView.findViewById(R.id.buy_coins_button);
         final ProgressBar progress = (ProgressBar) currentView.findViewById(R.id.prsLoading);
-        initButtonForBlockedScreen(btnBuy, blockSympathyOptions.buttonText, new View.OnClickListener() {
+        final SixCoinsSubscribeExperiment experiment = CacheProfile.getOptions().sixCoinsSubscribeExperiment;
+        initButtonForBlockedScreen(btnBuy, experiment.enabled ? experiment.text : blockSympathyOptions.buttonText,
+                new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (experiment.enabled) {
+                    getFragmentManager().beginTransaction()
+                            .add(new TransparentMarketFragment(), TransparentMarketFragment.class.getSimpleName()).commit();
+                    return;
+                }
                 if (CacheProfile.money >= blockSympathyOptions.price) {
                     btnBuy.setVisibility(View.INVISIBLE);
                     progress.setVisibility(View.VISIBLE);
