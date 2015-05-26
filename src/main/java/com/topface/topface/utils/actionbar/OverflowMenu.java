@@ -47,6 +47,7 @@ import static com.topface.topface.utils.actionbar.OverflowMenu.OverflowMenuItem.
 public class OverflowMenu {
 
     private final static String INTENT_BUY_VIP_FROM = "UserProfileFragment";
+    public static final String USER_ID_FOR_REMOVE = "user_id";
 
     private MenuItem mBarActions;
     private OverflowMenuType mOverflowMenuType;
@@ -345,7 +346,7 @@ public class OverflowMenu {
 
     private void onClickAddToBlackList() {
         Boolean isInBlackList = isInBlackList();
-        Integer userId = getUserId();
+        final Integer userId = getUserId();
         if (isInBlackList == null || userId == null) {
             return;
         }
@@ -362,7 +363,7 @@ public class OverflowMenu {
                             showBlackListToast(false);
                             LocalBroadcastManager.getInstance(mActivity).
                                     sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS)
-                                            .putExtra(DialogsFragment.PUSH_UPDATING, false));
+                                            .putExtra(USER_ID_FOR_REMOVE, userId));
                         }
 
                         @Override
@@ -384,7 +385,7 @@ public class OverflowMenu {
                             showBlackListToast(true);
                             LocalBroadcastManager.getInstance(mActivity).
                                     sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS)
-                                            .putExtra(DialogsFragment.PUSH_UPDATING, false));
+                                            .putExtra(USER_ID_FOR_REMOVE, userId));
                         }
 
                         @Override

@@ -66,6 +66,7 @@ import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.ad.NativeAd;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -84,6 +85,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private static final String POSITION = "POSITION";
     private static final String HAS_AD = "HAS_AD";
     private static final String FEED_AD = "FEED_AD";
+    public static final String REFRESH_DIALOGS = "refresh_dialogs";
 
     protected PullToRefreshListView mListView;
     protected FeedAdapter<T> mListAdapter;
@@ -139,6 +141,19 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             }
         }
     };
+
+    protected boolean mNeedRefresh;
+    private BroadcastReceiver mRefreshReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mNeedRefresh = true;
+            if (intent.hasExtra(OverflowMenu.USER_ID_FOR_REMOVE)) {
+                int idForRemove = intent.getIntExtra(OverflowMenu.USER_ID_FOR_REMOVE, -1);
+                getListAdapter().removeByUserId(idForRemove);
+            }
+        }
+    };
+
     private ActionMode mActionMode;
     private ActionMode.Callback mActionActivityCallback = new ActionMode.Callback() {
         @Override
@@ -226,7 +241,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
-
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mRefreshReceiver, new IntentFilter(REFRESH_DIALOGS));
         View root = inflater.inflate(getLayout(), null);
         mContainer = (RelativeLayout) root.findViewById(R.id.feedContainer);
         initNavigationBar();
@@ -263,6 +278,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             GCMUtils.cancelNotification(getActivity(), type);
         }
         return root;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mRefreshReceiver);
     }
 
     @SuppressWarnings("unchecked")

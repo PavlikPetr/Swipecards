@@ -421,7 +421,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         return result;
     }
 
-    @SuppressWarnings("UnusedDeclaration")
     public boolean removeByUserId(int userId) {
         boolean result = false;
         FeedList<T> feeds = getData();

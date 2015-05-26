@@ -1,11 +1,7 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,21 +25,7 @@ import java.util.List;
 
 public class DialogsFragment extends FeedFragment<FeedDialog> {
 
-    public static final String REFRESH_DIALOGS = "refresh_dialogs";
-    public static final String PUSH_UPDATING = "push_updating";
-
-
     private boolean mNeedRefresh = false;
-    private boolean mPushUpdating = true;
-
-    private BroadcastReceiver mRefreshReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            mNeedRefresh = true;
-            mPushUpdating = intent.getBooleanExtra(PUSH_UPDATING, true);
-        }
-    };
-
 
     public DialogsFragment() {
         super();
@@ -51,18 +33,15 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mRefreshReceiver, new IntentFilter(REFRESH_DIALOGS));
         return super.onCreateView(inflater, container, saved);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
         //Проверяем флаг, нужно ли обновлять диалоги
         if (mNeedRefresh) {
-            updateData(mPushUpdating, false);
-            mPushUpdating = true;
+            updateData(true, false);
             mNeedRefresh = false;
         }
     }
@@ -70,7 +49,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mRefreshReceiver);
     }
 
     @Override
