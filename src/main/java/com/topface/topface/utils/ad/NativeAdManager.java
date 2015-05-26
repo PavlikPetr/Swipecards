@@ -1,6 +1,5 @@
 package com.topface.topface.utils.ad;
 
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ad.pubnative.PubnativeAdvertising;
 
 import java.util.ArrayList;

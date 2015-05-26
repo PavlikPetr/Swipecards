@@ -150,7 +150,7 @@ public class Options extends AbstractData {
     public FeedNativeAd feedNativeAd = new FeedNativeAd();
     public NotShown notShown = new NotShown();
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
-    public InterstitialInFeeds interstitial= new InterstitialInFeeds();
+    public InterstitialInFeeds interstitial = new InterstitialInFeeds();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
