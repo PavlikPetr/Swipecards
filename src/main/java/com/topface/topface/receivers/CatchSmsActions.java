@@ -14,17 +14,17 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MarkSMSInviteRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.fragments.SMSInviteFragment;
+import com.topface.topface.ui.fragments.SmsInviteFragment;
 
-import static com.topface.topface.ui.fragments.SMSInviteFragment.PHONES_STATUSES.CAN_SEND_CONFIRMATION;
-import static com.topface.topface.ui.fragments.SMSInviteFragment.PHONES_STATUSES.CONFIRMATION_WAS_SENT;
-import static com.topface.topface.ui.fragments.SMSInviteFragment.PHONES_STATUSES.USER_REGISTERED;
+import static com.topface.topface.ui.fragments.SmsInviteFragment.PHONES_STATUSES.CAN_SEND_CONFIRMATION;
+import static com.topface.topface.ui.fragments.SmsInviteFragment.PHONES_STATUSES.CONFIRMATION_WAS_SENT;
+import static com.topface.topface.ui.fragments.SmsInviteFragment.PHONES_STATUSES.USER_REGISTERED;
 
 /**
  * Created by ppetr on 27.04.15.
  * catch here status of sms send
  */
-public class CatchSMSActions extends BroadcastReceiver {
+public class CatchSmsActions extends BroadcastReceiver {
 
     public static final String SMS_WAS_SEND = "com.topface.topface.SMS.SMS_WAS_SEND";
     public static final String INVITATIONS_SENT_COUNT = "invitations_sent_count";
@@ -58,10 +58,10 @@ public class CatchSMSActions extends BroadcastReceiver {
     private void parseMessage(final Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
-            String text = bundle.getString(SMSInviteFragment.SMS_TEXT);
-            String phone = bundle.getString(SMSInviteFragment.SMS_PHONE_NUMBER);
-            int id = bundle.getInt(SMSInviteFragment.SMS_ID);
-            final String phoneId = bundle.getString(SMSInviteFragment.SMS_PHONE_ID);
+            String text = bundle.getString(SmsInviteFragment.SMS_TEXT);
+            String phone = bundle.getString(SmsInviteFragment.SMS_PHONE_NUMBER);
+            int id = bundle.getInt(SmsInviteFragment.SMS_ID);
+            final String phoneId = bundle.getString(SmsInviteFragment.SMS_PHONE_ID);
             Log.e("TOPFACE_TEST", "CatchSMSActions text " + text);
             Log.e("TOPFACE_TEST", "CatchSMSActions phone " + phone);
             Log.e("TOPFACE_TEST", "CatchSMSActions id " + id);
@@ -103,7 +103,7 @@ public class CatchSMSActions extends BroadcastReceiver {
         Intent intent = new Intent(SMS_WAS_SEND);
         intent.putExtra(INVITATIONS_SENT_COUNT, invitationCount);
         intent.putExtra(FRIENDS_REGISTERED_COUNT, registeredCount);
-        intent.putExtra(SMSInviteFragment.SMS_PHONE_ID, phoneId);
+        intent.putExtra(SmsInviteFragment.SMS_PHONE_ID, phoneId);
         intent.putExtra(SMS_SENT_STATUS, status);
         return intent;
     }

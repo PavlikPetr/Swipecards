@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.topface.framework.JsonUtils;
 import com.topface.topface.R;
-import com.topface.topface.receivers.CatchSMSActions;
+import com.topface.topface.receivers.CatchSmsActions;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GenerateSMSInviteRequest;
@@ -31,7 +31,7 @@ import com.topface.topface.utils.ContactsProvider;
 
 import java.util.ArrayList;
 
-public class SMSInviteFragment extends ContentListFragment {
+public class SmsInviteFragment extends ContentListFragment {
     public static final String SMS_PHONE_NUMBER = "sms_phone_number";
     public static final String SMS_PHONE_ID = "sms_phone_id";
     public static final String SMS_TEXT = "sms_text";
@@ -55,11 +55,11 @@ public class SMSInviteFragment extends ContentListFragment {
     private BroadcastReceiver mSMSCountersReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            mInvitationsSentCount = intent.getIntExtra(CatchSMSActions.INVITATIONS_SENT_COUNT, mInvitationsSentCount);
-            mFriendsRegisteredCount = intent.getIntExtra(CatchSMSActions.FRIENDS_REGISTERED_COUNT, mFriendsRegisteredCount);
+            mInvitationsSentCount = intent.getIntExtra(CatchSmsActions.INVITATIONS_SENT_COUNT, mInvitationsSentCount);
+            mFriendsRegisteredCount = intent.getIntExtra(CatchSmsActions.FRIENDS_REGISTERED_COUNT, mFriendsRegisteredCount);
             setHeaderText();
             if (null != getAdapter()) {
-                ((ContactsAdapter) getAdapter()).setUserStatus(intent.getStringExtra(SMS_PHONE_ID), intent.getIntExtra(CatchSMSActions.SMS_SENT_STATUS, 0));
+                ((ContactsAdapter) getAdapter()).setUserStatus(intent.getStringExtra(SMS_PHONE_ID), intent.getIntExtra(CatchSmsActions.SMS_SENT_STATUS, 0));
             }
         }
     };
@@ -452,7 +452,7 @@ public class SMSInviteFragment extends ContentListFragment {
         Log.e("TOPFACE_TEST", "SMSInviteFragment id " + smsInvite.id);
         Log.e("TOPFACE_TEST", "SMSInviteFragment phone id " + id);
 
-        Intent sendIntent = new Intent(CatchSMSActions.FILTER_SMS_SENT);
+        Intent sendIntent = new Intent(CatchSmsActions.FILTER_SMS_SENT);
         sendIntent.putExtra(SMS_PHONE_NUMBER, phoneNumber);
         sendIntent.putExtra(SMS_PHONE_ID, id);
         sendIntent.putExtra(SMS_TEXT, smsInvite.text);
@@ -499,7 +499,7 @@ public class SMSInviteFragment extends ContentListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mSMSCountersReceiver, new IntentFilter(CatchSMSActions.SMS_WAS_SEND));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mSMSCountersReceiver, new IntentFilter(CatchSmsActions.SMS_WAS_SEND));
     }
 
     @Override

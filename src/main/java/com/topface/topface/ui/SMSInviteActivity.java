@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.topface.topface.Static;
-import com.topface.topface.ui.fragments.SMSInviteFragment;
+import com.topface.topface.ui.fragments.SmsInviteFragment;
 
-public class SMSInviteActivity extends CheckAuthActivity<SMSInviteFragment> {
+public class SMSInviteActivity extends CheckAuthActivity<SmsInviteFragment> {
 
     public static final int INTENT_CONTACTS = 8;
 
@@ -18,11 +18,11 @@ public class SMSInviteActivity extends CheckAuthActivity<SMSInviteFragment> {
 
     @Override
     protected String getFragmentTag() {
-        return SMSInviteFragment.class.getSimpleName();
+        return SmsInviteFragment.class.getSimpleName();
     }
 
     @Override
-    protected SMSInviteFragment createFragment() {
-        return new SMSInviteFragment();
+    protected SmsInviteFragment createFragment() {
+        return new SmsInviteFragment();
     }
 }
