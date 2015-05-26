@@ -7,12 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.SmsManager;
-import android.util.Log;
 
 import com.topface.framework.JsonUtils;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MarkSMSInviteRequest;
-import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.fragments.SmsInviteFragment;
 
@@ -62,22 +62,7 @@ public class CatchSmsActions extends BroadcastReceiver {
             String phone = bundle.getString(SmsInviteFragment.SMS_PHONE_NUMBER);
             int id = bundle.getInt(SmsInviteFragment.SMS_ID);
             final String phoneId = bundle.getString(SmsInviteFragment.SMS_PHONE_ID);
-            Log.e("TOPFACE_TEST", "CatchSMSActions text " + text);
-            Log.e("TOPFACE_TEST", "CatchSMSActions phone " + phone);
-            Log.e("TOPFACE_TEST", "CatchSMSActions id " + id);
-            Log.e("TOPFACE_TEST", "CatchSMSActions phone id = " + phoneId);
-            new MarkSMSInviteRequest(context, id).callback(new ApiHandler() {
-                @Override
-                public void success(IApiResponse response) {
-                    SMSInvitationCounters counters = JsonUtils.fromJson(response.toString(), SMSInvitationCounters.class);
-                    Integer invitationCount = null;
-                    Integer registeredCount = null;
-                    if (null != counters) {
-                        invitationCount = counters.sentCount;
-                        registeredCount = counters.registeredCount;
-                    }
-                    sendBroadcast(context, CONFIRMATION_WAS_SENT.getPosition(), phoneId, invitationCount, registeredCount);
-                }
+            new MarkSMSInviteRequest(context, id).callback(new DataApiHandler<SMSInvitationCounters>() {
 
                 @Override
                 public void fail(int codeError, IApiResponse response) {
@@ -95,6 +80,23 @@ public class CatchSmsActions extends BroadcastReceiver {
                     }
                     sendBroadcast(context, status, phoneId);
                 }
+
+                @Override
+                protected void success(SMSInvitationCounters data, IApiResponse response) {
+                    Integer invitationCount = null;
+                    Integer registeredCount = null;
+                    if (null != data) {
+                        invitationCount = data.sentCount;
+                        registeredCount = data.registeredCount;
+                    }
+                    sendBroadcast(context, CONFIRMATION_WAS_SENT.getPosition(), phoneId, invitationCount, registeredCount);
+                }
+
+                @Override
+                protected SMSInvitationCounters parseResponse(ApiResponse response) {
+                    return JsonUtils.fromJson(response.toString(), SMSInvitationCounters.class);
+                }
+
             }).exec();
         }
     }

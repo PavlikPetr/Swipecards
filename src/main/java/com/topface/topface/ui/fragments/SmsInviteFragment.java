@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -447,11 +446,6 @@ public class SmsInviteFragment extends ContentListFragment {
 
     // отправляем sms сообщение
     private void sendSMSMessage(String phoneNumber, String id, SMSInvite smsInvite) {
-        Log.e("TOPFACE_TEST", "SMSInviteFragment text " + smsInvite.text);
-        Log.e("TOPFACE_TEST", "SMSInviteFragment phone " + phoneNumber);
-        Log.e("TOPFACE_TEST", "SMSInviteFragment id " + smsInvite.id);
-        Log.e("TOPFACE_TEST", "SMSInviteFragment phone id " + id);
-
         Intent sendIntent = new Intent(CatchSmsActions.FILTER_SMS_SENT);
         sendIntent.putExtra(SMS_PHONE_NUMBER, phoneNumber);
         sendIntent.putExtra(SMS_PHONE_ID, id);
