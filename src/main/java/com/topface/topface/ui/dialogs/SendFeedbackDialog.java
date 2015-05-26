@@ -8,7 +8,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.topface.framework.utils.BackgroundThread;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendFeedbackRequest;
@@ -26,9 +25,9 @@ import com.topface.topface.utils.Utils;
  */
 public class SendFeedbackDialog extends AbstractDialogFragment implements View.OnClickListener {
 
+    public static final String TAG = "SendFeedBackDialog";
     private static final String ARG_TITLE_RES_ID = "feedback_dialog_title_res_id";
     private static final String ARG_FEEDBACK_SUBJECT = "feedback_dialog_subject_res_id";
-    public static final String TAG = "SendFeedBackDialog";
     private EditText mEdMessage;
     private String mSubject;
 
@@ -83,11 +82,9 @@ public class SendFeedbackDialog extends AbstractDialogFragment implements View.O
                     @Override
                     public void fail(int codeError, IApiResponse response) {
                         if (response.isCodeEqual(ErrorCodes.TOO_MANY_MESSAGES)) {
-                            Toast.makeText(App.getContext(), R.string.ban_flood_detected,
-                                    Toast.LENGTH_SHORT).show();
+                            Utils.showToastNotification(R.string.ban_flood_detected, Toast.LENGTH_SHORT);
                         } else {
-                            Toast.makeText(App.getContext(), R.string.general_data_error,
-                                    Toast.LENGTH_SHORT).show();
+                            Utils.showErrorMessage();
                         }
                     }
                 };

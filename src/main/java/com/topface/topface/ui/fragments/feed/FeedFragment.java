@@ -40,6 +40,7 @@ import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.data.FeedUser;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListAddRequest;
@@ -52,6 +53,7 @@ import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedAnimatedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
@@ -85,13 +87,24 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     protected PullToRefreshListView mListView;
     protected FeedAdapter<T> mListAdapter;
-    private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
     protected boolean mIsUpdating;
+    protected View mLockView;
+    private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
     private RetryViewCreator mRetryView;
     private RelativeLayout mContainer;
-    protected View mLockView;
-
     private BroadcastReceiver mReadItemReceiver;
+    private BannersController mBannersController;
+    private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (!CacheProfile.show_ad) {
+                getListAdapter().removeAdItems();
+            }
+        }
+    };
+    private boolean isDeletable = true;
+    private ViewStub mEmptyScreenStub;
+    private boolean needUpdate = false;
     private BroadcastReceiver mBlacklistedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -126,23 +139,89 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             }
         }
     };
-
-    private BannersController mBannersController;
-    private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
+    private ActionMode mActionMode;
+    private ActionMode.Callback mActionActivityCallback = new ActionMode.Callback() {
         @Override
-        public void onReceive(Context context, Intent intent) {
-            if (!CacheProfile.show_ad) {
-                getListAdapter().removeAdItems();
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mActionMode = mode;
+            FeedAdapter<T> adapter = getListAdapter();
+            adapter.setMultiSelectionListener(new MultiselectionController.IMultiSelectionListener() {
+                @Override
+                public void onSelected(int size, boolean overlimit) {
+                    if (overlimit) {
+                        Utils.showToastNotification(R.string.maximum_number_of_users, Toast.LENGTH_LONG);
+                    }
+                    if (mActionMode != null) {
+                        mActionMode.setTitle(Utils.getQuantityString(R.plurals.selected, size, size));
+                    }
+                }
+            });
+            adapter.notifyDataSetChanged();
+            menu.clear();
+            getActivity().getMenuInflater().inflate(getContextMenuLayoutRes(), menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            boolean result = true;
+            FeedAdapter<T> adapter = getListAdapter();
+            switch (item.getItemId()) {
+                case R.id.delete_list_item:
+                    onDeleteFeedItems(getSelectedFeedIds(adapter), adapter.getSelectedItems());
+                    break;
+                case R.id.add_to_black_list:
+                    onAddToBlackList(adapter.getSelectedUsersIds());
+                    break;
+                default:
+                    result = false;
             }
+            if (result) {
+                if (mActionMode != null) mActionMode.finish();
+            }
+
+            return result;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            getListAdapter().finishMultiSelection();
+            mActionMode = null;
         }
     };
-
-    private boolean isDeletable = true;
-    private ViewStub mEmptyScreenStub;
-    private boolean needUpdate = false;
-
-    private ActionMode mActionMode;
     private FeedRequest.UnreadStatePair mLastUnreadState = new FeedRequest.UnreadStatePair();
+    private View mInflated;
+
+    protected static void initButtonForBlockedScreen(Button button, String buttonText, View.OnClickListener listener) {
+        initButtonForBlockedScreen(null, null, button, buttonText, listener);
+    }
+
+    protected static void initButtonForBlockedScreen(TextView textView, String text,
+                                                     Button button, String buttonText,
+                                                     View.OnClickListener listener) {
+        if (textView != null) {
+            if (TextUtils.isEmpty(text)) {
+                textView.setVisibility(View.GONE);
+            } else {
+                textView.setVisibility(View.VISIBLE);
+                textView.setText(text);
+            }
+        }
+
+        if (TextUtils.isEmpty(buttonText)) {
+            // Не показываем кнопку без текста
+            button.setVisibility(View.GONE);
+        } else {
+            button.setVisibility(View.VISIBLE);
+            button.setText(buttonText);
+            button.setOnClickListener(listener);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -331,14 +410,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         return new int[]{GCMUtils.GCM_TYPE_UNKNOWN};
     }
 
-    abstract protected int getTypeForCounters();
+    abstract protected int getFeedType();
 
     protected int getLayout() {
         return R.layout.fragment_feed;
     }
 
     private void initListView(View view) {
-        // ListView    	
+        // ListView
 
         mListView = (PullToRefreshListView) view.findViewById(R.id.lvFeedList);
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
@@ -447,61 +526,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     }
 
-    private ActionMode.Callback mActionActivityCallback = new ActionMode.Callback() {
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mActionMode = mode;
-            FeedAdapter<T> adapter = getListAdapter();
-            adapter.setMultiSelectionListener(new MultiselectionController.IMultiSelectionListener() {
-                @Override
-                public void onSelected(int size, boolean overlimit) {
-                    if (overlimit) {
-                        Toast.makeText(App.getContext(), R.string.maximum_number_of_users, Toast.LENGTH_LONG).show();
-                    }
-                    if (mActionMode != null) {
-                        mActionMode.setTitle(Utils.getQuantityString(R.plurals.selected, size, size));
-                    }
-                }
-            });
-            adapter.notifyDataSetChanged();
-            menu.clear();
-            getActivity().getMenuInflater().inflate(getContextMenuLayoutRes(), menu);
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            boolean result = true;
-            FeedAdapter<T> adapter = getListAdapter();
-            switch (item.getItemId()) {
-                case R.id.delete_list_item:
-                    onDeleteFeedItems(getSelectedFeedIds(adapter), adapter.getSelectedItems());
-                    break;
-                case R.id.add_to_black_list:
-                    onAddToBlackList(adapter.getSelectedUsersIds());
-                    break;
-                default:
-                    result = false;
-            }
-            if (result) {
-                if (mActionMode != null) mActionMode.finish();
-            }
-
-            return result;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            getListAdapter().finishMultiSelection();
-            mActionMode = null;
-        }
-    };
-
     /**
      * В данный момент у нас проблема с id в диалогах, поэтому в DialogsFragment этот метод переопределен
      */
@@ -600,7 +624,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     protected void onFeedItemClick(FeedItem item) {
         //Open chat activity
         if (!item.user.isEmpty()) {
-            Intent intent = ChatActivity.createIntent(getActivity(), item.user, item.id);
+            FeedUser user = item.user;
+            Intent intent = ChatActivity.createIntent(user.id,user.getNameAndAge(),user.city.name,null, user.photo, false);
             getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT);
         }
     }
@@ -611,7 +636,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             if (adapter.isMultiSelectionMode()) {
                 adapter.onSelection(item);
             } else {
-                startActivity(CacheProfile.getOptions().autoOpenGallery.createIntent(item.user.id, item.user.photosCount, item.id, item.user.photo, getActivity()));
+                startActivity(UserProfileActivity.createIntent(null, item.user.photo, item.user.id, item.id, false, CacheProfile.premium, Utils.getNameAndAge(item.user.firstName, item.user.age), item.user.city.getName()));
             }
         }
     }
@@ -669,7 +694,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             if (isPullToRefreshUpdating && firstItem != null) {
                 request.from = firstItem.id;
             }
-
+            request.leave = isReadFeedItems();
             request.callback(new DataApiHandler<FeedListData<T>>() {
 
                 @Override
@@ -700,6 +725,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 }
             }).exec();
         }
+    }
+
+    protected boolean isReadFeedItems() {
+        return false;
     }
 
     protected void processFailUpdate(int codeError, boolean isHistoryLoad, FeedAdapter<T> adapter, boolean isPullToRefreshUpdating) {
@@ -827,8 +856,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (stub != null) stub.setVisibility(View.GONE);
     }
 
-    private View mInflated;
-
     protected void onEmptyFeed(int errorCode) {
         ViewStub stub = getEmptyFeedViewStub();
         if (mInflated == null && stub != null) {
@@ -836,7 +863,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             initEmptyFeedView(mInflated, errorCode);
         }
         if (mInflated != null) {
-            mInflated.setVisibility(mListAdapter != null && mListAdapter.isEmpty() ? View.VISIBLE : View.GONE);
+            if (errorCode == ErrorCodes.CANNOT_GET_GEO) {
+                mInflated.setVisibility(View.VISIBLE);
+            } else {
+                mInflated.setVisibility(mListAdapter != null && mListAdapter.isEmpty() ? View.VISIBLE : View.GONE);
+            }
             initEmptyFeedView(mInflated, errorCode);
         }
         mBackgroundController.hide();
@@ -924,36 +955,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     private void updateDataAfterReceivingCounters(String lastMethod) {
         if (!lastMethod.equals(CountersManager.NULL_METHOD) && lastMethod.equals(getRequest().getServiceName())) {
-            int counters = CountersManager.getInstance(getActivity()).getCounter(getTypeForCounters());
+            int counters = CountersManager.getInstance(getActivity()).getCounter(getFeedType());
             if (counters > 0) {
                 updateData(true, false);
             }
-        }
-    }
-
-    protected static void initButtonForBlockedScreen(Button button, String buttonText, View.OnClickListener listener) {
-        initButtonForBlockedScreen(null, null, button, buttonText, listener);
-    }
-
-    protected static void initButtonForBlockedScreen(TextView textView, String text,
-                                                     Button button, String buttonText,
-                                                     View.OnClickListener listener) {
-        if (textView != null) {
-            if (TextUtils.isEmpty(text)) {
-                textView.setVisibility(View.GONE);
-            } else {
-                textView.setVisibility(View.VISIBLE);
-                textView.setText(text);
-            }
-        }
-
-        if (TextUtils.isEmpty(buttonText)) {
-            // Не показываем кнопку без текста
-            button.setVisibility(View.GONE);
-        } else {
-            button.setVisibility(View.VISIBLE);
-            button.setText(buttonText);
-            button.setOnClickListener(listener);
         }
     }
 

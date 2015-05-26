@@ -10,8 +10,6 @@ import com.topface.topface.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.LinkedList;
-
 public class MessageStack extends SerializableList {
 
     public static final int EMPTY_USER_ID = -1;
@@ -41,10 +39,6 @@ public class MessageStack extends SerializableList {
 
     public int getAllCount() {
         return mRestMessages + size() + (mRestMessages == 0 ? 0 : -1); //отнимаем один, потому что сайз учитывает строчку "и еще %d"
-    }
-
-    public MessageStack(LinkedList<Message> list) {
-        addAll(list);
     }
 
     public MessageStack() {

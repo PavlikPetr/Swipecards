@@ -10,11 +10,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -49,7 +49,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
             return;
         }
         mSuccessUrl = getSuccessUrl(mWidgetUrl);
-        actionBarView.setActionBarTitle(R.string.buying_header_title);
+        actionBarView.setActionBarTitle(R.string.purchase_header_title);
 
         setContentView(R.layout.ac_web_auth);
 
@@ -66,7 +66,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     }
 
     private void onFatalError() {
-        Toast.makeText(this, R.string.general_data_error, Toast.LENGTH_SHORT).show();
+        Utils.showErrorMessage();
         setResult(RESULT_ERROR);
         finish();
     }

@@ -2,17 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_chat_footer_send"
+    android:background="@color/bg_white"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
+    android:minHeight="48dp"
     android:orientation="horizontal">
 
     <ImageButton
         android:id="@+id/send_gift_button"
-        android:layout_width="46dp"
-        android:layout_height="46dp"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_gravity="center_vertical"
-        android:background="@android:color/transparent"
+        android:background="@drawable/input_buttons_selector"
+        android:padding="16dp"
         android:src="@drawable/btn_send_gift_selector" />
 
     <EditText
@@ -23,23 +25,29 @@
         android:layout_marginBottom="6dp"
         android:layout_marginTop="6dp"
         android:layout_weight="1"
+        android:background="@android:color/transparent"
         android:gravity="center_vertical"
         android:hint="@string/chat_write_message"
         android:imeOptions="actionSend"
         android:inputType="textCapSentences|textMultiLine"
         android:maxLines="5"
-        android:textColor="#000000"
-        android:textSize="14sp">
+        android:shadowColor="#E6FFFFFF"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="1"
+        android:textColor="#DE000000"
+        android:textSize="16sp">
 
         <requestFocus />
     </EditText>
 
     <ImageButton
         android:id="@+id/btnSend"
-        android:layout_width="46dp"
-        android:layout_height="46dp"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_gravity="center"
-        android:background="@android:color/transparent"
+        android:background="@drawable/input_buttons_selector"
+        android:padding="16dp"
         android:src="@drawable/btn_send_message_selector" />
 
 </LinearLayout>

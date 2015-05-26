@@ -60,11 +60,6 @@ public class DatingInstantMessageController {
 
     private String mLastMsgFromConfig;
 
-    public interface SendLikeAction {
-
-        void sendLike();
-    }
-
     public DatingInstantMessageController(Activity activity, KeyboardListenerLayout root,
                                           View.OnClickListener clickListener,
                                           IRequestClient requestClient, String text,
@@ -131,6 +126,12 @@ public class DatingInstantMessageController {
         mRequestClient = requestClient;
     }
 
+    public static void resetMessage() {
+        UserConfig userConfig = App.getUserConfig();
+        userConfig.setDatingMessage("");
+        CacheProfile.getOptions().instantMessageFromSearch.setText("");
+    }
+
     public boolean sendMessage(SearchUser user) {
         if (!tryChat(user)) {
             setSendEnabled(true);
@@ -142,9 +143,9 @@ public class DatingInstantMessageController {
             return false;
         }
         if (editText.length() > mMaxMessageSize) {
-            Toast.makeText(mActivity,
+            Utils.showToastNotification(
                     String.format(mActivity.getString(R.string.message_too_long), mMaxMessageSize),
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT);
             return false;
         }
 
@@ -178,7 +179,7 @@ public class DatingInstantMessageController {
                 if (response.isCodeEqual(ErrorCodes.PREMIUM_ACCESS_ONLY)) {
                     startPurchasesActivity(CacheProfile.getOptions().instantMessagesForNewbies.getText(), "InstantMessageLimitExceeded");
                 } else {
-                    Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                    Utils.showErrorMessage();
                 }
             }
 
@@ -223,13 +224,8 @@ public class DatingInstantMessageController {
     }
 
     public void openChat(FragmentActivity activity, SearchUser user) {
-        openChat(activity, user, mMessageText.getText().toString());
-    }
-
-    public void openChat(FragmentActivity activity, SearchUser user, String defaultMessageText) {
         if (user != null) {
-            Intent intent = new ChatActivity.IntentBuilder(activity).feedUser(user).
-                    initialMessage(defaultMessageText).build();
+            Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false);
             activity.startActivityForResult(intent, ChatActivity.INTENT_CHAT);
             EasyTracker.sendEvent("Dating", "Additional", "Chat", 1L);
         }
@@ -353,9 +349,8 @@ public class DatingInstantMessageController {
         }
     }
 
-    public static void resetMessage() {
-        UserConfig userConfig = App.getUserConfig();
-        userConfig.setDatingMessage("");
-        CacheProfile.getOptions().instantMessageFromSearch.setText("");
+    public interface SendLikeAction {
+
+        void sendLike();
     }
 }

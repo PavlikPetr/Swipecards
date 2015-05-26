@@ -13,16 +13,19 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.topface.topface.R;
 import com.topface.topface.banners.BannersController;
-import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.banners.PageInfo;
+import com.topface.topface.banners.RefreshablePageWithAds;
+import com.topface.topface.banners.ad_providers.IRefresher;
+import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.ad.NativeAdManager;
+import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +34,7 @@ import java.util.Locale;
 /**
  * base class for feeds with tabs
  */
-public abstract class TabbedFeedFragment extends BaseFragment implements IPageWithAds {
+public abstract class TabbedFeedFragment extends BaseFragment implements RefreshablePageWithAds {
     public static final String HAS_FEED_AD = "com.topface.topface.has_feed_ad";
     public static final String EXTRA_OPEN_PAGE = "openTabbedFeedAt";
     private static final String LAST_OPENED_PAGE = "last_opened_page";
@@ -43,6 +46,17 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
     private BannersController mBannersController;
 
     private TabbedFeedPageAdapter mBodyPagerAdapter;
+    
+    protected static int mVisitorsastOpenedPage = 0;
+    protected static int mLikesLastOpenedPage = 0;
+    protected static int mDialogsLastOpenedPage = 0;
+
+    public static void setTabsDefaultPosition(){
+        mVisitorsastOpenedPage = 0;
+        mLikesLastOpenedPage = 0;
+        mDialogsLastOpenedPage = 0;
+    }
+
 
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -142,9 +156,26 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
     }
 
     protected void initFloatBlock() {
-        if (!NativeAdManager.hasAvailableAd()) {
-            mBannersController = new BannersController(this);
-        }
+        Utils.addOnGlobalLayoutListener(mPager, new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override public void onGlobalLayout() {
+                boolean needNativeAd = false;
+                if (mBodyPagerAdapter != null) {
+                    for (int i=0; i< mBodyPagerAdapter.getCount(); i++) {
+                        Fragment feed = mBodyPagerAdapter.getItem(i);
+                        if (feed instanceof FeedFragment) {
+                            FeedAdapter adapter = ((FeedFragment)feed).getListAdapter();
+                            if (adapter != null && adapter.isNeedFeedAd()) {
+                                needNativeAd = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (!needNativeAd) {
+                    mBannersController = new BannersController(TabbedFeedFragment.this);
+                }
+            }
+        });
     }
 
     protected abstract void addPages();
@@ -181,7 +212,14 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
         if (mBannersController != null) {
             mBannersController.onDestroy();
         }
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mRefresher != null) {
+            mRefresher.refreshBanner();
+        }
     }
 
     @Override
@@ -212,5 +250,12 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IPageWi
             return (ViewGroup) getView().findViewById(R.id.banner_container_for_tabbed_feeds);
         }
         return null;
+    }
+
+    private IRefresher mRefresher;
+
+    @Override
+    public void setRefresher(IRefresher refresher) {
+        mRefresher = refresher;
     }
 }

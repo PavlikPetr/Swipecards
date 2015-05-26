@@ -32,6 +32,7 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.RemindRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -80,7 +81,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             request.callback(new ApiHandler() {
                 @Override
                 public void success(IApiResponse response) {
-                    Toast.makeText(App.getContext(), R.string.email_confirmed, Toast.LENGTH_SHORT).show();
+                    Utils.showToastNotification(R.string.email_confirmed, Toast.LENGTH_SHORT);
                     CacheProfile.emailConfirmed = true;
                     if (isAdded()) {
                         setViewsState();
@@ -89,7 +90,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
                 @Override
                 public void fail(int codeError, IApiResponse response) {
-                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                    Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                 }
 
                 @Override
@@ -122,6 +123,9 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
     private void requestEmailConfirmedFlag(final boolean isShowEmailConfirmMessage) {
         ProfileRequest profileRequest = new ProfileRequest(getActivity());
+        if (getActivity() instanceof BaseFragmentActivity) {
+            ((BaseFragmentActivity) getActivity()).registerRequest(profileRequest);
+        }
         profileRequest.part = ProfileRequest.P_EMAIL_CONFIRMED;
         profileRequest.callback(new DataApiHandler<Boolean>() {
 
@@ -307,12 +311,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                     @Override
                     public void success(IApiResponse response) {
                         setEmailConfirmSent();
-                        Toast.makeText(App.getContext(), R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT).show();
+                        Utils.showToastNotification(R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT);
                     }
 
                     @Override
                     public void fail(int codeError, IApiResponse response) {
-                        Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                        Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                     }
                 }).exec();
                 break;
@@ -334,7 +338,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                             if (ErrorCodes.USER_ALREADY_REGISTERED == codeError) {
                                 showLogoutPopup(email);
                             } else {
-                                Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                                Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                             }
                         }
 
@@ -345,7 +349,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                         }
                     }).exec();
                 } else {
-                    Toast.makeText(App.getContext(), R.string.incorrect_email, Toast.LENGTH_SHORT).show();
+                    Utils.showToastNotification(R.string.incorrect_email, Toast.LENGTH_SHORT);
                 }
                 break;
             case ACTION_CHANGE_PASSWORD:

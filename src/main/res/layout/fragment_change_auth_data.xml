@@ -22,13 +22,19 @@
             android:visibility="gone" />
 
         <EditText
+            android:id="@+id/edOldPassword"
+            style="@style/SettingsAccountEditText"
+            android:gravity="left|center_vertical" />
+
+        <EditText
             android:id="@+id/edMainField"
+            android:layout_marginTop="16dp"
             style="@style/SettingsAccountEditText"
             android:gravity="left|center_vertical" />
 
         <EditText
             android:id="@+id/edConfirmationField"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="16dp"
             style="@style/SettingsAccountEditText"
             android:gravity="left|center_vertical" />
 

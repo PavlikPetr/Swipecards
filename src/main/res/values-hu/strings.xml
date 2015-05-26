@@ -177,7 +177,6 @@
         <item quantity="other">%d fénykép</item>
         <item quantity="one">%d fénykép</item>
     </plurals>
-    <string name="novice_sympathy">Küldj szimpátiát azoknak, akik \ntényleg tetszenek,\nígy el tudsz kezdeni egy élvezetes ismerkedést.</string>
     <string name="general_edit_profile_message">Kérjük, töltse ki a profil szükséges mezőit</string>
     <string name="general_search_null_response_error">Semmit sem találtam. Próbáld meg módosítani a szűrőket</string>
     <string name="change_filters">Szűrők változtatása</string>
@@ -213,8 +212,6 @@
     <string name="settings_invalid_email">Helytelen email</string>
     <string name="chat_write_message">Üzenet írása</string>
     <string name="buying_sympathies">Szimpátia vásárlás</string>
-    <string name="novice_sympathies_bonus">%1$d szimpátiát kaptál\najándékba! Ez azt jelenti, hogy\nbiztosan tetszel az emberek %2$d-nak,\n akikben szimpátiát ébresztesz.</string>
-    <string name="novice_buy_sympathies">Ha biztosan szeretnél \nszimpátiákat kapni, \nvedd meg őket most!</string>
     <string name="general_reconnect_social">A kapcsolódás a közösségi oldalhoz nem lehetséges. Próbáld meg később.</string>
     <string name="general_block">Letiltás</string>
     <string name="general_buying_disabled">A vásárlás nem elérhető most.</string>

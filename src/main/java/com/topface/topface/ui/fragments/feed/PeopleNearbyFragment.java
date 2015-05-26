@@ -1,6 +1,12 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
+import android.location.LocationManager;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -35,6 +41,33 @@ import java.util.List;
 
 public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     protected View mEmptyFeedView;
+    private GeoLocationManager mGeoLocationManager;
+    private BroadcastReceiver mGeoStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (mGeoLocationManager == null) {
+                return;
+            }
+            if (mGeoLocationManager.getEnabledProvider() != GeoLocationManager.NavigationType.DISABLE) {
+                mGeoLocationManager.startLocationListener();
+            } else {
+                mGeoLocationManager.stopLocationListener();
+            }
+        }
+    };
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        getActivity().registerReceiver(mGeoStateReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onDestroy() {
+        getActivity().unregisterReceiver(mGeoStateReceiver);
+        mGeoLocationManager.stopLocationListener();
+        super.onDestroy();
+    }
 
     @Override
     protected int[] getTypesForGCM() {
@@ -42,7 +75,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     }
 
     @Override
-    protected int getTypeForCounters() {
+    protected int getFeedType() {
         return CountersManager.GEO;
     }
 
@@ -65,10 +98,20 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     protected void updateData(boolean isPullToRefreshUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
         mIsUpdating = true;
         onUpdateStart(isPullToRefreshUpdating || isHistoryLoad);
-        Location location = GeoLocationManager.getLastKnownLocation(getActivity());
+        if (mGeoLocationManager == null) {
+            mGeoLocationManager = new GeoLocationManager(getActivity()) {
+                @Override
+                public void onUserLocationChanged(Location location) {
+                    sendPeopleNearbyRequest(location, isHistoryLoad, makeItemsRead);
+                }
+            };
+        }
+        sendPeopleNearbyRequest(mGeoLocationManager.getLastKnownLocation(), isHistoryLoad, makeItemsRead);
+    }
+
+    private void sendPeopleNearbyRequest(Location location, final boolean isHistoryLoad, final boolean makeItemsRead) {
         if (location != null) {
             PeopleNearbyRequest request = new PeopleNearbyRequest(getActivity(), location.getLatitude(), location.getLongitude());
-
             request.callback(new DataApiHandler<FeedListData<FeedGeo>>() {
 
                 @Override
@@ -87,6 +130,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                 }
             }).exec();
         } else {
+            getListView().setVisibility(View.GONE);
             onEmptyFeed(ErrorCodes.CANNOT_GET_GEO);
         }
     }

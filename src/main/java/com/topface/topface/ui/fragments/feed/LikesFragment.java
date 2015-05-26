@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -25,6 +26,7 @@ import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.ReadLikeRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
@@ -38,6 +40,7 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONObject;
@@ -55,6 +58,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             updateTitleWithCounter();
         }
     };
+
+    @Override
+    protected boolean isReadFeedItems() {
+        return true;
+    }
 
     @Override
     public void onResume() {
@@ -87,6 +95,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
             @Override
             public void onMutual(FeedItem item) {
+                item.unread = false;
                 LikesFragment.this.onMutual(item);
             }
         });
@@ -99,7 +108,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected int getTypeForCounters() {
+    protected int getFeedType() {
         return CountersManager.LIKES;
     }
 
@@ -110,7 +119,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                     mRateController.onLike(item.user.id, 0, null);
                     ((FeedLike) item).mutualed = true;
                     getListAdapter().notifyDataSetChanged();
-                    Toast.makeText(getActivity(), R.string.general_mutual, Toast.LENGTH_SHORT).show();
+                    Utils.showToastNotification(R.string.general_mutual, Toast.LENGTH_SHORT);
                 }
             }
         }
@@ -332,6 +341,28 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
+    public void onAvatarClick(FeedLike item, View view) {
+        super.onAvatarClick(item, view);
+        sendLikeReadRequest(item.id);
+        showInterstitial();
+    }
+
+    @Override
+    protected void onFeedItemClick(FeedItem item) {
+        super.onFeedItemClick(item);
+        sendLikeReadRequest(item.id);
+        showInterstitial();
+    }
+
+    private void sendLikeReadRequest(String id) {
+        if (!TextUtils.isEmpty(id)) {
+            ReadLikeRequest request = new ReadLikeRequest(getActivity(), Integer.valueOf(id), AdmobInterstitialUtils.canShowInterstitialAds());
+            request.exec();
+        }
+    }
+
+
+    @Override
     protected int getEmptyFeedLayout() {
         return R.layout.layout_empty_likes;
     }
@@ -356,4 +387,9 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         return GCMUtils.GCM_LIKE_UPDATE;
     }
 
+    private void showInterstitial() {
+        if (getFeedType() == CountersManager.LIKES) {
+            AdmobInterstitialUtils.requestPreloadedInterstitial(getActivity());
+        }
+    }
 }

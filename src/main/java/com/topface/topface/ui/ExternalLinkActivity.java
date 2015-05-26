@@ -14,7 +14,7 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
         public void onProfileLink(int profileID) {
-            startActivity(UserProfileActivity.createIntent(profileID, ExternalLinkActivity.this));
+            startActivity(UserProfileActivity.createIntent(null, null, profileID, null, true, true, null, null));
             getIntent().setData(null);
             finish();
         }

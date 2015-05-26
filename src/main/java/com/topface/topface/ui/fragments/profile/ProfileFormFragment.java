@@ -30,12 +30,13 @@ import com.topface.topface.ui.dialogs.EditTextFormDialog;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
+import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.topface.topface.ui.dialogs.AbstractEditDialog.EditingFinishedListener;
+import static com.topface.topface.ui.dialogs.BaseEditDialog.EditingFinishedListener;
 
 public class ProfileFormFragment extends AbstractFormFragment {
 
@@ -67,7 +68,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
 
                             @Override
                             public void fail(int codeError, IApiResponse response) {
-                                Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                                Utils.showToastNotification(R.string.general_data_error, Toast.LENGTH_SHORT);
                             }
 
                             @Override

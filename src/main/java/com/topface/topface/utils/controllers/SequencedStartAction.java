@@ -1,7 +1,5 @@
 package com.topface.topface.utils.controllers;
 
-import android.app.Activity;
-
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -9,7 +7,9 @@ import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Класс реализующий запуск очереди попапов. При закрытии одного, сразу появляется другой
@@ -17,13 +17,13 @@ import java.util.Iterator;
  */
 public class SequencedStartAction implements IStartAction {
 
-    private Activity mActivity;
-    private ArrayList<IStartAction> mActions = new ArrayList<>();
+    private IUiRunner mUiRunner;
+    private List<IStartAction> mActions = Collections.synchronizedList(new ArrayList<IStartAction>());
     private int mPriority = -1;
 
-    public SequencedStartAction(Activity activity, int priority) {
+    public SequencedStartAction(IUiRunner uiRunner, int priority) {
         mPriority = priority;
-        mActivity = activity;
+        mUiRunner = uiRunner;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class SequencedStartAction implements IStartAction {
     @Override
     public boolean isApplicable() {
         boolean isApplicable = false;
-        //если в списке дейвствий есть хотя бы одно готовой к запуску, то true
+        //если в списке дейвствий есть хотя бы одно готовое к запуску, то true
         for (IStartAction startAction : mActions) {
             isApplicable = isApplicable || startAction.isApplicable();
         }
@@ -65,7 +65,7 @@ public class SequencedStartAction implements IStartAction {
         mActions.add(action);
     }
 
-    public ArrayList<IStartAction> getActions() {
+    public List<IStartAction> getActions() {
         return mActions;
     }
 
@@ -73,11 +73,13 @@ public class SequencedStartAction implements IStartAction {
      * Выпиливаем все действия, которые не могут быть запущены
      */
     protected void removeNonApplicableActions() {
-        Iterator<IStartAction> iterator = mActions.iterator();
-        while (iterator.hasNext()) {
-            IStartAction action = iterator.next();
-            if (!action.isApplicable()) {
-                iterator.remove();
+        synchronized (mActions) {
+            Iterator<IStartAction> iterator = mActions.iterator();
+            while (iterator.hasNext()) {
+                IStartAction action = iterator.next();
+                if (!action.isApplicable()) {
+                    iterator.remove();
+                }
             }
         }
     }
@@ -96,7 +98,9 @@ public class SequencedStartAction implements IStartAction {
             });
         }
         //запускаем очередь
-        runAction(mActions.get(0));
+        if (!mActions.isEmpty()) {
+            runAction(mActions.get(0));
+        }
     }
 
     private void runAction(final IStartAction action) {
@@ -104,14 +108,14 @@ public class SequencedStartAction implements IStartAction {
             @Override
             public void execute() {
                 action.callInBackground();
-                mActivity.runOnUiThread(new Runnable() {
+                mUiRunner.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         boolean running = true;
-                        if (mActivity instanceof BaseFragmentActivity) {
-                            running = ((BaseFragmentActivity) mActivity).isRunning();
+                        if (mUiRunner instanceof BaseFragmentActivity) {
+                            running = ((BaseFragmentActivity) mUiRunner).isRunning();
                         }
-                        if (running && !mActivity.isFinishing()) {
+                        if (running && !mUiRunner.isFinishing()) {
                             action.callOnUi();
                         }
                     }
@@ -133,4 +137,8 @@ public class SequencedStartAction implements IStartAction {
         return stringBuilder.toString();
     }
 
+    public interface IUiRunner {
+        void runOnUiThread(Runnable runnable);
+        boolean isFinishing();
+    }
 }

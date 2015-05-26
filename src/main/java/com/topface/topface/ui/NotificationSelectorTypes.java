@@ -4,6 +4,7 @@ import com.topface.topface.R;
 
 /**
  * Created by saharuk on 17.03.15.
+ * Types of notifications
  */
 public enum NotificationSelectorTypes {
     ON_PHONE(0, R.string.on_phone),

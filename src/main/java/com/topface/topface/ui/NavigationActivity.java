@@ -34,6 +34,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
+import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
@@ -46,11 +47,11 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.PhotoTaker;
 import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
+import com.topface.topface.utils.controllers.SequencedStartAction;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
-import com.topface.topface.utils.controllers.startactions.FacebookRequestWindowAction;
-import com.topface.topface.utils.controllers.startactions.FacebookSequencedStartAction;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.InvitePopupAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
@@ -67,7 +68,7 @@ import static com.topface.topface.utils.controllers.StartActionsController.AC_PR
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
 
-public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener {
+public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener, SequencedStartAction.IUiRunner {
     public static final String INTENT_EXIT = "EXIT";
     public static final String PAGE_SWITCH = "Page switch: ";
 
@@ -80,6 +81,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     private boolean isPopupVisible = false;
     private boolean mActionBarOverlayed = false;
     private int mInitialTopMargin = 0;
+    @SuppressWarnings("deprecation")
     private ActionBarDrawerToggle mDrawerToggle;
     private IActionbarNotifier mNotificationController;
     private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
@@ -166,10 +168,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 showFragment(FragmentId.TABBED_LIKES);
             }
         }));
-        FacebookSequencedStartAction sequencedStartAction = new FacebookSequencedStartAction(this, AC_PRIORITY_NORMAL);
-        sequencedStartAction.addAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
-        sequencedStartAction.addAction(new FacebookRequestWindowAction(this, AC_PRIORITY_NORMAL));
-        startActionsController.registerAction(sequencedStartAction);
+        startActionsController.registerAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
         // fullscreen
@@ -187,6 +186,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         CacheProfile.needShowBonusCounter = lastTime < CacheProfile.getOptions().bonus.timestamp;
     }
 
+    @SuppressWarnings("deprecation")
     private void initDrawerLayout() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         mMenuFragment = (MenuFragment) fragmentManager.findFragmentById(R.id.fragment_menu);
@@ -305,6 +305,9 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+        if (CacheProfile.age <= App.getAppOptions().getUserAgeMin()) {
+            SetAgeDialog.newInstance().show(this.getSupportFragmentManager(), SetAgeDialog.TAG);
+        }
     }
 
     @Override
@@ -394,7 +397,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 }
             }, 3000);
             mBackPressedOnce.set(true);
-            Toast.makeText(App.getContext(), R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT).show();
+            Utils.showToastNotification(R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT);
             isPopupVisible = false;
         } else {
             super.onBackPressed();
@@ -439,6 +442,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         Initialize Topface offerwall here to be able to start it quickly instead of PurchasesActivity
          */
         OfferwallsManager.initTfOfferwall(this, null);
+        AdmobInterstitialUtils.preloadInterstitials(this);
     }
 
     @Override
@@ -454,6 +458,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
         mDrawerToggle = null;
         super.onDestroy();
+        AdmobInterstitialUtils.releaseInterstitials();
     }
 
     @Override

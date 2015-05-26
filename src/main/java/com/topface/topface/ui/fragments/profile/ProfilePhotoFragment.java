@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -37,9 +36,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
-import java.util.ArrayList;
-
-public class ProfilePhotoFragment extends ProfileInnerFragment {
+public class ProfilePhotoFragment extends ProfileInnerFragment implements View.OnClickListener {
 
     private static final String POSITION = "POSITION";
     private static final String FLIPPER_VISIBLE_CHILD = "FLIPPER_VISIBLE_CHILD";
@@ -62,21 +59,11 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     private BroadcastReceiver mPhotosReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ArrayList<Photo> arrList = intent.getParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS);
-            boolean clear = intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_CLEAR, false);
-            Photos newPhotos = new Photos();
-
-            newPhotos.addAll(arrList);
-            boolean more = intent.getBooleanExtra(PhotoSwitcherActivity.INTENT_MORE, false);
-            if (clear) {
-                mProfilePhotoGridAdapter.setData(newPhotos, more);
-            } else {
-                mProfilePhotoGridAdapter.addData(newPhotos, more);
+            if (null != mProfilePhotoGridAdapter) {
+                mProfilePhotoGridAdapter.updateData();
             }
-            mProfilePhotoGridAdapter.notifyDataSetChanged();
         }
     };
-
     private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -201,34 +188,9 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
             }
         });
 
-        root.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewFlipper.setDisplayedChild(0);
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
-                        new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", R.id.btnAddPhotoAlbum));
-            }
-        });
-        root.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mViewFlipper.setDisplayedChild(0);
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
-                        new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", R.id.btnAddPhotoCamera));
-            }
-        });
-        root.findViewById(R.id.btnCancel).setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                mViewFlipper.setDisplayedChild(0);
-            }
-        });
-
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
-                mPhotosReceiver,
-                new IntentFilter(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT)
-        );
+        root.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(this);
+        root.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(this);
+        root.findViewById(R.id.btnCancel).setOnClickListener(this);
 
         return root;
     }
@@ -290,8 +252,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                                         errorStringResource = R.string.general_server_error;
                                         break;
                                 }
-                                Toast.makeText(getActivity(), errorStringResource, Toast.LENGTH_SHORT)
-                                        .show();
+                                Utils.showToastNotification(errorStringResource, Toast.LENGTH_SHORT);
                             }
 
                             @Override
@@ -311,15 +272,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                                 //Декрементим общее количество фотографий
                                 CacheProfile.totalPhotos -= 1;
                                 CacheProfile.photos.remove(photo);
-                                Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
-                                Photos newPhotos = new Photos();
-                                // TODO перенести логику в адаптер
-                                for (int i = 0; i < CacheProfile.photos.size(); i++) {
-                                    newPhotos.add(i, CacheProfile.photos.get(i));
-                                }
-                                intent.putExtra(PhotoSwitcherActivity.INTENT_CLEAR, true);
-                                intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, newPhotos);
-                                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+                                mProfilePhotoGridAdapter.removePhoto(photo);
                                 if (position < CacheProfile.photo.position) {
                                     CacheProfile.incrementPhotoPosition(-1);
                                 }
@@ -344,20 +297,23 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
 
     @Override
     public void onResume() {
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
+                mPhotosReceiver,
+                new IntentFilter(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT)
+        );
         mProfilePhotoGridAdapter.updateData();
-        mProfilePhotoGridAdapter.notifyDataSetChanged();
         super.onResume();
     }
 
     @Override
     public void onPause() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPhotosReceiver);
         super.onPause();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPhotosReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileUpdateReceiver);
     }
 
@@ -368,5 +324,25 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
                     CacheProfile.photos.size() < CacheProfile.totalPhotos
             );
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (null != v) {
+            int id = v.getId();
+            switch (id) {
+                case R.id.btnAddPhotoAlbum:
+                case R.id.btnAddPhotoCamera:
+                    mViewFlipper.setDisplayedChild(0);
+                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
+                            new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", id));
+                    break;
+                case R.id.btnCancel:
+                    mViewFlipper.setDisplayedChild(0);
+                    break;
+
+            }
+        }
+
     }
 }

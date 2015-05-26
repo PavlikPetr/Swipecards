@@ -18,6 +18,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.zip.GZIPInputStream;
 
@@ -32,7 +33,7 @@ public class HttpUtils {
     public static final int READ_TIMEOUT = 20000;
     public static final String USER_AGENT_APP_NAME = "Topface";
     public static final String ACCEPT_ENCODING = "gzip,deflate";
-    private static String mUserAgent;
+    private static HashMap<String, String> mUserAgent = new HashMap<>();
 
     public static String httpGetRequest(String url) {
         String result = null;
@@ -114,8 +115,7 @@ public class HttpUtils {
      * @throws IOException
      */
     public static
-    @NonNull
-    HttpURLConnection openConnection(
+    @NonNull HttpURLConnection openConnection(
             HttpConnectionType type,
             String url,
             String contentType) throws IOException {
@@ -211,21 +211,26 @@ public class HttpUtils {
     }
 
     public static String getUserAgent() {
-        if (mUserAgent == null) {
+        return getUserAgent("");
+    }
+
+    public static String getUserAgent(String transport) {
+        if (!mUserAgent.containsKey(transport)) {
             final Locale locale = Locale.getDefault();
-            mUserAgent = String.format(Locale.ENGLISH,
-                    USER_AGENT_APP_NAME + "/%s%s v%d (%s; %s; %s-%s)",
+            mUserAgent.put(transport, String.format(
+                    Locale.ENGLISH,
+                    USER_AGENT_APP_NAME + "/%s%s v%d (%s; %s; %s-%s; %s)",
                     BuildConfig.VERSION_NAME,
                     TextUtils.equals(BuildConfig.BUILD_TYPE, "release") ? "" : "-" + BuildConfig.BUILD_TYPE,
                     BuildConfig.VERSION_CODE,
                     BuildConfig.MARKET_API_TYPE.getClientType(),
                     Utils.getClientOsVersion(),
                     locale.getLanguage(),
-                    locale.getCountry()
-            );
+                    locale.getCountry(),
+                    transport
+            ));
         }
-
-        return mUserAgent;
+        return mUserAgent.get(transport);
     }
 
     /**

@@ -22,7 +22,9 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Display;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -66,10 +68,6 @@ public class Utils {
         return (int) (System.currentTimeMillis() / 1000L);
     }
 
-    public static String formatPhotoQuantity(int quantity) {
-        return Utils.getQuantityString(R.plurals.photo, quantity, (int) quantity);
-    }
-
     public static String getQuantityString(int id, int quantity, Object... formatArgs) {
         try {
             mPluralResources = new PluralResources(App.getContext().getResources());
@@ -82,10 +80,28 @@ public class Utils {
     public static void showErrorMessage() {
         Context context = App.getContext();
         if (context != null) {
+            Utils.showToastNotification(R.string.general_data_error, Toast.LENGTH_SHORT);
+        }
+    }
+
+    public static void showToastNotification(int stringId, int duration) {
+        Context context = App.getContext();
+        if (context != null && (duration == 0 || duration == 1)) {
             Toast.makeText(
                     context,
-                    R.string.general_data_error,
-                    Toast.LENGTH_SHORT
+                    stringId,
+                    duration
+            ).show();
+        }
+    }
+
+    public static void showToastNotification(String text, int duration) {
+        Context context = App.getContext();
+        if (context != null && (duration == 0 || duration == 1)) {
+            Toast.makeText(
+                    context,
+                    text,
+                    duration
             ).show();
         }
     }
@@ -358,4 +374,29 @@ public class Utils {
         }
         return ConnectionChangeReceiver.getConnectionType();
     }
+
+    public static void addOnGlobalLayoutListener(final View view, final ViewTreeObserver.OnGlobalLayoutListener listener) {
+        ViewTreeObserver vto = view.getViewTreeObserver();
+        if (vto != null && vto.isAlive()) {
+            view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    listener.onGlobalLayout();
+                    ViewTreeObserver vto = view.getViewTreeObserver();
+                    if (vto != null && vto.isAlive()) {
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                            //noinspection deprecation
+                            vto.removeGlobalOnLayoutListener(this);
+                        } else {
+                            vto.removeOnGlobalLayoutListener(this);
+                        }
+                    }
+
+                }
+            });
+        }
+
+    }
+
+
 }

@@ -275,7 +275,6 @@
         <item quantity="other">%d Fotos</item>
         <item quantity="one">%d Foto</item>
     </plurals>
-    <string name="novice_sympathy">Senden Sie Sympathien den Menschen, die Ihnen\nwirklich gefallen,\num eine angenehme Bekanntschaft anzufangen</string>
     <string name="general_edit_profile_message">Bitte, füllen Sie notwendige Felder des Fragebogens</string>
     <string name="general_search_null_response_error">Nichts gefunden. Versuchen Sie die Filter zu ändern</string>
     <string name="change_filters">Filter ändern</string>
@@ -323,9 +322,6 @@
     <string name="chat_write_message">Nachricht schreiben</string>
     <string name="dating_message">Nachricht…</string>
     <string name="buying_sympathies">Sympathien kaufen</string>
-    <string name="novice_sympathies_bonus">Sie bekommen %1$d Sympathien als\nGeschenk! Das heißt, dass Sie\ngenau %2$d Menschen gefallen,\ndie Ihnen ihre Sympathie zeigen werden</string>
-    <string name="novice_buy_sympathies">Falls Sie garantiert\nSympathien erhalten möchten,\nkaufen Sie sie gearde
- jetzt!</string>
     <string name="general_reconnect_social">Keine Internetverbindung. Versuchen Sie später.</string>
     <string name="general_block">Blokieren</string>
     <string name="general_buying_disabled">Der Kauf ist jetzt unmöglich</string>
@@ -375,8 +371,8 @@
     <string name="password_changing">Passwort ändern</string>
     <string name="save">Speichern</string>
     <string name="confirmation_successfully_sent">Die Bestätigung wurde auf Ihre E-Mail-Adresse gesendet</string>
+    <string name="password_confirmation_hint">Passwort Bestätigung</string>
     <string name="password_hint">Passwort</string>
-    <string name="password_confirmation_hint">Passwort bestätigen</string>
     <string name="enter_new_password">Geben Sie ein neues Passwort ein</string>
     <string name="enter_password_confirmation">Geben Sie eine Passwortbestätigung ein</string>
     <string name="passwords_mismatched">Passwörter fallen nicht zusammen</string>

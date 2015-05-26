@@ -379,6 +379,26 @@ public class BitmapUtils {
         return Bitmap.createScaledBitmap(output, bitmap.getWidth(), bitmap.getWidth(), true);
     }
 
+    public static Bitmap getRoundAvatarBitmap(Bitmap bitmap) {
+        final int bitmapWidth = bitmap.getWidth();
+        final int bitmapHeight = bitmap.getHeight();
+        int multWidth = (bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight;
+        @SuppressWarnings("SuspiciousNameCombination")
+        Bitmap output = Bitmap.createBitmap(multWidth, multWidth, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        final Rect src = new Rect(0, 0, bitmapWidth, bitmapHeight);
+        final Rect dst = new Rect((multWidth - bitmapWidth) / 2, (multWidth - bitmapHeight) / 2, (multWidth + bitmapWidth) / 2, (multWidth - bitmapHeight) / 2 + bitmapHeight);
+        Paint circlePaint = new Paint();
+        circlePaint.setAntiAlias(true);
+        circlePaint.setColor(App.getContext().getResources().getColor(R.color.bg_white));
+        Paint canvasPaint = new Paint();
+        canvasPaint.setAntiAlias(true);
+        canvas.drawCircle(multWidth / 2, multWidth / 2, multWidth / 2, circlePaint);
+        canvasPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
+        canvas.drawBitmap(bitmap, src, dst, canvasPaint);
+        return Bitmap.createScaledBitmap(output, bitmap.getWidth(), bitmap.getWidth(), true);
+    }
+
     public static Bitmap squareBitmap(Bitmap bitmap, int width) {
         return getScaledBitmapInsideSquare(bitmap, width, 1.0f);
     }

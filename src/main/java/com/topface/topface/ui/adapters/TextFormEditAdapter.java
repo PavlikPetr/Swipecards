@@ -15,6 +15,8 @@ import com.topface.topface.R;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Adapter for text forms edit dialog
  */
@@ -81,7 +83,7 @@ public class TextFormEditAdapter extends AbstractEditAdapter<FormItem> {
             } else if (valueLimitInterface != null) {
                 fArray[0] = new InputFilter.LengthFilter(String.valueOf(valueLimitInterface.getMaxValue()).length()) {
                     @Override
-                    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                    public CharSequence filter(@NotNull CharSequence source, int start, int end, @NotNull Spanned dest, int dstart, int dend) {
                         char[] v = new char[end - start];
                         TextUtils.getChars(source, start, end, v, 0);
                         for (char ch : v) {
@@ -123,6 +125,7 @@ public class TextFormEditAdapter extends AbstractEditAdapter<FormItem> {
 
         holder.text.removeTextChangedListener(holder.textWatcher);
         holder.text.setText(value);
+
         holder.text.setSelection(value != null ? value.length() : 0);
         holder.text.addTextChangedListener(holder.textWatcher);
 

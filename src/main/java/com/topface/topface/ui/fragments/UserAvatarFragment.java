@@ -15,6 +15,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.IUniversalUser;
+import com.topface.topface.data.Photo;
 import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -43,6 +44,9 @@ public abstract class UserAvatarFragment extends BaseFragment
     public void onDestroy() {
         super.onDestroy();
         setOnline(false);
+        if (mOverflowMenu != null) {
+            mOverflowMenu.onReleaseOverflowMenu();
+        }
     }
 
     @Override
@@ -74,15 +78,6 @@ public abstract class UserAvatarFragment extends BaseFragment
         }
     }
 
-    @Override
-    public void onDestroyOptionsMenu() {
-        super.onDestroyOptionsMenu();
-        if (mOverflowMenu != null) {
-            mOverflowMenu.onReleaseOverflowMenu();
-        }
-
-    }
-
     protected boolean hasUserActions() {
         return true;
     }
@@ -92,6 +87,7 @@ public abstract class UserAvatarFragment extends BaseFragment
         return R.menu.actions_avatar;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void clearContent() {
         ((ImageViewRemote) getView().findViewById(R.id.ivBarAvatar)).setPhoto(null);
@@ -113,14 +109,23 @@ public abstract class UserAvatarFragment extends BaseFragment
         }
     }
 
+
+    protected void setThrownActionBarAvatar(Photo photo) {
+        if (mBarAvatar != null) {
+            ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar)
+                    .findViewById(R.id.ivBarAvatar))
+                    .setPhoto(photo);
+        }
+    }
+
     protected void setActionBarAvatar(IUniversalUser user) {
         if (mBarAvatar == null) return;
         if (user.isEmpty() || user.isBanned() || user.isDeleted() || user.isPhotoEmpty()) {
             ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar)
                     .findViewById(R.id.ivBarAvatar))
                     .setImageResource(user.getSex() == Static.GIRL ?
-                            R.drawable.feed_banned_female_avatar :
-                            R.drawable.feed_banned_male_avatar);
+                            R.drawable.rounded_avatar_female :
+                            R.drawable.rounded_avatar_male);
         } else {
             ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar)
                     .findViewById(R.id.ivBarAvatar))
@@ -172,10 +177,12 @@ public abstract class UserAvatarFragment extends BaseFragment
 
     public void onAvatarClick() {
         IUniversalUser user = getUniversalUser();
-        if (!user.isEmpty()) {
-            startActivity(PhotoSwitcherActivity.
-                    getPhotoSwitcherIntent(user.getGifts(), user.getPhoto().position,
-                            user.getId(), user.getPhotosCount(), user.getPhotos()));
+        if (user != null && !user.isEmpty()) {
+            startActivity(
+                    PhotoSwitcherActivity.getPhotoSwitcherIntent(user.getGifts(),
+                            user.getPhoto() != null ? user.getPhoto().position : 0,
+                            user.getId(), user.getPhotosCount(), user.getPhotos())
+            );
         }
     }
 
@@ -203,5 +210,7 @@ public abstract class UserAvatarFragment extends BaseFragment
         }
     }
 
-
+    protected MenuItem getBarActionsMenuItem() {
+        return mBarActions;
+    }
 }

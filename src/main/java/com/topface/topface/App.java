@@ -55,7 +55,6 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
-import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.ad.NativeAdManager;
 import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.config.AppConfig;
@@ -199,6 +198,7 @@ public class App extends Application {
                     protected void success(Options data, IApiResponse response) {
                         LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Options.OPTIONS_RECEIVED_ACTION));
                         mUserOptionsObtainedFromServer = true;
+                        NativeAdManager.init();
                     }
 
                     @Override
@@ -230,7 +230,6 @@ public class App extends Application {
                         }
                         CacheProfile.setProfile(data, response.getJsonResult(), part);
                         CacheProfile.sendUpdateProfileBroadcast();
-                        NativeAdManager.init();
                     }
 
                     @Override
@@ -296,10 +295,6 @@ public class App extends Application {
 
     public static BannersConfig getBannerConfig() {
         return getConfig().getBannerConfig();
-    }
-
-    public static Novice getNovice() {
-        return getConfig().getNovice();
     }
 
     public static AppOptions getAppOptions() {
@@ -459,7 +454,7 @@ public class App extends Application {
         new BackgroundThread(Thread.MIN_PRIORITY) {
             @Override
             public void execute() {
-                mCurLocation = GeoLocationManager.getLastKnownLocation(mContext);
+                mCurLocation = GeoLocationManager.getCurrentLocation();
                 if (mCurLocation != null) {
                     Looper.prepare();
                     SettingsRequest settingsRequest = new SettingsRequest(getContext());

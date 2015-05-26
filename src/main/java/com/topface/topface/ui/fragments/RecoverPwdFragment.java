@@ -79,7 +79,7 @@ public class RecoverPwdFragment extends BaseFragment {
                     @Override
                     public void success(IApiResponse response) {
                         showButtons();
-                        Toast.makeText(getContext(), R.string.recover_password_instructions, Toast.LENGTH_LONG).show();
+                        Utils.showToastNotification(R.string.recover_password_instructions, Toast.LENGTH_LONG);
                         getActivity().finish();
                     }
 

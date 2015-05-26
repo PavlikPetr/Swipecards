@@ -13,7 +13,6 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
-import com.topface.topface.data.experiments.AutoOpenGallery;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.InstantMessagesForNewbies;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
@@ -149,10 +148,9 @@ public class Options extends AbstractData {
     public TopfaceOfferwallRedirect topfaceOfferwallRedirect = new TopfaceOfferwallRedirect();
     public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
     public FeedNativeAd feedNativeAd = new FeedNativeAd();
-    public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
     public NotShown notShown = new NotShown();
-    public FacebookInviteFriends facebookInviteFriends = new FacebookInviteFriends();
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
+    public InterstitialInFeeds interstitial= new InterstitialInFeeds();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -318,8 +316,6 @@ public class Options extends AbstractData {
             instantMessageFromSearch = JsonUtils.optFromJson(response.optString(INSTANT_MSG),
                     InstantMessageFromSearch.class, new InstantMessageFromSearch());
 
-            autoOpenGallery.init(response);
-
             instantMessagesForNewbies.init(response);
 
             startPageFragmentId = getStartPageFragmentId(response);
@@ -328,11 +324,9 @@ public class Options extends AbstractData {
             if (jsonNotShown != null) {
                 notShown.parseNotShownJSON(jsonNotShown);
             }
-
-            facebookInviteFriends = JsonUtils.optFromJson(response.optString("facebookInviteFriends"),
-                    FacebookInviteFriends.class, new FacebookInviteFriends());
-
             feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
+            interstitial = JsonUtils.optFromJson(response.optString("interstitial"),
+                    InterstitialInFeeds.class, interstitial);
 
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
@@ -654,13 +648,6 @@ public class Options extends AbstractData {
         }
     }
 
-    public static class FacebookInviteFriends {
-        public boolean enabledOnLogin;
-        public boolean enabledAttempts;
-        public long minDelay = DateUtils.DAY_IN_SECONDS * 3;
-        public int maxAttempts;
-    }
-
     public static class FeedNativeAd {
         public boolean enabled;
         public String type;
@@ -710,5 +697,28 @@ public class Options extends AbstractData {
 
     public boolean isScruffyEnabled() {
         return scruffy != null ? scruffy : false;
+    }
+
+    public class InterstitialInFeeds {
+        public static final String FEED_NEWBIE = "NEWBIE";
+        public static final String FEED = "NORMAL";
+
+        public boolean enabled;
+        public int count = 0;
+        public long period = 0;
+        public String adGroup = "";
+
+        public boolean canShow() {
+            UserConfig config = App.getUserConfig();
+            if (config == null) {
+                return enabled;
+            } else {
+                long diff = System.currentTimeMillis() - config.getInterstitialsInFeedFirstShow();
+                if (diff > period * 1000) {
+                    config.resetInterstitialInFeedsCounter();
+                }
+                return enabled || (count > 0 && (config.getInterstitialsInFeedCounter() < count));
+            }
+        }
     }
 }

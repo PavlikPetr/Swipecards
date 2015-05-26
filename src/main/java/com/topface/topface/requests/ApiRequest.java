@@ -322,8 +322,8 @@ public abstract class ApiRequest implements IApiRequest {
         }
     }
 
-    public String getUserAgent() {
-        return HttpUtils.getUserAgent();
+    public String getUserAgent(String transport) {
+        return HttpUtils.getUserAgent(transport);
     }
 
     public static interface IConnectionConfigureListener {
@@ -333,8 +333,8 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     @Override
-    public Headers getHeaders() {
-        return new Headers(getId(), getContentType(), getUserAgent());
+    public Headers getHeaders(String type) {
+        return new Headers(getId(), getContentType(), getUserAgent(type));
     }
 
     @Override

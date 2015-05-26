@@ -191,7 +191,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment implements Vie
 
         //Если текст сообщения пустой, то не отправляем сообщение
         if (TextUtils.isEmpty(feedbackText)) {
-            Toast.makeText(App.getContext(), R.string.empty_fields, Toast.LENGTH_LONG).show();
+            Utils.showToastNotification(R.string.empty_fields, Toast.LENGTH_LONG);
             return;
         }
 
@@ -209,9 +209,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment implements Vie
                         finishRequestSend();
 
                         mEditText.setText(Static.EMPTY);
-                        Toast.makeText(App.getContext(),
-                                R.string.settings_feedback_success_msg,
-                                Toast.LENGTH_SHORT).show();
+                        Utils.showToastNotification(R.string.settings_feedback_success_msg, Toast.LENGTH_SHORT);
                         getActivity().finish();
                     }
                 }
@@ -220,16 +218,14 @@ public class FeedbackMessageFragment extends AbstractEditFragment implements Vie
                 public void fail(int codeError, IApiResponse response) {
                     finishRequestSend();
                     if (response.isCodeEqual(ErrorCodes.TOO_MANY_MESSAGES)) {
-                        Toast.makeText(App.getContext(), R.string.ban_flood_detected,
-                                Toast.LENGTH_SHORT).show();
+                        Utils.showToastNotification(R.string.ban_flood_detected, Toast.LENGTH_SHORT);
                     } else {
-                        Toast.makeText(App.getContext(), R.string.general_data_error,
-                                Toast.LENGTH_SHORT).show();
+                        Utils.showErrorMessage();
                     }
                 }
             }).exec();
         } else {
-            Toast.makeText(App.getContext(), R.string.settings_invalid_email, Toast.LENGTH_SHORT).show();
+            Utils.showToastNotification(R.string.settings_invalid_email, Toast.LENGTH_SHORT);
             mEditEmail.requestFocus();
         }
     }
@@ -319,10 +315,6 @@ public class FeedbackMessageFragment extends AbstractEditFragment implements Vie
             setType(type);
         }
 
-        public void setType(FeedbackType type) {
-            this.type = type;
-        }
-
         public String getSubject() {
             return "[" + Static.PLATFORM + "]" + subject + " {" + authToken.getSocialNet() + "_id=" + authToken.getUserSocialId() + "}";
         }
@@ -384,6 +376,10 @@ public class FeedbackMessageFragment extends AbstractEditFragment implements Vie
 
         public FeedbackType getType() {
             return type;
+        }
+
+        public void setType(FeedbackType type) {
+            this.type = type;
         }
 
         public String getEmail() {

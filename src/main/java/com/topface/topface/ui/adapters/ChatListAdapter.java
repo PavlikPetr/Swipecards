@@ -22,6 +22,7 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.ChatLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
@@ -59,11 +60,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         }
     }
 
-    @Override
-    protected LoadController initLoadController() {
-        return new ChatLoadController();
-    }
-
     public static int getItemType(History item) {
         boolean output = (item.target == FeedDialog.OUTPUT_USER_MESSAGE);
         switch (item.type) {
@@ -76,6 +72,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             default:
                 return output ? T_USER : T_FRIEND;
         }
+    }
+
+    @Override
+    protected LoadController initLoadController() {
+        return new ChatLoadController();
     }
 
     @Override
@@ -111,7 +112,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         final ViewHolder holder;
         final int type = getItemViewType(position);
         final History item = getItem(position);
-
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = inflateConvertView(holder, type, item);
@@ -121,7 +121,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
         setTypeDifferences(holder, type, item);
         if (type != T_RETRY) {
             setViewInfo(holder, item);
@@ -290,7 +289,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 mShowDatesList.add(currItem);
             }
         }
-
     }
 
     private void setTypeDifferences(ViewHolder holder, int type, final History item) {
@@ -317,12 +315,13 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 holder.message.setVisibility(View.GONE);
                 break;
         }
-
-        if (showDate) {
-            holder.dateDivider.setVisibility(View.VISIBLE);
-            holder.dateDividerText.setText(item.createdRelative);
-        } else {
-            holder.dateDivider.setVisibility(View.GONE);
+        if (holder != null && holder.dateDivider != null) {
+            if (showDate) {
+                holder.dateDivider.setVisibility(View.VISIBLE);
+                holder.dateDividerText.setText(item.createdRelative);
+            } else {
+                holder.dateDivider.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -441,8 +440,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
         if (clipboard != null) {
             clipboard.setText(text);
-            Toast.makeText(mContext, R.string.general_msg_copied, Toast.LENGTH_SHORT).show();
-        }
+            Utils.showToastNotification(R.string.general_msg_copied, Toast.LENGTH_SHORT);
+        }        
     }
 
     public void removeItem(int position) {

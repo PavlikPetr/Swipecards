@@ -37,8 +37,8 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
                 int[] ids = intent.getIntArrayExtra(BlackListAndBookmarkHandler.FEED_IDS);
                 boolean hasValue = intent.hasExtra(BlackListAndBookmarkHandler.VALUE);
                 boolean value = intent.getBooleanExtra(BlackListAndBookmarkHandler.VALUE, false);
-                if (ids != null && hasValue) {
-                    if (!value) {
+                if (hasValue) {
+                    if (!value && ids != null) {
                         getListAdapter().removeByUserIds(ids);
                     } else {
                         updateOnResume();
@@ -67,7 +67,7 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     }
 
     @Override
-    protected int getTypeForCounters() {
+    protected int getFeedType() {
         return CountersManager.UNKNOWN_TYPE;
     }
 

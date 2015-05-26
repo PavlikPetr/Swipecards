@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -42,7 +43,6 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.List;
@@ -85,12 +85,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         addFooterView();
         mLoadingLocker = (LockerView) findViewById(R.id.llvLeaderSending);
         if (savedInstanceState != null) {
-            try {
-                mPhotos = new Photos(
-                        new JSONArray(savedInstanceState.getString(PHOTOS)));
-            } catch (JSONException e) {
-                Debug.error(e);
-            }
+            mPhotos = JsonUtils.fromJson(savedInstanceState.getString(PHOTOS), Photos.class);
             mPosition = savedInstanceState.getInt(POSITION, 0);
             mSelectedPosition = savedInstanceState.getInt(SELECTED_POSITION, 0);
             mIsPhotoDialogShown = savedInstanceState.getBoolean(ALREADY_SHOWN);

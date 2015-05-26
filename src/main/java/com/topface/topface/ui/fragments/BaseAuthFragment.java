@@ -101,8 +101,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
     }
 
     private void showNoInternetToast() {
-        Toast.makeText(App.getContext(), R.string.general_internet_off, Toast.LENGTH_SHORT)
-                .show();
+        Utils.showToastNotification(R.string.general_internet_off, Toast.LENGTH_SHORT);
     }
 
     protected void auth(final AuthToken token) {

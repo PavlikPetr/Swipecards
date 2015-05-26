@@ -24,7 +24,6 @@ import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
 import com.topface.topface.ui.views.FeedItemViewConstructor.TypeAndFlag;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ad.NativeAd;
 import com.topface.topface.utils.ad.NativeAdManager;
 import com.topface.topface.utils.loadcontollers.FeedLoadController;
@@ -198,7 +197,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             // установка аватарки пользователя
             // какую аватарку использовать по умолчанию для забаненных и во время загрузки нормальной
             int defaultAvatarResId = (item.user.sex == Static.BOY ?
-                    R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
+                    R.drawable.rounded_avatar_male :
+                    R.drawable.rounded_avatar_female);
             holder.avatarImage.setStubResId(defaultAvatarResId);
 
             if (item.user.banned || item.user.deleted || item.user.photo == null || item.user.photo.isEmpty()) {
@@ -214,7 +214,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             }
 
             // установка имени
-            holder.name.setText(item.user.first_name);
+            holder.name.setText(item.user.firstName);
             if ((item.user.deleted || item.user.banned)) {
                 flag |= FeedItemViewConstructor.Flag.BANNED;
             }
@@ -224,7 +224,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             String age = "";
             if (item.user.age > 0) {
                 age = String.valueOf(item.user.age);
-                if (!TextUtils.isEmpty(item.user.first_name)) {
+                if (!TextUtils.isEmpty(item.user.firstName)) {
                     age = ", " + age;
                 }
             }
@@ -513,8 +513,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         mOnAvatarClickListener = listener;
     }
 
-    public static interface OnAvatarClickListener<T> {
-        public void onAvatarClick(T item, View view);
+    public interface OnAvatarClickListener<T> {
+        void onAvatarClick(T item, View view);
     }
 
     public List<String> getSelectedFeedIds() {
@@ -611,6 +611,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     public boolean isNeedFeedAd() {
-        return CacheProfile.show_ad && NativeAdManager.hasAvailableAd();
+        return false;
     }
 }

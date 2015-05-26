@@ -209,7 +209,6 @@
         <item quantity="other">%d fotografija</item>
         <item quantity="one">%d fotografija</item>
     </plurals>
-    <string name="novice_sympathy">Šaljite simpatije onima koji vam se zaista dopadaju, kako bi započeli prijatno poznanstvo</string>
     <string name="general_edit_profile_message">Molimo vas, popunite neophodna polja u anketi</string>
     <string name="general_search_null_response_error">Ništa nije pronađeno. Pokušajte izmeniti filtere</string>
     <string name="change_filters">Zameniti filtere</string>
@@ -245,8 +244,6 @@
     <string name="settings_invalid_email">Email nije tačan</string>
     <string name="chat_write_message">Napisati poruku</string>
     <string name="buying_sympathies">Kupovina simpatija</string>
-    <string name="novice_sympathies_bonus">Dobili ste %1$d simpatija na poklon! To znači da se vi sigurno dopadate %2$d ljudima, koji će vam izraziti svoju simpatiju.</string>
-    <string name="novice_buy_sympathies">Ako želite garantovano da stičete simpatije, steknite ih ovog momenta!</string>
     <string name="general_reconnect_social">Ne može se prikopčati na socijalnu mrežu. Pokušajte ponovo.</string>
     <string name="general_block">Blokirati</string>
     <string name="general_buying_disabled">U ovom momentu kupovina nije moguća</string>
@@ -295,8 +292,8 @@
     <string name="password_changing">Promena lozinke</string>
     <string name="save">Sačuvati</string>
     <string name="confirmation_successfully_sent">Potvrda je poslata na e-mail koji ste naveli</string>
+    <string name="password_confirmation_hint">Potvrda lozinke</string>
     <string name="password_hint">lozinka</string>
-    <string name="password_confirmation_hint">potvrda lozinke</string>
     <string name="enter_new_password">Unesite novu lozinku</string>
     <string name="enter_password_confirmation">Unesite potvrdu lozinke</string>
     <string name="passwords_mismatched">Lozinka se ne podudara</string>

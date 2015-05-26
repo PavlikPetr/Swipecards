@@ -19,6 +19,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.RemindRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
@@ -63,7 +64,6 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
         Utils.hideSoftKeyboard(getActivity(), mEditEmailText);
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -84,7 +84,7 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
                         changeEmailAndSendConfirmation(email);
                     }
                 } else {
-                    showToastMessage(R.string.incorrect_email);
+                    Utils.showToastNotification(R.string.incorrect_email, Toast.LENGTH_SHORT);
                 }
                 break;
             case R.id.btnConfirmed:
@@ -110,17 +110,17 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
                 AuthToken token = AuthToken.getInstance();
                 token.saveToken(token.getUserSocialId(), email, token.getPassword());
                 saveButtonSendConfirmationPressed();
-                showToastMessage(R.string.confirmation_successfully_sent);
+                Utils.showToastNotification(R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT);
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                showToastMessage(R.string.general_server_error);
+                Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
             }
 
             @Override
             public void always(IApiResponse response) {
-                onRequestEnd();
+                onRequestEnd();                
             }
         }).exec();
     }
@@ -132,17 +132,17 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
             @Override
             public void success(IApiResponse response) {
                 saveButtonSendConfirmationPressed();
-                showToastMessage(R.string.confirmation_successfully_sent);
+                Utils.showToastNotification(R.string.confirmation_successfully_sent, Toast.LENGTH_SHORT);
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                showToastMessage(R.string.general_server_error);
+                Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
             }
 
             @Override
             public void always(IApiResponse response) {
-                onRequestEnd();
+                onRequestEnd();                
             }
         }).exec();
     }
@@ -173,6 +173,9 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
 
     private void requestEmailConfirmed() {
         ProfileRequest profileRequest = new ProfileRequest(getActivity());
+        if (getActivity() instanceof BaseFragmentActivity) {
+            ((BaseFragmentActivity) getActivity()).registerRequest(profileRequest);
+        }
         onRequestStart();
         profileRequest.part = ProfileRequest.P_EMAIL_CONFIRMED;
         profileRequest.callback(new DataApiHandler<Boolean>() {
@@ -189,7 +192,7 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                showToastMessage(R.string.general_server_error);
+                Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
             }
 
             @Override
@@ -202,15 +205,11 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
 
     private void onProfileUpdated() {
         if (CacheProfile.emailConfirmed) {
-            showToastMessage(R.string.general_email_success_confirmed);
+            Utils.showToastNotification(R.string.general_email_success_confirmed, Toast.LENGTH_LONG);
             closeDialog();
         } else {
-            showToastMessage(R.string.general_email_not_confirmed);
+            Utils.showToastNotification(R.string.general_email_not_confirmed, Toast.LENGTH_LONG);
         }
-    }
-
-    private void showToastMessage(int textId) {
-        Toast.makeText(App.getContext(), textId, Toast.LENGTH_SHORT).show();
     }
 
     private void saveButtonSendConfirmationPressed() {

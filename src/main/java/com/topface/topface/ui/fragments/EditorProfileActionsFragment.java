@@ -19,6 +19,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ModerationPunish;
 import com.topface.topface.requests.ModerationUnban;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -211,7 +212,7 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
         punish.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                Toast.makeText(getActivity(), R.string.editor_ban_result_ok, Toast.LENGTH_SHORT).show();
+                Utils.showToastNotification(R.string.editor_ban_result_ok, Toast.LENGTH_SHORT);
                 showView(mLocker, false);
             }
 
@@ -243,7 +244,7 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                Toast.makeText(getActivity(), codeError, Toast.LENGTH_SHORT).show();
+                Utils.showToastNotification(response.getErrorMessage(), Toast.LENGTH_SHORT);
                 showView(mLocker, false);
             }
         }).exec();

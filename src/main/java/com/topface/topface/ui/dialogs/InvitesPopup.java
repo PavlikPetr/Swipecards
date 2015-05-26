@@ -97,13 +97,18 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
             public void success(IApiResponse response) {
                 boolean isPremium = response.getJsonResult().optBoolean("premium");
                 if (isPremium) {
-                    EasyTracker.sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumTrue", (long) contacts.size());
-                    EasyTracker.sendEvent("InvitesPopup", "PremiumReceived", "", (long) CacheProfile.getOptions().premium_period);
-                    Toast.makeText(App.getContext(), Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period), Toast.LENGTH_LONG).show();
+                    EasyTracker.sendEvent("InvitesPopup", "SuccessWithNotChecked",
+                            "premiumTrue", (long) contacts.size());
+                    EasyTracker.sendEvent("InvitesPopup", "PremiumReceived",
+                            "", (long) CacheProfile.getOptions().premium_period);
+                    Utils.showToastNotification(
+                            Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period),
+                            Toast.LENGTH_LONG
+                    );
                     CacheProfile.canInvite = false;
                 } else {
                     EasyTracker.sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumFalse", (long) contacts.size());
-                    Toast.makeText(getActivity(), getString(R.string.invalid_contacts), Toast.LENGTH_LONG).show();
+                    Utils.showToastNotification(getString(R.string.invalid_contacts), Toast.LENGTH_LONG);
                 }
             }
 

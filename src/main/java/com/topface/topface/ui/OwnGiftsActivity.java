@@ -5,6 +5,7 @@ import com.topface.topface.utils.CacheProfile;
 
 /**
  * Created by saharuk on 06.04.15.
+ * Activity to display gifts
  */
 public class OwnGiftsActivity extends CheckAuthActivity<OwnGiftsFragment> {
     @Override

@@ -3,6 +3,7 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.topface.framework.JsonUtils;
 import com.topface.topface.utils.ad.NativeAd;
 
 import org.json.JSONObject;
@@ -23,6 +24,8 @@ public class FeedPhotoBlog extends FeedItem implements Parcelable {
     public FeedPhotoBlog() {
     }
 
+    //Нужен для рефлекшена в FeedListData метод getList()
+    @SuppressWarnings("unused")
     public FeedPhotoBlog(JSONObject data) {
         super(data);
     }
@@ -37,7 +40,7 @@ public class FeedPhotoBlog extends FeedItem implements Parcelable {
 
     @Override
     public void fillData(JSONObject item) {
-        user = new FeedUser(item, this);
+        this.user = JsonUtils.fromJson(item.toString(), FeedUser.class);
     }
 
 }

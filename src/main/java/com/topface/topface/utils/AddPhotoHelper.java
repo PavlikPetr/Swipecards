@@ -15,7 +15,6 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,14 +37,12 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -141,7 +138,7 @@ public class AddPhotoHelper {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(mContext, R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                                Utils.showErrorMessage();
                             }
                         });
                         return;
@@ -274,9 +271,9 @@ public class AddPhotoHelper {
         }
 
         if (!isPhotoCorrectSize(uri)) {
-            Toast.makeText(mContext, String.format(mContext.getString(R.string.incorrect_photo_size),
+            Utils.showToastNotification(String.format(mContext.getString(R.string.incorrect_photo_size),
                     minPhotoSize.width,
-                    minPhotoSize.height), Toast.LENGTH_SHORT).show();
+                    minPhotoSize.height), Toast.LENGTH_SHORT);
             return;
         }
         // если начинаем грузить аватарку, то выставляем флаг, чтобы resumeFragment не вызвал показ попапа
@@ -284,7 +281,7 @@ public class AddPhotoHelper {
             App.getConfig().getUserConfig().setUserAvatarAvailable(true);
             App.getConfig().getUserConfig().saveConfig();
         }
-        Toast.makeText(mContext, R.string.photo_is_uploading, Toast.LENGTH_SHORT).show();
+        Utils.showToastNotification(R.string.photo_is_uploading, Toast.LENGTH_SHORT);
         showProgressDialog();
         mNotificationManager = UserNotificationManager.getInstance();
 
@@ -344,6 +341,8 @@ public class AddPhotoHelper {
             public void fail(int codeError, IApiResponse response) {
                 if (mHandler != null) {
                     mHandler.sendEmptyMessage(ADD_PHOTO_RESULT_ERROR);
+                } else {
+                    Utils.showToastNotification(mContext.getString(R.string.photo_add_error), Toast.LENGTH_LONG);
                 }
                 photoAddRequest.cancel();
                 showErrorMessage(codeError);
@@ -393,19 +392,18 @@ public class AddPhotoHelper {
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
 
-
     private void showErrorMessage(int codeError) {
         switch (codeError) {
             case ErrorCodes.INCORRECT_PHOTO_DATA:
-                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo), Toast.LENGTH_LONG).show();
+                Utils.showToastNotification(mContext.getString(R.string.incorrect_photo), Toast.LENGTH_LONG);
                 break;
             case ErrorCodes.INCORRECT_PHOTO_FORMAT:
-                Toast.makeText(mContext, mContext.getString(R.string.incorrect_photo_format), Toast.LENGTH_LONG).show();
+                Utils.showToastNotification(mContext.getString(R.string.incorrect_photo_format), Toast.LENGTH_LONG);
                 break;
             case ErrorCodes.INCORRECT_PHOTO_SIZES:
-                Toast.makeText(mContext, String.format(mContext.getString(R.string.incorrect_photo_size),
+                Utils.showToastNotification(String.format(mContext.getString(R.string.incorrect_photo_size),
                         minPhotoSize.width,
-                        minPhotoSize.height), Toast.LENGTH_SHORT).show();
+                        minPhotoSize.height), Toast.LENGTH_SHORT);
                 break;
         }
     }
@@ -466,18 +464,13 @@ public class AddPhotoHelper {
         if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
             Photo photo = (Photo) msg.obj;
             // ставим фото на аватарку только если она едиснтвенная
-                if (CacheProfile.photos.size() == 0) {
-                    CacheProfile.photo = photo;
-                }
+            if (CacheProfile.photos.size() == 0) {
+                CacheProfile.photo = photo;
+            }
             // добавляется фото в начало списка
             CacheProfile.photos.addFirst(photo);
             // Увеличиваем общее количество фотографий юзера
             CacheProfile.totalPhotos += 1;
-            ArrayList<Photo> photosForAdd = new ArrayList<>();
-            photosForAdd.add(photo);
-            Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photosForAdd);
-            LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
             // оповещаем всех об изменениях
             CacheProfile.sendUpdateProfileBroadcast();
             Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();

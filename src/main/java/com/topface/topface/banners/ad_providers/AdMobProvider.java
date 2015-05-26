@@ -10,6 +10,7 @@ import com.google.android.gms.ads.AdView;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.banners.IPageWithAds;
+import com.topface.topface.banners.RefreshablePageWithAds;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.Calendar;
@@ -28,11 +29,15 @@ class AdMobProvider extends AbstractAdsProvider {
         createView(page);
         setCallback(callbacks);
         loadAdMob();
+        if (page instanceof RefreshablePageWithAds) {
+            ((RefreshablePageWithAds) page).setRefresher(new IRefresher() {
+                @Override
+                public void refreshBanner() {
+                    loadAdMob();
+                }
+            });
+        }
         return true;
-    }
-
-    public AdView getAdView() {
-        return adView;
     }
 
     public Context getContext() {
