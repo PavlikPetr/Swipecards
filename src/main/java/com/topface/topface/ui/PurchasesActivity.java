@@ -276,7 +276,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     }
 
     private boolean isScreenShow() {
-        return showExtraScreen(getRandomPosByProbability(getListOfExtraSreens()));
+        return showExtraScreen(getRandomPosByProbability(getListOfExtraScreens()));
     }
 
 
@@ -307,18 +307,18 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         return null;
     }
 
-    private List<EXTRA_SCREEN> getListOfExtraSreens() {
-        List<EXTRA_SCREEN> sreensArray = new ArrayList<>();
+    private List<EXTRA_SCREEN> getListOfExtraScreens() {
+        List<EXTRA_SCREEN> screensArray = new ArrayList<>();
         if (isTopfaceOfferwallAvailable()) {
-            sreensArray.add(EXTRA_SCREEN.TOPFACE_OFFERWALL_SCREEN);
+            screensArray.add(EXTRA_SCREEN.TOPFACE_OFFERWALL_SCREEN);
         }
         if (isBonusAvailable()) {
-            sreensArray.add(EXTRA_SCREEN.BONUS_SCREEN);
+            screensArray.add(EXTRA_SCREEN.BONUS_SCREEN);
         }
         if (isSMSInviteAvailable()) {
-            sreensArray.add(EXTRA_SCREEN.SMS_INVITE_SCREEN);
+            screensArray.add(EXTRA_SCREEN.SMS_INVITE_SCREEN);
         }
-        return sreensArray;
+        return screensArray;
     }
 
 }
