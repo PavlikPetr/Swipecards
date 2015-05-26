@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -125,6 +126,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Drawable doubleDelight;
     private boolean mCanSendAlbumReq = true;
     private SearchUser mCurrentUser;
+    private int mCurrentStatusBarColor;
     private BroadcastReceiver mRateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -177,6 +179,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     };
 
+    @Override
+    protected int getStatusBarColor() {
+        return mCurrentStatusBarColor;
+    }
 
     private BroadcastReceiver mOptionsReceiver = new BroadcastReceiver() {
         @Override
@@ -316,6 +322,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onResume() {
+        if (mIsHide) {
+            setDarkStatusBarColor();
+        } else {
+            setMainStatusBarColor();
+        }
         super.onResume();
         if (getTitleSetter() != null) {
             getTitleSetter().setOnline(mCurrentUser != null && mCurrentUser.online);
@@ -363,6 +374,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    private void setDarkStatusBarColor() {
+        mCurrentStatusBarColor = R.color.status_bar_dating_screen_hide_mode_color;
+        setStatusBarColor();
+    }
+
+    private void setMainStatusBarColor() {
+        mCurrentStatusBarColor = R.color.light_theme_color_primary_dark;
+        setStatusBarColor();
+    }
+
     private void initViews(final KeyboardListenerLayout root) {
         mRetryBtn = (ImageButton) root.findViewById(R.id.btnUpdate);
         mRetryBtn.setOnClickListener(this);
@@ -385,6 +406,26 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mAnimationHelper = new AnimationHelper(getActivity(), R.anim.fade_in, R.anim.fade_out);
         mAnimationHelper.addView(mDatingCounter);
         mAnimationHelper.addView(mDatingResources);
+        mAnimationHelper.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                if (!mIsHide) {
+                    setMainStatusBarColor();
+                }
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (mIsHide) {
+                    setDarkStatusBarColor();
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
 
         mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
 
@@ -708,7 +749,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.btnDatingProfile: {
                 if (mCurrentUser != null && getActivity() != null) {
-                    Intent intent = UserProfileActivity.createIntent(null, mCurrentUser.photo,mCurrentUser.id, null, isChatAvailable()
+                    Intent intent = UserProfileActivity.createIntent(null, mCurrentUser.photo, mCurrentUser.id, null, isChatAvailable()
                             , isAddToFavoritsAvailable(), mCurrentUser.firstName + ", " + mCurrentUser.age, mCurrentUser.city.name);
                     startActivityForResult(intent, UserProfileActivity.INTENT_USER_PROFILE);
                     EasyTracker.sendEvent("Dating", "Additional", "Profile", 1L);

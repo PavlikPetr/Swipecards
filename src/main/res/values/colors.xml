@@ -76,6 +76,12 @@
     <color name="light_theme_color_primary">#03a9f4</color>
     <color name="light_theme_color_primary_dark">#33434D</color>
     <color name="light_theme_color_accent">#ee4493</color>
+    <color name="status_bar_dark_gray_color">@color/status_bar_dating_screen_hide_mode_color</color>
+    <color name="status_bar_dating_lock_popup_color">#4d4d4d</color>
+    <color name="status_bar_dating_screen_hide_mode_color">#252525</color>
+
+    <color name="dating_fragment_background_color">@color/status_bar_dating_screen_hide_mode_color
+    </color>
 
     <color name="edit_dialog_buttons_divider">#DCDCDC</color>
 </resources>
