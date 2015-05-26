@@ -62,6 +62,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         //Проверяем флаг, нужно ли обновлять диалоги
         if (mNeedRefresh) {
             updateData(mPushUpdating, false);
+            mPushUpdating = true;
             mNeedRefresh = false;
         }
     }
