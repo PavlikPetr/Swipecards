@@ -323,7 +323,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mCurrentUser != null) {
             fillUserInfo(mCurrentUser);
         }
-        if (CacheProfile.getOptions().isHideAdmiration) {
+        if (CacheProfile.getOptions().isHideAdmirations) {
             mDatingCounter.setVisibility(View.GONE);
             mDatingResources.setVisibility(View.GONE);
         }
@@ -406,11 +406,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
 
         ViewStub stub = (ViewStub) root.findViewById(R.id.vfDatingButtons);
-        stub.setLayoutResource(CacheProfile.getOptions().isHideAdmiration ? R.layout.hide_admiration_dating_buttons : R.layout.dating_buttons);
+        stub.setLayoutResource(CacheProfile.getOptions().isHideAdmirations ? R.layout.hide_admiration_dating_buttons : R.layout.dating_buttons);
         mDatingButtons = stub.inflate();
         initControlButtons(root);
         initInstantMessageController(mRoot);
-        if (!CacheProfile.getOptions().isHideAdmiration) {
+        if (!CacheProfile.getOptions().isHideAdmirations) {
             // Dating controls
             mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
 
@@ -459,7 +459,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void initControlButtons(View view) {
         // Control Buttons
-        if (!CacheProfile.getOptions().isHideAdmiration) {
+        if (!CacheProfile.getOptions().isHideAdmirations) {
             mDelightBtn = (Button) view.findViewById(R.id.btnDatingAdmiration);
             mDelightBtn.setOnClickListener(this);
         }
@@ -855,7 +855,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         Resources res = getResources();
 
         setUserOnlineStatus(currUser);
-        if (!CacheProfile.getOptions().isHideAdmiration) {
+        if (!CacheProfile.getOptions().isHideAdmirations) {
             setUserSex(currUser, res);
             setLikeButtonDrawables(currUser);
         }
@@ -996,7 +996,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
 
             }).exec();
-        } else if (!CacheProfile.getOptions().isHideAdmiration && hasOneSympathyOrDelight
+        } else if (!CacheProfile.getOptions().isHideAdmirations && hasOneSympathyOrDelight
                 && CacheProfile.likes <= Novice.MIN_LIKES_QUANTITY
                 && mNovice.isShowBuySympathies()) {
             showControls();
@@ -1058,7 +1058,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void unlockControls() {
         mProgressBar.setVisibility(View.GONE);
-        if (!mIsHide && !CacheProfile.getOptions().isHideAdmiration) {
+        if (!mIsHide && !CacheProfile.getOptions().isHideAdmirations) {
             mDatingCounter.setVisibility(View.VISIBLE);
             mUserInfoStatus.setVisibility(View.VISIBLE);
         } else {

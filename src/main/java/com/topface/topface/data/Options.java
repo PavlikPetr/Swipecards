@@ -88,7 +88,7 @@ public class Options extends AbstractData {
     /**
      * Флаг непоказа восхищений
      */
-    public boolean isHideAdmiration = false;
+    public boolean isHideAdmirations = false;
 
     /**
      * title и url для экрана "О программе"
