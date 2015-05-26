@@ -139,6 +139,7 @@ public class SequencedStartAction implements IStartAction {
 
     public interface IUiRunner {
         void runOnUiThread(Runnable runnable);
+
         boolean isFinishing();
     }
 }

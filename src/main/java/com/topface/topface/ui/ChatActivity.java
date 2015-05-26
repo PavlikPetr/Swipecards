@@ -46,7 +46,7 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
         if (fromGcm) {
             intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_CHAT);
         }
-        if(photo!=null){
+        if (photo != null) {
             intent.putExtra(ChatFragment.INTENT_AVATAR, photo);
         }
         return intent;

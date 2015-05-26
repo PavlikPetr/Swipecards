@@ -46,12 +46,12 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     private BannersController mBannersController;
 
     private TabbedFeedPageAdapter mBodyPagerAdapter;
-    
+
     protected static int mVisitorsastOpenedPage = 0;
     protected static int mLikesLastOpenedPage = 0;
     protected static int mDialogsLastOpenedPage = 0;
 
-    public static void setTabsDefaultPosition(){
+    public static void setTabsDefaultPosition() {
         mVisitorsastOpenedPage = 0;
         mLikesLastOpenedPage = 0;
         mDialogsLastOpenedPage = 0;
@@ -157,13 +157,14 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
 
     protected void initFloatBlock() {
         Utils.addOnGlobalLayoutListener(mPager, new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override public void onGlobalLayout() {
+            @Override
+            public void onGlobalLayout() {
                 boolean needNativeAd = false;
                 if (mBodyPagerAdapter != null) {
-                    for (int i=0; i< mBodyPagerAdapter.getCount(); i++) {
+                    for (int i = 0; i < mBodyPagerAdapter.getCount(); i++) {
                         Fragment feed = mBodyPagerAdapter.getItem(i);
                         if (feed instanceof FeedFragment) {
-                            FeedAdapter adapter = ((FeedFragment)feed).getListAdapter();
+                            FeedAdapter adapter = ((FeedFragment) feed).getListAdapter();
                             if (adapter != null && adapter.isNeedFeedAd()) {
                                 needNativeAd = true;
                                 break;
