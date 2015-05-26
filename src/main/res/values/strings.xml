@@ -185,6 +185,7 @@
     <string name="filter_age_start_prefix">From %s</string>
     <string name="filter_age_end_prefix">to %s</string>
     <string name="filter_cities_all">All cities</string>
+    <string name="purchase_header_title">Balance:</string>
     <string name="buying_header_title">Purchases</string>
     <plurals name="buying_gift_you_need_coins">
         <item quantity="other">To be able to send a gift, get %d more coins</item>

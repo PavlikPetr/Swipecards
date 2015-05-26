@@ -409,6 +409,8 @@ public class OverflowMenu {
                         public void success(IApiResponse response) {
                             super.success(response);
                             showBookmarkToast(false);
+                            LocalBroadcastManager.getInstance(mActivity).
+                                    sendBroadcast(new Intent(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
                         }
 
                         @Override
@@ -428,6 +430,8 @@ public class OverflowMenu {
                         public void success(IApiResponse response) {
                             super.success(response);
                             showBookmarkToast(true);
+                            LocalBroadcastManager.getInstance(mActivity).
+                                    sendBroadcast(new Intent(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
                         }
 
                         @Override

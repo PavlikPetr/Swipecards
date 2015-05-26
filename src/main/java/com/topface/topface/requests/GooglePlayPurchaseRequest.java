@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import com.topface.billing.DeveloperPayload;
 import com.topface.topface.App;
 import com.topface.topface.data.AppsFlyerData;
+import com.topface.topface.data.ProductsDetails;
+import com.topface.topface.utils.CacheProfile;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +20,8 @@ public class GooglePlayPurchaseRequest extends PurchaseRequest {
     private String data; // строка данных заказа от Google Play
     private String signature; // подпись данных заказа
     private String testProductId; //id продукта, нужен при тестовых покупках
+    private float cost = 0;// {Number} cost - стоимость покупки в валюте пользователя
+    private String currencyCode; // {String} currencyCode - код валюты пользователя ISO 4217
 
     public GooglePlayPurchaseRequest(Purchase product, Context context) {
         super(product, context);
@@ -30,6 +34,9 @@ public class GooglePlayPurchaseRequest extends PurchaseRequest {
         if (developerPayload != null && !TextUtils.equals(developerPayload.sku, product.getSku())) {
             this.testProductId = developerPayload.sku;
         }
+        ProductsDetails.ProductDetail detail = CacheProfile.getMarketProductsDetails().getProductDetail(product.getSku());
+        currencyCode = detail.currency;
+        cost = (float) (detail.price / ProductsDetails.MICRO_AMOUNT);
     }
 
     @Override
@@ -45,13 +52,15 @@ public class GooglePlayPurchaseRequest extends PurchaseRequest {
                 .put("signature", signature)
                 .put("source", getDeveloperPayload().source);
         requestData.put("appsflyer", new AppsFlyerData(context).toJsonWithConversions(App.getConversionHolder()));
-
         //Если включены тестовые платежи, то отправляем еще и id оригинального платежа,
         //что бы нам начислил реальный продукт
         if (!TextUtils.isEmpty(testProductId)) {
             requestData.put("testProductId", testProductId);
         }
-
+        if (!TextUtils.isEmpty(currencyCode)) {
+            requestData.put("currencyCode", currencyCode)
+                    .put("cost", cost);
+        }
         return requestData;
     }
 

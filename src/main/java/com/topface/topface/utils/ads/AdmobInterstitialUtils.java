@@ -183,4 +183,9 @@ public class AdmobInterstitialUtils {
 
         abstract void onAdLoaded(InterstitialAd interstitial);
     }
+
+    public static void onLogout() {
+        loadedInterstitials.clear();
+        mPreloadingInterstitialsCount.set(0);
+    }
 }
