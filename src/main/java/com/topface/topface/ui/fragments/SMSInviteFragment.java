@@ -1,34 +1,39 @@
 package com.topface.topface.ui.fragments;
 
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.topface.framework.JsonUtils;
 import com.topface.topface.R;
+import com.topface.topface.receivers.CatchSMSActions;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GenerateSMSInviteRequest;
+import com.topface.topface.requests.GetSMSInvitesStatusesRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.ContactsProvider;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Set;
 
 public class SMSInviteFragment extends ContentListFragment {
     public static final String SMS_PHONE_NUMBER = "sms_phone_number";
+    public static final String SMS_PHONE_ID = "sms_phone_id";
     public static final String SMS_TEXT = "sms_text";
     public static final String SMS_ID = "sms_id";
     private static final String ALL_READ_CONTACTS = "all_read_contacts";
@@ -38,13 +43,26 @@ public class SMSInviteFragment extends ContentListFragment {
     private static final String NO_CONTACTS_VISIBILITY = "no_contacts_visibility";
     private static final String HEADER_TEXT = "header_text";
     private final static int ONE_REQUEST_CONTACTS_LIMIT = 10;
-    Set<String> mInvitedIds;
     private boolean isUpdatable = false;
     private boolean isInProgress;
     private int mOffsetPosition;
     private int mLastContactBoxSize;
     private TextView mNoContactsAvailable;
     private TextView mHeaderText;
+    private int mInvitationsSentCount;
+    private int mFriendsRegisteredCount;
+
+    private BroadcastReceiver mSMSCountersReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mInvitationsSentCount = intent.getIntExtra(CatchSMSActions.INVITATIONS_SENT_COUNT, mInvitationsSentCount);
+            mFriendsRegisteredCount = intent.getIntExtra(CatchSMSActions.FRIENDS_REGISTERED_COUNT, mFriendsRegisteredCount);
+            setHeaderText();
+            if (null != getAdapter()) {
+                ((ContactsAdapter) getAdapter()).setUserStatus(intent.getStringExtra(SMS_PHONE_ID), intent.getIntExtra(CatchSMSActions.SMS_SENT_STATUS, 0));
+            }
+        }
+    };
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -117,64 +135,39 @@ public class SMSInviteFragment extends ContentListFragment {
 
     // отправляем список номеров на сервер для их проверки и назначения статуса каждому из них
     private void validateContactsOnServer(final ArrayList<ContactsProvider.Contact> contacts) {
-        testParse(contacts);
-//        new GetSMSInvitesStatusesRequest(getActivity(), contacts).callback(new ApiHandler() {
-//            @Override
-//            public void success(IApiResponse response) {
-//                ValidatedData data = JsonUtils.fromJson(response.toString(), ValidatedData.class);
-//                addContactsStatuses(contacts, data);
-//            }
-//
-//            @Override
-//            public void fail(int codeError, IApiResponse response) {
-////                String responseString = "";
-////                try {
-////                    responseString = createFakeResponse(contacts).toString();
-////                } catch (JSONException e) {
-////                    e.printStackTrace();
-////                }
-////                ValidatedData data = JsonUtils.fromJson(responseString, ValidatedData.class);
-////                addContactsStatuses(contacts, data);
-//            }
-//        }).exec();
+//        testParse(contacts);
+        new GetSMSInvitesStatusesRequest(getActivity(), contacts).callback(new DataApiHandler<ArrayList<ContactsProvider.Contact>>() {
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+
+            }
+
+            @Override
+            protected void success(ArrayList<ContactsProvider.Contact> data, IApiResponse response) {
+                setHeaderText();
+                addContacts(data);
+            }
+
+            @Override
+            protected ArrayList<ContactsProvider.Contact> parseResponse(ApiResponse response) {
+                ValidatedData data = JsonUtils.fromJson(response.toString(), ValidatedData.class);
+                if (null != data) {
+                    mInvitationsSentCount = data.sentCount;
+                    mFriendsRegisteredCount = data.registeredCount;
+                }
+                return addContactsStatuses(contacts, data);
+            }
+
+            @Override
+            public void always(IApiResponse response) {
+                super.always(response);
+                showProgress(false);
+            }
+        }).exec();
     }
 
-    // TEST
-    private void testParse(ArrayList<ContactsProvider.Contact> contacts) {
-        String responseString = "";
-        try {
-            responseString = createFakeResponse(contacts).toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        ValidatedData data = JsonUtils.fromJson(responseString, ValidatedData.class);
-        setHeaderText(data.sentCount, data.registeredCount);
-        addContactsStatuses(contacts, data);
-    }
-
-    private JSONObject createFakeResponse(ArrayList<ContactsProvider.Contact> contacts) throws JSONException {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("items", createJsonArray(contacts));
-        jsonObject.put("sentCount", 4);
-        jsonObject.put("registeredCount", 1);
-        return jsonObject;
-    }
-
-    private JSONArray createJsonArray(ArrayList<ContactsProvider.Contact> contacts) throws JSONException {
-        JSONArray res = new JSONArray();
-        for (ContactsProvider.Contact contact : contacts) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("phone", contact.getPhone());
-//            jsonObject.put("status", new Random().nextInt(3));
-            jsonObject.put("status", 0);
-            res.put(jsonObject);
-        }
-        return res;
-    }
-
-    //
-
-    private void addContactsStatuses(ArrayList<ContactsProvider.Contact> contacts, ValidatedData validatedData) {
+    private ArrayList<ContactsProvider.Contact> addContactsStatuses(ArrayList<ContactsProvider.Contact> contacts, ValidatedData validatedData) {
         for (ContactsProvider.Contact contact : contacts) {
             for (ValidatedNumber validatedNumber : validatedData.items) {
                 if (contact.getPhone().equals(validatedNumber.phone)) {
@@ -183,13 +176,12 @@ public class SMSInviteFragment extends ContentListFragment {
                 }
             }
         }
-        removeInvilidNumber(contacts);
+        return removeInvilidNumber(contacts);
     }
 
     // добавляем провалидированные номера в адаптер
     private void addContacts(ArrayList<ContactsProvider.Contact> contacts) {
         mOffsetPosition += mLastContactBoxSize;
-        showProgress(false);
         if (getAdapter() != null) {
             ((ContactsAdapter) getAdapter()).addContacts(contacts);
             getAdapter().notifyDataSetChanged();
@@ -245,6 +237,7 @@ public class SMSInviteFragment extends ContentListFragment {
                 holder.phone = (TextView) convertView.findViewById(R.id.contact_content);
                 holder.invite = (Button) convertView.findViewById(R.id.contact_invite_button);
                 holder.invitedText = (TextView) convertView.findViewById(R.id.contact_invited_text);
+                holder.progress = (ProgressBar) convertView.findViewById(R.id.contact_progress_bar);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
@@ -255,28 +248,85 @@ public class SMSInviteFragment extends ContentListFragment {
             return convertView;
         }
 
+        public void setUserStatus(String phoneId, int status) {
+            Integer position = getContactPositionById(phoneId);
+            if (null != position) {
+                contacts.get(position).setStatus(status);
+                notifyDataSetChanged();
+            }
+        }
+
+        private Integer getContactPositionById(String id) {
+            for (int i = 0; i < contacts.size(); i++) {
+                if (contacts.get(i).getId().equals(id)) {
+                    return i;
+                }
+            }
+            return null;
+        }
+
+        private void setButtonVisibility(ViewHolder holder, boolean isVisible) {
+            if (null != holder) {
+                holder.invite.setVisibility(isVisible ? View.VISIBLE : View.INVISIBLE);
+            }
+        }
+
+        private void setTextVisibility(ViewHolder holder, boolean isVisible) {
+            if (null != holder) {
+                holder.invitedText.setVisibility(isVisible ? View.VISIBLE : View.INVISIBLE);
+            }
+        }
+
+        private void setProgressVisibility(ViewHolder holder, boolean isVisible) {
+            if (null != holder) {
+                holder.progress.setVisibility(isVisible ? View.VISIBLE : View.INVISIBLE);
+            }
+        }
+
+        private void setButtonVisible(ViewHolder holder) {
+            setButtonVisibility(holder, true);
+            setTextVisibility(holder, false);
+            setProgressVisibility(holder, false);
+        }
+
+        private void setTextVisible(ViewHolder holder) {
+            setButtonVisibility(holder, false);
+            setTextVisibility(holder, true);
+            setProgressVisibility(holder, false);
+        }
+
+        private void setProgressVisible(ViewHolder holder) {
+            setButtonVisibility(holder, false);
+            setTextVisibility(holder, false);
+            setProgressVisibility(holder, true);
+        }
+
         private void initHolder(ViewHolder holder, final ContactsProvider.Contact contact) {
             holder.photo.setImageURI(contact.getPhoto());
             holder.name.setText(contact.getName());
             holder.phone.setText(contact.getPhone());
             PHONES_STATUSES status = getCorrelateSatus(contact.getStatus());
             switch (status) {
+                case USER_IN_PROGRESS:
+                    setProgressVisible(holder);
+                    holder.invite.setOnClickListener(null);
+                    break;
                 case CAN_SEND_CONFIRMATION:
                     holder.invite.setText(status.getResourceId());
-                    holder.invite.setVisibility(View.VISIBLE);
-                    holder.invitedText.setVisibility(View.INVISIBLE);
+                    setButtonVisible(holder);
                     holder.invite.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            sendRequestToGetSMSText(contact.getPhone());
+                            contact.setStatus(PHONES_STATUSES.USER_IN_PROGRESS.getPosition());
+                            notifyDataSetChanged();
+                            sendRequestToGetSMSText(contact.getPhone(), contact.getId());
                         }
                     });
                     break;
                 default:
                     holder.invitedText.setText(status.getResourceId());
-                    holder.invite.setVisibility(View.INVISIBLE);
                     holder.invite.setOnClickListener(null);
-                    holder.invitedText.setVisibility(View.VISIBLE);
+                    setTextVisible(holder);
                     break;
 
             }
@@ -288,6 +338,7 @@ public class SMSInviteFragment extends ContentListFragment {
             TextView phone;
             Button invite;
             TextView invitedText;
+            ProgressBar progress;
         }
     }
 
@@ -317,10 +368,15 @@ public class SMSInviteFragment extends ContentListFragment {
         CAN_SEND_CONFIRMATION(0, R.string.status_can_send_confirmation),
         INVILID_PHONE_NUMBER(1, R.string.status_invilid_phone_number),
         CONFIRMATION_WAS_SENT(2, R.string.status_confirmation_was_sent),
-        USER_REGISTERED(3, R.string.status_user_registered);
+        USER_REGISTERED(3, R.string.status_user_registered),
+        USER_IN_PROGRESS(4);
 
         private int pos;
         private int resourceId;
+
+        PHONES_STATUSES(int pos) {
+            this(pos, 0);
+        }
 
         PHONES_STATUSES(int pos, int resourceId) {
             this.pos = pos;
@@ -345,33 +401,14 @@ public class SMSInviteFragment extends ContentListFragment {
         return PHONES_STATUSES.INVILID_PHONE_NUMBER;
     }
 
-    private void removeInvilidNumber(ArrayList<ContactsProvider.Contact> contact) {
-        new removeInvilidNumberAsync().execute(contact);
-    }
-
-    private class removeInvilidNumberAsync extends AsyncTask<ArrayList<ContactsProvider.Contact>, Void, ArrayList<ContactsProvider.Contact>> {
-        @Override
-        protected void onPostExecute(ArrayList<ContactsProvider.Contact> contacts) {
-            super.onPostExecute(contacts);
-            addContacts(contacts);
-        }
-
-        @Override
-        protected final ArrayList<ContactsProvider.Contact> doInBackground(ArrayList<ContactsProvider.Contact>... params) {
-            ArrayList<ContactsProvider.Contact> contacts = params[0];
-            for (int i = 0; i < contacts.size(); i++) {
-                if (contacts.get(i).getStatus() == PHONES_STATUSES.INVILID_PHONE_NUMBER.getPosition()) {
-                    contacts.remove(i);
-                    i--;
-                }
+    private ArrayList<ContactsProvider.Contact> removeInvilidNumber(ArrayList<ContactsProvider.Contact> contact) {
+        for (int i = 0; i < contact.size(); i++) {
+            if (contact.get(i).getStatus() == PHONES_STATUSES.INVILID_PHONE_NUMBER.getPosition()) {
+                contact.remove(i);
+                i--;
             }
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return contacts;
         }
+        return contact;
     }
 
     // показываем или главный лоадер в центре экрана или маленький в футере списка в зависимости от
@@ -391,13 +428,13 @@ public class SMSInviteFragment extends ContentListFragment {
     }
 
     // отправляем запрос для получения текста смс сообщения
-    private void sendRequestToGetSMSText(final String phoneNumber) {
+    private void sendRequestToGetSMSText(final String phoneNumber, final String id) {
         new GenerateSMSInviteRequest(getActivity(), phoneNumber).callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
                 SMSInvite smsInvite = JsonUtils.fromJson(response.toString(), SMSInvite.class);
                 if (null != smsInvite) {
-                    sendSMSMessage(phoneNumber, smsInvite);
+                    sendSMSMessage(phoneNumber, id, smsInvite);
                 }
             }
 
@@ -409,13 +446,19 @@ public class SMSInviteFragment extends ContentListFragment {
     }
 
     // отправляем sms сообщение
-    private void sendSMSMessage(String phoneNumber, SMSInvite smsInvite) {
+    private void sendSMSMessage(String phoneNumber, String id, SMSInvite smsInvite) {
+        Log.e("TOPFACE_TEST", "SMSInviteFragment text " + smsInvite.text);
+        Log.e("TOPFACE_TEST", "SMSInviteFragment phone " + phoneNumber);
+        Log.e("TOPFACE_TEST", "SMSInviteFragment id " + smsInvite.id);
+        Log.e("TOPFACE_TEST", "SMSInviteFragment phone id " + id);
+
         Intent sendIntent = new Intent(CatchSMSActions.FILTER_SMS_SENT);
         sendIntent.putExtra(SMS_PHONE_NUMBER, phoneNumber);
+        sendIntent.putExtra(SMS_PHONE_ID, id);
         sendIntent.putExtra(SMS_TEXT, smsInvite.text);
         sendIntent.putExtra(SMS_ID, smsInvite.id);
         PendingIntent sendPI = PendingIntent.getBroadcast(getActivity(), 0,
-                sendIntent, 0);
+                sendIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         SmsManager sms = SmsManager.getDefault();
         if (null != sms) {
             sms.sendTextMessage(phoneNumber, null, smsInvite.text, sendPI, null);
@@ -439,9 +482,9 @@ public class SMSInviteFragment extends ContentListFragment {
         return mNoContactsAvailable != null && mNoContactsAvailable.getVisibility() == View.VISIBLE;
     }
 
-    private void setHeaderText(int invited, int registered) {
+    private void setHeaderText() {
         if (null != mHeaderText) {
-            mHeaderText.setText(getResources().getString(R.string.premium_for_invitations) + "\n" + generateText(invited, registered));
+            mHeaderText.setText(getResources().getString(R.string.premium_for_invitations) + "\n" + generateText(mInvitationsSentCount, mFriendsRegisteredCount));
         }
     }
 
@@ -451,5 +494,17 @@ public class SMSInviteFragment extends ContentListFragment {
                 invited,
                 registered
         );
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mSMSCountersReceiver, new IntentFilter(CatchSMSActions.SMS_WAS_SEND));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mSMSCountersReceiver);
     }
 }

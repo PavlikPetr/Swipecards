@@ -468,7 +468,7 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".ui.fragments.CatchSMSActions">
+        <receiver android:name=".receivers.CatchSMSActions">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_SEND" />
             </intent-filter>

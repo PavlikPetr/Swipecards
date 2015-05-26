@@ -35,14 +35,20 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="104dp"
         android:layout_height="wrap_content"
         android:gravity="center">
+
+        <ProgressBar
+            android:id="@+id/contact_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
 
         <Button
             android:id="@+id/contact_invite_button"
             style="@style/Widget.Topface.Button.Blue"
-            android:layout_width="104dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:singleLine="false" />
@@ -50,7 +56,7 @@
         <TextView
             android:id="@+id/contact_invited_text"
             style="@style/ListMessageText"
-            android:layout_width="104dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
