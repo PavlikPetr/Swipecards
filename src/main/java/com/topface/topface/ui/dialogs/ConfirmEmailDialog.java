@@ -19,7 +19,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.RemindRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
@@ -173,7 +173,9 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
 
     private void requestEmailConfirmed() {
         ProfileRequest profileRequest = new ProfileRequest(getActivity());
-        ((NavigationActivity) getActivity()).registerRequest(profileRequest);
+        if (getActivity() instanceof BaseFragmentActivity) {
+            ((BaseFragmentActivity) getActivity()).registerRequest(profileRequest);
+        }
         onRequestStart();
         profileRequest.part = ProfileRequest.P_EMAIL_CONFIRMED;
         profileRequest.callback(new DataApiHandler<Boolean>() {

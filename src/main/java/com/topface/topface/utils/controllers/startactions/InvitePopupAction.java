@@ -14,7 +14,6 @@ import com.topface.topface.ui.dialogs.InvitesPopup;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.EasyTracker;
-import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
 
@@ -47,7 +46,7 @@ public class InvitePopupAction extends LinkedStartAction {
 
     @Override
     public boolean isApplicable() {
-        return isFacebook() || InvitesPopup.isApplicable() && getContactsCount() >= CacheProfile.getOptions().contacts_count;
+        return InvitesPopup.isApplicable() && getContactsCount() >= CacheProfile.getOptions().contacts_count;
     }
 
     @Override
@@ -60,15 +59,13 @@ public class InvitePopupAction extends LinkedStartAction {
         return getClass().getSimpleName();
     }
 
-    private boolean isFacebook() {
-        return AuthToken.getInstance().getSocialNet()
-                .equals(AuthToken.SN_FACEBOOK);
-    }
-
     private int getContactsCount() {
         Cursor cursor = mActivity.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-        int contacts_count = cursor.getCount();
-        cursor.close();
+        int contacts_count = 0;
+        if (cursor != null) {
+            contacts_count = cursor.getCount();
+            cursor.close();
+        }
         return contacts_count;
     }
 

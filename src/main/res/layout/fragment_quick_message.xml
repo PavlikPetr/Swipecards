@@ -7,41 +7,41 @@
 
     <include
         android:id="@+id/chatUserMessage"
-        android:visibility="gone"
-        android:layout_marginBottom="15dp"
+        layout="@layout/chat_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/sendBlock"
-        layout="@layout/chat_user" />
+        android:layout_marginBottom="15dp"
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/quickMessageLoader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_above="@id/sendBlock"
-        android:visibility="gone"
         android:layout_alignParentRight="true"
         android:layout_margin="15dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:visibility="gone" />
 
     <include
         android:id="@id/sendBlock"
+        layout="@layout/chat_footer_send"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        layout="@layout/chat_footer_send" />
+        android:layout_alignParentBottom="true" />
 
     <ImageView
         android:id="@+id/close_button_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_close_dialog"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="8dp"
         android:layout_marginTop="?attr/actionBarSize"
+        android:paddingBottom="2dp"
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
-        android:paddingBottom="2dp"
-        android:scaleType="center" />
+        android:scaleType="center"
+        android:src="@drawable/ic_close_dialog" />
 
 </RelativeLayout>

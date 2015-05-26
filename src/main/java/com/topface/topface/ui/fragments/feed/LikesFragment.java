@@ -95,6 +95,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
             @Override
             public void onMutual(FeedItem item) {
+                item.unread = false;
                 LikesFragment.this.onMutual(item);
             }
         });
@@ -351,12 +352,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         super.onFeedItemClick(item);
         sendLikeReadRequest(item.id);
         showInterstitial();
-
     }
 
     private void sendLikeReadRequest(String id) {
         if (!TextUtils.isEmpty(id)) {
-            ReadLikeRequest request = new ReadLikeRequest(getActivity(), Integer.valueOf(id));
+            ReadLikeRequest request = new ReadLikeRequest(getActivity(), Integer.valueOf(id), AdmobInterstitialUtils.canShowInterstitialAds());
             request.exec();
         }
     }

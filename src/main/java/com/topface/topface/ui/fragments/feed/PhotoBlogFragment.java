@@ -16,6 +16,7 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedPhotoBlog;
 import com.topface.topface.data.FeedPhotoBlogListData;
+import com.topface.topface.data.FeedUser;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -24,6 +25,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.AddToLeaderActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.OwnProfileActivity;
+import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.PhotoBlogListAdapter;
 import com.topface.topface.ui.views.RetryViewCreator;
@@ -120,7 +122,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
                 adapter.onSelection(item);
             } else {
                 if (isNotYourOwnId(item.user.id)) {
-                    startActivity(CacheProfile.getOptions().autoOpenGallery.createIntent(item.user.id, item.user.photosCount, item.id, item.user.photo, getActivity()));
+                    startActivity(UserProfileActivity.createIntent(null, item.user.photo, item.user.id, item.id, false, false, Utils.getNameAndAge(item.user.firstName, item.user.age), item.user.city.getName()));
                 } else {
                     openOwnProfile();
                 }
@@ -132,7 +134,8 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     protected void onFeedItemClick(FeedItem item) {
         if (isNotYourOwnId(item.user.id)) {
             if (!item.user.isEmpty()) {
-                Intent intent = ChatActivity.createIntent(getActivity(), item.user, item.id);
+                FeedUser user = item.user;
+                Intent intent = ChatActivity.createIntent(user.id,user.getNameAndAge(),user.city.name,null, user.photo, false);
                 getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT);
             }
         } else {

@@ -161,6 +161,7 @@ abstract public class ApiHandler extends Handler {
         mContext = context;
     }
 
+    @SuppressWarnings("unused")
     protected boolean isShowPremiumError() {
         return true;
     }
@@ -173,7 +174,7 @@ abstract public class ApiHandler extends Handler {
         mCompleteAction = completeAction;
     }
 
-    public static interface CompleteAction {
+    public interface CompleteAction {
         void onCompleteAction();
     }
 }

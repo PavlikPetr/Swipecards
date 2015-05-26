@@ -17,7 +17,7 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
     /**
      * имя отправителя в текущей локали
      */
-    public String first_name;
+    public String firstName;
     /**
      * имя отправителя в текущей локали
      */
@@ -52,26 +52,22 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
 
     public boolean bookmarked;
 
-    public boolean blocked;
+    public boolean inBlacklist;
 
     // соответствующий пользователю элемент списка, может быть null
     // optional(for example for closings fragments)
     public String feedItemId;
 
-    public FeedUser(JSONObject user) {
-        if (user != null) {
-            fillData(user);
-        }
+    public FeedUser() {
     }
 
-    public FeedUser(JSONObject user, FeedItem item) {
-        this(user);
-        feedItemId = item.id;
+    public void setFeedItemId(String feedItemId) {
+        this.feedItemId = feedItemId;
     }
 
     public FeedUser(Parcel in) {
         this.id = in.readInt();
-        this.first_name = in.readString();
+        this.firstName = in.readString();
         this.sex = in.readInt();
         this.age = in.readInt();
         this.online = in.readByte() != 0;
@@ -89,52 +85,27 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
         this.banned = in.readByte() != 0;
         this.deleted = in.readByte() != 0;
         this.bookmarked = in.readByte() != 0;
-        this.blocked = in.readByte() != 0;
+        this.inBlacklist = in.readByte() != 0;
         this.feedItemId = in.readString();
     }
 
-    public void fillData(JSONObject user) {
-        this.id = user.optInt("id");
-
-        this.status = user.optString("status");
-        this.first_name = Utils.optString(user, "firstName");
-        this.age = user.optInt("age");
-        this.online = user.optBoolean("online");
-        this.city = new City(user.optJSONObject("city"));
-        this.photo = new Photo(user.optJSONObject("photo"));
-        this.sex = user.optInt("sex");
-        this.premium = user.optBoolean("premium");
-        this.banned = user.optBoolean("banned");
-        this.deleted = user.optBoolean("deleted") || this.isEmpty();
-        this.bookmarked = user.optBoolean("bookmarked");
-        this.blocked = user.optBoolean("inBlacklist");
-        if (user.has("photos")) {
-            this.photos = new Photos(user.optJSONArray("photos"));
-        } else {
-            this.photos = new Photos();
-            this.photos.add(this.photo);
-        }
-        this.photosCount = user.optInt("photosCount", photos.size());
-        this.feedItemId = user.optString("feedItemId");
-    }
-
     public String getNameAndAge() {
-        return Utils.getNameAndAge(first_name, age);
+        return Utils.getNameAndAge(firstName, age);
     }
 
     @Override
     public JSONObject toJson() throws JSONException {
         JSONObject json = new JSONObject();//TODO do not serialize twice for closings in FeedUser in FeedItem
         json.put("id", id);
-        json.put("firstName", first_name);
+        json.put("firstName", firstName);
         json.put("sex", sex);
         json.put("age", age);
         json.put("online", online);
         json.put("city", city != null ? city.toJson() : Static.EMPTY);
-        json.put("photo", photo != null ? photo.toJson() : Static.EMPTY);
+        json.put("photo", photo != null ? photo.toJson() : new Photo().toJson());
         json.put("premium", premium);
         json.put("bookmarked", bookmarked);
-        json.put("inBlacklist", blocked);
+        json.put("inBlacklist", inBlacklist);
         json.put("photos", photos != null ? photos.toJson() : Static.EMPTY);
         json.put("feedItemId", feedItemId);
         return json;
@@ -166,7 +137,7 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
-        dest.writeString(first_name);
+        dest.writeString(firstName);
         dest.writeInt(sex);
         dest.writeInt(age);
         dest.writeByte((byte) (online ? 1 : 0));
@@ -178,7 +149,7 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
         dest.writeByte((byte) (banned ? 1 : 0));
         dest.writeByte((byte) (deleted ? 1 : 0));
         dest.writeByte((byte) (bookmarked ? 1 : 0));
-        dest.writeByte((byte) (blocked ? 1 : 0));
+        dest.writeByte((byte) (inBlacklist ? 1 : 0));
         dest.writeString(feedItemId);
     }
 

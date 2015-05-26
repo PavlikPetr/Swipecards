@@ -208,7 +208,6 @@
         <item quantity="other">%d zdjęć</item>
         <item quantity="one">%d zdjęcie</item>
     </plurals>
-    <string name="novice_sympathy">Wysyłaj sympatie tym, kto Ci\nrzeczywiście się podoba,\naby zacząć miłą znajomość</string>
     <string name="general_edit_profile_message">Prosimy o uzupełnienie wszystkich pól ankiety</string>
     <string name="general_search_null_response_error">Niczego nie znaleziono. Spróbuj zmienić filtry</string>
     <string name="change_filters">Zmień filtry</string>
@@ -244,8 +243,6 @@
     <string name="settings_invalid_email">Niewłaściwy e-mail</string>
     <string name="chat_write_message">Napisz wiadomość</string>
     <string name="buying_sympathies">Zakup sympatie</string>
-    <string name="novice_sympathies_bonus">Otrzymasz %1$d sympatii\nprezencie! To oznacza, że\nna pewno się spodobasz %2$d osobom,\nktóre wyrażą Ci swoją sympatię</string>
-    <string name="novice_buy_sympathies">Jeśli chcesz gwarantowanie\notrzymywać sympatie,\nnabywaj je teraz!</string>
     <string name="general_reconnect_social">Nie ma dostępu do sieci socjalnej. Spróbuj ponownie później.</string>
     <string name="general_block">Zablokuj</string>
     <string name="general_buying_disabled">Teraz kupowanie jest niemożliwe</string>
@@ -293,7 +290,6 @@
     <string name="save">Zapisz</string>
     <string name="confirmation_successfully_sent">Potwierdzenie zostało wysłane na wskazany przez Ciebie e-mail</string>
     <string name="password_hint">hasło</string>
-    <string name="password_confirmation_hint">potwierdzenie hasła</string>
     <string name="enter_new_password">Wpisz nowe hasło</string>
     <string name="enter_password_confirmation">Wpisz potwierdzenie hasła</string>
     <string name="passwords_mismatched">Hasła nie pokrywają się</string>

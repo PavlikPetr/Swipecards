@@ -59,8 +59,6 @@ public class UserConfig extends AbstractConfig {
     public static final String REMAINED_DAILY_PUBNATIVE_SHOWS = "remained_feed_ad_shows";
     public static final String LAST_DAY_PUBNATIVE_SHOWN = "current_day_for_showing_feed_ad";
     public static final String SYMPATHY_SENT_ID_ARRAY = "sympathy_sent_id_array";
-    public static final String FACEBOOK_REQUESTS_DIALOG_SKIPS = "facebook_request_dialog_skip";
-    public static final String FACEBOOK_REQUESTS_DIALOG_TIME = "facebook_request_dialog_time";
     private static final String APPSFLYER_FIRST_PAY = "appsflyer_first_purchase";
     private static final String IS_EMAIL_CONFIRM_SENT = "is_button_send_confirmation_clicked";
     private static final String INTERSTITIAL_IN_FEEDS_COUNTER = "interstitial_in_feed_counter";
@@ -147,10 +145,6 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, IS_AVATAR_AVAILABLE, false);
         //Флаг первой покупки
         addField(settingsMap, APPSFLYER_FIRST_PAY, false);
-        // Сохраняем кол-во скипов FacebookRequest диалога
-        addField(settingsMap, FACEBOOK_REQUESTS_DIALOG_SKIPS, 0);
-        // Сохрфняем время показа FacebookRequest диалога
-        addField(settingsMap, FACEBOOK_REQUESTS_DIALOG_TIME, 0L);
         // is button send confirmation clicked by current user
         addField(settingsMap, IS_EMAIL_CONFIRM_SENT, false);
         // interstitials' shows counter in feeds
@@ -174,45 +168,6 @@ public class UserConfig extends AbstractConfig {
                 Context.MODE_PRIVATE
         );
     }
-
-    /**
-     * Set skips amount for facebook request window
-     *
-     * @param skipNumber skips facebook request window
-     * @return true on success
-     */
-    public boolean setFacebookRequestSkip(int skipNumber) {
-        return setField(getSettingsMap(), FACEBOOK_REQUESTS_DIALOG_SKIPS, skipNumber);
-    }
-
-    /**
-     * Get skips amount
-     *
-     * @return skips
-     */
-    public int getFacebookRequestSkip() {
-        return getIntegerField(getSettingsMap(), FACEBOOK_REQUESTS_DIALOG_SKIPS);
-    }
-
-    /**
-     * Sets last time when was shown facebook request window
-     *
-     * @param lastTime facebook request window last time
-     * @return true on success
-     */
-    public boolean setFacebookRequestWindowShow(long lastTime) {
-        return setField(getSettingsMap(), FACEBOOK_REQUESTS_DIALOG_TIME, lastTime);
-    }
-
-    /**
-     * Last time when was shown facebook request window
-     *
-     * @return last time
-     */
-    public long getFacebookRequestWindowShow() {
-        return getLongField(getSettingsMap(), FACEBOOK_REQUESTS_DIALOG_TIME);
-    }
-
 
     /**
      * Return first purchase flag

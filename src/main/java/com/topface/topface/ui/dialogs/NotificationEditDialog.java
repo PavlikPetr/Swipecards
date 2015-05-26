@@ -8,10 +8,10 @@ import com.topface.topface.data.Profile;
 /**
  * Dialog for editing notification options
  */
-public class NotificationEditDialog extends AbstractEditDialog<Profile.TopfaceNotifications> {
+public class NotificationEditDialog extends BaseEditDialog<Profile.TopfaceNotifications> {
 
     public static NotificationEditDialog newInstance(String title, Profile.TopfaceNotifications notification,
-                                                     final AbstractEditDialog.EditingFinishedListener<Profile.TopfaceNotifications> editingFinishedListener) {
+                                                     final BaseEditDialog.EditingFinishedListener<Profile.TopfaceNotifications> editingFinishedListener) {
         final NotificationEditDialog selector = new NotificationEditDialog();
         Bundle selectorArgs = new Bundle();
         selectorArgs.putString(DIALOG_TITLE, title);

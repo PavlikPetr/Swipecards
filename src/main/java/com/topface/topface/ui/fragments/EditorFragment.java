@@ -77,11 +77,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
 
         mApiUrlsMap = new SparseArray<>();
         mApiUrlsMap.put(0, Static.API_URL);
-        mApiUrlsMap.put(1, Static.API_ALPHA_URL);
-        mApiUrlsMap.put(2, Static.API_BETA_URL);
-        mApiUrlsMap.put(3, Static.API_GAMMA_URL);
-        mApiUrlsMap.put(4, Static.API_DELTA_URL);
-        mApiUrlsMap.put(5, Static.API_500_ERROR_URL);
+        mApiUrlsMap.put(1, Static.API_500_ERROR_URL);
     }
 
     @Override
@@ -204,10 +200,8 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
             public void onClick(View v) {
                 try {
                     getActivity().startActivity(
-                            UserProfileActivity.createIntent(
-                                    Integer.parseInt(profileId.getText().toString()),
-                                    getActivity()
-                            )
+                            UserProfileActivity.createIntent(null, null,
+                                    Integer.parseInt(profileId.getText().toString()), null, true, true, null, null)
                     );
                 } catch (Exception e) {
                     Debug.error(e);
@@ -309,7 +303,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         mCustomApi.addTextChangedListener(watcher);
 
         //Создаем стандартный адаптер
-        @SuppressWarnings("unchecked") ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
+        @SuppressWarnings("unchecked") ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(
                 getActivity(),
                 android.R.layout.simple_spinner_item,
                 Utils.sparsArrayToArrayList(mApiUrlsMap)

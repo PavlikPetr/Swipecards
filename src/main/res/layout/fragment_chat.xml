@@ -1,68 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.topface.topface.ui.views.KeyboardListenerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/chatContainer"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="@color/bg_holo">
 
-    <ProgressBar
+    <com.topface.topface.ui.views.ProgressBarWithAlpha
         android:id="@+id/chat_loader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
 
-    <com.topface.PullToRefreshListView xmlns:p2r="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/lvChatList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/loChatFooterSend"
-        android:cacheColorHint="#00000000"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="8dp"
-        android:fadeScrollbars="true"
-        android:fadingEdge="none"
-        android:listSelector="@android:color/transparent"
-        android:paddingLeft="2dp"
-        android:paddingRight="2dp"
-        android:stackFromBottom="true"
-        p2r:ptrHeaderTextColor="#8A8A8A"
-        p2r:ptrMode="pullUpFromBottom"
-        p2r:ptrOverScroll="false"
-        p2r:ptrShowIndicator="false" />
-
     <RelativeLayout
-        android:id="@+id/llvLockScreen"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@id/loChatFooterSend"
-        android:visibility="gone">
+        android:id="@+id/allView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.topface.PullToRefreshListView xmlns:p2r="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/lvChatList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/loChatFooterSend"
+            android:cacheColorHint="#00000000"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="8dp"
+            android:fadeScrollbars="true"
+            android:fadingEdge="none"
+            android:listSelector="@android:color/transparent"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:stackFromBottom="true"
+            p2r:ptrHeaderTextColor="#8A8A8A"
+            p2r:ptrMode="pullUpFromBottom"
+            p2r:ptrOverScroll="false"
+            p2r:ptrShowIndicator="false" />
+
+        <RelativeLayout
+            android:id="@+id/llvLockScreen"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@id/loChatFooterSend"
+            android:visibility="gone">
+
+            <ViewStub
+                android:id="@+id/famousBlockerStub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:inflatedId="@+id/famousBlocker"
+                android:layout="@layout/layout_popular_user_blocker" />
+        </RelativeLayout>
+
+        <include
+            android:id="@id/loChatFooterSend"
+            layout="@layout/chat_footer_send"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tab_bar_default_bottom_border_height"
+            android:layout_above="@+id/loChatFooterSend"
+            android:background="#12000000" />
 
         <ViewStub
-            android:id="@+id/famousBlockerStub"
-            android:layout_centerInParent="true"
+            android:id="@+id/chat_actions_stub"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inflatedId="@+id/famousBlocker"
-            android:layout="@layout/layout_popular_user_blocker" />
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp" />
     </RelativeLayout>
-
-    <include
-        android:id="@id/loChatFooterSend"
-        layout="@layout/chat_footer_send_holo"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_above="@+id/loChatFooterSend"
-        android:background="@drawable/chat_line_above_input_holo" />
-
-    <ViewStub
-        android:id="@+id/chat_actions_stub"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp" />
 </com.topface.topface.ui.views.KeyboardListenerLayout>

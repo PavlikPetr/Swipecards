@@ -289,7 +289,6 @@
         <item quantity="other">%d fotografijų</item>
         <item quantity="one">%d fotografija</item>
     </plurals>
-    <string name="novice_sympathy">Siųskite simpatijas tiems, kas jums\ntikrai patinka,\nkad pradėtumėte malonią pažintį</string>
     <string name="general_edit_profile_message">Prašome užpildyti visus būtinus anketos laukelius</string>
     <string name="general_search_null_response_error">Nieko nerasta. Pabandykite pakeisti filtrus</string>
     <string name="change_filters">Pakeisti filtrus</string>
@@ -338,8 +337,6 @@
     <string name="chat_write_message">Parašyti pranešimą</string>
     <string name="dating_message">Pranešimas…</string>
     <string name="buying_sympathies">Simpatijų pirkimas</string>
-    <string name="novice_sympathies_bonus">Jūs gaunate %1$d simpatijų\ndovanų! Tai reiškia, kad jūs\ntikrai patinkate %2$d žmonių,\nkurie išreikš jums savo simpatiją</string>
-    <string name="novice_buy_sympathies">Jei norite garantuotai\ngauti simpatijų,\nįsigykite jų tiesiog dabar!</string>
     <string name="general_reconnect_social">Neįmanoma prisijungti prie soc. tinklo. Pabandykite vėliau.</string>
     <string name="general_block">Blokuoti</string>
     <string name="general_buying_disabled">Šiuo metu pirkimas negalimas</string>
@@ -389,8 +386,8 @@
     <string name="password_changing">Slaptažodžio keitimas</string>
     <string name="save">Išsaugoti</string>
     <string name="confirmation_successfully_sent">Patvirtinimas išsiųstas jūsų nurodytu el. pašto adresu</string>
+    <string name="password_confirmation_hint">Slaptažodžio patvirtinimas</string>
     <string name="password_hint">slaptažodis</string>
-    <string name="password_confirmation_hint">slaptažodžio patvirtinimas</string>
     <string name="enter_new_password">Įveskite naują slaptažodį</string>
     <string name="enter_password_confirmation">Įveskite slaptažodžio patvirtinimą</string>
     <string name="passwords_mismatched">Slaptažodžiai nesutampa</string>

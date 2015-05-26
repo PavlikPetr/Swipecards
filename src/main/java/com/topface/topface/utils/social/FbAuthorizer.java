@@ -12,6 +12,7 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.topface.topface.App;
+import com.topface.topface.Static;
 import com.topface.topface.utils.config.SessionConfig;
 
 import java.util.Arrays;
@@ -21,15 +22,14 @@ import java.util.Arrays;
  */
 public class FbAuthorizer extends Authorizer {
 
-    private String[] FB_PERMISSIONS = {"user_photos", "email", "offline_access", "user_birthday", "public_profile", "user_location"};
+    private String[] FB_PERMISSIONS = {"user_photos", "email", "user_birthday", "public_profile", "user_location"};
 
     private UiLifecycleHelper mUiHelper;
     private Request mRequest;
     private Session.StatusCallback mStatusCallback;
 
     private Request getRequest(final Session session, final Intent intent) {
-        if (mRequest == null) {
-            mRequest = Request.newMeRequest(session, new Request.GraphUserCallback() {
+        mRequest = Request.newMeRequest(session, new Request.GraphUserCallback() {
                 @Override
                 public void onCompleted(GraphUser user, Response response) {
                     if (user != null) {
@@ -54,9 +54,6 @@ public class FbAuthorizer extends Authorizer {
                     broadcastAuthTokenStatus(intent);
                 }
             });
-        } else {
-            mRequest.setSession(session);
-        }
         return mRequest;
     }
 
@@ -131,6 +128,10 @@ public class FbAuthorizer extends Authorizer {
     @Override
     public void authorize() {
         Session session = Session.getActiveSession();
+        if (App.getAppConfig().getStageChecked()) {
+            session = new Session.Builder(App.getContext()).setApplicationId(Static.STAGE_AUTH_FACEBOOK_ID).build();
+            Session.setActiveSession(session);
+        }
         if (session != null && !session.isOpened() && !session.isClosed()) {
             session.openForRead(new Session.OpenRequest(getActivity())
                     .setPermissions(Arrays.asList(FB_PERMISSIONS)).setCallback(getStatusCallback()));

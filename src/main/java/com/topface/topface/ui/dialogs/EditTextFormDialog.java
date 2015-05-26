@@ -20,10 +20,10 @@ import com.topface.topface.utils.Utils;
 /**
  * Dialog for editing text form items
  */
-public class EditTextFormDialog extends AbstractEditDialog<FormItem> {
+public class EditTextFormDialog extends BaseEditDialog<FormItem> {
 
     public static EditTextFormDialog newInstance(String title, FormItem text,
-                                                 final AbstractEditDialog.EditingFinishedListener<FormItem> editingFinishedListener) {
+                                                 final BaseEditDialog.EditingFinishedListener<FormItem> editingFinishedListener) {
         final EditTextFormDialog editor = new EditTextFormDialog();
         Bundle args = new Bundle();
         args.putString(DIALOG_TITLE, title);

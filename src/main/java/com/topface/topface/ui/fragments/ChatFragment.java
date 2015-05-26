@@ -19,6 +19,8 @@ import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,6 +39,7 @@ import android.widget.Toast;
 import com.nhaarman.listviewanimations.appearance.ChatListAnimatedAdapter;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -46,6 +49,7 @@ import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.History;
 import com.topface.topface.data.HistoryListData;
 import com.topface.topface.data.IUniversalUser;
+import com.topface.topface.data.Photo;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.UniversalUserFactory;
 import com.topface.topface.requests.ApiRequest;
@@ -60,6 +64,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -84,21 +89,19 @@ import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.social.AuthToken;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
 
-public class ChatFragment extends UserAvatarFragment implements View.OnClickListener {
+public class ChatFragment extends AnimatedFragment implements View.OnClickListener {
 
     public static final int LIMIT = 50;
 
     public static final String FRIEND_FEED_USER = "user_profile";
     public static final String ADAPTER_DATA = "adapter";
     public static final String WAS_FAILED = "was_failed";
+    public static final String INTENT_AVATAR = "user_avatar";
     public static final String INTENT_USER_ID = "user_id";
-    public static final String INTENT_USER_SEX = "user_sex";
     public static final String INTENT_USER_CITY = "user_city";
     public static final String INTENT_USER_NAME_AND_AGE = "user_name_and_age";
     public static final String INTENT_ITEM_ID = "item_id";
@@ -139,6 +142,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     private String mItemId;
     private String mInitialMessage;
     private boolean wasFailed = false;
+
     TimerTask mUpdaterTask = new TimerTask() {
         @Override
         public void run() {
@@ -160,6 +164,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
     private String mUserCity;
     private String mUserNameAndAge;
+    private Photo mPhoto;
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -206,14 +211,13 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
         if (mAdapter == null) {
             mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
         }
-
         Bundle args = getArguments();
         mItemId = args.getString(INTENT_ITEM_ID);
         mUserId = args.getInt(INTENT_USER_ID, -1);
         mUserCity = args.getString(INTENT_USER_CITY);
         mUserNameAndAge = args.getString(INTENT_USER_NAME_AND_AGE);
         mInitialMessage = args.getString(INITIAL_MESSAGE);
-
+        mPhoto = args.getParcelable(INTENT_AVATAR);
         // only DialogsFragment will hear this
         Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ_BY_UID);
         intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
@@ -229,7 +233,8 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        final KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
+        KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
+        setAnimatedView(root.findViewById(R.id.allView));
         root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
             @SuppressWarnings("ConstantConditions")
             @Override
@@ -280,6 +285,12 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
             GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
         }
         return root;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        setThrownActionBarAvatar(mPhoto);
     }
 
     @Override
@@ -334,7 +345,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                     }
                 }
                 mAdapter.setData(historyData);
-                mUser = new FeedUser(new JSONObject(savedInstanceState.getString(FRIEND_FEED_USER)));
+                mUser = JsonUtils.fromJson(savedInstanceState.getString(FRIEND_FEED_USER), FeedUser.class);
                 invalidateUniversalUser();
                 initOverflowMenuActions(getOverflowMenu());
                 if (wasFailed) {
@@ -539,11 +550,11 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
         super.onDestroy();
     }
 
-    private void update(final boolean pullToRefresh, String type) {
+    private void update(boolean pullToRefresh, String type) {
         update(pullToRefresh, false, type);
     }
 
-    private void update(final boolean scrollRefresh) {
+    private void update(boolean scrollRefresh) {
         update(false, scrollRefresh, "scroll refresh");
     }
 
@@ -665,6 +676,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
             public void always(IApiResponse response) {
                 super.always(response);
                 mBackgroundController.hide();
+                requestExecuted();
                 if (pullToRefresh && mListView != null) {
                     mListView.onRefreshComplete();
                 }
@@ -730,7 +742,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
             setOnline(user.online);
         }
         // ставим фото пользователя в иконку в actionbar
-        setActionBarAvatar(getUniversalUser());
+       setActionBarAvatar(getUniversalUser());
     }
 
     @Override
@@ -964,13 +976,13 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
                     @Override
                     public void setBlackListValue(Boolean value) {
                         if (mUser != null) {
-                            mUser.blocked = value != null ? value : !mUser.blocked;
+                            mUser.inBlacklist = value != null ? value : !mUser.inBlacklist;
                         }
                     }
 
                     @Override
                     public Boolean getBlackListValue() {
-                        return mUser != null ? mUser.blocked : null;
+                        return mUser != null ? mUser.inBlacklist : null;
                     }
 
                     @Override
@@ -1044,11 +1056,7 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
     public void onAvatarClick() {
         if (mUser != null) {
             if (!(mUser.deleted || mUser.banned)) {
-                Intent profileIntent = CacheProfile.
-                        getOptions().
-                        autoOpenGallery.
-                        createIntent(mUserId, mUser.photosCount, mUser.photo, getActivity());
-                startActivity(profileIntent);
+                startActivity(UserProfileActivity.createIntent(null, mPhoto, mUserId, mUser.feedItemId, false, false, Utils.getNameAndAge(mUser.firstName, mUser.age), mUser.city.getName()));
             } else {
                 Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
                         Toast.LENGTH_LONG).show();
@@ -1070,4 +1078,8 @@ public class ChatFragment extends UserAvatarFragment implements View.OnClickList
         }
     }
 
+    @Override
+    protected boolean isAnimationRequire() {
+        return true;
+    }
 }

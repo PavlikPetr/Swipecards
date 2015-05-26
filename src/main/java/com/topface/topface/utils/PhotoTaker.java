@@ -1,10 +1,8 @@
 package com.topface.topface.utils;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
 import com.topface.topface.App;
@@ -14,9 +12,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
-
-import java.util.ArrayList;
 
 public class PhotoTaker implements IPhotoTakerWithDialog {
     private AddPhotoHelper mPhotoHelper;
@@ -42,14 +37,6 @@ public class PhotoTaker implements IPhotoTakerWithDialog {
         if (CacheProfile.photos != null) {
             CacheProfile.photos.add(photo);
             CacheProfile.totalPhotos += 1;
-            Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
-            intent.putExtra(PhotoSwitcherActivity.INTENT_PHOTOS, CacheProfile.photos);
-            LocalBroadcastManager.getInstance(mActivity).sendBroadcast(intent);
-        } else {
-            Intent intent = new Intent(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
-            ArrayList<Photo> photos = new ArrayList<>();
-            photos.add(photo);
-            intent.putParcelableArrayListExtra(PhotoSwitcherActivity.INTENT_PHOTOS, photos);
         }
         PhotoMainRequest request = new PhotoMainRequest(mActivity);
         request.photoId = photo.getId();
@@ -58,7 +45,7 @@ public class PhotoTaker implements IPhotoTakerWithDialog {
             public void success(IApiResponse response) {
                 CacheProfile.photo = photo;
                 App.sendProfileRequest();
-                Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
+                Utils.showToastNotification(R.string.photo_add_or, Toast.LENGTH_SHORT);
             }
 
             @Override

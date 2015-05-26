@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.utils.LocaleConfig;
-import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -23,7 +22,6 @@ public class Configurations {
     private SessionConfig mSessionConfig;
     private BannersConfig mBannerConfig;
     private LocaleConfig mLocaleConfig;
-    private Novice mNovice;
     private UserConfigConverter mConfigConverter;
 
     public Configurations(Context context) {
@@ -49,7 +47,7 @@ public class Configurations {
     public UserConfig getUserConfig() {
         if (mUserConfig == null) {
             if (App.getAppConfig().isNeedConverting() && UserConfigConverter.hasOldConfig()) {
-                    //если у пользователя старый конфиг, то конвертируем его в новые
+                //если у пользователя старый конфиг, то конвертируем его в новые
                 mConfigConverter = new UserConfigConverter(AuthToken.getInstance().getUserTokenUniqueId(), new UserConfigConverter.OnUpdateUserConfig() {
                     @Override
                     public void onUpdate() {
@@ -106,19 +104,11 @@ public class Configurations {
         return mLocaleConfig;
     }
 
-    public Novice getNovice() {
-        if (mNovice == null) {
-            mNovice = new Novice();
-        }
-        return mNovice;
-    }
-
     public void onAuthTokenReceived() {
         getUserConfig().onAuthTokenReceived();
     }
 
     public void onLogout() {
         getSessionConfig().resetAndSaveConfig();
-        mNovice = null;
     }
 }

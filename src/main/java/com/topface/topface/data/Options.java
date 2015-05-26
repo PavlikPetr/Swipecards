@@ -13,7 +13,6 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
-import com.topface.topface.data.experiments.AutoOpenGallery;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.InstantMessagesForNewbies;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
@@ -154,9 +153,7 @@ public class Options extends AbstractData {
     public TopfaceOfferwallRedirect topfaceOfferwallRedirect = new TopfaceOfferwallRedirect();
     public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
     public FeedNativeAd feedNativeAd = new FeedNativeAd();
-    public AutoOpenGallery autoOpenGallery = new AutoOpenGallery();
     public NotShown notShown = new NotShown();
-    public FacebookInviteFriends facebookInviteFriends = new FacebookInviteFriends();
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
     public InterstitialInFeeds interstitial = new InterstitialInFeeds();
 
@@ -324,8 +321,6 @@ public class Options extends AbstractData {
             instantMessageFromSearch = JsonUtils.optFromJson(response.optString(INSTANT_MSG),
                     InstantMessageFromSearch.class, new InstantMessageFromSearch());
 
-            autoOpenGallery.init(response);
-
             instantMessagesForNewbies.init(response);
 
             startPageFragmentId = getStartPageFragmentId(response);
@@ -334,12 +329,7 @@ public class Options extends AbstractData {
             if (jsonNotShown != null) {
                 notShown.parseNotShownJSON(jsonNotShown);
             }
-
-            facebookInviteFriends = JsonUtils.optFromJson(response.optString("facebookInviteFriends"),
-                    FacebookInviteFriends.class, new FacebookInviteFriends());
-
             feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
-
             interstitial = JsonUtils.optFromJson(response.optString("interstitial"),
                     InterstitialInFeeds.class, interstitial);
 
@@ -661,13 +651,6 @@ public class Options extends AbstractData {
                 text = jsonNotShown.optString("text");
             }
         }
-    }
-
-    public static class FacebookInviteFriends {
-        public boolean enabledOnLogin;
-        public boolean enabledAttempts;
-        public long minDelay = DateUtils.DAY_IN_SECONDS * 3;
-        public int maxAttempts;
     }
 
     public static class FeedNativeAd {

@@ -13,17 +13,19 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.topface.topface.R;
 import com.topface.topface.banners.BannersController;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.RefreshablePageWithAds;
 import com.topface.topface.banners.ad_providers.IRefresher;
+import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.ad.NativeAdManager;
+import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,19 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     private ArrayList<String> mPagesTitles = new ArrayList<>();
     private ArrayList<Integer> mPagesCounters = new ArrayList<>();
     private BannersController mBannersController;
+
+    private TabbedFeedPageAdapter mBodyPagerAdapter;
+    
+    protected static int mVisitorsastOpenedPage = 0;
+    protected static int mLikesLastOpenedPage = 0;
+    protected static int mDialogsLastOpenedPage = 0;
+
+    public static void setTabsDefaultPosition(){
+        mVisitorsastOpenedPage = 0;
+        mLikesLastOpenedPage = 0;
+        mDialogsLastOpenedPage = 0;
+    }
+
 
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -109,11 +124,11 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         addPages();
         mPager = (ViewPager) root.findViewById(R.id.pager);
         mPager.setSaveEnabled(false);
-        TabbedFeedPageAdapter bodyPagerAdapter = new TabbedFeedPageAdapter(getChildFragmentManager(),
+        mBodyPagerAdapter = new TabbedFeedPageAdapter(getChildFragmentManager(),
                 mPagesClassNames,
                 mPagesTitles,
                 mPagesCounters);
-        mPager.setAdapter(bodyPagerAdapter);
+        mPager.setAdapter(mBodyPagerAdapter);
 
         mSlidingTabLayout = (SlidingTabLayout) root.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setUseWeightProportions(true);
@@ -141,9 +156,26 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     }
 
     protected void initFloatBlock() {
-        if (!NativeAdManager.hasAvailableAd()) {
-            mBannersController = new BannersController(this);
-        }
+        Utils.addOnGlobalLayoutListener(mPager, new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override public void onGlobalLayout() {
+                boolean needNativeAd = false;
+                if (mBodyPagerAdapter != null) {
+                    for (int i=0; i< mBodyPagerAdapter.getCount(); i++) {
+                        Fragment feed = mBodyPagerAdapter.getItem(i);
+                        if (feed instanceof FeedFragment) {
+                            FeedAdapter adapter = ((FeedFragment)feed).getListAdapter();
+                            if (adapter != null && adapter.isNeedFeedAd()) {
+                                needNativeAd = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (!needNativeAd) {
+                    mBannersController = new BannersController(TabbedFeedFragment.this);
+                }
+            }
+        });
     }
 
     protected abstract void addPages();
