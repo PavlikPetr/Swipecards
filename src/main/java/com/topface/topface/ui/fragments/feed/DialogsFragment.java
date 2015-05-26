@@ -1,10 +1,7 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
@@ -32,11 +29,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        return super.onCreateView(inflater, container, saved);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         //Проверяем флаг, нужно ли обновлять диалоги
@@ -44,11 +36,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
             updateData(true, false);
             mNeedRefresh = false;
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
     @Override
