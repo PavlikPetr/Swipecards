@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.FrameLayout;
 
 import com.topface.topface.R;
@@ -14,6 +15,7 @@ import com.topface.topface.ui.views.ImageViewRemote;
 public class UserPhotoGridAdapter extends PhotoGridAdapter {
     // Data
     private LayoutInflater mInflater;
+
 
     public UserPhotoGridAdapter(Context context, Photos photoLinks, int totalPhotos, LoadingListAdapter.Updater callback) {
         super(photoLinks, totalPhotos, callback);
@@ -36,6 +38,9 @@ public class UserPhotoGridAdapter extends PhotoGridAdapter {
         // проверка нужна для исключения краша в адаптере при добавлении
         // GridViewWithHeaderAndFooter header и/или footer
         if (holder != null && holder.photo != null) {
+            AlphaAnimation animation = new AlphaAnimation(0,1);
+            animation.setDuration(300);
+            holder.photo.setViewDisplayAnimate(animation);
             holder.photo.setPhoto(getItem(position));
         }
         return convertView;
@@ -49,5 +54,10 @@ public class UserPhotoGridAdapter extends PhotoGridAdapter {
     // class ViewHolder
     static class ViewHolder {
         ImageViewRemote photo;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
     }
 }

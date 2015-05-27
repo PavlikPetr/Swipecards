@@ -15,6 +15,7 @@
     <color name="hidden_dialog_preview_text_color">#00CDFE</color>>
 
     <!-- new redesign colors -->
+    <color name="album_grid_item_bg">#F2F2F2</color>
     <color name="bg_holo">#F1F1F1</color>
     <color name="bg_white">#FFFFFF</color>
     <color name="action_bar_color">#455A64</color>

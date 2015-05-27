@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -30,7 +31,7 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
     private static final boolean DEFAULT_NEED_ANIMATE_ON_APPEAR = true;
 
     /**
-     * Максимальное количество дополнительных попыток загрузки изображения
+     * Максимальное  количество дополнительных попыток загрузки изображения
      */
     private static final int MAX_REPEAT_COUNT = 1;
     /**
@@ -64,6 +65,8 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
 
     // needed by some sub-classes to know - if need animate image when new content setted
     private boolean mNeedAnimateOnAppear = DEFAULT_NEED_ANIMATE_ON_APPEAR;
+
+    private Animation mViewDisplayAnimate;
 
 
     public ImageViewRemoteTemplate(Context context) {
@@ -187,6 +190,7 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
         return setPhoto(photo, null, null);
     }
 
+    @SuppressWarnings("unused")
     public boolean setPhoto(IPhoto photo, Handler handler) {
         return setPhoto(photo, handler, null);
     }
@@ -213,9 +217,19 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
         return 0;
     }
 
+    public void setViewDisplayAnimate(Animation viewDisplayAnimate) {
+        this.mViewDisplayAnimate = viewDisplayAnimate;
+    }
+
+    public Animation getViewDisplayAnimate() {
+        return mViewDisplayAnimate;
+    }
+
     private class RepeatImageLoadingListener extends SimpleImageLoadingListener {
         private final Handler mHandler;
         private final String mRemoteSrc;
+        private boolean isNeedAnimate;
+
 
         public RepeatImageLoadingListener(Handler handler, String remoteSrc) {
             mRemoteSrc = remoteSrc;
@@ -224,9 +238,9 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
 
         @Override
         public void onLoadingStarted(String imageUri, View view) {
-
             super.onLoadingStarted(imageUri, view);
             isFirstTime = true;
+            isNeedAnimate = true;
         }
 
         @Override
@@ -269,7 +283,10 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
         @Override
         public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
             super.onLoadingComplete(imageUri, view, loadedImage);
-
+            if(getViewDisplayAnimate()!=null && isNeedAnimate){
+                isNeedAnimate = false;
+                startAnimation(getViewDisplayAnimate());
+            }
             mRepeatCounter = 0;
             isFirstTime = false;
             if (mLoader != null) {
@@ -297,8 +314,7 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
         @Override
         public void onLoadedFromMemoryCache() {
             super.onLoadedFromMemoryCache();
-            setNeedAnimateOnAppear(false);
-            stopAppearingAnimation();
+            isNeedAnimate = false;
         }
     }
 
