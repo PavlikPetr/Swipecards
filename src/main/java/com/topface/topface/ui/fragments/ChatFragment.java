@@ -742,7 +742,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             setOnline(user.online);
         }
         // ставим фото пользователя в иконку в actionbar
-       setActionBarAvatar(getUniversalUser());
+        setActionBarAvatar(getUniversalUser());
     }
 
     @Override
