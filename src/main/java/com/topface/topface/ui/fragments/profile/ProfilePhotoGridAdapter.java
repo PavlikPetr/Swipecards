@@ -62,9 +62,7 @@ public class ProfilePhotoGridAdapter extends PhotoGridAdapter {
             }
             holder = (ViewHolder) convertView.getTag();
         }
-        AlphaAnimation animation = new AlphaAnimation(0,1);
-        animation.setDuration(300);
-        holder.photo.setViewDisplayAnimate(animation);
+        setImageViewRemoteAnimation(holder.photo,300);
         holder.photo.setPhoto(getItem(position));
         return convertView;
     }

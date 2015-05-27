@@ -38,9 +38,7 @@ public class UserPhotoGridAdapter extends PhotoGridAdapter {
         // проверка нужна для исключения краша в адаптере при добавлении
         // GridViewWithHeaderAndFooter header и/или footer
         if (holder != null && holder.photo != null) {
-            AlphaAnimation animation = new AlphaAnimation(0,1);
-            animation.setDuration(300);
-            holder.photo.setViewDisplayAnimate(animation);
+            setImageViewRemoteAnimation(holder.photo,300);
             holder.photo.setPhoto(getItem(position));
         }
         return convertView;
