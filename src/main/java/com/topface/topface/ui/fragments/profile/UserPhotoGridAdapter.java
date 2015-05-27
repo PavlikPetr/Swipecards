@@ -52,9 +52,4 @@ public class UserPhotoGridAdapter extends PhotoGridAdapter {
     static class ViewHolder {
         ImageViewRemote photo;
     }
-
-    @Override
-    public void notifyDataSetChanged() {
-        super.notifyDataSetChanged();
-    }
 }
