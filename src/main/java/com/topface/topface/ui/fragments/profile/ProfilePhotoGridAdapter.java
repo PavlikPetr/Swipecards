@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.widget.FrameLayout;
 
 import com.topface.topface.R;
@@ -62,7 +61,7 @@ public class ProfilePhotoGridAdapter extends PhotoGridAdapter {
             }
             holder = (ViewHolder) convertView.getTag();
         }
-        setImageViewRemoteAnimation(holder.photo,300);
+        setImageViewRemoteAnimation(holder.photo, 300);
         holder.photo.setPhoto(getItem(position));
         return convertView;
     }

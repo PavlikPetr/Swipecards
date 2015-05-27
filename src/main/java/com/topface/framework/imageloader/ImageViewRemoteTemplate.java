@@ -283,7 +283,7 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
         @Override
         public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
             super.onLoadingComplete(imageUri, view, loadedImage);
-            if(getViewDisplayAnimate()!=null && isNeedAnimate){
+            if (getViewDisplayAnimate() != null && isNeedAnimate) {
                 isNeedAnimate = false;
                 startAnimation(getViewDisplayAnimate());
             }

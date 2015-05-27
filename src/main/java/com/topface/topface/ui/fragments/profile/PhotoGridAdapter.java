@@ -163,8 +163,8 @@ public class PhotoGridAdapter extends BaseAdapter
         return mGridWidth;
     }
 
-    protected void setImageViewRemoteAnimation(ImageViewRemote view, int duration ){
-        AlphaAnimation animation = new AlphaAnimation(0,1);
+    protected void setImageViewRemoteAnimation(ImageViewRemote view, int duration) {
+        AlphaAnimation animation = new AlphaAnimation(0, 1);
         animation.setDuration(duration);
         view.setViewDisplayAnimate(animation);
     }

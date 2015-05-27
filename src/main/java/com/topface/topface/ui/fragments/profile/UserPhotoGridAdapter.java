@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.widget.FrameLayout;
 
 import com.topface.topface.R;
@@ -38,7 +37,7 @@ public class UserPhotoGridAdapter extends PhotoGridAdapter {
         // проверка нужна для исключения краша в адаптере при добавлении
         // GridViewWithHeaderAndFooter header и/или footer
         if (holder != null && holder.photo != null) {
-            setImageViewRemoteAnimation(holder.photo,300);
+            setImageViewRemoteAnimation(holder.photo, 300);
             holder.photo.setPhoto(getItem(position));
         }
         return convertView;
