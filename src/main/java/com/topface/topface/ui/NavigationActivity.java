@@ -305,9 +305,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
-        if (CacheProfile.age <= App.getAppOptions().getUserAgeMin()) {
-            SetAgeDialog.newInstance().show(this.getSupportFragmentManager(), SetAgeDialog.TAG);
-        }
     }
 
     @Override
@@ -436,6 +433,9 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
         if (mDrawerToggle != null) {
             mDrawerToggle.syncState();
+        }
+        if (CacheProfile.age <= App.getAppOptions().getUserAgeMin()) {
+            SetAgeDialog.newInstance().show(this.getSupportFragmentManager(), SetAgeDialog.TAG);
         }
 
         /*
