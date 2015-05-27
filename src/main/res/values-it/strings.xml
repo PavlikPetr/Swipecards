@@ -138,6 +138,7 @@
     <string name="general_dbl_unread">Non letti</string>
     <string name="general_empty_code_confirmation">Inserisci il codice di conferma</string>
     <string name="general_email_success_confirmed">L’e-mail è stata confermata con successo</string>
+    <string name="general_email_not_confirmed">L’e-mail non è stata confermata.</string>
     <string name="time_yesterday">Ieri</string>
     <string name="time_today">Oggi</string>
     <string name="general_send_button">Inv.</string>
@@ -184,6 +185,7 @@
     <string name="filter_age_start_prefix">Dai %s</string>
     <string name="filter_age_end_prefix">ai %s</string>
     <string name="filter_cities_all">In tutte le città</string>
+    <string name="purchase_header_title">Credito:</string>
     <string name="buying_header_title">Acquisti</string>
     <plurals name="buying_gift_you_need_coins">
         <item quantity="other">Per inviare il regalo compra ancora %d monete</item>
@@ -286,7 +288,6 @@
         <item quantity="other">%d foto</item>
         <item quantity="one">%d foto</item>
     </plurals>
-    <string name="novice_sympathy">Invia le simpatie solo alle persone che ti\npiacciono veramente\nper iniziare una piacevole relazione</string>
     <string name="general_edit_profile_message">Per favore riempi i campi obbligatori del questionario</string>
     <string name="general_search_null_response_error">La ricerca non ha prodotto risultati. Prova a cambiare i filtri</string>
     <string name="change_filters">Cambiare filtri</string>
@@ -335,8 +336,6 @@
     <string name="chat_write_message">Scrivi un messaggio</string>
     <string name="dating_message">Messaggio…</string>
     <string name="buying_sympathies">Acquisto simpatie</string>
-    <string name="novice_sympathies_bonus">Riceverai %1$d simpatie in\nregalo! Significa che\ndi sicuro piacerai a %2$d persone\nche ti dimostreranno la loro simpatia</string>
-    <string name="novice_buy_sympathies">Se vuoi ricevere\nle simpatie sicure,\nacquistale ora!</string>
     <string name="general_reconnect_social">Impossibile collegarsi alla rete sociale. Riprova più tardi.</string>
     <string name="general_block">Blocca</string>
     <string name="general_buying_disabled">Attualmente è impossibile effettuare l’acquisto</string>
@@ -367,6 +366,8 @@
     <string name="girl">ragazza</string>
     <string name="start_communication">Inizia a chattare</string>
     <string name="birthdate">Compleanno</string>
+    <string name="birthdate_confirm">Per favore indica la tua età altrimenti non potrai fare nuove conoscenze</string>
+    <string name="set_birthdate">Indicare l’età</string>
     <string name="welcome_to_topface">Benvenuti in Topface!</string>
     <string name="incorrect_email">E-mail errata</string>
     <string name="incorrect_login">Login errato</string>
@@ -392,8 +393,11 @@
     <string name="password_confirmation_hint">Conferma la password</string>
     <string name="password_hint">password</string>
     <string name="enter_new_password">Inserisci la nuova password</string>
+    <string name="enter_old_password">Inserisci la password attuale.</string>
     <string name="enter_password_confirmation">Inserisci la conferma di password</string>
     <string name="passwords_mismatched">Password errata</string>
+    <string name="old_password_mismatched">La password attuale è errata.</string>
+    <string name="passwords_matched">La nuova password è identica a quella attuale.</string>
     <string name="passwords_changed">Password modificata</string>
     <string name="take_photo">Scatta la foto</string>
     <string name="take_another_photo">Altra foto</string>
@@ -604,6 +608,7 @@
     <string name="enter_text">Inserisci il testo</string>
     <string name="send_feedback">Invia il messaggio</string>
     <string name="get_vip_free">Ricevi VIP gratis</string>
+    <string name="buy_more_sympathies">“Ricevi più simpatie, diventa più popolare”</string>
     <string name="google_service_general_title">Notifiche non disponibili</string>
     <string name="google_service_disabled_title">Hai disabilitato i Servizi Google Play che servono per il corretto funzionamento di notifiche.</string>
     <string name="google_service_disabled_button">Abilita</string>

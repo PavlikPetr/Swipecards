@@ -11,9 +11,9 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
-import com.topface.topface.utils.Novice;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.ProfileBackgrounds;
@@ -100,7 +100,7 @@ public class Profile extends AbstractDataWithPhotos {
             //поправим потом, с новой системой парсинга запросво
             //NOTE: Добавлять поля, нужные исключительно для профиля текущего юзера только в это условие!
             if (!(profile instanceof User)) {
-                Novice.giveNoviceLikes = !resp.optBoolean("noviceLikes", true);
+                CacheProfile.giveNoviceLikes = !resp.optBoolean("noviceLikes", true);
                 profile.dating = new DatingFilter(resp.optJSONObject("dating"));
                 profile.email = resp.optBoolean("email");
                 profile.emailGrabbed = resp.optBoolean("emailGrabbed");

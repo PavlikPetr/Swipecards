@@ -203,7 +203,6 @@
         <item quantity="other">%d poze</item>
         <item quantity="one">%d poza</item>
     </plurals>
-    <string name="novice_sympathy">Trimiteti simpatii la cei \n care va sunt dragi cu adevarat, \n pentru a incepe o cunostinta placuta</string>
     <string name="general_edit_profile_message">Fiti amabili, sa indepliniti campurile necesare a chestionarului</string>
     <string name="general_search_null_response_error">Cautare esuata. Incercati sa faceti schimbari in filtru</string>
     <string name="change_filters">Schimba filtru</string>
@@ -239,8 +238,6 @@
     <string name="settings_invalid_email">E-mail incorect</string>
     <string name="chat_write_message">Scrie mesaj</string>
     <string name="buying_sympathies">Cumpararea simpatiilor</string>
-    <string name="novice_sympathies_bonus">Dmv primiti %1$d simpatii \ncadou! Aceasta inseamna, ca Dmv\nprecis placeti %2$d la oameni,\ncare va exprima simpatia lor</string>
-    <string name="novice_buy_sympathies">Daca dorinti garantat\nsa primiti simpatii, \nprocurati acum!</string>
     <string name="general_reconnect_social">Imposibila conectare la reteaua de socializare. Repetati Incercarea mai tarziu.</string>
     <string name="general_block">Blocare</string>
     <string name="general_buying_disabled">La momentul dat cumpararea e imposibila</string>

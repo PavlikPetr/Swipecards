@@ -26,7 +26,6 @@ import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.City;
 import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.requests.IApiResponse;
@@ -50,6 +49,7 @@ import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
+import com.topface.topface.utils.controllers.SequencedStartAction;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
@@ -68,7 +68,7 @@ import static com.topface.topface.utils.controllers.StartActionsController.AC_PR
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
 
-public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener {
+public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener, SequencedStartAction.IUiRunner {
     public static final String INTENT_EXIT = "EXIT";
     public static final String PAGE_SWITCH = "Page switch: ";
 
@@ -305,9 +305,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
-        if (CacheProfile.age <= App.getAppOptions().getUserAgeMin()) {
-            SetAgeDialog.newInstance().show(this.getSupportFragmentManager(), SetAgeDialog.TAG);
-        }
     }
 
     @Override
@@ -436,6 +433,9 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
         if (mDrawerToggle != null) {
             mDrawerToggle.syncState();
+        }
+        if (CacheProfile.age <= App.getAppOptions().getUserAgeMin()) {
+            SetAgeDialog.newInstance().show(this.getSupportFragmentManager(), SetAgeDialog.TAG);
         }
 
         /*

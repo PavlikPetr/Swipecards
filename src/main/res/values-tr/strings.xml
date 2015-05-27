@@ -140,6 +140,7 @@
     <string name="general_dbl_unread">Okunmamış</string>
     <string name="general_empty_code_confirmation">Dogrulama kodunu giriniz</string>
     <string name="general_email_success_confirmed">E-posta başarıyla doğrulandı</string>
+    <string name="general_email_not_confirmed">E-posta teyit edilmemiştir.</string>
     <string name="time_yesterday">Dün</string>
     <string name="time_today">Bugün</string>
     <string name="general_send_button">Gönder</string>
@@ -186,6 +187,7 @@
     <string name="filter_age_start_prefix">%s gelen</string>
     <string name="filter_age_end_prefix">%s kadar</string>
     <string name="filter_cities_all">Bütün şehirlerde</string>
+    <string name="purchase_header_title">Denge:</string>
     <string name="buying_header_title">Alış verişler</string>
     <plurals name="buying_gift_you_need_coins">
         <item quantity="other">Bir hediye yollamak için daha fazla %d para gerek</item>
@@ -268,6 +270,7 @@
     <string name="settings_logout">Hesaptan çıkmak</string>
     <string name="settings_code_confirmation">Doğrulama kodunu gönderin</string>
     <string name="settings_email_was_confirmed">zaten doğruladı</string>
+    <string name="settings_email_was_confirmed_textview_text">Eğer e-postanızı bilgisayarda onayladısanız</string>
     <string name="settings_code_confirmation_hint">onay kodu</string>
     <string name="settings_logout_msg">Gerçekten çıkmak istiyor musunuz?</string>
     <string name="settings_error_message">Hata mesajı</string>
@@ -292,7 +295,6 @@
         <item quantity="other">%d fotoğraf</item>
         <item quantity="one">%d fotoğraf</item>
     </plurals>
-    <string name="novice_sympathy">Hoş bir tanışma başlamak \niçin \ngerçekten hoşlandığınız kişilere sempati gönderin</string>
     <string name="general_edit_profile_message">Lütfen, anketin gerekli boşlukları doldurun</string>
     <string name="general_search_null_response_error">Hiçbir şey bulunamadı. Filtreleri değiştirmeyi deneyin</string>
     <string name="change_filters">Filtreleri değiştirmek</string>
@@ -341,8 +343,6 @@
     <string name="chat_write_message">Mesaj yazmak</string>
     <string name="dating_message">Mesaj…</string>
     <string name="buying_sympathies">Sempati satın alımı</string>
-    <string name="novice_sympathies_bonus">Siz %1$d \nhediye olarak kazandınız! – Bu demek ki %2$d kişi sizi \nkesinlikle beğenir ve sempatileri size \ngösterir.</string>
-    <string name="novice_buy_sympathies">Sempati garanti olarak\nalmak istiyorsanız hemen şimdi \nsatın alın!</string>
     <string name="general_reconnect_social">Sosyal ağa bağlanamıyor. Daha sonra tekrar deneyin.</string>
     <string name="general_block">Engellemek</string>
     <string name="general_buying_disabled">Şu anda alışveriş mümkün değildir</string>
@@ -373,6 +373,8 @@
     <string name="girl">kız</string>
     <string name="start_communication">Sohbete başlamak</string>
     <string name="birthdate">DT</string>
+    <string name="birthdate_confirm">Aksi takdirde karşılamak mümkün olmayacaktır, yaşınızı doldurunuz, lütfen</string>
+    <string name="set_birthdate">Yaşınıza doldurun</string>
     <string name="welcome_to_topface">Topface’ye hoş geldiniz!</string>
     <string name="incorrect_email">E-mail yanlıştır</string>
     <string name="incorrect_login">Login yanlıştır</string>
@@ -398,8 +400,11 @@
     <string name="password_confirmation_hint">Parola onaylaması</string>
     <string name="password_hint">parola</string>
     <string name="enter_new_password">Yeni parolaya girin</string>
+    <string name="enter_old_password">Eski şifreyi girin</string>
     <string name="enter_password_confirmation">Parolayı tekrar yazın</string>
     <string name="passwords_mismatched">Parolalar eşleşmedi</string>
+    <string name="old_password_mismatched">Geçersiz eski şifre.</string>
+    <string name="passwords_matched">Yeni ve eski şifre aynıdır.</string>
     <string name="passwords_changed">Parola değiştirildi</string>
     <string name="take_photo">Foto çekmek</string>
     <string name="take_another_photo">Diğer foto</string>
@@ -514,6 +519,7 @@
     <string name="delete">Silmek</string>
     <string name="delete_account_warning">Dikkat! Topface’deki profilinizi silmeye çalışıyorsunuz.</string>
     <string name="delete_account_error">Maalesef, hesabınız silinemedi. Bir daha deneyebilirsiniz.</string>
+    <string name="delete_account_will_be_restored_are_you_sure">Uzak hesap girmeye çalışıyorsunuz. Girdiğiniz zaman bir hesap geri yüklenir.</string>
     <string name="restore">Kurtarmak</string>
     <string name="admiration_sended">Hayranlık gönderilmiştir</string>
     <string name="skip">Geç</string>
@@ -620,6 +626,7 @@
     <string name="enter_text">mesajınızı girin</string>
     <string name="send_feedback">mesaj göndermek</string>
     <string name="get_vip_free">VIP bedava kazanın</string>
+    <string name="buy_more_sympathies">\"Daha beğeneli kazanın, daha popüler olun\"</string>
     <string name="google_service_general_title">İkaz mevcut değildir</string>
     <string name="google_service_disabled_title">Google Play servisleri bildirimleri kapamak için gereklidir.</string>
     <string name="google_service_disabled_button">Açmak</string>
@@ -631,6 +638,10 @@
     <string name="google_sign_in_account_title">Google hesabı eklemediniz. eğer bildirim almak istiyorsanız, lütfen bağlanın</string>
     <string name="google_sign_in_account_button">Oturum açın</string>
     <string name="google_unavailable_services_title">Maalesef,bildirimler telefonunuzda çalışmaz.</string>
+    <string name="receive_message_notification">Yeni mesajı hakkında bildirimleri alın\nо</string>
+    <string name="receive_mutual_notification">Yeni karşılıklı beğeni hakkında bildirimleri alın\nо</string>
+    <string name="receive_sympathy_notification">Yeni beğeni hakkında bildirimleri alın\nо</string>
+    <string name="receive_guest_notification">Yeni misafiri hakkında bildirimleri alın\nо</string>
     <string name="on_phone">telefona</string>
     <string name="on_mail">e-postaya</string>
     <string name="add_leader_hint">Tebriksiniz …</string>

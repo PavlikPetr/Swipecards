@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.topface.topface.ui.dialogs.AbstractEditDialog.EditingFinishedListener;
+import static com.topface.topface.ui.dialogs.BaseEditDialog.EditingFinishedListener;
 
 public class ProfileFormFragment extends AbstractFormFragment {
 

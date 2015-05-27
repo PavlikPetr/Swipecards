@@ -33,7 +33,6 @@
             android:layout_marginLeft="6dp"
             android:layout_marginTop="6dp" />
 
-
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -50,9 +49,8 @@
                 android:textColor="#FFFFFF"
                 android:textSize="14sp" />
 
-            <include
+            <ViewStub
                 android:id="@+id/vfDatingButtons"
-                layout="@layout/dating_buttons"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal" />
@@ -71,7 +69,6 @@
             android:textSize="10sp"
             android:visibility="gone" />
 
-
         <ImageButton
             android:id="@+id/btnUpdate"
             android:layout_width="wrap_content"
@@ -81,11 +78,6 @@
             android:src="@drawable/btn_refresh_selector"
             android:visibility="gone" />
 
-        <com.topface.topface.ui.views.NoviceLayout
-            android:id="@+id/loNovice"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:visibility="gone" />
     </RelativeLayout>
 
     <ProgressBar

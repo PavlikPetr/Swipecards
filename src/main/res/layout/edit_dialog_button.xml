@@ -11,10 +11,7 @@
 
     <Button
         android:id="@+id/edit_dialog_ok"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/edit_dialog_button_heigh"
-        android:layout_below="@id/edit_dialog_buttons_top"
-        android:background="@null"
+        style="@style/ProfileEditDialogBth"
         android:text="@string/general_ok" />
 
 </RelativeLayout>

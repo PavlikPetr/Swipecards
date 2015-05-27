@@ -255,7 +255,6 @@
         <item quantity="other">%d foton</item>
         <item quantity="one">%d foto</item>
     </plurals>
-    <string name="novice_sympathy">Skicka sympatier till dem\ndu verkligen gillar,\nför att inleda ett trevligt förhållande</string>
     <string name="general_edit_profile_message">Vänligen fyll i nödvändiga fälten i profilen</string>
     <string name="general_search_null_response_error">Inget hittats. Försök att ändra sökkriterier</string>
     <string name="change_filters">Ändra filtrar</string>
@@ -303,8 +302,6 @@
     <string name="chat_write_message">Skriv ett meddelande</string>
     <string name="dating_message">Meddelande…</string>
     <string name="buying_sympathies">Köp sympatier</string>
-    <string name="novice_sympathies_bonus">Du får %1$d sympatier i\npresent! Detta innebär, att\n%2$d personer kommer att gilla dig\noch visa sin sympati för dig</string>
-    <string name="novice_buy_sympathies">Om du vill garanterat\nfå sympatier,\nköp dem redan nu!</string>
     <string name="general_reconnect_social">Det är omöjligt att ansluta sig till social media. Vänligen försök senare.</string>
     <string name="general_block">Blockera</string>
     <string name="general_buying_disabled">För närvarande är inköpet omöjligt</string>

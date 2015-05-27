@@ -6,10 +6,8 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
-        android:layout_marginTop="100dp"
         android:layout_width="280dp"
-        android:layout_height="265dp"
-        android:background="#efefef"
+        android:layout_height="275dp"
         android:layout_centerHorizontal="true"
         android:orientation="vertical"
         android:id="@+id/linearLayout3">
@@ -41,7 +39,9 @@
             android:layout_height="match_parent"
             android:maxHeight="44dp"
             android:text="@string/set_birthdate"
-            android:height="44dp" />
+            android:height="44dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp" />
 
     </LinearLayout>
 
