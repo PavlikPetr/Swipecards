@@ -187,6 +187,7 @@
     <string name="filter_age_start_prefix">%s gelen</string>
     <string name="filter_age_end_prefix">%s kadar</string>
     <string name="filter_cities_all">Bütün şehirlerde</string>
+    <string name="purchase_header_title">Denge:</string>
     <string name="buying_header_title">Alış verişler</string>
     <plurals name="buying_gift_you_need_coins">
         <item quantity="other">Bir hediye yollamak için daha fazla %d para gerek</item>
