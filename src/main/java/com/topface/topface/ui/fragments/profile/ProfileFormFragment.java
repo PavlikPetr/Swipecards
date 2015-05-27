@@ -187,7 +187,6 @@ public class ProfileFormFragment extends AbstractFormFragment {
                 settingsRequest.cityid = JsonUtils.fromJson(value, City.class).id;
                 break;
         }
-        App.sendProfileRequest();
         return settingsRequest;
     }
 }
