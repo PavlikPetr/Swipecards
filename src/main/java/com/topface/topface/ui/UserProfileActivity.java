@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
@@ -16,7 +17,9 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
 
     public static final int INTENT_USER_PROFILE = 6;
 
-    public static Intent createIntent(ApiResponse response, Photo photo, int userId, String itemId, boolean isChatAvailable, boolean isAddToFavoritesAvailable, String nameAndAge, String city) {
+    public static Intent createIntent(ApiResponse response, Photo photo, int userId, String itemId,
+                                      boolean isChatAvailable, boolean isAddToFavoritesAvailable,
+                                      String nameAndAge, String city) {
         Intent intent = new Intent(App.getContext(), UserProfileActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, nameAndAge);
         intent.putExtra(ChatFragment.INTENT_USER_CITY, city);
@@ -49,5 +52,12 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
     @Override
     protected void setActionBarView() {
         super.setActionBarView();
+    }
+
+    @Override
+    public Intent getSupportParentActivityIntent() {
+        Intent intent = super.getSupportParentActivityIntent();
+        FeedScreensIntent.equipDatingIntent(intent);
+        return intent;
     }
 }

@@ -3,11 +3,13 @@ package com.topface.topface.data.experiments;
 import android.content.Intent;
 
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.DATING;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.PHOTO_BLOG;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_DIALOGS;
 
@@ -31,4 +33,9 @@ public class FeedScreensIntent {
             intent.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, pageName);
         }
     }
+
+    public static void equipDatingIntent(Intent intent) {
+        equipFeedIntent(intent, DATING, DatingFragment.class.getName());
+    }
+
 }
