@@ -15,6 +15,7 @@ public class UserPhotoGridAdapter extends PhotoGridAdapter {
     // Data
     private LayoutInflater mInflater;
 
+
     public UserPhotoGridAdapter(Context context, Photos photoLinks, int totalPhotos, LoadingListAdapter.Updater callback) {
         super(photoLinks, totalPhotos, callback);
         mInflater = LayoutInflater.from(context);
@@ -36,6 +37,7 @@ public class UserPhotoGridAdapter extends PhotoGridAdapter {
         // проверка нужна для исключения краша в адаптере при добавлении
         // GridViewWithHeaderAndFooter header и/или footer
         if (holder != null && holder.photo != null) {
+            setImageViewRemoteAnimation(holder.photo, 300);
             holder.photo.setPhoto(getItem(position));
         }
         return convertView;
