@@ -409,6 +409,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mAnimationHelper = new AnimationHelper(getActivity(), R.anim.fade_in, R.anim.fade_out);
         mAnimationHelper.addView(mDatingCounter);
         mAnimationHelper.addView(mDatingResources);
+        mAnimationHelper.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                if (!mIsHide) {
+                    setMainStatusBarColor();
+                }
+            }
 
             @Override
             public void onAnimationEnd(Animation animation) {
