@@ -1,7 +1,7 @@
 package com.topface.topface.ui.fragments;
 
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.view.Menu;
 import android.view.View;
 
 import com.topface.topface.data.IUniversalUser;
@@ -36,7 +36,7 @@ public abstract class AnimatedFragment extends UserAvatarFragment {
     }
 
     @Override
-    protected OverflowMenu createOverflowMenu(MenuItem barActions) {
+    protected OverflowMenu createOverflowMenu(Menu barActions) {
         return null;
     }
 

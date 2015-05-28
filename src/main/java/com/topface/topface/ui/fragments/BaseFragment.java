@@ -17,12 +17,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.topface.framework.utils.Debug;
-import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.http.IRequestClient;
 
@@ -49,7 +49,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected int getStatusBarColor() {
-        return R.color.light_theme_color_primary_dark;
+        return Utils.getColorPrimaryDark(getActivity());
     }
 
     protected boolean needOptionsMenu() {

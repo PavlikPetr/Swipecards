@@ -380,7 +380,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setMainStatusBarColor() {
-        mCurrentStatusBarColor = R.color.light_theme_color_primary_dark;
+        mCurrentStatusBarColor = Utils.getColorPrimaryDark(getActivity());
         setStatusBarColor();
     }
 

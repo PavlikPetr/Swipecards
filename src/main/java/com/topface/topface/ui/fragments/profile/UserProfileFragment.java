@@ -13,7 +13,6 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -154,7 +153,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
     }
 
     @Override
-    protected OverflowMenu createOverflowMenu(MenuItem barActions) {
+    protected OverflowMenu createOverflowMenu(Menu barActions) {
         return new OverflowMenu(getActivity(), barActions, mRateController, mSavedResponse);
     }
 
@@ -420,7 +419,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
                         if (profile != null) {
                             return ChatActivity.createIntent(profile.uid, profile.getNameAndAge(),
                                     profile.city == null ? "" : profile.city.name,
-                                    null, profile.photo,false);
+                                    null, profile.photo, false);
                         }
                         return null;
                     }
