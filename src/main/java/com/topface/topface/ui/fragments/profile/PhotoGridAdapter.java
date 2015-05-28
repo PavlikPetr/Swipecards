@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.profile;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 
@@ -9,6 +10,7 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.ui.GridViewWithHeaderAndFooter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
+import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
@@ -159,5 +161,11 @@ public class PhotoGridAdapter extends BaseAdapter
 
     protected int getGridItemWidth() {
         return mGridWidth;
+    }
+
+    protected void setImageViewRemoteAnimation(ImageViewRemote view, int duration) {
+        AlphaAnimation animation = new AlphaAnimation(0, 1);
+        animation.setDuration(duration);
+        view.setViewDisplayAnimate(animation);
     }
 }

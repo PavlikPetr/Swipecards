@@ -22,7 +22,7 @@ import java.util.Arrays;
  */
 public class FbAuthorizer extends Authorizer {
 
-    private String[] FB_PERMISSIONS = {"user_photos", "email", "user_birthday", "public_profile", "user_location"};
+    private String[] FB_PERMISSIONS = {"user_photos", "email", "user_birthday", "public_profile", "user_location", "user_friends"};
 
     private UiLifecycleHelper mUiHelper;
     private Request mRequest;

@@ -1,14 +1,7 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
@@ -29,43 +22,20 @@ import java.util.List;
 
 public class DialogsFragment extends FeedFragment<FeedDialog> {
 
-    public static final String REFRESH_DIALOGS = "refresh_dialogs";
-
     private boolean mNeedRefresh = false;
-
-    private BroadcastReceiver mRefreshReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            mNeedRefresh = true;
-        }
-    };
-
 
     public DialogsFragment() {
         super();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mRefreshReceiver, new IntentFilter(REFRESH_DIALOGS));
-        return super.onCreateView(inflater, container, saved);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
-
         //Проверяем флаг, нужно ли обновлять диалоги
         if (mNeedRefresh) {
             updateData(true, false);
             mNeedRefresh = false;
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mRefreshReceiver);
     }
 
     @Override

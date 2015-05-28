@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.inputmethod.EditorInfo;
@@ -132,7 +133,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         public void onReceive(Context context, Intent intent) {
             int likedUserId = intent.getExtras().getInt(RateController.USER_ID_EXTRA);
             if (mCurrentUser != null && likedUserId == mCurrentUser.id) {
-                mDelightBtn.setEnabled(false);
+                if (null != mDelightBtn) {
+                    mDelightBtn.setEnabled(false);
+                }
                 mMutualBtn.setEnabled(false);
                 mCurrentUser.rated = true;
             } else if (mUserSearchList != null) {
@@ -310,6 +313,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mCurrentUser != null) {
             fillUserInfo(mCurrentUser);
         }
+        if (CacheProfile.getOptions().isHideAdmirations) {
+            mDatingCounter.setVisibility(View.GONE);
+            mDatingResources.setVisibility(View.GONE);
+        }
         return mRoot;
     }
 
@@ -388,9 +395,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mRetryBtn = (ImageButton) root.findViewById(R.id.btnUpdate);
         mRetryBtn.setOnClickListener(this);
 
-        // Dating controls
-        mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
-
         // User Info
         mUserInfoStatus = (TextView) root.findViewById(R.id.tvDatingUserStatus);
 
@@ -401,18 +405,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mProgressBar = (ProgressBar) root.findViewById(R.id.prsDatingLoading);
 
         initResources(root);
-        initControlButtons(root);
 
         mAnimationHelper = new AnimationHelper(getActivity(), R.anim.fade_in, R.anim.fade_out);
         mAnimationHelper.addView(mDatingCounter);
         mAnimationHelper.addView(mDatingResources);
-        mAnimationHelper.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                if (!mIsHide) {
-                    setMainStatusBarColor();
-                }
-            }
 
             @Override
             public void onAnimationEnd(Animation animation) {
@@ -429,9 +425,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
 
-        mDatingButtons = root.findViewById(R.id.vfDatingButtons);
-
+        ViewStub stub = (ViewStub) root.findViewById(R.id.vfDatingButtons);
+        stub.setLayoutResource(CacheProfile.getOptions().isHideAdmirations ? R.layout.hide_admiration_dating_buttons : R.layout.dating_buttons);
+        mDatingButtons = stub.inflate();
+        initControlButtons(root);
         initInstantMessageController(mRoot);
+        if (!CacheProfile.getOptions().isHideAdmirations) {
+            // Dating controls
+            mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
+
+            mAnimationHelper.addView(mDatingCounter);
+            mAnimationHelper.addView(mDatingResources);
+        }
     }
 
     private void initMutualDrawables() {
@@ -447,10 +452,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void setHighRatePrice() {
         // Dating Love Price
         final int delightPrice = CacheProfile.getOptions().priceAdmiration;
-        if (delightPrice > 0) {
-            mDatingLovePrice.setText(Integer.toString(CacheProfile.getOptions().priceAdmiration));
-        } else {
-            mDatingLovePrice.setVisibility(View.GONE);
+        if (null != mDatingLovePrice) {
+            if (delightPrice > 0) {
+                mDatingLovePrice.setText(Integer.toString(CacheProfile.getOptions().priceAdmiration));
+            } else {
+                mDatingLovePrice.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -472,8 +479,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void initControlButtons(View view) {
         // Control Buttons
-        mDelightBtn = (Button) view.findViewById(R.id.btnDatingAdmiration);
-        mDelightBtn.setOnClickListener(this);
+        if (!CacheProfile.getOptions().isHideAdmirations) {
+            mDelightBtn = (Button) view.findViewById(R.id.btnDatingAdmiration);
+            mDelightBtn.setOnClickListener(this);
+        }
         mMutualBtn = (Button) view.findViewById(R.id.btnDatingSympathy);
         mMutualBtn.setOnClickListener(this);
         mSkipBtn = (Button) view.findViewById(R.id.btnDatingSkip);
@@ -865,8 +874,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         Resources res = getResources();
 
         setUserOnlineStatus(currUser);
-        setUserSex(currUser, res);
-        setLikeButtonDrawables(currUser);
+        if (!CacheProfile.getOptions().isHideAdmirations) {
+            setUserSex(currUser, res);
+            setLikeButtonDrawables(currUser);
+        }
         setUserPhotos(currUser);
 
         mImageSwitcher.setData(currUser.photos);
@@ -896,9 +907,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 : singleMutual, null, null);
         mMutualBtn.setText(currUser.isMutualPossible ? App.getContext().getString(R.string.general_mutual)
                 : App.getContext().getString(R.string.general_sympathy));
-
-        mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                currUser.isMutualPossible ? doubleDelight : singleDelight, null, null);
+        if (null != mDelightBtn) {
+            mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(null,
+                    currUser.isMutualPossible ? doubleDelight : singleDelight, null, null);
+        }
     }
 
     private void setUserPhotos(SearchUser currUser) {
@@ -981,19 +993,25 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (!mIsHide) mDatingCounter.setVisibility(View.GONE);
         mUserInfoStatus.setVisibility(View.GONE);
         mMutualBtn.setEnabled(false);
-        mDelightBtn.setEnabled(false);
+        if (null != mDelightBtn) {
+            mDelightBtn.setEnabled(false);
+        }
         mSkipBtn.setEnabled(false);
         mProfileBtn.setEnabled(false);
-        mDatingLoveBtnLayout.setEnabled(false);
+        if (null != mDatingLoveBtnLayout) {
+            mDatingLoveBtnLayout.setEnabled(false);
+        }
         setEnableInputButtons(false);
     }
 
     @Override
     public void unlockControls() {
         mProgressBar.setVisibility(View.GONE);
-        if (!mIsHide) mDatingCounter.setVisibility(View.VISIBLE);
-        if (!mRoot.isKeyboardOpened()) {
+        if (!mIsHide && !CacheProfile.getOptions().isHideAdmirations) {
+            mDatingCounter.setVisibility(View.VISIBLE);
             mUserInfoStatus.setVisibility(View.VISIBLE);
+        } else {
+            mUserInfoStatus.setVisibility(View.GONE);
         }
 
         boolean enabled = false;
@@ -1001,14 +1019,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             enabled = !mCurrentUser.rated;
         }
         mMutualBtn.setEnabled(enabled);
-        mDelightBtn.setEnabled(enabled);
+        if (null != mDelightBtn) {
+            mDelightBtn.setEnabled(enabled);
+        }
 
         mSkipBtn.setEnabled(true);
 
         enabled = (mCurrentUser != null);
         mProfileBtn.setEnabled(enabled);
 
-        mDatingLoveBtnLayout.setEnabled(true);
+        if (null != mDatingLoveBtnLayout) {
+            mDatingLoveBtnLayout.setEnabled(true);
+        }
 
         setEnableInputButtons(true);
     }

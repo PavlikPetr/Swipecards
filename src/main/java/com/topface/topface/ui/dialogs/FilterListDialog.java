@@ -1,7 +1,6 @@
 package com.topface.topface.ui.dialogs;
 
 import android.app.Dialog;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -10,7 +9,7 @@ import com.topface.topface.R;
 import com.topface.topface.ui.adapters.FilterDialogAdapter;
 import com.topface.topface.utils.FormInfo;
 
-public class FilterListDialog extends AbstractDialogFragment {
+public class FilterListDialog extends BaseDialog {
 
     public static final String TAG = "com.topface.topface.ui.dialogs.FilterListDialog_TAG";
 
@@ -31,12 +30,6 @@ public class FilterListDialog extends AbstractDialogFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setStyle(STYLE_NO_FRAME, R.style.Theme_Topface_NoActionBar_Filterlist);
-    }
-
-    @Override
     protected void initViews(View root) {
         mList = (ListView) root.findViewWithTag("loFilterList");
         setAdapter();
@@ -51,11 +44,6 @@ public class FilterListDialog extends AbstractDialogFragment {
         });
     }
 
-    @Override
-    protected boolean isModalDialog() {
-        return false;
-    }
-
     private void setAdapter() {
         mList.setAdapter(new FilterDialogAdapter(getActivity(),
                 R.layout.filter_edit_form_dialog_cell,
@@ -66,6 +54,11 @@ public class FilterListDialog extends AbstractDialogFragment {
     @Override
     public int getDialogLayoutRes() {
         return R.layout.filter_dialog_layout;
+    }
+
+    @Override
+    protected int getDialogStyleResId() {
+        return R.style.EditDialog;
     }
 
     public interface DialogRowCliCkInterface {
