@@ -281,7 +281,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         }
     }
 
-    public void buyNow(Products.BuyButton btn) {
+    private void buyNow(Products.BuyButton btn) {
         if (btn.id != null) {
             if (btn.type.isSubscription() && !isTestPurchasesEnabled()) {
                 buySubscription(btn.id);

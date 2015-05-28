@@ -18,7 +18,7 @@ public class TransparentMarketFragment extends MarketBuyingFragment {
         if (CacheProfile.isEmpty()) {
             setTestPaymentsState(App.getUserConfig().getTestPaymentFlag());
         }
-        buyNow(experiment.productId, experiment.subscription);
+        buyNow(experiment.productId, experiment.isSubscription);
     }
 
     public void buyNow(String id, boolean isSubscription) {
@@ -35,6 +35,15 @@ public class TransparentMarketFragment extends MarketBuyingFragment {
     public void onPurchased(Purchase product) {
         super.onPurchased(product);
         mPurchaseCompleteAction.onPurchaseAction();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Устанавливаем тестовые покупки
+        if (CacheProfile.isEditor()) {
+            setTestPaymentsState(App.getUserConfig().getTestPaymentFlag());
+        }
     }
 
     public void setOnPurchaseCompleteAction(onPurchaseCompleteAction purchaseCompliteAction) {

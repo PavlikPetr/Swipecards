@@ -10,9 +10,9 @@ public class SixCoinsSubscribeExperiment {
     //id покупки
     public String productId;
     //подписка или разовая покупка
-    public boolean subscription;
+    public boolean isSubscription;
     //текст для кнопки
-    public String text;
-    public boolean enabled;
+    public String buttonText;
+    public boolean isEnabled;
 
 }

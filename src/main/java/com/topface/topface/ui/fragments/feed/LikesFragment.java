@@ -239,11 +239,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         final Button btnBuy = (Button) currentView.findViewById(R.id.buy_coins_button);
         final ProgressBar progress = (ProgressBar) currentView.findViewById(R.id.prsLoading);
         final SixCoinsSubscribeExperiment experiment = CacheProfile.getOptions().sixCoinsSubscribeExperiment;
-        initButtonForBlockedScreen(btnBuy, experiment.enabled ? experiment.text : blockSympathyOptions.buttonText,
+        initButtonForBlockedScreen(btnBuy, experiment.isEnabled ? experiment.buttonText : blockSympathyOptions.buttonText,
                 new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (experiment.enabled) {
+                if (experiment.isEnabled) {
                     Fragment f = getChildFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
                     final TransparentMarketFragment fragment = f == null ? new TransparentMarketFragment() : (TransparentMarketFragment) f;
                     fragment.setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseCompleteAction() {
@@ -251,11 +251,12 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                         public void onPurchaseAction() {
                             if (isAdded()) {
                                 updateData(false, true);
-                                getChildFragmentManager().beginTransaction().remove(fragment).commit();
+                                getActivity().getSupportFragmentManager().
+                                        beginTransaction().remove(fragment).commit();
                             }
                         }
                     });
-                    getChildFragmentManager().beginTransaction()
+                    getActivity().getSupportFragmentManager().beginTransaction()
                             .add(fragment, TransparentMarketFragment.class.getSimpleName()).commit();
                     return;
                 }
