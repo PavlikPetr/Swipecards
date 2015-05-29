@@ -17,7 +17,9 @@ import com.topface.topface.utils.social.AuthToken;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by kirussell on 06.01.14.
@@ -30,6 +32,7 @@ import java.util.List;
 public class UserConfig extends AbstractConfig {
     public static final int TOPFACE_OFFERWALL_REDIRECTION_FREQUENCY = 2;
     private static final int DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
+    public static final String LISTS_SEPARATOR = "&";
     public static final String PROFILE_CONFIG_SETTINGS = "profile_config_settings";
     /**
      * Keys' names to generate user-based keys
@@ -53,7 +56,6 @@ public class UserConfig extends AbstractConfig {
     public static final String SETTINGS_GCM_LED = "settings_gcm_led";
     public static final String SILENT = "silent";
     public static final String PURCHASED_SUBSCRIPTIONS = "purchased_subscriptions";
-    public static final String PURCHASED_SUBSCRIPTIONS_SEPARATOR = "&";
     public static final String DATING_LOCK_POPUP_TIME = "dating_lock_popup_time";
     public static final String TOPFACE_OFFERWALL_REDIRECT_COUNTER = "topface_offerwall_redirect_counter";
     public static final String REMAINED_DAILY_PUBNATIVE_SHOWS = "remained_feed_ad_shows";
@@ -63,6 +65,7 @@ public class UserConfig extends AbstractConfig {
     private static final String IS_EMAIL_CONFIRM_SENT = "is_button_send_confirmation_clicked";
     private static final String INTERSTITIAL_IN_FEEDS_COUNTER = "interstitial_in_feed_counter";
     private static final String INTERSTITIAL_IN_FEEDS_FIRST_SHOW_TIME = "interstitial_in_feed_first_show_time";
+    public static final String INVITED_CONTACTS_FOR_SMS = "invite_contacts_for_sms";
     private String mUnique;
 
     public UserConfig(String uniqueKey, Context context) {
@@ -151,6 +154,8 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, INTERSTITIAL_IN_FEEDS_COUNTER, 0);
         // interstitials' first show time
         addField(settingsMap, INTERSTITIAL_IN_FEEDS_FIRST_SHOW_TIME, 0L);
+        // отправленные контакты для отправки смс
+        addField(settingsMap, INVITED_CONTACTS_FOR_SMS, "");
     }
 
     @Override
@@ -464,6 +469,30 @@ public class UserConfig extends AbstractConfig {
         setField(getSettingsMap(), IS_EMAIL_CONFIRM_SENT, state);
     }
 
+    /**
+     * Adds contact id to list of invited contacts to send sms
+     *
+     * @param id contact id
+     */
+    public void addInvitedContactBySms(String id) {
+        String rawIds = getStringField(getSettingsMap(), INVITED_CONTACTS_FOR_SMS);
+        if (TextUtils.isEmpty(rawIds)) {
+            setField(getSettingsMap(), INVITED_CONTACTS_FOR_SMS, rawIds.concat(id));
+        } else {
+            setField(getSettingsMap(), INVITED_CONTACTS_FOR_SMS, rawIds.
+                    concat(LISTS_SEPARATOR).concat(id));
+        }
+    }
+
+    /**
+     * List of invites contacts' ids to send sms
+     *
+     * @return list of contacts' ids
+     */
+    public Set<String> getInvitedContactsBySms() {
+        String rawIds = getStringField(getSettingsMap(), INVITED_CONTACTS_FOR_SMS);
+        return new HashSet<>(Arrays.asList(rawIds.split(LISTS_SEPARATOR)));
+    }
 
     /**
      * @return true if push notification enabled
@@ -485,7 +514,7 @@ public class UserConfig extends AbstractConfig {
      */
     public List<String> getPurchasedSubscriptions() {
         String rawSubs = getStringField(getSettingsMap(), PURCHASED_SUBSCRIPTIONS);
-        return Arrays.asList(rawSubs.split(PURCHASED_SUBSCRIPTIONS_SEPARATOR));
+        return Arrays.asList(rawSubs.split(LISTS_SEPARATOR));
     }
 
     /**
@@ -497,7 +526,7 @@ public class UserConfig extends AbstractConfig {
             setField(getSettingsMap(), PURCHASED_SUBSCRIPTIONS, rawSubs.concat(subscriptionId));
         } else {
             setField(getSettingsMap(), PURCHASED_SUBSCRIPTIONS, rawSubs.
-                    concat(PURCHASED_SUBSCRIPTIONS_SEPARATOR).concat(subscriptionId));
+                    concat(LISTS_SEPARATOR).concat(subscriptionId));
         }
     }
 
@@ -547,7 +576,7 @@ public class UserConfig extends AbstractConfig {
         if (TextUtils.isEmpty(rawSubs)) {
             return res;
         }
-        for (String item : rawSubs.split(PURCHASED_SUBSCRIPTIONS_SEPARATOR)) {
+        for (String item : rawSubs.split(LISTS_SEPARATOR)) {
             int id = -1;
             try {
                 id = Integer.parseInt(item);
@@ -568,7 +597,7 @@ public class UserConfig extends AbstractConfig {
         for (int i = 0; i < array.size(); i++) {
             res = res + Integer.toString(array.get(i));
             if (i < array.size() - 1) {
-                res = res + PURCHASED_SUBSCRIPTIONS_SEPARATOR;
+                res = res + LISTS_SEPARATOR;
             }
         }
         setField(getSettingsMap(), SYMPATHY_SENT_ID_ARRAY, res);

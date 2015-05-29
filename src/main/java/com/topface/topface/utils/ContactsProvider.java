@@ -1,8 +1,10 @@
 package com.topface.topface.utils;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcel;
@@ -16,32 +18,48 @@ import java.util.ArrayList;
 
 public class ContactsProvider {
 
+    private static final int EMAIL = 1;
+    private static final int PHONE = 2;
+    private static final int EMAIL_AND_PHONE = 3;
+
     private final Context ctx;
     private ArrayList<Contact> contacts;
-    private GetContactsHandler handler;
 
     public ContactsProvider(Context ctx) {
-        this.ctx = ctx;
+        this.ctx = ctx.getApplicationContext();
         contacts = new ArrayList<>();
     }
 
-    public void getContacts(final int limit, final int offset, GetContactsHandler handler) {
-        this.handler = handler;
+    private void getContacts(final int limit, final int offset, final GetContactsHandler handler, final int dataType) {
         new BackgroundThread() {
             @Override
             public void execute() {
-                getContactsAsync(limit, offset);
+                getContactsAsync(limit, offset, dataType, handler);
             }
         };
     }
 
-    //Что за странная хрень с циклом???
-    @SuppressWarnings("LoopStatementThatDoesntLoop")
-    private void getContactsAsync(int limit, int offset) {
-        ContentResolver cr = getContentResolver();
+    public void getContactsWithEmails(final int limit, final int offset, final GetContactsHandler handler) {
+        getContacts(limit, offset, handler, EMAIL);
+    }
 
+    public void getContactsWithPhones(final int limit, final int offset, final GetContactsHandler handler) {
+        getContacts(limit, offset, handler, PHONE);
+    }
+
+    @SuppressWarnings("unused")
+    public void getContacts(final int limit, final int offset, final GetContactsHandler handler) {
+        getContacts(limit, offset, handler, EMAIL_AND_PHONE);
+    }
+
+    private void getContactsAsync(int limit, int offset, int dataType, GetContactsHandler handler) {
+        ContentResolver cr = getContentResolver();
         String limitCondition = (limit == -1) ? "" : " LIMIT " + limit + " offset " + offset;
-        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, " _id" + limitCondition);
+        String selection = dataType == PHONE ? ContactsContract.Contacts.HAS_PHONE_NUMBER + " > 0" : null;
+        Cursor cur = cr.query(
+                ContactsContract.Contacts.CONTENT_URI, null, selection, null,
+                ContactsContract.Contacts._ID + limitCondition
+        );
         if (cur == null) {
             return;
         }
@@ -50,43 +68,70 @@ public class ContactsProvider {
                 cur.moveToNext();
                 String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
                 String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                String email = "";
-                Cursor emailCur = cr.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ? ", new String[]{String.valueOf(id)}, null);
-                if (emailCur != null) {
-                    if (emailCur.getCount() > 0) {
-                        emailCur.moveToFirst();
-                        email = emailCur.getString(emailCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
-                    }
-                    emailCur.close();
+                String email = null, phone = null;
+                // email
+                if ((dataType & EMAIL) == EMAIL) {
+                    email = getEmail(cr, id);
                 }
-                if (!TextUtils.isEmpty(email)) {
-                    contacts.add(new Contact(name, email, true));
-                } else {
-                    Cursor phoneCursor = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{String.valueOf(id)}, null);
-                    if (phoneCursor != null) {
-                        if (phoneCursor.getCount() > 0) {
-                            phoneCursor.moveToNext();
-                            Contact contact = new Contact(name, getContactFromCursor(phoneCursor), false);
-                            while (!phoneCursor.isLast()) {
-                                phoneCursor.moveToNext();
-                                int isPrimary = phoneCursor.getInt(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.IS_SUPER_PRIMARY));
-                                if (isPrimary > 0) {
-                                    String phone = getContactFromCursor(phoneCursor);
-                                    contact = new Contact(name, phone, false);
-                                    break;
-                                }
-                            }
-                            contacts.add(contact);
-                        }
-                        phoneCursor.close();
-                    }
+                // phone
+                if ((dataType & PHONE) == PHONE) {
+                    phone = getPhone(cr, id);
+                }
+                // adds non empty contact
+                if (!TextUtils.isEmpty(email) || !TextUtils.isEmpty(phone)) {
+                    contacts.add(new Contact(id, name, email, phone));
                 }
             }
-
         }
         cur.close();
 
         handler.sendContacts(contacts);
+    }
+
+    private String getEmail(ContentResolver cr, String id) {
+        String email = null;
+        Cursor emailCur = cr.query(
+                ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                null,
+                ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ? ",
+                new String[]{String.valueOf(id)},
+                null
+        );
+        if (emailCur != null) {
+            if (emailCur.getCount() > 0) {
+                emailCur.moveToFirst();
+                email = emailCur.getString(emailCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+            }
+            emailCur.close();
+        }
+        return email;
+    }
+
+    private String getPhone(ContentResolver cr, String id) {
+        String phone = null;
+        Cursor phoneCursor = cr.query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                null,
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                new String[]{String.valueOf(id)},
+                null
+        );
+        if (phoneCursor != null) {
+            if (phoneCursor.getCount() > 0) {
+                phoneCursor.moveToNext();
+                phone = getContactFromCursor(phoneCursor);
+                while (!phoneCursor.isLast()) {
+                    phoneCursor.moveToNext();
+                    int isPrimary = phoneCursor.getInt(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.IS_SUPER_PRIMARY));
+                    if (isPrimary > 0) {
+                        phone = getContactFromCursor(phoneCursor);
+                        break;
+                    }
+                }
+            }
+            phoneCursor.close();
+        }
+        return phone;
     }
 
     private String getContactFromCursor(Cursor cursor) {
@@ -98,21 +143,36 @@ public class ContactsProvider {
     }
 
     public static class Contact implements Parcelable {
+        private String id;
         private String name;
+        private String email;
         private String phone;
-        private boolean email;
         private boolean isChecked = true;
+        private int status;
 
-        public Contact(String name, String phone, boolean isMail) {
+        public Contact(String id, String name, String email, String phone) {
+            this(id, name, email, phone, 2);
+        }
+
+        public Contact(String id, String name, String email, String phone, int status) {
+            this.id = id;
             this.name = name;
+            this.email = email;
             this.phone = phone;
-            email = isMail;
+            this.status = status;
         }
 
         private Contact(Parcel in) {
+            id = in.readString();
             name = in.readString();
+            email = in.readString();
             phone = in.readString();
-            email = in.readInt() == 1;
+            isChecked = in.readInt() == 1;
+            status = in.readInt();
+        }
+
+        public String getId() {
+            return id;
         }
 
         public String getName() {
@@ -123,8 +183,27 @@ public class ContactsProvider {
             return phone;
         }
 
-        public boolean isEmail() {
-            return email;
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        public Uri getPhoto() {
+            Uri person = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI,
+                    Long.parseLong(id));
+            return Uri.withAppendedPath(person, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+        }
+
+        public boolean hasEmail() {
+            return !TextUtils.isEmpty(email);
+        }
+
+        @SuppressWarnings("unused")
+        public boolean hasPhone() {
+            return !TextUtils.isEmpty(phone);
         }
 
         public void setChecked(boolean checked) {
@@ -154,11 +233,13 @@ public class ContactsProvider {
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(id);
             dest.writeString(name);
+            dest.writeString(email);
             dest.writeString(phone);
-            dest.writeInt(email ? 1 : 0);
+            dest.writeInt(isChecked ? 1 : 0);
+            dest.writeInt(status);
         }
-
     }
 
     public static abstract class GetContactsHandler extends Handler {
