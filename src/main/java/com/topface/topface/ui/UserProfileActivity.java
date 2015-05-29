@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
-import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
@@ -54,10 +53,5 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
         super.setActionBarView();
     }
 
-    @Override
-    public Intent getSupportParentActivityIntent() {
-        Intent intent = super.getSupportParentActivityIntent();
-        FeedScreensIntent.equipDatingIntent(intent);
-        return intent;
-    }
+
 }

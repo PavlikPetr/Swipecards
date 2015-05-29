@@ -28,7 +28,7 @@ import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
-import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
+import com.topface.topface.ui.fragments.profile.UserFormFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
@@ -377,10 +377,6 @@ public class GCMUtils {
         if (userJson != null) {
             user.json2User(userJson);
         }
-        user.id = 1217492;
-        user.name = "Борис Бритва";
-        user.age = 43;
-        user.city = "СПБ";
         return user;
     }
 
@@ -502,7 +498,7 @@ public class GCMUtils {
             case GCM_TYPE_FUN_UPDATE_PROFILE:
                 lastNotificationType = GCM_TYPE_FUN_UPDATE_PROFILE;
                 i = UserProfileActivity.createIntent(null, null, user.id, null, true, CacheProfile.premium, Utils.getNameAndAge(user.name, user.age), user.city);
-                i.putExtra(AbstractProfileFragment.CURRENT_BODY_PAGE, 1);
+                i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, UserFormFragment.class.getName());
                 break;
             case GCM_TYPE_FUN_ADD_PHOTO:
                 lastNotificationType = GCM_TYPE_FUN_ADD_PHOTO;

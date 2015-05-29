@@ -29,6 +29,7 @@ import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.gcmutils.GCMUtils;
@@ -314,6 +315,9 @@ public class UserNotification {
         String componentName = targetIntent.getComponent().getClassName();
         if (TextUtils.equals(componentName, ChatActivity.class.getCanonicalName())) {
             FeedScreensIntent.equipNotificationIntent(parentIntent);
+        }
+        if (TextUtils.equals(componentName, UserProfileActivity.class.getCanonicalName())) {
+            FeedScreensIntent.equipDatingIntent(parentIntent);
         }
     }
 

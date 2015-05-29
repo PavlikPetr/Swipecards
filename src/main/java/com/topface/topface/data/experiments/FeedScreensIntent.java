@@ -35,6 +35,7 @@ public class FeedScreensIntent {
     }
 
     public static void equipDatingIntent(Intent intent) {
+        intent.putExtra(GCMUtils.NOTIFICATION_INTENT, true);
         equipFeedIntent(intent, DATING, DatingFragment.class.getName());
     }
 
