@@ -427,7 +427,7 @@ public class GCMUtils {
         if (showMessage) {
             Intent i;
             if (user.id != 0) {
-                lastNotificationType = type;
+                lastNotificationType = GCM_TYPE_MESSAGE;
                 if (getUsersCountInMessageStack(user) > 1) {
                     // create intent to open Dialogs
                     i = new Intent(context, NavigationActivity.class);
