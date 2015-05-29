@@ -504,7 +504,7 @@ public class OverflowMenu {
         if (openChatIntent == null) {
             return;
         }
-        mActivity.startActivityForResult(openChatIntent, ChatActivity.INTENT_CHAT);
+        mActivity.startActivityForResult(openChatIntent, ChatActivity.REQUEST_CHAT);
     }
 
     private void setSympathySentState(boolean state, boolean isNeedSentBroadcast) {

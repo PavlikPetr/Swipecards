@@ -61,6 +61,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.PurchasesActivity;
@@ -644,6 +645,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     if (!data.items.isEmpty()) {
                         if (pullToRefresh) {
                             mAdapter.addFirst(data.items, data.more, mListView.getRefreshableView());
+                            if (!data.more && !data.items.isEmpty()) {
+                                onNewMessageAdded(data.items.get(0));
+                            }
                         } else if (scrollRefresh) {
                             mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
                         } else {
@@ -684,6 +688,13 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             }
 
         }).exec();
+    }
+
+    private void onNewMessageAdded(History history) {
+        Intent intent = new Intent();
+        intent.putExtra(ChatActivity.LAST_MESSAGE, history);
+        intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
+        getActivity().setResult(Activity.RESULT_OK, intent);
     }
 
     private void showKeyboardOnLargeScreen() {
@@ -850,6 +861,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         SendGiftAnswer sendGiftAnswer = extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
                         sendGiftAnswer.history.target = FeedDialog.OUTPUT_USER_MESSAGE;
                         addSentMessage(sendGiftAnswer.history, null);
+                        onNewMessageAdded(sendGiftAnswer.history);
                         LocalBroadcastManager.getInstance(getActivity())
                                 .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
                     }
@@ -913,6 +925,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             protected void success(History data, IApiResponse response) {
                 if (mAdapter != null && cancelable) {
                     mAdapter.replaceMessage(messageItem, data, mListView.getRefreshableView());
+                    onNewMessageAdded(data);
                 }
                 LocalBroadcastManager.getInstance(getActivity())
                         .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
