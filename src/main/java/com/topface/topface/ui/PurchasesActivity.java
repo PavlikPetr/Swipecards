@@ -25,12 +25,40 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
     /**
      * Constant keys for different fragments
      * Values have to be > 0
      */
+
+    // здесь настраивается вероятность, с которой будут отображаться экраны в случае "холостого" выхода
+    // с экрана покупок
+    private enum EXTRA_SCREEN {
+        TOPFACE_OFFERWALL_SCREEN(0, 10), BONUS_SCREEN(1, 30), SMS_INVITE_SCREEN(2, 70);
+
+        private int pos;
+        private int probability;
+
+        EXTRA_SCREEN(int pos, int probability) {
+            this.pos = pos;
+            this.probability = probability;
+        }
+
+        public int getPosition() {
+            return pos;
+        }
+
+        public int getProbability() {
+            return probability;
+        }
+
+    }
+
     public static final int INTENT_BUY_VIP = 1;
     public static final int INTENT_BUY = 2;
 
@@ -201,43 +229,96 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
                 !mTopfaceOfferwallRedirect.isCompleted() && mIsOfferwallsReady && !getFragment().isVipProducts();
     }
 
-    private boolean showBonus() {
-        /*
-        First check if redirection to topface offers is on. If no check redirection to bonus tab
-         */
-        if ((isTopfaceOfferwallRedirectEnabled() && mTopfaceOfferwallRedirect.isExpOnClose()) ||
-                mTopfaceOfferwallRedirect.isCompleted()) {
-            return false;
+    private boolean isTopfaceOfferwallAvailable() {
+        return needTFOfferwallOnCloseRedirect();
+    }
+
+    private boolean isBonusAvailable() {
+        return !((isTopfaceOfferwallRedirectEnabled() && mTopfaceOfferwallRedirect.isExpOnClose()) ||
+                mTopfaceOfferwallRedirect.isCompleted() || getFragment().isBonusSkiped() ||
+                !getFragment().isBonusPageAvailable() || !(mBonusRedirect != null && mBonusRedirect.isEnabled()));
+    }
+
+    private boolean isSMSInviteAvailable() {
+        return !((isTopfaceOfferwallRedirectEnabled() && mTopfaceOfferwallRedirect.isExpOnClose()) ||
+                mTopfaceOfferwallRedirect.isCompleted());
+    }
+
+    private boolean showExtraScreen(EXTRA_SCREEN screen) {
+        if (null != screen) {
+            switch (screen) {
+                case BONUS_SCREEN:
+                    return mBonusRedirect != null &&
+                            getFragment().forceBonusScreen(mBonusRedirect.getText());
+                case SMS_INVITE_SCREEN:
+                    startActivity(SMSInviteActivity.createIntent(this));
+                    mTopfaceOfferwallRedirect.setComplited(true);
+                    return true;
+
+                case TOPFACE_OFFERWALL_SCREEN:
+                    OfferwallPayload payload = new OfferwallPayload();
+                    payload.experimentGroup = mTopfaceOfferwallRedirect.getGroup();
+                    OfferwallsManager.startTfOfferwall(this, payload);
+                    mTopfaceOfferwallRedirect.setComplited(true);
+                    return true;
+            }
         }
-        return mBonusRedirect != null &&
-                mBonusRedirect.isEnabled() &&
-                getFragment().forceBonusScreen(mBonusRedirect.getText());
+        return false;
     }
 
     private static boolean isTopfaceOfferwallRedirectEnabled() {
         return mTopfaceOfferwallRedirect != null && mTopfaceOfferwallRedirect.isEnabled();
     }
 
-    private boolean showTopfaceOfferwall() {
-        if (needTFOfferwallOnCloseRedirect()) {
-            OfferwallPayload payload = new OfferwallPayload();
-            payload.experimentGroup = mTopfaceOfferwallRedirect.getGroup();
-            OfferwallsManager.startTfOfferwall(this, payload);
-            mTopfaceOfferwallRedirect.setComplited(true);
-            return true;
-        }
-        return false;
-    }
-
     @Override
     protected boolean onPreFinish() {
-        return !(showTopfaceOfferwall() || showBonus()) && super.onPreFinish();
+        return !isScreenShow() && super.onPreFinish();
     }
+
+    private boolean isScreenShow() {
+        return showExtraScreen(getRandomPosByProbability(getListOfExtraScreens()));
+    }
+
 
     @Override
     public void onBackPressed() {
-        if (!(showTopfaceOfferwall() || showBonus())) {
+        if (!isScreenShow()) {
             super.onBackPressed();
         }
     }
+
+    private EXTRA_SCREEN getRandomPosByProbability(List<EXTRA_SCREEN> extraScreenArray) {
+        if (null == extraScreenArray || extraScreenArray.size() == 0) {
+            return null;
+        }
+        int sum = 0;
+        for (int i = 0; i < extraScreenArray.size(); i++) {
+            sum += extraScreenArray.get(i).getProbability();
+        }
+        int randomValue = new Random().nextInt(sum - 1) + 1;
+        sum = 0;
+        for (int i = 0; i < extraScreenArray.size(); i++) {
+            EXTRA_SCREEN currentValue = extraScreenArray.get(i);
+            if (randomValue > sum && randomValue <= (currentValue.getProbability() + sum)) {
+                return currentValue;
+            }
+            sum += currentValue.getProbability();
+        }
+        return null;
+    }
+
+    private List<EXTRA_SCREEN> getListOfExtraScreens() {
+        List<EXTRA_SCREEN> screensArray = new ArrayList<>();
+        if (isTopfaceOfferwallAvailable()) {
+            screensArray.add(EXTRA_SCREEN.TOPFACE_OFFERWALL_SCREEN);
+        }
+        if (isBonusAvailable()) {
+            screensArray.add(EXTRA_SCREEN.BONUS_SCREEN);
+        }
+        if (isSMSInviteAvailable()) {
+            screensArray.add(EXTRA_SCREEN.SMS_INVITE_SCREEN);
+        }
+        return screensArray;
+    }
+
 }

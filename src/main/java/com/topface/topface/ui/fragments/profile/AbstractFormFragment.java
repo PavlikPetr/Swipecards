@@ -288,7 +288,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         if (mGiftAdapter.getCount() > 0) {
             giftsRequest.from = mGiftAdapter.getItem(mGiftAdapter.getCount() - 1).gift.feedId;
         } else {
-            giftsRequest.limit = mGiftsCount > 3*mVisibleGiftsNumber ? 3*mVisibleGiftsNumber : mGiftsCount;
+            giftsRequest.limit = mGiftsCount > 3 * mVisibleGiftsNumber ? 3 * mVisibleGiftsNumber : mGiftsCount;
         }
         registerRequest(giftsRequest);
         giftsRequest.callback(new DataApiHandler<FeedListData<FeedGift>>() {

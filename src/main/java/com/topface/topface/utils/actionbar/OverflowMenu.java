@@ -49,7 +49,7 @@ public class OverflowMenu {
     private final static String INTENT_BUY_VIP_FROM = "UserProfileFragment";
     public static final String USER_ID_FOR_REMOVE = "user_id";
 
-    private MenuItem mBarActions;
+    private Menu mBarActions;
     private OverflowMenuType mOverflowMenuType;
     private Activity mActivity;
     private RateController mRateController;
@@ -82,14 +82,14 @@ public class OverflowMenu {
         }
     };
 
-    public OverflowMenu(Activity activity, MenuItem barActions) {
+    public OverflowMenu(Activity activity, Menu barActions) {
         mBarActions = barActions;
         mOverflowMenuType = OverflowMenuType.CHAT_OVERFLOW_MENU;
         mActivity = activity;
         registerBroadcastReceiver();
     }
 
-    public OverflowMenu(Activity activity, MenuItem barActions, RateController rateController, ApiResponse savedResponse) {
+    public OverflowMenu(Activity activity, Menu barActions, RateController rateController, ApiResponse savedResponse) {
         mBarActions = barActions;
         mOverflowMenuType = OverflowMenuType.PROFILE_OVERFLOW_MENU;
         mActivity = activity;
@@ -138,11 +138,11 @@ public class OverflowMenu {
     }
 
     private void initProfileOverflowMenu() {
-        if (mBarActions != null && mBarActions.hasSubMenu()) {
+        if (mBarActions != null) {
+            mBarActions.removeItem(R.id.tempItem);
             Boolean isBookmarked = isBookmarked();
             Boolean isInBlackList = isInBlackList();
             Boolean isSympathySent = isSympathySent();
-            mBarActions.getSubMenu().clear();
             ArrayList<OverflowMenuItem> overflowMenuItemArray = getProfileOverflowMenu(CacheProfile.isEditor(), isBanned());
             for (int i = 0; i < overflowMenuItemArray.size(); i++) {
                 OverflowMenuItem item = overflowMenuItemArray.get(i);
@@ -162,25 +162,27 @@ public class OverflowMenu {
                         resourceId = item.getFirstResourceId();
                         break;
                 }
-                mBarActions.getSubMenu().add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mActivity.getString(resourceId) : "");
+                if (isNeedToAddItem(item.getId())) {
+                    mBarActions.add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mActivity.getString(resourceId) : "").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                }
             }
             if (overflowMenuItemArray.size() > 1) {
                 if (isInBlackList != null) {
-                    mBarActions.getSubMenu().findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!isInBlackList);
+                    mBarActions.findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!isInBlackList);
                 }
                 if (isSympathySent != null && isSympathySent) {
-                    mBarActions.getSubMenu().findItem(SEND_SYMPATHY_ACTION.getId()).setEnabled(false);
-                    mBarActions.getSubMenu().findItem(SEND_ADMIRATION_ACTION.getId()).setEnabled(false);
+                    mBarActions.findItem(SEND_SYMPATHY_ACTION.getId()).setEnabled(false);
+                    mBarActions.findItem(SEND_ADMIRATION_ACTION.getId()).setEnabled(false);
                 }
             }
         }
     }
 
     private void initChatOverflowMenu() {
-        if (mBarActions != null && mBarActions.hasSubMenu()) {
+        if (mBarActions != null) {
+            mBarActions.removeItem(R.id.tempItem);
             Boolean isBookmarked = isBookmarked();
             Boolean isInBlackList = isInBlackList();
-            mBarActions.getSubMenu().clear();
             ArrayList<OverflowMenuItem> overflowMenuItemArray = getChatOverflowMenu();
             for (int i = 0; i < overflowMenuItemArray.size(); i++) {
                 OverflowMenuItem item = overflowMenuItemArray.get(i);
@@ -200,12 +202,18 @@ public class OverflowMenu {
                         resourceId = item.getFirstResourceId();
                         break;
                 }
-                mBarActions.getSubMenu().add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mActivity.getString(resourceId) : "");
+                if (isNeedToAddItem(item.getId())) {
+                    mBarActions.add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mActivity.getString(resourceId) : "").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                }
             }
             if (isInBlackList != null) {
-                mBarActions.getSubMenu().findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!isInBlackList);
+                mBarActions.findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!isInBlackList);
             }
         }
+    }
+
+    private boolean isNeedToAddItem(int id) {
+        return mBarActions.findItem(id) == null;
     }
 
     public void onMenuClicked(MenuItem item) {

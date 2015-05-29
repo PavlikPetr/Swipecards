@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -391,12 +392,17 @@ public class Utils {
                             vto.removeOnGlobalLayoutListener(this);
                         }
                     }
-
                 }
             });
         }
 
     }
 
-
+    public static int getColorPrimaryDark(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            TypedArray a = context.getTheme().obtainStyledAttributes(R.style.Theme_Topface, new int[]{android.R.attr.colorPrimaryDark});
+            return a.getResourceId(0, 0);
+        }
+        return R.color.light_theme_color_primary_dark;
+    }
 }

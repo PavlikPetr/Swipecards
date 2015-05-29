@@ -21,7 +21,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -769,7 +768,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     @Override
-    protected OverflowMenu createOverflowMenu(MenuItem barActions) {
+    protected OverflowMenu createOverflowMenu(Menu barActions) {
         return new OverflowMenu(getActivity(), barActions);
     }
 
@@ -801,9 +800,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         GiftsActivity.INTENT_REQUEST_GIFT
                 );
                 EasyTracker.sendEvent("Chat", "SendGiftClick", "", 1L);
-                break;
-            case R.id.action_user_actions_list:
-                onOptionsItemSelected(getBarActionsMenuItem());
                 break;
             default:
                 super.onClick(v);

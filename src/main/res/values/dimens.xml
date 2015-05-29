@@ -51,5 +51,4 @@
     <item name="actionbar_elevation" format="float" type="dimen">0.0</item>
 
     <dimen name="tab_bar_default_bottom_border_height">1px</dimen>
-
 </resources>

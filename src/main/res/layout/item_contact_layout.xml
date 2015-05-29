@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/item_list_selector"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/contact_photo"
+        style="@style/ListAvatar"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/rect_avatar_male" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/contact_name"
+            style="@style/ContactsListName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Mr. Smith" />
+
+        <TextView
+            android:id="@+id/contact_content"
+            style="@style/ListMessageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="+79876543210" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="104dp"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <ProgressBar
+            android:id="@+id/contact_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center" />
+
+        <Button
+            android:id="@+id/contact_invite_button"
+            style="@style/Widget.Topface.Button.Blue"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:singleLine="false" />
+
+        <TextView
+            android:id="@+id/contact_invited_text"
+            style="@style/ListMessageText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:singleLine="false" />
+    </FrameLayout>
+
+</LinearLayout>

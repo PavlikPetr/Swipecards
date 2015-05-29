@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
@@ -21,6 +22,7 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.http.IRequestClient;
 
@@ -44,6 +46,10 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         if (savedInstanceState != null) {
             mNeedTitles = savedInstanceState.getBoolean(STATE_NEED_TITLES, true);
         }
+    }
+
+    protected int getStatusBarColor() {
+        return Utils.getColorPrimaryDark(getActivity());
     }
 
     protected boolean needOptionsMenu() {
@@ -91,9 +97,16 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
     }
 
+    public void setStatusBarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getActivity().getWindow().setStatusBarColor(getResources().getColor(getStatusBarColor()));
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
+        setStatusBarColor();
         if (mProfileLoadReceiver == null) {
             mProfileLoadReceiver = new BroadcastReceiver() {
                 @Override
@@ -237,19 +250,19 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     @SuppressWarnings("UnusedDeclaration")
     protected void setActionBarTitles(int title, int subtitle) {
-        if (mTitleSetter != null  && mNeedTitles) {
+        if (mTitleSetter != null && mNeedTitles) {
             mTitleSetter.setActionBarTitles(title, subtitle);
         }
     }
 
     protected void setActionBarTitles(String title) {
-        if (mTitleSetter != null  && mNeedTitles) {
+        if (mTitleSetter != null && mNeedTitles) {
             mTitleSetter.setActionBarTitles(title, null);
         }
     }
 
     protected void setActionBarTitles(int title) {
-        if (mTitleSetter != null  && mNeedTitles) {
+        if (mTitleSetter != null && mNeedTitles) {
             mTitleSetter.setActionBarTitles(title, null);
         }
     }

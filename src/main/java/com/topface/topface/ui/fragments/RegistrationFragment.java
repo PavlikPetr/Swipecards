@@ -67,6 +67,11 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
     private Timer mTimer = new Timer();
 
     @Override
+    protected int getStatusBarColor() {
+        return R.color.status_bar_dark_gray_color;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setNeedTitles(false);

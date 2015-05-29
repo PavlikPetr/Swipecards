@@ -77,4 +77,7 @@ public class ErrorCodes {
     public static final int USER_DELETED = 54;
     public static final int BLOCKED_SYMPATHIES = 57;
     public static final int BLOCKED_PEOPLE_NEARBY = 58;
+    public static final int CODE_SMS_INVITE_ALREADY_SENT = 65;
+    public static final int CODE_SMS_INVITE_ALREADY_REGISTERED = 66;
+    public static final int CODE_SMS_INVITE_NOT_FOUND = 67;
 }

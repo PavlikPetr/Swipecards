@@ -30,6 +30,11 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
     }
 
     @Override
+    protected int getDialogStyleResId() {
+        return R.style.Theme_Topface_NoActionBar_DatingLockPopup;
+    }
+
+    @Override
     protected void initViews(View root) {
         root.findViewById(R.id.redirect_into_sympathy).setOnClickListener(this);
         root.findViewById(R.id.iv_close).setOnClickListener(this);
