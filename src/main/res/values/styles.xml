@@ -1126,7 +1126,7 @@
         <item name="android:textSize">24sp</item>
     </style>
 
-    <style name="ActionBarTitle">
+    <style name="ActionBarItemClick">
         <item name="android:background">?attr/actionBarItemBackground</item>
     </style>
 

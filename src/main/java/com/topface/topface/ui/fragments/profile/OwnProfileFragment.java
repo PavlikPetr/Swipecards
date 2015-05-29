@@ -10,7 +10,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.MenuItemCompat;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +41,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     private BroadcastReceiver mAddPhotoReceiver;
     private BroadcastReceiver mUpdateProfileReceiver;
     private IPhotoTakerWithDialog mPhotoTaker;
+    private MenuItem mBarAvatar;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -101,8 +105,21 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     }
 
     @Override
-    protected boolean hasUserActions() {
-        return false;
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        MenuItem item = menu.findItem(R.id.action_profile);
+        if (item != null && mBarAvatar != null) {
+            item.setChecked(mBarAvatar.isChecked());
+        }
+        mBarAvatar = item;
+        MenuItemCompat.getActionView(mBarAvatar).findViewById(R.id.ivBarAvatarContainer).setOnClickListener(this);
+
+        setActionBarAvatar(getUniversalUser());
+    }
+
+    @Override
+    protected Integer getOptionsMenuRes() {
+        return R.menu.actions_avatar;
     }
 
     @Override
@@ -155,7 +172,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     }
 
     @Override
-    protected OverflowMenu createOverflowMenu(MenuItem barActions) {
+    protected OverflowMenu createOverflowMenu(Menu barActions) {
         return new OverflowMenu(getActivity(), barActions);
     }
 

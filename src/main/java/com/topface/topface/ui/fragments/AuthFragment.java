@@ -97,6 +97,11 @@ public class AuthFragment extends BaseAuthFragment {
     }
 
     @Override
+    protected int getStatusBarColor() {
+        return R.color.status_bar_dark_gray_color;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         Debug.log("AF: onCreate");

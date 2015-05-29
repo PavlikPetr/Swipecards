@@ -32,11 +32,11 @@ public class ProgressBarWithAlpha extends ProgressBar {
     }
 
     @Override
-    protected void onVisibilityChanged(View changedView, int visibility) {
-        if (visibility == View.VISIBLE) {
+    public void setVisibility(int v) {
+        if (v == View.VISIBLE) {
             this.animate().alpha(1.0f);
         }
-        super.onVisibilityChanged(changedView, visibility);
+        super.setVisibility(v);
     }
 
     @Override
