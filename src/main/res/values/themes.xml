@@ -108,16 +108,12 @@
         <item name="android:windowBackground">@color/bg_white</item>
     </style>
 
-    <style name="Theme.Topface.NoActionBar">
+    <style name="Theme.Topface.NoActionBar" parent="Theme.Topface">
         <item name="android:windowNoTitle">true</item>
         <!--Action Bar-->
         <item name="windowActionBar">false</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
-
-    <style name="Theme.Topface.NoActionBar.Filterlist" parent="Theme.Topface.NoActionBar">
-        <item name="android:windowBackground">@drawable/filter_dialog_background</item>
     </style>
 
     <style name="Theme.Topface.White">
@@ -126,7 +122,7 @@
         <item name="android:windowBackground">@color/bg_white</item>
     </style>
 
-    <style name="Topface.Theme.TranslucentDialog" parent="@style/Theme.AppCompat.Light">
+    <style name="Topface.Theme.TranslucentDialog" parent="Theme.Topface">
         <item name="android:windowBackground">@color/bg_white</item>
         <item name="android:colorBackground">@null</item>
         <item name="android:windowIsFloating">true</item>

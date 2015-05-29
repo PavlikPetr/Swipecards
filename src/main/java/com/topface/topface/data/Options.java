@@ -85,6 +85,11 @@ public class Options extends AbstractData {
     public boolean hidePreviewDialog;
 
     /**
+     * Флаг непоказа восхищений
+     */
+    public boolean isHideAdmirations = false;
+
+    /**
      * title и url для экрана "О программе"
      * по умолчанию отобразим "topface.com" с переходом на "http://topface.com", если сервер не пришлет другое значение
      */
@@ -271,6 +276,7 @@ public class Options extends AbstractData {
             if (getJarJson != null) {
                 getJar = new GetJar(getJarJson.optString("id"), getJarJson.optString("name"), getJarJson.optLong("price"));
             }
+            isHideAdmirations = response.optBoolean("hideAdmirations", false);
 
             fallbackTypeBanner = response.optString("gag_type_banner", AdProvidersFactory.BANNER_ADMOB);
             gagTypeFullscreen = response.optString("gag_type_fullscreen", AdProvidersFactory.BANNER_NONE);

@@ -1,7 +1,5 @@
 package com.topface.topface.ui.dialogs;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.StyleRes;
@@ -14,8 +12,6 @@ import android.view.ViewStub;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
-import com.topface.topface.Static;
-import com.topface.topface.ui.analytics.TrackedDialogFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -27,22 +23,16 @@ import java.util.HashSet;
  * shifted under actionbar
  * This class allows to show fragment with tag only in one instance at once
  */
-public abstract class AbstractDialogFragment extends TrackedDialogFragment {
+public abstract class AbstractDialogFragment extends BaseDialog {
 
     private boolean mNeedActionBarIndent = true;
     private int mActionBarSize;
     private static HashSet<String> mShowingDialogs = new HashSet<>();
     private String mTag;
-    private DialogInterface.OnDismissListener mDismissListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //По стилю это у нас не диалог, а кастомный дизайн -
-        //закрывает весь экран оверлеем и ниже ActionBar показывает контент
-        setStyle(STYLE_NO_FRAME, getDialogStyleResId());
-
         final TypedArray styledAttributes = getActivity().getTheme().obtainStyledAttributes(
                 new int[]{R.attr.actionBarSize});
         mActionBarSize = (int) styledAttributes.getDimension(0, 0);
@@ -58,14 +48,19 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
         }
     }
 
+    private int getDialogInnerLayoutRes() {
+        if (isModalDialog()) {
+            return R.layout.dialog_modal;
+        } else {
+            return R.layout.dialog_base;
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root;
+        View root = inflater.inflate(getDialogInnerLayoutRes(), null);
         if (isModalDialog()) {
-            root = inflater.inflate(R.layout.dialog_modal, container, false);
             setCanceledOnTouchOutside(true);
-        } else {
-            root = inflater.inflate(R.layout.dialog_base, container, false);
         }
         if (isUnderActionBar()) {
             root.setPadding(0, mNeedActionBarIndent ? mActionBarSize : 0, 0, 0);
@@ -75,14 +70,6 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
         View view = stub.inflate();
         initViews(view);
         return root;
-    }
-
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-        if (mDismissListener != null) {
-            mDismissListener.onDismiss(dialog);
-        }
     }
 
     public void setCanceledOnTouchOutside(boolean outside) {
@@ -114,10 +101,6 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
         mShowingDialogs.remove(mTag);
     }
 
-    public void setOnDismissListener(DialogInterface.OnDismissListener listener) {
-        mDismissListener = listener;
-    }
-
     /**
      * Gives access to content view of dialog which is defined
      * throw layout from getDialogLayoutRes() method
@@ -126,17 +109,7 @@ public abstract class AbstractDialogFragment extends TrackedDialogFragment {
      */
     protected abstract void initViews(View root);
 
-    @Override
-    public final void startActivityForResult(Intent intent, int requestCode) {
-        if (requestCode != -1) {
-            intent.putExtra(Static.INTENT_REQUEST_KEY, requestCode);
-        }
-        super.startActivityForResult(intent, requestCode);
-    }
-
     protected abstract boolean isModalDialog();
-
-    protected abstract int getDialogLayoutRes();
 
     protected final void setNeedActionBarIndent(boolean value) {
         mNeedActionBarIndent = value;

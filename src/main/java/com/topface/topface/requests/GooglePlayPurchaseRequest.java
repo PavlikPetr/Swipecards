@@ -29,14 +29,19 @@ public class GooglePlayPurchaseRequest extends PurchaseRequest {
         this.data = product.getOriginalJson();
         this.signature = product.getSignature();
         DeveloperPayload developerPayload = getDeveloperPayload();
+        ProductsDetails.ProductDetail detail = null;
         //Если SKU из DeveloperPayload не соответсвует тому, что мы купили, то это тестовая покупка
         //и нам нужно добавить соответсвующий параметр, что бы сервер нам корректно начислил продукт
         if (developerPayload != null && !TextUtils.equals(developerPayload.sku, product.getSku())) {
             this.testProductId = developerPayload.sku;
+            detail = CacheProfile.getMarketProductsDetails().getProductDetail(testProductId);
+        } else {
+            detail = CacheProfile.getMarketProductsDetails().getProductDetail(product.getSku());
         }
-        ProductsDetails.ProductDetail detail = CacheProfile.getMarketProductsDetails().getProductDetail(product.getSku());
-        currencyCode = detail.currency;
-        cost = (float) (detail.price / ProductsDetails.MICRO_AMOUNT);
+        if (detail != null) {
+            currencyCode = detail.currency;
+            cost = (float) (detail.price / ProductsDetails.MICRO_AMOUNT);
+        }
     }
 
     @Override
