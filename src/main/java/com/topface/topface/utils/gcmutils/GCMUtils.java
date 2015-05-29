@@ -435,7 +435,7 @@ public class GCMUtils {
                             i.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.TABBED_DIALOGS);
                             i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, DialogsFragment.class.getName());
                             // add the same request code like Chat intent
-                            i.putExtra(Static.INTENT_REQUEST_KEY, ChatActivity.INTENT_CHAT);
+                            i.putExtra(Static.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
                         } else {
                             i = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city, null, null, true);
                         }

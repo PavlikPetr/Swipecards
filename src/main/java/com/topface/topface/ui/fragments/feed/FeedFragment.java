@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
@@ -647,7 +648,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (!item.user.isEmpty()) {
             FeedUser user = item.user;
             Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false);
-            getActivity().startActivityForResult(intent, ChatActivity.INTENT_CHAT);
+            startActivityForResult(intent, ChatActivity.REQUEST_CHAT);
         }
     }
 
@@ -1028,5 +1029,31 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     public RetryViewCreator getRetryView() {
         return mRetryView;
+    }
+
+    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ChatActivity.REQUEST_CHAT) {
+            onChatActivityResult(resultCode, data);
+        }
+    }
+
+    protected void onChatActivityResult(int resultCode, Intent data) {
+
+    }
+
+    @Override public void startActivityForResult(Intent intent, int requestCode) {
+        Fragment fr = getParentFragment();
+        // startActivityForResult adds to requestCode (after first 16 bits) index of fragment that has invoked startActivityForResult
+        // then FragmentActivity passes onActivityResult to child fragment that has that index
+        // but FeedFragment that is in TabbedFeedFragment is not Activity's straight child
+        // so we need to call startActivityForResult from TabbedFeedFragment for Activity call passing
+        // then TabbedFeedFragment.onActivityResult will pass it to its childs
+        if (fr != null && fr instanceof TabbedFeedFragment) {
+            fr.startActivityForResult(intent, requestCode);
+        // otherwise current fragment is straight child of Activity
+        } else {
+            super.startActivityForResult(intent, requestCode);
+        }
     }
 }

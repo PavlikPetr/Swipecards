@@ -243,7 +243,7 @@ public class UserNotificationManager {
                                               User user) {
         UserNotification notification = new UserNotification(mContext);
         MessageStack messagesStack = new MessageStack();
-        if (intent != null && intent.getIntExtra(Static.INTENT_REQUEST_KEY, -1) == ChatActivity.INTENT_CHAT) {
+        if (intent != null && intent.getIntExtra(Static.INTENT_REQUEST_KEY, -1) == ChatActivity.REQUEST_CHAT) {
             id = MESSAGES_ID;
             messagesStack = saveMessageStack(message, user);
             notification.setWearReply(mContext, intent);
