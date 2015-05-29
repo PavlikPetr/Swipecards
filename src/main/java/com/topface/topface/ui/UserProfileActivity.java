@@ -31,8 +31,8 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
         if (!TextUtils.isEmpty(itemId)) {
             intent.putExtra(AbstractProfileFragment.INTENT_ITEM_ID, itemId);
         }
-        if(photo != null){
-            intent.putExtra(ChatFragment.INTENT_AVATAR,photo);
+        if (photo != null) {
+            intent.putExtra(ChatFragment.INTENT_AVATAR, photo);
         }
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_USER_PROFILE);
         return intent;

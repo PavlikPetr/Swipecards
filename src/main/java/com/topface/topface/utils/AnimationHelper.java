@@ -14,6 +14,7 @@ public class AnimationHelper {
 
     private Animation mInAnimation;
     private Animation mOutAnimation;
+    private Animation.AnimationListener mAnimationListener;
 
     public AnimationHelper(Context context, int inResource, int outResource) {
         mContext = context;
@@ -24,16 +25,21 @@ public class AnimationHelper {
     }
 
     private void generateOutAnimation(int outResource) {
-        mOutAnimation = AnimationUtils.loadAnimation(mContext,outResource);
+        mOutAnimation = AnimationUtils.loadAnimation(mContext, outResource);
         if (mOutAnimation != null) {
             mOutAnimation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
-
+                    if (null != mAnimationListener) {
+                        mAnimationListener.onAnimationStart(animation);
+                    }
                 }
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
+                    if (null != mAnimationListener) {
+                        mAnimationListener.onAnimationEnd(animation);
+                    }
                     for (View view : mViewsToAnimate) {
                         view.setVisibility(View.GONE);
                     }
@@ -41,7 +47,9 @@ public class AnimationHelper {
 
                 @Override
                 public void onAnimationRepeat(Animation animation) {
-
+                    if (null != mAnimationListener) {
+                        mAnimationListener.onAnimationRepeat(animation);
+                    }
                 }
             });
         } else {
@@ -57,6 +65,9 @@ public class AnimationHelper {
             mInAnimation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
+                    if (null != mAnimationListener) {
+                        mAnimationListener.onAnimationStart(animation);
+                    }
                     for (View view : mViewsToAnimate) {
                         view.setVisibility(View.VISIBLE);
                     }
@@ -64,12 +75,16 @@ public class AnimationHelper {
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-
+                    if (null != mAnimationListener) {
+                        mAnimationListener.onAnimationEnd(animation);
+                    }
                 }
 
                 @Override
                 public void onAnimationRepeat(Animation animation) {
-
+                    if (null != mAnimationListener) {
+                        mAnimationListener.onAnimationRepeat(animation);
+                    }
                 }
             });
         } else {
@@ -93,6 +108,10 @@ public class AnimationHelper {
         for (View view : mViewsToAnimate) {
             view.startAnimation(mInAnimation);
         }
+    }
+
+    public void setAnimationListener(Animation.AnimationListener listener) {
+        mAnimationListener = listener;
     }
 }
 

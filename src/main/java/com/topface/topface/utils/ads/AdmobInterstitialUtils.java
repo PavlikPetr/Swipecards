@@ -75,7 +75,7 @@ public class AdmobInterstitialUtils {
     }
 
     public static InterstitialAd requestAdmobFullscreen(Activity activity, String id, final AdListener listener,
-                                              final boolean showOnAdLoaded) {
+                                                        final boolean showOnAdLoaded) {
         // Создание межстраничного объявления.
         final InterstitialAd interstitial = new InterstitialAd(activity);
         interstitial.setAdUnitId(id);

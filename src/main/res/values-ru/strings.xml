@@ -155,7 +155,7 @@
     <string name="general_back">Назад</string>
     <string name="general_server_error">Ошибка. Попробуйте позже.</string>
     <string name="general_non_exist_photo_error">Не получилось совершить действие, т.к. фотография удалена.</string>
-    <string name="general_data_error">Ошибка. Попробуйте ещё раз</string>
+    <string name="general_data_error">Ошибка. Попробуйте ещё раз.</string>
     <string name="general_internet_off">Пытаемся восстановить соединение с интернетом. Пожалуйста, подождите.</string>
     <string name="general_msg_copied">Текст скопирован.</string>
     <string name="general_spinner_title">Выберите действие</string>
@@ -802,4 +802,17 @@
 
     <string name="add_leader_hint">Ваше приветствие&#8230;</string>
     <string name="more">еще</string>
+
+    <!--invite frends by sms-->
+    <string name="premium_for_invitations">Для получения VIP статуса на 1 день вам необходимо набрать 5 регистраций.</string>
+    <string name="premium_for_invitations_current_status">Вы уже набрали:\nПриглашений: %1$d\nРегистраций: %2$d</string>
+    <string name="no_contacts_available">На устройстве нет контактов, доступных к отображению</string>
+    <string name="sms_invite_title">Получите вип на сутки!</string>
+    <string name="sms_invite_subtitle">Получите вип на сутки!</string>
+
+    <!--phones number statuses-->
+    <string name="status_can_send_confirmation">Пригласить</string>
+    <string name="status_invilid_phone_number">Номер не валиден</string>
+    <string name="status_confirmation_was_sent">Ожидает регистрации</string>
+    <string name="status_user_registered">Уже зарегистрирован</string>
 </resources>

@@ -7,17 +7,7 @@
     <item
         android:id="@+id/action_profile"
         android:title="@string/profile_actions"
-        appcompat:actionLayout="@layout/actionbar_item_profile"
+        appcompat:actionLayout="@layout/actionbar_item_avatar_with_extra_paddings"
         appcompat:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
-    <item
-        android:id="@+id/action_user_actions_list"
-        android:icon="@drawable/ic_menu"
-        android:orderInCategory="11111"
-        android:title="@string/profile_actions"
-        appcompat:showAsAction="always"
-        tools:ignore="AlwaysShowAction">
-        <menu></menu>
-    </item>
-
 </menu>

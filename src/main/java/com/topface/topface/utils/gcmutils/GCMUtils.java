@@ -73,7 +73,6 @@ public class GCMUtils {
     public static final int GCM_TYPE_FUN_ADD_PHOTO = 12;
     public static final int GCM_TYPE_FUN_ONLINE = 13;
 
-
     /**
      * параметры геометрической прогрессии для расчета задержки между запросами на регистрацию в GCM
      * все значения в сек.

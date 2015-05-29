@@ -17,7 +17,7 @@ import com.topface.topface.ui.adapters.EditAdapterFactory;
 /**
  * Abstract dialog for editing fields
  */
-public class BaseEditDialog<T extends Parcelable> extends AbstractDialogFragment {
+public class BaseEditDialog<T extends Parcelable> extends BaseDialog {
     public static final String DIALOG_TITLE = "dialog_title";
     public static final String DATA = "data";
 
@@ -65,11 +65,6 @@ public class BaseEditDialog<T extends Parcelable> extends AbstractDialogFragment
         mTitleText.setText(mTitle);
         mLimitText = (TextView) root.findViewById(R.id.edit_dialog_limit);
         mButtonsStub = (ViewStub) root.findViewById(R.id.edit_dialog_buttons_stub);
-    }
-
-    @Override
-    protected boolean isModalDialog() {
-        return true;
     }
 
     @Override
