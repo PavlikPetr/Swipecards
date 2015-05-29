@@ -27,16 +27,22 @@ public abstract class ContentListFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.fragment_sms_invite, container, false);
+        return inflater.inflate(getMainLayout(), container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mFooterView = getActivity().getLayoutInflater().inflate(R.layout.gridview_footer_progress_bar, null);
+        Integer footerLayout = getFooterLayout();
+        Integer headerLayout = getHeaderLayout();
         mContentList = (ListView) view.findViewById(R.id.content_list);
-        mContentList.addHeaderView(getActivity().getLayoutInflater().inflate(R.layout.header_sms_invite, null));
-        mContentList.addFooterView(mFooterView);
+        if (null != headerLayout) {
+            mContentList.addHeaderView(getActivity().getLayoutInflater().inflate(headerLayout, null));
+        }
+        if (null != footerLayout) {
+            mFooterView = getActivity().getLayoutInflater().inflate(footerLayout, null);
+            mContentList.addFooterView(mFooterView);
+        }
         mProgress = (ProgressBar) view.findViewById(R.id.content_list_progress);
         if (mAdapter != null) {
             mContentList.setAdapter(mAdapter);
@@ -56,6 +62,16 @@ public abstract class ContentListFragment extends BaseFragment {
             }
         });
     }
+
+    protected Integer getFooterLayout() {
+        return null;
+    }
+
+    protected Integer getHeaderLayout() {
+        return null;
+    }
+
+    protected abstract int getMainLayout();
 
     protected void needToLoad() {
     }

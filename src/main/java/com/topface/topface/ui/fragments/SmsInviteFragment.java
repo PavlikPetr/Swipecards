@@ -105,7 +105,9 @@ public class SmsInviteFragment extends ContentListFragment {
         }
     }
 
-    // достаем контакты пользователя из тел. книги
+    /**
+     * pull user contacts
+     */
     private void getContactsWithPhone() {
         if (!isUpdatable || isInProgress) {
             if (!isInProgress) {
@@ -132,9 +134,12 @@ public class SmsInviteFragment extends ContentListFragment {
         provider.getContactsWithPhones(ONE_REQUEST_CONTACTS_LIMIT, mOffsetPosition, handler);
     }
 
-    // отправляем список номеров на сервер для их проверки и назначения статуса каждому из них
+    /**
+     * validate contacts list on server side
+     *
+     * @param contacts list of users contacts
+     */
     private void validateContactsOnServer(final ArrayList<ContactsProvider.Contact> contacts) {
-//        testParse(contacts);
         new GetSMSInvitesStatusesRequest(getActivity(), contacts).callback(new DataApiHandler<ArrayList<ContactsProvider.Contact>>() {
 
             @Override
@@ -175,10 +180,14 @@ public class SmsInviteFragment extends ContentListFragment {
                 }
             }
         }
-        return removeInvilidNumber(contacts);
+        return removeInvalidNumber(contacts);
     }
 
-    // добавляем провалидированные номера в адаптер
+    /**
+     * add validated users contacts to ContactsAdapter
+     *
+     * @param contacts list of validated users contacts
+     */
     private void addContacts(ArrayList<ContactsProvider.Contact> contacts) {
         mOffsetPosition += mLastContactBoxSize;
         if (getAdapter() != null) {
@@ -248,17 +257,17 @@ public class SmsInviteFragment extends ContentListFragment {
         }
 
         public void setUserStatus(String phoneId, int status) {
-            Integer position = getContactPositionById(phoneId);
-            if (null != position) {
-                contacts.get(position).setStatus(status);
+            ContactsProvider.Contact contact = getContactById(phoneId);
+            if (null != contact) {
+                contact.setStatus(status);
                 notifyDataSetChanged();
             }
         }
 
-        private Integer getContactPositionById(String id) {
-            for (int i = 0; i < contacts.size(); i++) {
-                if (contacts.get(i).getId().equals(id)) {
-                    return i;
+        private ContactsProvider.Contact getContactById(String id) {
+            for (ContactsProvider.Contact contact : contacts) {
+                if (contact.getId().equals(id)) {
+                    return contact;
                 }
             }
             return null;
@@ -304,7 +313,7 @@ public class SmsInviteFragment extends ContentListFragment {
             holder.photo.setImageURI(contact.getPhoto());
             holder.name.setText(contact.getName());
             holder.phone.setText(contact.getPhone());
-            PHONES_STATUSES status = getCorrelateSatus(contact.getStatus());
+            PHONES_STATUSES status = getCorrelateStatus(contact.getStatus());
             switch (status) {
                 case USER_IN_PROGRESS:
                     setProgressVisible(holder);
@@ -391,7 +400,7 @@ public class SmsInviteFragment extends ContentListFragment {
         }
     }
 
-    private PHONES_STATUSES getCorrelateSatus(int pos) {
+    private PHONES_STATUSES getCorrelateStatus(int pos) {
         for (PHONES_STATUSES status : PHONES_STATUSES.values()) {
             if (status.getPosition() == pos) {
                 return status;
@@ -400,7 +409,7 @@ public class SmsInviteFragment extends ContentListFragment {
         return PHONES_STATUSES.INVILID_PHONE_NUMBER;
     }
 
-    private ArrayList<ContactsProvider.Contact> removeInvilidNumber(ArrayList<ContactsProvider.Contact> contact) {
+    private ArrayList<ContactsProvider.Contact> removeInvalidNumber(ArrayList<ContactsProvider.Contact> contact) {
         for (int i = 0; i < contact.size(); i++) {
             if (contact.get(i).getStatus() == PHONES_STATUSES.INVILID_PHONE_NUMBER.getPosition()) {
                 contact.remove(i);
@@ -410,8 +419,11 @@ public class SmsInviteFragment extends ContentListFragment {
         return contact;
     }
 
-    // показываем или главный лоадер в центре экрана или маленький в футере списка в зависимости от
-    // количества загруженных контактов
+    /**
+     * show main or footer progressBar. If adapter is emty, main progressBar will show.
+     *
+     * @param visibility visibility state (visibility ? View.VISIBLE : View.GONE)
+     */
     private void showProgress(boolean visibility) {
         if (getAdapter() == null || getAdapter().getCount() == 0) {
             showMainProgressBar(visibility);
@@ -444,7 +456,13 @@ public class SmsInviteFragment extends ContentListFragment {
         }).exec();
     }
 
-    // отправляем sms сообщение
+    /**
+     * send sms
+     *
+     * @param phoneNumber destination phone number
+     * @param id          phone id from contacts book
+     * @param smsInvite   sms text and id from backend
+     */
     private void sendSMSMessage(String phoneNumber, String id, SMSInvite smsInvite) {
         Intent sendIntent = new Intent(CatchSmsActions.FILTER_SMS_SENT);
         sendIntent.putExtra(SMS_PHONE_NUMBER, phoneNumber);
@@ -500,5 +518,20 @@ public class SmsInviteFragment extends ContentListFragment {
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mSMSCountersReceiver);
+    }
+
+    @Override
+    protected Integer getFooterLayout() {
+        return R.layout.gridview_footer_progress_bar;
+    }
+
+    @Override
+    protected Integer getHeaderLayout() {
+        return R.layout.header_sms_invite;
+    }
+
+    @Override
+    protected int getMainLayout() {
+        return R.layout.fragment_sms_invite;
     }
 }

@@ -11,7 +11,7 @@
         android:id="@+id/contact_photo"
         style="@style/ListAvatar"
         android:layout_marginRight="10dp"
-        android:background="@drawable/feed_banned_male_avatar" />
+        android:background="@drawable/rect_avatar_male" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -34,7 +34,7 @@
             tools:text="+79876543210" />
     </LinearLayout>
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="104dp"
         android:layout_height="wrap_content"
         android:gravity="center">
@@ -43,14 +43,16 @@
             android:id="@+id/contact_progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+            android:gravity="center"
+            android:layout_gravity="center" />
 
         <Button
             android:id="@+id/contact_invite_button"
             style="@style/Widget.Topface.Button.Blue"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:singleLine="false" />
 
         <TextView
@@ -58,9 +60,9 @@
             style="@style/ListMessageText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_gravity="center"
             android:gravity="center"
             android:singleLine="false" />
-    </RelativeLayout>
+    </FrameLayout>
 
 </LinearLayout>
