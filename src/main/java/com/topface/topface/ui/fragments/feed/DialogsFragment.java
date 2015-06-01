@@ -132,7 +132,8 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         return first.user == null ? second.user == null : first.user.id == second.user.id;
     }
 
-    @Override protected void onChatActivityResult(int resultCode, Intent data) {
+    @Override
+    protected void onChatActivityResult(int resultCode, Intent data) {
         super.onChatActivityResult(resultCode, data);
         if (data != null) {
             History history = data.getParcelableExtra(ChatActivity.LAST_MESSAGE);

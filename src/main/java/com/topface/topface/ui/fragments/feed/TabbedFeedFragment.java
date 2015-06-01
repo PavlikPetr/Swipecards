@@ -260,7 +260,8 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         mRefresher = refresher;
     }
 
-    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         for (Fragment fr : getChildFragmentManager().getFragments()) {
             if (fr != null) {
