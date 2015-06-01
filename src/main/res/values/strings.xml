@@ -633,4 +633,13 @@
     <string name="on_mail">To email</string>
     <string name="add_leader_hint">Your greeting…</string>
     <string name="more">more</string>
+    <string name="premium_for_invitations">To receive a VIP-status for 1 day you\'ll have to get 5 registrations</string>
+    <string name="premium_for_invitations_current_status">You already have:\nInvitations: %1d\nRegistrations: %2$d</string>
+    <string name="no_contacts_available">The device does not have contacts that can be displayed</string>
+    <string name="sms_invite_title">Get VIP for a day!</string>
+    <string name="sms_invite_subtitle">Get VIP for a day!</string>
+    <string name="status_can_send_confirmation">Invite</string>
+    <string name="status_invilid_phone_number">The number is invalid</string>
+    <string name="status_confirmation_was_sent">Awaiting for registration</string>
+    <string name="status_user_registered">Already registered</string>
 </resources>

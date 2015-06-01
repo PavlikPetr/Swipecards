@@ -628,4 +628,13 @@
     <string name="on_mail">Sull’e-mail</string>
     <string name="add_leader_hint">Il tuo saluto…</string>
     <string name="more">ancora</string>
+    <string name="premium_for_invitations">Per ricevere lo stato VIP per un giorno accumula 5 registrazioni.</string>
+    <string name="premium_for_invitations_current_status">Hai già accumulato:\nInviti: %1$d\nRegistrazioni: %2$d</string>
+    <string name="no_contacts_available">Sul tuo dispositivo non ci sono contatti che possono essere visualizzati</string>
+    <string name="sms_invite_title">Ricevi VIP per un giorno!</string>
+    <string name="sms_invite_subtitle">Ricevi VIP per un giorno!</string>
+    <string name="status_can_send_confirmation">Invitare</string>
+    <string name="status_invilid_phone_number">Numero non valido</string>
+    <string name="status_confirmation_was_sent">In attesa di registrazione</string>
+    <string name="status_user_registered">È già stato registrato</string>
 </resources>
