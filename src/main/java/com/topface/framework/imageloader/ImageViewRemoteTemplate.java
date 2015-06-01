@@ -314,6 +314,8 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
         @Override
         public void onLoadedFromMemoryCache() {
             super.onLoadedFromMemoryCache();
+            setNeedAnimateOnAppear(false);
+            stopAppearingAnimation();
             isNeedAnimate = false;
         }
     }

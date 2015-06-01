@@ -6,9 +6,11 @@ import android.view.View;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.data.History;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteDialogsRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -110,11 +112,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteDialogsRequest(ids, getActivity());
     }
@@ -135,4 +132,23 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         return first.user == null ? second.user == null : first.user.id == second.user.id;
     }
 
+    @Override protected void onChatActivityResult(int resultCode, Intent data) {
+        super.onChatActivityResult(resultCode, data);
+        if (data != null) {
+            History history = data.getParcelableExtra(ChatActivity.LAST_MESSAGE);
+            int userId = data.getIntExtra(ChatActivity.LAST_MESSAGE_USER_ID, -1);
+            if (history != null && userId > 0) {
+                if (getListAdapter() instanceof DialogListAdapter) {
+                    DialogListAdapter adapter = (DialogListAdapter) getListAdapter();
+                    FeedDialog dialog;
+                    for (int i = 0; i < adapter.getCount(); i++) {
+                        dialog = adapter.getItem(i);
+                        if (dialog.user != null && dialog.user.id == userId) {
+                            adapter.replacePreview(i, history);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

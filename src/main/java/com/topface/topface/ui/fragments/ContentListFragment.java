@@ -36,6 +36,15 @@ public abstract class ContentListFragment extends BaseFragment {
         Integer footerLayout = getFooterLayout();
         Integer headerLayout = getHeaderLayout();
         mContentList = (ListView) view.findViewById(R.id.content_list);
+        if (null == mContentList) {
+            throw new IllegalArgumentException(
+                    "Cannot find view by content_list id");
+        }
+        mProgress = (ProgressBar) view.findViewById(R.id.content_list_progress);
+        if (null == mProgress) {
+            throw new IllegalArgumentException(
+                    "Cannot find view by content_list_progress id");
+        }
         if (null != headerLayout) {
             mContentList.addHeaderView(getActivity().getLayoutInflater().inflate(headerLayout, null));
         }
@@ -43,7 +52,7 @@ public abstract class ContentListFragment extends BaseFragment {
             mFooterView = getActivity().getLayoutInflater().inflate(footerLayout, null);
             mContentList.addFooterView(mFooterView);
         }
-        mProgress = (ProgressBar) view.findViewById(R.id.content_list_progress);
+
         if (mAdapter != null) {
             mContentList.setAdapter(mAdapter);
             setListShown(true);
