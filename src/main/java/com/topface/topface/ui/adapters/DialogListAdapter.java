@@ -199,4 +199,11 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
             }
         };
     }
+
+    public void replacePreview(int position, FeedDialog dialog) {
+        FeedDialog item = getData().get(position);
+        item.type = dialog.type;
+        item.text = dialog.text;
+        notifyDataSetChanged();
+    }
 }

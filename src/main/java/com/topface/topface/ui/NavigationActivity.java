@@ -469,7 +469,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         AbstractDialogFragment currentPopup = mPopupManager.getCurrentDialog();
         if (currentPopup != null) {
             currentPopup.onActivityResult(requestCode, resultCode, data);
@@ -516,8 +515,14 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                     AddPhotoHelper helper = getAddPhotoHelper();
                     helper.showTakePhotoDialog(new PhotoTaker(helper, this), helper.processActivityResult(requestCode, resultCode, data, false));
                     break;
+                default:
+                    super.onActivityResult(requestCode, resultCode, data);
+                    break;
             }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
+
     }
 
     private void toggleDrawerLayout() {

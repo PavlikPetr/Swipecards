@@ -61,6 +61,7 @@ public class ProfilePhotoGridAdapter extends PhotoGridAdapter {
             }
             holder = (ViewHolder) convertView.getTag();
         }
+        setImageViewRemoteAnimation(holder.photo, 300);
         holder.photo.setPhoto(getItem(position));
         return convertView;
     }

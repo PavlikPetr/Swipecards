@@ -17,6 +17,7 @@ import android.text.TextUtils;
 import com.appsflyer.AppsFlyerLib;
 import com.comscore.analytics.comScore;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
+import com.squareup.leakcanary.LeakCanary;
 import com.topface.billing.OpenIabHelperManager;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.imageloader.ImageLoaderStaticFactory;
@@ -336,7 +337,7 @@ public class App extends Application {
         }
 
         super.onCreate();
-
+        LeakCanary.install(this);
         mContext = getApplicationContext();
         //Включаем отладку, если это дебаг версия
         enableDebugLogs();

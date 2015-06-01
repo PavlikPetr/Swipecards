@@ -12,7 +12,9 @@ import com.topface.topface.ui.fragments.ChatFragment;
 
 public class ChatActivity extends CheckAuthActivity<ChatFragment> {
 
-    public static final int INTENT_CHAT = 3;
+    public static final int REQUEST_CHAT = 3;
+    public static final String LAST_MESSAGE = "com.topface.topface.ui.ChatActivity_last_message";
+    public static final String LAST_MESSAGE_USER_ID = "com.topface.topface.ui.ChatActivity_last_message_user_id";
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -44,7 +46,7 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
             intent.putExtra(ChatFragment.INTENT_ITEM_ID, feedItemId);
         }
         if (fromGcm) {
-            intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_CHAT);
+            intent.putExtra(Static.INTENT_REQUEST_KEY, REQUEST_CHAT);
         }
         if (photo != null) {
             intent.putExtra(ChatFragment.INTENT_AVATAR, photo);

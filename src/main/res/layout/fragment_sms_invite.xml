@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content_container"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/bg_white">
+
+    <ListView
+        android:id="@+id/content_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:cacheColorHint="#00000000"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:fadeScrollbars="true"
+        android:fadingEdge="none"
+        android:listSelector="@android:color/transparent" />
+
+    <ProgressBar
+        android:id="@+id/content_list_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/no_contacts_available"
+        style="@style/SMSInviteText"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="@string/no_contacts_available"
+        android:visibility="gone" />
+
+</RelativeLayout>

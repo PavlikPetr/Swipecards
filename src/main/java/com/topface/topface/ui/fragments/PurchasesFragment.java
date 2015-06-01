@@ -87,7 +87,7 @@ public class PurchasesFragment extends BaseFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt(LAST_PAGE, mPager.getCurrentItem());
-        outState.putBoolean(SKIP_BONUS, mSkipBonus);
+        outState.putBoolean(SKIP_BONUS, isBonusSkiped());
     }
 
     @Override
@@ -105,9 +105,9 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     public boolean forceBonusScreen(String infoText) {
-        if (!mSkipBonus) {
+        if (!isBonusSkiped()) {
             int bonusTabIndex = mPagerAdapter.getTabIndex(Options.Tab.BONUS);
-            if (mPagerAdapter.hasTab(Options.Tab.BONUS) && mPager.getCurrentItem() != bonusTabIndex) {
+            if (isBonusPageAvailable()) {
                 mPager.setCurrentItem(bonusTabIndex);
                 setResourceInfoText(infoText);
                 return true;
@@ -118,6 +118,14 @@ public class PurchasesFragment extends BaseFragment {
 
     public void skipBonus() {
         mSkipBonus = true;
+    }
+
+    public boolean isBonusPageAvailable() {
+        return null != mPagerAdapter && mPagerAdapter.hasTab(Options.Tab.BONUS) && mPager.getCurrentItem() != mPagerAdapter.getTabIndex(Options.Tab.BONUS);
+    }
+
+    public boolean isBonusSkiped() {
+        return mSkipBonus;
     }
 
     private void initViews(View root, Bundle savedInstanceState) {

@@ -34,7 +34,6 @@ public class GcmIntentService extends IntentService {
             //Сообщаем о том что есть новое уведомление и нужно обновить список
             Intent broadcastNotificationIntent = new Intent(GCMUtils.GCM_NOTIFICATION);
             String user = intent.getStringExtra("user");
-
             int type = GCMUtils.getType(intent);
             NotificationStatistics.sendReceived(type, GCMUtils.getLabel(intent));
 

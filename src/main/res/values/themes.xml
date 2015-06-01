@@ -116,6 +116,16 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <style name="Theme.Topface.NoActionBar.DatingLockPopup">
+        <item name="android:statusBarColor" tools:ignore="NewApi">
+            @color/status_bar_dating_lock_popup_color
+        </item>
+    </style>
+
+    <style name="Theme.Topface.NoActionBar.Filterlist" parent="Theme.Topface.NoActionBar">
+        <item name="android:windowBackground">@drawable/filter_dialog_background</item>
+    </style>
+
     <style name="Theme.Topface.White">
         <item name="actionBarStyle">@style/Widget.Topface.ActionBar</item>
         <item name="android:windowContentOverlay">@null</item>
