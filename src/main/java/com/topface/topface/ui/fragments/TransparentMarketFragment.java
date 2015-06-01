@@ -15,7 +15,7 @@ public class TransparentMarketFragment extends MarketBuyingFragment {
     public void onOpenIabSetupFinished(boolean normaly) {
         super.onOpenIabSetupFinished(normaly);
         SixCoinsSubscribeExperiment experiment = CacheProfile.getOptions().sixCoinsSubscribeExperiment;
-        if (CacheProfile.isEmpty()) {
+        if (isTestPurchasesAvailable()) {
             setTestPaymentsState(App.getUserConfig().getTestPaymentFlag());
         }
         buyNow(experiment.productId, experiment.isSubscription);
@@ -41,7 +41,7 @@ public class TransparentMarketFragment extends MarketBuyingFragment {
     public void onResume() {
         super.onResume();
         //Устанавливаем тестовые покупки
-        if (CacheProfile.isEditor()) {
+        if (isTestPurchasesAvailable()) {
             setTestPaymentsState(App.getUserConfig().getTestPaymentFlag());
         }
     }
