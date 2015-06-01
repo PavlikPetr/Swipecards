@@ -627,6 +627,9 @@
     <string name="black_list_add_short">В черный список</string>
     <string name="confirm_email_for_dating">Мы против спама. Подтвердите свой почтовый адрес, чтобы знакомиться в Topface!</string>
 
+    <string name="confirm_email_for_dating_title">Мы против спама</string>
+    <string name="confirm_email_for_dating_desc">Подтвердите свой почтовый адрес, чтобы знакомиться в Topface!</string>
+
     <string name="send_confirm_link">Отправить ссылку для подтверждения</string>
 
     <string name="complain_type_swearing_msg">Хамство, угрозы, мат</string>
