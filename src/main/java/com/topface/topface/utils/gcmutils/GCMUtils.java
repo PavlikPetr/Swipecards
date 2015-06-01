@@ -29,6 +29,7 @@ import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.fragments.profile.UserFormFragment;
+import com.topface.topface.ui.fragments.profile.UserPhotoFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
@@ -69,9 +70,9 @@ public class GCMUtils {
     public static final int GCM_TYPE_DIALOGS = 8;
     public static final int GCM_TYPE_PEOPLE_NEARBY = 9;
     public static final int GCM_TYPE_UPDATE_COUNTERS_BALANCE = 10;
-    public static final int GCM_TYPE_FUN_UPDATE_PROFILE = 11;
-    public static final int GCM_TYPE_FUN_ADD_PHOTO = 12;
-    public static final int GCM_TYPE_FUN_ONLINE = 13;
+    public static final int GCM_TYPE_FAN_UPDATE_PROFILE = 11;
+    public static final int GCM_TYPE_FAN_ADD_PHOTO = 12;
+    public static final int GCM_TYPE_FAN_ONLINE = 13;
 
     /**
      * параметры геометрической прогрессии для расчета задержки между запросами на регистрацию в GCM
@@ -427,7 +428,7 @@ public class GCMUtils {
         if (showMessage) {
             Intent i;
             if (user.id != 0) {
-                lastNotificationType = GCM_TYPE_MESSAGE;
+                lastNotificationType = type;
                 if (getUsersCountInMessageStack(user) > 1) {
                     // create intent to open Dialogs
                     i = new Intent(context, NavigationActivity.class);
@@ -449,7 +450,7 @@ public class GCMUtils {
         switch (type) {
             case GCM_TYPE_MESSAGE:
             case GCM_TYPE_GIFT:
-                i = openChat(context, user, type);
+                i = openChat(context, user, GCM_TYPE_MESSAGE);
                 break;
             case GCM_TYPE_MUTUAL:
                 if (showSympathy) {
@@ -494,17 +495,18 @@ public class GCMUtils {
                 i = new Intent(context, NavigationActivity.class);
                 FeedScreensIntent.equipMessageAllIntent(i);
                 break;
-            case GCM_TYPE_FUN_UPDATE_PROFILE:
-                lastNotificationType = GCM_TYPE_FUN_UPDATE_PROFILE;
+            case GCM_TYPE_FAN_UPDATE_PROFILE:
+                lastNotificationType = GCM_TYPE_FAN_UPDATE_PROFILE;
                 i = UserProfileActivity.createIntent(null, null, user.id, null, true, CacheProfile.premium, Utils.getNameAndAge(user.name, user.age), user.city);
                 i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, UserFormFragment.class.getName());
                 break;
-            case GCM_TYPE_FUN_ADD_PHOTO:
-                lastNotificationType = GCM_TYPE_FUN_ADD_PHOTO;
+            case GCM_TYPE_FAN_ADD_PHOTO:
+                lastNotificationType = GCM_TYPE_FAN_ADD_PHOTO;
                 i = UserProfileActivity.createIntent(null, null, user.id, null, true, CacheProfile.premium, Utils.getNameAndAge(user.name, user.age), user.city);
+                i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, UserPhotoFragment.class.getName());
                 break;
-            case GCM_TYPE_FUN_ONLINE:
-                i = openChat(context, user, GCM_TYPE_FUN_ONLINE);
+            case GCM_TYPE_FAN_ONLINE:
+                i = openChat(context, user, GCM_TYPE_FAN_ONLINE);
                 break;
             case GCM_TYPE_PROMO:
             default:
