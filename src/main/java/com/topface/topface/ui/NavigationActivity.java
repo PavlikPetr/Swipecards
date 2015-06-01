@@ -36,6 +36,7 @@ import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.ui.fragments.TransparentMarketFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.utils.AddPhotoHelper;
@@ -471,6 +472,11 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         AbstractDialogFragment currentPopup = mPopupManager.getCurrentDialog();
         if (currentPopup != null) {
             currentPopup.onActivityResult(requestCode, resultCode, data);
+        }
+        TransparentMarketFragment myFragment = (TransparentMarketFragment) getSupportFragmentManager()
+                .findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
+        if (myFragment != null && resultCode == RESULT_CANCELED) {
+            getSupportFragmentManager().beginTransaction().remove(myFragment).commit();
         }
         //Хак для работы покупок, см подробнее в BillingFragment.processRequestCode()
         boolean isBillingRequestProcessed = OpenIabFragment.processRequestCode(

@@ -190,14 +190,8 @@ public class PurchasesFragment extends BaseFragment {
 
     private void removeExcessTabs(LinkedList<Options.Tab> tabs) {
         boolean isVip = getArguments().getBoolean(IS_VIP_PRODUCTS, false);
-        Options.Tab pwallMobileTab = null;
         for (Iterator<Options.Tab> iterator = tabs.iterator(); iterator.hasNext(); ) {
             Options.Tab tab = iterator.next();
-            switch (tab.type) {
-                case Options.Tab.PWALL_MOBILE:
-                    pwallMobileTab = tab;
-                    break;
-            }
             //Удаляем вкладку Google Play, если не доступны Play Services
             if (TextUtils.equals(tab.type, Options.Tab.GPLAY) && !new GoogleMarketApiManager().isMarketApiAvailable()) {
                 iterator.remove();
