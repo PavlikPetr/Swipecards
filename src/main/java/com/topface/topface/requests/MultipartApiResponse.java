@@ -37,6 +37,7 @@ public class MultipartApiResponse implements IApiResponse {
     public JSONObject jsonResult;
     public JSONObject jsonBan;
     private HashMap<String, ApiResponse> mResponses = new HashMap<>();
+    private String mLastCompletedRequestId;
 
     public MultipartApiResponse(int responseCode, String contentType, String body) {
         processResponse(responseCode, contentType, new ByteArrayInputStream(body.getBytes()));
@@ -78,7 +79,6 @@ public class MultipartApiResponse implements IApiResponse {
 
     private void parseResponses(LinkedList<String> parts) throws JSONException {
         code = ErrorCodes.RESULT_OK;
-        boolean firstResponse = true;
         for (String responseString : parts) {
             if (!TextUtils.isEmpty(responseString)) {
                 ApiResponse response = new ApiResponse(responseString);
@@ -92,16 +92,16 @@ public class MultipartApiResponse implements IApiResponse {
                         return;
                     }
                 } else {
-                    //Для всех ответов кроме первого отключаем обновление счетчиков
-                    if (firstResponse) {
-                        firstResponse = false;
-                    } else {
-                        response.setUpdateCountersFlag(false);
-                    }
+                    response.setUpdateCountersFlag(false);
+                    mLastCompletedRequestId = response.id;
                 }
             } else {
                 Debug.error("Wrong response part:\n" + responseString);
             }
+        }
+        //Последнему удачно завершенному разрешаем обновить счетчики
+        if (mLastCompletedRequestId != null && mResponses.containsKey(mLastCompletedRequestId)) {
+            mResponses.get(mLastCompletedRequestId).setUpdateCountersFlag(true);
         }
     }
 
