@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.topface.topface.data.User;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.fragments.AnimatedFragment;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
+import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.Utils;
 
@@ -26,7 +28,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     public static final String INTENT_IS_CHAT_AVAILABLE = "intent_profile_is_chat_available";
     public static final String INTENT_IS_ADD_TO_FAVORITS_AVAILABLE = "intent_profile_is_add_to_favorits_available";
     public static final String ADD_PHOTO_INTENT = "com.topface.topface.ADD_PHOTO_INTENT";
-    private static final String CURRENT_BODY_PAGE = "CURRENT_BODY_PAGE";
+    public static final String CURRENT_BODY_PAGE = "CURRENT_BODY_PAGE";
     // state
     private ArrayList<String> BODY_PAGES_TITLES = new ArrayList<>();
     private ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<>();
@@ -95,6 +97,15 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
         if (savedInstanceState != null) {
             mBodyPager.setCurrentItem(savedInstanceState.getInt(CURRENT_BODY_PAGE, 0));
         }
+        Bundle arg = getArguments();
+        if (arg != null) {
+            String sLastPage = arg.getString(TabbedFeedFragment.EXTRA_OPEN_PAGE);
+            if (!TextUtils.isEmpty(sLastPage)) {
+                int lastPage = BODY_PAGES_CLASS_NAMES.indexOf(sLastPage);
+                mBodyPager.setCurrentItem(lastPage);
+            }
+        }
+
     }
 
     protected void onProfileUpdated() {

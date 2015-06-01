@@ -16,7 +16,9 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
 
     public static final int INTENT_USER_PROFILE = 6;
 
-    public static Intent createIntent(ApiResponse response, Photo photo, int userId, String itemId, boolean isChatAvailable, boolean isAddToFavoritesAvailable, String nameAndAge, String city) {
+    public static Intent createIntent(ApiResponse response, Photo photo, int userId, String itemId,
+                                      boolean isChatAvailable, boolean isAddToFavoritesAvailable,
+                                      String nameAndAge, String city) {
         Intent intent = new Intent(App.getContext(), UserProfileActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, nameAndAge);
         intent.putExtra(ChatFragment.INTENT_USER_CITY, city);
@@ -50,4 +52,6 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
     protected void setActionBarView() {
         super.setActionBarView();
     }
+
+
 }

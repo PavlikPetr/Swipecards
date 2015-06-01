@@ -1,11 +1,9 @@
 package com.topface.topface.utils.gcmutils;
 
-import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
@@ -23,12 +21,15 @@ import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.ui.fragments.profile.UserFormFragment;
+import com.topface.topface.ui.fragments.profile.UserPhotoFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
@@ -69,6 +70,9 @@ public class GCMUtils {
     public static final int GCM_TYPE_DIALOGS = 8;
     public static final int GCM_TYPE_PEOPLE_NEARBY = 9;
     public static final int GCM_TYPE_UPDATE_COUNTERS_BALANCE = 10;
+    public static final int GCM_TYPE_FAN_UPDATE_PROFILE = 11;
+    public static final int GCM_TYPE_FAN_ADD_PHOTO = 12;
+    public static final int GCM_TYPE_FAN_ONLINE = 13;
 
     /**
      * параметры геометрической прогрессии для расчета задержки между запросами на регистрацию в GCM
@@ -241,7 +245,6 @@ public class GCMUtils {
         return false;
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static boolean showNotification(final Intent extra, Context context) {
         if (!CacheProfile.isLoaded()) {
             Debug.log("GCM: wait for profile load to show notification");
@@ -421,31 +424,34 @@ public class GCMUtils {
         return uniqueIds.size();
     }
 
+    private static Intent openChat(Context context, User user, int type) {
+        if (showMessage) {
+            Intent i;
+            if (user.id != 0) {
+                lastNotificationType = type;
+                if (getUsersCountInMessageStack(user) > 1) {
+                    // create intent to open Dialogs
+                    i = new Intent(context, NavigationActivity.class);
+                    i.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.TABBED_DIALOGS);
+                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, DialogsFragment.class.getName());
+                    // add the same request code like Chat intent
+                    i.putExtra(Static.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
+                } else {
+                    return ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city, null, null, true);
+                }
+                return i;
+            }
+        }
+        return new Intent(context, NavigationActivity.class);
+    }
+
     private static Intent getIntentByType(Context context, int type, User user) {
         Intent i = null;
         switch (type) {
             case GCM_TYPE_MESSAGE:
             case GCM_TYPE_GIFT:
-                if (showMessage) {
-                    if (user.id != 0) {
-                        lastNotificationType = GCM_TYPE_MESSAGE;
-                        if (getUsersCountInMessageStack(user) > 1) {
-                            // create intent to open Dialogs
-                            i = new Intent(context, NavigationActivity.class);
-                            i.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.TABBED_DIALOGS);
-                            i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, DialogsFragment.class.getName());
-                            // add the same request code like Chat intent
-                            i.putExtra(Static.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
-                        } else {
-                            i = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city, null, null, true);
-                        }
-                    } else {
-                        i = new Intent(context, NavigationActivity.class);
-                    }
-                }
+                i = openChat(context, user, GCM_TYPE_MESSAGE);
                 break;
-
-
             case GCM_TYPE_MUTUAL:
                 if (showSympathy) {
                     lastNotificationType = GCM_TYPE_MUTUAL;
@@ -489,10 +495,22 @@ public class GCMUtils {
                 i = new Intent(context, NavigationActivity.class);
                 FeedScreensIntent.equipMessageAllIntent(i);
                 break;
+            case GCM_TYPE_FAN_UPDATE_PROFILE:
+                lastNotificationType = GCM_TYPE_FAN_UPDATE_PROFILE;
+                i = UserProfileActivity.createIntent(null, null, user.id, null, true, CacheProfile.premium, Utils.getNameAndAge(user.name, user.age), user.city);
+                i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, UserFormFragment.class.getName());
+                break;
+            case GCM_TYPE_FAN_ADD_PHOTO:
+                lastNotificationType = GCM_TYPE_FAN_ADD_PHOTO;
+                i = UserProfileActivity.createIntent(null, null, user.id, null, true, CacheProfile.premium, Utils.getNameAndAge(user.name, user.age), user.city);
+                i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, UserPhotoFragment.class.getName());
+                break;
+            case GCM_TYPE_FAN_ONLINE:
+                i = openChat(context, user, GCM_TYPE_FAN_ONLINE);
+                break;
             case GCM_TYPE_PROMO:
             default:
                 i = new Intent(context, NavigationActivity.class);
-
         }
         return i;
     }
@@ -534,7 +552,6 @@ public class GCMUtils {
         public String photoUrl;
         public int sex;
         public int age;
-        @SuppressWarnings("unused")
         public String city;
 
         public User() {

@@ -1031,7 +1031,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         return mRetryView;
     }
 
-    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ChatActivity.REQUEST_CHAT) {
             onChatActivityResult(resultCode, data);
@@ -1042,7 +1043,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     }
 
-    @Override public void startActivityForResult(Intent intent, int requestCode) {
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
         Fragment fr = getParentFragment();
         // startActivityForResult adds to requestCode (after first 16 bits) index of fragment that has invoked startActivityForResult
         // then FragmentActivity passes onActivityResult to child fragment that has that index
@@ -1051,7 +1053,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         // then TabbedFeedFragment.onActivityResult will pass it to its childs
         if (fr != null && fr instanceof TabbedFeedFragment) {
             fr.startActivityForResult(intent, requestCode);
-        // otherwise current fragment is straight child of Activity
+            // otherwise current fragment is straight child of Activity
         } else {
             super.startActivityForResult(intent, requestCode);
         }
