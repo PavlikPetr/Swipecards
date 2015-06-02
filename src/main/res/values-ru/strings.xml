@@ -509,6 +509,10 @@
     <string name="save">Сохранить</string>
     <string name="saving_in_progress">Cохранение...</string>
     <string name="confirmation_successfully_sent">Подтверждение выслано на указанный вами e-mail.</string>
+    <string name="email_successfully_confirmed">E-mail успешно подтвержден.</string>
+    <string name="email_not_confirmed">E-mail не подтвержден.</string>
+    <string name="email_already_confirmed">Уже подтвержден</string>
+
     <string name="password_confirmation_hint">Подтверждение пароля</string>
     <string name="password_hint">пароль</string>
     <string name="enter_new_password">Введите новый пароль.</string>
