@@ -9,6 +9,7 @@ import com.koushikdutta.async.http.WebSocket;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ErrorCodes;
@@ -27,7 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ScruffyRequestManager {
 
-    public static final String API_URL = "wss://scruffy.core.tf/v7";
+    public static final String API_URL = "wss://scruffy.core.tf/";
     private static final long FATWOOD_TIMEOUT = 10 * 1000;
     private static final int SENT_REQUESTS_LIMIT = 10;
     public static final int MIN_RECONNECT_DELAY_SEC = 2;
@@ -189,7 +190,7 @@ public class ScruffyRequestManager {
                             apiRequest.getRequestBodyData()
                     ).toString();
 
-                    Debug.log("Scruffy:: Request " + API_URL + " >>>\n" + requestString);
+                    Debug.log("Scruffy:: Request " + App.getAppConfig().getScruffyApiUrl() + " >>>\n" + requestString);
                     ScruffyStatistics.sendScruffyRequestSend();
                     mWebSocket.send(requestString);
                     mSentRequests.put(key, request);
@@ -219,7 +220,7 @@ public class ScruffyRequestManager {
         }
         if (!AuthToken.getInstance().isEmpty()) {
             //Если мы авторизованы коннектимся
-            AsyncHttpClient.getDefaultInstance().websocket(API_URL, null, new AsyncHttpClient.WebSocketConnectCallback() {
+            AsyncHttpClient.getDefaultInstance().websocket(App.getAppConfig().getScruffyApiUrl(), null, new AsyncHttpClient.WebSocketConnectCallback() {
                 @Override
                 public void onCompleted(Exception ex, final WebSocket webSocket) {
                     Debug.log("Scruffy:: try connect");
@@ -227,7 +228,7 @@ public class ScruffyRequestManager {
                         ScruffyStatistics.sendScruffyConnectFailure();
                         Debug.error("Scruffy::", ex);
                         if (listener != null) {
-                            listener.onError(ErrorCodes.ERRORS_PROCCESED, "ConnectedListener is ");
+                            listener.onError(ErrorCodes.ERRORS_PROCESSED, ex != null ? ex.toString() : "");
                         }
                         mIsAuthInProgress.set(false);
                         reconnect();
@@ -266,9 +267,7 @@ public class ScruffyRequestManager {
             if (reconnectCounter > RECONNECTION_LIMIT_FOR_HTTP_SWITCH) {
                 makeScruffyUnavailable();
             }
-            if (mWebSocket != null) {
-                mWebSocket = null;
-            }
+            killConnection(true);
             int reconnectDelay = (int) Math.pow(MIN_RECONNECT_DELAY_SEC, reconnectCounter);
             Debug.error("Scruffy:: connect error. Try reconnect #" + reconnectCounter
                     + " with delay=" + reconnectDelay + " sec");

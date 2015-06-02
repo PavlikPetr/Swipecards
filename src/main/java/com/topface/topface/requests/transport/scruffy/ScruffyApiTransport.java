@@ -36,7 +36,7 @@ public class ScruffyApiTransport implements IApiTransport {
                 } catch (InterruptedException e) {
                     Debug.error("Scruffy:: timeout ", e);
                     mHolder.setResponse(
-                            new ApiResponse(ErrorCodes.ERRORS_PROCCESED, "Thread exception " + e.getMessage())
+                            new ApiResponse(ErrorCodes.ERRORS_PROCESSED, "Thread exception " + e.getMessage())
                     );
                 }
             }
