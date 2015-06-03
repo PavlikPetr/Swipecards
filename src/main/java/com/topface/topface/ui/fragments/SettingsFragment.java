@@ -84,7 +84,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                     @Override
                     public void onClick(View v) {
                         if (mMarketApiManager != null) {
-                            mMarketApiManager.onProblemResolve();
+                            mMarketApiManager.onProblemResolve(getActivity());
                         }
                     }
                 });

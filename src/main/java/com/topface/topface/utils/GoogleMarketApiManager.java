@@ -2,6 +2,7 @@ package com.topface.topface.utils;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.ui.NavigationActivity;
 
 public class GoogleMarketApiManager extends BaseMarketApiManager {
 
@@ -66,7 +68,7 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
         decryptingErrorCode();
     }
 
-    private boolean isGoogleAccountExists() {
+    public static boolean isGoogleAccountExists() {
         AccountManager manager = AccountManager.get(App.getContext());
         Account[] accounts = manager.getAccountsByType("com.google");
         return accounts != null && accounts.length > 0;
@@ -142,7 +144,11 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
                     addAccountIntent.putExtra(Settings.EXTRA_ACCOUNT_TYPES,
                             App.getContext().getResources().getStringArray(R.array.extra_account_types));
                 }
-                context.startActivity(addAccountIntent);
+                if (context instanceof Activity) {
+                    ((Activity) context).startActivityForResult(addAccountIntent, NavigationActivity.GOOGLE_AUTH_CODE);
+                } else {
+                    context.startActivity(addAccountIntent);
+                }
                 break;
             default:
                 PendingIntent pendingIntent = GooglePlayServicesUtil.getErrorPendingIntent(mResultCode, context, 0);

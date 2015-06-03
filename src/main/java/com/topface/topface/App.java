@@ -92,7 +92,7 @@ public class App extends Application {
     private static Location mCurLocation;
     private static AppsFlyerData.ConversionHolder mAppsFlyerConversionHolder;
 
-    private static OpenIabHelperManager mOpenIabHelperManager = new OpenIabHelperManager();
+    public static OpenIabHelperManager mOpenIabHelperManager = new OpenIabHelperManager();
     private static boolean mAppOptionsObtainedFromServer = false;
     private static boolean mUserOptionsObtainedFromServer = false;
 

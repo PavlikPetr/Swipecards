@@ -42,7 +42,7 @@ public class OpenIabHelperManager implements IabHelper.OnIabSetupFinishedListene
         void onOpenIabSetupFinished(boolean normaly);
     }
 
-    private void init(Context context) {
+    public void init(Context context) {
         if (!mIsSetupStarted) {
             mIsSetupStarted = true;
             mIsSetupDone = false;
@@ -69,7 +69,7 @@ public class OpenIabHelperManager implements IabHelper.OnIabSetupFinishedListene
         if (mHelper != null) {
             mHelper.dispose();
         }
-
+        mOptsBuilder = null;
         mHelper = null;
         mIsSetupStarted = false;
         mIsSetupDone = false;

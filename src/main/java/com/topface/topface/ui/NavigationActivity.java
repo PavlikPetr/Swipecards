@@ -43,6 +43,7 @@ import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.CustomViewNotificationController;
+import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.IActionbarNotifier;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.PhotoTaker;
@@ -72,6 +73,7 @@ import static com.topface.topface.utils.controllers.StartActionsController.AC_PR
 public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener, SequencedStartAction.IUiRunner {
     public static final String INTENT_EXIT = "EXIT";
     public static final String PAGE_SWITCH = "Page switch: ";
+    public static final int GOOGLE_AUTH_CODE = 666;
 
     private Intent mPendingNextIntent;
     private boolean mIsActionBarHidden;
@@ -94,6 +96,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     private AddPhotoHelper mAddPhotoHelper;
     private PopupManager mPopupManager;
+    private boolean mGoogleAuthStareted;
 
     /**
      * Перезапускает NavigationActivity, нужно например при смене языка
@@ -293,6 +296,11 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     protected void onResume() {
         super.onResume();
+        if (GoogleMarketApiManager.isGoogleAccountExists() && mGoogleAuthStareted) {
+            App.mOpenIabHelperManager.freeHelper();
+            App.mOpenIabHelperManager.init(App.getContext());
+            mGoogleAuthStareted = false;
+        }
         //restart -> open NavigationActivity
         if (App.getLocaleConfig().fetchToSystemLocale()) {
             LocaleConfig.changeLocale(this, App.getLocaleConfig().getApplicationLocale());
@@ -469,6 +477,9 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == GOOGLE_AUTH_CODE) {
+            mGoogleAuthStareted = true;
+        }
         AbstractDialogFragment currentPopup = mPopupManager.getCurrentDialog();
         if (currentPopup != null) {
             currentPopup.onActivityResult(requestCode, resultCode, data);
