@@ -266,9 +266,7 @@ public class ScruffyRequestManager {
             if (reconnectCounter > RECONNECTION_LIMIT_FOR_HTTP_SWITCH) {
                 makeScruffyUnavailable();
             }
-            if (mWebSocket != null) {
-                mWebSocket = null;
-            }
+            killConnection(true);
             int reconnectDelay = (int) Math.pow(MIN_RECONNECT_DELAY_SEC, reconnectCounter);
             Debug.error("Scruffy:: connect error. Try reconnect #" + reconnectCounter
                     + " with delay=" + reconnectDelay + " sec");
@@ -304,6 +302,9 @@ public class ScruffyRequestManager {
         mPendingRequests.clear();
         mSentRequests.clear();
         mConnectionEverBeenEstablished.set(false);
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
         killConnection(true);
     }
 
@@ -314,8 +315,8 @@ public class ScruffyRequestManager {
                 mWebSocket.setClosedCallback(null);
             }
             mWebSocket.close();
+            mWebSocket = null;
         }
-        mWebSocket = null;
     }
 
     private class ReconnectTask extends TimerTask {
