@@ -13,6 +13,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -56,6 +57,12 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     };
     private boolean mRunning;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // игнорируем нажатие аппаратной кнопки
+        return keyCode == KeyEvent.KEYCODE_MENU || super.onKeyDown(keyCode, event);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -2,7 +2,6 @@ package com.topface.topface.ui.analytics;
 
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 
 import com.comscore.analytics.comScore;
 import com.facebook.AppEventsLogger;
@@ -16,12 +15,6 @@ import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.social.AuthToken;
 
 public class TrackedFragmentActivity extends ActionBarActivity {
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // отключаем аппаратную кнопку
-        return keyCode == KeyEvent.KEYCODE_MENU || super.onKeyDown(keyCode, event);
-    }
 
     @Override
     public void onStart() {
