@@ -85,6 +85,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private static final String FEEDS = "FEEDS";
     private static final String POSITION = "POSITION";
     private static final String HAS_AD = "HAS_AD";
+    private static final String BLACK_LIST_USER = "black_list_user";
     private static final String FEED_AD = "FEED_AD";
     public static final String REFRESH_DIALOGS = "refresh_dialogs";
 
@@ -143,14 +144,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     };
 
+    private int mIdForRemove;
     protected boolean mNeedRefresh;
     private BroadcastReceiver mRefreshReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             mNeedRefresh = true;
             if (intent.hasExtra(OverflowMenu.USER_ID_FOR_REMOVE)) {
-                int idForRemove = intent.getIntExtra(OverflowMenu.USER_ID_FOR_REMOVE, -1);
-                getListAdapter().removeByUserId(idForRemove);
+                mIdForRemove = intent.getIntExtra(OverflowMenu.USER_ID_FOR_REMOVE, -1);
             }
         }
     };
@@ -281,6 +282,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         return root;
     }
 
+    private void removeBlackListUserFromFeed() {
+        if (mIdForRemove > 0) {
+            getListAdapter().removeByUserId(mIdForRemove);
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -290,6 +297,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @SuppressWarnings("unchecked")
     protected void restoreInstanceState(Bundle saved) {
         if (saved != null) {
+            mIdForRemove = saved.getInt(BLACK_LIST_USER);
             if (CacheProfile.show_ad) {
                 mListAdapter.setHasFeedAd(saved.getBoolean(HAS_AD));
                 mListAdapter.setFeedAd(saved.<NativeAd>getParcelable(FEED_AD));
@@ -369,6 +377,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
+        removeBlackListUserFromFeed();
         FeedAdapter<T> adapter = getListAdapter();
         if (adapter.isNeedUpdate() || needUpdate) {
             updateData(false, true);
@@ -416,6 +425,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             outState.putInt(POSITION, mListView.getRefreshableView().getFirstVisiblePosition());
             outState.putBoolean(HAS_AD, mListAdapter.hasFeedAd());
             outState.putParcelable(FEED_AD, mListAdapter.getFeedAd());
+            outState.putInt(BLACK_LIST_USER, mIdForRemove);
         }
     }
 
@@ -658,7 +668,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             if (adapter.isMultiSelectionMode()) {
                 adapter.onSelection(item);
             } else {
-                startActivity(UserProfileActivity.createIntent(null, item.user.photo, item.user.id, item.id, false, CacheProfile.premium, Utils.getNameAndAge(item.user.firstName, item.user.age), item.user.city.getName()));
+                startActivity(UserProfileActivity.createIntent(null, item.user.photo, item.user.id, item.id, false, true, Utils.getNameAndAge(item.user.firstName, item.user.age), item.user.city.getName()));
             }
         }
     }

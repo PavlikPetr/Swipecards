@@ -1065,7 +1065,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     public void onAvatarClick() {
         if (mUser != null) {
             if (!(mUser.deleted || mUser.banned)) {
-                startActivity(UserProfileActivity.createIntent(null, mPhoto, mUserId, mUser.feedItemId, false, false, Utils.getNameAndAge(mUser.firstName, mUser.age), mUser.city.getName()));
+                startActivity(UserProfileActivity.createIntent(null, mPhoto, mUserId, mUser.feedItemId, false, true, Utils.getNameAndAge(mUser.firstName, mUser.age), mUser.city.getName()));
             } else {
                 Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
                         Toast.LENGTH_LONG).show();

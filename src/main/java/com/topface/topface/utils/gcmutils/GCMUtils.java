@@ -497,12 +497,12 @@ public class GCMUtils {
                 break;
             case GCM_TYPE_FAN_UPDATE_PROFILE:
                 lastNotificationType = GCM_TYPE_FAN_UPDATE_PROFILE;
-                i = UserProfileActivity.createIntent(null, null, user.id, null, true, CacheProfile.premium, Utils.getNameAndAge(user.name, user.age), user.city);
+                i = UserProfileActivity.createIntent(null, null, user.id, null, true, true, Utils.getNameAndAge(user.name, user.age), user.city);
                 i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, UserFormFragment.class.getName());
                 break;
             case GCM_TYPE_FAN_ADD_PHOTO:
                 lastNotificationType = GCM_TYPE_FAN_ADD_PHOTO;
-                i = UserProfileActivity.createIntent(null, null, user.id, null, true, CacheProfile.premium, Utils.getNameAndAge(user.name, user.age), user.city);
+                i = UserProfileActivity.createIntent(null, null, user.id, null, true, true, Utils.getNameAndAge(user.name, user.age), user.city);
                 i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, UserPhotoFragment.class.getName());
                 break;
             case GCM_TYPE_FAN_ONLINE:
