@@ -65,7 +65,6 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.ad.NativeAd;
@@ -77,6 +76,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import static android.widget.AdapterView.OnItemClickListener;
+import static com.topface.topface.utils.CountersManager.METHOD_INTENT_STRING;
+import static com.topface.topface.utils.CountersManager.NULL_METHOD;
+import static com.topface.topface.utils.CountersManager.UPDATE_COUNTERS;
+import static com.topface.topface.utils.CountersManager.getInstance;
 
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         implements FeedAdapter.OnAvatarClickListener<T>, IPageWithAds {
@@ -87,6 +90,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private static final String HAS_AD = "HAS_AD";
     private static final String FEED_AD = "FEED_AD";
     public static final String REFRESH_DIALOGS = "refresh_dialogs";
+
+    private int currentCounter;
+    private boolean isCurrentCounterChanged;
 
     protected PullToRefreshListView mListView;
     protected FeedAdapter<T> mListAdapter;
@@ -261,7 +267,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                     if (!TextUtils.isEmpty(itemId)) {
                         makeItemReadWithFeedId(itemId);
                     } else {
-                        String lastMethod = intent.getStringExtra(CountersManager.METHOD_INTENT_STRING);
+                        String lastMethod = intent.getStringExtra(METHOD_INTENT_STRING);
                         if (!TextUtils.isEmpty(lastMethod)) {
                             updateDataAfterReceivingCounters(lastMethod);
                         }
@@ -273,7 +279,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         };
         IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
         filter.addAction(ChatFragment.MAKE_ITEM_READ_BY_UID);
-        filter.addAction(CountersManager.UPDATE_COUNTERS);
+        filter.addAction(UPDATE_COUNTERS);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReadItemReceiver, filter);
         for (int type : getTypesForGCM()) {
             GCMUtils.cancelNotification(getActivity(), type);
@@ -671,9 +677,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (getListAdapter() != null) {
             if ((getListAdapter().isNeedUpdate()
                     || needUpdate
-                    || hasUnread())
+                    || (hasUnread() && isCurrentCounterChanged()))
                     && !mIsUpdating) {
-                updateData(false, true);
+                updateData(true, true);
             }
         }
     }
@@ -682,7 +688,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
      * @return true if got unread feeds, calculated from counters
      */
     private boolean hasUnread() {
-        return (getUnreadCounter() > 0);
+        return (getUnreadCount() > 0);
+    }
+
+    private int getUnreadCount() {
+        int value = getUnreadCounter();
+        setCurrentCounter(value);
+        return value;
     }
 
     /**
@@ -976,8 +988,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     private void updateDataAfterReceivingCounters(String lastMethod) {
-        if (!lastMethod.equals(CountersManager.NULL_METHOD) && lastMethod.equals(getRequest().getServiceName())) {
-            int counters = CountersManager.getInstance(getActivity()).getCounter(getFeedType());
+        if (!lastMethod.equals(NULL_METHOD) && lastMethod.equals(getRequest().getServiceName())) {
+            int counters = getInstance(getActivity()).getCounter(getFeedType());
             if (counters > 0) {
                 updateData(true, false);
             }
@@ -1057,5 +1069,23 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         } else {
             super.startActivityForResult(intent, requestCode);
         }
+    }
+
+    private void setCurrentCounter(int value) {
+        setCurrentCounterChanged(value);
+        currentCounter = value;
+    }
+
+    private boolean setCurrentCounterChanged(int currentValue) {
+        if (!isCurrentCounterChanged) {
+            isCurrentCounterChanged = currentCounter != currentValue;
+        }
+        return isCurrentCounterChanged;
+    }
+
+    private boolean isCurrentCounterChanged() {
+        boolean state = isCurrentCounterChanged;
+        isCurrentCounterChanged = false;
+        return state;
     }
 }
