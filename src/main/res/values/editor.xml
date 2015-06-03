@@ -2,6 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="editor_reset_settings">Сбросить настройки редактора</string>
     <string name="editor_refresh_profile">Обновить профиль и Options</string>
+    <string name="editor_reconnect_to_stage">Переподключить websocket</string>
+    <string name="editor_reconnect_msg">Переподключение на %s</string>
     <string name="editor_clear_search_cache">Очистить кэш поиска</string>
     <string name="editor_menu_admin">Админка</string>
     <string name="editor_fragment_error">Ошибка при выполнении действия</string>
