@@ -48,7 +48,7 @@ public class MultipartApiResponse implements IApiResponse {
             processResponse(connection.getResponseCode(), connection.getContentType(), connection.getInputStream());
         } catch (IOException e) {
             Debug.error(e);
-            setError(ErrorCodes.ERRORS_PROCCESED, "Parse response error");
+            setError(ErrorCodes.ERRORS_PROCESSED, "Parse response error");
         }
     }
 
@@ -73,7 +73,7 @@ public class MultipartApiResponse implements IApiResponse {
             setError(ErrorCodes.NETWORK_CONNECT_ERROR, "Read response error");
         } catch (Exception e) {
             Debug.error(e);
-            setError(ErrorCodes.ERRORS_PROCCESED, "Parse response error");
+            setError(ErrorCodes.ERRORS_PROCESSED, "Parse response error");
         }
     }
 

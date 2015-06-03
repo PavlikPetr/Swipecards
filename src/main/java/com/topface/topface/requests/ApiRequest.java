@@ -79,7 +79,7 @@ public abstract class ApiRequest implements IApiRequest {
             RetryDialog retryDialog = new RetryDialog(context.getString(R.string.general_internet_off), context, this);
             if (handler != null) {
                 Message msg = new Message();
-                msg.obj = new ApiResponse(ErrorCodes.ERRORS_PROCCESED, "App is offline");
+                msg.obj = new ApiResponse(ErrorCodes.ERRORS_PROCESSED, "App is offline");
                 handler.sendMessage(msg);
             }
             try {

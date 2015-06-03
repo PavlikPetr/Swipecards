@@ -221,6 +221,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
+            android:text="@string/editor_reconnect_to_stage"
+            android:id="@+id/ReconnectWebSocket"
+            style="@style/Widget.Topface.Button.Big.Gray" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:text="@string/editor_refresh_profile"
             android:id="@+id/EditorRefreshProfile"
             style="@style/Widget.Topface.Button.Big.Gray" />

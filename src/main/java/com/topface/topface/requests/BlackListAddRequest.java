@@ -55,7 +55,7 @@ public class BlackListAddRequest extends ApiRequest {
         if (mUserIds != null && mUserIds.size() > 0) {
             super.exec();
         } else {
-            handleFail(ErrorCodes.ERRORS_PROCCESED, "User list for delete from black list is empty");
+            handleFail(ErrorCodes.ERRORS_PROCESSED, "User list for delete from black list is empty");
         }
     }
 }

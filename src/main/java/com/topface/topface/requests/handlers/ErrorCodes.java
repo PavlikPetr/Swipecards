@@ -18,7 +18,7 @@ public class ErrorCodes {
     public static final int UNCONFIRMED_LOGIN_ACTION = -5;
     public static final int RESULT_DONT_SET = -4;
     public static final int CONNECTION_ERROR = -3;
-    public static final int ERRORS_PROCCESED = -2;
+    public static final int ERRORS_PROCESSED = -2;
     public static final int RESULT_OK = -1;
 
     public static final int INTERNAL_SERVER_ERROR = 0;

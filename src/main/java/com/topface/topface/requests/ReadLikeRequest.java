@@ -35,7 +35,7 @@ public class ReadLikeRequest extends ApiRequest {
         if (mId > 0) {
             super.exec();
         } else {
-            handleFail(ErrorCodes.ERRORS_PROCCESED, "Invalid id");
+            handleFail(ErrorCodes.ERRORS_PROCESSED, "Invalid id");
         }
     }
 

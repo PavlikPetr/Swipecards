@@ -46,8 +46,8 @@ abstract public class ApiHandler extends Handler {
         if (!mCancel) {
             try {
                 int result = response.getResultCode();
-                if (result == ErrorCodes.ERRORS_PROCCESED) {
-                    fail(ErrorCodes.ERRORS_PROCCESED, new ApiResponse(ErrorCodes.ERRORS_PROCCESED, "Client exception"));
+                if (result == ErrorCodes.ERRORS_PROCESSED) {
+                    fail(ErrorCodes.ERRORS_PROCESSED, new ApiResponse(ErrorCodes.ERRORS_PROCESSED, "Client exception"));
                 } else if (result == ErrorCodes.PREMIUM_ACCESS_ONLY) {
                     Debug.error("To do this you have to be a VIP");
                     fail(result, response);
@@ -70,7 +70,7 @@ abstract public class ApiHandler extends Handler {
                 }
             } catch (Exception e) {
                 Debug.error("ApiHandler exception", e);
-                fail(ErrorCodes.ERRORS_PROCCESED, new ApiResponse(ErrorCodes.ERRORS_PROCCESED, e.getMessage()));
+                fail(ErrorCodes.ERRORS_PROCESSED, new ApiResponse(ErrorCodes.ERRORS_PROCESSED, e.getMessage()));
             }
             try {
                 always(response);
