@@ -399,11 +399,11 @@ public class ConnectionManager {
         } catch (Exception e) {
             Debug.error(TAG + "::Exception", e);
             //Это ошибка нашего кода, не нужно автоматически переотправлять такой запрос
-            response = new ApiResponse(ErrorCodes.ERRORS_PROCCESED, "Request exception: " + e.toString());
+            response = new ApiResponse(ErrorCodes.ERRORS_PROCESSED, "Request exception: " + e.toString());
         } catch (OutOfMemoryError e) {
             Debug.error(TAG + "::OutOfMemory" + e.toString());
             //Если OutOfMemory, то отменяем запросы, толку от этого все равно нет
-            response = new ApiResponse(ErrorCodes.ERRORS_PROCCESED, "Request OutOfMemory: " + e.toString());
+            response = new ApiResponse(ErrorCodes.ERRORS_PROCESSED, "Request OutOfMemory: " + e.toString());
         }
 
         if (response == null) {

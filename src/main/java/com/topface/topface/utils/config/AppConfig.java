@@ -9,6 +9,7 @@ import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.utils.Editor;
 
 import org.json.JSONArray;
@@ -32,6 +33,7 @@ public class AppConfig extends AbstractConfig {
 
     public static final String BASE_CONFIG_SETTINGS = "base_config_settings";
     public static final String DATA_API_URL = "data_api_url";
+    public static final String SCRUFFY_DATA_API_URL = "scruffy_data_api_url";
     public static final String DATA_AUTH_VK_API = "data_auth_vk_api";
     public static final String FLOOD_ENDS_TIME = "flood_ens_time";
     private static final String DATA_EDITOR_MODE = "data_editor_mode";
@@ -63,6 +65,8 @@ public class AppConfig extends AbstractConfig {
     protected void fillSettingsMap(SettingsMap settingsMap) {
         // api url: https://api.topface.com/
         addField(settingsMap, DATA_API_URL, Static.API_URL);
+        // api url: wss://scruffy.core.tf/
+        addField(settingsMap, SCRUFFY_DATA_API_URL, ScruffyRequestManager.API_URL);
         // vk api id
         addField(settingsMap, DATA_AUTH_VK_API, Static.AUTH_VK_ID);
         // editor mode from Editor class
@@ -183,6 +187,15 @@ public class AppConfig extends AbstractConfig {
     }
 
     /**
+     * Scruffy Api url for requests in ConnectionManager
+     *
+     * @return scruffy url for request
+     */
+    public String getScruffyApiDomain() {
+        return getStringField(getSettingsMap(), SCRUFFY_DATA_API_URL);
+    }
+
+    /**
      * Network errors mode
      *
      * @return true if network errors mode switched on
@@ -210,6 +223,16 @@ public class AppConfig extends AbstractConfig {
         setField(settingsMap, DATA_API_URL, url);
     }
 
+    /**
+     * Сохраняет все настройки, связаные с доступок к Scruffy API
+     *
+     * @param url путь к API
+     */
+    public void setScruffyApiUrl(String url) {
+        SettingsMap settingsMap = getSettingsMap();
+        setField(settingsMap, SCRUFFY_DATA_API_URL, url);
+    }
+
     public void setStageLogin(String login, boolean checked) {
         SettingsMap settingsMap = getSettingsMap();
         setField(settingsMap, STAGE_LOGIN, login);
@@ -232,6 +255,16 @@ public class AppConfig extends AbstractConfig {
     public String getApiUrl() {
         SettingsMap settingsMap = getSettingsMap();
         return getStringField(settingsMap, DATA_API_URL) + "?v=" + ApiRequest.API_VERSION;
+    }
+
+    /**
+     * Scruffy Url for api request with current saved version
+     *
+     * @return url for requests
+     */
+    public String getScruffyApiUrl() {
+        SettingsMap settingsMap = getSettingsMap();
+        return getStringField(settingsMap, SCRUFFY_DATA_API_URL) + "v" + ApiRequest.API_VERSION;
     }
 
     /**

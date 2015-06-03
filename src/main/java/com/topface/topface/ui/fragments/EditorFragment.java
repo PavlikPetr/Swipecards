@@ -27,6 +27,7 @@ import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.ui.EditorBannersActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
@@ -53,6 +54,7 @@ import static com.topface.topface.utils.notifications.UserNotificationManager.ge
  */
 public class EditorFragment extends BaseFragment implements View.OnClickListener {
     public static final String API_STAGE_TF = "https://api-%s.stage.tf/";
+    public static final String API_SCRUFFY_STAGE_TF = "wss://api-%s.stage.tf/scruffy/";
     private static final int NETWORK_ERROR_NOTIFICATION_ID = 800;
     private Spinner mApiUrl;
     private Spinner mOfferwallTypeChoose;
@@ -85,6 +87,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_editor, null);
         // buttons
+        root.findViewById(R.id.ReconnectWebSocket).setOnClickListener(this);
         root.findViewById(R.id.EditorRefreshProfile).setOnClickListener(this);
         root.findViewById(R.id.EditorClearSearchCache).setOnClickListener(this);
         root.findViewById(R.id.EditorConfigureBanners).setOnClickListener(this);
@@ -332,15 +335,17 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
             }
             if (!mCustomApiCheckBox.isChecked()) {
                 mAppConfig.setApiUrl(
-                        (String) mApiUrl.getSelectedItem()
-                );
+                        (String) mApiUrl.getSelectedItem());
+                mAppConfig.setScruffyApiUrl(ScruffyRequestManager.API_URL);
             } else {
                 if (!TextUtils.isEmpty(customApi)) {
                     mAppConfig.setApiUrl(String.format(API_STAGE_TF, customApi.trim()));
+                    mAppConfig.setScruffyApiUrl(String.format(API_SCRUFFY_STAGE_TF, customApi.trim()));
                 }
             }
             showCompleteMessage();
             mAppConfig.saveConfig();
+            ScruffyRequestManager.getInstance().killConnection(true);
         } catch (Exception e) {
             showError();
         }
@@ -352,6 +357,19 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ReconnectWebSocket:
+                ScruffyRequestManager.getInstance().connect(new ScruffyRequestManager.ConnectedListener() {
+                    @Override
+                    public void onConnected() {
+                        Utils.showToastNotification(String.format(getActivity().getString(R.string.editor_reconnect_msg),
+                                App.getAppConfig().getScruffyApiUrl()), Toast.LENGTH_SHORT);
+                    }
+
+                    @Override
+                    public void onError(int errorCode, String errorMessage) {
+                    }
+                });
+                break;
             case R.id.EditorRefreshProfile:
                 App.sendProfileAndOptionsRequests();
                 showCompleteMessage();
