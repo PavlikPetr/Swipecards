@@ -2,8 +2,8 @@ package com.topface.topface.utils;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.provider.Settings;
@@ -15,6 +15,8 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 
 public class GoogleMarketApiManager extends BaseMarketApiManager {
+
+    public static final int GOOGLE_AUTH_CODE = 666;
 
     private boolean mIsServicesAvailable;
     private int mResultCode;
@@ -66,7 +68,7 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
         decryptingErrorCode();
     }
 
-    private boolean isGoogleAccountExists() {
+    public static boolean isGoogleAccountExists() {
         AccountManager manager = AccountManager.get(App.getContext());
         Account[] accounts = manager.getAccountsByType("com.google");
         return accounts != null && accounts.length > 0;
@@ -133,7 +135,7 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
     }
 
     @Override
-    public void onProblemResolve(Context context) {
+    public void onProblemResolve(Activity activity) {
         switch (mResultCode) {
             case ConnectionResult.SIGN_IN_REQUIRED:
                 Intent addAccountIntent = new Intent(android.provider.Settings.ACTION_ADD_ACCOUNT)
@@ -142,10 +144,10 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
                     addAccountIntent.putExtra(Settings.EXTRA_ACCOUNT_TYPES,
                             App.getContext().getResources().getStringArray(R.array.extra_account_types));
                 }
-                context.startActivity(addAccountIntent);
+                activity.startActivityForResult(addAccountIntent, GOOGLE_AUTH_CODE);
                 break;
             default:
-                PendingIntent pendingIntent = GooglePlayServicesUtil.getErrorPendingIntent(mResultCode, context, 0);
+                PendingIntent pendingIntent = GooglePlayServicesUtil.getErrorPendingIntent(mResultCode, activity, 0);
                 if (pendingIntent != null) {
                     try {
                         pendingIntent.send();

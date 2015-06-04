@@ -1,13 +1,13 @@
 package com.topface.topface.utils;
 
-import android.content.Context;
+import android.app.Activity;
 
 public abstract class BaseMarketApiManager {
     public abstract void onResume();
 
     public abstract int getResultCode();
 
-    public abstract void onProblemResolve(Context context);
+    public abstract void onProblemResolve(Activity activity);
 
     public abstract int getButtonTextId();
 

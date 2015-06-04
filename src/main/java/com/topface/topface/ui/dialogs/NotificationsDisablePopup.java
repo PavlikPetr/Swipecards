@@ -39,7 +39,7 @@ public class NotificationsDisablePopup implements IStartAction {
         if (getMarketApiManager().isButtonVisible()) {
             builder.setPositiveButton(getMarketApiManager().getButtonTextId(), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    getMarketApiManager().onProblemResolve();
+                    getMarketApiManager().onProblemResolve(mActivity);
                     dialog.cancel();
                     mActivity = null;
                 }
