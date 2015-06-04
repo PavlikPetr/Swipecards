@@ -349,7 +349,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         Intent intent = getIntent();
         String itemId = intent.getStringExtra(AbstractProfileFragment.INTENT_ITEM_ID);
         startActivity(UserProfileActivity.createIntent(lastResponse != null ? lastResponse : null, null,
-                mUid, itemId, false, false, null, null));
+                mUid, itemId, false, true, null, null));
         finish();
     }
 

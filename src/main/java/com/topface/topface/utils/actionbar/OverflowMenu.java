@@ -163,7 +163,9 @@ public class OverflowMenu {
                         break;
                 }
                 if (isNeedToAddItem(item.getId())) {
-                    mBarActions.add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mActivity.getString(resourceId) : "").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                    mBarActions.add(Menu.NONE, item.getId(), i, resourceId != null ? mActivity.getString(resourceId) : "").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                } else {
+                    replaceItem(item, resourceId);
                 }
             }
             if (overflowMenuItemArray.size() > 1) {
@@ -203,12 +205,23 @@ public class OverflowMenu {
                         break;
                 }
                 if (isNeedToAddItem(item.getId())) {
-                    mBarActions.add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mActivity.getString(resourceId) : "").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                    mBarActions.add(Menu.NONE, item.getId(), i, resourceId != null ? mActivity.getString(resourceId) : "").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                } else {
+                    replaceItem(item, resourceId);
                 }
             }
             if (isInBlackList != null) {
                 mBarActions.findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!isInBlackList);
             }
+        }
+    }
+
+    private void replaceItem(OverflowMenuItem item, Integer resourceId) {
+        if (item.getId() == ADD_TO_BLACK_LIST_ACTION.getId() ||
+                item.getId() == ADD_TO_BOOKMARK_ACTION.getId()) {
+            int order = mBarActions.findItem(item.getId()).getOrder();
+            mBarActions.removeItem(item.getId());
+            mBarActions.add(Menu.NONE, item.getId(), order, resourceId != null ? mActivity.getString(resourceId) : "").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         }
     }
 
@@ -371,7 +384,7 @@ public class OverflowMenu {
                             showBlackListToast(false);
                             LocalBroadcastManager.getInstance(mActivity).
                                     sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS)
-                                            .putExtra(USER_ID_FOR_REMOVE, userId));
+                                            .putExtra(USER_ID_FOR_REMOVE, -1));
                         }
 
                         @Override
