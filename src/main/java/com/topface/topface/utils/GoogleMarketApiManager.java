@@ -4,7 +4,6 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.provider.Settings;
@@ -14,9 +13,10 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.ui.NavigationActivity;
 
 public class GoogleMarketApiManager extends BaseMarketApiManager {
+
+    public static final int GOOGLE_AUTH_CODE = 666;
 
     private boolean mIsServicesAvailable;
     private int mResultCode;
@@ -135,7 +135,7 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
     }
 
     @Override
-    public void onProblemResolve(Context context) {
+    public void onProblemResolve(Activity activity) {
         switch (mResultCode) {
             case ConnectionResult.SIGN_IN_REQUIRED:
                 Intent addAccountIntent = new Intent(android.provider.Settings.ACTION_ADD_ACCOUNT)
@@ -144,14 +144,10 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
                     addAccountIntent.putExtra(Settings.EXTRA_ACCOUNT_TYPES,
                             App.getContext().getResources().getStringArray(R.array.extra_account_types));
                 }
-                if (context instanceof Activity) {
-                    ((Activity) context).startActivityForResult(addAccountIntent, NavigationActivity.GOOGLE_AUTH_CODE);
-                } else {
-                    context.startActivity(addAccountIntent);
-                }
+                activity.startActivityForResult(addAccountIntent, GOOGLE_AUTH_CODE);
                 break;
             default:
-                PendingIntent pendingIntent = GooglePlayServicesUtil.getErrorPendingIntent(mResultCode, context, 0);
+                PendingIntent pendingIntent = GooglePlayServicesUtil.getErrorPendingIntent(mResultCode, activity, 0);
                 if (pendingIntent != null) {
                     try {
                         pendingIntent.send();

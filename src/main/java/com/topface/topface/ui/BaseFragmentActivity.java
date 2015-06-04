@@ -27,6 +27,7 @@ import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.controllers.StartActionsController;
@@ -34,12 +35,15 @@ import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.social.AuthToken;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.LinkedList;
 import java.util.Locale;
 
 public class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient {
 
     public static final String AUTH_TAG = "AUTH";
+    public static final String GOOGLE_AUTH_STARTED = "google_auth_started";
     public static final String IGNORE_NOTIFICATION_INTENT = "IGNORE_NOTIFICATION_INTENT";
     private static final String APP_START_LABEL_FORM = "gcm_%d_%s";
     public ActionBarView actionBarView;
@@ -56,6 +60,8 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     };
     private boolean mRunning;
+    private boolean mGoogleAuthStarted;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +75,20 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         LocaleConfig.updateConfiguration(getBaseContext());
         setWindowOptions();
         initActionBar(getSupportActionBar());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NotNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mGoogleAuthStarted = savedInstanceState.getBoolean(GOOGLE_AUTH_STARTED);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mGoogleAuthStarted) {
+            outState.putBoolean(GOOGLE_AUTH_STARTED, true);
+        }
     }
 
     @Override
@@ -198,6 +218,11 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onResume() {
         super.onResume();
+        if (GoogleMarketApiManager.isGoogleAccountExists() && mGoogleAuthStarted) {
+            App.mOpenIabHelperManager.freeHelper();
+            App.mOpenIabHelperManager.init(App.getContext());
+            mGoogleAuthStarted = false;
+        }
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
 
@@ -323,6 +348,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GoogleMarketApiManager.GOOGLE_AUTH_CODE) {
+            mGoogleAuthStarted = true;
+        }
+
         //Вот такая херня сделана для того, чтобы result фэйсбуковского приложение обрабатывал
         //AuthFragment. Потому что фб приложение обязательно должно стартовать из активити
         //и ответ возвращать тоже в активити.
