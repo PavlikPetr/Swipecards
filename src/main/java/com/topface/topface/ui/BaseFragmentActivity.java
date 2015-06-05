@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import android.widget.FrameLayout;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
@@ -38,7 +40,7 @@ import com.topface.topface.utils.social.AuthToken;
 import java.util.LinkedList;
 import java.util.Locale;
 
-public class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient {
+public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient {
 
     public static final String AUTH_TAG = "AUTH";
     public static final String IGNORE_NOTIFICATION_INTENT = "IGNORE_NOTIFICATION_INTENT";
@@ -57,6 +59,7 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         }
     };
     private boolean mRunning;
+    private boolean mHasContent = true;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -67,6 +70,14 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setWindowOptions();
+        if (mHasContent) {
+            setContentView(getContentLayout());
+        }
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
         Intent intent = getIntent();
         if (intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false)) {
             App.setStartLabel(String.format(Locale.getDefault(), APP_START_LABEL_FORM,
@@ -74,9 +85,10 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
                     intent.getStringExtra(GCMUtils.GCM_LABEL)));
         }
         LocaleConfig.updateConfiguration(getBaseContext());
-        setWindowOptions();
         initActionBar(getSupportActionBar());
     }
+
+    protected abstract int getContentLayout();
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -118,12 +130,16 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
         if (actionBar != null) {
             actionBarView = new ActionBarView(actionBar, this);
             setActionBarView();
-            actionBar.setIcon(android.R.color.transparent);
-            actionBar.setDisplayHomeAsUpEnabled(false);
-            actionBar.setDisplayUseLogoEnabled(true);
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(false);
+            initActionBarOptions(actionBar);
         }
+    }
+
+    protected void initActionBarOptions(ActionBar actionBar) {
+        actionBar.setIcon(android.R.color.transparent);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayUseLogoEnabled(true);
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
     }
 
     protected void setActionBarView() {
@@ -474,5 +490,9 @@ public class BaseFragmentActivity extends TrackedFragmentActivity implements IRe
 
     public boolean isRunning() {
         return mRunning;
+    }
+
+    protected void setHasContent(boolean value) {
+        mHasContent = value;
     }
 }

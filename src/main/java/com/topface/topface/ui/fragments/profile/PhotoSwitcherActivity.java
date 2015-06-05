@@ -187,7 +187,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_photos);
         // Extras
         Intent intent = getIntent();
         mUid = intent.getIntExtra(INTENT_USER_ID, -1);
@@ -226,6 +225,10 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                     mUid
             );
         }
+    }
+
+    @Override protected int getContentLayout() {
+        return R.layout.ac_photos;
     }
 
     private void extractUserGifts(Intent intent) {

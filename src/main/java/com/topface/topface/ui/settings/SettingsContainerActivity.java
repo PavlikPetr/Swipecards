@@ -35,7 +35,6 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setContentView(R.layout.ac_fragment_frame);
         Fragment fragment = null;
         Intent intent = getIntent();
         mConfirmCode = getIntent().getStringExtra(CONFIRMATION_CODE);
@@ -77,6 +76,10 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.loFrame, fragment).commit();
         }
+    }
+
+    @Override protected int getContentLayout() {
+        return R.layout.ac_fragment_frame;
     }
 
     public String getConfirmationCode() {

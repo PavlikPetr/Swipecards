@@ -84,7 +84,6 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_gifts);
         actionBarView.setArrowUpView(getResources().getString(R.string.profile_gifts));
         mUserIdToSendGift = getIntent().getIntExtra(INTENT_USER_ID_TO_SEND_GIFT, 0);
         mIsSuccessToastAvailable = getIntent().getBooleanExtra(INTENT_IS_SUCCESS_TOAST_AVAILABLE, true);
@@ -107,6 +106,10 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             }
         }).build();
         mLockScreen.addView(mRetryView.getView());
+    }
+
+    @Override protected int getContentLayout() {
+        return R.layout.ac_gifts;
     }
 
     /**

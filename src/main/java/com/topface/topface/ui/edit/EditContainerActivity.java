@@ -24,7 +24,6 @@ public class EditContainerActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setContentView(R.layout.ac_fragment_frame);
         Intent intent = getIntent();
         switch (intent.getIntExtra(Static.INTENT_REQUEST_KEY, 0)) {
             case INTENT_EDIT_FILTER:
@@ -42,6 +41,10 @@ public class EditContainerActivity extends BaseFragmentActivity {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.loFrame, mFragment, mFragment.getClass().getCanonicalName()).commit();
         }
+    }
+
+    @Override protected int getContentLayout() {
+        return R.layout.ac_fragment_frame;
     }
 
     @Override

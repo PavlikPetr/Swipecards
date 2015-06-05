@@ -20,9 +20,15 @@ public class IllustratedTextView extends TextView {
 
     public int ICON_ALIGN = TfImageSpan.ALIGN_CENTER;
 
+    IDelegatePressed delegate = new IDelegatePressed() {
+        @Override public boolean isPressed() {
+            return mPressed;
+        }
+    };
+    private boolean mPressed;
+
     public IllustratedTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
     }
 
     public IllustratedTextView(Context context, AttributeSet attrs) {
@@ -36,7 +42,6 @@ public class IllustratedTextView extends TextView {
 
     protected SpannableString replaceTemplates(CharSequence text, String template, int icon) {
         SpannableString spannableString;
-        //Ставим иконку монетки
 
         ArrayList<Integer> indexes = getAllIndexesOfSubstring(text.toString(), template);
         if (indexes.size() > 0) {
@@ -45,7 +50,7 @@ public class IllustratedTextView extends TextView {
             Context ctx = getContext();
             for (int spanStart : indexes) {
                 spannableString.setSpan(
-                        new TfImageSpan(ctx, icon, ICON_ALIGN),
+                        new TfImageSpan(ctx, icon, ICON_ALIGN, delegate),
                         spanStart,
                         spanStart + templateLength,
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -89,4 +94,12 @@ public class IllustratedTextView extends TextView {
         return indexes;
     }
 
+    @Override protected void dispatchSetPressed(boolean pressed) {
+        super.dispatchSetPressed(pressed);
+        mPressed = pressed;
+    }
+
+    static interface IDelegatePressed {
+        boolean isPressed();
+    }
 }
