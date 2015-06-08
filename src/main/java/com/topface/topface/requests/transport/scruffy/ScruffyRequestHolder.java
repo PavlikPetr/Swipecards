@@ -35,18 +35,21 @@ public class ScruffyRequestHolder implements RequestHolder {
 
     @Override
     public void setResponse(ScruffyRequest response) {
+        IApiResponse resp;
         if (mRequest instanceof MultipartApiRequest) {
-            setResponse(new MultipartApiResponse(
+            resp = new MultipartApiResponse(
                     HttpStatus.SC_OK,
                     response.getContentType(),
                     response.getBody()
-            ));
+            );
         } else {
-            ApiResponse resp = new ApiResponse(response.getBody());
-            if (resp.getResultCode() != ErrorCodes.RESULT_OK) {
-                ScruffyStatistics.sendScruffyRequestFail();
-            }
-            setResponse(resp);
+            resp = new ApiResponse(response.getBody());
+        }
+        setResponse(resp);
+        if (resp.getResultCode() < ErrorCodes.RESULT_OK) {
+            ScruffyStatistics.sendScruffyResponseFail("InnerResultCode: " + resp.getResultCode());
+        } else {
+            ScruffyStatistics.sendScruffyResponseSuccess();
         }
     }
 

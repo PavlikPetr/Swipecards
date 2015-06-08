@@ -10,10 +10,12 @@ import com.koushikdutta.async.http.WebSocket;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.statistics.ScruffyStatistics;
+import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.Map;
@@ -62,6 +64,9 @@ public class ScruffyRequestManager {
         @Override
         public void onCompleted(Exception ex) {
             Debug.error("Scruffy:: Connection closed", ex);
+            if (ex != null && ex.getClass() != null) {
+                ScruffyStatistics.sendScruffyConnectFailure(ex.getClass().toString());
+            }
             reconnect();
         }
     };
@@ -76,6 +81,7 @@ public class ScruffyRequestManager {
     private int mLastDecreasedSentRequestsCount;
     private long mLastDecreasedSentRequestTime;
     private boolean mScruffyAvailable = true;
+    private HockeySender mHockeySender;
 
     /**
      * Parses common structure of response
@@ -85,19 +91,21 @@ public class ScruffyRequestManager {
     private void processResponseWrapper(String responseString) {
         try {
             ScruffyRequest scruffyResponse = JsonUtils.fromJson(responseString, ScruffyRequest.class);
-
-            ScruffyRequestHolder holder = mSentRequests.get(scruffyResponse.getId());
+            int httpStatus = scruffyResponse.getHttpStatus();
             Debug.log("Scruffy:: response with id: " + scruffyResponse.getId());
             Debug.log("Scruffy:: sent requests: " + mSentRequests.size());
-            for (Map.Entry<String, ScruffyRequestHolder> entry : mSentRequests.entrySet()) {
-                Debug.log("Scruffy:: request " + entry.getValue().getId());
+            ScruffyRequestHolder holder = mSentRequests.get(scruffyResponse.getId());
+            if (httpStatus == 200) {
+                if (holder != null) {
+                    holder.setResponse(scruffyResponse);
+                } else {
+                    Debug.error(String.format("Scruffy:: Request for response #%s not found", scruffyResponse.getId()));
+                }
+            } else {
+                ScruffyStatistics.sendScruffyResponseFail("http-status: " + httpStatus);
             }
             if (holder != null) {
-                holder.setResponse(scruffyResponse);
-                //noinspection SuspiciousMethodCalls
                 mSentRequests.remove(holder.getId());
-            } else {
-                Debug.error(String.format("Scruffy:: Request for response #%s not found", scruffyResponse.getId()));
             }
         } catch (Exception e) {
             Debug.error("Scruffy::", e);
@@ -107,6 +115,7 @@ public class ScruffyRequestManager {
     private ScruffyRequestManager() {
         mPendingRequests = new ConcurrentHashMap<>();
         mSentRequests = new ConcurrentHashMap<>();
+        mHockeySender = new HockeySender();
     }
 
     public static ScruffyRequestManager getInstance() {
@@ -189,14 +198,14 @@ public class ScruffyRequestManager {
                             apiRequest.getHeaders("Scruffy"),
                             apiRequest.getRequestBodyData()
                     ).toString();
-
                     Debug.log("Scruffy:: Request " + API_URL + " >>>\n" + requestString);
-                    ScruffyStatistics.sendScruffyRequestSend();
                     mWebSocket.send(requestString);
+                    ScruffyStatistics.sendScruffyRequestSend();
                     mSentRequests.put(key, request);
                     mPendingRequests.remove(key);
                 } catch (Exception e) {
                     Debug.error("Scruffy:: send error", e);
+                    ScruffyStatistics.sendScruffyRequestFail(e.getClass().toString());
                 }
             } else {
                 mPendingRequests.get(key).cancel();
@@ -220,12 +229,17 @@ public class ScruffyRequestManager {
         }
         if (!AuthToken.getInstance().isEmpty()) {
             //Если мы авторизованы коннектимся
+            killConnection(true);
             AsyncHttpClient.getDefaultInstance().websocket(API_URL, null, new AsyncHttpClient.WebSocketConnectCallback() {
                 @Override
                 public void onCompleted(Exception ex, final WebSocket webSocket) {
                     Debug.log("Scruffy:: try connect");
                     if (ex != null || webSocket == null) {
-                        ScruffyStatistics.sendScruffyConnectFailure();
+                        if (ex != null && ex.getClass() != null) {
+                            ScruffyStatistics.sendScruffyConnectFailure(ex.getClass().toString());
+                            HockeySender sender = getReportSender();
+                            sender.send(sender.createLocalReport(App.getContext(),ex));
+                        }
                         Debug.error("Scruffy::", ex);
                         if (listener != null) {
                             listener.onError(ErrorCodes.ERRORS_PROCCESED, "ConnectedListener is ");
@@ -322,6 +336,11 @@ public class ScruffyRequestManager {
             mWebSocket.close();
             mWebSocket = null;
         }
+    }
+
+    public HockeySender getReportSender() {
+
+        return mHockeySender;
     }
 
     private class ReconnectTask extends TimerTask {
