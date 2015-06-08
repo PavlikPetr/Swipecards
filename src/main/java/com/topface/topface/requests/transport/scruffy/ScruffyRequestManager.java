@@ -1,6 +1,7 @@
 package com.topface.topface.requests.transport.scruffy;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 
 import com.koushikdutta.async.callback.CompletedCallback;
@@ -282,12 +283,16 @@ public class ScruffyRequestManager {
     private void makeScruffyUnavailable() {
         ScruffyStatistics.sendScruffyTransportFallback();
         mScruffyAvailable = false;
-        for (ScruffyRequestHolder holder : mSentRequests.values()) {
-            holder.getRequest().exec();
-        }
-        for (ScruffyRequestHolder holder : mPendingRequests.values()) {
-            holder.getRequest().exec();
-        }
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override public void run() {
+                for (ScruffyRequestHolder holder : mSentRequests.values()) {
+                    holder.getRequest().exec();
+                }
+                for (ScruffyRequestHolder holder : mPendingRequests.values()) {
+                    holder.getRequest().exec();
+                }
+            }
+        });
         clearState();
     }
 
