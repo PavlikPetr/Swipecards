@@ -19,6 +19,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,7 +51,9 @@ public class HockeySender implements ReportSender {
         report.put(ReportField.PHONE_MODEL, Build.DEVICE);
         report.put(ReportField.INSTALLATION_ID, "unknown");
         if (ex != null && ex.getStackTrace() != null) {
-            report.put(ReportField.STACK_TRACE, ex.getStackTrace().toString());
+            StringWriter writer = new StringWriter();
+            ex.printStackTrace(new PrintWriter(writer));
+            report.put(ReportField.STACK_TRACE, writer.toString());
         }
         return report;
     }
@@ -63,11 +67,9 @@ public class HockeySender implements ReportSender {
         String log = createCrashLog(report);
         Debug.log("HockeyAppSender", log);
         String url = BASE_URL + ACRA.getConfig().formUri() + CRASHES_PATH;
-
         try {
             DefaultHttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(url);
-
             List<NameValuePair> parameters = new ArrayList<>();
             parameters.add(new BasicNameValuePair("raw", log));
             String uid;
@@ -79,9 +81,7 @@ public class HockeySender implements ReportSender {
             parameters.add(new BasicNameValuePair("userID", uid));
             parameters.add(new BasicNameValuePair("contact", report.get(ReportField.USER_EMAIL)));
             parameters.add(new BasicNameValuePair("description", report.get(ReportField.USER_COMMENT)));
-
             httpPost.setEntity(new UrlEncodedFormEntity(parameters, HTTP.UTF_8));
-
             httpClient.execute(httpPost);
         } catch (Exception e) {
             e.printStackTrace();

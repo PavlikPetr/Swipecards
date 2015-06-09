@@ -198,7 +198,9 @@ public class OverflowMenu {
                         resourceId = item.getFirstResourceId();
                         break;
                 }
-                mBarActions.getSubMenu().add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mActivity.getString(resourceId) : "");
+                if (mActivity != null) {
+                    mBarActions.getSubMenu().add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mActivity.getString(resourceId) : "");
+                }
             }
             if (overflowMenuItemArray.size() > 1) {
                 if (isInBlackList != null) {
@@ -236,7 +238,9 @@ public class OverflowMenu {
                         resourceId = item.getFirstResourceId();
                         break;
                 }
-                mBarActions.getSubMenu().add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mActivity.getString(resourceId) : "");
+                if (mActivity != null) {
+                    mBarActions.getSubMenu().add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mActivity.getString(resourceId) : "");
+                }
             }
             if (isInBlackList != null) {
                 mBarActions.getSubMenu().findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!isInBlackList);

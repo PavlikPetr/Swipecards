@@ -6,6 +6,7 @@ import android.os.Message;
 
 import com.koushikdutta.async.callback.CompletedCallback;
 import com.koushikdutta.async.http.AsyncHttpClient;
+import com.koushikdutta.async.http.AsyncHttpGet;
 import com.koushikdutta.async.http.WebSocket;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.BackgroundThread;
@@ -16,6 +17,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.statistics.ScruffyStatistics;
 import com.topface.topface.utils.debug.HockeySender;
+import com.topface.topface.utils.http.HttpUtils;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.Map;
@@ -230,7 +232,9 @@ public class ScruffyRequestManager {
         if (!AuthToken.getInstance().isEmpty()) {
             //Если мы авторизованы коннектимся
             killConnection(true);
-            AsyncHttpClient.getDefaultInstance().websocket(API_URL, null, new AsyncHttpClient.WebSocketConnectCallback() {
+            AsyncHttpGet req = new AsyncHttpGet(API_URL.replace("ws://", "http://").replace("wss://", "https://"));
+            req.setHeader("User-Agent", HttpUtils.getUserAgent("Scruffy"));
+            AsyncHttpClient.getDefaultInstance().websocket(req, null, new AsyncHttpClient.WebSocketConnectCallback() {
                 @Override
                 public void onCompleted(Exception ex, final WebSocket webSocket) {
                     Debug.log("Scruffy:: try connect");
@@ -238,7 +242,7 @@ public class ScruffyRequestManager {
                         if (ex != null && ex.getClass() != null) {
                             ScruffyStatistics.sendScruffyConnectFailure(ex.getClass().toString());
                             HockeySender sender = getReportSender();
-                            sender.send(sender.createLocalReport(App.getContext(),ex));
+                            sender.send(sender.createLocalReport(App.getContext(), ex));
                         }
                         Debug.error("Scruffy::", ex);
                         if (listener != null) {
