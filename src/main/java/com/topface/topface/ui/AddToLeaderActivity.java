@@ -140,7 +140,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         try {
             outState.putString(PHOTOS, getAdapter().getAdapterData().toJson().toString());

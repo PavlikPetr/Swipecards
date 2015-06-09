@@ -1,6 +1,6 @@
 package com.topface.topface.utils;
 
-import android.content.Context;
+import android.app.Activity;
 
 import com.topface.topface.BuildConfig;
 
@@ -30,8 +30,8 @@ public class MarketApiManager {
         return mServicesManager.getResultCode();
     }
 
-    public void onProblemResolve(Context context) {
-        mServicesManager.onProblemResolve(context);
+    public void onProblemResolve(Activity activity) {
+        mServicesManager.onProblemResolve(activity);
     }
 
     public int getButtonTextId() {

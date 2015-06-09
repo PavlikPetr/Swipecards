@@ -308,7 +308,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (mPhotoAlbumControl != null) {
             outState.putInt(CONTROL_VISIBILITY, mPhotoAlbumControl.getVisibility());
