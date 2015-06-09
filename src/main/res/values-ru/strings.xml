@@ -6,6 +6,7 @@
     <string name="app_locale">ru_RU</string>
 
     <!-- строки iOS -->
+    <string name="photofeed_title">Встать в ленту</string>
     <string name="general_warning">ПРЕДУПРЕЖДЕНИЕ</string>
     <string name="general_ok">OK</string>
     <string name="general_settings_abbr">Настр.</string>
