@@ -18,6 +18,9 @@ public class Headers {
     @SerializedName("User-Agent")
     public String userAgent;
 
+    @SerializedName("http-status")
+    public Integer status = null;
+
     public Headers(String scruffyId, String contentType, String userAgent) {
         this.scruffyId = scruffyId;
         this.contentType = contentType;

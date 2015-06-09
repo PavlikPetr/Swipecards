@@ -115,8 +115,7 @@ public class HttpUtils {
      * @throws IOException
      */
     public static
-    @NonNull
-    HttpURLConnection openConnection(
+    @NonNull HttpURLConnection openConnection(
             HttpConnectionType type,
             String url,
             String contentType) throws IOException {

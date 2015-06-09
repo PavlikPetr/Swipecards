@@ -54,6 +54,13 @@ public class ScruffyRequest {
         return body;
     }
 
+    public Integer getHttpStatus() {
+        if (headers != null) {
+            return headers.status == null ? -1 : headers.status;
+        }
+        return -1;
+    }
+
     @Override
     public String toString() {
         return JsonUtils.toJson(this);

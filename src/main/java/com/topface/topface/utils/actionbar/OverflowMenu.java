@@ -162,10 +162,12 @@ public class OverflowMenu {
                         resourceId = item.getFirstResourceId();
                         break;
                 }
-                if (isNeedToAddItem(item.getId())) {
-                    mBarActions.add(Menu.NONE, item.getId(), i, resourceId != null ? mActivity.getString(resourceId) : "").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-                } else {
-                    replaceItem(item, resourceId);
+                if (mActivity != null) {
+                    if (isNeedToAddItem(item.getId())) {
+                        mBarActions.add(Menu.NONE, item.getId(), i, resourceId != null ? mActivity.getString(resourceId) : "").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                    } else {
+                        replaceItem(item, resourceId);
+                    }
                 }
             }
             if (overflowMenuItemArray.size() > 1) {
@@ -204,10 +206,12 @@ public class OverflowMenu {
                         resourceId = item.getFirstResourceId();
                         break;
                 }
-                if (isNeedToAddItem(item.getId())) {
-                    mBarActions.add(Menu.NONE, item.getId(), i, resourceId != null ? mActivity.getString(resourceId) : "").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-                } else {
-                    replaceItem(item, resourceId);
+                if (mActivity != null) {
+                    if (isNeedToAddItem(item.getId())) {
+                        mBarActions.add(Menu.NONE, item.getId(), i, resourceId != null ? mActivity.getString(resourceId) : "").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                    } else {
+                        replaceItem(item, resourceId);
+                    }
                 }
             }
             if (isInBlackList != null) {
