@@ -151,7 +151,8 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
     }
 
-    @Override protected int getContentLayout() {
+    @Override
+    protected int getContentLayout() {
         return R.layout.ac_navigation;
     }
 

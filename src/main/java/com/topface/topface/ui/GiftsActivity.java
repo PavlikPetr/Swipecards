@@ -108,7 +108,8 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
         mLockScreen.addView(mRetryView.getView());
     }
 
-    @Override protected int getContentLayout() {
+    @Override
+    protected int getContentLayout() {
         return R.layout.ac_gifts;
     }
 

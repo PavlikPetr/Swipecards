@@ -98,7 +98,8 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         takePhotoDialog = (TakePhotoDialog) getSupportFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
     }
 
-    @Override protected int getContentLayout() {
+    @Override
+    protected int getContentLayout() {
         return R.layout.ac_photoblog;
     }
 

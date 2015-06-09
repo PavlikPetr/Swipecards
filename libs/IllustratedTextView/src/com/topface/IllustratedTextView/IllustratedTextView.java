@@ -94,12 +94,13 @@ public class IllustratedTextView extends TextView {
         return indexes;
     }
 
-    @Override protected void dispatchSetPressed(boolean pressed) {
+    @Override
+    protected void dispatchSetPressed(boolean pressed) {
         super.dispatchSetPressed(pressed);
         mPressed = pressed;
     }
 
-    static interface IDelegatePressed {
+    interface IDelegatePressed {
         boolean isPressed();
     }
 }

@@ -63,7 +63,8 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         webView.setWebViewClient(new PaymentwallClient(webView));
     }
 
-    @Override protected int getContentLayout() {
+    @Override
+    protected int getContentLayout() {
         return R.layout.ac_web_auth;
     }
 

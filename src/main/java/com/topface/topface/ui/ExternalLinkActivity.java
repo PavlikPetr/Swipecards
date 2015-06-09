@@ -54,7 +54,8 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
         new ExternalLinkExecuter(mListener).execute(this, getIntent());
     }
 
-    @Override protected int getContentLayout() {
+    @Override
+    protected int getContentLayout() {
         return -1;
     }
 

@@ -523,7 +523,7 @@ public class App extends Application {
         if (!mAppOptionsObtainedFromServer && !mUserOptionsObtainedFromServer) {
             return HttpApiTransport.TRANSPORT_NAME;
         } else {
-            boolean userOptions = true;//mAppOptionsObtainedFromServer && CacheProfile.getOptions().isScruffyEnabled();
+            boolean userOptions = mAppOptionsObtainedFromServer && CacheProfile.getOptions().isScruffyEnabled();
             boolean appOptions = mUserOptionsObtainedFromServer && getAppOptions().isScruffyEnabled();
             if (appOptions || userOptions) {
                 if (ScruffyRequestManager.getInstance().isAvailable()) {

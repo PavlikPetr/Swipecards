@@ -43,7 +43,8 @@ public class EditContainerActivity extends BaseFragmentActivity {
         }
     }
 
-    @Override protected int getContentLayout() {
+    @Override
+    protected int getContentLayout() {
         return R.layout.ac_fragment_frame;
     }
 

@@ -52,7 +52,8 @@ public class CitySearchActivity extends BaseFragmentActivity {
         });
     }
 
-    @Override protected int getContentLayout() {
+    @Override
+    protected int getContentLayout() {
         return R.layout.ac_city;
     }
 
