@@ -21,7 +21,7 @@ public class Connectivity {
         return (info != null && info.isConnected());
     }
 
-    public static boolean isNetworkTypeWifi(int type) {
+    private static boolean isNetworkTypeWifi(int type) {
         switch (type) {
             case ConnectivityManager.TYPE_WIFI:
             case ConnectivityManager.TYPE_ETHERNET:
@@ -31,7 +31,7 @@ public class Connectivity {
         }
     }
 
-    public static boolean isNetworkTypeMobile(int type) {
+    private static boolean isNetworkTypeMobile(int type) {
         switch (type) {
             case ConnectivityManager.TYPE_MOBILE:
             case ConnectivityManager.TYPE_MOBILE_MMS:
@@ -44,6 +44,10 @@ public class Connectivity {
             default:
                 return false;
         }
+    }
+
+    public static boolean isWifiConnected(Context context) {
+        return getConnType(context) == Conn.WIFI;
     }
 
     public static Conn getConnType(Context context) {

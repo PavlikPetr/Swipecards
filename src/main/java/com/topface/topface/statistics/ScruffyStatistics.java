@@ -2,6 +2,9 @@ package com.topface.topface.statistics;
 
 import com.topface.statistics.android.Slices;
 import com.topface.statistics.android.StatisticsTracker;
+import com.topface.topface.App;
+import com.topface.topface.utils.Connectivity;
+import com.topface.topface.utils.Utils;
 
 /**
  * Created by kirussell on 27/02/15.
@@ -18,13 +21,25 @@ public class ScruffyStatistics {
     private static final String TF_SCRUFFY_TRANSPORT_FALLBACK = "scruffy_transport_fallback";
 
     private static Slices slicesWithVal = new Slices();
+    private static Slices slicesOnlyWithCon = new Slices();
 
     private static void send(String key) {
-        StatisticsTracker.getInstance().sendEvent(key, 1, null);
+        StatisticsTracker.getInstance().sendEvent(
+                key, 1,
+                slicesOnlyWithCon
+                        .putSlice(TfStatConsts.con, TfStatConsts.getConnType(Connectivity.getConnType(App.getContext())))
+                        .putSlice(TfStatConsts.plc, Utils.getCarrierName())
+        );
     }
 
     private static void send(String key, String val) {
-        StatisticsTracker.getInstance().sendEvent(key, 1, slicesWithVal.putSlice(TfStatConsts.val, val));
+        StatisticsTracker.getInstance().sendEvent(
+                key, 1,
+                slicesWithVal
+                        .putSlice(TfStatConsts.val, val)
+                        .putSlice(TfStatConsts.con, TfStatConsts.getConnType(Connectivity.getConnType(App.getContext())))
+                        .putSlice(TfStatConsts.plc, Utils.getCarrierName())
+        );
     }
 
     public static void sendScruffyConnectSuccess() {

@@ -47,7 +47,7 @@ public class HockeySender implements ReportSender {
         CrashReportData report = new CrashReportData();
         report.put(ReportField.PACKAGE_NAME, context.getPackageName());
         report.put(ReportField.APP_VERSION_CODE, Integer.toString(BuildConfig.VERSION_CODE));
-        report.put(ReportField.ANDROID_VERSION, Integer.toString(Build.VERSION.SDK_INT));
+        report.put(ReportField.ANDROID_VERSION, Build.VERSION.RELEASE);
         report.put(ReportField.PHONE_MODEL, Build.DEVICE);
         report.put(ReportField.INSTALLATION_ID, "unknown");
         if (ex != null && ex.getStackTrace() != null) {
