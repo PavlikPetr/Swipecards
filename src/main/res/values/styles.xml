@@ -418,9 +418,7 @@
         <item name="android:layout_height">@dimen/list_avatar_size</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_alignParentRight">true</item>
-        <item name="android:background">@drawable/bg_solid_holo_selector</item>
         <item name="android:scaleType">center</item>
-        <item name="android:src">@drawable/im_item_mutual_heart</item>
         <item name="android:tint">@null</item>
     </style>
 

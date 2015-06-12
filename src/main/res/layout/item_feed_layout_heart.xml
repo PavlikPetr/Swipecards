@@ -7,9 +7,9 @@
         android:id="@+id/ifp_avatar"
         layout="@layout/item_feed_part_avatar" />
 
-    <include
+    <ImageView
         android:id="@+id/ifp_heart"
-        layout="@layout/item_feed_part_heart" />
+        style="@style/FeedHeart" />
 
     <LinearLayout
         android:layout_width="wrap_content"

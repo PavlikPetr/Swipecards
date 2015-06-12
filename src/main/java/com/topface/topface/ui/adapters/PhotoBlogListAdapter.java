@@ -52,7 +52,7 @@ public class PhotoBlogListAdapter extends FeedAdapter<FeedPhotoBlog> {
         final FeedPhotoBlog leader = getItem(position);
         if (holder != null) {
 
-            holder.heart.setImageResource(isSympathySent(leader.user.id) ? R.drawable.ic_sympathy_sent : R.drawable.im_item_mutual_heart);
+            holder.heart.setImageResource(isSympathySent(leader.user.id) ? R.drawable.full_heart_selector : R.drawable.empty_heart_selector);
 
             holder.text.setText(leader.user.status);
 
