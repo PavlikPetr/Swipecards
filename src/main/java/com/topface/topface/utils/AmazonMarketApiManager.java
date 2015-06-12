@@ -1,6 +1,6 @@
 package com.topface.topface.utils;
 
-import android.content.Context;
+import android.app.Activity;
 
 import com.topface.topface.R;
 
@@ -29,7 +29,7 @@ public class AmazonMarketApiManager extends BaseMarketApiManager {
     }
 
     @Override
-    public void onProblemResolve(Context context) {
+    public void onProblemResolve(Activity activity) {
     }
 
     @Override
