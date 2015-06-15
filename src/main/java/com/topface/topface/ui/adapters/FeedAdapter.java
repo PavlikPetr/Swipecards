@@ -197,8 +197,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             // установка аватарки пользователя
             // какую аватарку использовать по умолчанию для забаненных и во время загрузки нормальной
             int defaultAvatarResId = (item.user.sex == Static.BOY ?
-                    R.drawable.rounded_avatar_male :
-                    R.drawable.rounded_avatar_female);
+                    R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
             holder.avatarImage.setStubResId(defaultAvatarResId);
 
             if (item.user.banned || item.user.deleted || item.user.photo == null || item.user.photo.isEmpty()) {
