@@ -519,7 +519,6 @@ public class App extends Application {
         }
     }
 
-
     public static String getApiTransport() {
         if (!mAppOptionsObtainedFromServer && !mUserOptionsObtainedFromServer) {
             return HttpApiTransport.TRANSPORT_NAME;

@@ -14,6 +14,7 @@ public class TfStatConsts {
     // - connectivity
     public static final String val = "val";
     public static final String con = "con";
+    public static final String plc = "plc";
     public static final String mtd = "mtd";
 
     // statistics key name
