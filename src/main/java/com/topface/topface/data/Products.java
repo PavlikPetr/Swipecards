@@ -194,7 +194,7 @@ public class Products extends AbstractData {
      */
     public static View createBuyButtonLayout(Context context, BuyButton buyBtn,
                                              final BuyButtonClickListener listener) {
-        String value;
+        String value = "";
         String economy;
         if (buyBtn.type == ProductType.COINS_SUBSCRIPTION && buyBtn.price == 0) {
             value = buyBtn.hint;
@@ -209,9 +209,11 @@ public class Products extends AbstractData {
             if (productsDetails != null) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
                 if (detail != null) {
-                    value = buyBtn.totalTemplate.replace(PRICE,
-                            String.format("%f %s", detail.price / ProductsDetails.MICRO_AMOUNT,
-                                    detail.currency));
+                    if (!TextUtils.isEmpty(buyBtn.totalTemplate)) {
+                        value = buyBtn.totalTemplate.replace(PRICE,
+                                String.format("%f %s", detail.price / ProductsDetails.MICRO_AMOUNT,
+                                        detail.currency));
+                    }
                 }
             }
             economy = buyBtn.hint;
