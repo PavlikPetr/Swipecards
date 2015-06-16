@@ -31,7 +31,7 @@ import java.util.List;
 
 public class Products extends AbstractData {
     public static final String INTENT_UPDATE_PRODUCTS = "com.topface.topface.action.UPDATE_PRODUCTS";
-    private static final String PRISE = "{{price}}";
+    private static final String PRICE = "{{price}}";
 
     public enum ProductType {
         COINS("coins"),
@@ -209,7 +209,7 @@ public class Products extends AbstractData {
             if (productsDetails != null) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
                 if (detail != null) {
-                    value = buyBtn.totalTemplate.replace(PRISE,
+                    value = buyBtn.totalTemplate.replace(PRICE,
                             String.format("%f %s", detail.price / ProductsDetails.MICRO_AMOUNT,
                                     detail.currency));
                 }
@@ -451,7 +451,7 @@ public class Products extends AbstractData {
                     if (detail != null) {
                         double price = detail.price / ProductsDetails.MICRO_AMOUNT;
                         double pricePerItem = price / amount;
-                        title = titleTemplate.replace(PRISE, String.format("%.2f %s", price, detail.currency));
+                        title = titleTemplate.replace(PRICE, String.format("%.2f %s", price, detail.currency));
                         title = title.replace("{{price_per_item}}", String.format("%.2f %s", pricePerItem, detail.currency));
                     }
                 }
