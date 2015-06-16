@@ -31,6 +31,7 @@ import java.util.List;
 
 public class Products extends AbstractData {
     public static final String INTENT_UPDATE_PRODUCTS = "com.topface.topface.action.UPDATE_PRODUCTS";
+    private static final String PRISE = "{{price}}";
 
     public enum ProductType {
         COINS("coins"),
@@ -117,7 +118,6 @@ public class Products extends AbstractData {
             fillProductsArray(likes, data.optJSONArray(ProductType.LIKES.getName()));
             fillProductsArray(premium, data.optJSONArray(ProductType.PREMIUM.getName()));
             fillProductsArray(others, data.optJSONArray(ProductType.OTHERS.getName()));
-
         } catch (Exception e) {
             Debug.error("Products parsing error", e);
         }
@@ -209,11 +209,9 @@ public class Products extends AbstractData {
             if (productsDetails != null) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
                 if (detail != null) {
-                    value = String.format(
-                            App.getContext().getString(R.string.default_price_format_extended),
-                            detail.price / ProductsDetails.MICRO_AMOUNT,
-                            detail.currency
-                    );
+                    value = buyBtn.totalTemplate.replace(PRISE,
+                            String.format("%f %s", detail.price / ProductsDetails.MICRO_AMOUNT,
+                                    detail.currency));
                 }
             }
             economy = buyBtn.hint;
@@ -432,12 +430,14 @@ public class Products extends AbstractData {
         public ProductType type;
         public int discount;
         public String paymentwallLink;
+        public String totalTemplate;
 
         public BuyButton(JSONObject json) {
             if (json != null) {
                 id = json.optString("id");
                 title = json.optString("title");
                 titleTemplate = json.optString("titleTemplate");
+                totalTemplate = json.optString("totalTemplate");
                 price = json.optInt("price");
                 amount = json.optInt("amount");
                 hint = json.optString("hint");
@@ -451,7 +451,7 @@ public class Products extends AbstractData {
                     if (detail != null) {
                         double price = detail.price / ProductsDetails.MICRO_AMOUNT;
                         double pricePerItem = price / amount;
-                        title = titleTemplate.replace("{{price}}", String.format("%.2f %s", price, detail.currency));
+                        title = titleTemplate.replace(PRISE, String.format("%.2f %s", price, detail.currency));
                         title = title.replace("{{price_per_item}}", String.format("%.2f %s", pricePerItem, detail.currency));
                     }
                 }
