@@ -51,11 +51,8 @@ public class PhotoBlogListAdapter extends FeedAdapter<FeedPhotoBlog> {
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
         final FeedPhotoBlog leader = getItem(position);
         if (holder != null) {
-
-            holder.heart.setImageResource(isSympathySent(leader.user.id) ? R.drawable.full_heart_selector : R.drawable.empty_heart_selector);
-
+            holder.heart.setActivated(isSympathySent(leader.user.id));
             holder.text.setText(leader.user.status);
-
             ViewHelper.setAlpha(holder.heart, (leader.user.deleted || leader.user.banned) ? 0.1f : 1f);
             holder.heart.setOnClickListener(new OnClickListener() {
 
