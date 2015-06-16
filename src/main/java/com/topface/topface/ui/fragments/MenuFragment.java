@@ -409,13 +409,13 @@ public class MenuFragment extends Fragment {
         }
         mSelectedFragment = newFragmentId;
 
+        if (mFragmentSwitchListener != null) {
+            mFragmentSwitchListener.onFragmentSwitch(mSelectedFragment);
+        }
         //Закрываем меню только после создания фрагмента
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (mFragmentSwitchListener != null) {
-                    mFragmentSwitchListener.onFragmentSwitch(mSelectedFragment);
-                }
                 if (mOnFragmentSelected != null) {
                     mOnFragmentSelected.onFragmentSelected(mSelectedFragment);
                 }
