@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+       android:shape="oval">
+    <solid android:color="#F2F2F2" />
+    <size
+        android:width="@dimen/left_menu_background_height"
+        android:height="@dimen/left_menu_background_height" />
+</shape>

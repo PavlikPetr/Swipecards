@@ -5,7 +5,8 @@
     <!--flat design-->
     <color name="bg_left_menu_selected">#EEEEEE</color>
     <color name="bg_left_menu_normal">@color/bg_white</color>
-    <color name="bg_badge_left_menu">#41b5f5</color>
+    <color name="left_menu_blue">#41b5f5</color>
+    <color name="bg_badge_left_menu">@color/left_menu_blue</color>
     <color name="bg_left_menu_item">@android:color/transparent</color>
     <color name="bg_main">#4D4D4D</color>
     <color name="bg_action_mode">#373737</color>

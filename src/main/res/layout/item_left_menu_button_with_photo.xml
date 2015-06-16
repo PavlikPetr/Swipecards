@@ -15,7 +15,7 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         ivr:preProcessor="roundAvatar"
-        android:background="@drawable/rounded_avatar"/>
+        android:background="@drawable/left_menu_rounded_avatar"/>
 
     <ImageView
         android:id="@+id/image_badge"
