@@ -44,11 +44,8 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
             convertView.setSelected(true);
         }
         if (holder != null) {
-            holder.heart.setImageResource(like.mutualed ? R.drawable.im_item_dbl_mutual_heart :
-                    (like.highrate ? R.drawable.im_item_mutual_heart_top : R.drawable.im_item_mutual_heart));
-
+            holder.heart.setActivated(like.mutualed);
             ViewHelper.setAlpha(holder.heart, (like.user.deleted || like.user.banned) ? 0.1f : 1f);
-
             holder.heart.setOnClickListener(new OnClickListener() {
 
                 @Override
