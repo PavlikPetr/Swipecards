@@ -485,6 +485,7 @@
     <string name="general_no_notifications">Purtroppo, per il tuo dispositivo gli avvisi non sono disponibili</string>
     <string name="black_list_add_short">Nella black list</string>
     <string name="confirm_email_for_dating">Siamo contrari allo spam. Conferma il tuo e-mail per chattare su Topface!</string>
+    <string name="confirm_email_for_dating_title">Noi siamo contro lo spam</string>
     <string name="send_confirm_link">Invia il link di conferma</string>
     <string name="complain_type_swearing_msg">Cafonate, minacce, parolacce</string>
     <string name="general_exit">Logout</string>
