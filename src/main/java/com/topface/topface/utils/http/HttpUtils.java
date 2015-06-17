@@ -236,7 +236,7 @@ public class HttpUtils {
     /**
      * Типы HTTP запросов, PUT и т.п. мы не поддерживаем
      */
-    public static enum HttpConnectionType {
+    public enum HttpConnectionType {
         POST, GET
     }
 

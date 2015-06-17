@@ -6,8 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,17 +18,18 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.topface.IllustratedTextView.IllustratedTextView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.Products;
+import com.topface.topface.data.Photo;
 import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.LeftMenuAdapter;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
@@ -38,15 +37,12 @@ import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
-import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.BuyWidgetController;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.ResourcesUtils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.gcmutils.GCMUtils;
-import com.topface.topface.utils.http.ProfileBackgrounds;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -63,14 +59,13 @@ import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_DI
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_LIKES;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_VISITORS;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.UNDEFINED;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.VIP_PROFILE;
 
 /**
  * Created by kirussell on 05.11.13.
  * Left menu for switching NavigationActivity fragments
  * extends ListFragment and does not have any xml layout
  */
-public class MenuFragment extends Fragment implements View.OnClickListener {
+public class MenuFragment extends Fragment {
     public static final String SELECT_MENU_ITEM = "com.topface.topface.action.menu.selectitem";
     public static final String SELECTED_FRAGMENT_ID = "com.topface.topface.action.menu.item";
     private static final String CURRENT_FRAGMENT_STATE = "menu_fragment_current_fragment";
@@ -79,11 +74,8 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     private FragmentId mSelectedFragment = UNDEFINED;
     private LeftMenuAdapter mAdapter;
     private boolean mHardwareAccelerated;
-    private View mHeaderView;
-    private TextView mProfileButton;
-    private BuyWidgetController mBuyWidgetController;
-    private ViewGroup mFooterView;
     private View mEditorItem;
+    private IllustratedTextView textBalance;
 
     private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -94,18 +86,12 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
             switch (action) {
                 case CountersManager.UPDATE_BALANCE:
                     mAdapter.refreshCounterBadges();
-                    mBuyWidgetController.updateBalance();
+                    updateBalance();
                     break;
                 case CacheProfile.PROFILE_UPDATE_ACTION:
-                    initProfileMenuItem(mHeaderView);
+                    initProfileMenuItem(mProfileMenuItem);
                     initEditor();
                     initBonus();
-                    break;
-                case Products.INTENT_UPDATE_PRODUCTS:
-                    Products products = CacheProfile.getMarketProducts();
-                    if (products != null && mBuyWidgetController != null) {
-                        mBuyWidgetController.setSalesEnabled(products.saleExists);
-                    }
                     break;
                 case SELECT_MENU_ITEM:
                     Bundle extras = intent.getExtras();
@@ -130,6 +116,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     private INavigationFragmentsListener mFragmentSwitchListener;
     private ListView mListView;
+    private LeftMenuAdapter.ILeftMenuItem mProfileMenuItem;
 
     @Override
     public void onAttach(Activity activity) {
@@ -155,7 +142,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
 
     private void initBonus() {
         if (CacheProfile.getOptions().bonus.enabled && !mAdapter.hasFragment(BONUS)) {
-            mAdapter.addItem(LeftMenuAdapter.newLeftMenuItem(BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE, R.drawable.ic_bonus_1));
+            mAdapter.addItem(LeftMenuAdapter.newLeftMenuItem(BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE, R.drawable.ic_bonus_selector));
             mAdapter.refreshCounterBadges();
         }
     }
@@ -167,7 +154,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initEditor() {
-        if (mFooterView != null) {
+        if (mListView != null) {
             if (Editor.isEditor()) {
                 if (mEditorItem == null) {
                     mEditorItem = View.inflate(getActivity(), R.layout.item_left_menu_button_with_badge, null);
@@ -175,12 +162,16 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
                     //noinspection ResourceType
                     btnMenu.setText(ResourcesUtils.getFragmentNameResId(FragmentId.EDITOR));
                     mEditorItem.setTag(FragmentId.EDITOR);
-                    mEditorItem.setOnClickListener(this);
-                    mFooterView.addView(mEditorItem);
+                    mEditorItem.setOnClickListener(new View.OnClickListener() {
+                        @Override public void onClick(View v) {
+                            onMenuSelected(FragmentId.EDITOR);
+                        }
+                    });
+                    mListView.addFooterView(mEditorItem);
                 }
             } else {
                 if (mEditorItem != null) {
-                    mFooterView.removeView(mEditorItem);
+                    mListView.removeFooterView(mEditorItem);
                     mEditorItem.setOnClickListener(null);
                     mEditorItem = null;
                 }
@@ -188,39 +179,32 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void initHeader() {
-        mHeaderView = View.inflate(getActivity(), R.layout.layout_left_menu_header, null);
-        mHeaderView.setTag(FragmentId.PROFILE);
-        mHeaderView.setOnClickListener(this);
-        initProfileMenuItem(mHeaderView);
-        mListView.addHeaderView(mHeaderView);
-    }
-
-
     public void updateAdapter() {
         initAdapter();
     }
 
     private void initAdapter() {
         SparseArray<LeftMenuAdapter.ILeftMenuItem> menuItems = new SparseArray<>();
-        //- Profile added as part of header
+        mProfileMenuItem = LeftMenuAdapter.newLeftMenuItem(PROFILE, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_PHOTO,
+                CacheProfile.getProfile().photo);
+        menuItems.put(PROFILE.getId(), mProfileMenuItem);
         menuItems.put(DATING.getId(), LeftMenuAdapter.newLeftMenuItem(DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
                 R.drawable.ic_dating_selector));
         menuItems.put(TABBED_DIALOGS.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_dialog_selector));
         menuItems.put(PHOTO_BLOG.getId(), LeftMenuAdapter.newLeftMenuItem(PHOTO_BLOG, LeftMenuAdapter.TYPE_MENU_BUTTON,
-                R.drawable.ic_photolenta));
+                R.drawable.ic_photolenta_selector));
         menuItems.put(TABBED_VISITORS.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
         menuItems.put(TABBED_LIKES.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_likes_selector));
         menuItems.put(GEO.getId(), LeftMenuAdapter.newLeftMenuItem(GEO, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.drawable.icon_people_close));
+                R.drawable.icon_people_close_selector));
         if (CacheProfile.getOptions().bonus.enabled) {
             menuItems.put(BONUS.getId(), LeftMenuAdapter.newLeftMenuItem(BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                    R.drawable.ic_bonus_1));
+                    R.drawable.ic_bonus_selector));
         }
-        mAdapter = new LeftMenuAdapter(this, menuItems);
+        mAdapter = new LeftMenuAdapter(menuItems);
         mListView.setAdapter(mAdapter);
     }
 
@@ -228,75 +212,70 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_menu, null);
         mListView = (ListView) root.findViewById(R.id.lvMenu);
-        // init & add header with profile selector view
-        initHeader();
-        // init adapter
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            View lastActivated;
+
+            @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position < mAdapter.getCount()) {
+                    onMenuSelected(mAdapter.getItem(position).getMenuId());
+                    if (lastActivated != null) {
+                        lastActivated.setActivated(false);
+                    }
+                    view.setActivated(true);
+                    lastActivated = view;
+                } else {
+                    onBalanceSelected();
+                }
+            }
+        });
         initAdapter();
-        // init & add footer
-        initFooter(root);
+        initFooter();
         return root;
     }
 
-    private void initFooter(View root) {
-        mFooterView = (ViewGroup) root.findViewById(R.id.llCounters);
-        mBuyWidgetController = new BuyWidgetController(getActivity(),
-                mFooterView.findViewById(R.id.countersLayout));
+    private void onBalanceSelected() {
+        startActivity(PurchasesActivity.createBuyingIntent("Menu"));
+    }
 
-        Products products = CacheProfile.getMarketProducts();
-        mBuyWidgetController.setSalesEnabled(products != null && products.saleExists);
+    private void initFooter() {
+        ViewGroup footer = (ViewGroup) View.inflate(getActivity(), R.layout.layout_left_menu_footer, null);
+        mListView.addFooterView(footer);
+        textBalance = (IllustratedTextView) footer.findViewById(R.id.btnMenu);
+        updateBalance();
         initEditor();
     }
 
-    private void initProfileMenuItem(View headerView) {
-        if (headerView == null) return;
-        final View profileLayout = headerView.findViewById(R.id.btnProfileLayout);
-        final View profileLayoutWithBackground = headerView.findViewById(R.id.btnProfileLayoutWithBackground);
-        // detect right layout for profile button and init photo and background if needed
-        View currentLayout;
-        if (CacheProfile.premium
-                && ProfileBackgrounds.isVipBackgroundId(getActivity(), CacheProfile.background_id)) {
-            profileLayout.setVisibility(View.GONE);
-            profileLayoutWithBackground.setVisibility(View.VISIBLE);
-            currentLayout = profileLayoutWithBackground;
-            String name = CacheProfile.first_name.length() <= 1
-                    ? getString(R.string.general_profile) : CacheProfile.first_name;
-            ((Button) profileLayoutWithBackground.findViewById(R.id.btnUserName)).setText(name);
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
-                    ProfileBackgrounds.getBackgroundResource(getActivity(), CacheProfile.background_id));
-            ((ImageViewRemote) profileLayoutWithBackground.findViewById(R.id.profile_menu_background_image))
-                    .setRemoteImageBitmap(bitmap);
-        } else {
-            profileLayout.setVisibility(View.VISIBLE);
-            ((TextView) profileLayout.findViewById(R.id.profile_button))
-                    .setText(R.string.general_profile);
-            profileLayoutWithBackground.setVisibility(View.GONE);
-            currentLayout = profileLayout;
+    private void updateBalance() {
+        if (textBalance != null) {
+            textBalance.setText(String.format(getString(R.string.balance), CacheProfile.money, CacheProfile.likes));
         }
-        // init warning(fill profile info) icon
-        ImageView profileInfo = (ImageView) currentLayout.findViewWithTag("profileInfo");
-        if (profileInfo != null) {
-            if (!CacheProfile.isDataFilled() && CacheProfile.isLoaded()) {
-                profileInfo.setImageResource(R.drawable.ic_not_enough_data);
-                profileInfo.setVisibility(View.VISIBLE);
-            } else {
-                profileInfo.setVisibility(View.GONE);
+    }
+
+    private void initProfileMenuItem(LeftMenuAdapter.ILeftMenuItem profileMenuItem) {
+        boolean notify = false;
+        if (profileMenuItem != null) {
+            // update photo
+            Photo photo = profileMenuItem.getMenuIconPhoto();
+            if (photo != null) {
+                if (photo.equals(CacheProfile.getProfile().photo)) {
+                    profileMenuItem.setMenuIconPhoto(CacheProfile.getProfile().photo);
+                    notify = true;
+                }
             }
-        }
-        // set avatar photo for current profile menu item
-        ImageViewRemote avatarView = ((ImageViewRemote) currentLayout.findViewWithTag("ivMenuAvatar"));
-        if (avatarView != null) {
-            avatarView.setPhoto(CacheProfile.photo);
-        }
-        // set OnClickListener for profile menu item
-        mProfileButton = (TextView) currentLayout.findViewWithTag("profile_fragment_button_tag");
-        if (mProfileButton == null) {
-            mProfileButton = (TextView) currentLayout.findViewWithTag(PROFILE);
-        } else {
-            mProfileButton.setTag(FragmentId.PROFILE);
-        }
-        if (mProfileButton != null) {
-            mProfileButton.setOnClickListener(this);
-            notifyDataSetChanged(true);
+            // fill data warning icon
+            int res = 0;
+            if (!CacheProfile.isDataFilled() && CacheProfile.isLoaded()) {
+                res = R.drawable.ic_not_enough_data;
+            }
+            if (res != profileMenuItem.getExtraIconDrawable()) {
+                profileMenuItem.setExtraIconDrawable(res);
+                notify = true;
+            }
+            // notify if something changed
+            if (notify) {
+                notifyDataSetChanged();
+            }
         }
     }
 
@@ -341,18 +320,11 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         super.onResume();
         IntentFilter filter = new IntentFilter();
         filter.addAction(CacheProfile.PROFILE_UPDATE_ACTION);
-        filter.addAction(Products.INTENT_UPDATE_PRODUCTS);
         filter.addAction(CountersManager.UPDATE_BALANCE);
         filter.addAction(SELECT_MENU_ITEM);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, filter);
-        initProfileMenuItem(mHeaderView);
-        if (mBuyWidgetController != null) {
-            mBuyWidgetController.updateBalance();
-            Products products = CacheProfile.getMarketProducts();
-            if (products != null && products.saleExists == !mBuyWidgetController.salesEnabled) {
-                mBuyWidgetController.setSalesEnabled(products.saleExists);
-            }
-        }
+        initProfileMenuItem(mProfileMenuItem);
+        updateBalance();
     }
 
     @Override
@@ -390,22 +362,8 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
     }
 
     private void notifyDataSetChanged() {
-        notifyDataSetChanged(false);
-    }
-
-    /**
-     * To change selected state of menu items from Header & Adapter
-     */
-    private void notifyDataSetChanged(boolean updateOnlyHeader) {
-        if (mAdapter != null && !updateOnlyHeader) {
+        if (mAdapter != null) {
             mAdapter.notifyDataSetChanged();
-        }
-        if (mProfileButton != null) {
-            if (mSelectedFragment == PROFILE || mSelectedFragment == VIP_PROFILE) {
-                mProfileButton.setSelected(true);
-            } else {
-                mProfileButton.setSelected(false);
-            }
         }
     }
 
@@ -451,13 +409,13 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         }
         mSelectedFragment = newFragmentId;
 
+        if (mFragmentSwitchListener != null) {
+            mFragmentSwitchListener.onFragmentSwitch(mSelectedFragment);
+        }
         //Закрываем меню только после создания фрагмента
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (mFragmentSwitchListener != null) {
-                    mFragmentSwitchListener.onFragmentSwitch(mSelectedFragment);
-                }
                 if (mOnFragmentSelected != null) {
                     mOnFragmentSelected.onFragmentSelected(mSelectedFragment);
                 }
@@ -517,16 +475,8 @@ public class MenuFragment extends Fragment implements View.OnClickListener {
         return fragment;
     }
 
-    @Override
-    public void onClick(View v) {
+    public void onMenuSelected(FragmentId id) {
         if (mListView.isClickable()) {
-            FragmentId id = null;
-            if (v.getTag() instanceof LeftMenuAdapter.ViewHolder) {
-                id = ((LeftMenuAdapter.ViewHolder) v.getTag()).getFragmentId();
-            }
-            if (v.getTag() instanceof FragmentId) {
-                id = (FragmentId) v.getTag();
-            }
             //Тут сложная работа счетчика, которая отличается от стандартной логики. Мы контроллируем
             //его локально, а не серверно, как это происходит с остальными счетчиками.
             if (id == BONUS) {

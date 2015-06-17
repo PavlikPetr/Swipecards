@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">fr_FR</string>
+    <string name="photofeed_title">Mettre dans l\'actualité</string>
     <string name="general_warning">AVERTISSEMENT</string>
     <string name="general_ok">OK</string>
     <string name="general_settings_abbr">Paramètres</string>
@@ -188,8 +189,12 @@
     <string name="purchase_header_title">Solde :</string>
     <string name="buying_header_title">Achats</string>
     <plurals name="buying_gift_you_need_coins">
+        <item quantity="other">Pour pouvoir envoyer un cadeau, procurez-vous %d pièces en plus.</item>
+        <item quantity="one">Pour pouvoir envoyer un cadeau, procurez-vous %d pièce en plus.</item>
     </plurals>
     <plurals name="buying_admiration_you_need_coins">
+        <item quantity="other">Pour envoyer une admiration, procurez-vous %d pièces en plus.</item>
+        <item quantity="one">Pour envoyer une admiration, procurez-vous %d pièce en plus.</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
         <item quantity="other">Pour pouvoir voir qui s\'intéresse à vous, procurez-vous %d pièces en plus</item>
@@ -368,7 +373,7 @@
     <string name="incorrect_email">E-mail incorrect</string>
     <string name="incorrect_login">Nom d\'utilisateur incorrect</string>
     <string name="incorrect_password">Mot de passe incorrect</string>
-    <string name="empty_fields">Veuillez remplir tous les champs</string>
+    <string name="empty_fields">Veuillez remplir tous les champs.</string>
     <string name="email_already_registered">Désolé, cet e-mail est déjà enregistré dans le système.</string>
     <string name="enter_email_from_registration">Saisissez l\'e-mail que vous aviez indiqué lors de l\'enregistrement.</string>
     <string name="default_photo_upload">Téléchargement photos</string>
@@ -386,6 +391,9 @@
     <string name="save">Enregistrer</string>
     <string name="saving_in_progress">Enregistrement…</string>
     <string name="confirmation_successfully_sent">Un e-mail de confirmation vous a été envoyé.</string>
+    <string name="email_successfully_confirmed">Votre e-mail a été confirmé avec succès.</string>
+    <string name="email_not_confirmed">L\'e-mail n\'est pas confirmé.</string>
+    <string name="email_already_confirmed">Déjà confirmé</string>
     <string name="password_confirmation_hint">La confirmation du mot de passe</string>
     <string name="password_hint">mot de passe</string>
     <string name="enter_new_password">Saisissez un nouveau mot de passe</string>
@@ -398,9 +406,9 @@
     <string name="take_photo">Prendre une photo</string>
     <string name="take_another_photo">Une autre photo</string>
     <string name="we_detect_your_city">Nous avons déterminé votre ville :</string>
-    <string name="reselect_city">Sélectionner une autre ville</string>
+    <string name="reselect_city">Sélectionner une autre ville :</string>
     <string name="choose_cool_photo">Choisissez votre meilleure photo et un statut qui décrit votre humeur !</string>
-    <string name="email_confirmed">L\'e-mail est confirmé</string>
+    <string name="email_confirmed">L\'e-mail est confirmé.</string>
     <string name="sympathy_sended">Vous avez envoyé un J\'aime.</string>
     <string name="general_photo_deleted">Votre photo ne respecte pas les règles et a été éliminée.</string>
     <string name="general_change">Changer</string>
@@ -459,6 +467,7 @@
     <string name="avatar_set_successfully">Votre photo de profil a été définie avec succès</string>
     <string name="incorrect_photo">Photo incorrecte. Veuillez en télécharger une autre.</string>
     <string name="incorrect_photo_format">Format de la photo incorrect. Veuillez télécharger un fichier .jpg ou .png.</string>
+    <string name="incorrect_photo_size">Format de la photo incorrect.</string>
     <string name="input_contact_name">Saisissez le nom du contact</string>
     <string name="incorrect_locale">Si vous voulez que nous puissions lire votre avis, veuillez le rédiger en russe ou en anglais</string>
     <string name="complain_photo_header">Photo incorrecte</string>
@@ -480,6 +489,8 @@
     <string name="general_no_notifications">Malheureusement, les notifications ne sont pas disponibles sur votre appareil</string>
     <string name="black_list_add_short">À la liste noire</string>
     <string name="confirm_email_for_dating">Nous sommes contre le spam. Veuillez confirmer votre adresse e-mail pour pouvoir faire connaissance sur Topface !</string>
+    <string name="confirm_email_for_dating_title">Nous sommes contre le spam.</string>
+    <string name="confirm_email_for_dating_desc">Confirmez votre adresse e-mail pour pouvoir rencontrer des personnes sur Topface !</string>
     <string name="send_confirm_link">Envoyer un lien de confirmation</string>
     <string name="complain_type_swearing_msg">Comportement indécent, language innaproprié, menaces</string>
     <string name="general_exit">Quitter</string>
@@ -598,7 +609,7 @@
     <string name="preload_photo_type_wifi">WiFi seulement</string>
     <string name="preload_photo_type_always_on">Toujours connecté</string>
     <string name="preload_photo_type_preload_off">Déconnecté</string>
-    <string name="wrong_time_popup_text">Impossible d\'établir une connexion sécurisée. \nIl est possible que les réglages de l\'heure et de la date aient été mal définis.</string>
+    <string name="wrong_time_popup_text">Impossible d\'établir une connexion sécurisée.\nIl est possible que les réglages de l\'heure et de la date aient été mal définis.</string>
     <string name="wrong_time_popup_button">Afficher les paramètres</string>
     <string name="enter_text">Veuillez saisir le texte</string>
     <string name="send_feedback">Envoyer un message</string>
@@ -625,6 +636,7 @@
     <string name="add_leader_hint">Votre message d\'accueil…</string>
     <string name="more">plus</string>
     <string name="premium_for_invitations">Pour obtenir un statut VIP pendant 1 jour, vous devez obtenir 5 inscriptions</string>
+    <string name="premium_for_invitations_current_status">Vous avez déjà atteint :\nInvitations : %1$d\nInscriptions : %2$d</string>
     <string name="no_contacts_available">L\'appareil ne dispose pas de contacts qui peuvent être affichés</string>
     <string name="sms_invite_title">Obtenez le statut VIP pour une journée !</string>
     <string name="sms_invite_subtitle">Obtenez le statut VIP pour une journée !</string>

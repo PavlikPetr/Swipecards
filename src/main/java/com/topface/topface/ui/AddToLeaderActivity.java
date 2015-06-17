@@ -79,7 +79,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_photoblog);
         mGridFooterView = createGridViewFooter();
         mGridView = (GridViewWithHeaderAndFooter) findViewById(R.id.user_photos_grid);
         addFooterView();
@@ -97,6 +96,11 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         initPhotosGrid(mPosition, mSelectedPosition);
         mPhotoTaker = new PhotoTaker(initAddPhotoHelper(), this);
         takePhotoDialog = (TakePhotoDialog) getSupportFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
+    }
+
+    @Override
+    protected int getContentLayout() {
+        return R.layout.ac_photoblog;
     }
 
     @Override

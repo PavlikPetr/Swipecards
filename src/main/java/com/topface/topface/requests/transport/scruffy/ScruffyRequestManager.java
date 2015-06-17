@@ -200,7 +200,8 @@ public class ScruffyRequestManager {
                             apiRequest.getHeaders("Scruffy"),
                             apiRequest.getRequestBodyData()
                     ).toString();
-                    Debug.log("Scruffy:: Request " + API_URL + " >>>\n" + requestString);
+
+                    Debug.log("Scruffy:: Request " + App.getAppConfig().getScruffyApiUrl() + " >>>\n" + requestString);
                     mWebSocket.send(requestString);
                     ScruffyStatistics.sendScruffyRequestSend();
                     mSentRequests.put(key, request);
@@ -232,7 +233,7 @@ public class ScruffyRequestManager {
         if (!AuthToken.getInstance().isEmpty()) {
             //Если мы авторизованы коннектимся
             killConnection(true);
-            AsyncHttpGet req = new AsyncHttpGet(API_URL.replace("ws://", "http://").replace("wss://", "https://"));
+            AsyncHttpGet req = new AsyncHttpGet(App.getAppConfig().getScruffyApiUrl().replace("ws://", "http://").replace("wss://", "https://"));
             req.setHeader("User-Agent", HttpUtils.getUserAgent("Scruffy"));
             AsyncHttpClient.getDefaultInstance().websocket(req, null, new AsyncHttpClient.WebSocketConnectCallback() {
                 @Override

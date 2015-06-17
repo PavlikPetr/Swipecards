@@ -126,12 +126,6 @@ public class DatingInstantMessageController {
         mRequestClient = requestClient;
     }
 
-    public static void resetMessage() {
-        UserConfig userConfig = App.getUserConfig();
-        userConfig.setDatingMessage("");
-        CacheProfile.getOptions().instantMessageFromSearch.setText("");
-    }
-
     public boolean sendMessage(SearchUser user) {
         if (!tryChat(user)) {
             setSendEnabled(true);
@@ -235,7 +229,6 @@ public class DatingInstantMessageController {
         mGiftSend.setEnabled(isEnabled);
         mMessageText.setEnabled(isEnabled);
         mMessageSend.setEnabled(isEnabled && isMessageValid());
-
         mIsSendEnadled = mIsEnabled = isEnabled;
     }
 
@@ -251,10 +244,8 @@ public class DatingInstantMessageController {
         if (TextUtils.isEmpty(mLastMsgFromConfig)) {
             // такое бывает при первом запуске приложения после установки
             // фрагмент уже есть, а текста из Options еще нет
-            if (TextUtils.isEmpty(textCurrent)) {
-                mLastMsgFromConfig = textNewFromConfig;
-                setInstantMessageText(mLastMsgFromConfig);
-            }
+            mLastMsgFromConfig = textNewFromConfig;
+            setInstantMessageText(mLastMsgFromConfig);
         } else {
             if (textCurrent.equals(mLastMsgFromConfig)) {
                 if (!textNewFromConfig.equals(mLastMsgFromConfig)) {

@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <include
-        layout="@layout/item_left_menu_button_profile"
+        layout="@layout/item_left_menu_button_with_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

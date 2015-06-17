@@ -92,6 +92,17 @@
         <item name="android:windowActionBarOverlay" tools:ignore="NewApi">true</item>
     </style>
 
+    <style name="Theme.Topface.Navigation" parent="Theme.Topface.ActionbarOverlay">
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:windowActionBarOverlay" tools:ignore="NewApi">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="homeAsUpIndicator">@null</item>
+        <item name="android:homeAsUpIndicator">@null</item>
+    </style>
+
     <style name="Theme.Topface.NoActionBar.Fullscreen" parent="Theme.Topface.NoActionBar">
         <item name="android:windowFullscreen">true</item>
     </style>

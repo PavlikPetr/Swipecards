@@ -51,8 +51,6 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         mSuccessUrl = getSuccessUrl(mWidgetUrl);
         actionBarView.setActionBarTitle(R.string.purchase_header_title);
 
-        setContentView(R.layout.ac_web_auth);
-
         // Progress
         mProgressBar = findViewById(R.id.prsWebLoading);
 
@@ -63,6 +61,11 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         webView.setVerticalScrollbarOverlay(true);
         webView.setVerticalFadingEdgeEnabled(true);
         webView.setWebViewClient(new PaymentwallClient(webView));
+    }
+
+    @Override
+    protected int getContentLayout() {
+        return R.layout.ac_web_auth;
     }
 
     private void onFatalError() {
