@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
@@ -26,6 +27,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.http.IRequestClient;
 
+import java.lang.reflect.Field;
 import java.util.LinkedList;
 
 public abstract class BaseFragment extends TrackedFragment implements IRequestClient {
@@ -43,6 +45,16 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         restoreState();
         setHasOptionsMenu(needOptionsMenu());
         super.onCreate(savedInstanceState);
+        try {
+            ViewConfiguration config = ViewConfiguration.get(getActivity());
+            Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+            if (menuKeyField != null) {
+                menuKeyField.setAccessible(true);
+                menuKeyField.setBoolean(config, false);
+            }
+        } catch (Exception ex) {
+            Debug.error(ex);
+        }
         if (savedInstanceState != null) {
             mNeedTitles = savedInstanceState.getBoolean(STATE_NEED_TITLES, true);
         }

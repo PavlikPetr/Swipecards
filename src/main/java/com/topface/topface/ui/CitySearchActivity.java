@@ -25,7 +25,6 @@ public class CitySearchActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_city);
         Debug.log(this, "+onCreate");
 
         mRoot = findViewById(R.id.city_root);
@@ -51,6 +50,11 @@ public class CitySearchActivity extends BaseFragmentActivity {
                 mCitySearch.showDropDown();
             }
         });
+    }
+
+    @Override
+    protected int getContentLayout() {
+        return R.layout.ac_city;
     }
 
     @Override

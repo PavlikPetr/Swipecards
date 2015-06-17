@@ -108,12 +108,13 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     }
 
     @Override
-    protected void initActionBar(ActionBar actionBar) {
-        super.initActionBar(actionBar);
+    protected void initActionBarOptions(ActionBar actionBar) {
         if (actionBar != null) {
-            actionBarView.setLeftMenuView();
-            actionBar.setDisplayUseLogoEnabled(false);
-            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
+                    ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_HOME_AS_UP
+                            | ActionBar.DISPLAY_SHOW_TITLE
+                            | ActionBar.DISPLAY_SHOW_HOME
+                            | ActionBar.DISPLAY_HOME_AS_UP);
             mNotificationController = new CustomViewNotificationController(actionBar);
             mNotificationController.refreshNotificator();
         }
@@ -132,7 +133,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ac_navigation);
         if (isNeedBroughtToFront(intent)) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -149,6 +149,11 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
             mPendingNextIntent = intent;
         }
+    }
+
+    @Override
+    protected int getContentLayout() {
+        return R.layout.ac_navigation;
     }
 
     @Override
@@ -212,7 +217,8 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         mDrawerToggle = new ActionBarDrawerToggle(
                 this, /* host Activity */
                 mDrawerLayout, /* DrawerLayout object */
-                Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 ? android.R.color.transparent : R.drawable.empty_home_as_up, /* nav drawer icon to replace 'Up' caret */
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 ? android.R.color.transparent : R.drawable.empty_home_as_up,
+                /* nav drawer icon to replace 'Up' caret */
                 R.string.app_name, /* "open drawer" description */
                 R.string.app_name /* "close drawer" description */
         ) {
@@ -222,6 +228,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                 Utils.hideSoftKeyboard(NavigationActivity.this, mDrawerLayout.getWindowToken());
             }
         };
+        mDrawerToggle.setDrawerIndicatorEnabled(false);
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }

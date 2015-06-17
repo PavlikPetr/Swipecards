@@ -640,7 +640,7 @@
     <string name="add_leader_hint">Your greeting…</string>
     <string name="more">more</string>
     <string name="premium_for_invitations">To receive a VIP-status for 1 day you\'ll have to get 5 registrations</string>
-    <string name="premium_for_invitations_current_status">You already have:\nInvitations: %1$d\nRegistrations: %2$d</string>
+    <string name="premium_for_invitations_current_status">You\'ve already reached:\nInvitations: %1$d\nRegistrations: %2$d</string>
     <string name="no_contacts_available">The device does not have contacts that can be displayed</string>
     <string name="sms_invite_title">Get VIP for a day!</string>
     <string name="sms_invite_subtitle">Get VIP for a day!</string>

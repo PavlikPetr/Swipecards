@@ -5,18 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_left_menu_item_selector"
-    android:id="@+id/leftMenuCellLayout">
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/image_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"/>
+
+    <TextView
+        android:id="@+id/tvCounterBadge"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        style="@style/LeftMenuBadge"/>
 
     <TextView
         android:id="@+id/btnMenu"
-        android:layout_toLeftOf="@+id/tvCounterBadge"
-        android:gravity="center_vertical"
-        style="@style/LeftMenuButtons"/>
-
-    <TextView
-        android:id="@id/tvCounterBadge"
-        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/image_icon"
+        android:layout_toLeftOf="@id/tvCounterBadge"
         android:layout_centerVertical="true"
-        style="@style/Informer"/>
+        style="@style/LeftMenuButtons"/>
 
 </RelativeLayout>

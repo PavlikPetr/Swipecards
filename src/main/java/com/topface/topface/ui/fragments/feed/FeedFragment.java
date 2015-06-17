@@ -65,7 +65,6 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.ad.NativeAd;
@@ -77,6 +76,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import static android.widget.AdapterView.OnItemClickListener;
+import static com.topface.topface.utils.CountersManager.METHOD_INTENT_STRING;
+import static com.topface.topface.utils.CountersManager.NULL_METHOD;
+import static com.topface.topface.utils.CountersManager.UPDATE_COUNTERS;
+import static com.topface.topface.utils.CountersManager.getInstance;
 
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         implements FeedAdapter.OnAvatarClickListener<T>, IPageWithAds {
@@ -85,8 +88,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private static final String FEEDS = "FEEDS";
     private static final String POSITION = "POSITION";
     private static final String HAS_AD = "HAS_AD";
+    private static final String BLACK_LIST_USER = "black_list_user";
     private static final String FEED_AD = "FEED_AD";
     public static final String REFRESH_DIALOGS = "refresh_dialogs";
+
+    private int currentCounter;
+    private boolean isCurrentCounterChanged;
 
     protected PullToRefreshListView mListView;
     protected FeedAdapter<T> mListAdapter;
@@ -143,14 +150,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     };
 
+    private int mIdForRemove;
     protected boolean mNeedRefresh;
     private BroadcastReceiver mRefreshReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             mNeedRefresh = true;
             if (intent.hasExtra(OverflowMenu.USER_ID_FOR_REMOVE)) {
-                int idForRemove = intent.getIntExtra(OverflowMenu.USER_ID_FOR_REMOVE, -1);
-                getListAdapter().removeByUserId(idForRemove);
+                mIdForRemove = intent.getIntExtra(OverflowMenu.USER_ID_FOR_REMOVE, -1);
             }
         }
     };
@@ -261,7 +268,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                     if (!TextUtils.isEmpty(itemId)) {
                         makeItemReadWithFeedId(itemId);
                     } else {
-                        String lastMethod = intent.getStringExtra(CountersManager.METHOD_INTENT_STRING);
+                        String lastMethod = intent.getStringExtra(METHOD_INTENT_STRING);
                         if (!TextUtils.isEmpty(lastMethod)) {
                             updateDataAfterReceivingCounters(lastMethod);
                         }
@@ -273,12 +280,18 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         };
         IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
         filter.addAction(ChatFragment.MAKE_ITEM_READ_BY_UID);
-        filter.addAction(CountersManager.UPDATE_COUNTERS);
+        filter.addAction(UPDATE_COUNTERS);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReadItemReceiver, filter);
         for (int type : getTypesForGCM()) {
             GCMUtils.cancelNotification(getActivity(), type);
         }
         return root;
+    }
+
+    private void removeBlackListUserFromFeed() {
+        if (mIdForRemove > 0) {
+            getListAdapter().removeByUserId(mIdForRemove);
+        }
     }
 
     @Override
@@ -290,6 +303,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @SuppressWarnings("unchecked")
     protected void restoreInstanceState(Bundle saved) {
         if (saved != null) {
+            mIdForRemove = saved.getInt(BLACK_LIST_USER);
             if (CacheProfile.show_ad) {
                 mListAdapter.setHasFeedAd(saved.getBoolean(HAS_AD));
                 mListAdapter.setFeedAd(saved.<NativeAd>getParcelable(FEED_AD));
@@ -369,6 +383,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
+        removeBlackListUserFromFeed();
         FeedAdapter<T> adapter = getListAdapter();
         if (adapter.isNeedUpdate() || needUpdate) {
             updateData(false, true);
@@ -416,6 +431,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             outState.putInt(POSITION, mListView.getRefreshableView().getFirstVisiblePosition());
             outState.putBoolean(HAS_AD, mListAdapter.hasFeedAd());
             outState.putParcelable(FEED_AD, mListAdapter.getFeedAd());
+            outState.putInt(BLACK_LIST_USER, mIdForRemove);
         }
     }
 
@@ -658,7 +674,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             if (adapter.isMultiSelectionMode()) {
                 adapter.onSelection(item);
             } else {
-                startActivity(UserProfileActivity.createIntent(null, item.user.photo, item.user.id, item.id, false, CacheProfile.premium, Utils.getNameAndAge(item.user.firstName, item.user.age), item.user.city.getName()));
+                startActivity(UserProfileActivity.createIntent(null, item.user.photo, item.user.id, item.id, false, true, Utils.getNameAndAge(item.user.firstName, item.user.age), item.user.city.getName()));
             }
         }
     }
@@ -671,9 +687,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (getListAdapter() != null) {
             if ((getListAdapter().isNeedUpdate()
                     || needUpdate
-                    || hasUnread())
+                    || (hasUnread() && isCurrentCounterChanged()))
                     && !mIsUpdating) {
-                updateData(false, true);
+                updateData(true, true);
             }
         }
     }
@@ -682,7 +698,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
      * @return true if got unread feeds, calculated from counters
      */
     private boolean hasUnread() {
-        return (getUnreadCounter() > 0);
+        return (getUnreadCount() > 0);
+    }
+
+    private int getUnreadCount() {
+        int value = getUnreadCounter();
+        setCurrentCounter(value);
+        return value;
     }
 
     /**
@@ -976,8 +998,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     private void updateDataAfterReceivingCounters(String lastMethod) {
-        if (!lastMethod.equals(CountersManager.NULL_METHOD) && lastMethod.equals(getRequest().getServiceName())) {
-            int counters = CountersManager.getInstance(getActivity()).getCounter(getFeedType());
+        if (!lastMethod.equals(NULL_METHOD) && lastMethod.equals(getRequest().getServiceName())) {
+            int counters = getInstance(getActivity()).getCounter(getFeedType());
             if (counters > 0) {
                 updateData(true, false);
             }
@@ -1057,5 +1079,23 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         } else {
             super.startActivityForResult(intent, requestCode);
         }
+    }
+
+    private void setCurrentCounter(int value) {
+        setCurrentCounterChanged(value);
+        currentCounter = value;
+    }
+
+    private boolean setCurrentCounterChanged(int currentValue) {
+        if (!isCurrentCounterChanged) {
+            isCurrentCounterChanged = currentCounter != currentValue;
+        }
+        return isCurrentCounterChanged;
+    }
+
+    private boolean isCurrentCounterChanged() {
+        boolean state = isCurrentCounterChanged;
+        isCurrentCounterChanged = false;
+        return state;
     }
 }

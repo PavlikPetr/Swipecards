@@ -251,6 +251,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
                     return mBonusRedirect != null &&
                             getFragment().forceBonusScreen(mBonusRedirect.getText());
                 case SMS_INVITE_SCREEN:
+                    finish();
                     startActivity(SMSInviteActivity.createIntent(this));
                     mTopfaceOfferwallRedirect.setComplited(true);
                     return true;

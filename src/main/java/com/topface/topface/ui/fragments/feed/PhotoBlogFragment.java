@@ -122,7 +122,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
                 adapter.onSelection(item);
             } else {
                 if (isNotYourOwnId(item.user.id)) {
-                    startActivity(UserProfileActivity.createIntent(null, item.user.photo, item.user.id, item.id, false, false, Utils.getNameAndAge(item.user.firstName, item.user.age), item.user.city.getName()));
+                    startActivity(UserProfileActivity.createIntent(null, item.user.photo, item.user.id, item.id, false, true, Utils.getNameAndAge(item.user.firstName, item.user.age), item.user.city.getName()));
                 } else {
                     openOwnProfile();
                 }

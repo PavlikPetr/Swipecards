@@ -76,7 +76,7 @@
             android:name=".ui.NavigationActivity"
             android:configChanges="locale|screenSize|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Topface.ActionbarOverlay"
+            android:theme="@style/Theme.Topface.Navigation"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

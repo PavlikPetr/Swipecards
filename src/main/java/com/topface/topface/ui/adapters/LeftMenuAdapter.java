@@ -1,22 +1,22 @@
 package com.topface.topface.ui.adapters;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.Photo;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ResourcesUtils;
 
@@ -25,19 +25,31 @@ import java.util.HashMap;
 public class LeftMenuAdapter extends BaseAdapter {
     public static final int TYPE_MENU_BUTTON = 0;
     public static final int TYPE_MENU_BUTTON_WITH_BADGE = 1;
-    private static final int TYPE_COUNT = 2;
-    private MenuFragment mMenuFragment;
+    public static final int TYPE_MENU_BUTTON_WITH_PHOTO = 2;
+    private static final int TYPE_COUNT = 3;
     private final SparseArray<ILeftMenuItem> mItems;
     private HashMap<BaseFragment.FragmentId, TextView> mCountersBadgesMap = new HashMap<>();
 
-    public LeftMenuAdapter(MenuFragment menuFragment, SparseArray<ILeftMenuItem> items) {
-        this.mMenuFragment = menuFragment;
+    public LeftMenuAdapter(SparseArray<ILeftMenuItem> items) {
         mItems = items;
     }
 
+    public static ILeftMenuItem newLeftMenuItem(BaseFragment.FragmentId menuId, int menuType,
+                                                int menuIcon) {
+        return newLeftMenuItem(menuId, menuType, menuIcon, null);
+    }
+
+    public static ILeftMenuItem newLeftMenuItem(BaseFragment.FragmentId menuId, int menuType,
+                                                Photo menuIcon) {
+        return newLeftMenuItem(menuId, menuType, -1, menuIcon);
+    }
+
     public static ILeftMenuItem newLeftMenuItem(final BaseFragment.FragmentId menuId, final int menuType,
-                                                final int menuIconResId) {
+                                                final int menuIconResId, final Photo menuIconPhoto) {
         return new ILeftMenuItem() {
+
+            private Photo menuPhoto = menuIconPhoto;
+            private int menuExtraIconId = -1;
 
             @Override
             public BaseFragment.FragmentId getMenuId() {
@@ -57,6 +69,22 @@ public class LeftMenuAdapter extends BaseAdapter {
             @Override
             public int getMenuIconResId() {
                 return menuIconResId;
+            }
+
+            @Override public Photo getMenuIconPhoto() {
+                return menuPhoto;
+            }
+
+            @Override public void setMenuIconPhoto(Photo photo) {
+                menuPhoto = photo;
+            }
+
+            @Override public int getExtraIconDrawable() {
+                return menuExtraIconId;
+            }
+
+            @Override public void setExtraIconDrawable(int resId) {
+                menuExtraIconId = resId;
             }
         };
     }
@@ -91,11 +119,19 @@ public class LeftMenuAdapter extends BaseAdapter {
         final ViewHolder holder;
         // get menu item on current position
         final ILeftMenuItem item = getItem(position);
+        int type = item.getMenuType();
         //init convertView
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = View.inflate(mMenuFragment.getActivity(), R.layout.item_left_menu_button_with_badge, null);
-            holder.leftMenuCellLayout = convertView.findViewById(R.id.leftMenuCellLayout);
+            convertView = View.inflate(
+                    parent.getContext(),
+                    type == TYPE_MENU_BUTTON_WITH_PHOTO
+                            ? R.layout.item_left_menu_button_with_photo
+                            : R.layout.item_left_menu_button_with_badge,
+                    null
+            );
+            holder.icon = (ImageView) convertView.findViewById(R.id.image_icon);
+            holder.extraIcon = (ImageView) convertView.findViewById(R.id.image_badge);
             holder.btnMenu = (TextView) convertView.findViewById(R.id.btnMenu);
             holder.counterBadge = (TextView) convertView.findViewById(R.id.tvCounterBadge);
             convertView.setTag(holder);
@@ -106,55 +142,49 @@ public class LeftMenuAdapter extends BaseAdapter {
             holder.item = item;
         }
         // initiate views' state in holder
-        switch (item.getMenuType()) {
+        switch (type) {
             case TYPE_MENU_BUTTON:
                 holder.btnMenu.setText(item.getMenuText());
                 holder.counterBadge.setVisibility(View.GONE);
+                holder.icon.setBackgroundResource(item.getMenuIconResId());
                 unregisterCounterBadge(item);
                 break;
             case TYPE_MENU_BUTTON_WITH_BADGE:
                 holder.btnMenu.setText(item.getMenuText());
+                holder.icon.setBackgroundResource(item.getMenuIconResId());
                 registerCounterBadge(item, holder.counterBadge);
                 break;
+            case TYPE_MENU_BUTTON_WITH_PHOTO:
+                holder.btnMenu.setText(item.getMenuText());
+                if (holder.icon instanceof ImageViewRemote) {
+                    ((ImageViewRemote) holder.icon).setPhoto(item.getMenuIconPhoto());
+                }
+                if (holder.extraIcon != null) {
+                    int extraIconDrawable = item.getExtraIconDrawable();
+                    if (extraIconDrawable > 0) {
+                        holder.extraIcon.setImageResource(extraIconDrawable);
+                        holder.extraIcon.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.extraIcon.setVisibility(View.GONE);
+                    }
+                }
             default:
                 break;
         }
         holder.item = item;
         // init button state
-        holder.btnMenu.setCompoundDrawablesWithIntrinsicBounds(item.getMenuIconResId(), 0, 0, 0);
         if (item.getMenuId() == BaseFragment.FragmentId.BONUS) {
             if (CacheProfile.getOptions().bonus.buttonPicture != null) {
                 // set custom button ico from server
                 DefaultImageLoader.getInstance(App.getContext()).preloadImage(CacheProfile.getOptions().bonus.buttonPicture, new SimpleImageLoadingListener() {
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                        holder.btnMenu.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(App.getContext().getResources(), loadedImage), null, null, null);
+                        holder.icon.setImageDrawable(new BitmapDrawable(App.getContext().getResources(), loadedImage));
                     }
                 });
             }
         }
-        holder.leftMenuCellLayout.setOnClickListener(mMenuFragment);
-        setAlphaToTextAndDrawable(holder.btnMenu, 255);
-        setCheckedBackgroundState(mMenuFragment.getCurrentFragmentId() == item.getMenuId(), holder.leftMenuCellLayout);
-
         return convertView;
-    }
-
-    private void setCheckedBackgroundState(boolean isChecked, View layout) {
-        if (isChecked) {
-            layout.setBackgroundResource(R.color.bg_left_menu);
-        } else {
-            layout.setBackgroundResource(R.drawable.bg_left_menu_item_selector);
-        }
-    }
-
-
-    private void setAlphaToTextAndDrawable(TextView btn, int alpha) {
-        btn.setTextColor(Color.argb(alpha, 255, 255, 255));
-        Drawable[] compoundDrawables = btn.getCompoundDrawables();
-        if (compoundDrawables[0] != null) {
-            compoundDrawables[0].setAlpha(alpha);
-        }
     }
 
     @Override
@@ -196,13 +226,10 @@ public class LeftMenuAdapter extends BaseAdapter {
 
     public class ViewHolder {
         TextView btnMenu;
-        View leftMenuCellLayout;
         TextView counterBadge;
         ILeftMenuItem item;
-
-        public BaseFragment.FragmentId getFragmentId() {
-            return item.getMenuId();
-        }
+        ImageView icon;
+        ImageView extraIcon;
     }
 
     public interface ILeftMenuItem {
@@ -213,5 +240,13 @@ public class LeftMenuAdapter extends BaseAdapter {
         String getMenuText();
 
         int getMenuIconResId();
+
+        Photo getMenuIconPhoto();
+
+        void setMenuIconPhoto(Photo photo);
+
+        int getExtraIconDrawable();
+
+        void setExtraIconDrawable(int resId);
     }
 }

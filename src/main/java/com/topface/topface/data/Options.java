@@ -318,7 +318,7 @@ public class Options extends AbstractData {
             // experiments init
             forceOfferwallRedirect.init(response);
             sixCoinsSubscribeExperiment = JsonUtils.
-                    optFromJson(new JSONObject().getJSONObject("unlockLikeList").toString(),
+                    optFromJson(response.optJSONObject("unlockLikeList").toString(),
                             SixCoinsSubscribeExperiment.class, new SixCoinsSubscribeExperiment());
             topfaceOfferwallRedirect.init(response);
 

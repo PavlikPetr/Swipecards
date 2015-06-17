@@ -16,7 +16,6 @@ import com.topface.topface.utils.social.AuthToken;
 
 public class TrackedFragmentActivity extends ActionBarActivity {
 
-
     @Override
     public void onStart() {
         super.onStart();

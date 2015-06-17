@@ -16,7 +16,6 @@ import com.topface.topface.requests.UserSetLocaleRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.config.AppConfig;
-import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.Locale;
@@ -68,7 +67,6 @@ public class LocaleConfig {
             request.callback(new ApiHandler() {
                 @Override
                 public void success(IApiResponse response) {
-                    DatingInstantMessageController.resetMessage();
                     App.sendUserOptionsAndPurchasesRequest();
                     NavigationActivity.restartNavigationActivity(activity);
                 }

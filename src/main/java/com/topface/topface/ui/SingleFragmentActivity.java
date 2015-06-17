@@ -16,7 +16,6 @@ public abstract class SingleFragmentActivity<T extends Fragment> extends BaseFra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initLayout();
         FragmentManager fm = getSupportFragmentManager();
         Fragment oldFragment = fm.findFragmentByTag(getFragmentTag());
         if (oldFragment != null) {
@@ -64,11 +63,8 @@ public abstract class SingleFragmentActivity<T extends Fragment> extends BaseFra
         mFragment.setArguments(getIntent().getExtras());
     }
 
-    protected void initLayout() {
-        setContentView(getContentViewId());
-    }
-
-    protected int getContentViewId() {
+    @Override
+    protected int getContentLayout() {
         // this layout (R.layout.ac_fragment_frame) defines its own background,
         // so windowBackground in some activities (e.g. ChatActivity) defined in themes
         // doesn't work properly - overlayed by fragment background

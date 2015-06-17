@@ -41,7 +41,7 @@ public class SmsInviteFragment extends ContentListFragment {
     private static final String SCROLL_POSITION = "scroll_position";
     private static final String NO_CONTACTS_VISIBILITY = "no_contacts_visibility";
     private static final String HEADER_TEXT = "header_text";
-    private final static int ONE_REQUEST_CONTACTS_LIMIT = 10;
+    private final static int ONE_REQUEST_CONTACTS_LIMIT = 50;
     private boolean isUpdatable = false;
     private boolean isInProgress;
     private int mOffsetPosition;
