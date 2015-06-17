@@ -37,7 +37,7 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
         return new ChatFragment();
     }
 
-    public static Intent createIntent(int id, String nameAndAge, String city, String feedItemId, Photo photo, boolean fromGcm) {
+    public static Intent createIntent(int id, String nameAndAge, String city, String feedItemId, Photo photo, boolean fromGcm, Integer itemType) {
         Intent intent = new Intent(App.getContext(), ChatActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_ID, id);
         intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, nameAndAge);
@@ -50,6 +50,9 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
         }
         if (photo != null) {
             intent.putExtra(ChatFragment.INTENT_AVATAR, photo);
+        }
+        if (itemType != null) {
+            intent.putExtra(ChatFragment.USER_TYPE, itemType);
         }
         return intent;
     }
