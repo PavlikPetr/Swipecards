@@ -68,6 +68,7 @@ public class PhotoGridAdapter extends BaseAdapter
         return false;
     }
 
+    @SuppressWarnings("unused")
     public void addData(Photos photoLinks, boolean needMore) {
         if (mPhotoLinks.size() > 0 && !mPhotoLinks.get(mPhotoLinks.size() - 1).isFake()) {
             if (mPhotoLinks.get(mPhotoLinks.size() - 1).getId() == 0) {
