@@ -95,8 +95,6 @@ public class GeoLocationManager {
         }
     }
 
-//    protected abstract void onUserLocationChanged(Location location);
-
     public void startLocationListener() {
         Debug.log(this, "Geoloc attach listeners");
         switch (getEnabledProvider()) {

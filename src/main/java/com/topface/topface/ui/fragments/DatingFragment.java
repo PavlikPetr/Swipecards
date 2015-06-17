@@ -356,7 +356,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
 
-//        updateResources();
+        updateResources(mBalanceData);
     }
 
     @Override
