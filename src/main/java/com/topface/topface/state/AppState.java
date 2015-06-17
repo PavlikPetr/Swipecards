@@ -47,15 +47,17 @@ public class AppState {
         }
     }
 
-    public synchronized <T> Observable<T> getObservable(Class<T> dataClass) {
-        if (!getCachableData().containsKey(dataClass)) {
-            T data = null;
-            if (mCacheDataInterface != null) {
-                data = mCacheDataInterface.getDataFromCache(dataClass);
+    public <T> Observable<T> getObservable(Class<T> dataClass) {
+        synchronized (getCachableData()) {
+            if (!getCachableData().containsKey(dataClass)) {
+                T data = null;
+                if (mCacheDataInterface != null) {
+                    data = mCacheDataInterface.getDataFromCache(dataClass);
+                }
+                setData(data, false, false, dataClass);
             }
-            setData(data, false, false, dataClass);
+            return getCachableData().get(dataClass).getBehaviorSubject();
         }
-        return getCachableData().get(dataClass).getBehaviorSubject();
     }
 
     protected <T> T getNotNullData(@NotNull T defaultData) {
@@ -64,20 +66,22 @@ public class AppState {
     }
 
 
-    private synchronized <T> T getData(Class<T> dataClass) {
-        if (getCachableData().containsKey(dataClass)) {
-            return (T) getCachableData().get(dataClass).getObject();
-        } else {
-            T res = null;
-            if (mCacheDataInterface != null) {
-                res = mCacheDataInterface.getDataFromCache(dataClass);
-                if (res != null) {
-                    setData(res, false, true);
-                } else {
-                    setData(res, false, true, dataClass);
+    private <T> T getData(Class<T> dataClass) {
+        synchronized (getCachableData()) {
+            if (getCachableData().containsKey(dataClass)) {
+                return (T) getCachableData().get(dataClass).getObject();
+            } else {
+                T res = null;
+                if (mCacheDataInterface != null) {
+                    res = mCacheDataInterface.getDataFromCache(dataClass);
+                    if (res != null) {
+                        setData(res, false, true);
+                    } else {
+                        setData(res, false, true, dataClass);
+                    }
                 }
+                return (T) res;
             }
-            return (T) res;
         }
     }
 
@@ -114,8 +118,8 @@ public class AppState {
 
         public DataAndObservable(T data, BehaviorSubject<T> behaviorSubject) {
             mObject = data;
-            this.mBehaviorSubject = behaviorSubject;
-            this.mBehaviorSubject.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread());
+            mBehaviorSubject = behaviorSubject;
+            mBehaviorSubject.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread());
         }
 
         public T getObject() {

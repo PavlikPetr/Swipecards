@@ -4,7 +4,7 @@ package com.topface.topface.data;
  * Created by ppetr on 16.06.15.
  * data class for balance object from requests
  */
-public class BalanceData {
+public class BalanceData implements Cloneable {
     public boolean premium;
     public int likes;
     public int money;
@@ -13,9 +13,5 @@ public class BalanceData {
         this.premium = premium;
         this.likes = likes;
         this.money = money;
-    }
-
-    public BalanceData copy() {
-        return new BalanceData(premium, likes, money);
     }
 }

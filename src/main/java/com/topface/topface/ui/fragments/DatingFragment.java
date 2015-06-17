@@ -756,7 +756,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             }
                     );
                     if (canSendAdmiration && !isAdmirationFailed.get()) {
-                        BalanceData balance = mBalanceData.copy();
+                        BalanceData balance = new BalanceData(mBalanceData.premium, mBalanceData.likes, mBalanceData.money);
                         balance.money = balance.money - CacheProfile.getOptions().priceAdmiration;
                         moneyDecreased.set(true);
                         updateResources(balance);
