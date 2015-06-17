@@ -64,11 +64,11 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private static final String SELECTED_POSITION = "SELECTED_POSITION";
     private static final String ALREADY_SHOWN = "ALREADY_SHOWN";
     private static final int MAX_SYMBOL_COUNT = 120;
-    private int coins;
+    private int mCoins;
     private Action1<BalanceData> mBalanceAction = new Action1<BalanceData>() {
         @Override
         public void call(BalanceData balanceData) {
-            coins = balanceData.money;
+            mCoins = balanceData.money;
         }
     };
     private Subscription mBalanceSubscription;
@@ -234,7 +234,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private void pressedAddToLeader(int position) {
         final Options.LeaderButton buttonData = CacheProfile.getOptions().buyLeaderButtons.get(position);
         int selectedPhotoId = getAdapter().getSelectedPhotoId();
-        if (coins < buttonData.price) {
+        if (mCoins < buttonData.price) {
             showPurchasesFragment(buttonData.price);
         } else if (selectedPhotoId != -1) {
             mLoadingLocker.setVisibility(View.VISIBLE);

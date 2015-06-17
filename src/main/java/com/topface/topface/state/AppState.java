@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.ConcurrentHashMap;
 
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
 
 /**
@@ -33,36 +35,38 @@ public class AppState {
         if (isSaveCache && mCacheDataInterface != null) {
             mCacheDataInterface.saveDataToCache(data);
         }
-        if (getCachebleData().containsKey(dataClass)) {
-            getCachebleData().get(dataClass).setObject(data);
-        } else {
-            getCachebleData().put(dataClass, new DataAndObservable(data));
+        synchronized (getCachableData()) {
+            if (getCachableData().containsKey(dataClass)) {
+                getCachableData().get(dataClass).setObject(data);
+            } else {
+                getCachableData().put(dataClass, new DataAndObservable(data));
+            }
         }
         if (isNotifyListeners) {
-            newEmmit(data, dataClass);
+            emmit(data, dataClass);
         }
     }
 
-    public <T> Observable<T> getObservable(Class<T> dataClass) {
-        if (!getCachebleData().containsKey(dataClass)) {
+    public synchronized <T> Observable<T> getObservable(Class<T> dataClass) {
+        if (!getCachableData().containsKey(dataClass)) {
             T data = null;
             if (mCacheDataInterface != null) {
                 data = mCacheDataInterface.getDataFromCache(dataClass);
             }
             setData(data, false, false, dataClass);
         }
-        return getCachebleData().get(dataClass).getBehaviorSubject();
+        return getCachableData().get(dataClass).getBehaviorSubject();
     }
 
-    protected <T> T getNotNullData(@NotNull T data) {
-        T res = (T) getData(data.getClass());
-        return null == res ? data : res;
+    protected <T> T getNotNullData(@NotNull T defaultData) {
+        T res = (T) getData(defaultData.getClass());
+        return null == res ? defaultData : res;
     }
 
 
-    private <T> T getData(Class<T> dataClass) {
-        if (getCachebleData().containsKey(dataClass)) {
-            return (T) getCachebleData().get(dataClass).getObject();
+    private synchronized <T> T getData(Class<T> dataClass) {
+        if (getCachableData().containsKey(dataClass)) {
+            return (T) getCachableData().get(dataClass).getObject();
         } else {
             T res = null;
             if (mCacheDataInterface != null) {
@@ -77,20 +81,22 @@ public class AppState {
         }
     }
 
-    private ConcurrentHashMap<Class, DataAndObservable> getCachebleData() {
+    private ConcurrentHashMap<Class, DataAndObservable> getCachableData() {
         if (mStateData == null) {
             mStateData = new ConcurrentHashMap<>();
         }
         return mStateData;
     }
 
-    private <T> void newEmmit(T data, Class<?> dataClass) {
-        if (getCachebleData().containsKey(dataClass)) {
-            getCachebleData().get(dataClass).newEmmit(data);
+    private <T> void emmit(T data, Class<?> dataClass) {
+        synchronized (getCachableData()) {
+            if (getCachableData().containsKey(dataClass)) {
+                getCachableData().get(dataClass).emmit(data);
+            }
         }
     }
 
-    private <T> BehaviorSubject<T> getBehaviorSubjectNew(T data) {
+    private <T> BehaviorSubject<T> createBehaviorSubject(T data) {
         if (data == null) {
             return BehaviorSubject.create();
         } else {
@@ -99,31 +105,32 @@ public class AppState {
     }
 
     public class DataAndObservable<T> {
-        private BehaviorSubject<T> behaviorSubject;
-        private T object;
+        private BehaviorSubject<T> mBehaviorSubject;
+        private T mObject;
 
         public DataAndObservable(T data) {
-            this(data, getBehaviorSubjectNew(data));
+            this(data, createBehaviorSubject(data));
         }
 
         public DataAndObservable(T data, BehaviorSubject<T> behaviorSubject) {
-            object = data;
-            this.behaviorSubject = behaviorSubject;
+            mObject = data;
+            this.mBehaviorSubject = behaviorSubject;
+            this.mBehaviorSubject.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread());
         }
 
         public T getObject() {
-            return object;
+            return mObject;
         }
 
         public void setObject(T object) {
-            this.object = object;
+            this.mObject = object;
         }
 
         public BehaviorSubject<T> getBehaviorSubject() {
-            return behaviorSubject;
+            return mBehaviorSubject;
         }
 
-        public void newEmmit(T data) {
+        public void emmit(T data) {
             if (data != null) {
                 getBehaviorSubject().onNext(data);
             }

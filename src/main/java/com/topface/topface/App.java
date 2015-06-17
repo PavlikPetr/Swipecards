@@ -83,7 +83,7 @@ public class App extends Application {
     public static final String CONNECTIVITY_CHANGE_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
     private static final long PROFILE_UPDATE_TIMEOUT = 1000 * 120;
 
-    private ObjectGraph graph;
+    private ObjectGraph mGraph;
     private static Context mContext;
     private static Intent mConnectionIntent;
     private static ConnectionChangeReceiver mConnectionReceiver;
@@ -114,13 +114,13 @@ public class App extends Application {
     }
 
     private void initObjectGraphForInjections() {
-        graph = ObjectGraph.create(new TopfaceModule());
-        graph.injectStatics();
-        graph.inject(this);
+        mGraph = ObjectGraph.create(new TopfaceModule());
+        mGraph.injectStatics();
+        mGraph.inject(this);
     }
 
     public void inject(Object obj) {
-        graph.inject(obj);
+        mGraph.inject(obj);
     }
 
     public static App from(Context context) {

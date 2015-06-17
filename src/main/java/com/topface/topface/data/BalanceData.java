@@ -14,4 +14,8 @@ public class BalanceData {
         this.likes = likes;
         this.money = money;
     }
+
+    public BalanceData copy() {
+        return new BalanceData(premium, likes, money);
+    }
 }

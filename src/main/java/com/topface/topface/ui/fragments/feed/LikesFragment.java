@@ -66,11 +66,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     protected View mEmptyFeedView;
     private RateController mRateController;
     private TextView mTitleWithCounter;
-    private int coins;
+    private int mCoins;
     private Action1<BalanceData> mBalanceAction = new Action1<BalanceData>() {
         @Override
         public void call(BalanceData balanceData) {
-            coins = balanceData.money;
+            mCoins = balanceData.money;
         }
     };
     private Subscription mBalanceSubscription;
@@ -292,7 +292,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                                     .add(fragment, TransparentMarketFragment.class.getSimpleName()).commit();
                             return;
                         }
-                        if (coins >= blockSympathyOptions.price) {
+                        if (mCoins >= blockSympathyOptions.price) {
                             btnBuy.setVisibility(View.INVISIBLE);
                             progress.setVisibility(View.VISIBLE);
                             EasyTracker.sendEvent(

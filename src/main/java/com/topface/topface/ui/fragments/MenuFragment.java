@@ -176,7 +176,8 @@ public class MenuFragment extends Fragment {
                     btnMenu.setText(ResourcesUtils.getFragmentNameResId(FragmentId.EDITOR));
                     mEditorItem.setTag(FragmentId.EDITOR);
                     mEditorItem.setOnClickListener(new View.OnClickListener() {
-                        @Override public void onClick(View v) {
+                        @Override
+                        public void onClick(View v) {
                             onMenuSelected(FragmentId.EDITOR);
                         }
                     });
@@ -229,7 +230,8 @@ public class MenuFragment extends Fragment {
 
             View lastActivated;
 
-            @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position < mAdapter.getCount()) {
                     onMenuSelected(mAdapter.getItem(position).getMenuId());
                     if (lastActivated != null) {

@@ -355,8 +355,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 .registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
-
-        updateResources(mBalanceData);
     }
 
     @Override
@@ -749,7 +747,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                 public void onRateFailed(int userId, int mutualId) {
                                     if (moneyDecreased.get()) {
                                         moneyDecreased.set(false);
-                                        updateResources(mAppState.getBalance());
+                                        updateResources(mBalanceData);
                                     } else {
                                         isAdmirationFailed.set(true);
                                         unlockControls();
@@ -758,9 +756,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             }
                     );
                     if (canSendAdmiration && !isAdmirationFailed.get()) {
-                        mBalanceData.money = mBalanceData.money - CacheProfile.getOptions().priceAdmiration;
+                        BalanceData balance = mBalanceData.copy();
+                        balance.money = balance.money - CacheProfile.getOptions().priceAdmiration;
                         moneyDecreased.set(true);
-                        updateResources(mBalanceData);
+                        updateResources(balance);
                     }
                 }
             }
@@ -1083,7 +1082,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         unlockControls();
         if (moneyDecreased.get()) {
             moneyDecreased.set(false);
-            updateResources(mAppState.getBalance());
+            updateResources(mBalanceData);
         }
     }
 

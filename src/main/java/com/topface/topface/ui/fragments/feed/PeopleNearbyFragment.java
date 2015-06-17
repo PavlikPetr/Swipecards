@@ -51,7 +51,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     private Boolean mIsMakeItemsRead;
     private GeoLocationManager mGeoLocationManager;
     private Subscription mSubscriptionLocation;
-    private int coins;
+    private int mCoins;
     private Action1<Location> mLocationAction = new Action1<Location>() {
         @Override
         public void call(Location location) {
@@ -63,7 +63,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     private Action1<BalanceData> mBalanceAction = new Action1<BalanceData>() {
         @Override
         public void call(BalanceData balanceData) {
-            coins = balanceData.money;
+            mCoins = balanceData.money;
         }
     };
     private Subscription mBalanceSubscription;
@@ -210,7 +210,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         initButtonForBlockedScreen(btnBuy, blockPeopleNearby.buttonText, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (coins >= blockPeopleNearby.price) {
+                if (mCoins >= blockPeopleNearby.price) {
                     btnBuy.setVisibility(View.INVISIBLE);
                     progress.setVisibility(View.VISIBLE);
                     PeopleNearbyAccessRequest request = new PeopleNearbyAccessRequest(getActivity());
