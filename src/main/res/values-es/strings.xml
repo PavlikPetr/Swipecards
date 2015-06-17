@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">es_ES</string>
+    <string name="photofeed_title">Aparecer en el muro</string>
     <string name="general_warning">ADVERTENCIA</string>
     <string name="general_ok">OK</string>
     <string name="general_settings_abbr">Ajustes</string>
@@ -393,6 +394,9 @@
     <string name="save">Guardar</string>
     <string name="saving_in_progress">Guardando…</string>
     <string name="confirmation_successfully_sent">La confirmación fue enviada al e-mail que indicaste</string>
+    <string name="email_successfully_confirmed">E-mail confirmado con éxito.</string>
+    <string name="email_not_confirmed">E-mail no confirmada</string>
+    <string name="email_already_confirmed">Ya confirmada</string>
     <string name="password_confirmation_hint">Confirmar contraseña</string>
     <string name="password_hint">contraseña</string>
     <string name="enter_new_password">Introduce la contraseña nueva</string>
@@ -488,6 +492,8 @@
     <string name="general_no_notifications">Lamentablemente, los avisos no están disponibles en tu dispositivo</string>
     <string name="black_list_add_short">A la lista negra</string>
     <string name="confirm_email_for_dating">Luchamos contra spam. ¡Confirma tu dirección de correo para poder conocer la gente en Topface!</string>
+    <string name="confirm_email_for_dating_title">No nos gusta spam</string>
+    <string name="confirm_email_for_dating_desc">¡Confirma tu dirección e-mail para poder conocer a la gente en Topface!</string>
     <string name="send_confirm_link">Enviar enlace de confirmación</string>
     <string name="complain_type_swearing_msg">Insultos, amenazas, lenguaje inapropiado</string>
     <string name="general_exit">Salir</string>

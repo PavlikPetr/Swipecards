@@ -6,6 +6,7 @@
     <string name="app_locale">ru_RU</string>
 
     <!-- строки iOS -->
+    <string name="photofeed_title">Встать в ленту</string>
     <string name="general_warning">ПРЕДУПРЕЖДЕНИЕ</string>
     <string name="general_ok">OK</string>
     <string name="general_settings_abbr">Настр.</string>
@@ -14,7 +15,7 @@
     <string name="notification_denied_popup_title">Разрешите уведомления, чтобы узнавать о входящих сообщениях, симпатиях и других новостях.</string>
     <string name="notification_popup_title">Разрешите присылать вам уведомления, чтобы вы мгновенно могли узнать о новой симпатии, восхищении или непрочитанном сообщении</string>
     <string name="email_successfully_changed">Ваш e-mail успешно изменен</string>
-    <string name="auth_vk_name">ВКонтакте</string>g
+    <string name="auth_vk_name">ВКонтакте</string>
     <string name="dating_switch_button">Еще…</string>
     <string name="dating_prev_button">Предыдущая</string>
     <string name="dating_chat_button">Поболтать</string>
@@ -400,7 +401,7 @@
     <string name="ban_title_forever">Поздравляем! Вы забанены навсегда</string>
     <string name="ban_title_until">Поздравляем! Вы забанены до %s</string>
     <string name="ban_complain">Пожаловаться на бан</string>
-    <string name="general_ready">Готово.</string>
+    <string name="general_ready">Готово</string>
     <string name="buying_store_ok">Покупка успешно завершена.</string>
     <string name="vip_privileges">VIP-привилегии</string>
 

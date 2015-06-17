@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">en_US</string>
+    <string name="photofeed_title">Put in the feed</string>
     <string name="general_warning">WARNING</string>
     <string name="general_ok">OK</string>
     <string name="general_settings_abbr">Sett.</string>
@@ -211,7 +212,7 @@
     <string name="buying_money">Purchase coins</string>
     <string name="gifts_title">Choose a gift</string>
     <string name="profile_header_title">My profile</string>
-    <string name="album_add_photo_title">Add a photo</string>
+    <string name="album_add_photo_title">Add photo</string>
     <string name="profile_add_album">Choose from the library</string>
     <string name="profile_add_camera">Take a photo</string>
     <string name="profile_photo">Photos</string>
@@ -390,6 +391,9 @@
     <string name="save">Save</string>
     <string name="saving_in_progress">Saving…</string>
     <string name="confirmation_successfully_sent">Confirmation was successfully sent to your email.</string>
+    <string name="email_successfully_confirmed">Email succesfully confirmed</string>
+    <string name="email_not_confirmed">Email is not confirmed</string>
+    <string name="email_already_confirmed">Already confirmed</string>
     <string name="password_confirmation_hint">Confirm password</string>
     <string name="password_hint">password</string>
     <string name="enter_new_password">Enter your new password</string>
@@ -485,6 +489,8 @@
     <string name="general_no_notifications">Unfortunately, the notifications on your device are not available</string>
     <string name="black_list_add_short">To the Blacklist</string>
     <string name="confirm_email_for_dating">We are against spam. Please confirm your email, so that you can meet people in Topface!</string>
+    <string name="confirm_email_for_dating_title">We are against spam</string>
+    <string name="confirm_email_for_dating_desc">Confirm your email address to be able to meet people on Topface!</string>
     <string name="send_confirm_link">Send a link for confirmation</string>
     <string name="complain_type_swearing_msg">Offensive behavior, improper language, threats</string>
     <string name="general_exit">Exit</string>

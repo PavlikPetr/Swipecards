@@ -162,7 +162,7 @@ public class OverflowMenu {
                         resourceId = item.getFirstResourceId();
                         break;
                 }
-                if (isNeedToAddItem(item.getId())) {
+                if (mActivity != null && isNeedToAddItem(item.getId())) {
                     mBarActions.add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mActivity.getString(resourceId) : "").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
                 }
             }
@@ -202,7 +202,7 @@ public class OverflowMenu {
                         resourceId = item.getFirstResourceId();
                         break;
                 }
-                if (isNeedToAddItem(item.getId())) {
+                if (mActivity != null && isNeedToAddItem(item.getId())) {
                     mBarActions.add(Menu.NONE, item.getId(), Menu.NONE, resourceId != null ? mActivity.getString(resourceId) : "").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
                 }
             }
