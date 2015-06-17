@@ -19,6 +19,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -28,6 +29,8 @@ import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import javax.inject.Inject;
 
 public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
@@ -59,6 +62,8 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
     }
 
+    @Inject
+    static TopfaceAppState mAppState;
     public static final int INTENT_BUY_VIP = 1;
     public static final int INTENT_BUY = 2;
 
@@ -84,6 +89,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        App.from(this).inject(this);
         if (TFOfferwallSDK.isInitialized()) {
             mIsOfferwallsReady = TFCredentials.getAdId() != null;
         }
@@ -221,7 +227,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
     private static boolean needTFOfferwallOnOpenRedirect(int itemPrice) {
         return TFOfferwallSDK.canShowOffers() && isTopfaceOfferwallRedirectEnabled() && mTopfaceOfferwallRedirect.isExpOnOpen() &&
-                CacheProfile.money < itemPrice && mTopfaceOfferwallRedirect.showOrNot();
+                mAppState.getBalance().money < itemPrice && mTopfaceOfferwallRedirect.showOrNot();
     }
 
     private boolean needTFOfferwallOnCloseRedirect() {

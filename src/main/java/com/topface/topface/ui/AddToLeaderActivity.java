@@ -19,6 +19,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.AlbumPhotos;
+import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
@@ -30,6 +31,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.adapters.LeadersPhotoGridAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
@@ -47,14 +49,29 @@ import org.json.JSONException;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
+
 public class AddToLeaderActivity extends BaseFragmentActivity implements View.OnClickListener {
 
     public final static int ADD_TO_LEADER_ACTIVITY_ID = 1;
+    @Inject
+    TopfaceAppState mAppState;
     private static final String PHOTOS = "PHOTOS";
     private static final String POSITION = "POSITION";
     private static final String SELECTED_POSITION = "SELECTED_POSITION";
     private static final String ALREADY_SHOWN = "ALREADY_SHOWN";
     private static final int MAX_SYMBOL_COUNT = 120;
+    private int coins;
+    private Action1<BalanceData> mBalanceAction = new Action1<BalanceData>() {
+        @Override
+        public void call(BalanceData balanceData) {
+            coins = balanceData.money;
+        }
+    };
+    private Subscription mBalanceSubscription;
 
     private int mPosition;
     private int mSelectedPosition;
@@ -79,6 +96,8 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.from(this).inject(this);
+        mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
         mGridFooterView = createGridViewFooter();
         mGridView = (GridViewWithHeaderAndFooter) findViewById(R.id.user_photos_grid);
         addFooterView();
@@ -116,6 +135,12 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                 mIsPhotoDialogShown = true;
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mBalanceSubscription.unsubscribe();
     }
 
     @Override
@@ -209,7 +234,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private void pressedAddToLeader(int position) {
         final Options.LeaderButton buttonData = CacheProfile.getOptions().buyLeaderButtons.get(position);
         int selectedPhotoId = getAdapter().getSelectedPhotoId();
-        if (CacheProfile.money < buttonData.price) {
+        if (coins < buttonData.price) {
             showPurchasesFragment(buttonData.price);
         } else if (selectedPhotoId != -1) {
             mLoadingLocker.setVisibility(View.VISIBLE);
