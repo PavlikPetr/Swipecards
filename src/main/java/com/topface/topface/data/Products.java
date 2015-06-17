@@ -24,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -200,18 +201,18 @@ public class Products extends AbstractData {
             value = buyBtn.hint;
             economy = null;
         } else {
-            value = String.format(
-                    App.getContext().getString(R.string.default_price_format),
-                    ((float) buyBtn.price / 100)
-            );
+            value = buyBtn.totalTemplate.replace(PRICE, ((float) buyBtn.price / 100) +
+                    App.getContext().getString(R.string.usd));
             // try fill template
             ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
             if (productsDetails != null) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
                 if (detail != null) {
                     if (!TextUtils.isEmpty(buyBtn.totalTemplate)) {
+                        double price = detail.price / ProductsDetails.MICRO_AMOUNT;
+                        DecimalFormat decimalFormat = new DecimalFormat("#.##");
                         value = buyBtn.totalTemplate.replace(PRICE,
-                                String.format("%f %s", detail.price / ProductsDetails.MICRO_AMOUNT,
+                                String.format("%s %s", decimalFormat.format(price),
                                         detail.currency));
                     }
                 }
