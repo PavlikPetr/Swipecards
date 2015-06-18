@@ -647,4 +647,5 @@
     <string name="status_invilid_phone_number">The number is invalid</string>
     <string name="status_confirmation_was_sent">Awaiting for registration</string>
     <string name="status_user_registered">Already registered</string>
+    <string name="balance">Balance (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
 </resources>
