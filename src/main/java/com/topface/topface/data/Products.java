@@ -201,20 +201,19 @@ public class Products extends AbstractData {
             value = buyBtn.hint;
             economy = null;
         } else {
-            value = buyBtn.totalTemplate.replace(PRICE, ((float) buyBtn.price / 100) +
-                    App.getContext().getString(R.string.usd));
             // try fill template
             ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
-            if (productsDetails != null) {
+            if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
                 if (detail != null) {
-                    if (!TextUtils.isEmpty(buyBtn.totalTemplate)) {
-                        double price = detail.price / ProductsDetails.MICRO_AMOUNT;
-                        DecimalFormat decimalFormat = new DecimalFormat("#.##");
-                        value = buyBtn.totalTemplate.replace(PRICE,
-                                String.format("%s %s", decimalFormat.format(price),
-                                        detail.currency));
-                    }
+                    double price = detail.price / ProductsDetails.MICRO_AMOUNT;
+                    DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                    value = buyBtn.totalTemplate.replace(PRICE,
+                            String.format("%s %s", decimalFormat.format(price),
+                                    detail.currency));
+                } else {
+                    value = buyBtn.totalTemplate.replace(PRICE, ((float) buyBtn.price / 100) +
+                            App.getContext().getString(R.string.usd));
                 }
             }
             economy = buyBtn.hint;
