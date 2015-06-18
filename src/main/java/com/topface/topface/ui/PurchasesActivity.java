@@ -240,7 +240,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     }
 
     private boolean isSMSInviteAvailable() {
-        return !((isTopfaceOfferwallRedirectEnabled() && mTopfaceOfferwallRedirect.isExpOnClose()) ||
+        return !CacheProfile.premium && !((isTopfaceOfferwallRedirectEnabled() && mTopfaceOfferwallRedirect.isExpOnClose()) ||
                 mTopfaceOfferwallRedirect.isCompleted());
     }
 
