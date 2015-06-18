@@ -135,7 +135,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
         if (isNotYourOwnId(item.user.id)) {
             if (!item.user.isEmpty()) {
                 FeedUser user = item.user;
-                Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false, null);
+                Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false);
                 getActivity().startActivityForResult(intent, ChatActivity.REQUEST_CHAT);
             }
         } else {

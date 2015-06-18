@@ -181,9 +181,9 @@ dependencies {
     compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
     compile rootProject.ANDROID_BUILD_SUPPORT_APPCOMPAT_VERSION
     //Google play services
-    compile "com.google.android.gms:play-services-base:7.5.0"
-    compile "com.google.android.gms:play-services-gcm:7.5.0"
-    compile "com.google.android.gms:play-services-ads:7.5.0"
+    compile "com.google.android.gms:play-services-base:7.3.0"
+    compile "com.google.android.gms:play-services-gcm:7.3.0"
+    compile "com.google.android.gms:play-services-ads:7.3.0"
     //All jar libs
     compile fileTree(dir: 'libs', exclude: 'amazon/*.jar', include: '*.jar')
 
@@ -295,9 +295,6 @@ subprojects {
     //До лучших времен закоментировал эту строку, пока Idea отказывается делать такие штуки, как папка сборки вне пределов проекта
     //buildDir "../../build/projects/$project.name"
     android {
-        lintOptions {
-            ignore "AndroidGradlePluginVersion"
-        }
         compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
         buildToolsVersion rootProject.ANDROID_BUILD_TOOLS_VERSION
     }
