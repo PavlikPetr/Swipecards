@@ -306,15 +306,6 @@
         </activity>
 
         <activity
-            android:name=".ui.CoinsSubscriptionsActivity"
-            android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.NavigationActivity" />
-        </activity>
-
-        <activity
             android:name=".ui.ComplainsMessageActivity"
             android:parentActivityName=".ui.ComplainsActivity"
             android:screenOrientation="portrait"
