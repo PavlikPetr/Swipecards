@@ -24,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -31,6 +32,9 @@ import java.util.List;
 
 public class Products extends AbstractData {
     public static final String INTENT_UPDATE_PRODUCTS = "com.topface.topface.action.UPDATE_PRODUCTS";
+    private static final String PRICE = "{{price}}";
+    private static final String EUR = "EUR";
+    private static final String RUB = "RUB";
 
     public enum ProductType {
         COINS("coins"),
@@ -194,26 +198,31 @@ public class Products extends AbstractData {
      */
     public static View createBuyButtonLayout(Context context, BuyButton buyBtn,
                                              final BuyButtonClickListener listener) {
-        String value;
+        String value = "";
         String economy;
         if (buyBtn.type == ProductType.COINS_SUBSCRIPTION && buyBtn.price == 0) {
             value = buyBtn.hint;
             economy = null;
         } else {
-            value = String.format(
-                    App.getContext().getString(R.string.default_price_format),
-                    ((float) buyBtn.price / 100)
-            );
             // try fill template
             ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
-            if (productsDetails != null) {
+            if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
                 if (detail != null) {
-                    value = String.format(
-                            App.getContext().getString(R.string.default_price_format_extended),
-                            detail.price / ProductsDetails.MICRO_AMOUNT,
-                            detail.currency
-                    );
+                    double price = detail.price / ProductsDetails.MICRO_AMOUNT;
+                    DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                    value = buyBtn.totalTemplate.replace(PRICE,
+                            String.format("%s %s", decimalFormat.format(price),
+                                    detail.currency));
+                    if (isEurCurrency(detail.currency)) {
+                        value = value.replaceFirst(EUR, App.getContext().getString(R.string.eur));
+                    }
+                    if (isRubCurrency(detail.currency)) {
+                        value = value.replaceFirst(RUB, App.getContext().getString(R.string.rub));
+                    }
+                } else {
+                    value = buyBtn.totalTemplate.replace(PRICE, App.getContext().getString(R.string.usd) +
+                            ((float) buyBtn.price / 100));
                 }
             }
             economy = buyBtn.hint;
@@ -223,6 +232,15 @@ public class Products extends AbstractData {
                 buyBtn.showType, economy, value, listener
         );
     }
+
+    private static boolean isEurCurrency(String currency) {
+        return currency.equals(EUR);
+    }
+
+    private static boolean isRubCurrency(String currency) {
+        return currency.equals(RUB);
+    }
+
 
     /**
      * Creates view for buy actions. Button with hints
@@ -432,12 +450,14 @@ public class Products extends AbstractData {
         public ProductType type;
         public int discount;
         public String paymentwallLink;
+        public String totalTemplate;
 
         public BuyButton(JSONObject json) {
             if (json != null) {
                 id = json.optString("id");
                 title = json.optString("title");
                 titleTemplate = json.optString("titleTemplate");
+                totalTemplate = json.optString("totalTemplate");
                 price = json.optInt("price");
                 amount = json.optInt("amount");
                 hint = json.optString("hint");
@@ -451,7 +471,7 @@ public class Products extends AbstractData {
                     if (detail != null) {
                         double price = detail.price / ProductsDetails.MICRO_AMOUNT;
                         double pricePerItem = price / amount;
-                        title = titleTemplate.replace("{{price}}", String.format("%.2f %s", price, detail.currency));
+                        title = titleTemplate.replace(PRICE, String.format("%.2f %s", price, detail.currency));
                         title = title.replace("{{price_per_item}}", String.format("%.2f %s", pricePerItem, detail.currency));
                     }
                 }
