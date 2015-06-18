@@ -22,7 +22,6 @@ import com.topface.topface.R;
 import com.topface.topface.data.Products;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.ui.CoinsSubscriptionsActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.utils.CacheProfile;
 
@@ -33,7 +32,6 @@ import java.util.List;
 
 public abstract class CoinsBuyingFragment extends OpenIabFragment {
     private LinkedList<View> purchaseButtons = new LinkedList<>();
-    private View mCoinsSubscriptionButton;
     private TextView mResourceInfo;
     private String mResourceInfoText;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -146,11 +144,6 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
         if (coinsButtonsContainer.getChildCount() > 0) {
             coinsButtonsContainer.removeAllViews();
         }
-        // coins subscriptions button
-        mCoinsSubscriptionButton = coinsMaskedExperiment ? null : getCoinsSubscriptionsButton(products, coinsButtonsContainer);
-        if (mCoinsSubscriptionButton != null) {
-            purchaseButtons.add(mCoinsSubscriptionButton);
-        }
         // coins items buttons also coinsSubscriptionsMasked buttons
         for (final Products.BuyButton curButton : coinsProducts) {
             View btnView = Products.setBuyButton(coinsButtonsContainer, curButton, getActivity(),
@@ -173,29 +166,6 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
             }
         }
         coinsButtonsContainer.requestLayout();
-    }
-
-    private void updateCoinsSubscriptionButton() {
-        if (mCoinsSubscriptionButton != null) {
-            Products products = getProducts();
-            if (products != null) {
-                Products.ProductsInfo.CoinsSubscriptionInfo coinsSubscriptionInfo = products
-                        .info.coinsSubscription;
-                Products.BuyButton btn = coinsSubscriptionInfo.getSubscriptionButton();
-                Products.switchOpenButtonTexts(mCoinsSubscriptionButton, btn, getCoinsSubscriptionClickListener());
-            }
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == CoinsSubscriptionsActivity.INTENT_COINS_SUBSCRIPTION) {
-            if (resultCode == Activity.RESULT_OK) {
-                updateCoinsSubscriptionButton();
-            }
-        }
     }
 
     public String getFrom() {
@@ -240,9 +210,5 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
         }
     }
 
-    protected abstract View getCoinsSubscriptionsButton(Products products, LinearLayout coinsButtonsContainer);
-
     protected abstract List<Products.BuyButton> getCoinsProducts(Products products, boolean coinsMaskedExperiment);
-
-    public abstract Products.BuyButtonClickListener getCoinsSubscriptionClickListener();
 }
