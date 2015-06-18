@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
@@ -26,7 +25,7 @@ public class ImageSwitcher extends ViewPager {
 
     private GestureDetector mGestureDetector;
     private ImageSwitcherAdapter mImageSwitcherAdapter;
-    private OnClickListener mOnClickListener;
+    `
     private Handler mUpdatedHandler;
     private static final String VIEW_TAG = "view_container";
     private PreloadManager mPreloadManager;
@@ -46,9 +45,6 @@ public class ImageSwitcher extends ViewPager {
         setAdapter(mImageSwitcherAdapter);
         setOnTouchListener(mOnTouchListener);
         setPageMargin(40);
-        AlphaAnimation animation = new AlphaAnimation(0, 1);
-        animation.setDuration(500);
-        setAnimation(animation);
         mPreloadManager = new PreloadManager(getWidth(), getHeight());
     }
 
