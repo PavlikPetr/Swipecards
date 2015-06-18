@@ -13,6 +13,7 @@
     <!--text colors-->
     <color name="text_light_gray">#B8B8B8</color>
     <color name="text_white">#FFFFFF</color>
+    <color name="text_left_menu">#3f3f3f</color>
 
     <!-- text color for hidden dialog preview -->
     <color name="hidden_dialog_preview_text_color">#00CDFE</color>>
