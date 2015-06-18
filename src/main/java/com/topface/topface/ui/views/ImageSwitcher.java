@@ -25,7 +25,7 @@ public class ImageSwitcher extends ViewPager {
 
     private GestureDetector mGestureDetector;
     private ImageSwitcherAdapter mImageSwitcherAdapter;
-    `
+    private OnClickListener mOnClickListener;
     private Handler mUpdatedHandler;
     private static final String VIEW_TAG = "view_container";
     private PreloadManager mPreloadManager;
