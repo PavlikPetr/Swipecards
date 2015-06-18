@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.topface.topface.R;
 import com.topface.topface.data.Products;
-import com.topface.topface.data.Products.ProductsInfo.CoinsSubscriptionInfo;
 import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.statistics.PushButtonVipUniqueStatistics;
 import com.topface.topface.ui.fragments.PurchasesFragment;
@@ -18,7 +16,6 @@ import com.topface.topface.utils.CacheProfile;
 import java.util.LinkedList;
 
 import static com.topface.topface.data.Products.BuyButton;
-import static com.topface.topface.data.Products.BuyButtonClickListener;
 
 public class MarketBuyingFragment extends CoinsBuyingFragment {
 
@@ -52,13 +49,6 @@ public class MarketBuyingFragment extends CoinsBuyingFragment {
         fragment.setArguments(args);
     }
 
-    private Products.BuyButtonClickListener mCoinsSubscriptionClickListener = new Products.BuyButtonClickListener() {
-        @Override
-        public void onClick(String id) {
-            // startActivityForResult(CoinsSubscriptionsActivity.createIntent(getFrom()), CoinsSubscriptionsActivity.INTENT_COINS_SUBSCRIPTION);
-        }
-    };
-
     protected LinkedList<BuyButton> getCoinsProducts(@NonNull Products products, boolean coinsMaskedExperiment) {
         boolean hasMaskedCoinsSubs = products.info != null
                 && products.info.coinsSubscriptionMasked != null
@@ -88,21 +78,6 @@ public class MarketBuyingFragment extends CoinsBuyingFragment {
             view.findViewById(R.id.fbLikes).setVisibility(View.GONE);
             view.findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public BuyButtonClickListener getCoinsSubscriptionClickListener() {
-        return null;
-    }
-
-    protected View getCoinsSubscriptionsButton(Products products, LinearLayout coinsButtons) {
-        if (!products.coinsSubscriptions.isEmpty()) {
-            CoinsSubscriptionInfo info = products.info.coinsSubscription;
-            BuyButton btn = info.status.isActive() ? info.hasSubscriptionButton : info.noSubscriptionButton;
-            return Products.setOpenButton(coinsButtons, btn,
-                    getActivity(), mCoinsSubscriptionClickListener);
-        }
-        return null;
     }
 
     @Override

@@ -32,7 +32,6 @@ import java.util.List;
 
 public abstract class CoinsBuyingFragment extends OpenIabFragment {
     private LinkedList<View> purchaseButtons = new LinkedList<>();
-    private View mCoinsSubscriptionButton;
     private TextView mResourceInfo;
     private String mResourceInfoText;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -211,11 +210,5 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
         }
     }
 
-    @SuppressWarnings("unused")
-    protected abstract View getCoinsSubscriptionsButton(Products products, LinearLayout coinsButtonsContainer);
-
     protected abstract List<Products.BuyButton> getCoinsProducts(Products products, boolean coinsMaskedExperiment);
-
-    @SuppressWarnings("unused")
-    public abstract Products.BuyButtonClickListener getCoinsSubscriptionClickListener();
 }
