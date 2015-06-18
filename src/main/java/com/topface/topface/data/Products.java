@@ -213,15 +213,10 @@ public class Products extends AbstractData {
                     DecimalFormat decimalFormat = new DecimalFormat("#.##");
                     value = buyBtn.totalTemplate.replace(PRICE,
                             String.format("%s %s", decimalFormat.format(price),
-                                    detail.currency));
-                    if (isEurCurrency(detail.currency)) {
-                        value = value.replaceFirst(EUR, App.getContext().getString(R.string.eur));
-                    }
-                    if (isRubCurrency(detail.currency)) {
-                        value = value.replaceFirst(RUB, App.getContext().getString(R.string.rub));
-                    }
+                                    detail.currency.equals(RUB) ? context.getString(R.string.rub) :
+                                            (detail.currency.equals(EUR) ? context.getString(R.string.eur) : detail.currency)));
                 } else {
-                    value = buyBtn.totalTemplate.replace(PRICE, App.getContext().getString(R.string.usd) +
+                    value = buyBtn.totalTemplate.replace(PRICE, context.getString(R.string.usd) +
                             ((float) buyBtn.price / 100));
                 }
             }
@@ -232,15 +227,6 @@ public class Products extends AbstractData {
                 buyBtn.showType, economy, value, listener
         );
     }
-
-    private static boolean isEurCurrency(String currency) {
-        return currency.equals(EUR);
-    }
-
-    private static boolean isRubCurrency(String currency) {
-        return currency.equals(RUB);
-    }
-
 
     /**
      * Creates view for buy actions. Button with hints
