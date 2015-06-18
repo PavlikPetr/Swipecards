@@ -187,6 +187,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.fade_in, 0);
         // Extras
         Intent intent = getIntent();
         mUid = intent.getIntExtra(INTENT_USER_ID, -1);
