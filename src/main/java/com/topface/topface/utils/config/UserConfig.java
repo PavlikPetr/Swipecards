@@ -57,6 +57,7 @@ public class UserConfig extends AbstractConfig {
     public static final String SILENT = "silent";
     public static final String PURCHASED_SUBSCRIPTIONS = "purchased_subscriptions";
     public static final String DATING_LOCK_POPUP_TIME = "dating_lock_popup_time";
+    public static final String TRIAL_VIP_POPUP_COUNTER = "trial_vip_popup_counter";
     public static final String TOPFACE_OFFERWALL_REDIRECT_COUNTER = "topface_offerwall_redirect_counter";
     public static final String REMAINED_DAILY_PUBNATIVE_SHOWS = "remained_feed_ad_shows";
     public static final String LAST_DAY_PUBNATIVE_SHOWN = "current_day_for_showing_feed_ad";
@@ -159,6 +160,8 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, TEST_PAYMENT_ENABLED, false);
         // отправленные контакты для отправки смс
         addField(settingsMap, INVITED_CONTACTS_FOR_SMS, "");
+        // счетчик показа попапа триального VIP
+        addField(settingsMap, TRIAL_VIP_POPUP_COUNTER, 0);
     }
 
     @Override
@@ -245,6 +248,25 @@ public class UserConfig extends AbstractConfig {
     public String getPinCode() {
         return getStringField(getSettingsMap(), DATA_PIN_CODE);
     }
+
+    /**
+     * save the number of impressions trial vip popup
+     *
+     * @param count times trial vip popup showing
+     */
+    public void setTrialVipPopupCounter(int count) {
+        setField(getSettingsMap(), TRIAL_VIP_POPUP_COUNTER, count);
+    }
+
+    /**
+     * get the number of impressions trial vip popup
+     *
+     * @return count
+     */
+    public int getTrialVipCounter() {
+        return getIntegerField(getSettingsMap(), TRIAL_VIP_POPUP_COUNTER);
+    }
+
 
     public void setDatingLockPopupRedirect(long lastTime) {
         setField(getSettingsMap(), DATING_LOCK_POPUP_TIME, lastTime);

@@ -823,4 +823,7 @@
     <string name="status_confirmation_was_sent">Ожидает регистрации</string>
     <string name="status_user_registered">Уже зарегистрирован</string>
     <string name="balance">Баланс (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
+
+    <string name="trial_vip_text">Бесплатный VIP\nна 7 дней</string>
+    <string name="trial_vip_button_text">Подключить VIP</string>
 </resources>
