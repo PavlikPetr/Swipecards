@@ -640,7 +640,6 @@
     <string name="premium_for_invitations_current_status">Ya tienes:\nInvitaciones: %1$d\nRegistros: %2$d</string>
     <string name="no_contacts_available">No hay contactos para mostrar</string>
     <string name="sms_invite_title">¡Recibe VIP para un día!</string>
-    <string name="sms_invite_subtitle">¡Recibe VIP para un día!</string>
     <string name="status_can_send_confirmation">Invitar</string>
     <string name="status_invilid_phone_number">Número no valido</string>
     <string name="status_confirmation_was_sent">Esperando confirmación</string>
