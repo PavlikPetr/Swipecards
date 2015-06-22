@@ -207,7 +207,7 @@ public class Products extends AbstractData {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
                 if (detail != null) {
                     double price = detail.price / ProductsDetails.MICRO_AMOUNT;
-                    DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                    DecimalFormat decimalFormat = new DecimalFormat("#.00");
                     value = buyBtn.totalTemplate.replace(PRICE,
                             String.format("%s %s", decimalFormat.format(price),
                                     detail.currency));
