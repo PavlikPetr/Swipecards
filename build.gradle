@@ -161,7 +161,7 @@ android {
         checkReleaseBuilds true
         //Отключено, что бы не валилась сборка на CI сервере
         abortOnError false
-
+        disable 'InvalidPackage'
         //Отключаем ненужные нам проверки lint
         ignore "MissingTranslation", //Об отсутсвующих переводах. У нас есть всегда языки без переводов
                 "ContentDescription", //О том что к каждой картинке нужно описание
@@ -202,7 +202,8 @@ dependencies {
 
     //OpenIAB
     compile 'org.onepf:openiab:0.9.8.4'
-
+    //View Injection
+    compile 'com.jakewharton:butterknife:6.1.0'
     compile project(':libs:Android-ViewPagerIndicator')
     compile project(':libs:PullToRefresh')
     compile project(':libs:PhotoView')

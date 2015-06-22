@@ -27,6 +27,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.adapters.SpinnerAdapter;
 import com.topface.topface.ui.dialogs.FilterListDialog;
+import com.topface.topface.ui.dialogs.FilterNumberPickerDialog;
 import com.topface.topface.ui.views.CitySearchView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
@@ -54,7 +55,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     private CheckBox mLoFilterOnline;
     private CheckBox mLoFilterBeautiful;
-
+    private ViewGroup mLoFilterHeight;
+    private ViewGroup mLoFilterWeight;
     private ViewGroup mLoFilterDatingStatus;
     private ViewGroup mLoFilterMarriage;
     private ViewGroup mLoFilterCharacter;
@@ -73,6 +75,16 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         @Override
         public void onRowClickListener(int id, int item) {
             switch (id) {
+                case R.id.loFilterHeight:
+//                    mFilter.height = item;
+//                    setText(mFormInfo.getEntry(R.array.form_main_status, mFilter.height),
+//                            mLoFilterDatingStatus);
+                    break;
+                case R.id.loFilterWeight:
+//                    mFilter.weight = item;
+//                    setText(mFormInfo.getEntry(R.array.form_main_status, mFilter.weight),
+//                            mLoFilterDatingStatus);
+                    break;
                 case R.id.loFilterDatingStatus:
                     mFilter.xstatus = item;
                     setText(mFormInfo.getEntry(R.array.form_main_status, mFilter.xstatus),
@@ -238,6 +250,22 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mLoFilterBeautiful.setChecked(mFilter.beautiful);
         mLoFilterBeautiful.setOnClickListener(this);
 
+        // Height Status
+        mLoFilterHeight = (ViewGroup) root.findViewById(R.id.loFilterHeight);
+        setText(R.array.form_main_height,
+                "Default",
+                mLoFilterHeight);
+        mLoFilterHeight.setTag(R.array.form_main_status);
+        mLoFilterHeight.setOnClickListener(this);
+
+        // Weight Status
+        mLoFilterWeight = (ViewGroup) root.findViewById(R.id.loFilterWeight);
+        setText(R.array.form_main_weight,
+                "Default",
+                mLoFilterWeight);
+        mLoFilterWeight.setTag(R.array.form_main_status);
+        mLoFilterWeight.setOnClickListener(this);
+
         // Dating Status
         mLoFilterDatingStatus = (ViewGroup) root.findViewById(R.id.loFilterDatingStatus);
         setText(R.array.form_main_status,
@@ -294,6 +322,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     private void setText(int titleId, String text, ViewGroup frame) {
+        String s = mFormInfo.getFormTitle(titleId);
         ((TextView) frame.findViewWithTag("tvFilterTitle")).setText(mFormInfo.getFormTitle(titleId));
         TextView textView = (TextView) frame.findViewWithTag("tvFilterText");
         textView.setText(text);
@@ -373,6 +402,14 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                     mLoFilterChooseCity.setDefaultCity(city);
                     mFilter.city = city;
                 }
+                break;
+            case R.id.loFilterHeight:
+                FilterNumberPickerDialog.newInstance(true, getActivity().getString(R.string.form_main_height_0))
+                        .show(getActivity().getFragmentManager(), FilterListDialog.TAG);
+                break;
+            case R.id.loFilterWeight:
+                FilterNumberPickerDialog.newInstance(false, getActivity().getString(R.string.form_main_weight_0))
+                        .show(getActivity().getFragmentManager(), FilterListDialog.TAG);
                 break;
         }
         refreshSaveState();

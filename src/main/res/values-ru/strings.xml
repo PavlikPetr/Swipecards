@@ -9,6 +9,7 @@
     <string name="photofeed_title">Встать в ленту</string>
     <string name="general_warning">ПРЕДУПРЕЖДЕНИЕ</string>
     <string name="general_ok">OK</string>
+    <string name="general_any">Любой</string>
     <string name="general_settings_abbr">Настр.</string>
     <string name="general_disallow">Запретить</string>
     <string name="general_allow">Разрешить</string>
