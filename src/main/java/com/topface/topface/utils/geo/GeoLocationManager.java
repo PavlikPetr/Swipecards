@@ -1,6 +1,10 @@
 package com.topface.topface.utils.geo;
 
+import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -8,24 +12,32 @@ import android.os.Bundle;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.state.TopfaceAppState;
+
+import javax.inject.Inject;
+
+import static android.location.LocationManager.GPS_PROVIDER;
+import static android.location.LocationManager.NETWORK_PROVIDER;
 
 /**
  * При запуске экрана "Ближайших" проверяем какие из провайдеров включены у пользователя.
  * На каждый из обнаруженных регистрируем лисентер в PeopleNearbyFragment. Отписываем  лисентеры
  * там же, если выходим из экрана ближайших или находясь в этом экране выключаем ВСЮ навигацию
  */
-public abstract class GeoLocationManager {
+public class GeoLocationManager {
 
+    @Inject
+    TopfaceAppState mAppState;
     private static final int UPDATE_TIME = 1000 * 60 * 2;
     private static final float UPDATE_RANGE = 10f;
     private LocationManager mLocationManager;
     private Location mBestLocation;
+    private Activity mActivity;
     private ChangeLocationListener mNetworkLocationListener = new ChangeLocationListener() {
         @Override
         public void onLocationChanged(Location location) {
             Debug.log(this, "Receive location from Network");
             compareWithBestLocation(location);
-            onUserLocationChanged(mBestLocation);
         }
     };
     private ChangeLocationListener mGPSLocationListener = new ChangeLocationListener() {
@@ -33,31 +45,42 @@ public abstract class GeoLocationManager {
         public void onLocationChanged(Location location) {
             Debug.log(this, "Receive location from GPS");
             compareWithBestLocation(location);
-            onUserLocationChanged(mBestLocation);
         }
     };
 
-    public GeoLocationManager(Context context) {
-        mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+    private BroadcastReceiver mGeoStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (getEnabledProvider() != GeoLocationManager.NavigationType.DISABLE) {
+                startLocationListener();
+            } else {
+                stopLocationListener();
+            }
+        }
+    };
+
+    public GeoLocationManager(Activity activity) {
+        App.from(activity.getApplicationContext()).inject(this);
+        mLocationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
         startLocationListener();
     }
 
     public static Location getCurrentLocation() {
         LocationManager locationManager = (LocationManager) App.getContext().getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        return locationManager.getLastKnownLocation(NETWORK_PROVIDER);
     }
 
     public Location getLastKnownLocation() {
-        mBestLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        setBestLocation(mLocationManager.getLastKnownLocation(NETWORK_PROVIDER));
         return mBestLocation;
     }
 
     private boolean isGPSEnabled() {
-        return mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        return mLocationManager.isProviderEnabled(GPS_PROVIDER);
     }
 
     private boolean isNetworkEnabled() {
-        return mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        return mLocationManager.isProviderEnabled(NETWORK_PROVIDER);
     }
 
     public NavigationType getEnabledProvider() {
@@ -72,19 +95,17 @@ public abstract class GeoLocationManager {
         }
     }
 
-    protected abstract void onUserLocationChanged(Location location);
-
     public void startLocationListener() {
         Debug.log(this, "Geoloc attach listeners");
         switch (getEnabledProvider()) {
             case ALL:
             case GPS_ONLY:
-                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, UPDATE_TIME, UPDATE_RANGE, mGPSLocationListener);
+                mLocationManager.requestLocationUpdates(GPS_PROVIDER, UPDATE_TIME, UPDATE_RANGE, mGPSLocationListener);
                 if (getEnabledProvider() != NavigationType.ALL) {
                     break;
                 }
             case NETWORK_ONLY:
-                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, UPDATE_TIME, UPDATE_RANGE, mNetworkLocationListener);
+                mLocationManager.requestLocationUpdates(NETWORK_PROVIDER, UPDATE_TIME, UPDATE_RANGE, mNetworkLocationListener);
                 break;
         }
 
@@ -102,14 +123,19 @@ public abstract class GeoLocationManager {
             return;
         }
         if (mBestLocation == null) {
-            mBestLocation = location;
+            setBestLocation(location);
             return;
         }
         //GPS точку принимаем только в том случае если ее точность больше чем у Network
-        if (location.getProvider().equals(LocationManager.GPS_PROVIDER) &&
+        if (location.getProvider().equals(GPS_PROVIDER) &&
                 mBestLocation.getAccuracy() > location.getAccuracy()) {
-            mBestLocation = location;
+            setBestLocation(location);
         }
+    }
+
+    private void setBestLocation(Location location) {
+        mBestLocation = location;
+        mAppState.setData(mBestLocation);
     }
 
     public enum NavigationType {GPS_ONLY, NETWORK_ONLY, ALL, DISABLE}
@@ -134,6 +160,15 @@ public abstract class GeoLocationManager {
         public void onProviderDisabled(String provider) {
             Debug.log(GeoLocationManager.class, "Disabled " + provider);
         }
+    }
+
+    public void registerProvidersChangedActionReceiver() {
+        mActivity.registerReceiver(mGeoStateReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+    }
+
+    public void unregisterProvidersChangedActionReceiver() {
+        mActivity.unregisterReceiver(mGeoStateReceiver);
+        mActivity = null;
     }
 
 }

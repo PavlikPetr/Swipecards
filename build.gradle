@@ -203,6 +203,11 @@ dependencies {
     //OpenIAB
     compile 'org.onepf:openiab:0.9.8.4'
 
+    compile 'io.reactivex:rxandroid:0.24.0'
+
+    compile 'com.squareup.dagger:dagger:1.2.2'
+    provided 'com.squareup.dagger:dagger-compiler:1.2.2'
+
     compile project(':libs:Android-ViewPagerIndicator')
     compile project(':libs:PullToRefresh')
     compile project(':libs:PhotoView')

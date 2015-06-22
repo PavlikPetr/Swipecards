@@ -4,12 +4,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.topface.framework.JsonUtils;
 import com.topface.topface.App;
+import com.topface.topface.data.BalanceData;
 import com.topface.topface.requests.BannerRequest;
+import com.topface.topface.state.TopfaceAppState;
 
 import org.json.JSONObject;
 
+import javax.inject.Inject;
+
 public class CountersManager {
+    @Inject
+    TopfaceAppState mAppState;
     public static final String UPDATE_BALANCE = "com.topface.topface.UPDATE_BALANCE";
     public final static String UPDATE_COUNTERS = "com.topface.topface.UPDATE_COUNTERS";
     public static final String UPDATE_VIP_STATUS = "com.topface.topface.UPDATE_VIP_STATUS";
@@ -104,25 +111,15 @@ public class CountersManager {
 
     public void setBalanceCounters(JSONObject balanceJson) {
         if (balanceJson == null) return;
-        setBalanceCounters(
-                balanceJson.optInt("likes"),
-                balanceJson.optInt("money")
-        );
-        boolean premiumStatus = balanceJson.optBoolean("premium", CacheProfile.premium);
-        if (premiumStatus != CacheProfile.premium) {
-            CacheProfile.premium = premiumStatus;
+        App.from(mContext).inject(this);
+        BalanceData balanceData = JsonUtils.fromJson(balanceJson.toString(), BalanceData.class);
+        mAppState.setData(balanceData);
+        if (balanceData.premium != CacheProfile.premium) {
             App.sendProfileAndOptionsRequests();
             Intent intent = new Intent(UPDATE_VIP_STATUS);
-            intent.putExtra(VIP_STATUS_EXTRA, premiumStatus);
+            intent.putExtra(VIP_STATUS_EXTRA, balanceData.premium);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         }
-        updateBalanceCounters();
-    }
-
-    public void setBalanceCounters(int likes, int money) {
-        CacheProfile.likes = likes;
-        CacheProfile.money = money;
-        updateBalanceCounters();
     }
 
     public int getCounter(int type) {
@@ -185,11 +182,6 @@ public class CountersManager {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         }
         setMethod(NULL_METHOD);
-    }
-
-    private void updateBalanceCounters() {
-        Intent intent = new Intent(UPDATE_BALANCE);
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
     private boolean checkMethodIsDenyed(String method) {
