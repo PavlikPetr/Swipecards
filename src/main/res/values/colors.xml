@@ -89,4 +89,5 @@
     </color>
 
     <color name="edit_dialog_buttons_divider">#DCDCDC</color>
+    <color name="trial_popup_background">#242429</color>
 </resources>

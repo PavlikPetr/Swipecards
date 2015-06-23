@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/trial_vip_background"
+    android:fadingEdge="none"
+    android:fillViewport="true">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:padding="12dp"
+            android:src="@drawable/ic_close_trial_vip_popup" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/trial_vip_img_crown" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-37dp"
+                android:gravity="center"
+                android:text="@string/trial_vip_text"
+                android:textColor="#ddffffff"
+                android:textSize="28sp" />
+
+            <Button
+                android:id="@+id/get_trial_vip_button"
+                style="@style/Widget.Topface.Button.Big.Blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="15dp"
+                android:minHeight="46dp"
+                android:minWidth="198dp"
+                android:singleLine="true"
+                android:text="@string/trial_vip_button_text" />
+        </LinearLayout>
+    </FrameLayout>
+</ScrollView>

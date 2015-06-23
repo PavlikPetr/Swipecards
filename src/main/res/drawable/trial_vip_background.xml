@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/trial_popup_background" />
+    <item android:drawable="@drawable/trial_vip_bg_shadow" />
+
+</layer-list>

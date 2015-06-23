@@ -133,6 +133,12 @@
         </item>
     </style>
 
+    <style name="Theme.Topface.NoActionBar.TrialVipPopup">
+        <item name="android:statusBarColor" tools:ignore="NewApi">
+            @color/trial_popup_background
+        </item>
+    </style>
+
     <style name="Theme.Topface.NoActionBar.Filterlist" parent="Theme.Topface.NoActionBar">
         <item name="android:windowBackground">@drawable/filter_dialog_background</item>
     </style>
