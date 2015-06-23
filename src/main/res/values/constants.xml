@@ -16,7 +16,7 @@
     <string name="settings_feedback_internal">Оставить отзыв</string>
     <string name="settings_low_rate_internal">low_rate_%d</string>
     <string name="feedback_subject_ban_internal">Жалоба на несправедливый бан</string>
-
+    <string name="usd">\u0020USD</string>
     <string name="photo_is_set_tag">photo_is_set_tag</string>
 
     <string name="default_ban_time">10:00</string>

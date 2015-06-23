@@ -49,10 +49,10 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
                 break;
             case INTENT_CHANGE_PASSWORD:
                 boolean needExit = intent.getBooleanExtra(SettingsTopfaceAccountFragment.NEED_EXIT, false);
-                fragment = SettingsChangeAuthData.newInstance(needExit, true);
+                fragment = SettingsChangeAuthDataFragment.newInstance(needExit, true);
                 break;
             case INTENT_CHANGE_EMAIL:
-                fragment = SettingsChangeAuthData.newInstance(false, false);
+                fragment = SettingsChangeAuthDataFragment.newInstance(false, false);
                 break;
             case INTENT_FEEDBACK:
                 fragment = new SettingsFeedbackFragment();

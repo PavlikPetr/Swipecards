@@ -21,20 +21,27 @@ public class ActionBarTitleSetterDelegate {
     public ActionBarTitleSetterDelegate(ActionBar actionBar) {
         mNoActionBar = (actionBar == null);
         if (!mNoActionBar) {
-            mTitle = (TextView) actionBar.getCustomView().findViewById(R.id.title);
-            mSubtitle = (TextView) actionBar.getCustomView().findViewById(R.id.subtitle);
+            View view = actionBar.getCustomView();
+            if (view != null) {
+                mTitle = (TextView) view.findViewById(R.id.title);
+                mSubtitle = (TextView) view.findViewById(R.id.subtitle);
+            }
         }
     }
 
     public void setActionBarTitles(String title, String subtitle) {
         if (mNoActionBar) return;
-        mSubtitle.setVisibility(View.VISIBLE);
-        mTitle.setText(title);
-        if (TextUtils.isEmpty(subtitle)) {
-            mSubtitle.setVisibility(View.GONE);
-            return;
+        if (mTitle != null) {
+            mTitle.setText(title);
         }
-        mSubtitle.setText(subtitle);
+        if (mSubtitle != null) {
+            mSubtitle.setVisibility(View.VISIBLE);
+            if (TextUtils.isEmpty(subtitle)) {
+                mSubtitle.setVisibility(View.GONE);
+                return;
+            }
+            mSubtitle.setText(subtitle);
+        }
     }
 
     public void setActionBarTitles(int title, int subtitle) {

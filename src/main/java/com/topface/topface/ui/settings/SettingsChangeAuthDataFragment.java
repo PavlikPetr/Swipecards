@@ -27,7 +27,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-public class SettingsChangeAuthData extends BaseFragment implements OnClickListener {
+public class SettingsChangeAuthDataFragment extends BaseFragment implements OnClickListener {
 
     private View mLockerView;
     private EditText mEdMainField;
@@ -38,11 +38,11 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
     private boolean mNeedExit;
     private boolean mChangePassword;
 
-    public static SettingsChangeAuthData newInstance(boolean needExit, boolean changePassword) {
+    public static SettingsChangeAuthDataFragment newInstance(boolean needExit, boolean changePassword) {
         Bundle args = new Bundle();
         args.putBoolean("needExit", needExit);
         args.putBoolean("changePassword", changePassword);
-        SettingsChangeAuthData fragment = new SettingsChangeAuthData();
+        SettingsChangeAuthDataFragment fragment = new SettingsChangeAuthDataFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -71,13 +71,12 @@ public class SettingsChangeAuthData extends BaseFragment implements OnClickListe
         }
         mBtnSave.setOnClickListener(this);
         if (mChangePassword) {
-            mEdMainField.setHint(R.string.password);
-            mEdConfirmationField.setHint(R.string.password_confirmation_hint);
+            mOldPassword.setHint(R.string.enter_old_password);
+            mOldPassword.setInputType(mEdMainField.getInputType());
+            mEdMainField.setHint(R.string.enter_new_password);
             mEdMainField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             mEdConfirmationField.setHint(R.string.password_confirmation_hint);
             mEdConfirmationField.setInputType(mEdMainField.getInputType());
-            mOldPassword.setHint(R.string.enter_old_password);
-            mOldPassword.setInputType(mEdMainField.getInputType());
         } else {
             mEdMainField.setHint(R.string.email);
             mEdConfirmationField.setVisibility(View.GONE);

@@ -56,6 +56,7 @@
     <string name="editor_ban_result_ok">Пользователь забанен.</string>
     <string name="editor_ban_unban_user">Убрать бан</string>
     <string name="editor_ban_unban_user_result">Разбанен</string>
+    <string name="editor_transport">Transport:</string>
 
     <string-array name="editor_debug_titles">
         <item>Только в debug режиме</item>
