@@ -620,7 +620,9 @@ public class OverflowMenu {
     }
 
     public void onReleaseOverflowMenu() {
-        mBalanceSubscription.unsubscribe();
+        if (mBalanceSubscription != null) {
+            mBalanceSubscription.unsubscribe();
+        }
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(mUpdateActionsReceiver);
         mOverflowMenuFields = null;
         mActivity = null;

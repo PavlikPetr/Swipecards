@@ -108,7 +108,7 @@ public class AppState {
         }
     }
 
-    public class DataAndObservable<T> {
+    private class DataAndObservable<T> {
         private BehaviorSubject<T> mBehaviorSubject;
         private T mObject;
 
