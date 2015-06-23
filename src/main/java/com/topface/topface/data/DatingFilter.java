@@ -34,8 +34,10 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
     //Эти два параметра имеют одно и тоже значение в базе
     public int breast;
     public int finances;
-    public int height;
-    public int weight;
+    public int minHeight;
+    public int maxHeight;
+    public int minWeight;
+    public int maxWeight;
     private static Boolean mOnlyOnlineDating;
 
     public DatingFilter() {
@@ -85,8 +87,10 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
         finances = data.optInt("finances");
         marriage = data.optInt("marriage");
         character = data.optInt("character");
-        height = data.optInt("height");
-        weight = data.optInt("weight");
+        minHeight = data.optInt("minHeight");
+        maxHeight = data.optInt("maxHeight");
+        minWeight = data.optInt("minWeight");
+        maxWeight = data.optInt("maxWeight");
     }
 
     private void trimToMinMaxAge() {
@@ -115,8 +119,10 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
             else if (filter.alcohol != alcohol) return false;
             else if (filter.breast != breast && filter.sex == Static.GIRL) return false;
             else if (filter.finances != finances) return false;
-            else if (filter.height != height) return false;
-            else if (filter.weight != weight) return false;
+            else if (filter.minHeight != minHeight) return false;
+            else if (filter.maxHeight != maxHeight) return false;
+            else if (filter.minWeight != minWeight) return false;
+            else if (filter.maxWeight != maxWeight) return false;
 
             return true;
 
@@ -142,9 +148,10 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
         filter.alcohol = alcohol;
         filter.breast = breast;
         filter.finances = finances;
-        filter.height = height;
-        filter.weight = weight;
-
+        filter.minHeight = minHeight;
+        filter.maxHeight = maxHeight;
+        filter.minWeight = minWeight;
+        filter.maxWeight = maxWeight;
         return filter;
     }
 
@@ -163,8 +170,10 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
                 alcohol + "#" +
                 breast + "#" +
                 finances + "#" +
-                height + "#" +
-                weight + "#" +
+                minHeight + "#" +
+                maxHeight + "#" +
+                minWeight + "#" +
+                maxWeight + "#" +
                 DatingFilter.getOnlyOnlineField();
     }
 
@@ -192,8 +201,10 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
         dest.writeInt(character);
         dest.writeInt(breast);
         dest.writeInt(finances);
-        dest.writeInt(height);
-        dest.writeInt(weight);
+        dest.writeInt(minHeight);
+        dest.writeInt(maxHeight);
+        dest.writeInt(minWeight);
+        dest.writeInt(maxWeight);
     }
 
     @SuppressWarnings({"rawtypes", "UnusedDeclaration"})
@@ -220,9 +231,10 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
                     result.character = in.readInt();
                     result.breast = in.readInt();
                     result.finances = in.readInt();
-                    result.height = in.readInt();
-                    result.weight = in.readInt();
-
+                    result.minHeight = in.readInt();
+                    result.maxHeight = in.readInt();
+                    result.minWeight = in.readInt();
+                    result.maxWeight = in.readInt();
                     return result;
                 }
 

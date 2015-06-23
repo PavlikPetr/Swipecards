@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.StringRes;
 import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -26,8 +27,8 @@ import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.adapters.SpinnerAdapter;
+import com.topface.topface.ui.dialogs.FilterConstitutionDialog;
 import com.topface.topface.ui.dialogs.FilterListDialog;
-import com.topface.topface.ui.dialogs.FilterNumberPickerDialog;
 import com.topface.topface.ui.views.CitySearchView;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
@@ -37,6 +38,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import rx.functions.Action1;
 
 public class FilterFragment extends AbstractEditFragment implements OnClickListener {
 
@@ -75,16 +78,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         @Override
         public void onRowClickListener(int id, int item) {
             switch (id) {
-                case R.id.loFilterHeight:
-//                    mFilter.height = item;
-//                    setText(mFormInfo.getEntry(R.array.form_main_status, mFilter.height),
-//                            mLoFilterDatingStatus);
-                    break;
-                case R.id.loFilterWeight:
-//                    mFilter.weight = item;
-//                    setText(mFormInfo.getEntry(R.array.form_main_status, mFilter.weight),
-//                            mLoFilterDatingStatus);
-                    break;
                 case R.id.loFilterDatingStatus:
                     mFilter.xstatus = item;
                     setText(mFormInfo.getEntry(R.array.form_main_status, mFilter.xstatus),
@@ -252,16 +245,18 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
         // Height Status
         mLoFilterHeight = (ViewGroup) root.findViewById(R.id.loFilterHeight);
-        setText(R.array.form_main_height,
-                "Default",
+        setText(R.array.form_main_height, (mFilter.minHeight > 0 && mFilter.maxHeight > 0)
+                        ? String.format(getActivity().getString(R.string.filter_constitution_template), mFilter.minHeight, mFilter.maxHeight)
+                        : getActivity().getString(R.string.general_any),
                 mLoFilterHeight);
         mLoFilterHeight.setTag(R.array.form_main_status);
         mLoFilterHeight.setOnClickListener(this);
 
         // Weight Status
         mLoFilterWeight = (ViewGroup) root.findViewById(R.id.loFilterWeight);
-        setText(R.array.form_main_weight,
-                "Default",
+        setText(R.array.form_main_weight, (mFilter.minWeight > 0 && mFilter.maxWeight > 0)
+                        ? String.format(getActivity().getString(R.string.filter_constitution_template), mFilter.minWeight, mFilter.maxWeight)
+                        : getActivity().getString(R.string.general_any),
                 mLoFilterWeight);
         mLoFilterWeight.setTag(R.array.form_main_status);
         mLoFilterWeight.setOnClickListener(this);
@@ -322,7 +317,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     private void setText(int titleId, String text, ViewGroup frame) {
-        String s = mFormInfo.getFormTitle(titleId);
         ((TextView) frame.findViewWithTag("tvFilterTitle")).setText(mFormInfo.getFormTitle(titleId));
         TextView textView = (TextView) frame.findViewWithTag("tvFilterText");
         textView.setText(text);
@@ -404,15 +398,37 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 }
                 break;
             case R.id.loFilterHeight:
-                FilterNumberPickerDialog.newInstance(true, getActivity().getString(R.string.form_main_height_0))
-                        .show(getActivity().getFragmentManager(), FilterListDialog.TAG);
+                showConstiteutionDialog(true, R.string.form_main_height_0);
                 break;
             case R.id.loFilterWeight:
-                FilterNumberPickerDialog.newInstance(false, getActivity().getString(R.string.form_main_weight_0))
-                        .show(getActivity().getFragmentManager(), FilterListDialog.TAG);
+                showConstiteutionDialog(false, R.string.form_main_weight_0);
                 break;
         }
         refreshSaveState();
+    }
+
+    private void showConstiteutionDialog(final boolean isHeight, @StringRes int resId) {
+        final FilterConstitutionDialog dialog = FilterConstitutionDialog.newInstance(isHeight, getActivity().getString(resId));
+        dialog.getConstitutionLimitsObservable().subscribe(new Action1<FilterConstitutionDialog.ConstitutionLimits>() {
+            @Override
+            public void call(FilterConstitutionDialog.ConstitutionLimits constitutionLimits) {
+                if (constitutionLimits.min == 0 || constitutionLimits.max == 0) {
+                    setText(getActivity().getString(R.string.general_any), isHeight ? mLoFilterHeight : mLoFilterWeight);
+                } else {
+                    setText(String.format(isHeight ? getActivity().getString(R.string.filter_constitution_template) :
+                                    getActivity().getString(R.string.filter_constitution_template),
+                            constitutionLimits.min, constitutionLimits.max), isHeight ? mLoFilterHeight : mLoFilterWeight);
+                }
+                if (isHeight) {
+                    mFilter.minHeight = constitutionLimits.min;
+                    mFilter.maxHeight = constitutionLimits.max;
+                } else {
+                    mFilter.minWeight = constitutionLimits.min;
+                    mFilter.maxWeight = constitutionLimits.max;
+                }
+            }
+        });
+        dialog.show(getActivity().getFragmentManager(), FilterListDialog.TAG);
     }
 
     // create array for spinner Sex
