@@ -180,9 +180,7 @@ public class Options extends AbstractData {
     protected void fillData(JSONObject response, boolean cacheToPreferences) {
         try {
             priceAdmiration = response.optInt("admirationPrice");
-            if (response.has("experimentTrialVip")) {
-                trialVipExperiment = JsonUtils.fromJson(response.optString("experimentTrialVip"), TrialVipExperiment.class);
-            }
+            trialVipExperiment = JsonUtils.optFromJson(response.optString("experimentTrialVip"), TrialVipExperiment.class, new TrialVipExperiment());
             // по умолчанию превью в диалогах всегда отображаем
             hidePreviewDialog = response.optBoolean("hidePreviewDialog", false);
             priceLeader = response.optInt("leaderPrice");

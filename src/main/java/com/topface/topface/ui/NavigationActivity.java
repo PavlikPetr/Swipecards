@@ -26,7 +26,6 @@ import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.ActivityResultData;
 import com.topface.topface.data.City;
 import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.requests.IApiResponse;
@@ -37,7 +36,6 @@ import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.fragments.MenuFragment;
-import com.topface.topface.ui.fragments.TransparentMarketFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.utils.AddPhotoHelper;
@@ -75,7 +73,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     public static final String INTENT_EXIT = "EXIT";
     public static final String PAGE_SWITCH = "Page switch: ";
 
-    private ActivityResultData mActivityResultData = null;
     private Intent mPendingNextIntent;
     private boolean mIsActionBarHidden;
     private View mContentFrame;
@@ -162,8 +159,15 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     protected void onRegisterStartActions(StartActionsController startActionsController) {
         super.onRegisterStartActions(startActionsController);
+        final SequencedStartAction sequencedStartAction = new SequencedStartAction(this, AC_PRIORITY_HIGH);
+        sequencedStartAction.addAction(new TrialVipPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH, "first popup"));
+        // fullscreen
+        if (mFullscreenController != null) {
+            sequencedStartAction.addAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
+        }
+//        sequencedStartAction.callInBackground();
         // trial vip popup
-        startActionsController.registerMandatoryAction(new TrialVipPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH));
+        startActionsController.registerMandatoryAction(sequencedStartAction);
         // actions after registration
         startActionsController.registerAction(createAfterRegistrationStartAction(AC_PRIORITY_HIGH));
         // show popup when services disable
@@ -182,10 +186,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         startActionsController.registerAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
-        // fullscreen
-        if (mFullscreenController != null) {
-            startActionsController.registerMandatoryAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
-        }
     }
 
     private void initFullscreen() {
@@ -305,14 +305,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     protected void onResume() {
         super.onResume();
-        if (mActivityResultData != null) {
-            TransparentMarketFragment myFragment = (TransparentMarketFragment) getSupportFragmentManager()
-                    .findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
-            if (myFragment != null && mActivityResultData.resultCode == RESULT_CANCELED) {
-                getSupportFragmentManager().beginTransaction().remove(myFragment).commit();
-            }
-            mActivityResultData = null;
-        }
         //restart -> open NavigationActivity
         if (App.getLocaleConfig().fetchToSystemLocale()) {
             LocaleConfig.changeLocale(this, App.getLocaleConfig().getApplicationLocale());
@@ -489,7 +481,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mActivityResultData = new ActivityResultData(requestCode, resultCode, data);
         AbstractDialogFragment currentPopup = mPopupManager.getCurrentDialog();
         if (currentPopup != null) {
             currentPopup.onActivityResult(requestCode, resultCode, data);
@@ -612,4 +603,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     public void onUpClick() {
         toggleDrawerLayout();
     }
+
+
 }

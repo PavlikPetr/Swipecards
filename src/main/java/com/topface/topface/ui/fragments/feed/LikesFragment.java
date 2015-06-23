@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -236,6 +235,16 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         }
     }
 
+    private void addTransparentMarketFragment(Fragment fragment) {
+        getChildFragmentManager().beginTransaction()
+                .add(fragment, TransparentMarketFragment.class.getSimpleName()).commit();
+    }
+
+    private void removeTransparentMarketFragment(Fragment fragment) {
+        getChildFragmentManager().
+                beginTransaction().remove(fragment).commit();
+    }
+
     private void initBuyCoinsButton(final View inflated, final Options.BlockSympathy blockSympathyOptions, View currentView) {
         final Button btnBuy = (Button) currentView.findViewById(R.id.buy_coins_button);
         final ProgressBar progress = (ProgressBar) currentView.findViewById(R.id.prsLoading);
@@ -246,23 +255,28 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                     public void onClick(View v) {
                         if (experiment.isEnabled) {
                             Fragment f = getChildFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
-                            final TransparentMarketFragment fragment = f == null ? new TransparentMarketFragment() : (TransparentMarketFragment) f;
-                            Bundle bundle = new Bundle();
-                            bundle.putString(TransparentMarketFragment.SUBSCRIPTION_ID, experiment.productId);
-                            bundle.putBoolean(TransparentMarketFragment.IS_SUBSCRIPTION, experiment.isSubscription);
-                            fragment.setArguments(bundle);
-                            fragment.setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseCompleteAction() {
+                            final TransparentMarketFragment fragment = f == null ?
+                                    TransparentMarketFragment.newInstance(experiment.productId, experiment.isSubscription) :
+                                    (TransparentMarketFragment) f;
+                            fragment.setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
                                 @Override
-                                public void onPurchaseAction() {
-                                    if (isAdded()) {
-                                        updateData(false, true);
-                                        getActivity().getSupportFragmentManager().
-                                                beginTransaction().remove(fragment).commit();
+                                public void onPurchaseSuccess() {
+                                    updateData(false, true);
+                                }
+
+                                @Override
+                                public void onPopupClosed() {
+                                    if (fragment.isAdded()) {
+                                        removeTransparentMarketFragment(fragment);
                                     }
                                 }
                             });
-                            getActivity().getSupportFragmentManager().beginTransaction()
-                                    .add(fragment, TransparentMarketFragment.class.getSimpleName()).commit();
+                            if (!fragment.isAdded()) {
+                                addTransparentMarketFragment(fragment);
+                            } else {
+                                removeTransparentMarketFragment(fragment);
+                                addTransparentMarketFragment(fragment);
+                            }
                             return;
                         }
                         if (CacheProfile.money >= blockSympathyOptions.price) {

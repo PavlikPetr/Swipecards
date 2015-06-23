@@ -1,30 +1,27 @@
 package com.topface.topface.utils.controllers.startactions;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.fragments.TransparentMarketFragment;
 import com.topface.topface.utils.CacheProfile;
 
 
-public class TrialVipPopupAction extends DailyPopupAction {
+public class TrialVipPopupAction implements IStartAction {
 
     private int mPriority;
     private FragmentManager mFragmentManager;
     private TrialVipPopup mTrialVipPopup;
+    private String mTag;
+    private OnNextActionListener mOnNextActionListener;
 
-    public TrialVipPopupAction(FragmentManager fragmentManager, int priority) {
-        super(App.getContext());
+    public TrialVipPopupAction(FragmentManager fragmentManager, int priority, String tag) {
         mFragmentManager = fragmentManager;
         mPriority = priority;
-    }
-
-    @Override
-    protected boolean firstStartShow() {
-        return true;
+        mTag = tag;
     }
 
     @Override
@@ -33,11 +30,19 @@ public class TrialVipPopupAction extends DailyPopupAction {
 
     @Override
     public void callOnUi() {
+        Debug.error("callOnUi tag " + mTag);
         mTrialVipPopup = new TrialVipPopup();
-        mTrialVipPopup.setOnSubscribe(new TrialVipPopup.OnSubscribe() {
+        mTrialVipPopup.setOnSubscribe(new TrialVipPopup.OnFragmentActionsListener() {
             @Override
-            public void onClick() {
+            public void onSubscribeClick() {
                 showSubscriptionPopup();
+            }
+
+            @Override
+            public void onFragmentFinish() {
+                if (mOnNextActionListener != null) {
+                    mOnNextActionListener.onNextAction();
+                }
             }
         });
         mTrialVipPopup.show(mFragmentManager, TrialVipPopup.TAG);
@@ -62,29 +67,44 @@ public class TrialVipPopupAction extends DailyPopupAction {
 
     @Override
     public void setStartActionCallback(OnNextActionListener startActionCallback) {
-
+        mOnNextActionListener = startActionCallback;
     }
 
     private void showSubscriptionPopup() {
         Fragment f = mFragmentManager.findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
-        final TransparentMarketFragment fragment = f == null ? new TransparentMarketFragment() : (TransparentMarketFragment) f;
-        Bundle bundle = new Bundle();
-        bundle.putString(TransparentMarketFragment.SUBSCRIPTION_ID, CacheProfile.getOptions().trialVipExperiment.subscriptionSku);
-        bundle.putBoolean(TransparentMarketFragment.IS_SUBSCRIPTION, true);
-        fragment.setArguments(bundle);
-        fragment.setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseCompleteAction() {
+        final TransparentMarketFragment fragment = f == null ?
+                TransparentMarketFragment.newInstance(CacheProfile.getOptions().trialVipExperiment.subscriptionSku, true) :
+                (TransparentMarketFragment) f;
+        fragment.setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
             @Override
-            public void onPurchaseAction() {
+            public void onPurchaseSuccess() {
                 if (null != mTrialVipPopup) {
                     mTrialVipPopup.dismiss();
                 }
+            }
+
+            @Override
+            public void onPopupClosed() {
                 if (fragment.isAdded()) {
-                    mFragmentManager.
-                            beginTransaction().remove(fragment).commit();
+                    removeTransparentMarketFragment(fragment);
                 }
             }
         });
+        if (!fragment.isAdded()) {
+            addTransparentMarketFragment(fragment);
+        } else {
+            removeTransparentMarketFragment(fragment);
+            addTransparentMarketFragment(fragment);
+        }
+    }
+
+    private void addTransparentMarketFragment(Fragment fragment) {
         mFragmentManager.beginTransaction()
                 .add(fragment, TransparentMarketFragment.class.getSimpleName()).commit();
+    }
+
+    private void removeTransparentMarketFragment(Fragment fragment) {
+        mFragmentManager.
+                beginTransaction().remove(fragment).commit();
     }
 }

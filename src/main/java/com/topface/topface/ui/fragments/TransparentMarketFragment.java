@@ -1,25 +1,40 @@
 package com.topface.topface.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.topface.topface.App;
-import com.topface.topface.ui.fragments.buy.MarketBuyingFragment;
+import com.topface.topface.data.Products;
+import com.topface.topface.ui.fragments.buy.GoogleMarketBuyingFragment;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
+import java.util.List;
 
-public class TransparentMarketFragment extends MarketBuyingFragment {
+
+public class TransparentMarketFragment extends GoogleMarketBuyingFragment {
 
     public final static String SUBSCRIPTION_ID = "subscription_id";
     public final static String IS_SUBSCRIPTION = "is_subscription";
 
-    private onPurchaseCompleteAction mPurchaseCompleteAction;
+    private onPurchaseActions mPurchaseActions;
     private String mSubscriptionId;
     private boolean mIsSubscription;
+    private boolean isNeedCloseFragment = false;
+
+    public static TransparentMarketFragment newInstance(String skuId, boolean isSubscription) {
+        final TransparentMarketFragment fragment = new TransparentMarketFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(TransparentMarketFragment.SUBSCRIPTION_ID, skuId);
+        bundle.putBoolean(TransparentMarketFragment.IS_SUBSCRIPTION, isSubscription);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,25 +71,69 @@ public class TransparentMarketFragment extends MarketBuyingFragment {
     }
 
     @Override
+    protected Products getProducts() {
+        return null;
+    }
+
+    @Override
     public void onPurchased(Purchase product) {
         super.onPurchased(product);
-        mPurchaseCompleteAction.onPurchaseAction();
+        if (mPurchaseActions != null) {
+            mPurchaseActions.onPurchaseSuccess();
+        }
+    }
+
+    @Override
+    public void onInAppBillingSupported() {
+
+    }
+
+    @Override
+    public void onInAppBillingUnsupported() {
+
+    }
+
+    @Override
+    protected View getCoinsSubscriptionsButton(Products products, LinearLayout coinsButtonsContainer) {
+        return null;
+    }
+
+    @Override
+    protected List<Products.BuyButton> getCoinsProducts(Products products, boolean coinsMaskedExperiment) {
+        return null;
+    }
+
+    @Override
+    public Products.BuyButtonClickListener getCoinsSubscriptionClickListener() {
+        return null;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if (mPurchaseActions != null && isNeedCloseFragment) {
+            mPurchaseActions.onPopupClosed();
+        }
         //Устанавливаем тестовые покупки
         if (isTestPurchasesAvailable()) {
             setTestPaymentsState(App.getUserConfig().getTestPaymentFlag());
         }
     }
 
-    public void setOnPurchaseCompleteAction(onPurchaseCompleteAction purchaseCompliteAction) {
-        this.mPurchaseCompleteAction = purchaseCompliteAction;
+    public void setOnPurchaseCompleteAction(onPurchaseActions purchaseCompliteAction) {
+        this.mPurchaseActions = purchaseCompliteAction;
     }
 
-    public interface onPurchaseCompleteAction {
-        void onPurchaseAction();
+    public interface onPurchaseActions {
+
+        void onPurchaseSuccess();
+
+        void onPopupClosed();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        isNeedCloseFragment = true;
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

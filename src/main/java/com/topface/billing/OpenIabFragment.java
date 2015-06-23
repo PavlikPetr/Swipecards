@@ -28,6 +28,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PurchaseRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.edit.EditSwitcher;
+import com.topface.topface.ui.fragments.TransparentMarketFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
@@ -103,7 +104,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             if (parentFragmentClass != null && parentFragmentClass.isInstance(fragment)) {
                 //Да, вам не показалось, это рекурсивный вызов, но с пустым последним парметром
                 return processRequestCode(fragment.getChildFragmentManager(), requestCode, resultCode, data, null);
-            } else if (fragment instanceof OpenIabFragment && ((OpenIabFragment) fragment).getRequestCode() == requestCode) {
+            } else if ((fragment instanceof TransparentMarketFragment || fragment instanceof OpenIabFragment) && ((OpenIabFragment) fragment).getRequestCode() == requestCode) {
                 fragment.onActivityResult(requestCode, resultCode, data);
                 return true;
             }
@@ -232,7 +233,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             mIsTestPayments = savedInstanceState.getBoolean(IS_TEST_PURCHASES_ENABLED, false);
         }
         //После того как View создано проверяем, нужно ли показывать переключатель тестовых покупок
-        if (isTestPurchasesAvailable()) {
+        if (isTestPurchasesAvailable() && getView() != null) {
             ViewStub stub = (ViewStub) getView().findViewById(R.id.EditorTestStub);
             if (stub != null) {
                 View layout = stub.inflate();
@@ -297,7 +298,9 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             stopWaiting();
         }
         mHasDeferredPurchase = true;
-        mDeferredPurchaseButton = getView().findViewWithTag(btn);
+        if (getView() != null) {
+            mDeferredPurchaseButton = getView().findViewWithTag(btn);
+        }
         startWaiting();
     }
 

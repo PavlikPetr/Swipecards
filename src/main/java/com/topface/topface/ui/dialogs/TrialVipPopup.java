@@ -12,7 +12,7 @@ import com.topface.topface.utils.config.UserConfig;
 public class TrialVipPopup extends AbstractDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "TrialVipPopup";
-    private OnSubscribe mOnSubscribe;
+    private OnFragmentActionsListener mOnFragmentActionsListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,8 +49,8 @@ public class TrialVipPopup extends AbstractDialogFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.get_trial_vip_button:
-                if (mOnSubscribe != null) {
-                    mOnSubscribe.onClick();
+                if (mOnFragmentActionsListener != null) {
+                    mOnFragmentActionsListener.onSubscribeClick();
                 }
                 break;
             case R.id.iv_close:
@@ -71,11 +71,21 @@ public class TrialVipPopup extends AbstractDialogFragment implements View.OnClic
         incrPopupShowCounter();
     }
 
-    public void setOnSubscribe(OnSubscribe listener) {
-        mOnSubscribe = listener;
+    public void setOnSubscribe(OnFragmentActionsListener listener) {
+        mOnFragmentActionsListener = listener;
     }
 
-    public interface OnSubscribe {
-        void onClick();
+    public interface OnFragmentActionsListener {
+        void onSubscribeClick();
+
+        void onFragmentFinish();
+    }
+
+    @Override
+    public void dismiss() {
+        if (mOnFragmentActionsListener != null) {
+            mOnFragmentActionsListener.onFragmentFinish();
+        }
+        super.dismiss();
     }
 }
