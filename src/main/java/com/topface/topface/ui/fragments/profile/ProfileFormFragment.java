@@ -21,6 +21,8 @@ import com.topface.topface.data.City;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.ParallelApiRequest;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.CitySearchActivity;
@@ -53,7 +55,8 @@ public class ProfileFormFragment extends AbstractFormFragment {
                     if (form.dataId != data.dataId ||
                             data.dataId == FormItem.NO_RESOURCE_ID && !TextUtils.equals(form.value, data.value)) {
                         FormInfo info = new FormInfo(App.getContext(), CacheProfile.sex, Profile.TYPE_OWN_PROFILE);
-                        ApiRequest request = mMainFormTypes.contains(data.type) ?
+                        boolean isSettingsRequest = mMainFormTypes.contains(data.type);
+                        ApiRequest request = isSettingsRequest ?
                                 getSettingsRequest(data) : info.getFormRequest(data);
                         registerRequest(request);
                         form.isEditing = true;
@@ -77,7 +80,15 @@ public class ProfileFormFragment extends AbstractFormFragment {
                                 form.isEditing = false;
                                 mProfileFormListAdapter.notifyDataSetChanged();
                             }
-                        }).exec();
+                        });
+                        if (isSettingsRequest) {
+                            new ParallelApiRequest(getActivity())
+                                    .addRequest(request)
+                                    .addRequest(App.getProfileRequest(ProfileRequest.P_ALL))
+                                    .exec();
+                        } else {
+                            request.exec();
+                        }
                     }
                     break;
                 }

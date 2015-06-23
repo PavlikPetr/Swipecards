@@ -515,9 +515,9 @@
 
     <string name="password_confirmation_hint">Подтверждение пароля</string>
     <string name="password_hint">пароль</string>
-    <string name="enter_new_password">Введите новый пароль.</string>
-    <string name="enter_old_password">Введите старый пароль.</string>
-    <string name="enter_password_confirmation">Введите подтверждение пароля.</string>
+    <string name="enter_new_password">Введите новый пароль</string>
+    <string name="enter_old_password">Введите старый пароль</string>
+    <string name="enter_password_confirmation">Введите подтверждение пароля</string>
     <string name="passwords_mismatched">Пароли не совпадают.</string>
     <string name="old_password_mismatched">Неверный старый пароль.</string>
     <string name="passwords_matched">Новый и старый пароли совпадают.</string>
@@ -815,7 +815,6 @@
     <string name="premium_for_invitations_current_status">Вы уже набрали:\nПриглашений: %1$d\nРегистраций: %2$d</string>
     <string name="no_contacts_available">На устройстве нет контактов, доступных к отображению</string>
     <string name="sms_invite_title">Получите вип на сутки!</string>
-    <string name="sms_invite_subtitle">Получите вип на сутки!</string>
 
     <!--phones number statuses-->
     <string name="status_can_send_confirmation">Пригласить</string>
