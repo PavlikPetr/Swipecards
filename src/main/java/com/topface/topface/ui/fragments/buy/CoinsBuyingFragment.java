@@ -203,8 +203,6 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
                     if (isAdded()) {
                         initCoinsButtons(getView(), getProducts());
                     }
-                    LocalBroadcastManager.getInstance(App.getContext())
-                            .sendBroadcast(new Intent(Products.INTENT_UPDATE_PRODUCTS));
                 }
             });
         }

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.topface.topface.App;
-import com.topface.topface.data.Products;
 import com.topface.topface.ui.fragments.buy.GoogleMarketBuyingFragment;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
@@ -16,7 +15,7 @@ import org.onepf.oms.appstore.googleUtils.Purchase;
 
 public class TransparentMarketFragment extends GoogleMarketBuyingFragment {
 
-    public final static String SUBSCRIPTION_ID = "subscription_id";
+    public final static String PORDUCT_ID = "product_id";
     public final static String IS_SUBSCRIPTION = "is_subscription";
 
     private onPurchaseActions mPurchaseActions;
@@ -27,7 +26,7 @@ public class TransparentMarketFragment extends GoogleMarketBuyingFragment {
     public static TransparentMarketFragment newInstance(String skuId, boolean isSubscription) {
         final TransparentMarketFragment fragment = new TransparentMarketFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(TransparentMarketFragment.SUBSCRIPTION_ID, skuId);
+        bundle.putString(TransparentMarketFragment.PORDUCT_ID, skuId);
         bundle.putBoolean(TransparentMarketFragment.IS_SUBSCRIPTION, isSubscription);
         fragment.setArguments(bundle);
         return fragment;
@@ -37,8 +36,8 @@ public class TransparentMarketFragment extends GoogleMarketBuyingFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle bundle = getArguments();
         if (null != bundle) {
-            if (getArguments().containsKey(SUBSCRIPTION_ID)) {
-                mSubscriptionId = getArguments().getString(SUBSCRIPTION_ID, "");
+            if (getArguments().containsKey(PORDUCT_ID)) {
+                mSubscriptionId = getArguments().getString(PORDUCT_ID, "");
             }
             if (getArguments().containsKey(IS_SUBSCRIPTION)) {
                 mIsSubscription = getArguments().getBoolean(IS_SUBSCRIPTION);
@@ -65,11 +64,6 @@ public class TransparentMarketFragment extends GoogleMarketBuyingFragment {
                 buyItem(id);
             }
         }
-    }
-
-    @Override
-    protected Products getProducts() {
-        return null;
     }
 
     @Override
