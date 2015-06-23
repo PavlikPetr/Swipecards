@@ -19,16 +19,16 @@ import rx.Subscriber;
 import rx.observables.ConnectableObservable;
 
 /**
- * Диалог для вибора парамтров роста/веса
+ * Диалог для выбора парамтров роста/веса
  * Created by onikitin on 19.06.15.
  */
 public class FilterConstitutionDialog extends DialogFragment {
 
     private static final String HEIGHT_MARK = "height_mark";
     private static final String TITLE = "title";
-    @InjectView(R.id.numberStart)
+    @InjectView(R.id.pickerFirstLimit)
     NumberPicker mFirstLimit;
-    @InjectView(R.id.numberFinish)
+    @InjectView(R.id.pickerSecondLimit)
     NumberPicker mSecondLimit;
     private boolean mIsHeight;
     private String mTitle;

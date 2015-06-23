@@ -7,16 +7,16 @@
     android:gravity="center">
 
     <NumberPicker
-        android:id="@+id/numberStart"
+        android:id="@+id/pickerFirstLimit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"></NumberPicker>
 
     <NumberPicker
-        android:id="@+id/numberFinish"
+        android:id="@+id/pickerSecondLimit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="30dp"
-        android:layout_toRightOf="@+id/numberStart"
-        android:layout_toEndOf="@+id/numberStart"></NumberPicker>
+        android:layout_toRightOf="@+id/pickerFirstLimit"
+        android:layout_toEndOf="@+id/pickerFirstLimit"></NumberPicker>
 </RelativeLayout>
