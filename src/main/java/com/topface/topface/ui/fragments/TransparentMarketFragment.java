@@ -6,15 +6,12 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.topface.topface.App;
 import com.topface.topface.data.Products;
 import com.topface.topface.ui.fragments.buy.GoogleMarketBuyingFragment;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
-
-import java.util.List;
 
 
 public class TransparentMarketFragment extends GoogleMarketBuyingFragment {
@@ -91,21 +88,6 @@ public class TransparentMarketFragment extends GoogleMarketBuyingFragment {
     @Override
     public void onInAppBillingUnsupported() {
 
-    }
-
-    @Override
-    protected View getCoinsSubscriptionsButton(Products products, LinearLayout coinsButtonsContainer) {
-        return null;
-    }
-
-    @Override
-    protected List<Products.BuyButton> getCoinsProducts(Products products, boolean coinsMaskedExperiment) {
-        return null;
-    }
-
-    @Override
-    public Products.BuyButtonClickListener getCoinsSubscriptionClickListener() {
-        return null;
     }
 
     @Override
