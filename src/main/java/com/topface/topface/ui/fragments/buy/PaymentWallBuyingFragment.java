@@ -3,8 +3,6 @@ package com.topface.topface.ui.fragments.buy;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.LinearLayout;
 
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
@@ -81,11 +79,6 @@ public class PaymentWallBuyingFragment extends CoinsBuyingFragment {
     }
 
     @Override
-    protected View getCoinsSubscriptionsButton(Products products, LinearLayout coinsButtonsContainer) {
-        return null;
-    }
-
-    @Override
     protected List<Products.BuyButton> getCoinsProducts(Products products, boolean coinsMaskedExperiment) {
         return products.coins;
     }
@@ -99,11 +92,4 @@ public class PaymentWallBuyingFragment extends CoinsBuyingFragment {
                         PaymentWallProducts.TYPE.MOBILE
         );
     }
-
-    @Override
-    public Products.BuyButtonClickListener getCoinsSubscriptionClickListener() {
-        return null;
-    }
-
-
 }
