@@ -31,7 +31,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Products extends AbstractData {
-    public static final String INTENT_UPDATE_PRODUCTS = "com.topface.topface.action.UPDATE_PRODUCTS";
     private static final String PRICE = "{{price}}";
 
     public enum ProductType {
