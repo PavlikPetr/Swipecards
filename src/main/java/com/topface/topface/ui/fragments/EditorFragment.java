@@ -284,6 +284,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void initApiUrl(View rootLayout) {
+        ((TextView)rootLayout.findViewById(R.id.EditorTransport)).append(App.getApiTransport());
         mApiUrl = (Spinner) rootLayout.findViewById(R.id.EditorApiUrl);
 
         TextWatcher watcher = new TextWatcher() {

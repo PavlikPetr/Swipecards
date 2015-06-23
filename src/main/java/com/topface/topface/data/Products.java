@@ -121,7 +121,6 @@ public class Products extends AbstractData {
             fillProductsArray(likes, data.optJSONArray(ProductType.LIKES.getName()));
             fillProductsArray(premium, data.optJSONArray(ProductType.PREMIUM.getName()));
             fillProductsArray(others, data.optJSONArray(ProductType.OTHERS.getName()));
-
         } catch (Exception e) {
             Debug.error("Products parsing error", e);
         }
@@ -337,44 +336,6 @@ public class Products extends AbstractData {
     }
 
     /**
-     * Creates and adds view for buy button which opens new screen action
-     *
-     * @param root     container for button
-     * @param openBtn  data to configure button
-     * @param context  current context
-     * @param listener to process click
-     * @return create view
-     */
-    public static View setOpenButton(LinearLayout root, final BuyButton openBtn,
-                                     Context context, final BuyButtonClickListener listener) {
-        View view = createBuyButtonLayout(context, null, openBtn.title, openBtn.discount > 0,
-                openBtn.showType, null, openBtn.hint, listener);
-        if (view != null) {
-            root.addView(view);
-            return view;
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Takes created buy button and changes it's UI representation
-     * based on new buy button configure data
-     *
-     * @param button     button view created before
-     * @param newOpenBtn new buy button configure data
-     * @param listener   to process click
-     */
-    public static void switchOpenButtonTexts(View button, final BuyButton newOpenBtn, BuyButtonClickListener listener) {
-        boolean discount = newOpenBtn.discount > 0;
-        initBuyButtonViews(
-                button, null, newOpenBtn.title, discount, null, newOpenBtn.hint, listener,
-                getBuyButtonTextColor(newOpenBtn.showType),
-                getBuyButtonBackground(discount, newOpenBtn.showType)
-        );
-    }
-
-    /**
      * Can check if this product id is in on of subscriptions list
      *
      * @param product product
@@ -514,10 +475,6 @@ public class Products extends AbstractData {
                     noSubscriptionButton = new BuyButton(json.optJSONObject("noSubscriptionButton"));
                     status = new StatusInfo(json.optJSONObject("status"));
                 }
-            }
-
-            public BuyButton getSubscriptionButton() {
-                return status.isActive() ? hasSubscriptionButton : noSubscriptionButton;
             }
 
             public class MonthInfo {

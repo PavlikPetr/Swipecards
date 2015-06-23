@@ -16,11 +16,14 @@ import android.widget.TextView;
 import com.topface.billing.OpenIabFragment;
 import com.topface.statistics.android.Slices;
 import com.topface.statistics.android.StatisticsTracker;
+import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
 import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.CacheProfile;
@@ -31,8 +34,15 @@ import com.topface.topface.utils.Utils;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
+
 public class PurchasesFragment extends BaseFragment {
 
+    @Inject
+    TopfaceAppState mAppState;
     public static final String IS_VIP_PRODUCTS = "is_vip_products";
     public static final String LAST_PAGE = "LAST_PAGE";
     public static final String ARG_TAG_EXRA_TEXT = "extra_text";
@@ -56,19 +66,23 @@ public class PurchasesFragment extends BaseFragment {
     private TextView mCurCoins;
     private TextView mCurLikes;
     private boolean mSkipBonus;
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateBalanceCounters();
-            setResourceInfoText();
-        }
-    };
     private boolean mIsVip;
     private String mResourceInfoText;
+    private BalanceData mBalanceData;
+    private Action1<BalanceData> mBalanceAction = new Action1<BalanceData>() {
+        @Override
+        public void call(BalanceData balanceData) {
+            mBalanceData = balanceData;
+            updateBalanceCounters(balanceData);
+        }
+    };
+    private Subscription mBalanceSubscription;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.from(getActivity()).inject(this);
+        mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
         if (savedInstanceState != null) {
             mSkipBonus = savedInstanceState.getBoolean(SKIP_BONUS, false);
         }
@@ -79,7 +93,6 @@ public class PurchasesFragment extends BaseFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.purchases_fragment, null);
         initViews(root, savedInstanceState);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(CountersManager.UPDATE_BALANCE));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mVipPurchasedReceiver, new IntentFilter(CountersManager.UPDATE_VIP_STATUS));
         return root;
     }
@@ -93,15 +106,20 @@ public class PurchasesFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        setResourceInfoText(CacheProfile.premium ? null : getInfoText());
-        updateBalanceCounters();
+        setResourceInfoText(mBalanceData.premium ? null : getInfoText());
+        updateBalanceCounters(mBalanceData);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mVipPurchasedReceiver);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mBalanceSubscription.unsubscribe();
     }
 
     public boolean forceBonusScreen(String infoText) {
@@ -227,13 +245,13 @@ public class PurchasesFragment extends BaseFragment {
         root.findViewById(R.id.resources_layout).setVisibility(View.VISIBLE);
         mCurCoins = (TextView) root.findViewById(R.id.coins_textview);
         mCurLikes = (TextView) root.findViewById(R.id.likes_textview);
-        updateBalanceCounters();
+        updateBalanceCounters(mBalanceData);
     }
 
-    private void updateBalanceCounters() {
-        if (mCurCoins != null && mCurLikes != null) {
-            mCurCoins.setText(Integer.toString(CacheProfile.money));
-            mCurLikes.setText(Integer.toString(CacheProfile.likes));
+    private void updateBalanceCounters(BalanceData balance) {
+        if (mCurCoins != null && mCurLikes != null && balance != null) {
+            mCurCoins.setText(Integer.toString(balance.money));
+            mCurLikes.setText(Integer.toString(balance.likes));
         }
     }
 
@@ -243,7 +261,7 @@ public class PurchasesFragment extends BaseFragment {
         if (args != null) {
             int type = args.getInt(ARG_ITEM_TYPE);
             int coins = args.getInt(ARG_ITEM_PRICE);
-            int diff = coins - CacheProfile.money;
+            int diff = coins - mBalanceData.money;
             String extraText = args.getString(ARG_TAG_EXRA_TEXT);
             switch (type) {
                 case TYPE_GIFT:

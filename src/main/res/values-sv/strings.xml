@@ -630,7 +630,6 @@
     <string name="premium_for_invitations_current_status">Du har redan samlat ihop:\nInbjudningar: %1$d\nRegistreringar: %2$d</string>
     <string name="no_contacts_available">På apparaten finns inte kontakter tillgängliga för skildring</string>
     <string name="sms_invite_title">Få ett dygns VIP!</string>
-    <string name="sms_invite_subtitle">Få ett dygns VIP!</string>
     <string name="status_can_send_confirmation">Bjud in</string>
     <string name="status_invilid_phone_number">Numret är ogiltigt</string>
     <string name="status_confirmation_was_sent">Väntar på registrering</string>

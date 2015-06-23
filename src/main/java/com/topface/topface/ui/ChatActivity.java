@@ -37,6 +37,11 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
         return new ChatFragment();
     }
 
+    //Если itemType соответствует популярному юзеру не показываем клаву в чате
+    public static Intent createIntent(int id, String nameAndAge, String city, String feedItemId, Photo photo, boolean fromGcm, int itemType) {
+        return createIntent(id, nameAndAge, city, feedItemId, photo, fromGcm).putExtra(ChatFragment.USER_TYPE, itemType);
+    }
+
     public static Intent createIntent(int id, String nameAndAge, String city, String feedItemId, Photo photo, boolean fromGcm) {
         Intent intent = new Intent(App.getContext(), ChatActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_ID, id);

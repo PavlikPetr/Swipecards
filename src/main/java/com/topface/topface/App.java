@@ -32,6 +32,7 @@ import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.Profile;
+import com.topface.topface.modules.TopfaceModule;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.AmazonProductsRequest;
 import com.topface.topface.requests.ApiRequest;
@@ -73,6 +74,8 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import dagger.ObjectGraph;
+
 @ReportsCrashes(formUri = "817b00ae731c4a663272b4c4e53e4b61")
 public class App extends Application {
 
@@ -80,6 +83,7 @@ public class App extends Application {
     public static final String CONNECTIVITY_CHANGE_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
     private static final long PROFILE_UPDATE_TIMEOUT = 1000 * 120;
 
+    private ObjectGraph mGraph;
     private static Context mContext;
     private static Intent mConnectionIntent;
     private static ConnectionChangeReceiver mConnectionReceiver;
@@ -107,6 +111,20 @@ public class App extends Application {
                 .addRequest(getProfileRequest(ProfileRequest.P_ALL))
                 .callback(handler)
                 .exec();
+    }
+
+    private void initObjectGraphForInjections() {
+        mGraph = ObjectGraph.create(new TopfaceModule());
+        mGraph.injectStatics();
+        mGraph.inject(this);
+    }
+
+    public void inject(Object obj) {
+        mGraph.inject(obj);
+    }
+
+    public static App from(Context context) {
+        return (App) context.getApplicationContext();
     }
 
     private static ApiRequest getPaymentwallProductsRequest() {
@@ -218,7 +236,7 @@ public class App extends Application {
         getProfileRequest(ProfileRequest.P_ALL).exec();
     }
 
-    private static ApiRequest getProfileRequest(final int part) {
+    public static ApiRequest getProfileRequest(final int part) {
         mLastProfileUpdate = System.currentTimeMillis();
         return new ProfileRequest(part, App.getContext())
                 .callback(new DataApiHandler<Profile>() {
@@ -339,6 +357,7 @@ public class App extends Application {
         super.onCreate();
         LeakCanary.install(this);
         mContext = getApplicationContext();
+        initObjectGraphForInjections();
         //Включаем отладку, если это дебаг версия
         enableDebugLogs();
         //Включаем логирование ошибок

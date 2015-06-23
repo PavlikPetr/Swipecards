@@ -3,7 +3,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#CECECE">
+    android:background="#4c4c4c">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -49,6 +49,12 @@
             android:layout_height="wrap_content"
             android:id="@+id/EditorInfoEditorStatus"
             android:text="@string/editor_title_editor_status" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/editor_transport"
+            android:id="@+id/EditorTransport" />
 
         <!-- Настройка подключения к API: URL, версия, ревизия -->
         <RelativeLayout

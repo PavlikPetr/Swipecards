@@ -26,7 +26,9 @@ import com.topface.IllustratedTextView.IllustratedTextView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.Photo;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
@@ -38,7 +40,6 @@ import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.ResourcesUtils;
 import com.topface.topface.utils.config.UserConfig;
@@ -48,6 +49,11 @@ import com.topface.topface.utils.social.AuthToken;
 
 import java.io.Serializable;
 import java.util.Arrays;
+
+import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.BONUS;
@@ -70,12 +76,23 @@ public class MenuFragment extends Fragment {
     public static final String SELECTED_FRAGMENT_ID = "com.topface.topface.action.menu.item";
     private static final String CURRENT_FRAGMENT_STATE = "menu_fragment_current_fragment";
 
+    @Inject
+    TopfaceAppState mAppState;
     private OnFragmentSelectedListener mOnFragmentSelected;
     private FragmentId mSelectedFragment = UNDEFINED;
     private LeftMenuAdapter mAdapter;
     private boolean mHardwareAccelerated;
     private View mEditorItem;
     private IllustratedTextView textBalance;
+    private BalanceData mBalanceData;
+    private Action1<BalanceData> mBalanceAction = new Action1<BalanceData>() {
+        @Override
+        public void call(BalanceData balanceData) {
+            mBalanceData = balanceData;
+            updateBalance(balanceData);
+        }
+    };
+    private Subscription mBalanceSubscription;
 
     private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -84,10 +101,6 @@ public class MenuFragment extends Fragment {
             if (action == null) return;
 
             switch (action) {
-                case CountersManager.UPDATE_BALANCE:
-                    mAdapter.refreshCounterBadges();
-                    updateBalance();
-                    break;
                 case CacheProfile.PROFILE_UPDATE_ACTION:
                     initProfileMenuItem(mProfileMenuItem);
                     initEditor();
@@ -163,7 +176,8 @@ public class MenuFragment extends Fragment {
                     btnMenu.setText(ResourcesUtils.getFragmentNameResId(FragmentId.EDITOR));
                     mEditorItem.setTag(FragmentId.EDITOR);
                     mEditorItem.setOnClickListener(new View.OnClickListener() {
-                        @Override public void onClick(View v) {
+                        @Override
+                        public void onClick(View v) {
                             onMenuSelected(FragmentId.EDITOR);
                         }
                     });
@@ -216,7 +230,8 @@ public class MenuFragment extends Fragment {
 
             View lastActivated;
 
-            @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position < mAdapter.getCount()) {
                     onMenuSelected(mAdapter.getItem(position).getMenuId());
                     if (lastActivated != null) {
@@ -242,13 +257,13 @@ public class MenuFragment extends Fragment {
         ViewGroup footer = (ViewGroup) View.inflate(getActivity(), R.layout.layout_left_menu_footer, null);
         mListView.addFooterView(footer);
         textBalance = (IllustratedTextView) footer.findViewById(R.id.btnMenu);
-        updateBalance();
+        updateBalance(mBalanceData);
         initEditor();
     }
 
-    private void updateBalance() {
-        if (textBalance != null) {
-            textBalance.setText(String.format(getString(R.string.balance), CacheProfile.money, CacheProfile.likes));
+    private void updateBalance(BalanceData balanceData) {
+        if (textBalance != null && balanceData != null) {
+            textBalance.setText(String.format(getString(R.string.balance), balanceData.money, balanceData.likes));
         }
     }
 
@@ -282,6 +297,8 @@ public class MenuFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.from(getActivity()).inject(this);
+        mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
         //Показываем фрагмент только если мы авторизованы
         if (!AuthToken.getInstance().isEmpty()) {
             if (savedInstanceState != null) {
@@ -307,6 +324,12 @@ public class MenuFragment extends Fragment {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mBalanceSubscription.unsubscribe();
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(
@@ -320,11 +343,10 @@ public class MenuFragment extends Fragment {
         super.onResume();
         IntentFilter filter = new IntentFilter();
         filter.addAction(CacheProfile.PROFILE_UPDATE_ACTION);
-        filter.addAction(CountersManager.UPDATE_BALANCE);
         filter.addAction(SELECT_MENU_ITEM);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, filter);
         initProfileMenuItem(mProfileMenuItem);
-        updateBalance();
+        updateBalance(mBalanceData);
     }
 
     @Override

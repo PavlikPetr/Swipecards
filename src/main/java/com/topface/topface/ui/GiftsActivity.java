@@ -182,7 +182,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(GIFTS_LIST, mAllGifts);
         outState.putBoolean(SUCCESS_TOAST_AVAILABLE, mIsSuccessToastAvailable);

@@ -142,6 +142,7 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
         return isCorrectSrc;
     }
 
+    @SuppressWarnings("unused")
     public void setRemoteImageBitmap(Bitmap bitmap) {
         BitmapProcessor processor = getPreProcessor();
         if (processor != null) {

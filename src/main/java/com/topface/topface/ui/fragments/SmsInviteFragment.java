@@ -199,7 +199,7 @@ public class SmsInviteFragment extends ContentListFragment {
 
     @Override
     protected String getTitle() {
-        return getString(R.string.sms_invite_subtitle);
+        return getString(R.string.sms_invite_title);
     }
 
     private class ContactsAdapter extends BaseAdapter {

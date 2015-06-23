@@ -96,7 +96,7 @@ import java.util.TimerTask;
 public class ChatFragment extends AnimatedFragment implements View.OnClickListener {
 
     public static final int LIMIT = 50;
-
+    public static final String USER_TYPE = "type";
     public static final String FRIEND_FEED_USER = "user_profile";
     public static final String ADAPTER_DATA = "adapter";
     public static final String WAS_FAILED = "was_failed";
@@ -258,6 +258,10 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         mBackgroundController.startAnimation();
         // Edit Box
         mEditBox = (EditText) root.findViewById(R.id.edChatBox);
+        if (getArguments() != null &&
+                getArguments().getInt(ChatFragment.USER_TYPE) == FeedDialog.MESSAGE_POPULAR_STAGE_1) {
+            mEditBox.clearFocus();
+        }
         if (mInitialMessage != null) {
             mEditBox.setText(mInitialMessage);
             mEditBox.setSelection(mInitialMessage.length());
