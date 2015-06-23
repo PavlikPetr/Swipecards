@@ -10,7 +10,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.BalanceData;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListAddRequest;
@@ -20,6 +22,7 @@ import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.EditorProfileActionsActivity;
@@ -30,6 +33,11 @@ import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
 
 import static com.topface.topface.utils.actionbar.OverflowMenu.OverflowMenuItem.ADD_TO_BLACK_LIST_ACTION;
 import static com.topface.topface.utils.actionbar.OverflowMenu.OverflowMenuItem.ADD_TO_BOOKMARK_ACTION;
@@ -46,6 +54,8 @@ import static com.topface.topface.utils.actionbar.OverflowMenu.OverflowMenuItem.
  */
 public class OverflowMenu {
 
+    @Inject
+    TopfaceAppState mAppState;
     private final static String INTENT_BUY_VIP_FROM = "UserProfileFragment";
     public static final String USER_ID_FOR_REMOVE = "user_id";
 
@@ -55,6 +65,14 @@ public class OverflowMenu {
     private RateController mRateController;
     private ApiResponse mSavedResponse = null;
     private OverflowMenuUser mOverflowMenuFields = null;
+    private BalanceData mBalanceData;
+    private Action1<BalanceData> mBalanceAction = new Action1<BalanceData>() {
+        @Override
+        public void call(BalanceData balanceData) {
+            mBalanceData = balanceData;
+        }
+    };
+    private Subscription mBalanceSubscription;
     private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -90,6 +108,8 @@ public class OverflowMenu {
     }
 
     public OverflowMenu(Activity activity, Menu barActions, RateController rateController, ApiResponse savedResponse) {
+        App.from(activity).inject(this);
+        mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
         mBarActions = barActions;
         mOverflowMenuType = OverflowMenuType.PROFILE_OVERFLOW_MENU;
         mActivity = activity;
@@ -322,7 +342,7 @@ public class OverflowMenu {
         if (mRateController == null || userId == null || isMutual == null) {
             return;
         }
-        boolean isSentAdmiration = mRateController.onAdmiration(
+        boolean isSentAdmiration = mRateController.onAdmiration(mBalanceData,
                 userId,
                 isMutual ?
                         SendLikeRequest.DEFAULT_MUTUAL : SendLikeRequest.DEFAULT_NO_MUTUAL,
@@ -600,6 +620,7 @@ public class OverflowMenu {
     }
 
     public void onReleaseOverflowMenu() {
+        mBalanceSubscription.unsubscribe();
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(mUpdateActionsReceiver);
         mOverflowMenuFields = null;
         mActivity = null;

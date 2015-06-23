@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.Rate;
 import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.data.search.UsersList;
@@ -34,9 +35,9 @@ public class RateController {
         sendRate(new SendLikeRequest(mContext, userId, mutualId, mPlace), requestListener);
     }
 
-    public boolean onAdmiration(final int userId, final int mutualId, final OnRateRequestListener requestListener) {
+    public boolean onAdmiration(BalanceData balanceData, final int userId, final int mutualId, final OnRateRequestListener requestListener) {
         int admirationPrice = CacheProfile.getOptions().priceAdmiration;
-        if (CacheProfile.money < admirationPrice) {
+        if (balanceData.money < admirationPrice) {
             mContext.startActivity(PurchasesActivity.createBuyingIntent("RateAdmiration", PurchasesFragment.TYPE_ADMIRATION, admirationPrice));
             if (mOnRateControllerUiListener != null) {
                 mOnRateControllerUiListener.failRate();

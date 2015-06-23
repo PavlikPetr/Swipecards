@@ -1,18 +1,15 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.FeedGeo;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Options;
@@ -25,6 +22,7 @@ import com.topface.topface.requests.PeopleNearbyAccessRequest;
 import com.topface.topface.requests.PeopleNearbyRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
@@ -38,33 +36,57 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
+
 
 public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
+
+    @Inject
+    TopfaceAppState mAppState;
     protected View mEmptyFeedView;
+    private Boolean mIsHistoryLoad;
+    private Boolean mIsMakeItemsRead;
     private GeoLocationManager mGeoLocationManager;
-    private BroadcastReceiver mGeoStateReceiver = new BroadcastReceiver() {
+    private Subscription mSubscriptionLocation;
+    private int mCoins;
+    private Action1<Location> mLocationAction = new Action1<Location>() {
         @Override
-        public void onReceive(Context context, Intent intent) {
-            if (mGeoLocationManager == null) {
-                return;
-            }
-            if (mGeoLocationManager.getEnabledProvider() != GeoLocationManager.NavigationType.DISABLE) {
-                mGeoLocationManager.startLocationListener();
-            } else {
-                mGeoLocationManager.stopLocationListener();
+        public void call(Location location) {
+            if (null != mIsHistoryLoad && null != mIsMakeItemsRead) {
+                sendPeopleNearbyRequest(location, mIsHistoryLoad, mIsMakeItemsRead);
             }
         }
     };
+    private Action1<BalanceData> mBalanceAction = new Action1<BalanceData>() {
+        @Override
+        public void call(BalanceData balanceData) {
+            mCoins = balanceData.money;
+        }
+    };
+    private Subscription mBalanceSubscription;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        getActivity().registerReceiver(mGeoStateReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+        App.from(getActivity()).inject(this);
+        mSubscriptionLocation = mAppState.getObservable(Location.class).subscribe(mLocationAction);
+        mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
+        mGeoLocationManager = new GeoLocationManager(getActivity());
+        mGeoLocationManager.registerProvidersChangedActionReceiver();
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public void onDestroy() {
-        getActivity().unregisterReceiver(mGeoStateReceiver);
+        if (null != mSubscriptionLocation) {
+            mSubscriptionLocation.unsubscribe();
+        }
+        if (null != mBalanceSubscription) {
+            mBalanceSubscription.unsubscribe();
+        }
+        mGeoLocationManager.unregisterProvidersChangedActionReceiver();
         mGeoLocationManager.stopLocationListener();
         super.onDestroy();
     }
@@ -97,16 +119,11 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     @Override
     protected void updateData(boolean isPullToRefreshUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
         mIsUpdating = true;
-        onUpdateStart(isPullToRefreshUpdating || isHistoryLoad);
-        if (mGeoLocationManager == null) {
-            mGeoLocationManager = new GeoLocationManager(getActivity()) {
-                @Override
-                public void onUserLocationChanged(Location location) {
-                    sendPeopleNearbyRequest(location, isHistoryLoad, makeItemsRead);
-                }
-            };
+        mIsHistoryLoad = isHistoryLoad;
+        mIsMakeItemsRead = makeItemsRead;
+        if (null != mGeoLocationManager) {
+            mGeoLocationManager.getLastKnownLocation();
         }
-        sendPeopleNearbyRequest(mGeoLocationManager.getLastKnownLocation(), isHistoryLoad, makeItemsRead);
     }
 
     private void sendPeopleNearbyRequest(Location location, final boolean isHistoryLoad, final boolean makeItemsRead) {
@@ -193,7 +210,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         initButtonForBlockedScreen(btnBuy, blockPeopleNearby.buttonText, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (CacheProfile.money >= blockPeopleNearby.price) {
+                if (mCoins >= blockPeopleNearby.price) {
                     btnBuy.setVisibility(View.INVISIBLE);
                     progress.setVisibility(View.VISIBLE);
                     PeopleNearbyAccessRequest request = new PeopleNearbyAccessRequest(getActivity());

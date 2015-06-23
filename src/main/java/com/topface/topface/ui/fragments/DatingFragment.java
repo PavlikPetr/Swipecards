@@ -39,6 +39,7 @@ import com.topface.topface.RetryRequestReceiver;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.data.AlbumPhotos;
+import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.NoviceLikes;
 import com.topface.topface.data.Options;
@@ -60,6 +61,7 @@ import com.topface.topface.requests.SearchRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.SkipRateRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.PurchasesActivity;
@@ -72,7 +74,6 @@ import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AnimationHelper;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.PreloadManager;
@@ -85,12 +86,20 @@ import com.topface.topface.utils.social.AuthToken;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
+
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
 
     private static final String CURRENT_USER = "current_user";
 
+    @Inject
+    TopfaceAppState mAppState;
     AtomicBoolean isAdmirationFailed = new AtomicBoolean(false);
+    private BalanceData mBalanceData;
     private KeyboardListenerLayout mRoot;
     private TextView mResourcesLikes;
     private TextView mResourcesMoney;
@@ -148,6 +157,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
         }
     };
+    private Action1<BalanceData> mBalanceAction = new Action1<BalanceData>() {
+        @Override
+        public void call(BalanceData balanceData) {
+            mBalanceData = balanceData;
+            updateResources(balanceData);
+        }
+    };
+    private Subscription mBalanceSubscription;
     /**
      * Флаг того, что запущено обновление поиска и запускать дополнительные обновления не нужно
      */
@@ -224,12 +241,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
 
     };
-    private BroadcastReceiver mBalanceReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateResources();
-        }
-    };
     private INavigationFragmentsListener mFragmentSwitcherListener;
     private AnimationHelper mAnimationHelper;
     private AlbumLoadController mController;
@@ -278,6 +289,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.from(getActivity()).inject(this);
         if (savedInstanceState != null) {
             mCurrentUser = savedInstanceState.getParcelable(CURRENT_USER);
         }
@@ -308,6 +320,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mRoot = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_dating, null);
 
         initViews(mRoot);
+        mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
         initEmptySearchDialog(mRoot);
         initImageSwitcher(mRoot);
         if (mCurrentUser != null) {
@@ -341,11 +354,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
         LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(mBalanceReceiver, new IntentFilter(CountersManager.UPDATE_BALANCE));
-        LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
-
-        updateResources();
     }
 
     @Override
@@ -357,6 +366,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (null != mBalanceSubscription) {
+            mBalanceSubscription.unsubscribe();
+        }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mRateReceiver);
     }
 
@@ -368,7 +380,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             EasyTracker.sendEvent("EmptySearch", "DismissScreen", "", 0L);
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBalanceReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileReceiver);
         //При выходе из фрагмента сохраняем кэш поиска
         if (mUserSearchList != null) {
@@ -718,7 +729,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 if (mCurrentUser != null) {
                     lockControls();
                     isAdmirationFailed.set(false);
-                    boolean canSendAdmiration = mRateController.onAdmiration(
+                    boolean canSendAdmiration = mRateController.onAdmiration(mBalanceData,
                             mCurrentUser.id,
                             mCurrentUser.isMutualPossible ?
                                     SendLikeRequest.DEFAULT_MUTUAL
@@ -736,8 +747,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                 public void onRateFailed(int userId, int mutualId) {
                                     if (moneyDecreased.get()) {
                                         moneyDecreased.set(false);
-                                        CacheProfile.money += CacheProfile.getOptions().priceAdmiration;
-                                        updateResources();
+                                        updateResources(mBalanceData);
                                     } else {
                                         isAdmirationFailed.set(true);
                                         unlockControls();
@@ -746,9 +756,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             }
                     );
                     if (canSendAdmiration && !isAdmirationFailed.get()) {
-                        CacheProfile.money = CacheProfile.money - CacheProfile.getOptions().priceAdmiration;
+                        BalanceData balance = new BalanceData(mBalanceData.premium, mBalanceData.likes, mBalanceData.money);
+                        balance.money = balance.money - CacheProfile.getOptions().priceAdmiration;
                         moneyDecreased.set(true);
-                        updateResources();
+                        updateResources(balance);
                     }
                 }
             }
@@ -976,7 +987,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 protected void success(NoviceLikes noviceLikes, IApiResponse response) {
                     if (noviceLikes.increment > 0) {
                         showControls();
-                        updateResources();
                         CacheProfile.completeSetNoviceSympathiesBonus();
                         setEnableInputButtons(true);
                     }
@@ -1072,7 +1082,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         unlockControls();
         if (moneyDecreased.get()) {
             moneyDecreased.set(false);
-            updateResources();
+            updateResources(mBalanceData);
         }
     }
 
@@ -1182,9 +1192,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    private void updateResources() {
-        mResourcesLikes.setText(Integer.toString(CacheProfile.likes));
-        mResourcesMoney.setText(Integer.toString(CacheProfile.money));
+    private void updateResources(BalanceData balance) {
+        if (null != mResourcesLikes) {
+            mResourcesLikes.setText(Integer.toString(balance.likes));
+        }
+        if (null != mResourcesMoney) {
+            mResourcesMoney.setText(Integer.toString(balance.money));
+        }
     }
 
     private void showEmptySearchDialog() {
