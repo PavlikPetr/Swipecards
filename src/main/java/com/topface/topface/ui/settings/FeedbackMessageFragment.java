@@ -1,15 +1,19 @@
 package com.topface.topface.ui.settings;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -31,6 +35,8 @@ import com.topface.topface.utils.ClientUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -39,7 +45,6 @@ public class FeedbackMessageFragment extends AbstractEditFragment implements Vie
     public static final String INTENT_FEEDBACK_TYPE = "feedback_message_type";
     private EditText mEditText;
     private EditText mEditEmail;
-    private EditText mTransactionIdEditText;
     private Report mReport = new Report();
     private View mLoadingLocker;
     private FeedbackType mFeedbackType;
@@ -143,13 +148,19 @@ public class FeedbackMessageFragment extends AbstractEditFragment implements Vie
 
     private void initTextViews(View root, FeedbackType feedbackType) {
         initEmailInput(root);
-        mTransactionIdEditText = (EditText) root.findViewById(R.id.edTransactionId);
         switch (feedbackType) {
             case DEVELOPERS_MESSAGE:
                 break;
             case PAYMENT_MESSAGE:
-                root.findViewById(R.id.tvTransactionIdTitle).setVisibility(View.VISIBLE);
-                mTransactionIdEditText.setVisibility(View.VISIBLE);
+                TextView textView = (TextView) root.findViewById(R.id.tvTransactionIdInfoLink);
+                textView.setMovementMethod(new LinkMovementMethod() {
+                    @Override
+                    public boolean onTouchEvent(@NotNull TextView widget, @NotNull Spannable buffer, @NotNull MotionEvent event) {
+                        return Utils.isIntentAvailable(getActivity(), Intent.ACTION_VIEW) && super.onTouchEvent(widget, buffer, event);
+                    }
+
+                });
+                textView.setVisibility(View.VISIBLE);
                 break;
             case ERROR_MESSAGE:
             case COOPERATION_MESSAGE:
@@ -197,7 +208,6 @@ public class FeedbackMessageFragment extends AbstractEditFragment implements Vie
 
         if (emailConfirmed(Utils.getText(mEditEmail).trim())) {
             mReport.body = feedbackText;
-            mReport.transactionId = Utils.getText(mTransactionIdEditText).trim();
             prepareRequestSend();
             SendFeedbackRequest feedbackRequest = new SendFeedbackRequest(getActivity(), mReport);
             feedbackRequest.callback(new ApiHandler() {
@@ -303,7 +313,6 @@ public class FeedbackMessageFragment extends AbstractEditFragment implements Vie
         String android_CODENAME = android.os.Build.VERSION.CODENAME;
         String device = android.os.Build.DEVICE;
         String model = android.os.Build.MODEL;
-        String transactionId = null;
         FeedbackType type;
 
         private AuthToken authToken = AuthToken.getInstance();
@@ -360,10 +369,6 @@ public class FeedbackMessageFragment extends AbstractEditFragment implements Vie
                     .append(BuildConfig.MARKET_API_TYPE.getClientType())
                     .append(android_SDK)
                     .append(";</p>\n");
-            if (transactionId != null) {
-                strBuilder.append("<p>Transaction Id: ").append(transactionId).append(";</p>\n");
-            }
-
             return strBuilder.toString();
         }
 

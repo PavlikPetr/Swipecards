@@ -61,26 +61,8 @@
 
             <TextView
                 style="@style/FeedbackTextView"
-                android:id="@+id/tvTransactionIdTitle"
-                android:text="@string/settings_feedback_transaction_number"
-                android:visibility="gone" />
-
-            <EditText
-                style="@style/FeedbackEditText"
-                android:id="@+id/edTransactionId"
-                android:layout_height="34dp"
-                android:inputType="text"
-                android:hint="@string/settings_feedback_transaction_number_hint"
-                android:visibility="gone" />
-
-            <TextView
                 android:id="@+id/tvTransactionIdInfoLink"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_gravity="left"
-                android:text="@string/settings_feedback_transaction_link"
-                android:textColor="#697DFF"
+                android:text="@string/transaction_code_help"
                 android:visibility="gone" />
 
             <Button
