@@ -113,6 +113,7 @@ public class DefaultImageLoader {
                     imageView,
                     options,
                     listener,
+                    null,
                     null
             );
 

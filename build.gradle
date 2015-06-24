@@ -53,6 +53,7 @@ buildscript {
 allprojects {
     repositories {
         maven { url 'https://raw.githubusercontent.com/onepf/OPF-mvn-repo/master/' }
+        maven { url "https://dl.bintray.com/topface/libs" }
         jcenter()
     }
 }
@@ -194,9 +195,9 @@ dependencies {
     compile project(':libs:statistics-android')
     compile project(':libs:PullToRefresh')
     compile project(':libs:PhotoView')
-    compile project(':libs:UniversalImageLoader')
     compile project(':libs:tf-offerwall:sdk')
     compile project(':libs:odnoklassniki')
+    compile 'com.nostra13.universalimageloader:library:1.9.5@aar'
     //Acra
     compile('ch.acra:acra:4.6.0RC2') {
         //Удаляем предоставляемыю acra зависимость org.json, так как она все рвно не нужна
@@ -246,15 +247,6 @@ project(':libs:PullToRefresh') {
 }
 
 project(':libs:PhotoView') {
-    apply plugin: 'com.android.library'
-    android.sourceSets.main {
-        manifest.srcFile 'library/AndroidManifest.xml'
-        java.srcDirs = ['library/src']
-        res.srcDirs = ['library/res']
-    }
-}
-
-project(':libs:UniversalImageLoader') {
     apply plugin: 'com.android.library'
     android.sourceSets.main {
         manifest.srcFile 'library/AndroidManifest.xml'

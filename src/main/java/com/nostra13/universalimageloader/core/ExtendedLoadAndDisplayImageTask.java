@@ -2,7 +2,9 @@ package com.nostra13.universalimageloader.core;
 
 import android.os.Handler;
 
+import com.nostra13.universalimageloader.core.assist.LoadedFrom;
 import com.nostra13.universalimageloader.utils.IoUtils;
+import com.nostra13.universalimageloader.utils.L;
 import com.topface.topface.utils.IRequestConnectionListener;
 import com.topface.topface.utils.RequestConnectionListenerFactory;
 
@@ -21,29 +23,34 @@ public class ExtendedLoadAndDisplayImageTask extends LoadAndDisplayImageTask {
 
     public static final String SERVICE_NAME = "imgDwn";
 
+    private final ImageLoaderConfiguration configuration;
+    private final String memoryCacheKey;
+
     public ExtendedLoadAndDisplayImageTask(ImageLoaderEngine engine, ImageLoadingInfo imageLoadingInfo, Handler handler) {
         super(engine, imageLoadingInfo, handler);
+        this.configuration = engine.configuration;
+        this.memoryCacheKey = imageLoadingInfo.memoryCacheKey;
     }
 
-    @Override
-    protected boolean downloadImage(File targetFile) throws IOException {
+    private boolean downloadImage() throws IOException {
         IRequestConnectionListener listener = RequestConnectionListenerFactory.create(SERVICE_NAME);
         listener.onConnectionStarted();
         listener.onConnectInvoked();
-        InputStream is = getDownloader().getStream(uri, options.getExtraForDownloader());
+        InputStream is = this.getDownloader().getStream(this.uri, this.options.getExtraForDownloader());
         listener.onConnectionEstablished();
-        boolean loaded;
-        try {
-            OutputStream os = new BufferedOutputStream(new FileOutputStream(targetFile), BUFFER_SIZE);
+        if(is == null) {
+            L.e("No stream for image [%s]", new Object[]{this.memoryCacheKey});
+            return false;
+        } else {
+            boolean var2;
             try {
-                loaded = IoUtils.copyStream(is, os, this);
-                listener.onConnectionClose();
+                var2 = this.configuration.diskCache.save(this.uri, is, this);
             } finally {
-                IoUtils.closeSilently(os);
+                IoUtils.closeSilently(is);
+                listener.onConnectionClose();
             }
-        } finally {
-            IoUtils.closeSilently(is);
+
+            return var2;
         }
-        return loaded;
     }
 }
