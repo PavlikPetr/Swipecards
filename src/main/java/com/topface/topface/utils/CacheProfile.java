@@ -364,9 +364,6 @@ public class CacheProfile {
         //Каждый раз не забываем кешировать запрос продуктов, но делаем это в отдельном потоке
         if (response != null) {
             App.getSessionConfig().setMarketProductsData(response.toString());
-            LocalBroadcastManager.getInstance(App.getContext())
-                    .sendBroadcast(new Intent(Products.INTENT_UPDATE_PRODUCTS));
-
         }
     }
 
@@ -391,9 +388,6 @@ public class CacheProfile {
         //Каждый раз не забываем кешировать запрос продуктов, но делаем это в отдельном потоке
         if (response != null) {
             App.getSessionConfig().setPaymentWallProductsData(response.toString(), type);
-            LocalBroadcastManager.getInstance(App.getContext())
-                    .sendBroadcast(new Intent(Products.INTENT_UPDATE_PRODUCTS));
-
         }
     }
 

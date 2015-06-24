@@ -189,11 +189,9 @@ dependencies {
     //All jar libs
     compile fileTree(dir: 'libs', exclude: 'amazon/*.jar', include: '*.jar')
     //Testing
-    //androidTestCompile 'com.jakewharton.espresso:espresso:1.1-r3'
     //Topface sub libs
     compile project(':libs:IllustratedTextView')
     compile project(':libs:statistics-android')
-    compile project(':libs:Android-ViewPagerIndicator')
     compile project(':libs:PullToRefresh')
     compile project(':libs:PhotoView')
     compile project(':libs:UniversalImageLoader')
@@ -235,20 +233,6 @@ project(':libs:IllustratedTextView') {
         manifest.srcFile 'AndroidManifest.xml'
         java.srcDirs = ['src']
         res.srcDirs = ['res']
-    }
-}
-
-project(':libs:Android-ViewPagerIndicator') {
-    apply plugin: 'com.android.library'
-    //noinspection GradleMisplacedStatement
-    dependencies {
-        compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
-        compile project(':libs:IllustratedTextView')
-    }
-    android.sourceSets.main {
-        manifest.srcFile 'library/AndroidManifest.xml'
-        java.srcDirs = ['library/src']
-        res.srcDirs = ['library/res']
     }
 }
 

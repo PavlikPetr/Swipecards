@@ -19,9 +19,6 @@
         <item name="android:windowAnimationStyle">@null</item>
 
         <!-- Тема индикаторов для ViewPager -->
-        <item name="vpiIconPageIndicatorStyle">@style/Widget.TopfaceIconPageIndicator</item>
-        <item name="vpiTabPageIndicatorStyle">@style/Widget.TopfaceTabPageIndicator</item>
-        <item name="vpiCirclePageIndicatorStyle">@style/TopfaceCirclePageIndicator</item>
         <item name="android:textAppearanceLarge">@style/TopfaceTextAppearance.Large</item>
         <item name="android:textAppearanceMedium">@style/TopfaceTextAppearance.Medium</item>
         <item name="android:textAppearanceSmall">@style/TopfaceTextAppearance.Small</item>
@@ -132,6 +129,12 @@
     <style name="Theme.Topface.NoActionBar.DatingLockPopup">
         <item name="android:statusBarColor" tools:ignore="NewApi">
             @color/status_bar_dating_lock_popup_color
+        </item>
+    </style>
+
+    <style name="Theme.Topface.NoActionBar.TrialVipPopup">
+        <item name="android:statusBarColor" tools:ignore="NewApi">
+            @color/trial_popup_background
         </item>
     </style>
 
