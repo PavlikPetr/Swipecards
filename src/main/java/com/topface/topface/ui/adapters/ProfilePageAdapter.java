@@ -14,7 +14,6 @@ import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.buy.VipPaymentWallBuyFragment;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
 import com.topface.topface.utils.GoogleMarketApiManager;
-import com.viewpagerindicator.PageIndicator;
 
 import java.util.ArrayList;
 
@@ -23,7 +22,6 @@ public class ProfilePageAdapter extends HackyFragmentStatePagerAdapter {
     private ArrayList<String> mFragmentsClasses = new ArrayList<>();
     private ArrayList<String> mFragmentsTitles = new ArrayList<>();
     private AbstractProfileFragment.ProfileInnerUpdater mProfileUpdater;
-    private PageIndicator mPageIndicator;
 
     public ProfilePageAdapter(FragmentManager fm, ArrayList<String> fragmentsClasses, ArrayList<String> fragmentTitles, AbstractProfileFragment.ProfileInnerUpdater profileUpdater) {
         super(fm);

@@ -19,9 +19,6 @@
         <item name="android:windowAnimationStyle">@null</item>
 
         <!-- Тема индикаторов для ViewPager -->
-        <item name="vpiIconPageIndicatorStyle">@style/Widget.TopfaceIconPageIndicator</item>
-        <item name="vpiTabPageIndicatorStyle">@style/Widget.TopfaceTabPageIndicator</item>
-        <item name="vpiCirclePageIndicatorStyle">@style/TopfaceCirclePageIndicator</item>
         <item name="android:textAppearanceLarge">@style/TopfaceTextAppearance.Large</item>
         <item name="android:textAppearanceMedium">@style/TopfaceTextAppearance.Medium</item>
         <item name="android:textAppearanceSmall">@style/TopfaceTextAppearance.Small</item>

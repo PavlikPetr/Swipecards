@@ -4,9 +4,6 @@
 [submodule "libs/PullToRefresh"]
 	path = libs/PullToRefresh
 	url = git@github.com:Topface/Android-PullToRefresh.git
-[submodule "libs/Android-ViewPagerIndicator"]
-	path = libs/Android-ViewPagerIndicator
-	url = git@github.com:Topface/Android-ViewPagerIndicator.git
 [submodule "libs/PhotoView"]
 	path = libs/PhotoView
 	url = git@github.com:Topface/PhotoView.git

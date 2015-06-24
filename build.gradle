@@ -203,7 +203,6 @@ dependencies {
     //OpenIAB
     compile 'org.onepf:openiab:0.9.8.4'
 
-    compile project(':libs:Android-ViewPagerIndicator')
     compile project(':libs:PullToRefresh')
     compile project(':libs:PhotoView')
     compile project(':libs:UniversalImageLoader')
@@ -236,20 +235,6 @@ project(':libs:IllustratedTextView') {
         manifest.srcFile 'AndroidManifest.xml'
         java.srcDirs = ['src']
         res.srcDirs = ['res']
-    }
-}
-
-project(':libs:Android-ViewPagerIndicator') {
-    apply plugin: 'com.android.library'
-    //noinspection GradleMisplacedStatement
-    dependencies {
-        compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
-        compile project(':libs:IllustratedTextView')
-    }
-    android.sourceSets.main {
-        manifest.srcFile 'library/AndroidManifest.xml'
-        java.srcDirs = ['library/src']
-        res.srcDirs = ['library/res']
     }
 }
 
