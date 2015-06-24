@@ -163,7 +163,28 @@ public class MenuFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        //Показываем фрагмент только если мы авторизованы
+        if (!AuthToken.getInstance().isEmpty()) {
+            if (savedInstanceState != null) {
+                FragmentId savedId = (FragmentId) savedInstanceState.getSerializable(CURRENT_FRAGMENT_STATE);
+                if (savedId != null) {
+                    Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment from saved instance state.");
+                    switchFragment(savedId, false);
+                    return;
+                }
+            }
+            if (getActivity() != null) {
+                Intent intent = getActivity().getIntent();
+                if (intent != null &&
+                        intent.getSerializableExtra(GCMUtils.NEXT_INTENT) != null) {
+                    Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment from activity intent.");
+                    switchFragment((FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT), false);
+                    return;
+                }
+            }
+            Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment to default from onCreate().");
+            switchFragment(CacheProfile.getOptions().startPageFragmentId, false);
+        }
     }
 
     private void initEditor() {
@@ -299,28 +320,6 @@ public class MenuFragment extends Fragment {
         super.onCreate(savedInstanceState);
         App.from(getActivity()).inject(this);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
-        //Показываем фрагмент только если мы авторизованы
-        if (!AuthToken.getInstance().isEmpty()) {
-            if (savedInstanceState != null) {
-                FragmentId savedId = (FragmentId) savedInstanceState.getSerializable(CURRENT_FRAGMENT_STATE);
-                if (savedId != null) {
-                    Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment from saved instance state.");
-                    switchFragment(savedId, false);
-                    return;
-                }
-            }
-            if (getActivity() != null) {
-                Intent intent = getActivity().getIntent();
-                if (intent != null &&
-                        intent.getSerializableExtra(GCMUtils.NEXT_INTENT) != null) {
-                    Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment from activity intent.");
-                    switchFragment((FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT), false);
-                    return;
-                }
-            }
-            Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment to default from onCreate().");
-            switchFragment(CacheProfile.getOptions().startPageFragmentId, false);
-        }
     }
 
     @Override
