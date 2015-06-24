@@ -35,6 +35,7 @@ public class Products extends AbstractData {
     private static final String PRICE = "{{price}}";
     private static final String EUR = "EUR";
     private static final String RUB = "RUB";
+    private static final String USD = "USD";
 
     public enum ProductType {
         COINS("coins"),
@@ -207,7 +208,7 @@ public class Products extends AbstractData {
             ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
             if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
-                if (detail != null) {
+                if (detail != null && !detail.currency.equals(USD)) {
                     double price = detail.price / ProductsDetails.MICRO_AMOUNT;
                     DecimalFormat decimalFormat = new DecimalFormat("#.##");
                     value = buyBtn.totalTemplate.replace(PRICE,
