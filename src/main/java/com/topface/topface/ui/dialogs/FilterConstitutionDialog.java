@@ -2,9 +2,9 @@ package com.topface.topface.ui.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
@@ -12,11 +12,10 @@ import android.widget.NumberPicker;
 import com.topface.topface.App;
 import com.topface.topface.R;
 
+import org.jetbrains.annotations.NotNull;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import rx.Observable;
-import rx.Subscriber;
-import rx.observables.ConnectableObservable;
 
 /**
  * Диалог для выбора парамтров роста/веса
@@ -24,8 +23,13 @@ import rx.observables.ConnectableObservable;
  */
 public class FilterConstitutionDialog extends DialogFragment {
 
+    public static final String TAG = "com.topface.topface.ui.dialogs.FilterConstitutionDialog_TAG";
+
     private static final String HEIGHT_MARK = "height_mark";
     private static final String TITLE = "title";
+    private static final String FIRST_LIMIT = "first_limit";
+    private static final String SECOND_LIMIT = "second_limit";
+
     @InjectView(R.id.pickerFirstLimit)
     NumberPicker mFirstLimit;
     @InjectView(R.id.pickerSecondLimit)
@@ -33,24 +37,21 @@ public class FilterConstitutionDialog extends DialogFragment {
     private boolean mIsHeight;
     private String mTitle;
     private ConstitutionLimits mConstitutionLimits;
-    private ConnectableObservable<ConstitutionLimits> mConstitutionLimitsObservable = Observable.create(new Observable.OnSubscribe<ConstitutionLimits>() {
-        @Override
-        public void call(Subscriber<? super ConstitutionLimits> subscriber) {
-            subscriber.onNext(mConstitutionLimits);
-        }
-    }).publish();
+    private OnConstitutionDialogListener mListener;
 
-    public static FilterConstitutionDialog newInstance(boolean isHeight, String title) {
+    public static FilterConstitutionDialog newInstance(boolean isHeight, String title, int firstValue, int secondValue) {
         Bundle arg = new Bundle();
         arg.putBoolean(HEIGHT_MARK, isHeight);
         arg.putString(TITLE, title);
+        arg.putInt(FIRST_LIMIT, firstValue);
+        arg.putInt(SECOND_LIMIT, secondValue);
         FilterConstitutionDialog dialog = new FilterConstitutionDialog();
         dialog.setArguments(arg);
         return dialog;
     }
 
-    public ConnectableObservable<ConstitutionLimits> getConstitutionLimitsObservable() {
-        return mConstitutionLimitsObservable;
+    public void setConstitutionDialogListener(OnConstitutionDialogListener listener) {
+        this.mListener = listener;
     }
 
     @Override
@@ -61,25 +62,41 @@ public class FilterConstitutionDialog extends DialogFragment {
         mConstitutionLimits = new ConstitutionLimits();
     }
 
+    private void setPickersValue(int firstValue, int secondValue) {
+        mFirstLimit.setValue(firstValue);
+        mSecondLimit.setValue(secondValue);
+    }
+
+    @NotNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.filter_date_picker_dialog_view, null);
         ButterKnife.inject(this, view);
-        mFirstLimit.setMaxValue(mIsHeight ? App.getAppOptions().getUserHeightMin() + App.getAppOptions().getUserHeightMax() / 4
-                : App.getAppOptions().getUserWeightMax() / 2);
+        mFirstLimit.setMaxValue(mIsHeight ? App.getAppOptions().getUserHeightMax()
+                : App.getAppOptions().getUserWeightMax());
         mFirstLimit.setMinValue(mIsHeight ? App.getAppOptions().getUserHeightMin()
                 : App.getAppOptions().getUserWeightMin());
         mSecondLimit.setMaxValue(mIsHeight ? App.getAppOptions().getUserHeightMax()
                 : App.getAppOptions().getUserWeightMax());
-        mSecondLimit.setMinValue(mIsHeight ? App.getAppOptions().getUserHeightMin() + App.getAppOptions().getUserHeightMax() / 4 + 1
-                : App.getAppOptions().getUserWeightMax() / 2 + 1);
+        mSecondLimit.setMinValue(mIsHeight ? App.getAppOptions().getUserHeightMin()
+                : App.getAppOptions().getUserWeightMin());
 
+        Bundle bundle;
         //Начальное положение
-        mFirstLimit.setValue(mIsHeight ? App.getAppOptions().getUserHeightMin() + App.getAppOptions().getUserHeightMax() / 4
-                : App.getAppOptions().getUserWeightMax() / 2);
-        mSecondLimit.setValue(mIsHeight ? App.getAppOptions().getUserHeightMin() + App.getAppOptions().getUserHeightMax() / 4 + 1
-                : App.getAppOptions().getUserWeightMax() / 2 + 1);
+        if (savedInstanceState != null) {
+            bundle = savedInstanceState;
+        } else {
+            bundle = getArguments();
+        }
+        if (bundle.getInt(FIRST_LIMIT) != 0 && bundle.getInt(SECOND_LIMIT) != 0) {
+            setPickersValue(bundle.getInt(FIRST_LIMIT), bundle.getInt(SECOND_LIMIT));
+        } else {
+            setPickersValue(mIsHeight ? App.getAppOptions().getUserHeightMin()
+                            : App.getAppOptions().getUserWeightMin(),
+                    mIsHeight ? App.getAppOptions().getUserHeightMax()
+                            : App.getAppOptions().getUserWeightMax());
+        }
         mFirstLimit.setWrapSelectorWheel(false);
         mSecondLimit.setWrapSelectorWheel(false);
         mFirstLimit.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
@@ -115,17 +132,28 @@ public class FilterConstitutionDialog extends DialogFragment {
                                 App.getAppOptions().getUserHeightMin() == mFirstLimit.getValue())) {
                             mConstitutionLimits.setLimits(mFirstLimit.getValue(), mSecondLimit.getValue());
                         }
-                        getConstitutionLimitsObservable().connect();
+                        mListener.handleValues(mConstitutionLimits);
                     }
                 })
                 .setPositiveButton(getActivity().getString(R.string.general_any), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        getConstitutionLimitsObservable().connect();
+                        mListener.handleValues(mConstitutionLimits);
                         dismiss();
                     }
                 })
                 .create();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(FIRST_LIMIT, mFirstLimit.getValue());
+        outState.putInt(SECOND_LIMIT, mSecondLimit.getValue());
+        super.onSaveInstanceState(outState);
+    }
+
+    public interface OnConstitutionDialogListener {
+        void handleValues(ConstitutionLimits limits);
     }
 
     public class ConstitutionLimits {
