@@ -7,6 +7,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.topface.framework.JsonUtils;
 import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
+import com.topface.topface.data.CountersData;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.state.TopfaceAppState;
 
@@ -17,7 +18,6 @@ import javax.inject.Inject;
 public class CountersManager {
     @Inject
     TopfaceAppState mAppState;
-    public static final String UPDATE_BALANCE = "com.topface.topface.UPDATE_BALANCE";
     public final static String UPDATE_COUNTERS = "com.topface.topface.UPDATE_COUNTERS";
     public static final String UPDATE_VIP_STATUS = "com.topface.topface.UPDATE_VIP_STATUS";
     private static int likesCounter;
@@ -98,15 +98,10 @@ public class CountersManager {
         }
     }
 
-    public void setEntitiesCounters(int likesCounter, int sympathyCounter, int dialogsCounter, int visitorsCounter, int fansCounter, int admirationsCounter, int geoCounter) {
-        CountersManager.likesCounter = likesCounter;
-        CountersManager.sympathyCounter = sympathyCounter;
-        CountersManager.dialogsCounter = dialogsCounter;
-        CountersManager.visitorsCounter = visitorsCounter;
-        CountersManager.fansCounter = fansCounter;
-        CountersManager.admirationsCounter = admirationsCounter;
-        CountersManager.geoCounter = geoCounter;
-        commitCounters();
+    public void setEntitiesCounters(JSONObject unread) {
+        App.from(mContext).inject(this);
+        CountersData countersData = JsonUtils.fromJson(unread.toString(), CountersData.class);
+        mAppState.setData(countersData);
     }
 
     public void setBalanceCounters(JSONObject balanceJson) {

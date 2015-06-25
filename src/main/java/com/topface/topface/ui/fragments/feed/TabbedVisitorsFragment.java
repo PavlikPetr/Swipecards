@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed;
 
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
+import com.topface.topface.data.CountersData;
 import com.topface.topface.utils.CacheProfile;
 
 public class TabbedVisitorsFragment extends TabbedFeedFragment {
@@ -12,9 +13,9 @@ public class TabbedVisitorsFragment extends TabbedFeedFragment {
     }
 
     @Override
-    protected void onBeforeCountersUpdate() {
-        updatePageCounter(VisitorsFragment.class.getName(), CacheProfile.unread_visitors);
-        updatePageCounter(FansFragment.class.getName(), CacheProfile.unread_fans);
+    protected void onBeforeCountersUpdate(CountersData countersData) {
+        updatePageCounter(VisitorsFragment.class.getName(), countersData.visitors);
+        updatePageCounter(FansFragment.class.getName(), countersData.fans);
     }
 
     @Override

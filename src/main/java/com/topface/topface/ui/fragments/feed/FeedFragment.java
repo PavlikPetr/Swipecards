@@ -78,7 +78,6 @@ import java.util.List;
 import static android.widget.AdapterView.OnItemClickListener;
 import static com.topface.topface.utils.CountersManager.METHOD_INTENT_STRING;
 import static com.topface.topface.utils.CountersManager.NULL_METHOD;
-import static com.topface.topface.utils.CountersManager.UPDATE_COUNTERS;
 import static com.topface.topface.utils.CountersManager.getInstance;
 
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
@@ -280,7 +279,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         };
         IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
         filter.addAction(ChatFragment.MAKE_ITEM_READ_BY_UID);
-        filter.addAction(UPDATE_COUNTERS);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReadItemReceiver, filter);
         for (int type : getTypesForGCM()) {
             GCMUtils.cancelNotification(getActivity(), type);

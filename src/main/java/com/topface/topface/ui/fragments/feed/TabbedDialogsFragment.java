@@ -2,13 +2,14 @@ package com.topface.topface.ui.fragments.feed;
 
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
+import com.topface.topface.data.CountersData;
 import com.topface.topface.utils.CacheProfile;
 
 public class TabbedDialogsFragment extends TabbedFeedFragment {
 
     @Override
-    protected void onBeforeCountersUpdate() {
-        updatePageCounter(DialogsFragment.class.getName(), CacheProfile.unread_messages);
+    protected void onBeforeCountersUpdate(CountersData countersData) {
+        updatePageCounter(DialogsFragment.class.getName(), countersData.dialogs);
     }
 
 

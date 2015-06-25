@@ -351,15 +351,7 @@ public class GCMUtils {
             if (countersStr != null) {
                 JSONObject countersJson = new JSONObject(countersStr);
                 // on Api version 8 unread counter will have the same keys as common requests
-                counterManager.setEntitiesCounters(
-                        countersJson.optInt("unread_likes"),
-                        countersJson.optInt("unread_symphaties"),
-                        countersJson.optInt("unread_messages"),
-                        countersJson.optInt("unread_visitors"),
-                        countersJson.optInt("unread_fans"),
-                        countersJson.optInt("unread_admirations"),
-                        countersJson.optInt("unread_people_nearby")
-                );
+                counterManager.setEntitiesCounters(countersJson);
             }
             String balanceStr = extra.getStringExtra("balance");
             if (balanceStr != null) {

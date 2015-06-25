@@ -124,15 +124,7 @@ abstract public class ApiHandler extends Handler {
                     .setMethod(method);
 
             if (unread != null) {
-                countersManager
-                        .setEntitiesCounters(
-                                unread.optInt("likes"),
-                                unread.optInt("mutual"),
-                                unread.optInt("dialogs"),
-                                unread.optInt("visitors"),
-                                unread.optInt("fans"),
-                                unread.optInt("admirations"),
-                                unread.optInt("peopleNearby"));
+                countersManager.setEntitiesCounters(unread);
             }
             countersManager.setBalanceCounters(response.getBalance());
         } catch (Exception e) {

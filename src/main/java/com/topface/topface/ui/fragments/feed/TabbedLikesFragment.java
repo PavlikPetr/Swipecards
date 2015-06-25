@@ -2,16 +2,17 @@ package com.topface.topface.ui.fragments.feed;
 
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
+import com.topface.topface.data.CountersData;
 import com.topface.topface.utils.CacheProfile;
 
 public class TabbedLikesFragment extends TabbedFeedFragment {
 
     @Override
-    protected void onBeforeCountersUpdate() {
-        updatePageCounter(LikesFragment.class.getName(), CacheProfile.unread_likes);
-        updatePageCounter(MutualFragment.class.getName(), CacheProfile.unread_mutual);
+    protected void onBeforeCountersUpdate(CountersData countersData) {
+        updatePageCounter(LikesFragment.class.getName(), countersData.likes);
+        updatePageCounter(MutualFragment.class.getName(), countersData.mutual);
         if (!CacheProfile.getOptions().isHideAdmirations) {
-            updatePageCounter(AdmirationFragment.class.getName(), CacheProfile.unread_admirations);
+            updatePageCounter(AdmirationFragment.class.getName(), countersData.admirations);
         }
     }
 

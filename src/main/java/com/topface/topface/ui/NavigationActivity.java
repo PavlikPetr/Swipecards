@@ -1,17 +1,13 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -27,10 +23,12 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
+import com.topface.topface.data.CountersData;
 import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
@@ -40,7 +38,6 @@ import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.CustomViewNotificationController;
 import com.topface.topface.utils.IActionbarNotifier;
 import com.topface.topface.utils.LocaleConfig;
@@ -64,6 +61,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
+
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_HIGH;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
@@ -85,15 +87,12 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @SuppressWarnings("deprecation")
     private ActionBarDrawerToggle mDrawerToggle;
     private IActionbarNotifier mNotificationController;
-    private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (mNotificationController != null) mNotificationController.refreshNotificator();
-        }
-    };
+    @Inject
+    TopfaceAppState mAppState;
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     private AddPhotoHelper mAddPhotoHelper;
     private PopupManager mPopupManager;
+    private Subscription mCountersSubscription;
 
     /**
      * Перезапускает NavigationActivity, нужно например при смене языка
@@ -116,7 +115,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                             | ActionBar.DISPLAY_SHOW_HOME
                             | ActionBar.DISPLAY_HOME_AS_UP);
             mNotificationController = new CustomViewNotificationController(actionBar);
-            mNotificationController.refreshNotificator();
         }
     }
 
@@ -127,12 +125,21 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        App.from(getApplicationContext()).inject(this);
         Intent intent = getIntent();
         if (intent.getBooleanExtra(INTENT_EXIT, false)) {
             finish();
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
+        mCountersSubscription = mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
+            @Override
+            public void call(CountersData countersData) {
+                if (mNotificationController != null) {
+                    mNotificationController.refreshNotificator(countersData.dialogs, countersData.mutual);
+                }
+            }
+        });
         if (isNeedBroughtToFront(intent)) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -291,7 +298,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         if (mFullscreenController != null) {
             mFullscreenController.onPause();
         }
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mCountersReceiver);
     }
 
     @Override
@@ -313,11 +319,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
             LocaleConfig.localeChangeInitiated = false;
         }
         App.checkProfileUpdate();
-        if (mNotificationController != null) {
-            mNotificationController.refreshNotificator();
-        }
-        LocalBroadcastManager.getInstance(this)
-                .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
     }
 
     @Override
@@ -336,7 +337,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         if (mMenuFragment != null) {
             mMenuFragment.updateAdapter();
         }
-        mNotificationController.refreshNotificator();
     }
 
     /**
@@ -470,6 +470,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
             mFullscreenController.onDestroy();
         }
         mDrawerToggle = null;
+        mCountersSubscription.unsubscribe();
         super.onDestroy();
         AdmobInterstitialUtils.releaseInterstitials();
     }
@@ -589,14 +590,18 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     public void onHideActionBar() {
         mIsActionBarHidden = true;
         setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        getSupportActionBar().hide();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
     }
 
     @Override
     public void onShowActionBar() {
         mIsActionBarHidden = false;
         setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        getSupportActionBar().show();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().show();
+        }
     }
 
     @Override

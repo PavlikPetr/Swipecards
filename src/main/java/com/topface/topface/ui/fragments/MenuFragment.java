@@ -27,6 +27,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BalanceData;
+import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Photo;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.INavigationFragmentsListener;
@@ -93,7 +94,7 @@ public class MenuFragment extends Fragment {
         }
     };
     private Subscription mBalanceSubscription;
-
+    private Subscription mCountersSubscription;
     private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -218,8 +219,18 @@ public class MenuFragment extends Fragment {
             menuItems.put(BONUS.getId(), LeftMenuAdapter.newLeftMenuItem(BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                     R.drawable.ic_bonus_selector));
         }
-        mAdapter = new LeftMenuAdapter(menuItems);
-        mListView.setAdapter(mAdapter);
+        if (mAdapter == null) {
+            mAdapter = new LeftMenuAdapter(menuItems);
+            mListView.setAdapter(mAdapter);
+            mCountersSubscription = mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
+                @Override
+                public void call(CountersData countersData) {
+                    if (countersData.isNotEmpty()) {
+                        mAdapter.updateCountersBadge(countersData);
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -327,6 +338,7 @@ public class MenuFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         mBalanceSubscription.unsubscribe();
+        mCountersSubscription.unsubscribe();
     }
 
     @Override
