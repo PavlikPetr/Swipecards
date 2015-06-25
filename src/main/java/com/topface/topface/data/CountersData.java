@@ -26,6 +26,7 @@ public class CountersData implements Cloneable {
         this.peopleNearby = peopleNearby;
     }
 
+    @SuppressWarnings("unused")
     public boolean isNotEmpty() {
         return likes != 0 || mutual != 0 || dialogs != 0 || visitors != 0
                 || fans != 0 || admirations != 0 || peopleNearby != 0;

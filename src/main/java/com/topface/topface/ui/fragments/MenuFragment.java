@@ -246,9 +246,7 @@ public class MenuFragment extends Fragment {
             mCountersSubscription = mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
                 @Override
                 public void call(CountersData countersData) {
-                    if (countersData.isNotEmpty()) {
                         mAdapter.updateCountersBadge(countersData);
-                    }
                 }
             });
         }
