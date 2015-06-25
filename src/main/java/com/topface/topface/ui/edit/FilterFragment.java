@@ -258,7 +258,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                         ? String.format(getActivity().getString(R.string.filter_constitution_template), mFilter.minHeight, mFilter.maxHeight)
                         : getActivity().getString(R.string.general_any),
                 mLoFilterHeight);
-        mLoFilterHeight.setTag(R.array.form_main_status);
         mLoFilterHeight.setOnClickListener(this);
 
         // Weight Status
@@ -267,7 +266,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                         ? String.format(getActivity().getString(R.string.filter_constitution_template), mFilter.minWeight, mFilter.maxWeight)
                         : getActivity().getString(R.string.general_any),
                 mLoFilterWeight);
-        mLoFilterWeight.setTag(R.array.form_main_status);
         mLoFilterWeight.setOnClickListener(this);
 
         // Dating Status
@@ -407,18 +405,22 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 }
                 break;
             case R.id.loFilterHeight:
-                createAndShowConstitutionDialog(true, R.string.form_main_height_0);
+                createAndShowConstitutionDialog(App.getAppOptions().getUserHeightMin(),
+                        App.getAppOptions().getUserHeightMax(), mFilter.minHeight, mFilter.maxHeight, R.string.form_main_height_0, true);
                 break;
             case R.id.loFilterWeight:
-                createAndShowConstitutionDialog(false, R.string.form_main_weight_0);
+                createAndShowConstitutionDialog(App.getAppOptions().getUserWeightMin(),
+                        App.getAppOptions().getUserWeightMax(), mFilter.minWeight, mFilter.maxWeight,
+                        R.string.form_main_weight_0, false);
                 break;
         }
         refreshSaveState();
     }
 
-    private void createAndShowConstitutionDialog(final boolean isHeight, @StringRes int resId) {
-        final FilterConstitutionDialog dialog = FilterConstitutionDialog.newInstance(isHeight, getActivity().getString(resId),
-                isHeight ? mFilter.minHeight : mFilter.minWeight, isHeight ? mFilter.maxHeight : mFilter.maxWeight);
+    private void createAndShowConstitutionDialog(int configMin, int configMax, int filterMin, int filterMax
+            , @StringRes int resId, final boolean isHeight) {
+        final FilterConstitutionDialog dialog = FilterConstitutionDialog.newInstance(configMin, configMax, getActivity().getString(resId),
+                filterMin, filterMax);
         dialog.setConstitutionDialogListener(new FilterConstitutionDialog.OnConstitutionDialogListener() {
             @Override
             public void handleValues(FilterConstitutionDialog.ConstitutionLimits limits) {

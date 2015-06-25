@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/numberPickerLayout"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="horizontal"
     android:gravity="center">
 
     <NumberPicker
         android:id="@+id/pickerFirstLimit"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></NumberPicker>
+        android:layout_height="wrap_content" />
 
     <NumberPicker
         android:id="@+id/pickerSecondLimit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="30dp"
-        android:layout_toRightOf="@+id/pickerFirstLimit"
-        android:layout_toEndOf="@+id/pickerFirstLimit"></NumberPicker>
-</RelativeLayout>
+        android:layout_marginLeft="30dp" />
+</LinearLayout>

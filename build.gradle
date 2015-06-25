@@ -161,6 +161,7 @@ android {
         checkReleaseBuilds true
         //Отключено, что бы не валилась сборка на CI сервере
         abortOnError false
+        //Для ButterKnife. Смотри http://jakewharton.github.io/butterknife/ раздел подключения
         disable 'InvalidPackage'
         //Отключаем ненужные нам проверки lint
         ignore "MissingTranslation", //Об отсутсвующих переводах. У нас есть всегда языки без переводов

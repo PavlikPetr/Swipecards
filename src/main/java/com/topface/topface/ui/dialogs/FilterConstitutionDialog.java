@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
 
-import com.topface.topface.App;
 import com.topface.topface.R;
 
 import org.jetbrains.annotations.NotNull;
@@ -18,33 +17,46 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * Диалог для выбора парамтров роста/веса
+ * Диалог для выбора параметров роста/веса
  * Created by onikitin on 19.06.15.
  */
 public class FilterConstitutionDialog extends DialogFragment {
 
     public static final String TAG = "com.topface.topface.ui.dialogs.FilterConstitutionDialog_TAG";
 
-    private static final String HEIGHT_MARK = "height_mark";
     private static final String TITLE = "title";
     private static final String FIRST_LIMIT = "first_limit";
     private static final String SECOND_LIMIT = "second_limit";
+    private static final String CONFIG_MIN = "config_min";
+    private static final String CONFIG_MAX = "config_max";
 
     @InjectView(R.id.pickerFirstLimit)
     NumberPicker mFirstLimit;
     @InjectView(R.id.pickerSecondLimit)
     NumberPicker mSecondLimit;
-    private boolean mIsHeight;
     private String mTitle;
     private ConstitutionLimits mConstitutionLimits;
     private OnConstitutionDialogListener mListener;
+    private int mPickersMinValue;
+    private int mPickersMaxValue;
 
-    public static FilterConstitutionDialog newInstance(boolean isHeight, String title, int firstValue, int secondValue) {
+    /**
+     * Создать новый инстанс диалога
+     *
+     * @param configMin минимальное значение параметра из AppOptions
+     * @param configMax максимальное значение параметра из AppOptions
+     * @param title     титул диалога
+     * @param filterMin текущее минимальное значение параметра из DatingFilter
+     * @param filterMax текущее максимальное значение параметра из DatingFilter
+     * @return FilterConstitutionDialog
+     */
+    public static FilterConstitutionDialog newInstance(int configMin, int configMax, String title, int filterMin, int filterMax) {
         Bundle arg = new Bundle();
-        arg.putBoolean(HEIGHT_MARK, isHeight);
         arg.putString(TITLE, title);
-        arg.putInt(FIRST_LIMIT, firstValue);
-        arg.putInt(SECOND_LIMIT, secondValue);
+        arg.putInt(FIRST_LIMIT, filterMin);
+        arg.putInt(SECOND_LIMIT, filterMax);
+        arg.putInt(CONFIG_MIN, configMin);
+        arg.putInt(CONFIG_MAX,configMax);
         FilterConstitutionDialog dialog = new FilterConstitutionDialog();
         dialog.setArguments(arg);
         return dialog;
@@ -57,7 +69,6 @@ public class FilterConstitutionDialog extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mIsHeight = getArguments().getBoolean(HEIGHT_MARK);
         mTitle = getArguments().getString(TITLE);
         mConstitutionLimits = new ConstitutionLimits();
     }
@@ -67,21 +78,17 @@ public class FilterConstitutionDialog extends DialogFragment {
         mSecondLimit.setValue(secondValue);
     }
 
+    private void setPickerMinAndMaxValue(NumberPicker numberPicker, int min, int max) {
+        numberPicker.setMinValue(min);
+        numberPicker.setMaxValue(max);
+    }
+
     @NotNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.filter_date_picker_dialog_view, null);
         ButterKnife.inject(this, view);
-        mFirstLimit.setMaxValue(mIsHeight ? App.getAppOptions().getUserHeightMax()
-                : App.getAppOptions().getUserWeightMax());
-        mFirstLimit.setMinValue(mIsHeight ? App.getAppOptions().getUserHeightMin()
-                : App.getAppOptions().getUserWeightMin());
-        mSecondLimit.setMaxValue(mIsHeight ? App.getAppOptions().getUserHeightMax()
-                : App.getAppOptions().getUserWeightMax());
-        mSecondLimit.setMinValue(mIsHeight ? App.getAppOptions().getUserHeightMin()
-                : App.getAppOptions().getUserWeightMin());
-
         Bundle bundle;
         //Начальное положение
         if (savedInstanceState != null) {
@@ -89,13 +96,14 @@ public class FilterConstitutionDialog extends DialogFragment {
         } else {
             bundle = getArguments();
         }
+        mPickersMinValue = bundle.getInt(CONFIG_MIN);
+        mPickersMaxValue = bundle.getInt(CONFIG_MAX);
+        setPickerMinAndMaxValue(mFirstLimit, mPickersMinValue, mPickersMaxValue);
+        setPickerMinAndMaxValue(mSecondLimit, mPickersMinValue, mPickersMaxValue);
         if (bundle.getInt(FIRST_LIMIT) != 0 && bundle.getInt(SECOND_LIMIT) != 0) {
             setPickersValue(bundle.getInt(FIRST_LIMIT), bundle.getInt(SECOND_LIMIT));
         } else {
-            setPickersValue(mIsHeight ? App.getAppOptions().getUserHeightMin()
-                            : App.getAppOptions().getUserWeightMin(),
-                    mIsHeight ? App.getAppOptions().getUserHeightMax()
-                            : App.getAppOptions().getUserWeightMax());
+            setPickersValue(mPickersMinValue, mPickersMaxValue);
         }
         mFirstLimit.setWrapSelectorWheel(false);
         mSecondLimit.setWrapSelectorWheel(false);
@@ -128,17 +136,21 @@ public class FilterConstitutionDialog extends DialogFragment {
                         mFirstLimit.clearFocus();
                         mSecondLimit.clearFocus();
                         //Если в окне установлены максимальные пределы то ищем по всем пользователям, не учитывая рост/вес
-                        if (!(App.getAppOptions().getUserHeightMax() == mSecondLimit.getValue() &&
-                                App.getAppOptions().getUserHeightMin() == mFirstLimit.getValue())) {
+                        if (!(mPickersMaxValue == mSecondLimit.getValue() &&
+                                mPickersMinValue == mFirstLimit.getValue())) {
                             mConstitutionLimits.setLimits(mFirstLimit.getValue(), mSecondLimit.getValue());
                         }
-                        mListener.handleValues(mConstitutionLimits);
+                        if (mListener != null) {
+                            mListener.handleValues(mConstitutionLimits);
+                        }
                     }
                 })
                 .setPositiveButton(getActivity().getString(R.string.general_any), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mListener.handleValues(mConstitutionLimits);
+                        if (mListener != null) {
+                            mListener.handleValues(mConstitutionLimits);
+                        }
                         dismiss();
                     }
                 })
@@ -149,6 +161,8 @@ public class FilterConstitutionDialog extends DialogFragment {
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt(FIRST_LIMIT, mFirstLimit.getValue());
         outState.putInt(SECOND_LIMIT, mSecondLimit.getValue());
+        outState.putInt(CONFIG_MIN, mPickersMinValue);
+        outState.putInt(CONFIG_MAX, mPickersMaxValue);
         super.onSaveInstanceState(outState);
     }
 
