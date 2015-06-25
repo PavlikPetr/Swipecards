@@ -1,4 +1,4 @@
-package com.topface.topface.multithread;
+package com.topface.topface.unittests.startactionscontroller;
 
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
@@ -8,11 +8,16 @@ import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
 import junit.framework.TestCase;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
 /**
  * Тест для проверки метода removeNonApplicableActions в SequencedStartAction на предмет
  * java.util.ConcurrentModificationException
  * Created by onikitin on 06.05.15.
  */
+@RunWith(RobolectricTestRunner.class)
 public class SequencedStartActionConcurrentTest extends TestCase {
 
     private SequencedStartAction mSequencedStartAction = new SequencedStartAction(new SequencedStartAction.IUiRunner() {
@@ -31,6 +36,7 @@ public class SequencedStartActionConcurrentTest extends TestCase {
     private final static int THREAD_COUNT = 2;
 
 
+    @Test
     public void testStartSequencedStartActionConcurrentTest() {
         for (int i = 0; i <= ACTION_COUNT; i++) {
             mSequencedStartAction.addAction(getNewAction());

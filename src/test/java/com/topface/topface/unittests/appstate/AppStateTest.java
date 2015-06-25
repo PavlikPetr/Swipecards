@@ -1,26 +1,33 @@
-package com.topface.topface.appState;
+package com.topface.topface.unittests.appstate;
 
 import android.os.Handler;
-import android.test.InstrumentationTestCase;
 
 import com.topface.topface.state.AppState;
 import com.topface.topface.state.CacheDataInterface;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import java.util.concurrent.CountDownLatch;
 
 import rx.functions.Action1;
 
+import static org.junit.Assert.assertTrue;
+
 /**
  * Created by ppetr on 15.06.15.
  * testing AppState
  */
-public class AppStateTest extends InstrumentationTestCase {
+@RunWith(RobolectricTestRunner.class)
+public class AppStateTest {
 
     private static final int THREAD_COUNT = 3;
     private static final int REPEAT_COUNT = 50;
     int counter;
     String receivedData;
 
+    @Test
     public void testNullData() {
         AppState state = new AppState(null);
         counter = 0;
@@ -33,6 +40,7 @@ public class AppStateTest extends InstrumentationTestCase {
         assertTrue(counter == 0);
     }
 
+    @Test
     public void testConcurrent() {
         final AppState state = new AppState(null);
         counter = 0;
@@ -71,6 +79,7 @@ public class AppStateTest extends InstrumentationTestCase {
         }
     }
 
+    @Test
     public void testNotNullCacheData() {
         AppState state = new AppState(new CacheDataInterface() {
             @Override
@@ -100,6 +109,7 @@ public class AppStateTest extends InstrumentationTestCase {
      * testing BehaviorSubject
      * we must receive only one last data, when subscribe
      */
+    @Test
     public void testBehaviorSubject() {
         String lastValue = "last_value";
         AppState state = new AppState(new CacheDataInterface() {
@@ -133,6 +143,7 @@ public class AppStateTest extends InstrumentationTestCase {
     /**
      * subscriber couldn't return NULL, checked it
      */
+    @Test
     public void testFullyNullData() {
         counter = 0;
         final AppState state = new AppState(null);

@@ -94,7 +94,7 @@ public class Products extends AbstractData {
         App.getOpenIabHelperManager().updateInventory();
     }
 
-    private void fillProducts(JSONObject data) {
+    protected void fillProducts(JSONObject data) {
         if (data == null) {
             Debug.error("Products data is empty");
             return;
