@@ -55,4 +55,6 @@
     <array name="extra_account_types">
         <item>"com.google"</item>
     </array>
+
+    <string name="flurry_key">F5MMD85P2J58YBR27DN9</string>
 </resources>

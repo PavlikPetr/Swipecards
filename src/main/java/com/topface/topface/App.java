@@ -16,6 +16,7 @@ import android.text.TextUtils;
 
 import com.appsflyer.AppsFlyerLib;
 import com.comscore.analytics.comScore;
+import com.flurry.android.FlurryAgent;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.squareup.leakcanary.LeakCanary;
 import com.topface.billing.OpenIabHelperManager;
@@ -391,6 +392,7 @@ public class App extends Application {
         AppsFlyerLib.registerConversionListener(mContext, new AppsFlyerData.ConversionListener(mAppsFlyerConversionHolder));
 
         initComScore();
+        FlurryAgent.init(this, getString(R.string.flurry_key));
 
         final Handler handler = new Handler();
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
