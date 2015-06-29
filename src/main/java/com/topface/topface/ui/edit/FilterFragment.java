@@ -74,6 +74,10 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private boolean mInitFilterOnline;
     private boolean isDialogShown;
 
+    public FilterListDialog.DialogRowCliCkInterface getDialogOnItemClickListener() {
+        return mDialogOnItemClickListener;
+    }
+
     public FilterListDialog.DialogRowCliCkInterface mDialogOnItemClickListener = new FilterListDialog.DialogRowCliCkInterface() {
         @Override
         public void onRowClickListener(int id, int item) {
@@ -126,8 +130,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         initFilter();
         initViews(root);
         if (savedInstanceState != null && savedInstanceState.getBoolean(FILTER_DIALOG_SHOWN)) {
-            DialogFragment dialog = (DialogFragment) getActivity().getSupportFragmentManager().findFragmentByTag(FilterListDialog.TAG);
-            dialog.show(getActivity().getSupportFragmentManager(), FilterListDialog.TAG);
+            DialogFragment dialog = (DialogFragment) getChildFragmentManager().findFragmentByTag(FilterListDialog.TAG);
+            getChildFragmentManager().beginTransaction().show(dialog).commit();
         }
         return root;
     }
@@ -498,7 +502,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 isDialogShown = false;
             }
         });
-        dialog.show(getActivity().getSupportFragmentManager(), FilterListDialog.TAG);
+        dialog.show(getChildFragmentManager(), FilterListDialog.TAG);
         isDialogShown = true;
     }
 

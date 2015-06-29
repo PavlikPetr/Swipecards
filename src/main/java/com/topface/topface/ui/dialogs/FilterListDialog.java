@@ -41,15 +41,16 @@ public class FilterListDialog extends BaseDialog {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Fragment fragment;
         if (savedInstanceState != null) {
             mFormInfo = new FormInfo(getActivity(), savedInstanceState.getInt(SEX),
                     savedInstanceState.getInt(PROFILE_TYPE));
             mTitleId = savedInstanceState.getInt(TITLE_ID);
             mTargetId = savedInstanceState.getInt(TARGET_ID);
             mViewId = savedInstanceState.getInt(VIEW_ID);
-            fragment = getActivity().getSupportFragmentManager().findFragmentByTag(FilterFragment.TAG);
-            mDialogRowCliCkInterface = ((FilterFragment) fragment).mDialogOnItemClickListener;
+            Fragment fragment = getParentFragment();
+            if (fragment instanceof FilterFragment) {
+                mDialogRowCliCkInterface = ((FilterFragment) fragment).getDialogOnItemClickListener();
+            }
         }
         return super.onCreateView(inflater, container, savedInstanceState);
     }
