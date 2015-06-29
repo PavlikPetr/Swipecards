@@ -113,13 +113,39 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         }
     };
 
+    private boolean mIsHeight;
+
+    private FilterConstitutionDialog.OnConstitutionDialogListener mConstitutionDialogListener = new FilterConstitutionDialog.OnConstitutionDialogListener() {
+        @Override
+        public void handleValues(FilterConstitutionDialog.ConstitutionLimits limits) {
+            if (limits.min == 0 || limits.max == 0) {
+                setText(getActivity().getString(R.string.general_any), mIsHeight ? mLoFilterHeight : mLoFilterWeight);
+            } else {
+                setText(String.format(mIsHeight ? getActivity().getString(R.string.filter_constitution_template) :
+                                getActivity().getString(R.string.filter_constitution_template),
+                        limits.min, limits.max), mIsHeight ? mLoFilterHeight : mLoFilterWeight);
+            }
+            if (mIsHeight) {
+                mFilter.minHeight = limits.min;
+                mFilter.maxHeight = limits.max;
+            } else {
+                mFilter.minWeight = limits.min;
+                mFilter.maxWeight = limits.max;
+            }
+        }
+    };
+
+    public FilterConstitutionDialog.OnConstitutionDialogListener getConstitutionDialogListener() {
+        return mConstitutionDialogListener;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DialogFragment dialogsFragment = (DialogFragment) getActivity().getSupportFragmentManager()
                 .findFragmentByTag(FilterConstitutionDialog.TAG);
         if (dialogsFragment != null && !dialogsFragment.isAdded()) {
-            dialogsFragment.show(getActivity().getSupportFragmentManager(), FilterConstitutionDialog.TAG);
+            getChildFragmentManager().beginTransaction().show(dialogsFragment).commit();
         }
     }
 
@@ -405,42 +431,26 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 }
                 break;
             case R.id.loFilterHeight:
+                mIsHeight = true;
                 createAndShowConstitutionDialog(App.getAppOptions().getUserHeightMin(),
-                        App.getAppOptions().getUserHeightMax(), mFilter.minHeight, mFilter.maxHeight, R.string.form_main_height_0, true);
+                        App.getAppOptions().getUserHeightMax(), mFilter.minHeight, mFilter.maxHeight, R.string.form_main_height_0);
                 break;
             case R.id.loFilterWeight:
+                mIsHeight = false;
                 createAndShowConstitutionDialog(App.getAppOptions().getUserWeightMin(),
                         App.getAppOptions().getUserWeightMax(), mFilter.minWeight, mFilter.maxWeight,
-                        R.string.form_main_weight_0, false);
+                        R.string.form_main_weight_0);
                 break;
         }
         refreshSaveState();
     }
 
     private void createAndShowConstitutionDialog(int configMin, int configMax, int filterMin, int filterMax
-            , @StringRes int resId, final boolean isHeight) {
-        final FilterConstitutionDialog dialog = FilterConstitutionDialog.newInstance(configMin, configMax, getActivity().getString(resId),
+            , @StringRes int resId) {
+        FilterConstitutionDialog dialog = FilterConstitutionDialog.newInstance(configMin, configMax, getActivity().getString(resId),
                 filterMin, filterMax);
-        dialog.setConstitutionDialogListener(new FilterConstitutionDialog.OnConstitutionDialogListener() {
-            @Override
-            public void handleValues(FilterConstitutionDialog.ConstitutionLimits limits) {
-                if (limits.min == 0 || limits.max == 0) {
-                    setText(getActivity().getString(R.string.general_any), isHeight ? mLoFilterHeight : mLoFilterWeight);
-                } else {
-                    setText(String.format(isHeight ? getActivity().getString(R.string.filter_constitution_template) :
-                                    getActivity().getString(R.string.filter_constitution_template),
-                            limits.min, limits.max), isHeight ? mLoFilterHeight : mLoFilterWeight);
-                }
-                if (isHeight) {
-                    mFilter.minHeight = limits.min;
-                    mFilter.maxHeight = limits.max;
-                } else {
-                    mFilter.minWeight = limits.min;
-                    mFilter.maxWeight = limits.max;
-                }
-            }
-        });
-        dialog.show(getActivity().getSupportFragmentManager(), FilterConstitutionDialog.TAG);
+        dialog.setConstitutionDialogListener(mConstitutionDialogListener);
+        dialog.show(getChildFragmentManager(), FilterConstitutionDialog.TAG);
     }
 
     // create array for spinner Sex
