@@ -205,7 +205,7 @@ public class Products extends AbstractData {
             ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
             DecimalFormat decimalFormat = new DecimalFormat("#.00");
             value = buyBtn.totalTemplate.replace(PRICE, decimalFormat.format((float) buyBtn.price / 100) +
-                    App.getContext().getString(R.string.usd));
+                    context.getString(R.string.usd));
             if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
                 if (detail != null) {
