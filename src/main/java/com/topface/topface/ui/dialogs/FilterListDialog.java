@@ -1,17 +1,27 @@
 package com.topface.topface.ui.dialogs;
 
 import android.app.Dialog;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.topface.topface.R;
 import com.topface.topface.ui.adapters.FilterDialogAdapter;
+import com.topface.topface.ui.edit.FilterFragment;
 import com.topface.topface.utils.FormInfo;
 
 public class FilterListDialog extends BaseDialog {
 
     public static final String TAG = "com.topface.topface.ui.dialogs.FilterListDialog_TAG";
+    private static final String SEX = "sex";
+    private static final String PROFILE_TYPE = "profile_type";
+    private static final String TITLE_ID = "title_id";
+    private static final String TARGET_ID = "target_id";
+    private static final String VIEW_ID = "view_id";
 
     private ListView mList;
     private int mTitleId;
@@ -30,6 +40,21 @@ public class FilterListDialog extends BaseDialog {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Fragment fragment;
+        if (savedInstanceState != null) {
+            mFormInfo = new FormInfo(getActivity(), savedInstanceState.getInt(SEX),
+                    savedInstanceState.getInt(PROFILE_TYPE));
+            mTitleId = savedInstanceState.getInt(TITLE_ID);
+            mTargetId = savedInstanceState.getInt(TARGET_ID);
+            mViewId = savedInstanceState.getInt(VIEW_ID);
+            fragment = getActivity().getSupportFragmentManager().findFragmentByTag(FilterFragment.TAG);
+            mDialogRowCliCkInterface = ((FilterFragment) fragment).mDialogOnItemClickListener;
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
     protected void initViews(View root) {
         mList = (ListView) root.findViewWithTag("loFilterList");
         setAdapter();
@@ -45,10 +70,22 @@ public class FilterListDialog extends BaseDialog {
     }
 
     private void setAdapter() {
+        if (mFormInfo != null)
         mList.setAdapter(new FilterDialogAdapter(getActivity(),
                 R.layout.filter_edit_form_dialog_cell,
                 mFormInfo.getEntriesByTitleId(mTitleId),
                 mFormInfo.getEntry(mTitleId, mTargetId)));
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (outState != null) {
+            outState.putInt(SEX, mFormInfo.getSex());
+            outState.putInt(PROFILE_TYPE, mFormInfo.getProfileType());
+            outState.putInt(TITLE_ID, mTitleId);
+            outState.putInt(TARGET_ID, mTargetId);
+            outState.putInt(VIEW_ID, mViewId);
+        }
     }
 
     @Override
