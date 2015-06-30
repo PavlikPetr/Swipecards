@@ -8,6 +8,7 @@ import com.topface.topface.App;
 import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.fragments.TransparentMarketFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.GoogleMarketApiManager;
 
 
 public class TrialVipPopupAction implements IStartAction {
@@ -52,7 +53,7 @@ public class TrialVipPopupAction implements IStartAction {
     public boolean isApplicable() {
         return !CacheProfile.paid &&
                 App.getUserConfig().getTrialVipCounter() < CacheProfile.getOptions().trialVipExperiment.maxShowCount &&
-                CacheProfile.getOptions().trialVipExperiment.enable;
+                CacheProfile.getOptions().trialVipExperiment.enable && new GoogleMarketApiManager().isMarketApiAvailable();
     }
 
     @Override
