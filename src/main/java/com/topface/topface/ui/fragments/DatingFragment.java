@@ -35,6 +35,7 @@ import android.widget.Toast;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.RetryDialog;
 import com.topface.topface.RetryRequestReceiver;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
@@ -956,6 +957,17 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                             return;
                         }
                     }
+                }
+
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+                    RetryDialog retryDialog = new RetryDialog(getActivity().getString(R.string.general_internet_off), getActivity(), skipRateRequest);
+                    try {
+                        retryDialog.show();
+                    } catch (Exception e) {
+                        Debug.error(e);
+                    }
+
                 }
             }).exec();
         }

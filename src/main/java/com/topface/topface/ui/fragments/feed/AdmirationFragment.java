@@ -17,6 +17,9 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.config.FeedsCache;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -109,5 +112,11 @@ public class AdmirationFragment extends LikesFragment {
     @Override
     protected boolean isReadFeedItems() {
         return false;
+    }
+
+    @NotNull
+    @Override
+    protected FeedsCache.FEEDS_TYPE getFeedsType() {
+        return FeedsCache.FEEDS_TYPE.DATA_MUTUALS_FEEDS;
     }
 }

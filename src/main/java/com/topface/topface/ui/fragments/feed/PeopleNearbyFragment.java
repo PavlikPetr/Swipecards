@@ -77,7 +77,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         mSubscriptionLocation = mAppState.getObservable(Location.class).subscribe(mLocationAction);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
         mGeoLocationManager = new GeoLocationManager(getActivity());
-        mGeoLocationManager.registerProvidersChangedActionReceiver(getActivity());
+        mGeoLocationManager.registerProvidersChangedActionReceiver();
         super.onCreate(savedInstanceState);
     }
 
@@ -100,7 +100,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         if (null != mBalanceSubscription) {
             mBalanceSubscription.unsubscribe();
         }
-        mGeoLocationManager.unregisterProvidersChangedActionReceiver(getActivity());
+        mGeoLocationManager.unregisterProvidersChangedActionReceiver();
         mGeoLocationManager.stopLocationListener();
         super.onDestroy();
     }

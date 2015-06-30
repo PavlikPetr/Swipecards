@@ -409,7 +409,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     private void createObservables() {
         updateData(false, true, false);
-        FeedsCache.FEEDS_TYPE type = getFeedsType();
+        final FeedsCache.FEEDS_TYPE type = getFeedsType();
         if (type != FeedsCache.FEEDS_TYPE.UNKNOWN_TYPE) {
             final Type dataType = getFeedListDataType();
             String fromCacheString = App.getFeedsCache().getFeedFromCache(type);
@@ -423,7 +423,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             mCacheSubscription = mCacheObservable.subscribe(new Action1<FeedList<T>>() {
                 @Override
                 public void call(FeedList<T> ts) {
-                    Debug.log("OBSERVABLE mCacheSubscription");
+                    Debug.log("OBSERVABLE mCacheSubscription " + type + " size " + ts.size());
                     processSuccessUpdate(new FeedListData<>(ts, true, getFeedListItemClass()));
                 }
 
@@ -443,7 +443,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             mResponseSubscription = mResponseObservable.subscribe(new Action1<FeedList<T>>() {
                 @Override
                 public void call(FeedList<T> ts) {
-                    Debug.log("OBSERVABLE mResponseSubscription");
+                    Debug.log("OBSERVABLE mResponseSubscription " + type + " size " + ts.size());
                     if (!mCacheSubscription.isUnsubscribed()) {
                         mCacheSubscription.unsubscribe();
                     }
@@ -1008,11 +1008,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             initEmptyFeedView(mInflated, errorCode);
         }
         if (mInflated != null) {
-            if (errorCode == ErrorCodes.CANNOT_GET_GEO) {
-                mInflated.setVisibility(View.VISIBLE);
-            } else {
-                mInflated.setVisibility(mListAdapter != null && mListAdapter.isEmpty() ? View.VISIBLE : View.GONE);
-            }
+            mInflated.setVisibility(View.VISIBLE);
             initEmptyFeedView(mInflated, errorCode);
         }
         mBackgroundController.hide();
