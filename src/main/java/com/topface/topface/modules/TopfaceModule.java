@@ -71,6 +71,7 @@ public class TopfaceModule {
                     CacheProfile.money = balanceData.money;
                 } else if (data.getClass() == CountersData.class) {
                     CountersData countersData = (CountersData) data;
+                    CacheProfile.countersData = (CountersData) data;
                     CacheProfile.unread_likes = countersData.likes;
                     CacheProfile.unread_messages = countersData.dialogs;
                     CacheProfile.unread_mutual = countersData.mutual;

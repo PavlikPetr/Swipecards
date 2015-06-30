@@ -55,6 +55,7 @@ import javax.inject.Inject;
 
 import rx.Subscription;
 import rx.functions.Action1;
+import rx.functions.Func1;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.BONUS;
@@ -157,7 +158,6 @@ public class MenuFragment extends Fragment {
     private void initBonus() {
         if (CacheProfile.getOptions().bonus.enabled && !mAdapter.hasFragment(BONUS)) {
             mAdapter.addItem(LeftMenuAdapter.newLeftMenuItem(BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE, R.drawable.ic_bonus_selector));
-            mAdapter.refreshCounterBadges();
         }
     }
 
@@ -243,12 +243,20 @@ public class MenuFragment extends Fragment {
         if (mAdapter == null) {
             mAdapter = new LeftMenuAdapter(menuItems);
             mListView.setAdapter(mAdapter);
-            mCountersSubscription = mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
-                @Override
-                public void call(CountersData countersData) {
-                        mAdapter.updateCountersBadge(countersData);
-                }
-            });
+            mCountersSubscription = mAppState.getObservable(CountersData.class)
+                    .map(new Func1<CountersData, CountersData>() {
+                        @Override
+                        public CountersData call(CountersData countersData) {
+                            countersData.bonus = CacheProfile.needShowBonusCounter ? CacheProfile.getOptions().bonus.counter : 0;
+                            return countersData;
+                        }
+                    })
+                    .subscribe(new Action1<CountersData>() {
+                        @Override
+                        public void call(CountersData countersData) {
+                            mAdapter.updateCountersBadge(countersData);
+                        }
+                    });
         }
     }
 
@@ -517,7 +525,6 @@ public class MenuFragment extends Fragment {
                     config.saveConfig();
                 }
                 CacheProfile.needShowBonusCounter = false;
-                mAdapter.refreshCounterBadges();
                 if (!TextUtils.isEmpty(CacheProfile.getOptions().bonus.integrationUrl) ||
                         CacheProfile.getOptions().offerwalls.hasOffers()
                         ) {

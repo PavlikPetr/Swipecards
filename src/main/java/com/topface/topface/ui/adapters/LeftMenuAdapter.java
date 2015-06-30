@@ -202,34 +202,20 @@ public class LeftMenuAdapter extends BaseAdapter {
         return TYPE_COUNT;
     }
 
-    public void refreshCounterBadges() {
-        for (BaseFragment.FragmentId id : mCountersBadgesMap.keySet()) {
-            updateCounterBadge(id, mCountersBadgesMap.get(id));
-        }
-    }
-
     public void updateCountersBadge(CountersData countersData) {
-        updateCounterBage(mCountersBadgesMap.get(BaseFragment.FragmentId.TABBED_DIALOGS), countersData.dialogs);
-        updateCounterBage(mCountersBadgesMap.get(BaseFragment.FragmentId.TABBED_VISITORS), countersData.visitors);
-        updateCounterBage(mCountersBadgesMap.get(BaseFragment.FragmentId.TABBED_LIKES), countersData.likes);
-        updateCounterBage(mCountersBadgesMap.get(BaseFragment.FragmentId.GEO), countersData.peopleNearby);
-    }
-
-    private void updateCounterBage(TextView view, int value) {
-        if (view != null) {
-            view.setVisibility(value == 0 ? View.INVISIBLE : View.VISIBLE);
-            view.setText(String.valueOf(value));
+        updateCountersBadge(mCountersBadgesMap.get(BaseFragment.FragmentId.TABBED_DIALOGS), countersData.dialogs);
+        updateCountersBadge(mCountersBadgesMap.get(BaseFragment.FragmentId.TABBED_VISITORS), countersData.visitors);
+        updateCountersBadge(mCountersBadgesMap.get(BaseFragment.FragmentId.TABBED_LIKES), countersData.likes);
+        updateCountersBadge(mCountersBadgesMap.get(BaseFragment.FragmentId.GEO), countersData.peopleNearby);
+        if (mCountersBadgesMap.containsKey(BaseFragment.FragmentId.BONUS)) {
+            updateCountersBadge(mCountersBadgesMap.get(BaseFragment.FragmentId.BONUS), countersData.bonus);
         }
     }
 
-    private void updateCounterBadge(BaseFragment.FragmentId menuId, TextView mCounterBadgeView) {
-        if (mCounterBadgeView == null) return;
-        int unreadCounter = CacheProfile.getUnreadCounterByFragmentId(menuId);
-        if (unreadCounter > 0) {
-            mCounterBadgeView.setText(Integer.toString(unreadCounter));
-            mCounterBadgeView.setVisibility(View.VISIBLE);
-        } else {
-            mCounterBadgeView.setVisibility(View.GONE);
+    private void updateCountersBadge(TextView view, int value) {
+        if (view != null) {
+            view.setVisibility(value > 0 ? View.VISIBLE : View.INVISIBLE);
+            view.setText(String.valueOf(value));
         }
     }
 

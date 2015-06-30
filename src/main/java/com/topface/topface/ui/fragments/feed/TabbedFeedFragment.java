@@ -113,7 +113,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        App.from(getActivity().getApplicationContext()).inject(this);
+        App.from(getActivity()).inject(this);
         View root = inflater.inflate(R.layout.fragment_tabbed_feed, null);
         initPages(root);
         mCountersSubscription = mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {

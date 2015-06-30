@@ -99,13 +99,20 @@ public class CountersManager {
     }
 
     public void setEntitiesCounters(JSONObject unread) {
+        if (unread == null) {
+            return;
+        }
         App.from(mContext).inject(this);
         CountersData countersData = JsonUtils.fromJson(unread.toString(), CountersData.class);
-        mAppState.setData(countersData);
+        if (countersData != null) {
+            mAppState.setData(countersData);
+        }
     }
 
     public void setBalanceCounters(JSONObject balanceJson) {
-        if (balanceJson == null) return;
+        if (balanceJson == null) {
+            return;
+        }
         App.from(mContext).inject(this);
         BalanceData balanceData = JsonUtils.fromJson(balanceJson.toString(), BalanceData.class);
         mAppState.setData(balanceData);

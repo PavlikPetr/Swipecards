@@ -14,6 +14,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.data.City;
+import com.topface.topface.data.CountersData;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
@@ -24,7 +25,6 @@ import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.CitySearchActivity;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.utils.config.SessionConfig;
 
@@ -48,6 +48,7 @@ public class CacheProfile {
     public final static int NOTIFICATIONS_VISITOR = 4;
 
     // Data
+    public static CountersData countersData;
     public static int uid;                      // id пользователя в топфейсе
     public static String first_name;            // имя пользователя
     public static int age;                      // возраст пользователя
@@ -435,23 +436,6 @@ public class CacheProfile {
 
     public static boolean isEditor() {
         return editor;
-    }
-
-    public static int getUnreadCounterByFragmentId(BaseFragment.FragmentId id) {
-        switch (id) {
-            case TABBED_DIALOGS:
-                return CacheProfile.unread_messages;
-            case TABBED_VISITORS:
-                return CacheProfile.unread_visitors + CacheProfile.unread_fans;
-            case GEO:
-                return CacheProfile.unread_geo;
-            case BONUS:
-                return needShowBonusCounter ? getOptions().bonus.counter : 0;
-            case TABBED_LIKES:
-                return CacheProfile.unread_admirations + CacheProfile.unread_likes + CacheProfile.unread_mutual;
-            default:
-                return 0;
-        }
     }
 
     /**
