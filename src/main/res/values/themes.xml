@@ -120,7 +120,6 @@
 
     <style name="Theme.Topface.NoActionBar" parent="Theme.Topface">
         <item name="android:windowNoTitle">true</item>
-        <!--Action Bar-->
         <item name="windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
         <item name="windowActionBar">false</item>

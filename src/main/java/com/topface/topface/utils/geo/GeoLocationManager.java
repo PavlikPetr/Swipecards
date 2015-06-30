@@ -14,6 +14,8 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.state.TopfaceAppState;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.inject.Inject;
 
 import static android.location.LocationManager.GPS_PROVIDER;
@@ -32,7 +34,6 @@ public class GeoLocationManager {
     private static final float UPDATE_RANGE = 10f;
     private LocationManager mLocationManager;
     private Location mBestLocation;
-    private Activity mActivity;
     private ChangeLocationListener mNetworkLocationListener = new ChangeLocationListener() {
         @Override
         public void onLocationChanged(Location location) {

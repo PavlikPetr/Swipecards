@@ -39,8 +39,8 @@ import dagger.Provides;
                 PurchasesFragment.class,
                 AddToLeaderActivity.class,
                 LikesFragment.class,
-                MenuFragment.class,
-                AdmirationFragment.class
+                AdmirationFragment.class,
+                MenuFragment.class
         }
 )
 public class TopfaceModule {

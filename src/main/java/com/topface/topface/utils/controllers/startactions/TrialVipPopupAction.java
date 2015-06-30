@@ -50,7 +50,7 @@ public class TrialVipPopupAction implements IStartAction {
 
     @Override
     public boolean isApplicable() {
-        return !CacheProfile.paid &&
+        return !CacheProfile.paid && !CacheProfile.premium &&
                 App.getUserConfig().getTrialVipCounter() < CacheProfile.getOptions().trialVipExperiment.maxShowCount &&
                 CacheProfile.getOptions().trialVipExperiment.enable;
     }

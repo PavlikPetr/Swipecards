@@ -32,6 +32,9 @@ import java.util.List;
 
 public class Products extends AbstractData {
     private static final String PRICE = "{{price}}";
+    private static final String EUR = "EUR";
+    private static final String RUB = "RUB";
+    private static final String USD = "USD";
 
     public enum ProductType {
         COINS("coins"),
@@ -94,7 +97,7 @@ public class Products extends AbstractData {
         App.getOpenIabHelperManager().updateInventory();
     }
 
-    private void fillProducts(JSONObject data) {
+    protected void fillProducts(JSONObject data) {
         if (data == null) {
             Debug.error("Products data is empty");
             return;
@@ -204,15 +207,16 @@ public class Products extends AbstractData {
             ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
             if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
-                if (detail != null) {
+                if (detail != null && !detail.currency.equals(USD)) {
                     double price = detail.price / ProductsDetails.MICRO_AMOUNT;
-                    DecimalFormat decimalFormat = new DecimalFormat("#.00");
+                    DecimalFormat decimalFormat = new DecimalFormat("#.##");
                     value = buyBtn.totalTemplate.replace(PRICE,
                             String.format("%s %s", decimalFormat.format(price),
-                                    detail.currency));
+                                    detail.currency.equals(RUB) ? context.getString(R.string.rub) :
+                                            (detail.currency.equals(EUR) ? context.getString(R.string.eur) : detail.currency)));
                 } else {
-                    value = buyBtn.totalTemplate.replace(PRICE, ((float) buyBtn.price / 100) +
-                            App.getContext().getString(R.string.usd));
+                    value = buyBtn.totalTemplate.replace(PRICE, context.getString(R.string.usd) +
+                            ((float) buyBtn.price / 100));
                 }
             }
             economy = buyBtn.hint;

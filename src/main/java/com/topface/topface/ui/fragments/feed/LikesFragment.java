@@ -333,7 +333,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                             }
                             return;
                         }
-                        if (CacheProfile.money >= blockSympathyOptions.price) {
+                        if (mCoins >= blockSympathyOptions.price) {
                             btnBuy.setVisibility(View.INVISIBLE);
                             progress.setVisibility(View.VISIBLE);
                             EasyTracker.sendEvent(
