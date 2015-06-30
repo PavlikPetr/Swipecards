@@ -1,7 +1,5 @@
 package com.topface.topface.data;
 
-import android.util.ArrayMap;
-
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.utils.Utils;
