@@ -344,8 +344,7 @@ public class GCMUtils {
     }
 
     private static void setCounters(Intent extra, Context context) {
-        CountersManager counterManager = CountersManager.getInstance(context)
-                .setMethod(CountersManager.CHANGED_BY_GCM);
+        CountersManager counterManager = CountersManager.getInstance(context);
         try {
             String countersStr = extra.getStringExtra("counters");
             if (countersStr != null) {

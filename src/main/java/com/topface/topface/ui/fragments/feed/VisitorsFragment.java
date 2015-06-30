@@ -13,7 +13,6 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.VisitorsListAdapter;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONObject;
@@ -29,8 +28,8 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
-    protected int getFeedType() {
-        return CountersManager.VISITORS;
+    protected int getFeedCounter() {
+        return mCountersData.visitors;
     }
 
     @Override
@@ -90,7 +89,7 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
 
     @Override
     protected int getUnreadCounter() {
-        return CacheProfile.unread_visitors;
+        return mCountersData.visitors;
     }
 
     @Override

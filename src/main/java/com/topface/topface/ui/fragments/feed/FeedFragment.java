@@ -39,6 +39,7 @@ import com.topface.topface.Static;
 import com.topface.topface.banners.BannersController;
 import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.banners.PageInfo;
+import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedUser;
@@ -53,6 +54,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -75,10 +77,14 @@ import org.json.JSONObject;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
+
 import static android.widget.AdapterView.OnItemClickListener;
 import static com.topface.topface.utils.CountersManager.METHOD_INTENT_STRING;
 import static com.topface.topface.utils.CountersManager.NULL_METHOD;
-import static com.topface.topface.utils.CountersManager.getInstance;
 
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         implements FeedAdapter.OnAvatarClickListener<T>, IPageWithAds {
@@ -218,6 +224,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     };
     private FeedRequest.UnreadStatePair mLastUnreadState = new FeedRequest.UnreadStatePair();
     private View mInflated;
+    private Subscription mCountersSubscription;
+    protected CountersData mCountersData = new CountersData();
+    @Inject
+    TopfaceAppState mAppState;
 
     protected static void initButtonForBlockedScreen(Button button, String buttonText, View.OnClickListener listener) {
         initButtonForBlockedScreen(null, null, button, buttonText, listener);
@@ -373,9 +383,20 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.from(getActivity()).inject(this);
+        mCountersSubscription = mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
+            @Override
+            public void call(CountersData countersData) {
+                mCountersData = countersData;
+                countersUpdated(countersData);
+            }
+        });
         registerGcmReceiver();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBlacklistedReceiver, new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+    }
+
+    protected void countersUpdated(CountersData countersData) {
     }
 
     @Override
@@ -409,6 +430,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mCountersSubscription.unsubscribe();
         if (mBannersController != null) {
             mBannersController.onDestroy();
         }
@@ -446,7 +468,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         return new int[]{GCMUtils.GCM_TYPE_UNKNOWN};
     }
 
-    abstract protected int getFeedType();
+    abstract protected int getFeedCounter();
 
     protected int getLayout() {
         return R.layout.fragment_feed;
@@ -997,7 +1019,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     private void updateDataAfterReceivingCounters(String lastMethod) {
         if (!lastMethod.equals(NULL_METHOD) && lastMethod.equals(getRequest().getServiceName())) {
-            int counters = getInstance(getActivity()).getCounter(getFeedType());
+            int counters = getFeedCounter();
             if (counters > 0) {
                 updateData(true, false);
             }

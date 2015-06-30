@@ -6,7 +6,6 @@ import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.VisitorsMarkReadedRequest;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
 public class PromoKey71Dialog extends PromoDialog {
@@ -16,9 +15,10 @@ public class PromoKey71Dialog extends PromoDialog {
     @Override
     public void initViews(View root) {
         super.initViews(root);
-        int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
+        int curVisitCounter = mCountersData.visitors;
         if (curVisitCounter == 0) {
-            CountersManager.getInstance(getActivity()).setCounter(CountersManager.VISITORS, curVisitCounter + getPremiumEntity().getCount());
+            mCountersData.visitors = mCountersData.visitors + getPremiumEntity().getCount();
+            appState.setData(mCountersData);
             counterUpdated = true;
         }
     }
@@ -41,7 +41,7 @@ public class PromoKey71Dialog extends PromoDialog {
     @Override
     protected String getMessage() {
         int count = getPremiumEntity().getCount();
-        int guests = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
+        int guests = mCountersData.visitors;
         count = guests > 0 ? guests : count;
         return Utils.getQuantityString(getPluralForm(), count, count);
     }
@@ -57,9 +57,9 @@ public class PromoKey71Dialog extends PromoDialog {
         VisitorsMarkReadedRequest request = new VisitorsMarkReadedRequest(getActivity());
         request.exec();
         //Откручиваем счетчик назад
-        int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.VISITORS);
         if (counterUpdated) {
-            CountersManager.getInstance(getActivity()).setCounter(CountersManager.VISITORS, curVisitCounter - getPremiumEntity().getCount());
+            mCountersData.visitors = mCountersData.visitors - getPremiumEntity().getCount();
+            appState.setData(mCountersData);
         }
     }
 }

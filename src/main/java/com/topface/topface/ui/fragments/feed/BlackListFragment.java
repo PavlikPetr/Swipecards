@@ -27,7 +27,7 @@ public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> imple
     }
 
     @Override
-    protected int getFeedType() {
+    protected int getFeedCounter() {
         return CountersManager.UNKNOWN_TYPE;
     }
 

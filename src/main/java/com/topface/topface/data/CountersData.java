@@ -1,5 +1,7 @@
 package com.topface.topface.data;
 
+import com.topface.topface.ui.fragments.BaseFragment;
+
 /**
  * Counters data
  * Created by onikitin on 24.06.15.
@@ -15,16 +17,33 @@ public class CountersData {
     public int peopleNearby = 0;
     public int bonus = 0;
 
+    public CountersData(CountersData countersData) {
+        this.likes = countersData.likes;
+        this.mutual = countersData.mutual;
+        this.dialogs = countersData.dialogs;
+        this.visitors = countersData.visitors;
+        this.fans = countersData.fans;
+        this.admirations = countersData.admirations;
+        this.peopleNearby = countersData.peopleNearby;
+    }
 
-    public CountersData(int likes, int mutual, int dialogs, int visitors
-            , int fans, int admirations, int peopleNearby) {
-        this.likes = likes;
-        this.mutual = mutual;
-        this.dialogs = dialogs;
-        this.visitors = visitors;
-        this.fans = fans;
-        this.admirations = admirations;
-        this.peopleNearby = peopleNearby;
+    public CountersData() {
+    }
+
+    public int getCounterByFragmentId(BaseFragment.FragmentId id) {
+        switch (id) {
+            case TABBED_DIALOGS:
+                return dialogs;
+            case TABBED_VISITORS:
+                return visitors;
+            case TABBED_LIKES:
+                return likes;
+            case GEO:
+                return peopleNearby;
+            case BONUS:
+                return bonus;
+        }
+        return -1;
     }
 
     @SuppressWarnings("unused")

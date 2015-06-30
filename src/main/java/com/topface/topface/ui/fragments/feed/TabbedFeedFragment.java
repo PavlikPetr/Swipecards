@@ -58,6 +58,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     protected static int mLikesLastOpenedPage = 0;
     protected static int mDialogsLastOpenedPage = 0;
     private Subscription mCountersSubscription;
+    protected CountersData mCountersData = new CountersData();
 
     public static void setTabsDefaultPosition() {
         mVisitorsastOpenedPage = 0;
@@ -105,7 +106,6 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
 
     private void onCountersUpdated(CountersData countersData) {
         onBeforeCountersUpdate(countersData);
-
         if (mSlidingTabLayout != null) {
             mSlidingTabLayout.updateTitles();
         }
@@ -119,6 +119,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         mCountersSubscription = mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
             @Override
             public void call(CountersData countersData) {
+                mCountersData = countersData;
                 onCountersUpdated(countersData);
             }
         });

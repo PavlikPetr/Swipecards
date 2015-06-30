@@ -72,7 +72,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         }
     };
     private Subscription mBalanceSubscription;
-    private Subscription mCountersSubscription;
 
     @Override
     protected boolean isReadFeedItems() {
@@ -84,19 +83,17 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         super.onCreate(savedInstanceState);
         App.from(getActivity()).inject(this);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
-        mCountersSubscription = mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
-            @Override
-            public void call(CountersData countersData) {
-                updateTitleWithCounter(countersData);
-            }
-        });
+    }
+
+    @Override
+    protected void countersUpdated(CountersData countersData) {
+        updateTitleWithCounter(countersData);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         mBalanceSubscription.unsubscribe();
-        mCountersSubscription.unsubscribe();
     }
 
     @Override
@@ -129,8 +126,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected int getFeedType() {
-        return CountersManager.LIKES;
+    protected int getFeedCounter() {
+        return mCountersData.likes;
     }
 
     private void onMutual(FeedItem item) {
@@ -178,8 +175,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         if (mTitleWithCounter != null) {
             String title = Utils.getQuantityString(
                     R.plurals.you_were_liked,
-                    countersData != null ? countersData.likes : CacheProfile.unread_likes,
-                    countersData != null ? countersData.likes : CacheProfile.unread_likes
+                    countersData.likes,
+                    countersData.likes
             );
             mTitleWithCounter.setText(title);
         }
@@ -438,7 +435,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     @Override
     protected int getUnreadCounter() {
-        return CacheProfile.unread_likes;
+        return mCountersData.likes;
     }
 
     @Override
@@ -447,7 +444,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     private void showInterstitial() {
-        if (getFeedType() == CountersManager.LIKES) {
+        if (getFeedCounter() == CountersManager.LIKES) {
             AdmobInterstitialUtils.requestPreloadedInterstitial(getActivity());
         }
     }

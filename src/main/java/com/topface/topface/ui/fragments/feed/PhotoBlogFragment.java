@@ -30,6 +30,7 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.PhotoBlogListAdapter;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
 
@@ -158,8 +159,8 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     }
 
     @Override
-    protected int getFeedType() {
-        return -1;
+    protected int getFeedCounter() {
+        return CountersManager.UNKNOWN_TYPE;
     }
 
     @Override

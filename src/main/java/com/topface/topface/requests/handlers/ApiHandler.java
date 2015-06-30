@@ -120,8 +120,7 @@ abstract public class ApiHandler extends Handler {
             String method = response.getMethodName();
             Debug.log("Set counters from method " + method);
             CountersManager countersManager = CountersManager
-                    .getInstance(App.getContext())
-                    .setMethod(method);
+                    .getInstance(App.getContext());
 
             if (unread != null) {
                 countersManager.setEntitiesCounters(unread);

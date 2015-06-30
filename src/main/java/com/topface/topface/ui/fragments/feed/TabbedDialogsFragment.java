@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments.feed;
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.CountersData;
-import com.topface.topface.utils.CacheProfile;
 
 public class TabbedDialogsFragment extends TabbedFeedFragment {
 
@@ -20,7 +19,7 @@ public class TabbedDialogsFragment extends TabbedFeedFragment {
 
     @Override
     protected void addPages() {
-        addBodyPage(DialogsFragment.class.getName(), getString(R.string.general_dbl_all), CacheProfile.unread_messages);
+        addBodyPage(DialogsFragment.class.getName(), getString(R.string.general_dbl_all), mCountersData.dialogs);
         addBodyPage(BookmarksFragment.class.getName(), getString(R.string.general_bookmarks), 0);
     }
 

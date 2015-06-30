@@ -23,10 +23,10 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
 
     @Override
     protected void addPages() {
-        addBodyPage(LikesFragment.class.getName(), getString(R.string.general_likes), CacheProfile.unread_likes);
-        addBodyPage(MutualFragment.class.getName(), getString(R.string.general_mutual), CacheProfile.unread_mutual);
+        addBodyPage(LikesFragment.class.getName(), getString(R.string.general_likes), mCountersData.likes);
+        addBodyPage(MutualFragment.class.getName(), getString(R.string.general_mutual), mCountersData.mutual);
         if (!CacheProfile.getOptions().isHideAdmirations) {
-            addBodyPage(AdmirationFragment.class.getName(), getString(R.string.general_admirations), CacheProfile.unread_admirations);
+            addBodyPage(AdmirationFragment.class.getName(), getString(R.string.general_admirations), mCountersData.admirations);
         }
     }
 

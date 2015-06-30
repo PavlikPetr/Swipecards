@@ -203,12 +203,9 @@ public class LeftMenuAdapter extends BaseAdapter {
     }
 
     public void updateCountersBadge(CountersData countersData) {
-        updateCountersBadge(mCountersBadgesMap.get(BaseFragment.FragmentId.TABBED_DIALOGS), countersData.dialogs);
-        updateCountersBadge(mCountersBadgesMap.get(BaseFragment.FragmentId.TABBED_VISITORS), countersData.visitors);
-        updateCountersBadge(mCountersBadgesMap.get(BaseFragment.FragmentId.TABBED_LIKES), countersData.likes);
-        updateCountersBadge(mCountersBadgesMap.get(BaseFragment.FragmentId.GEO), countersData.peopleNearby);
-        if (mCountersBadgesMap.containsKey(BaseFragment.FragmentId.BONUS)) {
-            updateCountersBadge(mCountersBadgesMap.get(BaseFragment.FragmentId.BONUS), countersData.bonus);
+        for (BaseFragment.FragmentId id : mCountersBadgesMap.keySet()) {
+            int counter = countersData.getCounterByFragmentId(id);
+            updateCountersBadge(mCountersBadgesMap.get(id), counter);
         }
     }
 

@@ -3,6 +3,9 @@ package com.topface.topface.modules;
 import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
+import com.topface.topface.promo.dialogs.PromoDialog;
+import com.topface.topface.promo.dialogs.PromoKey71Dialog;
+import com.topface.topface.promo.dialogs.PromoKey81Dialog;
 import com.topface.topface.state.CacheDataInterface;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.AddToLeaderActivity;
@@ -13,12 +16,19 @@ import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.feed.AdmirationFragment;
+import com.topface.topface.ui.fragments.feed.BookmarksFragment;
+import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.FansFragment;
+import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
+import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
+import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
 import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
+import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.actionbar.OverflowMenu;
@@ -53,7 +63,19 @@ import dagger.Provides;
                 TabbedDialogsFragment.class,
                 TabbedVisitorsFragment.class,
                 NavigationActivity.class,
-                ChatFragment.class
+                ChatFragment.class,
+                FeedFragment.class,
+                DialogsFragment.class,
+                BookmarksFragment.class,
+                VisitorsFragment.class,
+                FansFragment.class,
+                MutualFragment.class,
+                AdmirationFragment.class,
+                PeopleNearbyFragment.class,
+                PhotoBlogFragment.class,
+                PromoDialog.class,
+                PromoKey71Dialog.class,
+                PromoKey81Dialog.class
         }
 )
 public class TopfaceModule {
@@ -70,15 +92,7 @@ public class TopfaceModule {
                     CacheProfile.likes = balanceData.likes;
                     CacheProfile.money = balanceData.money;
                 } else if (data.getClass() == CountersData.class) {
-                    CountersData countersData = (CountersData) data;
                     CacheProfile.countersData = (CountersData) data;
-                    CacheProfile.unread_likes = countersData.likes;
-                    CacheProfile.unread_messages = countersData.dialogs;
-                    CacheProfile.unread_mutual = countersData.mutual;
-                    CacheProfile.unread_visitors = countersData.visitors;
-                    CacheProfile.unread_fans = countersData.fans;
-                    CacheProfile.unread_admirations = countersData.admirations;
-                    CacheProfile.unread_geo = countersData.peopleNearby;
                 }
             }
 
@@ -87,9 +101,7 @@ public class TopfaceModule {
                 if (BalanceData.class.equals(classType)) {
                     return (T) new BalanceData(CacheProfile.premium, CacheProfile.likes, CacheProfile.money);
                 } else if (CountersData.class.equals(classType)) {
-                    return (T) new CountersData(CacheProfile.unread_likes, CacheProfile.unread_mutual,
-                            CacheProfile.unread_messages, CacheProfile.unread_visitors, CacheProfile.unread_fans,
-                            CacheProfile.unread_admirations, CacheProfile.unread_geo);
+                    return (T) (CacheProfile.countersData != null ? new CountersData(CacheProfile.countersData) : new CountersData());
                 }
                 return null;
             }
