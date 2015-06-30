@@ -8,6 +8,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
+import com.topface.topface.data.AppSocialAppsIds;
 import com.topface.topface.utils.config.SessionConfig;
 
 import org.json.JSONObject;
@@ -94,7 +95,8 @@ public class OkAuthorizer extends Authorizer {
 
     public OkAuthorizer(Activity activity) {
         super(activity);
-        mOkAuthObject = Odnoklassniki.createInstance(getActivity(), Static.AUTH_OK_ID, Static.OK_SECRET_KEY, Static.OK_PUBLIC_KEY);
+        AppSocialAppsIds ids = App.getAppSocialAppsIds();
+        mOkAuthObject = Odnoklassniki.createInstance(getActivity(), ids.okId, ids.getOkSecretKey(), ids.getOkPublicKey());
     }
 
     @Override
