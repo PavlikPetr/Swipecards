@@ -340,6 +340,10 @@
                     android:host="ok125879808"
                     android:scheme="okauth" />
 
+                <data
+                    android:host="ok192696576"
+                    android:scheme="okauth" />
+
             </intent-filter>
         </activity>
 

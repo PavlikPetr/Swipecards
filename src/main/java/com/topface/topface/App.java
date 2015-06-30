@@ -39,6 +39,7 @@ import com.topface.topface.requests.AmazonProductsRequest;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AppGetOptionsRequest;
+import com.topface.topface.requests.AppGetSocialAppsIdsRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GooglePlayProductsRequest;
 import com.topface.topface.requests.IApiResponse;
@@ -49,7 +50,6 @@ import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.requests.AppGetSocialAppsIdsRequest;
 import com.topface.topface.requests.transport.HttpApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
@@ -456,7 +456,7 @@ public class App extends Application {
     }
 
     private void sendUnauthorizedRequests() {
-        new ParallelApiRequest(getContext())
+        new ParallelApiRequest(getContext()) { @Override public boolean isNeedAuth() { return false; } }
                 .addRequest(new AppGetOptionsRequest(getContext()).callback(new DataApiHandler<AppOptions>() {
                     @Override
                     protected void success(AppOptions data, IApiResponse response) {
