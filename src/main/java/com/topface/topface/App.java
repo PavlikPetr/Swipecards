@@ -61,6 +61,7 @@ import com.topface.topface.utils.ad.NativeAdManager;
 import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.Configurations;
+import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.HockeySender;
@@ -298,6 +299,10 @@ public class App extends Application {
 
     public static AppConfig getAppConfig() {
         return getConfig().getAppConfig();
+    }
+
+    public static FeedsCache getFeedsCache() {
+        return getConfig().getFeedsCache();
     }
 
     public static SessionConfig getSessionConfig() {

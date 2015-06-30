@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed;
 
 import android.view.View;
 
+import com.google.gson.reflect.TypeToken;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedMutual;
@@ -9,14 +10,18 @@ import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteMutualsRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.MutualListAdapter;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class MutualFragment extends FeedFragment<FeedMutual> {
@@ -32,8 +37,19 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     }
 
     @Override
+    protected Type getFeedListDataType() {
+        return new TypeToken<FeedList<FeedMutual>>() {
+        }.getType();
+    }
+
+    @Override
+    protected Class getFeedListItemClass() {
+        return FeedMutual.class;
+    }
+
+    @Override
     protected FeedListData<FeedMutual> getFeedList(JSONObject response) {
-        return new FeedListData<>(response, FeedMutual.class);
+        return new FeedListData<>(response, getFeedListItemClass());
     }
 
     @Override
@@ -73,6 +89,12 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     @Override
     protected int getFeedType() {
         return CountersManager.SYMPATHY;
+    }
+
+    @NotNull
+    @Override
+    protected FeedsCache.FEEDS_TYPE getFeedsType() {
+        return FeedsCache.FEEDS_TYPE.DATA_MUTUALS_FEEDS;
     }
 
     @Override

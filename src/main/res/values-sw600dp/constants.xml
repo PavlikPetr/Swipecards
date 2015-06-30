@@ -2,4 +2,6 @@
 <resources>
     <!-- Все устройства с шириной больше или равной 600dp считаем планшетами -->
     <bool name="is_tablet">true</bool>
+    <!--Количество фидов, которые сохраним в кеш на планшете-->
+    <integer name="feeds_count_to_cache">30</integer>
 </resources>

@@ -10,6 +10,9 @@ import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.config.FeedsCache;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -62,6 +65,12 @@ public class FansFragment extends BookmarksFragment {
     @Override
     protected boolean isForPremium() {
         return true;
+    }
+
+    @NotNull
+    @Override
+    protected FeedsCache.FEEDS_TYPE getFeedsType() {
+        return FeedsCache.FEEDS_TYPE.DATA_FANS_FEEDS;
     }
 
     @Override

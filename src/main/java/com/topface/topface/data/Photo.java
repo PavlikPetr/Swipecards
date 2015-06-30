@@ -29,16 +29,16 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     public static final String SIZE_256 = "c256x256";
     public static final String SIZE_960 = "r640x960";
 
-    private HashMap<Interval, String> intervals;
+    private transient HashMap<Interval, String> intervals;
 
     //Этот флаг нужен для того, чтобы ставить пустые фото в поиске, которые, будут подгружаться после запроса альбома
-    private boolean isFakePhoto = false;
+    private transient boolean isFakePhoto = false;
 
     public static final String SIZE_64_ONLY = "c64x-";
     public static final String SIZE_150 = "r150x-";
     public static final String SIZE_64 = "c64x64";
     public static final String SIZE_ORIGINAL = "original";
-    private String[] deprecatedSizes = {
+    private transient String[] deprecatedSizes = {
             SIZE_64,
             SIZE_64_ONLY,
             SIZE_150,
@@ -115,7 +115,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
      */
     @SerializedName("id")
     protected int mId;
-    private Pattern mPattern;
+    private transient Pattern mPattern;
     public int liked;
     public boolean canBecomeLeader;
     public int position;

@@ -711,7 +711,8 @@ public class Options extends AbstractData {
     }
 
     public boolean isScruffyEnabled() {
-        return scruffy != null ? scruffy : false;
+//        return scruffy != null ? scruffy : false;
+        return false;
     }
 
     public class InterstitialInFeeds {

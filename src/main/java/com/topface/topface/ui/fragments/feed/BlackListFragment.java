@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed;
 
 import android.view.View;
 
+import com.google.gson.reflect.TypeToken;
 import com.topface.topface.R;
 import com.topface.topface.data.BlackListItem;
 import com.topface.topface.data.FeedListData;
@@ -10,10 +11,12 @@ import com.topface.topface.requests.DeleteBlackListRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.adapters.BlackListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.utils.CountersManager;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 /**
@@ -37,8 +40,19 @@ public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> imple
     }
 
     @Override
+    protected Type getFeedListDataType() {
+        return new TypeToken<FeedList<BlackListItem>>() {
+        }.getType();
+    }
+
+    @Override
+    protected Class getFeedListItemClass() {
+        return BlackListItem.class;
+    }
+
+    @Override
     protected FeedListData<BlackListItem> getFeedList(JSONObject response) {
-        return new FeedListData<>(response, BlackListItem.class);
+        return new FeedListData<>(response, getFeedListItemClass());
     }
 
     /**

@@ -9,6 +9,7 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
+import com.topface.topface.ui.fragments.feed.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -38,7 +39,8 @@ import dagger.Provides;
                 PurchasesFragment.class,
                 AddToLeaderActivity.class,
                 LikesFragment.class,
-                MenuFragment.class
+                MenuFragment.class,
+                AdmirationFragment.class
         }
 )
 public class TopfaceModule {

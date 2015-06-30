@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.google.gson.reflect.TypeToken;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -37,6 +38,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
 import com.topface.topface.ui.fragments.PurchasesFragment;
@@ -48,10 +50,13 @@ import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
+import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -91,6 +96,17 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         super.onCreate(savedInstanceState);
         App.from(getActivity()).inject(this);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
+    }
+
+    @Override
+    protected Type getFeedListDataType() {
+        return new TypeToken<FeedList<FeedLike>>() {
+        }.getType();
+    }
+
+    @Override
+    protected Class getFeedListItemClass() {
+        return FeedLike.class;
     }
 
     @Override
@@ -147,6 +163,12 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         return CountersManager.LIKES;
     }
 
+    @NotNull
+    @Override
+    protected FeedsCache.FEEDS_TYPE getFeedsType() {
+        return FeedsCache.FEEDS_TYPE.DATA_LIKES_FEEDS;
+    }
+
     private void onMutual(FeedItem item) {
         if (!(item.user.deleted || item.user.banned)) {
             if (item instanceof FeedLike) {
@@ -162,7 +184,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     @Override
     protected FeedListData<FeedLike> getFeedList(JSONObject response) {
-        return new FeedListData<>(response, FeedLike.class);
+        return new FeedListData<>(response, getFeedListItemClass());
     }
 
     @Override

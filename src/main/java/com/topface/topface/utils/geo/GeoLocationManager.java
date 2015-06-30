@@ -60,6 +60,7 @@ public class GeoLocationManager {
     };
 
     public GeoLocationManager(Activity activity) {
+        mActivity = activity;
         App.from(activity.getApplicationContext()).inject(this);
         mLocationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
         startLocationListener();
@@ -163,11 +164,15 @@ public class GeoLocationManager {
     }
 
     public void registerProvidersChangedActionReceiver() {
-        mActivity.registerReceiver(mGeoStateReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+        if (mActivity != null) {
+            mActivity.registerReceiver(mGeoStateReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+        }
     }
 
     public void unregisterProvidersChangedActionReceiver() {
-        mActivity.unregisterReceiver(mGeoStateReceiver);
+        if (mActivity != null) {
+            mActivity.unregisterReceiver(mGeoStateReceiver);
+        }
         mActivity = null;
     }
 
