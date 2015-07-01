@@ -63,6 +63,7 @@ public class HockeySender implements ReportSender {
         send(report);
     }
 
+    @SuppressWarnings("deprecation")
     public void send(CrashReportData report) {
         String log = createCrashLog(report);
         Debug.log("HockeyAppSender", log);

@@ -39,6 +39,7 @@ import com.nhaarman.listviewanimations.appearance.ChatListAnimatedAdapter;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
 import com.topface.framework.JsonUtils;
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -89,6 +90,8 @@ import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.social.AuthToken;
+
+import org.acra.sender.ReportSenderException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -601,12 +604,17 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     mIsUpdating = true;
                     super.exec();
                 } else {
-                    try {
-                        throw new IncorrectUserIdExeprion(mFrom);
-                    } catch (IncorrectUserIdExeprion ex) {
-                        HockeySender sender = new HockeySender();
-                        sender.send(sender.createLocalReport(getContext(), ex));
-                    }
+                    new BackgroundThread() {
+                        @Override
+                        public void execute() {
+                            HockeySender sender = new HockeySender();
+                            try {
+                                sender.send(getContext(), sender.createLocalReport(getContext(), new Exception("User id -1 from " + mFrom)));
+                            } catch (ReportSenderException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    };
                 }
             }
         };
@@ -1124,13 +1132,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     protected boolean isAnimationRequire() {
         return true;
-    }
-
-    private class IncorrectUserIdExeprion extends Exception {
-
-        public IncorrectUserIdExeprion(String detailMessage) {
-            super(detailMessage);
-        }
     }
 
 }
