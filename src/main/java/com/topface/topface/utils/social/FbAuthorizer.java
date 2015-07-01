@@ -1,7 +1,6 @@
 package com.topface.topface.utils.social;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -15,8 +14,6 @@ import com.facebook.model.GraphUser;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.utils.config.SessionConfig;
-
-import java.util.Arrays;
 
 /**
  * Class that starts Facebook authorization

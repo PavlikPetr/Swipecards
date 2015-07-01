@@ -7,7 +7,6 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.data.AppSocialAppsIds;
 import com.topface.topface.utils.config.SessionConfig;
 

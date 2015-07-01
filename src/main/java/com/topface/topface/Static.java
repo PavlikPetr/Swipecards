@@ -17,7 +17,8 @@ public class Static {
      * Ревизия серверной части, используется толькро при тестировании на бете
      */
     public static final String REV = "20121019010";
-
+    public static final String STAGE_AUTH_VK_ID = "4854621";
+    public static final String STAGE_AUTH_FACEBOOK_ID = "297350380464581";
     public static final String COMSCORE_C2 = "19015876";
     public static final String COMSCORE_SECRET_KEY = "b83e932c608c2e08273eeddf01c2a70e";
 

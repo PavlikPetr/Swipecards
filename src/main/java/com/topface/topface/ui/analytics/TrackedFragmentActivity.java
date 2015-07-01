@@ -9,7 +9,6 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.data.ExperimentTags;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
