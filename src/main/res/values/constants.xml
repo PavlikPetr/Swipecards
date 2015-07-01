@@ -34,7 +34,7 @@
     <bool name="is_tablet">false</bool>
 
     <string name="notification_message_format">%1$s &#160;%2$s</string>
-    <string name="app_id">642883445728173</string>
+    <string name="fb_app_id">879159665497091</string>
 
     <!-- messages of ssl exception -->
     <string-array name="ssl_handshake_exception_messages">

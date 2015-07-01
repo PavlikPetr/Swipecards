@@ -80,7 +80,7 @@ public class VkAuthorizer extends Authorizer {
     }
 
     public static String getVkId() {
-        return App.getAppConfig().getStageChecked() ? Static.STAGE_AUTH_VK_ID : Static.AUTH_VK_ID;
+        return App.getAppConfig().getStageChecked() ? Static.STAGE_AUTH_VK_ID : App.getAppSocialAppsIds().vkId;
     }
 
     @Override

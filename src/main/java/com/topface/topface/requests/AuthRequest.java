@@ -94,7 +94,7 @@ public class AuthRequest extends PrimalAuthRequest {
             data.put("appsflyer", mAppsflyer.toJsonWithConversions(App.getConversionHolder()));
         }
         if (TextUtils.equals(mPlatform, AuthToken.SN_ODNOKLASSNIKI)) {
-            data.put("socialAppId", Static.AUTH_OK_ID);
+            data.put("socialAppId", App.getAppSocialAppsIds().okId);
         }
         return data;
     }

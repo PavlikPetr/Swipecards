@@ -1,6 +1,7 @@
 package com.topface.topface.utils.social;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -22,8 +23,7 @@ import java.util.Arrays;
  */
 public class FbAuthorizer extends Authorizer {
 
-    private String[] FB_PERMISSIONS = {"user_photos", "email", "user_birthday", "public_profile", "user_location", "user_friends"};
-
+    public static final String[] PERMISSIONS = new String[]{"email", "public_profile", "user_friends"};
     private UiLifecycleHelper mUiHelper;
     private Request mRequest;
     private Session.StatusCallback mStatusCallback;
@@ -128,15 +128,22 @@ public class FbAuthorizer extends Authorizer {
     @Override
     public void authorize() {
         Session session = Session.getActiveSession();
-        if (App.getAppConfig().getStageChecked()) {
-            session = new Session.Builder(App.getContext()).setApplicationId(Static.STAGE_AUTH_FACEBOOK_ID).build();
-            Session.setActiveSession(session);
-        }
         if (session != null && !session.isOpened() && !session.isClosed()) {
-            session.openForRead(new Session.OpenRequest(getActivity())
-                    .setPermissions(Arrays.asList(FB_PERMISSIONS)).setCallback(getStatusCallback()));
+            session.openForRead(
+                    new Session.OpenRequest(getActivity())
+                            .setPermissions(PERMISSIONS)
+                            .setCallback(getStatusCallback())
+            );
         } else {
-            Session.openActiveSession(getActivity(), true, Arrays.asList(FB_PERMISSIONS), getStatusCallback());
+            Session.OpenRequest req = (new Session.OpenRequest(getActivity())).setCallback(getStatusCallback());
+            if (App.getAppConfig().getStageChecked()) {
+                session = (new Session.Builder(getActivity())).setApplicationId(App.getAppSocialAppsIds().fbId).build();    
+            } else {
+                session = (new Session.Builder(getActivity())).setApplicationId(Static.STAGE_AUTH_FACEBOOK_ID).build();
+            }
+            
+            Session.setActiveSession(session);
+            session.openForRead(req.setPermissions(PERMISSIONS));
         }
     }
 
