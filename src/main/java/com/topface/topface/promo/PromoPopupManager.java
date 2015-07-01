@@ -94,7 +94,7 @@ public class PromoPopupManager {
         if (fragment != null && fragment.getPremiumEntity() == null) {
             return null;
         }
-
+        fragment = new PromoKey31Dialog();
         return fragment;
     }
 
@@ -115,11 +115,12 @@ public class PromoPopupManager {
 
             @Override
             public boolean isApplicable() {
-                if (CacheProfile.premium) return false;
-                Options options = CacheProfile.getOptions();
-                return checkIsNeedShow(options.getPremiumEntityByType(AIR_MESSAGES)) ||
-                        checkIsNeedShow(options.getPremiumEntityByType(AIR_VISITORS)) ||
-                        checkIsNeedShow(options.getPremiumEntityByType(AIR_ADMIRATIONS));
+//                if (CacheProfile.premium) return false;
+//                Options options = CacheProfile.getOptions();
+//                return checkIsNeedShow(options.getPremiumEntityByType(AIR_MESSAGES)) ||
+//                        checkIsNeedShow(options.getPremiumEntityByType(AIR_VISITORS)) ||
+//                        checkIsNeedShow(options.getPremiumEntityByType(AIR_ADMIRATIONS));
+                return true;
             }
 
             @Override
