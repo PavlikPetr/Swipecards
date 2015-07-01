@@ -419,7 +419,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
                         if (profile != null) {
                             return ChatActivity.createIntent(profile.uid, profile.getNameAndAge(),
                                     profile.city == null ? "" : profile.city.name,
-                                    null, profile.photo, false);
+                                    null, profile.photo, false, this.getClass().getSimpleName());
                         }
                         return null;
                     }
