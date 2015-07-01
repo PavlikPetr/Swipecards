@@ -165,7 +165,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         if (mFullscreenController != null) {
             sequencedStartAction.addAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
         }
-//        sequencedStartAction.callInBackground();
         // trial vip popup
         startActionsController.registerMandatoryAction(sequencedStartAction);
         // actions after registration

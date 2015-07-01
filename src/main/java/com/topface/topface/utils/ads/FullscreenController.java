@@ -31,6 +31,7 @@ import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_MEDIATION;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_NONE;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_TOPFACE;
+import static com.topface.topface.banners.ad_providers.AdProvidersFactory.START_APP_ADMOB_FULLSCREEN;
 
 /**
  */
@@ -39,6 +40,7 @@ public class FullscreenController {
 
     private static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-9530442067223936/9732921207";
     private static final String ADMOB_INTERSTITIAL_MEDIATION_ID = "ca-app-pub-9530442067223936/9498586400";
+    private static final String ADMOB_INTERSTITIAL_START_APP_ID = "ca-app-pub-9530442067223936/3776010801";
     private static boolean isFullScreenBannerVisible = false;
     private Activity mActivity;
 
@@ -62,17 +64,18 @@ public class FullscreenController {
 
         @Override
         public void callOnUi() {
-            if (startPageInfo != null) {
+            if (CacheProfile.getOptions().interstitial.enabled) {
+                FullscreenController.this.requestFullscreen(START_APP_ADMOB_FULLSCREEN);
+            } else if (startPageInfo != null) {
                 FullscreenController.this.requestFullscreen(startPageInfo.getBanner());
             }
         }
 
         @Override
         public boolean isApplicable() {
-            return CacheProfile.show_ad &&
-                    FullscreenController.this.isTimePassed() &&
-                    startPageInfo != null &&
-                    startPageInfo.floatType.equals(PageInfo.FLOAT_TYPE_BANNER);
+            return CacheProfile.getOptions().interstitial.enabled || CacheProfile.show_ad &&
+                    FullscreenController.this.isTimePassed() && startPageInfo != null
+                    && startPageInfo.floatType.equals(PageInfo.FLOAT_TYPE_BANNER);
         }
 
         @Override
@@ -149,6 +152,9 @@ public class FullscreenController {
                     break;
                 case BANNER_ADMOB_MEDIATION:
                     requestAdmobFullscreen(ADMOB_INTERSTITIAL_MEDIATION_ID);
+                    break;
+                case START_APP_ADMOB_FULLSCREEN:
+                    requestAdmobFullscreen(ADMOB_INTERSTITIAL_START_APP_ID);
                     break;
                 case BANNER_TOPFACE:
                     requestTopfaceFullscreen();
