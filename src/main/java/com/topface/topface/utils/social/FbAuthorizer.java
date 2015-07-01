@@ -27,30 +27,30 @@ public class FbAuthorizer extends Authorizer {
 
     private Request getRequest(final Session session, final Intent intent) {
         mRequest = Request.newMeRequest(session, new Request.GraphUserCallback() {
-                @Override
-                public void onCompleted(GraphUser user, Response response) {
-                    if (user != null) {
-                        if (AuthToken.getInstance().isEmpty()) {
-                            AuthToken.getInstance().saveToken(
-                                    AuthToken.SN_FACEBOOK,
-                                    user.getId(),
-                                    session.getAccessToken(),
-                                    session.getExpirationDate().toString()
-                            );
+            @Override
+            public void onCompleted(GraphUser user, Response response) {
+                if (user != null) {
+                    if (AuthToken.getInstance().isEmpty()) {
+                        AuthToken.getInstance().saveToken(
+                                AuthToken.SN_FACEBOOK,
+                                user.getId(),
+                                session.getAccessToken(),
+                                session.getExpirationDate().toString()
+                        );
 
-                            String name = user.getFirstName() + " " + user.getLastName();
-                            SessionConfig sessionConfig = App.getSessionConfig();
-                            sessionConfig.setSocialAccountName(name);
-                            sessionConfig.saveConfig();
+                        String name = user.getFirstName() + " " + user.getLastName();
+                        SessionConfig sessionConfig = App.getSessionConfig();
+                        sessionConfig.setSocialAccountName(name);
+                        sessionConfig.saveConfig();
 
-                            intent.putExtra(TOKEN_STATUS, TOKEN_READY);
-                        }
-                    } else if (AuthToken.getInstance().isEmpty()) {
-                        intent.putExtra(TOKEN_STATUS, TOKEN_FAILED);
+                        intent.putExtra(TOKEN_STATUS, TOKEN_READY);
                     }
-                    broadcastAuthTokenStatus(intent);
+                } else if (AuthToken.getInstance().isEmpty()) {
+                    intent.putExtra(TOKEN_STATUS, TOKEN_FAILED);
                 }
-            });
+                broadcastAuthTokenStatus(intent);
+            }
+        });
         return mRequest;
     }
 
@@ -133,14 +133,17 @@ public class FbAuthorizer extends Authorizer {
             );
         } else {
             Session.OpenRequest req = (new Session.OpenRequest(getActivity())).setCallback(getStatusCallback());
-            if (App.getAppConfig().getStageChecked()) {
-                session = (new Session.Builder(getActivity())).setApplicationId(App.getAppSocialAppsIds().fbId).build();    
-            } else {
-                session = (new Session.Builder(getActivity())).setApplicationId(Static.STAGE_AUTH_FACEBOOK_ID).build();
-            }
-            
+            session = (new Session.Builder(getActivity())).setApplicationId(getFbId()).build();
             Session.setActiveSession(session);
             session.openForRead(req.setPermissions(PERMISSIONS));
+        }
+    }
+
+    public static String getFbId() {
+        if (App.getAppConfig().getStageChecked()) {
+            return App.getAppSocialAppsIds().fbId;
+        } else {
+            return Static.STAGE_AUTH_FACEBOOK_ID;
         }
     }
 
