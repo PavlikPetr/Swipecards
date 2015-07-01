@@ -91,6 +91,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private static final String BLACK_LIST_USER = "black_list_user";
     private static final String FEED_AD = "FEED_AD";
     public static final String REFRESH_DIALOGS = "refresh_dialogs";
+    private static final String FEED_COUNTER = "counter";
+    private static final String FEED_COUNTER_CHANGED = "counter_changed";
 
     private int currentCounter;
     private boolean isCurrentCounterChanged;
@@ -303,6 +305,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @SuppressWarnings("unchecked")
     protected void restoreInstanceState(Bundle saved) {
         if (saved != null) {
+            isCurrentCounterChanged = saved.getBoolean(FEED_COUNTER_CHANGED);
+            currentCounter = saved.getInt(FEED_COUNTER);
             mIdForRemove = saved.getInt(BLACK_LIST_USER);
             if (CacheProfile.show_ad) {
                 mListAdapter.setHasFeedAd(saved.getBoolean(HAS_AD));
@@ -432,6 +436,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             outState.putBoolean(HAS_AD, mListAdapter.hasFeedAd());
             outState.putParcelable(FEED_AD, mListAdapter.getFeedAd());
             outState.putInt(BLACK_LIST_USER, mIdForRemove);
+            outState.putInt(FEED_COUNTER, currentCounter);
+            outState.putBoolean(FEED_COUNTER_CHANGED, isCurrentCounterChanged);
         }
     }
 
