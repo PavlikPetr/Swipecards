@@ -7,6 +7,8 @@ import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.History;
+import com.topface.topface.promo.PromoPopupManager;
+import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteDialogsRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -33,6 +35,11 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     public void onResume() {
         super.onResume();
+        int[] locationOnScreen = new int[2];
+        int[] locationOnWindow = new int[2];
+        getListView().getLocationOnScreen(locationOnScreen);
+        getListView().getLocationInWindow(locationOnWindow);
+        new PromoExpressMessages().setExtraPaddingTop(50).show(getFragmentManager(), PromoPopupManager.PROMO_POPUP_TAG);
         //Проверяем флаг, нужно ли обновлять диалоги
         if (mNeedRefresh) {
             updateData(true, false);
@@ -56,6 +63,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     @Override
     protected FeedListData<FeedDialog> getFeedList(JSONObject data) {
+
         return new FeedListData<>(data, FeedDialog.class);
     }
 
