@@ -3,7 +3,6 @@ package com.topface.topface.utils.controllers.startactions;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.fragments.TransparentMarketFragment;
@@ -16,13 +15,11 @@ public class TrialVipPopupAction implements IStartAction {
     private int mPriority;
     private FragmentManager mFragmentManager;
     private TrialVipPopup mTrialVipPopup;
-    private String mTag;
     private OnNextActionListener mOnNextActionListener;
 
-    public TrialVipPopupAction(FragmentManager fragmentManager, int priority, String tag) {
+    public TrialVipPopupAction(FragmentManager fragmentManager, int priority) {
         mFragmentManager = fragmentManager;
         mPriority = priority;
-        mTag = tag;
     }
 
     @Override
@@ -31,7 +28,6 @@ public class TrialVipPopupAction implements IStartAction {
 
     @Override
     public void callOnUi() {
-        Debug.error("callOnUi tag " + mTag);
         mTrialVipPopup = new TrialVipPopup();
         mTrialVipPopup.setOnSubscribe(new TrialVipPopup.OnFragmentActionsListener() {
             @Override
@@ -52,7 +48,7 @@ public class TrialVipPopupAction implements IStartAction {
     @Override
     public boolean isApplicable() {
         return !CacheProfile.paid &&
-                App.getUserConfig().getTrialVipCounter() < CacheProfile.getOptions().trialVipExperiment.maxShowCount &&
+                App.getUserConfig().getTrialVipCounter() < CacheProfile.getOptions().getMaxShowCountTrialVipPopup() &&
                 CacheProfile.getOptions().trialVipExperiment.enable && new GoogleMarketApiManager().isMarketApiAvailable();
     }
 

@@ -742,4 +742,11 @@ public class Options extends AbstractData {
         public String subscriptionSku = "com.topface.topface.sub.trial.vip.13";
         public int maxShowCount = 10;
     }
+
+    public int getMaxShowCountTrialVipPopup() {
+        // пока серверн не добавит в объект поле "maxShowCount" оно будет возвращать 0 при парсинге,
+        // поэтому ставим по умолчанию 10
+        return trialVipExperiment.maxShowCount <= 0 ? 10 : trialVipExperiment.maxShowCount;
+    }
+
 }
