@@ -96,7 +96,8 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     private PopupManager mPopupManager;
 
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
-        @Override public void onReceive(Context context, Intent intent) {
+        @Override
+        public void onReceive(Context context, Intent intent) {
             if (CacheProfile.age <= App.getAppOptions().getUserAgeMin()) {
                 SetAgeDialog.newInstance().show(getSupportFragmentManager(), SetAgeDialog.TAG);
             }
@@ -168,7 +169,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     protected void onRegisterStartActions(StartActionsController startActionsController) {
         super.onRegisterStartActions(startActionsController);
         final SequencedStartAction sequencedStartAction = new SequencedStartAction(this, AC_PRIORITY_HIGH);
-        sequencedStartAction.addAction(new TrialVipPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH, "first popup"));
+        sequencedStartAction.addAction(new TrialVipPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH));
         // fullscreen
         if (mFullscreenController != null) {
             sequencedStartAction.addAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
