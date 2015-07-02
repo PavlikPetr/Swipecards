@@ -93,6 +93,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     public static final String REFRESH_DIALOGS = "refresh_dialogs";
     private static final String FEED_COUNTER = "counter";
     private static final String FEED_COUNTER_CHANGED = "counter_changed";
+    private static final String FEED_LAST_UNREAD_STATE = "last_unread_state";
 
     private int currentCounter;
     private boolean isCurrentCounterChanged;
@@ -305,6 +306,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @SuppressWarnings("unchecked")
     protected void restoreInstanceState(Bundle saved) {
         if (saved != null) {
+            mLastUnreadState = saved.getParcelable(FEED_LAST_UNREAD_STATE);
             isCurrentCounterChanged = saved.getBoolean(FEED_COUNTER_CHANGED);
             currentCounter = saved.getInt(FEED_COUNTER);
             mIdForRemove = saved.getInt(BLACK_LIST_USER);
@@ -438,6 +440,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             outState.putInt(BLACK_LIST_USER, mIdForRemove);
             outState.putInt(FEED_COUNTER, currentCounter);
             outState.putBoolean(FEED_COUNTER_CHANGED, isCurrentCounterChanged);
+            outState.putParcelable(FEED_LAST_UNREAD_STATE, mLastUnreadState);
         }
     }
 
@@ -936,6 +939,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     protected abstract int getEmptyFeedLayout();
 
     protected void makeAllItemsRead() {
+        baseMakeAllItemsRead();
+    }
+
+    protected void baseMakeAllItemsRead() {
         getListAdapter().makeAllItemsRead();
     }
 

@@ -14,6 +14,8 @@ import java.util.HashMap;
  */
 public class AppSocialAppsIds extends AbstractData {
 
+    transient boolean fromServer = false;
+
     /**
      * {String} fbId - идентификатор приложения в fb
      */
@@ -62,6 +64,7 @@ public class AppSocialAppsIds extends AbstractData {
             okId = ALLOWED_OK_IDS.contains(serverId) ? serverId : okId;
             serverId = Utils.optString(item, "vkId");
             vkId = ALLOWED_VK_IDS.contains(serverId) ? serverId : vkId;
+            fromServer = true;
             // caching
             App.getAppConfig().saveAppSocialAppsIds(this);
         } catch (Exception e) {
@@ -75,5 +78,9 @@ public class AppSocialAppsIds extends AbstractData {
 
     public String getOkPublicKey() {
         return OK_KEYS.get("public"+okId);
+    }
+
+    public boolean isFromCache() {
+        return !fromServer;
     }
 }
