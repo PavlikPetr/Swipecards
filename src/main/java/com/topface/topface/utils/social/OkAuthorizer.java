@@ -24,7 +24,9 @@ import ru.ok.android.sdk.util.OkScope;
  */
 public class OkAuthorizer extends Authorizer {
 
-    private Odnoklassniki mOkAuthObject;
+    public static String getOkId() {
+        return App.getAppSocialAppsIds().okId;
+    }
 
     private final class GetCurrentUserTask extends AsyncTask<Void, Void, String> {
 
@@ -95,16 +97,23 @@ public class OkAuthorizer extends Authorizer {
     public OkAuthorizer(Activity activity) {
         super(activity);
         AppSocialAppsIds ids = App.getAppSocialAppsIds();
-        mOkAuthObject = Odnoklassniki.createInstance(getActivity(), ids.okId, ids.getOkSecretKey(), ids.getOkPublicKey());
+    }
+
+    private Odnoklassniki getOkAuthObj(AppSocialAppsIds ids) {
+        if (!Odnoklassniki.hasInstance()) {
+            Odnoklassniki.createInstance(getActivity(), ids.okId, ids.getOkSecretKey(), ids.getOkPublicKey());
+        }
+        return Odnoklassniki.createInstance(getActivity(), ids.okId, ids.getOkSecretKey(), ids.getOkPublicKey());
     }
 
     @Override
     public void authorize() {
-        mOkAuthObject.setTokenRequestListener(new OkTokenRequestListener() {
+        final AppSocialAppsIds ids = App.getAppSocialAppsIds();
+        getOkAuthObj(ids).setTokenRequestListener(new OkTokenRequestListener() {
             @Override
             public void onSuccess(String token) {
                 Debug.log("Odnoklassniki auth success with token " + token);
-                new GetCurrentUserTask(mOkAuthObject, token).execute();
+                new GetCurrentUserTask(getOkAuthObj(ids), token).execute();
                 Intent intent = new Intent(AUTH_TOKEN_READY_ACTION);
                 intent.putExtra(TOKEN_STATUS, TOKEN_PREPARING);
                 LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
@@ -120,12 +129,11 @@ public class OkAuthorizer extends Authorizer {
                 Debug.error("Odnoklassniki auth cancel");
             }
         });
-
-        mOkAuthObject.requestAuthorization(getActivity(), false, OkScope.SET_STATUS, OkScope.PHOTO_CONTENT, OkScope.VALUABLE_ACCESS);
+        getOkAuthObj(ids).requestAuthorization(getActivity(), false, OkScope.SET_STATUS, OkScope.PHOTO_CONTENT, OkScope.VALUABLE_ACCESS);
     }
 
     @Override
     public void logout() {
-        mOkAuthObject.clearTokens(getActivity());
+        getOkAuthObj(App.getAppSocialAppsIds()).clearTokens(getActivity());
     }
 }

@@ -125,18 +125,13 @@ public class FbAuthorizer extends Authorizer {
     @Override
     public void authorize() {
         Session session = Session.getActiveSession();
-        if (session != null && !session.isOpened() && !session.isClosed()) {
-            session.openForRead(
-                    new Session.OpenRequest(getActivity())
-                            .setPermissions(PERMISSIONS)
-                            .setCallback(getStatusCallback())
-            );
-        } else {
-            Session.OpenRequest req = (new Session.OpenRequest(getActivity())).setCallback(getStatusCallback());
+        if (!(session != null && !session.isOpened() && !session.isClosed() && session.getApplicationId().equals(getFbId()))) {
             session = (new Session.Builder(getActivity())).setApplicationId(getFbId()).build();
             Session.setActiveSession(session);
-            session.openForRead(req.setPermissions(PERMISSIONS));
         }
+        session.openForRead((new Session.OpenRequest(getActivity()))
+                .setCallback(getStatusCallback())
+                .setPermissions(PERMISSIONS));
     }
 
     public static String getFbId() {

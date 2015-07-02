@@ -10,6 +10,7 @@ import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.FbAuthorizer;
+import com.topface.topface.utils.social.OkAuthorizer;
 import com.topface.topface.utils.social.VkAuthorizer;
 
 import org.json.JSONException;
@@ -96,7 +97,7 @@ public class AuthRequest extends PrimalAuthRequest {
         }
         switch (mPlatform) {
             case AuthToken.SN_ODNOKLASSNIKI:
-                data.put("socialAppId", App.getAppSocialAppsIds().okId);
+                data.put("socialAppId", OkAuthorizer.getOkId());
                 break;
             case AuthToken.SN_FACEBOOK:
                 data.put("socialAppId", FbAuthorizer.getFbId());

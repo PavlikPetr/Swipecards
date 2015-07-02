@@ -14,12 +14,11 @@ import java.util.HashMap;
  */
 public class AppSocialAppsIds extends AbstractData {
 
-    transient boolean fromServer = false;
-
+    private static AppSocialAppsIds DEFAULT_APPS_IDS;
     /**
      * {String} fbId - идентификатор приложения в fb
      */
-    public String fbId = "879159665497091"; //642883445728173
+    public String fbId = "642883445728173";
     private static final ArrayList<String>  ALLOWED_FB_IDS = new ArrayList<>(2);
     static {
         ALLOWED_FB_IDS.add("879159665497091");
@@ -64,7 +63,6 @@ public class AppSocialAppsIds extends AbstractData {
             okId = ALLOWED_OK_IDS.contains(serverId) ? serverId : okId;
             serverId = Utils.optString(item, "vkId");
             vkId = ALLOWED_VK_IDS.contains(serverId) ? serverId : vkId;
-            fromServer = true;
             // caching
             App.getAppConfig().saveAppSocialAppsIds(this);
         } catch (Exception e) {
@@ -80,7 +78,11 @@ public class AppSocialAppsIds extends AbstractData {
         return OK_KEYS.get("public"+okId);
     }
 
-    public boolean isFromCache() {
-        return !fromServer;
+    public static AppSocialAppsIds getDefault() {
+        if (DEFAULT_APPS_IDS == null) {
+            DEFAULT_APPS_IDS = new AppSocialAppsIds(null);
+        }
+        return DEFAULT_APPS_IDS;
     }
+
 }

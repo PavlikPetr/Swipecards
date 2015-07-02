@@ -17,11 +17,9 @@ import android.text.TextUtils;
 import com.appsflyer.AppsFlyerLib;
 import com.comscore.analytics.comScore;
 import com.flurry.android.FlurryAgent;
-import com.google.gson.JsonSyntaxException;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.squareup.leakcanary.LeakCanary;
 import com.topface.billing.OpenIabHelperManager;
-import com.topface.framework.JsonUtils;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.imageloader.ImageLoaderStaticFactory;
 import com.topface.framework.utils.BackgroundThread;
@@ -324,19 +322,7 @@ public class App extends Application {
     }
 
     public static AppSocialAppsIds getAppSocialAppsIds() {
-        if (mAppSocialAppsIds == null) {
-            AppConfig config = App.getAppConfig();
-            String cached = config.getAppSocialAppsIds();
-            try {
-                mAppSocialAppsIds = JsonUtils.optFromJson(cached, AppSocialAppsIds.class,
-                        new AppSocialAppsIds(null));
-
-            } catch (JsonSyntaxException e) {
-                config.resetAppOptionsData();
-                Debug.error(e);
-            }
-        }
-        return mAppSocialAppsIds;
+        return mAppSocialAppsIds != null ? mAppSocialAppsIds : AppSocialAppsIds.getDefault();
     }
 
     public static void setStartLabel(String startLabel) {
@@ -455,37 +441,58 @@ public class App extends Application {
 
     private void sendUnauthorizedRequests() {
         new ParallelApiRequest(getContext()) { @Override public boolean isNeedAuth() { return false; } }
-                .addRequest(new AppGetOptionsRequest(getContext()).callback(new DataApiHandler<AppOptions>() {
-                    @Override
-                    protected void success(AppOptions data, IApiResponse response) {
-                        mAppOptions = data;
-                        mAppOptionsObtainedFromServer = true;
-                        StatisticsTracker.getInstance()
-                                .setConfiguration(data.getStatisticsConfiguration(Connectivity.getConnType(mContext)));
-                    }
-
-                    @Override
-                    protected AppOptions parseResponse(ApiResponse response) {
-                        return new AppOptions(response.jsonResult);
-                    }
-
-                    @Override
-                    public void fail(int codeError, IApiResponse response) {
-                    }
-                }))
-                .addRequest(new AppGetSocialAppsIdsRequest(getContext()).callback(new DataApiHandler<AppSocialAppsIds>() {
-                    @Override public void fail(int codeError, IApiResponse response) {
-                    }
-
-                    @Override protected void success(AppSocialAppsIds data, IApiResponse response) {
-                        mAppSocialAppsIds = data;
-                    }
-
-                    @Override protected AppSocialAppsIds parseResponse(ApiResponse response) {
-                        return new AppSocialAppsIds(response.getJsonResult());
-                    }
-                }))
+                .addRequest(createAppOptionsRequest())
+                .addRequest(createAppSocialAppsIdsRequest(null))
                 .exec();
+    }
+
+    private ApiRequest createAppOptionsRequest() {
+        return new AppGetOptionsRequest(getContext()).callback(new DataApiHandler<AppOptions>() {
+            @Override
+            protected void success(AppOptions data, IApiResponse response) {
+                mAppOptions = data;
+                mAppOptionsObtainedFromServer = true;
+                StatisticsTracker.getInstance()
+                        .setConfiguration(data.getStatisticsConfiguration(Connectivity.getConnType(mContext)));
+            }
+
+            @Override
+            protected AppOptions parseResponse(ApiResponse response) {
+                return new AppOptions(response.jsonResult);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+            }
+        });
+    }
+
+    public ApiRequest createAppSocialAppsIdsRequest(final ApiHandler handler) {
+        return new AppGetSocialAppsIdsRequest(getContext()).callback(new DataApiHandler<AppSocialAppsIds>() {
+            @Override public void fail(int codeError, IApiResponse response) {
+                if (handler != null) {
+                    handler.fail(codeError, response);
+                }
+            }
+
+            @Override protected void success(AppSocialAppsIds data, IApiResponse response) {
+                mAppSocialAppsIds = data;
+                if (handler != null) {
+                    handler.success(response);
+                }
+            }
+
+            @Override protected AppSocialAppsIds parseResponse(ApiResponse response) {
+                return new AppSocialAppsIds(response.getJsonResult());
+            }
+
+            @Override public void always(IApiResponse response) {
+                super.always(response);
+                if (handler != null) {
+                    handler.always(response);
+                }
+            }
+        });
     }
 
     private void sendLocation() {
@@ -569,6 +576,10 @@ public class App extends Application {
             }
             return HttpApiTransport.TRANSPORT_NAME;
         }
+    }
+
+    public static App from(Context context) {
+        return (App)context.getApplicationContext();
     }
 }
 
