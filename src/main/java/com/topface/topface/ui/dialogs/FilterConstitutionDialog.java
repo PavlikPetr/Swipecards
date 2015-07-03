@@ -15,8 +15,8 @@ import com.topface.topface.ui.edit.FilterFragment;
 
 import org.jetbrains.annotations.NotNull;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Диалог для выбора параметров роста/веса
@@ -32,9 +32,9 @@ public class FilterConstitutionDialog extends DialogFragment {
     private static final String CONFIG_MIN = "config_min";
     private static final String CONFIG_MAX = "config_max";
 
-    @InjectView(R.id.pickerFirstLimit)
+    @Bind(R.id.pickerFirstLimit)
     NumberPicker mFirstPicker;
-    @InjectView(R.id.pickerSecondLimit)
+    @Bind(R.id.pickerSecondLimit)
     NumberPicker mSecondPicker;
     private String mTitle;
     private ConstitutionLimits mConstitutionLimits;
@@ -83,7 +83,7 @@ public class FilterConstitutionDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.filter_date_picker_dialog_view, null);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         Fragment fragment = getParentFragment();
         if (fragment != null && fragment instanceof FilterFragment) {
             mListener = ((FilterFragment) fragment).getConstitutionDialogListener();
@@ -155,6 +155,12 @@ public class FilterConstitutionDialog extends DialogFragment {
                     }
                 })
                 .create();
+    }
+
+    @Override
+    public void onDestroyView() {
+        ButterKnife.unbind(this);
+        super.onDestroyView();
     }
 
     @Override

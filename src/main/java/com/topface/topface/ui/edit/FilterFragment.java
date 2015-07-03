@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.StringRes;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -42,6 +41,7 @@ import java.util.ArrayList;
 
 public class FilterFragment extends AbstractEditFragment implements OnClickListener {
 
+    private static final String CONSTITUTION_DIALOG_MARK = "constitution_mark";
     public static Profile mTargetUser = new User();
     public static final String INTENT_DATING_FILTER = "Topface_Dating_Filter";
 
@@ -140,18 +140,11 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        DialogFragment dialogsFragment = (DialogFragment) getActivity().getSupportFragmentManager()
-                .findFragmentByTag(FilterConstitutionDialog.TAG);
-        if (dialogsFragment != null && !dialogsFragment.isAdded()) {
-            getChildFragmentManager().beginTransaction().show(dialogsFragment).commit();
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        if (savedInstanceState != null) {
+            mIsHeight = savedInstanceState.getBoolean(CONSTITUTION_DIALOG_MARK);
+        }
         mTargetUser.sex = CacheProfile.dating != null ? CacheProfile.dating.sex : Static.BOY;
         mFormInfo = new FormInfo(getActivity().getApplicationContext(), mTargetUser.sex, mTargetUser.getType());
 
@@ -162,6 +155,12 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         initViews(root);
 
         return root;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(CONSTITUTION_DIALOG_MARK, mIsHeight);
+        super.onSaveInstanceState(outState);
     }
 
     private void initFilter() {

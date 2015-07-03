@@ -215,8 +215,8 @@ dependencies {
     compile 'com.koushikdutta.async:androidasync:2.1.5'
     //OpenIAB
     compile 'org.onepf:openiab:0.9.8.4'
-    //View Injection
-    compile 'com.jakewharton:butterknife:6.1.0'
+    //View Bind
+    compile 'com.jakewharton:butterknife:7.0.1'
     //Для Амазона нужна библиотека для поддержки in-app покупок
     amazonCompile 'com.amazon:in-app-purchasing:2.0.1'
     //RxJava
