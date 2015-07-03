@@ -1,24 +1,59 @@
 package com.topface.topface.ui.fragments;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.topface.topface.App;
-import com.topface.topface.data.experiments.SixCoinsSubscribeExperiment;
-import com.topface.topface.ui.fragments.buy.MarketBuyingFragment;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.ui.fragments.buy.GoogleMarketBuyingFragment;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
 
-public class TransparentMarketFragment extends MarketBuyingFragment {
+public class TransparentMarketFragment extends GoogleMarketBuyingFragment {
 
-    private onPurchaseCompleteAction mPurchaseCompleteAction;
+    public final static String PORDUCT_ID = "product_id";
+    public final static String IS_SUBSCRIPTION = "is_subscription";
+
+    private onPurchaseActions mPurchaseActions;
+    private String mSubscriptionId;
+    private boolean mIsSubscription;
+    private boolean isNeedCloseFragment = false;
+
+    public static TransparentMarketFragment newInstance(String skuId, boolean isSubscription) {
+        final TransparentMarketFragment fragment = new TransparentMarketFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(TransparentMarketFragment.PORDUCT_ID, skuId);
+        bundle.putBoolean(TransparentMarketFragment.IS_SUBSCRIPTION, isSubscription);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Bundle bundle = getArguments();
+        if (null != bundle) {
+            if (getArguments().containsKey(PORDUCT_ID)) {
+                mSubscriptionId = getArguments().getString(PORDUCT_ID, "");
+            }
+            if (getArguments().containsKey(IS_SUBSCRIPTION)) {
+                mIsSubscription = getArguments().getBoolean(IS_SUBSCRIPTION);
+            }
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
 
     public void onOpenIabSetupFinished(boolean normaly) {
         super.onOpenIabSetupFinished(normaly);
-        SixCoinsSubscribeExperiment experiment = CacheProfile.getOptions().sixCoinsSubscribeExperiment;
         if (isTestPurchasesAvailable()) {
             setTestPaymentsState(App.getUserConfig().getTestPaymentFlag());
         }
-        buyNow(experiment.productId, experiment.isSubscription);
+        if (!TextUtils.isEmpty(mSubscriptionId)) {
+            buyNow(mSubscriptionId, mIsSubscription);
+        }
     }
 
     public void buyNow(String id, boolean isSubscription) {
@@ -34,23 +69,47 @@ public class TransparentMarketFragment extends MarketBuyingFragment {
     @Override
     public void onPurchased(Purchase product) {
         super.onPurchased(product);
-        mPurchaseCompleteAction.onPurchaseAction();
+        if (mPurchaseActions != null) {
+            mPurchaseActions.onPurchaseSuccess();
+        }
+    }
+
+    @Override
+    public void onInAppBillingSupported() {
+
+    }
+
+    @Override
+    public void onInAppBillingUnsupported() {
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if (mPurchaseActions != null && isNeedCloseFragment) {
+            mPurchaseActions.onPopupClosed();
+        }
         //Устанавливаем тестовые покупки
         if (isTestPurchasesAvailable()) {
             setTestPaymentsState(App.getUserConfig().getTestPaymentFlag());
         }
     }
 
-    public void setOnPurchaseCompleteAction(onPurchaseCompleteAction purchaseCompliteAction) {
-        this.mPurchaseCompleteAction = purchaseCompliteAction;
+    public void setOnPurchaseCompleteAction(onPurchaseActions purchaseCompliteAction) {
+        this.mPurchaseActions = purchaseCompliteAction;
     }
 
-    public interface onPurchaseCompleteAction {
-        void onPurchaseAction();
+    public interface onPurchaseActions {
+
+        void onPurchaseSuccess();
+
+        void onPopupClosed();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        isNeedCloseFragment = true;
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

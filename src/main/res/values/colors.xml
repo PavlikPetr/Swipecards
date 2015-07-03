@@ -2,6 +2,7 @@
 <resources>
     <!--цвета-->
     <color name="semitransparent_black">#50000000</color>
+    <color name="blue_holo_selected">#33B5E5</color>
     <!--flat design-->
     <color name="bg_left_menu_selected">#EEEEEE</color>
     <color name="bg_left_menu_normal">@color/bg_white</color>
@@ -29,7 +30,7 @@
     <color name="text_color_gray">#333333</color>
     <color name="text_color_gray_transparent">#88333333</color>
 
-    <color name="tab_counter_text_color_selected">#33B5E5</color>
+    <color name="tab_counter_text_color_selected">@color/blue_holo_selected</color>
     <color name="tab_counter_text_color_not_selected">#9933B5E5</color>
     <color name="tab_text_color_selected">#03A9F4</color>
     <color name="tab_text_color_not_selected">#66000000</color>
@@ -68,7 +69,7 @@
 
     <!--filter light edit form dialog background selector color-->
     <color name="edit_form_selector_background_color_release_state">#FFFFFF</color>
-    <color name="edit_form_selector_background_color_pressed_state">#33B5E5</color>
+    <color name="edit_form_selector_background_color_pressed_state">@color/blue_holo_selected</color>
 
     <!--filter fragment dividers color-->
     <color name="filter_fragment_divider_color">#E2E2E2</color>
@@ -89,4 +90,7 @@
     </color>
 
     <color name="edit_dialog_buttons_divider">#DCDCDC</color>
+    <color name="trial_popup_background">#242429</color>
+
+    <color name="default_line_indicator_selected_color">@color/blue_holo_selected</color>
 </resources>

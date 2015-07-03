@@ -36,7 +36,6 @@ import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.fragments.MenuFragment;
-import com.topface.topface.ui.fragments.TransparentMarketFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.utils.AddPhotoHelper;
@@ -56,6 +55,7 @@ import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.InvitePopupAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
+import com.topface.topface.utils.controllers.startactions.TrialVipPopupAction;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
@@ -159,6 +159,15 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @Override
     protected void onRegisterStartActions(StartActionsController startActionsController) {
         super.onRegisterStartActions(startActionsController);
+        final SequencedStartAction sequencedStartAction = new SequencedStartAction(this, AC_PRIORITY_HIGH);
+        sequencedStartAction.addAction(new TrialVipPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH, "first popup"));
+        // fullscreen
+        if (mFullscreenController != null) {
+            sequencedStartAction.addAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
+        }
+//        sequencedStartAction.callInBackground();
+        // trial vip popup
+        startActionsController.registerMandatoryAction(sequencedStartAction);
         // actions after registration
         startActionsController.registerAction(createAfterRegistrationStartAction(AC_PRIORITY_HIGH));
         // show popup when services disable
@@ -177,10 +186,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         startActionsController.registerAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
-        // fullscreen
-        if (mFullscreenController != null) {
-            startActionsController.registerMandatoryAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
-        }
     }
 
     private void initFullscreen() {
@@ -480,11 +485,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         if (currentPopup != null) {
             currentPopup.onActivityResult(requestCode, resultCode, data);
         }
-        TransparentMarketFragment myFragment = (TransparentMarketFragment) getSupportFragmentManager()
-                .findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
-        if (myFragment != null && resultCode == RESULT_CANCELED) {
-            getSupportFragmentManager().beginTransaction().remove(myFragment).commit();
-        }
         //Хак для работы покупок, см подробнее в BillingFragment.processRequestCode()
         boolean isBillingRequestProcessed = OpenIabFragment.processRequestCode(
                 getSupportFragmentManager(),
@@ -603,4 +603,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     public void onUpClick() {
         toggleDrawerLayout();
     }
+
+
 }

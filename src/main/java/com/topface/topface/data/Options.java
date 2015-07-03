@@ -75,6 +75,11 @@ public class Options extends AbstractData {
     public int priceAdmiration = 1;
 
     /**
+     * data for experiment of Trial VIP
+     */
+    public TrialVipExperiment trialVipExperiment = new TrialVipExperiment();
+
+    /**
      * Id фрагмента, который будет отображаться при старте приложения
      * По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
      */
@@ -175,6 +180,7 @@ public class Options extends AbstractData {
     protected void fillData(JSONObject response, boolean cacheToPreferences) {
         try {
             priceAdmiration = response.optInt("admirationPrice");
+            trialVipExperiment = JsonUtils.optFromJson(response.optString("experimentTrialVip"), TrialVipExperiment.class, new TrialVipExperiment());
             // по умолчанию превью в диалогах всегда отображаем
             hidePreviewDialog = response.optBoolean("hidePreviewDialog", false);
             priceLeader = response.optInt("leaderPrice");
@@ -729,5 +735,11 @@ public class Options extends AbstractData {
                 return enabled || (count > 0 && (config.getInterstitialsInFeedCounter() < count));
             }
         }
+    }
+
+    public class TrialVipExperiment {
+        public boolean enable = true;
+        public String subscriptionSku = "com.topface.topface.sub.trial.vip.13";
+        public int maxShowCount = 10;
     }
 }

@@ -1,11 +1,19 @@
-package com.topface.topface.data;
+package com.topface.topface.unittests.data;
 
-import android.test.InstrumentationTestCase;
+import com.topface.topface.data.Photo;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import java.util.HashMap;
 
-public class PhotoTest extends InstrumentationTestCase {
+import static org.junit.Assert.assertEquals;
 
+@RunWith(RobolectricTestRunner.class)
+public class PhotoTest {
+
+    @Test
     public void testGetSuitableLink() {
         HashMap<String, String> links = new HashMap<>();
         links.put("c64x64", "url1");

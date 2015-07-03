@@ -232,7 +232,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             mIsTestPayments = savedInstanceState.getBoolean(IS_TEST_PURCHASES_ENABLED, false);
         }
         //После того как View создано проверяем, нужно ли показывать переключатель тестовых покупок
-        if (isTestPurchasesAvailable()) {
+        if (isTestPurchasesAvailable() && getView() != null) {
             ViewStub stub = (ViewStub) getView().findViewById(R.id.EditorTestStub);
             if (stub != null) {
                 View layout = stub.inflate();
@@ -297,7 +297,9 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             stopWaiting();
         }
         mHasDeferredPurchase = true;
-        mDeferredPurchaseButton = getView().findViewWithTag(btn);
+        if (getView() != null) {
+            mDeferredPurchaseButton = getView().findViewWithTag(btn);
+        }
         startWaiting();
     }
 

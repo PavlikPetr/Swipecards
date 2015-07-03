@@ -3,7 +3,7 @@ rootProject.name = 'topface-android'
 //Topface sub projects
 include ':libs:IllustratedTextView', ':libs:statistics-android'
 //Third part libs
-include ':libs:Android-ViewPagerIndicator', ':libs:PullToRefresh', ':libs:PhotoView', ':libs:UniversalImageLoader'
+include ':libs:PullToRefresh', ':libs:PhotoView'
 //Social networks
 include ':libs:odnoklassniki'
 //Topface Offerwall

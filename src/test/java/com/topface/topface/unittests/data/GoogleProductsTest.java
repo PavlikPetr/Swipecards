@@ -1,22 +1,32 @@
-package com.topface.topface.data;
+package com.topface.topface.unittests.data;
+
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.topface.framework.utils.Debug;
-
-import junit.framework.TestCase;
+import com.topface.topface.data.Products;
+import com.topface.topface.requests.IApiResponse;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import java.util.Iterator;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by kirussell on 27.03.14.
  * Tests json parsing for google products data
  */
-public class GoogleProductsTest extends TestCase {
+@RunWith(RobolectricTestRunner.class)
+public class GoogleProductsTest {
     public static final String TEST = "Test";
 
+    @Test
     public void testNullData() {
         try {
             JSONObject json = new JSONObject(jsonGoogleProductsResponse);
@@ -24,7 +34,7 @@ public class GoogleProductsTest extends TestCase {
 
                 @Override
                 public void executeWith(JSONObject json) {
-                    new Products(json);
+                    new MockedProducts(json);
                     Debug.log(TEST, json.toString());
                 }
             });
@@ -33,8 +43,6 @@ public class GoogleProductsTest extends TestCase {
             assertTrue("Error: " + er.toString(), false);
         } catch (JSONException e) {
             assertTrue("Json exception", false);
-        } catch (Exception ex) {
-            assertTrue("Exception: " + ex.toString(), false);
         }
     }
 
@@ -329,4 +337,28 @@ public class GoogleProductsTest extends TestCase {
             "  \"id\": \"\",\n" +
             "  \"method\": \"googleplay.getProducts\"\n" +
             "}";
+
+    private class MockedProducts extends Products {
+
+        public MockedProducts() {
+            super();
+        }
+
+        public MockedProducts(@Nullable JSONObject data) {
+            super(data);
+        }
+
+        public MockedProducts(@NonNull IApiResponse data) {
+            super(data);
+        }
+
+        @Override protected void updateCache(JSONObject data) {
+            Debug.log("mocked caching for: " + data.toString());
+        }
+
+        @Override protected void fillData(JSONObject data) {
+            fillProducts(data);
+            updateCache(data);
+        }
+    }
 }

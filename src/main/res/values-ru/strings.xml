@@ -785,7 +785,7 @@
     <string name="enter_text">Введите текст</string>
     <string name="send_feedback">Отправить сообщение</string>
     <string name="get_vip_free">Получи VIP бесплатно</string>
-    <string name="buy_more_sympathies">"Получай больше симпатий, становись популярнее"</string>
+    <string name="buy_more_sympathies">\"Получай больше симпатий, становись популярнее\"</string>
     <string name="transaction_code_help">Если вы отправите нам код транзакции, это может помочь в выполнение вашего запроса, а так же ускорит его обработку. Подробную информацию о заказе, можно получить через <a href="https://wallet.google.com">Google-кошелек</a>.</string>
     <!-- ServicesManager-->
     <!-- Google -->
@@ -823,4 +823,11 @@
     <string name="status_confirmation_was_sent">Ожидает регистрации</string>
     <string name="status_user_registered">Уже зарегистрирован</string>
     <string name="balance">Баланс (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
+
+    <string name="trial_vip_text">Бесплатный VIP\nна 7 дней</string>
+    <string name="trial_vip_button_text">Подключить VIP</string>
+    
+    <string name="settings_check_vip_title">Проверка активности VIP статуса</string>
+    <string name="settings_check_vip_cell">Проверить VIP статус</string>
+    <string name="settings_check_vip_alert">Запрос на проверку отправлен</string>
 </resources>
