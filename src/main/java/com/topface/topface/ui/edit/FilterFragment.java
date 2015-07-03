@@ -1,11 +1,9 @@
 package com.topface.topface.ui.edit;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -72,7 +70,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private ImageView mLoFilterButtonHome;
 
     private boolean mInitFilterOnline;
-    private boolean isDialogShown;
 
     public FilterListDialog.DialogRowCliCkInterface getDialogOnItemClickListener() {
         return mDialogOnItemClickListener;
@@ -129,19 +126,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         // Preferences
         initFilter();
         initViews(root);
-        if (savedInstanceState != null && savedInstanceState.getBoolean(FILTER_DIALOG_SHOWN)) {
-            DialogFragment dialog = (DialogFragment) getChildFragmentManager().findFragmentByTag(FilterListDialog.TAG);
-            getChildFragmentManager().beginTransaction().show(dialog).commit();
-        }
         return root;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (outState != null) {
-            outState.putBoolean(FILTER_DIALOG_SHOWN, isDialogShown);
-        }
     }
 
     private void initFilter() {
@@ -496,14 +481,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                                      FilterListDialog.DialogRowCliCkInterface listener) {
         FilterListDialog dialog = FilterListDialog.newInstance();
         dialog.setData(titleId, targetId, viewId, listener, mFormInfo);
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                isDialogShown = false;
-            }
-        });
         dialog.show(getChildFragmentManager(), FilterListDialog.TAG);
-        isDialogShown = true;
     }
 
     @Override
