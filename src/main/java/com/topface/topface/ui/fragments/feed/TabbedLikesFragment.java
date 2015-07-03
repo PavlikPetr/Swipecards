@@ -1,10 +1,22 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.utils.CacheProfile;
 
 public class TabbedLikesFragment extends TabbedFeedFragment {
+
+    @Override
+    protected boolean isScrollable() {
+        return true;
+    }
 
     @Override
     protected void onBeforeCountersUpdate() {
@@ -27,6 +39,14 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
         if (!CacheProfile.getOptions().isHideAdmirations) {
             addBodyPage(AdmirationFragment.class.getName(), getString(R.string.general_admirations), CacheProfile.unread_admirations);
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        TabLayout layout = (TabLayout) view.findViewById(R.id.feedTabs);
+        layout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        return view;
     }
 
     @Override

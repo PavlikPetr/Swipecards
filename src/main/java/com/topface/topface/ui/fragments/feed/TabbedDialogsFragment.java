@@ -7,6 +7,11 @@ import com.topface.topface.utils.CacheProfile;
 public class TabbedDialogsFragment extends TabbedFeedFragment {
 
     @Override
+    protected boolean isScrollable() {
+        return false;
+    }
+
+    @Override
     protected void onBeforeCountersUpdate() {
         updatePageCounter(DialogsFragment.class.getName(), CacheProfile.unread_messages);
     }

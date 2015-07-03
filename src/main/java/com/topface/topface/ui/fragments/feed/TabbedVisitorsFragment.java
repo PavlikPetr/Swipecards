@@ -12,6 +12,11 @@ public class TabbedVisitorsFragment extends TabbedFeedFragment {
     }
 
     @Override
+    protected boolean isScrollable() {
+        return false;
+    }
+
+    @Override
     protected void onBeforeCountersUpdate() {
         updatePageCounter(VisitorsFragment.class.getName(), CacheProfile.unread_visitors);
         updatePageCounter(FansFragment.class.getName(), CacheProfile.unread_fans);

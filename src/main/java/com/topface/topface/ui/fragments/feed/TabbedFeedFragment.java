@@ -6,15 +6,21 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.TextView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.banners.BannersController;
 import com.topface.topface.banners.PageInfo;
@@ -23,13 +29,15 @@ import com.topface.topface.banners.ad_providers.IRefresher;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * base class for feeds with tabs
@@ -39,24 +47,25 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     public static final String EXTRA_OPEN_PAGE = "openTabbedFeedAt";
     private static final String LAST_OPENED_PAGE = "last_opened_page";
     private ViewPager mPager;
-    private SlidingTabLayout mSlidingTabLayout;
     private ArrayList<String> mPagesClassNames = new ArrayList<>();
     private ArrayList<String> mPagesTitles = new ArrayList<>();
     private ArrayList<Integer> mPagesCounters = new ArrayList<>();
     private BannersController mBannersController;
+    @Bind(R.id.feedTabs)
+    TabLayout mTabLayout;
 
     private TabbedFeedPageAdapter mBodyPagerAdapter;
 
     protected static int mVisitorsastOpenedPage = 0;
     protected static int mLikesLastOpenedPage = 0;
     protected static int mDialogsLastOpenedPage = 0;
+    private ArrayList<TextView> mViews;
 
     public static void setTabsDefaultPosition() {
         mVisitorsastOpenedPage = 0;
         mLikesLastOpenedPage = 0;
         mDialogsLastOpenedPage = 0;
     }
-
 
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -66,6 +75,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
 
         @Override
         public void onPageSelected(int position) {
+            setTabTitle(position);
             List<Fragment> fragments = getChildFragmentManager().getFragments();
             if (fragments != null) {
                 for (Fragment fragment : fragments) {
@@ -82,6 +92,8 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
 
         }
     };
+
+    protected abstract boolean isScrollable();
 
     private BroadcastReceiver mHasFeedAdReceiver = new BroadcastReceiver() {
         @Override
@@ -105,14 +117,13 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     private void onCountersUpdated() {
         onBeforeCountersUpdate();
 
-        if (mSlidingTabLayout != null) {
-            mSlidingTabLayout.updateTitles();
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_tabbed_feed, null);
+        ButterKnife.bind(this, root);
         initPages(root);
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
@@ -129,14 +140,51 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
                 mPagesTitles,
                 mPagesCounters);
         mPager.setAdapter(mBodyPagerAdapter);
-
-        mSlidingTabLayout = (SlidingTabLayout) root.findViewById(R.id.sliding_tabs);
-        mSlidingTabLayout.setUseWeightProportions(true);
-        mSlidingTabLayout.setCustomTabView(getIndicatorLayout(), R.id.tab_title, R.id.tab_counter);
-        mSlidingTabLayout.setViewPager(mPager);
-        // need this, because SlidingView defines its own listener
-        mSlidingTabLayout.setOnPageChangeListener(mPageChangeListener);
+        mPager.addOnPageChangeListener(mPageChangeListener);
+        mTabLayout.setupWithViewPager(mPager);
+        mTabLayout.setTabMode(isScrollable() ? TabLayout.MODE_SCROLLABLE : TabLayout.MODE_FIXED);
+        initTabView();
+        setTabTitle(getLastOpenedPage());
     }
+
+    public void setTabTitle(int position) {
+        for (int i = 0; i < mTabLayout.getTabCount(); i++) {
+            TextView textView = mViews.get(i);
+            if (i == position) {
+                SpannableString title;
+                title = new SpannableString(mPagesTitles.get(i));
+                title.setSpan(new ForegroundColorSpan(getActivity().getResources().getColor(R.color.tab_text_color))
+                        , 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                if (mPagesCounters.get(i) > 0) {
+                    SpannableString counter = new SpannableString(String.valueOf(mPagesCounters.get(i)));
+                    counter.setSpan(new ForegroundColorSpan(getActivity().getResources().getColor(R.color.tab_counter_color))
+                            , 0, counter.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    textView.setText(TextUtils.concat(title, " ", counter));
+                } else {
+                    textView.setText(title);
+                }
+            } else {
+                if (mPagesCounters.get(i) > 0) {
+                    textView.setText(TextUtils.concat(mPagesTitles.get(i), " ", String.valueOf(mPagesCounters.get(i))));
+                } else {
+                    textView.setText(mPagesTitles.get(i));
+                }
+            }
+        }
+    }
+
+    private ArrayList<TextView> initTabView() {
+        mViews = new ArrayList<>();
+        View view;
+        for (int i = 0; i < mPagesCounters.size(); i++) {
+            view = LayoutInflater.from(App.getContext()).inflate(R.layout.tab_indicator, null);
+            TextView textView = (TextView) view.findViewById(R.id.tab_title);
+            mViews.add(textView);
+            mTabLayout.getTabAt(i).setCustomView(textView);
+        }
+        return mViews;
+    }
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -181,10 +229,6 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
 
     protected abstract void addPages();
 
-    protected int getIndicatorLayout() {
-        return R.layout.tab_indicator;
-    }
-
     protected void addBodyPage(String className, String pageTitle, int counter) {
         mPagesCounters.add(counter);
         mPagesTitles.add(pageTitle.toUpperCase(Locale.getDefault()));
@@ -198,6 +242,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ButterKnife.unbind(this);
         LocalBroadcastManager.getInstance(getActivity())
                 .unregisterReceiver(mCountersReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mHasFeedAdReceiver);

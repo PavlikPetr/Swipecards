@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -25,7 +26,6 @@ import com.topface.topface.data.Products;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
-import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.GoogleMarketApiManager;
@@ -36,6 +36,8 @@ import java.util.LinkedList;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.functions.Action1;
 
@@ -55,7 +57,8 @@ public class PurchasesFragment extends BaseFragment {
     public static final int TYPE_PEOPLE_NEARBY = 5;
     public static final String ARG_ITEM_PRICE = "quantity_of_coins";
     private static final String SKIP_BONUS = "SKIP_BONUS";
-    private ViewPager mPager;
+    @Bind(R.id.purchasesPager)
+    ViewPager mPager;
     private PurchasesFragmentsAdapter mPagerAdapter;
     private BroadcastReceiver mVipPurchasedReceiver = new BroadcastReceiver() {
         @Override
@@ -77,6 +80,8 @@ public class PurchasesFragment extends BaseFragment {
         }
     };
     private Subscription mBalanceSubscription;
+    @Bind(R.id.purchasesTabs)
+    TabLayout mTabLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,6 +97,7 @@ public class PurchasesFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.purchases_fragment, null);
+        ButterKnife.bind(this, root);
         initViews(root, savedInstanceState);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mVipPurchasedReceiver, new IntentFilter(CountersManager.UPDATE_VIP_STATUS));
         return root;
@@ -113,6 +119,7 @@ public class PurchasesFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ButterKnife.unbind(this);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mVipPurchasedReceiver);
     }
 
@@ -147,11 +154,6 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     private void initViews(View root, Bundle savedInstanceState) {
-        SlidingTabLayout tabIndicator = (SlidingTabLayout) root.findViewById(R.id.purchasesTabs);
-        tabIndicator.setUseWeightProportions(true);
-        tabIndicator.setCustomTabView(R.layout.tab_indicator, R.id.tab_title);
-        mPager = (ViewPager) root.findViewById(R.id.purchasesPager);
-
         Bundle args = getArguments();
         mIsVip = args.getBoolean(IS_VIP_PRODUCTS, false);
         args.putString(OpenIabFragment.ARG_RESOURCE_INFO_TEXT, mResourceInfoText == null ? getInfoText() : mResourceInfoText);
@@ -168,10 +170,9 @@ public class PurchasesFragment extends BaseFragment {
         }
 
         removeExcessTabs(tabs.list); //Убираем табы в которых нет продуктов и бонусную вкладку, если фрагмент для покупки випа
-
         mPagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs.list);
         mPager.setAdapter(mPagerAdapter);
-        tabIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private TopfaceOfferwallRedirect mTopfaceOfferwallRedirect = CacheProfile.getOptions().topfaceOfferwallRedirect;
 
             @Override
@@ -196,7 +197,7 @@ public class PurchasesFragment extends BaseFragment {
             public void onPageScrollStateChanged(int state) {
             }
         });
-        tabIndicator.setViewPager(mPager);
+        mTabLayout.setupWithViewPager(mPager);
         initBalanceCounters(getSupportActionBar().getCustomView());
         setResourceInfoText();
         if (savedInstanceState != null) {
