@@ -67,7 +67,7 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     }
 
     @Override
-    protected int getFeedCounter() {
+    protected int getFeedType() {
         return CountersManager.UNKNOWN_TYPE;
     }
 

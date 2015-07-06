@@ -159,7 +159,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     }
 
     @Override
-    protected int getFeedCounter() {
+    protected int getFeedType() {
         return CountersManager.UNKNOWN_TYPE;
     }
 

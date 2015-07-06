@@ -15,6 +15,7 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONObject;
@@ -106,8 +107,8 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    protected int getFeedCounter() {
-        return mCountersData.dialogs;
+    protected int getFeedType() {
+        return CountersManager.DIALOGS;
     }
 
     @Override
@@ -118,7 +119,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     protected int getUnreadCounter() {
         // dialogs are not auto-read
-        return 0;
+        return mCountersData.dialogs;
     }
 
     @Override

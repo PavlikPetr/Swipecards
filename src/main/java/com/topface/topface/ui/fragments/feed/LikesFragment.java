@@ -86,7 +86,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected void countersUpdated(CountersData countersData) {
+    protected void onCountersUpdated(CountersData countersData) {
         updateTitleWithCounter(countersData);
     }
 
@@ -126,8 +126,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected int getFeedCounter() {
-        return mCountersData.likes;
+    protected int getFeedType() {
+        return CountersManager.LIKES;
     }
 
     private void onMutual(FeedItem item) {
@@ -444,7 +444,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     private void showInterstitial() {
-        if (getFeedCounter() == CountersManager.LIKES) {
+        if (getFeedType() == CountersManager.LIKES) {
             AdmobInterstitialUtils.requestPreloadedInterstitial(getActivity());
         }
     }

@@ -45,6 +45,7 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.BlackListAddRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -67,6 +68,7 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.ad.NativeAd;
@@ -83,7 +85,6 @@ import rx.Subscription;
 import rx.functions.Action1;
 
 import static android.widget.AdapterView.OnItemClickListener;
-import static com.topface.topface.utils.CountersManager.METHOD_INTENT_STRING;
 import static com.topface.topface.utils.CountersManager.NULL_METHOD;
 
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
@@ -276,11 +277,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 if (userId == 0) {
                     if (!TextUtils.isEmpty(itemId)) {
                         makeItemReadWithFeedId(itemId);
-                    } else {
-                        String lastMethod = intent.getStringExtra(METHOD_INTENT_STRING);
-                        if (!TextUtils.isEmpty(lastMethod)) {
-                            updateDataAfterReceivingCounters(lastMethod);
-                        }
                     }
                 } else {
                     makeItemReadUserId(userId, intent.getIntExtra(ChatFragment.LOADED_MESSAGES, 0));
@@ -318,12 +314,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             }
             Parcelable[] feeds = saved.getParcelableArray(FEEDS);
             FeedList<T> feedsList = new FeedList<>();
-            for (Parcelable p : feeds) {
-                T feed = (T) p;
-                if (feed.isAd() && !CacheProfile.show_ad) {
-                    continue;
+            if (feeds != null) {
+                for (Parcelable p : feeds) {
+                    T feed = (T) p;
+                    if (feed.isAd() && !CacheProfile.show_ad) {
+                        continue;
+                    }
+                    feedsList.add((T) p);
                 }
-                feedsList.add((T) p);
             }
             mListAdapter.setData(feedsList);
             mListView.getRefreshableView().setSelection(saved.getInt(POSITION, 0));
@@ -388,7 +386,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             @Override
             public void call(CountersData countersData) {
                 mCountersData = countersData;
-                countersUpdated(countersData);
+                updateDataAfterReceivingCounters();
+                onCountersUpdated(countersData);
             }
         });
         registerGcmReceiver();
@@ -396,7 +395,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
 
-    protected void countersUpdated(CountersData countersData) {
+    protected void onCountersUpdated(CountersData countersData) {
     }
 
     @Override
@@ -468,7 +467,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         return new int[]{GCMUtils.GCM_TYPE_UNKNOWN};
     }
 
-    abstract protected int getFeedCounter();
+    abstract protected int getFeedType();
 
     protected int getLayout() {
         return R.layout.fragment_feed;
@@ -559,6 +558,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     protected AdapterView.OnItemLongClickListener getOnItemLongClickListener() {
         return new AdapterView.OnItemLongClickListener() {
+            @SuppressWarnings("deprecation")
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long itemPosition) {
                 if (isDeletable) {
@@ -1017,13 +1017,16 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     }
 
-    private void updateDataAfterReceivingCounters(String lastMethod) {
-        if (!lastMethod.equals(NULL_METHOD) && lastMethod.equals(getRequest().getServiceName())) {
-            int counters = getFeedCounter();
+    private void updateDataAfterReceivingCounters() {
+        String lastMethod = CountersManager.getInstance(getActivity()).getLastRequestMeethod();
+        if (!lastMethod.equals(NULL_METHOD) && !BannerRequest.SERVICE_NAME.equals(lastMethod) &&
+                lastMethod.equals(getRequest().getServiceName())) {
+            int counters = getUnreadCounter();
             if (counters > 0) {
                 updateData(true, false);
             }
         }
+        CountersManager.getInstance(getActivity()).setLastRequestMeethod(NULL_METHOD);
     }
 
     @Override

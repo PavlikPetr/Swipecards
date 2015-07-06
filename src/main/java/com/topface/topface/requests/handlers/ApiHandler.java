@@ -64,7 +64,6 @@ abstract public class ApiHandler extends Handler {
                     fail(result, response);
                 } else {
                     success(response);
-
                     setCounters(response);
                     sendUpdateIntent(response);
                 }
@@ -121,7 +120,7 @@ abstract public class ApiHandler extends Handler {
             Debug.log("Set counters from method " + method);
             CountersManager countersManager = CountersManager
                     .getInstance(App.getContext());
-
+            countersManager.setLastRequestMeethod(method);
             if (unread != null) {
                 countersManager.setEntitiesCounters(unread);
             }
