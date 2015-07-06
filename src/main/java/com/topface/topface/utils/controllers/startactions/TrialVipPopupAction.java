@@ -49,7 +49,7 @@ public class TrialVipPopupAction implements IStartAction {
     public boolean isApplicable() {
         return !CacheProfile.paid &&
                 App.getUserConfig().getTrialVipCounter() < CacheProfile.getOptions().getMaxShowCountTrialVipPopup() &&
-                CacheProfile.getOptions().trialVipExperiment.enable && new GoogleMarketApiManager().isMarketApiAvailable();
+                CacheProfile.getOptions().trialVipExperiment.enabled && new GoogleMarketApiManager().isMarketApiAvailable();
     }
 
     @Override
