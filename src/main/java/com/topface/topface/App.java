@@ -16,6 +16,7 @@ import android.text.TextUtils;
 
 import com.appsflyer.AppsFlyerLib;
 import com.comscore.analytics.comScore;
+import com.flurry.android.FlurryAgent;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.squareup.leakcanary.LeakCanary;
 import com.topface.billing.OpenIabHelperManager;
@@ -27,6 +28,7 @@ import com.topface.offerwall.common.TFCredentials;
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.data.AppOptions;
+import com.topface.topface.data.AppSocialAppsIds;
 import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
@@ -38,6 +40,7 @@ import com.topface.topface.requests.AmazonProductsRequest;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AppGetOptionsRequest;
+import com.topface.topface.requests.AppGetSocialAppsIdsRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GooglePlayProductsRequest;
 import com.topface.topface.requests.IApiResponse;
@@ -99,6 +102,7 @@ public class App extends Application {
     public static OpenIabHelperManager mOpenIabHelperManager = new OpenIabHelperManager();
     private static boolean mAppOptionsObtainedFromServer = false;
     private static boolean mUserOptionsObtainedFromServer = false;
+    private static AppSocialAppsIds mAppSocialAppsIds;
 
     /**
      * Множественный запрос Options и профиля
@@ -335,6 +339,10 @@ public class App extends Application {
         return mAppOptions;
     }
 
+    public static AppSocialAppsIds getAppSocialAppsIds() {
+        return mAppSocialAppsIds != null ? mAppSocialAppsIds : AppSocialAppsIds.getDefault();
+    }
+
     public static void setStartLabel(String startLabel) {
         mStartLabel = startLabel;
     }
@@ -404,12 +412,13 @@ public class App extends Application {
         // Settings common image to display error
         DefaultImageLoader.getInstance(getContext()).setErrorImageResId(R.drawable.im_photo_error);
 
-        sendAppOptionsRequest();
+        sendUnauthorizedRequests();
 
         mAppsFlyerConversionHolder = new AppsFlyerData.ConversionHolder();
         AppsFlyerLib.registerConversionListener(mContext, new AppsFlyerData.ConversionListener(mAppsFlyerConversionHolder));
 
         initComScore();
+        FlurryAgent.init(this, getString(R.string.flurry_key));
 
         final Handler handler = new Handler();
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
@@ -449,8 +458,15 @@ public class App extends Application {
         config.saveConfig();
     }
 
-    private void sendAppOptionsRequest() {
-        new AppGetOptionsRequest(mContext).callback(new DataApiHandler<AppOptions>() {
+    private void sendUnauthorizedRequests() {
+        new ParallelApiRequest(getContext()) { @Override public boolean isNeedAuth() { return false; } }
+                .addRequest(createAppOptionsRequest())
+                .addRequest(createAppSocialAppsIdsRequest(null))
+                .exec();
+    }
+
+    private ApiRequest createAppOptionsRequest() {
+        return new AppGetOptionsRequest(getContext()).callback(new DataApiHandler<AppOptions>() {
             @Override
             protected void success(AppOptions data, IApiResponse response) {
                 mAppOptions = data;
@@ -467,7 +483,35 @@ public class App extends Application {
             @Override
             public void fail(int codeError, IApiResponse response) {
             }
-        }).exec();
+        });
+    }
+
+    public ApiRequest createAppSocialAppsIdsRequest(final ApiHandler handler) {
+        return new AppGetSocialAppsIdsRequest(getContext()).callback(new DataApiHandler<AppSocialAppsIds>() {
+            @Override public void fail(int codeError, IApiResponse response) {
+                if (handler != null) {
+                    handler.fail(codeError, response);
+                }
+            }
+
+            @Override protected void success(AppSocialAppsIds data, IApiResponse response) {
+                mAppSocialAppsIds = data;
+                if (handler != null) {
+                    handler.success(response);
+                }
+            }
+
+            @Override protected AppSocialAppsIds parseResponse(ApiResponse response) {
+                return new AppSocialAppsIds(response.getJsonResult());
+            }
+
+            @Override public void always(IApiResponse response) {
+                super.always(response);
+                if (handler != null) {
+                    handler.always(response);
+                }
+            }
+        });
     }
 
     private void sendLocation() {
@@ -551,6 +595,10 @@ public class App extends Application {
             }
             return HttpApiTransport.TRANSPORT_NAME;
         }
+    }
+
+    public static App from(Context context) {
+        return (App)context.getApplicationContext();
     }
 }
 

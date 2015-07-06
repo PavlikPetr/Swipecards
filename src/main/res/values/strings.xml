@@ -647,4 +647,6 @@
     <string name="status_confirmation_was_sent">Awaiting for registration</string>
     <string name="status_user_registered">Already registered</string>
     <string name="balance">Balance (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
+    <string name="trial_vip_text">Free VIP \nfor 7 days</string>
+    <string name="trial_vip_button_text">Get VIP</string>
 </resources>
