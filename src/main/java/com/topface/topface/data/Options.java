@@ -58,6 +58,8 @@ public class Options extends AbstractData {
     public static final String PREMIUM_ADMIRATION_POPUP_SHOW_TIME = "premium_admirations_popup_last_show";
     protected static final String INSTANT_MSG = "instantMessageFromSearch";
 
+    private final static int TRIAL_VIP_MAX_SHOW_COUNT = 10;
+
     /**
      * Настройки для каждого типа страниц
      */
@@ -740,13 +742,13 @@ public class Options extends AbstractData {
     public class TrialVipExperiment {
         public boolean enabled = true;
         public String subscriptionSku = "com.topface.topface.sub.trial.vip.13";
-        public int maxShowCount = 10;
+        public int maxShowCount = TRIAL_VIP_MAX_SHOW_COUNT;
     }
 
     public int getMaxShowCountTrialVipPopup() {
         // пока серверн не добавит в объект поле "maxShowCount" оно будет возвращать 0 при парсинге,
         // поэтому ставим по умолчанию 10
-        return trialVipExperiment.maxShowCount <= 0 ? 10 : trialVipExperiment.maxShowCount;
+        return trialVipExperiment.maxShowCount <= 0 ? TRIAL_VIP_MAX_SHOW_COUNT : trialVipExperiment.maxShowCount;
     }
 
 }
