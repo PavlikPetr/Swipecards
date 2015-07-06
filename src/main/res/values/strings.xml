@@ -649,4 +649,8 @@
     <string name="balance">Balance (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
     <string name="trial_vip_text">Free VIP \nfor 7 days</string>
     <string name="trial_vip_button_text">Get VIP</string>
+    
+    <string name="settings_check_vip_title">Check VIP activity</string>
+    <string name="settings_check_vip_cell">Check VIP status</string>
+    <string name="settings_check_vip_alert">Check request is sent</string>
 </resources>
