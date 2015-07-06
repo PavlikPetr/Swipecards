@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Widget">
-    </style>
+    <style name="Widget"></style>
 
     <style name="Widget.Topface.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="backgroundStacked">@color/action_bar_color</item>
@@ -1088,8 +1087,10 @@
         <item name="android:visibility">gone</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:gravity">center</item>
-        <item name="android:padding">10dp</item>
+        <item name="android:gravity">left</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:padding">16dp</item>
     </style>
 
     <style name="CoinsTextView">

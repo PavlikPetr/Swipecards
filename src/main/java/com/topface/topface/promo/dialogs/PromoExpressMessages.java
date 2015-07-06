@@ -16,6 +16,8 @@ import java.util.Random;
 
 public class PromoExpressMessages extends PromoDialog {
 
+    public final static String TAG = "promo_express_messages";
+
     private static final int AVATARS_ID_ARRAY_LENGTH = 3;
 
     private int mCurrentPosition = Integer.MAX_VALUE;

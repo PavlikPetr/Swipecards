@@ -9,6 +9,7 @@ import com.topface.topface.promo.dialogs.PromoDialog;
 import com.topface.topface.promo.dialogs.PromoKey31Dialog;
 import com.topface.topface.promo.dialogs.PromoKey71Dialog;
 import com.topface.topface.promo.dialogs.PromoKey81Dialog;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
@@ -27,7 +28,7 @@ public class PromoPopupManager {
 
     private boolean startFragment() {
         //Пробуем по очереди показать каждый тип попапа
-        if (showPromoPopup(AIR_MESSAGES) && CacheProfile.getOptions().premiumMessages != null) {
+        if (CacheProfile.getOptions().premiumMessages != null && CacheProfile.getOptions().premiumMessages.getPageId() != BaseFragment.FragmentId.TABBED_DIALOGS.getId() && showPromoPopup(AIR_MESSAGES)) {
             return true;
         } else if (showPromoPopup(AIR_VISITORS) && CacheProfile.getOptions().premiumVisitors != null) {
             return true;
@@ -94,7 +95,6 @@ public class PromoPopupManager {
         if (fragment != null && fragment.getPremiumEntity() == null) {
             return null;
         }
-        fragment = new PromoKey31Dialog();
         return fragment;
     }
 
@@ -115,12 +115,12 @@ public class PromoPopupManager {
 
             @Override
             public boolean isApplicable() {
-//                if (CacheProfile.premium) return false;
-//                Options options = CacheProfile.getOptions();
-//                return checkIsNeedShow(options.getPremiumEntityByType(AIR_MESSAGES)) ||
-//                        checkIsNeedShow(options.getPremiumEntityByType(AIR_VISITORS)) ||
-//                        checkIsNeedShow(options.getPremiumEntityByType(AIR_ADMIRATIONS));
-                return true;
+                if (CacheProfile.premium) return false;
+                Options options = CacheProfile.getOptions();
+                return (checkIsNeedShow(options.getPremiumEntityByType(AIR_MESSAGES)) &&
+                        options.getPremiumEntityByType(AIR_MESSAGES).getPageId() != BaseFragment.FragmentId.TABBED_DIALOGS.getId()) ||
+                        checkIsNeedShow(options.getPremiumEntityByType(AIR_VISITORS)) ||
+                        checkIsNeedShow(options.getPremiumEntityByType(AIR_ADMIRATIONS));
             }
 
             @Override

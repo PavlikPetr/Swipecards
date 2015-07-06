@@ -4,9 +4,9 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <com.topface.IllustratedTextView.IllustratedTextView
             android:id="@+id/payReasonFragmentBuy"
@@ -14,56 +14,37 @@
 
         <ViewStub
             android:id="@+id/EditorTestStub"
-            android:layout="@layout/fragment_buy_editor"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout="@layout/fragment_buy_editor" />
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:padding="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="14dp">
 
             <TextView
                 android:id="@+id/fbBuyingDisabled"
+                style="@style/TitleGrayText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                style="@style/TitleGrayText"
                 android:text="@string/general_buying_disabled"
                 android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/likes_title"
-                style="@style/GrayText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="2dp"
-                android:text="@string/buying_sympathies" />
 
             <LinearLayout
                 android:id="@+id/fbLikes"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
                 android:orientation="vertical" />
-
-            <!-- Money -->
-            <TextView
-                android:id="@+id/coins_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                style="@style/GrayText"
-                android:layout_marginBottom="2dp"
-                android:text="@string/buying_money" />
 
             <LinearLayout
                 android:id="@+id/fbCoins"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="10dp" />
+                android:orientation="vertical" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

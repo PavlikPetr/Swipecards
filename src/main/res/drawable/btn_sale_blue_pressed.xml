@@ -2,11 +2,13 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
-            <corners android:radius="2dp" />
-            <solid android:color="#00A4D7" />
+            <corners android:radius="5dp" />
+            <solid android:color="#62c4f5" />
         </shape>
     </item>
     <item>
-        <bitmap android:src="@drawable/marker_pressed" android:gravity="right|top"/>
+        <bitmap
+            android:gravity="right|top"
+            android:src="@drawable/marker_pressed" />
     </item>
 </layer-list>
