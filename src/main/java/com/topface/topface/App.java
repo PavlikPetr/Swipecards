@@ -596,9 +596,5 @@ public class App extends Application {
             return HttpApiTransport.TRANSPORT_NAME;
         }
     }
-
-    public static App from(Context context) {
-        return (App)context.getApplicationContext();
-    }
 }
 
