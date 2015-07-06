@@ -32,6 +32,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.FeedGiftsRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.MultipartApiRequest;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
@@ -282,6 +283,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
                         }
                     });
             registerRequest(userAndGiftsRequest);
+            ((MultipartApiRequest) userAndGiftsRequest).setFrom(getClass().getSimpleName());
             userAndGiftsRequest.exec();
         } else {
             onSuccess(new User(mProfileId, mSavedResponse), mSavedResponse);
