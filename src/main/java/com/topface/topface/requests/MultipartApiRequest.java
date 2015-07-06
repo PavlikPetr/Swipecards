@@ -3,6 +3,7 @@ package com.topface.topface.requests;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.transport.IApiTransport;
 import com.topface.topface.requests.transport.MultipartHttpApiTransport;
@@ -145,12 +146,17 @@ abstract public class MultipartApiRequest extends ApiRequest {
                     " subrequests. " + (MAX_SUBREQUESTS_NUMBER - 1) + " is maximum.");
         }
         if (mRequests.size() == 0) {
-            HockeySender hockeySender = new HockeySender();
-            try {
-                hockeySender.send(getContext(), hockeySender.createLocalReport(getContext(), new Exception("Empty multipart request sent from : " + mFrom)));
-            } catch (ReportSenderException e) {
-                e.printStackTrace();
-            }
+            new BackgroundThread() {
+                @Override
+                public void execute() {
+                    HockeySender hockeySender = new HockeySender();
+                    try {
+                        hockeySender.send(getContext(), hockeySender.createLocalReport(getContext(), new Exception("Empty multipart request sent from : " + mFrom)));
+                    } catch (ReportSenderException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
             return;
         }
         super.exec();
