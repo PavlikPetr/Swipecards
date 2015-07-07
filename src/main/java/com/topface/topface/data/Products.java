@@ -257,7 +257,6 @@ public class Products extends AbstractData {
 
     private static int getBuyButtonBackground(boolean discount, int showType) {
         int bgResource;
-        discount = true;
         switch (showType) {
             case 1:
                 bgResource = discount ? R.drawable.btn_sale_blue_selector : R.drawable.btn_blue_selector;

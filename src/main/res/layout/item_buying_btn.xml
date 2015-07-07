@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    tools:background="@drawable/btn_gray_selector">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/itContainer"

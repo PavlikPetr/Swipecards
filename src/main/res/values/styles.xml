@@ -696,16 +696,6 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="MobilePaymentButton" parent="android:Widget.ImageButton">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:layout_marginTop">5dp</item>
-        <item name="android:layout_marginBottom">5dp</item>
-        <item name="android:padding">8dp</item>
-        <item name="android:background">@drawable/btn_gray_selector</item>
-    </style>
-
     <style name="Widget.Topface.Button.Big">
         <item name="android:minHeight">50dp</item>
         <item name="android:paddingLeft">15dp</item>
@@ -735,7 +725,12 @@
 
     <style name="Widget.Topface.Button.Big.Gray" parent="Widget.Topface.Button.Big">
         <item name="android:background">@drawable/btn_gray_selector</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:elevation" tools:ignore="NewApi">2dp</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginRight">2dp</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:textColor">@drawable/btn_gray_text_color_selector</item>
     </style>
 
     <style name="BlueBonusButton" parent="Widget.Topface.Button.Big.Blue">
@@ -748,12 +743,22 @@
 
     <style name="Widget.Topface.Button.Big.Blue" parent="Widget.Topface.Button.Big">
         <item name="android:background">@drawable/btn_blue_selector</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:elevation" tools:ignore="NewApi">2dp</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginRight">2dp</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:textColor">@drawable/btn_blue_text_color_selector</item>
     </style>
 
     <style name="Widget.Topface.Button.Blue" parent="Widget.Topface.Button">
         <item name="android:background">@drawable/btn_blue_selector</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:elevation" tools:ignore="NewApi">2dp</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginRight">2dp</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:textColor">@drawable/btn_blue_text_color_selector</item>
     </style>
 
     <style name="ButtonSale" parent="Widget.Topface.Button.Big.Blue">
@@ -1090,7 +1095,10 @@
         <item name="android:gravity">left</item>
         <item name="android:layout_marginTop">6dp</item>
         <item name="android:layout_marginBottom">6dp</item>
-        <item name="android:padding">16dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
     </style>
 
     <style name="CoinsTextView">
