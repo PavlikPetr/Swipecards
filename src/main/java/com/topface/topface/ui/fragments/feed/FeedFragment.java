@@ -107,6 +107,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private RelativeLayout mContainer;
     private BroadcastReceiver mReadItemReceiver;
     private BannersController mBannersController;
+    private TextView mActionModeTitle;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -178,7 +179,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                         Utils.showToastNotification(R.string.maximum_number_of_users, Toast.LENGTH_LONG);
                     }
                     if (mActionMode != null) {
-                        mActionMode.setTitle(Utils.getQuantityString(R.plurals.selected, size, size));
+                        getActionModeTitle().setText(Utils.getQuantityString(R.plurals.selected, size, size));
+                        mActionMode.setCustomView(getActionModeTitle());
                     }
                 }
             });
@@ -1110,5 +1112,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         boolean state = isCurrentCounterChanged;
         isCurrentCounterChanged = false;
         return state;
+    }
+
+    private TextView getActionModeTitle() {
+        if (mActionModeTitle == null) {
+            mActionModeTitle = (TextView) LayoutInflater.from(getActivity()).inflate(R.layout.action_mode_text, null);
+        }
+        return mActionModeTitle;
     }
 }
