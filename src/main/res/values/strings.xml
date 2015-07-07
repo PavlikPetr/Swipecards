@@ -651,4 +651,7 @@
     <string name="settings_check_vip_title">Check VIP activity</string>
     <string name="settings_check_vip_cell">Check VIP status</string>
     <string name="settings_check_vip_alert">Check request is sent</string>
+    
+    <string name="novice_sympathy">Send likes only to those\nwho really attract you.\nYou just might find someone special!</string>
+    <string name="novice_sympathies_bonus">You are getting %1$d likes as a gift! It means that %2$d people will give you a like and they\'ll mean it.</string>
 </resources>
