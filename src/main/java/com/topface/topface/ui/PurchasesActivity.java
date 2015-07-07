@@ -196,13 +196,9 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                // для обновления счетчиков монет и лайков при покупке через paymentWall
-                case PaymentwallActivity.ACTION_BUY:
-                    new ProfileRequest(this).exec();
-                    break;
-            }
+        if (resultCode == RESULT_OK && requestCode == PaymentwallActivity.ACTION_BUY) {
+            // для обновления счетчиков монет и лайков при покупке через paymentWall
+            new ProfileRequest(this).exec();
         }
         //Это супер мега хак, смотри документацию processRequestCode
         if (!OpenIabFragment.processRequestCode(
