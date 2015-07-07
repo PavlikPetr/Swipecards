@@ -182,6 +182,7 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
             @Override
             protected void success(Boolean isEmailConfirmed, IApiResponse response) {
                 CacheProfile.emailConfirmed = isEmailConfirmed;
+                CacheProfile.getOptions().isActivityAllowed = true;
                 onProfileUpdated();
             }
 
