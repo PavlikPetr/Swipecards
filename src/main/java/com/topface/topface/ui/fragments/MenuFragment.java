@@ -294,7 +294,7 @@ public class MenuFragment extends Fragment {
             // update photo
             Photo photo = profileMenuItem.getMenuIconPhoto();
             if (photo != null) {
-                if (photo.equals(CacheProfile.getProfile().photo)) {
+                if (!photo.equals(CacheProfile.getProfile().photo)) {
                     profileMenuItem.setMenuIconPhoto(CacheProfile.getProfile().photo);
                     notify = true;
                 }
