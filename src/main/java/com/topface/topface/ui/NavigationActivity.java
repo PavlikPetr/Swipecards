@@ -95,6 +95,15 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     private AddPhotoHelper mAddPhotoHelper;
     private PopupManager mPopupManager;
 
+    private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (CacheProfile.age <= App.getAppOptions().getUserAgeMin()) {
+                SetAgeDialog.newInstance().show(getSupportFragmentManager(), SetAgeDialog.TAG);
+            }
+        }
+    };
+
     /**
      * Перезапускает NavigationActivity, нужно например при смене языка
      *
@@ -160,7 +169,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     protected void onRegisterStartActions(StartActionsController startActionsController) {
         super.onRegisterStartActions(startActionsController);
         final SequencedStartAction sequencedStartAction = new SequencedStartAction(this, AC_PRIORITY_HIGH);
-        sequencedStartAction.addAction(new TrialVipPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH, "first popup"));
+        sequencedStartAction.addAction(new TrialVipPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH));
         // fullscreen
         if (mFullscreenController != null) {
             sequencedStartAction.addAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
@@ -292,6 +301,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
             mFullscreenController.onPause();
         }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mCountersReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mProfileUpdateReceiver);
     }
 
     @Override
@@ -318,6 +328,8 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         }
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
 
     @Override
@@ -447,10 +459,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         if (mDrawerToggle != null) {
             mDrawerToggle.syncState();
         }
-        if (CacheProfile.age <= App.getAppOptions().getUserAgeMin()) {
-            SetAgeDialog.newInstance().show(this.getSupportFragmentManager(), SetAgeDialog.TAG);
-        }
-
         /*
         Initialize Topface offerwall here to be able to start it quickly instead of PurchasesActivity
          */
