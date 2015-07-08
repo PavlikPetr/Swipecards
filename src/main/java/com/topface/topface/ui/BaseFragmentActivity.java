@@ -89,8 +89,10 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         initActionBar(getSupportActionBar());
     }
 
-    public Toolbar getActionBarToolbar() {
-        return mToolbar;
+    public void setToolBarVisibility(boolean isVisible) {
+        if (mToolbar != null) {
+            mToolbar.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+        }
     }
 
     protected abstract int getContentLayout();

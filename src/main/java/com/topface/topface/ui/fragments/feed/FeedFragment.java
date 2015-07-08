@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -172,7 +171,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private ActionMode.Callback mActionActivityCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            setToolBarVisibility(false);
+            ((BaseFragmentActivity) getActivity()).setToolBarVisibility(false);
             mActionMode = mode;
             mActionMode.setCustomView(getActionModeTitle());
             FeedAdapter<T> adapter = getListAdapter();
@@ -224,16 +223,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         public void onDestroyActionMode(ActionMode mode) {
             getListAdapter().finishMultiSelection();
             mActionMode = null;
-            setToolBarVisibility(true);
+            ((BaseFragmentActivity) getActivity()).setToolBarVisibility(true);
         }
     };
-
-    private void setToolBarVisibility(boolean isVisible) {
-        Toolbar toolbar = ((BaseFragmentActivity) getActivity()).getActionBarToolbar();
-        if (toolbar != null) {
-            toolbar.setVisibility(isVisible ? View.VISIBLE : View.GONE);
-        }
-    }
 
     private FeedRequest.UnreadStatePair mLastUnreadState = new FeedRequest.UnreadStatePair();
     private View mInflated;
