@@ -16,8 +16,6 @@
 
         <item name="android:windowTitleStyle">@style/CenterJustifyDialogTitle</item>
 
-        <item name="android:windowAnimationStyle">@null</item>
-
         <!-- Тема индикаторов для ViewPager -->
         <item name="android:textAppearanceLarge">@style/TopfaceTextAppearance.Large</item>
         <item name="android:textAppearanceMedium">@style/TopfaceTextAppearance.Medium</item>
@@ -58,6 +56,11 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+
+    <style name="NoWindowAnimation" parent="Theme.Topface">
+        <item name="android:windowAnimationStyle">@null</item>
     </style>
 
     <style name="EditDialog" parent="Theme.Topface">
@@ -162,7 +165,7 @@
         <item name="android:windowBackground">@color/album_background</item>
     </style>
 
-    <style name="Theme.Topface.Chat">
+    <style name="Theme.Topface.Chat" parent="NoWindowAnimation">
         <item name="android:windowBackground">@color/bg_white</item>
     </style>
 
