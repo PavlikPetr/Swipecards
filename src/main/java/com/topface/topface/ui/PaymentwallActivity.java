@@ -1,19 +1,24 @@
 package com.topface.topface.ui;
 
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
 import java.io.UnsupportedEncodingException;
@@ -30,6 +35,14 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     private String mSuccessUrl;
     private View mProgressBar;
     private String mWidgetUrl;
+    private TextView mCurCoins;
+    private TextView mCurLikes;
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateBalanceCounters();
+        }
+    };
 
     public static Intent getIntent(Context context) {
         return new Intent(context, PaymentwallActivity.class);
@@ -43,6 +56,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initBalanceCounters();
         mWidgetUrl = getWidgetUrl();
         if (TextUtils.isEmpty(mWidgetUrl)) {
             onFatalError();
@@ -149,5 +163,30 @@ public class PaymentwallActivity extends BaseFragmentActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateBalanceCounters();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(CountersManager.UPDATE_BALANCE));
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
+    }
+
+    private void initBalanceCounters() {
+        findViewById(R.id.resources_layout).setVisibility(View.VISIBLE);
+        mCurCoins = (TextView) findViewById(R.id.coins_textview);
+        mCurLikes = (TextView) findViewById(R.id.likes_textview);
+        updateBalanceCounters();
+    }
+
+    private void updateBalanceCounters() {
+        if (mCurCoins != null && mCurLikes != null) {
+            mCurCoins.setText(Integer.toString(CacheProfile.money));
+            mCurLikes.setText(Integer.toString(CacheProfile.likes));
+        }
+    }
 }
