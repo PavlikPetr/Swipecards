@@ -834,6 +834,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
         onUpdateSuccess(isPullToRefreshUpdating || isHistoryLoad);
         mListView.onRefreshComplete();
+        mBackgroundController.hide();
         mListView.setVisibility(View.VISIBLE);
     }
 
