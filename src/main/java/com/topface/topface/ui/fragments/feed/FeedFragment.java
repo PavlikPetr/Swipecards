@@ -171,7 +171,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private ActionMode.Callback mActionActivityCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            ((BaseFragmentActivity) getActivity()).setToolBarVisibility(false);
+            setToolBarVisibility(false);
             mActionMode = mode;
             mActionMode.setCustomView(getActionModeTitle());
             FeedAdapter<T> adapter = getListAdapter();
@@ -223,7 +223,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         public void onDestroyActionMode(ActionMode mode) {
             getListAdapter().finishMultiSelection();
             mActionMode = null;
-            ((BaseFragmentActivity) getActivity()).setToolBarVisibility(true);
+            setToolBarVisibility(true);
         }
     };
 
@@ -1124,5 +1124,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             mActionModeTitle = (TextView) LayoutInflater.from(getActivity()).inflate(R.layout.action_mode_text, null);
         }
         return mActionModeTitle;
+    }
+
+    private void setToolBarVisibility(boolean isVisible) {
+        BaseFragmentActivity activity = ((BaseFragmentActivity) getActivity());
+        if (activity != null) {
+            activity.setToolBarVisibility(isVisible);
+        }
     }
 }
