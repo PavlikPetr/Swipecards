@@ -53,6 +53,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -107,6 +108,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private RelativeLayout mContainer;
     private BroadcastReceiver mReadItemReceiver;
     private BannersController mBannersController;
+    private TextView mActionModeTitle;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -169,7 +171,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private ActionMode.Callback mActionActivityCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            setToolBarVisibility(false);
             mActionMode = mode;
+            mActionMode.setCustomView(getActionModeTitle());
             FeedAdapter<T> adapter = getListAdapter();
             adapter.setMultiSelectionListener(new MultiselectionController.IMultiSelectionListener() {
                 @Override
@@ -178,9 +182,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                         Utils.showToastNotification(R.string.maximum_number_of_users, Toast.LENGTH_LONG);
                     }
                     if (mActionMode != null) {
-                        mActionMode.setTitle(Utils.getQuantityString(R.plurals.selected, size, size));
+                        getActionModeTitle().setText(Utils.getQuantityString(R.plurals.selected, size, size));
                     }
                 }
+
             });
             adapter.notifyDataSetChanged();
             menu.clear();
@@ -218,8 +223,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         public void onDestroyActionMode(ActionMode mode) {
             getListAdapter().finishMultiSelection();
             mActionMode = null;
+            setToolBarVisibility(true);
         }
     };
+
     private FeedRequest.UnreadStatePair mLastUnreadState = new FeedRequest.UnreadStatePair();
     private View mInflated;
 
@@ -1111,5 +1118,19 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         boolean state = isCurrentCounterChanged;
         isCurrentCounterChanged = false;
         return state;
+    }
+
+    private TextView getActionModeTitle() {
+        if (mActionModeTitle == null) {
+            mActionModeTitle = (TextView) LayoutInflater.from(getActivity()).inflate(R.layout.action_mode_text, null);
+        }
+        return mActionModeTitle;
+    }
+
+    private void setToolBarVisibility(boolean isVisible) {
+        BaseFragmentActivity activity = ((BaseFragmentActivity) getActivity());
+        if (activity != null) {
+            activity.setToolBarVisibility(isVisible);
+        }
     }
 }
