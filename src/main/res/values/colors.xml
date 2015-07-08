@@ -24,6 +24,7 @@
     <color name="bg_holo">#F1F1F1</color>
     <color name="bg_white">#FFFFFF</color>
     <color name="action_bar_color">#455A64</color>
+    <color name="action_mode_color">#37474F</color>
     <color name="bg_light_blue">#EAF8FF</color>
     <color name="blue_60_percent">#99AEE5FD</color>
     <color name="black_60_percent">#99000000</color>
@@ -69,7 +70,8 @@
 
     <!--filter light edit form dialog background selector color-->
     <color name="edit_form_selector_background_color_release_state">#FFFFFF</color>
-    <color name="edit_form_selector_background_color_pressed_state">@color/blue_holo_selected</color>
+    <color name="edit_form_selector_background_color_pressed_state">@color/blue_holo_selected
+    </color>
 
     <!--filter fragment dividers color-->
     <color name="filter_fragment_divider_color">#E2E2E2</color>

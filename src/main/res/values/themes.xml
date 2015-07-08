@@ -45,7 +45,7 @@
         <item name="selectableItemBackground">@drawable/bg_semitransparent_black_selector</item>
         <item name="actionBarSize">?android:attr/actionBarSize</item>
         <!-- Action Mode (CAB)-->
-        <item name="actionModeBackground">@color/action_bar_color</item>
+        <item name="actionModeBackground">@color/action_mode_color</item>
         <item name="actionModeCloseDrawable">@drawable/ic_check</item>
         <item name="android:windowDrawsSystemBarBackgrounds" tools:ignore="NewApi">true</item>
     </style>

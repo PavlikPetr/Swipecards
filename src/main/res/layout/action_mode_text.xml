@@ -5,4 +5,4 @@
     android:clickable="true"
     android:gravity="center_vertical"
     android:textColor="#FFFFFF"
-    android:textSize="18sp" />
+    android:textSize="20sp" />
