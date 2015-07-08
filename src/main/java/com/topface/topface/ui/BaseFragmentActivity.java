@@ -52,6 +52,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     private boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
     private StartActionsController mStartActionsController;
+    private Toolbar mToolbar;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -74,9 +75,9 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         if (mHasContent) {
             setContentView(getContentLayout());
         }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (mToolbar != null) {
+            setSupportActionBar(mToolbar);
         }
         Intent intent = getIntent();
         if (intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false)) {
@@ -86,6 +87,10 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
         LocaleConfig.updateConfiguration(getBaseContext());
         initActionBar(getSupportActionBar());
+    }
+
+    public Toolbar getActionBarToolbar() {
+        return mToolbar;
     }
 
     protected abstract int getContentLayout();

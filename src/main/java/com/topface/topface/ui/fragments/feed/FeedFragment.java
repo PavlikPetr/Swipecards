@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -53,6 +54,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -170,7 +172,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private ActionMode.Callback mActionActivityCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            setToolBarVisibility(false);
             mActionMode = mode;
+            mActionMode.setCustomView(getActionModeTitle());
             FeedAdapter<T> adapter = getListAdapter();
             adapter.setMultiSelectionListener(new MultiselectionController.IMultiSelectionListener() {
                 @Override
@@ -180,9 +184,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                     }
                     if (mActionMode != null) {
                         getActionModeTitle().setText(Utils.getQuantityString(R.plurals.selected, size, size));
-                        mActionMode.setCustomView(getActionModeTitle());
                     }
                 }
+
             });
             adapter.notifyDataSetChanged();
             menu.clear();
@@ -220,8 +224,17 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         public void onDestroyActionMode(ActionMode mode) {
             getListAdapter().finishMultiSelection();
             mActionMode = null;
+            setToolBarVisibility(true);
         }
     };
+
+    private void setToolBarVisibility(boolean isVisible) {
+        Toolbar toolbar = ((BaseFragmentActivity) getActivity()).getActionBarToolbar();
+        if (toolbar != null) {
+            toolbar.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+        }
+    }
+
     private FeedRequest.UnreadStatePair mLastUnreadState = new FeedRequest.UnreadStatePair();
     private View mInflated;
 
