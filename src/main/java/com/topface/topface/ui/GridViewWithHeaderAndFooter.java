@@ -117,7 +117,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
      * Add a fixed view to appear at the top of the grid. If addHeaderView is
      * called more than once, the views will appear in the order they were
      * added. Views added using this call can take focus if they want.
-     * <p>
+     * <p/>
      * NOTE: Call this before calling setAdapter. This is so HeaderGridView can wrap
      * the supplied cursor with one that will also account for header views.
      *
@@ -131,7 +131,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
      * Add a fixed view to appear at the top of the grid. If addHeaderView is
      * called more than once, the views will appear in the order they were
      * added. Views added using this call can take focus if they want.
-     * <p>
+     * <p/>
      * NOTE: Call this before calling setAdapter. This is so HeaderGridView can wrap
      * the supplied cursor with one that will also account for header views.
      *
@@ -789,6 +789,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
         return getNumColumns();
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public int getGridViewColumnWidth() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             return getColumnWidth();
@@ -800,6 +801,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public int getGridViewNumColumns() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             return getNumColumns();
@@ -808,6 +810,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public int getGridViewVerticalSpacing() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             return getVerticalSpacing();
