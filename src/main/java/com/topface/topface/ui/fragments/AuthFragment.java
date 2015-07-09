@@ -62,9 +62,6 @@ public class AuthFragment extends BaseAuthFragment {
     private boolean mBtnsHidden;
 
     private boolean mButtonsInitialized = false;
-    private ImageView mVkIcon;
-    private ImageView mOkIcon;
-    private ImageView mFbIcon;
     private boolean mNeedShowButtonsOnResume = true;
 
     private BroadcastReceiver mTokenReadyReceiver = new BroadcastReceiver() {
@@ -146,15 +143,6 @@ public class AuthFragment extends BaseAuthFragment {
         mFBButton = (Button) root.findViewById(R.id.btnAuthFB);
         mOKButton = (Button) root.findViewById(R.id.btnAuthOk);
         mOtherSocialNetworksButton = (LinearLayout) root.findViewById(R.id.otherServices);
-        mVkIcon = (ImageView) root.findViewById(R.id.vk_ico);
-        mOkIcon = (ImageView) root.findViewById(R.id.ok_ico);
-        mFbIcon = (ImageView) root.findViewById(R.id.fb_ico);
-        mVKButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btnVKClick();
-            }
-        });
         mFBButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -233,21 +221,21 @@ public class AuthFragment extends BaseAuthFragment {
         HashSet<String> otherSN = mBtnsController.getOthers();
         if (otherSN.size() != 0) {
             if (otherSN.contains(AuthToken.SN_VKONTAKTE)) {
-                mVkIcon.setVisibility(View.VISIBLE);
+                //mVkIcon.setVisibility(View.VISIBLE);
             } else {
-                mVkIcon.setVisibility(View.GONE);
+                //mVkIcon.setVisibility(View.GONE);
             }
 
             if (otherSN.contains(AuthToken.SN_ODNOKLASSNIKI)) {
-                mOkIcon.setVisibility(View.VISIBLE);
+                //mOkIcon.setVisibility(View.VISIBLE);
             } else {
-                mOkIcon.setVisibility(View.GONE);
+                //mOkIcon.setVisibility(View.GONE);
             }
 
             if (otherSN.contains(AuthToken.SN_FACEBOOK)) {
-                mFbIcon.setVisibility(View.VISIBLE);
+                //mFbIcon.setVisibility(View.VISIBLE);
             } else {
-                mFbIcon.setVisibility(View.GONE);
+                //mFbIcon.setVisibility(View.GONE);
             }
         }
     }

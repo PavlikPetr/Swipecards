@@ -3,8 +3,9 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@drawable/auth_bg"
-            android:fillViewport="true">
+    android:background="@drawable/bg"
+
+    android:fillViewport="true">
 
     <RelativeLayout
         android:id="@+id/authContainer"
@@ -47,6 +48,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/auth_fb_selector"
+                android:gravity="left|center"
                 android:text="@string/auth_btn_fb"
                 android:visibility="visible"/>
 
@@ -134,30 +136,6 @@
             android:orientation="horizontal"
             android:padding="10dp"
             android:visibility="gone">
-
-            <ImageView
-                android:id="@+id/fb_ico"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:src="@drawable/ico_facebook"
-                android:visibility="gone"/>
-
-            <ImageView
-                android:id="@+id/vk_ico"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:src="@drawable/ico_vk"
-                android:visibility="gone"/>
-
-            <ImageView
-                android:id="@+id/ok_ico"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:src="@drawable/ico_ok"
-                android:visibility="gone"/>
 
             <TextView
                 android:layout_width="wrap_content"

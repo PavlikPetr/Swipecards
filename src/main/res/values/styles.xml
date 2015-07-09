@@ -730,7 +730,7 @@
         <item name="android:gravity">center</item>
     </style>
 
-    // наследуются стили Widget
+    <!-- наследуются стили Widget-->
 
     <style name="Widget.Topface" />
 
