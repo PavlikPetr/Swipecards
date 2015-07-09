@@ -18,4 +18,10 @@ public class OwnProfileActivity extends CheckAuthActivity<OwnProfileFragment> {
     protected void setActionBarView() {
         super.setActionBarView();
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, 0);
+    }
 }
