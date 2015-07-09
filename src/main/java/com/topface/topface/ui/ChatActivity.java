@@ -60,4 +60,10 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
         FeedScreensIntent.equipMessageAllIntent(intent);
         return intent;
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, 0);
+    }
 }
