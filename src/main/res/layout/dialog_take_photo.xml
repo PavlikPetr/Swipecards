@@ -9,12 +9,12 @@
 
     <TextView
         android:id="@+id/tvText"
+        style="@style/ItemWhiteText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        style="@style/ItemWhiteText"
-        android:textSize="12sp"
-        android:text="@string/no_photo_take_photo" />
+        android:text="@string/no_photo_take_photo"
+        android:textSize="12sp" />
 
     <RelativeLayout
         android:id="@+id/loPhoto"
@@ -25,20 +25,20 @@
 
         <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/ivPhoto"
-            android:maxHeight="320dp"
-            android:adjustViewBounds="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
+            android:maxHeight="320dp" />
 
         <ImageView
             android:id="@+id/ivFrame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/ivPhoto"
-            android:layout_alignTop="@id/ivPhoto"
-            android:layout_alignRight="@id/ivPhoto"
             android:layout_alignBottom="@id/ivPhoto"
+            android:layout_alignLeft="@id/ivPhoto"
+            android:layout_alignRight="@id/ivPhoto"
+            android:layout_alignTop="@id/ivPhoto"
             android:background="@drawable/frame_dialog_photo" />
     </RelativeLayout>
 
@@ -52,42 +52,45 @@
 
         <Button
             android:id="@+id/btnTakePhoto"
+            style="@style/ButtonWhiteText.Mini"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginRight="4dp"
+            android:layout_weight="1"
             android:background="@drawable/btn_gray_selector"
-            style="@style/ButtonWhiteTextMini"
+            android:padding="8dp"
             android:text="@string/take_photo"
-            android:padding="8dp" />
+            android:textColor="@drawable/btn_gray_text_color_selector" />
 
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="4dp">
+            android:layout_marginLeft="4dp"
+            android:layout_weight="1">
 
             <Button
                 android:id="@+id/btnTakeFormGallery"
+                style="@style/ButtonWhiteText.Mini"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_gray_selector"
-                style="@style/ButtonWhiteTextMini"
+                android:padding="8dp"
                 android:text="@string/gallery"
-                android:padding="8dp" />
+                android:textColor="@drawable/btn_gray_text_color_selector" />
 
             <Button
                 android:id="@+id/btnSendPhoto"
+                style="@style/ButtonWhiteText.Mini"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_alignLeft="@id/btnTakeFormGallery"
-                android:layout_alignTop="@id/btnTakeFormGallery"
-                android:layout_alignRight="@id/btnTakeFormGallery"
                 android:layout_alignBottom="@id/btnTakeFormGallery"
+                android:layout_alignLeft="@id/btnTakeFormGallery"
+                android:layout_alignRight="@id/btnTakeFormGallery"
+                android:layout_alignTop="@id/btnTakeFormGallery"
                 android:background="@drawable/btn_blue_selector"
-                style="@style/ButtonWhiteTextMini"
+                android:padding="8dp"
                 android:text="@string/general_send_full"
-                android:padding="8dp" />
+                android:textColor="@drawable/btn_blue_text_color_selector" />
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

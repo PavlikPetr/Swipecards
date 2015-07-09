@@ -128,7 +128,6 @@
 
     <style name="ButtonGrayText" parent="ItemTitleText">
         <item name="android:textColor">#B5B5B5</item>
-        <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -137,12 +136,10 @@
     </style>
 
     <style name="ButtonWhiteText" parent="ItemTitleText">
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="ButtonWhiteTextMini" parent="ButtonWhiteText">
+    <style name="ButtonWhiteText.Mini" parent="BigButtonsStyle">
         <item name="android:textSize">13sp</item>
     </style>
 

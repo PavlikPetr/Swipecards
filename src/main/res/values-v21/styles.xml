@@ -4,4 +4,12 @@
     <style name="ActionBarItemClick">
         <item name="android:background">@drawable/actionbar_pressed_animation</item>
     </style>
+
+    <style name="BigButtonsStyle">
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginRight">2dp</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:elevation">2dp</item>
+    </style>
 </resources>
