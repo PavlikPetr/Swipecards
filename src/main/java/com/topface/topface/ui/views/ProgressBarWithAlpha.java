@@ -1,5 +1,6 @@
 package com.topface.topface.ui.views;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -28,13 +29,12 @@ public class ProgressBarWithAlpha extends ProgressBar {
 
     private void initView() {
         this.setAlpha(0.0f);
-        this.animate().setDuration(ALPHA_ANIMATION_DURATION);
     }
 
     @Override
     public void setVisibility(int v) {
         if (v == View.VISIBLE) {
-            this.animate().alpha(1.0f);
+            ObjectAnimator.ofFloat(this, "alpha", 0f, 1f).setDuration(ALPHA_ANIMATION_DURATION).start();
         }
         super.setVisibility(v);
     }
