@@ -39,9 +39,11 @@ public class SequencedStartAction implements IStartAction {
     @Override
     public boolean isApplicable() {
         boolean isApplicable = false;
-        //если в списке дейвствий есть хотя бы одно готовое к запуску, то true
-        for (IStartAction startAction : mActions) {
-            isApplicable = isApplicable || startAction.isApplicable();
+        synchronized (mActions) {
+            //если в списке дейвствий есть хотя бы одно готовое к запуску, то true
+            for (IStartAction startAction : mActions) {
+                isApplicable = isApplicable || startAction.isApplicable();
+            }
         }
         return isApplicable;
     }

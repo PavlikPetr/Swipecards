@@ -50,6 +50,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
     private BroadcastReceiver mReauthReceiver;
     private boolean mNeedAnimate = true;
+    private boolean mIsActivityRestoredState = false;
     private BroadcastReceiver mProfileLoadReceiver;
     private StartActionsController mStartActionsController;
     private Toolbar mToolbar;
@@ -255,8 +256,19 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         http://stackoverflow.com/questions/16265733/failure-delivering-result-onactivityforresult
          */
         super.onResumeFragments();
+        mIsActivityRestoredState = true;
         checkProfileLoad();
         registerReauthReceiver();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mIsActivityRestoredState = false;
+    }
+
+    public boolean isActivityRestoredState() {
+        return mIsActivityRestoredState;
     }
 
     private void registerReauthReceiver() {

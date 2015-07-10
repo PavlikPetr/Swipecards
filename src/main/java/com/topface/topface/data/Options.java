@@ -82,6 +82,11 @@ public class Options extends AbstractData {
     public TrialVipExperiment trialVipExperiment = new TrialVipExperiment();
 
     /**
+     * manage SmsInvite screen
+     */
+    public ForceSmsInviteRedirect forceSmsInviteRedirect = new ForceSmsInviteRedirect();
+
+    /**
      * Id фрагмента, который будет отображаться при старте приложения
      * По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
      */
@@ -183,6 +188,7 @@ public class Options extends AbstractData {
         try {
             priceAdmiration = response.optInt("admirationPrice");
             trialVipExperiment = JsonUtils.optFromJson(response.optString("experimentTrialVip"), TrialVipExperiment.class, new TrialVipExperiment());
+            forceSmsInviteRedirect = JsonUtils.optFromJson(response.optString("forceSmsInviteRedirect"), ForceSmsInviteRedirect.class, new ForceSmsInviteRedirect());
             // по умолчанию превью в диалогах всегда отображаем
             hidePreviewDialog = response.optBoolean("hidePreviewDialog", false);
             priceLeader = response.optInt("leaderPrice");
@@ -751,4 +757,7 @@ public class Options extends AbstractData {
         return trialVipExperiment.maxShowCount <= 0 ? TRIAL_VIP_MAX_SHOW_COUNT : trialVipExperiment.maxShowCount;
     }
 
+    public class ForceSmsInviteRedirect {
+        public boolean enabled = false;
+    }
 }
