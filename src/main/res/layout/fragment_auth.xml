@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:background="@drawable/bg"
-
     android:fillViewport="true">
 
     <RelativeLayout
@@ -18,19 +17,27 @@
             style="@style/TopFaceProgressBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/ivAuthGroup"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="55dp"
             android:visibility="gone"
-            android:layout_centerHorizontal="true"
-            android:layout_alignTop="@+id/ivAuthGroup"
-            tools:visibility="visible"/>
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/tf_auth_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back"
+            android:padding="20dp"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@id/ivAuthGroup"
-            android:layout_width="wrap_content"
+            android:layout_width="236dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:animateLayoutChanges="true"
+            android:layout_centerHorizontal="true"
             android:gravity="center"
+            android:layout_marginTop="72dp"
             android:orientation="vertical"
             tools:ignore="UnusedAttribute">
 
@@ -38,110 +45,57 @@
                 android:id="@+id/ivAuthLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/auth_logo"/>
+                android:layout_marginBottom="44dp"
+                android:src="@drawable/auth_logo" />
 
             <Button
                 android:id="@+id/btnAuthFB"
-                style="@style/AuthButtonsText"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                style="@style/AuthButton"
                 android:background="@drawable/auth_fb_selector"
-                android:gravity="left|center"
-                android:text="@string/auth_btn_fb"
-                android:visibility="visible"/>
+                android:text="@string/auth_btn_fb" />
 
             <Button
                 android:id="@+id/btnAuthVK"
-                style="@style/AuthButtonsText"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                style="@style/AuthButton"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/auth_vk_selector"
-                android:text="@string/auth_btn_vk"
-                android:visibility="visible"/>
+                android:text="@string/auth_btn_vk" />
 
             <Button
                 android:id="@+id/btnAuthOk"
-                style="@style/AuthButtonsText"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                style="@style/AuthButton"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/auth_ok_selector"
-                android:text="@string/auth_btn_ok"
-                android:visibility="visible"/>
+                android:text="@string/auth_btn_ok" />
 
-            <RelativeLayout
-                android:id="@+id/loSignIn"
-                android:layout_width="236dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:background="@drawable/btn_sign_in_selector">
+            <Button
+                android:id="@+id/btnTfAccount"
+                style="@style/AuthButton"
+                android:layout_marginTop="44dp"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:text="@string/auth_btn_tf"
+                android:textColor="#03A9F4" />
 
-                <TextView
-                    style="@style/AuthButtonsText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:drawableLeft="@drawable/ic_sign_in"
-                    android:drawablePadding="8dp"
-                    android:text="@string/sign_in"/>
+            <Button
+                android:id="@+id/btnEntrance"
+                style="@style/AuthButton.TfAccountButton"
+                android:drawableLeft="@drawable/ic_enter"
+                android:background="#03A9F4"
+                android:text="@string/sign_in"
+                android:textColor="#FFFFFF"
+                android:visibility="gone" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="4dp"
-                    android:src="@drawable/ic_arrow"/>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/loCreateAccount"
-                android:layout_width="236dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/btn_create_account_selector">
-
-                <TextView
-                    style="@style/AuthButtonsText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:drawableLeft="@drawable/ic_create_account"
-                    android:drawablePadding="8dp"
-                    android:text="@string/create_account"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="4dp"
-                    android:src="@drawable/ic_arrow"/>
-
-            </RelativeLayout>
+            <Button
+                android:id="@+id/btnCreateAccount"
+                style="@style/AuthButton.TfAccountButton"
+                android:layout_marginTop="16dp"
+                android:drawableLeft="@drawable/ic_add"
+                android:background="#fff3f3f3"
+                android:text="@string/create_account"
+                android:textColor="#4B4B4B"
+                android:visibility="gone" />
 
         </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/otherServices"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/other_auth"/>
-        </LinearLayout>
-
     </RelativeLayout>
 </ScrollView>

@@ -159,7 +159,7 @@
                     android:layout_centerInParent="true"
                     android:text="@string/start_communication"
                     android:background="@drawable/btn_signin_selector"
-                    style="@style/AuthButtonsText" />
+                    style="@style/AuthButton" />
             </RelativeLayout>
         </LinearLayout>
 

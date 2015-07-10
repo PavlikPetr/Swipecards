@@ -26,7 +26,7 @@
     <string name="visitors_background_text">Нет гостей</string>
 
     <string name="chat_background_text">Входящих сообщений нет</string>
-
+    <string name="entrance">Вход</string>
     <string name="filter_only_online">Только онлайн</string>
     <string name="filter_city_age_parameters">Возраст и город</string>
     <string name="filter_select_city">Выбор города</string>
@@ -699,6 +699,8 @@
     <string name="settings_feedback_transaction_link">где найти номер заказа?</string>
     <string name="general_logout_error">К сожалению, не удалось выйти из аккаунта</string>
     <string name="auth_btn_ok">Войти через Одноклассники</string>
+    <string name="auth_btn_tf">Аккаунт Topface</string>
+    <string name="birthday">День трождения</string>
     <string name="other_auth">Войти через другие сервисы</string>
     <string name="settings_feedback_transaction_number_hint">Введите номер заказа</string>
 

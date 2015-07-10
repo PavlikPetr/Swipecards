@@ -1,15 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
 
     <EditText
-        android:layout_width="match_parent"
+        android:id="@+id/etMail"
+        style="@style/TopfaceAuthText"
+        android:inputType="textEmailAddress"
+        android:hint="" />
+
+    <EditText
+        android:id="@+id/etPassword"
+        style="@style/TopfaceAuthText"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/etName"
+        style="@style/TopfaceAuthText"
+        android:inputType="text" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/edittext_holo_selector"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="28dp"
-        android:paddingTop="28dp"/>
+        android:orientation="horizontal"
+        android:paddingTop="28dp">
+
+        <Spinner
+            android:id="@+id/sex"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.45" />
+
+        <TextView
+            android:id="@+id/tvBirthday"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:textColor="#234144"
+            android:text="@string/birthday"
+            android:layout_weight="0.55" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnTfAccount"
+        android:layout_marginTop="28dp"
+        style="@style/TfRegButton"
+        android:background="#03A9F4"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="@string/start_communication"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/btnEntrance"
+        android:layout_marginTop="28dp"
+        style="@style/TfRegButton"
+        android:background="#03A9F4"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="@string/sign_in"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/btnRecoverPassword"
+        android:layout_marginTop="28dp"
+        style="@style/TfRegButton"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:singleLine="true"
+        android:background="#FFF3F3F3"
+        android:text="@string/recover_password"
+        android:textColor="#4B4B4B" />
 
 </LinearLayout>

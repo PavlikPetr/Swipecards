@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -29,6 +31,8 @@ import com.topface.topface.utils.http.IRequestClient;
 
 import java.lang.reflect.Field;
 import java.util.LinkedList;
+
+import butterknife.ButterKnife;
 
 public abstract class BaseFragment extends TrackedFragment implements IRequestClient {
 
@@ -68,12 +72,24 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         return true;
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         clearPreviousState();
         mTitleSetter = new ActionBarTitleSetterDelegate(getSupportActionBar());
         refreshActionBarTitles();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 
     @Override
