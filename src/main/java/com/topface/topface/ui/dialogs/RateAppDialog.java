@@ -34,7 +34,7 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
     public static final int GPLAY_ACTIVITY = 9999;
 
     private RatingBar mRatingBar;
-    private boolean isNeedClose = false;
+    private boolean mIsNeedClose = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
     @Override
     public void onResume() {
         super.onResume();
-        if (isNeedClose) {
+        if (mIsNeedClose) {
             dismiss();
         }
     }
@@ -103,7 +103,7 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GPLAY_ACTIVITY) {
-            isNeedClose = true;
+            mIsNeedClose = true;
         }
     }
 
