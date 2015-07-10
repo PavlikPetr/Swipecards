@@ -9,16 +9,18 @@ import com.topface.topface.ui.fragments.TransparentMarketFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GoogleMarketApiManager;
 
+import java.lang.ref.WeakReference;
+
 
 public class TrialVipPopupAction implements IStartAction {
 
     private int mPriority;
-    private BaseFragmentActivity mActivity;
+    private WeakReference<BaseFragmentActivity> mActivity;
     private TrialVipPopup mTrialVipPopup;
     private OnNextActionListener mOnNextActionListener;
 
     public TrialVipPopupAction(BaseFragmentActivity activity, int priority) {
-        mActivity = activity;
+        mActivity = new WeakReference<>(activity);
         mPriority = priority;
     }
 
@@ -42,8 +44,8 @@ public class TrialVipPopupAction implements IStartAction {
                 }
             }
         });
-        if (mActivity != null) {
-            mTrialVipPopup.show(mActivity.getSupportFragmentManager(), TrialVipPopup.TAG);
+        if (mActivity != null && mActivity.get() != null) {
+            mTrialVipPopup.show(mActivity.get().getSupportFragmentManager(), TrialVipPopup.TAG);
         }
     }
 
@@ -70,8 +72,8 @@ public class TrialVipPopupAction implements IStartAction {
     }
 
     private void showSubscriptionPopup() {
-        if (mActivity != null) {
-            Fragment f = mActivity.getSupportFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
+        if (mActivity != null && mActivity.get() != null) {
+            Fragment f = mActivity.get().getSupportFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
             final TransparentMarketFragment fragment = f == null ?
                     TransparentMarketFragment.newInstance(CacheProfile.getOptions().trialVipExperiment.subscriptionSku, true) :
                     (TransparentMarketFragment) f;
@@ -101,19 +103,19 @@ public class TrialVipPopupAction implements IStartAction {
 
     private void addTransparentMarketFragment(Fragment fragment) {
         if (isFragmentAplicable()) {
-            mActivity.getSupportFragmentManager().beginTransaction()
+            mActivity.get().getSupportFragmentManager().beginTransaction()
                     .add(fragment, TransparentMarketFragment.class.getSimpleName()).commit();
         }
     }
 
     private void removeTransparentMarketFragment(Fragment fragment) {
         if (isFragmentAplicable()) {
-            mActivity.getSupportFragmentManager().
+            mActivity.get().getSupportFragmentManager().
                     beginTransaction().remove(fragment).commit();
         }
     }
 
     private boolean isFragmentAplicable() {
-        return mActivity != null && mActivity.isActivityRestoredState();
+        return mActivity != null && mActivity.get() != null && mActivity.get().isActivityRestoredState();
     }
 }
