@@ -15,7 +15,7 @@ import com.topface.topface.R;
  */
 public class ProgressBarWithAlpha extends ProgressBar {
 
-    private final static int ALPHA_ANIMATION_DURATION = 8000;
+    private final static int ALPHA_ANIMATION_DURATION = 3000;
 
     public ProgressBarWithAlpha(Context context) {
         super(context);
