@@ -20,7 +20,7 @@
             <com.topface.IllustratedTextView.IllustratedTextView
                 android:id="@+id/payReasonFragmentBuyPremium"
                 style="@style/PayReasonView"
-                android:paddingLeft="2dp"
+                android:paddingLeft="1dp"
                 android:paddingRight="2dp" />
 
             <TextView
@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout="@layout/fragment_buy_editor"
-                android:paddingLeft="2dp"
+                android:paddingLeft="4dp"
                 android:paddingRight="2dp" />
 
             <LinearLayout
