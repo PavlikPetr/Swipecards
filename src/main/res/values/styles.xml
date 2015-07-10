@@ -143,6 +143,16 @@
         <item name="android:textSize">13sp</item>
     </style>
 
+    <style name="ButtonWhiteText.Mini.Gray">
+        <item name="android:background">@drawable/btn_gray_selector</item>
+        <item name="android:textColor">@drawable/btn_gray_text_color_selector</item>
+    </style>
+
+    <style name="ButtonWhiteText.Mini.Blue">
+        <item name="android:background">@drawable/btn_blue_selector</item>
+        <item name="android:textColor">@drawable/btn_blue_text_color_selector</item>
+    </style>
+
     <style name="TitleGrayText" parent="ItemTitleText">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text_color_gray</item>
@@ -720,13 +730,8 @@
 
     <style name="Widget.Topface" />
 
-    <style name="Widget.Topface.Button.Big.Gray" parent="Widget.Topface.Button.Big">
+    <style name="Widget.Topface.Button.Big.Gray" parent="BigButtonsStyle">
         <item name="android:background">@drawable/btn_gray_selector</item>
-        <item name="android:elevation" tools:ignore="NewApi">2dp</item>
-        <item name="android:layout_marginLeft">2dp</item>
-        <item name="android:layout_marginRight">2dp</item>
-        <item name="android:layout_marginTop">2dp</item>
-        <item name="android:layout_marginBottom">2dp</item>
         <item name="android:textColor">@drawable/btn_gray_text_color_selector</item>
     </style>
 
@@ -738,23 +743,13 @@
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="Widget.Topface.Button.Big.Blue" parent="Widget.Topface.Button.Big">
+    <style name="Widget.Topface.Button.Big.Blue" parent="BigButtonsStyle">
         <item name="android:background">@drawable/btn_blue_selector</item>
-        <item name="android:elevation" tools:ignore="NewApi">2dp</item>
-        <item name="android:layout_marginLeft">2dp</item>
-        <item name="android:layout_marginRight">2dp</item>
-        <item name="android:layout_marginTop">2dp</item>
-        <item name="android:layout_marginBottom">2dp</item>
         <item name="android:textColor">@drawable/btn_blue_text_color_selector</item>
     </style>
 
-    <style name="Widget.Topface.Button.Blue" parent="Widget.Topface.Button">
+    <style name="Widget.Topface.Button.Blue" parent="BigButtonsStyle">
         <item name="android:background">@drawable/btn_blue_selector</item>
-        <item name="android:elevation" tools:ignore="NewApi">2dp</item>
-        <item name="android:layout_marginLeft">2dp</item>
-        <item name="android:layout_marginRight">2dp</item>
-        <item name="android:layout_marginTop">2dp</item>
-        <item name="android:layout_marginBottom">2dp</item>
         <item name="android:textColor">@drawable/btn_blue_text_color_selector</item>
     </style>
 
