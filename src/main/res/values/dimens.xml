@@ -5,7 +5,7 @@
     <dimen name="indicator_corner_radius">12dp</dimen>
     <dimen name="indicator_internal_padding">4dp</dimen>
 
-    <dimen name="popular_dialog_text_margin">36dp</dimen>
+    <dimen name="popular_dialog_text_margin">24dp</dimen>
 
     <!--set padding left value for icon "online" inside actionBar-->
     <dimen name="padding_left_for_online_icon">8dp</dimen>
@@ -54,4 +54,8 @@
 
     <!--Gray/Blue buttons corner radius-->
     <dimen name="button_corners_radius">2dp</dimen>
+
+    <!--Popular user image size-->
+    <dimen name="popular_user_image_height">152dp</dimen>
+    <dimen name="popular_user_image_width">152dp</dimen>
 </resources>

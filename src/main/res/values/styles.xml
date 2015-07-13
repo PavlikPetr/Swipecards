@@ -735,6 +735,11 @@
         <item name="android:textColor">@drawable/btn_gray_text_color_selector</item>
     </style>
 
+    <style name="Widget.Topface.Button.Big.Red" parent="BigButtonsStyle">
+        <item name="android:background">@drawable/btn_red_selector</item>
+        <item name="android:textColor">@drawable/btn_red_text_color_selector</item>
+    </style>
+
     <style name="BlueBonusButton" parent="Widget.Topface.Button.Big.Blue">
         <item name="android:textStyle">normal</item>
     </style>

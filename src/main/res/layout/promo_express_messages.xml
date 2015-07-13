@@ -69,10 +69,9 @@
 
         <Button
             android:id="@+id/deleteMessages"
-            style="@style/Widget.Topface.Button.Big.Gray"
+            style="@style/Widget.Topface.Button.Big.Red"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_red_selector"
             android:ellipsize="end"
             android:minWidth="204dp"
             android:singleLine="true"

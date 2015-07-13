@@ -7,6 +7,8 @@ import android.util.AttributeSet;
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.topface.framework.imageloader.ImageViewRemoteTemplate;
 import com.topface.framework.imageloader.processor.CropProcessor;
+import com.topface.framework.imageloader.processor.IViewSizeGetter;
+import com.topface.framework.imageloader.processor.InscribedCircleAvatarProcessor;
 import com.topface.framework.imageloader.processor.RoundAvatarProcessor;
 import com.topface.framework.imageloader.processor.RoundCornersProcessor;
 import com.topface.framework.imageloader.processor.RoundProcessor;
@@ -16,7 +18,7 @@ import com.topface.topface.utils.imageloader.LeftMenuClipProcessor;
 import com.topface.topface.utils.imageloader.MaskClipProcessor;
 
 
-public class ImageViewRemote extends ImageViewRemoteTemplate implements SquareProcessor.IViewSizeGetter {
+public class ImageViewRemote extends ImageViewRemoteTemplate implements IViewSizeGetter {
     protected static final int POST_PROCESSOR_NONE = 0;
     private static final int POST_PROCESSOR_ROUNDED = 1;
     private static final int POST_PROCESSOR_ROUND_CORNERS = 2;
@@ -25,6 +27,7 @@ public class ImageViewRemote extends ImageViewRemoteTemplate implements SquarePr
     private static final int POST_PROCESSOR_SQUARED = 5;
     private static final int POST_PROCESSOR_CROPED = 6;
     private static final int POST_PROCESSOR_ROUND_AVATAR = 7;
+    private static final int POST_PROCESSOR_INSCRIBED_AVATAR_IN_CIRCLE = 8;
 
     public ImageViewRemote(Context context) {
         super(context);
@@ -78,6 +81,7 @@ public class ImageViewRemote extends ImageViewRemoteTemplate implements SquarePr
     @Override
     protected BitmapProcessor createProcessor(int processorId, float cornerRadius, int maskId) {
         if (!isInEditMode()) {
+            final ImageViewRemote currentImageViewRemote = this;
             switch (processorId) {
                 case POST_PROCESSOR_ROUNDED:
                     return new RoundProcessor();
@@ -93,6 +97,8 @@ public class ImageViewRemote extends ImageViewRemoteTemplate implements SquarePr
                     return new CropProcessor();
                 case POST_PROCESSOR_ROUND_AVATAR:
                     return new RoundAvatarProcessor();
+                case POST_PROCESSOR_INSCRIBED_AVATAR_IN_CIRCLE:
+                    return new InscribedCircleAvatarProcessor(this);
                 default:
                     return null;
             }

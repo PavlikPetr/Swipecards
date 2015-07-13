@@ -3,6 +3,7 @@ package com.topface.topface.data;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -262,7 +263,11 @@ public class Products extends AbstractData {
                 bgResource = discount ? R.drawable.btn_sale_blue_selector : R.drawable.btn_blue_selector;
                 break;
             case 2:
-                bgResource = discount ? R.drawable.btn_sale_blue_disabled : R.drawable.btn_blue_shape_disabled;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    bgResource = discount ? R.drawable.btn_sale_blue_disabled_only : R.drawable.btn_blue_disabled_only;
+                } else {
+                    bgResource = discount ? R.drawable.btn_sale_blue_disabled : R.drawable.btn_blue_shape_disabled;
+                }
                 break;
             case 0:
             default:

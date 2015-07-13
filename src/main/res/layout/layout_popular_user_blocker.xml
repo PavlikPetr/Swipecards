@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center">
@@ -11,6 +12,12 @@
         android:gravity="center"
         android:orientation="vertical">
 
+        <com.topface.topface.ui.views.ImageViewRemote
+            android:id="@+id/popularUserAvatar"
+            android:layout_width="@dimen/popular_user_image_width"
+            android:layout_height="@dimen/popular_user_image_height"
+            app:postProcessor="inscribedAvatar" />
+
         <TextView
             android:id="@+id/popular_user_lock_text"
             style="@style/ItemTitleText"
@@ -19,8 +26,6 @@
             android:layout_marginBottom="@dimen/popular_dialog_text_margin"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:drawablePadding="@dimen/popular_dialog_text_margin"
-            android:drawableTop="@drawable/icon_rocket"
             android:gravity="center"
             android:lineSpacingExtra="4sp"
             android:paddingTop="@dimen/popular_dialog_text_margin"

@@ -18,9 +18,4 @@ public class SquareProcessor implements BitmapProcessor {
         int width = mSizeGetter.getWidth() == 0 ? bitmap.getWidth() : mSizeGetter.getWidth();
         return BitmapUtils.squareBitmap(bitmap, width);
     }
-
-    public interface IViewSizeGetter {
-        public int getWidth();
-        public int getHeight();
-    }
 }
