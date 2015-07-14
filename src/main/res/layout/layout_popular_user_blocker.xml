@@ -14,8 +14,8 @@
 
         <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/popularUserAvatar"
-            android:layout_width="@dimen/popular_user_image_width"
-            android:layout_height="@dimen/popular_user_image_height"
+            android:layout_width="152dp"
+            android:layout_height="152dp"
             app:postProcessor="inscribedAvatar" />
 
         <TextView

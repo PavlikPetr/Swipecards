@@ -55,7 +55,6 @@
     <!--Gray/Blue buttons corner radius-->
     <dimen name="button_corners_radius">2dp</dimen>
 
-    <!--Popular user image size-->
-    <dimen name="popular_user_image_height">152dp</dimen>
-    <dimen name="popular_user_image_width">152dp</dimen>
+    <!--set elevation value for lollipop views-->
+    <dimen name="buttons_elevation_value">2dp</dimen>
 </resources>

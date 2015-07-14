@@ -252,13 +252,12 @@ public class Products extends AbstractData {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.item_buying_btn, null);
         initBuyButtonViews(
-                view, id, title, discount, value, listener,
-                getBuyButtonBackground(discount, showType), getBuyButtonTextColor(showType));
+                view, id, title, discount, value, listener, showType);
         return view;
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private static int getBuyButtonBackground(boolean discount, int showType) {
+    private static void setBuyButtonBackground(boolean discount, int showType, View view) {
         int bgResource;
         switch (showType) {
             case 1:
@@ -271,42 +270,37 @@ public class Products extends AbstractData {
                     bgResource = discount ? R.drawable.btn_sale_blue_disabled : R.drawable.btn_blue_shape_disabled;
                 }
                 break;
-            case 0:
             default:
                 bgResource = discount ? R.drawable.btn_sale_gray_selector : R.drawable.btn_gray_selector;
                 break;
         }
-        return bgResource;
+        view.setBackgroundResource(bgResource);
     }
 
-    private static int getBuyButtonTextColor(int showType) {
-        int bgResource;
+    private static void setBuyButtonTextColor(int showType, TextView view) {
         switch (showType) {
             case 1:
-                bgResource = R.drawable.btn_blue_text_color_selector;
+                setSelectorTextColor(R.drawable.btn_blue_text_color_selector, view);
                 break;
             case 2:
-                bgResource = R.drawable.btn_blue_disable_text_color_selector;
+                view.setTextColor(App.getContext().getResources().getColor(R.color.button_blue_text_disable_color));
                 break;
-            case 0:
             default:
-                bgResource = R.drawable.btn_gray_text_color_selector;
+                setSelectorTextColor(R.drawable.btn_gray_text_color_selector, view);
                 break;
         }
-        return bgResource;
     }
 
     private static void initBuyButtonViews(
             View view, final String id, String title, boolean discount,
-            String value, final BuyButtonClickListener listener, int bgResource, int btnTextColor
-    ) {
+            String value, final BuyButtonClickListener listener, int showType) {
         RelativeLayout container = (RelativeLayout) view.findViewById(R.id.itContainer);
         // button background
         if (discount) {
             int paddingFive = Utils.getPxFromDp(5);
             container.setPadding(paddingFive, paddingFive, Utils.getPxFromDp(56), paddingFive);
         }
-        container.setBackgroundResource(bgResource);
+        setBuyButtonBackground(discount, showType, container);
         container.requestLayout();
         // click listener
         container.setOnClickListener(new View.OnClickListener() {
@@ -317,13 +311,17 @@ public class Products extends AbstractData {
         });
         // title text
         TextView tvTitle = (TextView) view.findViewById(R.id.itText);
-        XmlResourceParser xrp = App.getContext().getResources().getXml(btnTextColor);
+        setBuyButtonTextColor(showType, tvTitle);
+        tvTitle.setText(title);
+    }
+
+    private static void setSelectorTextColor(int selector, TextView view) {
+        XmlResourceParser xrp = App.getContext().getResources().getXml(selector);
         try {
             ColorStateList csl = ColorStateList.createFromXml(App.getContext().getResources(), xrp);
-            tvTitle.setTextColor(csl);
+            view.setTextColor(csl);
         } catch (Exception e) {
         }
-        tvTitle.setText(title);
     }
 
     public static View setBuyButton(LinearLayout root, final BuyButton buyBtn,

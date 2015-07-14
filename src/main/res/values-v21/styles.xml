@@ -5,11 +5,60 @@
         <item name="android:background">@drawable/actionbar_pressed_animation</item>
     </style>
 
-    <style name="BigButtonsStyle">
-        <item name="android:layout_marginLeft">2dp</item>
-        <item name="android:layout_marginRight">2dp</item>
-        <item name="android:layout_marginTop">2dp</item>
-        <item name="android:layout_marginBottom">2dp</item>
-        <item name="android:elevation">2dp</item>
+    <style name="ViewWithElevation">
+        <item name="android:layout_marginLeft">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginRight">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginTop">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginBottom">@dimen/buttons_elevation_value</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="ButtonWhiteText.Mini">
+        <item name="android:textSize">13sp</item>
+        <item name="android:layout_marginLeft">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginRight">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginTop">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginBottom">@dimen/buttons_elevation_value</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="Widget.Topface.Button.Big.Gray">
+        <item name="android:background">@drawable/btn_gray_selector</item>
+        <item name="android:textColor">@drawable/btn_gray_text_color_selector</item>
+        <item name="android:layout_marginLeft">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginRight">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginTop">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginBottom">@dimen/buttons_elevation_value</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="Widget.Topface.Button.Big.Red">
+        <item name="android:background">@drawable/btn_red_selector</item>
+        <item name="android:textColor">@drawable/btn_red_text_color_selector</item>
+        <item name="android:layout_marginLeft">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginRight">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginTop">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginBottom">@dimen/buttons_elevation_value</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="Widget.Topface.Button.Big.Blue">
+        <item name="android:background">@drawable/btn_blue_selector</item>
+        <item name="android:textColor">@drawable/btn_blue_text_color_selector</item>
+        <item name="android:layout_marginLeft">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginRight">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginTop">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginBottom">@dimen/buttons_elevation_value</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="Widget.Topface.Button.Blue">
+        <item name="android:background">@drawable/btn_blue_selector</item>
+        <item name="android:textColor">@drawable/btn_blue_text_color_selector</item>
+        <item name="android:layout_marginLeft">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginRight">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginTop">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginBottom">@dimen/buttons_elevation_value</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
     </style>
 </resources>
