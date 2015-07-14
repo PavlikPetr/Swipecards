@@ -81,7 +81,6 @@ public class ImageViewRemote extends ImageViewRemoteTemplate implements IViewSiz
     @Override
     protected BitmapProcessor createProcessor(int processorId, float cornerRadius, int maskId) {
         if (!isInEditMode()) {
-            final ImageViewRemote currentImageViewRemote = this;
             switch (processorId) {
                 case POST_PROCESSOR_ROUNDED:
                     return new RoundProcessor();

@@ -1,5 +1,6 @@
 package com.topface.topface.data;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
@@ -256,6 +257,7 @@ public class Products extends AbstractData {
         return view;
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private static int getBuyButtonBackground(boolean discount, int showType) {
         int bgResource;
         switch (showType) {
