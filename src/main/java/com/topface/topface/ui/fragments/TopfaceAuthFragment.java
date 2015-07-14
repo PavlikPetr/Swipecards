@@ -47,17 +47,30 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
 
     @Bind(R.id.btnEntrance)
     Button mTFButton;
+    @Bind(R.id.etMail)
+    AutoCompleteTextView mLogin;
+    @Bind(R.id.edPassword)
+    EditText mPassword;
+    @Bind(R.id.ivShowPassword)
+    ImageButton mShowPassword;
+    @Bind(R.id.redAlert)
+    RelativeLayout mWrongPasswordAlertView;
+    @Bind(R.id.redAlertTextView)
+    TextView mWrongDataTextView;
+    @Bind(R.id.redAlertButton)
+    TextView mCreateAccountButton;
+    @Bind(R.id.btnRecoverPassword)
+    Button mBtnRecoverPassword;
+    private String mEmailForRestorePassword;
+    private String mEmailForNewReg;
+    private Timer mTimer = new Timer();
+
 
     @OnClick(R.id.btnEntrance)
     public void onTFLoginClick() {
         btnTFClick();
         Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
     }
-
-    @Bind(R.id.etMail)
-    AutoCompleteTextView mLogin;
-    @Bind(R.id.edPassword)
-    EditText mPassword;
 
     @OnEditorAction(R.id.edPassword)
     public boolean passwordAction(int action) {
@@ -80,15 +93,6 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         }
     }
 
-    @Bind(R.id.ivShowPassword)
-    ImageButton mShowPassword;
-    @Bind(R.id.redAlert)
-    RelativeLayout mWrongPasswordAlertView;
-    @Bind(R.id.redAlertTextView)
-    TextView mWrongDataTextView;
-    @Bind(R.id.redAlertButton)
-    TextView mCreateAccountButton;
-
     @OnClick(R.id.redAlertButton)
     public void createAccountClick() {
         EasyTracker.sendEvent("Registration", "StartActivity", "FromAuth", 1L);
@@ -97,19 +101,12 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         startActivityForResult(intent, RegistrationActivity.INTENT_REGISTRATION);
     }
 
-    @Bind(R.id.btnRecoverPassword)
-    Button btnRecoverPassword;
-
     @OnClick(R.id.btnRecoverPassword)
     public void recoverPasswordClick() {
         Intent intent = new Intent(getActivity(), PasswordRecoverActivity.class);
         intent.putExtra(RecoverPwdFragment.ARG_EMAIL, mEmailForRestorePassword);
         startActivityForResult(intent, PasswordRecoverActivity.INTENT_RECOVER_PASSWORD);
     }
-
-    private String mEmailForRestorePassword;
-    private String mEmailForNewReg;
-    private Timer mTimer = new Timer();
 
     @Override
     protected int getStatusBarColor() {
@@ -139,7 +136,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
 
     @Override
     protected String getTitle() {
-        return getActivity().getString(R.string.sign_in);
+        return getString(R.string.sign_in);
     }
 
     @Override
@@ -169,7 +166,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         STAuthMails.initInputField(getActivity(), mLogin);
         mWrongPasswordAlertView = (RelativeLayout) root.findViewById(R.id.redAlert);
         mShowPassword.setOnClickListener(new HidePasswordController(mShowPassword, mPassword));
-        btnRecoverPassword.setVisibility(View.GONE);
+        mBtnRecoverPassword.setVisibility(View.GONE);
     }
 
     @Override
@@ -190,7 +187,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
                 break;
             case ErrorCodes.INCORRECT_PASSWORD:
                 redAlert(R.string.incorrect_password);
-                btnRecoverPassword.setVisibility(View.VISIBLE);
+                mBtnRecoverPassword.setVisibility(View.VISIBLE);
                 //сохранить корректный логин на случай изменения
                 mEmailForRestorePassword = Utils.getText(mLogin).trim();
                 break;
@@ -210,7 +207,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         mLogin.setVisibility(View.GONE);
         mPassword.setVisibility(View.GONE);
         mShowPassword.setVisibility(View.GONE);
-        btnRecoverPassword.setVisibility(View.GONE);
+        mBtnRecoverPassword.setVisibility(View.GONE);
     }
 
     @Override
@@ -247,7 +244,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         sessionConfig.setSocialAccountEmail(emailLogin);
         sessionConfig.saveConfig();
         removeRedAlert();
-        btnRecoverPassword.setVisibility(View.GONE);
+        mBtnRecoverPassword.setVisibility(View.GONE);
         auth(token);
     }
 
@@ -290,7 +287,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         mLogin.setEnabled(true);
         mPassword.setEnabled(true);
         mShowPassword.setEnabled(true);
-        btnRecoverPassword.setEnabled(true);
+        mBtnRecoverPassword.setEnabled(true);
     }
 
     @Override
@@ -299,7 +296,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         mLogin.setEnabled(false);
         mPassword.setEnabled(false);
         mShowPassword.setEnabled(false);
-        btnRecoverPassword.setEnabled(false);
+        mBtnRecoverPassword.setEnabled(false);
     }
 
     @Override
@@ -331,19 +328,20 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     public static class HidePasswordController implements View.OnClickListener {
         private final ImageButton mEye;
         private final EditText mPass;
-        boolean toggle = false;
-        TransformationMethod passwordMethod = new PasswordTransformationMethod();
+        private boolean mToggle = false;
+        private TransformationMethod mPasswordMethod;
 
         public HidePasswordController(ImageButton imageButton, EditText editText) {
             this.mEye = imageButton;
             this.mPass = editText;
+            mPasswordMethod = new PasswordTransformationMethod();
         }
 
         @Override
         public void onClick(View v) {
-            toggle = !toggle;
-            mEye.setImageResource(toggle ? R.drawable.ic_eye_pressed : R.drawable.ic_eye_normal);
-            mPass.setTransformationMethod(toggle ? null : passwordMethod);
+            mToggle = !mToggle;
+            mEye.setImageResource(mToggle ? R.drawable.ic_eye_pressed : R.drawable.ic_eye_normal);
+            mPass.setTransformationMethod(mToggle ? null : mPasswordMethod);
             Editable text = mPass.getText();
             if (text != null) {
                 mPass.setSelection(text.length());

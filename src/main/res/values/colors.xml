@@ -95,5 +95,6 @@
     <color name="default_line_indicator_selected_color">@color/blue_holo_selected</color>
 
     <color name="auth_progressbar_color">#03A9F4</color>
+    <color name="text_gray">#4B4B4B</color>
 
 </resources>

@@ -17,7 +17,7 @@
         <item name="android:minWidth">212dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">fill_parent</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">@color/text_white</item>
         <item name="android:textSize">14sp</item>
         <item name="android:singleLine">true</item>
         <item name="android:gravity">start|center</item>
@@ -250,17 +250,17 @@
     </style>
 
     <style name="AuthButtonsVerySmallText">
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">@color/text_white</item>
         <item name="android:textSize">10sp</item>
     </style>
 
     <style name="AuthButtonsSmallText">
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">@color/text_white</item>
         <item name="android:textSize">12sp</item>
     </style>
 
     <style name="AuthButtonsBigText">
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">@color/text_white</item>
         <item name="android:textSize">16sp</item>
     </style>
 
@@ -280,7 +280,7 @@
 
     <style name="NotificationText">
         <item name="android:textSize">9sp</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">@color/text_white</item>
     </style>
 
     <style name="EditPhotoButtonsText" parent="ButtonsText">

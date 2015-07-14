@@ -71,17 +71,19 @@ public class RegistrationFragment extends BaseFragment {
     EditText mEdPassword;
     @Bind(R.id.etName)
     EditText mEdName;
-
     @Bind(R.id.spnSex)
     Spinner mSpnSex;
+    @Bind(R.id.tvRedAlert)
+    TextView mRedAlertView;
+    @Bind(R.id.btnStartChat)
+    Button mBtnRegister;
+    @Bind(R.id.tvBirthday)
+    TextView mBirthdayText;
 
     @OnItemSelected(R.id.spnSex)
     public void sexSelected(int position) {
         mSex = position;
     }
-
-    @Bind(R.id.tvRedAlert)
-    TextView mRedAlertView;
 
     @OnEditorAction(R.id.etName)
     public boolean nameActionListener(int actionId) {
@@ -95,9 +97,6 @@ public class RegistrationFragment extends BaseFragment {
         return handled;
     }
 
-    @Bind(R.id.btnStartChat)
-    Button mBtnRegister;
-
     @OnClick(R.id.btnStartChat)
     public void startChatClick() {
         removeRedAlert();
@@ -106,9 +105,6 @@ public class RegistrationFragment extends BaseFragment {
         Utils.hideSoftKeyboard(getActivity(), mEdEmail, mEdName);
         sendRegistrationRequest();
     }
-
-    @Bind(R.id.tvBirthday)
-    TextView mBirthdayText;
 
     @OnClick(R.id.tvBirthday)
     public void birthdayClick() {
@@ -143,7 +139,7 @@ public class RegistrationFragment extends BaseFragment {
 
     @Override
     protected String getTitle() {
-        return getActivity().getString(R.string.create_account);
+        return getString(R.string.create_account);
     }
 
     @Override

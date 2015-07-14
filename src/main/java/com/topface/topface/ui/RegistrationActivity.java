@@ -1,6 +1,7 @@
 package com.topface.topface.ui;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.RecoverPwdFragment;
@@ -13,8 +14,9 @@ public class RegistrationActivity extends NoAuthActivity<RegistrationFragment> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().show();
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.show();
         }
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }

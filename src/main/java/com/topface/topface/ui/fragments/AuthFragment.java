@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
@@ -51,6 +50,9 @@ public class AuthFragment extends BaseAuthFragment {
     public static final String SOC_NET_BTNS_HIDDEN = "SocNetBtnsHidden";
     public static final String TF_BTNS_HIDDEN = "TfBtnsHidden";
     private static final String MAIN_BUTTONS_GA_TAG = "LoginButtonsTest";
+    private static final String TRANSLATION_Y = "translationY";
+    private static final int ANIMATION_PATH = 36;
+    private static final long ANIMATION_DURATION = 500;
     private AuthorizationManager mAuthorizationManager;
     private AuthButtonsController mBtnsController;
 
@@ -65,9 +67,20 @@ public class AuthFragment extends BaseAuthFragment {
     View mLogo;
     @Bind(R.id.prsAuthLoading)
     ProgressBar mProgressBar;
-
     @Bind(R.id.btnAuthFB)
     Button mFBButton;
+    @Bind(R.id.btnAuthVK)
+    Button mVKButton;
+    @Bind(R.id.btnAuthOk)
+    Button mOKButton;
+    @Bind(R.id.btnTfAccount)
+    Button mTfAccount;
+    @Bind(R.id.btnEntrance)
+    Button mSignIn;
+    @Bind(R.id.btnCreateAccount)
+    Button mCreateTfAccount;
+    @Bind(R.id.tf_auth_back)
+    ImageView mTfAuthBack;
 
     @OnClick(R.id.btnAuthFB)
     public void btnFBClick() {
@@ -84,9 +97,6 @@ public class AuthFragment extends BaseAuthFragment {
         }
     }
 
-    @Bind(R.id.btnAuthVK)
-    Button mVKButton;
-
     @OnClick(R.id.btnAuthVK)
     public void btnVKClick() {
         EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "LoginMainVk", mBtnsController.getLocaleTag(), 1L);
@@ -102,9 +112,6 @@ public class AuthFragment extends BaseAuthFragment {
         }
     }
 
-    @Bind(R.id.btnAuthOk)
-    Button mOKButton;
-
     @OnClick(R.id.btnAuthOk)
     public void btnOKClick() {
         EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "LoginMainOk", mBtnsController.getLocaleTag(), 1L);
@@ -118,35 +125,25 @@ public class AuthFragment extends BaseAuthFragment {
         }
     }
 
-    @Bind(R.id.btnTfAccount)
-    Button mTfAccount;
-
     @OnClick(R.id.btnTfAccount)
     public void startTfAuthClick() {
         mTfAuthBack.setVisibility(View.VISIBLE);
-        ObjectAnimator.ofFloat(mAuthGroup, "translationY", 0, castDpToPixel(36))
-                .setDuration(500).start();
+        ObjectAnimator.ofFloat(mAuthGroup, TRANSLATION_Y, 0, Utils.getPxFromDp(ANIMATION_PATH))
+                .setDuration(ANIMATION_DURATION).start();
         mIsNeedAnimate = true;
         setSocNetBtnVisibility(false);
         setTfLoginBtnVisibility(true);
         mIsNeedAnimate = false;
     }
 
-    @Bind(R.id.btnEntrance)
-    Button mSignIn;
-
     @OnClick(R.id.btnEntrance)
     public void signInClick() {
-        FragmentActivity activity = getActivity();
-        if (activity != null) {
+        if (getActivity() != null) {
             if (checkOnline() && mAuthorizationManager != null) {
                 mAuthorizationManager.topfaceAuth();
             }
         }
     }
-
-    @Bind(R.id.btnCreateAccount)
-    Button mCreateTfAccount;
 
     @OnClick(R.id.btnCreateAccount)
     public void createAccountClick() {
@@ -155,13 +152,10 @@ public class AuthFragment extends BaseAuthFragment {
         startActivityForResult(intent, RegistrationActivity.INTENT_REGISTRATION);
     }
 
-    @Bind(R.id.tf_auth_back)
-    ImageView mTfAuthBack;
-
     @OnClick(R.id.tf_auth_back)
     public void tfAuthBackClick() {
-        ObjectAnimator.ofFloat(mAuthGroup, "translationY", castDpToPixel(36), 0)
-                .setDuration(500).start();
+        ObjectAnimator.ofFloat(mAuthGroup, TRANSLATION_Y, Utils.getPxFromDp(ANIMATION_PATH), 0)
+                .setDuration(ANIMATION_DURATION).start();
         mTfAuthBack.setVisibility(View.GONE);
         mIsNeedAnimate = true;
         setSocNetBtnVisibility(true);
@@ -169,14 +163,11 @@ public class AuthFragment extends BaseAuthFragment {
         mIsNeedAnimate = false;
     }
 
-    private int castDpToPixel(int dp) {
-        float scale = getResources().getDisplayMetrics().density;
-        return (int) (dp * scale + 0.5f);
-    }
-
     private void setSocNetBtnVisibility(boolean visibility) {
         mIsSocNetBtnHidden = visibility;
-        if (mBtnsController == null || !isAdded()) return;
+        if (mBtnsController == null || !isAdded()) {
+            return;
+        }
         if (mBtnsController.isSocialNetworkActive(AuthToken.SN_VKONTAKTE)) {
             setVisibilityAndAnmateView(mVKButton, visibility);
         } else {
@@ -383,9 +374,10 @@ public class AuthFragment extends BaseAuthFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mButtonAnimation = AnimationUtils.loadAnimation(getActivity(),
+        Activity activity = getActivity();
+        mButtonAnimation = AnimationUtils.loadAnimation(activity,
                 R.anim.fade_in);
-        mAuthorizationManager = new AuthorizationManager(getActivity());
+        mAuthorizationManager = new AuthorizationManager(activity);
         mAuthorizationManager.onCreate(savedInstanceState);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mTokenReadyReceiver,
                 new IntentFilter(Authorizer.AUTH_TOKEN_READY_ACTION));

@@ -7,11 +7,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -70,12 +68,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     protected boolean needOptionsMenu() {
         return true;
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -247,6 +239,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         return null;
     }
 
+    @SuppressWarnings("deprecation")
     protected ActionBar getSupportActionBar() {
         if (mSupportActionBar == null) {
             Activity activity = getActivity();
@@ -257,6 +250,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         return mSupportActionBar;
     }
 
+    @SuppressWarnings("deprecation")
     protected void setSupportProgressBarIndeterminateVisibility(boolean visible) {
         Activity activity = getActivity();
 

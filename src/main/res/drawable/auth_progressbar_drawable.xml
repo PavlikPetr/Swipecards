@@ -11,8 +11,8 @@
         android:thicknessRatio="8"
         android:useLevel="false">
         <size
-            android:height="76dip"
-            android:width="76dip" />
+            android:height="76dp"
+            android:width="76dp" />
 
         <gradient
             android:endColor="@color/auth_progressbar_color"

@@ -96,7 +96,7 @@
                     android:gravity="center"
                     android:singleLine="true"
                     android:text="@string/sign_in"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/text_white"
                     android:textSize="18sp" />
 
                 <Button
@@ -107,7 +107,7 @@
                     android:gravity="center"
                     android:singleLine="true"
                     android:text="@string/recover_password"
-                    android:textColor="#4B4B4B"
+                    android:textColor="@color/text_gray"
                     android:textSize="18sp" />
 
             </LinearLayout>
