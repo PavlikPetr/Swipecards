@@ -14,12 +14,13 @@
 
         <ProgressBar
             android:id="@+id/prsAuthLoading"
-            style="@style/TopFaceProgressBar.Small"
             android:layout_width="wrap_content"
+            android:indeterminateDrawable="@drawable/auth_progressbar_drawable"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/ivAuthGroup"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="55dp"
+            android:layout_marginTop="220dp"
+            android:indeterminate="true"
             android:visibility="gone"
             tools:visibility="visible" />
 

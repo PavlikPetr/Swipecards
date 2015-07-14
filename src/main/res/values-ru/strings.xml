@@ -479,7 +479,9 @@
     <string name="birthdate_confirm">Пожалуйста, укажите ваш возраст, иначе вы не сможете познакомиться</string>
     <string name="set_birthdate">Указать возраст</string>
     <string name="welcome_to_topface">Добро пожаловать в Topface!</string>
-
+    <string name="im_boy">Я - парень</string>
+    <string name="im_girl">Я - девушка</string>
+    <string name="u_sex">Ваш пол</string>
     <string name="incorrect_email">Неправильно введен e-mail.</string>
     <string name="incorrect_login">Неправильно введен логин</string>
     <string name="incorrect_password">Неправильно введен пароль</string>
@@ -700,7 +702,7 @@
     <string name="general_logout_error">К сожалению, не удалось выйти из аккаунта</string>
     <string name="auth_btn_ok">Войти через Одноклассники</string>
     <string name="auth_btn_tf">Аккаунт Topface</string>
-    <string name="birthday">День трождения</string>
+    <string name="birthday">День рождения</string>
     <string name="other_auth">Войти через другие сервисы</string>
     <string name="settings_feedback_transaction_number_hint">Введите номер заказа</string>
 

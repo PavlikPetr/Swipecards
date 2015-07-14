@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -46,7 +45,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-@SuppressWarnings("unused")
 public class AuthFragment extends BaseAuthFragment {
 
     public static final String REAUTH_INTENT = "com.topface.topface.action.AUTH";
@@ -59,7 +57,6 @@ public class AuthFragment extends BaseAuthFragment {
     private boolean mIsSocNetBtnHidden = true;
     private boolean mIsTfBtnHidden = false;
     private boolean mIsNeedAnimate;
-    private TranslateAnimation mMoveBottom;
     private Animation mButtonAnimation;
 
     @Bind(R.id.ivAuthGroup)
@@ -136,7 +133,7 @@ public class AuthFragment extends BaseAuthFragment {
     }
 
     @Bind(R.id.btnEntrance)
-    Button mSignIn;
+    public Button mSignIn;
 
     @OnClick(R.id.btnEntrance)
     public void signInClick() {

@@ -176,8 +176,7 @@
             android:theme="@style/Theme.Topface.Gifts" />
         <activity
             android:name=".ui.TopfaceAuthActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Topface.NoActionBar" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.CitySearchActivity"
             android:label="@string/edit_my_city"

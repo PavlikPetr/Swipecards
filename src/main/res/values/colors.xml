@@ -93,4 +93,7 @@
     <color name="trial_popup_background">#242429</color>
 
     <color name="default_line_indicator_selected_color">@color/blue_holo_selected</color>
+
+    <color name="auth_progressbar_color">#03A9F4</color>
+
 </resources>

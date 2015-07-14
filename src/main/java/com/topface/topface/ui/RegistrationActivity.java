@@ -2,10 +2,11 @@ package com.topface.topface.ui;
 
 import android.os.Bundle;
 
+import com.topface.topface.R;
 import com.topface.topface.ui.fragments.RecoverPwdFragment;
-import com.topface.topface.ui.fragments.TopfaceLoginFragment;
+import com.topface.topface.ui.fragments.RegistrationFragment;
 
-public class RegistrationActivity extends NoAuthActivity<TopfaceLoginFragment> {
+public class RegistrationActivity extends NoAuthActivity<RegistrationFragment> {
 
     public static final int INTENT_REGISTRATION = 4;
 
@@ -15,19 +16,20 @@ public class RegistrationActivity extends NoAuthActivity<TopfaceLoginFragment> {
         if (getSupportActionBar() != null) {
             getSupportActionBar().show();
         }
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     @Override
     protected String getFragmentTag() {
-        return TopfaceLoginFragment.class.getSimpleName();
+        return RegistrationFragment.class.getSimpleName();
     }
 
     @Override
-    protected TopfaceLoginFragment createFragment() {
-        TopfaceLoginFragment topfaceLoginFragment = new TopfaceLoginFragment();
+    protected RegistrationFragment createFragment() {
+        RegistrationFragment fragment = RegistrationFragment.getInstance();
         Bundle arg = new Bundle();
         arg.putString(RecoverPwdFragment.ARG_EMAIL, getIntent().getStringExtra(RecoverPwdFragment.ARG_EMAIL));
-        topfaceLoginFragment.setArguments(arg);
-        return topfaceLoginFragment;
+        fragment.setArguments(arg);
+        return fragment;
     }
 }

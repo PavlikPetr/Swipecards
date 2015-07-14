@@ -5,11 +5,11 @@
     </style>
 
     <style name="TopfaceAuthText">
-        <item name="android:layout_marginTop">28dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:background">@drawable/edittext_holo_selector</item>
+        <item name="android:gravity">center_horizontal|left</item>
+        <item name="android:background">@drawable/auth_et_selector</item>
     </style>
 
     <style name="AuthButton">
