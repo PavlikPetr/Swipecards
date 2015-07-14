@@ -46,7 +46,7 @@ import butterknife.OnEditorAction;
 public class TopfaceAuthFragment extends BaseAuthFragment {
 
     @Bind(R.id.btnEntrance)
-    public Button mTFButton;
+    Button mTFButton;
 
     @OnClick(R.id.btnEntrance)
     public void onTFLoginClick() {
@@ -55,9 +55,9 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     }
 
     @Bind(R.id.etMail)
-    public AutoCompleteTextView mLogin;
+    AutoCompleteTextView mLogin;
     @Bind(R.id.edPassword)
-    public EditText mPassword;
+    EditText mPassword;
 
     @OnEditorAction(R.id.edPassword)
     public boolean passwordAction(int action) {
@@ -81,13 +81,13 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     }
 
     @Bind(R.id.ivShowPassword)
-    public ImageButton mShowPassword;
+    ImageButton mShowPassword;
     @Bind(R.id.redAlert)
-    public RelativeLayout mWrongPasswordAlertView;
+    RelativeLayout mWrongPasswordAlertView;
     @Bind(R.id.redAlertTextView)
-    public TextView mWrongDataTextView;
+    TextView mWrongDataTextView;
     @Bind(R.id.redAlertButton)
-    public TextView mCreateAccountButton;
+    TextView mCreateAccountButton;
 
     @OnClick(R.id.redAlertButton)
     public void createAccountClick() {
@@ -98,7 +98,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     }
 
     @Bind(R.id.btnRecoverPassword)
-    public Button btnRecoverPassword;
+    Button btnRecoverPassword;
 
     @OnClick(R.id.btnRecoverPassword)
     public void recoverPasswordClick() {

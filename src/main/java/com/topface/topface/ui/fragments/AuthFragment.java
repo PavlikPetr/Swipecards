@@ -133,7 +133,7 @@ public class AuthFragment extends BaseAuthFragment {
     }
 
     @Bind(R.id.btnEntrance)
-    public Button mSignIn;
+    Button mSignIn;
 
     @OnClick(R.id.btnEntrance)
     public void signInClick() {
