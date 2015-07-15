@@ -129,7 +129,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     }
 
     private void showPhotoHelper() {
-        showPhotoHelper(this.getString(R.string.no_photo_take_photo), !mIsPhotoDialogShown);
+        showPhotoHelper(getString(R.string.no_photo_take_photo), !mIsPhotoDialogShown);
     }
 
     private void showPhotoHelper(String message, boolean isNeedShow) {
@@ -245,7 +245,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         if (getAdapter().getCount() > 0) {
             if (mCoins < buttonData.price) {
                 showPurchasesFragment(buttonData.price);
-            } else if (selectedPhotoId != -1) {
+            } else if (selectedPhotoId != LeadersPhotoGridAdapter.EMPTY_SELECTED_ID) {
                 mLoadingLocker.setVisibility(View.VISIBLE);
                 new AddPhotoFeedRequest(selectedPhotoId, AddToLeaderActivity.this, buttonData.photoCount, mEditText.getText().toString(), (long) buttonData.price)
                         .callback(new ApiHandler() {
