@@ -155,6 +155,13 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         initFloatBlock();
     }
 
+    public int getTabLayoutHeight() {
+        if (mSlidingTabLayout != null) {
+            return mSlidingTabLayout.getMeasuredHeight();
+        }
+        return 0;
+    }
+
     protected void initFloatBlock() {
         Utils.addOnGlobalLayoutListener(mPager, new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override

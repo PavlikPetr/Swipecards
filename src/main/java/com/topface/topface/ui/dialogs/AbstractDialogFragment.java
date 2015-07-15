@@ -63,13 +63,21 @@ public abstract class AbstractDialogFragment extends BaseDialog {
             setCanceledOnTouchOutside(true);
         }
         if (isUnderActionBar()) {
-            root.setPadding(0, mNeedActionBarIndent ? mActionBarSize : 0, 0, 0);
+            root.setPadding(0, mNeedActionBarIndent ? getPopupPaddingTop() : 0, 0, 0);
         }
         ViewStub stub = (ViewStub) root.findViewById(R.id.vsContent);
         stub.setLayoutResource(getDialogLayoutRes());
         View view = stub.inflate();
         initViews(view);
         return root;
+    }
+
+    protected int getPopupPaddingTop() {
+        return getActionBarHeight();
+    }
+
+    public int getActionBarHeight() {
+        return mActionBarSize;
     }
 
     public void setCanceledOnTouchOutside(boolean outside) {
