@@ -620,6 +620,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 if (!data.items.isEmpty() && !isPopularLockOn) {
                     for (History message : data.items) {
                         mPopularUserLockController.setTexts(message.dialogTitle, message.blockText);
+                        mPopularUserLockController.setPhoto(mPhoto);
                         int blockStage = mPopularUserLockController.block(message);
                         if (blockStage == PopularUserChatController.FIRST_STAGE) {
                             mIsUpdating = false;

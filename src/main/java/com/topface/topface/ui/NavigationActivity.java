@@ -64,6 +64,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import rx.Observable;
+import rx.subjects.BehaviorSubject;
+
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_HIGH;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
@@ -72,6 +75,10 @@ import static com.topface.topface.utils.controllers.StartActionsController.AC_PR
 public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener, SequencedStartAction.IUiRunner {
     public static final String INTENT_EXIT = "EXIT";
     public static final String PAGE_SWITCH = "Page switch: ";
+
+    public enum DRAWER_LAYOUT_STATE {
+        STATE_CHANGED, SLIDE, OPENED, CLOSED
+    }
 
     private Intent mPendingNextIntent;
     private boolean mIsActionBarHidden;
@@ -94,6 +101,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     private AddPhotoHelper mAddPhotoHelper;
     private PopupManager mPopupManager;
+    private BehaviorSubject<DRAWER_LAYOUT_STATE> mDrawerLayoutStateObservable;
 
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -174,7 +182,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         if (mFullscreenController != null) {
             sequencedStartAction.addAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
         }
-//        sequencedStartAction.callInBackground();
         // trial vip popup
         startActionsController.registerMandatoryAction(sequencedStartAction);
         // actions after registration
@@ -225,6 +232,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                     .add(R.id.fragment_menu, mMenuFragment)
                     .commit();
         }
+        mDrawerLayoutStateObservable = BehaviorSubject.create();
         mDrawerLayout = (HackyDrawerLayout) findViewById(R.id.loNavigationDrawer);
         mDrawerLayout.setScrimColor(Color.argb(217, 0, 0, 0));
         mDrawerLayout.setDrawerShadow(R.drawable.shadow_left_menu_right, GravityCompat.START);
@@ -240,6 +248,25 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
             public void onDrawerStateChanged(int newState) {
                 super.onDrawerStateChanged(newState);
                 Utils.hideSoftKeyboard(NavigationActivity.this, mDrawerLayout.getWindowToken());
+                mDrawerLayoutStateObservable.onNext(DRAWER_LAYOUT_STATE.STATE_CHANGED);
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                mDrawerLayoutStateObservable.onNext(DRAWER_LAYOUT_STATE.SLIDE);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                mDrawerLayoutStateObservable.onNext(DRAWER_LAYOUT_STATE.OPENED);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                mDrawerLayoutStateObservable.onNext(DRAWER_LAYOUT_STATE.CLOSED);
             }
         };
         mDrawerToggle.setDrawerIndicatorEnabled(false);
@@ -612,5 +639,8 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         toggleDrawerLayout();
     }
 
+    public Observable<DRAWER_LAYOUT_STATE> getDrawerLayoutStateObservable() {
+        return mDrawerLayoutStateObservable;
+    }
 
 }

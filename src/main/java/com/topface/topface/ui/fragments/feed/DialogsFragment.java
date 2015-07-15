@@ -1,20 +1,27 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.History;
+import com.topface.topface.data.Options;
+import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteDialogsRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.ChatActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -22,12 +29,78 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import rx.Observable;
+import rx.Subscription;
+import rx.functions.Action1;
+
+import static com.topface.topface.data.Options.PromoPopupEntity.AIR_MESSAGES;
+
 public class DialogsFragment extends FeedFragment<FeedDialog> {
 
+    private final static String IS_PROMO_EXPRESS_MESSAGES_VISIBLE = "is_promo_express_messages_visible";
+
     private boolean mNeedRefresh = false;
+    private Subscription mDrawerLayoutSubscription;
 
     public DialogsFragment() {
         super();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            if (savedInstanceState.getBoolean(IS_PROMO_EXPRESS_MESSAGES_VISIBLE, false)) {
+                showExpressMessagesPopupIfNeeded();
+            }
+        }
+        if (getActivity() instanceof NavigationActivity) {
+            Observable<NavigationActivity.DRAWER_LAYOUT_STATE> observable = ((NavigationActivity) getActivity()).getDrawerLayoutStateObservable();
+            if (observable != null) {
+                mDrawerLayoutSubscription = observable.subscribe(new Action1<NavigationActivity.DRAWER_LAYOUT_STATE>() {
+                    @Override
+                    public void call(NavigationActivity.DRAWER_LAYOUT_STATE drawer_layout_state) {
+                        switch (drawer_layout_state) {
+                            case CLOSED:
+                                showExpressMessagesPopupIfNeeded();
+                                break;
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    private boolean isPromoExpressMessagesDialogAttached() {
+        Fragment promoFragment = getFragmentManager().findFragmentByTag(PromoExpressMessages.TAG);
+        return promoFragment != null;
+    }
+
+    private void showExpressMessagesPopupIfNeeded() {
+        if (!isPromoExpressMessagesDialogAttached()) {
+            if (isExpressPopupAvailable()) {
+                int paddingTop = 0;
+                Fragment fragment = getParentFragment();
+                if (fragment != null && fragment instanceof TabbedDialogsFragment) {
+                    paddingTop = ((TabbedDialogsFragment) fragment).getTabLayoutHeight();
+                }
+                new PromoExpressMessages().setExtraPaddingTop(paddingTop).show(getFragmentManager(), PromoExpressMessages.TAG);
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mDrawerLayoutSubscription != null && !mDrawerLayoutSubscription.isUnsubscribed()) {
+            mDrawerLayoutSubscription.unsubscribe();
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(IS_PROMO_EXPRESS_MESSAGES_VISIBLE, isPromoExpressMessagesDialogAttached());
     }
 
     @Override
@@ -56,6 +129,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     @Override
     protected FeedListData<FeedDialog> getFeedList(JSONObject data) {
+
         return new FeedListData<>(data, FeedDialog.class);
     }
 
@@ -151,5 +225,18 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                 }
             }
         }
+    }
+
+    @Override
+    protected boolean isNeedFirstShowListDelay() {
+        return isExpressPopupAvailable();
+    }
+
+    private boolean isExpressPopupAvailable() {
+        if (CacheProfile.premium) return false;
+        Options options = CacheProfile.getOptions();
+        Options.PromoPopupEntity expressMessagesPopup = options.getPremiumEntityByType(AIR_MESSAGES);
+        return expressMessagesPopup != null && expressMessagesPopup.isNeedShow() &&
+                expressMessagesPopup.getPageId() == BaseFragment.FragmentId.TABBED_DIALOGS.getId();
     }
 }

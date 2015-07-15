@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/button_shadow" />
     <item>
         <shape android:shape="rectangle">
-            <corners android:radius="2dp" />
-            <solid android:color="#949494" />
+            <corners android:radius="@dimen/button_corners_radius" />
+            <solid android:color="#efefef" />
         </shape>
     </item>
     <item>
-        <bitmap android:src="@drawable/marker_normal" android:gravity="right|top"/>
+        <bitmap
+            android:gravity="right|top"
+            android:src="@drawable/marker_normal" />
     </item>
 </layer-list>

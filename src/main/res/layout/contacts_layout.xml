@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/addContainer"
@@ -15,10 +15,10 @@
             android:id="@+id/inviteText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="8sp"
-            android:textSize="12sp"
             android:layout_alignParentTop="true"
-            android:layout_marginBottom="5dp" />
+            android:layout_marginBottom="5dp"
+            android:lineSpacingExtra="8sp"
+            android:textSize="12sp" />
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -30,21 +30,21 @@
                 style="@style/Widget.Topface.Button.Big.Gray"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="5dp"
+                android:minHeight="10dp"
+                android:padding="10dp"
                 android:text="@string/general_add"
                 android:textColor="#FFFFFF"
-                android:padding="10dp"
-                android:minHeight="10dp"
-                android:textSize="12sp"
-                android:layout_alignParentRight="true"
-                android:layout_marginLeft="5dp" />
+                android:textSize="12sp" />
 
             <EditText
                 android:id="@+id/addInput"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/friend_email_hint"
                 android:layout_toLeftOf="@id/addButton"
                 android:gravity="left|center_vertical"
+                android:hint="@string/friend_email_hint"
                 android:textSize="12sp" />
 
         </RelativeLayout>
@@ -54,28 +54,28 @@
         android:id="@+id/buttonContainer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:layout_alignParentBottom="true"
         android:background="@drawable/bottom_plate"
-        android:layout_alignParentBottom="true">
+        android:padding="10dp">
 
         <Button
             android:id="@+id/contactsVip"
+            style="@style/Widget.Topface.Button.Big.Blue"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            style="@style/Widget.Topface.Button.Big.Blue" />
+            android:layout_height="wrap_content" />
     </RelativeLayout>
 
     <ListView
+        android:id="@+id/contactsList"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:id="@+id/contactsList"
-        android:cacheColorHint="#0000"
+        android:layout_above="@id/buttonContainer"
         android:layout_below="@id/addContainer"
-        android:layout_above="@id/buttonContainer" />
+        android:cacheColorHint="#0000" />
 
     <com.topface.topface.ui.views.LockerView
         android:id="@+id/clLocker"
-        android:visibility="gone"
-        style="@style/LoadingLocker" />
+        style="@style/LoadingLocker"
+        android:visibility="gone" />
 
 </RelativeLayout>

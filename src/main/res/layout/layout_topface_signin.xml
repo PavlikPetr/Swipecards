@@ -90,9 +90,8 @@
 
                 <Button
                     android:id="@+id/btnEntrance"
-                    style="@style/TfRegButton"
+                    style="@style/TfRegButtonBlue"
                     android:layout_marginTop="28dp"
-                    android:background="@drawable/btn_blue_selector"
                     android:gravity="center"
                     android:singleLine="true"
                     android:text="@string/sign_in"
@@ -101,9 +100,8 @@
 
                 <Button
                     android:id="@+id/btnRecoverPassword"
-                    style="@style/TfRegButton"
+                    style="@style/TfRegButtonGray"
                     android:layout_marginTop="28dp"
-                    android:background="@drawable/btn_gray_selector"
                     android:gravity="center"
                     android:singleLine="true"
                     android:text="@string/recover_password"

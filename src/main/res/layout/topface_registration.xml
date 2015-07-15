@@ -87,9 +87,8 @@
 
         <Button
             android:id="@+id/btnStartChat"
-            style="@style/TfRegButton"
+            style="@style/TfRegButtonBlue"
             android:layout_marginTop="28dp"
-            android:background="@drawable/btn_blue_selector"
             android:gravity="center"
             android:singleLine="true"
             android:text="@string/start_communication"

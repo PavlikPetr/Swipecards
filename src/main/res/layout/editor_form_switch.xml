@@ -6,7 +6,6 @@
     android:gravity="center">
 
     <TextView
-        android:tag="tvTitle"
         style="@style/GrayText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,30 +13,31 @@
         android:layout_gravity="left"
         android:drawablePadding="5dp"
         android:ellipsize="end"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:tag="tvTitle" />
 
     <!-- Switch -->
 
     <view
-        class="com.topface.topface.ui.views.Switcher"
         android:id="@+id/cbSwitch"
-        android:tag="cbSwitch"
+        class="com.topface.topface.ui.views.Switcher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:layout_marginRight="5dp"
         android:clickable="false"
-        android:minHeight="0dp" />
+        android:minHeight="0dp"
+        android:tag="cbSwitch" />
 
     <ProgressBar
-        android:tag="vsiLoadBar"
+        style="@style/TopFaceProgressBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@id/cbSwitch"
         android:layout_centerVertical="true"
         android:layout_marginRight="40dp"
-        style="@style/TopFaceProgressBar.Small"
+        android:tag="vsiLoadBar"
         android:visibility="gone"
         tools:visibility="visible" />
 

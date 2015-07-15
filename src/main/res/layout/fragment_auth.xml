@@ -51,51 +51,44 @@
 
             <Button
                 android:id="@+id/btnAuthFB"
-                style="@style/AuthButton"
-                android:background="@drawable/auth_fb_selector"
+                style="@style/AuthFb"
                 android:text="@string/auth_btn_fb" />
 
             <Button
                 android:id="@+id/btnAuthVK"
-                style="@style/AuthButton"
+                style="@style/AuthVk"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/auth_vk_selector"
                 android:text="@string/auth_btn_vk" />
 
             <Button
                 android:id="@+id/btnAuthOk"
-                style="@style/AuthButton"
+                style="@style/AuthOk"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/auth_ok_selector"
                 android:text="@string/auth_btn_ok" />
 
             <Button
                 android:id="@+id/btnTfAccount"
-                style="@style/AuthButton"
+                style="@style/AuthButtonWhite"
                 android:layout_marginTop="44dp"
-                android:background="@drawable/btn_white"
                 android:gravity="center"
                 android:text="@string/auth_btn_tf"
                 android:textColor="#03A9F4" />
 
             <Button
                 android:id="@+id/btnEntrance"
-                style="@style/AuthButton.TfAccountButton"
+                style="@style/AuthButtonBlue"
                 android:drawableLeft="@drawable/ic_enter"
-                android:background="@drawable/btn_blue_selector"
                 android:text="@string/sign_in"
                 android:textColor="#FFFFFF"
-                android:visibility="gone" />
+                />
 
             <Button
                 android:id="@+id/btnCreateAccount"
-                style="@style/AuthButton.TfAccountButton"
+                style="@style/AuthButtonGray"
                 android:layout_marginTop="16dp"
                 android:drawableLeft="@drawable/ic_add"
-                android:background="@drawable/btn_gray_selector"
                 android:text="@string/create_account"
-                android:textColor="#4B4B4B"
-                android:visibility="gone" />
+                android:textColor="#4B4B4B" />
 
         </LinearLayout>
     </RelativeLayout>
