@@ -5,7 +5,7 @@
     <dimen name="indicator_corner_radius">12dp</dimen>
     <dimen name="indicator_internal_padding">4dp</dimen>
 
-    <dimen name="popular_dialog_text_margin">36dp</dimen>
+    <dimen name="popular_dialog_text_margin">24dp</dimen>
 
     <!--set padding left value for icon "online" inside actionBar-->
     <dimen name="padding_left_for_online_icon">8dp</dimen>
@@ -51,4 +51,10 @@
     <item name="actionbar_elevation" format="float" type="dimen">0.0</item>
 
     <dimen name="tab_bar_default_bottom_border_height">1px</dimen>
+
+    <!--Gray/Blue buttons corner radius-->
+    <dimen name="button_corners_radius">2dp</dimen>
+
+    <!--set elevation value for lollipop views-->
+    <dimen name="buttons_elevation_value">2dp</dimen>
 </resources>
