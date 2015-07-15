@@ -416,17 +416,30 @@ public class AddPhotoHelper {
      * @param photoTaker object which implement "take photo's" methods
      * @param photoUri   if we already have photo to show pass it with Uri to show
      */
-    public void showTakePhotoDialog(final IPhotoTakerWithDialog photoTaker, Uri photoUri) {
+    public void showTakePhotoDialog(IPhotoTakerWithDialog photoTaker, Uri photoUri) {
+        showTakePhotoDialog(photoTaker, photoUri, null);
+    }
+
+    /**
+     * Gets TakePhotoDialog from FragmentManager if it has been created before
+     * or creates new TakePhotoDialog if there is no any in FragmentManager
+     * After it has been obtained or created method shows it
+     *
+     * @param photoTaker object which implement "take photo's" methods
+     * @param photoUri   if we already have photo to show pass it with Uri to show
+     * @param message    text that is displayed in the popup
+     */
+    public void showTakePhotoDialog(final IPhotoTakerWithDialog photoTaker, Uri photoUri, String message) {
         FragmentManager manager = photoTaker.getActivityFragmentManager();
         TakePhotoDialog takePhotoDialog = (TakePhotoDialog) manager.findFragmentByTag(TakePhotoDialog.TAG);
         if (takePhotoDialog == null) {
             takePhotoDialog = TakePhotoDialog.newInstance(photoUri);
-            takePhotoDialog.setUri(photoUri).show(manager, TakePhotoDialog.TAG);
+            takePhotoDialog.setUri(photoUri).setMessageText(message).show(manager, TakePhotoDialog.TAG);
         } else {
             if (takePhotoDialog.isAdded()) {
-                takePhotoDialog.setUri(photoUri);
+                takePhotoDialog.setUri(photoUri).setMessageText(message);
             } else {
-                takePhotoDialog.setUri(photoUri).show(manager, TakePhotoDialog.TAG);
+                takePhotoDialog.setUri(photoUri).setMessageText(message).show(manager, TakePhotoDialog.TAG);
             }
         }
         setOnResultHandler(new Handler() {

@@ -125,13 +125,21 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     @Override
     public void onResume() {
         super.onResume();
+        showPhotoHelper();
+    }
+
+    private void showPhotoHelper() {
+        showPhotoHelper(this.getString(R.string.no_photo_take_photo), !mIsPhotoDialogShown);
+    }
+
+    private void showPhotoHelper(String message, boolean isNeedShow) {
         if (takePhotoDialog != null) {
             takePhotoDialog.setPhotoTaker(mPhotoTaker);
         }
-        if (!mIsPhotoDialogShown) {
+        if (isNeedShow) {
             mAddPhotoHelper = initAddPhotoHelper();
             if (CacheProfile.photo == null && takePhotoDialog == null) {
-                mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
+                mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null, message);
                 mIsPhotoDialogShown = true;
             }
         }
@@ -234,34 +242,38 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private void pressedAddToLeader(int position) {
         final Options.LeaderButton buttonData = CacheProfile.getOptions().buyLeaderButtons.get(position);
         int selectedPhotoId = getAdapter().getSelectedPhotoId();
-        if (mCoins < buttonData.price) {
-            showPurchasesFragment(buttonData.price);
-        } else if (selectedPhotoId != -1) {
-            mLoadingLocker.setVisibility(View.VISIBLE);
-            new AddPhotoFeedRequest(selectedPhotoId, AddToLeaderActivity.this, buttonData.photoCount, mEditText.getText().toString(), (long) buttonData.price)
-                    .callback(new ApiHandler() {
-                        @Override
-                        public void success(IApiResponse response) {
-                            setResult(Activity.RESULT_OK, new Intent());
-                            finish();
-                        }
-
-                        @Override
-                        public void fail(int codeError, IApiResponse response) {
-                            mLoadingLocker.setVisibility(View.GONE);
-                            switch (codeError) {
-                                case ErrorCodes.PAYMENT:
-                                    showPurchasesFragment(buttonData.price);
-                                    break;
-                                default:
-                                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
-                                    break;
+        if (getAdapter().getCount() > 0) {
+            if (mCoins < buttonData.price) {
+                showPurchasesFragment(buttonData.price);
+            } else if (selectedPhotoId != -1) {
+                mLoadingLocker.setVisibility(View.VISIBLE);
+                new AddPhotoFeedRequest(selectedPhotoId, AddToLeaderActivity.this, buttonData.photoCount, mEditText.getText().toString(), (long) buttonData.price)
+                        .callback(new ApiHandler() {
+                            @Override
+                            public void success(IApiResponse response) {
+                                setResult(Activity.RESULT_OK, new Intent());
+                                finish();
                             }
-                        }
-                    }).exec();
 
+                            @Override
+                            public void fail(int codeError, IApiResponse response) {
+                                mLoadingLocker.setVisibility(View.GONE);
+                                switch (codeError) {
+                                    case ErrorCodes.PAYMENT:
+                                        showPurchasesFragment(buttonData.price);
+                                        break;
+                                    default:
+                                        Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+                            }
+                        }).exec();
+
+            } else {
+                Toast.makeText(AddToLeaderActivity.this, R.string.leaders_need_photo, Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Toast.makeText(AddToLeaderActivity.this, R.string.leaders_need_photo, Toast.LENGTH_SHORT).show();
+            showPhotoHelper(getString(R.string.add_photo_before), true);
         }
     }
 
