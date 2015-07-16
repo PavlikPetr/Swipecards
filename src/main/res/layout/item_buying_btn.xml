@@ -2,27 +2,27 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    tools:background="@drawable/btn_gray_selector"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/itContainer"
-        android:layout_height="50dp"
+        style="@style/ViewWithElevation"
         android:layout_width="fill_parent"
-        android:padding="5dp"
-        android:layout_marginTop="12dp">
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
+        android:padding="5dp">
 
         <TextView
-            style="@style/WhiteText"
-            tools:text="@string/buy_mobile_payments"
             android:id="@+id/itText"
-            android:layout_height="wrap_content"
+            style="@style/WhiteText"
             android:layout_width="wrap_content"
-            android:paddingLeft="10dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:gravity="center"
-            android:layout_centerInParent="true" />
+            android:paddingLeft="10dp"
+            tools:text="@string/buy_mobile_payments" />
 
         <ProgressBar
             android:id="@+id/marketWaiter"
@@ -30,39 +30,5 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:visibility="gone" />
-
     </RelativeLayout>
-
-    <View
-        android:id="@+id/middle"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_below="@id/itContainer"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        style="@style/GrayText"
-        android:id="@+id/itEconomy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:paddingLeft="9dp"
-        android:paddingRight="9dp"
-        android:layout_marginRight="4dp"
-        android:textSize="13sp"
-        android:background="@drawable/bg_economy"
-        android:layout_below="@id/itContainer"
-        android:layout_toLeftOf="@id/middle"
-        android:gravity="center" />
-
-    <TextView
-        android:id="@+id/itValue"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/text_light_gray"
-        android:textSize="13sp"
-        android:layout_below="@id/itContainer"
-        android:layout_toRightOf="@id/middle" />
 </RelativeLayout>

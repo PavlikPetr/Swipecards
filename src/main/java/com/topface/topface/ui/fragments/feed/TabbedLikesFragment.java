@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
+import com.topface.topface.data.CountersData;
 import com.topface.topface.utils.CacheProfile;
 
 public class TabbedLikesFragment extends TabbedFeedFragment {
@@ -19,11 +20,11 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
     }
 
     @Override
-    protected void onBeforeCountersUpdate() {
-        updatePageCounter(LikesFragment.class.getName(), CacheProfile.unread_likes);
-        updatePageCounter(MutualFragment.class.getName(), CacheProfile.unread_mutual);
+    protected void onBeforeCountersUpdate(CountersData countersData) {
+        updatePageCounter(LikesFragment.class.getName(), countersData.likes);
+        updatePageCounter(MutualFragment.class.getName(), countersData.mutual);
         if (!CacheProfile.getOptions().isHideAdmirations) {
-            updatePageCounter(AdmirationFragment.class.getName(), CacheProfile.unread_admirations);
+            updatePageCounter(AdmirationFragment.class.getName(), countersData.admirations);
         }
     }
 
@@ -34,10 +35,10 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
 
     @Override
     protected void addPages() {
-        addBodyPage(LikesFragment.class.getName(), getString(R.string.general_likes), CacheProfile.unread_likes);
-        addBodyPage(MutualFragment.class.getName(), getString(R.string.general_mutual), CacheProfile.unread_mutual);
+        addBodyPage(LikesFragment.class.getName(), getString(R.string.general_likes), mCountersData.likes);
+        addBodyPage(MutualFragment.class.getName(), getString(R.string.general_mutual), mCountersData.mutual);
         if (!CacheProfile.getOptions().isHideAdmirations) {
-            addBodyPage(AdmirationFragment.class.getName(), getString(R.string.general_admirations), CacheProfile.unread_admirations);
+            addBodyPage(AdmirationFragment.class.getName(), getString(R.string.general_admirations), mCountersData.admirations);
         }
     }
 

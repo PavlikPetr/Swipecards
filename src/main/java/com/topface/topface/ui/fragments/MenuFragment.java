@@ -27,6 +27,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BalanceData;
+import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Photo;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.INavigationFragmentsListener;
@@ -54,6 +55,7 @@ import javax.inject.Inject;
 
 import rx.Subscription;
 import rx.functions.Action1;
+import rx.functions.Func1;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.BONUS;
@@ -93,7 +95,7 @@ public class MenuFragment extends Fragment {
         }
     };
     private Subscription mBalanceSubscription;
-
+    private Subscription mCountersSubscription;
     private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -156,7 +158,6 @@ public class MenuFragment extends Fragment {
     private void initBonus() {
         if (CacheProfile.getOptions().bonus.enabled && !mAdapter.hasFragment(BONUS)) {
             mAdapter.addItem(LeftMenuAdapter.newLeftMenuItem(BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE, R.drawable.ic_bonus_selector));
-            mAdapter.refreshCounterBadges();
         }
     }
 
@@ -239,8 +240,24 @@ public class MenuFragment extends Fragment {
             menuItems.put(BONUS.getId(), LeftMenuAdapter.newLeftMenuItem(BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                     R.drawable.ic_bonus_selector));
         }
-        mAdapter = new LeftMenuAdapter(menuItems);
-        mListView.setAdapter(mAdapter);
+        if (mAdapter == null) {
+            mAdapter = new LeftMenuAdapter(menuItems);
+            mListView.setAdapter(mAdapter);
+            mCountersSubscription = mAppState.getObservable(CountersData.class)
+                    .map(new Func1<CountersData, CountersData>() {
+                        @Override
+                        public CountersData call(CountersData countersData) {
+                            countersData.bonus = CacheProfile.needShowBonusCounter ? CacheProfile.getOptions().bonus.counter : 0;
+                            return countersData;
+                        }
+                    })
+                    .subscribe(new Action1<CountersData>() {
+                        @Override
+                        public void call(CountersData countersData) {
+                            mAdapter.updateCountersBadge(countersData);
+                        }
+                    });
+        }
     }
 
     @Override
@@ -294,7 +311,7 @@ public class MenuFragment extends Fragment {
             // update photo
             Photo photo = profileMenuItem.getMenuIconPhoto();
             if (photo != null) {
-                if (photo.equals(CacheProfile.getProfile().photo)) {
+                if (!photo.equals(CacheProfile.getProfile().photo)) {
                     profileMenuItem.setMenuIconPhoto(CacheProfile.getProfile().photo);
                     notify = true;
                 }
@@ -326,6 +343,7 @@ public class MenuFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         mBalanceSubscription.unsubscribe();
+        mCountersSubscription.unsubscribe();
     }
 
     @Override
@@ -507,7 +525,6 @@ public class MenuFragment extends Fragment {
                     config.saveConfig();
                 }
                 CacheProfile.needShowBonusCounter = false;
-                mAdapter.refreshCounterBadges();
                 if (!TextUtils.isEmpty(CacheProfile.getOptions().bonus.integrationUrl) ||
                         CacheProfile.getOptions().offerwalls.hasOffers()
                         ) {

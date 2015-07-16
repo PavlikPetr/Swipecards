@@ -64,7 +64,6 @@ abstract public class ApiHandler extends Handler {
                     fail(result, response);
                 } else {
                     success(response);
-
                     setCounters(response);
                     sendUpdateIntent(response);
                 }
@@ -120,19 +119,10 @@ abstract public class ApiHandler extends Handler {
             String method = response.getMethodName();
             Debug.log("Set counters from method " + method);
             CountersManager countersManager = CountersManager
-                    .getInstance(App.getContext())
-                    .setMethod(method);
-
+                    .getInstance(App.getContext());
+            countersManager.setLastRequestMeethod(method);
             if (unread != null) {
-                countersManager
-                        .setEntitiesCounters(
-                                unread.optInt("likes"),
-                                unread.optInt("mutual"),
-                                unread.optInt("dialogs"),
-                                unread.optInt("visitors"),
-                                unread.optInt("fans"),
-                                unread.optInt("admirations"),
-                                unread.optInt("peopleNearby"));
+                countersManager.setEntitiesCounters(unread);
             }
             countersManager.setBalanceCounters(response.getBalance());
         } catch (Exception e) {

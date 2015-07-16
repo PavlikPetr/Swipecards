@@ -114,7 +114,6 @@ public class AuthorizationManager {
         mAuthorizers.get(Platform.TOPFACE).authorize();
     }
 
-
     public void logout(Activity activity) {
         Ssid.remove();
         UserNotificationManager.getInstance().removeNotifications();

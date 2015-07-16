@@ -26,10 +26,11 @@ import com.topface.topface.banners.BannersController;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.RefreshablePageWithAds;
 import com.topface.topface.banners.ad_providers.IRefresher;
+import com.topface.topface.data.CountersData;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
@@ -38,6 +39,11 @@ import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * base class for feeds with tabs
@@ -54,12 +60,15 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     @Bind(R.id.feedTabs)
     TabLayout mTabLayout;
 
+    @Inject
+    TopfaceAppState mAppState;
     private TabbedFeedPageAdapter mBodyPagerAdapter;
-
     protected static int mVisitorsastOpenedPage = 0;
     protected static int mLikesLastOpenedPage = 0;
     protected static int mDialogsLastOpenedPage = 0;
     private ArrayList<TextView> mViews;
+    private Subscription mCountersSubscription;
+    protected CountersData mCountersData = new CountersData();
 
     public static void setTabsDefaultPosition() {
         mVisitorsastOpenedPage = 0;
@@ -105,28 +114,26 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         }
     };
 
-    private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            onCountersUpdated();
-        }
-    };
+    protected abstract void onBeforeCountersUpdate(CountersData countersData);
 
-    protected abstract void onBeforeCountersUpdate();
-
-    private void onCountersUpdated() {
-        onBeforeCountersUpdate();
-
-
+    private void onCountersUpdated(CountersData countersData) {
+        onBeforeCountersUpdate(countersData);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        App.from(getActivity()).inject(this);
         View root = inflater.inflate(R.layout.fragment_tabbed_feed, null);
         ButterKnife.bind(this, root);
         initPages(root);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
+        mCountersSubscription = mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
+            @Override
+            public void call(CountersData countersData) {
+                mCountersData = countersData;
+                onCountersUpdated(countersData);
+                setTabTitle(getLastOpenedPage());
+            }
+        });
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mHasFeedAdReceiver, new IntentFilter(HAS_FEED_AD));
         return root;
     }
@@ -203,6 +210,10 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         initFloatBlock();
     }
 
+    public int getTabLayoutHeight() {
+        return 0;
+    }
+
     protected void initFloatBlock() {
         Utils.addOnGlobalLayoutListener(mPager, new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -243,14 +254,13 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(mCountersReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mHasFeedAdReceiver);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mCountersSubscription.unsubscribe();
         if (mPager != null) {
             setLastOpenedPage(mPager.getCurrentItem());
         }

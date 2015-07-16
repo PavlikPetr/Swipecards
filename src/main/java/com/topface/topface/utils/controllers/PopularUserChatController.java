@@ -14,9 +14,11 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.data.History;
+import com.topface.topface.data.Photo;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.PopularUserDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
+import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.EasyTracker;
@@ -40,6 +42,7 @@ public class PopularUserChatController extends BroadcastReceiver {
     private String mDialogTitle;
     private ChatFragment mChatFragment;
     private WeakReference<ViewGroup> mLockScreenRef;
+    private Photo mAvatar;
     private boolean mOff;
 
     public static class SavedState implements Parcelable {
@@ -48,6 +51,7 @@ public class PopularUserChatController extends BroadcastReceiver {
         public String dialogTitle;
         public String blockText;
         public boolean off;
+        public Photo photo;
 
         public static final Parcelable.Creator<SavedState> CREATOR
                 = new Parcelable.Creator<SavedState>() {
@@ -68,6 +72,7 @@ public class PopularUserChatController extends BroadcastReceiver {
             dialogTitle = in.readString();
             blockText = in.readString();
             off = in.readByte() == 1;
+            photo = in.readParcelable(Photo.class.getClassLoader());
         }
 
         @Override
@@ -81,6 +86,7 @@ public class PopularUserChatController extends BroadcastReceiver {
             dest.writeString(dialogTitle);
             dest.writeString(blockText);
             dest.writeByte((byte) (off ? 1 : 0));
+            dest.writeParcelable(photo, flags);
         }
     }
 
@@ -92,6 +98,10 @@ public class PopularUserChatController extends BroadcastReceiver {
     public void setTexts(String dialogTitle, String blockText) {
         mBlockText = blockText;
         mDialogTitle = dialogTitle;
+    }
+
+    public void setPhoto(Photo photo) {
+        mAvatar = photo;
     }
 
     public void setLockScreen(ViewGroup lockScreen) {
@@ -157,6 +167,8 @@ public class PopularUserChatController extends BroadcastReceiver {
         ViewStub stub = (ViewStub) lockScreen.findViewById(R.id.famousBlockerStub);
         if (stub != null) {
             mPopularChatBlocker = stub.inflate();
+            ImageViewRemote avatar = (ImageViewRemote) mPopularChatBlocker.findViewById(R.id.popularUserAvatar);
+            avatar.setPhoto(mAvatar);
             TextView lockText = (TextView) mPopularChatBlocker.findViewById(R.id.popular_user_lock_text);
             lockText.setText(mBlockText);
             mPopularChatBlocker.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
@@ -179,6 +191,7 @@ public class PopularUserChatController extends BroadcastReceiver {
         mDialogTitle = ss.dialogTitle;
         mBlockText = ss.blockText;
         mOff = ss.off;
+        mAvatar = ss.photo;
     }
 
     public void initBlockDialog() {
@@ -218,6 +231,7 @@ public class PopularUserChatController extends BroadcastReceiver {
         mDialogTitle = null;
         mBlockText = null;
         mOff = true;
+        mAvatar = null;
     }
 
     @Override

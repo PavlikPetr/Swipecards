@@ -11,8 +11,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
@@ -20,9 +23,18 @@ import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 
+import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
+
 public abstract class PromoDialog extends AbstractDialogFragment implements View.OnClickListener, IPromoPopup {
 
     private OnCloseListener mListener;
+    @Inject
+    TopfaceAppState mAppState;
+    protected CountersData mCountersData;
+    private Subscription mSubscription;
 
     public abstract Options.PromoPopupEntity getPremiumEntity();
 
@@ -59,6 +71,13 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.from(getActivity()).inject(this);
+        mSubscription = mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
+            @Override
+            public void call(CountersData countersData) {
+                mCountersData = countersData;
+            }
+        });
         //Закрыть диалог нельзя
         setCancelable(false);
         //Подписываемся на обновление профиля
@@ -146,6 +165,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mSubscription.unsubscribe();
         if (getActivity() != null) {
             LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mVipPurchasedReceiver);
             LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileReceiver);

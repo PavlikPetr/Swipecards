@@ -26,9 +26,9 @@ public class CustomViewNotificationController implements IActionbarNotifier {
     }
 
     @Override
-    public void refreshNotificator() {
+    public void refreshNotificator(int unreadMessages, int unreadMutual) {
         if (mIcon != null) {
-            if (CacheProfile.unread_messages > 0 || CacheProfile.unread_mutual > 0) {
+            if (unreadMessages > 0 || unreadMutual > 0) {
                 mIcon.setImageResource(R.drawable.ic_home_notification);
             } else {
                 mIcon.setImageResource(R.drawable.ic_home);

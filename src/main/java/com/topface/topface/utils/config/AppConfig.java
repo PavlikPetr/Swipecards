@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.Static;
+import com.topface.topface.data.AppSocialAppsIds;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.utils.Editor;
@@ -34,7 +36,6 @@ public class AppConfig extends AbstractConfig {
     public static final String BASE_CONFIG_SETTINGS = "base_config_settings";
     public static final String DATA_API_URL = "data_api_url";
     public static final String SCRUFFY_DATA_API_URL = "scruffy_data_api_url";
-    public static final String DATA_AUTH_VK_API = "data_auth_vk_api";
     public static final String FLOOD_ENDS_TIME = "flood_ens_time";
     private static final String DATA_EDITOR_MODE = "data_editor_mode";
     private static final String DATA_DEBUG_MODE = "data_debug_mode";
@@ -55,6 +56,7 @@ public class AppConfig extends AbstractConfig {
     public static final String SOCIAL_BUTTONS_SETTINGS = "ButtonSettings";
     public static final String CONVERT_CONFIG = "convert_config";
     public static final String POPUP_NOTIFICATION_DISABLE_TIME = "popup_notification_disable_time";
+    private static final String DATA_APP_SOCIAL_IDS = "data_app_social_ids";
 
 
     public AppConfig(Context context) {
@@ -67,8 +69,6 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, DATA_API_URL, Static.API_URL);
         // api url: wss://scruffy.core.tf/
         addField(settingsMap, SCRUFFY_DATA_API_URL, ScruffyRequestManager.API_URL);
-        // vk api id
-        addField(settingsMap, DATA_AUTH_VK_API, Static.AUTH_VK_ID);
         // editor mode from Editor class
         addField(settingsMap, DATA_EDITOR_MODE, Editor.MODE_USER_FIELD);
         // editor mode from Debug class
@@ -105,6 +105,8 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, CONVERT_CONFIG, true);
         // time when popup about notification disabled is shown in the last
         addField(settingsMap, POPUP_NOTIFICATION_DISABLE_TIME, 0L);
+        // social ids for social platforms obtained from server
+        addField(settingsMap, DATA_APP_SOCIAL_IDS, "");
     }
 
     protected SharedPreferences getPreferences() {
@@ -119,16 +121,6 @@ public class AppConfig extends AbstractConfig {
      */
     public void saveConfigAdditional(SharedPreferences.Editor editor) {
         editor.putInt(DATA_APP_CONFIG_VERSION, APP_CONFIG_VERSION);
-    }
-
-    /**
-     * Vk Api key
-     *
-     * @return api key
-     */
-    @SuppressWarnings("UnusedDeclaration")
-    public String getAuthVkApi() {
-        return getStringField(getSettingsMap(), DATA_AUTH_VK_API);
     }
 
     /**
@@ -429,4 +421,17 @@ public class AppConfig extends AbstractConfig {
         return setField(getSettingsMap(), CONVERT_CONFIG, false);
     }
 
+
+
+    public void resetAppSocialAppsIdsData() {
+        resetAndSaveConfig(DATA_APP_OPTIONS);
+    }
+
+    public String getAppSocialAppsIds() {
+        return getStringField(getSettingsMap(), DATA_APP_SOCIAL_IDS);
+    }
+
+    public void saveAppSocialAppsIds(AppSocialAppsIds appSocialAppsIds) {
+        setField(getSettingsMap(), DATA_APP_SOCIAL_IDS, JsonUtils.toJson(appSocialAppsIds));
+    }
 }

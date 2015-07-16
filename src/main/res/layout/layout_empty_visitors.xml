@@ -6,26 +6,28 @@
     android:clickable="true">
 
     <ImageView
+        android:id="@+id/ic_guest"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:scaleType="centerInside"
-        android:layout_centerInParent="true"
-        android:id="@+id/ic_guest"
         android:layout_above="@+id/tvText"
         android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="44dp"
+        android:scaleType="centerInside"
         android:src="@drawable/ic_guest" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/tvText"
         style="@style/ListItemEmptyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginBottom="24dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         android:gravity="center"
-        android:text="@string/with_vip_find_your_visitors" />
+        android:text="@string/with_vip_find_your_visitors"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/btnBuyVip"
