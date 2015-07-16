@@ -405,13 +405,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void initViews(final KeyboardListenerLayout root) {
         mRetryBtn = (ImageButton) root.findViewById(R.id.btnUpdate);
         mRetryBtn.setOnClickListener(this);
-
         // User Info
         mUserInfoStatus = (TextView) root.findViewById(R.id.tvDatingUserStatus);
-
         // Counter
         mDatingCounter = (TextView) root.findViewById(R.id.tvDatingCounter);
-
         // Progress
         mProgressBar = (ProgressBar) root.findViewById(R.id.prsDatingLoading);
 
@@ -441,8 +438,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
         });
 
-        mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
-
         ViewStub stub = (ViewStub) root.findViewById(R.id.vfDatingButtons);
         stub.setLayoutResource(CacheProfile.getOptions().isHideAdmirations ? R.layout.hide_admiration_dating_buttons : R.layout.dating_buttons);
         mDatingButtons = stub.inflate();
@@ -451,6 +446,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (!CacheProfile.getOptions().isHideAdmirations) {
             // Dating controls
             mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
+            mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
 
             mAnimationHelper.addView(mDatingCounter);
             mAnimationHelper.addView(mDatingResources);

@@ -323,7 +323,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         }
                     }
                 }
-                Intent intent = new Intent(CountersManager.UPDATE_COUNTERS);
+                Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ);
                 intent.putExtra(LOADED_MESSAGES, loadedItemsCount);
                 intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
                 LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
@@ -620,6 +620,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 if (!data.items.isEmpty() && !isPopularLockOn) {
                     for (History message : data.items) {
                         mPopularUserLockController.setTexts(message.dialogTitle, message.blockText);
+                        mPopularUserLockController.setPhoto(mPhoto);
                         int blockStage = mPopularUserLockController.block(message);
                         if (blockStage == PopularUserChatController.FIRST_STAGE) {
                             mIsUpdating = false;

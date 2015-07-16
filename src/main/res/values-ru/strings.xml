@@ -812,10 +812,10 @@
     <string name="more">еще</string>
 
     <!--invite frends by sms-->
-    <string name="premium_for_invitations">Для получения VIP статуса на 1 день вам необходимо набрать 5 регистраций.</string>
+    <string name="premium_for_invitations">Для получения VIP-статуса на 1 день вам необходимо набрать 5 регистраций.</string>
     <string name="premium_for_invitations_current_status">Вы уже набрали:\nПриглашений: %1$d\nРегистраций: %2$d</string>
     <string name="no_contacts_available">На устройстве нет контактов, доступных к отображению</string>
-    <string name="sms_invite_title">Получите вип на сутки!</string>
+    <string name="sms_invite_title">Получите VIP на сутки!</string>
 
     <!--phones number statuses-->
     <string name="status_can_send_confirmation">Пригласить</string>
@@ -830,4 +830,8 @@
     <string name="settings_check_vip_title">Проверка активности VIP статуса</string>
     <string name="settings_check_vip_cell">Проверить VIP статус</string>
     <string name="settings_check_vip_alert">Запрос на проверку отправлен</string>
+    
+    
+    <string name="novice_sympathy">Отправляйте симпатии тем, кто вам\nдействительно нравится,\nчтобы начать приятное знакомство</string>
+    <string name="novice_sympathies_bonus">Вы получаете %1$d симпатии в\nподарок! Это означает, что вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию</string>
 </resources>

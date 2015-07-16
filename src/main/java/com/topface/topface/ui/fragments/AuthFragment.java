@@ -21,8 +21,12 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
+import com.topface.topface.data.AppSocialAppsIds;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.PasswordRecoverActivity;
 import com.topface.topface.ui.RegistrationActivity;
@@ -141,9 +145,7 @@ public class AuthFragment extends BaseAuthFragment {
         mVKButton = (Button) root.findViewById(R.id.btnAuthVK);
         mFBButton = (Button) root.findViewById(R.id.btnAuthFB);
         mOKButton = (Button) root.findViewById(R.id.btnAuthOk);
-
         mOtherSocialNetworksButton = (LinearLayout) root.findViewById(R.id.otherServices);
-
         mVkIcon = (ImageView) root.findViewById(R.id.vk_ico);
         mOkIcon = (ImageView) root.findViewById(R.id.ok_ico);
         mFbIcon = (ImageView) root.findViewById(R.id.fb_ico);
@@ -369,7 +371,11 @@ public class AuthFragment extends BaseAuthFragment {
 
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
-            mAuthorizationManager.vkontakteAuth();
+            waitUntilAuthSocialOptions(new Runnable() {
+                @Override public void run() {
+                    mAuthorizationManager.vkontakteAuth();
+                }
+            });
         }
     }
 
@@ -377,7 +383,12 @@ public class AuthFragment extends BaseAuthFragment {
         EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, mAdditionalButtonsScreen ? "LoginAdditionalFb" : "LoginMainFb", mBtnsController.getLocaleTag(), 1L);
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
-            mAuthorizationManager.facebookAuth();
+            waitUntilAuthSocialOptions(new Runnable() {
+                @Override public void run() {
+                    mAuthorizationManager.facebookAuth();
+                }
+            });
+
         }
     }
 
@@ -385,7 +396,25 @@ public class AuthFragment extends BaseAuthFragment {
     private void btnOKClick() {
         EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, mAdditionalButtonsScreen ? "LoginAdditionalOk" : "LoginMainOk", mBtnsController.getLocaleTag(), 1L);
         if (checkOnline() && mAuthorizationManager != null) {
-            mAuthorizationManager.odnoklassnikiAuth();
+            waitUntilAuthSocialOptions(new Runnable() {
+                @Override public void run() {
+                    mAuthorizationManager.odnoklassnikiAuth();
+                }
+            });
+        }
+    }
+
+    private void waitUntilAuthSocialOptions(final Runnable runnable) {
+        AppSocialAppsIds ids = App.getAppSocialAppsIds();
+        if (ids == null) {
+            App.from(getActivity()).createAppSocialAppsIdsRequest(new SimpleApiHandler() {
+                @Override public void success(IApiResponse response) {
+                    super.success(response);
+                    runnable.run();
+                }
+            });
+        } else {
+            runnable.run();
         }
     }
 

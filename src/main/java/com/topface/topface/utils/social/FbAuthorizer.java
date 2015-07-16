@@ -15,45 +15,42 @@ import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.utils.config.SessionConfig;
 
-import java.util.Arrays;
-
 /**
  * Class that starts Facebook authorization
  */
 public class FbAuthorizer extends Authorizer {
 
-    private String[] FB_PERMISSIONS = {"user_photos", "email", "user_birthday", "public_profile", "user_location", "user_friends"};
-
+    public static final String[] PERMISSIONS = new String[]{"email", "public_profile", "user_friends"};
     private UiLifecycleHelper mUiHelper;
     private Request mRequest;
     private Session.StatusCallback mStatusCallback;
 
     private Request getRequest(final Session session, final Intent intent) {
         mRequest = Request.newMeRequest(session, new Request.GraphUserCallback() {
-                @Override
-                public void onCompleted(GraphUser user, Response response) {
-                    if (user != null) {
-                        if (AuthToken.getInstance().isEmpty()) {
-                            AuthToken.getInstance().saveToken(
-                                    AuthToken.SN_FACEBOOK,
-                                    user.getId(),
-                                    session.getAccessToken(),
-                                    session.getExpirationDate().toString()
-                            );
+            @Override
+            public void onCompleted(GraphUser user, Response response) {
+                if (user != null) {
+                    if (AuthToken.getInstance().isEmpty()) {
+                        AuthToken.getInstance().saveToken(
+                                AuthToken.SN_FACEBOOK,
+                                user.getId(),
+                                session.getAccessToken(),
+                                session.getExpirationDate().toString()
+                        );
 
-                            String name = user.getFirstName() + " " + user.getLastName();
-                            SessionConfig sessionConfig = App.getSessionConfig();
-                            sessionConfig.setSocialAccountName(name);
-                            sessionConfig.saveConfig();
+                        String name = user.getFirstName() + " " + user.getLastName();
+                        SessionConfig sessionConfig = App.getSessionConfig();
+                        sessionConfig.setSocialAccountName(name);
+                        sessionConfig.saveConfig();
 
-                            intent.putExtra(TOKEN_STATUS, TOKEN_READY);
-                        }
-                    } else if (AuthToken.getInstance().isEmpty()) {
-                        intent.putExtra(TOKEN_STATUS, TOKEN_FAILED);
+                        intent.putExtra(TOKEN_STATUS, TOKEN_READY);
                     }
-                    broadcastAuthTokenStatus(intent);
+                } else if (AuthToken.getInstance().isEmpty()) {
+                    intent.putExtra(TOKEN_STATUS, TOKEN_FAILED);
                 }
-            });
+                broadcastAuthTokenStatus(intent);
+            }
+        });
         return mRequest;
     }
 
@@ -128,16 +125,19 @@ public class FbAuthorizer extends Authorizer {
     @Override
     public void authorize() {
         Session session = Session.getActiveSession();
-        if (App.getAppConfig().getStageChecked()) {
-            session = new Session.Builder(App.getContext()).setApplicationId(Static.STAGE_AUTH_FACEBOOK_ID).build();
+        if (!(session != null && !session.isOpened() && !session.isClosed() && session.getApplicationId().equals(getFbId()))) {
+            session = (new Session.Builder(getActivity())).setApplicationId(getFbId()).build();
             Session.setActiveSession(session);
         }
-        if (session != null && !session.isOpened() && !session.isClosed()) {
-            session.openForRead(new Session.OpenRequest(getActivity())
-                    .setPermissions(Arrays.asList(FB_PERMISSIONS)).setCallback(getStatusCallback()));
-        } else {
-            Session.openActiveSession(getActivity(), true, Arrays.asList(FB_PERMISSIONS), getStatusCallback());
-        }
+        session.openForRead((new Session.OpenRequest(getActivity()))
+                .setCallback(getStatusCallback())
+                .setPermissions(PERMISSIONS));
+    }
+
+    public static String getFbId() {
+        return App.getAppConfig().getStageChecked()
+                ? Static.STAGE_AUTH_FACEBOOK_ID
+                : App.getAppSocialAppsIds().fbId;
     }
 
     @Override
