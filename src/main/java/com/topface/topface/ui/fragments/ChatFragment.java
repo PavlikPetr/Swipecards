@@ -323,7 +323,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         }
                     }
                 }
-                Intent intent = new Intent(CountersManager.UPDATE_COUNTERS);
+                Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ);
                 intent.putExtra(LOADED_MESSAGES, loadedItemsCount);
                 intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
                 LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);

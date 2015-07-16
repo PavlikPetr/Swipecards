@@ -1,13 +1,10 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +18,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.BalanceData;
+import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.FeedListData;
@@ -74,12 +72,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         }
     };
     private Subscription mBalanceSubscription;
-    private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateTitleWithCounter();
-        }
-    };
 
     @Override
     protected boolean isReadFeedItems() {
@@ -94,23 +86,14 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
+    protected void onCountersUpdated(CountersData countersData) {
+        updateTitleWithCounter(countersData);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         mBalanceSubscription.unsubscribe();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(mCountersReceiver);
     }
 
     @Override
@@ -192,12 +175,12 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         }
     }
 
-    private void updateTitleWithCounter() {
+    private void updateTitleWithCounter(CountersData countersData) {
         if (mTitleWithCounter != null) {
             String title = Utils.getQuantityString(
                     R.plurals.you_were_liked,
-                    CacheProfile.unread_likes,
-                    CacheProfile.unread_likes
+                    countersData.likes,
+                    countersData.likes
             );
             mTitleWithCounter.setText(title);
         }
@@ -208,7 +191,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         View currentView = viewFlipper.getChildAt(1);
         if (currentView != null) {
             mTitleWithCounter = (TextView) currentView.findViewById(R.id.tvTitle);
-            updateTitleWithCounter();
+            updateTitleWithCounter(null);
             currentView.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -456,7 +439,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     @Override
     protected int getUnreadCounter() {
-        return CacheProfile.unread_likes;
+        return mCountersData.likes;
     }
 
     @Override
