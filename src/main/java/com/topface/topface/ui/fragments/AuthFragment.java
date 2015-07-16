@@ -131,8 +131,8 @@ public class AuthFragment extends BaseAuthFragment {
         ObjectAnimator.ofFloat(mAuthGroup, TRANSLATION_Y, 0, Utils.getPxFromDp(ANIMATION_PATH))
                 .setDuration(ANIMATION_DURATION).start();
         mIsNeedAnimate = true;
-        setSocNetBtnVisibility(false);
-        setTfLoginBtnVisibility(true);
+        setSocNetBtnVisibility(false, true);
+        setTfLoginBtnVisibility(true, true);
         mIsNeedAnimate = false;
     }
 
@@ -158,13 +158,15 @@ public class AuthFragment extends BaseAuthFragment {
                 .setDuration(ANIMATION_DURATION).start();
         mTfAuthBack.setVisibility(View.GONE);
         mIsNeedAnimate = true;
-        setSocNetBtnVisibility(true);
-        setTfLoginBtnVisibility(false);
+        setSocNetBtnVisibility(true, false);
+        setTfLoginBtnVisibility(false, false);
         mIsNeedAnimate = false;
     }
 
-    private void setSocNetBtnVisibility(boolean visibility) {
-        mIsSocNetBtnHidden = visibility;
+    private void setSocNetBtnVisibility(boolean visibility, boolean isNeedChangeFlagState) {
+        if(isNeedChangeFlagState){
+            mIsSocNetBtnHidden = visibility;
+        }
         if (mBtnsController == null || !isAdded()) {
             return;
         }
@@ -186,9 +188,11 @@ public class AuthFragment extends BaseAuthFragment {
         setVisibilityAndAnmateView(mTfAccount, visibility);
     }
 
-    private void setTfLoginBtnVisibility(boolean visibility) {
+    private void setTfLoginBtnVisibility(boolean visibility, boolean isNeedChangeFlagState) {
         if (isAdded()) {
-            mIsTfBtnHidden = visibility;
+            if(isNeedChangeFlagState){
+                mIsTfBtnHidden = visibility;
+            }
             setVisibilityAndAnmateView(mSignIn, visibility);
             setVisibilityAndAnmateView(mCreateTfAccount, visibility);
         }
@@ -246,8 +250,8 @@ public class AuthFragment extends BaseAuthFragment {
         View root = inflater.inflate(R.layout.fragment_auth, null);
         ButterKnife.bind(this, root);
         if (savedInstanceState != null) {
-            setSocNetBtnVisibility(savedInstanceState.getBoolean(SOC_NET_BTNS_HIDDEN));
-            setTfLoginBtnVisibility(savedInstanceState.getBoolean(TF_BTNS_HIDDEN));
+            setSocNetBtnVisibility(savedInstanceState.getBoolean(SOC_NET_BTNS_HIDDEN), true);
+            setTfLoginBtnVisibility(savedInstanceState.getBoolean(TF_BTNS_HIDDEN), true);
         }
         initViews(root);
 
@@ -258,7 +262,7 @@ public class AuthFragment extends BaseAuthFragment {
     protected void initViews(final View root) {
         super.initViews(root);
         mBtnsController = new AuthButtonsController(getActivity());
-        setSocNetBtnVisibility(true);
+        setSocNetBtnVisibility(true, true);
     }
 
     @Override
@@ -298,8 +302,8 @@ public class AuthFragment extends BaseAuthFragment {
             if (!authToken.isEmpty()) {
                 auth(AuthToken.getInstance());
             } else if (TextUtils.equals(data.getAction(), VKOpenAuthActivity.VK_RESULT_INTENT_NAME)) {
-                setTfLoginBtnVisibility(mIsSocNetBtnHidden);
-                setTfLoginBtnVisibility(mIsTfBtnHidden);
+                setTfLoginBtnVisibility(mIsSocNetBtnHidden, true);
+                setTfLoginBtnVisibility(mIsTfBtnHidden, true);
                 hideProgress();
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -317,15 +321,15 @@ public class AuthFragment extends BaseAuthFragment {
     @Override
     protected void showButtons() {
         mLogo.setVisibility(View.VISIBLE);
-        setSocNetBtnVisibility(mIsSocNetBtnHidden);
-        setTfLoginBtnVisibility(mIsTfBtnHidden);
+        setSocNetBtnVisibility(mIsSocNetBtnHidden, true);
+        setTfLoginBtnVisibility(mIsTfBtnHidden, true);
     }
 
     @Override
     protected void hideButtons() {
         if (isAdded()) {
-            setSocNetBtnVisibility(false);
-            setTfLoginBtnVisibility(false);
+            setSocNetBtnVisibility(false,false);
+            setTfLoginBtnVisibility(false,false);
             hideRetrier();
             mProgressBar.setVisibility(View.VISIBLE);
         }
@@ -393,8 +397,8 @@ public class AuthFragment extends BaseAuthFragment {
     @Override
     public void onResume() {
         super.onResume();
-        setSocNetBtnVisibility(mIsSocNetBtnHidden);
-        setTfLoginBtnVisibility(mIsTfBtnHidden);
+            setSocNetBtnVisibility(mIsSocNetBtnHidden, true);
+            setTfLoginBtnVisibility(mIsTfBtnHidden, true);
         mAuthorizationManager.onResume();
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

@@ -34,7 +34,7 @@
 
         <LinearLayout
             android:id="@id/ivAuthGroup"
-            android:layout_width="236dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:gravity="center"
@@ -70,6 +70,7 @@
                 android:id="@+id/btnTfAccount"
                 style="@style/AuthButtonWhite"
                 android:layout_marginTop="44dp"
+                android:layout_marginBottom="5dp"
                 android:gravity="center"
                 android:text="@string/auth_btn_tf"
                 android:textColor="#03A9F4" />
@@ -86,6 +87,7 @@
                 android:id="@+id/btnCreateAccount"
                 style="@style/AuthButtonGray"
                 android:layout_marginTop="16dp"
+                android:layout_marginBottom="5dp"
                 android:drawableLeft="@drawable/ic_add"
                 android:text="@string/create_account"
                 android:textColor="#4B4B4B" />
