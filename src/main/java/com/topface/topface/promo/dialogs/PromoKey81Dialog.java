@@ -18,7 +18,7 @@ public class PromoKey81Dialog extends PromoDialog {
         int curVisitCounter = mCountersData.admirations;
         if (curVisitCounter == 0) {
             mCountersData.visitors = mCountersData.admirations + getPremiumEntity().getCount();
-            appState.setData(mCountersData);
+            mAppState.setData(mCountersData);
             counterUpdated = true;
         }
     }
@@ -56,7 +56,7 @@ public class PromoKey81Dialog extends PromoDialog {
         AdmirationsReadedRequest request = new AdmirationsReadedRequest(getActivity());
         if (counterUpdated) {
             mCountersData.visitors = mCountersData.admirations - getPremiumEntity().getCount();
-            appState.setData(mCountersData);
+            mAppState.setData(mCountersData);
         }
         request.exec();
     }

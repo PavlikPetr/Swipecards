@@ -18,7 +18,7 @@ public class PromoKey71Dialog extends PromoDialog {
         int curVisitCounter = mCountersData.visitors;
         if (curVisitCounter == 0) {
             mCountersData.visitors = mCountersData.visitors + getPremiumEntity().getCount();
-            appState.setData(mCountersData);
+            mAppState.setData(mCountersData);
             counterUpdated = true;
         }
     }
@@ -59,7 +59,7 @@ public class PromoKey71Dialog extends PromoDialog {
         //Откручиваем счетчик назад
         if (counterUpdated) {
             mCountersData.visitors = mCountersData.visitors - getPremiumEntity().getCount();
-            appState.setData(mCountersData);
+            mAppState.setData(mCountersData);
         }
     }
 }

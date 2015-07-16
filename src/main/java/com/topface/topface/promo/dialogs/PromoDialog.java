@@ -32,7 +32,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
 
     private OnCloseListener mListener;
     @Inject
-    TopfaceAppState appState;
+    TopfaceAppState mAppState;
     protected CountersData mCountersData;
     private Subscription mSubscription;
 
@@ -72,7 +72,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.from(getActivity()).inject(this);
-        mSubscription = appState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
+        mSubscription = mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
             @Override
             public void call(CountersData countersData) {
                 mCountersData = countersData;
