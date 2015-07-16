@@ -17,7 +17,7 @@ public class DatingLockPopupAction extends DailyPopupAction {
         super(App.getContext());
         mFragmentManager = fragmentManager;
         mDatingLockPopupRedirect = listener;
-        mPriority  = priority;
+        mPriority = priority;
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -90,6 +91,7 @@ import static com.topface.topface.utils.CountersManager.NULL_METHOD;
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         implements FeedAdapter.OnAvatarClickListener<T>, IPageWithAds {
     private static final int FEED_MULTI_SELECTION_LIMIT = 100;
+    private static final int FIRST_SHOW_LIST_DELAY = 500;
 
     private static final String FEEDS = "FEEDS";
     private static final String POSITION = "POSITION";
@@ -97,6 +99,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private static final String BLACK_LIST_USER = "black_list_user";
     private static final String FEED_AD = "FEED_AD";
     public static final String REFRESH_DIALOGS = "refresh_dialogs";
+    private static final String FEED_COUNTER = "counter";
+    private static final String FEED_COUNTER_CHANGED = "counter_changed";
+    private static final String FEED_LAST_UNREAD_STATE = "last_unread_state";
 
     private int currentCounter;
     private boolean isCurrentCounterChanged;
@@ -110,6 +115,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private RelativeLayout mContainer;
     private BroadcastReceiver mReadItemReceiver;
     private BannersController mBannersController;
+    private Boolean isNeedFirstShowListDelay = null;
+    private CountDownTimer mListShowDelayCountDownTimer;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -301,12 +308,16 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        stopListShowDelayTimer();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mRefreshReceiver);
     }
 
     @SuppressWarnings("unchecked")
     protected void restoreInstanceState(Bundle saved) {
         if (saved != null) {
+            mLastUnreadState = saved.getParcelable(FEED_LAST_UNREAD_STATE);
+            isCurrentCounterChanged = saved.getBoolean(FEED_COUNTER_CHANGED);
+            currentCounter = saved.getInt(FEED_COUNTER);
             mIdForRemove = saved.getInt(BLACK_LIST_USER);
             if (CacheProfile.show_ad) {
                 mListAdapter.setHasFeedAd(saved.getBoolean(HAS_AD));
@@ -451,6 +462,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             outState.putBoolean(HAS_AD, mListAdapter.hasFeedAd());
             outState.putParcelable(FEED_AD, mListAdapter.getFeedAd());
             outState.putInt(BLACK_LIST_USER, mIdForRemove);
+            outState.putInt(FEED_COUNTER, currentCounter);
+            outState.putBoolean(FEED_COUNTER_CHANGED, isCurrentCounterChanged);
+            outState.putParcelable(FEED_LAST_UNREAD_STATE, mLastUnreadState);
         }
     }
 
@@ -845,7 +859,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
         onUpdateSuccess(isPullToRefreshUpdating || isHistoryLoad);
         mListView.onRefreshComplete();
-        mListView.setVisibility(View.VISIBLE);
+        showListViewWithSuccessResponse();
+    }
+
+    private void showListViewWithSuccessResponse() {
+        if (getIsNeedFirstShowListDelay()) {
+            startListShowDelayTimer();
+        } else {
+            mListView.setVisibility(View.VISIBLE);
+        }
     }
 
     protected void removeOldDublicates(FeedListData<T> data) {
@@ -905,7 +927,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     protected void onUpdateSuccess(boolean isPushUpdating) {
         if (!isPushUpdating) {
-            mListView.setVisibility(View.VISIBLE);
+            showListViewWithSuccessResponse();
             mRetryView.setVisibility(View.GONE);
         }
         if (getListAdapter().isEmpty()) {
@@ -950,6 +972,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     protected abstract int getEmptyFeedLayout();
 
     protected void makeAllItemsRead() {
+        baseMakeAllItemsRead();
+    }
+
+    protected void baseMakeAllItemsRead() {
         getListAdapter().makeAllItemsRead();
     }
 
@@ -1120,5 +1146,46 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         boolean state = isCurrentCounterChanged;
         isCurrentCounterChanged = false;
         return state;
+    }
+
+    protected boolean isNeedFirstShowListDelay() {
+        return false;
+    }
+
+
+    private boolean getIsNeedFirstShowListDelay() {
+        if (isNeedFirstShowListDelay == null) {
+            isNeedFirstShowListDelay = isNeedFirstShowListDelay();
+        }
+        return isNeedFirstShowListDelay;
+    }
+
+    private void startListShowDelayTimer() {
+        stopListShowDelayTimer();
+        mListShowDelayCountDownTimer = new CountDownTimer(FIRST_SHOW_LIST_DELAY, FIRST_SHOW_LIST_DELAY) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                showListWithoutDelay();
+            }
+        }.start();
+    }
+
+    private void stopListShowDelayTimer() {
+        if (mListShowDelayCountDownTimer != null) {
+            mListShowDelayCountDownTimer.cancel();
+        }
+    }
+
+    public void showListWithoutDelay() {
+        stopListShowDelayTimer();
+        if (mListView != null) {
+            mListView.setVisibility(View.VISIBLE);
+            isNeedFirstShowListDelay = false;
+        }
     }
 }

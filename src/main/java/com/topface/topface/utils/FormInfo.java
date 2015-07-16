@@ -28,6 +28,15 @@ public class FormInfo {
         mContext = context;
     }
 
+    public int getSex() {
+        return mSex;
+    }
+
+    public int getProfileType() {
+        return mProfileType;
+    }
+
+
     public void fillFormItem(FormItem formItem) {
         String title = formItem.title;
         String data = formItem.value;

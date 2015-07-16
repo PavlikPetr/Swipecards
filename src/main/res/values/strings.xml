@@ -647,4 +647,13 @@
     <string name="status_confirmation_was_sent">Awaiting for registration</string>
     <string name="status_user_registered">Already registered</string>
     <string name="balance">Balance (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
+    <string name="trial_vip_text">Free VIP \nfor 7 days</string>
+    <string name="trial_vip_button_text">Get VIP</string>
+    
+    <string name="settings_check_vip_title">Check VIP activity</string>
+    <string name="settings_check_vip_cell">Check VIP status</string>
+    <string name="settings_check_vip_alert">Check request is sent</string>
+    
+    <string name="novice_sympathy">Send likes only to those\nwho really attract you.\nYou just might find someone special!</string>
+    <string name="novice_sympathies_bonus">You are getting %1$d likes as a gift! It means that %2$d people will give you a like and they\'ll mean it.</string>
 </resources>

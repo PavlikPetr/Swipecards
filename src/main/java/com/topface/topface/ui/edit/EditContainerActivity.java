@@ -33,13 +33,13 @@ public class EditContainerActivity extends BaseFragmentActivity {
                 break;
         }
 
-        Fragment fragmentByTag = getSupportFragmentManager().findFragmentByTag(mFragment.getClass().getCanonicalName());
+        Fragment fragmentByTag = getSupportFragmentManager().findFragmentByTag(FilterFragment.TAG);
         if (fragmentByTag != null) {
             mFragment = fragmentByTag;
         }
         if (mFragment != null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.loFrame, mFragment, mFragment.getClass().getCanonicalName()).commit();
+                    .replace(R.id.loFrame, mFragment, FilterFragment.TAG).commit();
         }
     }
 

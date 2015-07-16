@@ -39,8 +39,10 @@ import java.util.ArrayList;
 
 public class FilterFragment extends AbstractEditFragment implements OnClickListener {
 
+    private static final String FILTER_DIALOG_SHOWN = "dialog_shown";
     public static Profile mTargetUser = new User();
     public static final String INTENT_DATING_FILTER = "Topface_Dating_Filter";
+    public static String TAG = "filter_fragment_tag";
 
     private FormInfo mFormInfo;
     private DatingFilter mInitFilter;
@@ -69,7 +71,11 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     private boolean mInitFilterOnline;
 
-    private FilterListDialog.DialogRowCliCkInterface mDialogOnItemClickListener = new FilterListDialog.DialogRowCliCkInterface() {
+    public FilterListDialog.DialogRowCliCkInterface getDialogOnItemClickListener() {
+        return mDialogOnItemClickListener;
+    }
+
+    public FilterListDialog.DialogRowCliCkInterface mDialogOnItemClickListener = new FilterListDialog.DialogRowCliCkInterface() {
         @Override
         public void onRowClickListener(int id, int item) {
             switch (id) {
@@ -120,7 +126,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         // Preferences
         initFilter();
         initViews(root);
-
         return root;
     }
 
@@ -476,7 +481,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                                      FilterListDialog.DialogRowCliCkInterface listener) {
         FilterListDialog dialog = FilterListDialog.newInstance();
         dialog.setData(titleId, targetId, viewId, listener, mFormInfo);
-        dialog.show(getActivity().getSupportFragmentManager(), FilterListDialog.TAG);
+        dialog.show(getChildFragmentManager(), FilterListDialog.TAG);
     }
 
     @Override

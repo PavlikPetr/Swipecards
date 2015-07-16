@@ -106,6 +106,10 @@ public class AdmirationFragment extends LikesFragment {
         return mCountersData.admirations;
     }
 
+    @Override protected void makeAllItemsRead() {
+        baseMakeAllItemsRead();
+    }
+
     @Override
     protected boolean isReadFeedItems() {
         return false;

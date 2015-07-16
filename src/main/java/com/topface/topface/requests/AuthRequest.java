@@ -6,10 +6,12 @@ import android.text.TextUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.utils.social.FbAuthorizer;
+import com.topface.topface.utils.social.OkAuthorizer;
+import com.topface.topface.utils.social.VkAuthorizer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -93,8 +95,16 @@ public class AuthRequest extends PrimalAuthRequest {
         if (mAppsflyer != null) {
             data.put("appsflyer", mAppsflyer.toJsonWithConversions(App.getConversionHolder()));
         }
-        if (TextUtils.equals(mPlatform, AuthToken.SN_ODNOKLASSNIKI)) {
-            data.put("socialAppId", Static.AUTH_OK_ID);
+        switch (mPlatform) {
+            case AuthToken.SN_ODNOKLASSNIKI:
+                data.put("socialAppId", OkAuthorizer.getOkId());
+                break;
+            case AuthToken.SN_FACEBOOK:
+                data.put("socialAppId", FbAuthorizer.getFbId());
+                break;
+            case AuthToken.SN_VKONTAKTE:
+                data.put("socialAppId", VkAuthorizer.getVkId());
+                break;
         }
         return data;
     }

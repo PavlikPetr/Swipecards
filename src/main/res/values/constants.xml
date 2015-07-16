@@ -16,7 +16,9 @@
     <string name="settings_feedback_internal">Оставить отзыв</string>
     <string name="settings_low_rate_internal">low_rate_%d</string>
     <string name="feedback_subject_ban_internal">Жалоба на несправедливый бан</string>
-    <string name="usd">\u0020USD</string>
+    <string name="usd">$</string>
+    <string name="rub">р.</string>
+    <string name="eur">\u0020€</string>
     <string name="photo_is_set_tag">photo_is_set_tag</string>
 
     <string name="default_ban_time">10:00</string>
@@ -34,7 +36,7 @@
     <bool name="is_tablet">false</bool>
 
     <string name="notification_message_format">%1$s &#160;%2$s</string>
-    <string name="app_id">642883445728173</string>
+    <string name="fb_app_id">879159665497091</string>
 
     <!-- messages of ssl exception -->
     <string-array name="ssl_handshake_exception_messages">
@@ -55,4 +57,6 @@
     <array name="extra_account_types">
         <item>"com.google"</item>
     </array>
+
+    <string name="flurry_key">F5MMD85P2J58YBR27DN9</string>
 </resources>

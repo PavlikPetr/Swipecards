@@ -243,7 +243,7 @@ public class ScruffyRequestManager {
                         if (ex != null && ex.getClass() != null) {
                             ScruffyStatistics.sendScruffyConnectFailure(ex.getClass().toString());
                             HockeySender sender = getReportSender();
-                            sender.send(sender.createLocalReport(App.getContext(), ex));
+                            sender.sendDebug(sender.createLocalReport(App.getContext(), ex));
                         }
                         Debug.error("Scruffy::", ex);
                         if (listener != null) {

@@ -234,7 +234,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
-        setAnimatedView(root.findViewById(R.id.allView));
+        setAnimatedView(root.findViewById(R.id.lvChatList));
         root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
             @SuppressWarnings("ConstantConditions")
             @Override
@@ -276,7 +276,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mPopularUserLockController.setState((PopularUserChatController.SavedState) popularLockState);
             }
         }
-        updateSendMessageAbility();
+        updateSendMessageAbility(false);
         checkPopularUserLock();
         //init data
         restoreData(savedInstanceState);
@@ -352,16 +352,27 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mUser = JsonUtils.fromJson(savedInstanceState.getString(FRIEND_FEED_USER), FeedUser.class);
                 invalidateUniversalUser();
                 initOverflowMenuActions(getOverflowMenu());
-                if (wasFailed) {
-                    mLockScreen.setVisibility(View.VISIBLE);
-                } else {
-                    mLockScreen.setVisibility(View.GONE);
-                }
+                setLockScreenVisibility(wasFailed);
                 mBackgroundController.hide();
             } catch (Exception | OutOfMemoryError e) {
                 Debug.error(e);
             }
         }
+    }
+
+    private void setLockScreenVisibility(boolean isVisible) {
+        if (mLockScreen != null) {
+            if (isVisible) {
+                if (mLockScreen.getVisibility() != View.VISIBLE) {
+                    mLockScreen.setVisibility(View.VISIBLE);
+                }
+            } else {
+                if (mLockScreen.getVisibility() != View.GONE) {
+                    mLockScreen.setVisibility(View.GONE);
+                }
+            }
+        }
+        updateSendMessageAbility();
     }
 
     private void initChatHistory(View root) {
@@ -439,7 +450,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             @Override
             public void onClick(View v) {
                 update(false, "retry");
-                mLockScreen.setVisibility(View.GONE);
+                setLockScreenVisibility(false);
                 mBackgroundController.startAnimation();
             }
         }).messageFontColor(R.color.text_color_gray).noShadow().build();
@@ -465,8 +476,13 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private void updateSendMessageAbility() {
+        updateSendMessageAbility(null);
+    }
+
+    private void updateSendMessageAbility(Boolean isButtonAvailable) {
         if (mSendButton != null && mEditBox != null) {
-            mSendButton.setEnabled(!mEditBox.getText().toString().isEmpty());
+            mSendButton.setEnabled(!mEditBox.getText().toString().isEmpty() &&
+                    (mLockScreen == null || mLockScreen.getVisibility() == View.GONE) && (isButtonAvailable == null || isButtonAvailable));
         }
     }
 
@@ -604,6 +620,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 if (!data.items.isEmpty() && !isPopularLockOn) {
                     for (History message : data.items) {
                         mPopularUserLockController.setTexts(message.dialogTitle, message.blockText);
+                        mPopularUserLockController.setPhoto(mPhoto);
                         int blockStage = mPopularUserLockController.block(message);
                         if (blockStage == PopularUserChatController.FIRST_STAGE) {
                             mIsUpdating = false;
@@ -660,9 +677,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         if (!data.more && !pullToRefresh) mAdapter.forceStopLoader();
                     }
                 }
-                if (mLockScreen != null && mLockScreen.getVisibility() == View.VISIBLE) {
-                    mLockScreen.setVisibility(View.GONE);
-                }
+                setLockScreenVisibility(false);
             }
 
             @Override
@@ -673,8 +688,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             @Override
             public void fail(int codeError, IApiResponse response) {
                 FeedList<History> data = mAdapter != null ? mAdapter.getData() : null;
-                if (mLockScreen != null && (data == null || data.isEmpty())) {
-                    mLockScreen.setVisibility(View.VISIBLE);
+                if (data == null || data.isEmpty()) {
+                    setLockScreenVisibility(true);
                 }
                 wasFailed = true;
             }
