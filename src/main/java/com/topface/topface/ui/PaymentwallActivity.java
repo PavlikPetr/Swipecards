@@ -1,14 +1,11 @@
 package com.topface.topface.ui;
 
 import android.annotation.TargetApi;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
@@ -16,9 +13,11 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.BalanceData;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
 import java.io.UnsupportedEncodingException;
@@ -26,6 +25,11 @@ import java.net.URLDecoder;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
 
 public class PaymentwallActivity extends BaseFragmentActivity {
     public static final String SUCCESS_URL_PATTERN = "success_url=([^&]+)";
@@ -37,12 +41,10 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     private String mWidgetUrl;
     private TextView mCurCoins;
     private TextView mCurLikes;
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateBalanceCounters();
-        }
-    };
+    @Inject
+    TopfaceAppState mAppState;
+    private BalanceData mBalance;
+    private Subscription mBalanceSubscription;
 
     public static Intent getIntent(Context context) {
         return new Intent(context, PaymentwallActivity.class);
@@ -56,6 +58,14 @@ public class PaymentwallActivity extends BaseFragmentActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.from(this).inject(this);
+        mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
+            @Override
+            public void call(BalanceData balanceData) {
+                mBalance = balanceData;
+                updateBalanceCounters();
+            }
+        });
         initBalanceCounters();
         mWidgetUrl = getWidgetUrl();
         if (TextUtils.isEmpty(mWidgetUrl)) {
@@ -103,6 +113,14 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         }
 
         return result;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mBalanceSubscription != null) {
+            mBalanceSubscription.unsubscribe();
+        }
     }
 
     private String getWidgetUrl() {
@@ -167,13 +185,6 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     protected void onResume() {
         super.onResume();
         updateBalanceCounters();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(CountersManager.UPDATE_BALANCE));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
     }
 
     private void initBalanceCounters() {
@@ -184,9 +195,13 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     }
 
     private void updateBalanceCounters() {
-        if (mCurCoins != null && mCurLikes != null) {
-            mCurCoins.setText(Integer.toString(CacheProfile.money));
-            mCurLikes.setText(Integer.toString(CacheProfile.likes));
+        updateBalanceCounters(mBalance);
+    }
+
+    private void updateBalanceCounters(BalanceData balance) {
+        if (mCurCoins != null && mCurLikes != null && mBalance != null) {
+            mCurCoins.setText(Integer.toString(balance.money));
+            mCurLikes.setText(Integer.toString(balance.likes));
         }
     }
 }

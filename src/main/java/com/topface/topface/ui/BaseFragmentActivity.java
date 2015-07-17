@@ -116,6 +116,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         if (mGoogleAuthStarted) {
             outState.putBoolean(GOOGLE_AUTH_STARTED, true);
         }
+        mIsActivityRestoredState = false;
     }
 
     @Override
@@ -284,12 +285,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         mIsActivityRestoredState = true;
         checkProfileLoad();
         registerReauthReceiver();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mIsActivityRestoredState = false;
     }
 
     public boolean isActivityRestoredState() {
