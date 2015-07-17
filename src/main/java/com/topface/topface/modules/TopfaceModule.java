@@ -10,6 +10,7 @@ import com.topface.topface.state.CacheDataInterface;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.AddToLeaderActivity;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
@@ -75,7 +76,8 @@ import dagger.Provides;
                 PhotoBlogFragment.class,
                 PromoDialog.class,
                 PromoKey71Dialog.class,
-                PromoKey81Dialog.class
+                PromoKey81Dialog.class,
+                PaymentwallActivity.class
         }
 )
 public class TopfaceModule {
