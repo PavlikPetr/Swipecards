@@ -245,7 +245,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         if (getAdapter().getCount() > 0) {
             if (mCoins < buttonData.price) {
                 showPurchasesFragment(buttonData.price);
-            } else if (selectedPhotoId != LeadersPhotoGridAdapter.EMPTY_SELECTED_ID) {
+            } else if (selectedPhotoId > LeadersPhotoGridAdapter.EMPTY_SELECTED_ID) {
                 mLoadingLocker.setVisibility(View.VISIBLE);
                 new AddPhotoFeedRequest(selectedPhotoId, AddToLeaderActivity.this, buttonData.photoCount, mEditText.getText().toString(), (long) buttonData.price)
                         .callback(new ApiHandler() {
@@ -258,19 +258,16 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                             @Override
                             public void fail(int codeError, IApiResponse response) {
                                 mLoadingLocker.setVisibility(View.GONE);
-                                switch (codeError) {
-                                    case ErrorCodes.PAYMENT:
-                                        showPurchasesFragment(buttonData.price);
-                                        break;
-                                    default:
-                                        Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
-                                        break;
+                                if (codeError == ErrorCodes.PAYMENT) {
+                                    showPurchasesFragment(buttonData.price);
+                                } else {
+                                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }).exec();
 
             } else {
-                Toast.makeText(AddToLeaderActivity.this, R.string.leaders_need_photo, Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getContext(), R.string.leaders_need_photo, Toast.LENGTH_SHORT).show();
             }
         } else {
             showPhotoHelper(getString(R.string.add_photo_before), true);
