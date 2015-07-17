@@ -67,10 +67,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
-
-import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
