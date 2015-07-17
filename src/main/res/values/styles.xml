@@ -137,6 +137,7 @@
 
     <style name="ButtonWhiteText" parent="ItemTitleText">
         <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps" tools:ignore="NewApi">false</item>
     </style>
 
     <style name="ButtonWhiteText.Mini">

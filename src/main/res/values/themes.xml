@@ -16,8 +16,6 @@
 
         <item name="android:windowTitleStyle">@style/CenterJustifyDialogTitle</item>
 
-        <item name="android:windowAnimationStyle">@null</item>
-
         <!-- Тема индикаторов для ViewPager -->
         <item name="android:textAppearanceLarge">@style/TopfaceTextAppearance.Large</item>
         <item name="android:textAppearanceMedium">@style/TopfaceTextAppearance.Medium</item>
@@ -39,14 +37,14 @@
         <item name="blueButtonStyle">@style/BlueBonusButton</item>
         <item name="grayButtonStyle">@style/GrayBonusButton</item>
         <!-- ActionBar  -->
+        <item name="windowActionModeOverlay">true</item>
         <item name="actionBarStyle">@style/Widget.Topface.ActionBar</item>
         <item name="actionBarItemBackground">@drawable/bg_semitransparent_black_selector</item>
         <item name="selectableItemBackground">@drawable/bg_semitransparent_black_selector</item>
         <item name="actionBarSize">?android:attr/actionBarSize</item>
         <!-- Action Mode (CAB)-->
-        <item name="actionModeBackground">@color/bg_action_mode</item>
+        <item name="actionModeBackground">@color/action_mode_color</item>
         <item name="actionModeCloseDrawable">@drawable/ic_check</item>
-
         <item name="android:windowDrawsSystemBarBackgrounds" tools:ignore="NewApi">true</item>
     </style>
 
@@ -58,6 +56,11 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+
+    <style name="NoWindowAnimation" parent="Theme.Topface">
+        <item name="android:windowAnimationStyle">@null</item>
     </style>
 
     <style name="EditDialog" parent="Theme.Topface">
@@ -165,7 +168,7 @@
         <item name="android:windowBackground">@color/album_background</item>
     </style>
 
-    <style name="Theme.Topface.Chat">
+    <style name="Theme.Topface.Chat" parent="NoWindowAnimation">
         <item name="android:windowBackground">@color/bg_white</item>
     </style>
 

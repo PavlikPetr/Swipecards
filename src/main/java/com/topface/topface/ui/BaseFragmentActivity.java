@@ -54,8 +54,10 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
     private BroadcastReceiver mReauthReceiver;
     private boolean mNeedAnimate = true;
+    private boolean mIsActivityRestoredState = false;
     private BroadcastReceiver mProfileLoadReceiver;
     private StartActionsController mStartActionsController;
+    private Toolbar mToolbar;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -80,9 +82,9 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         if (mHasContent) {
             setContentView(getContentLayout());
         }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (mToolbar != null) {
+            setSupportActionBar(mToolbar);
         }
         Intent intent = getIntent();
         if (intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false)) {
@@ -92,6 +94,12 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
         LocaleConfig.updateConfiguration(getBaseContext());
         initActionBar(getSupportActionBar());
+    }
+
+    public void setToolBarVisibility(boolean isVisible) {
+        if (mToolbar != null) {
+            mToolbar.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+        }
     }
 
     protected abstract int getContentLayout();
@@ -273,8 +281,19 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         http://stackoverflow.com/questions/16265733/failure-delivering-result-onactivityforresult
          */
         super.onResumeFragments();
+        mIsActivityRestoredState = true;
         checkProfileLoad();
         registerReauthReceiver();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mIsActivityRestoredState = false;
+    }
+
+    public boolean isActivityRestoredState() {
+        return mIsActivityRestoredState;
     }
 
     private void registerReauthReceiver() {

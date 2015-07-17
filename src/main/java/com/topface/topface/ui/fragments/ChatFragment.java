@@ -298,6 +298,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     @Override
+    protected boolean isNeedShowOverflowMenu() {
+        return true;
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         if (isAdded()) {
@@ -874,9 +879,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     Bundle extras = data.getExtras();
                     if (extras != null) {
                         SendGiftAnswer sendGiftAnswer = extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
-                        sendGiftAnswer.history.target = FeedDialog.OUTPUT_USER_MESSAGE;
-                        addSentMessage(sendGiftAnswer.history, null);
-                        onNewMessageAdded(sendGiftAnswer.history);
+                        if (sendGiftAnswer != null) {
+                            sendGiftAnswer.history.target = FeedDialog.OUTPUT_USER_MESSAGE;
+                            addSentMessage(sendGiftAnswer.history, null);
+                            onNewMessageAdded(sendGiftAnswer.history);
+                        }
                         LocalBroadcastManager.getInstance(getActivity())
                                 .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
                     }

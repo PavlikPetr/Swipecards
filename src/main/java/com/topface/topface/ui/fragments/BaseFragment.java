@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -109,6 +110,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void setStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getActivity().getWindow().setStatusBarColor(getResources().getColor(getStatusBarColor()));
