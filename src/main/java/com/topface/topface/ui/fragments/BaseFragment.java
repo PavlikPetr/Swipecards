@@ -31,6 +31,8 @@ import com.topface.topface.utils.http.IRequestClient;
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 
+import butterknife.ButterKnife;
+
 public abstract class BaseFragment extends TrackedFragment implements IRequestClient {
 
     private static final String STATE_NEED_TITLES = "STATE_NEED_TITLES";
@@ -75,6 +77,12 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         clearPreviousState();
         mTitleSetter = new ActionBarTitleSetterDelegate(getSupportActionBar());
         refreshActionBarTitles();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 
     @Override
@@ -233,6 +241,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         return null;
     }
 
+    @SuppressWarnings("deprecation")
     protected ActionBar getSupportActionBar() {
         if (mSupportActionBar == null) {
             Activity activity = getActivity();
@@ -243,6 +252,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         return mSupportActionBar;
     }
 
+    @SuppressWarnings("deprecation")
     protected void setSupportProgressBarIndeterminateVisibility(boolean visible) {
         Activity activity = getActivity();
 

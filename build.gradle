@@ -162,7 +162,7 @@ android {
         checkReleaseBuilds true
         //Отключено, что бы не валилась сборка на CI сервере
         abortOnError false
-
+        disable 'InvalidPackage'
         //Отключаем ненужные нам проверки lint
         ignore "MissingTranslation", //Об отсутсвующих переводах. У нас есть всегда языки без переводов
                 "ContentDescription", //О том что к каждой картинке нужно описание
@@ -187,6 +187,7 @@ dependencies {
     compile "com.google.android.gms:play-services-base:7.3.0"
     compile "com.google.android.gms:play-services-gcm:7.3.0"
     compile "com.google.android.gms:play-services-ads:7.3.0"
+    compile 'com.jakewharton:butterknife:7.0.1'
     //All jar libs
     compile fileTree(dir: 'libs', exclude: 'amazon/*.jar', include: '*.jar')
     //Testing

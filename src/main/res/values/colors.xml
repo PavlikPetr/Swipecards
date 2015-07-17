@@ -70,8 +70,7 @@
 
     <!--filter light edit form dialog background selector color-->
     <color name="edit_form_selector_background_color_release_state">#FFFFFF</color>
-    <color name="edit_form_selector_background_color_pressed_state">@color/blue_holo_selected
-    </color>
+    <color name="edit_form_selector_background_color_pressed_state">@color/blue_holo_selected</color>
 
     <!--filter fragment dividers color-->
     <color name="filter_fragment_divider_color">#E2E2E2</color>
@@ -110,4 +109,8 @@
     <color name="button_red_text_pressed_color">#FFFFFF</color>
     <color name="button_red_text_released_color">#FFFFFF</color>
     <color name="button_red_text_disable_color">#FFFFFF</color>
+
+    <color name="auth_progressbar_color">#03A9F4</color>
+    <color name="text_gray">#4B4B4B</color>
+
 </resources>
