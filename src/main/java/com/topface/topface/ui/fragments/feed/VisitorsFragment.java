@@ -90,7 +90,7 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
 
     @Override
     protected int getUnreadCounter() {
-        return CacheProfile.unread_visitors;
+        return mCountersData.visitors;
     }
 
     @Override
