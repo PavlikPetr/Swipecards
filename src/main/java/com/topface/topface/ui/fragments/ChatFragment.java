@@ -39,6 +39,7 @@ import com.nhaarman.listviewanimations.appearance.ChatListAnimatedAdapter;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
 import com.topface.framework.JsonUtils;
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -85,9 +86,12 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
 import com.topface.topface.utils.controllers.PopularUserChatController;
+import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.social.AuthToken;
+
+import org.acra.sender.ReportSenderException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,6 +119,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private static final String HISTORY_CHAT = "history_chat";
     private static final String SOFT_KEYBOARD_LOCK_STATE = "keyboard_state";
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
+    public static final String FROM = "from";
 
     // Data
     private int mUserId;
@@ -142,6 +147,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private String mItemId;
     private String mInitialMessage;
     private boolean wasFailed = false;
+    private String mFrom;
 
     TimerTask mUpdaterTask = new TimerTask() {
         @Override
@@ -149,7 +155,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             updateUI(new Runnable() {
                 @Override
                 public void run() {
-                    if (mUpdater != null && !wasFailed) {
+                    if (mUpdater != null && !wasFailed && mUserId > 0) {
                         update(true, "timer");
                         mUpdater.postDelayed(this, DEFAULT_CHAT_UPDATE_PERIOD);
                     }
@@ -218,6 +224,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         mUserNameAndAge = args.getString(INTENT_USER_NAME_AND_AGE);
         mInitialMessage = args.getString(INITIAL_MESSAGE);
         mPhoto = args.getParcelable(INTENT_AVATAR);
+        mFrom = args.getString(FROM);
         // only DialogsFragment will hear this
         Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ_BY_UID);
         intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
@@ -597,8 +604,22 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
             @Override
             public void exec() {
-                mIsUpdating = true;
-                super.exec();
+                if (mUserId > 0) {
+                    mIsUpdating = true;
+                    super.exec();
+                } else {
+                    new BackgroundThread() {
+                        @Override
+                        public void execute() {
+                            HockeySender sender = new HockeySender();
+                            try {
+                                sender.send(getContext(), sender.createLocalReport(getContext(), new Exception("User id -1 from " + mFrom)));
+                            } catch (ReportSenderException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    };
+                }
             }
         };
 
@@ -1117,4 +1138,5 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     protected boolean isAnimationRequire() {
         return true;
     }
+
 }
