@@ -66,7 +66,7 @@ public class AppState {
     }
 
     public <T> boolean isEqualData(Class<T> dataClass, T data){
-        return data.equals(getData(dataClass));
+        return getData(dataClass).equals(data);
     }
 
     private <T> T getData(Class<T> dataClass) {

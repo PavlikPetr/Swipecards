@@ -53,14 +53,18 @@ public class CountersData {
     }
 
     @Override
-    public boolean equals(Object data) {
-        return ((CountersData) data).likes == likes &&
-                ((CountersData) data).mutual == mutual &&
-                ((CountersData) data).dialogs == dialogs &&
-                ((CountersData) data).visitors == visitors &&
-                ((CountersData) data).fans == fans &&
-                ((CountersData) data).admirations == admirations &&
-                ((CountersData) data).peopleNearby == peopleNearby;
+    public boolean equals(Object obj) {
+        if(obj == null){
+            return true;
+        }
+        CountersData data = (CountersData)obj;
+        return data.likes == likes &&
+                data.mutual == mutual &&
+                data.dialogs == dialogs &&
+                data.visitors == visitors &&
+                data.fans == fans &&
+                data.admirations == admirations &&
+                data.peopleNearby == peopleNearby;
     }
 
     @Override

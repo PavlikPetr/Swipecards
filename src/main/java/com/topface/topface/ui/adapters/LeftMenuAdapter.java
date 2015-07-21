@@ -192,6 +192,11 @@ public class LeftMenuAdapter extends BaseAdapter {
         return convertView;
     }
 
+    public void updateCounters(CountersData countersData){
+        mCountersData = countersData;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemViewType(int position) {
         return mItems.valueAt(position).getMenuType();
@@ -201,10 +206,6 @@ public class LeftMenuAdapter extends BaseAdapter {
     public int getViewTypeCount() {
         return TYPE_COUNT;
     }
-
-    public void setCountersData(CountersData countersData) {
-                mCountersData = countersData;
-            }
 
     private void updateCountersBadge(TextView view, int value) {
         if (view != null) {
