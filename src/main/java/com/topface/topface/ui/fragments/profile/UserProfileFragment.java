@@ -261,10 +261,10 @@ public class UserProfileFragment extends AbstractProfileFragment {
                     return new FeedListData<>(response.getJsonResult(), FeedGift.class);
                 }
             });
-            ApiRequest userAndGiftsRequest = new ParallelApiRequest(getActivity()).
-                    addRequest(userRequest).addRequest(giftsRequest).
-                    setFrom(getClass().getSimpleName()).
-                    callback(new ApiHandler() {
+            ApiRequest userAndGiftsRequest = new ParallelApiRequest(getActivity())
+                    .addRequest(userRequest).addRequest(giftsRequest)
+                    .setFrom(getClass().getSimpleName())
+                    .callback(new ApiHandler() {
                         @Override
                         public void success(IApiResponse response) {
                             if (mRequestedGifts != null) {

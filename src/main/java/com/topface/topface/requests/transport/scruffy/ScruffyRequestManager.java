@@ -14,7 +14,6 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.MultipartApiRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.statistics.ScruffyStatistics;
 import com.topface.topface.utils.debug.HockeySender;
@@ -305,17 +304,9 @@ public class ScruffyRequestManager {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override public void run() {
                 for (ScruffyRequestHolder holder : mSentRequests.values()) {
-                    if (holder.getRequest() instanceof MultipartApiRequest) {
-                        ((MultipartApiRequest) holder.getRequest()).
-                                setFrom(ScruffyRequestManager.class.getSimpleName() + "sent request");
-                    }
                     holder.getRequest().exec();
                 }
                 for (ScruffyRequestHolder holder : mPendingRequests.values()) {
-                    if (holder.getRequest() instanceof MultipartApiRequest) {
-                        ((MultipartApiRequest) holder.getRequest()).
-                                setFrom(ScruffyRequestManager.class.getSimpleName() + "pending request");
-                    }
                     holder.getRequest().exec();
                 }
             }
