@@ -55,7 +55,7 @@ public class CountersData {
     @Override
     public boolean equals(Object obj) {
         if(obj == null){
-            return true;
+            return false;
         }
         CountersData data = (CountersData)obj;
         return data.likes == likes &&
