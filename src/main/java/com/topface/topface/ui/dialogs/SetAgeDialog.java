@@ -8,6 +8,7 @@ import android.widget.Button;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.requests.MultipartApiRequest;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
@@ -51,8 +52,10 @@ public class SetAgeDialog extends AbstractDialogFragment implements View.OnClick
                 item.copy(data);
                 final SettingsRequest request = new SettingsRequest(getActivity());
                 request.age = Integer.valueOf(data.value);
-                ApiRequest updateAgeProfileRequest = new ParallelApiRequest(getActivity()).
-                        addRequest(request).addRequest(new ProfileRequest(ProfileRequest.P_ALL, App.getContext()));
+                ApiRequest updateAgeProfileRequest = new ParallelApiRequest(getActivity())
+                        .addRequest(request)
+                        .addRequest(new ProfileRequest(ProfileRequest.P_ALL, App.getContext()))
+                        .setFrom(getClass().getSimpleName());
                 updateAgeProfileRequest.exec();
             }
         };

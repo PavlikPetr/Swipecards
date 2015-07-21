@@ -3,11 +3,14 @@ package com.topface.topface.requests;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.transport.IApiTransport;
 import com.topface.topface.requests.transport.MultipartHttpApiTransport;
+import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.http.HttpUtils;
 
+import org.acra.sender.ReportSenderException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +22,7 @@ import java.util.Map;
 abstract public class MultipartApiRequest extends ApiRequest {
 
     public static final int MAX_SUBREQUESTS_NUMBER = 10;
+    private String mFrom;
 
     protected LinkedHashMap<String, IApiRequest> mRequests = new LinkedHashMap<>();
     private volatile MultipartHttpApiTransport mDefaultTransport;
@@ -128,6 +132,10 @@ abstract public class MultipartApiRequest extends ApiRequest {
         }
     }
 
+    public MultipartApiRequest setFrom(String mFrom) {
+        this.mFrom = mFrom;
+        return this;
+    }
 
     @Override
     public void exec() {
@@ -136,6 +144,20 @@ abstract public class MultipartApiRequest extends ApiRequest {
         if (mRequests.size() >= MAX_SUBREQUESTS_NUMBER) {
             throw new RuntimeException("Multiple request with " + mRequests.size() +
                     " subrequests. " + (MAX_SUBREQUESTS_NUMBER - 1) + " is maximum.");
+        }
+        if (mRequests.size() == 0) {
+            new BackgroundThread() {
+                @Override
+                public void execute() {
+                    HockeySender hockeySender = new HockeySender();
+                    try {
+                        hockeySender.send(getContext(), hockeySender.createLocalReport(getContext(), new Exception("Empty multipart request sent from : " + mFrom)));
+                    } catch (ReportSenderException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            return;
         }
         super.exec();
     }
