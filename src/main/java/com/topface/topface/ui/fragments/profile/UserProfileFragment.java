@@ -263,6 +263,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
             });
             ApiRequest userAndGiftsRequest = new ParallelApiRequest(getActivity()).
                     addRequest(userRequest).addRequest(giftsRequest).
+                    setFrom(getClass().getSimpleName()).
                     callback(new ApiHandler() {
                         @Override
                         public void success(IApiResponse response) {
@@ -283,7 +284,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
                         }
                     });
             registerRequest(userAndGiftsRequest);
-            ((MultipartApiRequest) userAndGiftsRequest).setFrom(getClass().getSimpleName());
             userAndGiftsRequest.exec();
         } else {
             onSuccess(new User(mProfileId, mSavedResponse), mSavedResponse);
