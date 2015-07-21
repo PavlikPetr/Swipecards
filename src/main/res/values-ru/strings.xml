@@ -9,6 +9,7 @@
     <string name="photofeed_title">Встать в ленту</string>
     <string name="general_warning">ПРЕДУПРЕЖДЕНИЕ</string>
     <string name="general_ok">OK</string>
+    <string name="general_any">Любой</string>
     <string name="general_settings_abbr">Настр.</string>
     <string name="general_disallow">Запретить</string>
     <string name="general_allow">Разрешить</string>
@@ -223,8 +224,7 @@
     <string name="filter_age">Выбор возраста</string>
     <string name="filter_age_start_prefix">От %s</string>
     <string name="filter_age_end_prefix">до %s</string>
-
-
+    <string name="filter_constitution_template">От %1$d до %2$d</string>
     <string name="filter_cities_all">По всем городам</string>
 
     <!-- Buying -->
@@ -792,7 +792,6 @@
     <string name="get_vip_free">Получи VIP бесплатно</string>
     <string name="buy_more_sympathies">\"Получай больше симпатий, становись популярнее\"</string>
     <string name="transaction_code_help">Если вы отправите нам код транзакции, это может помочь в выполнение вашего запроса, а так же ускорит его обработку. Подробную информацию о заказе, можно получить через <a href="https://wallet.google.com">Google-кошелек</a>.</string>
-
     <!-- ServicesManager-->
     <!-- Google -->
     <string name="google_service_general_title">Уведомления недоступны</string>

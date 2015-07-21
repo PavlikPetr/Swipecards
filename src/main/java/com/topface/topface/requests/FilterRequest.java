@@ -31,7 +31,14 @@ public class FilterRequest extends ApiRequest {
                 .put("marriage", filter.marriage)
                 .put("character", filter.character)
                 .put("alcohol", filter.alcohol);
-
+        if (filter.maxWeight != 0 && filter.minWeight != 0) {
+            data.put("maxWeight", filter.maxWeight)
+                    .put("minWeight", filter.minWeight);
+        }
+        if (filter.maxHeight != 0 && filter.minHeight != 0) {
+            data.put("maxHeight", filter.maxHeight)
+                    .put("minHeight", filter.minHeight);
+        }
         if (filter.sex == Static.GIRL) {
             data.put("breast", filter.breast);
             data.put("finances", filter.finances);
