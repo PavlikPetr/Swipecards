@@ -67,10 +67,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
-
-import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
@@ -188,7 +187,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     protected void onRegisterStartActions(StartActionsController startActionsController) {
         super.onRegisterStartActions(startActionsController);
         final SequencedStartAction sequencedStartAction = new SequencedStartAction(this, AC_PRIORITY_HIGH);
-        sequencedStartAction.addAction(new TrialVipPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH));
+        sequencedStartAction.addAction(new TrialVipPopupAction(this, AC_PRIORITY_HIGH));
         // fullscreen
         if (mFullscreenController != null) {
             sequencedStartAction.addAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));

@@ -27,7 +27,7 @@
     <string name="visitors_background_text">Нет гостей</string>
 
     <string name="chat_background_text">Входящих сообщений нет</string>
-
+    <string name="entrance">Вход</string>
     <string name="filter_only_online">Только онлайн</string>
     <string name="filter_city_age_parameters">Возраст и город</string>
     <string name="filter_select_city">Выбор города</string>
@@ -479,7 +479,9 @@
     <string name="birthdate_confirm">Пожалуйста, укажите ваш возраст, иначе вы не сможете познакомиться</string>
     <string name="set_birthdate">Указать возраст</string>
     <string name="welcome_to_topface">Добро пожаловать в Topface!</string>
-
+    <string name="im_boy">Я - парень</string>
+    <string name="im_girl">Я - девушка</string>
+    <string name="u_sex">Ваш пол</string>
     <string name="incorrect_email">Неправильно введен e-mail.</string>
     <string name="incorrect_login">Неправильно введен логин</string>
     <string name="incorrect_password">Неправильно введен пароль</string>
@@ -502,6 +504,7 @@
     <string name="photo_for_avatar">Фотография готова к отправке в профиль! Это ваша первая фотография и она будет
         использоваться как ваша аватарка.
     </string>
+    <string name="add_photo_before">Сначала необходимо добавить фото</string>
 
     <string name="change_email">Изменить e-mail</string>
     <string name="send_confirmation_email">Выслать подтверждение на e-mail</string>
@@ -597,7 +600,7 @@
         <item quantity="other">Получи VIP бесплатно за %d приглашений</item>
     </plurals>
     <string name="buy_status_and_watch_your_fans">Купите VIP-статус и узнайте, кто добавил вас в избранное</string>
-    <string name="add_bookmarks_to_be_connected">Добавляйте новых знакомых в этот раздел, и вы не потеряете с ними связь</string>
+    <string name="add_bookmarks_to_be_connected">Добавляйте новых знакомых в этот раздел и вы не потеряете с ними связь</string>
     <string name="nobody_chat_with_you_sympathies_will_help">Вам еще никто не писал. Симпатии помогут в поиске собеседника</string>
     <string name="rate_and_have_mutual_or_buy_and_chat">Обменивайтесь симпатиями или покупайте их, чтобы начать общаться прямо сейчас.</string>
 
@@ -699,6 +702,8 @@
     <string name="settings_feedback_transaction_link">где найти номер заказа?</string>
     <string name="general_logout_error">К сожалению, не удалось выйти из аккаунта</string>
     <string name="auth_btn_ok">Войти через Одноклассники</string>
+    <string name="auth_btn_tf">Аккаунт Topface</string>
+    <string name="birthday">День рождения</string>
     <string name="other_auth">Войти через другие сервисы</string>
     <string name="settings_feedback_transaction_number_hint">Введите номер заказа</string>
 
@@ -826,9 +831,9 @@
 
     <string name="trial_vip_text">Бесплатный VIP\nна 7 дней</string>
     <string name="trial_vip_button_text">Подключить VIP</string>
-    
-    <string name="settings_check_vip_title">Проверка активности VIP статуса</string>
-    <string name="settings_check_vip_cell">Проверить VIP статус</string>
+
+    <string name="settings_check_vip_title">Проверка активности VIP-статуса</string>
+    <string name="settings_check_vip_cell">Проверить VIP-статус</string>
     <string name="settings_check_vip_alert">Запрос на проверку отправлен</string>
     
     

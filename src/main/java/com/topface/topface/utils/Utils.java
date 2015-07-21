@@ -376,6 +376,7 @@ public class Utils {
         return ConnectionChangeReceiver.getConnectionType();
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static void addOnGlobalLayoutListener(final View view, final ViewTreeObserver.OnGlobalLayoutListener listener) {
         ViewTreeObserver vto = view.getViewTreeObserver();
         if (vto != null && vto.isAlive()) {

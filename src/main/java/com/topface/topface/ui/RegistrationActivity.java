@@ -1,7 +1,9 @@
 package com.topface.topface.ui;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 
+import com.topface.topface.R;
 import com.topface.topface.ui.fragments.RecoverPwdFragment;
 import com.topface.topface.ui.fragments.RegistrationFragment;
 
@@ -10,16 +12,26 @@ public class RegistrationActivity extends NoAuthActivity<RegistrationFragment> {
     public static final int INTENT_REGISTRATION = 4;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.show();
+        }
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
+    @Override
     protected String getFragmentTag() {
         return RegistrationFragment.class.getSimpleName();
     }
 
     @Override
     protected RegistrationFragment createFragment() {
-        RegistrationFragment registrationFragment = new RegistrationFragment();
+        RegistrationFragment fragment = RegistrationFragment.getInstance();
         Bundle arg = new Bundle();
         arg.putString(RecoverPwdFragment.ARG_EMAIL, getIntent().getStringExtra(RecoverPwdFragment.ARG_EMAIL));
-        registrationFragment.setArguments(arg);
-        return registrationFragment;
+        fragment.setArguments(arg);
+        return fragment;
     }
 }

@@ -61,4 +61,49 @@
         <item name="android:layout_marginBottom">@dimen/buttons_elevation_value</item>
         <item name="android:elevation">@dimen/buttons_elevation_value</item>
     </style>
+
+    <style name="AuthButtonBlue" parent="AuthButton">
+        <item name="android:drawablePadding">12dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:background">@drawable/btn_blue_selector</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="AuthButtonGray" parent="AuthButton">
+        <item name="android:drawablePadding">12dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:background">@drawable/btn_auth_gray_selector</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="AuthButtonWhite" parent="AuthButton">
+        <item name="android:background">@drawable/btn_white_selector</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="TfRegButtonBlue" parent="TfRegButton">
+        <item name="android:background">@drawable/btn_blue_selector</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="TfRegButtonGray" parent="TfRegButton">
+        <item name="android:background">@drawable/btn_auth_gray_selector</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="AuthFb" parent="AuthButton">
+        <item name="android:background">@drawable/btn_fb_selector</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="AuthVk" parent="AuthButton">
+        <item name="android:background">@drawable/btn_vk_selector</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="AuthOk" parent="AuthButton">
+        <item name="android:background">@drawable/btn_ok_selector</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
 </resources>

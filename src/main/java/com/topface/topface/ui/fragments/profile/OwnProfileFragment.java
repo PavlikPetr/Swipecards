@@ -118,6 +118,11 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     }
 
     @Override
+    protected boolean isNeedShowOverflowMenu() {
+        return false;
+    }
+
+    @Override
     protected Integer getOptionsMenuRes() {
         return R.menu.actions_avatar;
     }

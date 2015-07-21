@@ -108,7 +108,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
         mOutsideView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                closeOverflowMenu();
                 mOutsideView.setVisibility(View.GONE);
             }
         });
@@ -127,6 +126,11 @@ public class UserProfileFragment extends AbstractProfileFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         setThrownActionBarAvatar(mPhoto);
+    }
+
+    @Override
+    protected boolean isNeedShowOverflowMenu() {
+        return true;
     }
 
     @Override
@@ -462,17 +466,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
             }
             getOverflowMenu().initOverfowMenu();
         }
-    }
-
-    @Override
-    protected void onStartActivity() {
-        super.onStartActivity();
-        closeOverflowMenu();
-    }
-
-    @Override
-    public void onPageSelected(int i) {
-        closeOverflowMenu();
     }
 
     private BroadcastReceiver mGiftReceiver = new BroadcastReceiver() {
