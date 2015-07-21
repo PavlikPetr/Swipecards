@@ -148,7 +148,6 @@ public class Utils {
         return !TextUtils.isEmpty(email) && EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
 
-    @SuppressWarnings("UnusedDeclaration")
     public static void goToUrl(Context context, String url) {
         context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
