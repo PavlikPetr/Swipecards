@@ -120,7 +120,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private static final String SOFT_KEYBOARD_LOCK_STATE = "keyboard_state";
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
     public static final String FROM = "from";
-    private HockeySender mHockeySender = new HockeySender();
 
     // Data
     private int mUserId;
