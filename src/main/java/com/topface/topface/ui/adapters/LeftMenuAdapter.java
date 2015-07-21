@@ -29,7 +29,7 @@ public class LeftMenuAdapter extends BaseAdapter {
     public static final int TYPE_MENU_BUTTON_WITH_PHOTO = 2;
     private static final int TYPE_COUNT = 3;
     private final SparseArray<ILeftMenuItem> mItems;
-    private HashMap<BaseFragment.FragmentId, TextView> mCountersBadgesMap = new HashMap<>();
+    private CountersData mCountersData;
 
     public LeftMenuAdapter(SparseArray<ILeftMenuItem> items) {
         mItems = items;
@@ -143,7 +143,6 @@ public class LeftMenuAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
             // unregister previous non-visible item from updates
-            mCountersBadgesMap.remove(item.getMenuId());
             holder.item = item;
         }
         // initiate views' state in holder
@@ -152,12 +151,13 @@ public class LeftMenuAdapter extends BaseAdapter {
                 holder.btnMenu.setText(item.getMenuText());
                 holder.counterBadge.setVisibility(View.GONE);
                 holder.icon.setBackgroundResource(item.getMenuIconResId());
-                mCountersBadgesMap.remove(item.getMenuId());
                 break;
             case TYPE_MENU_BUTTON_WITH_BADGE:
                 holder.btnMenu.setText(item.getMenuText());
                 holder.icon.setBackgroundResource(item.getMenuIconResId());
-                mCountersBadgesMap.put(item.getMenuId(), holder.counterBadge);
+                if(mCountersData != null){
+                    updateCountersBadge(holder.counterBadge,mCountersData.getCounterByFragmentId(item.getMenuId()));
+                }
                 break;
             case TYPE_MENU_BUTTON_WITH_PHOTO:
                 holder.btnMenu.setText(item.getMenuText());
@@ -202,12 +202,9 @@ public class LeftMenuAdapter extends BaseAdapter {
         return TYPE_COUNT;
     }
 
-    public void updateCountersBadge(CountersData countersData) {
-        for (BaseFragment.FragmentId id : mCountersBadgesMap.keySet()) {
-            int counter = countersData.getCounterByFragmentId(id);
-            updateCountersBadge(mCountersBadgesMap.get(id), counter);
-        }
-    }
+    public void setCountersData(CountersData countersData) {
+                mCountersData = countersData;
+            }
 
     private void updateCountersBadge(TextView view, int value) {
         if (view != null) {

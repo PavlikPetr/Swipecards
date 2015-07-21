@@ -51,4 +51,28 @@ public class CountersData {
         return likes != 0 || mutual != 0 || dialogs != 0 || visitors != 0
                 || fans != 0 || admirations != 0 || peopleNearby != 0;
     }
+
+    @Override
+    public boolean equals(Object data) {
+        return ((CountersData) data).likes == likes &&
+                ((CountersData) data).mutual == mutual &&
+                ((CountersData) data).dialogs == dialogs &&
+                ((CountersData) data).visitors == visitors &&
+                ((CountersData) data).fans == fans &&
+                ((CountersData) data).admirations == admirations &&
+                ((CountersData) data).peopleNearby == peopleNearby;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 1;
+        hash = hash * 31 + likes;
+        hash = hash * 31 + mutual;
+        hash = hash * 31 + dialogs;
+        hash = hash * 31 + visitors;
+        hash = hash * 31 + fans;
+        hash = hash * 31 + admirations;
+        hash = hash * 31 + peopleNearby;
+        return hash;
+    }
 }

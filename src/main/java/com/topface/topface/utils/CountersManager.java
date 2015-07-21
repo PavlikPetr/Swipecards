@@ -60,7 +60,7 @@ public class CountersManager {
             return;
         }
         CountersData countersData = JsonUtils.fromJson(unread.toString(), CountersData.class);
-        if (countersData != null) {
+        if (countersData != null && !mAppState.isEqualData(CountersData.class, countersData)) {
             mAppState.setData(countersData);
         }
     }
