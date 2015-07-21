@@ -306,13 +306,15 @@ public class ScruffyRequestManager {
             @Override public void run() {
                 for (ScruffyRequestHolder holder : mSentRequests.values()) {
                     if (holder.getRequest() instanceof MultipartApiRequest) {
-                        ((MultipartApiRequest) holder.getRequest()).setFrom(getClass().getSimpleName() + "sent request");
+                        ((MultipartApiRequest) holder.getRequest()).
+                                setFrom(ScruffyRequestManager.class.getSimpleName() + "sent request");
                     }
                     holder.getRequest().exec();
                 }
                 for (ScruffyRequestHolder holder : mPendingRequests.values()) {
                     if (holder.getRequest() instanceof MultipartApiRequest) {
-                        ((MultipartApiRequest) holder.getRequest()).setFrom(getClass().getSimpleName() + "pending request");
+                        ((MultipartApiRequest) holder.getRequest()).
+                                setFrom(ScruffyRequestManager.class.getSimpleName() + "pending request");
                     }
                     holder.getRequest().exec();
                 }

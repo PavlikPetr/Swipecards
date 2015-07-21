@@ -53,7 +53,9 @@ public class SetAgeDialog extends AbstractDialogFragment implements View.OnClick
                 final SettingsRequest request = new SettingsRequest(getActivity());
                 request.age = Integer.valueOf(data.value);
                 ApiRequest updateAgeProfileRequest = new ParallelApiRequest(getActivity()).
-                        addRequest(request).addRequest(new ProfileRequest(ProfileRequest.P_ALL, App.getContext())).setFrom(getClass().getSimpleName());
+                        addRequest(request).
+                        addRequest(new ProfileRequest(ProfileRequest.P_ALL, App.getContext())).
+                        setFrom(getClass().getSimpleName());
                 updateAgeProfileRequest.exec();
             }
         };

@@ -109,6 +109,7 @@ public class App extends Application {
                 .addRequest(getProductsRequest())
                 .addRequest(getPaymentwallProductsRequest())
                 .addRequest(getProfileRequest(ProfileRequest.P_ALL))
+                .setFrom(App.class.getSimpleName() + " profile and options requests")
                 .callback(handler)
                 .exec();
     }
@@ -207,6 +208,7 @@ public class App extends Application {
                 .addRequest(getUserOptionsRequest())
                 .addRequest(getPaymentwallProductsRequest())
                 .addRequest(getProductsRequest())
+                .setFrom(App.class.getSimpleName() + " user options and purchases requests")
                 .exec();
     }
 
