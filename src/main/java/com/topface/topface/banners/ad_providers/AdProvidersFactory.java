@@ -12,7 +12,7 @@ public class AdProvidersFactory {
     public static final String BANNER_TOPFACE = "TOPFACE";
     public static final String BANNER_ADMOB = "ADMOB";
     public static final String BANNER_ADMOB_MEDIATION = "ADMOB_MEDIATION";
-    public static final String START_APP_ADMOB_FULLSCREEN = "START_APP_ADMOB_FULLSCREEN";
+    public static final String BANNER_ADMOB_FULLSCREEN_START_APP = "BANNER_ADMOB_FULLSCREEN_START_APP";
     public static final String BANNER_GAG = "GAG";
     public static final String BANNER_NONE = "NONE";
     public static final String[] BANNERS = new String[]{

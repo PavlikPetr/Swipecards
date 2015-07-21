@@ -31,7 +31,7 @@ import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_MEDIATION;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_NONE;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_TOPFACE;
-import static com.topface.topface.banners.ad_providers.AdProvidersFactory.START_APP_ADMOB_FULLSCREEN;
+import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_FULLSCREEN_START_APP;
 
 /**
  */
@@ -65,7 +65,7 @@ public class FullscreenController {
         @Override
         public void callOnUi() {
             if (CacheProfile.getOptions().interstitial.enabled) {
-                FullscreenController.this.requestFullscreen(START_APP_ADMOB_FULLSCREEN);
+                FullscreenController.this.requestFullscreen(BANNER_ADMOB_FULLSCREEN_START_APP);
             } else if (startPageInfo != null) {
                 FullscreenController.this.requestFullscreen(startPageInfo.getBanner());
             }
@@ -153,7 +153,7 @@ public class FullscreenController {
                 case BANNER_ADMOB_MEDIATION:
                     requestAdmobFullscreen(ADMOB_INTERSTITIAL_MEDIATION_ID);
                     break;
-                case START_APP_ADMOB_FULLSCREEN:
+                case BANNER_ADMOB_FULLSCREEN_START_APP:
                     requestAdmobFullscreen(ADMOB_INTERSTITIAL_START_APP_ID);
                     break;
                 case BANNER_TOPFACE:
