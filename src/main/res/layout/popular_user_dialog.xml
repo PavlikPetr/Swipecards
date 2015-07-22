@@ -29,7 +29,7 @@
     <Button
         android:id="@+id/unlock_message_sent"
         style="@style/Widget.Topface.Button.Big.Blue"
-        android:layout_width="179dp"
+        android:layout_width="wrap_content"
         android:layout_height="43dp"
         android:layout_below="@id/popular_user_message"
         android:layout_centerHorizontal="true"
