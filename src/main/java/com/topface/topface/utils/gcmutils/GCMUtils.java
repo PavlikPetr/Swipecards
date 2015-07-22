@@ -345,7 +345,7 @@ public class GCMUtils {
 
     private static void setCounters(Intent extra, Context context) {
         CountersManager counterManager = CountersManager.getInstance(context);
-        counterManager.setLastRequestMeethod(CountersManager.CHANGED_BY_GCM);
+        counterManager.setLastRequestMethod(CountersManager.CHANGED_BY_GCM);
         try {
             String countersStr = extra.getStringExtra("counters");
             if (countersStr != null) {
@@ -429,7 +429,7 @@ public class GCMUtils {
                     // add the same request code like Chat intent
                     i.putExtra(Static.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
                 } else {
-                    return ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city, null, null, true);
+                    return ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city, null, null, true, GCMUtils.class.getSimpleName());
                 }
                 return i;
             }

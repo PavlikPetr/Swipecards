@@ -704,7 +704,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         //Open chat activity
         if (!item.user.isEmpty()) {
             FeedUser user = item.user;
-            Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false, item.type);
+            Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false, item.type, this.getClass().getSimpleName());
             startActivityForResult(intent, ChatActivity.REQUEST_CHAT);
         }
     }
@@ -1051,7 +1051,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     private void updateDataAfterReceivingCounters() {
-        String lastMethod = CountersManager.getInstance(getActivity()).getLastRequestMeethod();
+        String lastMethod = CountersManager.getInstance(getActivity()).getLastRequestMethod();
         if (!lastMethod.equals(NULL_METHOD) && !BannerRequest.SERVICE_NAME.equals(lastMethod) &&
                 lastMethod.equals(getRequest().getServiceName())) {
             int counters = getUnreadCounter();
@@ -1059,7 +1059,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 updateData(true, false);
             }
         }
-        CountersManager.getInstance(getActivity()).setLastRequestMeethod(NULL_METHOD);
+        CountersManager.getInstance(getActivity()).setLastRequestMethod(NULL_METHOD);
     }
 
     @Override

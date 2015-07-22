@@ -84,6 +84,18 @@
             android:text="@string/filter_only_beautiful" />
 
         <include
+            android:id="@+id/loFilterHeight"
+            layout="@layout/filter_light_edit_form"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <include
+            android:id="@+id/loFilterWeight"
+            layout="@layout/filter_light_edit_form"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <include
             android:id="@+id/loFilterDatingStatus"
             layout="@layout/filter_light_edit_form"
             android:layout_width="fill_parent"

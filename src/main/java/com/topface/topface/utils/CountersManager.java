@@ -23,7 +23,6 @@ public class CountersManager {
     private Context mContext;
 
     public final static String NULL_METHOD = "null_method";
-    public final static String METHOD_INTENT_STRING = "method";
     public static final String VIP_STATUS_EXTRA = "vip_status";
 
     public final static int UNKNOWN_TYPE = -1;
@@ -47,11 +46,11 @@ public class CountersManager {
         mContext = context;
     }
 
-    public void setLastRequestMeethod(String mLastRequestMeethod) {
-        this.mLastRequestMeethod = mLastRequestMeethod;
+    public void setLastRequestMethod(String lastRequestMeethod) {
+        mLastRequestMeethod = lastRequestMeethod;
     }
 
-    public String getLastRequestMeethod() {
+    public String getLastRequestMethod() {
         return mLastRequestMeethod;
     }
 
@@ -60,7 +59,7 @@ public class CountersManager {
             return;
         }
         CountersData countersData = JsonUtils.fromJson(unread.toString(), CountersData.class);
-        if (countersData != null) {
+        if (countersData != null && !mAppState.isEqualData(CountersData.class, countersData)) {
             mAppState.setData(countersData);
         }
     }
