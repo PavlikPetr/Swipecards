@@ -10,9 +10,13 @@ import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.BalanceData;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -22,6 +26,11 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
+
 public class PaymentwallActivity extends BaseFragmentActivity {
     public static final String SUCCESS_URL_PATTERN = "success_url=([^&]+)";
     public static final int ACTION_BUY = 100;
@@ -30,6 +39,12 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     private String mSuccessUrl;
     private View mProgressBar;
     private String mWidgetUrl;
+    private TextView mCurCoins;
+    private TextView mCurLikes;
+    @Inject
+    TopfaceAppState mAppState;
+    private BalanceData mBalance;
+    private Subscription mBalanceSubscription;
 
     public static Intent getIntent(Context context) {
         return new Intent(context, PaymentwallActivity.class);
@@ -43,6 +58,15 @@ public class PaymentwallActivity extends BaseFragmentActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.from(this).inject(this);
+        mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
+            @Override
+            public void call(BalanceData balanceData) {
+                mBalance = balanceData;
+                updateBalanceCounters();
+            }
+        });
+        initBalanceCounters();
         mWidgetUrl = getWidgetUrl();
         if (TextUtils.isEmpty(mWidgetUrl)) {
             onFatalError();
@@ -89,6 +113,14 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         }
 
         return result;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mBalanceSubscription != null) {
+            mBalanceSubscription.unsubscribe();
+        }
     }
 
     private String getWidgetUrl() {
@@ -149,5 +181,27 @@ public class PaymentwallActivity extends BaseFragmentActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateBalanceCounters();
+    }
 
+    private void initBalanceCounters() {
+        findViewById(R.id.resources_layout).setVisibility(View.VISIBLE);
+        mCurCoins = (TextView) findViewById(R.id.coins_textview);
+        mCurLikes = (TextView) findViewById(R.id.likes_textview);
+        updateBalanceCounters();
+    }
+
+    private void updateBalanceCounters() {
+        updateBalanceCounters(mBalance);
+    }
+
+    private void updateBalanceCounters(BalanceData balance) {
+        if (mCurCoins != null && mCurLikes != null && mBalance != null) {
+            mCurCoins.setText(Integer.toString(balance.money));
+            mCurLikes.setText(Integer.toString(balance.likes));
+        }
+    }
 }

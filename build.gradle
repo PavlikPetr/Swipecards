@@ -162,7 +162,8 @@ android {
         checkReleaseBuilds true
         //Отключено, что бы не валилась сборка на CI сервере
         abortOnError false
-
+        //Для ButterKnife. Смотри http://jakewharton.github.io/butterknife/ раздел подключения
+        disable 'InvalidPackage'
         //Отключаем ненужные нам проверки lint
         ignore "MissingTranslation", //Об отсутсвующих переводах. У нас есть всегда языки без переводов
                 "ContentDescription", //О том что к каждой картинке нужно описание
@@ -216,6 +217,8 @@ dependencies {
     compile 'com.koushikdutta.async:androidasync:2.1.5'
     //OpenIAB
     compile 'org.onepf:openiab:0.9.8.4'
+    //View Bind
+    compile 'com.jakewharton:butterknife:7.0.1'
     //Для Амазона нужна библиотека для поддержки in-app покупок
     amazonCompile 'com.amazon:in-app-purchasing:2.0.1'
     //RxJava

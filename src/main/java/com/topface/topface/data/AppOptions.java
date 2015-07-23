@@ -158,10 +158,10 @@ public class AppOptions extends AbstractData {
         int userStringSettingMaxLength = 1024;
         int userAboutMeMaxLength = 1024;
         int userStatusMaxLength = 1024;
-        int userWeightMin = 1;
-        int userWeightMax = 999;
-        int userHeightMin = 1;
-        int userHeightMax = 999;
+        int userWeightMin = 40;
+        int userWeightMax = 160;
+        int userHeightMin = 150;
+        int userHeightMax = 220;
         int userAgeMin = 16;
         int userAgeMax = 99;
 
@@ -172,10 +172,10 @@ public class AppOptions extends AbstractData {
             userStringSettingMaxLength = json.optInt("userStringSettingMaxLength", 1024);
             userAboutMeMaxLength = json.optInt("userAboutMeMaxLength", 1024);
             userStatusMaxLength = json.optInt("userStatusMaxLength", 1024);
-            userWeightMin = json.optInt("userWeightMin", 1);
-            userWeightMax = json.optInt("userWeightMax", 999);
-            userHeightMin = json.optInt("userHeightMin", 1);
-            userHeightMax = json.optInt("userHeightMax", 999);
+            userWeightMin = json.optInt("userWeightMin", 40);
+            userWeightMax = json.optInt("userWeightMax", 160);
+            userHeightMin = json.optInt("userHeightMin", 150);
+            userHeightMax = json.optInt("userHeightMax", 220);
             userAgeMin = json.optInt("userAgeMin", 16);
             userAgeMax = json.optInt("userAgeMax", 99);
             DatingFilter.MIN_AGE = userAgeMin;

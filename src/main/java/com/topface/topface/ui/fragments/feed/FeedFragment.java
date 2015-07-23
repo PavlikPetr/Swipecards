@@ -57,6 +57,7 @@ import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -115,6 +116,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private RelativeLayout mContainer;
     private BroadcastReceiver mReadItemReceiver;
     private BannersController mBannersController;
+    private TextView mActionModeTitle;
     private Boolean isNeedFirstShowListDelay = null;
     private CountDownTimer mListShowDelayCountDownTimer;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
@@ -179,7 +181,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private ActionMode.Callback mActionActivityCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            setToolBarVisibility(false);
             mActionMode = mode;
+            mActionMode.setCustomView(getActionModeTitle());
             FeedAdapter<T> adapter = getListAdapter();
             adapter.setMultiSelectionListener(new MultiselectionController.IMultiSelectionListener() {
                 @Override
@@ -188,9 +192,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                         Utils.showToastNotification(R.string.maximum_number_of_users, Toast.LENGTH_LONG);
                     }
                     if (mActionMode != null) {
-                        mActionMode.setTitle(Utils.getQuantityString(R.plurals.selected, size, size));
+                        getActionModeTitle().setText(Utils.getQuantityString(R.plurals.selected, size, size));
                     }
                 }
+
             });
             adapter.notifyDataSetChanged();
             menu.clear();
@@ -228,8 +233,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         public void onDestroyActionMode(ActionMode mode) {
             getListAdapter().finishMultiSelection();
             mActionMode = null;
+            setToolBarVisibility(true);
         }
     };
+
     private FeedRequest.UnreadStatePair mLastUnreadState = new FeedRequest.UnreadStatePair();
     private View mInflated;
     private Subscription mCountersSubscription;
@@ -697,7 +704,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         //Open chat activity
         if (!item.user.isEmpty()) {
             FeedUser user = item.user;
-            Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false, item.type);
+            Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false, item.type, this.getClass().getSimpleName());
             startActivityForResult(intent, ChatActivity.REQUEST_CHAT);
         }
     }
@@ -1044,7 +1051,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     private void updateDataAfterReceivingCounters() {
-        String lastMethod = CountersManager.getInstance(getActivity()).getLastRequestMeethod();
+        String lastMethod = CountersManager.getInstance(getActivity()).getLastRequestMethod();
         if (!lastMethod.equals(NULL_METHOD) && !BannerRequest.SERVICE_NAME.equals(lastMethod) &&
                 lastMethod.equals(getRequest().getServiceName())) {
             int counters = getUnreadCounter();
@@ -1052,7 +1059,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 updateData(true, false);
             }
         }
-        CountersManager.getInstance(getActivity()).setLastRequestMeethod(NULL_METHOD);
+        CountersManager.getInstance(getActivity()).setLastRequestMethod(NULL_METHOD);
     }
 
     @Override
@@ -1186,6 +1193,20 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (mListView != null) {
             mListView.setVisibility(View.VISIBLE);
             isNeedFirstShowListDelay = false;
+        }
+    }
+
+    private TextView getActionModeTitle() {
+        if (mActionModeTitle == null) {
+            mActionModeTitle = (TextView) LayoutInflater.from(getActivity()).inflate(R.layout.action_mode_text, null);
+        }
+        return mActionModeTitle;
+    }
+
+    private void setToolBarVisibility(boolean isVisible) {
+        BaseFragmentActivity activity = ((BaseFragmentActivity) getActivity());
+        if (activity != null) {
+            activity.setToolBarVisibility(isVisible);
         }
     }
 }

@@ -2,6 +2,7 @@ package com.topface.topface.ui.adapters;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
 import android.view.View;
@@ -21,15 +22,13 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ResourcesUtils;
 
-import java.util.HashMap;
-
 public class LeftMenuAdapter extends BaseAdapter {
     public static final int TYPE_MENU_BUTTON = 0;
     public static final int TYPE_MENU_BUTTON_WITH_BADGE = 1;
     public static final int TYPE_MENU_BUTTON_WITH_PHOTO = 2;
     private static final int TYPE_COUNT = 3;
     private final SparseArray<ILeftMenuItem> mItems;
-    private HashMap<BaseFragment.FragmentId, TextView> mCountersBadgesMap = new HashMap<>();
+    private CountersData mCountersData;
 
     public LeftMenuAdapter(SparseArray<ILeftMenuItem> items) {
         mItems = items;
@@ -143,7 +142,6 @@ public class LeftMenuAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
             // unregister previous non-visible item from updates
-            mCountersBadgesMap.remove(item.getMenuId());
             holder.item = item;
         }
         // initiate views' state in holder
@@ -152,12 +150,13 @@ public class LeftMenuAdapter extends BaseAdapter {
                 holder.btnMenu.setText(item.getMenuText());
                 holder.counterBadge.setVisibility(View.GONE);
                 holder.icon.setBackgroundResource(item.getMenuIconResId());
-                mCountersBadgesMap.remove(item.getMenuId());
                 break;
             case TYPE_MENU_BUTTON_WITH_BADGE:
                 holder.btnMenu.setText(item.getMenuText());
                 holder.icon.setBackgroundResource(item.getMenuIconResId());
-                mCountersBadgesMap.put(item.getMenuId(), holder.counterBadge);
+                if(mCountersData != null){
+                    updateCountersBadge(holder.counterBadge,mCountersData.getCounterByFragmentId(item.getMenuId()));
+                }
                 break;
             case TYPE_MENU_BUTTON_WITH_PHOTO:
                 holder.btnMenu.setText(item.getMenuText());
@@ -192,6 +191,11 @@ public class LeftMenuAdapter extends BaseAdapter {
         return convertView;
     }
 
+    public void updateCounters(CountersData countersData){
+        mCountersData = countersData;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemViewType(int position) {
         return mItems.valueAt(position).getMenuType();
@@ -200,13 +204,6 @@ public class LeftMenuAdapter extends BaseAdapter {
     @Override
     public int getViewTypeCount() {
         return TYPE_COUNT;
-    }
-
-    public void updateCountersBadge(CountersData countersData) {
-        for (BaseFragment.FragmentId id : mCountersBadgesMap.keySet()) {
-            int counter = countersData.getCounterByFragmentId(id);
-            updateCountersBadge(mCountersBadgesMap.get(id), counter);
-        }
     }
 
     private void updateCountersBadge(TextView view, int value) {
@@ -237,8 +234,8 @@ public class LeftMenuAdapter extends BaseAdapter {
 
         void setMenuIconPhoto(Photo photo);
 
-        int getExtraIconDrawable();
+        @DrawableRes int getExtraIconDrawable();
 
-        void setExtraIconDrawable(int resId);
+        void setExtraIconDrawable(@DrawableRes int resId);
     }
 }

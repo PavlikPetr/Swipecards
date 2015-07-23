@@ -602,7 +602,9 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 for (Photo photo : newPhotos) {
                     mPhotoLinks.set(photo.getPosition(), photo);
                 }
-                CacheProfile.photos = mPhotoLinks;
+                if (mUid == CacheProfile.uid) {
+                    CacheProfile.photos = mPhotoLinks;
+                }
 
                 if (mImageSwitcher != null) {
                     mImageSwitcher.getAdapter().notifyDataSetChanged();

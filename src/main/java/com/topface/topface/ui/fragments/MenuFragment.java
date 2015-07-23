@@ -216,7 +216,7 @@ public class MenuFragment extends Fragment {
     }
 
     public void updateAdapter() {
-        initAdapter();
+        notifyDataSetChanged();
     }
 
     private void initAdapter() {
@@ -254,7 +254,7 @@ public class MenuFragment extends Fragment {
                     .subscribe(new Action1<CountersData>() {
                         @Override
                         public void call(CountersData countersData) {
-                            mAdapter.updateCountersBadge(countersData);
+                            mAdapter.updateCounters(countersData);
                         }
                     });
         }

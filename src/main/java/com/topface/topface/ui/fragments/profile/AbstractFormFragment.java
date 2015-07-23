@@ -259,7 +259,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         mUserId = userId;
         mForms = forms;
         mGifts = gifts;
-        mGiftsCount = giftsCount;
+        mGiftsCount = giftsCount < gifts.size() ? gifts.size() : giftsCount;
 
         mFormAdapter.setUserData(mStatus, mForms);
         mFormAdapter.notifyDataSetChanged();
