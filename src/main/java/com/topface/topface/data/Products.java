@@ -216,9 +216,9 @@ public class Products extends AbstractData {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
                 if (detail != null && !detail.currency.equals(USD)) {
                     double price = detail.price / ProductsDetails.MICRO_AMOUNT;
-                    value = buyBtn.totalTemplate.replace(PRICE, getPriseAndCurrencyAddrevation(decimalFormat.format(price), detail.currency));
+                    value = buyBtn.totalTemplate.replace(PRICE, getPriceAndCurrencyAddrevation(decimalFormat.format(price), detail.currency));
                 } else {
-                    value = buyBtn.totalTemplate.replace(PRICE, getPriseAndCurrencyAddrevation(String.valueOf((float) buyBtn.price / 100),USD));
+                    value = buyBtn.totalTemplate.replace(PRICE, getPriceAndCurrencyAddrevation(String.valueOf((float) buyBtn.price / 100), USD));
                 }
             }
             economy = buyBtn.hint;
@@ -417,9 +417,9 @@ public class Products extends AbstractData {
                     double tempPrice = price / amount;
                     double pricePerItem = tempPrice / 100;
                     if (titleTemplate.contains(Products.PRICE)) {
-                        title = titleTemplate.replace(Products.PRICE, getPriseAndCurrencyAddrevation(decimalFormat.format(pricePerItem), USD));
+                        title = titleTemplate.replace(Products.PRICE, getPriceAndCurrencyAddrevation(decimalFormat.format(pricePerItem), USD));
                     } else if (titleTemplate.contains(PRICE_PER_ITEM)) {
-                        title = titleTemplate.replace(PRICE_PER_ITEM, getPriseAndCurrencyAddrevation(decimalFormat.format(pricePerItem), USD));
+                        title = titleTemplate.replace(PRICE_PER_ITEM, getPriceAndCurrencyAddrevation(decimalFormat.format(pricePerItem), USD));
 
                     }
                 }
@@ -428,15 +428,15 @@ public class Products extends AbstractData {
                     if (detail != null) {
                         double price = detail.price / ProductsDetails.MICRO_AMOUNT;
                         double pricePerItem = price / amount;
-                        title = titleTemplate.replace(PRICE, getPriseAndCurrencyAddrevation(decimalFormat.format(price), detail.currency));
-                        title = title.replace(PRICE_PER_ITEM, getPriseAndCurrencyAddrevation(decimalFormat.format(pricePerItem),detail.currency));
+                        title = titleTemplate.replace(PRICE, getPriceAndCurrencyAddrevation(decimalFormat.format(price), detail.currency));
+                        title = title.replace(PRICE_PER_ITEM, getPriceAndCurrencyAddrevation(decimalFormat.format(pricePerItem), detail.currency));
                     }
                 }
             }
         }
     }
 
-    private static String getPriseAndCurrencyAddrevation(String price, String currency){
+    private static String getPriceAndCurrencyAddrevation(String price, String currency){
         switch (currency){
             case EUR:
                 return price + App.getContext().getString(R.string.eur);
@@ -445,7 +445,7 @@ public class Products extends AbstractData {
             case RUB:
                 return price + App.getContext().getString(R.string.rub);
         }
-        return currency;
+        return price + currency;
     }
 
     public static class SubscriptionBuyButton extends BuyButton {
