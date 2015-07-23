@@ -49,6 +49,24 @@
 -keep class java.util.concurrent.** { *; }
 -dontwarn java.util.concurrent.**
 
+#RxAndroid
+-dontwarn rx.internal.util.**
+-keep class rx.schedulers.Schedulers {
+    public static <methods>;
+}
+-keep class rx.schedulers.ImmediateScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.TestScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.Schedulers {
+    public static ** test();
+}
+
+# Jackson
+-dontwarn com.fasterxml.jackson.databind.ext.**
+
 #ACRA specifics
 # Restore some Source file names and restore approximate line numbers in the stack traces,
 # otherwise the stack traces are pretty useless
