@@ -2,6 +2,7 @@ package com.topface.topface.ui.adapters;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
 import android.view.View;
@@ -20,8 +21,6 @@ import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ResourcesUtils;
-
-import java.util.HashMap;
 
 public class LeftMenuAdapter extends BaseAdapter {
     public static final int TYPE_MENU_BUTTON = 0;
@@ -235,8 +234,8 @@ public class LeftMenuAdapter extends BaseAdapter {
 
         void setMenuIconPhoto(Photo photo);
 
-        int getExtraIconDrawable();
+        @DrawableRes int getExtraIconDrawable();
 
-        void setExtraIconDrawable(int resId);
+        void setExtraIconDrawable(@DrawableRes int resId);
     }
 }

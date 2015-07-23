@@ -216,7 +216,7 @@ public class MenuFragment extends Fragment {
     }
 
     public void updateAdapter() {
-        initAdapter();
+        notifyDataSetChanged();
     }
 
     private void initAdapter() {
