@@ -82,7 +82,7 @@ public class RegistrationFragment extends BaseFragment {
 
     @OnItemSelected(R.id.spnSex)
     public void sexSelected(int position) {
-        mSex = position;
+        mSex = position == Static.GIRL ? Static.GIRL : Static.BOY;
     }
 
     @OnEditorAction(R.id.etName)
@@ -139,7 +139,7 @@ public class RegistrationFragment extends BaseFragment {
 
     @Override
     protected String getTitle() {
-        return getString(R.string.create_account);
+        return getString(R.string.entrance);
     }
 
     @Override
@@ -148,7 +148,7 @@ public class RegistrationFragment extends BaseFragment {
         outState.putString(PASSWORD, mEdPassword.getText().toString());
         outState.putString(NAME, mEdName.getText().toString());
         outState.putInt(SEX, mSex);
-        outState.putString(BIRTHDAY, mBirthday.toString());
+        outState.putString(BIRTHDAY, mBirthday != null ? mBirthday.toString() : "");
         super.onSaveInstanceState(outState);
     }
 
@@ -169,7 +169,11 @@ public class RegistrationFragment extends BaseFragment {
             mEdPassword.setText(savedInstanceState.getString(PASSWORD));
             mEdName.setText(savedInstanceState.getString(NAME));
             mSex = savedInstanceState.getInt(SEX);
-            mBirthdayText.setText(savedInstanceState.getString(BIRTHDAY));
+            String birthday = savedInstanceState.getString(BIRTHDAY);
+            mBirthdayText.setText(
+                    birthday != null && !birthday.equals("")
+                    ? birthday
+                    : getString(R.string.birthday));
         }
         return root;
     }
@@ -182,8 +186,8 @@ public class RegistrationFragment extends BaseFragment {
 
     private void initSexChangeSpinner() {
         ArrayList<String> data = new ArrayList<>();
-        data.add(getActivity().getString(R.string.im_girl));
         data.add(getActivity().getString(R.string.im_boy));
+        data.add(getActivity().getString(R.string.im_girl));
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.sex_choise_item, data);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpnSex.setAdapter(adapter);
