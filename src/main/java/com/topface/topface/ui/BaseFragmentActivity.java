@@ -124,6 +124,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         super.onPostCreate(savedInstanceState);
         setWindowContentOverlayCompat();
         mStartActionsController = new StartActionsController(this);
+        onRegisterMandatoryStartActions(mStartActionsController);
         onRegisterStartActions(mStartActionsController);
     }
 
@@ -470,7 +471,15 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     }
 
     /**
-     * Method for overload where you can register start actions
+     * Method to override where you can register mandatory start actions
+     * User startActionController argument to register actions
+     * Note: actions can be placed here for global usage in all child activities
+     */
+    protected void onRegisterMandatoryStartActions(StartActionsController startActionsController) {
+    }
+
+    /**
+     * Method to override where you can register start actions
      * User startActionController argument to register actions
      * Note: actions can be placed here for global usage in all child activities
      */
