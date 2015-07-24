@@ -71,7 +71,6 @@
             <Spinner
                 android:id="@+id/spnSex"
                 android:layout_width="0dp"
-                android:background="@drawable/input_normal"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.6" />
 
@@ -82,7 +81,6 @@
                 android:layout_weight="0.4"
                 android:gravity="center"
                 android:layout_marginLeft="36dp"
-                android:background="@drawable/input_normal"
                 android:text="@string/birthday"
                 android:textColor="#234144"
                 android:textSize="16sp" />
