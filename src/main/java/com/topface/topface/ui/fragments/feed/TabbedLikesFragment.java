@@ -15,7 +15,7 @@ import com.topface.topface.utils.CacheProfile;
 public class TabbedLikesFragment extends TabbedFeedFragment {
 
     @Override
-    protected boolean isScrollable() {
+    protected boolean isScrollableTabs() {
         return true;
     }
 
@@ -44,10 +44,7 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-        TabLayout layout = (TabLayout) view.findViewById(R.id.feedTabs);
-        layout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        return view;
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override

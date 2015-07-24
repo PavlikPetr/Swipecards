@@ -102,7 +102,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         }
     };
 
-    protected abstract boolean isScrollable();
+    protected abstract boolean isScrollableTabs();
 
     private BroadcastReceiver mHasFeedAdReceiver = new BroadcastReceiver() {
         @Override
@@ -149,7 +149,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         mPager.setAdapter(mBodyPagerAdapter);
         mPager.addOnPageChangeListener(mPageChangeListener);
         mTabLayout.setupWithViewPager(mPager);
-        mTabLayout.setTabMode(isScrollable() ? TabLayout.MODE_SCROLLABLE : TabLayout.MODE_FIXED);
+        mTabLayout.setTabMode(isScrollableTabs() ? TabLayout.MODE_SCROLLABLE : TabLayout.MODE_FIXED);
         initTabView();
         setTabTitle(getLastOpenedPage());
     }
@@ -177,7 +177,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
                     , 0, counterSpannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             return TextUtils.concat(titleSpannable, " ", counterSpannable);
         }
-            return titleSpannable;
+        return titleSpannable;
     }
 
     private void initTabView() {

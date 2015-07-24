@@ -7,7 +7,7 @@ import com.topface.topface.data.CountersData;
 public class TabbedDialogsFragment extends TabbedFeedFragment {
 
     @Override
-    protected boolean isScrollable() {
+    protected boolean isScrollableTabs() {
         return false;
     }
 

@@ -12,7 +12,7 @@ public class TabbedVisitorsFragment extends TabbedFeedFragment {
     }
 
     @Override
-    protected boolean isScrollable() {
+    protected boolean isScrollableTabs() {
         return false;
     }
 
