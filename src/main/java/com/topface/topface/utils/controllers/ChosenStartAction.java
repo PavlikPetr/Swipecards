@@ -76,11 +76,11 @@ public class ChosenStartAction implements IStartAction {
     }
 
     @Override public String getActionName() {
-        String name = "";
+        StringBuilder builder = new StringBuilder();
         for (IStartAction action : mActions) {
-            name += action.getActionName() + ",";
+            builder.append(action.getActionName()).append(",");
         }
-        return name;
+        return builder.toString();
     }
 
     @Override public void setStartActionCallback(OnNextActionListener startActionCallback) {
