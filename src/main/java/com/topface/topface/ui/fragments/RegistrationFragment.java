@@ -60,7 +60,7 @@ public class RegistrationFragment extends BaseFragment {
     private static final int START_SHIFT = 33;
 
     private Date mBirthday;
-    private int mSex;
+    private int mSex = 1;
     private Timer mTimer = new Timer();
 
     @Bind(R.id.ivShowPassword)
@@ -82,7 +82,7 @@ public class RegistrationFragment extends BaseFragment {
 
     @OnItemSelected(R.id.spnSex)
     public void sexSelected(int position) {
-        mSex = position == Static.GIRL ? Static.GIRL : Static.BOY;
+        mSex = position == 1 ? Static.GIRL : Static.BOY;
     }
 
     @OnEditorAction(R.id.etName)
