@@ -87,12 +87,8 @@
         <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewStyle</item>
     </style>
 
-    <style name="Theme.Topface.ActionbarOverlay" parent="Theme.Topface">
-        <item name="windowActionBarOverlay">true</item>
-        <item name="android:windowActionBarOverlay" tools:ignore="NewApi">true</item>
-    </style>
 
-    <style name="Theme.Topface.Navigation" parent="Theme.Topface.ActionbarOverlay">
+    <style name="Theme.Topface.Navigation" parent="Theme.Topface">
         <item name="windowActionBarOverlay">true</item>
         <item name="android:windowActionBarOverlay" tools:ignore="NewApi">true</item>
         <item name="android:windowNoTitle">true</item>

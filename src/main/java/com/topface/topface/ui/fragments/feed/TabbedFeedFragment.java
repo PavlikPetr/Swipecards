@@ -158,38 +158,36 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         for (int i = 0; i < mTabLayout.getTabCount(); i++) {
             TextView textView = mViews.get(i);
             if (i == position) {
-                SpannableString title;
-                title = new SpannableString(mPagesTitles.get(i));
-                title.setSpan(new ForegroundColorSpan(getActivity().getResources().getColor(R.color.tab_text_color))
-                        , 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                if (mPagesCounters.get(i) > 0) {
-                    SpannableString counter = new SpannableString(String.valueOf(mPagesCounters.get(i)));
-                    counter.setSpan(new ForegroundColorSpan(getActivity().getResources().getColor(R.color.tab_counter_color))
-                            , 0, counter.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    textView.setText(TextUtils.concat(title, " ", counter));
-                } else {
-                    textView.setText(title);
-                }
+                textView.setText(prepareTabIndicatorTitle(mPagesTitles.get(i), mPagesCounters.get(i), true));
             } else {
-                if (mPagesCounters.get(i) > 0) {
-                    textView.setText(TextUtils.concat(mPagesTitles.get(i), " ", String.valueOf(mPagesCounters.get(i))));
-                } else {
-                    textView.setText(mPagesTitles.get(i));
-                }
+                textView.setText(prepareTabIndicatorTitle(mPagesTitles.get(i), mPagesCounters.get(i), false));
             }
         }
     }
 
-    private ArrayList<TextView> initTabView() {
+    private CharSequence prepareTabIndicatorTitle(String title, int counter, boolean isSelectedTab) {
+        SpannableString titleSpannable = new SpannableString(title);
+        titleSpannable.setSpan(new ForegroundColorSpan(isSelectedTab
+                ? getResources().getColor(R.color.tab_text_color)
+                : getResources().getColor(R.color.light_gray))
+                , 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        if (counter > 0) {
+            SpannableString counterSpannable = new SpannableString(String.valueOf(counter));
+            counterSpannable.setSpan(new ForegroundColorSpan(getActivity().getResources().getColor(R.color.tab_counter_color))
+                    , 0, counterSpannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            return TextUtils.concat(titleSpannable, " ", counterSpannable);
+        }
+            return titleSpannable;
+    }
+
+    private void initTabView() {
         mViews = new ArrayList<>();
-        View view;
         for (int i = 0; i < mPagesCounters.size(); i++) {
-            view = LayoutInflater.from(App.getContext()).inflate(R.layout.tab_indicator, null);
-            TextView textView = (TextView) view.findViewById(R.id.tab_title);
+            TextView textView = (TextView) LayoutInflater
+                    .from(App.getContext()).inflate(R.layout.tab_indicator, null);
             mViews.add(textView);
             mTabLayout.getTabAt(i).setCustomView(textView);
         }
-        return mViews;
     }
 
 
