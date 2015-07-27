@@ -397,7 +397,7 @@ public class MenuFragment extends Fragment {
         } else if (mOnFragmentSelected != null) {
             mOnFragmentSelected.onFragmentSelected(fragmentId);
         }
-        if(fragmentId == BONUS && CacheProfile.countersData!=null){
+        if (fragmentId == BONUS && CacheProfile.countersData != null) {
             mAppState.setData(CacheProfile.countersData);
         }
     }
