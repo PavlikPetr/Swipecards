@@ -136,7 +136,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
 
     @Override
     protected String getTitle() {
-        return getString(R.string.sign_in);
+        return getString(R.string.entrance);
     }
 
     @Override
