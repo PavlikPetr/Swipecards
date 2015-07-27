@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -40,11 +41,13 @@ import com.topface.topface.Static;
 import com.topface.topface.banners.BannersController;
 import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.banners.PageInfo;
+import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.BlackListAddRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -54,6 +57,8 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -66,6 +71,7 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.ad.NativeAd;
@@ -79,6 +85,11 @@ import java.lang.reflect.Type;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
+
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -86,14 +97,12 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 
 import static android.widget.AdapterView.OnItemClickListener;
-import static com.topface.topface.utils.CountersManager.METHOD_INTENT_STRING;
 import static com.topface.topface.utils.CountersManager.NULL_METHOD;
-import static com.topface.topface.utils.CountersManager.UPDATE_COUNTERS;
-import static com.topface.topface.utils.CountersManager.getInstance;
 
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         implements FeedAdapter.OnAvatarClickListener<T>, IPageWithAds {
     private static final int FEED_MULTI_SELECTION_LIMIT = 100;
+    private static final int FIRST_SHOW_LIST_DELAY = 500;
 
     private static final String FEEDS = "FEEDS";
     private static final String POSITION = "POSITION";
@@ -101,6 +110,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private static final String BLACK_LIST_USER = "black_list_user";
     private static final String FEED_AD = "FEED_AD";
     public static final String REFRESH_DIALOGS = "refresh_dialogs";
+    private static final String FEED_COUNTER = "counter";
+    private static final String FEED_COUNTER_CHANGED = "counter_changed";
+    private static final String FEED_LAST_UNREAD_STATE = "last_unread_state";
 
     private int currentCounter;
     private boolean isCurrentCounterChanged;
@@ -114,6 +126,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private RelativeLayout mContainer;
     private BroadcastReceiver mReadItemReceiver;
     private BannersController mBannersController;
+    private TextView mActionModeTitle;
+    private Boolean isNeedFirstShowListDelay = null;
+    private CountDownTimer mListShowDelayCountDownTimer;
     private Subscriber<? super FeedList<T>> mResponseSubscriber;
     private Subscription mCacheSubscription;
     private Subscription mResponseSubscription;
@@ -194,7 +209,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private ActionMode.Callback mActionActivityCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            setToolBarVisibility(false);
             mActionMode = mode;
+            mActionMode.setCustomView(getActionModeTitle());
             FeedAdapter<T> adapter = getListAdapter();
             adapter.setMultiSelectionListener(new MultiselectionController.IMultiSelectionListener() {
                 @Override
@@ -203,9 +220,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                         Utils.showToastNotification(R.string.maximum_number_of_users, Toast.LENGTH_LONG);
                     }
                     if (mActionMode != null) {
-                        mActionMode.setTitle(Utils.getQuantityString(R.plurals.selected, size, size));
+                        getActionModeTitle().setText(Utils.getQuantityString(R.plurals.selected, size, size));
                     }
                 }
+
             });
             adapter.notifyDataSetChanged();
             menu.clear();
@@ -243,10 +261,16 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         public void onDestroyActionMode(ActionMode mode) {
             getListAdapter().finishMultiSelection();
             mActionMode = null;
+            setToolBarVisibility(true);
         }
     };
+
     private FeedRequest.UnreadStatePair mLastUnreadState = new FeedRequest.UnreadStatePair();
     private View mInflated;
+    private Subscription mCountersSubscription;
+    protected CountersData mCountersData = new CountersData();
+    @Inject
+    TopfaceAppState mAppState;
 
     protected static void initButtonForBlockedScreen(Button button, String buttonText, View.OnClickListener listener) {
         initButtonForBlockedScreen(null, null, button, buttonText, listener);
@@ -296,11 +320,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 if (userId == 0) {
                     if (!TextUtils.isEmpty(itemId)) {
                         makeItemReadWithFeedId(itemId);
-                    } else {
-                        String lastMethod = intent.getStringExtra(METHOD_INTENT_STRING);
-                        if (!TextUtils.isEmpty(lastMethod)) {
-                            updateDataAfterReceivingCounters(lastMethod);
-                        }
                     }
                 } else {
                     makeItemReadUserId(userId, intent.getIntExtra(ChatFragment.LOADED_MESSAGES, 0));
@@ -309,7 +328,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         };
         IntentFilter filter = new IntentFilter(ChatFragment.MAKE_ITEM_READ);
         filter.addAction(ChatFragment.MAKE_ITEM_READ_BY_UID);
-        filter.addAction(UPDATE_COUNTERS);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReadItemReceiver, filter);
         for (int type : getTypesForGCM()) {
             GCMUtils.cancelNotification(getActivity(), type);
@@ -326,12 +344,16 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        stopListShowDelayTimer();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mRefreshReceiver);
     }
 
     @SuppressWarnings("unchecked")
     protected void restoreInstanceState(Bundle saved) {
         if (saved != null) {
+            mLastUnreadState = saved.getParcelable(FEED_LAST_UNREAD_STATE);
+            isCurrentCounterChanged = saved.getBoolean(FEED_COUNTER_CHANGED);
+            currentCounter = saved.getInt(FEED_COUNTER);
             mIdForRemove = saved.getInt(BLACK_LIST_USER);
             if (CacheProfile.show_ad) {
                 mListAdapter.setHasFeedAd(saved.getBoolean(HAS_AD));
@@ -461,9 +483,21 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.from(getActivity()).inject(this);
+        mCountersSubscription = mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
+            @Override
+            public void call(CountersData countersData) {
+                mCountersData = countersData;
+                updateDataAfterReceivingCounters();
+                onCountersUpdated(countersData);
+            }
+        });
         registerGcmReceiver();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBlacklistedReceiver, new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+    }
+
+    protected void onCountersUpdated(CountersData countersData) {
     }
 
     @Override
@@ -504,6 +538,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mCountersSubscription.unsubscribe();
         if (mBannersController != null) {
             mBannersController.onDestroy();
         }
@@ -525,6 +560,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             outState.putBoolean(HAS_AD, mListAdapter.hasFeedAd());
             outState.putParcelable(FEED_AD, mListAdapter.getFeedAd());
             outState.putInt(BLACK_LIST_USER, mIdForRemove);
+            outState.putInt(FEED_COUNTER, currentCounter);
+            outState.putBoolean(FEED_COUNTER_CHANGED, isCurrentCounterChanged);
+            outState.putParcelable(FEED_LAST_UNREAD_STATE, mLastUnreadState);
         }
     }
 
@@ -632,6 +670,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     protected AdapterView.OnItemLongClickListener getOnItemLongClickListener() {
         return new AdapterView.OnItemLongClickListener() {
+            @SuppressWarnings("deprecation")
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long itemPosition) {
                 if (isDeletable) {
@@ -756,7 +795,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         //Open chat activity
         if (!item.user.isEmpty()) {
             FeedUser user = item.user;
-            Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false, item.type);
+            Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false, item.type, this.getClass().getSimpleName());
             startActivityForResult(intent, ChatActivity.REQUEST_CHAT);
         }
     }
@@ -924,7 +963,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
         onUpdateSuccess(isPullToRefreshUpdating || isHistoryLoad);
         mListView.onRefreshComplete();
-        mListView.setVisibility(View.VISIBLE);
+        showListViewWithSuccessResponse();
+    }
+
+    private void showListViewWithSuccessResponse() {
+        if (getIsNeedFirstShowListDelay()) {
+            startListShowDelayTimer();
+        } else {
+            mListView.setVisibility(View.VISIBLE);
+        }
     }
 
     protected void removeOldDublicates(FeedListData<T> data) {
@@ -986,7 +1033,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     protected void onUpdateSuccess(boolean isPushUpdating) {
         if (!isPushUpdating) {
-            mListView.setVisibility(View.VISIBLE);
+            showListViewWithSuccessResponse();
             mRetryView.setVisibility(View.GONE);
         }
         if (getListAdapter().isEmpty()) {
@@ -1027,6 +1074,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     protected abstract int getEmptyFeedLayout();
 
     protected void makeAllItemsRead() {
+        baseMakeAllItemsRead();
+    }
+
+    protected void baseMakeAllItemsRead() {
         getListAdapter().makeAllItemsRead();
     }
 
@@ -1094,13 +1145,16 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     }
 
-    private void updateDataAfterReceivingCounters(String lastMethod) {
-        if (!lastMethod.equals(NULL_METHOD) && lastMethod.equals(getRequest().getServiceName())) {
-            int counters = getInstance(getActivity()).getCounter(getFeedType());
+    private void updateDataAfterReceivingCounters() {
+        String lastMethod = CountersManager.getInstance(getActivity()).getLastRequestMethod();
+        if (!lastMethod.equals(NULL_METHOD) && !BannerRequest.SERVICE_NAME.equals(lastMethod) &&
+                lastMethod.equals(getRequest().getServiceName())) {
+            int counters = getUnreadCounter();
             if (counters > 0) {
                 updateData(true, false);
             }
         }
+        CountersManager.getInstance(getActivity()).setLastRequestMethod(NULL_METHOD);
     }
 
     @Override
@@ -1194,5 +1248,60 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         boolean state = isCurrentCounterChanged;
         isCurrentCounterChanged = false;
         return state;
+    }
+
+    protected boolean isNeedFirstShowListDelay() {
+        return false;
+    }
+
+
+    private boolean getIsNeedFirstShowListDelay() {
+        if (isNeedFirstShowListDelay == null) {
+            isNeedFirstShowListDelay = isNeedFirstShowListDelay();
+        }
+        return isNeedFirstShowListDelay;
+    }
+
+    private void startListShowDelayTimer() {
+        stopListShowDelayTimer();
+        mListShowDelayCountDownTimer = new CountDownTimer(FIRST_SHOW_LIST_DELAY, FIRST_SHOW_LIST_DELAY) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                showListWithoutDelay();
+            }
+        }.start();
+    }
+
+    private void stopListShowDelayTimer() {
+        if (mListShowDelayCountDownTimer != null) {
+            mListShowDelayCountDownTimer.cancel();
+        }
+    }
+
+    public void showListWithoutDelay() {
+        stopListShowDelayTimer();
+        if (mListView != null) {
+            mListView.setVisibility(View.VISIBLE);
+            isNeedFirstShowListDelay = false;
+        }
+    }
+
+    private TextView getActionModeTitle() {
+        if (mActionModeTitle == null) {
+            mActionModeTitle = (TextView) LayoutInflater.from(getActivity()).inflate(R.layout.action_mode_text, null);
+        }
+        return mActionModeTitle;
+    }
+
+    private void setToolBarVisibility(boolean isVisible) {
+        BaseFragmentActivity activity = ((BaseFragmentActivity) getActivity());
+        if (activity != null) {
+            activity.setToolBarVisibility(isVisible);
+        }
     }
 }

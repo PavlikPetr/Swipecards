@@ -643,4 +643,6 @@
     <string name="status_invilid_phone_number">Le nombre est incorrect</string>
     <string name="status_confirmation_was_sent">En attente d\'enregistrement</string>
     <string name="status_user_registered">Déjà enregistré</string>
+    <string name="novice_sympathy">Envoyez des J\'aime aux personnes qui vous\nplaisent vraiment.\nVous allez peut être rencontrer quelqu\'un d\'unique !</string>
+    <string name="novice_sympathies_bonus">Vous recevez %1$d J\'aime\nen cadeau ! Cela signifie que\n%2$d personne va vous donner un J\'aime,\nà qui vous plaisez réellement.</string>
 </resources>

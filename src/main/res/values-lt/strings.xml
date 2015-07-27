@@ -617,4 +617,6 @@
     <string name="google_sign_in_account_title">Pas jus nepridėta Google paskyra, jūs turite autorizuotis, jei norite gauti pranešimus.</string>
     <string name="google_sign_in_account_button">Autorizuotis</string>
     <string name="google_unavailable_services_title">Deja, pranešimai nepalaikomi jūsų įrenginyje.</string>
+    <string name="novice_sympathy">Siųskite simpatijas tiems, kas jums\ntikrai patinka,\nkad pradėtumėte malonią pažintį</string>
+    <string name="novice_sympathies_bonus">Jūs gaunate %1$d simpatijų\ndovanų! Tai reiškia, kad jūs\ntikrai patinkate %2$d žmonių,\nkurie išreikš jums savo simpatiją</string>
 </resources>

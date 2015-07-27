@@ -9,6 +9,7 @@
     <string name="photofeed_title">Встать в ленту</string>
     <string name="general_warning">ПРЕДУПРЕЖДЕНИЕ</string>
     <string name="general_ok">OK</string>
+    <string name="general_any">Любой</string>
     <string name="general_settings_abbr">Настр.</string>
     <string name="general_disallow">Запретить</string>
     <string name="general_allow">Разрешить</string>
@@ -26,7 +27,7 @@
     <string name="visitors_background_text">Нет гостей</string>
 
     <string name="chat_background_text">Входящих сообщений нет</string>
-
+    <string name="entrance">Вход</string>
     <string name="filter_only_online">Только онлайн</string>
     <string name="filter_city_age_parameters">Возраст и город</string>
     <string name="filter_select_city">Выбор города</string>
@@ -223,8 +224,7 @@
     <string name="filter_age">Выбор возраста</string>
     <string name="filter_age_start_prefix">От %s</string>
     <string name="filter_age_end_prefix">до %s</string>
-
-
+    <string name="filter_constitution_template">От %1$d до %2$d</string>
     <string name="filter_cities_all">По всем городам</string>
 
     <!-- Buying -->
@@ -463,6 +463,7 @@
         корректное число и повторите попытку.
     </string>
     <string name="wrong_password_format">Недопустимый формат пароля</string>
+    <string name="edit_value_error">Значение должно быть в диапазоне от %1$d до %2$d</string>
 
     <string name="sign_in">Войти</string>
     <string name="create_account">Создать аккаунт</string>
@@ -479,7 +480,9 @@
     <string name="birthdate_confirm">Пожалуйста, укажите ваш возраст, иначе вы не сможете познакомиться</string>
     <string name="set_birthdate">Указать возраст</string>
     <string name="welcome_to_topface">Добро пожаловать в Topface!</string>
-
+    <string name="im_boy">Я - парень</string>
+    <string name="im_girl">Я - девушка</string>
+    <string name="u_sex">Ваш пол</string>
     <string name="incorrect_email">Неправильно введен e-mail.</string>
     <string name="incorrect_login">Неправильно введен логин</string>
     <string name="incorrect_password">Неправильно введен пароль</string>
@@ -502,6 +505,7 @@
     <string name="photo_for_avatar">Фотография готова к отправке в профиль! Это ваша первая фотография и она будет
         использоваться как ваша аватарка.
     </string>
+    <string name="add_photo_before">Сначала необходимо добавить фото</string>
 
     <string name="change_email">Изменить e-mail</string>
     <string name="send_confirmation_email">Выслать подтверждение на e-mail</string>
@@ -597,7 +601,7 @@
         <item quantity="other">Получи VIP бесплатно за %d приглашений</item>
     </plurals>
     <string name="buy_status_and_watch_your_fans">Купите VIP-статус и узнайте, кто добавил вас в избранное</string>
-    <string name="add_bookmarks_to_be_connected">Добавляйте новых знакомых в этот раздел, и вы не потеряете с ними связь</string>
+    <string name="add_bookmarks_to_be_connected">Добавляйте новых знакомых в этот раздел и вы не потеряете с ними связь</string>
     <string name="nobody_chat_with_you_sympathies_will_help">Вам еще никто не писал. Симпатии помогут в поиске собеседника</string>
     <string name="rate_and_have_mutual_or_buy_and_chat">Обменивайтесь симпатиями или покупайте их, чтобы начать общаться прямо сейчас.</string>
 
@@ -699,6 +703,8 @@
     <string name="settings_feedback_transaction_link">где найти номер заказа?</string>
     <string name="general_logout_error">К сожалению, не удалось выйти из аккаунта</string>
     <string name="auth_btn_ok">Войти через Одноклассники</string>
+    <string name="auth_btn_tf">Аккаунт Topface</string>
+    <string name="birthday">День рождения</string>
     <string name="other_auth">Войти через другие сервисы</string>
     <string name="settings_feedback_transaction_number_hint">Введите номер заказа</string>
 
@@ -785,9 +791,8 @@
     <string name="enter_text">Введите текст</string>
     <string name="send_feedback">Отправить сообщение</string>
     <string name="get_vip_free">Получи VIP бесплатно</string>
-    <string name="buy_more_sympathies">"Получай больше симпатий, становись популярнее"</string>
-    <string name="transaction_code_help">Если вы отправите нам код транзакции, это может помочь в выполнение вашего запроса, а так же ускорит его обработку. Подробную информацию о заказе, можно получить через <a href="https://wallet.google.com">Google-кошелек</a>.</string>
-
+    <string name="buy_more_sympathies">\"Получай больше симпатий, становись популярнее\"</string>
+    <string name="transaction_code_help">Если вы отправите нам код транзакции, это может помочь в выполнение вашего запроса, а так же ускорит его обработку. Подробную информацию о заказе, можно получить через <![CDATA[<font color=#05c5cf><u>Google-кошелек</u>]]>.</string>
     <!-- ServicesManager-->
     <!-- Google -->
     <string name="google_service_general_title">Уведомления недоступны</string>
@@ -813,10 +818,10 @@
     <string name="more">еще</string>
 
     <!--invite frends by sms-->
-    <string name="premium_for_invitations">Для получения VIP статуса на 1 день вам необходимо набрать 5 регистраций.</string>
+    <string name="premium_for_invitations">Для получения VIP-статуса на 1 день вам необходимо набрать 5 регистраций.</string>
     <string name="premium_for_invitations_current_status">Вы уже набрали:\nПриглашений: %1$d\nРегистраций: %2$d</string>
     <string name="no_contacts_available">На устройстве нет контактов, доступных к отображению</string>
-    <string name="sms_invite_title">Получите вип на сутки!</string>
+    <string name="sms_invite_title">Получите VIP на сутки!</string>
 
     <!--phones number statuses-->
     <string name="status_can_send_confirmation">Пригласить</string>
@@ -827,4 +832,12 @@
 
     <string name="trial_vip_text">Бесплатный VIP\nна 7 дней</string>
     <string name="trial_vip_button_text">Подключить VIP</string>
+
+    <string name="settings_check_vip_title">Проверка активности VIP-статуса</string>
+    <string name="settings_check_vip_cell">Проверить VIP-статус</string>
+    <string name="settings_check_vip_alert">Запрос на проверку отправлен</string>
+    
+    
+    <string name="novice_sympathy">Отправляйте симпатии тем, кто вам\nдействительно нравится,\nчтобы начать приятное знакомство</string>
+    <string name="novice_sympathies_bonus">Вы получаете %1$d симпатии в\nподарок! Это означает, что вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию</string>
 </resources>

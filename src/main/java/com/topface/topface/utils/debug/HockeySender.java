@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 public class HockeySender implements ReportSender {
+    public static final String DEBUG_ID = "176f942f1bdedecb45696cd6a6a58aac";
     public static String BASE_URL = "https://rink.hockeyapp.net/api/2/apps/";
     public static String CRASHES_PATH = "/crashes";
 
@@ -63,10 +64,19 @@ public class HockeySender implements ReportSender {
         send(report);
     }
 
+    @SuppressWarnings("deprecation")
     public void send(CrashReportData report) {
+        send(report, ACRA.getConfig().formUri());
+    }
+
+    public void sendDebug(CrashReportData report) {
+        send(report, DEBUG_ID);
+    }
+
+    public void send(CrashReportData report, String formUri) {
         String log = createCrashLog(report);
         Debug.log("HockeyAppSender", log);
-        String url = BASE_URL + ACRA.getConfig().formUri() + CRASHES_PATH;
+        String url = BASE_URL + formUri + CRASHES_PATH;
         try {
             DefaultHttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(url);

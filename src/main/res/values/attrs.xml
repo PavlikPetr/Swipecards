@@ -21,6 +21,7 @@
             <flag name="leftMenuClip" value="4" />
             <flag name="squared" value="5" />
             <flag name="cropped" value="6" />
+            <flag name="inscribedAvatar" value="8" />
         </attr>
         <attr name="preProcessor">
             <flag name="none" value="0" />
@@ -31,6 +32,7 @@
             <flag name="squared" value="5" />
             <flag name="cropped" value="6" />
             <flag name="roundAvatar" value="7" />
+            <flag name="inscribedAvatar" value="8" />
         </attr>
     </declare-styleable>
 

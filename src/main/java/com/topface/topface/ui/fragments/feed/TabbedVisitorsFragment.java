@@ -2,7 +2,7 @@ package com.topface.topface.ui.fragments.feed;
 
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.data.CountersData;
 
 public class TabbedVisitorsFragment extends TabbedFeedFragment {
 
@@ -12,15 +12,20 @@ public class TabbedVisitorsFragment extends TabbedFeedFragment {
     }
 
     @Override
-    protected void onBeforeCountersUpdate() {
-        updatePageCounter(VisitorsFragment.class.getName(), CacheProfile.unread_visitors);
-        updatePageCounter(FansFragment.class.getName(), CacheProfile.unread_fans);
+    protected boolean isScrollableTabs() {
+        return false;
+    }
+
+    @Override
+    protected void onBeforeCountersUpdate(CountersData countersData) {
+        updatePageCounter(VisitorsFragment.class.getName(), countersData.visitors);
+        updatePageCounter(FansFragment.class.getName(), countersData.fans);
     }
 
     @Override
     protected void addPages() {
-        addBodyPage(VisitorsFragment.class.getName(), getString(R.string.general_visitors_tab_views), CacheProfile.unread_visitors);
-        addBodyPage(FansFragment.class.getName(), getString(R.string.general_fans), CacheProfile.unread_fans);
+        addBodyPage(VisitorsFragment.class.getName(), getString(R.string.general_visitors_tab_views), mCountersData.visitors);
+        addBodyPage(FansFragment.class.getName(), getString(R.string.general_fans), mCountersData.fans);
     }
 
     @Override

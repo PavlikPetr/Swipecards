@@ -19,6 +19,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
@@ -201,6 +202,10 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == PaymentwallActivity.ACTION_BUY) {
+            // для обновления счетчиков монет и лайков при покупке через paymentWall
+            new ProfileRequest(this).exec();
+        }
         //Это супер мега хак, смотри документацию processRequestCode
         if (!OpenIabFragment.processRequestCode(
                 getSupportFragmentManager(),
@@ -246,8 +251,10 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     }
 
     private boolean isSMSInviteAvailable() {
-        return !CacheProfile.premium && !((isTopfaceOfferwallRedirectEnabled() && mTopfaceOfferwallRedirect.isExpOnClose()) ||
-                mTopfaceOfferwallRedirect.isCompleted());
+        return !CacheProfile.premium && !(mTopfaceOfferwallRedirect != null &&
+                (mTopfaceOfferwallRedirect.isExpOnClose() ||
+                        mTopfaceOfferwallRedirect.isCompleted())) &&
+                CacheProfile.getOptions().forceSmsInviteRedirect.enabled;
     }
 
     private boolean showExtraScreen(EXTRA_SCREEN screen) {

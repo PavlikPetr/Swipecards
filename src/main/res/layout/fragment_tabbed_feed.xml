@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.topface.topface.ui.views.slidingtab.SlidingTabLayout
-        android:id="@+id/sliding_tabs"
-        android:background="@color/tab_background"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/feedTabs"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/tab_text_color" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"

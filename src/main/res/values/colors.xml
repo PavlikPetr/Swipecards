@@ -24,6 +24,7 @@
     <color name="bg_holo">#F1F1F1</color>
     <color name="bg_white">#FFFFFF</color>
     <color name="action_bar_color">#455A64</color>
+    <color name="action_mode_color">#37474F</color>
     <color name="bg_light_blue">#EAF8FF</color>
     <color name="blue_60_percent">#99AEE5FD</color>
     <color name="black_60_percent">#99000000</color>
@@ -93,4 +94,23 @@
     <color name="trial_popup_background">#242429</color>
 
     <color name="default_line_indicator_selected_color">@color/blue_holo_selected</color>
+
+    <!--Button gray text color in different states-->
+    <color name="button_gray_text_pressed_color">#4B4B4B</color>
+    <color name="button_gray_text_released_color">#4B4B4B</color>
+    <color name="button_gray_text_disable_color">#c3c3c3</color>
+
+    <!--Button blue text color in different states-->
+    <color name="button_blue_text_pressed_color">#FFFFFF</color>
+    <color name="button_blue_text_released_color">#FFFFFF</color>
+    <color name="button_blue_text_disable_color">#FFFFFF</color>
+
+    <!--Button red text color in different states-->
+    <color name="button_red_text_pressed_color">#FFFFFF</color>
+    <color name="button_red_text_released_color">#FFFFFF</color>
+    <color name="button_red_text_disable_color">#FFFFFF</color>
+
+    <color name="auth_progressbar_color">#03A9F4</color>
+    <color name="text_gray">#4B4B4B</color>
+
 </resources>

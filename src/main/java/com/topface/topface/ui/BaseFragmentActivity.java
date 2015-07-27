@@ -54,8 +54,10 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
     private BroadcastReceiver mReauthReceiver;
     private boolean mNeedAnimate = true;
+    private boolean mIsActivityRestoredState = false;
     private BroadcastReceiver mProfileLoadReceiver;
     private StartActionsController mStartActionsController;
+    private Toolbar mToolbar;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -80,9 +82,9 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         if (mHasContent) {
             setContentView(getContentLayout());
         }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (mToolbar != null) {
+            setSupportActionBar(mToolbar);
         }
         Intent intent = getIntent();
         if (intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false)) {
@@ -92,6 +94,12 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
         LocaleConfig.updateConfiguration(getBaseContext());
         initActionBar(getSupportActionBar());
+    }
+
+    public void setToolBarVisibility(boolean isVisible) {
+        if (mToolbar != null) {
+            mToolbar.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+        }
     }
 
     protected abstract int getContentLayout();
@@ -108,6 +116,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         if (mGoogleAuthStarted) {
             outState.putBoolean(GOOGLE_AUTH_STARTED, true);
         }
+        mIsActivityRestoredState = false;
     }
 
     @Override
@@ -115,6 +124,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         super.onPostCreate(savedInstanceState);
         setWindowContentOverlayCompat();
         mStartActionsController = new StartActionsController(this);
+        onRegisterMandatoryStartActions(mStartActionsController);
         onRegisterStartActions(mStartActionsController);
     }
 
@@ -273,8 +283,13 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         http://stackoverflow.com/questions/16265733/failure-delivering-result-onactivityforresult
          */
         super.onResumeFragments();
+        mIsActivityRestoredState = true;
         checkProfileLoad();
         registerReauthReceiver();
+    }
+
+    public boolean isActivityRestoredState() {
+        return mIsActivityRestoredState;
     }
 
     private void registerReauthReceiver() {
@@ -456,7 +471,15 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     }
 
     /**
-     * Method for overload where you can register start actions
+     * Method to override where you can register mandatory start actions
+     * User startActionController argument to register actions
+     * Note: actions can be placed here for global usage in all child activities
+     */
+    protected void onRegisterMandatoryStartActions(StartActionsController startActionsController) {
+    }
+
+    /**
+     * Method to override where you can register start actions
      * User startActionController argument to register actions
      * Note: actions can be placed here for global usage in all child activities
      */

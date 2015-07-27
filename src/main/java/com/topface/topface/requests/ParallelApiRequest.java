@@ -2,7 +2,6 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
-@SuppressWarnings("UnusedDeclaration")
 public class ParallelApiRequest extends MultipartApiRequest {
 
     public static final String BOUNDARY = "XFDNSAdakmslen23n4123asdmnasd";

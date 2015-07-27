@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">it_IT</string>
+    <string name="photofeed_title">Alza a nastro</string>
     <string name="general_warning">AVVERTIMENTO</string>
     <string name="general_ok">OK</string>
     <string name="general_settings_abbr">Impost.</string>
@@ -390,6 +391,9 @@
     <string name="save">Salvare</string>
     <string name="saving_in_progress">Salvataggio…</string>
     <string name="confirmation_successfully_sent">All’indirizzo e-mail da te indicato è stata inviata la conferma</string>
+    <string name="email_successfully_confirmed">Indirizzo e-mail confermato con successo.</string>
+    <string name="email_not_confirmed">Indirizzo e-mail non confermato.</string>
+    <string name="email_already_confirmed">Indirizzo e-mail confermato</string>
     <string name="password_confirmation_hint">Conferma la password</string>
     <string name="password_hint">password</string>
     <string name="enter_new_password">Inserisci la nuova password</string>
@@ -486,6 +490,7 @@
     <string name="black_list_add_short">Nella black list</string>
     <string name="confirm_email_for_dating">Siamo contrari allo spam. Conferma il tuo e-mail per chattare su Topface!</string>
     <string name="confirm_email_for_dating_title">Noi siamo contro lo spam</string>
+    <string name="confirm_email_for_dating_desc">Conferma il tuo indirizzo di posta per fare nuove conoscenze su Topface!</string>
     <string name="send_confirm_link">Invia il link di conferma</string>
     <string name="complain_type_swearing_msg">Cafonate, minacce, parolacce</string>
     <string name="general_exit">Logout</string>
@@ -624,6 +629,7 @@
     <string name="receive_message_notification">Ricevere notifiche\ndei nuovi messaggi</string>
     <string name="receive_mutual_notification">Ricevere notifiche\ndelle nuove simpatie reciproche</string>
     <string name="receive_sympathy_notification">Ricevere notifiche\ndelle nuove simpatie</string>
+    <string name="receive_rate_notification">key: receive_rate_notification</string>
     <string name="receive_guest_notification">Ricevere notifiche\ndei nuovi visitatori</string>
     <string name="on_phone">Sul cellulare</string>
     <string name="on_mail">Sull’e-mail</string>
@@ -637,4 +643,9 @@
     <string name="status_invilid_phone_number">Numero non valido</string>
     <string name="status_confirmation_was_sent">In attesa di registrazione</string>
     <string name="status_user_registered">È già stato registrato</string>
+    <string name="balance">Saldo (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
+    <string name="trial_vip_text">Modalità VIP gratis per 7 giorni</string>
+    <string name="trial_vip_button_text">Connettere VIP</string>
+    <string name="novice_sympathy">Invia le simpatie solo alle persone che ti\npiacciono veramente\nper iniziare una piacevole relazione</string>
+    <string name="novice_sympathies_bonus">Riceverai %1$d simpatie in\nregalo! Significa che\ndi sicuro piacerai a %2$d persone\nche ti dimostreranno la loro simpatia</string>
 </resources>

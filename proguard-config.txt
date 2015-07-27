@@ -4,6 +4,10 @@
 -dontskipnonpubliclibraryclasses
 -keep class !android.support.v7.internal.view.menu.**, ** { *; }
 
+# Flurry
+-keep class com.flurry.** { *; }
+-dontwarn com.flurry.**
+
 # GOOGLE
 -keep class com.android.vending.billing.**
 -keep class com.google.android.maps.** { *; }
@@ -69,7 +73,7 @@
 # ButterKnife
 -keep class butterknife.** { *; }
 -dontwarn butterknife.internal.**
--keep class **$$ViewInjector { *; }
+-keep class **$$ViewBinder { *; }
 -keepclasseswithmembernames class * {
     @butterknife.* <fields>;
 }

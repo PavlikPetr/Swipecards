@@ -32,6 +32,7 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.FeedGiftsRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.MultipartApiRequest;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
@@ -108,7 +109,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
         mOutsideView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                closeOverflowMenu();
                 mOutsideView.setVisibility(View.GONE);
             }
         });
@@ -127,6 +127,11 @@ public class UserProfileFragment extends AbstractProfileFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         setThrownActionBarAvatar(mPhoto);
+    }
+
+    @Override
+    protected boolean isNeedShowOverflowMenu() {
+        return true;
     }
 
     @Override
@@ -260,9 +265,10 @@ public class UserProfileFragment extends AbstractProfileFragment {
                     return new FeedListData<>(response.getJsonResult(), FeedGift.class);
                 }
             });
-            ApiRequest userAndGiftsRequest = new ParallelApiRequest(getActivity()).
-                    addRequest(userRequest).addRequest(giftsRequest).
-                    callback(new ApiHandler() {
+            ApiRequest userAndGiftsRequest = new ParallelApiRequest(getActivity())
+                    .addRequest(userRequest).addRequest(giftsRequest)
+                    .setFrom(getClass().getSimpleName())
+                    .callback(new ApiHandler() {
                         @Override
                         public void success(IApiResponse response) {
                             if (mRequestedGifts != null) {
@@ -419,7 +425,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
                         if (profile != null) {
                             return ChatActivity.createIntent(profile.uid, profile.getNameAndAge(),
                                     profile.city == null ? "" : profile.city.name,
-                                    null, profile.photo, false);
+                                    null, profile.photo, false, UserProfileFragment.class.getSimpleName());
                         }
                         return null;
                     }
@@ -462,17 +468,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
             }
             getOverflowMenu().initOverfowMenu();
         }
-    }
-
-    @Override
-    protected void onStartActivity() {
-        super.onStartActivity();
-        closeOverflowMenu();
-    }
-
-    @Override
-    public void onPageSelected(int i) {
-        closeOverflowMenu();
     }
 
     private BroadcastReceiver mGiftReceiver = new BroadcastReceiver() {

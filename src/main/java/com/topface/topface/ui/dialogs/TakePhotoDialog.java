@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v4.app.DialogFragment;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -24,6 +25,7 @@ public class TakePhotoDialog extends AbstractDialogFragment implements View.OnCl
     private Button mBtnTakePhoto;
     private Button mBtnFromGallery;
     private Button mBtnSendPhoto;
+    private String mMessage;
 
     private Uri mPhotoUri = null;
 
@@ -81,7 +83,7 @@ public class TakePhotoDialog extends AbstractDialogFragment implements View.OnCl
             mBtnFromGallery.setVisibility(View.VISIBLE);
             mPhotoLayout.setVisibility(View.GONE);
             mBtnTakePhoto.setText(R.string.take_photo);
-            mText.setText(R.string.no_photo_take_photo);
+            mText.setText(TextUtils.isEmpty(mMessage) ? getString(R.string.no_photo_take_photo) : mMessage);
         } else {
             mBtnSendPhoto.setVisibility(View.VISIBLE);
             mBtnFromGallery.setVisibility(View.INVISIBLE);
@@ -178,6 +180,14 @@ public class TakePhotoDialog extends AbstractDialogFragment implements View.OnCl
      */
     public TakePhotoDialog setUri(Uri uri) {
         mPhotoUri = uri;
+        if (getView() != null) {
+            refreshViewsState();
+        }
+        return this;
+    }
+
+    public TakePhotoDialog setMessageText(String message) {
+        mMessage = message;
         if (getView() != null) {
             refreshViewsState();
         }

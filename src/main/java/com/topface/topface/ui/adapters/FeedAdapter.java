@@ -441,7 +441,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         boolean result = false;
         FeedList<T> feeds = getData();
         for (T feed : feeds) {
-            if (feed.user.id == userId) {
+            if (feed.user != null && feed.user.id == userId) {
                 result = feeds.remove(feed);
                 notifyDataSetChanged();
                 break;

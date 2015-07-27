@@ -228,4 +228,6 @@
     <string name="profile_edit_age_ranges">Az életkornak 16 és 99 év között kell lennie. Kérjük, add meg a helyes értéket, és próbáld újra.</string>
     <string name="notifications">Értesítés</string>
     <string name="auth_btn_ok">Bejelentkezés a Odnoklassniki-n</string>
+    <string name="novice_sympathy">Küldj szimpátiát azoknak, akik \ntényleg tetszenek,\nígy el tudsz kezdeni egy élvezetes ismerkedést.</string>
+    <string name="novice_sympathies_bonus">%1$d szimpátiát kaptál\najándékba! Ez azt jelenti, hogy\nbiztosan tetszel az emberek %2$d-nak,\n akikben szimpátiát ébresztesz.</string>
 </resources>

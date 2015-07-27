@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.StringRes;
 import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.adapters.SpinnerAdapter;
+import com.topface.topface.ui.dialogs.FilterConstitutionDialog;
 import com.topface.topface.ui.dialogs.FilterListDialog;
 import com.topface.topface.ui.views.CitySearchView;
 import com.topface.topface.utils.CacheProfile;
@@ -39,8 +41,11 @@ import java.util.ArrayList;
 
 public class FilterFragment extends AbstractEditFragment implements OnClickListener {
 
+    private static final String FILTER_DIALOG_SHOWN = "dialog_shown";
+    private static final String CONSTITUTION_DIALOG_MARK = "constitution_mark";
     public static Profile mTargetUser = new User();
     public static final String INTENT_DATING_FILTER = "Topface_Dating_Filter";
+    public static String TAG = "filter_fragment_tag";
 
     private FormInfo mFormInfo;
     private DatingFilter mInitFilter;
@@ -54,7 +59,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     private CheckBox mLoFilterOnline;
     private CheckBox mLoFilterBeautiful;
-
+    private ViewGroup mLoFilterHeight;
+    private ViewGroup mLoFilterWeight;
     private ViewGroup mLoFilterDatingStatus;
     private ViewGroup mLoFilterMarriage;
     private ViewGroup mLoFilterCharacter;
@@ -69,7 +75,11 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     private boolean mInitFilterOnline;
 
-    private FilterListDialog.DialogRowCliCkInterface mDialogOnItemClickListener = new FilterListDialog.DialogRowCliCkInterface() {
+    public FilterListDialog.DialogRowCliCkInterface getDialogOnItemClickListener() {
+        return mDialogOnItemClickListener;
+    }
+
+    public FilterListDialog.DialogRowCliCkInterface mDialogOnItemClickListener = new FilterListDialog.DialogRowCliCkInterface() {
         @Override
         public void onRowClickListener(int id, int item) {
             switch (id) {
@@ -109,9 +119,38 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         }
     };
 
+    private boolean mIsHeight;
+
+    private FilterConstitutionDialog.OnConstitutionDialogListener mConstitutionDialogListener = new FilterConstitutionDialog.OnConstitutionDialogListener() {
+        @Override
+        public void handleValues(FilterConstitutionDialog.ConstitutionLimits limits) {
+            if (limits.min == 0 || limits.max == 0) {
+                setText(getActivity().getString(R.string.general_any), mIsHeight ? mLoFilterHeight : mLoFilterWeight);
+            } else {
+                setText(String.format(mIsHeight ? getActivity().getString(R.string.filter_constitution_template) :
+                                getActivity().getString(R.string.filter_constitution_template),
+                        limits.min, limits.max), mIsHeight ? mLoFilterHeight : mLoFilterWeight);
+            }
+            if (mIsHeight) {
+                mFilter.minHeight = limits.min;
+                mFilter.maxHeight = limits.max;
+            } else {
+                mFilter.minWeight = limits.min;
+                mFilter.maxWeight = limits.max;
+            }
+        }
+    };
+
+    public FilterConstitutionDialog.OnConstitutionDialogListener getConstitutionDialogListener() {
+        return mConstitutionDialogListener;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        if (savedInstanceState != null) {
+            mIsHeight = savedInstanceState.getBoolean(CONSTITUTION_DIALOG_MARK);
+        }
         mTargetUser.sex = CacheProfile.dating != null ? CacheProfile.dating.sex : Static.BOY;
         mFormInfo = new FormInfo(getActivity().getApplicationContext(), mTargetUser.sex, mTargetUser.getType());
 
@@ -120,8 +159,13 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         // Preferences
         initFilter();
         initViews(root);
-
         return root;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(CONSTITUTION_DIALOG_MARK, mIsHeight);
+        super.onSaveInstanceState(outState);
     }
 
     private void initFilter() {
@@ -237,6 +281,22 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mLoFilterBeautiful = (CheckBox) root.findViewById(R.id.loFilterBeautiful);
         mLoFilterBeautiful.setChecked(mFilter.beautiful);
         mLoFilterBeautiful.setOnClickListener(this);
+
+        // Height Status
+        mLoFilterHeight = (ViewGroup) root.findViewById(R.id.loFilterHeight);
+        setText(R.array.form_main_height, (mFilter.minHeight > 0 && mFilter.maxHeight > 0)
+                        ? String.format(getActivity().getString(R.string.filter_constitution_template), mFilter.minHeight, mFilter.maxHeight)
+                        : getActivity().getString(R.string.general_any),
+                mLoFilterHeight);
+        mLoFilterHeight.setOnClickListener(this);
+
+        // Weight Status
+        mLoFilterWeight = (ViewGroup) root.findViewById(R.id.loFilterWeight);
+        setText(R.array.form_main_weight, (mFilter.minWeight > 0 && mFilter.maxWeight > 0)
+                        ? String.format(getActivity().getString(R.string.filter_constitution_template), mFilter.minWeight, mFilter.maxWeight)
+                        : getActivity().getString(R.string.general_any),
+                mLoFilterWeight);
+        mLoFilterWeight.setOnClickListener(this);
 
         // Dating Status
         mLoFilterDatingStatus = (ViewGroup) root.findViewById(R.id.loFilterDatingStatus);
@@ -374,8 +434,27 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                     mFilter.city = city;
                 }
                 break;
+            case R.id.loFilterHeight:
+                mIsHeight = true;
+                createAndShowConstitutionDialog(App.getAppOptions().getUserHeightMin(),
+                        App.getAppOptions().getUserHeightMax(), mFilter.minHeight, mFilter.maxHeight, R.string.form_main_height_0);
+                break;
+            case R.id.loFilterWeight:
+                mIsHeight = false;
+                createAndShowConstitutionDialog(App.getAppOptions().getUserWeightMin(),
+                        App.getAppOptions().getUserWeightMax(), mFilter.minWeight, mFilter.maxWeight,
+                        R.string.form_main_weight_0);
+                break;
         }
         refreshSaveState();
+    }
+
+    private void createAndShowConstitutionDialog(int configMin, int configMax, int filterMin, int filterMax
+            , @StringRes int resId) {
+        FilterConstitutionDialog dialog = FilterConstitutionDialog.newInstance(configMin, configMax, getActivity().getString(resId),
+                filterMin, filterMax);
+        dialog.setConstitutionDialogListener(mConstitutionDialogListener);
+        dialog.show(getChildFragmentManager(), FilterConstitutionDialog.TAG);
     }
 
     // create array for spinner Sex
@@ -476,7 +555,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                                      FilterListDialog.DialogRowCliCkInterface listener) {
         FilterListDialog dialog = FilterListDialog.newInstance();
         dialog.setData(titleId, targetId, viewId, listener, mFormInfo);
-        dialog.show(getActivity().getSupportFragmentManager(), FilterListDialog.TAG);
+        dialog.show(getChildFragmentManager(), FilterListDialog.TAG);
     }
 
     @Override

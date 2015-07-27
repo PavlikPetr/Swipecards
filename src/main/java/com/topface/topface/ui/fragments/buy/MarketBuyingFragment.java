@@ -72,8 +72,6 @@ public class MarketBuyingFragment extends CoinsBuyingFragment {
         //Если платежи не поддерживаются, то скрываем все кнопки
         View view = getView();
         if (view != null) {
-            view.findViewById(R.id.likes_title).setVisibility(View.GONE);
-            view.findViewById(R.id.coins_title).setVisibility(View.GONE);
             view.findViewById(R.id.fbCoins).setVisibility(View.GONE);
             view.findViewById(R.id.fbLikes).setVisibility(View.GONE);
             view.findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);

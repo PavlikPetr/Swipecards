@@ -1,6 +1,8 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.topface.topface.utils.loadcontollers.FeedLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
@@ -27,10 +29,36 @@ public class FeedRequest extends LimitedApiRequest {
         DIALOGS, LIKES, MUTUAL, VISITORS, BLACK_LIST, BOOKMARKS, FANS, ADMIRATIONS, GEO, PHOTOBLOG
     }
 
-    public static class UnreadStatePair {
+    public static class UnreadStatePair implements Parcelable {
         public boolean wasFromInited = false;
         public boolean from = false;
         public boolean to;
+
+        @Override public int describeContents() {
+            return 0;
+        }
+
+        @Override public void writeToParcel(Parcel dest, int flags) {
+            dest.writeByte((byte) (wasFromInited ? 1 : 0));
+            dest.writeByte((byte) (from ? 1 : 0));
+            dest.writeByte((byte) (to ? 1 : 0));
+        }
+
+        @SuppressWarnings("UnusedDeclaration")
+        public static final Parcelable.Creator CREATOR =
+                new Parcelable.Creator() {
+                    public UnreadStatePair createFromParcel(Parcel in) {
+                        UnreadStatePair state = new UnreadStatePair();
+                        state.wasFromInited = in.readByte() == 1;
+                        state.from = in.readByte() == 1;
+                        state.to = in.readByte() == 1;
+                        return state;
+                    }
+
+                    public UnreadStatePair[] newArray(int size) {
+                        return new UnreadStatePair[size];
+                    }
+                };
     }
 
     public FeedRequest(FeedService service, Context context) {

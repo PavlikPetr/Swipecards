@@ -102,10 +102,6 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
         if (products.likes.isEmpty() && products.coins.isEmpty()) {
             root.findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
         }
-        // sympathies title
-        root.findViewById(R.id.likes_title).setVisibility(
-                products.likes.isEmpty() ? View.GONE : View.VISIBLE
-        );
         // sympathies buttons
         for (final Products.BuyButton curButton : products.likes) {
             View btnView = Products.setBuyButton(likesButtons, curButton, getActivity(),
@@ -137,9 +133,6 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
         }
         boolean coinsMaskedExperiment = CacheProfile.getOptions().forceCoinsSubscriptions;
         List<Products.BuyButton> coinsProducts = getCoinsProducts(products, coinsMaskedExperiment);
-        root.findViewById(R.id.coins_title).setVisibility(
-                coinsProducts.isEmpty() ? View.GONE : View.VISIBLE
-        );
         LinearLayout coinsButtonsContainer = (LinearLayout) root.findViewById(R.id.fbCoins);
         if (coinsButtonsContainer.getChildCount() > 0) {
             coinsButtonsContainer.removeAllViews();

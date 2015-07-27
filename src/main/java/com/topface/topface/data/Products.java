@@ -1,6 +1,10 @@
 package com.topface.topface.data;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.content.res.XmlResourceParser;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -32,6 +36,7 @@ import java.util.List;
 
 public class Products extends AbstractData {
     private static final String PRICE = "{{price}}";
+    private static final String PRICE_PER_ITEM = "{{price_per_item}}";
     private static final String EUR = "EUR";
     private static final String RUB = "RUB";
     private static final String USD = "USD";
@@ -197,26 +202,23 @@ public class Products extends AbstractData {
      */
     public static View createBuyButtonLayout(Context context, BuyButton buyBtn,
                                              final BuyButtonClickListener listener) {
-        String value = "";
+        String value;
         String economy;
         if (buyBtn.type == ProductType.COINS_SUBSCRIPTION && buyBtn.price == 0) {
             value = buyBtn.hint;
             economy = null;
         } else {
-            // try fill template
             ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
+            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+            value = buyBtn.totalTemplate.replace(PRICE, decimalFormat.format((float) buyBtn.price / 100) +
+                    context.getString(R.string.usd));
             if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
                 if (detail != null && !detail.currency.equals(USD)) {
                     double price = detail.price / ProductsDetails.MICRO_AMOUNT;
-                    DecimalFormat decimalFormat = new DecimalFormat("#.##");
-                    value = buyBtn.totalTemplate.replace(PRICE,
-                            String.format("%s %s", decimalFormat.format(price),
-                                    detail.currency.equals(RUB) ? context.getString(R.string.rub) :
-                                            (detail.currency.equals(EUR) ? context.getString(R.string.eur) : detail.currency)));
+                    value = buyBtn.totalTemplate.replace(PRICE, getPriceAndCurrencyAddrevation(decimalFormat.format(price), detail.currency));
                 } else {
-                    value = buyBtn.totalTemplate.replace(PRICE, context.getString(R.string.usd) +
-                            ((float) buyBtn.price / 100));
+                    value = buyBtn.totalTemplate.replace(PRICE, getPriceAndCurrencyAddrevation(String.valueOf((float) buyBtn.price / 100), USD));
                 }
             }
             economy = buyBtn.hint;
@@ -248,57 +250,55 @@ public class Products extends AbstractData {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.item_buying_btn, null);
         initBuyButtonViews(
-                view, id, title, discount, economy, value, listener,
-                getBuyButtonTextColor(showType),
-                getBuyButtonBackground(discount, showType)
-        );
+                view, id, title, discount, value, listener, showType);
         return view;
     }
 
-    private static int getBuyButtonTextColor(int showType) {
-        Context context = App.getContext();
-        int color;
-        switch (showType) {
-            case 1:
-                color = context.getResources().getColor(R.color.text_color_gray);
-                break;
-            case 2:
-            case 0:
-            default:
-                color = context.getResources().getColor(R.color.text_color_gray);
-                break;
-        }
-        return color;
-    }
-
-    private static int getBuyButtonBackground(boolean discount, int showType) {
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private static void setBuyButtonBackground(boolean discount, int showType, View view) {
         int bgResource;
         switch (showType) {
             case 1:
                 bgResource = discount ? R.drawable.btn_sale_blue_selector : R.drawable.btn_blue_selector;
                 break;
             case 2:
-                bgResource = discount ? R.drawable.btn_sale_blue_disabled : R.drawable.btn_blue_shape_disabled;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    bgResource = discount ? R.drawable.btn_sale_blue_disabled_only : R.drawable.btn_blue_disabled_only;
+                } else {
+                    bgResource = discount ? R.drawable.btn_sale_blue_disabled : R.drawable.btn_blue_shape_disabled;
+                }
                 break;
-            case 0:
             default:
                 bgResource = discount ? R.drawable.btn_sale_gray_selector : R.drawable.btn_gray_selector;
                 break;
         }
-        return bgResource;
+        view.setBackgroundResource(bgResource);
+    }
+
+    private static void setBuyButtonTextColor(int showType, TextView view) {
+        switch (showType) {
+            case 1:
+                setSelectorTextColor(R.drawable.btn_blue_text_color_selector, view);
+                break;
+            case 2:
+                view.setTextColor(App.getContext().getResources().getColor(R.color.button_blue_text_disable_color));
+                break;
+            default:
+                setSelectorTextColor(R.drawable.btn_gray_text_color_selector, view);
+                break;
+        }
     }
 
     private static void initBuyButtonViews(
-            View view, final String id, String title, boolean discount, String economy,
-            String value, final BuyButtonClickListener listener, int color, int bgResource
-    ) {
+            View view, final String id, String title, boolean discount,
+            String value, final BuyButtonClickListener listener, int showType) {
         RelativeLayout container = (RelativeLayout) view.findViewById(R.id.itContainer);
         // button background
         if (discount) {
             int paddingFive = Utils.getPxFromDp(5);
             container.setPadding(paddingFive, paddingFive, Utils.getPxFromDp(56), paddingFive);
         }
-        container.setBackgroundResource(bgResource);
+        setBuyButtonBackground(discount, showType, container);
         container.requestLayout();
         // click listener
         container.setOnClickListener(new View.OnClickListener() {
@@ -309,17 +309,16 @@ public class Products extends AbstractData {
         });
         // title text
         TextView tvTitle = (TextView) view.findViewById(R.id.itText);
+        setBuyButtonTextColor(showType, tvTitle);
         tvTitle.setText(title);
-        // value text
-        TextView tvValue = (TextView) view.findViewById(R.id.itValue);
-        tvValue.setText(value);
-        // economy text
-        TextView tvEconomy = (TextView) view.findViewById(R.id.itEconomy);
-        tvEconomy.setTextColor(color);
-        if (!TextUtils.isEmpty(economy)) {
-            tvEconomy.setText(economy);
-        } else {
-            tvEconomy.setVisibility(View.GONE);
+    }
+
+    private static void setSelectorTextColor(int selector, TextView view) {
+        XmlResourceParser xrp = App.getContext().getResources().getXml(selector);
+        try {
+            ColorStateList csl = ColorStateList.createFromXml(App.getContext().getResources(), xrp);
+            view.setTextColor(csl);
+        } catch (Exception e) {
         }
     }
 
@@ -413,17 +412,40 @@ public class Products extends AbstractData {
                 discount = json.optInt("discount");
                 paymentwallLink = json.optString("url");
                 ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
+                DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                if (type == ProductType.PREMIUM) {
+                    double tempPrice = price / amount;
+                    double pricePerItem = tempPrice / 100;
+                    if (titleTemplate.contains(Products.PRICE)) {
+                        title = titleTemplate.replace(Products.PRICE, getPriceAndCurrencyAddrevation(decimalFormat.format(pricePerItem), USD));
+                    } else if (titleTemplate.contains(PRICE_PER_ITEM)) {
+                        title = titleTemplate.replace(PRICE_PER_ITEM, getPriceAndCurrencyAddrevation(decimalFormat.format(pricePerItem), USD));
+
+                    }
+                }
                 if (productsDetails != null) {
                     ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(id);
                     if (detail != null) {
                         double price = detail.price / ProductsDetails.MICRO_AMOUNT;
                         double pricePerItem = price / amount;
-                        title = titleTemplate.replace(PRICE, String.format("%.2f %s", price, detail.currency));
-                        title = title.replace("{{price_per_item}}", String.format("%.2f %s", pricePerItem, detail.currency));
+                        title = titleTemplate.replace(PRICE, getPriceAndCurrencyAddrevation(decimalFormat.format(price), detail.currency));
+                        title = title.replace(PRICE_PER_ITEM, getPriceAndCurrencyAddrevation(decimalFormat.format(pricePerItem), detail.currency));
                     }
                 }
             }
         }
+    }
+
+    private static String getPriceAndCurrencyAddrevation(String price, String currency){
+        switch (currency){
+            case EUR:
+                return price + App.getContext().getString(R.string.eur);
+            case USD:
+                return App.getContext().getString(R.string.usd) + price;
+            case RUB:
+                return price + App.getContext().getString(R.string.rub);
+        }
+        return price + currency;
     }
 
     public static class SubscriptionBuyButton extends BuyButton {
