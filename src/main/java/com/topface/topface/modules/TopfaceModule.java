@@ -4,6 +4,7 @@ import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.promo.dialogs.PromoDialog;
+import com.topface.topface.promo.dialogs.PromoKey31Dialog;
 import com.topface.topface.promo.dialogs.PromoKey71Dialog;
 import com.topface.topface.promo.dialogs.PromoKey81Dialog;
 import com.topface.topface.state.CacheDataInterface;
@@ -75,6 +76,7 @@ import dagger.Provides;
                 PeopleNearbyFragment.class,
                 PhotoBlogFragment.class,
                 PromoDialog.class,
+                PromoKey31Dialog.class,
                 PromoKey71Dialog.class,
                 PromoKey81Dialog.class,
                 PaymentwallActivity.class
