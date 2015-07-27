@@ -121,11 +121,6 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     }
 
     @Override
-    protected FeedListData<FeedGeo> getFeedList(JSONObject response) {
-        return new FeedListData<>(response, getFeedListItemClass());
-    }
-
-    @Override
     protected FeedRequest.FeedService getFeedService() {
         return FeedRequest.FeedService.GEO;
     }

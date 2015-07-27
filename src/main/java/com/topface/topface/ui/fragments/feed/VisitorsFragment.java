@@ -61,12 +61,6 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
-    protected FeedListData<Visitor> getFeedList(JSONObject response) {
-        return new FeedListData<>(response, getFeedListItemClass());
-    }
-
-
-    @Override
     protected FeedRequest.FeedService getFeedService() {
         return FeedRequest.FeedService.VISITORS;
     }

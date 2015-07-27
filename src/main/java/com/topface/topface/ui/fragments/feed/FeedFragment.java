@@ -87,9 +87,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Subscription;
-import rx.functions.Action1;
-
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -132,6 +129,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private Subscriber<? super FeedList<T>> mResponseSubscriber;
     private Subscription mCacheSubscription;
     private Subscription mResponseSubscription;
+    private Func1<FeedList<T>, Boolean> mFilterNotNull = new Func1<FeedList<T>, Boolean>() {
+        @Override
+        public Boolean call(FeedList<T> ts) {
+            return ts != null && ts.size() > 0;
+        }
+    };
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -188,8 +191,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     protected
     @NotNull
-    FeedsCache.FEEDS_TYPE
-    getFeedsType() {
+    FeedsCache.FEEDS_TYPE getFeedsType() {
         return FeedsCache.FEEDS_TYPE.UNKNOWN_TYPE;
     }
 
@@ -436,12 +438,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             final Type dataType = getFeedListDataType();
             String fromCacheString = App.getFeedsCache().getFeedFromCache(type);
             Debug.log("");
-            Observable<FeedList<T>> mCacheObservable = Observable.just((FeedList<T>) JsonUtils.fromJson(fromCacheString, dataType)).first().filter(new Func1<FeedList<T>, Boolean>() {
-                @Override
-                public Boolean call(FeedList<T> ts) {
-                    return ts != null && ts.size() > 0;
-                }
-            });
+            Observable<FeedList<T>> mCacheObservable = Observable
+                    .just((FeedList<T>) JsonUtils.fromJson(fromCacheString, dataType))
+                    .filter(mFilterNotNull);
             mCacheSubscription = mCacheObservable.subscribe(new Action1<FeedList<T>>() {
                 @Override
                 public void call(FeedList<T> ts) {
@@ -456,12 +455,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 public void call(Subscriber<? super FeedList<T>> subscriber) {
                     mResponseSubscriber = subscriber;
                 }
-            }).first().filter(new Func1<FeedList<T>, Boolean>() {
-                @Override
-                public Boolean call(FeedList<T> ts) {
-                    return ts != null && ts.size() > 0;
-                }
-            });
+            }).first().filter(mFilterNotNull);
             mResponseSubscription = mResponseObservable.subscribe(new Action1<FeedList<T>>() {
                 @Override
                 public void call(FeedList<T> ts) {
@@ -1022,7 +1016,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         return mListAdapter;
     }
 
-    protected abstract FeedListData<T> getFeedList(JSONObject response);
+    protected FeedListData<T> getFeedList(JSONObject response) {
+        return new FeedListData<>(response, getFeedListItemClass());
+    }
 
     protected FeedRequest getRequest() {
         return new FeedRequest(getFeedService(), getActivity()).setPreviousUnreadState(mLastUnreadState);

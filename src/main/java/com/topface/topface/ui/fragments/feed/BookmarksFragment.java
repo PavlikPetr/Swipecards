@@ -11,7 +11,6 @@ import android.view.View;
 import com.google.gson.reflect.TypeToken;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedBookmark;
-import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -24,7 +23,6 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.config.FeedsCache;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -96,11 +94,6 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     @Override
     protected FeedAdapter<FeedBookmark> createNewAdapter() {
         return new BookmarksListAdapter(getActivity(), getUpdaterCallback());
-    }
-
-    @Override
-    protected FeedListData<FeedBookmark> getFeedList(JSONObject response) {
-        return new FeedListData<>(response, getFeedListItemClass());
     }
 
     /**

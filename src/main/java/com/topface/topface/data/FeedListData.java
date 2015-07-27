@@ -20,11 +20,7 @@ public class FeedListData<T extends FeedItem> extends AbstractData {
     }
 
     public FeedListData(FeedList<T> data, boolean more, Class classType) {
-        if (items == null) {
-            items = new FeedList<>();
-        } else {
-            items.clear();
-        }
+        items = new FeedList<>();
         items.addAll(data);
         this.more = more;
         mClass = classType;

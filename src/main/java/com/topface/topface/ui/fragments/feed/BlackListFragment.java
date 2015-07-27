@@ -50,11 +50,6 @@ public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> imple
         return BlackListItem.class;
     }
 
-    @Override
-    protected FeedListData<BlackListItem> getFeedList(JSONObject response) {
-        return new FeedListData<>(response, getFeedListItemClass());
-    }
-
     /**
      * Этот метод используется для получения id элементов ленты при удалении.
      * Но в диалогах у нас работает не так как в остальных лентах

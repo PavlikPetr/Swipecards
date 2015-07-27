@@ -178,11 +178,6 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     }
 
     @Override
-    protected FeedPhotoBlogListData getFeedList(JSONObject response) {
-        return new FeedPhotoBlogListData(response, getFeedListItemClass());
-    }
-
-    @Override
     protected FeedRequest.FeedService getFeedService() {
         return FeedRequest.FeedService.PHOTOBLOG;
     }

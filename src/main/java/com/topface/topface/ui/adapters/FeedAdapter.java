@@ -80,13 +80,11 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public FeedList<T> getDataForCache(int count) {
         FeedList<T> data = getData();
-        if (data.size() >= count) {
-            FeedList<T> result = new FeedList<>();
-            for (int i = 0; i < count; i++) {
-                result.add(data.get(i));
-            }
-            return result;
-        } else return data;
+        FeedList<T> result = new FeedList<>();
+        for (int i = 0; i < (data.size() >= count ? count : data.size()); i++) {
+            result.add(data.get(i));
+        }
+        return result;
     }
 
     protected abstract INativeAdItemCreator<T> getNativeAdItemCreator();

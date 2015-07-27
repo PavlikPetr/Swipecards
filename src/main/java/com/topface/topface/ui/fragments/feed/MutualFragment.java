@@ -47,11 +47,6 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     }
 
     @Override
-    protected FeedListData<FeedMutual> getFeedList(JSONObject response) {
-        return new FeedListData<>(response, getFeedListItemClass());
-    }
-
-    @Override
     protected FeedRequest.FeedService getFeedService() {
         return FeedRequest.FeedService.MUTUAL;
     }

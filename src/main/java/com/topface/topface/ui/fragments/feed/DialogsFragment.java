@@ -8,7 +8,6 @@ import android.view.View;
 import com.google.gson.reflect.TypeToken;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
-import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.History;
 import com.topface.topface.data.Options;
 import com.topface.topface.promo.dialogs.PromoExpressMessages;
@@ -20,8 +19,8 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.adapters.FeedList;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -29,7 +28,6 @@ import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -141,11 +139,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     protected DialogListAdapter createNewAdapter() {
         return new DialogListAdapter(getActivity().getApplicationContext(), getUpdaterCallback());
-    }
-
-    @Override
-    protected FeedListData<FeedDialog> getFeedList(JSONObject data) {
-        return new FeedListData<>(data, getFeedListItemClass());
     }
 
     @Override

@@ -22,7 +22,6 @@ import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
-import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.experiments.SixCoinsSubscribeExperiment;
 import com.topface.topface.requests.BuyLikesAccessRequest;
@@ -52,7 +51,6 @@ import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -168,11 +166,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                 }
             }
         }
-    }
-
-    @Override
-    protected FeedListData<FeedLike> getFeedList(JSONObject response) {
-        return new FeedListData<>(response, getFeedListItemClass());
     }
 
     @Override
