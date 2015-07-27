@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -34,7 +35,6 @@ import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.STAuthMails;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
@@ -60,7 +60,7 @@ public class RegistrationFragment extends BaseFragment {
     private static final int START_SHIFT = 33;
 
     private Date mBirthday;
-    private int mSex = 1;
+    private int mSex = Static.BOY;
     private Timer mTimer = new Timer();
 
     @Bind(R.id.ivShowPassword)
@@ -81,8 +81,8 @@ public class RegistrationFragment extends BaseFragment {
     TextView mBirthdayText;
 
     @OnItemSelected(R.id.spnSex)
-    public void sexSelected(int position) {
-        mSex = position == 1 ? Static.GIRL : Static.BOY;
+    public void sexSelected(View view) {
+        mSex = (int) view.getTag();
     }
 
     @OnEditorAction(R.id.etName)
@@ -172,8 +172,8 @@ public class RegistrationFragment extends BaseFragment {
             String birthday = savedInstanceState.getString(BIRTHDAY);
             mBirthdayText.setText(
                     birthday != null && !birthday.equals("")
-                    ? birthday
-                    : getString(R.string.birthday));
+                            ? birthday
+                            : getString(R.string.birthday));
         }
         return root;
     }
@@ -185,12 +185,7 @@ public class RegistrationFragment extends BaseFragment {
     }
 
     private void initSexChangeSpinner() {
-        ArrayList<String> data = new ArrayList<>();
-        data.add(getActivity().getString(R.string.im_boy));
-        data.add(getActivity().getString(R.string.im_girl));
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.sex_choise_item, data);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpnSex.setAdapter(adapter);
+        mSpnSex.setAdapter(new SexAdapter(getActivity()));
         mSpnSex.setPrompt(getActivity().getString(R.string.u_sex));
     }
 
@@ -331,4 +326,40 @@ public class RegistrationFragment extends BaseFragment {
         mEdPassword.setEnabled(enable);
         mBirthdayText.setEnabled(enable);
     }
+
+    private class SexAdapter extends BaseAdapter {
+
+        private Context mContext;
+        private int[] mSexResIdArray = {R.string.im_boy, R.string.im_girl};
+
+        public SexAdapter(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        public int getCount() {
+            return mSexResIdArray.length;
+        }
+
+        @Override
+        public String getItem(int position) {
+            return mContext.getString(mSexResIdArray[position]);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = View.inflate(mContext, R.layout.sex_choise_item, null);
+                convertView.setTag(position == 0 ? Static.BOY : Static.GIRL);
+            }
+            ((TextView) convertView).setText(getItem(position));
+            return convertView;
+        }
+    }
+
 }
