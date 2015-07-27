@@ -82,6 +82,11 @@ public class Options extends AbstractData {
     public TrialVipExperiment trialVipExperiment = new TrialVipExperiment();
 
     /**
+     * manage SmsInvite screen
+     */
+    public ForceSmsInviteRedirect forceSmsInviteRedirect = new ForceSmsInviteRedirect();
+
+    /**
      * Id фрагмента, который будет отображаться при старте приложения
      * По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
      */
@@ -183,6 +188,7 @@ public class Options extends AbstractData {
         try {
             priceAdmiration = response.optInt("admirationPrice");
             trialVipExperiment = JsonUtils.optFromJson(response.optString("experimentTrialVip"), TrialVipExperiment.class, new TrialVipExperiment());
+            forceSmsInviteRedirect = JsonUtils.optFromJson(response.optString("forceSmsInviteRedirect"), ForceSmsInviteRedirect.class, new ForceSmsInviteRedirect());
             // по умолчанию превью в диалогах всегда отображаем
             hidePreviewDialog = response.optBoolean("hidePreviewDialog", false);
             priceLeader = response.optInt("leaderPrice");
@@ -221,7 +227,7 @@ public class Options extends AbstractData {
                         response.optJSONObject("premiumMessages"), PromoPopupEntity.AIR_MESSAGES
                 );
             } else {
-                premiumMessages = new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_MESSAGES);
+                premiumMessages = new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_MESSAGES, "");
             }
 
             if (response.has("visitorsPopup")) {
@@ -229,7 +235,7 @@ public class Options extends AbstractData {
                         response.optJSONObject("visitorsPopup"), PromoPopupEntity.AIR_VISITORS
                 );
             } else {
-                premiumVisitors = new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_VISITORS);
+                premiumVisitors = new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_VISITORS, "");
             }
 
             if (response.has("admirationPopup")) {
@@ -237,7 +243,7 @@ public class Options extends AbstractData {
                         response.optJSONObject("admirationPopup"), PromoPopupEntity.AIR_ADMIRATIONS
                 );
             } else {
-                premiumAdmirations = new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_ADMIRATIONS);
+                premiumAdmirations = new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_ADMIRATIONS, "");
             }
 
             if (response.has("links")) {
@@ -480,6 +486,10 @@ public class Options extends AbstractData {
          * таймаут для отображения попапа покупки премиума в часах
          */
         private int mTimeout;
+        /**
+         * id страницы, где показывать попап (ориентируемся на FragmentId)
+         */
+        private int mPageId;
 
         public static final int AIR_NONE = 0;
         public static final int AIR_MESSAGES = 1;
@@ -492,18 +502,34 @@ public class Options extends AbstractData {
                 mEnabled = premiumMessages.optBoolean("enabled");
                 mCount = premiumMessages.optInt("count", DEFAULT_COUNT);
                 mTimeout = premiumMessages.optInt("timeout", DEFAULT_TIMEOUT);
+                mPageId = getPageId(premiumMessages.optString("page"));
             }
         }
 
-        public PromoPopupEntity(boolean enabled, int count, int timeout, int type) {
+        public PromoPopupEntity(boolean enabled, int count, int timeout, int type, String page) {
             mEnabled = enabled;
             mCount = count;
             mTimeout = timeout;
             airType = type;
+            mPageId = getPageId(page);
+        }
+
+        private int getPageId(String page) {
+            BaseFragment.FragmentId fragmentId = BaseFragment.FragmentId.UNDEFINED;
+            try {
+                fragmentId = BaseFragment.FragmentId.valueOf(page);
+            } catch (IllegalArgumentException e) {
+                Debug.error("Illegal value of pageId", e);
+            }
+            return fragmentId.getId();
         }
 
         public int getCount() {
             return mCount;
+        }
+
+        public int getPageId() {
+            return mPageId;
         }
 
         public boolean isNeedShow() {
@@ -751,4 +777,7 @@ public class Options extends AbstractData {
         return trialVipExperiment.maxShowCount <= 0 ? TRIAL_VIP_MAX_SHOW_COUNT : trialVipExperiment.maxShowCount;
     }
 
+    public class ForceSmsInviteRedirect {
+        public boolean enabled = false;
+    }
 }

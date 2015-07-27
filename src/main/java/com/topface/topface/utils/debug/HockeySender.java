@@ -64,6 +64,7 @@ public class HockeySender implements ReportSender {
         send(report);
     }
 
+    @SuppressWarnings("deprecation")
     public void send(CrashReportData report) {
         send(report, ACRA.getConfig().formUri());
     }

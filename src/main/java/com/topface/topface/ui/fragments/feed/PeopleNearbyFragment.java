@@ -98,7 +98,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     @Override
     protected int getFeedType() {
-        return CountersManager.GEO;
+        return CountersManager.PEOPLE_NEARLY;
     }
 
     @Override
@@ -271,7 +271,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     @Override
     protected int getUnreadCounter() {
-        return 0;
+        return mCountersData.peopleNearby;
     }
 
     @Override

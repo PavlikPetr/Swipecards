@@ -7,6 +7,7 @@ import com.topface.topface.R;
 /**
  * Updates actionbar logo to show notification.
  */
+@SuppressWarnings("unused")
 public class IconNotificationController implements IActionbarNotifier {
 
     private ActionBar mActionBar;
@@ -16,9 +17,9 @@ public class IconNotificationController implements IActionbarNotifier {
     }
 
     @Override
-    public void refreshNotificator() {
+    public void refreshNotificator(int unreadMessages, int unreadMutual) {
         if (mActionBar != null) {
-            if (CacheProfile.unread_messages > 0 || CacheProfile.unread_mutual > 0) {
+            if (unreadMessages > 0 || unreadMutual > 0) {
                 mActionBar.setLogo(R.drawable.ic_home_notification);
             } else {
                 mActionBar.setLogo(R.drawable.ic_home);

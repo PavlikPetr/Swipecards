@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -29,6 +30,8 @@ import com.topface.topface.utils.http.IRequestClient;
 
 import java.lang.reflect.Field;
 import java.util.LinkedList;
+
+import butterknife.ButterKnife;
 
 public abstract class BaseFragment extends TrackedFragment implements IRequestClient {
 
@@ -77,6 +80,12 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(STATE_NEED_TITLES, mNeedTitles);
@@ -109,6 +118,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void setStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getActivity().getWindow().setStatusBarColor(getResources().getColor(getStatusBarColor()));
@@ -231,6 +241,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         return null;
     }
 
+    @SuppressWarnings("deprecation")
     protected ActionBar getSupportActionBar() {
         if (mSupportActionBar == null) {
             Activity activity = getActivity();
@@ -241,6 +252,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         return mSupportActionBar;
     }
 
+    @SuppressWarnings("deprecation")
     protected void setSupportProgressBarIndeterminateVisibility(boolean visible) {
         Activity activity = getActivity();
 

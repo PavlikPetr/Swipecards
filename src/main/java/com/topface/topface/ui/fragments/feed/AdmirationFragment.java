@@ -52,9 +52,9 @@ public class AdmirationFragment extends LikesFragment {
                 }
             });
         } else {
-            if (CacheProfile.unread_admirations > 0) {
+            if (mCountersData.admirations > 0) {
                 ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(1);
-                int curCounter = CacheProfile.unread_admirations;
+                int curCounter = mCountersData.admirations;
                 if (curCounter == 0) {
                     curCounter = CacheProfile.getOptions().premiumAdmirations.getCount();
                 }
@@ -103,7 +103,7 @@ public class AdmirationFragment extends LikesFragment {
 
     @Override
     protected int getUnreadCounter() {
-        return CacheProfile.unread_admirations;
+        return mCountersData.admirations;
     }
 
     @Override protected void makeAllItemsRead() {

@@ -30,6 +30,7 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.PhotoBlogListAdapter;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
 
@@ -135,7 +136,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
         if (isNotYourOwnId(item.user.id)) {
             if (!item.user.isEmpty()) {
                 FeedUser user = item.user;
-                Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false);
+                Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false, this.getClass().getSimpleName());
                 getActivity().startActivityForResult(intent, ChatActivity.REQUEST_CHAT);
             }
         } else {
@@ -159,7 +160,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
 
     @Override
     protected int getFeedType() {
-        return -1;
+        return CountersManager.UNKNOWN_TYPE;
     }
 
     @Override

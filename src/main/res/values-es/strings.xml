@@ -646,4 +646,8 @@
     <string name="status_confirmation_was_sent">Esperando confirmación</string>
     <string name="status_user_registered">Ya registrado</string>
     <string name="balance">Saldo (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
+    <string name="trial_vip_text">VIP gratis\npara 7 días</string>
+    <string name="trial_vip_button_text">Conectar VIP</string>
+    <string name="novice_sympathy">Envía simpatías a aquellos\nquienes realmente te gustan para\nempezar una relación satisfactoria</string>
+    <string name="novice_sympathies_bonus">¡Recibes %1$d simpatías de\nregalo! Esto significa que\nseguro les gustarás a las %2$d personas,\nque te mostrarán su simpatía</string>
 </resources>

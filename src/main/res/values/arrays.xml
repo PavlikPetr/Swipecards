@@ -8,4 +8,23 @@
         <item>@string/settings_cooperation</item>
     </string-array>
 
+    <string-array name="fake_girl_avatars">
+        <item>@drawable/fake_girl1</item>
+        <item>@drawable/fake_girl2</item>
+        <item>@drawable/fake_girl3</item>
+        <item>@drawable/fake_girl4</item>
+        <item>@drawable/fake_girl5</item>
+        <item>@drawable/fake_girl6</item>
+        <item>@drawable/fake_girl7</item>
+    </string-array>
+
+    <string-array name="fake_boy_avatars">
+        <item>@drawable/fake_boy1</item>
+        <item>@drawable/fake_boy2</item>
+        <item>@drawable/fake_boy3</item>
+        <item>@drawable/fake_boy4</item>
+        <item>@drawable/fake_boy5</item>
+        <item>@drawable/fake_boy6</item>
+        <item>@drawable/fake_boy7</item>
+    </string-array>
 </resources>

@@ -62,7 +62,6 @@ public class PaymentWallBuyingFragment extends CoinsBuyingFragment {
         }
     }
 
-
     @Override
     public void onInAppBillingUnsupported() {
         //У нас всегда платежи доступны для PW

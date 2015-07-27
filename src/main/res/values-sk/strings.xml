@@ -409,4 +409,6 @@
     <string name="restore">Obnoviť</string>
     <string name="admiration_sended">Údiv bol poslaný</string>
     <string name="auth_btn_ok">Prihlásiť sa cez Odnoklassniki</string>
+    <string name="novice_sympathy">Posielajte sympatie iba ľuďom, ktorý sa Vám\nnaozaj páčia\n - a môžete začať príjemnú známosť</string>
+    <string name="novice_sympathies_bonus">Získavate %1$d sympatií ako \n darček! Znamená to, že sa \nurčite budete páčiť %2$d ľuďom, \n kotrí Vám vyjadria svoju sympatiu</string>
 </resources>

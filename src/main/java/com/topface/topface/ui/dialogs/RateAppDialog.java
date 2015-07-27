@@ -34,6 +34,7 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
     public static final int GPLAY_ACTIVITY = 9999;
 
     private RatingBar mRatingBar;
+    private boolean mIsNeedClose = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,14 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
         //Закрыть диалог можно
         setCancelable(true);
         EasyTracker.sendEvent("RatePopup", "FeaturePopup", "Show", 1L);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mIsNeedClose) {
+            dismiss();
+        }
     }
 
     @Override
@@ -94,7 +103,7 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GPLAY_ACTIVITY) {
-            dismiss();
+            mIsNeedClose = true;
         }
     }
 
@@ -137,6 +146,7 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
             }
         }).exec();
     }
+
     /**
      * Saves status of rate popup show
      *

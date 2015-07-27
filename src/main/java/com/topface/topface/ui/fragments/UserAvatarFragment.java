@@ -26,9 +26,8 @@ public abstract class UserAvatarFragment extends BaseFragment
         implements View.OnClickListener, IUserOnlineListener {
 
     private MenuItem mBarAvatar;
-    private MenuItem mBarActions;
     private ActionBarTitleSetterDelegate mSetter;
-    private OverflowMenu mOverflowMenu;
+    protected OverflowMenu mOverflowMenu;
     private IUniversalUser mUniversalUser;
 
     @Override
@@ -57,8 +56,12 @@ public abstract class UserAvatarFragment extends BaseFragment
         MenuItemCompat.getActionView(mBarAvatar).findViewById(R.id.ivBarAvatarContainer).setOnClickListener(this);
 
         setActionBarAvatar(getUniversalUser());
-        mOverflowMenu = createOverflowMenu(menu);
+        if (isNeedShowOverflowMenu()) {
+            mOverflowMenu = createOverflowMenu(menu);
+        }
     }
+
+    protected abstract boolean isNeedShowOverflowMenu();
 
     @Override
     protected Integer getOptionsMenuRes() {
@@ -164,12 +167,6 @@ public abstract class UserAvatarFragment extends BaseFragment
         }
     }
 
-    public void closeOverflowMenu() {
-        if (mBarActions != null && mBarActions.isChecked()) {
-            onOptionsItemSelected(mBarActions);
-        }
-    }
-
     @Override
     protected String getTitle() {
         IUniversalUser user = getUniversalUser();
@@ -186,9 +183,5 @@ public abstract class UserAvatarFragment extends BaseFragment
         } else {
             return user.getCity();
         }
-    }
-
-    protected MenuItem getBarActionsMenuItem() {
-        return mBarActions;
     }
 }

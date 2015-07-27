@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">it_IT</string>
+    <string name="photofeed_title">Alza a nastro</string>
     <string name="general_warning">AVVERTIMENTO</string>
     <string name="general_ok">OK</string>
     <string name="general_settings_abbr">Impost.</string>
@@ -628,6 +629,7 @@
     <string name="receive_message_notification">Ricevere notifiche\ndei nuovi messaggi</string>
     <string name="receive_mutual_notification">Ricevere notifiche\ndelle nuove simpatie reciproche</string>
     <string name="receive_sympathy_notification">Ricevere notifiche\ndelle nuove simpatie</string>
+    <string name="receive_rate_notification">key: receive_rate_notification</string>
     <string name="receive_guest_notification">Ricevere notifiche\ndei nuovi visitatori</string>
     <string name="on_phone">Sul cellulare</string>
     <string name="on_mail">Sull’e-mail</string>
@@ -644,4 +646,6 @@
     <string name="balance">Saldo (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
     <string name="trial_vip_text">Modalità VIP gratis per 7 giorni</string>
     <string name="trial_vip_button_text">Connettere VIP</string>
+    <string name="novice_sympathy">Invia le simpatie solo alle persone che ti\npiacciono veramente\nper iniziare una piacevole relazione</string>
+    <string name="novice_sympathies_bonus">Riceverai %1$d simpatie in\nregalo! Significa che\ndi sicuro piacerai a %2$d persone\nche ti dimostreranno la loro simpatia</string>
 </resources>

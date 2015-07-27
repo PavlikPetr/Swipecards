@@ -148,7 +148,6 @@ public class Utils {
         return !TextUtils.isEmpty(email) && EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
 
-    @SuppressWarnings("UnusedDeclaration")
     public static void goToUrl(Context context, String url) {
         context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
@@ -376,6 +375,7 @@ public class Utils {
         return ConnectionChangeReceiver.getConnectionType();
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static void addOnGlobalLayoutListener(final View view, final ViewTreeObserver.OnGlobalLayoutListener listener) {
         ViewTreeObserver vto = view.getViewTreeObserver();
         if (vto != null && vto.isAlive()) {
