@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments;
+package com.topface.topface.ui.fragments.buy;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.topface.topface.App;
-import com.topface.topface.ui.fragments.buy.GoogleMarketBuyingFragment;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
