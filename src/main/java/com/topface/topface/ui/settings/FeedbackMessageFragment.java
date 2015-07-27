@@ -47,7 +47,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
-public class FeedbackMessageFragment extends AbstractEditFragment{
+public class FeedbackMessageFragment extends AbstractEditFragment {
 
     public static final String INTENT_FEEDBACK_TYPE = "feedback_message_type";
     private static final String GOOGLE_WALLET_URL = "https://wallet.google.com";
@@ -101,8 +101,8 @@ public class FeedbackMessageFragment extends AbstractEditFragment{
 
     @OnClick(R.id.tvTransactionIdInfoLink)
     public void googleWalletClick() {
-        if(Utils.isIntentAvailable(getActivity(), Intent.ACTION_VIEW)){
-            Utils.goToUrl(getActivity(),GOOGLE_WALLET_URL);
+        if (Utils.isIntentAvailable(getActivity(), Intent.ACTION_VIEW)) {
+            Utils.goToUrl(getActivity(), GOOGLE_WALLET_URL);
         }
     }
 
@@ -112,7 +112,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment{
         super.onCreateView(inflater, container, saved);
         View root = inflater.inflate(R.layout.fragment_feedback_message, null);
         if (root == null) return null;
-        ButterKnife.bind(this,root);
+        ButterKnife.bind(this, root);
         //Если  текущий язык приложения не русский или английский, то нужно показывать сообщение
         //о том, что лучше писать нам по русски или английски, поэтому проверяем тут локаль
         String language = Locale.getDefault().getLanguage();

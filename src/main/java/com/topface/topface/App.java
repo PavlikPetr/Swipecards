@@ -466,7 +466,12 @@ public class App extends Application {
     }
 
     private void sendUnauthorizedRequests() {
-        new ParallelApiRequest(getContext()) { @Override public boolean isNeedAuth() { return false; } }
+        new ParallelApiRequest(getContext()) {
+            @Override
+            public boolean isNeedAuth() {
+                return false;
+            }
+        }
                 .addRequest(createAppOptionsRequest())
                 .addRequest(createAppSocialAppsIdsRequest(null))
                 .exec();
@@ -495,24 +500,28 @@ public class App extends Application {
 
     public ApiRequest createAppSocialAppsIdsRequest(final ApiHandler handler) {
         return new AppGetSocialAppsIdsRequest(getContext()).callback(new DataApiHandler<AppSocialAppsIds>() {
-            @Override public void fail(int codeError, IApiResponse response) {
+            @Override
+            public void fail(int codeError, IApiResponse response) {
                 if (handler != null) {
                     handler.fail(codeError, response);
                 }
             }
 
-            @Override protected void success(AppSocialAppsIds data, IApiResponse response) {
+            @Override
+            protected void success(AppSocialAppsIds data, IApiResponse response) {
                 mAppSocialAppsIds = data;
                 if (handler != null) {
                     handler.success(response);
                 }
             }
 
-            @Override protected AppSocialAppsIds parseResponse(ApiResponse response) {
+            @Override
+            protected AppSocialAppsIds parseResponse(ApiResponse response) {
                 return new AppSocialAppsIds(response.getJsonResult());
             }
 
-            @Override public void always(IApiResponse response) {
+            @Override
+            public void always(IApiResponse response) {
                 super.always(response);
                 if (handler != null) {
                     handler.always(response);

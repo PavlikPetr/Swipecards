@@ -4,6 +4,6 @@
         <nine-patch android:src="@drawable/button_shadow" />
     </item>
     <item>
-        <nine-patch android:src="@drawable/btn_vk_normal"/>
+        <nine-patch android:src="@drawable/btn_vk_normal" />
     </item>
 </layer-list>

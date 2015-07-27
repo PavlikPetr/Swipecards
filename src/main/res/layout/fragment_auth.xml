@@ -80,8 +80,7 @@
                 style="@style/AuthButtonBlue"
                 android:drawableLeft="@drawable/ic_enter"
                 android:text="@string/sign_in"
-                android:textColor="#FFFFFF"
-                />
+                android:textColor="#FFFFFF" />
 
             <Button
                 android:id="@+id/btnCreateAccount"

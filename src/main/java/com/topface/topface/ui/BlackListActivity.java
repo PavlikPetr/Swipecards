@@ -11,6 +11,7 @@ public class BlackListActivity extends SingleFragmentActivity {
     protected String getFragmentTag() {
         return BlackListFragment.class.getSimpleName();
     }
+
     @Override
     protected Fragment createFragment() {
         return new BlackListFragment();

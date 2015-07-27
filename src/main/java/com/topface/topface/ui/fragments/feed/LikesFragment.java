@@ -117,7 +117,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_FEED);
     }
 
-    @Override protected void makeAllItemsRead() {
+    @Override
+    protected void makeAllItemsRead() {
         // likes are read by one
     }
 

@@ -422,7 +422,6 @@ public class AppConfig extends AbstractConfig {
     }
 
 
-
     public void resetAppSocialAppsIdsData() {
         resetAndSaveConfig(DATA_APP_OPTIONS);
     }

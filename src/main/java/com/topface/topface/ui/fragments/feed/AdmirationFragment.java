@@ -109,7 +109,8 @@ public class AdmirationFragment extends LikesFragment {
         return mCountersData.admirations;
     }
 
-    @Override protected void makeAllItemsRead() {
+    @Override
+    protected void makeAllItemsRead() {
         baseMakeAllItemsRead();
     }
 
