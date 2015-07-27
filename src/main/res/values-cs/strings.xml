@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">cs_CZ</string>
+    <string name="photofeed_title">Postavit se na stránku</string>
     <string name="general_warning">UPOZORNĚNÍ</string>
     <string name="general_ok">OK</string>
     <string name="general_settings_abbr">Nastavení</string>
@@ -605,4 +606,6 @@
     <string name="balance">Bilance (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
     <string name="trial_vip_text">Status VIP zdarma na 7 dní</string>
     <string name="trial_vip_button_text">Připojit VIP</string>
+    <string name="novice_sympathy">Posílejte sympatie pouze lidem, které se Vám\nopravdu líbí\ - a můžete začít příjemnou známost</string>
+    <string name="novice_sympathies_bonus">Zjískáváte %1$d sympatií jako\ndárek! Znamená to, že se\nurčitě budete líbit %2$d lidem,\nkteří vyjádří Vám svou sympatii</string>
 </resources>
