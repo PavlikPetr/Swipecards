@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.topface.topface.R;
+import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.Products;
 import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.statistics.PushButtonVipUniqueStatistics;
@@ -15,18 +16,16 @@ import com.topface.topface.utils.CacheProfile;
 
 import java.util.LinkedList;
 
-import static com.topface.topface.data.Products.BuyButton;
-
 public class MarketBuyingFragment extends CoinsBuyingFragment {
 
     public static MarketBuyingFragment newInstance(String from, String text) {
         MarketBuyingFragment buyingFragment = new MarketBuyingFragment();
         Bundle args = new Bundle();
         if (!TextUtils.isEmpty(text)) {
-            args.putString(ARG_RESOURCE_INFO_TEXT, text);
+            args.putString(PurchasesConstants.ARG_RESOURCE_INFO_TEXT, text);
         }
         if (from != null) {
-            args.putString(ARG_TAG_SOURCE, from);
+            args.putString(PurchasesConstants.ARG_TAG_SOURCE, from);
         }
         buyingFragment.setArguments(args);
         return buyingFragment;
@@ -44,12 +43,12 @@ public class MarketBuyingFragment extends CoinsBuyingFragment {
         args.putInt(PurchasesFragment.ARG_ITEM_TYPE, type);
         args.putInt(PurchasesFragment.ARG_ITEM_PRICE, coins);
         if (from != null) {
-            args.putString(ARG_TAG_SOURCE, from);
+            args.putString(PurchasesConstants.ARG_TAG_SOURCE, from);
         }
         fragment.setArguments(args);
     }
 
-    protected LinkedList<BuyButton> getCoinsProducts(@NonNull Products products, boolean coinsMaskedExperiment) {
+    protected LinkedList<BuyButtonData> getCoinsProducts(@NonNull Products products, boolean coinsMaskedExperiment) {
         boolean hasMaskedCoinsSubs = products.info != null
                 && products.info.coinsSubscriptionMasked != null
                 && products.info.coinsSubscriptionMasked.status != null
@@ -81,7 +80,7 @@ public class MarketBuyingFragment extends CoinsBuyingFragment {
     }
 
     @Override
-    public void buy(BuyButton btn) {
+    public void buy(BuyButtonData btn) {
         PushButtonVipUniqueStatistics.sendPushButtonNoVip(btn.id, ((Object) this).getClass().getSimpleName(), getFrom());
         PushButtonVipStatistics.send(btn.id, ((Object) this).getClass().getSimpleName(), getFrom());
         super.buy(btn);

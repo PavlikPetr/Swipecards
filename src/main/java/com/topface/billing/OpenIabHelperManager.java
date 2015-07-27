@@ -7,6 +7,7 @@ import android.content.Intent;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
+import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.utils.CacheProfile;
@@ -195,22 +196,22 @@ public class OpenIabHelperManager implements IabHelper.OnIabSetupFinishedListene
         ArrayList<String> skuList = new ArrayList<>();
         Products products = CacheProfile.getMarketProducts();
         if (products != null) {
-            for (Products.BuyButton buyButton : products.coins) {
+            for (BuyButtonData buyButton : products.coins) {
                 skuList.add(buyButton.id);
             }
-            for (Products.BuyButton buyButton : products.likes) {
+            for (BuyButtonData buyButton : products.likes) {
                 skuList.add(buyButton.id);
             }
-            for (Products.BuyButton buyButton : products.coinsSubscriptions) {
+            for (BuyButtonData buyButton : products.coinsSubscriptions) {
                 skuList.add(buyButton.id);
             }
-            for (Products.BuyButton buyButton : products.coinsSubscriptionsMasked) {
+            for (BuyButtonData buyButton : products.coinsSubscriptionsMasked) {
                 skuList.add(buyButton.id);
             }
-            for (Products.BuyButton buyButton : products.premium) {
+            for (BuyButtonData buyButton : products.premium) {
                 skuList.add(buyButton.id);
             }
-            for (Products.BuyButton buyButton : products.others) {
+            for (BuyButtonData buyButton : products.others) {
                 skuList.add(buyButton.id);
             }
         }

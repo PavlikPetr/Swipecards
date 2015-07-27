@@ -19,10 +19,12 @@ import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.Products;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.utils.BuyVipFragmentManager;
 import com.topface.topface.utils.CacheProfile;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
@@ -45,9 +47,9 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
 
     private void getDataFromIntent(Bundle args) {
         if (args != null) {
-            mFrom = args.getString(ARG_TAG_SOURCE);
-            if (args.containsKey(ARG_RESOURCE_INFO_TEXT)) {
-                mResourceInfoText = args.getString(ARG_RESOURCE_INFO_TEXT);
+            mFrom = args.getString(PurchasesConstants.ARG_TAG_SOURCE);
+            if (args.containsKey(PurchasesConstants.ARG_RESOURCE_INFO_TEXT)) {
+                mResourceInfoText = args.getString(PurchasesConstants.ARG_RESOURCE_INFO_TEXT);
                 setResourceInfoText();
             }
         }
@@ -107,7 +109,7 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
                 products.likes.isEmpty() ? View.GONE : View.VISIBLE
         );
         // sympathies buttons
-        for (final Products.BuyButton curButton : products.likes) {
+        for (final BuyButtonData curButton : products.likes) {
             View btnView = Products.setBuyButton(likesButtons, curButton, getActivity(),
                     new Products.BuyButtonClickListener() {
                         @Override
@@ -136,7 +138,7 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
             return;
         }
         boolean coinsMaskedExperiment = CacheProfile.getOptions().forceCoinsSubscriptions;
-        List<Products.BuyButton> coinsProducts = getCoinsProducts(products, coinsMaskedExperiment);
+        List<BuyButtonData> coinsProducts = getCoinsProducts(products, coinsMaskedExperiment);
         root.findViewById(R.id.coins_title).setVisibility(
                 coinsProducts.isEmpty() ? View.GONE : View.VISIBLE
         );
@@ -145,7 +147,7 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
             coinsButtonsContainer.removeAllViews();
         }
         // coins items buttons also coinsSubscriptionsMasked buttons
-        for (final Products.BuyButton curButton : coinsProducts) {
+        for (final BuyButtonData curButton : coinsProducts) {
             View btnView = Products.setBuyButton(coinsButtonsContainer, curButton, getActivity(),
                     new Products.BuyButtonClickListener() {
                         @Override
@@ -208,5 +210,5 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
         }
     }
 
-    protected abstract List<Products.BuyButton> getCoinsProducts(Products products, boolean coinsMaskedExperiment);
+    protected abstract List<BuyButtonData> getCoinsProducts(Products products, boolean coinsMaskedExperiment);
 }

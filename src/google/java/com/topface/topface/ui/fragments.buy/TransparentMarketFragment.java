@@ -12,6 +12,8 @@ import com.topface.topface.ui.fragments.buy.GoogleMarketBuyingFragment;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
+import static com.topface.topface.ui.fragments.buy.PurchasesConstants.ARG_TAG_SOURCE;
+
 
 public class TransparentMarketFragment extends GoogleMarketBuyingFragment {
 
@@ -22,11 +24,13 @@ public class TransparentMarketFragment extends GoogleMarketBuyingFragment {
     private String mSubscriptionId;
     private boolean mIsSubscription;
     private boolean isNeedCloseFragment = false;
+    private String mFrom;
 
-    public static TransparentMarketFragment newInstance(String skuId, boolean isSubscription) {
+    public static TransparentMarketFragment newInstance(String skuId, boolean isSubscription, String from) {
         final TransparentMarketFragment fragment = new TransparentMarketFragment();
         Bundle bundle = new Bundle();
         bundle.putString(TransparentMarketFragment.PORDUCT_ID, skuId);
+        bundle.putString(ARG_TAG_SOURCE, from);
         bundle.putBoolean(TransparentMarketFragment.IS_SUBSCRIPTION, isSubscription);
         fragment.setArguments(bundle);
         return fragment;
@@ -41,6 +45,9 @@ public class TransparentMarketFragment extends GoogleMarketBuyingFragment {
             }
             if (getArguments().containsKey(IS_SUBSCRIPTION)) {
                 mIsSubscription = getArguments().getBoolean(IS_SUBSCRIPTION);
+            }
+            if (getArguments().containsKey(ARG_TAG_SOURCE)) {
+                mFrom = getArguments().getString(ARG_TAG_SOURCE, "");
             }
         }
         return super.onCreateView(inflater, container, savedInstanceState);
