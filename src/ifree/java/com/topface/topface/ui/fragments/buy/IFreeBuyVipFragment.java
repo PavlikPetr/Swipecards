@@ -190,7 +190,7 @@ public class IFreeBuyVipFragment extends IFreePurchases implements OnClickListen
                     new Products.BuyButtonClickListener() {
                         @Override
                         public void onClick(String id) {
-                            buyProduct(id,getFrom());
+                            buyProduct(id, getFrom());
                         }
                     }
             );

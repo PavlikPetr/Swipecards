@@ -12,7 +12,7 @@ public class BuyVipFragmentManager {
         return IFreeBuyVipFragment.class.getName();
     }
 
-    public static IFreeBuyVipFragment getVipInstance(boolean needActionBar, String from, String text){
-        return IFreeBuyVipFragment.newInstance(needActionBar,from,text);
+    public static IFreeBuyVipFragment getVipInstance(boolean needActionBar, String from, String text) {
+        return IFreeBuyVipFragment.newInstance(needActionBar, from, text);
     }
 }

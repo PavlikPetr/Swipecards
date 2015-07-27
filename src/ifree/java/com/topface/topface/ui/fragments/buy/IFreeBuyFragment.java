@@ -168,7 +168,7 @@ public class IFreeBuyFragment extends IFreePurchases {
                     new Products.BuyButtonClickListener() {
                         @Override
                         public void onClick(String id) {
-                            buyProduct(id,mFrom);
+                            buyProduct(id, mFrom);
                             Activity activity = getActivity();
                             if (activity instanceof PurchasesActivity) {
                                 ((PurchasesActivity) activity).skipBonus();
@@ -199,7 +199,7 @@ public class IFreeBuyFragment extends IFreePurchases {
                     new Products.BuyButtonClickListener() {
                         @Override
                         public void onClick(String id) {
-                            buyProduct(id,mFrom);
+                            buyProduct(id, mFrom);
                             Activity activity = getActivity();
                             if (activity instanceof PurchasesActivity) {
                                 ((PurchasesActivity) activity).skipBonus();

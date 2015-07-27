@@ -4,7 +4,7 @@ import com.topface.topface.BuildConfig;
 
 public class MarketApiManagerUtils {
 
-    public static BaseMarketApiManager getMarketManagerByType(){
+    public static BaseMarketApiManager getMarketManagerByType() {
         switch (BuildConfig.MARKET_API_TYPE) {
             case GOOGLE_PLAY:
                 return new GoogleMarketApiManager();
