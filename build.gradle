@@ -210,6 +210,8 @@ dependencies {
         //и на нее ругается gradle
         exclude group: 'org.json'
     }
+    compile 'com.jakewharton:butterknife:7.0.1'
+
     compile 'com.google.code.gson:gson:2.3'
     //Library for WebSocket and other network requests
     compile 'com.koushikdutta.async:androidasync:2.1.5'

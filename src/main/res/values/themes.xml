@@ -2,7 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Базовая тема приложения -->
-    <style name="Theme.Topface" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="Theme._Topface" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/light_theme_color_primary</item>
         <item name="colorPrimaryDark">@color/light_theme_color_primary_dark</item>
         <item name="colorAccent">@color/light_theme_color_accent</item>
@@ -48,6 +48,8 @@
         <item name="android:windowDrawsSystemBarBackgrounds" tools:ignore="NewApi">true</item>
     </style>
 
+    <style name="Theme.Topface" parent="Theme._Topface"></style>
+
     <!-- transparent activity theme -->
     <style name="Theme.Transparent" parent="Topface.Theme.TransparentActionBarActivity">
         <item name="android:windowIsTranslucent">true</item>
@@ -87,12 +89,8 @@
         <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewStyle</item>
     </style>
 
-    <style name="Theme.Topface.ActionbarOverlay" parent="Theme.Topface">
-        <item name="windowActionBarOverlay">true</item>
-        <item name="android:windowActionBarOverlay" tools:ignore="NewApi">true</item>
-    </style>
 
-    <style name="Theme.Topface.Navigation" parent="Theme.Topface.ActionbarOverlay">
+    <style name="Theme.Topface.Navigation" parent="Theme.Topface">
         <item name="windowActionBarOverlay">true</item>
         <item name="android:windowActionBarOverlay" tools:ignore="NewApi">true</item>
         <item name="android:windowNoTitle">true</item>
