@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/loInvitesPopup"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
+    android:id="@+id/loInvitesPopup"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black_60_percent">
+    android:background="@color/black_60_percent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -18,14 +18,14 @@
 
         <TextView
             android:id="@+id/airMessagesTitle"
+            style="@style/TitleBlackText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:gravity="center"
-            style="@style/TitleBlackText"
-            android:textSize="20sp"
+            android:minHeight="50dp"
             android:text="@string/general_attention"
-            android:minHeight="50dp"/>
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/airMessagesText"
@@ -33,53 +33,53 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/airMessagesTitle"
             android:gravity="center"
-            android:textColor="@color/bg_main"
-            android:textSize="16sp"
+            android:paddingBottom="28dp"
             android:paddingTop="30dp"
-            android:paddingBottom="28dp" />
+            android:textColor="@color/bg_main"
+            android:textSize="16sp" />
 
         <View
             android:id="@+id/fakeView"
-            android:layout_height="0dp"
             android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_below="@+id/airMessagesText"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true" />
 
         <Button
-            style="@style/Widget.Topface.Button.Big.Blue"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:layout_alignRight="@id/fakeView"
-            android:layout_alignParentLeft="true"
-            android:layout_alignTop="@id/fakeView"
             android:id="@+id/buyVip"
-            android:text="@string/buying_vip_status"
-            android:layout_marginRight="2dp"
-            android:padding="6dp"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textSize="14sp"/>
-
-                <Button
-            style="@style/Widget.Topface.Button.Big.Gray"
-            android:id="@+id/deleteMessages"
-            android:layout_height="wrap_content"
+            style="@style/Widget.Topface.Button.Big.Blue"
             android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignRight="@id/fakeView"
             android:layout_alignTop="@id/fakeView"
-            android:layout_alignLeft="@id/fakeView"
-            android:text="@string/general_delete_messages"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="2dp"
-            android:padding="6dp"
+            android:layout_marginRight="2dp"
             android:ellipsize="end"
+            android:padding="6dp"
             android:singleLine="true"
-            android:textSize="14sp"/>
+            android:text="@string/buying_vip_status"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/deleteMessages"
+            style="@style/Widget.Topface.Button.Big.Gray"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/fakeView"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/fakeView"
+            android:layout_marginLeft="2dp"
+            android:ellipsize="end"
+            android:padding="6dp"
+            android:singleLine="true"
+            android:text="@string/general_delete_messages"
+            android:textSize="14sp" />
 
     </RelativeLayout>
 
     <com.topface.topface.ui.views.LockerView
         android:id="@+id/ipLocker"
-        android:visibility="gone"
-        style="@style/LoadingLocker"/>
+        style="@style/LoadingLocker"
+        android:visibility="gone" />
 
 </RelativeLayout>
