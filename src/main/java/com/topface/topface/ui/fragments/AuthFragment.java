@@ -31,7 +31,6 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.PasswordRecoverActivity;
 import com.topface.topface.ui.RegistrationActivity;
 import com.topface.topface.ui.TopfaceAuthActivity;
-import com.topface.topface.utils.AuthButtonsController;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
@@ -47,14 +46,11 @@ import butterknife.OnClick;
 public class AuthFragment extends BaseAuthFragment {
 
     public static final String REAUTH_INTENT = "com.topface.topface.action.AUTH";
-    public static final String SOC_NET_BTNS_HIDDEN = "SocNetBtnsHidden";
-    public static final String TF_BTNS_HIDDEN = "TfBtnsHidden";
     private static final String MAIN_BUTTONS_GA_TAG = "LoginButtonsTest";
     private static final String TRANSLATION_Y = "translationY";
     private static final int ANIMATION_PATH = 36;
     private static final long ANIMATION_DURATION = 500;
     private AuthorizationManager mAuthorizationManager;
-    private AuthButtonsController mBtnsController;
 
     private boolean mIsSocNetBtnHidden = true;
     private boolean mIsTfBtnHidden = false;
@@ -84,7 +80,7 @@ public class AuthFragment extends BaseAuthFragment {
 
     @OnClick(R.id.btnAuthFB)
     public void btnFBClick() {
-        EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "LoginMainFb", mBtnsController.getLocaleTag(), 1L);
+        EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "LoginMainFb", "", 1L);
         if (checkOnline() && mAuthorizationManager != null) {
             hideButtons();
             waitUntilAuthSocialOptions(new Runnable() {
@@ -99,10 +95,8 @@ public class AuthFragment extends BaseAuthFragment {
 
     @OnClick(R.id.btnAuthVK)
     public void btnVKClick() {
-        EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "LoginMainVk", mBtnsController.getLocaleTag(), 1L);
-
+        EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "LoginMainVk", "", 1L);
         if (checkOnline() && mAuthorizationManager != null) {
-            hideButtons();
             waitUntilAuthSocialOptions(new Runnable() {
                 @Override
                 public void run() {
@@ -114,7 +108,7 @@ public class AuthFragment extends BaseAuthFragment {
 
     @OnClick(R.id.btnAuthOk)
     public void btnOKClick() {
-        EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "LoginMainOk", mBtnsController.getLocaleTag(), 1L);
+        EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "LoginMainOk", "", 1L);
         if (checkOnline() && mAuthorizationManager != null) {
             waitUntilAuthSocialOptions(new Runnable() {
                 @Override
@@ -158,39 +152,26 @@ public class AuthFragment extends BaseAuthFragment {
                 .setDuration(ANIMATION_DURATION).start();
         mTfAuthBack.setVisibility(View.GONE);
         mIsNeedAnimate = true;
-        setSocNetBtnVisibility(true, false);
-        setTfLoginBtnVisibility(false, false);
+        setSocNetBtnVisibility(true, true);
+        setTfLoginBtnVisibility(false, true);
         mIsNeedAnimate = false;
     }
 
     private void setSocNetBtnVisibility(boolean visibility, boolean isNeedChangeFlagState) {
-        if(isNeedChangeFlagState){
-            mIsSocNetBtnHidden = visibility;
-        }
-        if (mBtnsController == null || !isAdded()) {
-            return;
-        }
-        if (mBtnsController.isSocialNetworkActive(AuthToken.SN_VKONTAKTE)) {
+        if (isAdded()) {
+            if (isNeedChangeFlagState) {
+                mIsSocNetBtnHidden = visibility;
+            }
             setVisibilityAndAnmateView(mVKButton, visibility);
-        } else {
-            setVisibilityAndAnmateView(mVKButton, false);
-        }
-        if (mBtnsController.isSocialNetworkActive(AuthToken.SN_FACEBOOK)) {
             setVisibilityAndAnmateView(mFBButton, visibility);
-        } else {
-            setVisibilityAndAnmateView(mFBButton, false);
-        }
-        if (mBtnsController.isSocialNetworkActive(AuthToken.SN_ODNOKLASSNIKI)) {
             setVisibilityAndAnmateView(mOKButton, visibility);
-        } else {
-            setVisibilityAndAnmateView(mOKButton, false);
+            setVisibilityAndAnmateView(mTfAccount, visibility);
         }
-        setVisibilityAndAnmateView(mTfAccount, visibility);
     }
 
     private void setTfLoginBtnVisibility(boolean visibility, boolean isNeedChangeFlagState) {
         if (isAdded()) {
-            if(isNeedChangeFlagState){
+            if (isNeedChangeFlagState) {
                 mIsTfBtnHidden = visibility;
             }
             setVisibilityAndAnmateView(mSignIn, visibility);
@@ -249,20 +230,9 @@ public class AuthFragment extends BaseAuthFragment {
         Debug.log("AF: onCreate");
         View root = inflater.inflate(R.layout.fragment_auth, null);
         ButterKnife.bind(this, root);
-        if (savedInstanceState != null) {
-            setSocNetBtnVisibility(savedInstanceState.getBoolean(SOC_NET_BTNS_HIDDEN), true);
-            setTfLoginBtnVisibility(savedInstanceState.getBoolean(TF_BTNS_HIDDEN), true);
-        }
         initViews(root);
 
         return root;
-    }
-
-    @Override
-    protected void initViews(final View root) {
-        super.initViews(root);
-        mBtnsController = new AuthButtonsController(getActivity());
-        setSocNetBtnVisibility(true, true);
     }
 
     @Override
@@ -302,8 +272,6 @@ public class AuthFragment extends BaseAuthFragment {
             if (!authToken.isEmpty()) {
                 auth(AuthToken.getInstance());
             } else if (TextUtils.equals(data.getAction(), VKOpenAuthActivity.VK_RESULT_INTENT_NAME)) {
-                setTfLoginBtnVisibility(mIsSocNetBtnHidden, true);
-                setTfLoginBtnVisibility(mIsTfBtnHidden, true);
                 hideProgress();
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -312,24 +280,16 @@ public class AuthFragment extends BaseAuthFragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(SOC_NET_BTNS_HIDDEN, mIsSocNetBtnHidden);
-        outState.putBoolean(TF_BTNS_HIDDEN, mIsTfBtnHidden);
-    }
-
-    @Override
     protected void showButtons() {
-        mLogo.setVisibility(View.VISIBLE);
-        setSocNetBtnVisibility(mIsSocNetBtnHidden, true);
-        setTfLoginBtnVisibility(mIsTfBtnHidden, true);
+        setSocNetBtnVisibility(mIsSocNetBtnHidden, false);
+        setTfLoginBtnVisibility(mIsTfBtnHidden, false);
     }
 
     @Override
     protected void hideButtons() {
         if (isAdded()) {
-            setSocNetBtnVisibility(false,false);
-            setTfLoginBtnVisibility(false,false);
+            setSocNetBtnVisibility(false, false);
+            setTfLoginBtnVisibility(false, false);
             hideRetrier();
             mProgressBar.setVisibility(View.VISIBLE);
         }
@@ -338,7 +298,6 @@ public class AuthFragment extends BaseAuthFragment {
     @Override
     protected void showProgress() {
         hideButtons();
-        mLogo.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
@@ -388,17 +347,11 @@ public class AuthFragment extends BaseAuthFragment {
     }
 
     @Override
-    protected void onSuccessAuthorization(AuthToken token) {
-        if (!token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-            mBtnsController.addSocialNetwork(token.getSocialNet());
-        }
-    }
+    protected void onSuccessAuthorization(AuthToken token) {}
 
     @Override
     public void onResume() {
         super.onResume();
-            setSocNetBtnVisibility(mIsSocNetBtnHidden, true);
-            setTfLoginBtnVisibility(mIsTfBtnHidden, true);
         mAuthorizationManager.onResume();
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -424,7 +377,7 @@ public class AuthFragment extends BaseAuthFragment {
             actionBar.show();
         }
         if (!hasAuthorized()) {
-            EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "DismissMain", mBtnsController.getLocaleTag(), 1L);
+            EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "DismissMain", "", 1L);
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mTokenReadyReceiver);
     }
