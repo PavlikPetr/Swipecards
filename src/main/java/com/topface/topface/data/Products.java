@@ -436,8 +436,8 @@ public class Products extends AbstractData {
         }
     }
 
-    private static String getPriceAndCurrencyAddrevation(String price, String currency){
-        switch (currency){
+    private static String getPriceAndCurrencyAddrevation(String price, String currency) {
+        switch (currency) {
             case EUR:
                 return price + App.getContext().getString(R.string.eur);
             case USD:

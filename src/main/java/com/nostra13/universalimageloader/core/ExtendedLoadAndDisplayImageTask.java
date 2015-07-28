@@ -2,18 +2,13 @@ package com.nostra13.universalimageloader.core;
 
 import android.os.Handler;
 
-import com.nostra13.universalimageloader.core.assist.LoadedFrom;
 import com.nostra13.universalimageloader.utils.IoUtils;
 import com.nostra13.universalimageloader.utils.L;
 import com.topface.topface.utils.IRequestConnectionListener;
 import com.topface.topface.utils.RequestConnectionListenerFactory;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * Created by kirussell on 26.04.2014.
@@ -38,7 +33,7 @@ public class ExtendedLoadAndDisplayImageTask extends LoadAndDisplayImageTask {
         listener.onConnectInvoked();
         InputStream is = this.getDownloader().getStream(this.uri, this.options.getExtraForDownloader());
         listener.onConnectionEstablished();
-        if(is == null) {
+        if (is == null) {
             L.e("No stream for image [%s]", new Object[]{this.memoryCacheKey});
             return false;
         } else {

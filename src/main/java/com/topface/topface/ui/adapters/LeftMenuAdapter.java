@@ -154,8 +154,8 @@ public class LeftMenuAdapter extends BaseAdapter {
             case TYPE_MENU_BUTTON_WITH_BADGE:
                 holder.btnMenu.setText(item.getMenuText());
                 holder.icon.setBackgroundResource(item.getMenuIconResId());
-                if(mCountersData != null){
-                    updateCountersBadge(holder.counterBadge,mCountersData.getCounterByFragmentId(item.getMenuId()));
+                if (mCountersData != null) {
+                    updateCountersBadge(holder.counterBadge, mCountersData.getCounterByFragmentId(item.getMenuId()));
                 }
                 break;
             case TYPE_MENU_BUTTON_WITH_PHOTO:
@@ -191,7 +191,7 @@ public class LeftMenuAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void updateCounters(CountersData countersData){
+    public void updateCounters(CountersData countersData) {
         mCountersData = countersData;
         notifyDataSetChanged();
     }
@@ -234,7 +234,8 @@ public class LeftMenuAdapter extends BaseAdapter {
 
         void setMenuIconPhoto(Photo photo);
 
-        @DrawableRes int getExtraIconDrawable();
+        @DrawableRes
+        int getExtraIconDrawable();
 
         void setExtraIconDrawable(@DrawableRes int resId);
     }
