@@ -8,6 +8,7 @@ import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.Static;
 import com.topface.topface.utils.social.AuthToken;
 
+import static com.topface.topface.utils.config.FeedsCache.FEEDS_TYPE.DATA_ADMIRATION_FEEDS;
 import static com.topface.topface.utils.config.FeedsCache.FEEDS_TYPE.DATA_BOOKMARKS_FEEDS;
 import static com.topface.topface.utils.config.FeedsCache.FEEDS_TYPE.DATA_DIALOGS_FEEDS;
 import static com.topface.topface.utils.config.FeedsCache.FEEDS_TYPE.DATA_FANS_FEEDS;
@@ -27,6 +28,7 @@ public class FeedsCache extends AbstractConfig {
         DATA_BOOKMARKS_FEEDS("data_bookmarks_feeds"),
         DATA_LIKES_FEEDS("data_likes_feeds"),
         DATA_MUTUALS_FEEDS("data_mutuals_feeds"),
+        DATA_ADMIRATION_FEEDS("data_admiration_feeds"),
         DATA_VISITORS_FEEDS("data_visitors_feeds"),
         DATA_FANS_FEEDS("data_fans_feeds");
 
@@ -72,6 +74,7 @@ public class FeedsCache extends AbstractConfig {
         addField(settingsMap, DATA_MUTUALS_FEEDS.getText(), "");
         addField(settingsMap, DATA_VISITORS_FEEDS.getText(), "");
         addField(settingsMap, DATA_FANS_FEEDS.getText(), "");
+        addField(settingsMap, DATA_ADMIRATION_FEEDS.getText(), "");
     }
 
     @Override

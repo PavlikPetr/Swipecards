@@ -122,6 +122,6 @@ public class AdmirationFragment extends LikesFragment {
     @NotNull
     @Override
     protected FeedsCache.FEEDS_TYPE getFeedsType() {
-        return FeedsCache.FEEDS_TYPE.DATA_MUTUALS_FEEDS;
+        return FeedsCache.FEEDS_TYPE.DATA_ADMIRATION_FEEDS;
     }
 }
