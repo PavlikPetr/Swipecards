@@ -76,6 +76,7 @@ import dagger.Provides;
                 PeopleNearbyFragment.class,
                 PhotoBlogFragment.class,
                 PromoDialog.class,
+                PromoKey31Dialog.class,
                 PromoKey71Dialog.class,
                 PromoKey81Dialog.class,
                 PaymentwallActivity.class,
