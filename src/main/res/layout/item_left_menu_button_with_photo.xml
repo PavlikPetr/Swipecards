@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/bg_left_menu_item_selector"
-    android:padding="16dp">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LeftMenuItemBackground">
 
-    <com.topface.topface.ui.views.ImageViewRemote
+    <com.topface.topface.ui.views.ImageViewRemote xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
         android:id="@+id/image_icon"
-        xmlns:ivr="http://schemas.android.com/apk/res/com.topface.topface"
         android:layout_width="@dimen/left_menu_background_height"
         android:layout_height="@dimen/left_menu_background_height"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        ivr:preProcessor="roundAvatar"
-        android:background="@drawable/left_menu_rounded_avatar"/>
+        android:background="@drawable/left_menu_rounded_avatar"
+        android:clickable="false"
+        ivr:preProcessor="roundAvatar" />
 
     <ImageView
         android:id="@+id/image_badge"
@@ -23,12 +19,16 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:visibility="gone"/>
+        android:background="@null"
+        android:clickable="false"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/btnMenu"
         style="@style/LeftMenuButtons"
+        android:layout_toLeftOf="@id/image_badge"
         android:layout_toRightOf="@id/image_icon"
-        android:layout_toLeftOf="@id/image_badge"/>
+        android:background="@null"
+        android:clickable="false" />
 
 </RelativeLayout>

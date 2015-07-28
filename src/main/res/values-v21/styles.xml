@@ -106,4 +106,31 @@
         <item name="android:elevation">@dimen/buttons_elevation_value</item>
     </style>
 
+    <style name="HideAdmirationProfileButton" parent="HideAdmirationNavigationButtons">
+        <item name="android:drawableTop">@drawable/button_person_selector_v21</item>
+    </style>
+
+    <style name="HideAdmirationSympathyButton" parent="HideAdmirationNavigationButtons">
+        <item name="android:drawableTop">@drawable/button_favorite_selector_v21</item>
+    </style>
+
+    <style name="HideAdmirationSkipButton" parent="HideAdmirationNavigationButtons">
+        <item name="android:drawableTop">@drawable/button_close_selector_v21</item>
+    </style>
+
+    <style name="InputSendButton" parent="@style/InputButtons">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:src">@drawable/btn_send_message_selector</item>
+        <item name="android:background">@drawable/input_buttons_selector_v21</item>
+    </style>
+
+    <style name="InputGiftButton" parent="@style/InputButtons">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:src">@drawable/btn_send_gift_selector</item>
+        <item name="android:background">@drawable/input_buttons_selector_v21</item>
+    </style>
+
+    <style name="LeftMenuItemBackground" parent="@style/LeftMenuItem">
+        <item name="android:background">@drawable/bg_left_menu_item_selector_v21</item>
+    </style>
 </resources>
