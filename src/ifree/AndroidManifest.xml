@@ -15,6 +15,10 @@
             android:name="net.billingpro.PAYMENT_KEY"
             android:value="pIoVxHLd" />
 
+        <meta-data
+            android:name="@string/tracking_id_meta_data_name"
+            android:value="UA-57607575-45"
+            tools:node="replace" />
 
         <activity
             android:name="com.ifree.monetize.core.MonetizePayActivity"

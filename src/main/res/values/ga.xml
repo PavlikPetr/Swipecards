@@ -3,8 +3,8 @@
     <!-- Настройки Google Analytics - https://developers.google.com/analytics/devguides/collection/android/v4/parameters -->
     <!-- Xnj  -->
 
-    <!-- The Google Analytics tracking ID to which to send your data. Dashes in the ID must be unencoded. You can disable your tracking by not providing this value. -->
-    <string name="ga_trackingId">UA-36704890-1</string>
+    <!-- The Google Analytics tracking ID place inside AndroidManifest with this name-->
+    <string name="tracking_id_meta_data_name">ga_trackingId</string>
 
     <!-- The name of your app, used in the app name dimension in your reports. Defaults to the value found in the package. -->
     <!--<string name="ga_appName">Topface</string>-->

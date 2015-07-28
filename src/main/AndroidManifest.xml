@@ -70,6 +70,10 @@
             tools:replace="value" />
 
         <meta-data
+            android:name="@string/tracking_id_meta_data_name"
+            android:value="UA-36704890-1" />
+
+        <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/fb_app_id" />
 

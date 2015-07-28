@@ -10,13 +10,18 @@ import com.ifree.monetize.core.PaymentState;
 import com.ifree.monetize.core.PurchaseListener;
 import com.ifree.monetize.core.PurchaseResponse;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.LinkedList;
 
 /**
@@ -24,6 +29,8 @@ import java.util.LinkedList;
  * Base fragment i-free purchases
  */
 public class IFreePurchases extends BaseFragment implements LibraryInitListener {
+
+    private static final String CHARSET_NAME = "utf-8";
 
     protected Monetization mMonetization;
     private PurchaseListener mPurchaseListener;
@@ -50,7 +57,26 @@ public class IFreePurchases extends BaseFragment implements LibraryInitListener 
             if (mPurchaseListener != null) {
                 mPurchaseListener.onPurchaseEventReceive(purchaseResponse);
             }
-            Debug.log("IFreePurchases " + purchaseResponse);
+            Debug.log("IFreePurchases response: " + purchaseResponse);
+            Debug.log("IFreePurchases response.toString: " + purchaseResponse.toString());
+            Debug.log("IFreePurchases answerFromServer: " + purchaseResponse.getAnswerFromApplicationServer());
+            Debug.log("IFreePurchases metaInfo: " + purchaseResponse.getMetaInfo());
+            Debug.log("IFreePurchases tarifGroup: " + purchaseResponse.getTariffGroupName());
+            Debug.log("IFreePurchases transactionId: " + purchaseResponse.getTransactionId());
+            Debug.log("IFreePurchases code: " + purchaseResponse.getCode());
+            Debug.log("IFreePurchases details: " + purchaseResponse.getDetails());
+            Debug.log("IFreePurchases paymentMethod: " + purchaseResponse.getPaymentMethod());
+
+            try {
+                CountersManager countersManager = CountersManager
+                        .getInstance(App.getContext())
+                        .setMethod(purchaseResponse.getCode().toString());
+                countersManager.setBalanceCounters(new JSONObject(URLDecoder.decode(purchaseResponse.getAnswerFromApplicationServer(), CHARSET_NAME)));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
 
             if (purchaseResponse.getCode() == PaymentState.PURCHASE_CONFIRMED) {
                 // handle confirmed status (successful response from server)
@@ -118,7 +144,13 @@ public class IFreePurchases extends BaseFragment implements LibraryInitListener 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return metaData.toString();
+        String result = "";
+        try {
+            result = URLEncoder.encode(metaData.toString(), CHARSET_NAME);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     protected Monetization getMonetization() {
