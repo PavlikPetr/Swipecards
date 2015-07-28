@@ -88,7 +88,7 @@
                     android:drawableLeft="@drawable/ic_enter"
                     android:text="@string/sign_in"
                     android:textColor="#FFFFFF"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/btnCreateAccount"
@@ -98,7 +98,7 @@
                     android:drawableLeft="@drawable/ic_add"
                     android:text="@string/create_account"
                     android:textColor="#4B4B4B"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </LinearLayout>
         </RelativeLayout>

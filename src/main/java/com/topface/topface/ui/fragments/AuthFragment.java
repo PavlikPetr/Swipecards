@@ -347,7 +347,8 @@ public class AuthFragment extends BaseAuthFragment {
     }
 
     @Override
-    protected void onSuccessAuthorization(AuthToken token) {}
+    protected void onSuccessAuthorization(AuthToken token) {
+    }
 
     @Override
     public void onResume() {
