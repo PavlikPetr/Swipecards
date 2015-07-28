@@ -189,9 +189,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         App.getFeedsCache().setFeedToCache(JsonUtils.toJson(getListAdapter().getDataForCache()), type).saveConfig();
     }
 
-    protected
     @NotNull
-    FeedsCache.FEEDS_TYPE getFeedsType() {
+    protected FeedsCache.FEEDS_TYPE getFeedsType() {
         return FeedsCache.FEEDS_TYPE.UNKNOWN_TYPE;
     }
 
@@ -1143,7 +1142,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     private void updateDataAfterReceivingCounters() {
         String lastMethod = CountersManager.getInstance(getActivity()).getLastRequestMethod();
-        if (!lastMethod.equals(NULL_METHOD) && !BannerRequest.SERVICE_NAME.equals(lastMethod) &&
+        if (lastMethod != null && !lastMethod.equals(NULL_METHOD) && !BannerRequest.SERVICE_NAME.equals(lastMethod) &&
                 lastMethod.equals(getRequest().getServiceName())) {
             int counters = getUnreadCounter();
             if (counters > 0) {

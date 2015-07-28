@@ -38,7 +38,7 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
     public static final String SIZE_150 = "r150x-";
     public static final String SIZE_64 = "c64x64";
     public static final String SIZE_ORIGINAL = "original";
-    private transient String[] deprecatedSizes = {
+    private static String[] deprecatedSizes = {
             SIZE_64,
             SIZE_64_ONLY,
             SIZE_150,

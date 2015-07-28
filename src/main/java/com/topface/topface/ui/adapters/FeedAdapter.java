@@ -82,7 +82,9 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         FeedList<T> data = getData();
         FeedList<T> result = new FeedList<>();
         for (int i = 0; i < (data.size() >= count ? count : data.size()); i++) {
-            result.add(data.get(i));
+            if (!data.get(i).isAd()) {
+                result.add(data.get(i));
+            }
         }
         return result;
     }
