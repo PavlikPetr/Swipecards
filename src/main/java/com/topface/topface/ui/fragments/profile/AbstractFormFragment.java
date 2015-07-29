@@ -88,7 +88,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_form, container, false);
         mListQuestionnaire = (ListView) root.findViewById(R.id.fragmentFormList);
-
+        mListQuestionnaire.setOnItemClickListener(getOnItemClickListener());
         View giftsHeaderWrapper = inflater.inflate(R.layout.form_gifts, null);
         mGiftsHeader = (LinearLayout) giftsHeaderWrapper.findViewById(R.id.gifts_strip);
         mGiftsHeader.setOnClickListener(new View.OnClickListener() {
@@ -251,6 +251,8 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         }
         return false;
     }
+
+    protected abstract ListView.OnItemClickListener getOnItemClickListener();
 
     protected abstract AbstractFormListAdapter createFormAdapter(Context context);
 

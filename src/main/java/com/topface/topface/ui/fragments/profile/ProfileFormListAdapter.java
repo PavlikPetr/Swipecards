@@ -140,9 +140,9 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
 
     @Override
     protected void configureHolder(ViewHolder holder, FormItem item) {
-        holder.value.setOnClickListener(mOnEditListener);
+//        holder.value.setOnClickListener(mOnEditListener);
         holder.value.setTag(item);
-        holder.title.setOnClickListener(mOnEditListener);
+//        holder.title.setOnClickListener(mOnEditListener);
         holder.title.setTag(item);
 
         if (item.isEditing) {

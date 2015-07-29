@@ -12,18 +12,18 @@
         android:dividerHeight="1dp"
         android:fadeScrollbars="true"
         android:fadingEdge="none"
-        android:listSelector="@android:color/transparent"
-        android:headerDividersEnabled="false" />
+        android:headerDividersEnabled="false"
+        android:listSelector="@drawable/ripple_black" />
 
     <LinearLayout
         android:id="@+id/loEmptyForm"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
+        android:layout_alignWithParentIfMissing="true"
         android:layout_centerInParent="true"
         android:gravity="center_horizontal"
-        android:layout_alignWithParentIfMissing="true">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tvEmptyForm"
@@ -36,8 +36,8 @@
             android:text="@string/profile_empty_form" />
 
         <Button
-            style="@style/FlatGrayButton"
             android:id="@+id/btnEmptyForm"
+            style="@style/FlatGrayButton"
             android:layout_width="224dp"
             android:layout_height="40dp"
             android:layout_marginLeft="16dp"
@@ -58,8 +58,8 @@
         </RelativeLayout>
 
         <TextView
-            style="@style/GrayText"
             android:id="@+id/emptyFormSuccess"
+            style="@style/GrayText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"

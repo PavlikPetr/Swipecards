@@ -3,7 +3,6 @@
     android:id="@+id/loRoot"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/ripple_black"
     android:gravity="center_vertical"
     android:minHeight="60dp"
     android:padding="8dp">
@@ -12,7 +11,6 @@
     <TextView
         android:id="@+id/tvTitle"
         style="@style/FormTitleText"
-        android:clickable="false"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
@@ -23,7 +21,6 @@
     <TextView
         android:id="@+id/tvValue"
         style="@style/ProfileText"
-        android:clickable="false"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@id/tvTitle"
