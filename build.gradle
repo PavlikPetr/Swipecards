@@ -207,8 +207,6 @@ dependencies {
     compile name: 'appsflyer'
     compile name: 'comscore'
     compile name: 'flurry_analytics_5.5.0'
-//    googleCompile name: 'flurry_analytics_5.5.0'
-//    amazonCompile name: 'flurry_analytics_5.5.0'
     compile name: 'offerwalls_sponsorpay'
 
     //Library for WebSocket and other network requests

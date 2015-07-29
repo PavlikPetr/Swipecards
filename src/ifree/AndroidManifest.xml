@@ -22,7 +22,7 @@
 
         <activity
             android:name="com.ifree.monetize.core.MonetizePayActivity"
-            android:theme="@android:style/Theme.Dialog"
+            android:theme="@style/Theme.Transparent.NoAnimation"
             tools:replace="@android:theme" />
 
         <service android:name="com.ifree.monetize.core.MonetizeService" />
