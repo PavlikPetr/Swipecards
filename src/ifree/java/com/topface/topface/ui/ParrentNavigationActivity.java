@@ -6,7 +6,7 @@ import com.ifree.vendors.updateversion.Updater;
  * Created by ppetr on 20.07.15.
  * Start/Stop working i-Free updater
  */
-public abstract class ParrentNavActivity extends BaseFragmentActivity {
+public abstract class ParrentNavigationActivity extends BaseFragmentActivity {
 
     @Override
     protected int getContentLayout() {
