@@ -19,29 +19,30 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@id/edit_dialog_limit"
-        android:maxLines="2"
         android:ellipsize="end"
+        android:maxLines="2"
         tools:text='Very long long text to fill all that gap and overlay on limit text' />
 
     <View
         android:id="@+id/edit_dialog_title_divider"
         android:layout_width="fill_parent"
         android:layout_height="2dp"
-        android:background="@color/tab_counter_text_color_selected"
-        android:layout_below="@id/edit_dialog_title"/>
+        android:layout_below="@id/edit_dialog_title"
+        android:background="@color/tab_counter_text_color_selected" />
 
     <ListView
         android:id="@+id/edit_dialog_options_list"
-        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_below="@id/edit_dialog_title_divider"
         android:layout_centerInParent="true"
+        android:descendantFocusability="afterDescendants"
         android:divider="@color/gray_divider"
         android:dividerHeight="1dp"
-        android:layout_below="@id/edit_dialog_title_divider"
-        android:scrollbars="none"
-        android:descendantFocusability="afterDescendants" />
+        android:gravity="center"
+        android:listSelector="@android:color/transparent"
+        android:orientation="vertical"
+        android:scrollbars="none" />
 
     <ViewStub
         android:id="@+id/edit_dialog_buttons_stub"

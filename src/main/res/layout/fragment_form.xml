@@ -13,7 +13,7 @@
         android:fadeScrollbars="true"
         android:fadingEdge="none"
         android:headerDividersEnabled="false"
-        android:listSelector="@drawable/ripple_black" />
+        style="@style/FormListSelector" />
 
     <LinearLayout
         android:id="@+id/loEmptyForm"

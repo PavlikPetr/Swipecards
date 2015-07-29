@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -44,7 +43,7 @@ public class UserFormFragment extends AbstractFormFragment implements OnClickLis
 
     @Override
     protected AbstractFormListAdapter createFormAdapter(Context context) {
-        return new UserFormListAdapter(context);
+        return new UserFormListAdapter(context, false);
     }
 
     @Override
@@ -52,11 +51,6 @@ public class UserFormFragment extends AbstractFormFragment implements OnClickLis
         Activity activity = getActivity();
         Intent intent = GiftsActivity.getSendGiftIntent(activity, getUserId());
         getParentFragment().startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
-    }
-
-    @Override
-    protected ListView.OnItemClickListener getOnItemClickListener() {
-        return null;
     }
 
     @Override

@@ -133,4 +133,12 @@
     <style name="LeftMenuSelector">
         <item name="android:listSelector">@drawable/bg_left_menu_item_selector_v21</item>
     </style>
+
+    <style name="WhiteListItem.Underline">
+        <item name="android:background">@drawable/form_list_ripple</item>
+    </style>
+
+    <style name="FormListSelector">
+        <item name="android:listSelector">@drawable/form_list_ripple</item>
+    </style>
 </resources>

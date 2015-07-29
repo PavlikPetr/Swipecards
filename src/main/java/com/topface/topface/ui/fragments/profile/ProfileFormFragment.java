@@ -99,12 +99,12 @@ public class ProfileFormFragment extends AbstractFormFragment {
         }
     };
 
-    View.OnClickListener mOnFillClickListener = new View.OnClickListener() {
+    ListView.OnItemClickListener mOnFillClickListener = new ListView.OnItemClickListener() {
         @Override
-        public void onClick(View view) {
-            Object formItem = view.getTag();
-            if (formItem instanceof FormItem) {
-                FormItem item = (FormItem) formItem;
+        public void onItemClick(AdapterView<?> parentView, View view, int position, long id) {
+            View valueView = view.findViewById(R.id.tvValue);
+            if (valueView != null && valueView.getTag() instanceof FormItem) {
+                FormItem item = (FormItem) valueView.getTag();
 
                 if (item.type == FormItem.CITY) {
                     Intent intent = new Intent(getActivity(), CitySearchActivity.class);
@@ -151,7 +151,6 @@ public class ProfileFormFragment extends AbstractFormFragment {
     @Override
     protected AbstractFormListAdapter createFormAdapter(Context context) {
         mProfileFormListAdapter = new ProfileFormListAdapter(context);
-        mProfileFormListAdapter.setOnEditListener(mOnFillClickListener);
         return mProfileFormListAdapter;
     }
 
@@ -166,40 +165,6 @@ public class ProfileFormFragment extends AbstractFormFragment {
     public void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
-    }
-
-    @Override
-    protected ListView.OnItemClickListener getOnItemClickListener() {
-        return new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parentView, View view, int position, long id) {
-                Object formItem = view.getTag();
-                if (formItem instanceof FormItem) {
-                    FormItem item = (FormItem) formItem;
-
-                    if (item.type == FormItem.CITY) {
-                        Intent intent = new Intent(getActivity(), CitySearchActivity.class);
-                        intent.putExtra(Static.INTENT_REQUEST_KEY, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
-                        Fragment parent = getParentFragment();
-                        if (parent != null) {
-                            parent.startActivityForResult(intent, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
-                        } else {
-                            startActivityForResult(intent, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
-                        }
-                    } else if (item.dataId == FormItem.NO_RESOURCE_ID && item.type != FormItem.SEX) {
-                        if (mFragmentManager != null) {
-                            EditTextFormDialog.newInstance(item.getTitle(), item, mFormEditedListener).
-                                    show(mFragmentManager, EditTextFormDialog.class.getName());
-                        }
-                    } else {
-                        if (mFragmentManager != null) {
-                            EditFormItemsEditDialog.newInstance(item.getTitle(), item, mFormEditedListener).
-                                    show(mFragmentManager, EditFormItemsEditDialog.class.getName());
-                        }
-                    }
-                }
-            }
-        };
     }
 
     @Override
@@ -236,5 +201,11 @@ public class ProfileFormFragment extends AbstractFormFragment {
                 break;
         }
         return settingsRequest;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getList().setOnItemClickListener(mOnFillClickListener);
     }
 }
