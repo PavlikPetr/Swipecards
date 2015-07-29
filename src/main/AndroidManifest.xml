@@ -89,40 +89,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--
-
-                i-free
-                <meta-data
-                    android:name="net.billingpro.PROMOTION_ID"
-                    android:value="480" />
-
-                <meta-data
-                    android:name="net.billingpro.PAYMENT_KEY"
-                    android:value="pIoVxHLd" />
-
-
-                <activity
-                    android:name="com.ifree.monetize.core.MonetizePayActivity"
-                    android:theme="@android:style/Theme.Dialog"
-                    tools:replace="@android:theme" />
-
-                <service android:name="com.ifree.monetize.core.MonetizeService" />
-                <receiver
-                    android:name="com.ifree.monetize.receivers.SmsReceiver"
-                    android:enabled="true">
-                    <intent-filter android:priority="2147483647">
-                        <action android:name="android.intent.action.DATA_SMS_RECEIVED" />
-
-                        <data android:host="*" />
-                        <data android:scheme="sms" />
-                        <data android:port="1235" />
-                    </intent-filter>
-                    <intent-filter android:priority="2147483647">
-                        <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-                    </intent-filter>
-                </receiver>
-
-        -->
 
         <activity
             android:name=".ui.ExternalLinkActivity"
@@ -440,9 +406,6 @@
                 <action android:name="com.topface.topface.actions.TEST_NETWORK_ERRORS_CANCEL" />
             </intent-filter>
         </receiver>
-        <!--
-                &lt;!&ndash;i-Free update service&ndash;&gt;
-                <service android:name="com.ifree.vendors.updateversion.UpdateVersionService" />-->
 
         <!-- gcm -->
         <service android:name=".GcmIntentService" />
