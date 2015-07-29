@@ -3,6 +3,7 @@ package com.topface.billing;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.ifree.monetize.core.LibraryInitListener;
 import com.ifree.monetize.core.Monetization;
@@ -11,6 +12,7 @@ import com.ifree.monetize.core.PurchaseListener;
 import com.ifree.monetize.core.PurchaseResponse;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -37,17 +39,17 @@ public class IFreePurchases extends BaseFragment implements LibraryInitListener 
 
     @Override
     public void onLibraryInitStarted() {
-        Debug.error("IFreePurchases onLibraryInitStarted");
+        Debug.log("IFreePurchases onLibraryInitStarted");
     }
 
     @Override
     public void onLibraryInitialised() {
-        Debug.error("IFreePurchases onLibraryInitialised");
+        Debug.log("IFreePurchases onLibraryInitialised");
     }
 
     @Override
     public void onLibraryReleased() {
-        Debug.error("IFreePurchases onLibraryReleased");
+        Debug.log("IFreePurchases onLibraryReleased");
     }
 
     private PurchaseListener purchaseListener = new PurchaseListener() {
@@ -58,35 +60,23 @@ public class IFreePurchases extends BaseFragment implements LibraryInitListener 
                 mPurchaseListener.onPurchaseEventReceive(purchaseResponse);
             }
             Debug.log("IFreePurchases response: " + purchaseResponse);
-            Debug.log("IFreePurchases response.toString: " + purchaseResponse.toString());
-            Debug.log("IFreePurchases answerFromServer: " + purchaseResponse.getAnswerFromApplicationServer());
-            Debug.log("IFreePurchases metaInfo: " + purchaseResponse.getMetaInfo());
-            Debug.log("IFreePurchases tarifGroup: " + purchaseResponse.getTariffGroupName());
-            Debug.log("IFreePurchases transactionId: " + purchaseResponse.getTransactionId());
-            Debug.log("IFreePurchases code: " + purchaseResponse.getCode());
-            Debug.log("IFreePurchases details: " + purchaseResponse.getDetails());
-            Debug.log("IFreePurchases paymentMethod: " + purchaseResponse.getPaymentMethod());
 
-            try {
-                CountersManager countersManager = CountersManager
-                        .getInstance(App.getContext())
-                        .setMethod(purchaseResponse.getCode().toString());
-                countersManager.setBalanceCounters(new JSONObject(URLDecoder.decode(purchaseResponse.getAnswerFromApplicationServer(), CHARSET_NAME)));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-
+            int toastId;
             if (purchaseResponse.getCode() == PaymentState.PURCHASE_CONFIRMED) {
-                // handle confirmed status (successful response from server)
-            } else if (purchaseResponse.getCode() == PaymentState.PURCHASE_UNCONFIRMED) {
-                // handle unconfirmed status (server not answered)
-            } else if (purchaseResponse.getCode() == PaymentState.MONEY_CHARGED) {
-                // handle money charged status (sms was received)
-            } else if (purchaseResponse.getCode() == PaymentState.CANCELLED) {
-                // handle canceled status (no money or user canceled action)
+                try {
+                    CountersManager countersManager = CountersManager
+                            .getInstance(App.getContext())
+                            .setMethod(purchaseResponse.getPaymentMethod().toString());
+                    countersManager.setBalanceCounters(new JSONObject(URLDecoder
+                            .decode(purchaseResponse.getAnswerFromApplicationServer(), CHARSET_NAME)));
+                } catch (JSONException | UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                toastId = R.string.buying_store_ok;
+            } else {
+                toastId = R.string.buying_store_fail;
             }
+            Toast.makeText(App.getContext(), toastId, Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -114,7 +104,7 @@ public class IFreePurchases extends BaseFragment implements LibraryInitListener 
     }
 
     public LinkedList<BuyButtonData> validateProducts(LinkedList<BuyButtonData> products) {
-        String price = null;
+        String price;
         for (BuyButtonData product : products) {
             price = null;
             try {
@@ -131,7 +121,7 @@ public class IFreePurchases extends BaseFragment implements LibraryInitListener 
     }
 
     public void buyProduct(String name, String place) {
-        Debug.error("IFreePurchases product: " + name + " metaData: " + getMetaInfo(place));
+        Debug.log("IFreePurchases product: " + name + " metaData: " + getMetaInfo(place));
         mMonetization.monetizeMethod(name, "default", "", getMetaInfo(place));
     }
 
