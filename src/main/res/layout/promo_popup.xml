@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:background="@color/bg_white"
         android:paddingBottom="20dp"
-        android:paddingLeft="42dp"
-        android:paddingRight="42dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:paddingTop="30dp">
 
         <TextView
@@ -54,7 +54,6 @@
             android:layout_alignRight="@id/fakeView"
             android:layout_alignTop="@id/fakeView"
             android:layout_marginRight="2dp"
-            android:ellipsize="end"
             android:padding="6dp"
             android:singleLine="true"
             android:text="@string/buying_vip_status"
@@ -69,7 +68,6 @@
             android:layout_alignParentRight="true"
             android:layout_alignTop="@id/fakeView"
             android:layout_marginLeft="2dp"
-            android:ellipsize="end"
             android:padding="6dp"
             android:singleLine="true"
             android:text="@string/general_delete_messages"
