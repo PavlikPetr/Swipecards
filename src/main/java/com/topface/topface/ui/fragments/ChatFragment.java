@@ -195,6 +195,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     };
     private ImageButton mSendButton;
     private ChatListAnimatedAdapter mAnimatedAdapter;
+    private int mUserType;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -493,10 +494,10 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     private void updateSendMessageAbility(Boolean isButtonAvailable) {
         if (mSendButton != null && mEditBox != null) {
-            mSendButton.setEnabled(!mEditBox.getText().toString().isEmpty()
+            mSendButton.setEnabled(getArguments().getInt(ChatFragment.USER_TYPE) == FeedDialog.MESSAGE_POPULAR_STAGE_1
+                    ||(!mEditBox.getText().toString().isEmpty()
                     && (mLockScreen == null || mLockScreen.getVisibility() == View.GONE)
-                    && (isButtonAvailable == null || isButtonAvailable)
-                    && !mPopularUserLockController.isChatLocked());
+                    && (isButtonAvailable == null || isButtonAvailable)));
         }
     }
 
