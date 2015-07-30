@@ -45,13 +45,13 @@ import butterknife.OnClick;
 
 public class AuthFragment extends BaseAuthFragment {
 
+    public static final String TF_BUTTONS = "tf_buttons";
     public static final String REAUTH_INTENT = "com.topface.topface.action.AUTH";
     private static final String MAIN_BUTTONS_GA_TAG = "LoginButtonsTest";
     private static final String TRANSLATION_Y = "translationY";
     private static final int ANIMATION_PATH = 36;
     private static final long ANIMATION_DURATION = 500;
     private AuthorizationManager mAuthorizationManager;
-
     private boolean mIsSocNetBtnHidden = true;
     private boolean mIsTfBtnHidden = false;
     private boolean mIsNeedAnimate;
@@ -59,8 +59,6 @@ public class AuthFragment extends BaseAuthFragment {
 
     @Bind(R.id.ivAuthGroup)
     View mAuthGroup;
-    @Bind(R.id.ivAuthLogo)
-    View mLogo;
     @Bind(R.id.prsAuthLoading)
     ProgressBar mProgressBar;
     @Bind(R.id.btnAuthFB)
@@ -231,8 +229,18 @@ public class AuthFragment extends BaseAuthFragment {
         View root = inflater.inflate(R.layout.fragment_auth, null);
         ButterKnife.bind(this, root);
         initViews(root);
-
+        if (savedInstanceState != null && savedInstanceState.containsKey(TF_BUTTONS)) {
+            setSocNetBtnVisibility(savedInstanceState.getBoolean(TF_BUTTONS), true);
+            setTfLoginBtnVisibility(savedInstanceState.getBoolean(TF_BUTTONS), true);
+            mTfAuthBack.setVisibility(View.VISIBLE);
+        }
         return root;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(TF_BUTTONS, !mIsTfBtnHidden);
     }
 
     @Override
@@ -347,7 +355,8 @@ public class AuthFragment extends BaseAuthFragment {
     }
 
     @Override
-    protected void onSuccessAuthorization(AuthToken token) {}
+    protected void onSuccessAuthorization(AuthToken token) {
+    }
 
     @Override
     public void onResume() {
