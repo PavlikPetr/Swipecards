@@ -96,6 +96,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         root.findViewById(R.id.EditorClearAirMessages).setOnClickListener(this);
         root.findViewById(R.id.EditorSendGCMToken).setOnClickListener(this);
         root.findViewById(R.id.EditorSendAuth).setOnClickListener(this);
+        root.findViewById(R.id.EditorCrash).setOnClickListener(this);
         mCustomApi = (EditText) root.findViewById(R.id.EditorLogin);
         mCustomApi.setText(mAppConfig.getStageLogin());
 
@@ -452,6 +453,8 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
             case R.id.EditorApiCheckbox:
                 saveApiUrl();
                 break;
+            case R.id.EditorCrash:
+                throw new NullPointerException("Crash from Editor");
             default:
                 showError();
         }
