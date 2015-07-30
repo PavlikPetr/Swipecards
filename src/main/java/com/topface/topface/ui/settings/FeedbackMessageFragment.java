@@ -53,7 +53,6 @@ import butterknife.OnTextChanged;
 public class FeedbackMessageFragment extends AbstractEditFragment {
 
     public static final String INTENT_FEEDBACK_TYPE = "feedback_message_type";
-    public static final String WALLET_HOLDER = "{{wallet}}";
     private static final String GOOGLE_WALLET_URL = "https://wallet.google.com";
     @Bind(R.id.edText)
     EditText mEditText;
@@ -182,7 +181,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
 
     public SpannableString createHelpMessage() {
         String walletString = getString(R.string.google_wallet);
-        String messageTemplate = getString(R.string.transaction_code_help).replace(WALLET_HOLDER, walletString);
+        String messageTemplate = String.format(getString(R.string.transaction_code_help), walletString);
         SpannableString helpSpannable = new SpannableString(messageTemplate);
         int startSpan = messageTemplate.indexOf(walletString);
         int endSpan = startSpan + walletString.length();

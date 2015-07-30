@@ -629,7 +629,7 @@
     <string name="send_feedback">Send message</string>
     <string name="get_vip_free">Get free VIP-status</string>
     <string name="buy_more_sympathies">\"Get more likes, become more popular\"</string>
-    <string name="transaction_code_help">If you send us a transaction code, this will help us complete your request by speeding up the processing time. Further information about an order can be found through {{wallet}}.</string>
+    <string name="transaction_code_help">If you send us a transaction code, this will help us complete your request by speeding up the processing time. Further information about an order can be found through %s.</string>
     <string name="google_wallet">Google Wallet</string>
     <string name="google_service_general_title">Reminders are not available</string>
     <string name="google_service_disabled_title">You have Google Play disabled. You need to enable it to receive Notifications.</string>
