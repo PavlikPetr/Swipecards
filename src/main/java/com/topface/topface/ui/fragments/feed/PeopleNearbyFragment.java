@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BalanceData;
@@ -25,6 +26,7 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -34,6 +36,7 @@ import com.topface.topface.utils.geo.GeoLocationManager;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -74,8 +77,19 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         mSubscriptionLocation = mAppState.getObservable(Location.class).subscribe(mLocationAction);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
         mGeoLocationManager = new GeoLocationManager(getActivity());
-        mGeoLocationManager.registerProvidersChangedActionReceiver(getActivity());
+        mGeoLocationManager.registerProvidersChangedActionReceiver();
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected Type getFeedListDataType() {
+        return new TypeToken<FeedList<FeedGeo>>() {
+        }.getType();
+    }
+
+    @Override
+    protected Class getFeedListItemClass() {
+        return FeedGeo.class;
     }
 
     @Override
@@ -86,7 +100,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         if (null != mBalanceSubscription) {
             mBalanceSubscription.unsubscribe();
         }
-        mGeoLocationManager.unregisterProvidersChangedActionReceiver(getActivity());
+        mGeoLocationManager.unregisterProvidersChangedActionReceiver();
         mGeoLocationManager.stopLocationListener();
         super.onDestroy();
     }
@@ -104,11 +118,6 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     @Override
     protected FeedAdapter<FeedGeo> createNewAdapter() {
         return new PeopleNearbyAdapter(getActivity(), getUpdaterCallback());
-    }
-
-    @Override
-    protected FeedListData<FeedGeo> getFeedList(JSONObject response) {
-        return new FeedListData<>(response, FeedGeo.class);
     }
 
     @Override

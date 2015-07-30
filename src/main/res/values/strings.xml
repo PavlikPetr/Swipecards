@@ -5,6 +5,7 @@
     <string name="photofeed_title">Put in the feed</string>
     <string name="general_warning">WARNING</string>
     <string name="general_ok">OK</string>
+    <string name="general_any">Any</string>
     <string name="general_settings_abbr">Sett.</string>
     <string name="general_disallow">Forbid</string>
     <string name="general_allow">Allow</string>
@@ -15,10 +16,11 @@
     <string name="dating_switch_button">More…</string>
     <string name="dating_prev_button">Previous</string>
     <string name="dating_chat_button">Chat</string>
-    <string name="waiting_a_products">Please wait, we\'re loading our available products :)</string>
+    <string name="waiting_a_products">Please wait, we\'re loading our available products</string>
     <string name="likes_background_text">No likes</string>
     <string name="visitors_background_text">No guests</string>
     <string name="chat_background_text">No incoming messages</string>
+    <string name="entrance">Enter</string>
     <string name="filter_only_online">Online only</string>
     <string name="filter_city_age_parameters">Age and city</string>
     <string name="filter_select_city">Select city</string>
@@ -185,6 +187,7 @@
     <string name="filter_age">Select age</string>
     <string name="filter_age_start_prefix">From %s</string>
     <string name="filter_age_end_prefix">to %s</string>
+    <string name="filter_constitution_template">From %1$d to %2$d</string>
     <string name="filter_cities_all">All cities</string>
     <string name="purchase_header_title">Balance:</string>
     <string name="buying_header_title">Purchases</string>
@@ -277,7 +280,7 @@
     <string name="settings_switch_off">off</string>
     <string name="leaders_go_date">Place me here!</string>
     <string name="leaders_leader_now">Now everyone will see you!</string>
-    <string name="leaders_need_photo">First select a photo :)</string>
+    <string name="leaders_need_photo">First select a photo</string>
     <plurals name="leaders_price">
         <item quantity="other">Place me here for %d coins</item>
         <item quantity="one">Place me here for %d coin</item>
@@ -355,6 +358,7 @@
     <string name="user_actions_chat">Chat</string>
     <string name="profile_edit_age_ranges">Age has to be between 16 and 99 years. Please enter a correct number and try again.</string>
     <string name="wrong_password_format">Incorrect password format</string>
+    <string name="edit_value_error">The value must be between %1$d to %2$d</string>
     <string name="sign_in">Sign in</string>
     <string name="create_account">Create an account</string>
     <string name="email">Email</string>
@@ -370,6 +374,9 @@
     <string name="birthdate_confirm">You need to specify your age to be able to meet people.</string>
     <string name="set_birthdate">Specify age</string>
     <string name="welcome_to_topface">Welcome to Topface!</string>
+    <string name="im_boy">I\'m a guy</string>
+    <string name="im_girl">I\'m a girl</string>
+    <string name="u_sex">Your gender</string>
     <string name="incorrect_email">Invalid email</string>
     <string name="incorrect_login">Invalid login</string>
     <string name="incorrect_password">Invalid password</string>
@@ -382,8 +389,9 @@
     <string name="general_error_try_again_later">Unable to connect to Topface. Please try again later.</string>
     <string name="search_city_by_name">Search by city name</string>
     <string name="gallery">Photo gallery</string>
-    <string name="no_photo_take_photo">No one can meet you! Take a photo or choose one from your photo gallery :)</string>
+    <string name="no_photo_take_photo">No one can meet you! Take a photo or choose one from your photo gallery</string>
     <string name="photo_for_avatar">Your photo is ready to be sent to your profile! This is your first uploaded one, meaning it will act as your profile photo.</string>
+    <string name="add_photo_before">First you need to add a photo</string>
     <string name="change_email">Change email</string>
     <string name="send_confirmation_email">Send a confirmation email</string>
     <string name="change_password">Change password</string>
@@ -459,7 +467,7 @@
     </plurals>
     <string name="buy_status_and_watch_your_fans">Get VIP-status and find out who added you to their favorites.</string>
     <string name="add_bookmarks_to_be_connected">Add new contacts to this section and you\'ll never lose touch with them.</string>
-    <string name="nobody_chat_with_you_sympathies_will_help">No one has written to you yet! Likes will help you find someone to chat with! :)</string>
+    <string name="nobody_chat_with_you_sympathies_will_help">No one has written to you yet! Likes will help you find someone to chat with!</string>
     <string name="rate_and_have_mutual_or_buy_and_chat">Send Likes and get them in return! Start chating now!</string>
     <string name="with_vip_find_your_visitors">With VIP-status you can find out who visited your page</string>
     <string name="on_avatar">Set as your profile picture</string>
@@ -542,6 +550,8 @@
     <string name="settings_feedback_transaction_link">Where do I find my order number?</string>
     <string name="general_logout_error">An error occured during logout. Please try again.</string>
     <string name="auth_btn_ok">Log in with Odnoklassniki</string>
+    <string name="auth_btn_tf">Topface Account</string>
+    <string name="birthday">Birthday</string>
     <string name="other_auth">Login with other services</string>
     <string name="settings_feedback_transaction_number_hint">Enter your order number</string>
     <string name="delete_visitors">Delete visitors</string>
@@ -619,6 +629,8 @@
     <string name="send_feedback">Send message</string>
     <string name="get_vip_free">Get free VIP-status</string>
     <string name="buy_more_sympathies">\"Get more likes, become more popular\"</string>
+    <string name="transaction_code_help">If you send us a transaction code, this will help us complete your request by speeding up the processing time. Further information about an order can be found through %s.</string>
+    <string name="google_wallet">Google Wallet</string>
     <string name="google_service_general_title">Reminders are not available</string>
     <string name="google_service_disabled_title">You have Google Play disabled. You need to enable it to receive Notifications.</string>
     <string name="google_service_disabled_button">Enable</string>
@@ -650,6 +662,9 @@
     <string name="balance">Balance (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
     <string name="trial_vip_text">Free VIP \nfor 7 days</string>
     <string name="trial_vip_button_text">Get VIP</string>
+    <string name="settings_check_vip_title">Check if VIP-status is active</string>
+    <string name="settings_check_vip_cell">Check VIP-status</string>
+    <string name="settings_check_vip_alert">Your request to check VIP-status has been sent.</string>
     <string name="novice_sympathy">Send Likes only to those\nwho really attract you.\nYou just might find someone special!</string>
     <string name="novice_sympathies_bonus">You are getting %1$d Likes as a gift! It means that %2$d people will give you a Like and genuinely mean it!</string>
 </resources>

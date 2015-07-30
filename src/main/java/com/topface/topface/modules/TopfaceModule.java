@@ -79,7 +79,8 @@ import dagger.Provides;
                 PromoKey31Dialog.class,
                 PromoKey71Dialog.class,
                 PromoKey81Dialog.class,
-                PaymentwallActivity.class
+                PaymentwallActivity.class,
+                PromoKey31Dialog.class
         }
 )
 public class TopfaceModule {
