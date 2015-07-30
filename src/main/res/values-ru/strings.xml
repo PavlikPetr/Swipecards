@@ -792,7 +792,8 @@
     <string name="send_feedback">Отправить сообщение</string>
     <string name="get_vip_free">Получи VIP бесплатно</string>
     <string name="buy_more_sympathies">\"Получай больше симпатий, становись популярнее\"</string>
-    <string name="transaction_code_help">Если вы отправите нам код транзакции, это может помочь в выполнение вашего запроса, а так же ускорит его обработку. Подробную информацию о заказе, можно получить через <![CDATA[<font color=#05c5cf><u>Google-кошелек</u>]]>.</string>
+    <string name="transaction_code_help">Если вы отправите нам код транзакции, это может помочь в выполнение вашего запроса, а так же ускорит его обработку. Подробную информацию о заказе, можно получить через %s.</string>
+    <string name="google_wallet">Google-кошелек</string>
     <!-- ServicesManager-->
     <!-- Google -->
     <string name="google_service_general_title">Уведомления недоступны</string>
