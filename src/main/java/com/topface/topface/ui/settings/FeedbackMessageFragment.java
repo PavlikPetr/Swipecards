@@ -11,9 +11,12 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.InputType;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -50,6 +53,7 @@ import butterknife.OnTextChanged;
 public class FeedbackMessageFragment extends AbstractEditFragment {
 
     public static final String INTENT_FEEDBACK_TYPE = "feedback_message_type";
+    public static final String WALLET_HOLDER = "{{wallet}}";
     private static final String GOOGLE_WALLET_URL = "https://wallet.google.com";
     @Bind(R.id.edText)
     EditText mEditText;
@@ -166,7 +170,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
             case DEVELOPERS_MESSAGE:
                 break;
             case PAYMENT_MESSAGE:
-                mTransactionIdInfo.setText(Html.fromHtml(getString(R.string.transaction_code_help)));
+                mTransactionIdInfo.setText(createHelpMessage());
                 mTransactionIdInfo.setVisibility(View.VISIBLE);
                 break;
             case ERROR_MESSAGE:
@@ -176,12 +180,22 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         }
     }
 
+    public SpannableString createHelpMessage() {
+        String walletString = getString(R.string.google_wallet);
+        String messageTemplate = getString(R.string.transaction_code_help).replace(WALLET_HOLDER, walletString);
+        SpannableString helpSpannable = new SpannableString(messageTemplate);
+        int startSpan = messageTemplate.indexOf(walletString);
+        int endSpan = startSpan + walletString.length();
+        helpSpannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.link_color)), startSpan, endSpan, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        helpSpannable.setSpan(new UnderlineSpan(), startSpan, endSpan, 0);
+        return helpSpannable;
+    }
+
     /**
      * инициализация поля ввода email
      * и заполнение его в зависимости от типа сети
      * если вход был через соц сеть - то email гугл-аккаунта
      * если через topface аккаунт - то его email
-     *
      */
     private void initEmailInput() {
         mEditEmail.setInputType(InputType.TYPE_CLASS_TEXT);
