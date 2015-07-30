@@ -402,6 +402,7 @@
     <string name="ban_complain">Пожаловаться на бан</string>
     <string name="general_ready">Готово.</string>
     <string name="buying_store_ok">Покупка успешно завершена.</string>
+    <string name="buying_store_fail">Не удалось совершить покупку.</string>
     <string name="vip_privileges">VIP-привилегии</string>
 
     <string name="vip_rest">Вы подписаны на VIP</string>

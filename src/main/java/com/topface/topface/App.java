@@ -1,7 +1,6 @@
 package com.topface.topface;
 
 import android.annotation.TargetApi;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -32,16 +31,13 @@ import com.topface.topface.data.AppSocialAppsIds;
 import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
-import com.topface.topface.data.Products;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
-import com.topface.topface.requests.AmazonProductsRequest;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AppGetOptionsRequest;
 import com.topface.topface.requests.AppGetSocialAppsIdsRequest;
 import com.topface.topface.requests.DataApiHandler;
-import com.topface.topface.requests.GooglePlayProductsRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.PaymentwallProductsRequest;
@@ -53,6 +49,7 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.transport.HttpApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
+import com.topface.topface.ui.ApplicationBase;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
@@ -77,7 +74,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 @ReportsCrashes(formUri = "817b00ae731c4a663272b4c4e53e4b61")
-public class App extends Application {
+public class App extends ApplicationBase {
 
     public static final String TAG = "Topface";
     public static final String CONNECTIVITY_CHANGE_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
@@ -149,42 +146,6 @@ public class App extends Application {
      */
     public static void sendProfileAndOptionsRequests() {
         sendProfileAndOptionsRequests(new SimpleApiHandler());
-    }
-
-    private static ApiRequest getProductsRequest() {
-        ApiRequest request;
-        switch (BuildConfig.MARKET_API_TYPE) {
-            case AMAZON:
-                request = new AmazonProductsRequest(App.getContext());
-                break;
-            case GOOGLE_PLAY:
-                request = new GooglePlayProductsRequest(App.getContext());
-                break;
-            case NOKIA_STORE:
-            default:
-                request = null;
-                break;
-        }
-
-        if (request != null) {
-            request.callback(new DataApiHandler<Products>() {
-                @Override
-                protected void success(Products data, IApiResponse response) {
-                }
-
-                @Override
-                protected Products parseResponse(ApiResponse response) {
-                    return new Products(response);
-                }
-
-                @Override
-                public void fail(int codeError, IApiResponse response) {
-
-                }
-            });
-        }
-
-        return request;
     }
 
     public static void sendUserOptionsAndPurchasesRequest() {
@@ -440,7 +401,12 @@ public class App extends Application {
     }
 
     private void sendUnauthorizedRequests() {
-        new ParallelApiRequest(getContext()) { @Override public boolean isNeedAuth() { return false; } }
+        new ParallelApiRequest(getContext()) {
+            @Override
+            public boolean isNeedAuth() {
+                return false;
+            }
+        }
                 .addRequest(createAppOptionsRequest())
                 .addRequest(createAppSocialAppsIdsRequest(null))
                 .exec();
@@ -469,24 +435,28 @@ public class App extends Application {
 
     public ApiRequest createAppSocialAppsIdsRequest(final ApiHandler handler) {
         return new AppGetSocialAppsIdsRequest(getContext()).callback(new DataApiHandler<AppSocialAppsIds>() {
-            @Override public void fail(int codeError, IApiResponse response) {
+            @Override
+            public void fail(int codeError, IApiResponse response) {
                 if (handler != null) {
                     handler.fail(codeError, response);
                 }
             }
 
-            @Override protected void success(AppSocialAppsIds data, IApiResponse response) {
+            @Override
+            protected void success(AppSocialAppsIds data, IApiResponse response) {
                 mAppSocialAppsIds = data;
                 if (handler != null) {
                     handler.success(response);
                 }
             }
 
-            @Override protected AppSocialAppsIds parseResponse(ApiResponse response) {
+            @Override
+            protected AppSocialAppsIds parseResponse(ApiResponse response) {
                 return new AppSocialAppsIds(response.getJsonResult());
             }
 
-            @Override public void always(IApiResponse response) {
+            @Override
+            public void always(IApiResponse response) {
                 super.always(response);
                 if (handler != null) {
                     handler.always(response);
@@ -579,7 +549,7 @@ public class App extends Application {
     }
 
     public static App from(Context context) {
-        return (App)context.getApplicationContext();
+        return (App) context.getApplicationContext();
     }
 }
 

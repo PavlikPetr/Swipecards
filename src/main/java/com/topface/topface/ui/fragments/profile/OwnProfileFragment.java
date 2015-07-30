@@ -25,8 +25,8 @@ import com.topface.topface.data.UniversalUserFactory;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
-import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.utils.AddPhotoHelper;
+import com.topface.topface.utils.BuyVipFragmentManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.PhotoTaker;
@@ -100,7 +100,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
         super.initBody();
         addBodyPage(ProfilePhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
         addBodyPage(ProfileFormFragment.class.getName(), getResources().getString(R.string.profile_form));
-        addBodyPage(VipBuyFragment.class.getName(), getResources().getString(R.string.vip_status));
+        addBodyPage(BuyVipFragmentManager.getClassName(), getResources().getString(R.string.vip_status));
         addBodyPage(SettingsFragment.class.getName(), getResources().getString(R.string.settings_header_title));
     }
 

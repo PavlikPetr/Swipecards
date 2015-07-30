@@ -31,8 +31,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Products extends AbstractData {
-    private static final String PRICE = "{{price}}";
-    private static final String PRICE_PER_ITEM = "{{price_per_item}}";
+    public static final String PRICE = "{{price}}";
+    public static final String PRICE_PER_ITEM = "{{price_per_item}}";
 
     public enum ProductType {
         COINS("coins"),
@@ -65,12 +65,12 @@ public class Products extends AbstractData {
     }
 
     public boolean saleExists = false;
-    public LinkedList<BuyButton> coins = new LinkedList<>();
-    public LinkedList<BuyButton> likes = new LinkedList<>();
-    public LinkedList<BuyButton> premium = new LinkedList<>();
-    public LinkedList<BuyButton> others = new LinkedList<>();
-    public LinkedList<BuyButton> coinsSubscriptions = new LinkedList<>();
-    public LinkedList<BuyButton> coinsSubscriptionsMasked = new LinkedList<>();
+    public LinkedList<BuyButtonData> coins = new LinkedList<>();
+    public LinkedList<BuyButtonData> likes = new LinkedList<>();
+    public LinkedList<BuyButtonData> premium = new LinkedList<>();
+    public LinkedList<BuyButtonData> others = new LinkedList<>();
+    public LinkedList<BuyButtonData> coinsSubscriptions = new LinkedList<>();
+    public LinkedList<BuyButtonData> coinsSubscriptionsMasked = new LinkedList<>();
     //Список всех подписок пользователя
     public ProductsInventory inventory;
     public ProductsInfo info;
@@ -135,7 +135,7 @@ public class Products extends AbstractData {
         }
     }
 
-    protected void fillSubscriptionsProductsArray(LinkedList<BuyButton> list, JSONArray coinsJSON,
+    protected void fillSubscriptionsProductsArray(LinkedList<BuyButtonData> list, JSONArray coinsJSON,
                                                   List<String> userSubscriptions) {
         if (coinsJSON != null && list != null) {
             SubscriptionBuyButton buyButtonFromJSON;
@@ -151,9 +151,9 @@ public class Products extends AbstractData {
         }
     }
 
-    protected void fillProductsArray(LinkedList<BuyButton> list, JSONArray coinsJSON) {
+    protected void fillProductsArray(LinkedList<BuyButtonData> list, JSONArray coinsJSON) {
         if (coinsJSON != null && list != null) {
-            BuyButton buyButtonFromJSON;
+            BuyButtonData buyButtonFromJSON;
             for (int i = 0; i < coinsJSON.length(); i++) {
                 buyButtonFromJSON = createBuyButtonFromJSON(coinsJSON.optJSONObject(i));
                 if (buyButtonFromJSON != null) {
@@ -163,13 +163,13 @@ public class Products extends AbstractData {
         }
     }
 
-    public BuyButton createBuyButtonFromJSON(JSONObject purchaseItem) {
-        BuyButton button = null;
+    public BuyButtonData createBuyButtonFromJSON(JSONObject purchaseItem) {
+        BuyButtonData button = null;
         if (purchaseItem != null) {
             if (purchaseItem.optInt("discount") > 0) {
                 saleExists = true;
             }
-            button = new BuyButton(purchaseItem);
+            button = new BuyButtonData(purchaseItem);
         }
         return button;
     }
@@ -193,7 +193,7 @@ public class Products extends AbstractData {
      * @param listener to process click
      * @return created view
      */
-    public static View createBuyButtonLayout(Context context, BuyButton buyBtn,
+    public static View createBuyButtonLayout(Context context, BuyButtonData buyBtn,
                                              final BuyButtonClickListener listener) {
         String value;
         String economy;
@@ -308,6 +308,7 @@ public class Products extends AbstractData {
         tvTitle.setText(title);
         // value text
         TextView tvValue = (TextView) view.findViewById(R.id.itValue);
+        tvValue.setVisibility(TextUtils.isEmpty(value) ? View.GONE : View.VISIBLE);
         tvValue.setText(value);
         // economy text
         TextView tvEconomy = (TextView) view.findViewById(R.id.itEconomy);
@@ -319,7 +320,7 @@ public class Products extends AbstractData {
         }
     }
 
-    public static View setBuyButton(LinearLayout root, final BuyButton buyBtn,
+    public static View setBuyButton(LinearLayout root, final BuyButtonData buyBtn,
                                     Context context, final BuyButtonClickListener listener) {
         View view = createBuyButtonLayout(context, buyBtn, listener);
         if (view != null) {
@@ -342,12 +343,12 @@ public class Products extends AbstractData {
         if (productId.equals(OpenIabFragment.TEST_PURCHASED_PRODUCT_ID)) {
             productId = getSkuFromDeveloperPayload(product.getDeveloperPayload());
         }
-        for (BuyButton subscription : coinsSubscriptions) {
+        for (BuyButtonData subscription : coinsSubscriptions) {
             if (subscription.id.equals(productId)) {
                 return true;
             }
         }
-        for (BuyButton subscription : coinsSubscriptionsMasked) {
+        for (BuyButtonData subscription : coinsSubscriptionsMasked) {
             if (subscription.id.equals(productId)) {
                 return true;
             }
@@ -364,7 +365,7 @@ public class Products extends AbstractData {
         void onClick(String id);
     }
 
-    private static ProductType getProductTypeByName(String name) {
+    public static ProductType getProductTypeByName(String name) {
         if (name.equals(ProductType.COINS.getName())) {
             return ProductType.COINS;
         } else if (name.equals(ProductType.COINS_SUBSCRIPTION.getName())) {
@@ -382,59 +383,7 @@ public class Products extends AbstractData {
         }
     }
 
-    public static class BuyButton {
-        public String id;
-        public String title;
-        public String titleTemplate;
-        public int price;
-        public int showType;
-        public int amount;
-        public String hint;
-        public ProductType type;
-        public int discount;
-        public String paymentwallLink;
-        public String totalTemplate;
-
-        public BuyButton(JSONObject json) {
-            if (json != null) {
-                id = json.optString("id");
-                title = json.optString("title");
-                titleTemplate = json.optString("titleTemplate");
-                totalTemplate = json.optString("totalTemplate");
-                price = json.optInt("price");
-                amount = json.optInt("amount");
-                hint = json.optString("hint");
-                showType = json.optInt("showType");
-                type = getProductTypeByName(json.optString("type"));
-                discount = json.optInt("discount");
-                paymentwallLink = json.optString("url");
-                ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
-                if (type == ProductType.PREMIUM) {
-                    DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                    double tempPrice = price / amount;
-                    double pricePerItem = tempPrice / 100;
-                    if (titleTemplate.contains(Products.PRICE)) {
-                        title = titleTemplate.replace(Products.PRICE, decimalFormat.format(pricePerItem) + App.getContext().getString(R.string.usd));
-
-                    } else if (titleTemplate.contains(PRICE_PER_ITEM)) {
-                        title = titleTemplate.replace(PRICE_PER_ITEM, decimalFormat.format(pricePerItem) + App.getContext().getString(R.string.usd));
-
-                    }
-                }
-                if (productsDetails != null) {
-                    ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(id);
-                    if (detail != null) {
-                        double price = detail.price / ProductsDetails.MICRO_AMOUNT;
-                        double pricePerItem = price / amount;
-                        title = titleTemplate.replace(PRICE, String.format("%.2f %s", price, detail.currency));
-                        title = title.replace(PRICE_PER_ITEM, String.format("%.2f %s", pricePerItem, detail.currency));
-                    }
-                }
-            }
-        }
-    }
-
-    public static class SubscriptionBuyButton extends BuyButton {
+    public static class SubscriptionBuyButton extends BuyButtonData {
 
         public boolean activated = false;
 
@@ -466,8 +415,8 @@ public class Products extends AbstractData {
         public class CoinsSubscriptionInfo {
             public List<MonthInfo> months = new ArrayList<>();
             public String text;
-            public BuyButton hasSubscriptionButton;
-            public BuyButton noSubscriptionButton;
+            public BuyButtonData hasSubscriptionButton;
+            public BuyButtonData noSubscriptionButton;
             public StatusInfo status = new StatusInfo(null);
 
             public CoinsSubscriptionInfo(JSONObject json) {
@@ -479,8 +428,8 @@ public class Products extends AbstractData {
                         }
                     }
                     text = json.optString("text");
-                    hasSubscriptionButton = new BuyButton(json.optJSONObject("hasSubscriptionButton"));
-                    noSubscriptionButton = new BuyButton(json.optJSONObject("noSubscriptionButton"));
+                    hasSubscriptionButton = new BuyButtonData(json.optJSONObject("hasSubscriptionButton"));
+                    noSubscriptionButton = new BuyButtonData(json.optJSONObject("noSubscriptionButton"));
                     status = new StatusInfo(json.optJSONObject("status"));
                 }
             }

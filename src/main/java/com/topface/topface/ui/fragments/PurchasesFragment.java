@@ -20,8 +20,10 @@ import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
+import com.topface.topface.data.PurchasesTabData;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
+import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -106,7 +108,7 @@ public class PurchasesFragment extends BaseFragment {
 
     public boolean forceBonusScreen(String infoText) {
         if (!isBonusSkiped()) {
-            int bonusTabIndex = mPagerAdapter.getTabIndex(Options.Tab.BONUS);
+            int bonusTabIndex = mPagerAdapter.getTabIndex(PurchasesTabData.BONUS);
             if (isBonusPageAvailable()) {
                 mPager.setCurrentItem(bonusTabIndex);
                 setResourceInfoText(infoText);
@@ -121,7 +123,7 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     public boolean isBonusPageAvailable() {
-        return null != mPagerAdapter && mPagerAdapter.hasTab(Options.Tab.BONUS) && mPager.getCurrentItem() != mPagerAdapter.getTabIndex(Options.Tab.BONUS);
+        return null != mPagerAdapter && mPagerAdapter.hasTab(PurchasesTabData.BONUS) && mPager.getCurrentItem() != mPagerAdapter.getTabIndex(PurchasesTabData.BONUS);
     }
 
     public boolean isBonusSkiped() {
@@ -136,7 +138,7 @@ public class PurchasesFragment extends BaseFragment {
 
         Bundle args = getArguments();
         mIsVip = args.getBoolean(IS_VIP_PRODUCTS, false);
-        args.putString(OpenIabFragment.ARG_RESOURCE_INFO_TEXT, mResourceInfoText == null ? getInfoText() : mResourceInfoText);
+        args.putString(PurchasesConstants.ARG_RESOURCE_INFO_TEXT, mResourceInfoText == null ? getInfoText() : mResourceInfoText);
 
         Options.TabsList tabs;
         //Для того, что бы при изменении текста плавно менялся лейаут, без скачков
@@ -164,7 +166,7 @@ public class PurchasesFragment extends BaseFragment {
             @Override
             public void onPageSelected(int position) {
                 setResourceInfoText();
-                if (position == mPagerAdapter.getTabIndex(Options.Tab.BONUS)) {
+                if (position == mPagerAdapter.getTabIndex(PurchasesTabData.BONUS)) {
                     if (mTopfaceOfferwallRedirect != null && mTopfaceOfferwallRedirect.isEnabled()) {
                         StatisticsTracker.getInstance().sendEvent("bonuses_opened",
                                 new Slices().putSlice("ref", mTopfaceOfferwallRedirect.getGroup()));
@@ -188,18 +190,18 @@ public class PurchasesFragment extends BaseFragment {
         }
     }
 
-    private void removeExcessTabs(LinkedList<Options.Tab> tabs) {
+    private void removeExcessTabs(LinkedList<PurchasesTabData> tabs) {
         boolean isVip = getArguments().getBoolean(IS_VIP_PRODUCTS, false);
-        for (Iterator<Options.Tab> iterator = tabs.iterator(); iterator.hasNext(); ) {
-            Options.Tab tab = iterator.next();
+        for (Iterator<PurchasesTabData> iterator = tabs.iterator(); iterator.hasNext(); ) {
+            PurchasesTabData tab = iterator.next();
             //Удаляем вкладку Google Play, если не доступны Play Services
-            if (TextUtils.equals(tab.type, Options.Tab.GPLAY) && !new GoogleMarketApiManager().isMarketApiAvailable()) {
+            if (TextUtils.equals(tab.type, PurchasesTabData.GPLAY) && !new GoogleMarketApiManager().isMarketApiAvailable()) {
                 iterator.remove();
             } else {
                 Products products = getProductsByTab(tab);
                 if (products != null) {
                     if ((!isVip && products.coins.isEmpty() && products.likes.isEmpty()) ||
-                            (isVip && products.premium.isEmpty()) || !Options.Tab.markets.contains(tab.type)) {
+                            (isVip && products.premium.isEmpty()) || !PurchasesTabData.markets.contains(tab.type)) {
                         iterator.remove();
                     }
                 }
@@ -207,16 +209,16 @@ public class PurchasesFragment extends BaseFragment {
         }
     }
 
-    private Products getProductsByTab(Options.Tab tab) {
+    private Products getProductsByTab(PurchasesTabData tab) {
         Products products = null;
         switch (tab.type) {
-            case Options.Tab.GPLAY:
+            case PurchasesTabData.GPLAY:
                 products = CacheProfile.getMarketProducts();
                 break;
-            case Options.Tab.PWALL:
+            case PurchasesTabData.PWALL:
                 products = CacheProfile.getPaymentWallProducts(PaymentWallProducts.TYPE.DIRECT);
                 break;
-            case Options.Tab.PWALL_MOBILE:
+            case PurchasesTabData.PWALL_MOBILE:
                 products = CacheProfile.getPaymentWallProducts(PaymentWallProducts.TYPE.MOBILE);
                 break;
         }
@@ -304,7 +306,7 @@ public class PurchasesFragment extends BaseFragment {
 
     private Intent getUpdateResourceInfoTextIntent(String text) {
         Intent intent = new Intent(OpenIabFragment.UPDATE_RESOURCE_INFO);
-        intent.putExtra(OpenIabFragment.ARG_RESOURCE_INFO_TEXT, text);
+        intent.putExtra(PurchasesConstants.ARG_RESOURCE_INFO_TEXT, text);
         return intent;
     }
 }
