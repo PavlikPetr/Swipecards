@@ -282,8 +282,8 @@ public class MenuFragment extends Fragment {
                 }
             }
         });
-        initAdapter();
         initFooter();
+        initAdapter();
         return root;
     }
 
