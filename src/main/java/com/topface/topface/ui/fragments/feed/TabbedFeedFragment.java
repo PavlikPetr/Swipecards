@@ -10,15 +10,11 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.TextView;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -31,6 +27,7 @@ import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
@@ -66,9 +63,9 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     protected static int mVisitorsastOpenedPage = 0;
     protected static int mLikesLastOpenedPage = 0;
     protected static int mDialogsLastOpenedPage = 0;
-    private ArrayList<TextView> mViews;
     private Subscription mCountersSubscription;
     protected CountersData mCountersData = new CountersData();
+    private TabLayoutCreator mTabLayoutCreator;
 
     public static void setTabsDefaultPosition() {
         mVisitorsastOpenedPage = 0;
@@ -84,7 +81,9 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
 
         @Override
         public void onPageSelected(int position) {
-            setTabTitle(position);
+            if (mTabLayoutCreator != null) {
+                mTabLayoutCreator.setTabTitle(position);
+            }
             List<Fragment> fragments = getChildFragmentManager().getFragments();
             if (fragments != null) {
                 for (Fragment fragment : fragments) {
@@ -131,7 +130,9 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
             public void call(CountersData countersData) {
                 mCountersData = countersData;
                 onCountersUpdated(countersData);
-                setTabTitle(getLastOpenedPage());
+                if (mTabLayoutCreator != null) {
+                    mTabLayoutCreator.setTabTitle(getLastOpenedPage());
+                }
             }
         });
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mHasFeedAdReceiver, new IntentFilter(HAS_FEED_AD));
@@ -148,48 +149,9 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
                 mPagesCounters);
         mPager.setAdapter(mBodyPagerAdapter);
         mPager.addOnPageChangeListener(mPageChangeListener);
-        mTabLayout.setupWithViewPager(mPager);
-        mTabLayout.setTabMode(isScrollableTabs() ? TabLayout.MODE_SCROLLABLE : TabLayout.MODE_FIXED);
-        initTabView();
-        setTabTitle(getLastOpenedPage());
+        mTabLayoutCreator = new TabLayoutCreator(getActivity(), mPager, mTabLayout, mPagesTitles, mPagesCounters);
+        mTabLayoutCreator.isScrollableTabs(isScrollableTabs() && this instanceof TabbedLikesFragment);
     }
-
-    public void setTabTitle(int position) {
-        for (int i = 0; i < mTabLayout.getTabCount(); i++) {
-            TextView textView = mViews.get(i);
-            if (i == position) {
-                textView.setText(prepareTabIndicatorTitle(mPagesTitles.get(i), mPagesCounters.get(i), true));
-            } else {
-                textView.setText(prepareTabIndicatorTitle(mPagesTitles.get(i), mPagesCounters.get(i), false));
-            }
-        }
-    }
-
-    private CharSequence prepareTabIndicatorTitle(String title, int counter, boolean isSelectedTab) {
-        SpannableString titleSpannable = new SpannableString(title);
-        titleSpannable.setSpan(new ForegroundColorSpan(isSelectedTab
-                ? getResources().getColor(R.color.tab_text_color)
-                : getResources().getColor(R.color.light_gray))
-                , 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        if (counter > 0) {
-            SpannableString counterSpannable = new SpannableString(String.valueOf(counter));
-            counterSpannable.setSpan(new ForegroundColorSpan(getActivity().getResources().getColor(R.color.tab_counter_color))
-                    , 0, counterSpannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            return TextUtils.concat(titleSpannable, " ", counterSpannable);
-        }
-        return titleSpannable;
-    }
-
-    private void initTabView() {
-        mViews = new ArrayList<>();
-        for (int i = 0; i < mPagesCounters.size(); i++) {
-            TextView textView = (TextView) LayoutInflater
-                    .from(App.getContext()).inflate(R.layout.tab_indicator, null);
-            mViews.add(textView);
-            mTabLayout.getTabAt(i).setCustomView(textView);
-        }
-    }
-
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
