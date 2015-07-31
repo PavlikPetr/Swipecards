@@ -646,4 +646,6 @@
     <string name="on_mail">e-postaya</string>
     <string name="add_leader_hint">Tebriksiniz …</string>
     <string name="more">daha</string>
+    <string name="novice_sympathy">Hoş bir tanışma başlamak \niçin \ngerçekten hoşlandığınız kişilere sempati gönderin</string>
+    <string name="novice_sympathies_bonus">Siz %1$d \nhediye olarak kazandınız! – Bu demek ki %2$d kişi sizi \nkesinlikle beğenir ve sempatileri size \ngösterir.</string>
 </resources>

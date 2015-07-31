@@ -410,4 +410,6 @@
     <string name="restore">Obnoviti</string>
     <string name="admiration_sended">Divljenje je poslato</string>
     <string name="auth_btn_ok">Ući preko Odnoklassniki</string>
+    <string name="novice_sympathy">Šaljite simpatije onima koji vam se zaista dopadaju, kako bi počeli prijatno poznanstvo</string>
+    <string name="novice_sympathies_bonus">Dobili ste %1$d simpatija na poklon! To znači da se vi sigurno dopadate %2$d ljudima, koji će vam izraziti svoju simpatiju.</string>
 </resources>

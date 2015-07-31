@@ -11,42 +11,47 @@
         android:id="@+id/loDialog"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bg_white"
-        android:padding="5dp">
+        android:background="@color/bg_white">
 
-        <TextView
-            android:id="@+id/invitesTitle"
-            style="@style/TitleBlackText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:gravity="center"
-            android:minHeight="50dp"
-            android:textSize="14sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/invitesTitle"
             android:layout_centerInParent="true"
             android:orientation="vertical"
-            android:padding="5dp">
+            android:paddingLeft="42dp"
+            android:paddingRight="42dp"
+            android:paddingBottom="20dp"
+            android:paddingTop="30dp">
 
             <TextView
-                android:id="@+id/checkBoxTitle"
+                android:id="@+id/invitesTitle"
                 style="@style/TitleBlackText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:gravity="left"
+                android:minHeight="50dp"
+                android:textSize="20sp" />
+
+
+            <TextView
+                android:id="@+id/checkBoxTitle"
+                android:textColor="@color/bg_main"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingBottom="5dp"
+                android:paddingTop="30dp"
+                android:paddingBottom="28dp"
                 android:text="@string/invite_friends_title_short"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <Button
                 android:id="@+id/sendContacts"
                 style="@style/Widget.Topface.Button.Big.Blue"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:minWidth="276dp"
+                android:minHeight="40dp" />
         </LinearLayout>
 
         <ImageView
@@ -55,8 +60,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_margin="2dp"
-            android:src="@drawable/ic_close_dialog" />
+            android:padding="8dp"
+            android:src="@drawable/invite_popup_close_selector" />
     </RelativeLayout>
 
     <com.topface.topface.ui.views.LockerView

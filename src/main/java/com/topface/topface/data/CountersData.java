@@ -54,10 +54,10 @@ public class CountersData {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == null){
+        if (obj == null) {
             return false;
         }
-        CountersData data = (CountersData)obj;
+        CountersData data = (CountersData) obj;
         return data.likes == likes &&
                 data.mutual == mutual &&
                 data.dialogs == dialogs &&

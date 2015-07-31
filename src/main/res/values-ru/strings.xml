@@ -191,8 +191,8 @@
     <string name="general_settings">Настройки</string>
 
     <!-- Auth -->
-    <string name="auth_btn_vk">Войти через ВКонтакте</string>
-    <string name="auth_btn_fb">Войти через Facebook</string>
+    <string name="auth_btn_vk">ВКонтакте</string>
+    <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Повторить</string>
 
     <!-- Dating -->
@@ -702,7 +702,7 @@
     <string name="settings_feedback_transaction_number">Номер заказа</string>
     <string name="settings_feedback_transaction_link">где найти номер заказа?</string>
     <string name="general_logout_error">К сожалению, не удалось выйти из аккаунта</string>
-    <string name="auth_btn_ok">Войти через Одноклассники</string>
+    <string name="auth_btn_ok">Одноклассники</string>
     <string name="auth_btn_tf">Аккаунт Topface</string>
     <string name="birthday">День рождения</string>
     <string name="other_auth">Войти через другие сервисы</string>
@@ -792,7 +792,8 @@
     <string name="send_feedback">Отправить сообщение</string>
     <string name="get_vip_free">Получи VIP бесплатно</string>
     <string name="buy_more_sympathies">\"Получай больше симпатий, становись популярнее\"</string>
-    <string name="transaction_code_help">Если вы отправите нам код транзакции, это может помочь в выполнение вашего запроса, а так же ускорит его обработку. Подробную информацию о заказе, можно получить через <![CDATA[<font color=#05c5cf><u>Google-кошелек</u>]]>.</string>
+    <string name="transaction_code_help">Если вы отправите нам код транзакции, это может помочь в выполнение вашего запроса, а так же ускорит его обработку. Подробную информацию о заказе, можно получить через %s.</string>
+    <string name="google_wallet">Google-кошелек</string>
     <!-- ServicesManager-->
     <!-- Google -->
     <string name="google_service_general_title">Уведомления недоступны</string>
@@ -836,8 +837,8 @@
     <string name="settings_check_vip_title">Проверка активности VIP-статуса</string>
     <string name="settings_check_vip_cell">Проверить VIP-статус</string>
     <string name="settings_check_vip_alert">Запрос на проверку отправлен</string>
-    
-    
+
+
     <string name="novice_sympathy">Отправляйте симпатии тем, кто вам\nдействительно нравится,\nчтобы начать приятное знакомство</string>
     <string name="novice_sympathies_bonus">Вы получаете %1$d симпатии в\nподарок! Это означает, что вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию</string>
 </resources>

@@ -23,6 +23,7 @@ public class Configurations {
     private BannersConfig mBannerConfig;
     private LocaleConfig mLocaleConfig;
     private UserConfigConverter mConfigConverter;
+    private FeedsCache mFeedsCache;
 
     public Configurations(Context context) {
         mContext = context;
@@ -33,6 +34,13 @@ public class Configurations {
             mAppConfig = new AppConfig(mContext);
         }
         return mAppConfig;
+    }
+
+    public FeedsCache getFeedsCache() {
+        if (mFeedsCache == null) {
+            mFeedsCache = new FeedsCache(null, mContext);
+        }
+        return mFeedsCache;
     }
 
 

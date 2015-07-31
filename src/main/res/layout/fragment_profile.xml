@@ -26,6 +26,7 @@
         android:id="@+id/vpFragments"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="@color/bg_white"
         android:layout_below="@id/tab_layout_wrapper" />
 
     <com.topface.topface.ui.views.ProgressBarWithAlpha

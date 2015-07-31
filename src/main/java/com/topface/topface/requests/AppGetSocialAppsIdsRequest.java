@@ -16,11 +16,13 @@ public class AppGetSocialAppsIdsRequest extends ApiRequest {
         super(context);
     }
 
-    @Override protected JSONObject getRequestData() throws JSONException {
+    @Override
+    protected JSONObject getRequestData() throws JSONException {
         return new JSONObject().put("clienttype", BuildConfig.MARKET_API_TYPE.getClientType());
     }
 
-    @Override public String getServiceName() {
+    @Override
+    public String getServiceName() {
         return "app.getSocialApplications";
     }
 

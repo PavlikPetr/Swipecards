@@ -564,4 +564,6 @@
     <string name="wrong_time_popup_button">Einstellungen öffnen</string>
     <string name="google_service_missing_button">Installieren</string>
     <string name="google_service_version_update_required_button">Aktualisieren</string>
+    <string name="novice_sympathy">Senden Sie Sympathien den Menschen, die Ihnen\nwirklich gefallen,\num eine angenehme Bekanntschaft anzufangen</string>
+    <string name="novice_sympathies_bonus">Sie bekommen %1$d Sympathien als\nGeschenk! Das heißt, dass Sie\ngenau %2$d Menschen gefallen,\ndie Ihnen ihre Sympathie zeigen werden</string>
 </resources>

@@ -33,7 +33,6 @@
         android:layout_height="43dp"
         android:layout_below="@id/popular_user_message"
         android:layout_centerHorizontal="true"
-        android:ellipsize="end"
         android:singleLine="true"
         android:text="@string/buying_vip_status" />
 
