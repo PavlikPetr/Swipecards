@@ -61,7 +61,7 @@
                 android:visibility="gone" />
 
             <Button
-                style="@style/FlatButton.Blue"
+                style="@style/Widget.Topface.Button.Big.Blue"
                 android:id="@+id/sendFeedback"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

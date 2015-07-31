@@ -383,6 +383,10 @@
 
     <style name="ListItemContainer">
         <!-- paddings set in drawables -->
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:paddingTop">8dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
@@ -1222,5 +1226,14 @@
 
     <style name="LeftMenuSelector">
         <item name="android:listSelector">@drawable/bg_left_menu_item_selector</item>
+    </style>
+
+    <style name="ItemFeedStyle">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:paddingTop">8dp</item>
     </style>
 </resources>

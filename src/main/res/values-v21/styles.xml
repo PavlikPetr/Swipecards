@@ -135,10 +135,17 @@
     </style>
 
     <style name="WhiteListItem.Underline">
-        <item name="android:background">@drawable/form_list_ripple</item>
+        <item name="android:background">@drawable/white_list_underline</item>
     </style>
 
     <style name="FormListSelector">
         <item name="android:listSelector">@drawable/form_list_ripple</item>
+    </style>
+
+    <style name="ProfileEditDialogBth">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/edit_dialog_button_heigh</item>
+        <item name="android:background">@drawable/edit_dialog_ripple</item>
+        <item name="android:layout_below">@id/edit_dialog_buttons_top</item>
     </style>
 </resources>
