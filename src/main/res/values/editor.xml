@@ -71,4 +71,6 @@
         <item>Выключен всегда</item>
     </string-array>
 
+    <string name="editor_crash_me">Нажми меня чтобы КРАШНУТЬ</string>
+
 </resources>

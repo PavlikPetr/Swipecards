@@ -10,6 +10,8 @@ def getVersionCode(versionProps) {
     def versionCode = versionProps['VERSION_CODE'].toInteger()
     if (project.gradle.startParameter.taskNames.contains("assembleGoogleQa")) {
         versionCode = versionCode + getQaVersion(versionProps)
+    } else if (project.gradle.startParameter.taskNames.contains("assembleIfreeQa")) {
+        versionCode = versionCode + getQaVersion(versionProps)
     }
     return versionCode;
 }

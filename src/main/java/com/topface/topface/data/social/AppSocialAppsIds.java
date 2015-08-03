@@ -1,7 +1,8 @@
-package com.topface.topface.data;
+package com.topface.topface.data.social;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.data.AbstractData;
 import com.topface.topface.utils.Utils;
 
 import org.json.JSONObject;
@@ -43,11 +44,7 @@ public class AppSocialAppsIds extends AbstractData {
     /**
      * {String} vkId - идентификатор приложения в vk
      */
-    public String vkId = "2664589";
-    private static final ArrayList<String>  ALLOWED_VK_IDS = new ArrayList<>(1);
-    static {
-        ALLOWED_VK_IDS.add("2664589");
-    }
+    public String vkId = VkSocialAppsIdsHolder.VK_ID;
 
     public AppSocialAppsIds(JSONObject data) {
         if (data != null) {
@@ -62,7 +59,7 @@ public class AppSocialAppsIds extends AbstractData {
             serverId = Utils.optString(item, "okId");
             okId = ALLOWED_OK_IDS.contains(serverId) ? serverId : okId;
             serverId = Utils.optString(item, "vkId");
-            vkId = ALLOWED_VK_IDS.contains(serverId) ? serverId : vkId;
+            vkId = VkSocialAppsIdsHolder.checkAllowedVkId(serverId);
             // caching
             App.getAppConfig().saveAppSocialAppsIds(this);
         } catch (Exception e) {
