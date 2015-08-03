@@ -93,6 +93,9 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
         }
     };
 
+
+    protected abstract boolean isScrollable();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -101,7 +104,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
         initBodyPages(root);
         mTabLayoutCreator = new TabLayoutCreator(getActivity(), mBodyPager, mTabLayout, BODY_PAGES_TITLES, null);
         mTabLayoutCreator.setTabTitle(DEFAULT_PAGE);
-        mTabLayoutCreator.isScrollableTabs(this instanceof OwnProfileFragment);
+        mTabLayoutCreator.isScrollableTabs(isScrollable());
         return root;
     }
 

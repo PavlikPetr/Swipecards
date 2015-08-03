@@ -96,6 +96,11 @@ public class UserProfileFragment extends AbstractProfileFragment {
     }
 
     @Override
+    protected boolean isScrollable() {
+        return false;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
         if (mItemId != null) {
