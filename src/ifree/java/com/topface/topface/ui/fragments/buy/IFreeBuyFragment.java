@@ -78,10 +78,13 @@ public class IFreeBuyFragment extends IFreePurchases {
 
     @Override
     public void onLibraryInitialised() {
-        super.onLibraryInitialised();
         setProgressVisibility(false);
-        Products products = CacheProfile.getMarketProducts();
-        initButtons(mRoot, products != null ? validateProducts(products.likes) : null, products != null ? validateProducts(products.coins) : null);
+        if (!isLibraryInitialised()) {
+            Products products = CacheProfile.getMarketProducts();
+            initButtons(mRoot, products != null ? validateProducts(products.likes) : null, products != null ? validateProducts(products.coins) : null);
+
+        }
+        super.onLibraryInitialised();
     }
 
     private void setResourceInfoText() {

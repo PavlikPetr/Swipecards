@@ -100,12 +100,14 @@ public class IFreeBuyVipFragment extends IFreePurchases implements OnClickListen
 
     @Override
     public void onLibraryInitialised() {
-        super.onLibraryInitialised();
         setProgressVisibility(false);
-        Products products = CacheProfile.getMarketProducts();
-        if (!CacheProfile.premium) {
-            initBuyVipViews(mRoot, products != null ? validateProducts(products.premium) : null);
+        if (!isLibraryInitialised()) {
+            Products products = CacheProfile.getMarketProducts();
+            if (!CacheProfile.premium) {
+                initBuyVipViews(mRoot, products != null ? validateProducts(products.premium) : null);
+            }
         }
+        super.onLibraryInitialised();
     }
 
     @Override
