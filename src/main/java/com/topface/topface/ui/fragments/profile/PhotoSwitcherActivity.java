@@ -55,6 +55,7 @@ import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -513,6 +514,13 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                         Utils.showToastNotification(R.string.general_non_exist_photo_error, Toast.LENGTH_SHORT);
                         CacheProfile.sendUpdateProfileBroadcast();
                         finish();
+                        break;
+                    case ErrorCodes.CODE_CANNOT_SET_PHOTO_AS_MAIN:
+                        try {
+                            Utils.showToastNotification(response.getJsonResult().getString("userMessage"),Toast.LENGTH_SHORT);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     default:
                         Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
