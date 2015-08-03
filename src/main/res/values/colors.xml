@@ -79,6 +79,7 @@
     <color name="gray_divider">#E5E5E5</color>
     <color name="light_gray">#888888</color>
     <color name="dialog_bg">#F3F3F3</color>
+    <color name="disable_tab_color">#757575</color>
 
 
     <!-- main theme color -->
