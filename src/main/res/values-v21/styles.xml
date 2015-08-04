@@ -148,4 +148,8 @@
         <item name="android:background">@drawable/edit_dialog_ripple</item>
         <item name="android:layout_below">@id/edit_dialog_buttons_top</item>
     </style>
+
+    <style name="FeedHeart.Selector">
+        <item name="android:src">@drawable/heart_ripple</item>
+    </style>
 </resources>
