@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.topface.topface.App;
 import com.topface.topface.data.Products;
+import com.topface.topface.requests.handlers.ApiHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,22 +15,6 @@ public class AmazonProductsRequest extends ApiRequest {
     public AmazonProductsRequest(Context context) {
         super(context);
         doNeedAlert(false);
-        callback(new DataApiHandler<Products>() {
-            @Override
-            public void fail(int codeError, IApiResponse response) {
-
-            }
-
-            @Override
-            protected void success(Products data, IApiResponse response) {
-                App.getOpenIabHelperManager().updateInventory();
-            }
-
-            @Override
-            protected Products parseResponse(ApiResponse response) {
-                return new Products(response);
-            }
-        });
     }
 
     @Override
@@ -40,5 +25,16 @@ public class AmazonProductsRequest extends ApiRequest {
     @Override
     protected JSONObject getRequestData() throws JSONException {
         return null;
+    }
+
+    @Override
+    public ApiRequest callback(ApiHandler handler) {
+        return super.callback(new ApiHandlerWrapper<Products>(handler) {
+            @Override
+            protected void success(Products data, IApiResponse response) {
+                App.getOpenIabHelperManager().updateInventory();
+                super.success(data, response);
+            }
+        });
     }
 }
