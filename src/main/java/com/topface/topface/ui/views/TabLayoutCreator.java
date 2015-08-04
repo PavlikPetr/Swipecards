@@ -86,7 +86,7 @@ public class TabLayoutCreator {
         mTabLayout.setLayoutParams(layoutParams);
     }
 
-    public void isScrollableTabs(boolean isScrollable) {
+    public void isModeScrollable(boolean isScrollable) {
         if (isScrollable) {
             mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
             changeLayoutWidth();

@@ -54,7 +54,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     }
 
     @Override
-    protected boolean isScrollable() {
+    protected boolean isScrollableTabs() {
         return true;
     }
 
