@@ -34,11 +34,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
 import javax.inject.Inject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.functions.Action1;
 
@@ -150,7 +149,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         mPager.setAdapter(mBodyPagerAdapter);
         mPager.addOnPageChangeListener(mPageChangeListener);
         mTabLayoutCreator = new TabLayoutCreator(getActivity(), mPager, mTabLayout, mPagesTitles, mPagesCounters);
-        mTabLayoutCreator.isScrollableTabs(isScrollableTabs() && this instanceof TabbedLikesFragment);
+        mTabLayoutCreator.isModeScrollable(isScrollableTabs() && this instanceof TabbedLikesFragment);
     }
 
     @Override
