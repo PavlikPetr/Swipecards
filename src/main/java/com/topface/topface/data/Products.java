@@ -92,7 +92,6 @@ public class Products extends AbstractData {
     protected void fillData(JSONObject data) {
         fillProducts(data);
         updateCache(data);
-        App.getOpenIabHelperManager().updateInventory();
     }
 
     private void fillProducts(JSONObject data) {
