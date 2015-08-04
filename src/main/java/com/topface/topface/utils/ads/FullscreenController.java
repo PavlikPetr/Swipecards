@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.appodeal.ads.Appodeal;
+import com.appodeal.ads.InterstitialCallbacks;
 import com.google.android.gms.ads.AdListener;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -29,6 +31,7 @@ import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_MEDIATION;
+import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_APPODEAL_FULLSCREEN;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_NONE;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_TOPFACE;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_FULLSCREEN_START_APP;
@@ -41,6 +44,7 @@ public class FullscreenController {
     private static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-9530442067223936/9732921207";
     private static final String ADMOB_INTERSTITIAL_MEDIATION_ID = "ca-app-pub-9530442067223936/9498586400";
     private static final String ADMOB_INTERSTITIAL_START_APP_ID = "ca-app-pub-9530442067223936/3776010801";
+    public static final String APP_KEY = "2f48418b677cf24a3fa37eacfc7a4e76d385db08b51bd328";
     private static boolean isFullScreenBannerVisible = false;
     private Activity mActivity;
 
@@ -156,6 +160,9 @@ public class FullscreenController {
                 case BANNER_ADMOB_FULLSCREEN_START_APP:
                     requestAdmobFullscreen(ADMOB_INTERSTITIAL_START_APP_ID);
                     break;
+                case BANNER_APPODEAL_FULLSCREEN:
+                    requestAppodealFullscreen();
+                    break;
                 case BANNER_TOPFACE:
                     requestTopfaceFullscreen();
                     break;
@@ -165,6 +172,21 @@ public class FullscreenController {
         } catch (Exception e) {
             Debug.error("Request fullscreen error", e);
         }
+    }
+
+    private void requestAppodealFullscreen() {
+        Appodeal.setAutoCache(Appodeal.INTERSTITIAL, false);
+        Appodeal.initialize(mActivity, APP_KEY, Appodeal.INTERSTITIAL);
+        Appodeal.cache(mActivity, Appodeal.INTERSTITIAL);
+        Appodeal.setInterstitialCallbacks(new InterstitialCallbacks() {
+            public void onInterstitialLoaded(boolean isPrecache) {
+                Appodeal.show(mActivity, Appodeal.INTERSTITIAL);
+            }
+            public void onInterstitialFailedToLoad() { }
+            public void onInterstitialShown() { }
+            public void onInterstitialClicked() { }
+            public void onInterstitialClosed() { }
+        });
     }
 
     public void requestAdmobFullscreen(String id) {

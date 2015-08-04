@@ -107,6 +107,9 @@ android {
         buildConfigField "String", "GIT_HEAD_SHA", "null";
         buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                 "com.topface.billing.MarketApiType.GOOGLE_PLAY";
+
+        multiDexEnabled true
+
     }
 
     signingConfigs {
@@ -122,7 +125,19 @@ android {
         }
     }
 
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
     buildTypes {
+        debug {
+            minifyEnabled true
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-config.txt'
+        }
+
         release {
             signingConfig signingConfigs.release
             minifyEnabled true
@@ -179,6 +194,8 @@ android {
 }
 
 dependencies {
+    //Multi dex support
+    compile 'com.android.support:multidex:1.0.1'
     //Android Support libs
     compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
     compile rootProject.ANDROID_BUILD_SUPPORT_APPCOMPAT_VERSION
