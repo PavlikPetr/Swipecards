@@ -21,22 +21,6 @@ public abstract class ApplicationBase extends Application {
     }
 
     public static ApiRequest getProductsRequest() {
-//        IFreeProductsRequest request = new IFreeProductsRequest(App.getContext());
-//        request.callback(new DataApiHandler<Products>() {
-//            @Override
-//            protected void success(Products data, IApiResponse response) {
-//            }
-//
-//            @Override
-//            protected Products parseResponse(ApiResponse response) {
-//                return new Products(response);
-//            }
-//
-//            @Override
-//            public void fail(int codeError, IApiResponse response) {
-//
-//            }
-//        });
         return new IFreeProductsRequest(App.getContext());
     }
 }
