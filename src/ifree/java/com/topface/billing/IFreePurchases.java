@@ -63,23 +63,24 @@ public class IFreePurchases extends BaseFragment implements LibraryInitListener 
                 mPurchaseListener.onPurchaseEventReceive(purchaseResponse);
             }
             Debug.log("IFreePurchases response: " + purchaseResponse);
-
-            int toastId;
-            if (purchaseResponse.getCode() == PaymentState.PURCHASE_CONFIRMED) {
-                try {
-                    CountersManager countersManager = CountersManager
-                            .getInstance(App.getContext())
-                            .setMethod(purchaseResponse.getPaymentMethod().toString());
-                    countersManager.setBalanceCounters(new JSONObject(URLDecoder
-                            .decode(purchaseResponse.getAnswerFromApplicationServer(), CHARSET_NAME)));
-                } catch (JSONException | UnsupportedEncodingException e) {
-                    e.printStackTrace();
+            if (purchaseResponse != null) {
+                int toastId;
+                if (purchaseResponse.getCode() == PaymentState.PURCHASE_CONFIRMED) {
+                    try {
+                        CountersManager countersManager = CountersManager
+                                .getInstance(App.getContext())
+                                .setMethod(purchaseResponse.getPaymentMethod().toString());
+                        countersManager.setBalanceCounters(new JSONObject(URLDecoder
+                                .decode(purchaseResponse.getAnswerFromApplicationServer(), CHARSET_NAME)));
+                    } catch (JSONException | UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    toastId = R.string.buying_store_ok;
+                } else {
+                    toastId = R.string.buying_store_fail;
                 }
-                toastId = R.string.buying_store_ok;
-            } else {
-                toastId = R.string.buying_store_fail;
+                Toast.makeText(App.getContext(), toastId, Toast.LENGTH_SHORT).show();
             }
-            Toast.makeText(App.getContext(), toastId, Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -135,7 +136,6 @@ public class IFreePurchases extends BaseFragment implements LibraryInitListener 
         JSONObject metaData = new JSONObject();
         try {
             metaData.put("uid", CacheProfile.uid);
-
             metaData.put("place", place);
         } catch (JSONException e) {
             e.printStackTrace();
