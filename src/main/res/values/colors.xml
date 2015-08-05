@@ -3,6 +3,7 @@
     <!--цвета-->
     <color name="semitransparent_black">#50000000</color>
     <color name="blue_holo_selected">#33B5E5</color>
+    <color name="link_color">#05c5cf</color>
     <!--flat design-->
     <color name="bg_left_menu_selected">#EEEEEE</color>
     <color name="bg_left_menu_normal">@color/bg_white</color>
@@ -70,13 +71,15 @@
 
     <!--filter light edit form dialog background selector color-->
     <color name="edit_form_selector_background_color_release_state">#FFFFFF</color>
-    <color name="edit_form_selector_background_color_pressed_state">@color/blue_holo_selected</color>
+    <color name="edit_form_selector_background_color_pressed_state">@color/blue_holo_selected
+    </color>
 
     <!--filter fragment dividers color-->
     <color name="filter_fragment_divider_color">#E2E2E2</color>
     <color name="gray_divider">#E5E5E5</color>
     <color name="light_gray">#888888</color>
     <color name="dialog_bg">#F3F3F3</color>
+    <color name="disable_tab_color">#757575</color>
 
 
     <!-- main theme color -->

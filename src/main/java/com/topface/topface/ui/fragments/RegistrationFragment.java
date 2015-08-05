@@ -1,10 +1,14 @@
 package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Context;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -12,12 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +47,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnEditorAction;
-import butterknife.OnItemSelected;
 
 public class RegistrationFragment extends BaseFragment {
 
@@ -71,19 +73,14 @@ public class RegistrationFragment extends BaseFragment {
     EditText mEdPassword;
     @Bind(R.id.etName)
     EditText mEdName;
-    @Bind(R.id.spnSex)
-    Spinner mSpnSex;
+    @Bind(R.id.tvSex)
+    TextView mTvSex;
     @Bind(R.id.tvRedAlert)
     TextView mRedAlertView;
     @Bind(R.id.btnStartChat)
     Button mBtnRegister;
     @Bind(R.id.tvBirthday)
     TextView mBirthdayText;
-
-    @OnItemSelected(R.id.spnSex)
-    public void sexSelected(View view) {
-        mSex = (int) view.getTag();
-    }
 
     @OnEditorAction(R.id.etName)
     public boolean nameActionListener(int actionId) {
@@ -95,6 +92,12 @@ public class RegistrationFragment extends BaseFragment {
             }
         }
         return handled;
+    }
+
+    @OnClick(R.id.tvSex)
+    public void sexClick() {
+        SexDialog sexDialog = new SexDialog();
+        sexDialog.show(getChildFragmentManager(), SexDialog.class.getSimpleName());
     }
 
     @OnClick(R.id.btnStartChat)
@@ -181,12 +184,6 @@ public class RegistrationFragment extends BaseFragment {
     private void initViews() {
         mShowPassword.setOnClickListener(new TopfaceAuthFragment.HidePasswordController(mShowPassword, mEdPassword));
         initEditTextViews();
-        initSexChangeSpinner();
-    }
-
-    private void initSexChangeSpinner() {
-        mSpnSex.setAdapter(new SexAdapter(getActivity()));
-        mSpnSex.setPrompt(getActivity().getString(R.string.u_sex));
     }
 
     private void initEditTextViews() {
@@ -327,39 +324,27 @@ public class RegistrationFragment extends BaseFragment {
         mBirthdayText.setEnabled(enable);
     }
 
-    private class SexAdapter extends BaseAdapter {
+    private class SexDialog extends DialogFragment {
 
-        private Context mContext;
+
         private int[] mSexResIdArray = {R.string.im_boy, R.string.im_girl};
 
-        public SexAdapter(Context context) {
-            mContext = context;
-        }
-
+        @NonNull
         @Override
-        public int getCount() {
-            return mSexResIdArray.length;
-        }
-
-        @Override
-        public String getItem(int position) {
-            return mContext.getString(mSexResIdArray[position]);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                convertView = View.inflate(mContext, R.layout.sex_choise_item, null);
-                convertView.setTag(position == 0 ? Static.BOY : Static.GIRL);
-            }
-            ((TextView) convertView).setText(getItem(position));
-            return convertView;
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                    getActivity(), R.array.sex, R.layout.sex_choise_item);
+            return new AlertDialog.Builder(getActivity())
+                    .setTitle(getString(R.string.u_sex))
+                    .setAdapter(adapter, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            mSex = (pos == 0 ? Static.BOY : Static.GIRL);
+                            mTvSex.setText(mSexResIdArray[pos]);
+                            dismiss();
+                        }
+                    })
+                    .create();
         }
     }
-
 }

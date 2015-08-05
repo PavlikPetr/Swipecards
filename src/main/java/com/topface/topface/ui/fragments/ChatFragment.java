@@ -195,6 +195,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     };
     private ImageButton mSendButton;
     private ChatListAnimatedAdapter mAnimatedAdapter;
+    private int mUserType;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -213,6 +214,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        mUserType = getArguments().getInt(ChatFragment.USER_TYPE);
         // do not recreate Adapter cause of setRetainInstance(true)
         if (mAdapter == null) {
             mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
@@ -266,7 +268,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         // Edit Box
         mEditBox = (EditText) root.findViewById(R.id.edChatBox);
         if (getArguments() != null &&
-                getArguments().getInt(ChatFragment.USER_TYPE) == FeedDialog.MESSAGE_POPULAR_STAGE_1) {
+                mUserType == FeedDialog.MESSAGE_POPULAR_STAGE_1) {
             mEditBox.clearFocus();
         }
         if (mInitialMessage != null) {
@@ -493,8 +495,10 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     private void updateSendMessageAbility(Boolean isButtonAvailable) {
         if (mSendButton != null && mEditBox != null) {
-            mSendButton.setEnabled(!mEditBox.getText().toString().isEmpty() &&
-                    (mLockScreen == null || mLockScreen.getVisibility() == View.GONE) && (isButtonAvailable == null || isButtonAvailable));
+            mSendButton.setEnabled(mUserType == FeedDialog.MESSAGE_POPULAR_STAGE_1
+                    ||(!mEditBox.getText().toString().isEmpty()
+                    && (mLockScreen == null || mLockScreen.getVisibility() == View.GONE)
+                    && (isButtonAvailable == null || isButtonAvailable)));
         }
     }
 

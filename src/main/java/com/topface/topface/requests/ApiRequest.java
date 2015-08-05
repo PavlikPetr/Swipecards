@@ -9,8 +9,6 @@ import android.text.TextUtils;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.R;
-import com.topface.topface.RetryDialog;
 import com.topface.topface.Ssid;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
@@ -76,16 +74,10 @@ public abstract class ApiRequest implements IApiRequest {
         handler.setNeedCounters(isNeedCounters);
 
         if (context != null && context instanceof Activity && !App.isOnline() && doNeedAlert) {
-            RetryDialog retryDialog = new RetryDialog(context.getString(R.string.general_internet_off), context, this);
             if (handler != null) {
                 Message msg = new Message();
                 msg.obj = new ApiResponse(ErrorCodes.ERRORS_PROCESSED, "App is offline");
                 handler.sendMessage(msg);
-            }
-            try {
-                retryDialog.show();
-            } catch (Exception e) {
-                Debug.error(e);
             }
         } else {
             ConnectionManager.getInstance().sendRequest(this);
