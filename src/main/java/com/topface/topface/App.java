@@ -321,6 +321,12 @@ public class App extends ApplicationBase {
     }
 
     @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
+    @Override
     public void onCreate() {
         /**
          * Баг Admob и Google Play Services, пробуем исправить
@@ -573,10 +579,6 @@ public class App extends ApplicationBase {
             }
             return HttpApiTransport.TRANSPORT_NAME;
         }
-    }
-
-    public static App from(Context context) {
-        return (App) context.getApplicationContext();
     }
 }
 

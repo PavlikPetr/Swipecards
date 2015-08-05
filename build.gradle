@@ -205,8 +205,6 @@ android {
 }
 
 dependencies {
-    //Multi dex support
-    compile 'com.android.support:multidex:1.0.1'
     //Android Support libs
     compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
     compile rootProject.ANDROID_BUILD_SUPPORT_APPCOMPAT_VERSION
@@ -216,6 +214,8 @@ dependencies {
     compile "com.google.android.gms:play-services-base:7.3.0"
     compile "com.google.android.gms:play-services-gcm:7.3.0"
     compile "com.google.android.gms:play-services-ads:7.3.0"
+    //Multi dex support
+    compile 'com.android.support:multidex:1.0.1'
     //All jar libs
     compile fileTree(dir: 'libs', exclude: 'amazon/*.jar', include: '*.jar')
     //Testing
@@ -282,9 +282,7 @@ dependencies {
             [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.3.3'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.3.3']
     )
-    ifreeCompile 'com.android.support:multidex:1.0.1'
-    ifreeCompile fileTree(dir: 'ifree/libs', include: '*.jar')
-    // />
+        ifreeCompile fileTree(dir: 'ifree/libs', include: '*.jar')
 }
 
 project(':libs:IllustratedTextView') {

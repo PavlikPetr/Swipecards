@@ -35,8 +35,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Products extends AbstractData {
-    private static final String PRICE = "{{price}}";
-    private static final String PRICE_PER_ITEM = "{{price_per_item}}";
+    public static final String PRICE = "{{price}}";
+    public static final String PRICE_PER_ITEM = "{{price_per_item}}";
     private static final String EUR = "EUR";
     private static final String RUB = "RUB";
     private static final String USD = "USD";
