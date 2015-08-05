@@ -8,20 +8,23 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 
+import com.google.gson.reflect.TypeToken;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedBookmark;
-import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.ui.adapters.BookmarksListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.config.FeedsCache;
 
-import org.json.JSONObject;
+import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
@@ -49,6 +52,17 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     };
 
     @Override
+    protected Type getFeedListDataType() {
+        return new TypeToken<FeedList<FeedBookmark>>() {
+        }.getType();
+    }
+
+    @Override
+    protected Class getFeedListItemClass() {
+        return FeedBookmark.class;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBookmarkedReceiver,
@@ -71,14 +85,15 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
         return CountersManager.UNKNOWN_TYPE;
     }
 
+    @NotNull
     @Override
-    protected FeedAdapter<FeedBookmark> createNewAdapter() {
-        return new BookmarksListAdapter(getActivity(), getUpdaterCallback());
+    protected FeedsCache.FEEDS_TYPE getFeedsType() {
+        return FeedsCache.FEEDS_TYPE.DATA_BOOKMARKS_FEEDS;
     }
 
     @Override
-    protected FeedListData<FeedBookmark> getFeedList(JSONObject response) {
-        return new FeedListData<>(response, FeedBookmark.class);
+    protected FeedAdapter<FeedBookmark> createNewAdapter() {
+        return new BookmarksListAdapter(getActivity(), getUpdaterCallback());
     }
 
     /**

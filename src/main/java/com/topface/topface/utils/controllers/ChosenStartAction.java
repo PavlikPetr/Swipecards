@@ -45,26 +45,30 @@ public class ChosenStartAction implements IStartAction {
         return maxAction;
     }
 
-    @Override public void callInBackground() {
+    @Override
+    public void callInBackground() {
         IStartAction action = getNextAction();
         if (action != null) {
             action.callInBackground();
         }
     }
 
-    @Override public void callOnUi() {
+    @Override
+    public void callOnUi() {
         IStartAction action = getNextAction();
         if (action != null) {
             action.callOnUi();
         }
     }
 
-    @Override public boolean isApplicable() {
+    @Override
+    public boolean isApplicable() {
         chosenAction = getNextAction();
         return chosenAction != null;
     }
 
-    @Override public int getPriority() {
+    @Override
+    public int getPriority() {
         int max = 0, tmp;
         for (IStartAction action : mActions) {
             tmp = action.getPriority();
@@ -75,7 +79,8 @@ public class ChosenStartAction implements IStartAction {
         return max;
     }
 
-    @Override public String getActionName() {
+    @Override
+    public String getActionName() {
         StringBuilder builder = new StringBuilder();
         for (IStartAction action : mActions) {
             builder.append(action.getActionName()).append(",");
@@ -83,7 +88,8 @@ public class ChosenStartAction implements IStartAction {
         return builder.toString();
     }
 
-    @Override public void setStartActionCallback(OnNextActionListener startActionCallback) {
+    @Override
+    public void setStartActionCallback(OnNextActionListener startActionCallback) {
         //empty
     }
 }

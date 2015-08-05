@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.google.gson.reflect.TypeToken;
 import com.topface.PullToRefreshBase;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -27,6 +28,7 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.OwnProfileActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.PhotoBlogListAdapter;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
@@ -36,6 +38,7 @@ import com.topface.topface.utils.Utils;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
@@ -47,6 +50,17 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     private MenuItem mBarActions;
     private CountDownTimer mTimerUpdate;
     private PhotoBlogListAdapter mAdapter;
+
+    @Override
+    protected Type getFeedListDataType() {
+        return new TypeToken<FeedList<FeedPhotoBlog>>() {
+        }.getType();
+    }
+
+    @Override
+    protected Class getFeedListItemClass() {
+        return FeedPhotoBlog.class;
+    }
 
     @Override
     public void onResume() {
@@ -161,11 +175,6 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     @Override
     protected int getFeedType() {
         return CountersManager.UNKNOWN_TYPE;
-    }
-
-    @Override
-    protected FeedPhotoBlogListData getFeedList(JSONObject response) {
-        return new FeedPhotoBlogListData(response, FeedPhotoBlog.class);
     }
 
     @Override

@@ -34,11 +34,13 @@ public class FeedRequest extends LimitedApiRequest {
         public boolean from = false;
         public boolean to;
 
-        @Override public int describeContents() {
+        @Override
+        public int describeContents() {
             return 0;
         }
 
-        @Override public void writeToParcel(Parcel dest, int flags) {
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
             dest.writeByte((byte) (wasFromInited ? 1 : 0));
             dest.writeByte((byte) (from ? 1 : 0));
             dest.writeByte((byte) (to ? 1 : 0));

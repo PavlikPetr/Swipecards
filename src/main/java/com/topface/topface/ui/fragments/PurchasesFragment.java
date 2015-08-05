@@ -26,11 +26,13 @@ import com.topface.topface.data.Products;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
+import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -82,6 +84,9 @@ public class PurchasesFragment extends BaseFragment {
     private Subscription mBalanceSubscription;
     @Bind(R.id.purchasesTabs)
     TabLayout mTabLayout;
+    private TabLayoutCreator mTabLayoutCreator;
+    private ArrayList<String> mPagesTitle = new ArrayList<>();
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,6 +105,9 @@ public class PurchasesFragment extends BaseFragment {
         ButterKnife.bind(this, root);
         initViews(root, savedInstanceState);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mVipPurchasedReceiver, new IntentFilter(CountersManager.UPDATE_VIP_STATUS));
+        mTabLayoutCreator = new TabLayoutCreator(getActivity(), mPager, mTabLayout, mPagesTitle, null);
+        mTabLayoutCreator.setTabTitle(mPager.getCurrentItem());
+        mTabLayoutCreator.isModeScrollable(true);
         return root;
     }
 
@@ -153,6 +161,11 @@ public class PurchasesFragment extends BaseFragment {
         return mSkipBonus;
     }
 
+    private void createTabList(LinkedList<Options.Tab> list) {
+        for (Options.Tab tab : list)
+            mPagesTitle.add(tab.name.toUpperCase());
+    }
+
     private void initViews(View root, Bundle savedInstanceState) {
         Bundle args = getArguments();
         mIsVip = args.getBoolean(IS_VIP_PRODUCTS, false);
@@ -168,8 +181,8 @@ public class PurchasesFragment extends BaseFragment {
             tabs = new Options.TabsList();
             tabs.list.addAll(CacheProfile.getOptions().otherTabs.list);
         }
-
         removeExcessTabs(tabs.list); //Убираем табы в которых нет продуктов и бонусную вкладку, если фрагмент для покупки випа
+        createTabList(tabs.list);
         mPagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs.list);
         mPager.setAdapter(mPagerAdapter);
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -182,6 +195,9 @@ public class PurchasesFragment extends BaseFragment {
 
             @Override
             public void onPageSelected(int position) {
+                if (mTabLayoutCreator != null) {
+                    mTabLayoutCreator.setTabTitle(position);
+                }
                 setResourceInfoText();
                 if (position == mPagerAdapter.getTabIndex(Options.Tab.BONUS)) {
                     if (mTopfaceOfferwallRedirect != null && mTopfaceOfferwallRedirect.isEnabled()) {
@@ -197,7 +213,6 @@ public class PurchasesFragment extends BaseFragment {
             public void onPageScrollStateChanged(int state) {
             }
         });
-        mTabLayout.setupWithViewPager(mPager);
         initBalanceCounters(getSupportActionBar().getCustomView());
         setResourceInfoText();
         if (savedInstanceState != null) {

@@ -184,7 +184,8 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         return R.layout.ac_navigation;
     }
 
-    @Override protected void onRegisterMandatoryStartActions(StartActionsController startActionsController) {
+    @Override
+    protected void onRegisterMandatoryStartActions(StartActionsController startActionsController) {
         super.onRegisterMandatoryStartActions(startActionsController);
         final SequencedStartAction sequencedStartAction = new SequencedStartAction(this, AC_PRIORITY_HIGH);
         final IStartAction popupsAction = new ChosenStartAction().chooseFrom(

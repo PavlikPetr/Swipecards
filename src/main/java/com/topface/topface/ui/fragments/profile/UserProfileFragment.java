@@ -32,7 +32,6 @@ import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.FeedGiftsRequest;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.MultipartApiRequest;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
@@ -93,6 +92,11 @@ public class UserProfileFragment extends AbstractProfileFragment {
         }
         setIsChatAvailable(args.getBoolean(AbstractProfileFragment.INTENT_IS_CHAT_AVAILABLE));
         setIsAddToFavoritsAvailable(args.getBoolean(AbstractProfileFragment.INTENT_IS_ADD_TO_FAVORITS_AVAILABLE));
+    }
+
+    @Override
+    protected boolean isScrollableTabs() {
+        return false;
     }
 
     @Override
