@@ -60,11 +60,6 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <!-- transparent activity theme without animation-->
-    <style name="Theme.Transparent.NoAnimation">
-        <item name="android:windowAnimationStyle">@null</item>
-    </style>
-
     <style name="NoWindowAnimation" parent="Theme.Topface">
         <item name="android:windowAnimationStyle">@null</item>
     </style>

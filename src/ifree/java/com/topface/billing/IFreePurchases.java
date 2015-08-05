@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -36,6 +37,7 @@ public class IFreePurchases extends BaseFragment implements LibraryInitListener 
 
     protected Monetization mMonetization;
     private PurchaseListener mPurchaseListener;
+    private boolean mIsLibraryInitialised = false;
 
     @Override
     public void onLibraryInitStarted() {
@@ -45,6 +47,7 @@ public class IFreePurchases extends BaseFragment implements LibraryInitListener 
     @Override
     public void onLibraryInitialised() {
         Debug.log("IFreePurchases onLibraryInitialised");
+        mIsLibraryInitialised = true;
     }
 
     @Override
@@ -60,23 +63,24 @@ public class IFreePurchases extends BaseFragment implements LibraryInitListener 
                 mPurchaseListener.onPurchaseEventReceive(purchaseResponse);
             }
             Debug.log("IFreePurchases response: " + purchaseResponse);
-
-            int toastId;
-            if (purchaseResponse.getCode() == PaymentState.PURCHASE_CONFIRMED) {
-                try {
-                    CountersManager countersManager = CountersManager
-                            .getInstance(App.getContext())
-                            .setMethod(purchaseResponse.getPaymentMethod().toString());
-                    countersManager.setBalanceCounters(new JSONObject(URLDecoder
-                            .decode(purchaseResponse.getAnswerFromApplicationServer(), CHARSET_NAME)));
-                } catch (JSONException | UnsupportedEncodingException e) {
-                    e.printStackTrace();
+            if (purchaseResponse != null) {
+                int toastId;
+                if (purchaseResponse.getCode() == PaymentState.PURCHASE_CONFIRMED) {
+                    try {
+                        CountersManager countersManager = CountersManager
+                                .getInstance(App.getContext())
+                                .setMethod(purchaseResponse.getPaymentMethod().toString());
+                        countersManager.setBalanceCounters(new JSONObject(URLDecoder
+                                .decode(purchaseResponse.getAnswerFromApplicationServer(), CHARSET_NAME)));
+                    } catch (JSONException | UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    toastId = R.string.buying_store_ok;
+                } else {
+                    toastId = R.string.buying_store_fail;
                 }
-                toastId = R.string.buying_store_ok;
-            } else {
-                toastId = R.string.buying_store_fail;
+                Toast.makeText(App.getContext(), toastId, Toast.LENGTH_SHORT).show();
             }
-            Toast.makeText(App.getContext(), toastId, Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -105,16 +109,19 @@ public class IFreePurchases extends BaseFragment implements LibraryInitListener 
 
     public LinkedList<BuyButtonData> validateProducts(LinkedList<BuyButtonData> products) {
         String price;
-        for (BuyButtonData product : products) {
+        for (Iterator<BuyButtonData> product = products.iterator(); product.hasNext(); ) {
+            BuyButtonData entry = product.next();
             price = null;
             try {
-                price = mMonetization.getPriceTariffGroup(product.id);
+                price = mMonetization.getPriceTariffGroup(entry.id);
             } catch (Exception ignored) {
+                Debug.error("IFreePurchases Exception = " + ignored);
             }
+            Debug.error("IFreePurchases price = " + price + " id = " + entry.id);
             if (price != null) {
-                product.setTitleByPrice(price);
+                entry.setTitleByPrice(price);
             } else {
-                products.remove(product);
+                product.remove();
             }
         }
         return products;
@@ -129,7 +136,6 @@ public class IFreePurchases extends BaseFragment implements LibraryInitListener 
         JSONObject metaData = new JSONObject();
         try {
             metaData.put("uid", CacheProfile.uid);
-
             metaData.put("place", place);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -149,5 +155,9 @@ public class IFreePurchases extends BaseFragment implements LibraryInitListener 
 
     public void setPurchaseListener(PurchaseListener purchaseListener) {
         mPurchaseListener = purchaseListener;
+    }
+
+    public boolean isLibraryInitialised() {
+        return mIsLibraryInitialised;
     }
 }

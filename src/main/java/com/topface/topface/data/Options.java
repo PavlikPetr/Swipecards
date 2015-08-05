@@ -79,6 +79,11 @@ public class Options extends AbstractData {
     public TrialVipExperiment trialVipExperiment = new TrialVipExperiment();
 
     /**
+     * udate url (path to application on market)
+     */
+    public String updateUrl;
+
+    /**
      * manage SmsInvite screen
      */
     public ForceSmsInviteRedirect forceSmsInviteRedirect = new ForceSmsInviteRedirect();
@@ -197,6 +202,7 @@ public class Options extends AbstractData {
             }
             fillLeaderButtons(response.optJSONObject("photofeed"));
             JSONObject aboutAppJson = response.optJSONObject("aboutApp");
+            updateUrl = response.optString("updateUrl");
             aboutApp = new AboutApp(aboutAppJson.optString("title"), aboutAppJson.optString("url"));
             offerwall = response.optString("offerwall");
             maxVersion = response.optString("maxVersion");
