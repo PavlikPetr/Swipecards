@@ -932,10 +932,13 @@
     </style>
 
     <style name="SpinnerDropDownView" parent="SpinnerTextView">
-        <item name="android:background">@drawable/spinner_selector</item>
         <item name="android:paddingBottom">15dp</item>
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingTop">15dp</item>
+    </style>
+
+    <style name="SpinnerDropDownView.Selector">
+        <item name="android:background">@drawable/spinner_selector</item>
     </style>
 
     <style name="CitySearchView" parent="SpinnerTextView">
@@ -1081,7 +1084,17 @@
         <item name="android:paddingRight">@dimen/item_side_padding</item>
     </style>
 
+    <style name="WhiteListItem.ItemSelector">
+        <item name="android:background">
+            @drawable/filter_light_edit_form_dialog_background_color_selector
+        </item>
+    </style>
+
     <style name="WhiteListItem.Underline">
+        <item name="android:background">@drawable/list_item_btn</item>
+    </style>
+
+    <style name="FilterParamSelector">
         <item name="android:background">@drawable/list_item_btn</item>
     </style>
 
@@ -1101,7 +1114,7 @@
 
     <style name="SelectorDialogTitle.Blue">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/default_line_indicator_selected_color</item>
+        <item name="android:textColor">@color/dialog_title_text_color</item>
     </style>
 
     <style name="WhiteBackgroundTitle">
@@ -1238,5 +1251,11 @@
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingRight">12dp</item>
         <item name="android:paddingTop">8dp</item>
+    </style>
+
+    <style name="FilterDialogSelector">
+        <item name="android:listSelector">
+            @drawable/filter_light_edit_form_dialog_background_color_selector
+        </item>
     </style>
 </resources>

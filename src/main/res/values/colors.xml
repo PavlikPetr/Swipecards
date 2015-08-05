@@ -94,6 +94,7 @@
     <color name="trial_popup_background">#242429</color>
 
     <color name="default_line_indicator_selected_color">@color/blue_holo_selected</color>
+    <color name="dialog_title_text_color">@color/blue_holo_selected</color>
 
     <!--Button gray text color in different states-->
     <color name="button_gray_text_pressed_color">#4B4B4B</color>

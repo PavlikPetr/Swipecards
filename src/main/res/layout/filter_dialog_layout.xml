@@ -9,5 +9,6 @@
         android:background="@color/edit_form_selector_background_color_release_state"
         android:divider="@color/filter_fragment_divider_color"
         android:dividerHeight="@dimen/filter_fragment_divider_height"
+        style="@style/FilterDialogSelector"
         android:tag="loFilterList" />
 </RelativeLayout>

@@ -131,7 +131,7 @@
     </style>
 
     <style name="LeftMenuSelector">
-        <item name="android:listSelector">@drawable/bg_left_menu_item_selector_v21</item>
+        <item name="android:listSelector">@drawable/form_list_ripple</item>
     </style>
 
     <style name="WhiteListItem.Underline">
@@ -151,5 +151,21 @@
 
     <style name="FeedHeart.Selector">
         <item name="android:src">@drawable/heart_ripple</item>
+    </style>
+
+    <style name="WhiteListItem.ItemSelector">
+        <item name="android:background">@drawable/dialog_items_selector_ripple</item>
+    </style>
+
+    <style name="FilterDialogSelector">
+        <item name="android:listSelector">@drawable/dialog_items_selector_ripple</item>
+    </style>
+
+    <style name="SpinnerDropDownView.Selector">
+        <item name="android:background">@drawable/filter_spinner_items_selector_ripple</item>
+    </style>
+
+    <style name="FilterParamSelector">
+        <item name="android:background">@drawable/white_list_underline</item>
     </style>
 </resources>

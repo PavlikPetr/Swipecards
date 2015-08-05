@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/edit_form_selector_background_color_pressed_state">
+    <item android:drawable="@drawable/filter_light_edit_form_dialog_background_color_selector_v21" />
+</ripple>

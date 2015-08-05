@@ -102,7 +102,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
     ListView.OnItemClickListener mOnFillClickListener = new ListView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parentView, View view, int position, long id) {
-            View valueView = view.findViewById(R.id.tvValue);
+            View valueView = view.findViewById(R.id.tvTitle);
             if (valueView != null && valueView.getTag() instanceof FormItem) {
                 FormItem item = (FormItem) valueView.getTag();
 

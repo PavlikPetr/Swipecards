@@ -17,7 +17,7 @@
 
     <TextView
         android:id="@+id/citySearchText"
-        style="@style/SpinnerDropDownView"
+        style="@style/SpinnerDropDownView.Selector"
         android:textSize="14sp" />
 
 </LinearLayout>

@@ -5,8 +5,7 @@
 
     <CheckedTextView
         android:id="@+id/editor_check"
-        style="@style/WhiteListItem"
-        android:background="@drawable/filter_light_edit_form_dialog_background_color_selector"
+        style="@style/WhiteListItem.ItemSelector"
         android:checked="false"
         android:drawablePadding="5dp"
         android:paddingLeft="16dp"
