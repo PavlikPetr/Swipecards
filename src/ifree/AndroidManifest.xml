@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.topface.topface">
+
+    <application
+        android:name=".App"
+        tools:node="merge">
+
+        <meta-data
+            android:name="net.billingpro.PROMOTION_ID"
+            android:value="480" />
+
+        <meta-data
+            android:name="net.billingpro.PAYMENT_KEY"
+            android:value="pIoVxHLd" />
+
+        <meta-data
+            android:name="@string/tracking_id_meta_data_name"
+            android:value="UA-57607575-45"
+            tools:node="replace" />
+
+        <activity
+            android:name="com.ifree.monetize.core.MonetizePayActivity"
+            android:theme="@style/Theme.Transparent.NoAnimation"
+            tools:replace="@android:theme" />
+
+        <service android:name="com.ifree.monetize.core.MonetizeService" />
+        <receiver
+            android:name="com.ifree.monetize.receivers.SmsReceiver"
+            android:enabled="true">
+            <intent-filter android:priority="2147483647">
+                <action android:name="android.intent.action.DATA_SMS_RECEIVED" />
+
+                <data android:host="*" />
+                <data android:scheme="sms" />
+                <data android:port="1235" />
+            </intent-filter>
+            <intent-filter android:priority="2147483647">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.ifree.vendors.updateversion.UpdateVersionService" />
+
+    </application>
+
+</manifest>
+

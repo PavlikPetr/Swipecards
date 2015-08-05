@@ -49,6 +49,9 @@
 -keep class java.util.concurrent.** { *; }
 -dontwarn java.util.concurrent.**
 
+# Jackson
+-dontwarn com.fasterxml.jackson.databind.ext.**
+
 #ACRA specifics
 # Restore some Source file names and restore approximate line numbers in the stack traces,
 # otherwise the stack traces are pretty useless

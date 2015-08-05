@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments;
+package com.topface.topface.ui.fragments.buy;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,25 +8,28 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.topface.topface.App;
-import com.topface.topface.ui.fragments.buy.GoogleMarketBuyingFragment;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
+
+import static com.topface.topface.ui.fragments.buy.PurchasesConstants.ARG_TAG_SOURCE;
 
 
 public class TransparentMarketFragment extends GoogleMarketBuyingFragment {
 
-    public final static String PORDUCT_ID = "product_id";
+    public final static String PRODUCT_ID = "product_id";
     public final static String IS_SUBSCRIPTION = "is_subscription";
 
     private onPurchaseActions mPurchaseActions;
     private String mSubscriptionId;
     private boolean mIsSubscription;
     private boolean isNeedCloseFragment = false;
+    private String mFrom;
 
-    public static TransparentMarketFragment newInstance(String skuId, boolean isSubscription) {
+    public static TransparentMarketFragment newInstance(String skuId, boolean isSubscription, String from) {
         final TransparentMarketFragment fragment = new TransparentMarketFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(TransparentMarketFragment.PORDUCT_ID, skuId);
+        bundle.putString(TransparentMarketFragment.PRODUCT_ID, skuId);
+        bundle.putString(ARG_TAG_SOURCE, from);
         bundle.putBoolean(TransparentMarketFragment.IS_SUBSCRIPTION, isSubscription);
         fragment.setArguments(bundle);
         return fragment;
@@ -36,11 +39,14 @@ public class TransparentMarketFragment extends GoogleMarketBuyingFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle bundle = getArguments();
         if (null != bundle) {
-            if (getArguments().containsKey(PORDUCT_ID)) {
-                mSubscriptionId = getArguments().getString(PORDUCT_ID, "");
+            if (getArguments().containsKey(PRODUCT_ID)) {
+                mSubscriptionId = getArguments().getString(PRODUCT_ID, "");
             }
             if (getArguments().containsKey(IS_SUBSCRIPTION)) {
                 mIsSubscription = getArguments().getBoolean(IS_SUBSCRIPTION);
+            }
+            if (getArguments().containsKey(ARG_TAG_SOURCE)) {
+                mFrom = getArguments().getString(ARG_TAG_SOURCE, "");
             }
         }
         return super.onCreateView(inflater, container, savedInstanceState);
