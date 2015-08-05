@@ -98,8 +98,6 @@
     <string name="general_visitors">Külalised</string>
     <string name="general_profile">Konto</string>
     <string name="general_settings">Seaded.</string>
-    <string name="auth_btn_vk">Siseneda VKontakte kaudu</string>
-    <string name="auth_btn_fb">Siseneda Facebook\'i kaudu</string>
     <string name="auth_retry">Katset korrata</string>
     <string name="dating_header_girls">Neiud alates %1$d kuni %2$d</string>
     <string name="dating_header_guys">Noormehed alates %1$d kuni %2$d</string>
@@ -335,5 +333,4 @@ Sa oled müksanud.</string>
     <string name="delete_account_are_you_sure">Kas sa oled päris kindel?</string>
     <string name="delete">Ära kustutada</string>
     <string name="restore">Taastada</string>
-    <string name="auth_btn_ok">Siseneda Odnoklassniki kaudu</string>
 </resources>

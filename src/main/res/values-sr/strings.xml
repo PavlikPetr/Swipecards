@@ -28,6 +28,7 @@
     <string name="general_bookmarks_add_short">U odabrane</string>
     <string name="general_complaint">Požaliti se</string>
     <string name="general_type_complain">Predmet žalbe</string>
+    <string name="address_book_access_error">Ova aplikacija nema pristup Vašim kontaktima. Možete dozvoliti pristup preko Podešavanja privatnosti na svom uređaju</string>
     <string name="profile_deleted_user">Korisnik je uklonjen</string>
     <string name="filter_main_parameters">Zanimljivi su mi</string>
     <string name="dating_prev_button_ext">Predhodni</string>
@@ -109,8 +110,7 @@
     <string name="general_visitors">Gosti</string>
     <string name="general_profile">Profil</string>
     <string name="general_settings">Podešavanja</string>
-    <string name="auth_btn_vk">Uće preko UKontaktu</string>
-    <string name="auth_btn_fb">Ući preko Facebook</string>
+    <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Ponoviti pokušaj</string>
     <string name="dating_header_girls">Devojke od %1$d dо %2$d</string>
     <string name="dating_header_guys">Momci od %1$d dо %2$d</string>
@@ -137,6 +137,7 @@
     <string name="buying_money">Kupovina moneta</string>
     <string name="gifts_title">Odaberite poklon</string>
     <string name="profile_header_title">Moj profil</string>
+    <string name="album_add_photo_title">Dodaj fotografiju</string>
     <string name="profile_add_album">Odabrati od postojećih</string>
     <string name="profile_add_camera">Načiniti snimak</string>
     <string name="profile_photo">Foto</string>
@@ -287,6 +288,7 @@
     <string name="gallery">Galerija</string>
     <string name="no_photo_take_photo">Sa vama se niko ne može upoznati! Napravite fotografiju ili odaberite postojeću iz albuma</string>
     <string name="photo_for_avatar">Fotografija je spremna za slanje u profil! To je vaša prva fotografija i ona će se koristiti kao vaš avatar.</string>
+    <string name="add_photo_before">Prvo morate da dodate fotografiju</string>
     <string name="send_confirmation_email">Poslati potvrdu na e-mail</string>
     <string name="change_password">Promeniti lozinku</string>
     <string name="password_changing">Promena lozinke</string>
@@ -409,7 +411,6 @@
     <string name="delete_account_error">Na žalost nije uspeo pokušaj uklanjanja vašeg akaunta. možete pokušati još jednom.</string>
     <string name="restore">Obnoviti</string>
     <string name="admiration_sended">Divljenje je poslato</string>
-    <string name="auth_btn_ok">Ući preko Odnoklassniki</string>
     <string name="novice_sympathy">Šaljite simpatije onima koji vam se zaista dopadaju, kako bi počeli prijatno poznanstvo</string>
     <string name="novice_sympathies_bonus">Dobili ste %1$d simpatija na poklon! To znači da se vi sigurno dopadate %2$d ljudima, koji će vam izraziti svoju simpatiju.</string>
 </resources>

@@ -158,8 +158,6 @@
     <string name="general_visitors_tab_views">visite</string>
     <string name="general_profile">Profilo</string>
     <string name="general_settings">Impostazioni</string>
-    <string name="auth_btn_vk">Accedi tramite VK</string>
-    <string name="auth_btn_fb">Accedi tramite Facebook</string>
     <string name="auth_retry">Riprovare</string>
     <string name="dating_header_girls">Ragazze da %1$d a %2$d</string>
     <string name="dating_header_guys">Ragazzi da %1$d a %2$d</string>
@@ -537,7 +535,6 @@
     <string name="settings_feedback_transaction_number">Numero dell’ordine</string>
     <string name="settings_feedback_transaction_link">Dove posso trovare numero dell’ordine?</string>
     <string name="general_logout_error">Purtroppo il logout non è stato effettuato</string>
-    <string name="auth_btn_ok">Accedi tramite Odnoklassniki</string>
     <string name="other_auth">Accedi tramite altri sistemi</string>
     <string name="settings_feedback_transaction_number_hint">Inserisci il numero dell’ordine</string>
     <string name="delete_visitors">Elimina visitatori</string>

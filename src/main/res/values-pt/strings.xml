@@ -5,6 +5,7 @@
     <string name="photofeed_title">Colocar no feed</string>
     <string name="general_warning">AVISO</string>
     <string name="general_ok">OK</string>
+    <string name="general_any">Qualquer</string>
     <string name="general_settings_abbr">Defin.</string>
     <string name="general_disallow">Proibir</string>
     <string name="general_allow">Permitir</string>
@@ -19,6 +20,7 @@
     <string name="likes_background_text">Sem gostos</string>
     <string name="visitors_background_text">Sem visitantes</string>
     <string name="chat_background_text">Não há mensagens recebidas</string>
+    <string name="entrance">Entrar</string>
     <string name="filter_only_online">Apenas online</string>
     <string name="filter_city_age_parameters">Idade e cidade</string>
     <string name="filter_select_city">Selecionar cidade</string>
@@ -158,8 +160,6 @@
     <string name="general_visitors_tab_views">visualizações</string>
     <string name="general_profile">Perfil</string>
     <string name="general_settings">Definições</string>
-    <string name="auth_btn_vk">Iniciar sessão com VK</string>
-    <string name="auth_btn_fb">Iniciar sessão com Facebook</string>
     <string name="auth_retry">Tentar novamente</string>
     <string name="dating_header_girls">Raparigas entre %1$d e %2$d</string>
     <string name="dating_header_guys">Rapazes entre %1$d e %2$d</string>
@@ -185,6 +185,7 @@
     <string name="filter_age">Selecionar idade</string>
     <string name="filter_age_start_prefix">Entre %s</string>
     <string name="filter_age_end_prefix">e %s</string>
+    <string name="filter_constitution_template">De %1$d a %2$d</string>
     <string name="filter_cities_all">Todas as cidades</string>
     <string name="purchase_header_title">Saldo:</string>
     <string name="buying_header_title">Compras</string>
@@ -355,6 +356,7 @@
     <string name="user_actions_chat">Chat</string>
     <string name="profile_edit_age_ranges">A idade deve ser entre os 16 e 99 anos. Introduza o número correto e tente novamente.</string>
     <string name="wrong_password_format">Formato de palavra-passe inaceitável</string>
+    <string name="edit_value_error">O valor deve estar entre %1$d e %2$d</string>
     <string name="sign_in">Iniciar sessão</string>
     <string name="create_account">Criar uma conta</string>
     <string name="email">E-mail</string>
@@ -370,6 +372,9 @@
     <string name="birthdate_confirm">Necessita de especificar a sua idade para poder conhecer pessoas.</string>
     <string name="set_birthdate">Especificar idade</string>
     <string name="welcome_to_topface">Bem-vindo ao Topface!</string>
+    <string name="im_boy">Sou um rapaz</string>
+    <string name="im_girl">Sou uma rapariga</string>
+    <string name="u_sex">O teu género</string>
     <string name="incorrect_email">E-mail inválido</string>
     <string name="incorrect_login">Início de sessão inválido</string>
     <string name="incorrect_password">Palavra-passe inválida</string>
@@ -384,6 +389,7 @@
     <string name="gallery">Galeria de fotos</string>
     <string name="no_photo_take_photo">Ninguém pode conhecê-lo(a)! Tire uma foto ou escolha uma da galeria de fotos.</string>
     <string name="photo_for_avatar">A sua foto está pronta a ser enviada para o seu perfil! Esta é o seu primeiro carregamento, que será utilizado como foto de perfil.</string>
+    <string name="add_photo_before">Primeiro precisas de adicionar uma foto</string>
     <string name="change_email">Alterar e-mail</string>
     <string name="send_confirmation_email">Enviar um e-mail de confirmação</string>
     <string name="change_password">Alterar palavra-passe</string>
@@ -537,7 +543,8 @@
     <string name="settings_feedback_transaction_number">Número do pedido</string>
     <string name="settings_feedback_transaction_link">Onde encontro o número do pedido?</string>
     <string name="general_logout_error">Infelizmente, não é possível terminar sessão.</string>
-    <string name="auth_btn_ok">Iniciar sessão com Odnoklassniki</string>
+    <string name="auth_btn_tf">Conta Topface</string>
+    <string name="birthday">Aniversário</string>
     <string name="other_auth">Iniciar sessão com outros serviços</string>
     <string name="settings_feedback_transaction_number_hint">Introduza o número do pedido</string>
     <string name="delete_visitors">Eliminar visitantes</string>
@@ -615,6 +622,7 @@
     <string name="send_feedback">Enviar mensagem</string>
     <string name="get_vip_free">Obter estatuto VIP gratuito</string>
     <string name="buy_more_sympathies">\"Obtenha mais gostos, torne-se mais popular\"</string>
+    <string name="transaction_code_help">Se nos enviares um código de transação, isto irá ajudar-nos a completar o teu pedido ao acelerar o tempo de processamento. Podes encontrar mais informação acerca de uma encomenda em %s.</string>
     <string name="google_service_general_title">Lembretes não disponíveis</string>
     <string name="google_service_disabled_title">O Google Play está desativado. Necessita de o ativar para receber lembretes.</string>
     <string name="google_service_disabled_button">Ativar</string>
@@ -646,6 +654,9 @@
     <string name="balance">Saldo (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
     <string name="trial_vip_text">Estatuto VIP gratuito\npor 7 dias</string>
     <string name="trial_vip_button_text">Ser VIP</string>
+    <string name="settings_check_vip_title">Verificar se o estatuto VIP está ativo</string>
+    <string name="settings_check_vip_cell">Verificar estatuto VIP</string>
+    <string name="settings_check_vip_alert">O teu pedido para verificar o teu estatuto VIP foi enviado.</string>
     <string name="novice_sympathy">Envie gostos apenas às pessoas\npor quem se sendo atraído(a).\nPode encontrar alguém especial!</string>
     <string name="novice_sympathies_bonus">Está a receber %1$d gostos como presente! Significa que %2$d pessoas far-lhe-ão gosto.</string>
 </resources>

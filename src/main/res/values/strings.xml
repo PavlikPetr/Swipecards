@@ -160,8 +160,6 @@
     <string name="general_visitors_tab_views">views</string>
     <string name="general_profile">Profile</string>
     <string name="general_settings">Settings</string>
-    <string name="auth_btn_vk">Log in with VK</string>
-    <string name="auth_btn_fb">Log in with Facebook</string>
     <string name="auth_retry">Retry</string>
     <string name="dating_header_girls">Girls from %1$d to %2$d</string>
     <string name="dating_header_guys">Guys from %1$d to %2$d</string>
@@ -548,8 +546,7 @@
     <string name="skip_all">Skip all</string>
     <string name="settings_feedback_transaction_number">Order number</string>
     <string name="settings_feedback_transaction_link">Where do I find my order number?</string>
-    <string name="general_logout_error">An error occured during logout. Please try again.</string>
-    <string name="auth_btn_ok">Log in with Odnoklassniki</string>
+    <string name="general_logout_error">An error occurred during logout. Please try again.</string>
     <string name="auth_btn_tf">Topface Account</string>
     <string name="birthday">Birthday</string>
     <string name="other_auth">Login with other services</string>
