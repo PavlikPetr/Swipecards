@@ -47,7 +47,6 @@ public class FilterDialogAdapter extends ArrayAdapter<String> {
         if (item != null) {
             CheckedTextView textView = (CheckedTextView) view;
             if (textView != null) {
-//                textView.setChecked((DEFAULT_CURRENT_VALUE.equals(mCurrentField) && position == 0) || item.equals(mCurrentField));
                 if ((DEFAULT_CURRENT_VALUE.equals(mCurrentField) && position == 0) || item.equals(mCurrentField)) {
                     textView.setChecked(true);
                 } else {
