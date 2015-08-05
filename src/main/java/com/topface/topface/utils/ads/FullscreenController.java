@@ -15,6 +15,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
+import com.topface.topface.banners.ad_providers.AppodealProvider;
 import com.topface.topface.data.Banner;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
@@ -31,7 +32,6 @@ import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_MEDIATION;
-import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_APPODEAL_FULLSCREEN;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_NONE;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_TOPFACE;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_FULLSCREEN_START_APP;
@@ -44,7 +44,7 @@ public class FullscreenController {
     private static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-9530442067223936/9732921207";
     private static final String ADMOB_INTERSTITIAL_MEDIATION_ID = "ca-app-pub-9530442067223936/9498586400";
     private static final String ADMOB_INTERSTITIAL_START_APP_ID = "ca-app-pub-9530442067223936/3776010801";
-    public static final String APP_KEY = "2f48418b677cf24a3fa37eacfc7a4e76d385db08b51bd328";
+    private static final String BANNER_APPODEAL_FULLSCREEN = "APPODEAL_FULLSCREEN";
     private static boolean isFullScreenBannerVisible = false;
     private Activity mActivity;
 
@@ -176,16 +176,28 @@ public class FullscreenController {
 
     private void requestAppodealFullscreen() {
         Appodeal.setAutoCache(Appodeal.INTERSTITIAL, false);
-        Appodeal.initialize(mActivity, APP_KEY, Appodeal.INTERSTITIAL);
+        Appodeal.initialize(mActivity, AppodealProvider.APPODEAL_APP_KEY, Appodeal.INTERSTITIAL);
         Appodeal.cache(mActivity, Appodeal.INTERSTITIAL);
         Appodeal.setInterstitialCallbacks(new InterstitialCallbacks() {
             public void onInterstitialLoaded(boolean isPrecache) {
                 Appodeal.show(mActivity, Appodeal.INTERSTITIAL);
+                isFullScreenBannerVisible = true;
             }
-            public void onInterstitialFailedToLoad() { }
-            public void onInterstitialShown() { }
-            public void onInterstitialClicked() { }
-            public void onInterstitialClosed() { }
+
+            public void onInterstitialFailedToLoad() {
+                requestFallbackFullscreen();
+            }
+
+            public void onInterstitialShown() {
+                addLastFullscreenShowedTime();
+            }
+
+            public void onInterstitialClicked() {
+            }
+
+            public void onInterstitialClosed() {
+                isFullScreenBannerVisible = false;
+            }
         });
     }
 

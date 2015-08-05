@@ -14,19 +14,20 @@ import com.topface.topface.utils.ads.FullscreenController;
 
 public class AppodealProvider extends AbstractAdsProvider {
 
+    public static final String APPODEAL_APP_KEY = "2f48418b677cf24a3fa37eacfc7a4e76d385db08b51bd328";
+
     @Override
     boolean injectBannerInner(final IPageWithAds page, final IAdProviderCallbacks callbacks) {
-        Activity mActivity = page.getActivity();
-        final ViewGroup container = page.getContainerForAd();
-        Appodeal.initialize(mActivity, FullscreenController.APP_KEY, Appodeal.BANNER_VIEW);
-        Appodeal.getUserSettings(mActivity)
+        Activity activity = page.getActivity();
+        Appodeal.initialize(activity, APPODEAL_APP_KEY, Appodeal.BANNER_VIEW);
+        Appodeal.getUserSettings(activity)
                 .setGender(
                         CacheProfile.getProfile().sex == Static.BOY ?
                                 UserSettings.Gender.MALE :
                                 UserSettings.Gender.FEMALE)
                 .setAge(CacheProfile.getProfile().age);
-        final BannerView adView =  Appodeal.getBannerView(page.getActivity());
-        container.addView(adView);
+        final BannerView adView = Appodeal.getBannerView(page.getActivity());
+        page.getContainerForAd().addView(adView);
         Appodeal.setBannerCallbacks(new BannerCallbacks() {
 
             @Override

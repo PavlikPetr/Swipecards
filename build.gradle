@@ -139,10 +139,6 @@ android {
         }
     }
 
-    dexOptions {
-        javaMaxHeapSize "4g"
-    }
-
     buildTypes {
         debug {
             minifyEnabled true
@@ -152,6 +148,7 @@ android {
                     'proguard-config.txt'
         }
         release {
+            minifyEnabled true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     getDefaultProguardFile('proguard-android-optimize.txt'),
@@ -162,6 +159,7 @@ android {
         //пишем время сборки и SHA текущего комита, это нужно для идентификации сборки
         qa.initWith(buildTypes.debug)
         qa {
+            minifyEnabled true
             versionNameSuffix ".${getQaVersion(versionProps)}-qa"
             buildConfigField "long", "BUILD_TIME", "${getTimestamp()}L";
             buildConfigField "String", "GIT_HEAD_SHA", "\"${getGitHeadSha()}\"";
@@ -282,7 +280,7 @@ dependencies {
             [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.3.3'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.3.3']
     )
-        ifreeCompile fileTree(dir: 'ifree/libs', include: '*.jar')
+    ifreeCompile fileTree(dir: 'ifree/libs', include: '*.jar')
 }
 
 project(':libs:IllustratedTextView') {
