@@ -24,7 +24,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
-import com.topface.topface.data.AppSocialAppsIds;
+import com.topface.topface.data.social.AppSocialAppsIds;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;

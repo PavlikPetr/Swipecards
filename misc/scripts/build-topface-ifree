@@ -1,0 +1,73 @@
+#!/bin/bash
+# This is template for script that will build Topface-IFree apk
+# and distribute it through HockeyApp
+# and will post notification to slack channels
+# TODO: generify with build-topface script template
+
+# put credentials to this vars and put to your workplace
+# from where you will run script
+# https://rink.hockeyapp.net/manage/auth_tokens
+hockey_app_token=<HOCKEY_ACCOUNT_TOKEN_FOR_API>
+# https://rink.hockeyapp.net/manage/apps/26531
+hockey_app_topface_id=<ID_FOR_APP_IN_HOCKEYAPP>
+# https://api.slack.com/incoming-webhooks - ask admin of slack to create this url
+slack_post_url=<URL_TO_POST_TO_SLACK_WITH_ALL_CREDENTIALS>
+# just path to topface-android project dir
+project_dir=<PATH_TO_ROOT_OF_TOPFACE_PROJECT>
+# for example Dropbox/apk/topface-debug but can be your local path just to archive apks
+sync_dir=<DIRECTORY_TO_PUT_BUILT_APK>
+
+function jsonval {
+    temp=`echo $json | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w $prop| cut -d":" -f2| sed -e 's/^ *//g' -e 's/ *$//g' `
+    echo ${temp##*|}
+}
+
+gradle_debug_apk="$project_dir/build/outputs/apk/topface-android-ifree-debug-unaligned.apk"
+cd $project_dir
+if [ -f build.gradle ] && git rev-parse --git-dir > /dev/null 2>&1; then
+	./gradlew assembleIfreeQa
+	. version.properties
+	version=$VERSION_NAME\.$VERSION_QA_BUILD\-qa
+	if [ $? -eq 0 ]; then
+		branch=`git rev-parse --abbrev-ref HEAD`
+    	commit=`git rev-parse --short HEAD`
+    	apk_name="topface-ifree-${version}-${branch}-current.apk"
+		target="$sync_dir/$apk_name"
+		copy="$gradle_debug_apk $target"
+		echo "cp $copy"
+		cp $copy
+		if [ "$1" = "-s" ]; then
+			echo "silently released, apk only in dropbox"
+		else 
+			json=`curl \
+			  -F "status=2" \
+			  -F "notify=1" \
+			  -F "ipa=@$gradle_debug_apk" \
+			  -H "X-HockeyAppToken: $hockey_app_token" \
+			  https://rink.hockeyapp.net/api/2/apps/$hockey_app_topface_id/app_versions/upload`
+			echo json
+			prop='build_url'
+			apk_url=`jsonval`
+			if [ -n "$apk_url" ]; then
+			    echo "HockeyApp url: $apk_url"
+			    text="Собрана новая версия <https:$apk_url|*$apk_name*> ($version) из ревизии <https://github.com/Topface/topface-android/commits/$commit|'$commit'>"
+			    icon_url="http://blog.appliedis.com/wp-content/uploads/2013/11/android1.png"
+		    	curl -X POST --data-urlencode 'payload={"channel": "#tf-mobile-qa", "username": "Topface Android", "text": "'"$text"'", "icon_url": "'"$icon_url"'"}' $slack_post_url
+		    	curl -X POST --data-urlencode 'payload={"channel": "#android", "username": "Topface Android", "text": "'"$text"'", "icon_url": "'"$icon_url"'"}' $slack_post_url
+		    	# pushing version file to repositry		    		    	
+				git add version.properties
+				git commit -m 'qa build version now '$version''
+				git push topface $brach
+				# create tag for dev version and push to remote
+				git tag v$version -m 'QA build version '$version''	    	
+			else 
+				echo "HockeyApp did not return download url"
+			fi
+    	fi
+	else
+		exit 1
+	fi
+else
+	echo "Error! Current dir is not contains Topface project"
+	exit 1
+fi

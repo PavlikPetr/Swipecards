@@ -130,7 +130,9 @@ public class OverflowMenu {
         ArrayList<OverflowMenuItem> result = new ArrayList<>();
         if (!isBanned) {
             result.add(SEND_SYMPATHY_ACTION);
-            result.add(SEND_ADMIRATION_ACTION);
+            if (!CacheProfile.getOptions().isHideAdmirations) {
+                result.add(SEND_ADMIRATION_ACTION);
+            }
             result.add(OPEN_CHAT_ACTION);
             result.add(SEND_GIFT_ACTION);
             result.add(ADD_TO_BLACK_LIST_ACTION);
