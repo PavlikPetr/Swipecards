@@ -20,6 +20,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Display;
@@ -51,6 +52,8 @@ import java.util.regex.Pattern;
 public class Utils {
     public static final long DAY = 86400000;
     public static final long WEEK_IN_SECONDS = 604800;
+    private static final String DASH_SYMBOL = "-";
+    private static final String HYPHEN_SYMBOL = "&#8209;";
     // from android.util.Patterns.EMAIL_ADDRESS
     private final static Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
             "[a-zA-Z0-9\\+\\._%\\-\\+]{1,256}@" +
@@ -404,5 +407,9 @@ public class Utils {
             return a.getResourceId(0, 0);
         }
         return R.color.light_theme_color_primary_dark;
+    }
+
+    public static String replaceDashWithHyphen(String text) {
+        return Html.fromHtml(text.replaceAll(DASH_SYMBOL, HYPHEN_SYMBOL)).toString();
     }
 }
