@@ -18,12 +18,6 @@ import com.topface.topface.requests.IFreeProductsRequest;
  */
 public abstract class ApplicationBase extends Application {
 
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
-
     public static ApiRequest getProductsRequest() {
         IFreeProductsRequest request = new IFreeProductsRequest(App.getContext());
         request.callback(new DataApiHandler<Products>() {

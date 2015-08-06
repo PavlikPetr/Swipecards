@@ -89,7 +89,6 @@ android {
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappandroidnokia\"";
         }*/
         ifree {
-            multiDexEnabled true
             applicationId "com.topface.topface.ifree";
             buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.I_FREE";
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappifree\"";
@@ -160,6 +159,9 @@ android {
         qa.initWith(buildTypes.debug)
         qa {
             minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-config.txt'
             versionNameSuffix ".${getQaVersion(versionProps)}-qa"
             buildConfigField "long", "BUILD_TIME", "${getTimestamp()}L";
             buildConfigField "String", "GIT_HEAD_SHA", "\"${getGitHeadSha()}\"";
@@ -243,8 +245,6 @@ dependencies {
         //и на нее ругается gradle
         exclude group: 'org.json'
     }
-    compile 'com.jakewharton:butterknife:7.0.1'
-
     compile 'com.google.code.gson:gson:2.3'
     //Library for WebSocket and other network requests
     compile 'com.koushikdutta.async:androidasync:2.1.5'
