@@ -67,9 +67,8 @@ public class IFreePurchases extends BaseFragment implements LibraryInitListener 
                 int toastId;
                 if (purchaseResponse.getCode() == PaymentState.PURCHASE_CONFIRMED) {
                     try {
-                        CountersManager countersManager = CountersManager
-                                .getInstance(App.getContext())
-                                .setLastRequestMethod(purchaseResponse.getPaymentMethod().toString());
+                        CountersManager countersManager = CountersManager.getInstance(App.getContext());
+                        countersManager.setLastRequestMethod(purchaseResponse.getPaymentMethod().toString());
                         countersManager.setBalanceCounters(new JSONObject(URLDecoder
                                 .decode(purchaseResponse.getAnswerFromApplicationServer(), CHARSET_NAME)));
                     } catch (JSONException | UnsupportedEncodingException e) {
