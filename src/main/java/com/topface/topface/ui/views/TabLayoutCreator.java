@@ -3,18 +3,17 @@ package com.topface.topface.ui.views;
 import android.app.Activity;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.topface.topface.App;
 import com.topface.topface.R;
 
 import java.util.ArrayList;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Класс для инициализации TabLayout
@@ -24,7 +23,7 @@ public class TabLayoutCreator {
 
     private Activity mActivity;
     private TabLayout mTabLayout;
-    private ArrayList<TextView> mTabViews;
+    private ArrayList<TabViewsContainer> mTabViews;
     private ArrayList<String> mPagesTitles;
     private ArrayList<Integer> mPagesCounters;
 
@@ -38,42 +37,49 @@ public class TabLayoutCreator {
         initTabView();
     }
 
+    public class TabViewsContainer {
+
+        @Bind(R.id.tab_title)
+        public TextView titleView;
+        @Bind(R.id.tab_counter)
+        public TextView counterView;
+        public View tabView;
+
+        public TabViewsContainer(Activity activity) {
+            tabView = LayoutInflater.from(activity).inflate(R.layout.tab_indicator, null);
+            ButterKnife.bind(this, tabView);
+        }
+    }
+
     private void initTabView() {
         mTabViews = new ArrayList<>();
+        TabViewsContainer viewsContainer;
         for (int i = 0; i < mPagesTitles.size(); i++) {
-            TextView textView = (TextView) LayoutInflater
-                    .from(App.getContext()).inflate(R.layout.tab_indicator, null);
-            mTabViews.add(textView);
-            mTabLayout.getTabAt(i).setCustomView(textView);
+            viewsContainer = new TabViewsContainer(mActivity);
+            mTabViews.add(viewsContainer);
+            mTabLayout.getTabAt(i).setCustomView(viewsContainer.tabView);
         }
     }
 
     public void setTabTitle(int position) {
+        TabViewsContainer container;
+        String title;
+        int counter;
         for (int i = 0; i < mTabLayout.getTabCount(); i++) {
-            TextView textView = mTabViews.get(i);
-            if (i == position) {
-                textView.setText(prepareTabIndicatorTitle(mPagesTitles.get(i)
-                        , mPagesCounters == null ? 0 : mPagesCounters.get(i), true));
-            } else {
-                textView.setText(prepareTabIndicatorTitle(mPagesTitles.get(i)
-                        , mPagesCounters == null ? 0 : mPagesCounters.get(i), false));
+            title = mPagesTitles.get(i);
+            counter = mPagesCounters == null ? 0 : mPagesCounters.get(i);
+            container = mTabViews.get(i);
+            container.titleView.setTextColor(i == position
+                    ? mActivity.getResources().getColor(R.color.tab_text_color)
+                    : mActivity.getResources().getColor(R.color.disable_tab_color));
+            container.titleView.setText(title);
+            if (counter > 0) {
+                container.counterView.setTextColor(i == position
+                        ? mActivity.getResources().getColor(R.color.tab_counter_color)
+                        : mActivity.getResources().getColor(R.color.disable_tab_color));
+                container.counterView.setText(String.valueOf(counter));
             }
         }
-    }
-
-    private CharSequence prepareTabIndicatorTitle(String title, int counter, boolean isSelectedTab) {
-        SpannableString titleSpannable = new SpannableString(title);
-        titleSpannable.setSpan(new ForegroundColorSpan(isSelectedTab
-                ? mActivity.getResources().getColor(R.color.tab_text_color)
-                : mActivity.getResources().getColor(R.color.disable_tab_color))
-                , 0, title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        if (counter > 0) {
-            SpannableString counterSpannable = new SpannableString(String.valueOf(counter));
-            counterSpannable.setSpan(new ForegroundColorSpan(mActivity.getResources().getColor(R.color.tab_counter_color))
-                    , 0, counterSpannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            return TextUtils.concat(titleSpannable, " ", counterSpannable);
-        }
-        return titleSpannable;
     }
 
     /**
@@ -86,6 +92,13 @@ public class TabLayoutCreator {
         mTabLayout.setLayoutParams(layoutParams);
     }
 
+    /**
+     * Если табы дляжны скролится ныжно вызвать этот метод. При этом TabLayout нужно обернуть в
+     * LinearLayout
+     *
+     * @param isScrollable скролящиеся табы или нет
+     */
+    @SuppressWarnings("unused")
     public void isModeScrollable(boolean isScrollable) {
         if (isScrollable) {
             mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);

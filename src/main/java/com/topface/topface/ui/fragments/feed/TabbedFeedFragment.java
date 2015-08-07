@@ -100,8 +100,6 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         }
     };
 
-    protected abstract boolean isScrollableTabs();
-
     private BroadcastReceiver mHasFeedAdReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -149,7 +147,6 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         mPager.setAdapter(mBodyPagerAdapter);
         mPager.addOnPageChangeListener(mPageChangeListener);
         mTabLayoutCreator = new TabLayoutCreator(getActivity(), mPager, mTabLayout, mPagesTitles, mPagesCounters);
-        mTabLayoutCreator.isModeScrollable(isScrollableTabs() && this instanceof TabbedLikesFragment);
     }
 
     @Override

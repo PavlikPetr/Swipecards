@@ -7,11 +7,6 @@ import com.topface.topface.data.CountersData;
 public class TabbedDialogsFragment extends TabbedFeedFragment {
 
     @Override
-    protected boolean isScrollableTabs() {
-        return false;
-    }
-
-    @Override
     protected void onBeforeCountersUpdate(CountersData countersData) {
         updatePageCounter(DialogsFragment.class.getName(), countersData.dialogs);
     }

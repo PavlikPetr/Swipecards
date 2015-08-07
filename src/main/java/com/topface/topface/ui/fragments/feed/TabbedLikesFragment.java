@@ -15,11 +15,6 @@ import com.topface.topface.utils.CacheProfile;
 public class TabbedLikesFragment extends TabbedFeedFragment {
 
     @Override
-    protected boolean isScrollableTabs() {
-        return true;
-    }
-
-    @Override
     protected void onBeforeCountersUpdate(CountersData countersData) {
         updatePageCounter(LikesFragment.class.getName(), countersData.likes);
         updatePageCounter(MutualFragment.class.getName(), countersData.mutual);

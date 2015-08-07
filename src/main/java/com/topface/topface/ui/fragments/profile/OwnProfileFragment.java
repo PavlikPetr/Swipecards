@@ -54,11 +54,6 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     }
 
     @Override
-    protected boolean isScrollableTabs() {
-        return true;
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
         initAddPhotoHelper();
