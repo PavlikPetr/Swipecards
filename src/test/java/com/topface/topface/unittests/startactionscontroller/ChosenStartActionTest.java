@@ -6,7 +6,10 @@ import com.topface.topface.utils.controllers.ChosenStartAction;
 
 import org.junit.Test;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -75,6 +78,18 @@ public class ChosenStartActionTest {
                 }).setProiority(3),
                 new DummyAction(SUCCESS, true).setProiority(2)
         ));
+        // check that action is checked for applicability only on call phase without any caching
+        final AtomicBoolean bool = new AtomicBoolean(false);
+        DummyAction dummy = new DummyAction(SUCCESS, true) {
+            @Override public boolean isApplicable() {
+                return bool.get();
+            }
+        };
+        assertFalse(dummy.isApplicable());
+        bool.set(true);
+        assertTrue(dummy.isApplicable());
+        mApplyer.applyAction(new ChosenStartAction().chooseFrom(dummy));
+        assertTrue(dummy.isCalled());
     }
 
 }

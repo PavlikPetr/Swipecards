@@ -43,7 +43,9 @@ public class DummyAction implements IStartAction {
 
     @Override public void callOnUi() {
         mResult = mOnUiResult != UNPROCESSED ? mOnUiResult : mResult;
-        mResultListener.checkResult(mResult);
+        if (mResultListener != null) {
+            mResultListener.checkResult(mResult);
+        }
     }
 
     public DummyAction setResultListener(IResultListener listener) {
@@ -65,6 +67,10 @@ public class DummyAction implements IStartAction {
 
     @Override public void setStartActionCallback(OnNextActionListener startActionCallback) {
 
+    }
+
+    public boolean isCalled() {
+        return mResult == mOnUiResult;
     }
 
     public interface IResultListener {

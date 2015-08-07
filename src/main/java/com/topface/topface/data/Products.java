@@ -101,7 +101,7 @@ public class Products extends AbstractData {
         updateCache(data);
     }
 
-    private void fillProducts(JSONObject data) {
+    protected void fillProducts(JSONObject data) {
         if (data == null) {
             Debug.error("Products data is empty");
             return;
@@ -325,11 +325,12 @@ public class Products extends AbstractData {
     }
 
     private static void setSelectorTextColor(int selector, TextView view) {
-        XmlResourceParser xrp = App.getContext().getResources().getXml(selector);
         try {
+            XmlResourceParser xrp = App.getContext().getResources().getXml(selector);
             ColorStateList csl = ColorStateList.createFromXml(App.getContext().getResources(), xrp);
             view.setTextColor(csl);
         } catch (Exception e) {
+            Debug.error(e.toString());
         }
     }
 
