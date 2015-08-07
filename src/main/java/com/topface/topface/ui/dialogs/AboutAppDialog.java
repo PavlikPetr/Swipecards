@@ -30,10 +30,10 @@ public class AboutAppDialog {
 
     public AboutAppDialog(Context context, String title) {
         mContext = context;
-        startPreloadPhotoTypesSelection(title);
+        showAboutAppDialog(title);
     }
 
-    private void startPreloadPhotoTypesSelection(String titleDialog) {
+    private void showAboutAppDialog(String titleDialog) {
         View view = LayoutInflater.from(mContext)
                 .inflate(R.layout.fragment_about, null);
         // Version
