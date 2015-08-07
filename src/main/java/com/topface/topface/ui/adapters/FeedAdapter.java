@@ -575,6 +575,10 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         return result;
     }
 
+    public void removeAllData() {
+        getData().clear();
+    }
+
     public void finishMultiSelection() {
         mSelectionController.finishMultiSelection();
     }

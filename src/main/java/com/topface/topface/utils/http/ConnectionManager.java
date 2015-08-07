@@ -1,15 +1,12 @@
 package com.topface.topface.utils.http;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.RetryDialog;
 import com.topface.topface.Ssid;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.IApiRequest;
@@ -347,31 +344,31 @@ public class ConnectionManager {
         final Context context = apiRequest.getContext();
         if (apiRequest.getHandler() != null && context != null && context instanceof Activity) {
             needResend = true;
-            apiRequest.getHandler().post(new Runnable() {
-                @Override
-                public void run() {
-                    RetryDialog retryDialog = new RetryDialog(
-                            context.getString(R.string.general_maintenance),
-                            context,
-                            apiRequest
-                    );
-                    retryDialog.setButton(
-                            Dialog.BUTTON_POSITIVE,
-                            context.getString(R.string.general_dialog_retry),
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    apiRequest.exec();
-                                }
-                            }
-                    );
-                    try {
-                        retryDialog.show();
-                    } catch (Exception e) {
-                        Debug.error(e);
-                    }
-                }
-            });
+//            apiRequest.getHandler().post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    RetryDialog retryDialog = new RetryDialog(
+//                            context.getString(R.string.general_maintenance),
+//                            context,
+//                            apiRequest
+//                    );
+//                    retryDialog.setButton(
+//                            Dialog.BUTTON_POSITIVE,
+//                            context.getString(R.string.general_dialog_retry),
+//                            new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    apiRequest.exec();
+//                                }
+//                            }
+//                    );
+//                    try {
+//                        retryDialog.show();
+//                    } catch (Exception e) {
+//                        Debug.error(e);
+//                    }
+//                }
+//            });
         }
 
         return needResend;

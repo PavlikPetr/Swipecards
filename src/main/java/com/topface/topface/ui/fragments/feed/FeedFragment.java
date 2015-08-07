@@ -182,11 +182,20 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     };
 
     public void saveToCache() {
+        cacheData(JsonUtils.toJson(getListAdapter().getDataForCache()));
+    }
+
+    private void cacheData(String value) {
         FeedsCache.FEEDS_TYPE type = getFeedsType();
         if (type == FeedsCache.FEEDS_TYPE.UNKNOWN_TYPE) {
             return;
         }
-        App.getFeedsCache().setFeedToCache(JsonUtils.toJson(getListAdapter().getDataForCache()), type).saveConfig();
+        App.getFeedsCache().setFeedToCache(value, type).saveConfig();
+    }
+
+    private void clearCache() {
+        getListAdapter().removeAllData();
+        cacheData("");
     }
 
     @NotNull
@@ -915,7 +924,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
             //Если ошибки обработаны на уровне фрагмента,
             // то не показываем стандартную ошибку
-            if (!processErrors(codeError)) {
+            if (!processErrors(codeError) && (App.isOnline() || isPullToRefreshUpdating)) {
                 Utils.showErrorMessage();
             }
             onUpdateFail(isPullToRefreshUpdating || isHistoryLoad);
@@ -999,6 +1008,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             case ErrorCodes.PREMIUM_ACCESS_ONLY:
             case ErrorCodes.BLOCKED_SYMPATHIES:
             case ErrorCodes.BLOCKED_PEOPLE_NEARBY:
+                clearCache();
                 mListView.setVisibility(View.INVISIBLE);
                 onEmptyFeed(codeError);
                 return true;

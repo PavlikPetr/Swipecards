@@ -238,6 +238,10 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
         return mPosition >= size() - 1;
     }
 
+    public boolean isCurrentUserLast() {
+        return mPosition >= size() - 2;
+    }
+
     @SuppressWarnings("UnusedDeclaration")
     public boolean isHasRated() {
         return !isEmpty() && mPosition > 0;

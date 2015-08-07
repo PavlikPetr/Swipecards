@@ -52,6 +52,7 @@ import com.topface.topface.data.search.OnUsersListEventsListener;
 import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.data.search.UsersList;
 import com.topface.topface.requests.AlbumRequest;
+import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.FilterRequest;
@@ -940,32 +941,41 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void skipUser(SearchUser currentSearch) {
         if (currentSearch != null && !currentSearch.skipped && !currentSearch.rated) {
-            final SkipRateRequest skipRateRequest = new SkipRateRequest(getActivity());
-            registerRequest(skipRateRequest);
-            skipRateRequest.userid = currentSearch.id;
-            skipRateRequest.callback(new SimpleApiHandler() {
+            if (App.isOnline()) {
+                getSkipRateRequest(currentSearch).exec();
+            } else {
+                if (mUserSearchList.isCurrentUserLast()) {
+                    showRetryDialog(getSkipRateRequest(currentSearch));
+                }
+            }
+        }
+    }
 
-                @Override
-                public void success(IApiResponse response) {
-                    for (SearchUser user : mUserSearchList) {
-                        if (user.id == skipRateRequest.userid) {
-                            user.skipped = true;
-                            return;
-                        }
+    private ApiRequest getSkipRateRequest(SearchUser currentSearch) {
+        final SkipRateRequest skipRateRequest = new SkipRateRequest(getActivity());
+        registerRequest(skipRateRequest);
+        skipRateRequest.userid = currentSearch.id;
+        skipRateRequest.callback(new SimpleApiHandler() {
+
+            @Override
+            public void success(IApiResponse response) {
+                for (SearchUser user : mUserSearchList) {
+                    if (user.id == skipRateRequest.userid) {
+                        user.skipped = true;
+                        return;
                     }
                 }
+            }
+        });
+        return skipRateRequest;
+    }
 
-                @Override
-                public void fail(int codeError, IApiResponse response) {
-                    RetryDialog retryDialog = new RetryDialog(getActivity().getString(R.string.general_internet_off), getActivity(), skipRateRequest);
-                    try {
-                        retryDialog.show();
-                    } catch (Exception e) {
-                        Debug.error(e);
-                    }
-
-                }
-            }).exec();
+    private void showRetryDialog(ApiRequest request) {
+        RetryDialog retryDialog = new RetryDialog(getActivity().getString(R.string.general_internet_off), getActivity(), request);
+        try {
+            retryDialog.show();
+        } catch (Exception e) {
+            Debug.error(e);
         }
     }
 
