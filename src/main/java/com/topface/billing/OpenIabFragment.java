@@ -20,6 +20,7 @@ import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.Verify;
 import com.topface.topface.requests.ApiResponse;
@@ -28,6 +29,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PurchaseRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.edit.EditSwitcher;
+import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
@@ -52,11 +54,9 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         IabHelper.OnIabPurchaseFinishedListener,
         IabHelper.OnConsumeFinishedListener, OpenIabHelperManager.IOpenIabEventListener {
 
-    public static final String ARG_TAG_SOURCE = "from_value";
     public static final int BUYING_REQUEST = 1001;
     public static final String TEST_PURCHASED_PRODUCT_ID = "android.test.purchased";
     private static final String APP_STORE_NAME = "&storename";
-    public static final String ARG_RESOURCE_INFO_TEXT = "resource_info_text";
     public static final String UPDATE_RESOURCE_INFO = "com.topface.topface.UPDATE_RESOURCE_INFO";
 
     /**
@@ -273,7 +273,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
      *
      * @param btn BuyButton object to determine which type of buy is processing
      */
-    public void buy(Products.BuyButton btn) {
+    public void buy(BuyButtonData btn) {
         if (App.getOpenIabHelperManager().isReadyToBuyNow()) {
             buyNow(btn);
         } else {
@@ -281,7 +281,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         }
     }
 
-    private void buyNow(Products.BuyButton btn) {
+    private void buyNow(BuyButtonData btn) {
         if (btn.id != null) {
             if (btn.type.isSubscription() && !isTestPurchasesEnabled()) {
                 buySubscription(btn.id);
@@ -292,7 +292,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     }
 
     @SuppressWarnings("ConstantConditions")
-    private void buyDeferred(final Products.BuyButton btn) {
+    private void buyDeferred(final BuyButtonData btn) {
         if (mDeferredPurchaseButton != null) {
             stopWaiting();
         }
@@ -348,7 +348,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     private String getSourceValue() {
         Bundle arguments = getArguments();
         if (arguments != null) {
-            return arguments.getString(ARG_TAG_SOURCE);
+            return arguments.getString(PurchasesConstants.ARG_TAG_SOURCE);
         }
         return null;
     }
@@ -562,7 +562,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
 
                 if (mHasDeferredPurchase) {
                     stopWaiting();
-                    buyNow((Products.BuyButton) mDeferredPurchaseButton.getTag());
+                    buyNow((BuyButtonData) mDeferredPurchaseButton.getTag());
                     mHasDeferredPurchase = false;
                     mDeferredPurchaseButton = null;
                 }

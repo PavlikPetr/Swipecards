@@ -23,6 +23,7 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
+import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
@@ -155,7 +156,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         Intent intent = new Intent(App.getContext(), PurchasesActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY_VIP);
         intent.putExtra(PurchasesFragment.ARG_TAG_EXRA_TEXT, extraText);
-        intent.putExtra(OpenIabFragment.ARG_TAG_SOURCE, from);
+        intent.putExtra(PurchasesConstants.ARG_TAG_SOURCE, from);
         intent.putExtra(PurchasesFragment.IS_VIP_PRODUCTS, true);
         return intent;
     }
@@ -172,7 +173,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
             intent = new Intent(context, PurchasesActivity.class);
         }
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY);
-        intent.putExtra(OpenIabFragment.ARG_TAG_SOURCE, from);
+        intent.putExtra(PurchasesConstants.ARG_TAG_SOURCE, from);
         if (itemType != -1) {
             intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, itemType);
         }

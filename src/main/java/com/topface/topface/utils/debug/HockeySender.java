@@ -7,7 +7,6 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.utils.CacheProfile;
 
-import org.acra.ACRA;
 import org.acra.ReportField;
 import org.acra.collector.CrashReportData;
 import org.acra.sender.ReportSender;
@@ -26,7 +25,6 @@ import java.util.Date;
 import java.util.List;
 
 public class HockeySender implements ReportSender {
-    public static final String DEBUG_ID = "176f942f1bdedecb45696cd6a6a58aac";
     public static String BASE_URL = "https://rink.hockeyapp.net/api/2/apps/";
     public static String CRASHES_PATH = "/crashes";
 
@@ -66,11 +64,11 @@ public class HockeySender implements ReportSender {
 
     @SuppressWarnings("deprecation")
     public void send(CrashReportData report) {
-        send(report, ACRA.getConfig().formUri());
+        send(report, HockeySettings.APP_ID);
     }
 
     public void sendDebug(CrashReportData report) {
-        send(report, DEBUG_ID);
+        send(report, HockeySettings.DEBUG_APP_ID);
     }
 
     public void send(CrashReportData report, String formUri) {
