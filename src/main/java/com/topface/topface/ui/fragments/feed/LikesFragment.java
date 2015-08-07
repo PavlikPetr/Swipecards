@@ -39,7 +39,7 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
 import com.topface.topface.ui.fragments.PurchasesFragment;
-import com.topface.topface.ui.fragments.TransparentMarketFragment;
+import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -291,7 +291,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                         if (experiment.isEnabled) {
                             Fragment f = getChildFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
                             final TransparentMarketFragment fragment = f == null ?
-                                    TransparentMarketFragment.newInstance(experiment.productId, experiment.isSubscription) :
+                                    TransparentMarketFragment.newInstance(experiment.productId, experiment.isSubscription, "Likes") :
                                     (TransparentMarketFragment) f;
                             fragment.setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
                                 @Override

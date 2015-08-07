@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -22,6 +21,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.statistics.TopfaceAdStatistics;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.EasyTracker;
@@ -166,7 +166,7 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
                     } else {
                         intent.putExtra(Static.INTENT_REQUEST_KEY, PurchasesActivity.INTENT_BUY);
                     }
-                    intent.putExtra(OpenIabFragment.ARG_TAG_SOURCE, "Banner_" + mBanner.name);
+                    intent.putExtra(PurchasesConstants.ARG_TAG_SOURCE, "Banner_" + mBanner.name);
                     break;
                 case Banner.ACTION_URL:
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mBanner.parameter));
