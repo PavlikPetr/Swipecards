@@ -1,7 +1,7 @@
 package com.topface.topface;
 
 import android.annotation.TargetApi;
- import android.content.Context;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
