@@ -35,9 +35,9 @@ public class CountersData {
             case TABBED_DIALOGS:
                 return dialogs;
             case TABBED_VISITORS:
-                return visitors;
+                return visitors + fans;
             case TABBED_LIKES:
-                return likes;
+                return likes + mutual + admirations;
             case GEO:
                 return peopleNearby;
             case BONUS:
