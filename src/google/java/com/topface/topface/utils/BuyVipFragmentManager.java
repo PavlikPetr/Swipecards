@@ -15,7 +15,7 @@ public class BuyVipFragmentManager {
         return VipBuyFragment.class.getName();
     }
 
-    public static VipBuyFragment getVipInstance(boolean needActionBar, String from, String text){
+    public static VipBuyFragment getVipInstance(boolean needActionBar, String from, String text) {
         return VipBuyFragment.newInstance(needActionBar, from, text);
     }
 }

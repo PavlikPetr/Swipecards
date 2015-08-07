@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -190,7 +189,6 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         RelativeLayout invisLayout =
                 initEditItem(root,
                         R.id.fepInvis,
-                        R.drawable.list_like_btn_normal,
                         getString(R.string.vip_invis),
                         new OnClickListener() {
                             @Override
@@ -201,16 +199,8 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
                 );
         mInvisSwitcher = new EditSwitcher(invisLayout);
 
-        int blackListDrawable;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            blackListDrawable = R.drawable.white_list_underline;
-        } else {
-            blackListDrawable = R.drawable.list_item_btn;
-        }
-
         initEditItem(root,
                 R.id.fepBlackList,
-                blackListDrawable,
                 getString(R.string.vip_black_list),
                 new OnClickListener() {
                     @Override
@@ -221,19 +211,19 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         );
     }
 
-    private RelativeLayout initEditItem(View root, int ID, int bgId, String text, OnClickListener listener) {
-        RelativeLayout layout = initLayouts(root, ID, bgId, text);
+    private RelativeLayout initEditItem(View root, int ID, String text, OnClickListener listener) {
+        RelativeLayout layout = initLayouts(root, ID, text);
         layout.setOnClickListener(listener);
         return layout;
     }
 
-    private RelativeLayout initLayouts(View root, int ID, int bgId, String text) {
+    private RelativeLayout initLayouts(View root, int ID, String text) {
         RelativeLayout layout = (RelativeLayout) root.findViewById(ID);
 
         TextView layoutText = (TextView) layout.findViewWithTag("tvTitle");
         if (layoutText != null) {
             layoutText.setText(text);
-            layout.setBackgroundResource(bgId);
+//            layout.setBackgroundResource(bgId);
         }
         return layout;
     }
