@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -39,7 +40,6 @@ import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import com.topface.topface.utils.social.Authorizer;
 import com.vk.sdk.VKOpenAuthActivity;
-import com.topface.topface.utils.AnimationUtils.ObjectAnimatorEvents;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -121,7 +121,7 @@ public class AuthFragment extends BaseAuthFragment {
     @OnClick(R.id.btnTfAccount)
     public void startTfAuthClick() {
         ObjectAnimator animator = ObjectAnimator.ofFloat(mAuthGroup, TRANSLATION_Y, 0, Utils.getPxFromDp(ANIMATION_PATH));
-        animator.addListener(new ObjectAnimatorEvents() {
+        animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
                 setSocNetBtnVisibility(false, true, false);
@@ -154,7 +154,7 @@ public class AuthFragment extends BaseAuthFragment {
     @OnClick(R.id.tf_auth_back)
     public void tfAuthBackClick() {
         ObjectAnimator animator = ObjectAnimator.ofFloat(mAuthGroup, TRANSLATION_Y, Utils.getPxFromDp(ANIMATION_PATH), 0);
-        animator.addListener(new ObjectAnimatorEvents() {
+        animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
                 setTfLoginBtnVisibility(false, true, false);

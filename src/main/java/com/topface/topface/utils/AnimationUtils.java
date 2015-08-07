@@ -1,10 +1,8 @@
 package com.topface.topface.utils;
 
-import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.view.View;
-
-import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.animation.ValueAnimator;
 
 public class AnimationUtils {
     /**
@@ -94,29 +92,4 @@ public class AnimationUtils {
         animator.setStartDelay(Defaults.AppearingImage.TIMING.startDelay);
         return animator;
     }
-
-    public static class ObjectAnimatorEvents implements Animator.AnimatorListener {
-
-        @Override
-        public void onAnimationStart(Animator animation) {
-
-        }
-
-        @Override
-        public void onAnimationEnd(Animator animation) {
-
-        }
-
-        @Override
-        public void onAnimationCancel(Animator animation) {
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animator animation) {
-
-        }
-    }
-
-
 }
