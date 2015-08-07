@@ -35,9 +35,9 @@ public class CountersData {
             case TABBED_DIALOGS:
                 return dialogs;
             case TABBED_VISITORS:
-                return visitors;
+                return visitors + fans;
             case TABBED_LIKES:
-                return likes;
+                return likes + mutual + admirations;
             case GEO:
                 return peopleNearby;
             case BONUS:
@@ -54,10 +54,10 @@ public class CountersData {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == null){
+        if (obj == null) {
             return false;
         }
-        CountersData data = (CountersData)obj;
+        CountersData data = (CountersData) obj;
         return data.likes == likes &&
                 data.mutual == mutual &&
                 data.dialogs == dialogs &&
