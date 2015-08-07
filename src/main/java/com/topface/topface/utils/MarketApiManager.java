@@ -1,5 +1,6 @@
 package com.topface.topface.utils;
 
+import com.topface.topface.App;
 import android.app.Activity;
 
 import com.topface.topface.BuildConfig;
@@ -8,17 +9,7 @@ public class MarketApiManager {
     BaseMarketApiManager mServicesManager;
 
     public MarketApiManager() {
-        switch (BuildConfig.MARKET_API_TYPE) {
-            case GOOGLE_PLAY:
-                mServicesManager = new GoogleMarketApiManager();
-                break;
-            case AMAZON:
-                mServicesManager = new AmazonMarketApiManager();
-                break;
-            case NOKIA_STORE:
-                mServicesManager = new NokiaMarketApiManager();
-                break;
-        }
+        mServicesManager = MarketApiManagerUtils.getMarketManagerByType();
     }
 
     public void onResume() {

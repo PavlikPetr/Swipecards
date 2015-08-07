@@ -20,6 +20,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Display;
@@ -35,7 +36,6 @@ import android.widget.Toast;
 import com.topface.framework.utils.Debug;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
-import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
@@ -51,6 +51,8 @@ import java.util.regex.Pattern;
 public class Utils {
     public static final long DAY = 86400000;
     public static final long WEEK_IN_SECONDS = 604800;
+    private static final String DASH_SYMBOL = "-";
+    private static final String HYPHEN_SYMBOL = "&#8209;";
     // from android.util.Patterns.EMAIL_ADDRESS
     private final static Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
             "[a-zA-Z0-9\\+\\._%\\-\\+]{1,256}@" +
@@ -200,18 +202,7 @@ public class Utils {
     }
 
     public static Intent getMarketIntent(Context context) {
-        String link;
-        //Для амазона делаем специальную ссылку, иначе он ругается, хотя и работает
-        switch (BuildConfig.MARKET_API_TYPE) {
-            case AMAZON:
-                link = context.getString(R.string.amazon_market_link);
-                break;
-            default:
-                link = context.getString(R.string.default_market_link);
-                break;
-        }
-
-        return new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+        return new Intent(Intent.ACTION_VIEW, Uri.parse(CacheProfile.getOptions().updateUrl));
     }
 
     public static String getClientDeviceName() {
@@ -404,5 +395,9 @@ public class Utils {
             return a.getResourceId(0, 0);
         }
         return R.color.light_theme_color_primary_dark;
+    }
+
+    public static String replaceDashWithHyphen(String text) {
+        return Html.fromHtml(text.replaceAll(DASH_SYMBOL, HYPHEN_SYMBOL)).toString();
     }
 }

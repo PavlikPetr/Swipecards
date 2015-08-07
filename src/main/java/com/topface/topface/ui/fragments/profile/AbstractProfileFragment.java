@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -16,11 +17,14 @@ import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.fragments.AnimatedFragment;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
-import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
+import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public abstract class AbstractProfileFragment extends AnimatedFragment implements ViewPager.OnPageChangeListener {
     public static final String INTENT_UID = "intent_profile_uid";
@@ -29,12 +33,15 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     public static final String INTENT_IS_ADD_TO_FAVORITS_AVAILABLE = "intent_profile_is_add_to_favorits_available";
     public static final String ADD_PHOTO_INTENT = "com.topface.topface.ADD_PHOTO_INTENT";
     public static final String CURRENT_BODY_PAGE = "CURRENT_BODY_PAGE";
+    public static final int DEFAULT_PAGE = 0;
+
     // state
     private ArrayList<String> BODY_PAGES_TITLES = new ArrayList<>();
     private ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<>();
     private UserPhotoFragment mUserPhotoFragment;
     private AbstractFormFragment mFormFragment;
     private Profile mProfile = null;
+    private TabLayoutCreator mTabLayoutCreator;
     ProfileInnerUpdater mProfileUpdater = new ProfileInnerUpdater() {
         @Override
         public void update() {
@@ -55,7 +62,8 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     };
     // views
     private ViewPager mBodyPager;
-    private SlidingTabLayout mTabIndicator;
+    @Bind(R.id.profileTabs)
+    TabLayout mTabLayout;
 
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -65,6 +73,9 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
 
         @Override
         public void onPageSelected(int position) {
+            if (mTabLayoutCreator != null) {
+                mTabLayoutCreator.setTabTitle(position);
+            }
             List<Fragment> fragments = getChildFragmentManager().getFragments();
             if (fragments != null) {
                 for (Fragment fragment : fragments) {
@@ -82,12 +93,18 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
         }
     };
 
+
+    protected abstract boolean isScrollableTabs();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View root = inflater.inflate(R.layout.fragment_profile, null);
+        ButterKnife.bind(this, root);
         initBodyPages(root);
-        // start pages initialization
+        mTabLayoutCreator = new TabLayoutCreator(getActivity(), mBodyPager, mTabLayout, BODY_PAGES_TITLES, null);
+        mTabLayoutCreator.setTabTitle(DEFAULT_PAGE);
+        mTabLayoutCreator.isModeScrollable(isScrollableTabs());
         return root;
     }
 
@@ -114,12 +131,13 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mTabIndicator != null) {
-            mTabIndicator.setOnPageChangeListener(null);
-            mTabIndicator.removeAllViews();
-            mTabIndicator = null;
-        }
         mBodyPager = null;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 
     @Override
@@ -154,12 +172,8 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
                 BODY_PAGES_TITLES, mProfileUpdater);
         mBodyPager.setAdapter(mBodyPagerAdapter);
         //Tabs for Body
-        mTabIndicator = (SlidingTabLayout) root.findViewById(R.id.tpiTabs);
-        mTabIndicator.setUseWeightProportions(true);
-        mTabIndicator.setCustomTabView(R.layout.tab_indicator, R.id.tab_title);
-        mTabIndicator.setViewPager(mBodyPager);
-        mTabIndicator.setOnPageChangeListener(mPageChangeListener);
-        mTabIndicator.setOnPageChangeListener(this);
+        mBodyPager.addOnPageChangeListener(mPageChangeListener);
+        mTabLayout.setupWithViewPager(mBodyPager);
     }
 
     protected void initBody() {

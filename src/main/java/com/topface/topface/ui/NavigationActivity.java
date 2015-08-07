@@ -50,6 +50,7 @@ import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
+import com.topface.topface.utils.controllers.ChosenStartAction;
 import com.topface.topface.utils.controllers.SequencedStartAction;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
@@ -77,7 +78,7 @@ import static com.topface.topface.utils.controllers.StartActionsController.AC_PR
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
 
-public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener, SequencedStartAction.IUiRunner {
+public class NavigationActivity extends ParentNavigationActivity implements INavigationFragmentsListener, SequencedStartAction.IUiRunner {
     public static final String INTENT_EXIT = "EXIT";
     public static final String PAGE_SWITCH = "Page switch: ";
 
@@ -179,21 +180,36 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     }
 
     @Override
-    protected int getContentLayout() {
+    protected int getContentLayoutId() {
         return R.layout.ac_navigation;
     }
 
     @Override
-    protected void onRegisterStartActions(StartActionsController startActionsController) {
-        super.onRegisterStartActions(startActionsController);
+    protected void onRegisterMandatoryStartActions(StartActionsController startActionsController) {
+        super.onRegisterMandatoryStartActions(startActionsController);
         final SequencedStartAction sequencedStartAction = new SequencedStartAction(this, AC_PRIORITY_HIGH);
-        sequencedStartAction.addAction(new TrialVipPopupAction(this, AC_PRIORITY_HIGH));
+        final IStartAction popupsAction = new ChosenStartAction().chooseFrom(
+                new TrialVipPopupAction(this, AC_PRIORITY_HIGH),
+                new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH,
+                        new DatingLockPopup.DatingLockPopupRedirectListener() {
+                            @Override
+                            public void onRedirect() {
+                                showFragment(FragmentId.TABBED_LIKES);
+                            }
+                        })
+        );
+        sequencedStartAction.addAction(popupsAction);
         // fullscreen
         if (mFullscreenController != null) {
             sequencedStartAction.addAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
         }
         // trial vip popup
         startActionsController.registerMandatoryAction(sequencedStartAction);
+    }
+
+    @Override
+    protected void onRegisterStartActions(StartActionsController startActionsController) {
+        super.onRegisterStartActions(startActionsController);
         // actions after registration
         startActionsController.registerAction(createAfterRegistrationStartAction(AC_PRIORITY_HIGH));
         // show popup when services disable
@@ -203,12 +219,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         startActionsController.registerAction(promoPopupManager.createPromoPopupStartAction(AC_PRIORITY_NORMAL));
         // popups
         mPopupManager = new PopupManager(this);
-        startActionsController.registerAction(new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH, new DatingLockPopup.DatingLockPopupRedirectListener() {
-            @Override
-            public void onRedirect() {
-                showFragment(FragmentId.TABBED_LIKES);
-            }
-        }));
         startActionsController.registerAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
@@ -540,19 +550,21 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                         Bundle extras = data.getExtras();
                         if (extras != null) {
                             final City city = extras.getParcelable(CitySearchActivity.INTENT_CITY);
-                            SettingsRequest request = new SettingsRequest(this);
-                            request.cityid = city.id;
-                            request.callback(new ApiHandler() {
-                                @Override
-                                public void success(IApiResponse response) {
-                                    CacheProfile.city = city;
-                                    CacheProfile.sendUpdateProfileBroadcast();
-                                }
+                            if (city != null) {
+                                SettingsRequest request = new SettingsRequest(this);
+                                request.cityid = city.id;
+                                request.callback(new ApiHandler() {
+                                    @Override
+                                    public void success(IApiResponse response) {
+                                        CacheProfile.city = city;
+                                        CacheProfile.sendUpdateProfileBroadcast();
+                                    }
 
-                                @Override
-                                public void fail(int codeError, IApiResponse response) {
-                                }
-                            }).exec();
+                                    @Override
+                                    public void fail(int codeError, IApiResponse response) {
+                                    }
+                                }).exec();
+                            }
                         }
                     }
                     break;

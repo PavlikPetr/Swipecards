@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.topface.billing.OpenIabFragment;
 import com.topface.topface.R;
+import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.Products;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
@@ -33,8 +34,6 @@ import org.onepf.oms.appstore.googleUtils.Purchase;
 import static android.view.View.OnClickListener;
 
 public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
-
-    public static final String ACTION_BAR_CONST = "needActionBar";
 
     public static final String VIP_PURCHASED_INTENT = "com.topface.topface.VIP_PURCHASED";
     EditSwitcher mInvisSwitcher;
@@ -62,8 +61,8 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     private void getDataFromIntent(Bundle args) {
         if (args != null) {
-            if (args.containsKey(ARG_RESOURCE_INFO_TEXT)) {
-                mResourceInfoText = args.getString(ARG_RESOURCE_INFO_TEXT);
+            if (args.containsKey(PurchasesConstants.ARG_RESOURCE_INFO_TEXT)) {
+                mResourceInfoText = args.getString(PurchasesConstants.ARG_RESOURCE_INFO_TEXT);
                 setResourceInfoText();
             }
         }
@@ -80,11 +79,11 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         VipBuyFragment fragment = new VipBuyFragment();
         Bundle args = new Bundle();
         if (!TextUtils.isEmpty(text)) {
-            args.putString(ARG_RESOURCE_INFO_TEXT, text);
+            args.putString(PurchasesConstants.ARG_RESOURCE_INFO_TEXT, text);
         }
-        args.putBoolean(ACTION_BAR_CONST, needActionBar);
+        args.putBoolean(PurchasesConstants.ACTION_BAR_CONST, needActionBar);
         if (from != null) {
-            args.putString(ARG_TAG_SOURCE, from);
+            args.putString(PurchasesConstants.ARG_TAG_SOURCE, from);
         }
         fragment.setArguments(args);
         return fragment;
@@ -126,7 +125,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     }
 
     private void initActionBar() {
-        if (getArguments() != null && getArguments().getBoolean(ACTION_BAR_CONST, false)) {
+        if (getArguments() != null && getArguments().getBoolean(PurchasesConstants.ACTION_BAR_CONST, false)) {
             setActionBarTitles(R.string.vip_buy_vip);
         }
     }
@@ -161,7 +160,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         } else {
             root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.GONE);
         }
-        for (final Products.BuyButton curBtn : products.premium) {
+        for (final BuyButtonData curBtn : products.premium) {
             Products.setBuyButton(btnContainer, curBtn, getActivity(),
                     new Products.BuyButtonClickListener() {
                         @Override
@@ -173,7 +172,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         }
     }
 
-    protected void buy(String id, Products.BuyButton curBtn) {
+    protected void buy(String id, BuyButtonData curBtn) {
         buy(curBtn);
         PushButtonVipUniqueStatistics.sendPushButtonVip(id, ((Object) this).getClass().getSimpleName(), getFrom());
         PushButtonVipStatistics.send(id, ((Object) this).getClass().getSimpleName(), getFrom());
@@ -321,7 +320,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         Bundle arguments = getArguments();
         String from = "";
         if (arguments != null) {
-            from = "From" + arguments.getString(ARG_TAG_SOURCE);
+            from = "From" + arguments.getString(PurchasesConstants.ARG_TAG_SOURCE);
         }
         return from;
     }

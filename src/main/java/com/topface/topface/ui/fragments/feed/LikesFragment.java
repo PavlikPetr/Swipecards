@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.google.gson.reflect.TypeToken;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -21,7 +22,6 @@ import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
-import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.experiments.SixCoinsSubscribeExperiment;
 import com.topface.topface.requests.BuyLikesAccessRequest;
@@ -35,10 +35,11 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
 import com.topface.topface.ui.fragments.PurchasesFragment;
-import com.topface.topface.ui.fragments.TransparentMarketFragment;
+import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -46,10 +47,12 @@ import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
+import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
-import org.json.JSONObject;
+import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -91,6 +94,17 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
+    protected Type getFeedListDataType() {
+        return new TypeToken<FeedList<FeedLike>>() {
+        }.getType();
+    }
+
+    @Override
+    protected Class getFeedListItemClass() {
+        return FeedLike.class;
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         mBalanceSubscription.unsubscribe();
@@ -101,7 +115,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_FEED);
     }
 
-    @Override protected void makeAllItemsRead() {
+    @Override
+    protected void makeAllItemsRead() {
         // likes are read by one
     }
 
@@ -134,6 +149,12 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         return CountersManager.LIKES;
     }
 
+    @NotNull
+    @Override
+    protected FeedsCache.FEEDS_TYPE getFeedsType() {
+        return FeedsCache.FEEDS_TYPE.DATA_LIKES_FEEDS;
+    }
+
     private void onMutual(FeedItem item) {
         if (!(item.user.deleted || item.user.banned)) {
             if (item instanceof FeedLike) {
@@ -145,11 +166,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                 }
             }
         }
-    }
-
-    @Override
-    protected FeedListData<FeedLike> getFeedList(JSONObject response) {
-        return new FeedListData<>(response, FeedLike.class);
     }
 
     @Override
@@ -275,7 +291,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                         if (experiment.isEnabled) {
                             Fragment f = getChildFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
                             final TransparentMarketFragment fragment = f == null ?
-                                    TransparentMarketFragment.newInstance(experiment.productId, experiment.isSubscription) :
+                                    TransparentMarketFragment.newInstance(experiment.productId, experiment.isSubscription, "Likes") :
                                     (TransparentMarketFragment) f;
                             fragment.setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
                                 @Override

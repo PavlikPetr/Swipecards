@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
@@ -26,7 +27,7 @@ import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.views.slidingtab.SlidingTabLayout;
+import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
@@ -35,6 +36,8 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.functions.Action1;
 
@@ -46,11 +49,13 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     public static final String EXTRA_OPEN_PAGE = "openTabbedFeedAt";
     private static final String LAST_OPENED_PAGE = "last_opened_page";
     private ViewPager mPager;
-    private SlidingTabLayout mSlidingTabLayout;
     private ArrayList<String> mPagesClassNames = new ArrayList<>();
     private ArrayList<String> mPagesTitles = new ArrayList<>();
     private ArrayList<Integer> mPagesCounters = new ArrayList<>();
     private BannersController mBannersController;
+    @Bind(R.id.feedTabs)
+    TabLayout mTabLayout;
+
     @Inject
     TopfaceAppState mAppState;
     private TabbedFeedPageAdapter mBodyPagerAdapter;
@@ -59,13 +64,13 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     protected static int mDialogsLastOpenedPage = 0;
     private Subscription mCountersSubscription;
     protected CountersData mCountersData = new CountersData();
+    private TabLayoutCreator mTabLayoutCreator;
 
     public static void setTabsDefaultPosition() {
         mVisitorsastOpenedPage = 0;
         mLikesLastOpenedPage = 0;
         mDialogsLastOpenedPage = 0;
     }
-
 
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -75,6 +80,9 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
 
         @Override
         public void onPageSelected(int position) {
+            if (mTabLayoutCreator != null) {
+                mTabLayoutCreator.setTabTitle(position);
+            }
             List<Fragment> fragments = getChildFragmentManager().getFragments();
             if (fragments != null) {
                 for (Fragment fragment : fragments) {
@@ -92,6 +100,8 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         }
     };
 
+    protected abstract boolean isScrollableTabs();
+
     private BroadcastReceiver mHasFeedAdReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -106,21 +116,22 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
 
     private void onCountersUpdated(CountersData countersData) {
         onBeforeCountersUpdate(countersData);
-        if (mSlidingTabLayout != null) {
-            mSlidingTabLayout.updateTitles();
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         App.from(getActivity()).inject(this);
         View root = inflater.inflate(R.layout.fragment_tabbed_feed, null);
+        ButterKnife.bind(this, root);
         initPages(root);
         mCountersSubscription = mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
             @Override
             public void call(CountersData countersData) {
                 mCountersData = countersData;
                 onCountersUpdated(countersData);
+                if (mTabLayoutCreator != null) {
+                    mTabLayoutCreator.setTabTitle(getLastOpenedPage());
+                }
             }
         });
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mHasFeedAdReceiver, new IntentFilter(HAS_FEED_AD));
@@ -136,13 +147,9 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
                 mPagesTitles,
                 mPagesCounters);
         mPager.setAdapter(mBodyPagerAdapter);
-
-        mSlidingTabLayout = (SlidingTabLayout) root.findViewById(R.id.sliding_tabs);
-        mSlidingTabLayout.setUseWeightProportions(true);
-        mSlidingTabLayout.setCustomTabView(getIndicatorLayout(), R.id.tab_title, R.id.tab_counter);
-        mSlidingTabLayout.setViewPager(mPager);
-        // need this, because SlidingView defines its own listener
-        mSlidingTabLayout.setOnPageChangeListener(mPageChangeListener);
+        mPager.addOnPageChangeListener(mPageChangeListener);
+        mTabLayoutCreator = new TabLayoutCreator(getActivity(), mPager, mTabLayout, mPagesTitles, mPagesCounters);
+        mTabLayoutCreator.isModeScrollable(isScrollableTabs() && this instanceof TabbedLikesFragment);
     }
 
     @Override
@@ -163,9 +170,6 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     }
 
     public int getTabLayoutHeight() {
-        if (mSlidingTabLayout != null) {
-            return mSlidingTabLayout.getMeasuredHeight();
-        }
         return 0;
     }
 
@@ -195,10 +199,6 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
 
     protected abstract void addPages();
 
-    protected int getIndicatorLayout() {
-        return R.layout.tab_indicator;
-    }
-
     protected void addBodyPage(String className, String pageTitle, int counter) {
         mPagesCounters.add(counter);
         mPagesTitles.add(pageTitle.toUpperCase(Locale.getDefault()));
@@ -212,6 +212,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        ButterKnife.unbind(this);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mHasFeedAdReceiver);
     }
 

@@ -63,23 +63,34 @@
             android:inputType="text" />
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="28dp">
+            android:layout_marginTop="18dp"
+            android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/spnSex"
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/tvSex"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.5"
+                android:drawableRight="@drawable/arrow_down"
+                android:gravity="left"
+                android:paddingTop="10dp"
+                android:background="@drawable/reg_text_view_selector"
+                android:text="@string/im_boy"
+                android:textColor="#234144"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tvBirthday"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
                 android:layout_weight="0.5"
+                android:drawableRight="@drawable/arrow_down"
+                android:background="@drawable/reg_text_view_selector"
                 android:gravity="center"
+                android:paddingTop="10dp"
                 android:text="@string/birthday"
                 android:textColor="#234144"
                 android:textSize="16sp" />

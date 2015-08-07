@@ -117,7 +117,9 @@ public class SessionConfig extends AbstractConfig {
      * @return true on success
      */
     public boolean setMarketProductsData(String googleProductsResponseJson) {
-        return setField(getSettingsMap(), DATA_MARKET_PRODUCTS, googleProductsResponseJson);
+        boolean res = setField(getSettingsMap(), DATA_MARKET_PRODUCTS, googleProductsResponseJson);
+        this.saveConfig();
+        return res;
     }
 
     /**
@@ -127,12 +129,16 @@ public class SessionConfig extends AbstractConfig {
      * @return true on success
      */
     public boolean setMarketProductsDetailsData(String googleProductsDetailsJson) {
-        return setField(getSettingsMap(), DATA_MARKET_PRODUCTS_DETAILS, googleProductsDetailsJson);
+        boolean res = setField(getSettingsMap(), DATA_MARKET_PRODUCTS_DETAILS, googleProductsDetailsJson);
+        this.saveConfig();
+        return res;
     }
 
     public boolean setPaymentWallProductsData(String pwProductsResponseJson, PaymentWallProducts.TYPE type) {
-        return setField(getSettingsMap(), type == PaymentWallProducts.TYPE.MOBILE ? DATA_PAYMENTWALL_MOBILE_PRODUCTS :
+        boolean res = setField(getSettingsMap(), type == PaymentWallProducts.TYPE.MOBILE ? DATA_PAYMENTWALL_MOBILE_PRODUCTS :
                 DATA_PAYMENTWALL_PRODUCTS, pwProductsResponseJson);
+        this.saveConfig();
+        return res;
     }
 
     /**

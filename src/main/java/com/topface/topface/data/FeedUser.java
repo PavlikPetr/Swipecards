@@ -56,7 +56,7 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
 
     // соответствующий пользователю элемент списка, может быть null
     // optional(for example for closings fragments)
-    public String feedItemId;
+    public transient String feedItemId;
 
     public FeedUser() {
     }

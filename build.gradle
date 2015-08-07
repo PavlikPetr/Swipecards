@@ -10,6 +10,8 @@ def getVersionCode(versionProps) {
     def versionCode = versionProps['VERSION_CODE'].toInteger()
     if (project.gradle.startParameter.taskNames.contains("assembleGoogleQa")) {
         versionCode = versionCode + getQaVersion(versionProps)
+    } else if (project.gradle.startParameter.taskNames.contains("assembleIfreeQa")) {
+        versionCode = versionCode + getQaVersion(versionProps)
     }
     return versionCode;
 }
@@ -53,8 +55,12 @@ buildscript {
 allprojects {
     repositories {
         maven { url 'https://raw.githubusercontent.com/onepf/OPF-mvn-repo/master/' }
+        maven { url 'https://bitbucket.org/atm13/artifacts/raw/master/' }
         maven { url "https://dl.bintray.com/topface/libs" }
         jcenter()
+        flatDir {
+            dirs 'libs'
+        }
     }
 }
 
@@ -82,6 +88,13 @@ android {
                     "com.topface.billing.MarketApiType.NOKIA_STORE";
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappandroidnokia\"";
         }*/
+        ifree {
+            applicationId "com.topface.topface.ifree";
+            buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.I_FREE";
+            buildConfigField "String", "STATISTICS_APP", "\"topfacemobappifree\"";
+            buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
+                    "com.topface.billing.MarketApiType.I_FREE";
+        }
     }
 
     compileOptions {
@@ -107,6 +120,9 @@ android {
         buildConfigField "String", "GIT_HEAD_SHA", "null";
         buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                 "com.topface.billing.MarketApiType.GOOGLE_PLAY";
+
+        multiDexEnabled true
+
     }
 
     signingConfigs {
@@ -123,9 +139,16 @@ android {
     }
 
     buildTypes {
-        release {
-            signingConfig signingConfigs.release
+        debug {
             minifyEnabled true
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-config.txt'
+        }
+        release {
+            minifyEnabled true
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-config.txt'
@@ -135,13 +158,13 @@ android {
         //пишем время сборки и SHA текущего комита, это нужно для идентификации сборки
         qa.initWith(buildTypes.debug)
         qa {
-            versionNameSuffix ".${getQaVersion(versionProps)}-qa"
-            buildConfigField "long", "BUILD_TIME", "${getTimestamp()}L";
-            buildConfigField "String", "GIT_HEAD_SHA", "\"${getGitHeadSha()}\"";
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-config.txt'
+            versionNameSuffix ".${getQaVersion(versionProps)}-qa"
+            buildConfigField "long", "BUILD_TIME", "${getTimestamp()}L";
+            buildConfigField "String", "GIT_HEAD_SHA", "\"${getGitHeadSha()}\"";
         }
     }
 
@@ -153,9 +176,12 @@ android {
         exclude 'LICENSE.txt'
     }
 
-    //@see https://code.google.com/p/android/issues/detail?id=40409
     dexOptions {
-        jumboMode = true
+        //@see https://code.google.com/p/android/issues/detail?id=40409
+        jumboMode true
+        //@see https://code.google.com/p/android/issues/detail?id=176638
+        incremental true
+        javaMaxHeapSize "4g"
     }
 
     lintOptions {
@@ -188,6 +214,8 @@ dependencies {
     compile "com.google.android.gms:play-services-base:7.3.0"
     compile "com.google.android.gms:play-services-gcm:7.3.0"
     compile "com.google.android.gms:play-services-ads:7.3.0"
+    //Multi dex support
+    compile 'com.android.support:multidex:1.0.1'
     //All jar libs
     compile fileTree(dir: 'libs', exclude: 'amazon/*.jar', include: '*.jar')
     //Testing
@@ -196,6 +224,13 @@ dependencies {
     testCompile('org.robolectric:robolectric:2.4') {
         exclude group: 'com.android.support'
     }
+    googleCompile name: 'ads_adman_2.2.7'
+    amazonCompile name: 'ads_adman_2.2.7'
+    compile name: 'appsflyer'
+    compile name: 'comscore'
+    compile name: 'flurry_analytics_5.5.0'
+    compile name: 'offerwalls_sponsorpay'
+
     //Topface sub libs
     compile project(':libs:IllustratedTextView')
     compile project(':libs:statistics-android')
@@ -234,6 +269,18 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
     qaCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
+
+    // I-FREE dependency
+    ifreeCompile('com.ifree.monetize:monetization-library:2.2.3') {
+        exclude group: "com.fasterxml.jackson.core"
+        exclude module: "support-v4"
+    }
+    ifreeCompile(
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.3.3'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.3.3'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.3.3']
+    )
+    ifreeCompile fileTree(dir: 'ifree/libs', include: '*.jar')
 }
 
 project(':libs:IllustratedTextView') {

@@ -11,9 +11,12 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.InputType;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -47,7 +50,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
-public class FeedbackMessageFragment extends AbstractEditFragment{
+public class FeedbackMessageFragment extends AbstractEditFragment {
 
     public static final String INTENT_FEEDBACK_TYPE = "feedback_message_type";
     private static final String GOOGLE_WALLET_URL = "https://wallet.google.com";
@@ -101,8 +104,8 @@ public class FeedbackMessageFragment extends AbstractEditFragment{
 
     @OnClick(R.id.tvTransactionIdInfoLink)
     public void googleWalletClick() {
-        if(Utils.isIntentAvailable(getActivity(), Intent.ACTION_VIEW)){
-            Utils.goToUrl(getActivity(),GOOGLE_WALLET_URL);
+        if (Utils.isIntentAvailable(getActivity(), Intent.ACTION_VIEW)) {
+            Utils.goToUrl(getActivity(), GOOGLE_WALLET_URL);
         }
     }
 
@@ -112,7 +115,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment{
         super.onCreateView(inflater, container, saved);
         View root = inflater.inflate(R.layout.fragment_feedback_message, null);
         if (root == null) return null;
-        ButterKnife.bind(this,root);
+        ButterKnife.bind(this, root);
         //Если  текущий язык приложения не русский или английский, то нужно показывать сообщение
         //о том, что лучше писать нам по русски или английски, поэтому проверяем тут локаль
         String language = Locale.getDefault().getLanguage();
@@ -166,7 +169,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment{
             case DEVELOPERS_MESSAGE:
                 break;
             case PAYMENT_MESSAGE:
-                mTransactionIdInfo.setText(Html.fromHtml(getString(R.string.transaction_code_help)));
+                mTransactionIdInfo.setText(createHelpMessage());
                 mTransactionIdInfo.setVisibility(View.VISIBLE);
                 break;
             case ERROR_MESSAGE:
@@ -176,12 +179,22 @@ public class FeedbackMessageFragment extends AbstractEditFragment{
         }
     }
 
+    public SpannableString createHelpMessage() {
+        String walletString = getString(R.string.google_wallet);
+        String messageTemplate = String.format(getString(R.string.transaction_code_help), walletString);
+        SpannableString helpSpannable = new SpannableString(messageTemplate);
+        int startSpan = messageTemplate.indexOf(walletString);
+        int endSpan = startSpan + walletString.length();
+        helpSpannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.link_color)), startSpan, endSpan, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        helpSpannable.setSpan(new UnderlineSpan(), startSpan, endSpan, 0);
+        return helpSpannable;
+    }
+
     /**
      * инициализация поля ввода email
      * и заполнение его в зависимости от типа сети
      * если вход был через соц сеть - то email гугл-аккаунта
      * если через topface аккаунт - то его email
-     *
      */
     private void initEmailInput() {
         mEditEmail.setInputType(InputType.TYPE_CLASS_TEXT);
