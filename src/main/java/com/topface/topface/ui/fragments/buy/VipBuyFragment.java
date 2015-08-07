@@ -223,7 +223,6 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         TextView layoutText = (TextView) layout.findViewWithTag("tvTitle");
         if (layoutText != null) {
             layoutText.setText(text);
-//            layout.setBackgroundResource(bgId);
         }
         return layout;
     }
