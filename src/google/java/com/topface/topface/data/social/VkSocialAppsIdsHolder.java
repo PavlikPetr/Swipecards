@@ -12,6 +12,7 @@ class VkSocialAppsIdsHolder {
      */
     static final String VK_ID = "2664589";
     static final ArrayList<String> ALLOWED_VK_IDS = new ArrayList<>(1);
+
     static {
         ALLOWED_VK_IDS.add("2664589");
     }

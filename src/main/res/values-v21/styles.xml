@@ -72,7 +72,7 @@
     <style name="AuthButtonGray" parent="AuthButton">
         <item name="android:drawablePadding">12dp</item>
         <item name="android:paddingLeft">12dp</item>
-        <item name="android:background">@drawable/btn_auth_gray_selector</item>
+        <item name="android:background">@drawable/btn_gray_selector</item>
         <item name="android:elevation">@dimen/buttons_elevation_value</item>
     </style>
 
@@ -87,7 +87,7 @@
     </style>
 
     <style name="TfRegButtonGray" parent="TfRegButton">
-        <item name="android:background">@drawable/btn_auth_gray_selector</item>
+        <item name="android:background">@drawable/btn_gray_selector</item>
         <item name="android:elevation">@dimen/buttons_elevation_value</item>
     </style>
 

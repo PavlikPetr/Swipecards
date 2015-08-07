@@ -113,6 +113,11 @@
     <color name="button_red_bg_released_color">#bf4240</color>
     <color name="button_red_bg_disable_color">#fab9b9</color>
 
+    <!-- Big white buttons states color -->
+    <color name="button_white_bg_pressed_color">#efefef</color>
+    <color name="button_white_bg_released_color">#fcfcfc</color>
+    <color name="button_white_bg_disable_color">#f9f9f9</color>
+
     <!--Button gray text color in different states-->
     <color name="button_gray_text_pressed_color">#4B4B4B</color>
     <color name="button_gray_text_released_color">#4B4B4B</color>
