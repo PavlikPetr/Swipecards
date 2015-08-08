@@ -10,28 +10,13 @@
 
     <Button
         android:id="@+id/btnDatingProfile"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.0"
-        android:background="@null"
-        android:drawableTop="@drawable/button_person_selector"
-        android:textSize="0sp" />
+        style="@style/HideAdmirationProfileButton" />
 
     <Button
         android:id="@+id/btnDatingSympathy"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.0"
-        android:background="@null"
-        android:drawableTop="@drawable/button_favorite_selector"
-        android:textSize="0sp" />
+        style="@style/HideAdmirationSympathyButton" />
 
     <Button
         android:id="@+id/btnDatingSkip"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.0"
-        android:background="@null"
-        android:drawableTop="@drawable/button_close_selector"
-        android:textSize="0sp" />
+        style="@style/HideAdmirationSkipButton" />
 </LinearLayout>

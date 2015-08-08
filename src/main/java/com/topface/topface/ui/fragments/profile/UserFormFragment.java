@@ -43,7 +43,7 @@ public class UserFormFragment extends AbstractFormFragment implements OnClickLis
 
     @Override
     protected AbstractFormListAdapter createFormAdapter(Context context) {
-        return new UserFormListAdapter(context);
+        return new UserFormListAdapter(context, false);
     }
 
     @Override
