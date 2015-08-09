@@ -108,7 +108,6 @@ public class PurchasesFragment extends BaseFragment {
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mVipPurchasedReceiver, new IntentFilter(CountersManager.UPDATE_VIP_STATUS));
         mTabLayoutCreator = new TabLayoutCreator(getActivity(), mPager, mTabLayout, mPagesTitle, null);
         mTabLayoutCreator.setTabTitle(mPager.getCurrentItem());
-        mTabLayoutCreator.isModeScrollable(true);
         return root;
     }
 
