@@ -10,12 +10,7 @@
 
     <ImageButton
         android:id="@+id/send_gift_button"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center_vertical"
-        android:background="@drawable/input_buttons_selector"
-        android:padding="16dp"
-        android:src="@drawable/btn_send_gift_selector" />
+        style="@style/InputGiftButton" />
 
     <EditText
         android:id="@+id/edChatBox"
@@ -43,11 +38,6 @@
 
     <ImageButton
         android:id="@+id/btnSend"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center"
-        android:background="@drawable/input_buttons_selector"
-        android:padding="16dp"
-        android:src="@drawable/btn_send_message_selector" />
+        style="@style/InputSendButton" />
 
 </LinearLayout>

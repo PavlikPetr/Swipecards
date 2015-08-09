@@ -1,9 +1,8 @@
 package com.topface.topface.utils;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.view.View;
-
-import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.animation.ValueAnimator;
 
 public class AnimationUtils {
     /**
@@ -93,5 +92,4 @@ public class AnimationUtils {
         animator.setStartDelay(Defaults.AppearingImage.TIMING.startDelay);
         return animator;
     }
-
 }

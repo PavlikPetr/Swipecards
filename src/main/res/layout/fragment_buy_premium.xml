@@ -57,14 +57,12 @@
 
                 <include
                     android:id="@+id/fepInvis"
-                    style="@style/WhiteListItem.Underline"
                     layout="@layout/vip_item_edit_form_switch"
                     android:layout_width="fill_parent"
                     android:layout_height="@dimen/form_item_height" />
 
                 <include
                     android:id="@+id/fepBlackList"
-                    style="@style/WhiteListItem.Underline"
                     layout="@layout/vip_item_edit_form_select"
                     android:layout_width="fill_parent"
                     android:layout_height="@dimen/form_item_height" />

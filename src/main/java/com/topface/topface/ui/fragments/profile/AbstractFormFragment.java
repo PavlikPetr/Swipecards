@@ -88,7 +88,6 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_form, container, false);
         mListQuestionnaire = (ListView) root.findViewById(R.id.fragmentFormList);
-
         View giftsHeaderWrapper = inflater.inflate(R.layout.form_gifts, null);
         mGiftsHeader = (LinearLayout) giftsHeaderWrapper.findViewById(R.id.gifts_strip);
         mGiftsHeader.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +124,6 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
                 mListQuestionnaire.setSelection(savedInstanceState.getInt(POSITION, 0));
             }
         }
-
         return root;
     }
 
@@ -253,6 +251,10 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
     }
 
     protected abstract AbstractFormListAdapter createFormAdapter(Context context);
+
+    public ListView getList() {
+        return mListQuestionnaire;
+    }
 
     public void setUserData(String status, int userId, LinkedList<FormItem> forms, Profile.Gifts gifts, int giftsCount) {
         mStatus = status;

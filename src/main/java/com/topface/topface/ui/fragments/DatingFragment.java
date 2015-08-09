@@ -417,7 +417,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         mAnimationHelper = new AnimationHelper(getActivity(), R.anim.fade_in, R.anim.fade_out);
         mAnimationHelper.addView(mDatingCounter);
-        mAnimationHelper.addView(mDatingResources);
         mAnimationHelper.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -449,7 +448,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
             mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
 
-            mAnimationHelper.addView(mDatingCounter);
             mAnimationHelper.addView(mDatingResources);
         }
     }

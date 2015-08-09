@@ -2,27 +2,27 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/loRoot"
     android:layout_width="fill_parent"
-    android:minHeight="60dp"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:minHeight="60dp"
+    android:padding="8dp">
 
     <!-- Title -->
     <TextView
-        style="@style/FormTitleText"
         android:id="@+id/tvTitle"
+        style="@style/FormTitleText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="3dp"
+        android:ellipsize="end"
         android:maxLines="2"
-        android:ellipsize="end" />
+        android:paddingBottom="3dp" />
 
     <!-- Value -->
     <TextView
-        style="@style/ProfileText"
         android:id="@+id/tvValue"
+        style="@style/ProfileText"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:gravity="top"
-        android:layout_below="@id/tvTitle" />
+        android:layout_below="@id/tvTitle"
+        android:gravity="top" />
 </RelativeLayout>

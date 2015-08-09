@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +19,7 @@ import android.widget.TextView;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.ui.dialogs.AboutDialog;
+import com.topface.topface.ui.dialogs.AboutAppDialog;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelector;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
@@ -167,11 +166,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_FEEDBACK);
                 break;
             case R.id.loAbout:
-                FragmentManager fm = getChildFragmentManager();
-                if (fm != null) {
-                    AboutDialog.newInstance(App.getContext().getString(R.string.settings_about)).
-                            show(fm, AboutDialog.class.getName());
-                }
+                new AboutAppDialog(getActivity(), App.getContext().getString(R.string.settings_about));
                 break;
             case R.id.loLanguage:
                 startLanguageSelection();
@@ -207,7 +202,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
             }
         }
         final int selectedLocaleIndexFinal = selectedLocaleIndex;
-        setDialogBtnBackground(new AlertDialog.Builder(getActivity())
+        new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.settings_select_language)
                 .setSingleChoiceItems(languages, selectedLocaleIndex, null)
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -223,7 +218,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                             dialogLocales.dismiss();
                             return;
                         }
-                        setDialogBtnBackground(new AlertDialog.Builder(getActivity())
+                        new AlertDialog.Builder(getActivity())
                                 .setTitle(R.string.settings_select_language)
                                 .setMessage(R.string.restart_to_change_locale)
                                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -240,15 +235,10 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                                     public void onClick(DialogInterface dialogConfirm, int which) {
                                         dialogLocales.dismiss();
                                     }
-                                }).show());
+                                }).show();
                     }
-                }).show());
+                }).show();
 
-    }
-
-    private void setDialogBtnBackground(AlertDialog dialog) {
-        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setBackgroundResource(R.drawable.btn_profile_dialog_selector);
-        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundResource(R.drawable.btn_profile_dialog_selector);
     }
 
     @Override

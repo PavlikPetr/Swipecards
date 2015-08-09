@@ -12,9 +12,21 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 public class UserFormListAdapter extends AbstractFormListAdapter {
+    private boolean isItemsEnabled;
 
     public UserFormListAdapter(Context context) {
+        this(context, true);
+    }
+
+    public UserFormListAdapter(Context context, boolean isItemsEnabled) {
         super(context);
+        this.isItemsEnabled = isItemsEnabled;
+    }
+
+    // control items selectable
+    @Override
+    public boolean isEnabled(int position) {
+        return isItemsEnabled;
     }
 
     @Override

@@ -13,26 +13,26 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/icon"
-        android:layout_centerVertical="true">
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/icon">
 
         <TextView
             android:id="@+id/ad_title"
+            style="@style/ListName.Ad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/ListName.Ad"
-            android:drawableRight="@drawable/ic_arrow_feed_ads"
+            android:layout_marginRight="10dp"
             android:drawablePadding="6dp"
-            android:layout_marginRight="10dp" />
+            android:drawableRight="@drawable/ic_arrow_feed_ads" />
 
         <TextView
             android:id="@+id/ad_description"
+            style="@style/AdDescriptionText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/AdDescriptionText"
-            android:gravity="left|center_vertical"
             android:layout_below="@id/ad_title"
-            android:layout_marginRight="6dp" />
+            android:layout_marginRight="6dp"
+            android:gravity="left|center_vertical" />
 
     </RelativeLayout>
 </RelativeLayout>
