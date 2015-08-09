@@ -324,6 +324,7 @@
     <string name="ban_complain">Engellemeyi şikayet etmek</string>
     <string name="general_ready">Hazır</string>
     <string name="buying_store_ok">Alış başarılıyla tamamlanmıştır</string>
+    <string name="buying_store_fail">Satın alma işleminiz tamamlanamadı.</string>
     <string name="vip_privileges">VIP-ayrıcalık</string>
     <string name="vip_rest">VIP’e abone oldunuz</string>
     <string name="vip_invis">Görünmez durumu</string>
@@ -383,6 +384,7 @@
     <string name="welcome_to_topface">Topface’ye hoş geldiniz!</string>
     <string name="im_boy">Erkeğim</string>
     <string name="im_girl">Kızım</string>
+    <string name="u_sex">Cinsiyetiniz</string>
     <string name="incorrect_email">E-mail yanlıştır</string>
     <string name="incorrect_login">Login yanlıştır</string>
     <string name="incorrect_password">Parola yalnıştır</string>
@@ -673,6 +675,8 @@
     <string name="status_confirmation_was_sent">Kayıt Bekleniyor</string>
     <string name="status_user_registered">Önceden kayıt olunmuş</string>
     <string name="balance">Bakiye (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
+    <string name="trial_vip_text">7 günlük bedava VIP \n statüsü</string>
+    <string name="trial_vip_button_text">VIP statüsü edinin</string>
     <string name="settings_check_vip_title">VIP statüsünün aktif olup olmadığını kontrol et</string>
     <string name="settings_check_vip_cell">VIP statüsünü kontrol et</string>
     <string name="settings_check_vip_alert">VIP statüsünün kontrol edilmesi talebiniz iletildi.</string>
