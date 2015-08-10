@@ -564,7 +564,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     protected void allViewsInitialized() {
-
     }
 
     private void initBackground(View view) {
