@@ -2,7 +2,6 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.text.TextUtils;
 
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.Static;
@@ -102,10 +101,10 @@ public class FeedsCache extends AbstractConfig {
      * @param type  feeds type
      */
     public FeedsCache setFeedToCache(String value, FEEDS_TYPE type) {
-        if (!TextUtils.isEmpty(value)) {
+//        if (!TextUtils.isEmpty(value)) {
             SettingsMap settingsMap = getSettingsMap();
             setField(settingsMap, type.getText(), value);
-        }
+//        }
         return this;
     }
 

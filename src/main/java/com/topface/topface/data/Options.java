@@ -292,6 +292,7 @@ public class Options extends AbstractData {
                 getJar = new GetJar(getJarJson.optString("id"), getJarJson.optString("name"), getJarJson.optLong("price"));
             }
             isHideAdmirations = response.optBoolean("hideAdmirations", false);
+            isHideAdmirations = true;
 
             fallbackTypeBanner = response.optString("gag_type_banner", AdProvidersFactory.BANNER_ADMOB);
             gagTypeFullscreen = response.optString("gag_type_fullscreen", AdProvidersFactory.BANNER_NONE);

@@ -182,7 +182,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     };
 
     public void saveToCache() {
-        cacheData(JsonUtils.toJson(getListAdapter().getDataForCache()));
+        FeedList<T> data = getListAdapter().getDataForCache();
+        if (data != null && data.size() > 0) {
+            cacheData(JsonUtils.toJson(getListAdapter().getDataForCache()));
+        } else {
+            cacheData("");
+        }
     }
 
     private void cacheData(String value) {
@@ -924,7 +929,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
             //Если ошибки обработаны на уровне фрагмента,
             // то не показываем стандартную ошибку
-            if (!processErrors(codeError) && (App.isOnline() || isPullToRefreshUpdating)) {
+            boolean processError = processErrors(codeError);
+            if ((!processError && !App.isOnline() && isPullToRefreshUpdating) || (!processError && App.isOnline())) {
                 Utils.showErrorMessage();
             }
             onUpdateFail(isPullToRefreshUpdating || isHistoryLoad);
@@ -973,6 +979,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             startListShowDelayTimer();
         } else {
             mListView.setVisibility(View.VISIBLE);
+            mBackgroundController.hide();
         }
     }
 
@@ -1013,7 +1020,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 onEmptyFeed(codeError);
                 return true;
             default:
-                if (getListAdapter() == null || getListAdapter().getCount() == 0) {
+                if (getListAdapter() == null || getListAdapter().getDataForCache() == null || getListAdapter().getDataForCache().size() < 1) {
                     mRetryView.setVisibility(View.VISIBLE);
                 }
                 onFilledFeed();
