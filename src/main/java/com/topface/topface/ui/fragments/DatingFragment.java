@@ -467,7 +467,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         final int delightPrice = CacheProfile.getOptions().priceAdmiration;
         if (null != mDatingLovePrice) {
             if (delightPrice > 0) {
-                mDatingLovePrice.setText(Integer.toString(CacheProfile.getOptions().priceAdmiration));
+                mDatingLovePrice.setVisibility(View.VISIBLE);
+                mDatingLovePrice.setText(Integer.toString(delightPrice));
             } else {
                 mDatingLovePrice.setVisibility(View.GONE);
             }

@@ -69,12 +69,12 @@ public class CountersManager {
             return;
         }
         BalanceData balanceData = JsonUtils.fromJson(balanceJson.toString(), BalanceData.class);
-        mAppState.setData(balanceData);
         if (balanceData.premium != CacheProfile.premium) {
             App.sendProfileAndOptionsRequests();
             Intent intent = new Intent(UPDATE_VIP_STATUS);
             intent.putExtra(VIP_STATUS_EXTRA, balanceData.premium);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         }
+        mAppState.setData(balanceData);
     }
 }
