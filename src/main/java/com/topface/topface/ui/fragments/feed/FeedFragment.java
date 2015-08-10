@@ -333,6 +333,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         for (int type : getTypesForGCM()) {
             GCMUtils.cancelNotification(getActivity(), type);
         }
+        allViewsInitialized();
         return root;
     }
 
@@ -560,6 +561,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     protected void init() {
+    }
+
+    protected void allViewsInitialized() {
+
     }
 
     private void initBackground(View view) {
