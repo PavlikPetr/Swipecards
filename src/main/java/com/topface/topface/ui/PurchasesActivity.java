@@ -74,9 +74,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     private boolean mIsOfferwallsReady;
 
     static {
-        if (CacheProfile.isLoaded()) {
-            mTopfaceOfferwallRedirect = CacheProfile.getOptions().topfaceOfferwallRedirect;
-        }
+        mTopfaceOfferwallRedirect = CacheProfile.getOptions().topfaceOfferwallRedirect;
     }
 
     private BroadcastReceiver mOfferwallOpenedReceiver = new BroadcastReceiver() {
@@ -114,9 +112,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     protected void onLoadProfile() {
         super.onLoadProfile();
         mBonusRedirect = CacheProfile.getOptions().forceOfferwallRedirect;
-        if (mTopfaceOfferwallRedirect == null) {
-            mTopfaceOfferwallRedirect = CacheProfile.getOptions().topfaceOfferwallRedirect;
-        }
+        mTopfaceOfferwallRedirect = CacheProfile.getOptions().topfaceOfferwallRedirect;
         if (!TFOfferwallSDK.isInitialized()) {
             OfferwallsManager.initTfOfferwall(this, new TFCredentials.OnInitializeListener() {
                 @Override
