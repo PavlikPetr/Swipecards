@@ -495,10 +495,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     private void updateSendMessageAbility(Boolean isButtonAvailable) {
         if (mSendButton != null && mEditBox != null) {
-            mSendButton.setEnabled(mUserType == FeedDialog.MESSAGE_POPULAR_STAGE_1
-                    ||(!mEditBox.getText().toString().isEmpty()
-                    && (mLockScreen == null || mLockScreen.getVisibility() == View.GONE)
-                    && (isButtonAvailable == null || isButtonAvailable)));
+            mSendButton.setEnabled(
+                    !mEditBox.getText().toString().isEmpty() &&
+                            (mUserType == FeedDialog.MESSAGE_POPULAR_STAGE_1
+                                    || ((mLockScreen == null || mLockScreen.getVisibility() == View.GONE)
+                                    && (isButtonAvailable == null || isButtonAvailable))));
         }
     }
 
