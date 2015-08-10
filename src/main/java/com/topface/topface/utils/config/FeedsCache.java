@@ -101,8 +101,7 @@ public class FeedsCache extends AbstractConfig {
      * @param type  feeds type
      */
     public FeedsCache setFeedToCache(String value, FEEDS_TYPE type) {
-        SettingsMap settingsMap = getSettingsMap();
-        setField(settingsMap, type.getText(), value);
+        setField(getSettingsMap(), type.getText(), value);
         return this;
     }
 

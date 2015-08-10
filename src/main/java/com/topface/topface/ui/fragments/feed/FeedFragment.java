@@ -183,8 +183,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     public void saveToCache() {
         FeedList<T> data = getListAdapter().getDataForCache();
-        if (data != null && data.size() > 0) {
-            cacheData(JsonUtils.toJson(getListAdapter().getDataForCache()));
+        if (data != null && !data.isEmpty()) {
+            cacheData(JsonUtils.toJson(data));
         } else {
             cacheData("");
         }
