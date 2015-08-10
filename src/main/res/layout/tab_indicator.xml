@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/tab_title"
-    style="@style/TabIndicatorHoloStyle" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
+    <TextView
+        android:id="@+id/tab_title"
+        android:ellipsize="end"
+        android:layout_weight="1"
+        style="@style/TabIndicatorHoloStyle"/>
+
+    <TextView
+        android:id="@+id/tab_counter"
+        android:paddingLeft="3dp"
+        android:layout_weight="0"
+        style="@style/TabIndicatorHoloStyle"/>
+</LinearLayout>

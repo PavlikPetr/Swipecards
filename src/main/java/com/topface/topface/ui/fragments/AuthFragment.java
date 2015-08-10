@@ -1,5 +1,7 @@
 package com.topface.topface.ui.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -24,7 +26,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
-import com.topface.topface.data.AppSocialAppsIds;
+import com.topface.topface.data.social.AppSocialAppsIds;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -118,10 +120,19 @@ public class AuthFragment extends BaseAuthFragment {
 
     @OnClick(R.id.btnTfAccount)
     public void startTfAuthClick() {
-        ObjectAnimator.ofFloat(mAuthGroup, TRANSLATION_Y, 0, Utils.getPxFromDp(ANIMATION_PATH))
-                .setDuration(ANIMATION_DURATION).start();
-        setSocNetBtnVisibility(false, true, false);
-        setTfLoginBtnVisibility(true, true, true);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(mAuthGroup, TRANSLATION_Y, 0, Utils.getPxFromDp(ANIMATION_PATH));
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                setSocNetBtnVisibility(false, true, false);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                setTfLoginBtnVisibility(true, true, true);
+            }
+        });
+        animator.setDuration(ANIMATION_DURATION).start();
     }
 
     @OnClick(R.id.btnEntrance)
@@ -142,17 +153,25 @@ public class AuthFragment extends BaseAuthFragment {
 
     @OnClick(R.id.tf_auth_back)
     public void tfAuthBackClick() {
-        ObjectAnimator.ofFloat(mAuthGroup, TRANSLATION_Y, Utils.getPxFromDp(ANIMATION_PATH), 0)
-                .setDuration(ANIMATION_DURATION).start();
-        setSocNetBtnVisibility(true, true, true);
-        setTfLoginBtnVisibility(false, true, false);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(mAuthGroup, TRANSLATION_Y, Utils.getPxFromDp(ANIMATION_PATH), 0);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                setTfLoginBtnVisibility(false, true, false);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                setSocNetBtnVisibility(true, true, true);
+            }
+        });
+        animator.setDuration(ANIMATION_DURATION).start();
     }
 
     /**
-     *
-     * @param visibility - показать/скрыть кнопки авторизации через соц сети
+     * @param visibility            - показать/скрыть кнопки авторизации через соц сети
      * @param isNeedChangeFlagState - запоминать состояние кнопок
-     * @param isNeedAnimate - анимировать появление
+     * @param isNeedAnimate         - анимировать появление
      */
     private void setSocNetBtnVisibility(boolean visibility, boolean isNeedChangeFlagState, boolean isNeedAnimate) {
         if (isAdded()) {
@@ -167,10 +186,9 @@ public class AuthFragment extends BaseAuthFragment {
     }
 
     /**
-     *
-     * @param visibility - показать/скрыть кнопки авторизации через тф
+     * @param visibility            - показать/скрыть кнопки авторизации через тф
      * @param isNeedChangeFlagState - запоминать состояние кнопок
-     * @param isNeedAnimate - анимировать появление
+     * @param isNeedAnimate         - анимировать появление
      */
     private void setTfLoginBtnVisibility(boolean visibility, boolean isNeedChangeFlagState, boolean isNeedAnimate) {
         if (isAdded()) {
@@ -186,7 +204,7 @@ public class AuthFragment extends BaseAuthFragment {
     private void setVisibilityAndAnimateView(View v, boolean visibility, boolean isNeedAnimate) {
         if (visibility && isNeedAnimate) {
             v.startAnimation(mButtonAnimation);
-        }else{
+        } else {
             v.clearAnimation();
         }
         v.setVisibility(visibility ? View.VISIBLE : View.GONE);
@@ -354,7 +372,7 @@ public class AuthFragment extends BaseAuthFragment {
         super.onCreate(savedInstanceState);
         Activity activity = getActivity();
         mButtonAnimation = AnimationUtils.loadAnimation(activity,
-                R.anim.fade_in);
+                R.anim.auth_button_anim);
         mAuthorizationManager = new AuthorizationManager(activity);
         mAuthorizationManager.onCreate(savedInstanceState);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mTokenReadyReceiver,

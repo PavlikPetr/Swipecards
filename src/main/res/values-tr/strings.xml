@@ -2,8 +2,10 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">tr_TR</string>
+    <string name="photofeed_title">Akışa koy</string>
     <string name="general_warning">UYARI</string>
     <string name="general_ok">Tamam</string>
+    <string name="general_any">Herhangi biri</string>
     <string name="general_settings_abbr">Ayarlar</string>
     <string name="general_disallow">Yasak</string>
     <string name="general_allow">İzin vermek</string>
@@ -18,6 +20,7 @@
     <string name="likes_background_text">Sempati yok</string>
     <string name="visitors_background_text">Misafirler yok</string>
     <string name="chat_background_text">Gelen mesaj yok</string>
+    <string name="entrance">Gir</string>
     <string name="filter_only_online">Sadece çevrim içi</string>
     <string name="filter_city_age_parameters">Yaş ve şehir</string>
     <string name="filter_select_city">Şehir seçeneği</string>
@@ -159,8 +162,8 @@
     <string name="general_visitors_tab_views">görüntülemeler</string>
     <string name="general_profile">Profil</string>
     <string name="general_settings">Ayarlar</string>
-    <string name="auth_btn_vk">Vkontakte’den giriş yapmak</string>
-    <string name="auth_btn_fb">Facebook’tan giriş yapmak</string>
+    <string name="auth_btn_vk">VKontakte</string>
+    <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Tekrar deneyin</string>
     <string name="dating_header_girls">%1$d’dan %2$d’a kadar kızlar</string>
     <string name="dating_header_guys">%1$d’dan %2$d’a kadar erkekler</string>
@@ -186,6 +189,7 @@
     <string name="filter_age">Yaş</string>
     <string name="filter_age_start_prefix">%s gelen</string>
     <string name="filter_age_end_prefix">%s kadar</string>
+    <string name="filter_constitution_template">%1$d ile %2$d arası</string>
     <string name="filter_cities_all">Bütün şehirlerde</string>
     <string name="purchase_header_title">Denge:</string>
     <string name="buying_header_title">Alış verişler</string>
@@ -320,6 +324,7 @@
     <string name="ban_complain">Engellemeyi şikayet etmek</string>
     <string name="general_ready">Hazır</string>
     <string name="buying_store_ok">Alış başarılıyla tamamlanmıştır</string>
+    <string name="buying_store_fail">Satın alma işleminiz tamamlanamadı.</string>
     <string name="vip_privileges">VIP-ayrıcalık</string>
     <string name="vip_rest">VIP’e abone oldunuz</string>
     <string name="vip_invis">Görünmez durumu</string>
@@ -361,6 +366,7 @@
     <string name="user_actions_chat">Sohbet</string>
     <string name="profile_edit_age_ranges">Yaş 16 ile 99 arasında olmalıdır. Lütfen doğru rakam yazın ve tekrar deneyin.</string>
     <string name="wrong_password_format">Yanlış parola formatı</string>
+    <string name="edit_value_error">Değer, %1$d ile %2$d arasında olmalıdır</string>
     <string name="sign_in">Giriş</string>
     <string name="create_account">Hesap oluşturmak</string>
     <string name="email">E-mail</string>
@@ -376,6 +382,9 @@
     <string name="birthdate_confirm">Aksi takdirde karşılamak mümkün olmayacaktır, yaşınızı doldurunuz, lütfen</string>
     <string name="set_birthdate">Yaşınıza doldurun</string>
     <string name="welcome_to_topface">Topface’ye hoş geldiniz!</string>
+    <string name="im_boy">Erkeğim</string>
+    <string name="im_girl">Kızım</string>
+    <string name="u_sex">Cinsiyetiniz</string>
     <string name="incorrect_email">E-mail yanlıştır</string>
     <string name="incorrect_login">Login yanlıştır</string>
     <string name="incorrect_password">Parola yalnıştır</string>
@@ -390,6 +399,7 @@
     <string name="gallery">Galeri</string>
     <string name="no_photo_take_photo">Sizinle kimse tanışamıyor! Fotoğraf çekin veya mevcut albümden seçin</string>
     <string name="photo_for_avatar">Fotoğraf profilinize yüklenmek için hazırdır! Bu sizin ilk fotoğrafınız ve o profil resmi olarak kullanılacaktır.</string>
+    <string name="add_photo_before">İlk olarak bir fotoğraf eklemeniz gerekiyor</string>
     <string name="change_email">e-mail adresi değiştermek</string>
     <string name="send_confirmation_email">E-maile onay göndermek</string>
     <string name="change_password">Parola değiştirmek</string>
@@ -397,6 +407,9 @@
     <string name="save">Kaydetmek</string>
     <string name="saving_in_progress">Tasarruf …</string>
     <string name="confirmation_successfully_sent">Gösterdiğiniz e-mailinize onay gönderildi</string>
+    <string name="email_successfully_confirmed">E-posta başarılı bir şekilde onaylandı</string>
+    <string name="email_not_confirmed">E-posta onaylanmadı</string>
+    <string name="email_already_confirmed">E-posta zaten onaylanmış</string>
     <string name="password_confirmation_hint">Parola onaylaması</string>
     <string name="password_hint">parola</string>
     <string name="enter_new_password">Yeni parolaya girin</string>
@@ -496,6 +509,8 @@
     <string name="general_no_notifications">Maalesef, cihazınızda bildirimler uygulanmıyor</string>
     <string name="black_list_add_short">Kara listeye</string>
     <string name="confirm_email_for_dating">Biz spama karşıyız. Topface’de tanışmak için posta adresinizi onaylayın!</string>
+    <string name="confirm_email_for_dating_title">Biz Spam\'lere karşıyız</string>
+    <string name="confirm_email_for_dating_desc">Topface\'de yeni insanlarla tanışabilmek için e-posta adresinizi onaylayın!</string>
     <string name="send_confirm_link">Onaylama için link göndermek</string>
     <string name="complain_type_swearing_msg">Kabalık, tehdit, küfür</string>
     <string name="general_exit">Çıkış</string>
@@ -545,7 +560,9 @@
     <string name="settings_feedback_transaction_number">Siparişin numarası</string>
     <string name="settings_feedback_transaction_link">Siparişin numarası nerede bulunur?</string>
     <string name="general_logout_error">Maalesef, hesaptan çıkış yapılamadı</string>
-    <string name="auth_btn_ok">Odnoklassniki’den giriş yap</string>
+    <string name="auth_btn_ok">Odnoklassniki</string>
+    <string name="auth_btn_tf">Topface Hesabı</string>
+    <string name="birthday">Doğum Günü</string>
     <string name="other_auth">Diğer servislerin yardımıyla giriş yap</string>
     <string name="settings_feedback_transaction_number_hint">Sipariş numarasına girin</string>
     <string name="delete_visitors">Misafirleri silmek</string>
@@ -627,6 +644,8 @@
     <string name="send_feedback">mesaj göndermek</string>
     <string name="get_vip_free">VIP bedava kazanın</string>
     <string name="buy_more_sympathies">\"Daha beğeneli kazanın, daha popüler olun\"</string>
+    <string name="transaction_code_help">Bize işlem kodunu göndermeniz halinde, bu talebinizi daha hızlı bir şekilde tamamlamanıza yardımcı olacaktır. Sipariş hakkındaki daha fazla bilgi %s içerisinde bulunabilir.</string>
+    <string name="google_wallet">Google Cüzdan</string>
     <string name="google_service_general_title">İkaz mevcut değildir</string>
     <string name="google_service_disabled_title">Google Play servisleri bildirimleri kapamak için gereklidir.</string>
     <string name="google_service_disabled_button">Açmak</string>
@@ -641,11 +660,26 @@
     <string name="receive_message_notification">Yeni mesajı hakkında bildirimleri alın\nо</string>
     <string name="receive_mutual_notification">Yeni karşılıklı beğeni hakkında bildirimleri alın\nо</string>
     <string name="receive_sympathy_notification">Yeni beğeni hakkında bildirimleri alın\nо</string>
+    <string name="receive_rate_notification">sil</string>
     <string name="receive_guest_notification">Yeni misafiri hakkında bildirimleri alın\nо</string>
     <string name="on_phone">telefona</string>
     <string name="on_mail">e-postaya</string>
     <string name="add_leader_hint">Tebriksiniz …</string>
     <string name="more">daha</string>
+    <string name="premium_for_invitations">1 günlük bir VIP statüsü elde etmek için kayıt yaptıracak 5 kişi bulmanız gerekecek</string>
+    <string name="premium_for_invitations_current_status">Gerçekleştirmiş olduğunuz: :\nDavetiye: %1$d\nKayıt: %2$d</string>
+    <string name="no_contacts_available">Cihazda, görüntülenebilecek hiçbir kişi bulunmuyor</string>
+    <string name="sms_invite_title">Bir günlük bir VIP statüsü alın!</string>
+    <string name="status_can_send_confirmation">Davet Et</string>
+    <string name="status_invilid_phone_number">Numara geçersiz</string>
+    <string name="status_confirmation_was_sent">Kayıt Bekleniyor</string>
+    <string name="status_user_registered">Önceden kayıt olunmuş</string>
+    <string name="balance">Bakiye (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
+    <string name="trial_vip_text">7 günlük bedava VIP \n statüsü</string>
+    <string name="trial_vip_button_text">VIP statüsü edinin</string>
+    <string name="settings_check_vip_title">VIP statüsünün aktif olup olmadığını kontrol et</string>
+    <string name="settings_check_vip_cell">VIP statüsünü kontrol et</string>
+    <string name="settings_check_vip_alert">VIP statüsünün kontrol edilmesi talebiniz iletildi.</string>
     <string name="novice_sympathy">Hoş bir tanışma başlamak \niçin \ngerçekten hoşlandığınız kişilere sempati gönderin</string>
     <string name="novice_sympathies_bonus">Siz %1$d \nhediye olarak kazandınız! – Bu demek ki %2$d kişi sizi \nkesinlikle beğenir ve sempatileri size \ngösterir.</string>
 </resources>

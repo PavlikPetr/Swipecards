@@ -1,9 +1,9 @@
 package com.topface.topface.ui.views;
 
+import android.animation.ValueAnimator;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.topface.topface.utils.AnimationUtils;
 

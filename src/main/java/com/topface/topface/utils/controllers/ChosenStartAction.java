@@ -16,21 +16,13 @@ import java.util.Arrays;
 public class ChosenStartAction implements IStartAction {
 
     ArrayList<IStartAction> mActions = new ArrayList<>(2);
-    private IStartAction chosenAction;
 
     public ChosenStartAction chooseFrom(IStartAction... actions) {
-        if (actions.length == 1) {
-            chosenAction = actions[0];
-        } else {
-            mActions.addAll(Arrays.asList(actions));
-        }
+        mActions.addAll(Arrays.asList(actions));
         return this;
     }
 
-    private IStartAction getNextAction() {
-        if (chosenAction != null) {
-            return chosenAction;
-        }
+    private IStartAction chooseAction() {
         int maxPriority = -1;
         IStartAction maxAction = null;
         for (IStartAction action : mActions) {
@@ -47,7 +39,7 @@ public class ChosenStartAction implements IStartAction {
 
     @Override
     public void callInBackground() {
-        IStartAction action = getNextAction();
+        IStartAction action = chooseAction();
         if (action != null) {
             action.callInBackground();
         }
@@ -55,7 +47,7 @@ public class ChosenStartAction implements IStartAction {
 
     @Override
     public void callOnUi() {
-        IStartAction action = getNextAction();
+        IStartAction action = chooseAction();
         if (action != null) {
             action.callOnUi();
         }
@@ -63,7 +55,7 @@ public class ChosenStartAction implements IStartAction {
 
     @Override
     public boolean isApplicable() {
-        chosenAction = getNextAction();
+        IStartAction chosenAction = chooseAction();
         return chosenAction != null;
     }
 

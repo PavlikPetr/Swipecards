@@ -151,8 +151,6 @@
     <string name="general_visitors">Gäste</string>
     <string name="general_profile">Profil</string>
     <string name="general_settings">Einstellungen</string>
-    <string name="auth_btn_vk">Via VKontakte einloggen</string>
-    <string name="auth_btn_fb">Via Facebook einloggen</string>
     <string name="auth_retry">Nochmal versuchen</string>
     <string name="dating_header_girls">Frauen von %1$d bis %2$d</string>
     <string name="dating_header_guys">Männer von %1$d bis %2$d</string>
@@ -507,7 +505,6 @@
     <string name="settings_feedback_transaction_number">Bestellnummer</string>
     <string name="settings_feedback_transaction_link">Wo kann man Bestellnummer finden?</string>
     <string name="general_logout_error">Leider, konnte man nicht abmelden</string>
-    <string name="auth_btn_ok">Via Odnoklassniki einloggen</string>
     <string name="other_auth">Via andere Services einloggen</string>
     <string name="settings_feedback_transaction_number_hint">Geben Sie Bestellnummer ein</string>
     <string name="delete_visitors">Gäste löschen</string>

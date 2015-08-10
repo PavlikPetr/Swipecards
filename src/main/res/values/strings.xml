@@ -42,7 +42,7 @@
     <string name="leaders_select_photo">Select an impressive photo:</string>
     <string name="locking_screen_button_answer">Respond</string>
     <string name="locking_screen_advice">Respond to all incoming Likes</string>
-    <string name="locking_screen_advice2">Get Unrestrited Access</string>
+    <string name="locking_screen_advice2">Get Unrestricted Access</string>
     <string name="general_bookmarks_is_deleted">User deleted from favorites</string>
     <string name="general_blacklist_is_deleted">User has been deleted from the Blacklist</string>
     <string name="invite_friends_title_short">Invite all friends to Topface</string>
@@ -160,8 +160,8 @@
     <string name="general_visitors_tab_views">views</string>
     <string name="general_profile">Profile</string>
     <string name="general_settings">Settings</string>
-    <string name="auth_btn_vk">Log in with VK</string>
-    <string name="auth_btn_fb">Log in with Facebook</string>
+    <string name="auth_btn_vk">Vkontakte</string>
+    <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Retry</string>
     <string name="dating_header_girls">Girls from %1$d to %2$d</string>
     <string name="dating_header_guys">Guys from %1$d to %2$d</string>
@@ -197,7 +197,7 @@
     </plurals>
     <plurals name="buying_admiration_you_need_coins">
         <item quantity="other">To send an adoration, get %d more coins</item>
-        <item quantity="one">To send an adoration, get %d more coin</item>
+        <item quantity="one">To send an adreoration, get %d more coin</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
         <item quantity="other">To be able to see who likes you, get %d more coins</item>
@@ -317,6 +317,7 @@
     <string name="ban_complain">Refute ban</string>
     <string name="general_ready">Done</string>
     <string name="buying_store_ok">Purchase successfully completed</string>
+    <string name="buying_store_fail">Unable to complete your purchase.</string>
     <string name="vip_privileges">VIP Privileges</string>
     <string name="vip_rest">You have a VIP-status subscription</string>
     <string name="vip_invis">Invisibility Mode</string>
@@ -399,7 +400,7 @@
     <string name="save">Save</string>
     <string name="saving_in_progress">Saving…</string>
     <string name="confirmation_successfully_sent">Confirmation was successfully sent to your email.</string>
-    <string name="email_successfully_confirmed">Email succesfully confirmed</string>
+    <string name="email_successfully_confirmed">Email successfully confirmed</string>
     <string name="email_not_confirmed">Email has not been confirmed</string>
     <string name="email_already_confirmed">Already confirmed</string>
     <string name="password_confirmation_hint">Confirm password</string>
@@ -437,7 +438,7 @@
     <string name="general_bookmarks_delete">Delete from favorites</string>
     <string name="general_bookmarks_add">Add to favorites</string>
     <string name="buy_resources">Refill</string>
-    <string name="user_is_banned">User has beenbanned.</string>
+    <string name="user_is_banned">User has been banned.</string>
     <string name="profile_empty_name">The name field cannot be empty.</string>
     <string name="general_wrong_photo_upload">Your photo violates the photo rules. Try to take another one.</string>
     <string name="general_input_email">Enter your email</string>
@@ -548,8 +549,8 @@
     <string name="skip_all">Skip all</string>
     <string name="settings_feedback_transaction_number">Order number</string>
     <string name="settings_feedback_transaction_link">Where do I find my order number?</string>
-    <string name="general_logout_error">An error occured during logout. Please try again.</string>
-    <string name="auth_btn_ok">Log in with Odnoklassniki</string>
+    <string name="general_logout_error">An error occurred during logout. Please try again.</string>
+    <string name="auth_btn_ok">Odnoklassniki</string>
     <string name="auth_btn_tf">Topface Account</string>
     <string name="birthday">Birthday</string>
     <string name="other_auth">Login with other services</string>

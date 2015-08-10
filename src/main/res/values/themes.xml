@@ -60,7 +60,6 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-
     <style name="NoWindowAnimation" parent="Theme.Topface">
         <item name="android:windowAnimationStyle">@null</item>
     </style>

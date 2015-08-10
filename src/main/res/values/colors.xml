@@ -79,6 +79,7 @@
     <color name="gray_divider">#E5E5E5</color>
     <color name="light_gray">#888888</color>
     <color name="dialog_bg">#F3F3F3</color>
+    <color name="disable_tab_color">#757575</color>
 
 
     <!-- main theme color -->
@@ -96,6 +97,27 @@
     <color name="trial_popup_background">#242429</color>
 
     <color name="default_line_indicator_selected_color">@color/blue_holo_selected</color>
+    <color name="dialog_title_text_color">@color/blue_holo_selected</color>
+
+    <!-- Big gray buttons states color -->
+    <color name="button_gray_bg_pressed_color">#fcfcfc</color>
+    <color name="button_gray_bg_released_color">#efefef</color>
+    <color name="button_gray_bg_disable_color">#f9f9f9</color>
+
+    <!-- Big blue buttons states color -->
+    <color name="button_blue_bg_pressed_color">#62c4f5</color>
+    <color name="button_blue_bg_released_color">#03a9f4</color>
+    <color name="button_blue_bg_disable_color">#b3e5fb</color>
+
+    <!-- Big red buttons states color -->
+    <color name="button_red_bg_pressed_color">#ef5350</color>
+    <color name="button_red_bg_released_color">#bf4240</color>
+    <color name="button_red_bg_disable_color">#fab9b9</color>
+
+    <!-- Big white buttons states color -->
+    <color name="button_white_bg_pressed_color">#efefef</color>
+    <color name="button_white_bg_released_color">#fcfcfc</color>
+    <color name="button_white_bg_disable_color">#f9f9f9</color>
 
     <!--Button gray text color in different states-->
     <color name="button_gray_text_pressed_color">#4B4B4B</color>

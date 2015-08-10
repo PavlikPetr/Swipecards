@@ -45,7 +45,7 @@
     <string name="profile_form_character_female_3">Acquiescent</string>
     <string name="profile_form_character_female_4">Calm</string>
     <string name="profile_form_character_female_5">Restless</string>
-    <string name="profile_form_character_female_6">Noone\'s complained yet</string>
+    <string name="profile_form_character_female_6">No one\'s complained yet</string>
     <string name="profile_form_alcohol_male_0">Quite happy without it</string>
     <string name="profile_form_alcohol_male_1">No more</string>
     <string name="profile_form_alcohol_male_2">Sometimes</string>
@@ -221,7 +221,7 @@
     <string name="form_habits_restaurants_1">Favorite restaurants</string>
     <string name="form_habits_restaurants_2">Your favorite restaurants</string>
     <string name="form_habits_restaurants_3">Your favorite restaurants</string>
-    <string name="form_detail_about_dating_0">About your first date  with a girl</string>
+    <string name="form_detail_about_dating_0">About your first date with a girl</string>
     <string name="form_detail_about_dating_1">About your ideal first date</string>
     <string name="form_detail_about_dating_2">What would your first date with a girl be like?</string>
     <string name="form_detail_about_dating_3">Describe your perfect date</string>

@@ -126,8 +126,6 @@
     <string name="general_visitors">Гості</string>
     <string name="general_profile">Профіль</string>
     <string name="general_settings">Налаштування</string>
-    <string name="auth_btn_vk">Увійти через ВКонтакте</string>
-    <string name="auth_btn_fb">Увійти через Facebook</string>
     <string name="auth_retry">Повторити спробу</string>
     <string name="dating_header_girls">Дівчата від %1$d до %2$d</string>
     <string name="dating_header_guys">Хлопці від %1$d до %2$d</string>
@@ -427,7 +425,6 @@
     <string name="general_delete_messages">Видалити повідомлення</string>
     <string name="settings_feedback_transaction_number">Номер замовлення</string>
     <string name="general_logout_error">На жаль, не вдалося вийти з аккаунта</string>
-    <string name="auth_btn_ok">Увійти через Odnoklassniki</string>
     <string name="delete_visitors">Видалити гостей</string>
     <string name="delete_admirations">Видалити захоплення</string>
     <string name="general_admirations">Захоплення</string>

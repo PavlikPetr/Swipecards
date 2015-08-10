@@ -155,8 +155,6 @@
     <string name="general_visitors_tab_views">Shlédnutí</string>
     <string name="general_profile">Profil</string>
     <string name="general_settings">Nastavení</string>
-    <string name="auth_btn_vk">Přihlásit se přes VKontakte</string>
-    <string name="auth_btn_fb">Přihlásit se přes Facebook</string>
     <string name="auth_retry">Opakujte ještě jednou</string>
     <string name="dating_header_girls">Slečny od %1$d do %2$d</string>
     <string name="dating_header_guys">Muží od %1$d do %2$d</string>
@@ -514,7 +512,6 @@
     <string name="settings_feedback_transaction_number">Číslo objednávky</string>
     <string name="settings_feedback_transaction_link">Kde mohu najít číslo objednávky?</string>
     <string name="general_logout_error">Je nám líto, odhlášení se nepodařilo</string>
-    <string name="auth_btn_ok">Přihlásit se přes Odnoklassniki</string>
     <string name="other_auth">Přihlásit se přes jinou obsluhu</string>
     <string name="settings_feedback_transaction_number_hint">Zadejte číslo objednávky</string>
     <string name="delete_visitors">Smazat hosty</string>

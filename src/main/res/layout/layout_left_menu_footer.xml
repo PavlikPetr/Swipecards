@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/bg_left_menu_item_selector"
-    android:padding="16dp">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LeftMenuViewStyle">
 
     <ImageView
         android:id="@+id/image_icon"
@@ -13,12 +9,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/ic_balance_selector"/>
+        android:background="@drawable/ic_balance_selector" />
 
     <com.topface.IllustratedTextView.IllustratedTextView
         android:id="@+id/btnMenu"
-        android:layout_toRightOf="@id/image_icon"
+        style="@style/LeftMenuButtons"
         android:layout_centerVertical="true"
-        style="@style/LeftMenuButtons"/>
+        android:layout_toRightOf="@id/image_icon" />
 
 </RelativeLayout>

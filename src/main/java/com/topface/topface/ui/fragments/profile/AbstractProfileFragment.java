@@ -17,6 +17,7 @@ import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.fragments.AnimatedFragment;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
+import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
@@ -32,12 +33,15 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     public static final String INTENT_IS_ADD_TO_FAVORITS_AVAILABLE = "intent_profile_is_add_to_favorits_available";
     public static final String ADD_PHOTO_INTENT = "com.topface.topface.ADD_PHOTO_INTENT";
     public static final String CURRENT_BODY_PAGE = "CURRENT_BODY_PAGE";
+    public static final int DEFAULT_PAGE = 0;
+
     // state
     private ArrayList<String> BODY_PAGES_TITLES = new ArrayList<>();
     private ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<>();
     private UserPhotoFragment mUserPhotoFragment;
     private AbstractFormFragment mFormFragment;
     private Profile mProfile = null;
+    private TabLayoutCreator mTabLayoutCreator;
     ProfileInnerUpdater mProfileUpdater = new ProfileInnerUpdater() {
         @Override
         public void update() {
@@ -69,6 +73,9 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
 
         @Override
         public void onPageSelected(int position) {
+            if (mTabLayoutCreator != null) {
+                mTabLayoutCreator.setTabTitle(position);
+            }
             List<Fragment> fragments = getChildFragmentManager().getFragments();
             if (fragments != null) {
                 for (Fragment fragment : fragments) {
@@ -86,13 +93,15 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
         }
     };
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View root = inflater.inflate(R.layout.fragment_profile, null);
         ButterKnife.bind(this, root);
         initBodyPages(root);
-        // start pages initialization
+        mTabLayoutCreator = new TabLayoutCreator(getActivity(), mBodyPager, mTabLayout, BODY_PAGES_TITLES, null);
+        mTabLayoutCreator.setTabTitle(DEFAULT_PAGE);
         return root;
     }
 

@@ -39,7 +39,7 @@
             android:gravity="left|center_vertical" />
 
         <Button
-            style="@style/FlatButton.Blue"
+            style="@style/Widget.Topface.Button.Big.Blue"
             android:id="@+id/btnSave"
             android:layout_marginTop="16dp"
             android:layout_width="fill_parent"

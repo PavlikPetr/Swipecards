@@ -173,6 +173,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private BroadcastReceiver mProfileReceiver;
     private boolean mNeedMore;
     private int mLoadedCount;
+    private boolean isHideAdmirations;
     private ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
 
         @Override
@@ -317,9 +318,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
-
+        isHideAdmirations = CacheProfile.getOptions().isHideAdmirations;
         mRoot = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_dating, null);
-
         initViews(mRoot);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
         initEmptySearchDialog(mRoot);
@@ -327,7 +327,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mCurrentUser != null) {
             fillUserInfo(mCurrentUser);
         }
-        if (CacheProfile.getOptions().isHideAdmirations) {
+        if (isHideAdmirations) {
             mDatingCounter.setVisibility(View.GONE);
             mDatingResources.setVisibility(View.GONE);
         }
@@ -417,7 +417,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         mAnimationHelper = new AnimationHelper(getActivity(), R.anim.fade_in, R.anim.fade_out);
         mAnimationHelper.addView(mDatingCounter);
-        mAnimationHelper.addView(mDatingResources);
         mAnimationHelper.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -440,16 +439,15 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         });
 
         ViewStub stub = (ViewStub) root.findViewById(R.id.vfDatingButtons);
-        stub.setLayoutResource(CacheProfile.getOptions().isHideAdmirations ? R.layout.hide_admiration_dating_buttons : R.layout.dating_buttons);
+        stub.setLayoutResource(isHideAdmirations ? R.layout.hide_admiration_dating_buttons : R.layout.dating_buttons);
         mDatingButtons = stub.inflate();
         initControlButtons(root);
         initInstantMessageController(mRoot);
-        if (!CacheProfile.getOptions().isHideAdmirations) {
+        if (!isHideAdmirations) {
             // Dating controls
             mDatingLoveBtnLayout = (RelativeLayout) root.findViewById(R.id.loDatingLove);
             mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
 
-            mAnimationHelper.addView(mDatingCounter);
             mAnimationHelper.addView(mDatingResources);
         }
     }
@@ -494,7 +492,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void initControlButtons(View view) {
         // Control Buttons
-        if (!CacheProfile.getOptions().isHideAdmirations) {
+        if (!isHideAdmirations) {
             mDelightBtn = (Button) view.findViewById(R.id.btnDatingAdmiration);
             mDelightBtn.setOnClickListener(this);
         }
@@ -889,7 +887,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         Resources res = getResources();
 
         setUserOnlineStatus(currUser);
-        if (!CacheProfile.getOptions().isHideAdmirations) {
+        if (!isHideAdmirations) {
             setUserSex(currUser, res);
             setLikeButtonDrawables(currUser);
         }
@@ -1032,7 +1030,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void unlockControls() {
         mProgressBar.setVisibility(View.GONE);
-        if (!mIsHide && !CacheProfile.getOptions().isHideAdmirations) {
+        if (!mIsHide && !isHideAdmirations) {
             mDatingCounter.setVisibility(View.VISIBLE);
             mUserInfoStatus.setVisibility(View.VISIBLE);
         } else {
