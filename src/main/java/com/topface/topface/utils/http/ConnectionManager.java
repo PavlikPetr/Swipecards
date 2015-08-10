@@ -344,31 +344,6 @@ public class ConnectionManager {
         final Context context = apiRequest.getContext();
         if (apiRequest.getHandler() != null && context != null && context instanceof Activity) {
             needResend = true;
-//            apiRequest.getHandler().post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    RetryDialog retryDialog = new RetryDialog(
-//                            context.getString(R.string.general_maintenance),
-//                            context,
-//                            apiRequest
-//                    );
-//                    retryDialog.setButton(
-//                            Dialog.BUTTON_POSITIVE,
-//                            context.getString(R.string.general_dialog_retry),
-//                            new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    apiRequest.exec();
-//                                }
-//                            }
-//                    );
-//                    try {
-//                        retryDialog.show();
-//                    } catch (Exception e) {
-//                        Debug.error(e);
-//                    }
-//                }
-//            });
         }
 
         return needResend;
