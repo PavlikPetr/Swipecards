@@ -34,8 +34,6 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.geo.GeoLocationManager;
 
-import org.json.JSONObject;
-
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -79,6 +77,14 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         mGeoLocationManager = new GeoLocationManager(getActivity());
         mGeoLocationManager.registerProvidersChangedActionReceiver();
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void allViewsInitialized() {
+        super.allViewsInitialized();
+        if (mGeoLocationManager.getEnabledProvider() == GeoLocationManager.NavigationType.DISABLE) {
+            onEmptyFeed(ErrorCodes.CANNOT_GET_GEO);
+        }
     }
 
     @Override
