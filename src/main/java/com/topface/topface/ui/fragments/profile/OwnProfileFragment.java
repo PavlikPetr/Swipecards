@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.IUniversalUser;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.UniversalUserFactory;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
@@ -71,6 +72,10 @@ public class OwnProfileFragment extends OwnAvatarFragment {
             }
         };
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+        showTakePhotoDialog();
+    }
+
+    private void showTakePhotoDialog() {
         TakePhotoDialog takePhotoDialog = (TakePhotoDialog) mPhotoTaker.getActivityFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
         if (CacheProfile.photo == null && mAddPhotoHelper != null && takePhotoDialog == null && !App.getConfig().getUserConfig().isUserAvatarAvailable()) {
             mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
@@ -184,5 +189,18 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     @Override
     protected void initOverflowMenuActions(OverflowMenu overflowMenu) {
         overflowMenu.initOverfowMenu();
+    }
+
+    @Override
+    public void onAvatarClick() {
+        Profile profile = getProfile();
+        if (profile != null && profile.photo != null) {
+            startActivity(PhotoSwitcherActivity.
+                    getPhotoSwitcherIntent(profile.gifts, profile.photo.position,
+                            profile.uid, profile.photosCount,
+                            profile.photos));
+        } else {
+            showTakePhotoDialog();
+        }
     }
 }
