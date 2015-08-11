@@ -10,15 +10,14 @@ import android.os.CountDownTimer;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.AdapterView;
@@ -30,8 +29,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
-import com.topface.PullToRefreshBase;
-import com.topface.PullToRefreshListView;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
@@ -70,6 +67,7 @@ import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.ui.views.SwipeRefreshController;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
@@ -87,13 +85,17 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnItemClick;
+import butterknife.OnItemLongClick;
+import butterknife.OnTouch;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
-import static android.widget.AdapterView.OnItemClickListener;
 import static com.topface.topface.utils.CountersManager.NULL_METHOD;
 
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
@@ -114,13 +116,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private int currentCounter;
     private boolean isCurrentCounterChanged;
 
-    protected PullToRefreshListView mListView;
     protected FeedAdapter<T> mListAdapter;
     protected boolean mIsUpdating;
-    protected View mLockView;
+    private SwipeRefreshLayout mSwipeRefresh;
     private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
     private RetryViewCreator mRetryView;
-    private RelativeLayout mContainer;
     private BroadcastReceiver mReadItemReceiver;
     private BannersController mBannersController;
     private TextView mActionModeTitle;
@@ -132,7 +132,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private Func1<FeedList<T>, Boolean> mFilterNotNull = new Func1<FeedList<T>, Boolean>() {
         @Override
         public Boolean call(FeedList<T> ts) {
-            return ts != null && ts.size() > 0;
+            return ts != null && !ts.isEmpty();
         }
     };
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
@@ -144,7 +144,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     };
     private boolean isDeletable = true;
-    private ViewStub mEmptyScreenStub;
     private boolean needUpdate = false;
     private BroadcastReceiver mBlacklistedReceiver = new BroadcastReceiver() {
         @Override
@@ -180,6 +179,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             }
         }
     };
+
+    @Bind(R.id.feedContainer)
+    RelativeLayout mContainer;
+    @Bind(R.id.lvFeedList)
+    ListView mListView;
+    @Bind(R.id.llvFeedLoading)
+    View mLockView;
+    @Bind(R.id.stubForEmptyFeed)
+    ViewStub mEmptyScreenStub;
 
     public void saveToCache() {
         FeedList<T> data = getListAdapter().getDataForCache();
@@ -318,9 +326,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         super.onCreateView(inflater, container, saved);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mRefreshReceiver, new IntentFilter(REFRESH_DIALOGS));
         View root = inflater.inflate(getLayout(), null);
-        mContainer = (RelativeLayout) root.findViewById(R.id.feedContainer);
+        ButterKnife.bind(this, root);
         initNavigationBar();
-        mLockView = root.findViewById(R.id.llvFeedLoading);
         mLockView.setVisibility(View.GONE);
         init();
 
@@ -387,7 +394,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 }
             }
             mListAdapter.setData(feedsList);
-            mListView.getRefreshableView().setSelection(saved.getInt(POSITION, 0));
+            mListView.setSelection(saved.getInt(POSITION, 0));
             if (!mListAdapter.isEmpty()) {
                 mBackgroundController.hide();
             }
@@ -407,13 +414,25 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     private void initViews(View root) {
         initBackground(root);
-        initListView(root);
+        initSwipeRefresh(root);
+        initListView();
         initRetryViews();
-        initViewStubForEmptyFeed(root);
+        initViewStubForEmptyFeed();
     }
 
-    protected void initViewStubForEmptyFeed(View root) {
-        mEmptyScreenStub = (ViewStub) root.findViewById(R.id.stubForEmptyFeed);
+    private void initSwipeRefresh(View root) {
+        mSwipeRefresh = new SwipeRefreshController((SwipeRefreshLayout) root.findViewById(R.id.swipeRefresh)).getSwipeRefreshLayout();
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwipeRefresh.setRefreshing(true);
+                updateData(true, true);
+            }
+        });
+        mSwipeRefresh.setEnabled(isSwipeRefreshEnable());
+    }
+
+    protected void initViewStubForEmptyFeed() {
         try {
             mEmptyScreenStub.setLayoutResource(getEmptyFeedLayout());
         } catch (Exception ex) {
@@ -451,7 +470,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (type != FeedsCache.FEEDS_TYPE.UNKNOWN_TYPE) {
             final Type dataType = getFeedListDataType();
             String fromCacheString = App.getFeedsCache().getFeedFromCache(type);
-            Debug.log("");
             Observable<FeedList<T>> mCacheObservable = Observable
                     .just((FeedList<T>) JsonUtils.fromJson(fromCacheString, dataType))
                     .filter(mFilterNotNull);
@@ -474,14 +492,18 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 @Override
                 public void call(FeedList<T> ts) {
                     Debug.log("OBSERVABLE mResponseSubscription " + type + " size " + ts.size());
-                    if (!mCacheSubscription.isUnsubscribed()) {
-                        mCacheSubscription.unsubscribe();
-                    }
-                    mResponseSubscriber = null;
+                    unsubscribeAllObservable();
                     processSuccessUpdate(new FeedListData<>(ts, true, getFeedListItemClass()));
                 }
             });
         }
+    }
+
+    private void unsubscribeAllObservable() {
+        if (!mCacheSubscription.isUnsubscribed()) {
+            mCacheSubscription.unsubscribe();
+        }
+        mResponseSubscriber = null;
     }
 
     private void processSuccessUpdate(FeedListData<T> tFeedListData) {
@@ -519,8 +541,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         // try update list if last visible item is loader,
         // and loading was probably interrupted
         adapter.loadOlderItemsIfNeeded(
-                mListView.getRefreshableView().getFirstVisiblePosition(),
-                mListView.getRefreshableView().getChildCount(),
+                mListView.getFirstVisiblePosition(),
+                mListView.getChildCount(),
                 adapter.getCount());
         if (!adapter.isEmpty()) {
             adapter.refreshAdItem();
@@ -538,9 +560,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
         saveToCache();
         finishMultiSelection();
-        if (mListView.isRefreshing()) {
-            mListView.onRefreshComplete();
-        }
     }
 
     @Override
@@ -564,7 +583,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (mListAdapter != null) {
             FeedList<T> data = mListAdapter.getData();
             outState.putParcelableArray(FEEDS, data.toArray(new Parcelable[data.size()]));
-            outState.putInt(POSITION, mListView.getRefreshableView().getFirstVisiblePosition());
+            outState.putInt(POSITION, mListView.getFirstVisiblePosition());
             outState.putBoolean(HAS_AD, mListAdapter.hasFeedAd());
             outState.putParcelable(FEED_AD, mListAdapter.getFeedAd());
             outState.putInt(BLACK_LIST_USER, mIdForRemove);
@@ -596,21 +615,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         return R.layout.fragment_feed;
     }
 
-    private void initListView(View view) {
+    private void initListView() {
         // ListView
-
-        mListView = (PullToRefreshListView) view.findViewById(R.id.lvFeedList);
-        mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
-            @Override
-            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                updateData(true, true);
-            }
-        });
-
         mListAdapter = createNewAdapter();
 
         FeedAnimatedAdapter animationAdapter = new FeedAnimatedAdapter(mListAdapter);
-        animationAdapter.setAbsListView(mListView.getRefreshableView());
+        animationAdapter.setAbsListView(mListView);
 
         FeedAdapter<T> adapter = getListAdapter();
         adapter.setOnAvatarClickListener(this);
@@ -623,11 +633,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                         adapter
                 )
         );
-
-        mListView.getRefreshableView().setAdapter(animationAdapter);
-        mListView.getRefreshableView().setOnItemClickListener(getOnItemClickListener());
-        mListView.getRefreshableView().setOnTouchListener(getListViewOnTouchListener());
-        mListView.getRefreshableView().setOnItemLongClickListener(getOnItemLongClickListener());
+        mListView.setAdapter(animationAdapter);
     }
 
     /**
@@ -648,53 +654,44 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         };
     }
 
-    protected OnItemClickListener getOnItemClickListener() {
-        return new OnItemClickListener() {
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long itemPosition) {
-                final FeedAdapter<T> adapter = getListAdapter();
-                if (adapter.isMultiSelectionMode()) {
-                    adapter.onSelection((int) itemPosition);
-                } else {
-                    T item = (T) parent.getItemAtPosition(position);
-                    if (item != null) {
-                        if (!mIsUpdating && item.isRetrier()) {
-                            updateUI(new Runnable() {
-                                public void run() {
-                                    adapter.showLoaderItem();
-                                }
-                            });
-                            updateData(false, true, false);
-                        } else {
-                            try {
-                                onFeedItemClick(item);
-                            } catch (Exception e) {
-                                Debug.error("FeedItem click error:", e);
-                            }
+    @SuppressWarnings("unused")
+    @OnItemClick(R.id.lvFeedList)
+    protected void listOnItemClickListener(AdapterView<?> parent, int position, long itemPosition) {
+        final FeedAdapter<T> adapter = getListAdapter();
+        if (adapter.isMultiSelectionMode()) {
+            adapter.onSelection((int) itemPosition);
+        } else {
+            T item = (T) parent.getItemAtPosition(position);
+            if (item != null) {
+                if (!mIsUpdating && item.isRetrier()) {
+                    updateUI(new Runnable() {
+                        public void run() {
+                            adapter.showLoaderItem();
                         }
+                    });
+                    updateData(false, true, false);
+                } else {
+                    try {
+                        onFeedItemClick(item);
+                    } catch (Exception e) {
+                        Debug.error("FeedItem click error:", e);
                     }
                 }
             }
-        };
+        }
     }
 
-    protected AdapterView.OnItemLongClickListener getOnItemLongClickListener() {
-        return new AdapterView.OnItemLongClickListener() {
-            @SuppressWarnings("deprecation")
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long itemPosition) {
-                if (isDeletable) {
-                    FeedAdapter<T> adapter = getListAdapter();
-                    ((ActionBarActivity) getActivity()).startSupportActionMode(mActionActivityCallback);
-                    adapter.startMultiSelection(getMultiSelectionLimit());
-                    adapter.onSelection((int) itemPosition);
-                    return true;
-                }
-                return false;
-            }
-
-        };
+    @SuppressWarnings("unused")
+    @OnItemLongClick(R.id.lvFeedList)
+    protected boolean listOnItemLongClickListener(final long itemPosition) {
+        if (isDeletable) {
+            FeedAdapter<T> adapter = getListAdapter();
+            ((ActionBarActivity) getActivity()).startSupportActionMode(mActionActivityCallback);
+            adapter.startMultiSelection(getMultiSelectionLimit());
+            adapter.onSelection((int) itemPosition);
+            return true;
+        }
+        return false;
     }
 
     protected int getMultiSelectionLimit() {
@@ -793,13 +790,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         return getListAdapter().getItem(position);
     }
 
-    protected OnTouchListener getListViewOnTouchListener() {
-        return new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        };
+    @SuppressWarnings("unused")
+    @OnTouch(R.id.lvFeedList)
+    protected boolean listOnTouchListener() {
+        return false;
     }
 
     protected void onFeedItemClick(FeedItem item) {
@@ -892,8 +886,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 @Override
                 protected void success(FeedListData<T> data, IApiResponse response) {
                     if (mResponseSubscriber != null) {
-                        mResponseSubscriber.onNext(data.items);
-
+                        if (data != null) {
+                            if (data.items.isEmpty()) {
+                                unsubscribeAllObservable();
+                                processSuccessUpdate(data, isHistoryLoad, isPullToRefreshUpdating, makeItemsRead, request.getLimit());
+                            } else {
+                                mResponseSubscriber.onNext(data.items);
+                            }
+                        }
                     } else {
                         processSuccessUpdate(data, isHistoryLoad, isPullToRefreshUpdating, makeItemsRead, request.getLimit());
                     }
@@ -908,6 +908,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 @Override
                 public void always(IApiResponse response) {
                     super.always(response);
+                    if (mSwipeRefresh.isRefreshing()) {
+                        mSwipeRefresh.setRefreshing(false);
+                    }
                     mBackgroundController.hide();
                     mIsUpdating = false;
                 }
@@ -938,7 +941,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 Utils.showErrorMessage();
             }
             onUpdateFail(isPullToRefreshUpdating || isHistoryLoad);
-            mListView.onRefreshComplete();
         }
     }
 
@@ -974,7 +976,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             adapter.setData(data);
         }
         onUpdateSuccess(isPullToRefreshUpdating || isHistoryLoad);
-        mListView.onRefreshComplete();
         showListViewWithSuccessResponse();
     }
 
@@ -1208,7 +1209,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     }
 
-    public PullToRefreshListView getListView() {
+    public ListView getListView() {
         return mListView;
     }
 
@@ -1319,5 +1320,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (activity != null) {
             activity.setToolBarVisibility(isVisible);
         }
+    }
+
+    protected boolean isSwipeRefreshEnable() {
+        return true;
     }
 }
