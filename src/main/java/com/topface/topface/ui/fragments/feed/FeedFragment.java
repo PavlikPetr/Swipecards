@@ -17,9 +17,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.AdapterView;
@@ -87,13 +85,17 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnItemClick;
+import butterknife.OnItemLongClick;
+import butterknife.OnTouch;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
-import static android.widget.AdapterView.OnItemClickListener;
 import static com.topface.topface.utils.CountersManager.NULL_METHOD;
 
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
@@ -114,14 +116,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private int currentCounter;
     private boolean isCurrentCounterChanged;
 
-    protected ListView mListView;
     protected FeedAdapter<T> mListAdapter;
     protected boolean mIsUpdating;
-    protected View mLockView;
     private SwipeRefreshLayout mSwipeRefresh;
     private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
     private RetryViewCreator mRetryView;
-    private RelativeLayout mContainer;
     private BroadcastReceiver mReadItemReceiver;
     private BannersController mBannersController;
     private TextView mActionModeTitle;
@@ -145,7 +144,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     };
     private boolean isDeletable = true;
-    private ViewStub mEmptyScreenStub;
     private boolean needUpdate = false;
     private BroadcastReceiver mBlacklistedReceiver = new BroadcastReceiver() {
         @Override
@@ -181,6 +179,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             }
         }
     };
+
+    @Bind(R.id.feedContainer)
+    RelativeLayout mContainer;
+    @Bind(R.id.lvFeedList)
+    ListView mListView;
+    @Bind(R.id.llvFeedLoading)
+    View mLockView;
+    @Bind(R.id.stubForEmptyFeed)
+    ViewStub mEmptyScreenStub;
 
     public void saveToCache() {
         FeedsCache.FEEDS_TYPE type = getFeedsType();
@@ -305,9 +312,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         super.onCreateView(inflater, container, saved);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mRefreshReceiver, new IntentFilter(REFRESH_DIALOGS));
         View root = inflater.inflate(getLayout(), null);
-        mContainer = (RelativeLayout) root.findViewById(R.id.feedContainer);
+        ButterKnife.bind(this, root);
         initNavigationBar();
-        mLockView = root.findViewById(R.id.llvFeedLoading);
         mLockView.setVisibility(View.GONE);
         init();
 
@@ -395,9 +401,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private void initViews(View root) {
         initBackground(root);
         initSwipeRefresh(root);
-        initListView(root);
+        initListView();
         initRetryViews();
-        initViewStubForEmptyFeed(root);
+        initViewStubForEmptyFeed();
     }
 
     private void initSwipeRefresh(View root) {
@@ -412,8 +418,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         mSwipeRefresh.setEnabled(isSwipeRefreshEnable());
     }
 
-    protected void initViewStubForEmptyFeed(View root) {
-        mEmptyScreenStub = (ViewStub) root.findViewById(R.id.stubForEmptyFeed);
+    protected void initViewStubForEmptyFeed() {
         try {
             mEmptyScreenStub.setLayoutResource(getEmptyFeedLayout());
         } catch (Exception ex) {
@@ -596,10 +601,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         return R.layout.fragment_feed;
     }
 
-    private void initListView(View view) {
+    private void initListView() {
         // ListView
-
-        mListView = (ListView) view.findViewById(R.id.lvFeedList);
         mListAdapter = createNewAdapter();
 
         FeedAnimatedAdapter animationAdapter = new FeedAnimatedAdapter(mListAdapter);
@@ -616,11 +619,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                         adapter
                 )
         );
-
         mListView.setAdapter(animationAdapter);
-        mListView.setOnItemClickListener(getOnItemClickListener());
-        mListView.setOnTouchListener(getListViewOnTouchListener());
-        mListView.setOnItemLongClickListener(getOnItemLongClickListener());
     }
 
     /**
@@ -641,53 +640,44 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         };
     }
 
-    protected OnItemClickListener getOnItemClickListener() {
-        return new OnItemClickListener() {
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long itemPosition) {
-                final FeedAdapter<T> adapter = getListAdapter();
-                if (adapter.isMultiSelectionMode()) {
-                    adapter.onSelection((int) itemPosition);
-                } else {
-                    T item = (T) parent.getItemAtPosition(position);
-                    if (item != null) {
-                        if (!mIsUpdating && item.isRetrier()) {
-                            updateUI(new Runnable() {
-                                public void run() {
-                                    adapter.showLoaderItem();
-                                }
-                            });
-                            updateData(false, true, false);
-                        } else {
-                            try {
-                                onFeedItemClick(item);
-                            } catch (Exception e) {
-                                Debug.error("FeedItem click error:", e);
-                            }
+    @SuppressWarnings("unused")
+    @OnItemClick(R.id.lvFeedList)
+    protected void listOnItemClickListener(AdapterView<?> parent, int position, long itemPosition) {
+        final FeedAdapter<T> adapter = getListAdapter();
+        if (adapter.isMultiSelectionMode()) {
+            adapter.onSelection((int) itemPosition);
+        } else {
+            T item = (T) parent.getItemAtPosition(position);
+            if (item != null) {
+                if (!mIsUpdating && item.isRetrier()) {
+                    updateUI(new Runnable() {
+                        public void run() {
+                            adapter.showLoaderItem();
                         }
+                    });
+                    updateData(false, true, false);
+                } else {
+                    try {
+                        onFeedItemClick(item);
+                    } catch (Exception e) {
+                        Debug.error("FeedItem click error:", e);
                     }
                 }
             }
-        };
+        }
     }
 
-    protected AdapterView.OnItemLongClickListener getOnItemLongClickListener() {
-        return new AdapterView.OnItemLongClickListener() {
-            @SuppressWarnings("deprecation")
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, final long itemPosition) {
-                if (isDeletable) {
-                    FeedAdapter<T> adapter = getListAdapter();
-                    ((ActionBarActivity) getActivity()).startSupportActionMode(mActionActivityCallback);
-                    adapter.startMultiSelection(getMultiSelectionLimit());
-                    adapter.onSelection((int) itemPosition);
-                    return true;
-                }
-                return false;
-            }
-
-        };
+    @SuppressWarnings("unused")
+    @OnItemLongClick(R.id.lvFeedList)
+    protected boolean listOnItemLongClickListener(final long itemPosition) {
+        if (isDeletable) {
+            FeedAdapter<T> adapter = getListAdapter();
+            ((ActionBarActivity) getActivity()).startSupportActionMode(mActionActivityCallback);
+            adapter.startMultiSelection(getMultiSelectionLimit());
+            adapter.onSelection((int) itemPosition);
+            return true;
+        }
+        return false;
     }
 
     protected int getMultiSelectionLimit() {
@@ -786,13 +776,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         return getListAdapter().getItem(position);
     }
 
-    protected OnTouchListener getListViewOnTouchListener() {
-        return new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        };
+    @SuppressWarnings("unused")
+    @OnTouch(R.id.lvFeedList)
+    protected boolean listOnTouchListener() {
+        return false;
     }
 
     protected void onFeedItemClick(FeedItem item) {
