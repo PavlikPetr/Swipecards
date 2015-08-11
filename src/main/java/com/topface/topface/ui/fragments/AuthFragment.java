@@ -256,7 +256,7 @@ public class AuthFragment extends BaseAuthFragment {
         ButterKnife.bind(this, root);
         initViews(root);
         if (savedInstanceState != null && savedInstanceState.containsKey(TF_BUTTONS)) {
-            setSocNetBtnVisibility(savedInstanceState.getBoolean(TF_BUTTONS), true, false);
+            setSocNetBtnVisibility(!savedInstanceState.getBoolean(TF_BUTTONS), true, false);
             setTfLoginBtnVisibility(savedInstanceState.getBoolean(TF_BUTTONS), true, false);
         }
         return root;
@@ -265,7 +265,7 @@ public class AuthFragment extends BaseAuthFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(TF_BUTTONS, !mIsTfBtnHidden);
+        outState.putBoolean(TF_BUTTONS, mIsTfBtnHidden);
     }
 
     @Override
