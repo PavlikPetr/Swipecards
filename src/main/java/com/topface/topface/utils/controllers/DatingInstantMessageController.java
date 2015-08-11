@@ -43,6 +43,7 @@ import com.topface.topface.utils.http.IRequestClient;
  * Controller to handle dating message send footer.
  */
 public class DatingInstantMessageController {
+    public static final String DEFAULT_MESSAGE = "default_message";
 
     private Activity mActivity;
     private IRequestClient mRequestClient;

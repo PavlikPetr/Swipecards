@@ -51,6 +51,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.controllers.ChosenStartAction;
+import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.controllers.SequencedStartAction;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
@@ -124,6 +125,10 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         Intent intent = new Intent(activity, NavigationActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(GCMUtils.NEXT_INTENT, CacheProfile.getOptions().startPageFragmentId);
+        if(App.getUserConfig().getDatingMessage().equals(CacheProfile.getOptions()
+                .instantMessageFromSearch.getText())){
+            intent.putExtra(DatingInstantMessageController.DEFAULT_MESSAGE,true);
+        }
         activity.startActivity(intent);
     }
 
