@@ -277,5 +277,4 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
         mData = null;
         mInflater = null;
     }
-
 }

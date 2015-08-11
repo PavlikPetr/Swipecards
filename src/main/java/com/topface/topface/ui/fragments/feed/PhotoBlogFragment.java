@@ -10,13 +10,11 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.google.gson.reflect.TypeToken;
-import com.topface.PullToRefreshBase;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedPhotoBlog;
-import com.topface.topface.data.FeedPhotoBlogListData;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
@@ -35,8 +33,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
-
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -66,11 +62,15 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     public void onResume() {
         super.onResume();
         initTimer();
-        getListView().setMode(PullToRefreshBase.Mode.DISABLED);
         setDeletable(false);
         if (mAdapter != null) {
             mAdapter.setSympathySentArray(App.getUserConfig().getSympathySentArray());
         }
+    }
+
+    @Override
+    protected boolean isSwipeRefreshEnable() {
+        return false;
     }
 
     @Override
