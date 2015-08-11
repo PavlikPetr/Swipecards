@@ -69,14 +69,10 @@ public class TabLayoutCreator {
             title = mPagesTitles.get(i);
             counter = mPagesCounters == null ? 0 : mPagesCounters.get(i);
             container = mTabViews.get(i);
-            container.titleView.setTextColor(i == position
-                    ? mActivity.getResources().getColor(R.color.tab_text_color)
-                    : mActivity.getResources().getColor(R.color.disable_tab_color));
+            container.titleView.setEnabled(i == position);
             container.titleView.setText(title);
             if (counter > 0) {
-                container.counterView.setTextColor(i == position
-                        ? mActivity.getResources().getColor(R.color.tab_counter_color)
-                        : mActivity.getResources().getColor(R.color.disable_tab_color));
+                container.counterView.setEnabled(i == position);
                 container.counterView.setText(String.valueOf(counter));
             }
         }

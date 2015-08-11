@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/tab_divider"
-        app:tabIndicatorColor="@color/tab_text_color"
+        app:tabIndicatorColor="@color/tab_text_color_selected"
         app:tabGravity="fill" />
 
     <android.support.v4.view.ViewPager
