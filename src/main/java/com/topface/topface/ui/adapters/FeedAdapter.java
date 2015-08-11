@@ -81,10 +81,16 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     public FeedList<T> getDataForCache(int count) {
         FeedList<T> data = getData();
         FeedList<T> result = new FeedList<>();
-        for (int i = 0; i < (data.size() >= count ? count : data.size()); i++) {
-            if (!data.get(i).isAd()) {
-                result.add(data.get(i));
+        int addedCount = 0;
+        int iter = 0;
+        while (addedCount < count && iter < data.size()) {
+            T currentItem = data.get(iter);
+            int itemType = currentItem.type;
+            if (!currentItem.isAd() && itemType != LoadingListAdapter.T_LOADER && itemType != LoadingListAdapter.T_RETRIER && currentItem.user != null) {
+                result.add(currentItem);
+                addedCount++;
             }
+            iter++;
         }
         return result;
     }
@@ -573,6 +579,10 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         List<T> result = new ArrayList<>();
         result.addAll(mSelectionController.getSelected());
         return result;
+    }
+
+    public void removeAllData() {
+        getData().clear();
     }
 
     public void finishMultiSelection() {
