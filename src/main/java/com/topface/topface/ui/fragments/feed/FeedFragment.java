@@ -407,7 +407,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     private void initSwipeRefresh(View root) {
-        mSwipeRefresh = new SwipeRefreshController(root, R.id.swipeRefresh).getSwipeRefreshLayout();
+        mSwipeRefresh = new SwipeRefreshController((SwipeRefreshLayout) root.findViewById(R.id.swipeRefresh)).getSwipeRefreshLayout();
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

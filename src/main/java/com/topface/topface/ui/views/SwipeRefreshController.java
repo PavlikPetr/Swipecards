@@ -3,7 +3,6 @@ package com.topface.topface.ui.views;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.View;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -15,14 +14,8 @@ import com.topface.topface.R;
 public class SwipeRefreshController {
     private SwipeRefreshLayout mSwipeRefresh;
 
-    @SuppressWarnings("unused")
     public SwipeRefreshController(SwipeRefreshLayout swipeRefreshLayout) {
         setSwipeRefreshLayout(swipeRefreshLayout);
-        setDefaultShemeColor();
-    }
-
-    public SwipeRefreshController(View root, int id) {
-        setSwipeRefreshLayout((SwipeRefreshLayout) root.findViewById(id));
         setDefaultShemeColor();
     }
 
@@ -59,5 +52,9 @@ public class SwipeRefreshController {
             return getColorByThemeAttribute(R.attr.colorAccent);
         }
         return R.color.light_theme_color_accent;
+    }
+
+    public void releaseController() {
+        mSwipeRefresh = null;
     }
 }
