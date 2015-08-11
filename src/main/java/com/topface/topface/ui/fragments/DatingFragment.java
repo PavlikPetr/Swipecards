@@ -66,6 +66,7 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.INavigationFragmentsListener;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
@@ -558,7 +559,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 if (isAdded()) {
                     updateFilterData();
                     setHighRatePrice();
-                    if (mDatingInstantMessageController != null) {
+                    Activity activity = getActivity();
+                    if (mDatingInstantMessageController != null
+                            && activity instanceof NavigationActivity
+                            && activity.getIntent().hasExtra(DatingInstantMessageController.DEFAULT_MESSAGE)) {
                         mDatingInstantMessageController.updateMessageIfNeed();
                     }
                 }
