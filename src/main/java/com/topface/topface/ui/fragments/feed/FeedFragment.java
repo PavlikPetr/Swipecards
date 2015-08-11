@@ -133,7 +133,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private Func1<FeedList<T>, Boolean> mFilterNotNull = new Func1<FeedList<T>, Boolean>() {
         @Override
         public Boolean call(FeedList<T> ts) {
-            return ts != null;
+            return ts != null && !ts.isEmpty();
         }
     };
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
