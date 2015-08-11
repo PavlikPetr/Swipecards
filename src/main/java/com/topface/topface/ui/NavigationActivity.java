@@ -109,7 +109,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (CacheProfile.age <= App.getAppOptions().getUserAgeMin()) {
+            if (CacheProfile.age < App.getAppOptions().getUserAgeMin()) {
                 SetAgeDialog.newInstance().show(getSupportFragmentManager(), SetAgeDialog.TAG);
             }
         }
