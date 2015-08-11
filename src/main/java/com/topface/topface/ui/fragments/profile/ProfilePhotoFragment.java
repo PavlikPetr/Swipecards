@@ -251,11 +251,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
                                         App.sendProfileRequest();
                                         break;
                                     case ErrorCodes.CODE_CANNOT_SET_PHOTO_AS_MAIN:
-                                        try {
-                                            Utils.showToastNotification(response.getJsonResult().getString("userMessage"), Toast.LENGTH_SHORT);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
+                                        Utils.showCantSetPhotoAsMainToast(response);
                                         break;
                                     default:
                                         errorStringResource = R.string.general_server_error;

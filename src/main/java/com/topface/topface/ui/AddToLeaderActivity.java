@@ -113,7 +113,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         new ActionBarTitleSetterDelegate(getSupportActionBar()).setActionBarTitles(R.string.general_photoblog, null);
         // init grid view and create adapter
         initPhotosGrid(mPosition, mSelectedPosition);
-        sendAlbumRequest();
         mPhotoTaker = new PhotoTaker(initAddPhotoHelper(), this);
         takePhotoDialog = (TakePhotoDialog) getSupportFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
     }
@@ -299,11 +298,29 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         }
     }
 
-    private LeadersPhotoGridAdapter createAdapter() {
-        Photos photos = new Photos();
-        if(CacheProfile.photo != null){
-            photos.add(CacheProfile.photo);
+    private Photos getPhotoLinks() {
+        Photos photoLinks = new Photos();
+        photoLinks.clear();
+        if (CacheProfile.photos != null) {
+            photoLinks.addAll(CacheProfile.photos);
         }
+        return checkPhotos(photoLinks);
+    }
+
+    private Photos checkPhotos(Photos photos) {
+        Photos result = new Photos();
+        result.clear();
+        for (Photo photo : photos) {
+            if (photo.canBecomeLeader) {
+                result.add(new Photo(photo));
+            }
+        }
+        return result;
+    }
+
+
+    private LeadersPhotoGridAdapter createAdapter() {
+        Photos photos = getPhotoLinks();
         return new LeadersPhotoGridAdapter(this.getApplicationContext(),
                 photos,
                 photos.size(),
@@ -316,16 +333,13 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     }
 
     private void sendAlbumRequest() {
-        if (CacheProfile.photos != null && CacheProfile.photos.size() <= 1) {
+        Photos photoLinks = getAdapter().getAdapterData();
+        if (photoLinks == null || photoLinks.size() < 2) {
             return;
         }
-        int position = 0;
-        Photos photoLinks = getAdapter().getAdapterData();
         mGridFooterView.setVisibility(View.VISIBLE);
-        if (photoLinks != null && photoLinks.size() > 2) {
-            Photo photo = getAdapter().getItem(photoLinks.size() - 2);
-            position = photo.getPosition();
-        }
+        Photo photo = getAdapter().getItem(photoLinks.size() - 2);
+        int position = photo.getPosition();
         AlbumRequest request = new AlbumRequest(
                 this.getApplicationContext(),
                 CacheProfile.uid,

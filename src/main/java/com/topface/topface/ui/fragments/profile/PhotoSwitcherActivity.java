@@ -516,11 +516,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                         finish();
                         break;
                     case ErrorCodes.CODE_CANNOT_SET_PHOTO_AS_MAIN:
-                        try {
-                            Utils.showToastNotification(response.getJsonResult().getString("userMessage"),Toast.LENGTH_SHORT);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        Utils.showCantSetPhotoAsMainToast(response);
                         break;
                     default:
                         Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
