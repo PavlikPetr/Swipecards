@@ -22,13 +22,23 @@ public class AlbumRequest extends LimitedApiRequest {
     private int mFrom;
     private String mMode;
     private int mType;
+    private boolean mForLeaders;
 
+    public AlbumRequest(Context context, int uid, String mode, int type, boolean forLeaders) {
+        this(context, uid, mode, type);
+        mForLeaders = forLeaders;
+    }
 
     public AlbumRequest(Context context, int uid, String mode, int type) {
         super(context);
         mUid = uid;
         mMode = mode;
         mType = type;
+    }
+
+    public AlbumRequest(Context context, int uid, int from, String mode, int type, boolean forLeaders) {
+        this(context, uid, from, mode, type);
+        mForLeaders = forLeaders;
     }
 
     public AlbumRequest(Context context, int uid, int from, String mode, int type) {
@@ -48,6 +58,9 @@ public class AlbumRequest extends LimitedApiRequest {
         }
         if (mMode != null) {
             response.put("mode", mMode);
+        }
+        if (mForLeaders) {
+            response.put("forLeaders", mMode);
         }
 
         return response;

@@ -80,4 +80,5 @@ public class ErrorCodes {
     public static final int CODE_SMS_INVITE_ALREADY_SENT = 65;
     public static final int CODE_SMS_INVITE_ALREADY_REGISTERED = 66;
     public static final int CODE_SMS_INVITE_NOT_FOUND = 67;
+    public static final int CODE_CANNOT_SET_PHOTO_AS_MAIN = 68;
 }

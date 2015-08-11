@@ -36,6 +36,8 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
+import org.json.JSONException;
+
 public class ProfilePhotoFragment extends ProfileInnerFragment implements View.OnClickListener {
 
     private static final String POSITION = "POSITION";
@@ -240,7 +242,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
 
                             @Override
                             public void fail(int codeError, IApiResponse response) {
-                                int errorStringResource;
+                                int errorStringResource = 0;
                                 switch (codeError) {
                                     // если пользователь пытается поставить на аватарку фото, которое было удалено модератором
                                     case ErrorCodes.NON_EXIST_PHOTO_ERROR:
@@ -248,11 +250,16 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
                                         // обновляем профиль пользователя
                                         App.sendProfileRequest();
                                         break;
+                                    case ErrorCodes.CODE_CANNOT_SET_PHOTO_AS_MAIN:
+                                        Utils.showCantSetPhotoAsMainToast(response);
+                                        break;
                                     default:
                                         errorStringResource = R.string.general_server_error;
                                         break;
                                 }
-                                Utils.showToastNotification(errorStringResource, Toast.LENGTH_SHORT);
+                                if (errorStringResource > 0) {
+                                    Utils.showToastNotification(errorStringResource, Toast.LENGTH_SHORT);
+                                }
                             }
 
                             @Override

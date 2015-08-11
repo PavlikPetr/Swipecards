@@ -39,9 +39,11 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -95,6 +97,14 @@ public class Utils {
                     stringId,
                     duration
             ).show();
+        }
+    }
+
+    public static void showCantSetPhotoAsMainToast(IApiResponse response) {
+        try {
+            Utils.showToastNotification(response.getJsonResult().getString("userMessage"), Toast.LENGTH_SHORT);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 

@@ -189,15 +189,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         outState.putBoolean(ALREADY_SHOWN, mIsPhotoDialogShown);
     }
 
-    private Photos getPhotoLinks() {
-        Photos photoLinks = new Photos();
-        photoLinks.clear();
-        if (CacheProfile.photos != null) {
-            photoLinks.addAll(CacheProfile.photos);
-        }
-        return checkPhotos(photoLinks);
-    }
-
     private View getHeaderView() {
         View headerView = getLayoutInflater().inflate(R.layout.add_leader_grid_view_header, null);
         mEditText = (EditText) headerView.findViewById(R.id.yourGreetingEditText);
@@ -280,20 +271,9 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     }
 
 
-    private Photos checkPhotos(Photos photos) {
-        Photos result = new Photos();
-        result.clear();
-        for (Photo photo : photos) {
-            if (photo.canBecomeLeader || CacheProfile.getOptions().minLeadersPercent == 0) {
-                result.add(new Photo(photo));
-            }
-        }
-        return result;
-    }
-
     private LeadersPhotoGridAdapter getAdapter() {
         if (mUsePhotosAdapter == null) {
-            mUsePhotosAdapter = createAdapter(mPhotos);
+            mUsePhotosAdapter = createAdapter();
         }
         return mUsePhotosAdapter;
     }
@@ -318,10 +298,32 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         }
     }
 
-    private LeadersPhotoGridAdapter createAdapter(Photos photos) {
+    private Photos getPhotoLinks() {
+        Photos photoLinks = new Photos();
+        photoLinks.clear();
+        if (CacheProfile.photos != null) {
+            photoLinks.addAll(CacheProfile.photos);
+        }
+        return checkPhotos(photoLinks);
+    }
+
+    private Photos checkPhotos(Photos photos) {
+        Photos result = new Photos();
+        result.clear();
+        for (Photo photo : photos) {
+            if (photo.canBecomeLeader) {
+                result.add(new Photo(photo));
+            }
+        }
+        return result;
+    }
+
+
+    private LeadersPhotoGridAdapter createAdapter() {
+        Photos photos = getPhotoLinks();
         return new LeadersPhotoGridAdapter(this.getApplicationContext(),
-                photos == null ? getPhotoLinks() : photos,
-                photos == null ? CacheProfile.totalPhotos : photos.size(),
+                photos,
+                photos.size(),
                 mGridView.getGridViewColumnWidth(), new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
@@ -343,7 +345,8 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                 CacheProfile.uid,
                 position + 1,
                 AlbumRequest.MODE_ALBUM,
-                AlbumLoadController.FOR_GALLERY
+                AlbumLoadController.FOR_GALLERY,
+                true
         );
         request.callback(new DataApiHandler<AlbumPhotos>() {
 
