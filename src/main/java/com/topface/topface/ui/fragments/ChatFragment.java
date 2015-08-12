@@ -613,17 +613,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     mIsUpdating = true;
                     super.exec();
                 } else {
-                    new BackgroundThread() {
-                        @Override
-                        public void execute() {
-                            HockeySender sender = new HockeySender();
-                            try {
-                                sender.send(getContext(), sender.createLocalReport(getContext(), new Exception("User id -1 from " + mFrom)));
-                            } catch (ReportSenderException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    };
+                    Utils.sendHockeyMessage(getContext(), "User id -1 from " + mFrom);
                 }
             }
         };

@@ -33,6 +33,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
@@ -41,8 +42,10 @@ import com.topface.topface.Static;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.social.AuthToken;
 
+import org.acra.sender.ReportSenderException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -410,4 +413,19 @@ public class Utils {
     public static String replaceDashWithHyphen(String text) {
         return Html.fromHtml(text.replaceAll(DASH_SYMBOL, HYPHEN_SYMBOL)).toString();
     }
+
+    public static void sendHockeyMessage(final Context context, final String message) {
+        new BackgroundThread() {
+            @Override
+            public void execute() {
+                HockeySender hockeySender = new HockeySender();
+                try {
+                    hockeySender.send(context, hockeySender.createLocalReport(context, new Exception(message)));
+                } catch (ReportSenderException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    }
+
 }

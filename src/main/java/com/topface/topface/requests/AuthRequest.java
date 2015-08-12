@@ -119,9 +119,15 @@ public class AuthRequest extends PrimalAuthRequest {
         return false;
     }
 
+    public boolean isValidRequest() {
+        return !(TextUtils.isEmpty(mPlatform)
+                && TextUtils.isEmpty(mToken)
+                && TextUtils.isEmpty(mSid));
+    }
+
     @Override
     public void exec() {
-        if (TextUtils.isEmpty(mPlatform)) {
+        if (!isValidRequest()) {
             handleFail(ErrorCodes.UNVERIFIED_TOKEN, "Key params are empty");
             return;
         } else {

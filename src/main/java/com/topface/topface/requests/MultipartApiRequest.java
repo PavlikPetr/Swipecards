@@ -5,8 +5,10 @@ import android.text.TextUtils;
 
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.transport.IApiTransport;
 import com.topface.topface.requests.transport.MultipartHttpApiTransport;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.http.HttpUtils;
 
@@ -137,8 +139,32 @@ abstract public class MultipartApiRequest extends ApiRequest {
         return this;
     }
 
+    private AuthRequest getAuthRequest() {
+        for (Map.Entry<String, IApiRequest> entry : mRequests.entrySet()) {
+            IApiRequest request = entry.getValue();
+            if (request instanceof AuthRequest) {
+                return ((AuthRequest) request);
+            }
+        }
+        return null;
+    }
+
+    private void handleAllAbortedRequests() {
+        for (Map.Entry<String, IApiRequest> entry : mRequests.entrySet()) {
+            ((ApiRequest) entry.getValue())
+                    .handleFail(ErrorCodes.EMPTY_REQUEST, "AuthRequest has empty fields");
+        }
+    }
+
     @Override
     public void exec() {
+
+        AuthRequest request = getAuthRequest();
+        if (request != null && !request.isValidRequest()) {
+            Utils.sendHockeyMessage(getContext(), getRequestsAsString());
+            handleAllAbortedRequests();
+            return;
+        }
         // Check number of subrequests. One position is reserved for optional auth request.
         // So maximum allowed number is MAX - 1.
         if (mRequests.size() >= MAX_SUBREQUESTS_NUMBER) {
@@ -146,17 +172,7 @@ abstract public class MultipartApiRequest extends ApiRequest {
                     " subrequests. " + (MAX_SUBREQUESTS_NUMBER - 1) + " is maximum.");
         }
         if (mRequests.size() == 0) {
-            new BackgroundThread() {
-                @Override
-                public void execute() {
-                    HockeySender hockeySender = new HockeySender();
-                    try {
-                        hockeySender.send(getContext(), hockeySender.createLocalReport(getContext(), new Exception("Empty multipart request sent from : " + mFrom)));
-                    } catch (ReportSenderException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
+            Utils.sendHockeyMessage(getContext(), "Empty multipart request sent from : " + mFrom);
             return;
         }
         super.exec();
