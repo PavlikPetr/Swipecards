@@ -79,7 +79,7 @@ public class BanFragment extends BaseFragment implements View.OnClickListener {
         if (banExpire == -1) {
             return App.getContext().getResources().getString(R.string.ban_title_forever);
         }
-        SimpleDateFormat df = new SimpleDateFormat("HH:mm dd MMMM yyyy");
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm dd MMMM yyyy", new Locale(App.getLocaleConfig().getApplicationLocale()));
         String s = df.format(banExpire * 1000);
         return String.format(App.getContext().getResources().getString(R.string.ban_title_until), s);
     }
