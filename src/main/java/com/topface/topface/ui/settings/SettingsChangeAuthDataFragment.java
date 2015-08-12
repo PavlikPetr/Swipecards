@@ -71,10 +71,10 @@ public class SettingsChangeAuthDataFragment extends BaseFragment implements OnCl
         }
         mBtnSave.setOnClickListener(this);
         if (mChangePassword) {
-            mOldPassword.setHint(R.string.enter_old_password);
-            mOldPassword.setInputType(mEdMainField.getInputType());
             mEdMainField.setHint(R.string.enter_new_password);
             mEdMainField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            mOldPassword.setHint(R.string.enter_old_password);
+            mOldPassword.setInputType(mEdMainField.getInputType());
             mEdConfirmationField.setHint(R.string.password_confirmation_hint);
             mEdConfirmationField.setInputType(mEdMainField.getInputType());
         } else {
