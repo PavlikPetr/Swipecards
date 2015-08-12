@@ -43,6 +43,8 @@
                 style="@style/Widget.Topface.ActionBar.Subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
