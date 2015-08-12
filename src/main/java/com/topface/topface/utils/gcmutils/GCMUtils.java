@@ -434,7 +434,7 @@ public class GCMUtils {
                 return i;
             }
         }
-        return new Intent(context, NavigationActivity.class);
+        return null;
     }
 
     private static Intent getIntentByType(Context context, int type, User user) {
