@@ -80,6 +80,7 @@ public class SettingsChangeAuthDataFragment extends BaseFragment implements OnCl
         } else {
             mEdMainField.setHint(R.string.email);
             mEdConfirmationField.setVisibility(View.GONE);
+            mOldPassword.setVisibility(View.GONE);
         }
         return root;
     }
