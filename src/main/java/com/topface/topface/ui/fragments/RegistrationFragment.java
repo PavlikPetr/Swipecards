@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -53,11 +54,13 @@ public class RegistrationFragment extends BaseFragment {
     public static final String INTENT_LOGIN = "registration_login";
     public static final String INTENT_PASSWORD = "registration_password";
     public static final String INTENT_USER_ID = "registration_user_id";
+    public static final int SEX_SELECTED = 123;
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
     public static final String NAME = "name";
     public static final String SEX = "sex";
     public static final String BIRTHDAY = "birthday";
+    public static final String SEX_MESSAGE = "sex_message";
 
     private static final int START_SHIFT = 33;
 
@@ -324,8 +327,16 @@ public class RegistrationFragment extends BaseFragment {
         mBirthdayText.setEnabled(enable);
     }
 
-    private class SexDialog extends DialogFragment {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == SEX_SELECTED){
+            mSex = (data.getIntExtra(SEX,1));
+            mTvSex.setText(data.getIntExtra(SEX_MESSAGE,R.string.im_boy));
+        }
+    }
 
+    public static class SexDialog extends DialogFragment {
 
         private int[] mSexResIdArray = {R.string.im_boy, R.string.im_girl};
 
@@ -339,8 +350,13 @@ public class RegistrationFragment extends BaseFragment {
                     .setAdapter(adapter, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int pos) {
-                            mSex = (pos == 0 ? Static.BOY : Static.GIRL);
-                            mTvSex.setText(mSexResIdArray[pos]);
+                            android.support.v4.app.Fragment fragment = getParentFragment();
+                            if (fragment != null && fragment instanceof RegistrationFragment) {
+                                Intent result = new Intent();
+                                result.putExtra(RegistrationFragment.SEX, pos == 0 ? Static.BOY : Static.GIRL);
+                                result.putExtra(RegistrationFragment.SEX_MESSAGE, mSexResIdArray[pos]);
+                                fragment.onActivityResult(SEX_SELECTED, Activity.RESULT_OK, result);
+                            }
                             dismiss();
                         }
                     })
