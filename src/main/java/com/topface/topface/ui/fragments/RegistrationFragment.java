@@ -4,12 +4,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -350,7 +350,7 @@ public class RegistrationFragment extends BaseFragment {
                     .setAdapter(adapter, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int pos) {
-                            android.support.v4.app.Fragment fragment = getParentFragment();
+                            Fragment fragment = getParentFragment();
                             if (fragment != null && fragment instanceof RegistrationFragment) {
                                 Intent result = new Intent();
                                 result.putExtra(RegistrationFragment.SEX, pos == 0 ? Static.BOY : Static.GIRL);
