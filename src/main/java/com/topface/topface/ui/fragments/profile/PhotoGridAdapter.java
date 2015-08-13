@@ -43,7 +43,7 @@ public class PhotoGridAdapter extends BaseAdapter
     }
 
     public void updateData() {
-        if (isNeedUpadate()) {
+        if (isNeedUpadate() && CacheProfile.photos != null) {
             setData((Photos) CacheProfile.photos.clone(), CacheProfile.photos.size() != CacheProfile.totalPhotos, true);
         }
     }

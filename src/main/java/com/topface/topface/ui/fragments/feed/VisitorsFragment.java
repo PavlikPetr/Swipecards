@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments.feed;
 import android.content.Intent;
 import android.view.View;
 
+import com.google.gson.reflect.TypeToken;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Visitor;
@@ -11,13 +12,17 @@ import com.topface.topface.requests.DeleteVisitorsRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.VisitorsListAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 
@@ -29,20 +34,31 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
+    protected Type getFeedListDataType() {
+        return new TypeToken<FeedList<Visitor>>() {
+        }.getType();
+    }
+
+    @Override
+    protected Class getFeedListItemClass() {
+        return Visitor.class;
+    }
+
+    @Override
     protected int getFeedType() {
         return CountersManager.VISITORS;
+    }
+
+    @NotNull
+    @Override
+    protected FeedsCache.FEEDS_TYPE getFeedsType() {
+        return FeedsCache.FEEDS_TYPE.DATA_VISITORS_FEEDS;
     }
 
     @Override
     protected FeedAdapter<Visitor> createNewAdapter() {
         return new VisitorsListAdapter(getActivity(), getUpdaterCallback());
     }
-
-    @Override
-    protected FeedListData<Visitor> getFeedList(JSONObject response) {
-        return new FeedListData<>(response, Visitor.class);
-    }
-
 
     @Override
     protected FeedRequest.FeedService getFeedService() {
@@ -90,7 +106,7 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
 
     @Override
     protected int getUnreadCounter() {
-        return CacheProfile.unread_visitors;
+        return mCountersData.visitors;
     }
 
     @Override

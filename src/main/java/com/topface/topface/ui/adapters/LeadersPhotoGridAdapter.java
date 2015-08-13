@@ -20,6 +20,8 @@ import com.topface.topface.ui.views.ImageViewRemote;
 public class LeadersPhotoGridAdapter extends PhotoGridAdapter
         implements GridViewWithHeaderAndFooter.IGridSizes {
 
+    public static final int EMPTY_SELECTED_ID = -1;
+
     private LayoutInflater mInflater;
 
     private int mSelectedPhotoId;
@@ -28,7 +30,7 @@ public class LeadersPhotoGridAdapter extends PhotoGridAdapter
         if (photoLinks.size() > 0) {
             setSelectedPhotoId(photoLinks.getFirst().getId());
         } else {
-            setSelectedPhotoId(-1);
+            setSelectedPhotoId(EMPTY_SELECTED_ID);
         }
     }
 

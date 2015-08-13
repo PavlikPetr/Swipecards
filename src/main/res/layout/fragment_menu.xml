@@ -9,11 +9,12 @@
 
     <ListView
         android:id="@+id/lvMenu"
+        style="@style/LeftMenuSelector"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:divider="@null"
         android:dividerHeight="0dp"
         android:fadingEdgeLength="20dp"
         android:requiresFadingEdge="vertical"
-        tools:ignore="UnusedAttribute"/>
+        tools:ignore="UnusedAttribute" />
 </LinearLayout>

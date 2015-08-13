@@ -7,7 +7,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -37,32 +35,78 @@ import com.topface.topface.utils.social.STAuthMails;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnEditorAction;
+
 /**
  * Own Topface authorization
  */
 public class TopfaceAuthFragment extends BaseAuthFragment {
 
-    private View mLogo;
-    private Button mTFButton;
-    private AutoCompleteTextView mLogin;
-    private EditText mPassword;
-    private ImageButton mShowPassword;
-    private TextView mBackButton;
-    private RelativeLayout mWrongPasswordAlertView;
-    private TextView mWrongDataTextView;
-    private TextView mCreateAccountButton;
-    private Timer mTimer = new Timer();
-    private ProgressBar mLoginSendingProgress;
-    private TextView mRecoverPwd;
+    @Bind(R.id.btnEntrance)
+    Button mTFButton;
+    @Bind(R.id.etMail)
+    AutoCompleteTextView mLogin;
+    @Bind(R.id.edPassword)
+    EditText mPassword;
+    @Bind(R.id.ivShowPassword)
+    ImageButton mShowPassword;
+    @Bind(R.id.redAlert)
+    RelativeLayout mWrongPasswordAlertView;
+    @Bind(R.id.redAlertTextView)
+    TextView mWrongDataTextView;
+    @Bind(R.id.redAlertButton)
+    TextView mCreateAccountButton;
+    @Bind(R.id.btnRecoverPassword)
+    Button mBtnRecoverPassword;
     private String mEmailForRestorePassword;
     private String mEmailForNewReg;
+    private Timer mTimer = new Timer();
 
-    private View.OnClickListener mCredentialsEditListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            removeRedAlert();
+
+    @OnClick(R.id.btnEntrance)
+    public void onTFLoginClick() {
+        btnTFClick();
+        Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
+    }
+
+    @OnEditorAction(R.id.edPassword)
+    public boolean passwordAction(int action) {
+        boolean handled = false;
+        if (action == EditorInfo.IME_ACTION_DONE) {
+            handled = true;
+            onTFLoginClick();
         }
-    };
+        return handled;
+    }
+
+    @OnClick({R.id.etMail, R.id.edPassword})
+    public void removeRedAlert() {
+        if (mWrongPasswordAlertView != null && mWrongPasswordAlertView.getVisibility() == View.VISIBLE) {
+            if (isAdded()) {
+                mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
+            }
+            mWrongPasswordAlertView.setVisibility(View.GONE);
+            mWrongDataTextView.setVisibility(View.GONE);
+        }
+    }
+
+    @OnClick(R.id.redAlertButton)
+    public void createAccountClick() {
+        EasyTracker.sendEvent("Registration", "StartActivity", "FromAuth", 1L);
+        Intent intent = new Intent(getActivity(), RegistrationActivity.class);
+        intent.putExtra(RecoverPwdFragment.ARG_EMAIL, mEmailForNewReg);
+        startActivityForResult(intent, RegistrationActivity.INTENT_REGISTRATION);
+    }
+
+    @OnClick(R.id.btnRecoverPassword)
+    public void recoverPasswordClick() {
+        Intent intent = new Intent(getActivity(), PasswordRecoverActivity.class);
+        intent.putExtra(RecoverPwdFragment.ARG_EMAIL, mEmailForRestorePassword);
+        startActivityForResult(intent, PasswordRecoverActivity.INTENT_RECOVER_PASSWORD);
+    }
 
     @Override
     protected int getStatusBarColor() {
@@ -72,11 +116,27 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
+        setNeedTitles(true);
         View root = inflater.inflate(R.layout.layout_topface_signin, null);
+        ButterKnife.bind(this, root);
         initViews(root);
-
+        if (savedInstanceState != null) {
+            mLogin.setText(savedInstanceState.getString(RegistrationFragment.EMAIL));
+            mPassword.setText(savedInstanceState.getString(RegistrationFragment.PASSWORD));
+        }
         return root;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(RegistrationFragment.EMAIL, mLogin.getText().toString());
+        outState.putString(RegistrationFragment.PASSWORD, mPassword.getText().toString());
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.entrance);
     }
 
     @Override
@@ -102,81 +162,11 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     @Override
     protected void initViews(View root) {
         super.initViews(root);
-
-        mLogo = root.findViewById(R.id.ivTopfaceLogo);
-        mLogin = (AutoCompleteTextView) root.findViewById(R.id.edLogin);
         //fill autocomplete data (emails)
         STAuthMails.initInputField(getActivity(), mLogin);
-        mTFButton = (Button) root.findViewById(R.id.btnLogin);
-        mTFButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onTFLoginClick();
-            }
-        });
-        mBackButton = (TextView) root.findViewById(R.id.tvBackToMainAuth);
-        mBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeRedAlert();
-                Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
-                getActivity().onBackPressed();
-            }
-        });
         mWrongPasswordAlertView = (RelativeLayout) root.findViewById(R.id.redAlert);
-        mWrongDataTextView = (TextView) root.findViewById(R.id.redAlertTextView);
-        mCreateAccountButton = (TextView) root.findViewById(R.id.redAlertButton);
-        mCreateAccountButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EasyTracker.sendEvent("Registration", "StartActivity", "FromAuth", 1L);
-                Intent intent = new Intent(getActivity(), RegistrationActivity.class);
-                intent.putExtra(RecoverPwdFragment.ARG_EMAIL, mEmailForNewReg);
-                startActivityForResult(intent, RegistrationActivity.INTENT_REGISTRATION);
-            }
-        });
-        mPassword = (EditText) root.findViewById(R.id.edPassword);
-        mPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    handled = true;
-                    onTFLoginClick();
-                }
-                return handled;
-            }
-        });
-        mShowPassword = (ImageButton) root.findViewById(R.id.ivShowPassword);
-        mShowPassword.setOnClickListener(new View.OnClickListener() {
-            boolean toggle = false;
-            TransformationMethod passwordMethod = new PasswordTransformationMethod();
-
-            @Override
-            public void onClick(View v) {
-                toggle = !toggle;
-                mShowPassword.setImageResource(toggle ? R.drawable.ic_show_password : R.drawable.ic_show_password_pressed);
-                mPassword.setTransformationMethod(toggle ? null : passwordMethod);
-                Editable text = mPassword.getText();
-                if (text != null) {
-                    mPassword.setSelection(text.length());
-                }
-            }
-        });
-        mLoginSendingProgress = (ProgressBar) root.findViewById(R.id.prsLoginSending);
-        mRecoverPwd = (TextView) root.findViewById(R.id.tvRecoverPwd);
-        mRecoverPwd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), PasswordRecoverActivity.class);
-                intent.putExtra(RecoverPwdFragment.ARG_EMAIL, mEmailForRestorePassword);
-                startActivityForResult(intent, PasswordRecoverActivity.INTENT_RECOVER_PASSWORD);
-            }
-        });
-        mRecoverPwd.setVisibility(View.GONE);
-
-        mLogin.setOnClickListener(mCredentialsEditListener);
-        mPassword.setOnClickListener(mCredentialsEditListener);
+        mShowPassword.setOnClickListener(new HidePasswordController(mShowPassword, mPassword));
+        mBtnRecoverPassword.setVisibility(View.GONE);
     }
 
     @Override
@@ -187,7 +177,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     @Override
     protected void processAuthError(int codeError, ApiRequest request) {
         super.processAuthError(codeError, request);
-//        mPassword.setTransformationMethod(new PasswordTransformationMethod());
+        mPassword.setTransformationMethod(new PasswordTransformationMethod());
         switch (codeError) {
             case ErrorCodes.INCORRECT_LOGIN:
             case ErrorCodes.UNKNOWN_SOCIAL_USER:
@@ -197,7 +187,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
                 break;
             case ErrorCodes.INCORRECT_PASSWORD:
                 redAlert(R.string.incorrect_password);
-                mRecoverPwd.setVisibility(View.VISIBLE);
+                mBtnRecoverPassword.setVisibility(View.VISIBLE);
                 //сохранить корректный логин на случай изменения
                 mEmailForRestorePassword = Utils.getText(mLogin).trim();
                 break;
@@ -213,19 +203,16 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     @Override
     protected void showRetrier() {
         super.showRetrier();
-        mLogo.setVisibility(View.GONE);
         mTFButton.setVisibility(View.GONE);
         mLogin.setVisibility(View.GONE);
         mPassword.setVisibility(View.GONE);
         mShowPassword.setVisibility(View.GONE);
-        mLoginSendingProgress.setVisibility(View.GONE);
-        mRecoverPwd.setVisibility(View.GONE);
+        mBtnRecoverPassword.setVisibility(View.GONE);
     }
 
     @Override
     protected void hideRetrier() {
         super.hideRetrier();
-        mLogo.setVisibility(View.VISIBLE);
         mTFButton.setVisibility(View.VISIBLE);
         mLogin.setVisibility(View.VISIBLE);
         mPassword.setVisibility(View.VISIBLE);
@@ -256,16 +243,9 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         SessionConfig sessionConfig = App.getSessionConfig();
         sessionConfig.setSocialAccountEmail(emailLogin);
         sessionConfig.saveConfig();
-
         removeRedAlert();
-        mRecoverPwd.setVisibility(View.GONE);
-
+        mBtnRecoverPassword.setVisibility(View.GONE);
         auth(token);
-    }
-
-    private void onTFLoginClick() {
-        btnTFClick();
-        Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
     }
 
     private void redAlert(int resId) {
@@ -300,46 +280,32 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         }
     }
 
-    private void removeRedAlert() {
-        if (mWrongPasswordAlertView != null && mWrongPasswordAlertView.getVisibility() == View.VISIBLE) {
-            if (isAdded()) {
-                mWrongPasswordAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
-            }
-            mWrongPasswordAlertView.setVisibility(View.GONE);
-            mWrongDataTextView.setVisibility(View.GONE);
-        }
-    }
 
     @Override
     protected void showButtons() {
-        mBackButton.setVisibility(View.VISIBLE);
-        mLogo.setVisibility(View.VISIBLE);
         mTFButton.setVisibility(View.VISIBLE);
         mLogin.setEnabled(true);
         mPassword.setEnabled(true);
         mShowPassword.setEnabled(true);
-        mRecoverPwd.setEnabled(true);
+        mBtnRecoverPassword.setEnabled(true);
     }
 
     @Override
     protected void hideButtons() {
-        mBackButton.setVisibility(View.GONE);
         mTFButton.setVisibility(View.INVISIBLE);
         mLogin.setEnabled(false);
         mPassword.setEnabled(false);
         mShowPassword.setEnabled(false);
-        mRecoverPwd.setEnabled(false);
+        mBtnRecoverPassword.setEnabled(false);
     }
 
     @Override
     protected void showProgress() {
         hideButtons();
-        mLoginSendingProgress.setVisibility(View.VISIBLE);
     }
 
     @Override
     protected void hideProgress() {
-        mLoginSendingProgress.setVisibility(View.GONE);
     }
 
     @Override
@@ -358,4 +324,31 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         mEmailForRestorePassword = null;
         super.authorizationFailed(codeError, request);
     }
+
+    public static class HidePasswordController implements View.OnClickListener {
+        private final ImageButton mEye;
+        private final EditText mPass;
+        private boolean mToggle = false;
+        private TransformationMethod mPasswordMethod;
+
+        public HidePasswordController(ImageButton imageButton, EditText editText) {
+            this.mEye = imageButton;
+            this.mPass = editText;
+            mPasswordMethod = new PasswordTransformationMethod();
+        }
+
+        @Override
+        public void onClick(View v) {
+            mToggle = !mToggle;
+            mEye.setImageResource(mToggle ? R.drawable.ic_eye_pressed : R.drawable.ic_eye_normal);
+            mPass.setTransformationMethod(mToggle ? null : mPasswordMethod);
+            Editable text = mPass.getText();
+            if (text != null) {
+                mPass.setSelection(text.length());
+            }
+        }
+    }
+
+
+
 }

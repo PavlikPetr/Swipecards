@@ -1,23 +1,26 @@
 package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Context;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,31 +43,117 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class RegistrationFragment extends BaseFragment implements DatePickerDialog.OnDateSetListener {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnEditorAction;
+
+public class RegistrationFragment extends BaseFragment {
 
     public static final String INTENT_LOGIN = "registration_login";
     public static final String INTENT_PASSWORD = "registration_password";
     public static final String INTENT_USER_ID = "registration_user_id";
+    public static final String EMAIL = "email";
+    public static final String PASSWORD = "password";
+    public static final String NAME = "name";
+    public static final String SEX = "sex";
+    public static final String BIRTHDAY = "birthday";
 
     private static final int START_SHIFT = 33;
 
-    private EditText mEdEmail;
-    private EditText mEdName;
-    private EditText mEdPassword;
-    private TextView mBirthdayText;
-    private SexController mSexController;
-    private TextView mRedAlertView;
-    private TextView mWelcomeView;
-    private ProgressBar mProgressBar;
-    private Button mBtnRegister;
-    private ImageButton mDownArrow;
-    private View mBirthdayView;
-
     private Date mBirthday;
-    private int mYear;
-    private int mMonthOfYear;
-    private int mDayOfMonth;
+    private int mSex = Static.BOY;
     private Timer mTimer = new Timer();
+
+    @Bind(R.id.ivShowPassword)
+    ImageButton mShowPassword;
+    @Bind(R.id.etMail)
+    EditText mEdEmail;
+    @Bind(R.id.edPassword)
+    EditText mEdPassword;
+    @Bind(R.id.etName)
+    EditText mEdName;
+    @Bind(R.id.tvSex)
+    TextView mTvSex;
+    @Bind(R.id.tvRedAlert)
+    TextView mRedAlertView;
+    @Bind(R.id.btnStartChat)
+    Button mBtnRegister;
+    @Bind(R.id.tvBirthday)
+    TextView mBirthdayText;
+
+    @OnEditorAction(R.id.etName)
+    public boolean nameActionListener(int actionId) {
+        boolean handled = false;
+        if (actionId == EditorInfo.IME_ACTION_NEXT) {
+            if (mBirthdayText != null) {
+                handled = true;
+                mBirthdayText.performClick();
+            }
+        }
+        return handled;
+    }
+
+    @OnClick(R.id.tvSex)
+    public void sexClick() {
+        SexDialog sexDialog = new SexDialog();
+        sexDialog.show(getChildFragmentManager(), SexDialog.class.getSimpleName());
+    }
+
+    @OnClick(R.id.btnStartChat)
+    public void startChatClick() {
+        removeRedAlert();
+        hideButtons();
+        setEditing(false);
+        Utils.hideSoftKeyboard(getActivity(), mEdEmail, mEdName);
+        sendRegistrationRequest();
+    }
+
+    @OnClick(R.id.tvBirthday)
+    public void birthdayClick() {
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.YEAR, -START_SHIFT);
+        DatePickerFragment datePicker = DatePickerFragment.newInstance(c.get(Calendar.YEAR)
+                , c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        datePicker.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                final Calendar c = Calendar.getInstance();
+                c.add(Calendar.YEAR, -Static.MIN_AGE);
+                long maxDate = c.getTimeInMillis();
+
+                c.add(Calendar.YEAR, -(Static.MAX_AGE - Static.MIN_AGE));
+                long minDate = c.getTimeInMillis();
+
+                if (DatePickerFragment.isValidDate(year, monthOfYear, dayOfMonth, minDate, maxDate)) {
+                    Date date = DateUtils.getDate(year, monthOfYear, dayOfMonth);
+                    String dateStr = DateFormat.getDateFormat(getActivity()).format(date);
+                    mBirthdayText.setText(dateStr);
+                    mBirthday = date;
+                }
+            }
+        });
+        datePicker.show(getChildFragmentManager(), DatePickerFragment.TAG);
+    }
+
+    public static RegistrationFragment getInstance() {
+        return new RegistrationFragment();
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.entrance);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(EMAIL, mEdEmail.getText().toString());
+        outState.putString(PASSWORD, mEdPassword.getText().toString());
+        outState.putString(NAME, mEdName.getText().toString());
+        outState.putInt(SEX, mSex);
+        outState.putString(BIRTHDAY, mBirthday != null ? mBirthday.toString() : "");
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     protected int getStatusBarColor() {
@@ -72,124 +161,49 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setNeedTitles(false);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View root = inflater.inflate(R.layout.fragment_create_account, null);
-
-        initViews(root);
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.YEAR, -START_SHIFT);
-        mYear = c.get(Calendar.YEAR);
-        mMonthOfYear = c.get(Calendar.MONTH);
-        mDayOfMonth = c.get(Calendar.DAY_OF_MONTH);
+        setNeedTitles(true);
+        View root = inflater.inflate(R.layout.topface_registration, null);
+        ButterKnife.bind(this, root);
+        initViews();
+        if (savedInstanceState != null) {
+            mEdEmail.setText(savedInstanceState.getString(EMAIL));
+            mEdPassword.setText(savedInstanceState.getString(PASSWORD));
+            mEdName.setText(savedInstanceState.getString(NAME));
+            mSex = savedInstanceState.getInt(SEX);
+            String birthday = savedInstanceState.getString(BIRTHDAY);
+            mBirthdayText.setText(
+                    birthday != null && !birthday.equals("")
+                            ? birthday
+                            : getString(R.string.birthday));
+        }
         return root;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mSexController != null) mSexController.switchSex(Static.BOY);
+    private void initViews() {
+        mShowPassword.setOnClickListener(new TopfaceAuthFragment.HidePasswordController(mShowPassword, mEdPassword));
+        initEditTextViews();
     }
 
-    private void initViews(View root) {
-        initEditTextViews(root);
-        initBirthdayViews(root);
-        initSexViews(root);
-        initButtons(root);
-        initOtherViews(root);
-    }
-
-    private void initOtherViews(View root) {
-        mRedAlertView = (TextView) root.findViewById(R.id.tvRedAlert);
-        mProgressBar = (ProgressBar) root.findViewById(R.id.prsRegistrationSending);
-        mWelcomeView = (TextView) root.findViewById(R.id.tvWelcome);
-    }
-
-    private void initEditTextViews(View root) {
-        mEdEmail = (EditText) root.findViewById(R.id.edEmail);
+    private void initEditTextViews() {
         mEdEmail.setText(getArguments().getString(RecoverPwdFragment.ARG_EMAIL));
-        mEdName = (EditText) root.findViewById(R.id.edName);
-        mEdName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    if (mBirthdayText != null) {
-                        handled = true;
-                        mBirthdayText.performClick();
-                    }
-                }
-                return handled;
-            }
-        });
-        mEdPassword = (EditText) root.findViewById(R.id.edPassword);
-    }
-
-    private void initBirthdayViews(View root) {
-        mBirthdayView = root.findViewById(R.id.loBirthday);
-        mBirthdayText = (TextView) mBirthdayView.findViewById(R.id.tvBirthday);
-        mDownArrow = (ImageButton) mBirthdayView.findViewById(R.id.ibBirthday);
-        View.OnClickListener clickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerFragment datePicker = DatePickerFragment.newInstance(mYear, mMonthOfYear, mDayOfMonth);
-                datePicker.setOnDateSetListener(RegistrationFragment.this);
-                datePicker.show(getChildFragmentManager(), DatePickerFragment.TAG);
-            }
-        };
-        mBirthdayView.setOnClickListener(clickListener);
-        mBirthdayText.setOnClickListener(clickListener);
-        mDownArrow.setOnClickListener(clickListener);
-
-    }
-
-    private void initSexViews(View root) {
-        mSexController = new SexController(getActivity().getApplicationContext(), root.findViewById(R.id.loSex));
-    }
-
-    private void initButtons(final View root) {
-        mBtnRegister = (Button) root.findViewById(R.id.btnRegister);
-        mBtnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeRedAlert();
-                hideButtons();
-                setEditing(false);
-                Utils.hideSoftKeyboard(getActivity(), mEdEmail, mEdName);
-                sendRegistrationRequest();
-            }
-        });
-
-        root.findViewById(R.id.tvBackToMainAuth).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.hideSoftKeyboard(getActivity(), mEdName, mEdEmail);
-                getActivity().finish();
-            }
-        });
     }
 
     private void sendRegistrationRequest() {
         final String emailLogin = Utils.getText(mEdEmail).trim();
         final String name = Utils.getText(mEdName).trim();
         final String password = Utils.getText(mEdPassword);
-        int sex = mSexController.getSex();
 
         setEditing(false);
-        if (TextUtils.isEmpty(emailLogin) || TextUtils.isEmpty(name) || sex == -1 || mBirthday == null
+        if (TextUtils.isEmpty(emailLogin) || TextUtils.isEmpty(name) || mSex == -1 || mBirthday == null
                 || password.trim().length() == 0) {
             redAlert(R.string.empty_fields);
             showButtons();
             setEditing(true);
         } else {
             RegisterRequest request = new RegisterRequest(getActivity().getApplicationContext(), emailLogin, password, name,
-                    DateUtils.getSeconds(mBirthday), sex);
+                    DateUtils.getSeconds(mBirthday), mSex);
             registerRequest(request);
             request.callback(new DataApiHandler<Register>() {
 
@@ -262,9 +276,6 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
         mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
                 R.anim.slide_down_fade_in));
         mRedAlertView.setVisibility(View.VISIBLE);
-        mWelcomeView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
-                android.R.anim.fade_out));
-        mWelcomeView.setVisibility(View.INVISIBLE);
         mTimer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -291,43 +302,18 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
                         android.R.anim.fade_out));
             }
             mRedAlertView.setVisibility(View.INVISIBLE);
-            mWelcomeView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
-                    android.R.anim.fade_in));
-            mWelcomeView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        final Calendar c = Calendar.getInstance();
-        c.add(Calendar.YEAR, -Static.MIN_AGE);
-        long maxDate = c.getTimeInMillis();
-
-        c.add(Calendar.YEAR, -(Static.MAX_AGE - Static.MIN_AGE));
-        long minDate = c.getTimeInMillis();
-
-        if (DatePickerFragment.isValidDate(year, monthOfYear, dayOfMonth, minDate, maxDate)) {
-            Date date = DateUtils.getDate(year, monthOfYear, dayOfMonth);
-            mYear = year;
-            mMonthOfYear = monthOfYear;
-            mDayOfMonth = dayOfMonth;
-            String dateStr = DateFormat.getDateFormat(getActivity()).format(date);
-            mBirthdayText.setText(dateStr);
-            mBirthday = date;
         }
     }
 
     private void showButtons() {
-        if (mBtnRegister != null && mProgressBar != null) {
+        if (mBtnRegister != null) {
             mBtnRegister.setVisibility(View.VISIBLE);
-            mProgressBar.setVisibility(View.GONE);
         }
     }
 
     private void hideButtons() {
-        if (mBtnRegister != null && mProgressBar != null) {
+        if (mBtnRegister != null) {
             mBtnRegister.setVisibility(View.INVISIBLE);
-            mProgressBar.setVisibility(View.VISIBLE);
         }
     }
 
@@ -336,65 +322,29 @@ public class RegistrationFragment extends BaseFragment implements DatePickerDial
         mEdName.setEnabled(enable);
         mEdPassword.setEnabled(enable);
         mBirthdayText.setEnabled(enable);
-        mDownArrow.setEnabled(enable);
-        mBirthdayView.setEnabled(enable);
-        mSexController.setEdtiting(enable);
     }
 
-    private static class SexController {
+    private class SexDialog extends DialogFragment {
 
-        private Context mContext;
 
-        private TextView mBoy;
-        private TextView mGirl;
-        private int mSex;
+        private int[] mSexResIdArray = {R.string.im_boy, R.string.im_girl};
 
-        public SexController(Context context, View sexViewsRoot) {
-            mBoy = (TextView) sexViewsRoot.findViewById(R.id.tvBoy);
-            mBoy.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    switchSex(Static.BOY);
-                }
-            });
-
-            mGirl = (TextView) sexViewsRoot.findViewById(R.id.tvGirl);
-            mGirl.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    switchSex(Static.GIRL);
-                }
-            });
-
-            mSex = -1;
-            mContext = context;
-        }
-
-        public void switchSex(int sex) {
-            mSex = sex;
-            switch (mSex) {
-                case Static.BOY:
-                    mBoy.setCompoundDrawablesWithIntrinsicBounds(
-                            mContext.getResources().getDrawable(R.drawable.ic_sex_male), null, null, null);
-                    mGirl.setCompoundDrawablesWithIntrinsicBounds(
-                            mContext.getResources().getDrawable(R.drawable.ic_sex), null, null, null);
-                    break;
-                case Static.GIRL:
-                    mBoy.setCompoundDrawablesWithIntrinsicBounds(
-                            mContext.getResources().getDrawable(R.drawable.ic_sex), null, null, null);
-                    mGirl.setCompoundDrawablesWithIntrinsicBounds(
-                            mContext.getResources().getDrawable(R.drawable.ic_sex_female), null, null, null);
-                    break;
-            }
-        }
-
-        public int getSex() {
-            return mSex;
-        }
-
-        public void setEdtiting(boolean enable) {
-            mBoy.setEnabled(enable);
-            mGirl.setEnabled(enable);
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                    getActivity(), R.array.sex, R.layout.sex_choise_item);
+            return new AlertDialog.Builder(getActivity())
+                    .setTitle(getString(R.string.u_sex))
+                    .setAdapter(adapter, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            mSex = (pos == 0 ? Static.BOY : Static.GIRL);
+                            mTvSex.setText(mSexResIdArray[pos]);
+                            dismiss();
+                        }
+                    })
+                    .create();
         }
     }
 }

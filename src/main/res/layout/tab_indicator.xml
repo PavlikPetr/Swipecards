@@ -1,30 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
-    <!-- need this nesting for correct title/counter work -->
-    <!-- title must be ellipsized when total tab width is too small -->
-    <!-- counter must at right of title, and always visible -->
-    <!-- and both of them must be always in center, even when tab width is big -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:minHeight="48dp"
-        android:orientation="horizontal"
-        android:paddingBottom="16dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="16dp">
+    <TextView
+        android:id="@+id/tab_title"
+        android:ellipsize="end"
+        android:layout_weight="1"
+        android:textColor="@color/tab_title_color"
+        style="@style/TabIndicatorHoloStyle"/>
 
-        <TextView
-            android:id="@+id/tab_title"
-            style="@style/TabIndicatorHoloStyle.Title" />
-
-        <TextView
-            android:id="@+id/tab_counter"
-            style="@style/TabIndicatorHoloStyle.Counter"
-            android:visibility="gone" />
-    </LinearLayout>
-</FrameLayout>
+    <TextView
+        android:id="@+id/tab_counter"
+        android:paddingLeft="3dp"
+        android:layout_weight="0"
+        android:textColor="@color/tab_counter_color"
+        style="@style/TabIndicatorHoloStyle"/>
+</LinearLayout>

@@ -31,13 +31,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 /**
  * Опции приложения
@@ -80,6 +77,16 @@ public class Options extends AbstractData {
      * data for experiment of Trial VIP
      */
     public TrialVipExperiment trialVipExperiment = new TrialVipExperiment();
+
+    /**
+     * udate url (path to application on market)
+     */
+    public String updateUrl;
+
+    /**
+     * manage SmsInvite screen
+     */
+    public ForceSmsInviteRedirect forceSmsInviteRedirect = new ForceSmsInviteRedirect();
 
     /**
      * Id фрагмента, который будет отображаться при старте приложения
@@ -183,6 +190,7 @@ public class Options extends AbstractData {
         try {
             priceAdmiration = response.optInt("admirationPrice");
             trialVipExperiment = JsonUtils.optFromJson(response.optString("experimentTrialVip"), TrialVipExperiment.class, new TrialVipExperiment());
+            forceSmsInviteRedirect = JsonUtils.optFromJson(response.optString("forceSmsInviteRedirect"), ForceSmsInviteRedirect.class, new ForceSmsInviteRedirect());
             // по умолчанию превью в диалогах всегда отображаем
             hidePreviewDialog = response.optBoolean("hidePreviewDialog", false);
             priceLeader = response.optInt("leaderPrice");
@@ -194,6 +202,7 @@ public class Options extends AbstractData {
             }
             fillLeaderButtons(response.optJSONObject("photofeed"));
             JSONObject aboutAppJson = response.optJSONObject("aboutApp");
+            updateUrl = response.optString("updateUrl");
             aboutApp = new AboutApp(aboutAppJson.optString("title"), aboutAppJson.optString("url"));
             offerwall = response.optString("offerwall");
             maxVersion = response.optString("maxVersion");
@@ -604,49 +613,14 @@ public class Options extends AbstractData {
 
     public static class TabsList {
         @SerializedName("tabs")
-        public LinkedList<Tab> list;
+        public LinkedList<PurchasesTabData> list;
 
-        public TabsList(LinkedList<Tab> list) {
+        public TabsList(LinkedList<PurchasesTabData> list) {
             this.list = list;
         }
 
         public TabsList() {
             list = new LinkedList<>();
-        }
-    }
-
-    public static class Tab {
-        public static final String GPLAY = "google-play";
-        public static final String AMAZON = "amazon";
-        public static final String PWALL_MOBILE = "paymentwall-mobile";
-        public static final String PWALL = "paymentwall-direct";
-        public static final String BONUS = "bonus";
-
-        /**
-         * !!! IMPORTANT !!!
-         * markets stores all available markets. Used to delete missing tabs on older client versions.
-         * Add all new purchase tabs to markets.
-         */
-        public static Set<String> markets = new HashSet<>();
-
-        static {
-            markets.add(GPLAY);
-            markets.add(AMAZON);
-            markets.add(PWALL_MOBILE);
-            markets.add(PWALL);
-            markets.add(BONUS);
-        }
-
-        public String name;
-        public String type;
-
-        public Tab(String name, String type) {
-            this.name = name;
-            this.type = type;
-        }
-
-        public String getUpperCaseName() {
-            return name.toUpperCase(Locale.getDefault());
         }
     }
 
@@ -771,4 +745,7 @@ public class Options extends AbstractData {
         return trialVipExperiment.maxShowCount <= 0 ? TRIAL_VIP_MAX_SHOW_COUNT : trialVipExperiment.maxShowCount;
     }
 
+    public class ForceSmsInviteRedirect {
+        public boolean enabled = false;
+    }
 }

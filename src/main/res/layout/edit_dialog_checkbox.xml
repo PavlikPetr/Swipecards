@@ -8,8 +8,8 @@
         style="@style/WhiteListItem"
         android:background="@null"
         android:button="@null"
+        android:checked="false"
         android:drawableLeft="@drawable/selector_checkbox"
         android:drawablePadding="5dp"
-        android:paddingLeft="30dp"
-        android:checked="false" />
+        android:paddingLeft="30dp" />
 </FrameLayout>

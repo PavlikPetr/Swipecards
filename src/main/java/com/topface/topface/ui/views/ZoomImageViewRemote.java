@@ -1,5 +1,6 @@
 package com.topface.topface.ui.views;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
@@ -7,7 +8,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.nineoldandroids.animation.ValueAnimator;
 import com.topface.topface.utils.AnimationUtils;
 
 import uk.co.senab.photoview.PhotoViewAttacher;

@@ -14,8 +14,16 @@ public abstract class NoAuthActivity<T extends Fragment> extends SingleFragmentA
         super.onCreate(savedInstanceState);
         ActionBar ab = getSupportActionBar();
         if (ab != null) {
-            ab.hide();
+            if (isNeedShowActionBar()) {
+                ab.show();
+            } else {
+                ab.hide();
+            }
         }
+    }
+
+    protected boolean isNeedShowActionBar() {
+        return false;
     }
 
     @Override

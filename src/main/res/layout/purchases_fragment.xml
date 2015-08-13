@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/purchaseLayout"
     android:layout_width="fill_parent"
-    android:background="@color/bg_white"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="@color/bg_white">
 
-    <com.topface.topface.ui.views.slidingtab.SlidingTabLayout
+    <android.support.design.widget.TabLayout
         android:id="@+id/purchasesTabs"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/tab_background" />
+        android:background="@drawable/tab_divider"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/tab_text_color_selected" />
 
 
     <android.support.v4.view.ViewPager
         android:id="@+id/purchasesPager"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/purchasesTabs" />
+        android:layout_below="@id/purchasesTabs"
+        android:background="@color/bg_white" />
 </RelativeLayout>

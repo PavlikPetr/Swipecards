@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.topface.framework.JsonUtils;
@@ -85,6 +87,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
                             new ParallelApiRequest(getActivity())
                                     .addRequest(request)
                                     .addRequest(App.getProfileRequest(ProfileRequest.P_ALL))
+                                    .setFrom(getClass().getSimpleName())
                                     .exec();
                         } else {
                             request.exec();
@@ -96,12 +99,12 @@ public class ProfileFormFragment extends AbstractFormFragment {
         }
     };
 
-    View.OnClickListener mOnFillClickListener = new View.OnClickListener() {
+    ListView.OnItemClickListener mOnFillClickListener = new ListView.OnItemClickListener() {
         @Override
-        public void onClick(View view) {
-            Object formItem = view.getTag();
-            if (formItem instanceof FormItem) {
-                FormItem item = (FormItem) formItem;
+        public void onItemClick(AdapterView<?> parentView, View view, int position, long id) {
+            View valueView = view.findViewById(R.id.tvTitle);
+            if (valueView != null && valueView.getTag() instanceof FormItem) {
+                FormItem item = (FormItem) valueView.getTag();
 
                 if (item.type == FormItem.CITY) {
                     Intent intent = new Intent(getActivity(), CitySearchActivity.class);
@@ -148,7 +151,6 @@ public class ProfileFormFragment extends AbstractFormFragment {
     @Override
     protected AbstractFormListAdapter createFormAdapter(Context context) {
         mProfileFormListAdapter = new ProfileFormListAdapter(context);
-        mProfileFormListAdapter.setOnEditListener(mOnFillClickListener);
         return mProfileFormListAdapter;
     }
 
@@ -199,5 +201,11 @@ public class ProfileFormFragment extends AbstractFormFragment {
                 break;
         }
         return settingsRequest;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getList().setOnItemClickListener(mOnFillClickListener);
     }
 }

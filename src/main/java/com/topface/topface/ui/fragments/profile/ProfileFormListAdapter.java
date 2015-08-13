@@ -2,7 +2,6 @@ package com.topface.topface.ui.fragments.profile;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.view.View;
 
 import com.topface.framework.JsonUtils;
 import com.topface.topface.App;
@@ -21,7 +20,6 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
     private String mSavingText;
     private int mSavingColor;
     private int mMainValueColor;
-    private View.OnClickListener mOnEditListener;
 
     public ProfileFormListAdapter(Context context) {
         super(context);
@@ -134,15 +132,9 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
         return ageItem;
     }
 
-    public void setOnEditListener(View.OnClickListener onEditListener) {
-        mOnEditListener = onEditListener;
-    }
-
     @Override
     protected void configureHolder(ViewHolder holder, FormItem item) {
-        holder.value.setOnClickListener(mOnEditListener);
         holder.value.setTag(item);
-        holder.title.setOnClickListener(mOnEditListener);
         holder.title.setTag(item);
 
         if (item.isEditing) {

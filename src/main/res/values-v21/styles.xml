@@ -61,4 +61,111 @@
         <item name="android:layout_marginBottom">@dimen/buttons_elevation_value</item>
         <item name="android:elevation">@dimen/buttons_elevation_value</item>
     </style>
+
+    <style name="AuthButtonBlue" parent="AuthButton">
+        <item name="android:drawablePadding">12dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:background">@drawable/btn_blue_selector</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="AuthButtonGray" parent="AuthButton">
+        <item name="android:drawablePadding">12dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:background">@drawable/btn_gray_selector</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="AuthButtonWhite" parent="AuthButton">
+        <item name="android:background">@drawable/btn_white_selector</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="TfRegButtonBlue" parent="TfRegButton">
+        <item name="android:background">@drawable/btn_blue_selector</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="TfRegButtonGray" parent="TfRegButton">
+        <item name="android:background">@drawable/btn_gray_selector</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="AuthFb" parent="AuthButton">
+        <item name="android:background">@drawable/btn_fb_selector</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="AuthVk" parent="AuthButton">
+        <item name="android:background">@drawable/btn_vk_selector</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="AuthOk" parent="AuthButton">
+        <item name="android:background">@drawable/btn_ok_selector</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="HideAdmirationProfileButton" parent="HideAdmirationNavigationButtons">
+        <item name="android:drawableTop">@drawable/button_person_selector_v21</item>
+    </style>
+
+    <style name="HideAdmirationSympathyButton" parent="HideAdmirationNavigationButtons">
+        <item name="android:drawableTop">@drawable/button_favorite_selector_v21</item>
+    </style>
+
+    <style name="HideAdmirationSkipButton" parent="HideAdmirationNavigationButtons">
+        <item name="android:drawableTop">@drawable/button_close_selector_v21</item>
+    </style>
+
+    <style name="InputSendButton" parent="@style/InputButtons">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:src">@drawable/btn_send_message_selector</item>
+        <item name="android:background">@drawable/ripple</item>
+    </style>
+
+    <style name="InputGiftButton" parent="@style/InputButtons">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:src">@drawable/btn_send_gift_selector</item>
+        <item name="android:background">@drawable/ripple</item>
+    </style>
+
+    <style name="LeftMenuSelector">
+        <item name="android:listSelector">@drawable/form_list_ripple</item>
+    </style>
+
+    <style name="WhiteListItem.Underline">
+        <item name="android:background">@drawable/white_list_underline</item>
+    </style>
+
+    <style name="FormListSelector">
+        <item name="android:listSelector">@drawable/form_list_ripple</item>
+    </style>
+
+    <style name="ProfileEditDialogBth">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/edit_dialog_button_heigh</item>
+        <item name="android:background">@drawable/edit_dialog_ripple</item>
+        <item name="android:layout_below">@id/edit_dialog_buttons_top</item>
+    </style>
+
+    <style name="FeedHeart.Selector">
+        <item name="android:src">@drawable/heart_ripple</item>
+    </style>
+
+    <style name="WhiteListItem.ItemSelector">
+        <item name="android:background">@drawable/dialog_items_selector_ripple</item>
+    </style>
+
+    <style name="FilterDialogSelector">
+        <item name="android:listSelector">@drawable/dialog_items_selector_ripple</item>
+    </style>
+
+    <style name="SpinnerDropDownView.Selector">
+        <item name="android:background">@drawable/filter_spinner_items_selector_ripple</item>
+    </style>
+
+    <style name="FilterParamSelector">
+        <item name="android:background">@drawable/white_list_underline</item>
+    </style>
 </resources>

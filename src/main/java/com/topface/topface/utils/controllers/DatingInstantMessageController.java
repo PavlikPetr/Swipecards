@@ -43,6 +43,7 @@ import com.topface.topface.utils.http.IRequestClient;
  * Controller to handle dating message send footer.
  */
 public class DatingInstantMessageController {
+    public static final String DEFAULT_MESSAGE = "default_message";
 
     private Activity mActivity;
     private IRequestClient mRequestClient;
@@ -219,7 +220,7 @@ public class DatingInstantMessageController {
 
     public void openChat(FragmentActivity activity, SearchUser user) {
         if (user != null) {
-            Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false);
+            Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false, this.getClass().getSimpleName());
             activity.startActivityForResult(intent, ChatActivity.REQUEST_CHAT);
             EasyTracker.sendEvent("Dating", "Additional", "Chat", 1L);
         }

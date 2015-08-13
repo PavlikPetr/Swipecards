@@ -17,6 +17,9 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.config.FeedsCache;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -52,9 +55,9 @@ public class AdmirationFragment extends LikesFragment {
                 }
             });
         } else {
-            if (CacheProfile.unread_admirations > 0) {
+            if (mCountersData.admirations > 0) {
                 ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(1);
-                int curCounter = CacheProfile.unread_admirations;
+                int curCounter = mCountersData.admirations;
                 if (curCounter == 0) {
                     curCounter = CacheProfile.getOptions().premiumAdmirations.getCount();
                 }
@@ -103,15 +106,22 @@ public class AdmirationFragment extends LikesFragment {
 
     @Override
     protected int getUnreadCounter() {
-        return CacheProfile.unread_admirations;
+        return mCountersData.admirations;
     }
 
-    @Override protected void makeAllItemsRead() {
+    @Override
+    protected void makeAllItemsRead() {
         baseMakeAllItemsRead();
     }
 
     @Override
     protected boolean isReadFeedItems() {
         return false;
+    }
+
+    @NotNull
+    @Override
+    protected FeedsCache.FEEDS_TYPE getFeedsType() {
+        return FeedsCache.FEEDS_TYPE.DATA_ADMIRATION_FEEDS;
     }
 }

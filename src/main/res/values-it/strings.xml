@@ -2,8 +2,10 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">it_IT</string>
+    <string name="photofeed_title">Alza a nastro</string>
     <string name="general_warning">AVVERTIMENTO</string>
     <string name="general_ok">OK</string>
+    <string name="general_any">Qualsiasi</string>
     <string name="general_settings_abbr">Impost.</string>
     <string name="general_disallow">Non abilitare</string>
     <string name="general_allow">Abilitare</string>
@@ -18,6 +20,7 @@
     <string name="likes_background_text">Non hai simpatie</string>
     <string name="visitors_background_text">Non ci sono le visite</string>
     <string name="chat_background_text">Non ci sono i messaggi in entrata</string>
+    <string name="entrance">Entrata</string>
     <string name="filter_only_online">Solo online</string>
     <string name="filter_city_age_parameters">Età e città</string>
     <string name="filter_select_city">Scelta della città</string>
@@ -157,8 +160,8 @@
     <string name="general_visitors_tab_views">visite</string>
     <string name="general_profile">Profilo</string>
     <string name="general_settings">Impostazioni</string>
-    <string name="auth_btn_vk">Accedi tramite VK</string>
-    <string name="auth_btn_fb">Accedi tramite Facebook</string>
+    <string name="auth_btn_vk">Vkontakte</string>
+    <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Riprovare</string>
     <string name="dating_header_girls">Ragazze da %1$d a %2$d</string>
     <string name="dating_header_guys">Ragazzi da %1$d a %2$d</string>
@@ -369,6 +372,9 @@
     <string name="birthdate_confirm">Per favore indica la tua età altrimenti non potrai fare nuove conoscenze</string>
     <string name="set_birthdate">Indicare l’età</string>
     <string name="welcome_to_topface">Benvenuti in Topface!</string>
+    <string name="im_boy">Sono un ragazzo</string>
+    <string name="im_girl">Sono una ragazza</string>
+    <string name="u_sex">Il vostro  sesso</string>
     <string name="incorrect_email">E-mail errata</string>
     <string name="incorrect_login">Login errato</string>
     <string name="incorrect_password">Password errata</string>
@@ -383,6 +389,7 @@
     <string name="gallery">Galleria</string>
     <string name="no_photo_take_photo">Nessuno può conoscerti! Scatta una foto o scegline una dall’album</string>
     <string name="photo_for_avatar">La foto è pronta per essere inviata! Questa è la tua prima foto e sarà il tuo avatar.</string>
+    <string name="add_photo_before">Devi prima aggiungere foto</string>
     <string name="change_email">Cambiare l’e-mail</string>
     <string name="send_confirmation_email">Invia conferma all’indirizzo e-mail</string>
     <string name="change_password">Cambia password</string>
@@ -536,7 +543,9 @@
     <string name="settings_feedback_transaction_number">Numero dell’ordine</string>
     <string name="settings_feedback_transaction_link">Dove posso trovare numero dell’ordine?</string>
     <string name="general_logout_error">Purtroppo il logout non è stato effettuato</string>
-    <string name="auth_btn_ok">Accedi tramite Odnoklassniki</string>
+    <string name="auth_btn_ok">Odnoklassniki</string>
+    <string name="auth_btn_tf">Account Topface</string>
+    <string name="birthday">Compleanno</string>
     <string name="other_auth">Accedi tramite altri sistemi</string>
     <string name="settings_feedback_transaction_number_hint">Inserisci il numero dell’ordine</string>
     <string name="delete_visitors">Elimina visitatori</string>
@@ -628,6 +637,7 @@
     <string name="receive_message_notification">Ricevere notifiche\ndei nuovi messaggi</string>
     <string name="receive_mutual_notification">Ricevere notifiche\ndelle nuove simpatie reciproche</string>
     <string name="receive_sympathy_notification">Ricevere notifiche\ndelle nuove simpatie</string>
+    <string name="receive_rate_notification">key: receive_rate_notification</string>
     <string name="receive_guest_notification">Ricevere notifiche\ndei nuovi visitatori</string>
     <string name="on_phone">Sul cellulare</string>
     <string name="on_mail">Sull’e-mail</string>
@@ -644,4 +654,6 @@
     <string name="balance">Saldo (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
     <string name="trial_vip_text">Modalità VIP gratis per 7 giorni</string>
     <string name="trial_vip_button_text">Connettere VIP</string>
+    <string name="novice_sympathy">Invia le simpatie solo alle persone che ti\npiacciono veramente\nper iniziare una piacevole relazione</string>
+    <string name="novice_sympathies_bonus">Riceverai %1$d simpatie in\nregalo! Significa che\ndi sicuro piacerai a %2$d persone\nche ti dimostreranno la loro simpatia</string>
 </resources>

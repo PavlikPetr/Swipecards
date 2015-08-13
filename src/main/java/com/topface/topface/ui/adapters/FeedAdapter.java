@@ -34,6 +34,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.topface.topface.receivers.ConnectionChangeReceiver.ConnectionType.CONNECTION_WIFI;
+
 
 /**
  * @param <T>
@@ -70,6 +72,27 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         if (isNeedFeedAd()) {
             mFeedAdView = getAdView();
         }
+    }
+
+    public FeedList<T> getDataForCache() {
+        return getDataForCache(App.getContext().getResources().getIntArray(R.array.feed_limit)[CONNECTION_WIFI.getInt()]);
+    }
+
+    public FeedList<T> getDataForCache(int count) {
+        FeedList<T> data = getData();
+        FeedList<T> result = new FeedList<>();
+        int addedCount = 0;
+        int iter = 0;
+        while (addedCount < count && iter < data.size()) {
+            T currentItem = data.get(iter);
+            int itemType = currentItem.type;
+            if (!currentItem.isAd() && itemType != LoadingListAdapter.T_LOADER && itemType != LoadingListAdapter.T_RETRIER && currentItem.user != null) {
+                result.add(currentItem);
+                addedCount++;
+            }
+            iter++;
+        }
+        return result;
     }
 
     protected abstract INativeAdItemCreator<T> getNativeAdItemCreator();
@@ -424,7 +447,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         boolean result = false;
         FeedList<T> feeds = getData();
         for (T feed : feeds) {
-            if (feed.user.id == userId) {
+            if (feed.user != null && feed.user.id == userId) {
                 result = feeds.remove(feed);
                 notifyDataSetChanged();
                 break;
@@ -556,6 +579,10 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         List<T> result = new ArrayList<>();
         result.addAll(mSelectionController.getSelected());
         return result;
+    }
+
+    public void removeAllData() {
+        getData().clear();
     }
 
     public void finishMultiSelection() {

@@ -19,9 +19,11 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
+import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
+import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
@@ -72,9 +74,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     private boolean mIsOfferwallsReady;
 
     static {
-        if (CacheProfile.isLoaded()) {
-            mTopfaceOfferwallRedirect = CacheProfile.getOptions().topfaceOfferwallRedirect;
-        }
+        mTopfaceOfferwallRedirect = CacheProfile.getOptions().topfaceOfferwallRedirect;
     }
 
     private BroadcastReceiver mOfferwallOpenedReceiver = new BroadcastReceiver() {
@@ -112,9 +112,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     protected void onLoadProfile() {
         super.onLoadProfile();
         mBonusRedirect = CacheProfile.getOptions().forceOfferwallRedirect;
-        if (mTopfaceOfferwallRedirect == null) {
-            mTopfaceOfferwallRedirect = CacheProfile.getOptions().topfaceOfferwallRedirect;
-        }
+        mTopfaceOfferwallRedirect = CacheProfile.getOptions().topfaceOfferwallRedirect;
         if (!TFOfferwallSDK.isInitialized()) {
             OfferwallsManager.initTfOfferwall(this, new TFCredentials.OnInitializeListener() {
                 @Override
@@ -154,7 +152,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         Intent intent = new Intent(App.getContext(), PurchasesActivity.class);
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY_VIP);
         intent.putExtra(PurchasesFragment.ARG_TAG_EXRA_TEXT, extraText);
-        intent.putExtra(OpenIabFragment.ARG_TAG_SOURCE, from);
+        intent.putExtra(PurchasesConstants.ARG_TAG_SOURCE, from);
         intent.putExtra(PurchasesFragment.IS_VIP_PRODUCTS, true);
         return intent;
     }
@@ -171,7 +169,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
             intent = new Intent(context, PurchasesActivity.class);
         }
         intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY);
-        intent.putExtra(OpenIabFragment.ARG_TAG_SOURCE, from);
+        intent.putExtra(PurchasesConstants.ARG_TAG_SOURCE, from);
         if (itemType != -1) {
             intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, itemType);
         }
@@ -201,6 +199,10 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == PaymentwallActivity.ACTION_BUY) {
+            // для обновления счетчиков монет и лайков при покупке через paymentWall
+            new ProfileRequest(this).exec();
+        }
         //Это супер мега хак, смотри документацию processRequestCode
         if (!OpenIabFragment.processRequestCode(
                 getSupportFragmentManager(),
@@ -246,8 +248,10 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     }
 
     private boolean isSMSInviteAvailable() {
-        return !CacheProfile.premium && !((isTopfaceOfferwallRedirectEnabled() && mTopfaceOfferwallRedirect.isExpOnClose()) ||
-                mTopfaceOfferwallRedirect.isCompleted());
+        return !CacheProfile.premium && !(mTopfaceOfferwallRedirect != null &&
+                (mTopfaceOfferwallRedirect.isExpOnClose() ||
+                        mTopfaceOfferwallRedirect.isCompleted())) &&
+                CacheProfile.getOptions().forceSmsInviteRedirect.enabled;
     }
 
     private boolean showExtraScreen(EXTRA_SCREEN screen) {

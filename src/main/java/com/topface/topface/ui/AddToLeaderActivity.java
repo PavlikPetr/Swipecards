@@ -125,13 +125,21 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     @Override
     public void onResume() {
         super.onResume();
+        showPhotoHelper();
+    }
+
+    private void showPhotoHelper() {
+        showPhotoHelper(getString(R.string.no_photo_take_photo), !mIsPhotoDialogShown);
+    }
+
+    private void showPhotoHelper(String message, boolean isNeedShow) {
         if (takePhotoDialog != null) {
             takePhotoDialog.setPhotoTaker(mPhotoTaker);
         }
-        if (!mIsPhotoDialogShown) {
+        if (isNeedShow) {
             mAddPhotoHelper = initAddPhotoHelper();
             if (CacheProfile.photo == null && takePhotoDialog == null) {
-                mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
+                mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null, message);
                 mIsPhotoDialogShown = true;
             }
         }
@@ -181,15 +189,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         outState.putBoolean(ALREADY_SHOWN, mIsPhotoDialogShown);
     }
 
-    private Photos getPhotoLinks() {
-        Photos photoLinks = new Photos();
-        photoLinks.clear();
-        if (CacheProfile.photos != null) {
-            photoLinks.addAll(CacheProfile.photos);
-        }
-        return checkPhotos(photoLinks);
-    }
-
     private View getHeaderView() {
         View headerView = getLayoutInflater().inflate(R.layout.add_leader_grid_view_header, null);
         mEditText = (EditText) headerView.findViewById(R.id.yourGreetingEditText);
@@ -234,34 +233,35 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private void pressedAddToLeader(int position) {
         final Options.LeaderButton buttonData = CacheProfile.getOptions().buyLeaderButtons.get(position);
         int selectedPhotoId = getAdapter().getSelectedPhotoId();
-        if (mCoins < buttonData.price) {
-            showPurchasesFragment(buttonData.price);
-        } else if (selectedPhotoId != -1) {
-            mLoadingLocker.setVisibility(View.VISIBLE);
-            new AddPhotoFeedRequest(selectedPhotoId, AddToLeaderActivity.this, buttonData.photoCount, mEditText.getText().toString(), (long) buttonData.price)
-                    .callback(new ApiHandler() {
-                        @Override
-                        public void success(IApiResponse response) {
-                            setResult(Activity.RESULT_OK, new Intent());
-                            finish();
-                        }
-
-                        @Override
-                        public void fail(int codeError, IApiResponse response) {
-                            mLoadingLocker.setVisibility(View.GONE);
-                            switch (codeError) {
-                                case ErrorCodes.PAYMENT:
-                                    showPurchasesFragment(buttonData.price);
-                                    break;
-                                default:
-                                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
-                                    break;
+        if (getAdapter().getCount() > 0) {
+            if (mCoins < buttonData.price) {
+                showPurchasesFragment(buttonData.price);
+            } else if (selectedPhotoId > LeadersPhotoGridAdapter.EMPTY_SELECTED_ID) {
+                mLoadingLocker.setVisibility(View.VISIBLE);
+                new AddPhotoFeedRequest(selectedPhotoId, AddToLeaderActivity.this, buttonData.photoCount, mEditText.getText().toString(), (long) buttonData.price)
+                        .callback(new ApiHandler() {
+                            @Override
+                            public void success(IApiResponse response) {
+                                setResult(Activity.RESULT_OK, new Intent());
+                                finish();
                             }
-                        }
-                    }).exec();
 
+                            @Override
+                            public void fail(int codeError, IApiResponse response) {
+                                mLoadingLocker.setVisibility(View.GONE);
+                                if (codeError == ErrorCodes.PAYMENT) {
+                                    showPurchasesFragment(buttonData.price);
+                                } else {
+                                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }).exec();
+
+            } else {
+                Toast.makeText(App.getContext(), R.string.leaders_need_photo, Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Toast.makeText(AddToLeaderActivity.this, R.string.leaders_need_photo, Toast.LENGTH_SHORT).show();
+            showPhotoHelper(getString(R.string.add_photo_before), true);
         }
     }
 
@@ -271,20 +271,9 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     }
 
 
-    private Photos checkPhotos(Photos photos) {
-        Photos result = new Photos();
-        result.clear();
-        for (Photo photo : photos) {
-            if (photo.canBecomeLeader || CacheProfile.getOptions().minLeadersPercent == 0) {
-                result.add(new Photo(photo));
-            }
-        }
-        return result;
-    }
-
     private LeadersPhotoGridAdapter getAdapter() {
         if (mUsePhotosAdapter == null) {
-            mUsePhotosAdapter = createAdapter(mPhotos);
+            mUsePhotosAdapter = createAdapter();
         }
         return mUsePhotosAdapter;
     }
@@ -309,10 +298,32 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         }
     }
 
-    private LeadersPhotoGridAdapter createAdapter(Photos photos) {
+    private Photos getPhotoLinks() {
+        Photos photoLinks = new Photos();
+        photoLinks.clear();
+        if (CacheProfile.photos != null) {
+            photoLinks.addAll(CacheProfile.photos);
+        }
+        return checkPhotos(photoLinks);
+    }
+
+    private Photos checkPhotos(Photos photos) {
+        Photos result = new Photos();
+        result.clear();
+        for (Photo photo : photos) {
+            if (photo.canBecomeLeader) {
+                result.add(new Photo(photo));
+            }
+        }
+        return result;
+    }
+
+
+    private LeadersPhotoGridAdapter createAdapter() {
+        Photos photos = getPhotoLinks();
         return new LeadersPhotoGridAdapter(this.getApplicationContext(),
-                photos == null ? getPhotoLinks() : photos,
-                photos == null ? CacheProfile.totalPhotos : photos.size(),
+                photos,
+                photos.size(),
                 mGridView.getGridViewColumnWidth(), new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
@@ -334,7 +345,8 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                 CacheProfile.uid,
                 position + 1,
                 AlbumRequest.MODE_ALBUM,
-                AlbumLoadController.FOR_GALLERY
+                AlbumLoadController.FOR_GALLERY,
+                true
         );
         request.callback(new DataApiHandler<AlbumPhotos>() {
 

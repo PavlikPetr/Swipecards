@@ -9,13 +9,12 @@ import android.view.View;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.topface.PullToRefreshBase;
+import com.google.gson.reflect.TypeToken;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedPhotoBlog;
-import com.topface.topface.data.FeedPhotoBlogListData;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
@@ -27,14 +26,15 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.OwnProfileActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.PhotoBlogListAdapter;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
 
-import org.json.JSONObject;
-
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
@@ -48,14 +48,29 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     private PhotoBlogListAdapter mAdapter;
 
     @Override
+    protected Type getFeedListDataType() {
+        return new TypeToken<FeedList<FeedPhotoBlog>>() {
+        }.getType();
+    }
+
+    @Override
+    protected Class getFeedListItemClass() {
+        return FeedPhotoBlog.class;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         initTimer();
-        getListView().setMode(PullToRefreshBase.Mode.DISABLED);
         setDeletable(false);
         if (mAdapter != null) {
             mAdapter.setSympathySentArray(App.getUserConfig().getSympathySentArray());
         }
+    }
+
+    @Override
+    protected boolean isSwipeRefreshEnable() {
+        return false;
     }
 
     @Override
@@ -135,7 +150,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
         if (isNotYourOwnId(item.user.id)) {
             if (!item.user.isEmpty()) {
                 FeedUser user = item.user;
-                Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false);
+                Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false, this.getClass().getSimpleName());
                 getActivity().startActivityForResult(intent, ChatActivity.REQUEST_CHAT);
             }
         } else {
@@ -159,12 +174,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
 
     @Override
     protected int getFeedType() {
-        return -1;
-    }
-
-    @Override
-    protected FeedPhotoBlogListData getFeedList(JSONObject response) {
-        return new FeedPhotoBlogListData(response, FeedPhotoBlog.class);
+        return CountersManager.UNKNOWN_TYPE;
     }
 
     @Override

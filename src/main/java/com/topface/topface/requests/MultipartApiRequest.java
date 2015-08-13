@@ -3,11 +3,16 @@ package com.topface.topface.requests;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.transport.IApiTransport;
 import com.topface.topface.requests.transport.MultipartHttpApiTransport;
+import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.http.HttpUtils;
 
+import org.acra.sender.ReportSenderException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +24,7 @@ import java.util.Map;
 abstract public class MultipartApiRequest extends ApiRequest {
 
     public static final int MAX_SUBREQUESTS_NUMBER = 10;
+    private String mFrom;
 
     protected LinkedHashMap<String, IApiRequest> mRequests = new LinkedHashMap<>();
     private volatile MultipartHttpApiTransport mDefaultTransport;
@@ -128,14 +134,46 @@ abstract public class MultipartApiRequest extends ApiRequest {
         }
     }
 
+    public MultipartApiRequest setFrom(String mFrom) {
+        this.mFrom = mFrom;
+        return this;
+    }
+
+    private AuthRequest getAuthRequest() {
+        for (Map.Entry<String, IApiRequest> entry : mRequests.entrySet()) {
+            IApiRequest request = entry.getValue();
+            if (request instanceof AuthRequest) {
+                return ((AuthRequest) request);
+            }
+        }
+        return null;
+    }
+
+    private void handleAllAbortedRequests() {
+        for (Map.Entry<String, IApiRequest> entry : mRequests.entrySet()) {
+            ((ApiRequest) entry.getValue())
+                    .handleFail(ErrorCodes.EMPTY_REQUEST, "AuthRequest has empty fields");
+        }
+    }
 
     @Override
     public void exec() {
+
+        AuthRequest request = getAuthRequest();
+        if (request != null && !request.isValidRequest()) {
+            Utils.sendHockeyMessage(getContext(), getRequestsAsString());
+            handleAllAbortedRequests();
+            return;
+        }
         // Check number of subrequests. One position is reserved for optional auth request.
         // So maximum allowed number is MAX - 1.
         if (mRequests.size() >= MAX_SUBREQUESTS_NUMBER) {
             throw new RuntimeException("Multiple request with " + mRequests.size() +
                     " subrequests. " + (MAX_SUBREQUESTS_NUMBER - 1) + " is maximum.");
+        }
+        if (mRequests.size() == 0) {
+            Utils.sendHockeyMessage(getContext(), "Empty multipart request sent from : " + mFrom);
+            return;
         }
         super.exec();
     }

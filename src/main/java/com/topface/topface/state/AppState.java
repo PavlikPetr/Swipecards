@@ -65,6 +65,9 @@ public class AppState {
         return null == res ? defaultData : res;
     }
 
+    public <T> boolean isEqualData(Class<T> dataClass, T data) {
+        return getData(dataClass).equals(data);
+    }
 
     private <T> T getData(Class<T> dataClass) {
         synchronized (getCachableData()) {

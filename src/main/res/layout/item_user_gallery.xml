@@ -7,5 +7,5 @@
 
     <com.topface.topface.ui.views.ImageViewRemote
         android:id="@+id/ivPhoto"
-        style="@style/GalleryItem"/>
+        style="@style/GalleryItem" />
 </FrameLayout>

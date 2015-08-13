@@ -27,10 +27,12 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
+import com.topface.topface.data.CountersData;
 import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
@@ -40,7 +42,6 @@ import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.CustomViewNotificationController;
 import com.topface.topface.utils.IActionbarNotifier;
 import com.topface.topface.utils.LocaleConfig;
@@ -49,6 +50,8 @@ import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
+import com.topface.topface.utils.controllers.ChosenStartAction;
+import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.controllers.SequencedStartAction;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
@@ -64,7 +67,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.inject.Inject;
+
 import rx.Observable;
+import rx.Subscription;
+import rx.functions.Action1;
 import rx.subjects.BehaviorSubject;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
@@ -72,7 +79,7 @@ import static com.topface.topface.utils.controllers.StartActionsController.AC_PR
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
 
-public class NavigationActivity extends BaseFragmentActivity implements INavigationFragmentsListener, SequencedStartAction.IUiRunner {
+public class NavigationActivity extends ParentNavigationActivity implements INavigationFragmentsListener, SequencedStartAction.IUiRunner {
     public static final String INTENT_EXIT = "EXIT";
     public static final String PAGE_SWITCH = "Page switch: ";
 
@@ -92,21 +99,18 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     @SuppressWarnings("deprecation")
     private ActionBarDrawerToggle mDrawerToggle;
     private IActionbarNotifier mNotificationController;
-    private BroadcastReceiver mCountersReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (mNotificationController != null) mNotificationController.refreshNotificator();
-        }
-    };
+    @Inject
+    TopfaceAppState mAppState;
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     private AddPhotoHelper mAddPhotoHelper;
     private PopupManager mPopupManager;
+    private Subscription mCountersSubscription;
     private BehaviorSubject<DRAWER_LAYOUT_STATE> mDrawerLayoutStateObservable;
 
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (CacheProfile.age <= App.getAppOptions().getUserAgeMin()) {
+            if (CacheProfile.age < App.getAppOptions().getUserAgeMin()) {
                 SetAgeDialog.newInstance().show(getSupportFragmentManager(), SetAgeDialog.TAG);
             }
         }
@@ -121,6 +125,10 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         Intent intent = new Intent(activity, NavigationActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(GCMUtils.NEXT_INTENT, CacheProfile.getOptions().startPageFragmentId);
+        if(App.getUserConfig().getDatingMessage().equals(CacheProfile.getOptions()
+                .instantMessageFromSearch.getText())){
+            intent.putExtra(DatingInstantMessageController.DEFAULT_MESSAGE,true);
+        }
         activity.startActivity(intent);
     }
 
@@ -133,7 +141,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                             | ActionBar.DISPLAY_SHOW_HOME
                             | ActionBar.DISPLAY_HOME_AS_UP);
             mNotificationController = new CustomViewNotificationController(actionBar);
-            mNotificationController.refreshNotificator();
         }
     }
 
@@ -144,12 +151,21 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        App.from(getApplicationContext()).inject(this);
         Intent intent = getIntent();
         if (intent.getBooleanExtra(INTENT_EXIT, false)) {
             finish();
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
+        mCountersSubscription = mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
+            @Override
+            public void call(CountersData countersData) {
+                if (mNotificationController != null) {
+                    mNotificationController.refreshNotificator(countersData.dialogs, countersData.mutual);
+                }
+            }
+        });
         if (isNeedBroughtToFront(intent)) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -169,21 +185,36 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     }
 
     @Override
-    protected int getContentLayout() {
+    protected int getContentLayoutId() {
         return R.layout.ac_navigation;
     }
 
     @Override
-    protected void onRegisterStartActions(StartActionsController startActionsController) {
-        super.onRegisterStartActions(startActionsController);
+    protected void onRegisterMandatoryStartActions(StartActionsController startActionsController) {
+        super.onRegisterMandatoryStartActions(startActionsController);
         final SequencedStartAction sequencedStartAction = new SequencedStartAction(this, AC_PRIORITY_HIGH);
-        sequencedStartAction.addAction(new TrialVipPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH));
+        final IStartAction popupsAction = new ChosenStartAction().chooseFrom(
+                new TrialVipPopupAction(this, AC_PRIORITY_HIGH),
+                new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH,
+                        new DatingLockPopup.DatingLockPopupRedirectListener() {
+                            @Override
+                            public void onRedirect() {
+                                showFragment(FragmentId.TABBED_LIKES);
+                            }
+                        })
+        );
+        sequencedStartAction.addAction(popupsAction);
         // fullscreen
         if (mFullscreenController != null) {
             sequencedStartAction.addAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
         }
         // trial vip popup
         startActionsController.registerMandatoryAction(sequencedStartAction);
+    }
+
+    @Override
+    protected void onRegisterStartActions(StartActionsController startActionsController) {
+        super.onRegisterStartActions(startActionsController);
         // actions after registration
         startActionsController.registerAction(createAfterRegistrationStartAction(AC_PRIORITY_HIGH));
         // show popup when services disable
@@ -193,12 +224,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         startActionsController.registerAction(promoPopupManager.createPromoPopupStartAction(AC_PRIORITY_NORMAL));
         // popups
         mPopupManager = new PopupManager(this);
-        startActionsController.registerAction(new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH, new DatingLockPopup.DatingLockPopupRedirectListener() {
-            @Override
-            public void onRedirect() {
-                showFragment(FragmentId.TABBED_LIKES);
-            }
-        }));
         startActionsController.registerAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
@@ -327,7 +352,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         if (mFullscreenController != null) {
             mFullscreenController.onPause();
         }
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mCountersReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mProfileUpdateReceiver);
     }
 
@@ -350,11 +374,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
             LocaleConfig.localeChangeInitiated = false;
         }
         App.checkProfileUpdate();
-        if (mNotificationController != null) {
-            mNotificationController.refreshNotificator();
-        }
-        LocalBroadcastManager.getInstance(this)
-                .registerReceiver(mCountersReceiver, new IntentFilter(CountersManager.UPDATE_COUNTERS));
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
@@ -375,7 +394,6 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
         if (mMenuFragment != null) {
             mMenuFragment.updateAdapter();
         }
-        mNotificationController.refreshNotificator();
     }
 
     /**
@@ -505,6 +523,7 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
             mFullscreenController.onDestroy();
         }
         mDrawerToggle = null;
+        mCountersSubscription.unsubscribe();
         super.onDestroy();
         AdmobInterstitialUtils.releaseInterstitials();
     }
@@ -536,19 +555,21 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
                         Bundle extras = data.getExtras();
                         if (extras != null) {
                             final City city = extras.getParcelable(CitySearchActivity.INTENT_CITY);
-                            SettingsRequest request = new SettingsRequest(this);
-                            request.cityid = city.id;
-                            request.callback(new ApiHandler() {
-                                @Override
-                                public void success(IApiResponse response) {
-                                    CacheProfile.city = city;
-                                    CacheProfile.sendUpdateProfileBroadcast();
-                                }
+                            if (city != null) {
+                                SettingsRequest request = new SettingsRequest(this);
+                                request.cityid = city.id;
+                                request.callback(new ApiHandler() {
+                                    @Override
+                                    public void success(IApiResponse response) {
+                                        CacheProfile.city = city;
+                                        CacheProfile.sendUpdateProfileBroadcast();
+                                    }
 
-                                @Override
-                                public void fail(int codeError, IApiResponse response) {
-                                }
-                            }).exec();
+                                    @Override
+                                    public void fail(int codeError, IApiResponse response) {
+                                    }
+                                }).exec();
+                            }
                         }
                     }
                     break;
@@ -624,14 +645,18 @@ public class NavigationActivity extends BaseFragmentActivity implements INavigat
     public void onHideActionBar() {
         mIsActionBarHidden = true;
         setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        getSupportActionBar().hide();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
     }
 
     @Override
     public void onShowActionBar() {
         mIsActionBarHidden = false;
         setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        getSupportActionBar().show();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().show();
+        }
     }
 
     @Override

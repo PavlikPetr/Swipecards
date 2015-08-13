@@ -25,7 +25,7 @@ public class PromoKey31Dialog extends PromoDialog {
     protected String getMessage() {
         Options.PromoPopupEntity premiumEntity = getPremiumEntity();
         int count = premiumEntity.getCount();
-        return Utils.getQuantityString(getPluralForm(), count, count);
+        return Utils.replaceDashWithHyphen(Utils.getQuantityString(getPluralForm(), count, count));
     }
 
     @Override
@@ -35,6 +35,5 @@ public class PromoKey31Dialog extends PromoDialog {
 
     @Override
     protected void deleteMessages() {
-
     }
 }

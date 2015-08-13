@@ -6,7 +6,6 @@ import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.AdmirationsReadedRequest;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 
 public class PromoKey81Dialog extends PromoDialog {
@@ -16,9 +15,10 @@ public class PromoKey81Dialog extends PromoDialog {
     @Override
     public void initViews(View root) {
         super.initViews(root);
-        int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.ADMIRATIONS);
+        int curVisitCounter = mCountersData.admirations;
         if (curVisitCounter == 0) {
-            CountersManager.getInstance(getActivity()).setCounter(CountersManager.ADMIRATIONS, curVisitCounter + getPremiumEntity().getCount());
+            mCountersData.visitors = mCountersData.admirations + getPremiumEntity().getCount();
+            mAppState.setData(mCountersData);
             counterUpdated = true;
         }
     }
@@ -41,7 +41,7 @@ public class PromoKey81Dialog extends PromoDialog {
     @Override
     protected String getMessage() {
         int count = getPremiumEntity().getCount();
-        int admirations = CountersManager.getInstance(getActivity()).getCounter(CountersManager.ADMIRATIONS);
+        int admirations = mCountersData.admirations;
         count = admirations > 0 ? admirations : count;
         return Utils.getQuantityString(getPluralForm(), count, count);
     }
@@ -53,10 +53,10 @@ public class PromoKey81Dialog extends PromoDialog {
 
     @Override
     protected void deleteMessages() {
-        int curVisitCounter = CountersManager.getInstance(getActivity()).getCounter(CountersManager.ADMIRATIONS);
         AdmirationsReadedRequest request = new AdmirationsReadedRequest(getActivity());
         if (counterUpdated) {
-            CountersManager.getInstance(getActivity()).setCounter(CountersManager.ADMIRATIONS, curVisitCounter - getPremiumEntity().getCount());
+            mCountersData.visitors = mCountersData.admirations - getPremiumEntity().getCount();
+            mAppState.setData(mCountersData);
         }
         request.exec();
     }

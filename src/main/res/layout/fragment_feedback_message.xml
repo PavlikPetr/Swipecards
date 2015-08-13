@@ -20,10 +20,6 @@
             android:paddingRight="16dp">
 
             <TextView
-                android:id="@+id/tvTitle"
-                style="@style/BackgroundFormTitleText" />
-
-            <TextView
                 android:id="@+id/tvLocale"
                 android:textColor="#8A8A8A"
                 android:layout_width="fill_parent"
@@ -62,11 +58,10 @@
             <TextView
                 style="@style/FeedbackTextView"
                 android:id="@+id/tvTransactionIdInfoLink"
-                android:text="@string/transaction_code_help"
                 android:visibility="gone" />
 
             <Button
-                style="@style/FlatButton.Blue"
+                style="@style/Widget.Topface.Button.Big.Blue"
                 android:id="@+id/sendFeedback"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

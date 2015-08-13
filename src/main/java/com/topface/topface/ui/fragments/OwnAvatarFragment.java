@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.topface.topface.data.Profile;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.utils.CacheProfile;
@@ -44,16 +43,5 @@ public abstract class OwnAvatarFragment extends AbstractProfileFragment {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity())
                 .unregisterReceiver(mAvatarPositionReceiver);
-    }
-
-    @Override
-    public void onAvatarClick() {
-        Profile profile = getProfile();
-        if (profile != null && profile.photo != null) {
-            startActivity(PhotoSwitcherActivity.
-                    getPhotoSwitcherIntent(profile.gifts, profile.photo.position,
-                            profile.uid, profile.photosCount,
-                            profile.photos));
-        }
     }
 }

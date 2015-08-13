@@ -147,8 +147,6 @@
     <string name="general_visitors_tab_views">προβολές</string>
     <string name="general_profile">Προφίλ</string>
     <string name="general_settings">Ρυθμίσεις</string>
-    <string name="auth_btn_vk">Εισάγετε με Vkontakte</string>
-    <string name="auth_btn_fb">Εισάγετε με Facebook</string>
     <string name="auth_retry">Δοκιμάστε ξανά</string>
     <string name="dating_header_girls">Οι κοπέλες από %1$d έως %2$d</string>
     <string name="dating_header_guys">Οι άντρες από %1$d έως %2$d</string>
@@ -499,7 +497,6 @@
     <string name="settings_feedback_transaction_number">Αριθμός παραγγελίας</string>
     <string name="settings_feedback_transaction_link">πού να βρείτε τον αριθμό παραγγελίας?</string>
     <string name="general_logout_error">Δυστυχώς, ο λογαριασμός σας δεν απενεργοποιήθηκε</string>
-    <string name="auth_btn_ok">Εισάγετε με Odnoklassniki</string>
     <string name="other_auth">Συνδεθείτε σε άλλες υπηρεσίες</string>
     <string name="settings_feedback_transaction_number_hint">Εισάγετε τον αριθμό παραγγελίας σας</string>
     <string name="delete_visitors">Αφαιρέστε τους επισκέπτες</string>
@@ -557,4 +554,6 @@
     <string name="google_service_version_update_required_button">Ανανεώστε</string>
     <string name="google_sign_in_account_title">Δεν έχετε προσθέσει το λογαριασμό Google, θα πρέπει να εγγραφείτεб αν θέλετε να ενημερώνεστε.</string>
     <string name="add_leader_hint">Χαιρετισμό σας …</string>
+    <string name="novice_sympathy">Στείλτε συμπάθεια για εκείνους που \nσας αρέσει πραγματικά\ nγια να ξεκινήσετε μια ευχάριστη γνωριμία</string>
+    <string name="novice_sympathies_bonus">Παίρνετε %1$d συμπάθειες για\nδωρεάν!  Αυτό σημαίνει ότι, εσέις\n θα αρέσετε ακριβώς για %2$d τους ανθρώπους,\nοποίοι θα εκφράζουν την συμπάθεια για σας</string>
 </resources>

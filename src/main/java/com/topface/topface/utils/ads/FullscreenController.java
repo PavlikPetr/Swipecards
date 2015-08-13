@@ -8,11 +8,14 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.appodeal.ads.Appodeal;
+import com.appodeal.ads.InterstitialCallbacks;
 import com.google.android.gms.ads.AdListener;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
+import com.topface.topface.banners.ad_providers.AppodealProvider;
 import com.topface.topface.data.Banner;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
@@ -31,6 +34,7 @@ import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_MEDIATION;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_NONE;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_TOPFACE;
+import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_FULLSCREEN_START_APP;
 
 /**
  */
@@ -39,6 +43,8 @@ public class FullscreenController {
 
     private static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-9530442067223936/9732921207";
     private static final String ADMOB_INTERSTITIAL_MEDIATION_ID = "ca-app-pub-9530442067223936/9498586400";
+    private static final String ADMOB_INTERSTITIAL_START_APP_ID = "ca-app-pub-9530442067223936/3776010801";
+    private static final String BANNER_APPODEAL_FULLSCREEN = "APPODEAL_FULLSCREEN";
     private static boolean isFullScreenBannerVisible = false;
     private Activity mActivity;
 
@@ -62,17 +68,18 @@ public class FullscreenController {
 
         @Override
         public void callOnUi() {
-            if (startPageInfo != null) {
+            if (CacheProfile.getOptions().interstitial.enabled) {
+                FullscreenController.this.requestFullscreen(BANNER_ADMOB_FULLSCREEN_START_APP);
+            } else if (startPageInfo != null) {
                 FullscreenController.this.requestFullscreen(startPageInfo.getBanner());
             }
         }
 
         @Override
         public boolean isApplicable() {
-            return CacheProfile.show_ad &&
-                    FullscreenController.this.isTimePassed() &&
-                    startPageInfo != null &&
-                    startPageInfo.floatType.equals(PageInfo.FLOAT_TYPE_BANNER);
+            return CacheProfile.getOptions().interstitial.enabled || CacheProfile.show_ad &&
+                    FullscreenController.this.isTimePassed() && startPageInfo != null
+                    && startPageInfo.floatType.equals(PageInfo.FLOAT_TYPE_BANNER);
         }
 
         @Override
@@ -150,6 +157,12 @@ public class FullscreenController {
                 case BANNER_ADMOB_MEDIATION:
                     requestAdmobFullscreen(ADMOB_INTERSTITIAL_MEDIATION_ID);
                     break;
+                case BANNER_ADMOB_FULLSCREEN_START_APP:
+                    requestAdmobFullscreen(ADMOB_INTERSTITIAL_START_APP_ID);
+                    break;
+                case BANNER_APPODEAL_FULLSCREEN:
+                    requestAppodealFullscreen();
+                    break;
                 case BANNER_TOPFACE:
                     requestTopfaceFullscreen();
                     break;
@@ -159,6 +172,33 @@ public class FullscreenController {
         } catch (Exception e) {
             Debug.error("Request fullscreen error", e);
         }
+    }
+
+    private void requestAppodealFullscreen() {
+        Appodeal.setAutoCache(Appodeal.INTERSTITIAL, false);
+        Appodeal.initialize(mActivity, AppodealProvider.APPODEAL_APP_KEY, Appodeal.INTERSTITIAL);
+        Appodeal.cache(mActivity, Appodeal.INTERSTITIAL);
+        Appodeal.setInterstitialCallbacks(new InterstitialCallbacks() {
+            public void onInterstitialLoaded(boolean isPrecache) {
+                Appodeal.show(mActivity, Appodeal.INTERSTITIAL);
+                isFullScreenBannerVisible = true;
+            }
+
+            public void onInterstitialFailedToLoad() {
+                requestFallbackFullscreen();
+            }
+
+            public void onInterstitialShown() {
+                addLastFullscreenShowedTime();
+            }
+
+            public void onInterstitialClicked() {
+            }
+
+            public void onInterstitialClosed() {
+                isFullScreenBannerVisible = false;
+            }
+        });
     }
 
     public void requestAdmobFullscreen(String id) {

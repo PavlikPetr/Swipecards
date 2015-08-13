@@ -2,16 +2,21 @@ package com.topface.topface.ui.settings;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.Html;
 import android.text.InputType;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,14 +45,28 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Locale;
 
-public class FeedbackMessageFragment extends AbstractEditFragment implements View.OnClickListener {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
+
+public class FeedbackMessageFragment extends AbstractEditFragment {
 
     public static final String INTENT_FEEDBACK_TYPE = "feedback_message_type";
-    private EditText mEditText;
-    private EditText mEditEmail;
-    private Report mReport = new Report();
-    private View mLoadingLocker;
+    private static final String GOOGLE_WALLET_URL = "https://wallet.google.com";
+    @Bind(R.id.edText)
+    EditText mEditText;
+    @Bind(R.id.edEmail)
+    EditText mEditEmail;
+    @Bind(R.id.fbLoadingLocker)
+    View mLoadingLocker;
+    @Bind(R.id.tvTransactionIdInfoLink)
+    TextView mTransactionIdInfo;
+    @Bind(R.id.tvLocale)
+    TextView mIncorrectLocaleTv;
     private FeedbackType mFeedbackType;
+    private String mFeedback = Static.EMPTY;
+    private Report mReport = new Report();
 
     public static void fillVersion(Context context, Report report) {
         if (context != null && report != null) {
@@ -64,49 +83,47 @@ public class FeedbackMessageFragment extends AbstractEditFragment implements Vie
         return fragment;
     }
 
+    @OnTextChanged(value = R.id.edText, callback = OnTextChanged.Callback.BEFORE_TEXT_CHANGED)
+    void onBeforeFeedbackChanged(CharSequence text) {
+        mFeedback = text.toString();
+    }
+
+    @OnTextChanged(value = R.id.edText, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    void onAfterFeedbackChanged(CharSequence text) {
+        String after = text.toString();
+        if (TextUtils.isEmpty(mFeedback) && !TextUtils.isEmpty(after) || !TextUtils.isEmpty(mFeedback) && TextUtils.isEmpty(after)) {
+            mReport.body = after;
+            refreshSaveState();
+        }
+    }
+
+    @OnClick(R.id.sendFeedback)
+    public void sendFeedbackClick() {
+        saveChanges(new Handler());
+    }
+
+    @OnClick(R.id.tvTransactionIdInfoLink)
+    public void googleWalletClick() {
+        if (Utils.isIntentAvailable(getActivity(), Intent.ACTION_VIEW)) {
+            Utils.goToUrl(getActivity(), GOOGLE_WALLET_URL);
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         getSupportActionBar().show();
         super.onCreateView(inflater, container, saved);
         View root = inflater.inflate(R.layout.fragment_feedback_message, null);
         if (root == null) return null;
-        // Navigation bar
-        mLoadingLocker = root.findViewById(R.id.fbLoadingLocker);
-        // EditText
-        root.findViewById(R.id.tvTitle).setVisibility(View.GONE);
+        ButterKnife.bind(this, root);
         //Если  текущий язык приложения не русский или английский, то нужно показывать сообщение
         //о том, что лучше писать нам по русски или английски, поэтому проверяем тут локаль
-        TextView incorrectLocaleTv = (TextView) root.findViewById(R.id.tvLocale);
         String language = Locale.getDefault().getLanguage();
         if (language.equals("en") || language.equals("ru")) {
-            incorrectLocaleTv.setVisibility(View.GONE);
+            mIncorrectLocaleTv.setVisibility(View.GONE);
         }
-        root.findViewById(R.id.sendFeedback).setOnClickListener(this);
-        mEditText = (EditText) root.findViewById(R.id.edText);
         mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-        mEditText.addTextChangedListener(new TextWatcher() {
-
-            String before = Static.EMPTY;
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                before = s.toString();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String after = s.toString();
-                if (TextUtils.isEmpty(before) && !TextUtils.isEmpty(after) || !TextUtils.isEmpty(before) && TextUtils.isEmpty(after)) {
-                    mReport.body = after;
-                    refreshSaveState();
-                }
-            }
-        });
-        initTextViews(root, mFeedbackType);
+        initTextViews(mFeedbackType);
         FeedbackMessageFragment.fillVersion(getActivity(), mReport);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         return root;
@@ -146,21 +163,14 @@ public class FeedbackMessageFragment extends AbstractEditFragment implements Vie
         }
     }
 
-    private void initTextViews(View root, FeedbackType feedbackType) {
-        initEmailInput(root);
+    private void initTextViews(FeedbackType feedbackType) {
+        initEmailInput();
         switch (feedbackType) {
             case DEVELOPERS_MESSAGE:
                 break;
             case PAYMENT_MESSAGE:
-                TextView textView = (TextView) root.findViewById(R.id.tvTransactionIdInfoLink);
-                textView.setMovementMethod(new LinkMovementMethod() {
-                    @Override
-                    public boolean onTouchEvent(@NotNull TextView widget, @NotNull Spannable buffer, @NotNull MotionEvent event) {
-                        return Utils.isIntentAvailable(getActivity(), Intent.ACTION_VIEW) && super.onTouchEvent(widget, buffer, event);
-                    }
-
-                });
-                textView.setVisibility(View.VISIBLE);
+                mTransactionIdInfo.setText(createHelpMessage());
+                mTransactionIdInfo.setVisibility(View.VISIBLE);
                 break;
             case ERROR_MESSAGE:
             case COOPERATION_MESSAGE:
@@ -169,16 +179,24 @@ public class FeedbackMessageFragment extends AbstractEditFragment implements Vie
         }
     }
 
+    public SpannableString createHelpMessage() {
+        String walletString = getString(R.string.google_wallet);
+        String messageTemplate = String.format(getString(R.string.transaction_code_help), walletString);
+        SpannableString helpSpannable = new SpannableString(messageTemplate);
+        int startSpan = messageTemplate.indexOf(walletString);
+        int endSpan = startSpan + walletString.length();
+        helpSpannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.link_color)), startSpan, endSpan, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        helpSpannable.setSpan(new UnderlineSpan(), startSpan, endSpan, 0);
+        return helpSpannable;
+    }
+
     /**
      * инициализация поля ввода email
      * и заполнение его в зависимости от типа сети
      * если вход был через соц сеть - то email гугл-аккаунта
      * если через topface аккаунт - то его email
-     *
-     * @param root - view, где вложено поле ввода email
      */
-    private void initEmailInput(View root) {
-        mEditEmail = (EditText) root.findViewById(R.id.edEmail);
+    private void initEmailInput() {
         mEditEmail.setInputType(InputType.TYPE_CLASS_TEXT);
         String email;
         if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_TOPFACE)) {
@@ -263,13 +281,6 @@ public class FeedbackMessageFragment extends AbstractEditFragment implements Vie
         if (mLoadingLocker != null) {
             mEditText.setEnabled(true);
             mLoadingLocker.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.sendFeedback) {
-            saveChanges(new Handler());
         }
     }
 

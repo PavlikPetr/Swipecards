@@ -20,6 +20,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Display;
@@ -32,16 +33,20 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
-import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.social.AuthToken;
 
+import org.acra.sender.ReportSenderException;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -51,6 +56,8 @@ import java.util.regex.Pattern;
 public class Utils {
     public static final long DAY = 86400000;
     public static final long WEEK_IN_SECONDS = 604800;
+    private static final String DASH_SYMBOL = "-";
+    private static final String HYPHEN_SYMBOL = "&#8209;";
     // from android.util.Patterns.EMAIL_ADDRESS
     private final static Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
             "[a-zA-Z0-9\\+\\._%\\-\\+]{1,256}@" +
@@ -93,6 +100,14 @@ public class Utils {
                     stringId,
                     duration
             ).show();
+        }
+    }
+
+    public static void showCantSetPhotoAsMainToast(IApiResponse response) {
+        try {
+            Utils.showToastNotification(response.getJsonResult().getString("userMessage"), Toast.LENGTH_SHORT);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -148,7 +163,6 @@ public class Utils {
         return !TextUtils.isEmpty(email) && EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
 
-    @SuppressWarnings("UnusedDeclaration")
     public static void goToUrl(Context context, String url) {
         context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
@@ -201,18 +215,7 @@ public class Utils {
     }
 
     public static Intent getMarketIntent(Context context) {
-        String link;
-        //Для амазона делаем специальную ссылку, иначе он ругается, хотя и работает
-        switch (BuildConfig.MARKET_API_TYPE) {
-            case AMAZON:
-                link = context.getString(R.string.amazon_market_link);
-                break;
-            default:
-                link = context.getString(R.string.default_market_link);
-                break;
-        }
-
-        return new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+        return new Intent(Intent.ACTION_VIEW, Uri.parse(CacheProfile.getOptions().updateUrl));
     }
 
     public static String getClientDeviceName() {
@@ -376,6 +379,7 @@ public class Utils {
         return ConnectionChangeReceiver.getConnectionType();
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static void addOnGlobalLayoutListener(final View view, final ViewTreeObserver.OnGlobalLayoutListener listener) {
         ViewTreeObserver vto = view.getViewTreeObserver();
         if (vto != null && vto.isAlive()) {
@@ -405,4 +409,23 @@ public class Utils {
         }
         return R.color.light_theme_color_primary_dark;
     }
+
+    public static String replaceDashWithHyphen(String text) {
+        return Html.fromHtml(text.replaceAll(DASH_SYMBOL, HYPHEN_SYMBOL)).toString();
+    }
+
+    public static void sendHockeyMessage(final Context context, final String message) {
+        new BackgroundThread() {
+            @Override
+            public void execute() {
+                HockeySender hockeySender = new HockeySender();
+                try {
+                    hockeySender.send(context, hockeySender.createLocalReport(context, new Exception(message)));
+                } catch (ReportSenderException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    }
+
 }

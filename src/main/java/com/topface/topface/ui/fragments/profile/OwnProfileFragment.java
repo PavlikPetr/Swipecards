@@ -21,12 +21,13 @@ import android.view.ViewGroup;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.IUniversalUser;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.UniversalUserFactory;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
-import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.utils.AddPhotoHelper;
+import com.topface.topface.utils.BuyVipFragmentManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.PhotoTaker;
@@ -71,6 +72,10 @@ public class OwnProfileFragment extends OwnAvatarFragment {
             }
         };
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+        showTakePhotoDialog();
+    }
+
+    private void showTakePhotoDialog() {
         TakePhotoDialog takePhotoDialog = (TakePhotoDialog) mPhotoTaker.getActivityFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
         if (CacheProfile.photo == null && mAddPhotoHelper != null && takePhotoDialog == null && !App.getConfig().getUserConfig().isUserAvatarAvailable()) {
             mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
@@ -100,7 +105,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
         super.initBody();
         addBodyPage(ProfilePhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
         addBodyPage(ProfileFormFragment.class.getName(), getResources().getString(R.string.profile_form));
-        addBodyPage(VipBuyFragment.class.getName(), getResources().getString(R.string.vip_status));
+        addBodyPage(BuyVipFragmentManager.getClassName(), getResources().getString(R.string.vip_status));
         addBodyPage(SettingsFragment.class.getName(), getResources().getString(R.string.settings_header_title));
     }
 
@@ -115,6 +120,11 @@ public class OwnProfileFragment extends OwnAvatarFragment {
         MenuItemCompat.getActionView(mBarAvatar).findViewById(R.id.ivBarAvatarContainer).setOnClickListener(this);
 
         setActionBarAvatar(getUniversalUser());
+    }
+
+    @Override
+    protected boolean isNeedShowOverflowMenu() {
+        return false;
     }
 
     @Override
@@ -179,5 +189,18 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     @Override
     protected void initOverflowMenuActions(OverflowMenu overflowMenu) {
         overflowMenu.initOverfowMenu();
+    }
+
+    @Override
+    public void onAvatarClick() {
+        Profile profile = getProfile();
+        if (profile != null && profile.photo != null) {
+            startActivity(PhotoSwitcherActivity.
+                    getPhotoSwitcherIntent(profile.gifts, profile.photo.position,
+                            profile.uid, profile.photosCount,
+                            profile.photos));
+        } else {
+            showTakePhotoDialog();
+        }
     }
 }

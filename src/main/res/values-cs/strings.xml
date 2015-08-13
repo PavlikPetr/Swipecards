@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Topface</string>
     <string name="app_locale">cs_CZ</string>
+    <string name="photofeed_title">Postavit se na stránku</string>
     <string name="general_warning">UPOZORNĚNÍ</string>
     <string name="general_ok">OK</string>
     <string name="general_settings_abbr">Nastavení</string>
@@ -154,8 +155,6 @@
     <string name="general_visitors_tab_views">Shlédnutí</string>
     <string name="general_profile">Profil</string>
     <string name="general_settings">Nastavení</string>
-    <string name="auth_btn_vk">Přihlásit se přes VKontakte</string>
-    <string name="auth_btn_fb">Přihlásit se přes Facebook</string>
     <string name="auth_retry">Opakujte ještě jednou</string>
     <string name="dating_header_girls">Slečny od %1$d do %2$d</string>
     <string name="dating_header_guys">Muží od %1$d do %2$d</string>
@@ -513,7 +512,6 @@
     <string name="settings_feedback_transaction_number">Číslo objednávky</string>
     <string name="settings_feedback_transaction_link">Kde mohu najít číslo objednávky?</string>
     <string name="general_logout_error">Je nám líto, odhlášení se nepodařilo</string>
-    <string name="auth_btn_ok">Přihlásit se přes Odnoklassniki</string>
     <string name="other_auth">Přihlásit se přes jinou obsluhu</string>
     <string name="settings_feedback_transaction_number_hint">Zadejte číslo objednávky</string>
     <string name="delete_visitors">Smazat hosty</string>
@@ -605,4 +603,6 @@
     <string name="balance">Bilance (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
     <string name="trial_vip_text">Status VIP zdarma na 7 dní</string>
     <string name="trial_vip_button_text">Připojit VIP</string>
+    <string name="novice_sympathy">Posílejte sympatie pouze lidem, které se Vám\nopravdu líbí\ - a můžete začít příjemnou známost</string>
+    <string name="novice_sympathies_bonus">Zjískáváte %1$d sympatií jako\ndárek! Znamená to, že se\nurčitě budete líbit %2$d lidem,\nkteří vyjádří Vám svou sympatii</string>
 </resources>

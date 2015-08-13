@@ -12,14 +12,17 @@ public class AdProvidersFactory {
     public static final String BANNER_TOPFACE = "TOPFACE";
     public static final String BANNER_ADMOB = "ADMOB";
     public static final String BANNER_ADMOB_MEDIATION = "ADMOB_MEDIATION";
+    public static final String BANNER_ADMOB_FULLSCREEN_START_APP = "ADMOB_FULLSCREEN_EXP";
     public static final String BANNER_GAG = "GAG";
     public static final String BANNER_NONE = "NONE";
+    public static final String BANNER_APPODEAL = "APPODEAL";
     public static final String[] BANNERS = new String[]{
             BANNER_TOPFACE,
             BANNER_ADMOB,
             BANNER_ADMOB_MEDIATION,
             BANNER_GAG,
-            BANNER_NONE
+            BANNER_NONE,
+            BANNER_APPODEAL
     };
 
     /**
@@ -36,6 +39,8 @@ public class AdProvidersFactory {
                 return new TopfaceBannerProvider();
             case BANNER_ADMOB_MEDIATION:
                 return new AdMobMediationProvider();
+            case BANNER_APPODEAL:
+                return new AppodealProvider();
             default:
                 return null;
         }

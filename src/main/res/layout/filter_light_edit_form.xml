@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/filter_light_edit_form_selector"
+    style="@style/FilterParamSelector"
     android:orientation="vertical"
     android:paddingLeft="14dp"
     android:paddingRight="8dp"

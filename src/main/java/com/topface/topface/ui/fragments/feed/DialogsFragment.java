@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.google.gson.reflect.TypeToken;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
-import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.History;
 import com.topface.topface.data.Options;
 import com.topface.topface.promo.dialogs.PromoExpressMessages;
@@ -19,14 +19,17 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
-import org.json.JSONObject;
+import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import rx.Observable;
@@ -114,6 +117,17 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
+    protected Type getFeedListDataType() {
+        return new TypeToken<FeedList<FeedDialog>>() {
+        }.getType();
+    }
+
+    @Override
+    protected Class getFeedListItemClass() {
+        return FeedDialog.class;
+    }
+
+    @Override
     protected String getTitle() {
         return getString(R.string.settings_messages);
     }
@@ -125,12 +139,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     protected DialogListAdapter createNewAdapter() {
         return new DialogListAdapter(getActivity().getApplicationContext(), getUpdaterCallback());
-    }
-
-    @Override
-    protected FeedListData<FeedDialog> getFeedList(JSONObject data) {
-
-        return new FeedListData<>(data, FeedDialog.class);
     }
 
     @Override
@@ -185,6 +193,12 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         return CountersManager.DIALOGS;
     }
 
+    @NotNull
+    @Override
+    protected FeedsCache.FEEDS_TYPE getFeedsType() {
+        return FeedsCache.FEEDS_TYPE.DATA_DIALOGS_FEEDS;
+    }
+
     @Override
     protected DeleteAbstractRequest getDeleteRequest(List<String> ids) {
         return new DeleteDialogsRequest(ids, getActivity());
@@ -193,7 +207,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     protected int getUnreadCounter() {
         // dialogs are not auto-read
-        return 0;
+        return mCountersData.dialogs;
     }
 
     @Override
