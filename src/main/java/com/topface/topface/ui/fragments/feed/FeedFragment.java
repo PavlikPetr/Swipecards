@@ -885,7 +885,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
                 @Override
                 protected void success(FeedListData<T> data, IApiResponse response) {
-                    if (mResponseSubscriber != null) {
+                    if (mResponseSubscriber != null && !mResponseSubscriber.isUnsubscribed()) {
                         if (data != null) {
                             if (data.items.isEmpty()) {
                                 unsubscribeAllObservable();

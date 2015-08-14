@@ -5,8 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.ConcurrentHashMap;
 
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
 
 /**
@@ -83,7 +81,7 @@ public class AppState {
                         setData(res, false, true, dataClass);
                     }
                 }
-                return (T) res;
+                return res;
             }
         }
     }
@@ -119,10 +117,9 @@ public class AppState {
             this(data, createBehaviorSubject(data));
         }
 
-        public DataAndObservable(T data, BehaviorSubject<T> behaviorSubject) {
+        private DataAndObservable(T data, BehaviorSubject<T> behaviorSubject) {
             mObject = data;
             mBehaviorSubject = behaviorSubject;
-            mBehaviorSubject.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread());
         }
 
         public T getObject() {
