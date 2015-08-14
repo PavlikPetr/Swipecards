@@ -82,6 +82,7 @@ public class RegistrationFragment extends BaseFragment {
     @Bind(R.id.tvBirthday)
     TextView mBirthdayText;
 
+    @SuppressWarnings("unused")
     @OnEditorAction(R.id.etName)
     public boolean nameActionListener(int actionId) {
         boolean handled = false;
@@ -94,12 +95,14 @@ public class RegistrationFragment extends BaseFragment {
         return handled;
     }
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.tvSex)
     public void sexClick() {
         SexDialog sexDialog = new SexDialog();
         sexDialog.show(getChildFragmentManager(), SexDialog.class.getSimpleName());
     }
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.btnStartChat)
     public void startChatClick() {
         removeRedAlert();
@@ -109,6 +112,7 @@ public class RegistrationFragment extends BaseFragment {
         sendRegistrationRequest();
     }
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.tvBirthday)
     public void birthdayClick() {
         Calendar c = Calendar.getInstance();

@@ -55,6 +55,7 @@
                     android:id="@+id/loFilterChooseCity"
                     style="@style/CitySearchView"
                     android:layout_width="fill_parent"
+                    android:imeOptions="flagNoExtractUi"
                     android:layout_height="wrap_content"
                     app:request_key="CITY_SEARCH_FROM_FILTER_ACTIVITY" />
 

@@ -36,8 +36,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
-import org.json.JSONException;
-
 public class ProfilePhotoFragment extends ProfileInnerFragment implements View.OnClickListener {
 
     private static final String POSITION = "POSITION";
@@ -308,7 +306,9 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
                 mPhotosReceiver,
                 new IntentFilter(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT)
         );
-        mProfilePhotoGridAdapter.updateData();
+        if (mProfilePhotoGridAdapter != null) {
+            mProfilePhotoGridAdapter.updateData();
+        }
         super.onResume();
     }
 

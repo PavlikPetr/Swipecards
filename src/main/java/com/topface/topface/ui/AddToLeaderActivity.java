@@ -9,6 +9,7 @@ import android.os.Message;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -95,6 +96,9 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        }
         super.onCreate(savedInstanceState);
         App.from(this).inject(this);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
@@ -221,9 +225,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
     @Override
     protected void onPause() {
-        if (mEditText != null) {
-            Utils.hideSoftKeyboard(this, mEditText);
-        }
         mPosition = mGridView.getFirstVisiblePosition();
         mSelectedPosition = getAdapter().getSelectedPhotoId();
         mIsPhotoDialogShown = true;

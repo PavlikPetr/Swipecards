@@ -80,8 +80,7 @@
         <!-- activity -->
         <activity
             android:name=".ui.NavigationActivity"
-            android:configChanges="locale|screenSize|orientation"
-            android:screenOrientation="portrait"
+            android:configChanges="locale"
             android:theme="@style/Theme.Topface.Navigation"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
             <intent-filter>
@@ -180,9 +179,7 @@
             android:name=".ui.GiftsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Topface.Gifts" />
-        <activity
-            android:name=".ui.TopfaceAuthActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".ui.TopfaceAuthActivity" />
         <activity
             android:name=".ui.CitySearchActivity"
             android:label="@string/edit_my_city"
@@ -194,7 +191,6 @@
             android:theme="@style/Topface.Theme.TransparentActionBarActivity" />
         <activity
             android:name=".ui.edit.EditContainerActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.Topface.Light" />
         <activity
             android:name=".ui.settings.SettingsContainerActivity"
@@ -206,12 +202,10 @@
         </activity>
         <activity
             android:name=".ui.BanActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.Topface.Ban" />
 
         <activity
             android:name=".ui.RestoreAccountActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.Topface.RestoreAccountActivity" />
 
         <activity android:name=".ui.BlackListActivity" />
@@ -229,7 +223,7 @@
         <activity
             android:name=".ui.UserProfileActivity"
             android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="sensor"
             android:theme="@style/NoWindowAnimation">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -239,7 +233,7 @@
         <activity
             android:name=".ui.OwnProfileActivity"
             android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="sensor"
             android:theme="@style/NoWindowAnimation">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -286,7 +280,7 @@
         <activity
             android:name=".ui.RegistrationActivity"
             android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="sensor"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -296,7 +290,6 @@
         <activity
             android:name=".ui.PasswordRecoverActivity"
             android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -306,7 +299,7 @@
         <activity
             android:name=".ui.PurchasesActivity"
             android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="sensor">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
@@ -322,9 +315,7 @@
                 android:value=".ui.ComplainsActivity" />
         </activity>
 
-        <activity
-            android:name=".ui.PaymentwallActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".ui.PaymentwallActivity" />
 
         <activity
             android:name="ru.ok.android.sdk.OkAuthActivity"
@@ -352,7 +343,7 @@
         <activity
             android:name=".ui.SMSInviteActivity"
             android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="sensor">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
