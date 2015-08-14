@@ -5,9 +5,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.ActionProvider;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
+import android.view.View;
 import android.widget.Toast;
 
 import com.topface.topface.App;
@@ -194,14 +199,19 @@ public class OverflowMenu {
             }
             if (overflowMenuItemArray.size() > 1) {
                 if (isInBlackList != null) {
-                    mBarActions.findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!isInBlackList);
+                    findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!isInBlackList);
                 }
                 if (isSympathySent != null && isSympathySent) {
-                    mBarActions.findItem(SEND_SYMPATHY_ACTION.getId()).setEnabled(false);
-                    mBarActions.findItem(SEND_ADMIRATION_ACTION.getId()).setEnabled(false);
+                    findItem(SEND_SYMPATHY_ACTION.getId()).setEnabled(false);
+                    findItem(SEND_ADMIRATION_ACTION.getId()).setEnabled(false);
                 }
             }
         }
+    }
+
+    private MenuItem findItem(int id) {
+        MenuItem item = mBarActions.findItem(id);
+        return item == null ? EMPTY_MENU_ITEM : item;
     }
 
     private void initChatOverflowMenu() {
@@ -237,7 +247,7 @@ public class OverflowMenu {
                 }
             }
             if (isInBlackList != null) {
-                mBarActions.findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!isInBlackList);
+                findItem(ADD_TO_BOOKMARK_ACTION.getId()).setEnabled(!isInBlackList);
             }
         }
     }
@@ -245,14 +255,14 @@ public class OverflowMenu {
     private void replaceItem(OverflowMenuItem item, Integer resourceId) {
         if (item.getId() == ADD_TO_BLACK_LIST_ACTION.getId() ||
                 item.getId() == ADD_TO_BOOKMARK_ACTION.getId()) {
-            int order = mBarActions.findItem(item.getId()).getOrder();
+            int order = findItem(item.getId()).getOrder();
             mBarActions.removeItem(item.getId());
             mBarActions.add(Menu.NONE, item.getId(), order, resourceId != null ? mActivity.getString(resourceId) : "").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         }
     }
 
     private boolean isNeedToAddItem(int id) {
-        return mBarActions.findItem(id) == null;
+        return findItem(id) == EMPTY_MENU_ITEM;
     }
 
     public void onMenuClicked(MenuItem item) {
@@ -667,4 +677,170 @@ public class OverflowMenu {
             return mSecondResourceId;
         }
     }
+
+    private static final MenuItem EMPTY_MENU_ITEM = new MenuItem() {
+        @Override public int getItemId() {
+            return 0;
+        }
+
+        @Override public int getGroupId() {
+            return 0;
+        }
+
+        @Override public int getOrder() {
+            return 0;
+        }
+
+        @Override public MenuItem setTitle(CharSequence title) {
+            return null;
+        }
+
+        @Override public MenuItem setTitle(int title) {
+            return null;
+        }
+
+        @Override public CharSequence getTitle() {
+            return null;
+        }
+
+        @Override public MenuItem setTitleCondensed(CharSequence title) {
+            return null;
+        }
+
+        @Override public CharSequence getTitleCondensed() {
+            return null;
+        }
+
+        @Override public MenuItem setIcon(Drawable icon) {
+            return null;
+        }
+
+        @Override public MenuItem setIcon(int iconRes) {
+            return null;
+        }
+
+        @Override public Drawable getIcon() {
+            return null;
+        }
+
+        @Override public MenuItem setIntent(Intent intent) {
+            return null;
+        }
+
+        @Override public Intent getIntent() {
+            return null;
+        }
+
+        @Override public MenuItem setShortcut(char numericChar, char alphaChar) {
+            return null;
+        }
+
+        @Override public MenuItem setNumericShortcut(char numericChar) {
+            return null;
+        }
+
+        @Override public char getNumericShortcut() {
+            return 0;
+        }
+
+        @Override public MenuItem setAlphabeticShortcut(char alphaChar) {
+            return null;
+        }
+
+        @Override public char getAlphabeticShortcut() {
+            return 0;
+        }
+
+        @Override public MenuItem setCheckable(boolean checkable) {
+            return null;
+        }
+
+        @Override public boolean isCheckable() {
+            return false;
+        }
+
+        @Override public MenuItem setChecked(boolean checked) {
+            return null;
+        }
+
+        @Override public boolean isChecked() {
+            return false;
+        }
+
+        @Override public MenuItem setVisible(boolean visible) {
+            return null;
+        }
+
+        @Override public boolean isVisible() {
+            return false;
+        }
+
+        @Override public MenuItem setEnabled(boolean enabled) {
+            return null;
+        }
+
+        @Override public boolean isEnabled() {
+            return false;
+        }
+
+        @Override public boolean hasSubMenu() {
+            return false;
+        }
+
+        @Override public SubMenu getSubMenu() {
+            return null;
+        }
+
+        @Override public MenuItem setOnMenuItemClickListener(OnMenuItemClickListener menuItemClickListener) {
+            return null;
+        }
+
+        @Override public ContextMenu.ContextMenuInfo getMenuInfo() {
+            return null;
+        }
+
+        @Override public void setShowAsAction(int actionEnum) {
+
+        }
+
+        @Override public MenuItem setShowAsActionFlags(int actionEnum) {
+            return null;
+        }
+
+        @Override public MenuItem setActionView(View view) {
+            return null;
+        }
+
+        @Override public MenuItem setActionView(int resId) {
+            return null;
+        }
+
+        @Override public View getActionView() {
+            return null;
+        }
+
+        @Override public MenuItem setActionProvider(ActionProvider actionProvider) {
+            return null;
+        }
+
+        @Override public ActionProvider getActionProvider() {
+            return null;
+        }
+
+        @Override public boolean expandActionView() {
+            return false;
+        }
+
+        @Override public boolean collapseActionView() {
+            return false;
+        }
+
+        @Override public boolean isActionViewExpanded() {
+            return false;
+        }
+
+        @Override public MenuItem setOnActionExpandListener(OnActionExpandListener listener) {
+            return null;
+        }
+    };
 }
