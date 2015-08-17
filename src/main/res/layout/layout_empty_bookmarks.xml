@@ -27,7 +27,7 @@
 
     <Button
         android:id="@+id/btnStartRate"
-        style="@style/FlatButton.Blue.Emptyfeed"
+        style="@style/BigStretchedBlueButton"
         android:layout_below="@+id/tvText"
         android:layout_centerHorizontal="true"
         android:text="@string/general_get_dating" />

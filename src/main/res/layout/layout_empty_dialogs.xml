@@ -30,15 +30,13 @@
 
         <Button
             android:id="@+id/btnBuyVip"
-            style="@style/FlatButton.Blue.Emptyfeed"
-            android:layout_weight="1"
+            style="@style/BigStretchedBlueButton"
             android:text="@string/buy_resources" />
 
         <Button
             android:id="@+id/btnStartRate"
-            style="@style/FlatButton.Gray.Emptyfeed"
+            style="@style/BigStretchedGrayButton"
             android:layout_marginTop="12dp"
-            android:layout_weight="1"
             android:text="@string/general_get_dating" />
 
     </LinearLayout>
