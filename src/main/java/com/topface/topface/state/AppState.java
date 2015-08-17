@@ -139,7 +139,8 @@ public class AppState {
         public void emmit(final T data) {
             if (data != null) {
                 AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
-                    @Override public void call() {
+                    @Override
+                    public void call() {
                         getBehaviorSubject().onNext(data);
                     }
                 });

@@ -44,7 +44,6 @@
                     android:layout_centerInParent="true"
                     android:hint="@string/password"
                     android:imeOptions="actionNext"
-                    android:inputType="textPassword"
                     android:paddingRight="24dp" />
 
 
