@@ -3,6 +3,7 @@ package com.topface.topface.data;
 
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.webkit.URLUtil;
 
 import com.google.gson.annotations.SerializedName;
@@ -519,10 +520,13 @@ public class Options extends AbstractData {
 
         private int getPageId(String page) {
             BaseFragment.FragmentId fragmentId = BaseFragment.FragmentId.UNDEFINED;
-            try {
-                fragmentId = BaseFragment.FragmentId.valueOf(page);
-            } catch (IllegalArgumentException e) {
-                Debug.error("Illegal value of pageId", e);
+            if (!TextUtils.isEmpty(page)) {
+                try {
+
+                    fragmentId = BaseFragment.FragmentId.valueOf(page);
+                } catch (IllegalArgumentException e) {
+                    Debug.error("Illegal value of pageId", e);
+                }
             }
             return fragmentId.getId();
         }

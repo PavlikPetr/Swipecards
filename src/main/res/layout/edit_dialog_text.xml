@@ -14,5 +14,6 @@
         android:imeOptions="actionDone|flagNoExtractUi"
         android:layout_gravity="center_horizontal"
         android:inputType="textCapSentences"
+        android:textSize="18sp"
         android:layout_margin="15dp" />
 </FrameLayout>
