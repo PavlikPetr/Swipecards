@@ -39,6 +39,11 @@ public class Configurations {
     public FeedsCache getFeedsCache() {
         if (mFeedsCache == null) {
             mFeedsCache = new FeedsCache(null, mContext);
+        } else {
+            if (!TextUtils.isEmpty(AuthToken.getInstance().getUserTokenUniqueId()) &&
+                    !AuthToken.getInstance().getUserTokenUniqueId().equals(mFeedsCache.getUnique())) {
+                mFeedsCache.updateConfig(AuthToken.getInstance().getUserTokenUniqueId());
+            }
         }
         return mFeedsCache;
     }
