@@ -32,6 +32,9 @@ public class BaseEditDialog<T extends Parcelable> extends BaseDialog {
     private TextView mTitleText;
     private TextView mLimitText;
     private ViewStub mButtonsStub;
+    private Activity mActivity;
+    private T mData;
+
 
     @Override
     protected int getDialogStyleResId() {
@@ -43,15 +46,19 @@ public class BaseEditDialog<T extends Parcelable> extends BaseDialog {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         Bundle args = getArguments();
+        mActivity = activity;
         if (args != null) {
             mTitle = args.getString(DIALOG_TITLE);
-            T data = args.getParcelable(DATA);
-            mAdapter = new EditAdapterFactory().createAdapterFor(activity, data);
+            mData = args.getParcelable(DATA);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (savedInstanceState != null && savedInstanceState.containsKey(DATA)) {
+            mData = savedInstanceState.getParcelable(DATA);
+        }
+        mAdapter = new EditAdapterFactory().createAdapterFor(mActivity, mData);
         View view = inflater.inflate(getDialogLayoutRes(), container, false);
         initViews(view);
         return view;
@@ -95,5 +102,14 @@ public class BaseEditDialog<T extends Parcelable> extends BaseDialog {
 
     protected ViewStub getButtonsStub() {
         return mButtonsStub;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        AbstractEditAdapter<T> adapter = getAdapter();
+        if (adapter != null) {
+            outState.putParcelable(DATA, adapter.getCurrentData());
+        }
     }
 }

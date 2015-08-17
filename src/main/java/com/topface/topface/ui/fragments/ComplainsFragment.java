@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.topface.topface.R;
@@ -12,22 +13,31 @@ import com.topface.topface.ui.ComplainsMessageActivity;
 
 public class ComplainsFragment extends BaseFragment {
 
+    private static final String SCROLL_VIEW_LIST = "scroll_view_list";
+
     public static final String USERID = "USERID";
     public static final String FEEDID = "FEEDID";
     private int userId;
     private String feedId;
+    private ScrollView mScroll;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.complains_fragment, container, false);
         Bundle args = getArguments();
+        mScroll = (ScrollView) root.findViewById(R.id.complains_scroll);
+        int scroll = 0;
+        if (savedInstanceState != null) {
+            scroll = savedInstanceState.getInt(SCROLL_VIEW_LIST);
+        }
         userId = args.getInt(USERID, -1);
         feedId = args.getString(FEEDID);
         initViews(root);
         if (userId == -1) {
             getActivity().finish();
         }
+        mScroll.scrollTo(0, scroll);
         return root;
     }
 
@@ -123,5 +133,13 @@ public class ComplainsFragment extends BaseFragment {
     @Override
     protected String getTitle() {
         return getString(R.string.general_complain);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mScroll != null) {
+            outState.putInt(SCROLL_VIEW_LIST, mScroll.getScrollY());
+        }
     }
 }

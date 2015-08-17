@@ -39,7 +39,6 @@ import com.nhaarman.listviewanimations.appearance.ChatListAnimatedAdapter;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
 import com.topface.framework.JsonUtils;
-import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -86,12 +85,9 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
 import com.topface.topface.utils.controllers.PopularUserChatController;
-import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.social.AuthToken;
-
-import org.acra.sender.ReportSenderException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -882,7 +878,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         super.onPause();
         LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(mNewMessageReceiver);
         stopTimer();
-        Utils.hideSoftKeyboard(getActivity(), mEditBox);
     }
 
     @Override

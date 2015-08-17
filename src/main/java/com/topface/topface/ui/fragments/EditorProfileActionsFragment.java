@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,11 +29,15 @@ import org.json.JSONTokener;
 public class EditorProfileActionsFragment extends BaseFragment implements View.OnClickListener {
     public static final String USERID = "USERID";
     public static final String PROFILE_RESPONSE = "PROFILE_RESPONSE";
+    private static final String FULL_INFO_VISIBLE = "full_info_visible";
+    private static final String SCROLL_VIEW_LIST = "scroll_view_list";
     private int mUserId;
     private String mResponse = null;
     private User mUser = null;
     private View mFullInfo = null;
     private View mLocker = null;
+    private boolean mIsFullInfoVisible;
+    private ScrollView mScroll;
 
     public class BanAction {
         public static final String SPAM_MSG = "TWO_MONTHS_SPAM";
@@ -55,7 +60,13 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_editor_profile_actions, container, false);
         Bundle args = getArguments();
-
+        mIsFullInfoVisible = false;
+        int scroll = 0;
+        if (savedInstanceState != null) {
+            mIsFullInfoVisible = savedInstanceState.getBoolean(FULL_INFO_VISIBLE);
+            scroll = savedInstanceState.getInt(SCROLL_VIEW_LIST);
+        }
+        mScroll = (ScrollView) root.findViewById(R.id.editor_profile_scroll);
         mUserId = args.getInt(USERID, -1);
 
         mResponse = args.getString(PROFILE_RESPONSE);
@@ -74,6 +85,7 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
         if (mUserId == -1) {
             getActivity().finish();
         }
+        mScroll.scrollTo(0, scroll);
         return root;
     }
 
@@ -135,6 +147,7 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
         if (ok) {
             mFullInfo = root.findViewById(R.id.editor_ban_profile_full_info);
             root.findViewById(R.id.editor_ban_profile_show_full_info).setOnClickListener(this);
+            mFullInfo.setVisibility(mIsFullInfoVisible ? View.VISIBLE : View.GONE);
         } else {
             showView(root, R.id.editor_ban_profile_show_full_info, false);
         }
@@ -248,5 +261,14 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
                 showView(mLocker, false);
             }
         }).exec();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(FULL_INFO_VISIBLE, mFullInfo.getVisibility() == View.VISIBLE);
+        if (mScroll != null) {
+            outState.putInt(SCROLL_VIEW_LIST, mScroll.getScrollY());
+        }
     }
 }

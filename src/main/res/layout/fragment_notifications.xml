@@ -1,44 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_white">
 
-    <include
-        android:id="@+id/notification_sympathies"
-        layout="@layout/item_edit_form_select" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <include
-        android:id="@+id/notification_mutuals"
-        layout="@layout/item_edit_form_select" />
+        <include
+            android:id="@+id/notification_sympathies"
+            layout="@layout/item_edit_form_select" />
 
-    <include
-        android:id="@+id/notification_messages"
-        layout="@layout/item_edit_form_select" />
+        <include
+            android:id="@+id/notification_mutuals"
+            layout="@layout/item_edit_form_select" />
 
-    <include
-        android:id="@+id/notification_guests"
-        layout="@layout/item_edit_form_select" />
+        <include
+            android:id="@+id/notification_messages"
+            layout="@layout/item_edit_form_select" />
 
-    <CheckBox
-        android:tag="tvTitle"
-        style="@style/WhiteListItem.Underline"
-        android:id="@+id/notification_vibro"
-        android:drawableLeft="@null"
-        android:drawableRight="@drawable/selector_checkbox"
-        android:checked="false" />
+        <include
+            android:id="@+id/notification_guests"
+            layout="@layout/item_edit_form_select" />
 
-    <CheckBox
-        android:tag="tvTitle"
-        style="@style/WhiteListItem.Underline"
-        android:id="@+id/notification_led"
-        android:drawableLeft="@null"
-        android:drawableRight="@drawable/selector_checkbox"
-        android:checked="false" />
+        <CheckBox
+            android:id="@+id/notification_vibro"
+            style="@style/WhiteListItem.Underline"
+            android:checked="false"
+            android:drawableLeft="@null"
+            android:drawableRight="@drawable/selector_checkbox"
+            android:tag="tvTitle" />
 
-    <include
-        android:id="@+id/notification_melody"
-        layout="@layout/item_edit_form_select" />
+        <CheckBox
+            android:id="@+id/notification_led"
+            style="@style/WhiteListItem.Underline"
+            android:checked="false"
+            android:drawableLeft="@null"
+            android:drawableRight="@drawable/selector_checkbox"
+            android:tag="tvTitle" />
 
-</LinearLayout>
+        <include
+            android:id="@+id/notification_melody"
+            layout="@layout/item_edit_form_select" />
+
+    </LinearLayout>
+</ScrollView>

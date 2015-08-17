@@ -1,12 +1,14 @@
 package com.topface.topface.ui.dialogs;
 
 import android.app.AlertDialog;
-import android.content.Context;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.UnderlineSpan;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
+import com.topface.topface.ui.analytics.TrackedDialogFragment;
 import com.topface.topface.utils.CacheProfile;
 
 import java.text.SimpleDateFormat;
@@ -24,25 +27,30 @@ import java.util.Calendar;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class AboutAppDialog {
+public class AboutAppDialog extends TrackedDialogFragment {
+    private static final String DIALOG_TITLE = "dialog_title";
 
-    private Context mContext;
-
-    public AboutAppDialog(Context context, String title) {
-        mContext = context;
-        showAboutAppDialog(title);
+    public static AboutAppDialog newInstance(String title) {
+        AboutAppDialog dialog = new AboutAppDialog();
+        Bundle args = new Bundle();
+        args.putString(DIALOG_TITLE, title);
+        dialog.setArguments(args);
+        return dialog;
     }
 
-    private void showAboutAppDialog(String titleDialog) {
-        View view = LayoutInflater.from(mContext)
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        String titleDialog = getArguments().getString(DIALOG_TITLE);
+        View view = LayoutInflater.from(getActivity())
                 .inflate(R.layout.fragment_about, null);
         // Version
         TextView version = (TextView) view.findViewById(R.id.tvVersion);
         String versionNumber;
 
         try {
-            PackageManager packageManager = mContext.getPackageManager();
-            String packageName = mContext.getPackageName();
+            PackageManager packageManager = getActivity().getPackageManager();
+            String packageName = getActivity().getPackageName();
             versionNumber = BuildConfig.VERSION_NAME;
 
             //Дополнительную информацию показываем только в дебаг режиме
@@ -55,13 +63,13 @@ public class AboutAppDialog {
             Debug.error(e);
         }
 
-        version.setText(mContext.getResources().getString(R.string.settings_version) + " " + versionNumber);
+        version.setText(getActivity().getResources().getString(R.string.settings_version) + " " + versionNumber);
 
         // Copyright
         TextView copyright = (TextView) view.findViewById(R.id.tvCopyright);
-        String copyrightText = mContext.getResources().getString(R.string.settings_copyright) +
+        String copyrightText = getActivity().getResources().getString(R.string.settings_copyright) +
                 Calendar.getInstance().get(Calendar.YEAR) + " " +
-                mContext.getResources().getString(R.string.settings_rights_reserved);
+                getActivity().getResources().getString(R.string.settings_rights_reserved);
         copyright.setText(copyrightText);
 
         // Extra
@@ -74,16 +82,16 @@ public class AboutAppDialog {
             public void onClick(View v) {
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(CacheProfile.getOptions().aboutApp.url));
-                mContext.startActivity(i);
+                getActivity().startActivity(i);
             }
         });
-        new AlertDialog.Builder(mContext)
+        return new AlertDialog.Builder(getActivity())
                 .setTitle(titleDialog).setView(view)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, int whichButton) {
                         dialog.dismiss();
                     }
-                }).show();
+                }).create();
     }
 
     /**

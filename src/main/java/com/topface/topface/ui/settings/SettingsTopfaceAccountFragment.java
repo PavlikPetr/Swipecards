@@ -2,10 +2,12 @@ package com.topface.topface.ui.settings;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -33,6 +35,8 @@ import com.topface.topface.requests.RemindRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.IDialogListener;
+import com.topface.topface.ui.analytics.TrackedDialogFragment;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -380,55 +384,44 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     }
 
     private void showLogoutPopup(final String email) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(String.format(getActivity().getString(R.string.logout_if_email_already_registred), email));
-        builder.setPositiveButton(R.string.general_exit, new DialogInterface.OnClickListener() {
+        final LogoutDialog logoutDialog = LogoutDialog.newInstance(email);
+        logoutDialog.setDialogInterface(new IDialogListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onPositiveButtonClick() {
                 logout();
             }
-        });
-        builder.setNegativeButton(R.string.general_cancel, new DialogInterface.OnClickListener() {
+
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+            public void onNegativeButtonClick() {
             }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.setCanceledOnTouchOutside(true);
-        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
             @Override
-            public void onDismiss(DialogInterface dialog) {
+            public void onDismissListener() {
                 setClickableAccountManagmentButtons(true);
             }
         });
-        alertDialog.show();
+        logoutDialog.show(getFragmentManager(), LogoutDialog.class.getName());
     }
 
     private void showExitPopup() {
         setClickableAccountManagmentButtons(false);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.settings_logout_msg);
-        builder.setNegativeButton(R.string.general_no, new DialogInterface.OnClickListener() {
+        final ExitDialog exitDialog = new ExitDialog();
+        exitDialog.setDialogInterface(new IDialogListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.setPositiveButton(R.string.general_yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onPositiveButtonClick() {
                 logout();
             }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
             @Override
-            public void onDismiss(DialogInterface dialog) {
+            public void onNegativeButtonClick() {
+            }
+
+            @Override
+            public void onDismissListener() {
                 setClickableAccountManagmentButtons(true);
             }
         });
-        alertDialog.show();
+        exitDialog.show(getFragmentManager(), ExitDialog.class.getName());
     }
 
     private void setClickableAccountManagmentButtons(boolean b) {
@@ -453,6 +446,100 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             Toast.makeText(App.getContext(), R.string.general_email_success_confirmed, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(App.getContext(), R.string.general_email_not_confirmed, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static class ExitDialog extends TrackedDialogFragment {
+        private IDialogListener mIDialogListener;
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            return new AlertDialog.Builder(getActivity())
+                    .setMessage(R.string.settings_logout_msg)
+                    .setNegativeButton(R.string.general_no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                            if (mIDialogListener != null) {
+                                mIDialogListener.onNegativeButtonClick();
+                            }
+                        }
+                    })
+                    .setPositiveButton(R.string.general_yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (mIDialogListener != null) {
+                                mIDialogListener.onPositiveButtonClick();
+                            }
+                        }
+                    }).create();
+        }
+
+        public void setDialogInterface(IDialogListener dialogInterface) {
+            mIDialogListener = dialogInterface;
+        }
+
+        @Override
+        public void onDismiss(DialogInterface dialog) {
+            super.onDismiss(dialog);
+            if (mIDialogListener != null) {
+                mIDialogListener.onDismissListener();
+            }
+        }
+    }
+
+    public static class LogoutDialog extends TrackedDialogFragment {
+        private static final String EMAIL = "logout_dialog_email";
+        private IDialogListener mIDialogListener;
+
+        public static LogoutDialog newInstance(String email) {
+            LogoutDialog logoutDialog = new LogoutDialog();
+            Bundle bundle = new Bundle();
+            bundle.putString(EMAIL, email);
+            logoutDialog.setArguments(bundle);
+            return logoutDialog;
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            String email = "";
+            Bundle bundle = getArguments();
+            if (bundle != null) {
+                email = bundle.getString(EMAIL);
+            }
+            return new AlertDialog.Builder(getActivity())
+                    .setMessage(String.format(getActivity().getString(R.string.logout_if_email_already_registred), email))
+                    .setPositiveButton(R.string.general_exit, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (mIDialogListener != null) {
+                                mIDialogListener.onPositiveButtonClick();
+                            }
+                        }
+                    })
+                    .setNegativeButton(R.string.general_cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                            if (mIDialogListener != null) {
+                                mIDialogListener.onNegativeButtonClick();
+                            }
+                        }
+                    }).create();
+        }
+
+        public void setDialogInterface(IDialogListener dialogInterface) {
+            mIDialogListener = dialogInterface;
+        }
+
+        @Override
+        public void onDismiss(DialogInterface dialog) {
+            super.onDismiss(dialog);
+            if (mIDialogListener != null) {
+                mIDialogListener.onDismissListener();
+            }
         }
     }
 }

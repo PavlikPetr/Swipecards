@@ -85,12 +85,6 @@ public class SettingsChangeAuthDataFragment extends BaseFragment implements OnCl
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Utils.hideSoftKeyboard(getActivity(), mEdMainField, mEdConfirmationField);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         mBtnSave.setClickable(true);

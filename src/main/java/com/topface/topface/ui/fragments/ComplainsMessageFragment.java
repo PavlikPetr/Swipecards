@@ -33,12 +33,6 @@ public class ComplainsMessageFragment extends BaseFragment {
     private MenuItem mSendMenuItem;
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Utils.hideSoftKeyboard(getActivity(), description);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.complains_message_fragment, container, false);

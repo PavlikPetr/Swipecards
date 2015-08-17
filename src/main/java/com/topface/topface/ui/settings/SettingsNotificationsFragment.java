@@ -243,7 +243,7 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
 
     @Override
     public void onClick(View v) {
-        FragmentManager fm = getChildFragmentManager();
+        FragmentManager fm = getFragmentManager();
         Resources res = App.getContext().getResources();
         switch (v.getId()) {
             case R.id.notification_sympathies:
