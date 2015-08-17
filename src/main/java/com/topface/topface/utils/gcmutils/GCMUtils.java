@@ -476,7 +476,7 @@ public class GCMUtils {
                 i.putExtra(NEXT_INTENT, GEO);
                 break;
             case GCM_TYPE_UPDATE:
-                i = Utils.getMarketIntent(context);
+                i = Utils.getMarketIntent();
                 //Есть шанс что ссылка на маркет не будет поддерживаться
                 if (!Utils.isCallableIntent(i, context)) {
                     i = new Intent(context, NavigationActivity.class);

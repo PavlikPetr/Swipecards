@@ -3,9 +3,7 @@ package com.topface.topface.utils;
 import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -17,6 +15,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
@@ -41,6 +40,8 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.ui.IDialogListener;
+import com.topface.topface.ui.dialogs.OldVersionDialog;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.social.AuthToken;
@@ -172,23 +173,22 @@ public class Utils {
     }
 
     public static void startOldVersionPopup(final Activity activity, boolean cancelable) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
+        OldVersionDialog oldVersionDialog = OldVersionDialog.newInstance(cancelable);
+        oldVersionDialog.setDialogInterface(new IDialogListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onPositiveButtonClick() {
                 Utils.goToMarket(activity);
             }
+
+            @Override
+            public void onNegativeButtonClick() {
+            }
+
+            @Override
+            public void onDismissListener() {
+            }
         });
-        if (cancelable) {
-            builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-        }
-        builder.setMessage(R.string.general_version_not_supported);
-        builder.setCancelable(cancelable);
-        builder.create().show();
+        oldVersionDialog.show(((FragmentActivity) activity).getSupportFragmentManager(), OldVersionDialog.class.getName());
     }
 
     public static void goToMarket(Activity context) {
@@ -196,7 +196,7 @@ public class Utils {
     }
 
     public static void goToMarket(Activity context, Integer requestCode) {
-        Intent marketIntent = getMarketIntent(context);
+        Intent marketIntent = getMarketIntent();
         if (isCallableIntent(marketIntent, context)) {
             if (requestCode == null) {
                 context.startActivity(marketIntent);
@@ -214,7 +214,7 @@ public class Utils {
         return list.size() > 0;
     }
 
-    public static Intent getMarketIntent(Context context) {
+    public static Intent getMarketIntent() {
         return new Intent(Intent.ACTION_VIEW, Uri.parse(CacheProfile.getOptions().updateUrl));
     }
 
