@@ -815,7 +815,7 @@
         <item name="android:paddingRight">56dp</item>
     </style>
 
-    <style name="ButtonAddLeader" parent="FlatButton.Blue">
+    <style name="ButtonAddLeader" parent="Widget.Topface.Button.Big.Blue">
         <item name="android:layout_marginLeft">6dp</item>
         <item name="android:layout_marginRight">6dp</item>
         <item name="android:layout_marginTop">8dp</item>
@@ -986,36 +986,6 @@
     <style name="OverflowDropDownMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="overlapAnchor">false</item>
         <item name="android:overlapAnchor" tools:ignore="NewApi">false</item>
-    </style>
-
-    <style name="FlatButton">
-        <item name="android:textColor">@color/text_white</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:minHeight">44dp</item>
-        <item name="android:minWidth">240dp</item>
-        <item name="android:fontFamily" tools:ignore="NewApi">Roboto Regular</item>
-    </style>
-
-    <style name="FlatButton.Emptyfeed" parent="FlatButton">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:singleLine">true</item>
-    </style>
-
-    <style name="FlatButton.Gray.Emptyfeed" parent="FlatButton.Emptyfeed">
-        <item name="android:background">@drawable/flat_gray_btn</item>
-    </style>
-
-    <style name="FlatButton.Blue.Emptyfeed" parent="FlatButton.Emptyfeed">
-        <item name="android:background">@drawable/flat_blue_btn</item>
-    </style>
-
-    <style name="FlatButton.Gray">
-        <item name="android:background">@drawable/flat_gray_btn</item>
-    </style>
-
-    <style name="FlatButton.Blue">
-        <item name="android:background">@drawable/flat_blue_btn</item>
     </style>
 
     <style name="BanButton">
@@ -1233,6 +1203,18 @@
         <item name="android:listSelector">
             @drawable/filter_light_edit_form_dialog_background_color_selector
         </item>
+    </style>
+
+    <style name="BigStretchedBlueButton" parent="Widget.Topface.Button.Big.Blue">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minWidth">240dp</item>
+    </style>
+
+    <style name="BigStretchedGrayButton" parent="Widget.Topface.Button.Big.Gray">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minWidth">240dp</item>
     </style>
 
     <style name="UserInfoTextStyle">

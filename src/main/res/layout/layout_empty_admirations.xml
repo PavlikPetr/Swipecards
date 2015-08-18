@@ -32,8 +32,7 @@
 
             <Button
                 android:id="@+id/btnStartRate"
-                style="@style/FlatButton.Blue.Emptyfeed"
-                android:layout_weight="1"
+                style="@style/BigStretchedBlueButton"
                 android:text="@string/buy_resources" />
         </LinearLayout>
 
@@ -101,7 +100,7 @@
 
         <Button
             android:id="@+id/btnBuyVip"
-            style="@style/FlatButton.Blue"
+            style="@style/Widget.Topface.Button.Big.Blue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

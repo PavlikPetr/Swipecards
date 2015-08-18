@@ -32,7 +32,7 @@
 
             <Button
                 android:id="@+id/btnStartRate"
-                style="@style/FlatButton.Blue.Emptyfeed"
+                style="@style/BigStretchedBlueButton"
                 android:layout_weight="1"
                 android:text="@string/buy_resources" />
         </LinearLayout>
