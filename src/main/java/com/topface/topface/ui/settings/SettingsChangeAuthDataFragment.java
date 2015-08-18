@@ -73,7 +73,7 @@ public class SettingsChangeAuthDataFragment extends BaseFragment {
         ButterKnife.bind(this, root);
         mChangePassword = getArguments().getBoolean("changePassword");
         mLockerView.setVisibility(View.GONE);
-        root.findViewById(R.id.setPasswordText).setVisibility(mNeedExit ? View.VISIBLE : View.GONE);
+        ButterKnife.findById(root, R.id.setPasswordText).setVisibility(mNeedExit ? View.VISIBLE : View.GONE);
         if (mNeedExit) {
             mBtnSave.setText(getString(R.string.general_save_and_exit));
         }

@@ -53,20 +53,20 @@ public class EditorProfileActionsFragment extends BaseFragment {
         DEL_ABOUT("REMOVE_ABOUT", R.id.editor_ban_del_about),
         CHANGE_GENDER("SWITCH_SEX", R.id.editor_ban_change_gender);
 
-        private String text;
-        private int viewId;
+        private String mText;
+        private int mViewId;
 
         BAN_ACTION(String text, int viewId) {
-            this.text = text;
-            this.viewId = viewId;
+            this.mText = text;
+            this.mViewId = viewId;
         }
 
-        public int getViewId() {
-            return viewId;
+        public int getmViewId() {
+            return mViewId;
         }
 
-        public String getText() {
-            return text;
+        public String getmText() {
+            return mText;
         }
 
     }
@@ -253,8 +253,8 @@ public class EditorProfileActionsFragment extends BaseFragment {
 
     private String getTextByViewId(int viewId) {
         for (BAN_ACTION action : BAN_ACTION.values()) {
-            if (action.getViewId() == viewId) {
-                return action.getText();
+            if (action.getmViewId() == viewId) {
+                return action.getmText();
             }
         }
         return null;
