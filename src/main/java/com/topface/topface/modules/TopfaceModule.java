@@ -4,6 +4,7 @@ import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.promo.dialogs.PromoDialog;
+import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.promo.dialogs.PromoKey31Dialog;
 import com.topface.topface.promo.dialogs.PromoKey71Dialog;
 import com.topface.topface.promo.dialogs.PromoKey81Dialog;
@@ -80,7 +81,8 @@ import dagger.Provides;
                 PromoKey71Dialog.class,
                 PromoKey81Dialog.class,
                 PaymentwallActivity.class,
-                PromoKey31Dialog.class
+                PromoKey31Dialog.class,
+                PromoExpressMessages.class
         }
 )
 public class TopfaceModule {
