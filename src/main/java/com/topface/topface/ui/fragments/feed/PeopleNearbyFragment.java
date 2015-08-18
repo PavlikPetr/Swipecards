@@ -106,8 +106,10 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         if (null != mBalanceSubscription) {
             mBalanceSubscription.unsubscribe();
         }
-        mGeoLocationManager.unregisterProvidersChangedActionReceiver();
-        mGeoLocationManager.stopLocationListener();
+        if (mGeoLocationManager != null) {
+            mGeoLocationManager.unregisterProvidersChangedActionReceiver();
+            mGeoLocationManager.stopLocationListener();
+        }
         super.onDestroy();
     }
 
