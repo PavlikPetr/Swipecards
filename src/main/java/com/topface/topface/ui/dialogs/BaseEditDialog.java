@@ -32,7 +32,6 @@ public class BaseEditDialog<T extends Parcelable> extends BaseDialog {
     private TextView mTitleText;
     private TextView mLimitText;
     private ViewStub mButtonsStub;
-    private Activity mActivity;
     private T mData;
 
 
@@ -46,7 +45,6 @@ public class BaseEditDialog<T extends Parcelable> extends BaseDialog {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         Bundle args = getArguments();
-        mActivity = activity;
         if (args != null) {
             mTitle = args.getString(DIALOG_TITLE);
             mData = args.getParcelable(DATA);
@@ -58,7 +56,7 @@ public class BaseEditDialog<T extends Parcelable> extends BaseDialog {
         if (savedInstanceState != null && savedInstanceState.containsKey(DATA)) {
             mData = savedInstanceState.getParcelable(DATA);
         }
-        mAdapter = new EditAdapterFactory().createAdapterFor(mActivity, mData);
+        mAdapter = new EditAdapterFactory().createAdapterFor(getActivity(), mData);
         View view = inflater.inflate(getDialogLayoutRes(), container, false);
         initViews(view);
         return view;

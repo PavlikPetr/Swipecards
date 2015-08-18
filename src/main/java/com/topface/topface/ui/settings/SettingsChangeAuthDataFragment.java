@@ -6,11 +6,9 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.topface.topface.App;
@@ -27,16 +25,37 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-public class SettingsChangeAuthDataFragment extends BaseFragment implements OnClickListener {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-    private View mLockerView;
-    private EditText mEdMainField;
-    private EditText mEdConfirmationField;
-    private EditText mOldPassword;
-    private Button mBtnSave;
+public class SettingsChangeAuthDataFragment extends BaseFragment {
+
     private AuthToken mToken = AuthToken.getInstance();
     private boolean mNeedExit;
     private boolean mChangePassword;
+
+    @Bind(R.id.llvLogoutLoading)
+    View mLockerView;
+    @Bind(R.id.edMainField)
+    EditText mEdMainField;
+    @Bind(R.id.edConfirmationField)
+    EditText mEdConfirmationField;
+    @Bind(R.id.edOldPassword)
+    EditText mOldPassword;
+    @Bind(R.id.btnSave)
+    Button mBtnSave;
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.btnSave)
+    protected void saveBtnClick() {
+        Utils.hideSoftKeyboard(getActivity(), mEdMainField, mEdConfirmationField);
+        if (mChangePassword) {
+            changePassword();
+        } else {
+            changeEmail();
+        }
+    }
 
     public static SettingsChangeAuthDataFragment newInstance(boolean needExit, boolean changePassword) {
         Bundle args = new Bundle();
@@ -51,25 +70,13 @@ public class SettingsChangeAuthDataFragment extends BaseFragment implements OnCl
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_change_auth_data, container, false);
+        ButterKnife.bind(this, root);
         mChangePassword = getArguments().getBoolean("changePassword");
-        mLockerView = root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
-
-        TextView mSetPasswordText = (TextView) root.findViewById(R.id.setPasswordText);
-
-        if (mNeedExit) {
-            mSetPasswordText.setVisibility(View.VISIBLE);
-        }
-
-        mEdMainField = (EditText) root.findViewById(R.id.edMainField);
-        mEdConfirmationField = (EditText) root.findViewById(R.id.edConfirmationField);
-        mOldPassword = (EditText) root.findViewById(R.id.edOldPassword);
-
-        mBtnSave = (Button) root.findViewById(R.id.btnSave);
+        root.findViewById(R.id.setPasswordText).setVisibility(mNeedExit ? View.VISIBLE : View.GONE);
         if (mNeedExit) {
             mBtnSave.setText(getString(R.string.general_save_and_exit));
         }
-        mBtnSave.setOnClickListener(this);
         if (mChangePassword) {
             mEdMainField.setHint(R.string.enter_new_password);
             mEdMainField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
@@ -106,22 +113,6 @@ public class SettingsChangeAuthDataFragment extends BaseFragment implements OnCl
             return getString(R.string.password_changing);
         } else {
             return getString(R.string.email_changing);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnSave:
-                Utils.hideSoftKeyboard(getActivity(), mEdMainField, mEdConfirmationField);
-                if (mChangePassword) {
-                    changePassword();
-                } else {
-                    changeEmail();
-                }
-                break;
-            default:
-                break;
         }
     }
 

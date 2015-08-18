@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,21 +27,72 @@ import com.topface.topface.utils.MarketApiManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-public class SettingsFragment extends ProfileInnerFragment implements OnClickListener {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class SettingsFragment extends ProfileInnerFragment {
 
     private TextView mSocialNameText;
     private MarketApiManager mMarketApiManager;
 
-    private View mLoNotifications;
-
     private TextView preloadPhotoName;
-    private ViewGroup mNoNotificationViewGroup;
+
+    @Bind(R.id.loNotifications)
+    View mLoNotifications;
+    @Bind(R.id.loNoNotifications)
+    ViewGroup mNoNotificationViewGroup;
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.loNotifications)
+    protected void notificationClick() {
+        Intent intent = new Intent(App.getContext(), SettingsContainerActivity.class);
+        startActivityForResult(intent, SettingsContainerActivity.INTENT_NOTIFICATIONS);
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.loAccount)
+    protected void accountClick() {
+        Intent intent = new Intent(App.getContext(), SettingsContainerActivity.class);
+        startActivityForResult(intent, SettingsContainerActivity.INTENT_ACCOUNT);
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.loFeedback)
+    protected void feedbackClick() {
+        Intent intent = new Intent(App.getContext(), SettingsContainerActivity.class);
+        startActivityForResult(intent, SettingsContainerActivity.INTENT_FEEDBACK);
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.loAbout)
+    protected void aboutClick() {
+        AboutAppDialog.newInstance(getActivity().getString(R.string.settings_about)).show(getFragmentManager(),
+                AboutAppDialog.class.getName());
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.loLanguage)
+    protected void languageClick() {
+        new SelectLanguageDialog().show(getFragmentManager(), SelectLanguageDialog.class.getName());
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.loHelp)
+    protected void helpClick() {
+        String helpUrl = CacheProfile.getOptions().helpUrl;
+        if (!TextUtils.isEmpty(helpUrl)) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(helpUrl));
+            startActivity(intent);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(R.layout.fragment_settings, null);
-
+        ButterKnife.bind(this, view);
         mMarketApiManager = new MarketApiManager();
 
         // Account
@@ -69,9 +119,6 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         View frame;
 
         // Notifications
-        mLoNotifications = root.findViewById(R.id.loNotifications);
-        mLoNotifications.setOnClickListener(this);
-        mNoNotificationViewGroup = (ViewGroup) root.findViewById(R.id.loNoNotifications);
         mNoNotificationViewGroup.findViewById(R.id.buttonNoNotificationsSetServices)
                 .setOnClickListener(new OnClickListener() {
                     @Override
@@ -85,19 +132,9 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
 
         // Help
         View help = root.findViewById(R.id.loHelp);
-        help.setOnClickListener(this);
         if (TextUtils.isEmpty(CacheProfile.getOptions().helpUrl)) {
             help.setVisibility(View.GONE);
         }
-
-        // Feedback
-        root.findViewById(R.id.loFeedback).setOnClickListener(this);
-
-        // Language app
-        root.findViewById(R.id.loLanguage).setOnClickListener(this);
-
-        // About
-        root.findViewById(R.id.loAbout).setOnClickListener(this);
 
         //Preload photo
         frame = root.findViewById(R.id.loPreloadPhoto);
@@ -105,7 +142,6 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         preloadPhotoName = (TextView) frame.findViewWithTag("tvText");
         preloadPhotoName.setVisibility(View.VISIBLE);
         preloadPhotoName.setText(App.getUserConfig().getPreloadPhotoType().getName());
-        frame.setOnClickListener(this);
     }
 
     private void initAccountViews(View root) {
@@ -115,7 +151,6 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         getSocialAccountName(mSocialNameText);
         getSocialAccountIcon(mSocialNameText);
         mSocialNameText.setVisibility(View.VISIBLE);
-        frame.setOnClickListener(this);
     }
 
     private void setNotificationsState() {
@@ -138,46 +173,9 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        Intent intent;
-        Context applicationContext = App.getContext();
-        switch (v.getId()) {
-            case R.id.loAccount:
-                intent = new Intent(applicationContext, SettingsContainerActivity.class);
-                startActivityForResult(intent, SettingsContainerActivity.INTENT_ACCOUNT);
-                break;
-            case R.id.loHelp:
-                String helpUrl = CacheProfile.getOptions().helpUrl;
-                if (!TextUtils.isEmpty(helpUrl)) {
-                    intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(helpUrl));
-                    startActivity(intent);
-                }
-                break;
-            case R.id.loFeedback:
-                intent = new Intent(applicationContext, SettingsContainerActivity.class);
-                startActivityForResult(intent, SettingsContainerActivity.INTENT_FEEDBACK);
-                break;
-            case R.id.loAbout:
-                AboutAppDialog.newInstance(getActivity().getString(R.string.settings_about)).show(getFragmentManager(), AboutAppDialog.class.getName());
-                break;
-            case R.id.loLanguage:
-                new SelectLanguageDialog().show(getFragmentManager(), SelectLanguageDialog.class.getName());
-                break;
-            case R.id.loPreloadPhoto:
-                showPreloadPhotoSelectorDialog();
-                break;
-            case R.id.loNotifications:
-                intent = new Intent(applicationContext, SettingsContainerActivity.class);
-                startActivityForResult(intent, SettingsContainerActivity.INTENT_NOTIFICATIONS);
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void showPreloadPhotoSelectorDialog() {
+    @SuppressWarnings("unused")
+    @OnClick(R.id.loPreloadPhoto)
+    protected void showPreloadPhotoSelectorDialog() {
         PreloadPhotoSelectorDialog preloadPhotoSelectorDialog = new PreloadPhotoSelectorDialog();
         preloadPhotoSelectorDialog.setPreloadPhotoTypeListener(new PreloadPhotoSelectorDialog.PreloadPhotoTypeListener() {
             @Override

@@ -21,7 +21,6 @@
             android:orientation="vertical">
 
             <RelativeLayout
-                android:id="@+id/fieldContainer_layout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="18dp"

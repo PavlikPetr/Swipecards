@@ -36,16 +36,19 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
-public class ProfilePhotoFragment extends ProfileInnerFragment implements View.OnClickListener {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnItemClick;
+import butterknife.OnItemLongClick;
+
+public class ProfilePhotoFragment extends ProfileInnerFragment {
 
     private static final String POSITION = "POSITION";
     private static final String FLIPPER_VISIBLE_CHILD = "FLIPPER_VISIBLE_CHILD";
 
     private OwnPhotoGridAdapter mProfilePhotoGridAdapter;
 
-    private ViewFlipper mViewFlipper;
-    private GridViewWithHeaderAndFooter mGridAlbum;
-    private View mLoadingLocker;
     private View mGridFooterView;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -64,22 +67,40 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
             }
         }
     };
-    private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (position == 0) {
-                mViewFlipper.setDisplayedChild(1);
-            } else if (position <= CacheProfile.totalPhotos) {
-                startActivity(PhotoSwitcherActivity.getPhotoSwitcherIntent(
-                        null,
-                        position - 1,
-                        CacheProfile.uid,
-                        CacheProfile.totalPhotos,
-                        CacheProfile.photos
-                ));
-            }
+
+    @Bind(R.id.fppLocker)
+    View mLoadingLocker;
+    @Bind(R.id.vfFlipper)
+    ViewFlipper mViewFlipper;
+    @Bind(R.id.usedGrid)
+    GridViewWithHeaderAndFooter mGridAlbum;
+
+    @SuppressWarnings("unused")
+    @OnItemClick(R.id.usedGrid)
+    protected void gridItemClick(int position) {
+        if (position == 0) {
+            mViewFlipper.setDisplayedChild(1);
+        } else if (position <= CacheProfile.totalPhotos) {
+            startActivity(PhotoSwitcherActivity.getPhotoSwitcherIntent(
+                    null,
+                    position - 1,
+                    CacheProfile.uid,
+                    CacheProfile.totalPhotos,
+                    CacheProfile.photos
+            ));
         }
-    };
+    }
+
+    @SuppressWarnings("unused")
+    @OnItemLongClick(R.id.usedGrid)
+    protected boolean gridItemLongCkick(AdapterView<?> parent, View view, int position11, long id) {
+        Photo item = (Photo) parent.getItemAtPosition(position11);
+        if (needDialog(item)) {
+            startPhotoDialog(item, position11 - 1);
+            return true;
+        }
+        return false;
+    }
 
     private View createGridViewFooter() {
         return ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.gridview_footer_progress_bar, null, false);
@@ -139,6 +160,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
+        ButterKnife.bind(this, root);
         mGridFooterView = createGridViewFooter();
         //Navigation bar
 
@@ -147,11 +169,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
             setActionBarTitles(getString(R.string.edit_title), getString(R.string.edit_album));
         }
 
-        mLoadingLocker = root.findViewById(R.id.fppLocker);
-
-        mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
-
-        mGridAlbum = (GridViewWithHeaderAndFooter) root.findViewById(R.id.usedGrid);
         mProfilePhotoGridAdapter = new OwnPhotoGridAdapter(getActivity().getApplicationContext(), getPhotoLinks(),
                 CacheProfile.totalPhotos, new LoadingListAdapter.Updater() {
             @Override
@@ -168,30 +185,13 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
         }
         addFooterView();
         mGridAlbum.setSelection(position);
-        mGridAlbum.setOnItemClickListener(mOnItemClickListener);
         mGridAlbum.setOnScrollListener(mProfilePhotoGridAdapter);
-        mGridAlbum.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position11, long id) {
-                Photo item = (Photo) parent.getItemAtPosition(position11);
-                if (needDialog(item)) {
-                    startPhotoDialog(item, position11 - 1);
-                    return true;
-                }
-                return false;
-            }
-        });
         mGridAlbum.post(new Runnable() {
             @Override
             public void run() {
                 mGridAlbum.setAdapter(mProfilePhotoGridAdapter);
             }
         });
-
-        root.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(this);
-        root.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(this);
-        root.findViewById(R.id.btnCancel).setOnClickListener(this);
-
         return root;
     }
 
@@ -333,23 +333,17 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        if (null != v) {
-            int id = v.getId();
-            switch (id) {
-                case R.id.btnAddPhotoAlbum:
-                case R.id.btnAddPhotoCamera:
-                    mViewFlipper.setDisplayedChild(0);
-                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
-                            new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", id));
-                    break;
-                case R.id.btnCancel:
-                    mViewFlipper.setDisplayedChild(0);
-                    break;
+    @SuppressWarnings("unused")
+    @OnClick({R.id.btnAddPhotoAlbum, R.id.btnAddPhotoCamera})
+    protected void addPhotoClick(View v) {
+        mViewFlipper.setDisplayedChild(0);
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
+                new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", v.getId()));
+    }
 
-            }
-        }
-
+    @SuppressWarnings("unused")
+    @OnClick(R.id.btnCancel)
+    protected void cancelClick() {
+        mViewFlipper.setDisplayedChild(0);
     }
 }

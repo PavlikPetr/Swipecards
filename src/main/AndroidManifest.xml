@@ -192,8 +192,7 @@
             android:theme="@style/Theme.Topface.Light" />
         <activity
             android:name=".ui.settings.SettingsContainerActivity"
-            android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="sensor">
+            android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
@@ -221,7 +220,6 @@
         <activity
             android:name=".ui.UserProfileActivity"
             android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="sensor"
             android:theme="@style/NoWindowAnimation">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -231,7 +229,6 @@
         <activity
             android:name=".ui.OwnProfileActivity"
             android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="sensor"
             android:theme="@style/NoWindowAnimation">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -241,7 +238,6 @@
         <activity
             android:name=".ui.OwnGiftsActivity"
             android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="sensor"
             android:theme="@style/Theme.Topface.Gifts">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -250,8 +246,7 @@
 
         <activity
             android:name=".ui.ComplainsActivity"
-            android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="sensor">
+            android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
@@ -259,8 +254,7 @@
 
         <activity
             android:name=".ui.EditorBannersActivity"
-            android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="sensor">
+            android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
@@ -268,8 +262,7 @@
 
         <activity
             android:name=".ui.EditorProfileActionsActivity"
-            android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="sensor">
+            android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
@@ -278,7 +271,6 @@
         <activity
             android:name=".ui.RegistrationActivity"
             android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="sensor"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -296,8 +288,7 @@
 
         <activity
             android:name=".ui.PurchasesActivity"
-            android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="sensor">
+            android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
@@ -339,8 +330,7 @@
 
         <activity
             android:name=".ui.SMSInviteActivity"
-            android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="sensor">
+            android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />

@@ -9,10 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,19 +43,14 @@ import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-public class SettingsTopfaceAccountFragment extends BaseFragment implements OnClickListener {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
+
+public class SettingsTopfaceAccountFragment extends BaseFragment {
 
     public static final String NEED_EXIT = "NEED_EXIT";
-    private View mLockerView;
-    private EditText mEditText;
-    private TextView mText;
-    private Button mBtnChange;
-    private Button mBtnChangeEmail;
-    private Button mBtnLogout;
-    private Button mBtnCodeWasSend;
-    private TextView mTxtCodeWasSend;
-
-    RelativeLayout fieldContainer;
 
     private final AuthToken mToken = AuthToken.getInstance();
 
@@ -67,14 +60,41 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     private int mChangeButtonAction = ACTION_CHANGE_PASSWORD;
     private boolean mChangeEmail = false;
 
+    @Bind(R.id.llvLogoutLoading)
+    View mLockerView;
+    @Bind(R.id.edText)
+    EditText mEditText;
+    @Bind(R.id.tvText)
+    TextView mText;
+    @Bind(R.id.btnChange)
+    Button mBtnChange;
+    @Bind(R.id.btnChangeEmail)
+    Button mBtnChangeEmail;
+    @Bind(R.id.btnLogout)
+    Button mBtnLogout;
+    @Bind(R.id.btnCodeWasSend)
+    Button mBtnCodeWasSend;
+    @Bind(R.id.txtCodeWasSend)
+    Button mTxtCodeWasSend;
+
+    @SuppressWarnings("unused")
+    @OnTextChanged(value = R.id.edText, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    protected void afterTextChanged(Editable s) {
+        String text = s.toString();
+        if (text.equals(mToken.getLogin())) {
+            setChangeBtnAction(ACTION_RESEND_CONFIRM);
+            mChangeEmail = false;
+        } else {
+            setChangeBtnAction(ACTION_CHANGE_EMAIL);
+            mChangeEmail = true;
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_topface_account, container, false);
-
-        fieldContainer = (RelativeLayout) root.findViewById(R.id.fieldContainer_layout);
-
-        mLockerView = root.findViewById(R.id.llvLogoutLoading);
+        ButterKnife.bind(this, root);
         mLockerView.setVisibility(View.GONE);
 
         String code = ((SettingsContainerActivity) getActivity()).getConfirmationCode();
@@ -109,8 +129,8 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             requestEmailConfirmedFlag(false);
         }
 
-        initTextViews(root);
-        initButtons(root);
+        initTextViews();
+        mBtnChange.setVisibility(View.VISIBLE);
         return root;
     }
 
@@ -165,33 +185,10 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         setButtonsState();
     }
 
-    private void initTextViews(ViewGroup root) {
+    private void initTextViews() {
         Drawable icon = getResources().getDrawable(R.drawable.ic_logo_account);
-        mEditText = (EditText) root.findViewById(R.id.edText);
         mEditText.setText(mToken.getLogin());
         mEditText.setSelection(mEditText.getText().length());
-        mEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String text = s.toString();
-                if (text.equals(mToken.getLogin())) {
-                    setChangeBtnAction(ACTION_RESEND_CONFIRM);
-                    mChangeEmail = false;
-                } else {
-                    setChangeBtnAction(ACTION_CHANGE_EMAIL);
-                    mChangeEmail = true;
-                }
-            }
-        });
-        mText = (TextView) root.findViewById(R.id.tvText);
         mText.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
         mText.setText(mToken.getLogin());
     }
@@ -210,20 +207,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
             mBtnCodeWasSend.setVisibility(View.VISIBLE);
             mTxtCodeWasSend.setVisibility(View.VISIBLE);
         }
-    }
-
-    private void initButtons(ViewGroup root) {
-        mBtnChange = (Button) root.findViewById(R.id.btnChange);
-        mBtnChange.setOnClickListener(this);
-        mBtnChange.setVisibility(View.VISIBLE);
-        mBtnChangeEmail = (Button) root.findViewById(R.id.btnChangeEmail);
-        mBtnChangeEmail.setOnClickListener(this);
-        mBtnLogout = (Button) root.findViewById(R.id.btnLogout);
-        mBtnLogout.setOnClickListener(this);
-        root.findViewById(R.id.btnDeleteAccount).setOnClickListener(this);
-        mBtnCodeWasSend = (Button) root.findViewById(R.id.btnCodeWasSend);
-        mBtnCodeWasSend.setOnClickListener(this);
-        mTxtCodeWasSend = (TextView) root.findViewById(R.id.txtCodeWasSend);
     }
 
     private void setButtonsState() {
@@ -257,46 +240,39 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         mChangeButtonAction = action;
     }
 
-    @Override
-    public void onClick(View v) {
+    @SuppressWarnings("unused")
+    @OnClick(R.id.btnLogout)
+    protected void onLogoutButtonClick() {
         Utils.hideSoftKeyboard(getActivity(), mEditText);
-        switch (v.getId()) {
-            case R.id.btnLogout:
-                if (CacheProfile.needToChangePassword(App.getContext())) {
-                    Intent intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
-                    intent.putExtra(NEED_EXIT, true);
-                    startActivityForResult(intent, SettingsContainerActivity.INTENT_CHANGE_PASSWORD);
-                } else {
-                    showExitPopup();
-                }
-                break;
-            case R.id.btnChange:
-                onChangeButtonClick();
-                break;
-            case R.id.btnDeleteAccount:
-                deleteAccount();
-                break;
-            case R.id.btnCodeWasSend:
-                updateProfile();
-                break;
-            case R.id.btnChangeEmail:
-                onChangeEmailButtonClick();
-            default:
-                break;
+        if (CacheProfile.needToChangePassword(App.getContext())) {
+            Intent intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
+            intent.putExtra(NEED_EXIT, true);
+            startActivityForResult(intent, SettingsContainerActivity.INTENT_CHANGE_PASSWORD);
+        } else {
+            showExitPopup();
         }
     }
 
-    private void onChangeEmailButtonClick() {
+    @SuppressWarnings("unused")
+    @OnClick(R.id.btnChangeEmail)
+    protected void onChangeEmailButtonClick() {
+        Utils.hideSoftKeyboard(getActivity(), mEditText);
         Intent intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
         startActivityForResult(intent, SettingsContainerActivity.INTENT_CHANGE_EMAIL);
     }
 
-    private void updateProfile() {
+    @SuppressWarnings("unused")
+    @OnClick(R.id.btnCodeWasSend)
+    protected void updateProfile() {
+        Utils.hideSoftKeyboard(getActivity(), mEditText);
         mText.setText(mToken.getLogin());
         requestEmailConfirmedFlag(true);
     }
 
-    private void deleteAccount() {
+    @SuppressWarnings("unused")
+    @OnClick(R.id.btnDeleteAccount)
+    protected void deleteAccount() {
+        Utils.hideSoftKeyboard(getActivity(), mEditText);
         DeleteAccountDialog newFragment = DeleteAccountDialog.newInstance();
         newFragment.show(getActivity().getSupportFragmentManager(), DeleteAccountDialog.TAG);
     }
@@ -307,7 +283,10 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         config.saveConfig();
     }
 
-    private void onChangeButtonClick() {
+    @SuppressWarnings("unused")
+    @OnClick(R.id.btnChange)
+    protected void onChangeButtonClick() {
+        Utils.hideSoftKeyboard(getActivity(), mEditText);
         switch (mChangeButtonAction) {
             case ACTION_RESEND_CONFIRM:
                 RemindRequest remindRequest = new RemindRequest(getActivity());
