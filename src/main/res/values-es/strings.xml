@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Topface</string>
     <string name="app_locale">es_ES</string>
     <string name="photofeed_title">Aparecer en el muro</string>
     <string name="general_warning">ADVERTENCIA</string>

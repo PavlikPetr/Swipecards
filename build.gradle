@@ -95,6 +95,13 @@ android {
             buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                     "com.topface.billing.MarketApiType.I_FREE";
         }
+        blueStacks {
+            applicationId "com.topface.topface.bluestacks";
+            buildConfigField "String", "STATISTICS_APP", "\"topfacemobappbluestack\"";
+            buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.BLUE_STACKS";
+            buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
+                    "com.topface.billing.MarketApiType.BLUE_STACKS";
+        }
     }
 
     compileOptions {
