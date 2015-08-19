@@ -144,6 +144,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         mRunning = false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setSupportProgressBarIndeterminateVisibility(boolean visible) {
         if (mIndeterminateSupported) {
@@ -490,6 +491,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
      * Set the window content overlay on device's that don't respect the theme
      * attribute.
      */
+    @SuppressWarnings("deprecation")
     private void setWindowContentOverlayCompat() {
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN_MR2) {
             // Get the content view

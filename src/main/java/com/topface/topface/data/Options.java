@@ -20,6 +20,7 @@ import com.topface.topface.data.experiments.SixCoinsSubscribeExperiment;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
@@ -36,6 +37,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import javax.inject.Inject;
 
 /**
  * Опции приложения
@@ -172,6 +175,8 @@ public class Options extends AbstractData {
     public NotShown notShown = new NotShown();
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
     public InterstitialInFeeds interstitial = new InterstitialInFeeds();
+    @Inject
+    TopfaceAppState mAppState;
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -184,6 +189,8 @@ public class Options extends AbstractData {
     public Options(JSONObject data, boolean cacheToPreferences) {
         if (data != null) {
             fillData(data, cacheToPreferences);
+            App.from(App.getContext().getApplicationContext()).inject(this);
+            mAppState.setData(this);
         }
     }
 
@@ -300,6 +307,7 @@ public class Options extends AbstractData {
             fallbackTypeBanner = response.optString("gag_type_banner", AdProvidersFactory.BANNER_ADMOB);
             gagTypeFullscreen = response.optString("gag_type_fullscreen", AdProvidersFactory.BANNER_NONE);
             scruffy = response.optBoolean("scruffy", false);
+            App.isScruffyEnabled = scruffy;
             JSONObject bonusObject = response.optJSONObject("bonus");
             if (bonusObject != null) {
                 bonus.enabled = bonusObject.optBoolean("enabled");
@@ -360,7 +368,7 @@ public class Options extends AbstractData {
         }
 
         if (response != null && cacheToPreferences) {
-            CacheProfile.setOptions(this, response);
+            CacheProfile.setOptions(response);
         } else {
             Debug.error(cacheToPreferences ? "Options from preferences" : "Options response is null");
         }

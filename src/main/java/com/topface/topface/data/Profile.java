@@ -11,7 +11,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
@@ -24,6 +24,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+
+import javax.inject.Inject;
 
 /* Класс профиля владельца устройства */
 public class Profile extends AbstractDataWithPhotos {
@@ -65,6 +67,9 @@ public class Profile extends AbstractDataWithPhotos {
     protected String status; // статус пользователя
     // Флаг того, является ли пользоветль редактором
     private boolean mEditor;
+    @Inject
+    TopfaceAppState mAppState;
+    public boolean giveNoviceLikes;
 
     public Profile() {
         super();
@@ -75,7 +80,9 @@ public class Profile extends AbstractDataWithPhotos {
     }
 
     public Profile(JSONObject jsonObject) {
+        App.from(App.getContext().getApplicationContext()).inject(this);
         fillData(jsonObject);
+        mAppState.setData(this);
     }
 
     protected void fillData(final JSONObject resp) {
@@ -100,7 +107,7 @@ public class Profile extends AbstractDataWithPhotos {
             //поправим потом, с новой системой парсинга запросво
             //NOTE: Добавлять поля, нужные исключительно для профиля текущего юзера только в это условие!
             if (!(profile instanceof User)) {
-                CacheProfile.giveNoviceLikes = !resp.optBoolean("noviceLikes", true);
+                profile.giveNoviceLikes = !resp.optBoolean("noviceLikes", true);
                 profile.dating = new DatingFilter(resp.optJSONObject("dating"));
                 profile.email = resp.optBoolean("email");
                 profile.emailGrabbed = resp.optBoolean("emailGrabbed");

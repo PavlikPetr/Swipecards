@@ -176,17 +176,17 @@ public class PurchasesFragment extends BaseFragment {
         Utils.enableLayoutChangingTransition((ViewGroup) root.findViewById(R.id.purchaseLayout));
         if (mIsVip) {
             tabs = new Options.TabsList();
-            tabs.list.addAll(CacheProfile.getOptions().premiumTabs.list);
+            tabs.list.addAll(getOptions().premiumTabs.list);
         } else {
             tabs = new Options.TabsList();
-            tabs.list.addAll(CacheProfile.getOptions().otherTabs.list);
+            tabs.list.addAll(getOptions().otherTabs.list);
         }
         removeExcessTabs(tabs.list); //Убираем табы в которых нет продуктов и бонусную вкладку, если фрагмент для покупки випа
         createTabList(tabs.list);
         mPagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs.list);
         mPager.setAdapter(mPagerAdapter);
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            private TopfaceOfferwallRedirect mTopfaceOfferwallRedirect = CacheProfile.getOptions().topfaceOfferwallRedirect;
+            private TopfaceOfferwallRedirect mTopfaceOfferwallRedirect = getOptions().topfaceOfferwallRedirect;
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

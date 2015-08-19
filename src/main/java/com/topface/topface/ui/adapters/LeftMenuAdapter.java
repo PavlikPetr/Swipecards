@@ -17,6 +17,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Photo;
+import com.topface.topface.state.OptionsProvider;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
@@ -29,9 +30,11 @@ public class LeftMenuAdapter extends BaseAdapter {
     private static final int TYPE_COUNT = 3;
     private final SparseArray<ILeftMenuItem> mItems;
     private CountersData mCountersData;
+    private OptionsProvider.IOptionsUpdater mUpdater;
 
-    public LeftMenuAdapter(SparseArray<ILeftMenuItem> items) {
+    public LeftMenuAdapter(SparseArray<ILeftMenuItem> items, OptionsProvider.IOptionsUpdater updater) {
         mItems = items;
+        mUpdater = updater;
     }
 
     public static ILeftMenuItem newLeftMenuItem(BaseFragment.FragmentId menuId, int menuType,
@@ -152,7 +155,11 @@ public class LeftMenuAdapter extends BaseAdapter {
                 holder.icon.setBackgroundResource(item.getMenuIconResId());
                 break;
             case TYPE_MENU_BUTTON_WITH_BADGE:
-                holder.btnMenu.setText(item.getMenuText());
+                if (item.getMenuId() == BaseFragment.FragmentId.BONUS) {
+                    holder.btnMenu.setText(mUpdater.getOptions().bonus.buttonText);
+                } else {
+                    holder.btnMenu.setText(item.getMenuText());
+                }
                 holder.icon.setBackgroundResource(item.getMenuIconResId());
                 if (mCountersData != null) {
                     updateCountersBadge(holder.counterBadge, mCountersData.getCounterByFragmentId(item.getMenuId()));
@@ -178,9 +185,9 @@ public class LeftMenuAdapter extends BaseAdapter {
         holder.item = item;
         // init button state
         if (item.getMenuId() == BaseFragment.FragmentId.BONUS) {
-            if (CacheProfile.getOptions().bonus.buttonPicture != null) {
+            if (mUpdater.getOptions().bonus.buttonPicture != null) {
                 // set custom button ico from server
-                DefaultImageLoader.getInstance(App.getContext()).preloadImage(CacheProfile.getOptions().bonus.buttonPicture, new SimpleImageLoadingListener() {
+                DefaultImageLoader.getInstance(App.getContext()).preloadImage(mUpdater.getOptions().bonus.buttonPicture, new SimpleImageLoadingListener() {
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                         holder.icon.setImageDrawable(new BitmapDrawable(App.getContext().getResources(), loadedImage));

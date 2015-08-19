@@ -3,8 +3,11 @@ package com.topface.topface.utils.controllers.startactions;
 import android.support.v4.app.FragmentManager;
 
 import com.topface.topface.App;
+import com.topface.topface.data.Options;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
-import com.topface.topface.utils.CacheProfile;
+
+import java.lang.ref.WeakReference;
 
 
 public class DatingLockPopupAction extends DailyPopupAction {
@@ -12,12 +15,16 @@ public class DatingLockPopupAction extends DailyPopupAction {
     private int mPriority;
     private DatingLockPopup.DatingLockPopupRedirectListener mDatingLockPopupRedirect;
     private FragmentManager mFragmentManager;
+    private WeakReference<BaseFragmentActivity> mActivity;
 
-    public DatingLockPopupAction(FragmentManager fragmentManager, int priority, DatingLockPopup.DatingLockPopupRedirectListener listener) {
+
+    public DatingLockPopupAction(FragmentManager fragmentManager, int priority
+            , DatingLockPopup.DatingLockPopupRedirectListener listener, BaseFragmentActivity activity) {
         super(App.getContext());
         mFragmentManager = fragmentManager;
         mDatingLockPopupRedirect = listener;
         mPriority = priority;
+        mActivity = new WeakReference<>(activity);
     }
 
     @Override
@@ -38,8 +45,9 @@ public class DatingLockPopupAction extends DailyPopupAction {
 
     @Override
     public boolean isApplicable() {
-        return CacheProfile.getOptions().notShown.enabledDatingLockPopup
-                && isTimeoutEnded(CacheProfile.getOptions().notShown.datingLockPopupTimeout,
+        Options options = mActivity.get().getOptions();
+        return options.notShown.enabledDatingLockPopup
+                && isTimeoutEnded(options.notShown.datingLockPopupTimeout,
                 getUserConfig().getDatingLockPopupRedirect());
     }
 

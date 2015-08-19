@@ -53,7 +53,7 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
     }
 
     private void initOnStartLoadingControls(View root) {
-        final BannersConfig config = App.getBannerConfig();
+        final BannersConfig config = App.getBannerConfig(getOptions());
         final CheckBox checkBoxOnStart = ((CheckBox) root.findViewById(R.id.cbOnStart));
         checkBoxOnStart.setChecked(config.needLoadOnStart());
         View.OnClickListener listener = new View.OnClickListener() {
@@ -68,7 +68,7 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
     private void initConfigContainer() {
         if (mConfigContainer != null) {
             for (PageInfo.PageName pageName : PageInfo.PageName.values()) {
-                PageInfo pageInfo = CacheProfile.getOptions().getPagesInfo().get(pageName.getName());
+                PageInfo pageInfo = getOptions().getPagesInfo().get(pageName.getName());
                 if (pageInfo != null) {
                     PageConfigurator configurator = new PageConfigurator(getActivity());
                     configurator.setPage(pageInfo);
@@ -103,11 +103,11 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSaveSettings:
-                App.getBannerConfig().saveBannersSettings();
+                App.getBannerConfig(getOptions()).saveBannersSettings(getOptions().getPagesInfo());
                 showCompleteMessage();
                 break;
             case R.id.btnResetSettings:
-                App.getBannerConfig().resetBannersSettings();
+                App.getBannerConfig(getOptions()).resetBannersSettings();
                 clearConfigContainer();
                 initConfigContainer();
                 showCompleteMessage();

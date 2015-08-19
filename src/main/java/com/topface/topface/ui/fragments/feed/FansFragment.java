@@ -41,7 +41,7 @@ public class FansFragment extends BookmarksFragment {
             buttonBuy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(PurchasesActivity.createBuyingIntent(FANS));
+                    startActivity(PurchasesActivity.createBuyingIntent(FANS, getOptions().topfaceOfferwallRedirect));
                 }
             });
         } else {

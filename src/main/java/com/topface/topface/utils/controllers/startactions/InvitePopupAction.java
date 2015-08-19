@@ -1,30 +1,29 @@
 package com.topface.topface.utils.controllers.startactions;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.provider.ContactsContract;
-import android.support.v7.app.ActionBarActivity;
 
 import com.topface.topface.App;
 import com.topface.topface.Static;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.dialogs.InvitesPopup;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.EasyTracker;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 
 public class InvitePopupAction extends LinkedStartAction {
 
-    private Activity mActivity;
+    private WeakReference<BaseFragmentActivity> mActivity;
     private int mPriority;
 
-    public InvitePopupAction(Activity activity, int priority) {
-        mActivity = activity;
+    public InvitePopupAction(BaseFragmentActivity activity, int priority) {
+        mActivity = new WeakReference<>(activity);
         mPriority = priority;
     }
 
@@ -46,7 +45,7 @@ public class InvitePopupAction extends LinkedStartAction {
 
     @Override
     public boolean isApplicable() {
-        return InvitesPopup.isApplicable() && getContactsCount() >= CacheProfile.getOptions().contacts_count;
+        return InvitesPopup.isApplicable(mActivity.get().getOptions().popup_timeout) && getContactsCount() >= mActivity.get().getOptions().contacts_count;
     }
 
     @Override
@@ -60,7 +59,7 @@ public class InvitePopupAction extends LinkedStartAction {
     }
 
     private int getContactsCount() {
-        Cursor cursor = mActivity.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        Cursor cursor = mActivity.get().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
         int contacts_count = 0;
         if (cursor != null) {
             contacts_count = cursor.getCount();
@@ -83,12 +82,12 @@ public class InvitePopupAction extends LinkedStartAction {
                         }
                     }
                 });
-                popup.show(((ActionBarActivity) mActivity).getSupportFragmentManager(), InvitesPopup.TAG);
+                popup.show(mActivity.get().getSupportFragmentManager(), InvitesPopup.TAG);
                 EasyTracker.sendEvent("InvitesPopup", "Show", "", 0L);
 
             }
         };
-        ContactsProvider provider = new ContactsProvider(mActivity);
+        ContactsProvider provider = new ContactsProvider(mActivity.get());
         provider.getContacts(-1, 0, handler);
     }
 

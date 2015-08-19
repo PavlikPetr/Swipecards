@@ -51,7 +51,7 @@ public class AdmirationFragment extends LikesFragment {
             inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations"));
+                    startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations", getOptions().topfaceOfferwallRedirect));
                 }
             });
         } else {
@@ -59,7 +59,7 @@ public class AdmirationFragment extends LikesFragment {
                 ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(1);
                 int curCounter = mCountersData.admirations;
                 if (curCounter == 0) {
-                    curCounter = CacheProfile.getOptions().premiumAdmirations.getCount();
+                    curCounter = getOptions().premiumAdmirations.getCount();
                 }
 
                 String title = Utils.getQuantityString(R.plurals.popup_vip_admirations, curCounter, curCounter);
@@ -82,7 +82,7 @@ public class AdmirationFragment extends LikesFragment {
                 inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations"));
+                        startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations", getOptions().topfaceOfferwallRedirect));
                     }
                 });
             }

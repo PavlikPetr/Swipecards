@@ -34,7 +34,7 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
 
         @Override
         public void onOfferWall() {
-            OfferwallsManager.startOfferwall(ExternalLinkActivity.this);
+            OfferwallsManager.startOfferwall(ExternalLinkActivity.this, getOptions());
             getIntent().setData(null);
             finish();
         }

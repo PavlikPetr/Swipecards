@@ -92,7 +92,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         // Help
         View help = root.findViewById(R.id.loHelp);
         help.setOnClickListener(this);
-        if (TextUtils.isEmpty(CacheProfile.getOptions().helpUrl)) {
+        if (TextUtils.isEmpty(getOptions().helpUrl)) {
             help.setVisibility(View.GONE);
         }
 
@@ -154,7 +154,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_ACCOUNT);
                 break;
             case R.id.loHelp:
-                String helpUrl = CacheProfile.getOptions().helpUrl;
+                String helpUrl = getOptions().helpUrl;
                 if (!TextUtils.isEmpty(helpUrl)) {
                     intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse(helpUrl));
@@ -166,7 +166,8 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_FEEDBACK);
                 break;
             case R.id.loAbout:
-                new AboutAppDialog(getActivity(), App.getContext().getString(R.string.settings_about));
+                new AboutAppDialog(getActivity(), App.getContext().getString(R.string.settings_about)
+                        , getOptions().aboutApp.title, getOptions().aboutApp.url);
                 break;
             case R.id.loLanguage:
                 startLanguageSelection();
@@ -227,7 +228,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                                         String selectedLocale = locales[selectedPosition];
                                         (new SearchCacheManager()).clearCache();
 
-                                        LocaleConfig.changeLocale(getActivity(), selectedLocale);
+                                        LocaleConfig.changeLocale(getActivity(), selectedLocale, SettingsFragment.this);
                                     }
                                 })
                                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {

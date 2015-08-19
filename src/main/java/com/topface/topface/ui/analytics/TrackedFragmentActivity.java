@@ -1,6 +1,5 @@
 package com.topface.topface.ui.analytics;
 
-import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 
 import com.comscore.analytics.comScore;
@@ -10,11 +9,13 @@ import com.google.android.gms.analytics.Tracker;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
 import com.topface.topface.data.ExperimentTags;
+import com.topface.topface.data.Options;
+import com.topface.topface.ui.StateTaransportFragmentActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.social.AuthToken;
 
-public class TrackedFragmentActivity extends ActionBarActivity {
+public class TrackedFragmentActivity extends StateTaransportFragmentActivity {
 
     @Override
     public void onStart() {
@@ -23,7 +24,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
         if (isTrackable()) {
             Tracker tracker = EasyTracker.getTracker();
             tracker.setScreenName(getTrackName());
-            tracker.send(setCustomMeticsAndDimensions().build());
+            tracker.send(setCustomMeticsAndDimensions(getOptions()).build());
         }
     }
 
@@ -34,7 +35,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
         comScore.onEnterForeground();
     }
 
-    public static HitBuilders.AppViewBuilder setCustomMeticsAndDimensions() {
+    public static HitBuilders.AppViewBuilder setCustomMeticsAndDimensions(Options options) {
         //Дополнительные параметры для статистики
         HitBuilders.AppViewBuilder builder = new HitBuilders.AppViewBuilder();
         String socialNet = AuthToken.getInstance().getSocialNet();
@@ -49,7 +50,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
          * Абстрактное поле для подсчета статистики экспериментов
          * Т.е. сервер может прислать любые данные для п
          */
-        ExperimentTags tags = CacheProfile.getOptions().experimentTags;
+        ExperimentTags tags = options.experimentTags;
         if (tags != null) {
             tags.setToStatistics(builder);
         }

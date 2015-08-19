@@ -9,18 +9,22 @@ import android.widget.Toast;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
+import com.topface.topface.state.OptionsProvider;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
-public class TestNotificationsReceiver extends BroadcastReceiver {
+public class TestNotificationsReceiver extends BroadcastReceiver implements OptionsProvider.IOptionsUpdater {
 
     public static final String ACTION_NOTIFY = "com.topface.topface.actions.NOTIFY";
     public static final String ACTION_TEST_NETWORK_ERRORS_ON = "com.topface.topface.actions.TEST_NETWORK_ERRORS_ON";
     public static final String ACTION_TEST_NETWORK_ERRORS_OFF = "com.topface.topface.actions.TEST_NETWORK_ERRORS_OFF";
     public static final String ACTION_CANCEL_TEST_NETWORK_ERRORS = "com.topface.topface.actions.TEST_NETWORK_ERRORS_CANCEL";
-
     private static final String EXTRA_ACTION_PARAMETER = "extraParameter";
+
+    private OptionsProvider mOptionsProvider = new OptionsProvider(this);
+    private Options mOptions;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -49,7 +53,7 @@ public class TestNotificationsReceiver extends BroadcastReceiver {
                 break;
             case ACTION_NOTIFY:
                 Debug.log("TOPFACE_NOTIFICATION:" + intent.getStringExtra("text"));
-                GCMUtils.showNotificationIfNeed(intent, context);
+                GCMUtils.showNotificationIfNeed(intent, context, getOptions().updateUrl);
                 break;
         }
     }
@@ -64,5 +68,15 @@ public class TestNotificationsReceiver extends BroadcastReceiver {
             intent.putExtra(EXTRA_ACTION_PARAMETER, extraParameter);
         }
         return PendingIntent.getBroadcast(App.getContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+    }
+
+    @Override
+    public void onOptionsUpdate(Options options) {
+        mOptions = options;
+    }
+
+    @Override
+    public Options getOptions() {
+        return mOptions;
     }
 }

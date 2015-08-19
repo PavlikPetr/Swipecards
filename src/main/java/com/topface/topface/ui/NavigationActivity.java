@@ -28,6 +28,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
 import com.topface.topface.data.CountersData;
+import com.topface.topface.data.Options;
 import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
@@ -121,11 +122,11 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
      *
      * @param activity активити, которое принадлежит тому же таску, что и старый NavigationActivity
      */
-    public static void restartNavigationActivity(Activity activity) {
+    public static void restartNavigationActivity(Activity activity, Options options) {
         Intent intent = new Intent(activity, NavigationActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(GCMUtils.NEXT_INTENT, CacheProfile.getOptions().startPageFragmentId);
-        if(App.getUserConfig().getDatingMessage().equals(CacheProfile.getOptions()
+                .putExtra(GCMUtils.NEXT_INTENT, options.startPageFragmentId);
+        if (App.getUserConfig().getDatingMessage().equals(options
                 .instantMessageFromSearch.getText())){
             intent.putExtra(DatingInstantMessageController.DEFAULT_MESSAGE,true);
         }
@@ -201,7 +202,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                             public void onRedirect() {
                                 showFragment(FragmentId.TABBED_LIKES);
                             }
-                        })
+                        }, this)
         );
         sequencedStartAction.addAction(popupsAction);
         // fullscreen
@@ -225,7 +226,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         // popups
         mPopupManager = new PopupManager(this);
         startActionsController.registerAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
-        startActionsController.registerAction(mPopupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
+        startActionsController.registerAction(mPopupManager.createRatePopupStartAction(AC_PRIORITY_LOW
+                , getOptions().ratePopupTimeout, getOptions().ratePopupEnabled));
         startActionsController.registerAction(mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
     }
 
@@ -235,7 +237,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     private void initBonusCounterConfig() {
         long lastTime = App.getUserConfig().getBonusCounterLastShowTime();
-        CacheProfile.needShowBonusCounter = lastTime < CacheProfile.getOptions().bonus.timestamp;
+        CacheProfile.needShowBonusCounter = lastTime < getOptions().bonus.timestamp;
     }
 
     @SuppressWarnings("deprecation")
@@ -343,7 +345,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         //Получаем id фрагмента, если он открыт
         FragmentId currentFragment = (FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT);
         Debug.log(PAGE_SWITCH + "show fragment from NEXT_INTENT: " + currentFragment);
-        showFragment(currentFragment == null ? CacheProfile.getOptions().startPageFragmentId : currentFragment);
+        showFragment(currentFragment == null ? getOptions().startPageFragmentId : currentFragment);
     }
 
     @Override
@@ -368,7 +370,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         super.onResume();
         //restart -> open NavigationActivity
         if (App.getLocaleConfig().fetchToSystemLocale()) {
-            LocaleConfig.changeLocale(this, App.getLocaleConfig().getApplicationLocale());
+            LocaleConfig.changeLocale(this, App.getLocaleConfig().getApplicationLocale(), this);
             return;
         } else {
             LocaleConfig.localeChangeInitiated = false;
@@ -508,7 +510,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         Initialize Topface offerwall here to be able to start it quickly instead of PurchasesActivity
          */
         OfferwallsManager.initTfOfferwall(this, null);
-        AdmobInterstitialUtils.preloadInterstitials(this);
+        AdmobInterstitialUtils.preloadInterstitials(this, getOptions().interstitial);
     }
 
     @Override

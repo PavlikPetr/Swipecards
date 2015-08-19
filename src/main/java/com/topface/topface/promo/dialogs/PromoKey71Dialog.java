@@ -5,7 +5,6 @@ import android.view.View;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.VisitorsMarkReadedRequest;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
 public class PromoKey71Dialog extends PromoDialog {
@@ -25,7 +24,7 @@ public class PromoKey71Dialog extends PromoDialog {
 
     @Override
     public Options.PromoPopupEntity getPremiumEntity() {
-        return CacheProfile.getOptions().premiumVisitors;
+        return getOptions().premiumVisitors;
     }
 
     @Override

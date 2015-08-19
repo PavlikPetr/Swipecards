@@ -364,7 +364,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
 
     @SuppressWarnings("unused")
     protected void editSubscriptions() {
-        Utils.goToMarket(getActivity());
+        Utils.goToMarket(getActivity(), getOptions().updateUrl);
     }
 
     protected void onError(String message) {

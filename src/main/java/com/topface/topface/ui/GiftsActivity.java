@@ -198,7 +198,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     @Override
     public void onSendGift(final Gift item) {
         EasyTracker.sendEvent("Gifts", "Send", "GiftId=" + item.id, (long) item.price);
-        final SendGiftRequest sendGiftRequest = new SendGiftRequest(this);
+        final SendGiftRequest sendGiftRequest = new SendGiftRequest(this, getOptions().blockUnconfirmed);
         sendGiftRequest.giftId = item.id;
         sendGiftRequest.userId = mUserIdToSendGift;
         registerRequest(sendGiftRequest);
@@ -226,7 +226,8 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             public void fail(int codeError, final IApiResponse response) {
                 setSupportProgressBarIndeterminateVisibility(false);
                 if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
-                    startActivity(PurchasesActivity.createBuyingIntent("Gifts", PurchasesFragment.TYPE_GIFT, item.price));
+                    startActivity(PurchasesActivity.createBuyingIntent("Gifts"
+                            , PurchasesFragment.TYPE_GIFT, item.price, getOptions().topfaceOfferwallRedirect));
                 } else {
                     Utils.showErrorMessage();
                 }

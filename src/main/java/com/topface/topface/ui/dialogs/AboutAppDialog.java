@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
-import com.topface.topface.utils.CacheProfile;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -27,8 +26,12 @@ import java.util.zip.ZipFile;
 public class AboutAppDialog {
 
     private Context mContext;
+    private String mAboutTitle;
+    private String mAboutUrl;
 
-    public AboutAppDialog(Context context, String title) {
+    public AboutAppDialog(Context context, String title, String aboutTitle, String aboutUrl) {
+        mAboutTitle = aboutTitle;
+        mAboutUrl = aboutUrl;
         mContext = context;
         showAboutAppDialog(title);
     }
@@ -66,14 +69,14 @@ public class AboutAppDialog {
 
         // Extra
         TextView extra = (TextView) view.findViewById(R.id.tvExtra);
-        SpannableString title = new SpannableString(CacheProfile.getOptions().aboutApp.title);
+        SpannableString title = new SpannableString(mAboutTitle);
         title.setSpan(new UnderlineSpan(), 0, title.length(), 0);
         extra.setText(title);
         extra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(CacheProfile.getOptions().aboutApp.url));
+                i.setData(Uri.parse(mAboutUrl));
                 mContext.startActivity(i);
             }
         });

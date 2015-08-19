@@ -32,7 +32,7 @@ public class OwnGiftsFragment extends UpdatableGiftsFragment {
             mBtnInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(PurchasesActivity.createBuyingIntent("ProfileGifts"));
+                    startActivity(PurchasesActivity.createBuyingIntent("ProfileGifts", getOptions().topfaceOfferwallRedirect));
                 }
             });
         } else {

@@ -114,7 +114,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         testNetworkSwitcherView.setOnClickListener(this);
         switcherTestNetwork = new EditSwitcher(testNetworkSwitcherView);
 
-        standard_timeout = CacheProfile.getOptions().popup_timeout;
+        standard_timeout = getOptions().popup_timeout;
 
         initNavigationBar();
         initApiUrl(root);
@@ -186,7 +186,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (mConfigInited) {
-                    CacheProfile.getOptions().offerwall = OfferwallsManager.OFFERWALLS[position];
+                    getOptions().offerwall = OfferwallsManager.OFFERWALLS[position];
                 }
             }
 
@@ -397,9 +397,9 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
             case R.id.loPopupSwitcher:
                 switcher.doSwitch();
                 if (CacheProfile.canInvite) {
-                    CacheProfile.getOptions().popup_timeout = standard_timeout;
+                    getOptions().popup_timeout = standard_timeout;
                 } else {
-                    CacheProfile.getOptions().popup_timeout = 1;
+                    getOptions().popup_timeout = 1;
                 }
                 CacheProfile.canInvite = switcher.isChecked();
 
@@ -431,7 +431,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 }
                 break;
             case R.id.EditorClearAirMessages:
-                CacheProfile.getOptions().premiumMessages.clearPopupShowTime();
+                getOptions().premiumMessages.clearPopupShowTime();
                 break;
             case R.id.EditorSendGCMToken:
                 new GCMUtils(getActivity()).registerGCM("");
@@ -474,7 +474,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         mDebugModeSpinner.setSelection(mAppConfig.getDebugMode());
         switcherTestNetwork.setChecked(mAppConfig.getTestNetwork());
         switcher.setChecked(CacheProfile.canInvite);
-        mOfferwallTypeChoose.setSelection(getOfferwallIndexInArray(CacheProfile.getOptions().offerwall));
+        mOfferwallTypeChoose.setSelection(getOfferwallIndexInArray(getOptions().offerwall));
     }
 
     @Override

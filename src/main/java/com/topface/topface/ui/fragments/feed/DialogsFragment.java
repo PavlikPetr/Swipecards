@@ -138,7 +138,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     @Override
     protected DialogListAdapter createNewAdapter() {
-        return new DialogListAdapter(getActivity().getApplicationContext(), getUpdaterCallback());
+        return new DialogListAdapter(getActivity().getApplicationContext(), getUpdaterCallback(), this);
     }
 
     @Override
@@ -156,7 +156,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(PurchasesActivity.createBuyingIntent("EmptyDialogs"));
+                startActivity(PurchasesActivity.createBuyingIntent("EmptyDialogs", getOptions().topfaceOfferwallRedirect));
             }
         });
 
@@ -248,7 +248,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     private boolean isExpressPopupAvailable() {
         if (CacheProfile.premium) return false;
-        Options options = CacheProfile.getOptions();
+        Options options = getOptions();
         Options.PromoPopupEntity expressMessagesPopup = options.getPremiumEntityByType(AIR_MESSAGES);
         return expressMessagesPopup != null && expressMessagesPopup.isNeedShow() &&
                 expressMessagesPopup.getPageId() == BaseFragment.FragmentId.TABBED_DIALOGS.getId();

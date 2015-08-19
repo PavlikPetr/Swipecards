@@ -224,7 +224,7 @@ public class GCMUtils {
     }
 
 
-    public static boolean showNotificationIfNeed(final Intent extra, Context context) {
+    public static boolean showNotificationIfNeed(final Intent extra, Context context, String updateUrl) {
         //Проверяем, не отключены ли уведомления
         if (!App.getUserConfig().isNotificationEnabled()) {
             Debug.log("GCM: notification is disabled");
@@ -237,7 +237,7 @@ public class GCMUtils {
             return false;
         }
         try {
-            return showNotification(extra, context);
+            return showNotification(extra, context, updateUrl);
         } catch (Exception e) {
             Debug.error("GCM: Notifcation error", e);
         }
@@ -245,13 +245,13 @@ public class GCMUtils {
         return false;
     }
 
-    private static boolean showNotification(final Intent extra, Context context) {
+    private static boolean showNotification(final Intent extra, Context context, final String updateUrl) {
         if (!CacheProfile.isLoaded()) {
             Debug.log("GCM: wait for profile load to show notification");
             BroadcastReceiver profileLoadReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    showNotification(extra, context);
+                    showNotification(extra, context, updateUrl);
                     LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
                 }
             };
@@ -278,7 +278,7 @@ public class GCMUtils {
             int type = getType(extra);
             final User user = getUser(extra);
             String title = getTitle(context, extra.getStringExtra("title"));
-            Intent intent = getIntentByType(context, type, user);
+            Intent intent = getIntentByType(context, type, user, updateUrl);
 
             if (intent != null) {
                 intent.putExtra(GCMUtils.NOTIFICATION_INTENT, true);
@@ -437,7 +437,7 @@ public class GCMUtils {
         return null;
     }
 
-    private static Intent getIntentByType(Context context, int type, User user) {
+    private static Intent getIntentByType(Context context, int type, User user, String updateUrl) {
         Intent i = null;
         switch (type) {
             case GCM_TYPE_MESSAGE:
@@ -476,7 +476,7 @@ public class GCMUtils {
                 i.putExtra(NEXT_INTENT, GEO);
                 break;
             case GCM_TYPE_UPDATE:
-                i = Utils.getMarketIntent(context);
+                i = Utils.getMarketIntent(updateUrl);
                 //Есть шанс что ссылка на маркет не будет поддерживаться
                 if (!Utils.isCallableIntent(i, context)) {
                     i = new Intent(context, NavigationActivity.class);

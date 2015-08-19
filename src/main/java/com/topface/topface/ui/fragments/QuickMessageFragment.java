@@ -140,7 +140,8 @@ public class QuickMessageFragment extends AbstractDialogFragment implements View
         showLoader();
         editText.clear();
 
-        final MessageRequest messageRequest = new MessageRequest(mUserId, editString, getActivity());
+        final MessageRequest messageRequest = new MessageRequest(mUserId, editString, getActivity()
+                , getOptions().blockUnconfirmed);
         messageRequest.callback(new DataApiHandler<History>() {
             @Override
             protected void success(History data, IApiResponse response) {

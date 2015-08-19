@@ -219,7 +219,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     mDatingInstantMessageController != null &&
                             TextUtils.isEmpty(userConfig.getDatingMessage())
                     ) {
-                Options.InstantMessageFromSearch message = CacheProfile.getOptions().instantMessageFromSearch;
+                Options.InstantMessageFromSearch message = getOptions().instantMessageFromSearch;
                 mDatingInstantMessageController.setInstantMessageText(message.getText());
                 userConfig.setDatingMessage(message.getText());
                 userConfig.saveConfig();
@@ -320,7 +320,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
-        isHideAdmirations = CacheProfile.getOptions().isHideAdmirations;
+        isHideAdmirations = getOptions().isHideAdmirations;
         mRoot = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_dating, null);
         initViews(mRoot);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
@@ -466,7 +466,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void setHighRatePrice() {
         // Dating Love Price
-        final int delightPrice = CacheProfile.getOptions().priceAdmiration;
+        final int delightPrice = getOptions().priceAdmiration;
         if (null != mDatingLovePrice) {
             if (delightPrice > 0) {
                 mDatingLovePrice.setVisibility(View.VISIBLE);
@@ -687,7 +687,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void initInstantMessageController(KeyboardListenerLayout root) {
         mDatingInstantMessageController = new DatingInstantMessageController(getActivity(), root,
-                this, this, CacheProfile.getOptions().instantMessageFromSearch.getText(),
+                this, this, getOptions().instantMessageFromSearch.getText(),
                 mDatingButtons, mUserInfoStatus, new DatingInstantMessageController.SendLikeAction() {
             @Override
             public void sendLike() {
@@ -701,7 +701,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
                 return false;
             }
-        }
+        }, this
         );
     }
 
@@ -723,7 +723,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         switch (view.getId()) {
             case R.id.loDatingResources: {
                 EasyTracker.sendEvent("Dating", "BuyClick", "", 1L);
-                startActivity(PurchasesActivity.createBuyingIntent("Dating"));
+                startActivity(PurchasesActivity.createBuyingIntent("Dating", getOptions().topfaceOfferwallRedirect));
             }
             break;
             case R.id.btnDatingAdmiration: {
@@ -741,7 +741,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                     isAdmirationFailed.set(true);
                                     EasyTracker.sendEvent("Dating", "Rate",
                                             "AdmirationSend" + (mutualId == SendLikeRequest.DEFAULT_MUTUAL ? "mutual" : ""),
-                                            (long) CacheProfile.getOptions().priceAdmiration);
+                                            (long) getOptions().priceAdmiration);
                                 }
 
                                 @Override
@@ -754,11 +754,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                         unlockControls();
                                     }
                                 }
-                            }
+                            }, getOptions()
                     );
                     if (canSendAdmiration && !isAdmirationFailed.get()) {
                         BalanceData balance = new BalanceData(mBalanceData.premium, mBalanceData.likes, mBalanceData.money);
-                        balance.money = balance.money - CacheProfile.getOptions().priceAdmiration;
+                        balance.money = balance.money - getOptions().priceAdmiration;
                         moneyDecreased.set(true);
                         updateResources(balance);
                     }
@@ -813,7 +813,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private boolean isChatAvailable() {
-        return !(!CacheProfile.premium && CacheProfile.getOptions().blockChatNotMutual && !mCurrentUser.isMutualPossible);
+        return !(!CacheProfile.premium && getOptions().blockChatNotMutual && !mCurrentUser.isMutualPossible);
     }
 
     private boolean isAddToFavoritsAvailable() {
@@ -841,7 +841,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                 }
                                 unlockControls();
                             }
-                        }
+                        }, getOptions().blockUnconfirmed
                 );
             } else {
                 showNextUser();
@@ -1090,7 +1090,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void successRate() {
         moneyDecreased.set(false);
-        if (CacheProfile.getOptions().isActivityAllowed) {
+        if (getOptions().isActivityAllowed) {
             if (mCurrentUser != null) {
                 mCurrentUser.rated = true;
             }

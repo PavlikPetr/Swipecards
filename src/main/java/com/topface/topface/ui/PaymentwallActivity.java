@@ -17,7 +17,6 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.state.TopfaceAppState;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
 import java.io.UnsupportedEncodingException;
@@ -126,7 +125,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     private String getWidgetUrl() {
         String url = getIntent().getStringExtra(PW_URL);
         if (url == null) {
-            url = CacheProfile.getOptions().getPaymentwallLink();
+            url = getOptions().getPaymentwallLink();
         }
         return url;
     }

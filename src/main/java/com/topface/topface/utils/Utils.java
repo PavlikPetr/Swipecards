@@ -41,6 +41,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.social.AuthToken;
@@ -167,16 +168,16 @@ public class Utils {
         context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
 
-    public static void startOldVersionPopup(final Activity activity) {
+    public static void startOldVersionPopup(final BaseFragmentActivity activity) {
         startOldVersionPopup(activity, true);
     }
 
-    public static void startOldVersionPopup(final Activity activity, boolean cancelable) {
+    public static void startOldVersionPopup(final BaseFragmentActivity activity, boolean cancelable) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Utils.goToMarket(activity);
+                Utils.goToMarket(activity, activity.getOptions().updateUrl);
             }
         });
         if (cancelable) {
@@ -191,12 +192,12 @@ public class Utils {
         builder.create().show();
     }
 
-    public static void goToMarket(Activity context) {
-        goToMarket(context, null);
+    public static void goToMarket(Activity context, String updateUrl) {
+        goToMarket(context, null, updateUrl);
     }
 
-    public static void goToMarket(Activity context, Integer requestCode) {
-        Intent marketIntent = getMarketIntent(context);
+    public static void goToMarket(Activity context, Integer requestCode, String updateUrl) {
+        Intent marketIntent = getMarketIntent(updateUrl);
         if (isCallableIntent(marketIntent, context)) {
             if (requestCode == null) {
                 context.startActivity(marketIntent);
@@ -214,8 +215,8 @@ public class Utils {
         return list.size() > 0;
     }
 
-    public static Intent getMarketIntent(Context context) {
-        return new Intent(Intent.ACTION_VIEW, Uri.parse(CacheProfile.getOptions().updateUrl));
+    public static Intent getMarketIntent(String updateUrl) {
+        return new Intent(Intent.ACTION_VIEW, Uri.parse(updateUrl));
     }
 
     public static String getClientDeviceName() {

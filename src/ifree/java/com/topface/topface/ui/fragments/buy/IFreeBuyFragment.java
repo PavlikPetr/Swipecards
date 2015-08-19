@@ -177,7 +177,7 @@ public class IFreeBuyFragment extends IFreePurchases {
                                 ((PurchasesActivity) activity).skipBonus();
                             }
 
-                            CacheProfile.getOptions().topfaceOfferwallRedirect.setComplited(true);
+                            getOptions().topfaceOfferwallRedirect.setComplited(true);
                         }
                     }
             );
@@ -208,7 +208,7 @@ public class IFreeBuyFragment extends IFreePurchases {
                                 ((PurchasesActivity) activity).skipBonus();
                             }
 
-                            CacheProfile.getOptions().topfaceOfferwallRedirect.setComplited(true);
+                            getOptions().topfaceOfferwallRedirect.setComplited(true);
                         }
                     }
             );

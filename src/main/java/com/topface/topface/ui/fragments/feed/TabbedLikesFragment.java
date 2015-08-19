@@ -2,7 +2,6 @@ package com.topface.topface.ui.fragments.feed;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.CountersData;
-import com.topface.topface.utils.CacheProfile;
 
 public class TabbedLikesFragment extends TabbedFeedFragment {
 
@@ -18,7 +16,7 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
     protected void onBeforeCountersUpdate(CountersData countersData) {
         updatePageCounter(LikesFragment.class.getName(), countersData.likes);
         updatePageCounter(MutualFragment.class.getName(), countersData.mutual);
-        if (!CacheProfile.getOptions().isHideAdmirations) {
+        if (!getOptions().isHideAdmirations) {
             updatePageCounter(AdmirationFragment.class.getName(), countersData.admirations);
         }
     }
@@ -32,7 +30,7 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
     protected void addPages() {
         addBodyPage(LikesFragment.class.getName(), getString(R.string.general_likes), mCountersData.likes);
         addBodyPage(MutualFragment.class.getName(), getString(R.string.general_mutual), mCountersData.mutual);
-        if (!CacheProfile.getOptions().isHideAdmirations) {
+        if (!getOptions().isHideAdmirations) {
             addBodyPage(AdmirationFragment.class.getName(), getString(R.string.general_admirations), mCountersData.admirations);
         }
     }

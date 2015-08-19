@@ -26,7 +26,7 @@ public class PromoExpressMessages extends PromoDialog {
 
     @Override
     public Options.PromoPopupEntity getPremiumEntity() {
-        return CacheProfile.getOptions().premiumMessages;
+        return getOptions().premiumMessages;
     }
 
     @Override

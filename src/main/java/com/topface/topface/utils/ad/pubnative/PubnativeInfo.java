@@ -142,10 +142,10 @@ public class PubnativeInfo extends RequestInfo {
             return this;
         }
 
-        public PubnativeInfo create() {
+        public PubnativeInfo create(int dailyShows) {
             PubnativeInfo pubnativeInfo = new PubnativeInfo();
             pubnativeInfo.zone_id = mZoneId;
-            pubnativeInfo.ad_count = mAdCount != 0 ? mAdCount : App.getUserConfig().getRemainedPubnativeShows();
+            pubnativeInfo.ad_count = mAdCount != 0 ? mAdCount : App.getUserConfig().getRemainedPubnativeShows(dailyShows);
             pubnativeInfo.locale = mLocale;
             pubnativeInfo.icon_size = mIconSize;
             pubnativeInfo.banner_size = mBannerSize;

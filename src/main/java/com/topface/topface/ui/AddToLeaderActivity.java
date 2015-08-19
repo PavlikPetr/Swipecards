@@ -72,11 +72,9 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         }
     };
     private Subscription mBalanceSubscription;
-
     private int mPosition;
     private int mSelectedPosition;
     private boolean mIsPhotoDialogShown;
-
     private GridViewWithHeaderAndFooter mGridView;
     private LockerView mLoadingLocker;
     private EditText mEditText;
@@ -201,7 +199,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private void initButtons(View headerView) {
         LinearLayout buttonsLayout = (LinearLayout) headerView.findViewById(R.id.buttonsContainer);
         buttonsLayout.removeAllViews();
-        List<Options.LeaderButton> buttons = CacheProfile.getOptions().buyLeaderButtons;
+        List<Options.LeaderButton> buttons = getOptions().buyLeaderButtons;
         for (int i = 0; i < buttons.size(); i++) {
             getLayoutInflater().inflate(R.layout.add_leader_button, buttonsLayout);
             // get last added view
@@ -231,7 +229,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     }
 
     private void pressedAddToLeader(int position) {
-        final Options.LeaderButton buttonData = CacheProfile.getOptions().buyLeaderButtons.get(position);
+        final Options.LeaderButton buttonData = getOptions().buyLeaderButtons.get(position);
         int selectedPhotoId = getAdapter().getSelectedPhotoId();
         if (getAdapter().getCount() > 0) {
             if (mCoins < buttonData.price) {
@@ -267,7 +265,8 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
     private void showPurchasesFragment(int price) {
         Debug.error("money price " + price);
-        startActivity(PurchasesActivity.createBuyingIntent(this.getLocalClassName(), PurchasesFragment.TYPE_LEADERS, price));
+        startActivity(PurchasesActivity.createBuyingIntent(this.getLocalClassName()
+                , PurchasesFragment.TYPE_LEADERS, price, getOptions().topfaceOfferwallRedirect));
     }
 
 

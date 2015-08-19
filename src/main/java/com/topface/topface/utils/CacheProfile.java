@@ -16,7 +16,6 @@ import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.DatingFilter;
-import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
@@ -24,6 +23,7 @@ import com.topface.topface.data.Products;
 import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.utils.config.SessionConfig;
@@ -34,8 +34,14 @@ import org.json.JSONObject;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.inject.Inject;
+
 /* Cache Profile */
 public class CacheProfile {
+
+    @Inject
+    TopfaceAppState state;
+
     public static final String ACTION_PROFILE_LOAD = "com.topface.topface.ACTION.PROFILE_LOAD";
     /**
      * Use sendProfileUpdateBroadcast() static method
@@ -122,7 +128,7 @@ public class CacheProfile {
         profile.showAd = show_ad;
         profile.xstatus = xstatus;
         profile.setEditor(editor);
-
+        profile.giveNoviceLikes = giveNoviceLikes;
         profile.canInvite = canInvite;
         return profile;
     }
@@ -174,7 +180,7 @@ public class CacheProfile {
                 xstatus = profile.xstatus;
 
                 canInvite = profile.canInvite;
-
+                giveNoviceLikes = profile.giveNoviceLikes;
                 editor = profile.isEditor();
 
                 setProfileCache(response);
@@ -222,37 +228,10 @@ public class CacheProfile {
     /**
      * Опции по умолчанию
      */
-    private static Options options;
     private static Products mMarketProducts;
     private static ProductsDetails mProductsDetails;
     private static PaymentWallProducts mPWProducts;
     private static PaymentWallProducts mPWMobileProducts;
-
-    /**
-     * Данные из сервиса options
-     */
-    public static Options getOptions() {
-        if (options == null) {
-            SessionConfig config = App.getSessionConfig();
-            String optionsCache = config.getOptionsData();
-            if (!TextUtils.isEmpty(optionsCache)) {
-                //Получаем опции из кэша, причем передаем флаг, что бы эти опции не кешировались повторно
-                try {
-                    options = new Options(new JSONObject(optionsCache), false);
-                } catch (JSONException e) {
-                    //Если произошла ошибка при парсинге кэша, то скидываем опции
-                    config.resetOptionsData();
-                    Debug.error(e);
-                }
-            }
-            if (options == null) {
-                //Если по каким то причинам кэша нет и опции нам в данный момент взять негде.
-                //то просто используем их по умолчанию
-                options = new Options(null, false);
-            }
-        }
-        return options;
-    }
 
     /**
      * Данные из сервиса googleplay.getProducts
@@ -322,13 +301,8 @@ public class CacheProfile {
      * Clears CacheProfile fields (does not affect cached data from ProfileConfig)
      */
     public static void clearProfileAndOptions() {
-        clearOptions();
         setProfile(new Profile(), null);
         wasCityAsked = false;
-    }
-
-    public static void clearOptions() {
-        options = null;
     }
 
     private static void setProfileUpdateTime() {
@@ -343,8 +317,7 @@ public class CacheProfile {
         return isLoaded() && uid == 0;
     }
 
-    public static void setOptions(Options newOptions, final JSONObject response) {
-        options = newOptions;
+    public static void setOptions(final JSONObject response) {
         //Каждый раз не забываем кешировать запрос опций, но делаем это в отдельном потоке
         if (response != null) {
             SessionConfig config = App.getSessionConfig();

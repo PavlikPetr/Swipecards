@@ -127,7 +127,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     @Override
     protected LikesListAdapter createNewAdapter() {
-        LikesListAdapter adapter = new LikesListAdapter(getActivity(), getUpdaterCallback());
+        LikesListAdapter adapter = new LikesListAdapter(getActivity(), getUpdaterCallback(), this);
         adapter.setOnMutualListener(new OnMutualListener() {
 
             @Override
@@ -159,7 +159,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         if (!(item.user.deleted || item.user.banned)) {
             if (item instanceof FeedLike) {
                 if (!((FeedLike) item).mutualed) {
-                    mRateController.onLike(item.user.id, 0, null);
+                    mRateController.onLike(item.user.id, 0, null, getOptions().blockUnconfirmed);
                     ((FeedLike) item).mutualed = true;
                     getListAdapter().notifyDataSetChanged();
                     Utils.showToastNotification(R.string.general_mutual, Toast.LENGTH_SHORT);
@@ -226,14 +226,14 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             currentView.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(PurchasesActivity.createBuyingIntent("EmptyLikes"));
+                    startActivity(PurchasesActivity.createBuyingIntent("EmptyLikes", getOptions().topfaceOfferwallRedirect));
                 }
             });
         }
     }
 
     private void initEmptyScreenOnBlockedLikes(final View inflated, ViewFlipper viewFlipper) {
-        final Options.BlockSympathy blockSympathyOptions = CacheProfile.getOptions().blockSympathy;
+        final Options.BlockSympathy blockSympathyOptions = getOptions().blockSympathy;
         // send stat to google analytics
         sendBlockSympathyStatistics(blockSympathyOptions);
         // set paid likes view
@@ -250,7 +250,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     private void initBuyVipButton(View currentView, Options.BlockSympathy blockSympathyOptions) {
         Button btnBuy = (Button) currentView.findViewById(R.id.buy_vip_button);
         TextView buyText = (TextView) currentView.findViewById(R.id.buy_vip_text);
-        if (CacheProfile.getOptions().unlockAllForPremium) {
+        if (getOptions().unlockAllForPremium) {
             initButtonForBlockedScreen(
                     buyText, blockSympathyOptions.textPremium,
                     btnBuy, blockSympathyOptions.buttonTextPremium,
@@ -283,7 +283,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     private void initBuyCoinsButton(final View inflated, final Options.BlockSympathy blockSympathyOptions, View currentView) {
         final Button btnBuy = (Button) currentView.findViewById(R.id.buy_coins_button);
         final ProgressBar progress = (ProgressBar) currentView.findViewById(R.id.prsLoading);
-        final SixCoinsSubscribeExperiment experiment = CacheProfile.getOptions().sixCoinsSubscribeExperiment;
+        final SixCoinsSubscribeExperiment experiment = getOptions().sixCoinsSubscribeExperiment;
         initButtonForBlockedScreen(btnBuy, experiment.isEnabled ? experiment.buttonText : blockSympathyOptions.buttonText,
                 new View.OnClickListener() {
                     @Override
@@ -362,7 +362,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                 PurchasesActivity.createBuyingIntent(
                         "VipPaidSympathies." + group,
                         PurchasesFragment.TYPE_UNLOCK_SYMPATHIES,
-                        blockSympathyOptions.price
+                        blockSympathyOptions.price,
+                        getOptions().topfaceOfferwallRedirect
                 )
         );
     }
@@ -465,7 +466,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     private void showInterstitial() {
         if (getFeedType() == CountersManager.LIKES) {
-            AdmobInterstitialUtils.requestPreloadedInterstitial(getActivity());
+            AdmobInterstitialUtils.requestPreloadedInterstitial(getActivity(), getOptions().interstitial);
         }
     }
 }

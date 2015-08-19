@@ -20,6 +20,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.state.OptionsProvider;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
 import com.topface.topface.ui.views.FeedItemViewConstructor.TypeAndFlag;
@@ -111,6 +112,15 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         public TextView unreadCounter;
         public ImageView heart;
         public Drawable background;
+    }
+
+    protected OptionsProvider.IOptionsUpdater mOptionsUpdater;
+
+    public FeedAdapter(Context context, Updater updateCallback, OptionsProvider.IOptionsUpdater optionsUpdater) {
+        super(context, null, updateCallback);
+        mOptionsUpdater = optionsUpdater;
+        mSelectionController = new MultiselectionController<>(this);
+        initFeedAd();
     }
 
     public FeedAdapter(Context context, Updater updateCallback) {

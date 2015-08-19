@@ -29,7 +29,6 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.ui.fragments.PurchasesFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.geo.GeoLocationManager;
@@ -170,7 +169,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
         if (mEmptyFeedView == null) mEmptyFeedView = inflated;
-        Options.BlockPeopleNearby blockPeopleNearby = CacheProfile.getOptions().blockPeople;
+        Options.BlockPeopleNearby blockPeopleNearby = getOptions().blockPeople;
         if (errorCode == ErrorCodes.BLOCKED_PEOPLE_NEARBY) {
             initEmptyScreenOnBlocked(inflated, blockPeopleNearby);
         } else {
@@ -199,7 +198,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     private void initBuyVipButton(View emptyView, final Options.BlockPeopleNearby blockPeopleNearby) {
         final Button buyButton = (Button) emptyView.findViewById(R.id.buy_vip_button);
         TextView buyText = (TextView) emptyView.findViewById(R.id.buy_vip_text);
-        if (CacheProfile.getOptions().unlockAllForPremium) {
+        if (getOptions().unlockAllForPremium) {
             initButtonForBlockedScreen(
                     buyText, blockPeopleNearby.textPremium,
                     buyButton, blockPeopleNearby.buttonTextPremium,
@@ -265,7 +264,8 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     private void openBuyScreenOnBlockedGeo(Options.BlockPeopleNearby blockPeopleNearby) {
         startActivity(
-                PurchasesActivity.createBuyingIntent("PeoplePaidNearby", PurchasesFragment.TYPE_PEOPLE_NEARBY, blockPeopleNearby.price)
+                PurchasesActivity.createBuyingIntent("PeoplePaidNearby"
+                        , PurchasesFragment.TYPE_PEOPLE_NEARBY, blockPeopleNearby.price, getOptions().topfaceOfferwallRedirect)
         );
     }
 

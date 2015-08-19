@@ -1,5 +1,6 @@
 package com.topface.topface.utils.ad;
 
+import com.topface.topface.data.Options;
 import com.topface.topface.utils.ad.pubnative.PubnativeAdvertising;
 
 import java.util.ArrayList;
@@ -21,9 +22,9 @@ public class NativeAdManager {
         return false;
     }
 
-    public static void init() {
+    public static void init(Options options) {
         advertisings.clear();
-        advertisings.add(new PubnativeAdvertising());
+        advertisings.add(new PubnativeAdvertising(options));
         loadAd();
     }
 

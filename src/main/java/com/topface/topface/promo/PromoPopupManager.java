@@ -9,6 +9,7 @@ import com.topface.topface.promo.dialogs.PromoDialog;
 import com.topface.topface.promo.dialogs.PromoKey31Dialog;
 import com.topface.topface.promo.dialogs.PromoKey71Dialog;
 import com.topface.topface.promo.dialogs.PromoKey81Dialog;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
@@ -21,19 +22,23 @@ import static com.topface.topface.data.Options.PromoPopupEntity.AIR_VISITORS;
 public class PromoPopupManager {
     public static final String PROMO_POPUP_TAG = "promo_popup";
     private final FragmentActivity mActivity;
+    private Options mOptions;
 
     public PromoPopupManager(FragmentActivity activity) {
         mActivity = activity;
+        if (activity instanceof BaseFragmentActivity) {
+            mOptions = ((BaseFragmentActivity) activity).getOptions();
+        }
     }
 
     private boolean startFragment() {
         //Пробуем по очереди показать каждый тип попапа
-        if (CacheProfile.getOptions().premiumMessages != null && CacheProfile.getOptions().premiumMessages.getPageId() != BaseFragment.FragmentId.TABBED_DIALOGS.getId() && showPromoPopup(AIR_MESSAGES)) {
+        if (mOptions.premiumMessages != null && mOptions.premiumMessages.getPageId() != BaseFragment.FragmentId.TABBED_DIALOGS.getId() && showPromoPopup(AIR_MESSAGES)) {
             return true;
-        } else if (showPromoPopup(AIR_VISITORS) && CacheProfile.getOptions().premiumVisitors != null) {
+        } else if (showPromoPopup(AIR_VISITORS) && mOptions.premiumVisitors != null) {
             return true;
-        } else if (!CacheProfile.getOptions().isHideAdmirations) {
-            if (showPromoPopup(AIR_ADMIRATIONS) && CacheProfile.getOptions().premiumAdmirations != null) {
+        } else if (!mOptions.isHideAdmirations) {
+            if (showPromoPopup(AIR_ADMIRATIONS) && mOptions.premiumAdmirations != null) {
                 return true;
             }
         }
@@ -44,7 +49,7 @@ public class PromoPopupManager {
         PromoDialog promo = null;
         FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
         Debug.log("Promo: try showPromoPopup #" + type);
-        if (checkIsNeedShow(CacheProfile.getOptions().getPremiumEntityByType(type))) {
+        if (checkIsNeedShow(mOptions.getPremiumEntityByType(type))) {
             Debug.log("Promo: need show popup #" + type);
             promo = (PromoDialog) fragmentManager.findFragmentByTag(PROMO_POPUP_TAG);
             //Проверяем, показывается ли в данный момент попап
@@ -116,11 +121,10 @@ public class PromoPopupManager {
             @Override
             public boolean isApplicable() {
                 if (CacheProfile.premium) return false;
-                Options options = CacheProfile.getOptions();
-                return (checkIsNeedShow(options.getPremiumEntityByType(AIR_MESSAGES)) &&
-                        options.getPremiumEntityByType(AIR_MESSAGES).getPageId() != BaseFragment.FragmentId.TABBED_DIALOGS.getId()) ||
-                        checkIsNeedShow(options.getPremiumEntityByType(AIR_VISITORS)) ||
-                        checkIsNeedShow(options.getPremiumEntityByType(AIR_ADMIRATIONS));
+                return (checkIsNeedShow(mOptions.getPremiumEntityByType(AIR_MESSAGES)) &&
+                        mOptions.getPremiumEntityByType(AIR_MESSAGES).getPageId() != BaseFragment.FragmentId.TABBED_DIALOGS.getId()) ||
+                        checkIsNeedShow(mOptions.getPremiumEntityByType(AIR_VISITORS)) ||
+                        checkIsNeedShow(mOptions.getPremiumEntityByType(AIR_ADMIRATIONS));
             }
 
             @Override

@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.ConcurrentHashMap;
 
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.subjects.BehaviorSubject;
 
 /**
@@ -42,6 +44,12 @@ public class AppState {
         }
         if (isNotifyListeners) {
             emmit(data, dataClass);
+        }
+    }
+
+    public <T> void destroyObservable(Class<T> dataClass) {
+        if (getCachableData().contains(dataClass)) {
+            getCachableData().remove(dataClass);
         }
     }
 
@@ -134,9 +142,14 @@ public class AppState {
             return mBehaviorSubject;
         }
 
-        public void emmit(T data) {
+        public void emmit(final T data) {
             if (data != null) {
-                getBehaviorSubject().onNext(data);
+                AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
+                    @Override
+                    public void call() {
+                        getBehaviorSubject().onNext(data);
+                    }
+                });
             }
         }
     }

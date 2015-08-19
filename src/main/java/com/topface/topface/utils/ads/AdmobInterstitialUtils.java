@@ -30,9 +30,8 @@ public class AdmobInterstitialUtils {
     private static final AtomicInteger mPreloadingInterstitialsCount = new AtomicInteger(0);
     private static final List<InterstitialAd> loadedInterstitials = Collections.synchronizedList(new ArrayList<InterstitialAd>(PRELOAD_COUNT));
 
-    public static void preloadInterstitials(final Activity activity) {
+    public static void preloadInterstitials(final Activity activity, final Options.InterstitialInFeeds interstitialInFeed) {
         if (needPreload()) {
-            Options.InterstitialInFeeds interstitialInFeed = CacheProfile.getOptions().interstitial;
             if (interstitialInFeed.canShow()) {
                 AdListener listener = new SimpleAdListener() {
                     @Override
@@ -40,7 +39,7 @@ public class AdmobInterstitialUtils {
                         loadedInterstitials.add(interstitial);
                         mPreloadingInterstitialsCount.decrementAndGet();
                         if (needPreload()) {
-                            preloadInterstitials(activity);
+                            preloadInterstitials(activity, interstitialInFeed);
                         }
                     }
                 };
@@ -140,13 +139,13 @@ public class AdmobInterstitialUtils {
         return requestAdmobFullscreen(activity, id, listener, true);
     }
 
-    public static void requestPreloadedInterstitial(Activity activity) {
+    public static void requestPreloadedInterstitial(Activity activity, Options.InterstitialInFeeds interstitialInFeed) {
         if (loadedInterstitials.isEmpty()) {
-            preloadInterstitials(activity);
+            preloadInterstitials(activity, interstitialInFeed);
         } else {
             InterstitialAd interstitial = loadedInterstitials.remove(0);
             interstitial.show();
-            notifyShow();
+            notifyShow(interstitialInFeed.count);
         }
     }
 
@@ -154,9 +153,8 @@ public class AdmobInterstitialUtils {
         return !loadedInterstitials.isEmpty();
     }
 
-    private static void notifyShow() {
-        Options.InterstitialInFeeds interstitialInFeeds = CacheProfile.getOptions().interstitial;
-        if (interstitialInFeeds.count > 0) {
+    private static void notifyShow(int count) {
+        if (count > 0) {
             UserConfig config = App.getUserConfig();
             int counter = config.incrementInterstitialInFeedsCounter();
             if (counter == 1) {

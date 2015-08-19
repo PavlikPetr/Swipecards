@@ -18,7 +18,6 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.utils.CacheProfile;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -69,14 +68,14 @@ public class SettingsAboutFragment extends BaseFragment {
 
         // Extra
         TextView extra = (TextView) root.findViewById(R.id.tvExtra);
-        SpannableString title = new SpannableString(CacheProfile.getOptions().aboutApp.title);
+        SpannableString title = new SpannableString(getOptions().aboutApp.title);
         title.setSpan(new UnderlineSpan(), 0, title.length(), 0);
         extra.setText(title);
         extra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(CacheProfile.getOptions().aboutApp.url));
+                i.setData(Uri.parse(getOptions().aboutApp.url));
                 startActivity(i);
             }
         });

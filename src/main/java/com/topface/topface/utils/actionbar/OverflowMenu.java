@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BalanceData;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListAddRequest;
@@ -22,6 +23,7 @@ import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
+import com.topface.topface.state.OptionsProvider;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
@@ -52,7 +54,7 @@ import static com.topface.topface.utils.actionbar.OverflowMenu.OverflowMenuItem.
  * you need to call OverflowMenu.onDestroy inside onDestroy method your native class for unregister
  * broadcast receiver and remove interface OverflowMenuUser
  */
-public class OverflowMenu {
+public class OverflowMenu implements OptionsProvider.IOptionsUpdater {
 
     @Inject
     TopfaceAppState mAppState;
@@ -99,6 +101,19 @@ public class OverflowMenu {
             }
         }
     };
+    private Options mOptions;
+    private OptionsProvider mOptionsProvider = new OptionsProvider(this);
+
+    @Override
+    public void onOptionsUpdate(Options options) {
+        mOptions = options;
+    }
+
+    @Override
+    public Options getOptions() {
+        return mOptions;
+    }
+
 
     public OverflowMenu(Activity activity, Menu barActions) {
         mBarActions = barActions;
@@ -130,7 +145,7 @@ public class OverflowMenu {
         ArrayList<OverflowMenuItem> result = new ArrayList<>();
         if (!isBanned) {
             result.add(SEND_SYMPATHY_ACTION);
-            if (!CacheProfile.getOptions().isHideAdmirations) {
+            if (!getOptions().isHideAdmirations) {
                 result.add(SEND_ADMIRATION_ACTION);
             }
             result.add(OPEN_CHAT_ACTION);
@@ -333,7 +348,7 @@ public class OverflowMenu {
                         }
                         initOverfowMenu();
                     }
-                }
+                }, getOptions().blockUnconfirmed
         );
         setSympathySentState(true, true);
     }
@@ -364,7 +379,7 @@ public class OverflowMenu {
                         setSympathySentState(false, true);
                         initOverfowMenu();
                     }
-                }
+                }, getOptions()
         );
         if (isSentAdmiration) {
             setSympathySentState(true, true);
@@ -476,7 +491,7 @@ public class OverflowMenu {
                         }
                     });
         } else {
-            request = new BookmarkAddRequest(userId, mActivity).
+            request = new BookmarkAddRequest(userId, mActivity, getOptions().blockUnconfirmed).
                     callback(new BlackListAndBookmarkHandler(mActivity,
                             BlackListAndBookmarkHandler.ActionTypes.BOOKMARK,
                             userId,
@@ -622,6 +637,7 @@ public class OverflowMenu {
     }
 
     public void onReleaseOverflowMenu() {
+        mOptionsProvider.unsubscribe();
         if (mBalanceSubscription != null) {
             mBalanceSubscription.unsubscribe();
         }

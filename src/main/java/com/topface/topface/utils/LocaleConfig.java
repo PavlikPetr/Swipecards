@@ -14,6 +14,7 @@ import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserSetLocaleRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.state.OptionsProvider;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
@@ -49,7 +50,7 @@ public class LocaleConfig {
         return resources.getString(R.string.app_locale);
     }
 
-    public static void changeLocale(final Activity activity, String selectedLocale) {
+    public static void changeLocale(final Activity activity, String selectedLocale, final OptionsProvider.IOptionsUpdater updater) {
         localeChangeInitiated = true;
         final ProgressDialog progress = new ProgressDialog(activity);
         progress.setTitle(R.string.locale_changing);
@@ -68,7 +69,7 @@ public class LocaleConfig {
                 @Override
                 public void success(IApiResponse response) {
                     App.sendUserOptionsAndPurchasesRequest();
-                    NavigationActivity.restartNavigationActivity(activity);
+                    NavigationActivity.restartNavigationActivity(activity, updater.getOptions());
                 }
 
                 @Override
@@ -84,7 +85,7 @@ public class LocaleConfig {
             }).exec();
         } else {
             progress.dismiss();
-            NavigationActivity.restartNavigationActivity(activity);
+            NavigationActivity.restartNavigationActivity(activity, updater.getOptions());
         }
     }
 

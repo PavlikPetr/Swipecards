@@ -20,7 +20,9 @@ import android.widget.AdapterView;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.state.OptionsProvider;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -33,7 +35,7 @@ import java.util.LinkedList;
 
 import butterknife.ButterKnife;
 
-public abstract class BaseFragment extends TrackedFragment implements IRequestClient {
+public abstract class BaseFragment extends TrackedFragment implements IRequestClient, OptionsProvider.IOptionsUpdater {
 
     private static final String STATE_NEED_TITLES = "STATE_NEED_TITLES";
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
@@ -42,6 +44,18 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     private BroadcastReceiver mProfileLoadReceiver;
     private ActionBarTitleSetterDelegate mTitleSetter;
     private boolean mNeedTitles = true;
+    private OptionsProvider optionsProvider = new OptionsProvider(this);
+    private Options mOptions;
+
+    @Override
+    public Options getOptions() {
+        return mOptions;
+    }
+
+    @Override
+    public void onOptionsUpdate(Options options) {
+        mOptions = options;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -187,6 +201,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     @Override
     public void onDestroy() {
         super.onDestroy();
+        optionsProvider.unsubscribe();
         removeAllRequests();
         View rootView = getView();
         if (rootView != null) {

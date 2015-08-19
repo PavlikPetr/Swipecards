@@ -13,6 +13,7 @@ import com.topface.offerwall.common.OfferwallPayload;
 import com.topface.offerwall.common.TFCredentials;
 import com.topface.offerwall.publisher.TFOfferwallSDK;
 import com.topface.topface.R;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
@@ -47,12 +48,12 @@ public class OfferwallsManager {
     public static final String SPONSORPAY_SECURITY_TOKEN = "0a4c64db64ed3c1ca14a5e5d81aaa23c";
     private static final int SPONSORPAY_OFFERWALL_REQUEST_CODE = 856;
 
-    private static String getOfferWallType() {
-        return CacheProfile.getOptions().offerwall;
+    private static String getOfferWallType(String offerwall) {
+        return offerwall;
     }
 
-    public static void init(Activity activity) {
-        String offerwall = getOfferWallType();
+    public static void init(Activity activity, Options options) {
+        String offerwall = getOfferWallType(options.offerwall);
         if (!TextUtils.isEmpty(offerwall)) {
             switch (offerwall) {
                 case SPONSORPAY:
@@ -63,11 +64,11 @@ public class OfferwallsManager {
     }
 
 
-    public static void startOfferwall(Activity activity) {
-        startOfferwall(activity, getOfferWallType());
+    public static void startOfferwall(Activity activity, Options options) {
+        startOfferwall(activity, getOfferWallType(options.offerwall), options);
     }
 
-    public static void startOfferwall(Activity activity, String offerwall) {
+    public static void startOfferwall(Activity activity, String offerwall, Options options) {
         offerwall = offerwall == null ? "" : offerwall;
 
         if (CacheProfile.uid <= 0) {
@@ -83,7 +84,7 @@ public class OfferwallsManager {
                 startSupersonic(activity);
                 break;
             case TFOFFERWALL:
-                TopfaceOfferwallRedirect topfaceOfferwallRedirect = CacheProfile.getOptions().topfaceOfferwallRedirect;
+                TopfaceOfferwallRedirect topfaceOfferwallRedirect = options.topfaceOfferwallRedirect;
                 if (topfaceOfferwallRedirect != null && topfaceOfferwallRedirect.isEnabled()) {
                     OfferwallPayload offerwallPayload = new OfferwallPayload();
                     offerwallPayload.experimentGroup = topfaceOfferwallRedirect.getGroup();

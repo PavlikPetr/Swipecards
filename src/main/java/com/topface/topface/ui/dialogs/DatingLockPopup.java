@@ -7,7 +7,6 @@ import android.widget.TextView;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.statistics.DatingLockPopupStatistics;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.config.UserConfig;
 
 
@@ -38,8 +37,8 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
     protected void initViews(View root) {
         root.findViewById(R.id.redirect_into_sympathy).setOnClickListener(this);
         root.findViewById(R.id.iv_close).setOnClickListener(this);
-        ((TextView) root.findViewById(R.id.title)).setText(CacheProfile.getOptions().notShown.title);
-        ((TextView) root.findViewById(R.id.message)).setText(CacheProfile.getOptions().notShown.text);
+        ((TextView) root.findViewById(R.id.title)).setText(getOptions().notShown.title);
+        ((TextView) root.findViewById(R.id.message)).setText(getOptions().notShown.text);
     }
 
     @Override

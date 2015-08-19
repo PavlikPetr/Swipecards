@@ -92,7 +92,7 @@ public class App extends ApplicationBase {
     private static long mLastProfileUpdate;
     private static Configurations mBaseConfig;
     private static AppOptions mAppOptions;
-
+    public static boolean isScruffyEnabled;
     private static Boolean mIsGmsSupported;
     private static String mStartLabel;
     private static Location mCurLocation;
@@ -186,7 +186,7 @@ public class App extends ApplicationBase {
                     protected void success(Options data, IApiResponse response) {
                         LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Options.OPTIONS_RECEIVED_ACTION));
                         mUserOptionsObtainedFromServer = true;
-                        NativeAdManager.init();
+                        NativeAdManager.init(data);
                     }
 
                     @Override
@@ -285,8 +285,8 @@ public class App extends ApplicationBase {
         return getConfig().getLocaleConfig();
     }
 
-    public static BannersConfig getBannerConfig() {
-        return getConfig().getBannerConfig();
+    public static BannersConfig getBannerConfig(Options options) {
+        return getConfig().getBannerConfig(options);
     }
 
     public static AppOptions getAppOptions() {
@@ -570,7 +570,7 @@ public class App extends ApplicationBase {
         if (!mAppOptionsObtainedFromServer && !mUserOptionsObtainedFromServer) {
             return HttpApiTransport.TRANSPORT_NAME;
         } else {
-            boolean userOptions = mAppOptionsObtainedFromServer && CacheProfile.getOptions().isScruffyEnabled();
+            boolean userOptions = mAppOptionsObtainedFromServer && isScruffyEnabled;
             boolean appOptions = mUserOptionsObtainedFromServer && getAppOptions().isScruffyEnabled();
             if (appOptions || userOptions) {
                 if (ScruffyRequestManager.getInstance().isAvailable()) {

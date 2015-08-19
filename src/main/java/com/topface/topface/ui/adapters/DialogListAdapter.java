@@ -8,8 +8,8 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.state.OptionsProvider;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ad.NativeAd;
 
@@ -17,8 +17,9 @@ import java.util.Collections;
 
 public class DialogListAdapter extends FeedAdapter<FeedDialog> {
 
-    public DialogListAdapter(Context context, Updater updateCallback) {
-        super(context, updateCallback);
+
+    public DialogListAdapter(Context context, Updater updateCallback, OptionsProvider.IOptionsUpdater updater) {
+        super(context, updateCallback, updater);
     }
 
     @Override
@@ -35,7 +36,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
             holder.time.setText(dialog.createdRelative);
             int itemType = getItemViewType(position);
             FeedItemViewConstructor.setCounter(holder.unreadCounter,
-                    ((itemType == T_NEW || itemType == T_NEW_VIP) && (!CacheProfile.getOptions().hidePreviewDialog)) ?
+                    ((itemType == T_NEW || itemType == T_NEW_VIP) && (!mOptionsUpdater.getOptions().hidePreviewDialog)) ?
                             getUnreadCounter(dialog) :
                             0
             );
@@ -93,7 +94,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
                     break;
             }
         }
-        if (dialog.unread && CacheProfile.getOptions().hidePreviewDialog) {
+        if (dialog.unread && mOptionsUpdater.getOptions().hidePreviewDialog) {
             text = Utils.getQuantityString(R.plurals.notification_many_messages,
                     dialog.unreadCounter, dialog.unreadCounter);
             view.setTextColor(getContext().getResources().getColor(R.color.hidden_dialog_preview_text_color));

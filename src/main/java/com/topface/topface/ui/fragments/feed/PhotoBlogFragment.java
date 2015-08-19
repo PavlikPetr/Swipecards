@@ -122,7 +122,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
                                     Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                                 }
                             }
-                        }
+                        }, getOptions().blockUnconfirmed
                 );
             }
         });
