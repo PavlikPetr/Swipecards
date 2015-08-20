@@ -1,4 +1,5 @@
 def versionProps = new Properties()
+def releaseSigningConfig = signingConfigs.releaseTopface
 def versionPropsFile = file('version.properties')
 if (!versionPropsFile.canRead()) {
     throw new GradleException("Could not read version.properties! Create file in project root")
@@ -89,6 +90,7 @@ android {
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappandroidnokia\"";
         }*/
         ifree {
+            releaseSigningConfig signingConfigs.releaseIFree
             applicationId "com.topface.topface.ifree";
             buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.I_FREE";
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappifree\"";
@@ -96,6 +98,7 @@ android {
                     "com.topface.billing.MarketApiType.I_FREE";
         }
         blueStacks {
+            releaseSigningConfig signingConfigs.releaseBLueStacks
             applicationId "com.topface.topface.bluestacks";
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappbluestack\"";
             buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.BLUE_STACKS";
@@ -137,10 +140,24 @@ android {
             storeFile file("misc/keys/debug.keystore")
         }
 
-        release {
+        releaseTopface {
             storeFile file("misc/keys/topface.keystore")
             storePassword "Sonetica2012"
             keyAlias "topface"
+            keyPassword "Sonetica2012"
+        }
+
+        releaseBLueStacks {
+            storeFile file("misc/keys/topfaceBlueStacks.keystore")
+            storePassword "Sonetica2012"
+            keyAlias "topfaceBlueStacks"
+            keyPassword "Sonetica2012"
+        }
+
+        releaseIFree {
+            storeFile file("misc/keys/topfaceIFree.keystore")
+            storePassword "Sonetica2012"
+            keyAlias "topfaceIFree"
             keyPassword "Sonetica2012"
         }
     }
@@ -155,7 +172,7 @@ android {
         }
         release {
             minifyEnabled true
-            signingConfig signingConfigs.release
+            signingConfig releaseSigningConfig
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-config.txt'
