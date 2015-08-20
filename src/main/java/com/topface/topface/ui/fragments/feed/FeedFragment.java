@@ -54,7 +54,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.state.CountersDataProvider;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.UserProfileActivity;
@@ -112,10 +112,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private static final String FEED_COUNTER = "counter";
     private static final String FEED_COUNTER_CHANGED = "counter_changed";
     private static final String FEED_LAST_UNREAD_STATE = "last_unread_state";
-
     private int currentCounter;
     private boolean isCurrentCounterChanged;
-
     protected FeedAdapter<T> mListAdapter;
     protected boolean mIsUpdating;
     private SwipeRefreshLayout mSwipeRefresh;
@@ -179,6 +177,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             }
         }
     };
+    CountersDataProvider mCountersDataProvider;
 
     @Bind(R.id.feedContainer)
     RelativeLayout mContainer;
@@ -290,10 +289,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     private FeedRequest.UnreadStatePair mLastUnreadState = new FeedRequest.UnreadStatePair();
     private View mInflated;
-    private Subscription mCountersSubscription;
     protected CountersData mCountersData = new CountersData();
-    @Inject
-    TopfaceAppState mAppState;
 
     protected static void initButtonForBlockedScreen(Button button, String buttonText, View.OnClickListener listener) {
         initButtonForBlockedScreen(null, null, button, buttonText, listener);
@@ -513,21 +509,15 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.from(getActivity()).inject(this);
-        mCountersSubscription = mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
-            @Override
-            public void call(CountersData countersData) {
-                mCountersData = countersData;
-                updateDataAfterReceivingCounters();
-                onCountersUpdated(countersData);
-            }
-        });
+        mCountersDataProvider = new CountersDataProvider(this);
         registerGcmReceiver();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBlacklistedReceiver, new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
 
     protected void onCountersUpdated(CountersData countersData) {
+        mCountersData = countersData;
+        updateDataAfterReceivingCounters();
     }
 
     @Override
@@ -565,7 +555,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mCountersSubscription.unsubscribe();
+        mCountersDataProvider.unsubscribe();
         if (mBannersController != null) {
             mBannersController.onDestroy();
         }
@@ -1224,6 +1214,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK
+                && requestCode == CountersDataProvider.COUNTERS_DATA_UPDATED) {
+            if (data.hasExtra(CountersDataProvider.COUNTERS_DATA)) {
+                onCountersUpdated((CountersData) data.getParcelableExtra(CountersDataProvider.COUNTERS_DATA));
+            }
+        }
         if (requestCode == ChatActivity.REQUEST_CHAT) {
             onChatActivityResult(resultCode, data);
         }
