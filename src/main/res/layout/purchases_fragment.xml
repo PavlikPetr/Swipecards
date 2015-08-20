@@ -13,7 +13,7 @@
         android:background="@drawable/tab_divider"
         app:tabGravity="fill"
         app:tabMode="scrollable"
-        app:tabContentStart="73dp"
+        app:tabContentStart="@dimen/tablayout_padding"
         app:tabIndicatorColor="@color/tab_text_color_selected" />
 
 
