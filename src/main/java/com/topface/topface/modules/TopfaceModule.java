@@ -4,11 +4,11 @@ import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.promo.dialogs.PromoDialog;
-import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.promo.dialogs.PromoKey31Dialog;
 import com.topface.topface.promo.dialogs.PromoKey71Dialog;
 import com.topface.topface.promo.dialogs.PromoKey81Dialog;
 import com.topface.topface.state.CacheDataInterface;
+import com.topface.topface.state.CountersDataProvider;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.AddToLeaderActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -22,7 +22,6 @@ import com.topface.topface.ui.fragments.feed.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.BookmarksFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.FansFragment;
-import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
@@ -67,7 +66,6 @@ import dagger.Provides;
                 TabbedVisitorsFragment.class,
                 NavigationActivity.class,
                 ChatFragment.class,
-                FeedFragment.class,
                 DialogsFragment.class,
                 BookmarksFragment.class,
                 VisitorsFragment.class,
@@ -82,7 +80,7 @@ import dagger.Provides;
                 PromoKey81Dialog.class,
                 PaymentwallActivity.class,
                 PromoKey31Dialog.class,
-                PromoExpressMessages.class
+                CountersDataProvider.class
         }
 )
 public class TopfaceModule {
