@@ -100,6 +100,11 @@ public abstract class BaseAuthFragment extends BaseFragment {
         return true;
     }
 
+    @Override
+    protected int getStatusBarColor() {
+        return super.getStatusBarColor();
+    }
+
     private void showNoInternetToast() {
         Utils.showToastNotification(R.string.general_internet_off, Toast.LENGTH_SHORT);
     }
