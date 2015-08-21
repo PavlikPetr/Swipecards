@@ -5,12 +5,18 @@ import android.view.View;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.AdmirationsReadedRequest;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
+
+import javax.inject.Inject;
 
 public class PromoKey81Dialog extends PromoDialog {
 
     private boolean counterUpdated;
+    @Inject
+    TopfaceAppState mAppState;
+
 
     @Override
     public void initViews(View root) {
