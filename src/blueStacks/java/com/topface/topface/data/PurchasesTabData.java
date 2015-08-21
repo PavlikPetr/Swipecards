@@ -20,7 +20,6 @@ public class PurchasesTabData {
 
     static {
         markets.add(GPLAY);
-        markets.add(AMAZON);
         markets.add(PWALL_MOBILE);
         markets.add(PWALL);
         markets.add(BONUS);

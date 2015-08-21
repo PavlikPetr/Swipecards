@@ -10,7 +10,6 @@ import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.PurchasesTabData;
 import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
-import com.topface.topface.ui.fragments.buy.AmazonBuyingFragment;
 import com.topface.topface.ui.fragments.buy.MarketBuyingFragment;
 import com.topface.topface.ui.fragments.buy.PaymentWallBuyingFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
@@ -66,13 +65,6 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
             case PurchasesTabData.GPLAY:
                 if (!mIsVip) {
                     fragment = MarketBuyingFragment.newInstance(from, text);
-                } else {
-                    fragment = VipBuyFragment.newInstance(true, from, text);
-                }
-                break;
-            case PurchasesTabData.AMAZON:
-                if (!mIsVip) {
-                    fragment = AmazonBuyingFragment.newInstance(from, text);
                 } else {
                     fragment = VipBuyFragment.newInstance(true, from, text);
                 }

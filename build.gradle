@@ -1,5 +1,14 @@
 def versionProps = new Properties()
-def releaseSigningConfig = signingConfigs.releaseTopface
+
+enum FlavourType {
+    Google,
+    Amazon,
+    Nokia,
+    IFree,
+    BlueStacks
+}
+
+FlavourType flavourType = FlavourType.Google
 def versionPropsFile = file('version.properties')
 if (!versionPropsFile.canRead()) {
     throw new GradleException("Could not read version.properties! Create file in project root")
@@ -75,22 +84,25 @@ android {
     productFlavors {
         //Основной flavor, в нашем случае работает с Google Play
         google {
+            flavourType = FlavourType.Google
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappandroid\"";
         }
         //flavor для версии приложения для Amazon
         amazon {
+            flavourType = FlavourType.Amazon
             buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.AMAZON";
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappamazon\"";
         }
         //flavor для версии приложения для Nokia X
         //Пока не используется, поэтому закоментирован
         /*nokia {
+            flavourType = FlavourType.Nokia
             buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                     "com.topface.billing.MarketApiType.NOKIA_STORE";
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappandroidnokia\"";
         }*/
         ifree {
-            releaseSigningConfig signingConfigs.releaseIFree
+            flavourType = FlavourType.IFree
             applicationId "com.topface.topface.ifree";
             buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.I_FREE";
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappifree\"";
@@ -98,7 +110,7 @@ android {
                     "com.topface.billing.MarketApiType.I_FREE";
         }
         blueStacks {
-            releaseSigningConfig signingConfigs.releaseBLueStacks
+            flavourType = FlavourType.BlueStacks
             applicationId "com.topface.topface.bluestacks";
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappbluestack\"";
             buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.BLUE_STACKS";
@@ -132,7 +144,6 @@ android {
                 "com.topface.billing.MarketApiType.GOOGLE_PLAY";
 
         multiDexEnabled true
-
     }
 
     signingConfigs {
@@ -140,25 +151,30 @@ android {
             storeFile file("misc/keys/debug.keystore")
         }
 
-        releaseTopface {
-            storeFile file("misc/keys/topface.keystore")
-            storePassword "Sonetica2012"
-            keyAlias "topface"
-            keyPassword "Sonetica2012"
-        }
-
-        releaseBLueStacks {
-            storeFile file("misc/keys/topfaceBlueStacks.keystore")
-            storePassword "Sonetica2012"
-            keyAlias "topfaceBlueStacks"
-            keyPassword "Sonetica2012"
-        }
-
-        releaseIFree {
-            storeFile file("misc/keys/topfaceIFree.keystore")
-            storePassword "Sonetica2012"
-            keyAlias "topfaceIFree"
-            keyPassword "Sonetica2012"
+        release {
+            switch (flavourType) {
+                case FlavourType.IFree:
+                    storeFile file("misc/keys/topfaceIFree.keystore")
+                    storePassword "Sonetica2012"
+                    keyAlias "topfaceIFree"
+                    keyPassword "Sonetica2012"
+                    break;
+                case FlavourType.BlueStacks:
+                    storeFile file("misc/keys/topfaceBlueStacks.keystore")
+                    storePassword "Sonetica2012"
+                    keyAlias "topfaceBlueStacks"
+                    keyPassword "Sonetica2012"
+                    break
+                case FlavourType.Google:
+                case FlavourType.Amazon:
+                case FlavourType.Nokia:
+                default:
+                    storeFile file("misc/keys/topface.keystore")
+                    storePassword "Sonetica2012"
+                    keyAlias "topface"
+                    keyPassword "Sonetica2012"
+                    break;
+            }
         }
     }
 
@@ -172,7 +188,7 @@ android {
         }
         release {
             minifyEnabled true
-            signingConfig releaseSigningConfig
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-config.txt'
