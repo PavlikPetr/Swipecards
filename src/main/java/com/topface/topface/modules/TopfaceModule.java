@@ -3,8 +3,6 @@ package com.topface.topface.modules;
 import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
-import com.topface.topface.promo.dialogs.PromoDialog;
-import com.topface.topface.promo.dialogs.PromoKey31Dialog;
 import com.topface.topface.promo.dialogs.PromoKey71Dialog;
 import com.topface.topface.promo.dialogs.PromoKey81Dialog;
 import com.topface.topface.state.CacheDataInterface;
@@ -26,10 +24,6 @@ import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
-import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
-import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
-import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
-import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -59,11 +53,7 @@ import dagger.Provides;
                 AddToLeaderActivity.class,
                 LikesFragment.class,
                 MenuFragment.class,
-                TabbedFeedFragment.class,
-                TabbedLikesFragment.class,
                 AdmirationFragment.class,
-                TabbedDialogsFragment.class,
-                TabbedVisitorsFragment.class,
                 NavigationActivity.class,
                 ChatFragment.class,
                 DialogsFragment.class,
@@ -74,12 +64,9 @@ import dagger.Provides;
                 AdmirationFragment.class,
                 PeopleNearbyFragment.class,
                 PhotoBlogFragment.class,
-                PromoDialog.class,
-                PromoKey31Dialog.class,
                 PromoKey71Dialog.class,
                 PromoKey81Dialog.class,
                 PaymentwallActivity.class,
-                PromoKey31Dialog.class,
                 CountersDataProvider.class
         }
 )
