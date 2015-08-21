@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Topface</string>
     <string name="app_locale">ko_KR</string>
     <string name="general_warning">경고</string>
     <string name="general_ok">ok</string>
