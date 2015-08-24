@@ -55,7 +55,6 @@ import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -501,6 +500,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             @Override
             public void success(IApiResponse response) {
                 CacheProfile.photo = currentPhoto;
+                CacheProfile.getProfile().photo = currentPhoto;
                 CacheProfile.sendUpdateProfileBroadcast();
                 refreshButtonsState();
                 Utils.showToastNotification(R.string.avatar_set_successfully, Toast.LENGTH_SHORT);
