@@ -1,5 +1,7 @@
 package com.topface.topface.modules;
 
+import android.location.Location;
+
 import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
@@ -28,6 +30,7 @@ import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.actionbar.OverflowMenu;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.geo.GeoLocationManager;
 
 import javax.inject.Singleton;
@@ -85,6 +88,10 @@ public class TopfaceModule {
                     CacheProfile.money = balanceData.money;
                 } else if (data.getClass() == CountersData.class) {
                     CacheProfile.countersData = (CountersData) data;
+                } else if (data.getClass() == Location.class) {
+                    UserConfig config = App.getUserConfig();
+                    config.setUserGeoLocation((Location) data);
+                    config.saveConfig();
                 }
             }
 

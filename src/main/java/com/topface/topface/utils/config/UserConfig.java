@@ -2,6 +2,7 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -13,6 +14,8 @@ import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.social.AuthToken;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +33,9 @@ import java.util.Set;
  * use generateKey(String name) to create keys to put(key) and get(key) data
  */
 public class UserConfig extends AbstractConfig {
+    public static final double DEFAULT_USER_LATITUDE_LOCATION = Double.MAX_VALUE;
+    public static final double DEFAULT_USER_LONGITUDE_LOCATION = Double.MAX_VALUE;
+    private static final String LOCATION_PROVIDER = "dummyprovider";
     public static final int TOPFACE_OFFERWALL_REDIRECTION_FREQUENCY = 2;
     private static final int DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
     public static final String LISTS_SEPARATOR = "&";
@@ -68,6 +74,9 @@ public class UserConfig extends AbstractConfig {
     private static final String INTERSTITIAL_IN_FEEDS_FIRST_SHOW_TIME = "interstitial_in_feed_first_show_time";
     private static final String TEST_PAYMENT_ENABLED = "test_payment_enabled";
     public static final String INVITED_CONTACTS_FOR_SMS = "invite_contacts_for_sms";
+    public static final String LAST_CATCHED_GEO_LATITUDE = "last_catched_geo_latitude";
+    public static final String LAST_CATCHED_GEO_LONGITUDE = "last_catched_geo_longitude";
+    public static final String LAST_CATCHED_GEO_PROVIDER = "last_catched_geo_provider";
     private String mUnique;
 
     public UserConfig(String uniqueKey, Context context) {
@@ -162,6 +171,10 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, INVITED_CONTACTS_FOR_SMS, "");
         // счетчик показа попапа триального VIP
         addField(settingsMap, TRIAL_VIP_POPUP_COUNTER, 0);
+        // последнее сохраненное местоположение пользователя
+        addField(settingsMap, LAST_CATCHED_GEO_LATITUDE, DEFAULT_USER_LATITUDE_LOCATION);
+        addField(settingsMap, LAST_CATCHED_GEO_LONGITUDE, DEFAULT_USER_LONGITUDE_LOCATION);
+        addField(settingsMap, LAST_CATCHED_GEO_PROVIDER, LOCATION_PROVIDER);
     }
 
     @Override
@@ -639,11 +652,13 @@ public class UserConfig extends AbstractConfig {
     public int incrementInterstitialInFeedsCounter() {
         int counter = getIntegerField(getSettingsMap(), INTERSTITIAL_IN_FEEDS_COUNTER);
         setField(getSettingsMap(), INTERSTITIAL_IN_FEEDS_COUNTER, ++counter);
+        this.saveConfig();
         return counter;
     }
 
     public void resetInterstitialInFeedsCounter() {
         setField(getSettingsMap(), INTERSTITIAL_IN_FEEDS_COUNTER, 0);
+        this.saveConfig();
     }
 
     public int getInterstitialsInFeedCounter() {
@@ -652,11 +667,35 @@ public class UserConfig extends AbstractConfig {
 
     public void setInterstitialsInFeedFirstShow(long timestamp) {
         setField(getSettingsMap(), INTERSTITIAL_IN_FEEDS_FIRST_SHOW_TIME, timestamp);
+        this.saveConfig();
     }
 
     public long getInterstitialsInFeedFirstShow() {
         return getLongField(getSettingsMap(), INTERSTITIAL_IN_FEEDS_FIRST_SHOW_TIME);
     }
-
     // =====================================================
+
+    /**
+     * Save last catched user location
+     *
+     * @param location user geo position
+     */
+    public void setUserGeoLocation(@NotNull Location location) {
+        setField(getSettingsMap(), LAST_CATCHED_GEO_LATITUDE, location.getLatitude());
+        setField(getSettingsMap(), LAST_CATCHED_GEO_LONGITUDE, location.getLongitude());
+        setField(getSettingsMap(), LAST_CATCHED_GEO_PROVIDER, location.getProvider());
+        this.saveConfig();
+    }
+
+    /**
+     * Return last saved user location
+     *
+     * @return last location
+     */
+    public Location getUserGeoLocation() {
+        Location location = new Location(getStringField(getSettingsMap(), LAST_CATCHED_GEO_PROVIDER));
+        location.setLatitude(getDoubleField(getSettingsMap(), LAST_CATCHED_GEO_LATITUDE));
+        location.setLongitude(getDoubleField(getSettingsMap(), LAST_CATCHED_GEO_LONGITUDE));
+        return location;
+    }
 }
