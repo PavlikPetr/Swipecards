@@ -180,7 +180,6 @@ public class FullscreenController {
         Appodeal.initialize(mActivity, AppodealProvider.APPODEAL_APP_KEY, Appodeal.INTERSTITIAL);
         if (BuildConfig.DEBUG) {
             Appodeal.setTesting(true);
-            Appodeal.show(mActivity, Appodeal.INTERSTITIAL);
         }
         Appodeal.cache(mActivity, Appodeal.INTERSTITIAL);
         Appodeal.setInterstitialCallbacks(new InterstitialCallbacks() {

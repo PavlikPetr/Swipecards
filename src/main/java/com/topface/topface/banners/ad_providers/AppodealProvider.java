@@ -23,8 +23,6 @@ public class AppodealProvider extends AbstractAdsProvider {
         page.getContainerForAd().addView(adView);
         if (BuildConfig.DEBUG) {
             Appodeal.setTesting(true);
-            Appodeal.show(page.getActivity(), Appodeal.BANNER_VIEW);
-            return true;
         }
         Appodeal.getUserSettings(activity)
                 .setGender(
@@ -32,8 +30,6 @@ public class AppodealProvider extends AbstractAdsProvider {
                                 UserSettings.Gender.MALE :
                                 UserSettings.Gender.FEMALE)
                 .setAge(CacheProfile.getProfile().age);
-
-        page.getContainerForAd().addView(adView);
         Appodeal.setBannerCallbacks(new BannerCallbacks() {
 
             @Override
