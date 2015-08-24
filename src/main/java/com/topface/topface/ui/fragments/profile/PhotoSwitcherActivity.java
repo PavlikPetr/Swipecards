@@ -422,7 +422,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 @Override
                 public void onClick(View v) {
                     final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
-                    if (CacheProfile.photo != null && currentPhoto != null && currentPhoto.getId() != CacheProfile.photo.getId()) {
+                    if (CacheProfile.photo == null || !(currentPhoto != null && currentPhoto.getId() != CacheProfile.photo.getId())) {
                         if (!mDeletedPhotos.contains(currentPhoto)) {
                             setAsMainRequest(currentPhoto);
                         } else {
@@ -430,7 +430,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                             refreshButtonsState();
                         }
                     }
-                }
+               }
             });
             // - delete button
             mDeleteButton = (ImageButton) mPhotoAlbumControl.findViewById(R.id.btnDelete);
@@ -466,7 +466,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         CacheProfile.totalPhotos -= mDeletedPhotos.size();
         int decrementPositionBy = 0;
         for (Photo deleted : mDeletedPhotos) {
-            if (deleted.position < CacheProfile.photo.position && CacheProfile.photo.position > 0) {
+            if (CacheProfile.photo!=null && deleted.position < CacheProfile.photo.position && CacheProfile.photo.position > 0) {
                 decrementPositionBy--;
             }
         }
