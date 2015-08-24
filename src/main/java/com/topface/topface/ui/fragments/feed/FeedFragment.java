@@ -896,7 +896,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 @Override
                 public void always(IApiResponse response) {
                     super.always(response);
-                    refreshComplited();
+                    refreshCompleted();
                     mBackgroundController.hide();
                     mIsUpdating = false;
                 }
@@ -909,7 +909,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     }
 
-    public void refreshComplited() {
+    public void refreshCompleted() {
         if (mSwipeRefresh != null && mSwipeRefresh.isRefreshing()) {
             mSwipeRefresh.setRefreshing(false);
         }

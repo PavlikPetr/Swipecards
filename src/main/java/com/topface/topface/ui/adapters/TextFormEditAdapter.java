@@ -122,6 +122,7 @@ public class TextFormEditAdapter extends AbstractEditAdapter<FormItem> {
         }
         Holder holder = (Holder) convertView.getTag();
         holder.text.removeTextChangedListener(holder.textWatcher);
+        holder.text.getText().clear();
         holder.text.append(value);
         holder.text.addTextChangedListener(holder.textWatcher);
         return convertView;

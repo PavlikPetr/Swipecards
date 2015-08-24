@@ -150,14 +150,15 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
             mGeoLocationManager.getLastKnownLocation();
         } else {
             showCannotGetGeoErrorOnEmptyScreen();
-            refreshComplited();
+            refreshCompleted();
         }
     }
 
     private void showCannotGetGeoErrorOnEmptyScreen() {
-        if (getListAdapter() != null) {
-            getListAdapter().removeAllData();
-            getListAdapter().notifyDataSetChanged();
+        FeedAdapter<FeedGeo> adapter = getListAdapter();
+        if (adapter != null) {
+            adapter.removeAllData();
+            adapter.notifyDataSetChanged();
         }
         showCannotGetGeoError();
     }
@@ -186,7 +187,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                 @Override
                 public void always(IApiResponse response) {
                     super.always(response);
-                    refreshComplited();
+                    refreshCompleted();
                 }
             }).exec();
         } else {
@@ -329,7 +330,8 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     }
 
     private void showCannotGetGeoError() {
-        if (getListAdapter() == null || getListAdapter().getCount() <= 0) {
+        FeedAdapter<FeedGeo> adapter = getListAdapter();
+        if (adapter == null || adapter.getCount() <= 0) {
             onEmptyFeed(ErrorCodes.CANNOT_GET_GEO);
         }
     }
