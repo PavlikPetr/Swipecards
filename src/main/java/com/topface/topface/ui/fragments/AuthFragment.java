@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +19,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.topface.framework.utils.Debug;
@@ -253,33 +250,12 @@ public class AuthFragment extends BaseAuthFragment {
         return R.color.status_bar_color;
     }
 
-    private static final int LOW_DPI_TF_BTN_TOP_MARGIN = 23;
-    private static final int LOW_DPI_TF_LOGO_BOTTOM_MARGIN = 40;
-    private static final int LOW_DPI_AUTH_GROUP_TOP_MARGIN = 40;
-    private static final int LOW_DPI_TF_BTN_BOTTOM_MARGIN = 5;
-
-    private void setLowDpiLayoutParams() {
-        LinearLayout.LayoutParams paramsTfAccBtn = (LinearLayout.LayoutParams) mTfAccount.getLayoutParams();
-        paramsTfAccBtn.setMargins(0, LOW_DPI_TF_BTN_TOP_MARGIN, 0, LOW_DPI_TF_BTN_BOTTOM_MARGIN);
-        mTfAccount.requestLayout();
-        LinearLayout.LayoutParams paramsTfLogo = (LinearLayout.LayoutParams) mTfLogo.getLayoutParams();
-        paramsTfLogo.setMargins(0, 0, 0, LOW_DPI_TF_LOGO_BOTTOM_MARGIN);
-        mTfLogo.requestLayout();
-        RelativeLayout.LayoutParams paramsAuthGroup = (RelativeLayout.LayoutParams) mAuthGroup.getLayoutParams();
-        paramsAuthGroup.setMargins(0, LOW_DPI_AUTH_GROUP_TOP_MARGIN, 0, 0);
-        mAuthGroup.requestLayout();
-    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         Debug.log("AF: onCreate");
         View root = inflater.inflate(R.layout.fragment_auth, null);
         ButterKnife.bind(this, root);
-        if (getActivity().getResources().getDisplayMetrics().densityDpi <= DisplayMetrics.DENSITY_HIGH) {
-            setLowDpiLayoutParams();
-        }
         initViews(root);
         if (savedInstanceState != null && savedInstanceState.containsKey(TF_BUTTONS)) {
             setSocNetBtnVisibility(!savedInstanceState.getBoolean(TF_BUTTONS), true, false);

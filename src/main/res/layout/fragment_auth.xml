@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="72dp"
+                android:layout_marginTop="@dimen/tf_logo_top"
                 android:gravity="center"
                 android:orientation="vertical"
                 tools:ignore="UnusedAttribute">
@@ -53,7 +53,7 @@
                     android:id="@+id/ivAuthLogo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="44dp"
+                    android:layout_marginBottom="@dimen/tf_logo_bottom"
                     android:src="@drawable/auth_logo" />
 
                 <Button
@@ -77,7 +77,7 @@
                     android:id="@+id/btnTfAccount"
                     style="@style/AuthButtonWhite"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginTop="44dp"
+                    android:layout_marginTop="@dimen/tf_auth_btn_top"
                     android:gravity="center"
                     android:text="@string/auth_btn_tf"
                     android:textColor="#03A9F4" />
