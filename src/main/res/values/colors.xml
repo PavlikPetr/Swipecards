@@ -137,4 +137,6 @@
     <color name="auth_progressbar_color">#03A9F4</color>
     <color name="text_gray">#4B4B4B</color>
 
+    <color name="status_bar_color">#8c9698</color>
+    <color name="registration_hint_color">#808080</color>
 </resources>
