@@ -2,7 +2,6 @@
 <resources>
 
     <!-- App -->
-    <string name="app_name">Topface</string>
     <string name="app_locale">ru_RU</string>
 
     <!-- строки iOS -->
@@ -25,7 +24,7 @@
     <string name="likes_background_text">Нет симпатий</string>
 
     <string name="visitors_background_text">Нет гостей</string>
-
+    <string name="need_set_avatar">С вами никто не может познакомиться! Установите фото на аватар.</string>
     <string name="chat_background_text">Входящих сообщений нет</string>
     <string name="entrance">Вход</string>
     <string name="filter_only_online">Только онлайн</string>
@@ -144,7 +143,7 @@
 
     <!--/ строки iOS -->
 
-    <string name="general_error">ОШИБКА.</string>
+    <string name="general_error">ОШИБКА</string>
     <string name="general_yes">Да</string>
     <string name="general_no">Нет</string>
     <string name="general_cancel">Отмена</string>
@@ -842,4 +841,5 @@
 
     <string name="novice_sympathy">Отправляйте симпатии тем, кто вам\nдействительно нравится,\nчтобы начать приятное знакомство</string>
     <string name="novice_sympathies_bonus">Вы получаете %1$d симпатии в\nподарок! Это означает, что вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию</string>
+    <string name="photo_not_from_main_album">По результатам модерации это фото запрещено ставить на аватар</string>
 </resources>

@@ -13,6 +13,7 @@ import com.appodeal.ads.InterstitialCallbacks;
 import com.google.android.gms.ads.AdListener;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AppodealProvider;
@@ -187,6 +188,9 @@ public class FullscreenController {
     private void requestAppodealFullscreen() {
         Appodeal.setAutoCache(Appodeal.INTERSTITIAL, false);
         Appodeal.initialize(mActivity, AppodealProvider.APPODEAL_APP_KEY, Appodeal.INTERSTITIAL);
+        if (BuildConfig.DEBUG) {
+            Appodeal.setTesting(true);
+        }
         Appodeal.cache(mActivity, Appodeal.INTERSTITIAL);
         Appodeal.setInterstitialCallbacks(new InterstitialCallbacks() {
             public void onInterstitialLoaded(boolean isPrecache) {

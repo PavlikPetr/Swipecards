@@ -34,7 +34,7 @@
 
         <Button
             android:id="@+id/setBirthday"
-            style="@style/FlatButton.Blue"
+            style="@style/Widget.Topface.Button.Big.Blue"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:maxHeight="44dp"

@@ -1,5 +1,7 @@
 package com.topface.topface.modules;
 
+import android.location.Location;
+
 import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
@@ -13,6 +15,7 @@ import com.topface.topface.promo.dialogs.PromoKey31Dialog;
 import com.topface.topface.promo.dialogs.PromoKey71Dialog;
 import com.topface.topface.promo.dialogs.PromoKey81Dialog;
 import com.topface.topface.state.CacheDataInterface;
+import com.topface.topface.state.CountersDataProvider;
 import com.topface.topface.state.OptionsProvider;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.AddToLeaderActivity;
@@ -27,20 +30,16 @@ import com.topface.topface.ui.fragments.feed.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.BookmarksFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.FansFragment;
-import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
-import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
-import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
-import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
-import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.config.SessionConfig;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.geo.GeoLocationManager;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -123,6 +122,10 @@ public class TopfaceModule {
                     CacheProfile.money = balanceData.money;
                 } else if (data.getClass() == CountersData.class) {
                     CacheProfile.countersData = (CountersData) data;
+                } else if (data.getClass() == Location.class) {
+                    UserConfig config = App.getUserConfig();
+                    config.setUserGeoLocation((Location) data);
+                    config.saveConfig();
                 }
                 //кэш для Options сохраняем в SessionConfig в конце парсинга опций
             }

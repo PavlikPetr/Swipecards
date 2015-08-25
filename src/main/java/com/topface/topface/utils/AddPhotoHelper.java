@@ -535,15 +535,18 @@ public class AddPhotoHelper {
     }
 
     public String getPath(Uri uri) {
-        String picturePath;
+        String picturePath = null;
         Cursor cursor = mContext.getContentResolver().query(uri,
                 new String[]{MediaStore.Images.Media.DATA}, null, null, null);
         if (cursor != null) {
             // получаем путь к изображению из галлереи
             cursor.moveToFirst();
-            picturePath = cursor.getString(0);
+            if (cursor.getColumnCount() > 0) {
+                picturePath = cursor.getString(0);
+            }
             cursor.close();
-        } else {
+        }
+        if (picturePath == null) {
             // путь к файлу, полученному с камеры
             picturePath = uri.getEncodedPath();
         }

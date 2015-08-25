@@ -27,7 +27,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -118,7 +117,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private RateController mRateController;
     private ImageSwitcher mImageSwitcher;
     private CachableSearchList<SearchUser> mUserSearchList;
-    private ProgressBar mProgressBar;
     private AlphaAnimation mAlphaAnimation;
     private RelativeLayout mDatingLoveBtnLayout;
     private RetryViewCreator mRetryView;
@@ -412,9 +410,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mUserInfoStatus = (TextView) root.findViewById(R.id.tvDatingUserStatus);
         // Counter
         mDatingCounter = (TextView) root.findViewById(R.id.tvDatingCounter);
-        // Progress
-        mProgressBar = (ProgressBar) root.findViewById(R.id.prsDatingLoading);
-
         initResources(root);
 
         mAnimationHelper = new AnimationHelper(getActivity(), R.anim.fade_in, R.anim.fade_out);
@@ -480,6 +475,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void initImageSwitcher(View view) {
         // Dating Album
         mImageSwitcher = ((ImageSwitcher) view.findViewById(R.id.glrDatingAlbum));
+        mImageSwitcher.needAnimateLoader(false);
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setOnClickListener(mOnClickListener);
         mImageSwitcher.setUpdateHandler(mUnlockHandler);
@@ -538,7 +534,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         ResetFilterRequest resetRequest = new ResetFilterRequest(getActivity());
                         registerRequest(resetRequest);
                         hideEmptySearchDialog();
-                        mProgressBar.setVisibility(View.VISIBLE);
                         resetRequest.callback(new FilterHandler() {
                             @Override
                             protected void success(DatingFilter filter, IApiResponse response) {
@@ -621,7 +616,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         //Скрываем кнопку отправки повтора
                         mRetryBtn.setVisibility(View.GONE);
                     } else {
-                        mProgressBar.setVisibility(View.GONE);
                         if (!isAddition || mUserSearchList.isEmpty()) {
                             showEmptySearchDialog();
                         }
@@ -787,7 +781,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             case R.id.btnUpdate: {
                 updateData(false);
                 mRetryBtn.setVisibility(View.GONE);
-                mProgressBar.setVisibility(View.VISIBLE);
             }
             break;
             case R.id.btnSend: {
@@ -1027,7 +1020,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void lockControls() {
-        mProgressBar.setVisibility(View.VISIBLE);
         if (!mIsHide) mDatingCounter.setVisibility(View.GONE);
         mUserInfoStatus.setVisibility(View.GONE);
         mMutualBtn.setEnabled(false);
@@ -1044,7 +1036,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void unlockControls() {
-        mProgressBar.setVisibility(View.GONE);
         if (!mIsHide && !isHideAdmirations) {
             mDatingCounter.setVisibility(View.VISIBLE);
             mUserInfoStatus.setVisibility(View.VISIBLE);
@@ -1110,7 +1101,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     protected void onUpdateStart(boolean isPushUpdating) {
         if (!isPushUpdating) {
-            mProgressBar.setVisibility(View.VISIBLE);
             mImageSwitcher.setVisibility(View.GONE);
             mCurrentUser = null;
             refreshActionBarTitles();
@@ -1120,16 +1110,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     @Override
-    protected void onUpdateSuccess(boolean isPushUpdating) {
-        if (!isPushUpdating) {
-            mProgressBar.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
     protected void onUpdateFail(boolean isPushUpdating) {
         if (!isPushUpdating) {
-            mProgressBar.setVisibility(View.GONE);
             mRetryBtn.setVisibility(View.VISIBLE);
         }
     }
@@ -1139,7 +1121,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
             lockControls();
             hideEmptySearchDialog();
-            mProgressBar.setVisibility(View.VISIBLE);
             if (data != null && data.getExtras() != null) {
                 final DatingFilter filter = data.getExtras().getParcelable(FilterFragment.INTENT_DATING_FILTER);
                 FilterRequest filterRequest = new FilterRequest(filter, getActivity());
@@ -1225,7 +1206,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void showEmptySearchDialog() {
         Debug.log("Search:: showEmptySearchDialog");
         EasyTracker.sendEvent("EmptySearch", "Show", "", 0L);
-        mProgressBar.setVisibility(View.GONE);
         mImageSwitcher.setVisibility(View.GONE);
         mRetryView.setVisibility(View.VISIBLE);
         setActionBarTitles(getString(R.string.general_dating));
@@ -1278,7 +1258,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         @Override
         public void cancel() {
             super.cancel();
-            mProgressBar.setVisibility(View.GONE);
             if (mCurrentUser != null) {
                 unlockControls();
             }
