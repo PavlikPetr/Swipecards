@@ -310,11 +310,9 @@ public class MenuFragment extends Fragment {
         if (profileMenuItem != null) {
             // update photo
             Photo photo = profileMenuItem.getMenuIconPhoto();
-            if (photo != null) {
-                if (!photo.equals(CacheProfile.getProfile().photo)) {
-                    profileMenuItem.setMenuIconPhoto(CacheProfile.getProfile().photo);
-                    notify = true;
-                }
+            if (photo == null || !photo.equals(CacheProfile.getProfile().photo)) {
+                profileMenuItem.setMenuIconPhoto(CacheProfile.getProfile().photo);
+                notify = true;
             }
             // fill data warning icon
             int res = 0;
