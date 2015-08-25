@@ -1,7 +1,6 @@
 package com.topface.topface.modules;
 
 import android.location.Location;
-
 import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
@@ -10,8 +9,6 @@ import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
-import com.topface.topface.promo.dialogs.PromoDialog;
-import com.topface.topface.promo.dialogs.PromoKey31Dialog;
 import com.topface.topface.promo.dialogs.PromoKey71Dialog;
 import com.topface.topface.promo.dialogs.PromoKey81Dialog;
 import com.topface.topface.state.CacheDataInterface;
@@ -22,19 +19,12 @@ import com.topface.topface.ui.AddToLeaderActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.feed.AdmirationFragment;
-import com.topface.topface.ui.fragments.feed.BookmarksFragment;
-import com.topface.topface.ui.fragments.feed.DialogsFragment;
-import com.topface.topface.ui.fragments.feed.FansFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
-import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
-import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
-import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.actionbar.OverflowMenu;
@@ -68,40 +58,25 @@ import dagger.Provides;
 
                 //Fragments
 
-                TabbedFeedFragment.class,
-                TabbedLikesFragment.class,
                 AdmirationFragment.class,
-                TabbedDialogsFragment.class,
-                TabbedVisitorsFragment.class,
                 PeopleNearbyFragment.class,
                 PurchasesFragment.class,
                 DatingFragment.class,
                 LikesFragment.class,
                 MenuFragment.class,
-                ChatFragment.class,
-                FeedFragment.class,
-                BookmarksFragment.class,
-                VisitorsFragment.class,
-                DialogsFragment.class,
-                FansFragment.class,
-                MutualFragment.class,
                 AdmirationFragment.class,
                 PeopleNearbyFragment.class,
-                PhotoBlogFragment.class,
+                PromoKey71Dialog.class,
+                PromoKey81Dialog.class,
 
                 //Other
-
+                CountersDataProvider.class,
                 AuthorizationManager.class,
                 OptionsProvider.class,
                 GeoLocationManager.class,
                 App.class,
                 CountersManager.class,
                 OverflowMenu.class,
-                PromoDialog.class,
-                PromoKey31Dialog.class,
-                PromoKey71Dialog.class,
-                PromoKey81Dialog.class,
-                PromoKey31Dialog.class,
                 Profile.class,
                 Options.class
         }

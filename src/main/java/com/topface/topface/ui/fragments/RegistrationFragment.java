@@ -330,9 +330,9 @@ public class RegistrationFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == SEX_SELECTED){
-            mSex = (data.getIntExtra(SEX,1));
-            mTvSex.setText(data.getIntExtra(SEX_MESSAGE,R.string.im_boy));
+        if (requestCode == SEX_SELECTED) {
+            mSex = (data.getIntExtra(SEX, 1));
+            mTvSex.setText(data.getIntExtra(SEX_MESSAGE, R.string.im_boy));
         }
     }
 
