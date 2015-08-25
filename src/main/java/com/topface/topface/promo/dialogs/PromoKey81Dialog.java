@@ -1,7 +1,9 @@
 package com.topface.topface.promo.dialogs;
 
+import android.os.Bundle;
 import android.view.View;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.AdmirationsReadedRequest;
@@ -17,6 +19,11 @@ public class PromoKey81Dialog extends PromoDialog {
     @Inject
     TopfaceAppState mAppState;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        App.from(getActivity()).inject(this);
+    }
 
     @Override
     public void initViews(View root) {

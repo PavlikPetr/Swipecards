@@ -83,8 +83,6 @@ import java.lang.reflect.Type;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
@@ -898,9 +896,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 @Override
                 public void always(IApiResponse response) {
                     super.always(response);
-                    if (mSwipeRefresh.isRefreshing()) {
-                        mSwipeRefresh.setRefreshing(false);
-                    }
+                    refreshCompleted();
                     mBackgroundController.hide();
                     mIsUpdating = false;
                 }
@@ -912,6 +908,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             }).exec();
         }
     }
+
+    public void refreshCompleted() {
+        if (mSwipeRefresh != null && mSwipeRefresh.isRefreshing()) {
+            mSwipeRefresh.setRefreshing(false);
+        }
+    }
+
 
     protected boolean isReadFeedItems() {
         return false;
