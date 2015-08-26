@@ -51,7 +51,7 @@ public class User extends Profile {
                 deleted = resp.optBoolean("deleted") || isEmpty();
                 bookmarked = resp.optBoolean("bookmarked");
                 isSympathySent = resp.optBoolean("isSympathySent");
-                if (CacheProfile.isEditor()) {
+                if (CacheProfile.getProfile().isEditor()) {
                     socialInfo = UserSocialInfo.parse(resp.optString("info"));
                 }
             } else {

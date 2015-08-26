@@ -44,7 +44,7 @@ class BannerInjector implements IBannerInjector, OptionsProvider.IOptionsUpdater
     }
 
     private boolean canInject(IPageWithAds page) {
-        if (!CacheProfile.show_ad || page == null) {
+        if (!CacheProfile.getProfile().showAd || page == null) {
             return false;
         }
         PageInfo.PageName pageId = page.getPageName();

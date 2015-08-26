@@ -111,7 +111,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (CacheProfile.age < App.getAppOptions().getUserAgeMin()) {
+            if (CacheProfile.getProfile().age < App.getAppOptions().getUserAgeMin()) {
                 SetAgeDialog.newInstance().show(getSupportFragmentManager(), SetAgeDialog.TAG);
             }
         }
@@ -440,7 +440,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             }
 
             private boolean isTakePhotoApplicable() {
-                return !AuthToken.getInstance().isEmpty() && (CacheProfile.photo == null)
+                return !AuthToken.getInstance().isEmpty() && (CacheProfile.getProfile().photo == null)
                         && !App.getConfig().getUserConfig().isUserAvatarAvailable();
             }
 
@@ -495,9 +495,9 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     protected void onLoadProfile() {
         super.onLoadProfile();
         //Интеграция наших id юзера с AppsFlyer
-        if (CacheProfile.uid > 0) {
+        if (CacheProfile.getProfile().uid > 0) {
             try {
-                AppsFlyerLib.setAppUserId(Integer.toString(CacheProfile.uid));
+                AppsFlyerLib.setAppUserId(Integer.toString(CacheProfile.getProfile().uid));
             } catch (Exception e) {
                 Debug.error(e);
             }
@@ -563,7 +563,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                                 request.callback(new ApiHandler() {
                                     @Override
                                     public void success(IApiResponse response) {
-                                        CacheProfile.city = city;
+                                        CacheProfile.getProfile().city = city;
                                         CacheProfile.sendUpdateProfileBroadcast();
                                     }
 

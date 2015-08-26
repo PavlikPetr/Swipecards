@@ -942,7 +942,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         final History messageItem = new History(text, IListLoader.ItemType.TEMP_MESSAGE);
         final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity(), getOptions().blockUnconfirmed);
         if (TextUtils.equals(AuthToken.getInstance().getSocialNet(), AuthToken.SN_TOPFACE)) {
-            if (!CacheProfile.emailConfirmed) {
+            if (!CacheProfile.getProfile().emailConfirmed) {
                 Toast.makeText(App.getContext(), R.string.confirm_email, Toast.LENGTH_SHORT).show();
                 ConfirmEmailDialog.newInstance().show(getActivity().getSupportFragmentManager(), CONFIRM_EMAIL_DIALOG_TAG);
                 return false;

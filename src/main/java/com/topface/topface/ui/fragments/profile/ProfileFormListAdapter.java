@@ -30,9 +30,9 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
 
     @Override
     protected LinkedList<FormItem> prepareForm(String status, LinkedList<FormItem> forms) {
-        FormInfo formInfo = new FormInfo(App.getContext(), CacheProfile.sex, Profile.TYPE_OWN_PROFILE);
+        FormInfo formInfo = new FormInfo(App.getContext(), CacheProfile.getProfile().sex, Profile.TYPE_OWN_PROFILE);
         forms.clear();
-        if (CacheProfile.forms != null) {
+        if (CacheProfile.getProfile().forms != null) {
             // fake forms for profile main data
             FormItem statusItem = new FormItem(R.string.edit_status, CacheProfile.getStatus(), FormItem.STATUS) {
                 @Override
@@ -44,11 +44,11 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
             statusItem.setTextLimitInterface(new FormItem.DefaultTextLimiter(App.getAppOptions().getUserStatusMaxLength()));
             forms.add(statusItem);
 
-            FormItem nameItem = new FormItem(R.string.edit_name, CacheProfile.first_name, FormItem.NAME) {
+            FormItem nameItem = new FormItem(R.string.edit_name, CacheProfile.getProfile().firstName, FormItem.NAME) {
                 @Override
                 public void copy(FormItem formItem) {
                     super.copy(formItem);
-                    CacheProfile.first_name = formItem.value;
+                    CacheProfile.getProfile().firstName = formItem.value;
                 }
             };
             nameItem.setTextLimitInterface(new FormItem.DefaultTextLimiter(){
@@ -60,21 +60,21 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
             nameItem.setCanBeEmpty(false);
             forms.add(nameItem);
 
-            String sex = App.getContext().getString(CacheProfile.sex == Static.BOY ? R.string.boy : R.string.girl);
+            String sex = App.getContext().getString(CacheProfile.getProfile().sex == Static.BOY ? R.string.boy : R.string.girl);
             forms.add(new FormItem(R.string.general_sex, sex, FormItem.SEX) {
                 @Override
                 public void copy(FormItem formItem) {
                     super.copy(formItem);
-                    CacheProfile.sex = formItem.dataId;
+                    CacheProfile.getProfile().sex = formItem.dataId;
                 }
             });
 
-            FormItem ageItem = new FormItem(R.string.edit_age, String.valueOf(CacheProfile.age), FormItem.AGE) {
+            FormItem ageItem = new FormItem(R.string.edit_age, String.valueOf(CacheProfile.getProfile().age), FormItem.AGE) {
                 @Override
                 public void copy(FormItem formItem) {
 
                     super.copy(formItem);
-                    CacheProfile.age = TextUtils.isEmpty(formItem.value) ? 0 : Integer.valueOf(formItem.value);
+                    CacheProfile.getProfile().age = TextUtils.isEmpty(formItem.value) ? 0 : Integer.valueOf(formItem.value);
                 }
             };
             ageItem.setValueLimitInterface(new FormItem.ValueLimitInterface() {
@@ -90,17 +90,17 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
             });
             forms.add(ageItem);
 
-            forms.add(new FormItem(R.string.general_city, JsonUtils.toJson(CacheProfile.city), FormItem.CITY) {
+            forms.add(new FormItem(R.string.general_city, JsonUtils.toJson(CacheProfile.getProfile().city), FormItem.CITY) {
                 @Override
                 public void copy(FormItem formItem) {
                     super.copy(formItem);
-                    CacheProfile.city = JsonUtils.fromJson(formItem.value, City.class);
+                    CacheProfile.getProfile().city = JsonUtils.fromJson(formItem.value, City.class);
                 }
             });
 
             // real forms
-            for (FormItem item : CacheProfile.forms) {
-                if (!(item.isOnlyForWomen() && CacheProfile.sex == Static.BOY)) {
+            for (FormItem item : CacheProfile.getProfile().forms) {
+                if (!(item.isOnlyForWomen() && CacheProfile.getProfile().sex == Static.BOY)) {
                     formInfo.fillFormItem(item);
                     forms.add(item);
                 }
@@ -111,11 +111,11 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
     }
 
     public static FormItem getAgeItem() {
-        FormItem ageItem = new FormItem(R.string.edit_age, String.valueOf(CacheProfile.age), FormItem.AGE) {
+        FormItem ageItem = new FormItem(R.string.edit_age, String.valueOf(CacheProfile.getProfile().age), FormItem.AGE) {
             @Override
             public void copy(FormItem formItem) {
                 super.copy(formItem);
-                CacheProfile.age = TextUtils.isEmpty(formItem.value) ? 0 : Integer.valueOf(formItem.value);
+                CacheProfile.getProfile().age = TextUtils.isEmpty(formItem.value) ? 0 : Integer.valueOf(formItem.value);
             }
         };
         ageItem.setValueLimitInterface(new FormItem.ValueLimitInterface() {

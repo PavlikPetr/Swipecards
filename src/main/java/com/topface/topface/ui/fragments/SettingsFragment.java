@@ -127,7 +127,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
     private void setNotificationsState() {
         boolean isMarketApiAvailable = mMarketApiManager.isMarketApiAvailable();
         if ((!isMarketApiAvailable && mMarketApiManager.isMarketApiSupportByUs()) ||
-                (!isMarketApiAvailable && !CacheProfile.email)) {
+                (!isMarketApiAvailable && !CacheProfile.getProfile().email)) {
             TextView text = (TextView) mNoNotificationViewGroup.findViewById(R.id.textNoNotificationDescription);
             text.setVisibility(mMarketApiManager.isTitleVisible() ? View.VISIBLE : View.GONE);
             text.setText(mMarketApiManager.getTitleTextId());

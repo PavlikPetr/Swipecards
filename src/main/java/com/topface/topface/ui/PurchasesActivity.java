@@ -242,7 +242,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     }
 
     private boolean isSMSInviteAvailable() {
-        return !CacheProfile.premium && !(mTopfaceOfferwallRedirect != null &&
+        return !CacheProfile.getProfile().premium && !(mTopfaceOfferwallRedirect != null &&
                 (mTopfaceOfferwallRedirect.isExpOnClose() ||
                         mTopfaceOfferwallRedirect.isCompleted())) &&
                 getOptions().forceSmsInviteRedirect.enabled;

@@ -58,7 +58,7 @@ public class DebugEmailSender implements ReportSender {
 
     @Override
     public void send(Context context, CrashReportData errorContent) throws ReportSenderException {
-        final String subject = "[Crash Report] [uid: " + CacheProfile.uid + "] Topface";
+        final String subject = "[Crash Report] [uid: " + CacheProfile.getProfile().uid + "] Topface";
 
         final String body = buildBody(errorContent);
 

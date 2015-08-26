@@ -28,7 +28,7 @@ public class DeleteAccountDialog extends AbstractDialogFragment implements View.
         root.findViewById(R.id.btnCancel).setOnClickListener(this);
         mBtnOk = (Button) root.findViewById(R.id.btnOk);
         mBtnOk.setOnClickListener(this);
-        ((ImageViewRemote) root.findViewById(R.id.ivAvatar)).setPhoto(CacheProfile.photo);
+        ((ImageViewRemote) root.findViewById(R.id.ivAvatar)).setPhoto(CacheProfile.getProfile().photo);
         ((TextView) root.findViewById(R.id.tvProfile)).setText(CacheProfile.getUserNameAgeString());
         ((TextView) root.findViewById(R.id.tvWarningText)).setText(R.string.delete_account_warning);
     }

@@ -28,7 +28,7 @@ public class SupersonicWallActivity extends Activity {
         setContentView(mRelLayout);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.postUrl(
-                url + "?applicationUserId=" + CacheProfile.uid +
+                url + "?applicationUserId=" + CacheProfile.getProfile().uid +
                         "&applicationKey=" + API_KEY +
                         "&deviceOs=android", null
         );

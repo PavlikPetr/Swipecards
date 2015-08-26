@@ -41,7 +41,7 @@ public class IFreeBuyVipFragment extends IFreePurchases implements OnClickListen
         public void onReceive(Context context, Intent intent) {
             switchLayouts();
             if (mInvisSwitcher != null) {
-                mInvisSwitcher.setChecked(CacheProfile.invisible);
+                mInvisSwitcher.setChecked(CacheProfile.getProfile().invisible);
             }
         }
     };
@@ -103,7 +103,7 @@ public class IFreeBuyVipFragment extends IFreePurchases implements OnClickListen
         setProgressVisibility(false);
         if (!isLibraryInitialised()) {
             Products products = CacheProfile.getMarketProducts();
-            if (!CacheProfile.premium) {
+            if (!CacheProfile.getProfile().premium) {
                 initBuyVipViews(mRoot, products != null ? validateProducts(products.premium) : null);
             }
         }
@@ -115,7 +115,7 @@ public class IFreeBuyVipFragment extends IFreePurchases implements OnClickListen
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(OpenIabFragment.UPDATE_RESOURCE_INFO));
-        mInvisSwitcher.setProgressState(false, CacheProfile.invisible);
+        mInvisSwitcher.setProgressState(false, CacheProfile.getProfile().invisible);
         switchLayouts();
     }
 
@@ -137,7 +137,7 @@ public class IFreeBuyVipFragment extends IFreePurchases implements OnClickListen
         setResourceInfoText();
         initViews(view);
         initActionBar();
-        if (!CacheProfile.premium) {
+        if (!CacheProfile.getProfile().premium) {
             setProgressVisibility(true);
         }
         return view;
@@ -166,7 +166,7 @@ public class IFreeBuyVipFragment extends IFreePurchases implements OnClickListen
 
     private void switchLayouts() {
         if (mBuyVipViewsContainer != null && mEditPremiumContainer != null) {
-            if (CacheProfile.premium) {
+            if (CacheProfile.getProfile().premium) {
                 mEditPremiumContainer.setVisibility(View.VISIBLE);
                 mBuyVipViewsContainer.setVisibility(View.GONE);
             } else {
@@ -258,15 +258,15 @@ public class IFreeBuyVipFragment extends IFreePurchases implements OnClickListen
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) throws NullPointerException {
-                CacheProfile.invisible = invisibility;
+                CacheProfile.getProfile().invisible = invisibility;
                 CacheProfile.sendUpdateProfileBroadcast();
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) throws NullPointerException {
                 if (mInvisSwitcher != null && getActivity() != null) {
-                    if (CacheProfile.invisible != mInvisSwitcher.isChecked()) {
-                        mInvisSwitcher.setChecked(CacheProfile.invisible);
+                    if (CacheProfile.getProfile().invisible != mInvisSwitcher.isChecked()) {
+                        mInvisSwitcher.setChecked(CacheProfile.getProfile().invisible);
                     }
                 }
             }
@@ -275,7 +275,7 @@ public class IFreeBuyVipFragment extends IFreePurchases implements OnClickListen
             public void always(IApiResponse response) {
                 super.always(response);
                 if (mInvisSwitcher != null && getActivity() != null) {
-                    mInvisSwitcher.setProgressState(false, CacheProfile.invisible);
+                    mInvisSwitcher.setProgressState(false, CacheProfile.getProfile().invisible);
                 }
             }
         }).exec();

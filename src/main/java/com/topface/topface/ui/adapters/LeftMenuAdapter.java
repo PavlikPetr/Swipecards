@@ -168,7 +168,7 @@ public class LeftMenuAdapter extends BaseAdapter {
             case TYPE_MENU_BUTTON_WITH_PHOTO:
                 holder.btnMenu.setText(item.getMenuText());
                 if (holder.icon instanceof ImageViewRemote) {
-                    ((ImageViewRemote) holder.icon).setPhoto(CacheProfile.photo);
+                    ((ImageViewRemote) holder.icon).setPhoto(CacheProfile.getProfile().photo);
                 }
                 if (holder.extraIcon != null) {
                     int extraIconDrawable = item.getExtraIconDrawable();

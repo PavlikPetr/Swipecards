@@ -40,11 +40,11 @@ public class TrackedFragmentActivity extends StateTaransportFragmentActivity {
         HitBuilders.AppViewBuilder builder = new HitBuilders.AppViewBuilder();
         String socialNet = AuthToken.getInstance().getSocialNet();
         builder.setCustomDimension(1, TextUtils.isEmpty(socialNet) ? "Unauthorized" : socialNet);
-        builder.setCustomDimension(2, CacheProfile.sex == 0 ? "Female" : "Male");
-        builder.setCustomDimension(3, CacheProfile.paid ? "Yes" : "No");
-        builder.setCustomDimension(4, CacheProfile.emailConfirmed ? "Yes" : "No");
-        builder.setCustomDimension(5, CacheProfile.premium ? "Yes" : "No");
-        builder.setCustomDimension(6, Integer.toString(CacheProfile.age));
+        builder.setCustomDimension(2, CacheProfile.getProfile().sex == 0 ? "Female" : "Male");
+        builder.setCustomDimension(3, CacheProfile.getProfile().paid ? "Yes" : "No");
+        builder.setCustomDimension(4, CacheProfile.getProfile().emailConfirmed ? "Yes" : "No");
+        builder.setCustomDimension(5, CacheProfile.getProfile().premium ? "Yes" : "No");
+        builder.setCustomDimension(6, Integer.toString(CacheProfile.getProfile().age));
         builder.set(EasyTracker.SESSION_CONTROL, "start");
         /**
          * Абстрактное поле для подсчета статистики экспериментов

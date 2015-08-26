@@ -247,7 +247,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     private boolean isExpressPopupAvailable() {
-        if (CacheProfile.premium) return false;
+        if (CacheProfile.getProfile().premium) return false;
         Options options = getOptions();
         Options.PromoPopupEntity expressMessagesPopup = options.getPremiumEntityByType(AIR_MESSAGES);
         return expressMessagesPopup != null && expressMessagesPopup.isNeedShow() &&

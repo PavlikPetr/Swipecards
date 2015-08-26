@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 
 import com.google.gson.JsonSyntaxException;
@@ -13,17 +12,13 @@ import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
-import com.topface.topface.data.City;
+import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
-import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.PaymentWallProducts;
-import com.topface.topface.data.Photo;
-import com.topface.topface.data.Photos;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.utils.config.SessionConfig;
@@ -31,16 +26,10 @@ import com.topface.topface.utils.config.SessionConfig;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import javax.inject.Inject;
 
 /* Cache Profile */
 public class CacheProfile {
-
-    @Inject
-    TopfaceAppState state;
 
     public static final String ACTION_PROFILE_LOAD = "com.topface.topface.ACTION.PROFILE_LOAD";
     /**
@@ -55,39 +44,17 @@ public class CacheProfile {
 
     // Data
     public static CountersData countersData;
-    public static int uid;                      // id пользователя в топфейсе
-    public static String first_name;            // имя пользователя
-    public static int age;                      // возраст пользователя
-    public static int sex;                      // пол пользователя
-    public static City city;                    // город пользователя
-    public static int money;                    // количество монет у пользователя
-    public static int likes;                    // количество симпатий пользователя
-    public static DatingFilter dating;          // Фильтр поиска
-    public static boolean paid;                 // признак платящего пользоателя
-    public static boolean show_ad = true;       // флаг показа рекламы
-    public static boolean premium;              // показывает есть ли у пользователя Vip статус
-    public static boolean invisible;            // показывает включен ли режим невидимки
-    public static LinkedList<FormItem> forms;   // анкета пользователя
-    public static int background_id;            // идентификатор фона в профиле
-    public static Photos photos;                // список первых 30 фото
-    public static Photo photo;                  // аватарка пользователя
-    public static int totalPhotos;              // общее количество фотографий пользователя
-    public static boolean email;                // присутсвует ли email
-    public static boolean emailGrabbed;         // был ли email введен пользователем
-    public static boolean emailConfirmed;       // подтвержден ли email
-    public static int xstatus;                  // код цели знакомства пользователя, возможные варианты
-    private static boolean editor;              // является ли пользователь редактором
-    private static String status;               // статус пользователя
-    public static boolean canInvite;            // может ли этот пользователь отправлять приглашения контактам
-    public static Profile.Gifts gifts = new Profile.Gifts(); // массив подарков пользователя
-    public static SparseArrayCompat<Profile.TopfaceNotifications> notifications;
-    public static boolean giveNoviceLikes = false;
+    public static BalanceData balanceData;
 
     // State
     public static long profileUpdateTime;               // время последнего вызова setProfile(...)
     public static boolean wasCityAsked = false;         // был ли показан экран выбора города новичку
     public static boolean needShowBonusCounter = false;
     private static AtomicBoolean mIsLoaded = new AtomicBoolean(false);
+
+
+    public static Profile profile;
+
 
     private static void setProfileCache(final JSONObject response) {
         if (response != null) {
@@ -97,92 +64,16 @@ public class CacheProfile {
         }
     }
 
+
     public static Profile getProfile() {
-        Profile profile = new Profile();
-        profile.uid = uid;
-        profile.firstName = first_name;
-        profile.age = age;
-        profile.sex = sex;
-
-        profile.notifications = notifications;
-        profile.email = email;
-        profile.emailConfirmed = emailConfirmed;
-        profile.emailGrabbed = emailGrabbed;
-
-        profile.premium = premium;
-        profile.invisible = invisible;
-
-        profile.city = city;
-
-        profile.dating = dating;
-        profile.forms = forms;
-        profile.setStatus(status);
-        profile.gifts = gifts;
-        profile.background = background_id;
-
-        profile.photos = photos;
-        profile.photo = photo;
-        profile.photosCount = totalPhotos;
-
-        profile.paid = paid;
-        profile.showAd = show_ad;
-        profile.xstatus = xstatus;
-        profile.setEditor(editor);
-        profile.giveNoviceLikes = giveNoviceLikes;
-        profile.canInvite = canInvite;
         return profile;
-    }
-
-    public static void setProfile(Profile profile, JSONObject response) {
-        setProfile(profile, response, ProfileRequest.P_ALL);
     }
 
     public static void setProfile(Profile profile, JSONObject response, int part) {
         switch (part) {
-            case ProfileRequest.P_NECESSARY_DATA:
-                gifts = profile.gifts;
-                invisible = profile.invisible;
-                premium = profile.premium;
-                show_ad = profile.showAd;
-                photo = profile.photo;
-                photos = profile.photos;
-                totalPhotos = profile.photosCount;
-                break;
             case ProfileRequest.P_ALL:
                 Editor.init(profile);
-                uid = profile.uid;
-                first_name = profile.firstName;
-                age = profile.age;
-                sex = profile.sex;
-                city = profile.city;
-
-                notifications = profile.notifications;
-                email = profile.email;
-                emailConfirmed = profile.emailConfirmed;
-                emailGrabbed = profile.emailGrabbed;
-
-                premium = profile.premium;
-                invisible = profile.invisible;
-                dating = profile.dating;
-                forms = profile.forms;
-
-                photos = profile.photos;
-                photo = profile.photo;
-                status = profile.getStatus();
-                gifts = profile.gifts;
-                background_id = profile.background;
-
-                totalPhotos = profile.photosCount;
-
-                paid = profile.paid;
-                show_ad = profile.showAd;
-
-                xstatus = profile.xstatus;
-
-                canInvite = profile.canInvite;
-                giveNoviceLikes = profile.giveNoviceLikes;
-                editor = profile.isEditor();
-
+                CacheProfile.profile = profile;
                 setProfileCache(response);
                 break;
         }
@@ -190,11 +81,11 @@ public class CacheProfile {
     }
 
     public static String getStatus() {
-        return status;
+        return profile.status;
     }
 
     public static void setStatus(String status) {
-        CacheProfile.status = Profile.normilizeStatus(status);
+        profile.status = Profile.normilizeStatus(status);
     }
 
     /**
@@ -204,16 +95,14 @@ public class CacheProfile {
      */
     public static boolean loadProfile() {
         boolean result = false;
-        if (uid == 0) {
+        if (profile == null) {
             SessionConfig config = App.getSessionConfig();
             String profileCache = config.getProfileData();
-            Profile profile;
             if (!TextUtils.isEmpty(profileCache)) {
                 //Получаем опции из кэша
                 try {
                     JSONObject profileJson = new JSONObject(profileCache);
-                    profile = new Profile(profileJson);
-                    setProfile(profile, profileJson);
+                    CacheProfile.profile = new Profile(profileJson);
                     result = true;
                 } catch (JSONException e) {
                     config.resetProfileData();
@@ -294,14 +183,15 @@ public class CacheProfile {
     }
 
     public static boolean isDataFilled() {
-        return city != null && !city.isEmpty() && age != 0 && first_name != null && photo != null;
+        return profile.city != null && !profile.city.isEmpty() && profile.age != 0 && profile.firstName != null && profile.photo != null;
     }
 
     /**
      * Clears CacheProfile fields (does not affect cached data from ProfileConfig)
      */
     public static void clearProfileAndOptions() {
-        setProfile(new Profile(), null);
+        CacheProfile.profile = new Profile();
+        setProfileCache(null);
         wasCityAsked = false;
     }
 
@@ -314,7 +204,7 @@ public class CacheProfile {
     }
 
     public static boolean isEmpty() {
-        return isLoaded() && uid == 0;
+        return isLoaded() && profile.uid == 0;
     }
 
     public static void setOptions(final JSONObject response) {
@@ -360,8 +250,8 @@ public class CacheProfile {
 
     @SuppressWarnings("UnusedDeclaration")
     public static String getUserNameAgeString() {
-        return CacheProfile.first_name +
-                (CacheProfile.isAgeOk(CacheProfile.age) ? ", " + CacheProfile.age : "");
+        return CacheProfile.getProfile().firstName +
+                (CacheProfile.isAgeOk(CacheProfile.getProfile().age) ? ", " + CacheProfile.getProfile().age : "");
     }
 
     private static boolean isAgeOk(int age) {
@@ -400,10 +290,6 @@ public class CacheProfile {
         editor.apply();
     }
 
-    public static boolean isEditor() {
-        return editor;
-    }
-
     /**
      * Посылаем Broadcast о том, что данные профиля обновлены
      */
@@ -423,8 +309,8 @@ public class CacheProfile {
         return (
                 !CacheProfile.isEmpty() &&
                         (
-                                CacheProfile.city == null ||
-                                        CacheProfile.city.isEmpty() ||
+                                CacheProfile.getProfile().city == null ||
+                                        CacheProfile.getProfile().city.isEmpty() ||
                                         CacheProfile.needCityConfirmation(context)
                         )
                         && !CacheProfile.wasCityAsked
@@ -432,8 +318,8 @@ public class CacheProfile {
     }
 
     public static void incrementPhotoPosition(int diff, boolean needBroadcast) {
-        if (CacheProfile.photo != null) {
-            CacheProfile.photo.position += diff;
+        if (profile.photo != null) {
+            profile.photo.position += diff;
             if (needBroadcast) {
                 Intent intent = new Intent(OwnAvatarFragment.UPDATE_AVATAR_POSITION);
                 LocalBroadcastManager.getInstance(App.getContext())
@@ -447,11 +333,11 @@ public class CacheProfile {
     }
 
     public static boolean isSetSympathiesBonus() {
-        return giveNoviceLikes;
+        return profile.giveNoviceLikes;
     }
 
     public static void completeSetNoviceSympathiesBonus() {
-        giveNoviceLikes = false;
+        profile.giveNoviceLikes = false;
     }
 
 }

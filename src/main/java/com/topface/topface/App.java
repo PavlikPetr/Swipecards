@@ -250,7 +250,7 @@ public class App extends ApplicationBase {
     public static void checkProfileUpdate() {
         if (System.currentTimeMillis() > mLastProfileUpdate + PROFILE_UPDATE_TIMEOUT) {
             mLastProfileUpdate = System.currentTimeMillis();
-            getProfileRequest(ProfileRequest.P_NECESSARY_DATA).exec();
+            getProfileRequest(ProfileRequest.P_ALL).exec();
         }
     }
 

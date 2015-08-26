@@ -48,8 +48,8 @@ public class SearchCacheManager extends UsersListCacheManager {
 
     @Override
     protected boolean isCacheExpired(String cacheKey) {
-        return CacheProfile.dating == null || super.isCacheExpired(cacheKey) || //Проверяем соответсвие кэша текущему фильтру поиска
-                !TextUtils.equals(getSignatureFromCache(), CacheProfile.dating.getFilterSignature());
+        return CacheProfile.getProfile().dating == null || super.isCacheExpired(cacheKey) || //Проверяем соответсвие кэша текущему фильтру поиска
+                !TextUtils.equals(getSignatureFromCache(), CacheProfile.getProfile().dating.getFilterSignature());
     }
 
     protected String getSignatureFromCache() {

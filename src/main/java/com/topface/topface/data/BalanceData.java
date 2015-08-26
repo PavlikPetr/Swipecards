@@ -6,12 +6,21 @@ package com.topface.topface.data;
  */
 public class BalanceData implements Cloneable {
     public boolean premium;
-    public int likes;
-    public int money;
+    public int likes = 0;
+    public int money = 0;
 
     public BalanceData(boolean premium, int likes, int money) {
         this.premium = premium;
         this.likes = likes;
         this.money = money;
+    }
+
+    public BalanceData(BalanceData balanceData) {
+        this.premium = balanceData.premium;
+        this.likes = balanceData.likes;
+        this.money = balanceData.money;
+    }
+
+    public BalanceData() {
     }
 }

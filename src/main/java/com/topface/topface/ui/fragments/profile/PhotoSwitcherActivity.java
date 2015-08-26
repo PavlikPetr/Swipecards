@@ -383,7 +383,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 );
             }
         });
-        if (mUid == CacheProfile.uid) {
+        if (mUid == CacheProfile.getProfile().uid) {
             mGiftImage.setVisibility(View.GONE);
         } else {
             mGiftImage.setVisibility(View.VISIBLE);
@@ -415,14 +415,15 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     private void initControls() {
-        if (mUid == CacheProfile.uid) {
+        if (mUid == CacheProfile.getProfile().uid) {
             // - set avatar button
             mSetAvatarButton = (TextView) mPhotoAlbumControl.findViewById(R.id.btnSetAvatar);
             mSetAvatarButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
-                    if (CacheProfile.photo == null || !(currentPhoto != null && currentPhoto.getId() != CacheProfile.photo.getId())) {
+                    if (CacheProfile.getProfile().photo == null || !(currentPhoto != null
+                            && currentPhoto.getId() != CacheProfile.getProfile().photo.getId())) {
                         if (!mDeletedPhotos.contains(currentPhoto)) {
                             setAsMainRequest(currentPhoto);
                         } else {
@@ -458,15 +459,16 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
     public void deletePhotoRequest() {
         if (mDeletedPhotos.isEmpty()) return;
-        final Photos photos = (Photos) CacheProfile.photos.clone();
-        final int totalPhotos = CacheProfile.totalPhotos;
+        final Photos photos = (Photos) CacheProfile.getProfile().photos.clone();
+        final int totalPhotos = CacheProfile.getProfile().photosCount;
         for (Photo currentPhoto : mDeletedPhotos) {
-            CacheProfile.photos.removeById(currentPhoto.getId());
+            CacheProfile.getProfile().photos.removeById(currentPhoto.getId());
         }
-        CacheProfile.totalPhotos -= mDeletedPhotos.size();
+        CacheProfile.getProfile().photosCount -= mDeletedPhotos.size();
         int decrementPositionBy = 0;
         for (Photo deleted : mDeletedPhotos) {
-            if (CacheProfile.photo != null && deleted.position < CacheProfile.photo.position && CacheProfile.photo.position > 0) {
+            if (CacheProfile.getProfile().photo != null && deleted.position < CacheProfile.getProfile().photo.position
+                    && CacheProfile.getProfile().photo.position > 0) {
                 decrementPositionBy--;
             }
         }
@@ -484,8 +486,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             @Override
             public void fail(int codeError, IApiResponse response) {
                 Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
-                CacheProfile.photos = photos;
-                CacheProfile.totalPhotos = totalPhotos;
+                CacheProfile.getProfile().photos = photos;
+                CacheProfile.getProfile().photosCount = totalPhotos;
                 CacheProfile.incrementPhotoPosition(avatarPosition, false);
                 LocalBroadcastManager.getInstance(PhotoSwitcherActivity.this).sendBroadcast(new Intent(DEFAULT_UPDATE_PHOTOS_INTENT));
             }
@@ -499,7 +501,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                CacheProfile.photo = currentPhoto;
+                CacheProfile.getProfile().photo = currentPhoto;
                 CacheProfile.getProfile().photo = currentPhoto;
                 CacheProfile.sendUpdateProfileBroadcast();
                 refreshButtonsState();
@@ -572,7 +574,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     private void refreshButtonsState() {
-        if (mUid == CacheProfile.uid && mSetAvatarButton != null && mPhotoLinks != null && mPhotoLinks.size() > mCurrentPosition) {
+        if (mUid == CacheProfile.getProfile().uid && mSetAvatarButton != null && mPhotoLinks != null && mPhotoLinks.size() > mCurrentPosition) {
             final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
             if (mDeletedPhotos.contains(currentPhoto)) {
                 mDeleteButton.setVisibility(View.VISIBLE);
@@ -580,18 +582,18 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 mSetAvatarButton.setText(R.string.edit_restore);
                 mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             } else {
-                if (CacheProfile.photo != null && CacheProfile.photo.getId() == currentPhoto.getId()) {
+                if (CacheProfile.getProfile().photo != null && CacheProfile.getProfile().photo.getId() == currentPhoto.getId()) {
                     mDeleteButton.setVisibility(View.GONE);
                 } else {
                     mDeleteButton.setVisibility(View.VISIBLE);
                     mDeleteButton.setImageResource(R.drawable.ico_delete_selector);
                 }
-                if (CacheProfile.photo != null && currentPhoto.getId() == CacheProfile.photo.getId()) {
+                if (CacheProfile.getProfile().photo != null && currentPhoto.getId() == CacheProfile.getProfile().photo.getId()) {
                     mSetAvatarButton.setText(R.string.your_avatar);
                     mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ico_selected, 0, 0, 0);
                 } else {
                     mSetAvatarButton.setText(R.string.on_avatar);
-                    mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(CacheProfile.sex == Static.BOY ? R.drawable.ico_avatar_man_selector : R.drawable.ico_avatar_woman_selector, 0, 0, 0);
+                    mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(CacheProfile.getProfile().sex == Static.BOY ? R.drawable.ico_avatar_man_selector : R.drawable.ico_avatar_woman_selector, 0, 0, 0);
                 }
             }
         }
@@ -606,8 +608,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 for (Photo photo : newPhotos) {
                     mPhotoLinks.set(photo.getPosition(), photo);
                 }
-                if (mUid == CacheProfile.uid) {
-                    CacheProfile.photos = mPhotoLinks;
+                if (mUid == CacheProfile.getProfile().uid) {
+                    CacheProfile.getProfile().photos = mPhotoLinks;
                 }
 
                 if (mImageSwitcher != null) {

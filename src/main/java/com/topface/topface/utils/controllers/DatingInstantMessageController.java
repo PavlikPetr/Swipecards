@@ -212,7 +212,7 @@ public class DatingInstantMessageController {
             return true;
         }
 
-        if (CacheProfile.premium || user.isMutualPossible || !mUpdater.getOptions().blockChatNotMutual) {
+        if (CacheProfile.getProfile().premium || user.isMutualPossible || !mUpdater.getOptions().blockChatNotMutual) {
             return true;
         } else {
             startPurchasesActivity(mActivity.getString(R.string.chat_block_not_mutual),

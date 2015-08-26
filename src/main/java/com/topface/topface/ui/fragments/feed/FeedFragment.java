@@ -134,7 +134,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (!CacheProfile.show_ad) {
+            if (!CacheProfile.getProfile().showAd) {
                 getListAdapter().removeAdItems();
             }
         }
@@ -372,7 +372,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             isCurrentCounterChanged = saved.getBoolean(FEED_COUNTER_CHANGED);
             currentCounter = saved.getInt(FEED_COUNTER);
             mIdForRemove = saved.getInt(BLACK_LIST_USER);
-            if (CacheProfile.show_ad) {
+            if (CacheProfile.getProfile().showAd) {
                 mListAdapter.setHasFeedAd(saved.getBoolean(HAS_AD));
                 mListAdapter.setFeedAd(saved.<NativeAd>getParcelable(FEED_AD));
             }
@@ -381,7 +381,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             if (feeds != null) {
                 for (Parcelable p : feeds) {
                     T feed = (T) p;
-                    if (feed.isAd() && !CacheProfile.show_ad) {
+                    if (feed.isAd() && !CacheProfile.getProfile().showAd) {
                         continue;
                     }
                     feedsList.add((T) p);

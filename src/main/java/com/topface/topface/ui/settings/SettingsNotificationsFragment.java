@@ -106,11 +106,11 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
         setTitle(R.string.settings_messages, mLoChat);
         setTitle(R.string.settings_guests, mLoGuests);
 
-        if (CacheProfile.notifications != null) {
-            setText(CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES), mLoLikes);
-            setText(CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY), mLoMutual);
-            setText(CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE), mLoChat);
-            setText(CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR), mLoGuests);
+        if (CacheProfile.getProfile().notifications != null) {
+            setText(CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_LIKES), mLoLikes);
+            setText(CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY), mLoMutual);
+            setText(CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE), mLoChat);
+            setText(CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_VISITOR), mLoGuests);
         }
 
         setTitle(R.string.settings_vibration, mLoVibration);
@@ -209,7 +209,7 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
 
     private void setNotificationState() {
         boolean isMarketApiAvailable = mMarketApiManager.isMarketApiAvailable();
-        if (!CacheProfile.email && !isMarketApiAvailable) {
+        if (!CacheProfile.getProfile().email && !isMarketApiAvailable) {
             mMelodyName.setVisibility(View.GONE);
             setNotificationVisibility(View.GONE);
         } else {
@@ -248,22 +248,22 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
         switch (v.getId()) {
             case R.id.notification_sympathies:
                 NotificationEditDialog.newInstance(res.getString(R.string.receive_sympathy_notification),
-                        CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES),
+                        CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_LIKES),
                         mEditingFinishedListener).show(fm, NotificationEditDialog.class.getName());
                 break;
             case R.id.notification_mutuals:
                 NotificationEditDialog.newInstance(res.getString(R.string.receive_mutual_notification),
-                        CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY),
+                        CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY),
                         mEditingFinishedListener).show(fm, NotificationEditDialog.class.getName());
                 break;
             case R.id.notification_messages:
                 NotificationEditDialog.newInstance(res.getString(R.string.receive_message_notification),
-                        CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE),
+                        CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE),
                         mEditingFinishedListener).show(fm, NotificationEditDialog.class.getName());
                 break;
             case R.id.notification_guests:
                 NotificationEditDialog.newInstance(res.getString(R.string.receive_guest_notification),
-                        CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR),
+                        CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_VISITOR),
                         mEditingFinishedListener).show(fm, NotificationEditDialog.class.getName());
                 break;
             case R.id.notification_melody:
@@ -286,7 +286,7 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
             @Override
             public void fail(int codeError, IApiResponse response) {
                 if (getView() != null) {
-                    setText(CacheProfile.notifications.get(notification.type), view);
+                    setText(CacheProfile.getProfile().notifications.get(notification.type), view);
                     Utils.showToastNotification(R.string.general_data_error, Toast.LENGTH_SHORT);
                 }
             }
@@ -294,7 +294,7 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
             @Override
             protected void success(SendMailNotificationResponse data, IApiResponse response) {
                 if (data.saved) {
-                    CacheProfile.notifications.put(notification.type, notification);
+                    CacheProfile.getProfile().notifications.put(notification.type, notification);
                     CacheProfile.sendUpdateProfileBroadcast();
                     if (getView() != null) {
                         setText(notification, view);
@@ -333,8 +333,8 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
     }
 
     private boolean hasChanges(Profile.TopfaceNotifications notification) {
-        if (CacheProfile.notifications != null) {
-            Profile.TopfaceNotifications cachedNotification = CacheProfile.notifications.get(notification.type);
+        if (CacheProfile.getProfile().notifications != null) {
+            Profile.TopfaceNotifications cachedNotification = CacheProfile.getProfile().notifications.get(notification.type);
             return cachedNotification.mail != notification.mail || cachedNotification.apns != notification.apns;
         }
         return false;
@@ -386,21 +386,21 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
      */
     public SendMailNotificationsRequest getMailNotificationRequest(Context context) {
         SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
-        if (CacheProfile.notifications != null) {
+        if (CacheProfile.getProfile().notifications != null) {
             try {
-                request.mailSympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
-                request.mailMutual = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail;
-                request.mailChat = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail;
-                request.mailGuests = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).mail;
+                request.mailSympathy = CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
+                request.mailMutual = CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail;
+                request.mailChat = CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail;
+                request.mailGuests = CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).mail;
             } catch (Exception e) {
                 Debug.error(e);
             }
 
             try {
-                request.apnsSympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
-                request.apnsMutual = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
-                request.apnsChat = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
-                request.apnsVisitors = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
+                request.apnsSympathy = CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
+                request.apnsMutual = CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
+                request.apnsChat = CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
+                request.apnsVisitors = CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
             } catch (Exception e) {
                 Debug.error(e);
             }

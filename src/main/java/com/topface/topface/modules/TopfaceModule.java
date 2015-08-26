@@ -91,10 +91,7 @@ public class TopfaceModule {
             @Override
             public <T> void saveDataToCache(T data) {
                 if (data.getClass() == BalanceData.class) {
-                    BalanceData balanceData = (BalanceData) data;
-                    CacheProfile.premium = balanceData.premium;
-                    CacheProfile.likes = balanceData.likes;
-                    CacheProfile.money = balanceData.money;
+                    CacheProfile.balanceData = (BalanceData) data;
                 } else if (data.getClass() == CountersData.class) {
                     CacheProfile.countersData = (CountersData) data;
                 } else if (data.getClass() == Location.class) {
@@ -128,7 +125,7 @@ public class TopfaceModule {
             @Override
             public <T> T getDataFromCache(Class<T> classType) {
                 if (BalanceData.class.equals(classType)) {
-                    return (T) new BalanceData(CacheProfile.premium, CacheProfile.likes, CacheProfile.money);
+                    return (T) (CacheProfile.balanceData != null ? new BalanceData(CacheProfile.balanceData) : new BalanceData());
                 } else if (CountersData.class.equals(classType)) {
                     return (T) (CacheProfile.countersData != null ? new CountersData(CacheProfile.countersData) : new CountersData());
                 } else if (Options.class.equals(classType)) {

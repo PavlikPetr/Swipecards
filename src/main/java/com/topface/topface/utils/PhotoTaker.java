@@ -34,16 +34,16 @@ public class PhotoTaker implements IPhotoTakerWithDialog {
 
     @Override
     public void onTakePhotoDialogSentSuccess(final Photo photo) {
-        if (CacheProfile.photos != null) {
-            CacheProfile.photos.add(photo);
-            CacheProfile.totalPhotos += 1;
+        if (CacheProfile.getProfile().photos != null) {
+            CacheProfile.getProfile().photos.add(photo);
+            CacheProfile.getProfile().photosCount += 1;
         }
         PhotoMainRequest request = new PhotoMainRequest(mActivity);
         request.photoId = photo.getId();
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                CacheProfile.photo = photo;
+                CacheProfile.getProfile().photo = photo;
                 App.sendProfileRequest();
                 Utils.showToastNotification(R.string.photo_add_or, Toast.LENGTH_SHORT);
             }
@@ -51,8 +51,8 @@ public class PhotoTaker implements IPhotoTakerWithDialog {
             @Override
             public void fail(int codeError, IApiResponse response) {
                 if (codeError == ErrorCodes.NON_EXIST_PHOTO_ERROR) {
-                    if (CacheProfile.photos != null && CacheProfile.photos.contains(photo)) {
-                        CacheProfile.photos.remove(photo);
+                    if (CacheProfile.getProfile().photos != null && CacheProfile.getProfile().photos.contains(photo)) {
+                        CacheProfile.getProfile().photos.remove(photo);
                     }
                     Utils.showToastNotification(App.getContext().getString(R.string.general_wrong_photo_upload), Toast.LENGTH_LONG);
                 }

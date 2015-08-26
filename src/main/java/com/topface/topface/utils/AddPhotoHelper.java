@@ -277,7 +277,7 @@ public class AddPhotoHelper {
             return;
         }
         // если начинаем грузить аватарку, то выставляем флаг, чтобы resumeFragment не вызвал показ попапа
-        if (CacheProfile.photos != null && CacheProfile.photos.size() == 0) {
+        if (CacheProfile.getProfile().photos != null && CacheProfile.getProfile().photos.size() == 0) {
             App.getConfig().getUserConfig().setUserAvatarAvailable(true);
             App.getConfig().getUserConfig().saveConfig();
         }
@@ -477,19 +477,19 @@ public class AddPhotoHelper {
         if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
             Photo photo = (Photo) msg.obj;
             // ставим фото на аватарку только если она едиснтвенная
-            if (CacheProfile.photos.size() == 0) {
-                CacheProfile.photo = photo;
+            if (CacheProfile.getProfile().photos.size() == 0) {
+                CacheProfile.getProfile().photo = photo;
             }
             // добавляется фото в начало списка
-            CacheProfile.photos.addFirst(photo);
+            CacheProfile.getProfile().photos.addFirst(photo);
             // Увеличиваем общее количество фотографий юзера
-            CacheProfile.totalPhotos += 1;
+            CacheProfile.getProfile().photosCount += 1;
             // оповещаем всех об изменениях
             CacheProfile.sendUpdateProfileBroadcast();
             Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
         } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
             // если загрузка аватраки не завершилась успехом, то сбрасываем флаг
-            if (CacheProfile.photos.size() == 0) {
+            if (CacheProfile.getProfile().photos.size() == 0) {
                 App.getConfig().getUserConfig().setUserAvatarAvailable(false);
                 App.getConfig().getUserConfig().saveConfig();
             }

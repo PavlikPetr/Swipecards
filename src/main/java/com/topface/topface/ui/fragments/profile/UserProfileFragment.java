@@ -143,7 +143,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
     public void onResume() {
         super.onResume();
         getUserProfile(mProfileId);
-        if (CacheProfile.premium) {
+        if (CacheProfile.getProfile().premium) {
             setIsChatAvailable(true);
         }
         mOutsideView.setVisibility(View.GONE);
@@ -301,7 +301,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
             showRetryBtn();
         } else if (user.banned) {
             showForBanned();
-            if (CacheProfile.isEditor()) {
+            if (CacheProfile.getProfile().isEditor()) {
                 setProfile(user);
                 initOverflowMenuActions(getOverflowMenu());
             }
@@ -320,7 +320,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
     }
 
     private void saveResponseForEditor(ApiResponse response) {
-        if (CacheProfile.isEditor()) {
+        if (CacheProfile.getProfile().isEditor()) {
             mSavedResponse = response;
             if (hasOverflowMenu()) {
                 getOverflowMenu().setSavedResponse(mSavedResponse);

@@ -35,7 +35,7 @@ public class FansFragment extends BookmarksFragment {
     protected void initEmptyFeedView(View inflated, int errorCode) {
         Button buttonBuy = (Button) inflated.findViewById(R.id.btnBuy);
         TextView message = ((TextView) inflated.findViewById(R.id.tvText));
-        if (CacheProfile.premium) {
+        if (CacheProfile.getProfile().premium) {
             message.setText(R.string.buy_more_sympathies);
             buttonBuy.setText(R.string.buy_sympathies);
             buttonBuy.setOnClickListener(new View.OnClickListener() {

@@ -22,7 +22,7 @@ public abstract class AbstractBillingFragment extends BaseFragment {
      * Доступны ли тестовые платежи
      */
     public boolean isTestPurchasesAvailable() {
-        return mIsTestPurchasesAvailable || (!CacheProfile.isEmpty() && CacheProfile.isEditor());
+        return mIsTestPurchasesAvailable || (!CacheProfile.isEmpty() && CacheProfile.getProfile().isEditor());
     }
 
     /**

@@ -136,7 +136,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         }
         if (isNeedShow) {
             mAddPhotoHelper = initAddPhotoHelper();
-            if (CacheProfile.photo == null && takePhotoDialog == null) {
+            if (CacheProfile.getProfile().photo == null && takePhotoDialog == null) {
                 mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null, message);
                 mIsPhotoDialogShown = true;
             }
@@ -152,10 +152,10 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     @Override
     protected void onProfileUpdated() {
         super.onProfileUpdated();
-        mPhotos = CacheProfile.photos;
+        mPhotos = CacheProfile.getProfile().photos;
         LeadersPhotoGridAdapter adapter = getAdapter();
         adapter.setData(mPhotos, false);
-        setSeletedPosition(0, CacheProfile.photos.isEmpty() ? 0 : CacheProfile.photos.get(0).getId());
+        setSeletedPosition(0, CacheProfile.getProfile().photos.isEmpty() ? 0 : CacheProfile.getProfile().photos.get(0).getId());
     }
 
     @Override
@@ -300,8 +300,8 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private Photos getPhotoLinks() {
         Photos photoLinks = new Photos();
         photoLinks.clear();
-        if (CacheProfile.photos != null) {
-            photoLinks.addAll(CacheProfile.photos);
+        if (CacheProfile.getProfile().photos != null) {
+            photoLinks.addAll(CacheProfile.getProfile().photos);
         }
         return checkPhotos(photoLinks);
     }
@@ -341,7 +341,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         int position = photo.getPosition();
         AlbumRequest request = new AlbumRequest(
                 this.getApplicationContext(),
-                CacheProfile.uid,
+                CacheProfile.getProfile().uid,
                 position + 1,
                 AlbumRequest.MODE_ALBUM,
                 AlbumLoadController.FOR_GALLERY,

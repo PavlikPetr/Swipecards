@@ -29,8 +29,8 @@ public class PubnativeInfo extends RequestInfo {
     private String device_type;
     private double lat;
     private double longitude;
-    private String gender = CacheProfile.sex == 0 ? "female" : "male";
-    private int age = CacheProfile.age;
+    private String gender = CacheProfile.getProfile().sex == 0 ? "female" : "male";
+    private int age = CacheProfile.getProfile().age;
     private String android_advertiser_id;
     private int no_user_id;
 

@@ -181,7 +181,7 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
         profileRequest.callback(new DataApiHandler<Boolean>() {
             @Override
             protected void success(Boolean isEmailConfirmed, IApiResponse response) {
-                CacheProfile.emailConfirmed = isEmailConfirmed;
+                CacheProfile.getProfile().emailConfirmed = isEmailConfirmed;
                 getOptions().isActivityAllowed = true;
                 onProfileUpdated();
             }
@@ -205,7 +205,7 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
     }
 
     private void onProfileUpdated() {
-        if (CacheProfile.emailConfirmed) {
+        if (CacheProfile.getProfile().emailConfirmed) {
             Utils.showToastNotification(R.string.general_email_success_confirmed, Toast.LENGTH_LONG);
             closeDialog();
         } else {

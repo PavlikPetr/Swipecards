@@ -120,7 +120,7 @@ public class PromoPopupManager {
 
             @Override
             public boolean isApplicable() {
-                if (CacheProfile.premium) return false;
+                if (CacheProfile.getProfile().premium) return false;
                 return (checkIsNeedShow(mOptions.getPremiumEntityByType(AIR_MESSAGES)) &&
                         mOptions.getPremiumEntityByType(AIR_MESSAGES).getPageId() != BaseFragment.FragmentId.TABBED_DIALOGS.getId()) ||
                         checkIsNeedShow(mOptions.getPremiumEntityByType(AIR_VISITORS)) ||

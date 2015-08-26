@@ -151,7 +151,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         if (savedInstanceState != null) {
             mIsHeight = savedInstanceState.getBoolean(CONSTITUTION_DIALOG_MARK);
         }
-        mTargetUser.sex = CacheProfile.dating != null ? CacheProfile.dating.sex : Static.BOY;
+        mTargetUser.sex = CacheProfile.getProfile().dating != null ? CacheProfile.getProfile().dating.sex : Static.BOY;
         mFormInfo = new FormInfo(getActivity().getApplicationContext(), mTargetUser.sex, mTargetUser.getType());
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_filter_light_theme, container, false);
@@ -171,8 +171,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private void initFilter() {
         try {
             //Странный, достаточно редкий баг, но бывает что CacheProfile.dating == null
-            mFilter = (CacheProfile.dating != null) ?
-                    CacheProfile.dating.clone() :
+            mFilter = (CacheProfile.getProfile().dating != null) ?
+                    CacheProfile.getProfile().dating.clone() :
                     new DatingFilter();
             mInitFilter = mFilter.clone();
             mInitFilterOnline = DatingFilter.getOnlyOnlineField();
@@ -422,13 +422,13 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
             case R.id.loFilterButtonHome:
                 City city = null;
                 try {
-                    city = new City(new JSONObject(CacheProfile.city.getName()));
+                    city = new City(new JSONObject(CacheProfile.getProfile().city.getName()));
                 } catch (JSONException e) {
                     Debug.error(e);
                 }
                 if (city == null) {
-                    mLoFilterChooseCity.setDefaultCity(CacheProfile.city);
-                    mFilter.city = CacheProfile.city;
+                    mLoFilterChooseCity.setDefaultCity(CacheProfile.getProfile().city);
+                    mFilter.city = CacheProfile.getProfile().city;
                 } else {
                     mLoFilterChooseCity.setDefaultCity(city);
                     mFilter.city = city;

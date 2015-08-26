@@ -187,7 +187,7 @@ public class ConnectionManager {
         } else if (isNeedResend(apiResponse)) {
             //Переотправляем запрос, если это возможно
             needResend = resendRequest(apiRequest, apiResponse);
-        } else if (apiResponse.isCodeEqual(ErrorCodes.PREMIUM_ACCESS_ONLY) && CacheProfile.premium) {
+        } else if (apiResponse.isCodeEqual(ErrorCodes.PREMIUM_ACCESS_ONLY) && CacheProfile.getProfile().premium) {
             // Перезапрашиваем профиль и настройки, т.к. локальный флаг преимиума устарел
             apiRequest.getHandler().post(new Runnable() {
                 @Override
@@ -198,7 +198,7 @@ public class ConnectionManager {
                             // мы были локально премиум и получили ошибку PREMIUM_ACCESS_ONLY при перезапросе
                             // возвращается что мы премиум, следовательно, прокидываем ошибку чтобы не
                             // перепосылать запрос и не зацикливаться
-                            if (CacheProfile.premium) {
+                            if (CacheProfile.getProfile().premium) {
                                 apiRequest.sendHandlerMessage(apiResponse);
                             } else {
                                 resendRequest(apiRequest, apiResponse);

@@ -262,16 +262,16 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void initUserInfo(View rootLayout) {
-        setInfoText(rootLayout, R.id.EditorInfoName, CacheProfile.first_name);
+        setInfoText(rootLayout, R.id.EditorInfoName, CacheProfile.getProfile().firstName);
         setInfoText(rootLayout, R.id.EditorInfoEditorStatus,
-                CacheProfile.isEditor() ?
+                CacheProfile.getProfile().isEditor() ?
                         getString(R.string.general_yes) :
                         getString(R.string.general_no)
         );
         setInfoText(rootLayout, R.id.EditorInfoSsid, Ssid.get());
         AuthToken authToken = AuthToken.getInstance();
         setInfoText(rootLayout, R.id.EditorInfoToken, authToken.getTokenKey());
-        setInfoText(rootLayout, R.id.EditorInfoId, Integer.toString(CacheProfile.uid));
+        setInfoText(rootLayout, R.id.EditorInfoId, Integer.toString(CacheProfile.getProfile().uid));
         setInfoText(
                 rootLayout,
                 R.id.EditorInfoSocialNetwork,
@@ -396,12 +396,12 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.loPopupSwitcher:
                 switcher.doSwitch();
-                if (CacheProfile.canInvite) {
+                if (CacheProfile.getProfile().canInvite) {
                     getOptions().popup_timeout = standard_timeout;
                 } else {
                     getOptions().popup_timeout = 1;
                 }
-                CacheProfile.canInvite = switcher.isChecked();
+                CacheProfile.getProfile().canInvite = switcher.isChecked();
 
                 break;
             case R.id.loTestNetworkSwitcher:
@@ -473,7 +473,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         mEditorModeSpinner.setSelection(mAppConfig.getEditorMode());
         mDebugModeSpinner.setSelection(mAppConfig.getDebugMode());
         switcherTestNetwork.setChecked(mAppConfig.getTestNetwork());
-        switcher.setChecked(CacheProfile.canInvite);
+        switcher.setChecked(CacheProfile.getProfile().canInvite);
         mOfferwallTypeChoose.setSelection(getOfferwallIndexInArray(getOptions().offerwall));
     }
 

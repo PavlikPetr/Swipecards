@@ -402,7 +402,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         ImageViewRemote ivThree = (ImageViewRemote) currentView.findViewById(R.id.ivThree);
 
         // if profile still not cached - show girls by default
-        if (CacheProfile.dating != null && CacheProfile.dating.sex == Static.GIRL) {
+        if (CacheProfile.getProfile().dating != null && CacheProfile.getProfile().dating.sex == Static.GIRL) {
             ivOne.setResourceSrc(R.drawable.likes_male_one);
             ivTwo.setResourceSrc(R.drawable.likes_male_two);
             ivThree.setResourceSrc(R.drawable.likes_male_three);

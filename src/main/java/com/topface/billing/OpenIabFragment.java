@@ -355,7 +355,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
 
     protected String getDeveloperPayload(String productId) {
         DeveloperPayload payload = new DeveloperPayload(
-                CacheProfile.uid,
+                CacheProfile.getProfile().uid,
                 productId,
                 getSourceValue()
         );
@@ -500,7 +500,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     }
 
     private boolean isNeedSendPurchasesStatistics() {
-        return !CacheProfile.isEditor() && !BuildConfig.DEBUG;
+        return !CacheProfile.getProfile().isEditor() && !BuildConfig.DEBUG;
     }
 
     private boolean consumeTestPurchase(Purchase purchase, PurchaseRequest validateRequest) {

@@ -46,7 +46,7 @@ public class AdmirationFragment extends LikesFragment {
     @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
         if (mEmptyFeedView == null) mEmptyFeedView = inflated;
-        if (CacheProfile.premium) {
+        if (CacheProfile.getProfile().premium) {
             ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
             inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -72,11 +72,11 @@ public class AdmirationFragment extends LikesFragment {
                     }
                 });
                 ((ImageViewRemote) inflated.findViewById(R.id.ivOne))
-                        .setResourceSrc(CacheProfile.dating.sex == Static.GIRL ? R.drawable.likes_male_one : R.drawable.likes_female_one);
+                        .setResourceSrc(CacheProfile.getProfile().dating.sex == Static.GIRL ? R.drawable.likes_male_one : R.drawable.likes_female_one);
                 ((ImageViewRemote) inflated.findViewById(R.id.ivTwo))
-                        .setResourceSrc(CacheProfile.dating.sex == Static.GIRL ? R.drawable.likes_male_two : R.drawable.likes_female_two);
+                        .setResourceSrc(CacheProfile.getProfile().dating.sex == Static.GIRL ? R.drawable.likes_male_two : R.drawable.likes_female_two);
                 ((ImageViewRemote) inflated.findViewById(R.id.ivThree))
-                        .setResourceSrc(CacheProfile.dating.sex == Static.GIRL ? R.drawable.likes_male_three : R.drawable.likes_female_three);
+                        .setResourceSrc(CacheProfile.getProfile().dating.sex == Static.GIRL ? R.drawable.likes_male_three : R.drawable.likes_female_three);
             } else {
                 ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
                 inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {

@@ -26,7 +26,7 @@ public class FormItemEditAdapter extends AbstractEditAdapter<FormItem> {
     public FormItemEditAdapter(Context context, FormItem formItem) {
         super(context);
         mFormItem = new FormItem(formItem);
-        mFormInfo = new FormInfo(App.getContext(), CacheProfile.sex, Profile.TYPE_OWN_PROFILE);
+        mFormInfo = new FormInfo(App.getContext(), CacheProfile.getProfile().sex, Profile.TYPE_OWN_PROFILE);
         mEntries = createEntries(mFormItem);
         mIds = createIds(mFormItem);
     }

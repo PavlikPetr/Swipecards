@@ -11,7 +11,6 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
@@ -25,7 +24,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import javax.inject.Inject;
 
 /* Класс профиля владельца устройства */
 public class Profile extends AbstractDataWithPhotos {
@@ -64,11 +62,9 @@ public class Profile extends AbstractDataWithPhotos {
     // Показывать рекламу или нет
     public boolean showAd;
     public boolean canInvite;
-    protected String status; // статус пользователя
+    public String status; // статус пользователя
     // Флаг того, является ли пользоветль редактором
     private boolean mEditor;
-    @Inject
-    TopfaceAppState mAppState;
     public boolean giveNoviceLikes;
 
     public Profile() {
@@ -80,10 +76,9 @@ public class Profile extends AbstractDataWithPhotos {
     }
 
     public Profile(JSONObject jsonObject) {
-        App.from(App.getContext().getApplicationContext()).inject(this);
         fillData(jsonObject);
-        mAppState.setData(this);
     }
+
 
     protected void fillData(final JSONObject resp) {
         if (resp == null) {

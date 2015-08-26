@@ -340,7 +340,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
     }
 
     public boolean updateSignature() {
-        return useSignature && setSignature(CacheProfile.dating != null ? CacheProfile.dating.getFilterSignature() : "");
+        return useSignature && setSignature(CacheProfile.getProfile().dating != null ? CacheProfile.getProfile().dating.getFilterSignature() : "");
     }
 
     public void updateSignatureAndUpdate() {

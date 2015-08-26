@@ -106,7 +106,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
                             Utils.getQuantityString(R.plurals.vip_status_period, getOptions().premium_period, getOptions().premium_period),
                             Toast.LENGTH_LONG
                     );
-                    CacheProfile.canInvite = false;
+                    CacheProfile.getProfile().canInvite = false;
                 } else {
                     EasyTracker.sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumFalse", (long) contacts.size());
                     Utils.showToastNotification(getString(R.string.invalid_contacts), Toast.LENGTH_LONG);
@@ -129,7 +129,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
     }
 
     public static boolean isApplicable(long timeout) {
-        if (CacheProfile.canInvite) {
+        if (CacheProfile.getProfile().canInvite) {
             final SharedPreferences preferences = App.getContext().getSharedPreferences(
                     Static.PREFERENCES_TAG_SHARED,
                     Context.MODE_PRIVATE

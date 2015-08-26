@@ -259,7 +259,7 @@ public class GCMUtils {
                     new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD));
             return false;
         }
-        String uid = Integer.toString(CacheProfile.uid);
+        String uid = Integer.toString(CacheProfile.getProfile().uid);
         String targetUserId = extra.getStringExtra("receiver");
         targetUserId = targetUserId != null ? targetUserId : uid;
 
@@ -267,7 +267,7 @@ public class GCMUtils {
         //другому пользователю. Такое может произойти, если не было нормального разлогина,
         //например если удалить приложения будучи залогиненым
         if (!TextUtils.equals(targetUserId, uid)) {
-            Debug.error("GCM: target id # " + targetUserId + " dont equal current user id " + CacheProfile.uid);
+            Debug.error("GCM: target id # " + targetUserId + " dont equal current user id " + CacheProfile.getProfile().uid);
             return false;
         }
 
@@ -373,12 +373,12 @@ public class GCMUtils {
     }
 
     private static void loadNotificationSettings() {
-        if (CacheProfile.notifications != null) {
-            if (CacheProfile.notifications.size() > 0) {
-                showMessage = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
-                showLikes = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
-                showSympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
-                showVisitors = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
+        if (CacheProfile.getProfile().notifications != null) {
+            if (CacheProfile.getProfile().notifications.size() > 0) {
+                showMessage = CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
+                showLikes = CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
+                showSympathy = CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
+                showVisitors = CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
             }
         }
     }

@@ -185,7 +185,7 @@ public class OverflowMenu implements OptionsProvider.IOptionsUpdater {
             Boolean isBookmarked = isBookmarked();
             Boolean isInBlackList = isInBlackList();
             Boolean isSympathySent = isSympathySent();
-            ArrayList<OverflowMenuItem> overflowMenuItemArray = getProfileOverflowMenu(CacheProfile.isEditor(), isBanned());
+            ArrayList<OverflowMenuItem> overflowMenuItemArray = getProfileOverflowMenu(CacheProfile.getProfile().isEditor(), isBanned());
             for (int i = 0; i < overflowMenuItemArray.size(); i++) {
                 OverflowMenuItem item = overflowMenuItemArray.get(i);
                 Integer resourceId = null;

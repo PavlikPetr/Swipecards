@@ -71,7 +71,7 @@ public class OfferwallsManager {
     public static void startOfferwall(Activity activity, String offerwall, Options options) {
         offerwall = offerwall == null ? "" : offerwall;
 
-        if (CacheProfile.uid <= 0) {
+        if (CacheProfile.getProfile().uid <= 0) {
             Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
             return;
         }
@@ -130,7 +130,7 @@ public class OfferwallsManager {
         try {
             SponsorPay.start(
                     SPONSORPAY_APP_ID,
-                    Integer.toString(CacheProfile.uid),
+                    Integer.toString(CacheProfile.getProfile().uid),
                     SPONSORPAY_SECURITY_TOKEN,
                     activity
             );
@@ -145,7 +145,7 @@ public class OfferwallsManager {
             activity.startActivityForResult(offerWallIntent, SPONSORPAY_OFFERWALL_REQUEST_CODE);
         } catch (Exception e) {
             Debug.error(e);
-            if (activity != null && CacheProfile.uid > 0) {
+            if (activity != null && CacheProfile.getProfile().uid > 0) {
                 initSponsorpay(activity);
                 Intent offerWallIntent = SponsorPayPublisher.getIntentForOfferWallActivity(activity, true);
                 activity.startActivityForResult(offerWallIntent, SPONSORPAY_OFFERWALL_REQUEST_CODE);
@@ -154,8 +154,8 @@ public class OfferwallsManager {
     }
 
     public static void initTfOfferwall(Context context, TFCredentials.OnInitializeListener listener) {
-        TFOfferwallSDK.initialize(context, Integer.toString(CacheProfile.uid), "53edb54b0fdc7", listener);
-        TFOfferwallSDK.setTarget(new TFOfferwallSDK.Target().setAge(CacheProfile.age).setSex(CacheProfile.sex));
+        TFOfferwallSDK.initialize(context, Integer.toString(CacheProfile.getProfile().uid), "53edb54b0fdc7", listener);
+        TFOfferwallSDK.setTarget(new TFOfferwallSDK.Target().setAge(CacheProfile.getProfile().age).setSex(CacheProfile.getProfile().sex));
     }
 
     public static void startTfOfferwall(Context context) {

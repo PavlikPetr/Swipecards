@@ -42,7 +42,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         public void onReceive(Context context, Intent intent) {
             switchLayouts();
             if (mInvisSwitcher != null) {
-                mInvisSwitcher.setChecked(CacheProfile.invisible);
+                mInvisSwitcher.setChecked(CacheProfile.getProfile().invisible);
             }
         }
     };
@@ -102,7 +102,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(OpenIabFragment.UPDATE_RESOURCE_INFO));
-        mInvisSwitcher.setProgressState(false, CacheProfile.invisible);
+        mInvisSwitcher.setProgressState(false, CacheProfile.getProfile().invisible);
         switchLayouts();
     }
 
@@ -138,7 +138,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     private void switchLayouts() {
         if (mBuyVipViewsContainer != null && mEditPremiumContainer != null) {
-            if (CacheProfile.premium) {
+            if (CacheProfile.getProfile().premium) {
                 mEditPremiumContainer.setVisibility(View.VISIBLE);
                 mBuyVipViewsContainer.setVisibility(View.GONE);
             } else {
@@ -235,15 +235,15 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) throws NullPointerException {
-                CacheProfile.invisible = invisibility;
+                CacheProfile.getProfile().invisible = invisibility;
                 CacheProfile.sendUpdateProfileBroadcast();
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) throws NullPointerException {
                 if (mInvisSwitcher != null && getActivity() != null) {
-                    if (CacheProfile.invisible != mInvisSwitcher.isChecked()) {
-                        mInvisSwitcher.setChecked(CacheProfile.invisible);
+                    if (CacheProfile.getProfile().invisible != mInvisSwitcher.isChecked()) {
+                        mInvisSwitcher.setChecked(CacheProfile.getProfile().invisible);
                     }
                 }
             }
@@ -252,7 +252,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
             public void always(IApiResponse response) {
                 super.always(response);
                 if (mInvisSwitcher != null && getActivity() != null) {
-                    mInvisSwitcher.setProgressState(false, CacheProfile.invisible);
+                    mInvisSwitcher.setProgressState(false, CacheProfile.getProfile().invisible);
                 }
             }
         }).exec();

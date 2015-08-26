@@ -80,7 +80,7 @@ public class FullscreenController {
 
         @Override
         public boolean isApplicable() {
-            return getOptions().interstitial.enabled || CacheProfile.show_ad &&
+            return getOptions().interstitial.enabled || CacheProfile.getProfile().showAd &&
                     FullscreenController.this.isTimePassed() && startPageInfo != null
                     && startPageInfo.floatType.equals(PageInfo.FLOAT_TYPE_BANNER);
         }

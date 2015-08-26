@@ -43,11 +43,11 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
 
     private void initShowAdsCheckbox(View root) {
         final CheckBox showAsCheckBox = ((CheckBox) root.findViewById(R.id.show_ad_checkbox));
-        showAsCheckBox.setChecked(CacheProfile.show_ad);
+        showAsCheckBox.setChecked(CacheProfile.getProfile().showAd);
         showAsCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CacheProfile.show_ad = showAsCheckBox.isChecked();
+                CacheProfile.getProfile().showAd = showAsCheckBox.isChecked();
             }
         });
     }

@@ -40,7 +40,7 @@ public class BlackListAddTest extends AbstractThreadTest {
                             @Override
                             public void fail(int codeError, IApiResponse response) {
                                 if (codeError == ErrorCodes.PREMIUM_ACCESS_ONLY) {
-                                    assertFalse("User has premium, but does not get premium", CacheProfile.premium);
+                                    assertFalse("User has premium, but does not get premium", CacheProfile.getProfile().premium);
                                 } else {
                                     assertTrue("Request exec fail: " + codeError, false);
                                 }

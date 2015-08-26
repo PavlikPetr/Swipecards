@@ -103,7 +103,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
 
     @Override
     public boolean isNeedFeedAd() {
-        return CacheProfile.show_ad && NativeAdManager.hasAvailableAd()
+        return CacheProfile.getProfile().showAd && NativeAdManager.hasAvailableAd()
                 && !mOptionsUpdater.getOptions().interstitial.canShow();
     }
 }

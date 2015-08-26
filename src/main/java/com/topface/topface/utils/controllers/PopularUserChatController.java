@@ -121,7 +121,7 @@ public class PopularUserChatController extends BroadcastReceiver {
     }
 
     public boolean isAccessAllowed() {
-        return CacheProfile.premium || TextUtils.isEmpty(mBlockText) || mOff;
+        return CacheProfile.getProfile().premium || TextUtils.isEmpty(mBlockText) || mOff;
     }
 
     public boolean checkChatBlock(History message) {

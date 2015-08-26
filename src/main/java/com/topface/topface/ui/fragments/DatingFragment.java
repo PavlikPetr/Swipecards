@@ -806,11 +806,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private boolean isChatAvailable() {
-        return !(!CacheProfile.premium && getOptions().blockChatNotMutual && !mCurrentUser.isMutualPossible);
+        return !(!CacheProfile.getProfile().premium && getOptions().blockChatNotMutual && !mCurrentUser.isMutualPossible);
     }
 
     private boolean isAddToFavoritsAvailable() {
-        return CacheProfile.premium;
+        return CacheProfile.getProfile().premium;
     }
 
     private void sendSympathy() {
@@ -1233,7 +1233,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         @Override
         protected void success(DatingFilter filter, IApiResponse response) {
-            CacheProfile.dating = filter;
+            CacheProfile.getProfile().dating = filter;
             updateFilterData();
             updateData(false);
         }

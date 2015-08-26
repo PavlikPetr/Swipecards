@@ -69,7 +69,7 @@ public class CountersManager {
             return;
         }
         BalanceData balanceData = JsonUtils.fromJson(balanceJson.toString(), BalanceData.class);
-        if (balanceData.premium != CacheProfile.premium) {
+        if (balanceData.premium != CacheProfile.getProfile().premium) {
             App.sendProfileAndOptionsRequests();
             Intent intent = new Intent(UPDATE_VIP_STATUS);
             intent.putExtra(VIP_STATUS_EXTRA, balanceData.premium);

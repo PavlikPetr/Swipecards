@@ -36,8 +36,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
-import org.json.JSONException;
-
 public class ProfilePhotoFragment extends ProfileInnerFragment implements View.OnClickListener {
 
     private static final String POSITION = "POSITION";
@@ -52,7 +50,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (isAdded() && getView() != null && CacheProfile.photos != null && mProfilePhotoGridAdapter != null) {
+            if (isAdded() && getView() != null && CacheProfile.getProfile().photos != null && mProfilePhotoGridAdapter != null) {
                 initData();
             }
         }
@@ -71,13 +69,13 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if (position == 0) {
                 mViewFlipper.setDisplayedChild(1);
-            } else if (position <= CacheProfile.totalPhotos) {
+            } else if (position <= CacheProfile.getProfile().photosCount) {
                 startActivity(PhotoSwitcherActivity.getPhotoSwitcherIntent(
                         null,
                         position - 1,
-                        CacheProfile.uid,
-                        CacheProfile.totalPhotos,
-                        CacheProfile.photos
+                        CacheProfile.getProfile().uid,
+                        CacheProfile.getProfile().photosCount,
+                        CacheProfile.getProfile().photos
                 ));
             }
         }
@@ -97,7 +95,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
         int position = photo.getPosition();
         AlbumRequest request = new AlbumRequest(
                 getActivity(),
-                CacheProfile.uid,
+                CacheProfile.getProfile().uid,
                 position + 1,
                 AlbumRequest.MODE_ALBUM,
                 AlbumLoadController.FOR_GALLERY
@@ -131,8 +129,8 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
 
     private Photos getPhotoLinks() {
         Photos photoLinks = new Photos();
-        if (CacheProfile.photos != null) {
-            photoLinks.addAll(CacheProfile.photos);
+        if (CacheProfile.getProfile().photos != null) {
+            photoLinks.addAll(CacheProfile.getProfile().photos);
         }
         return photoLinks;
     }
@@ -155,7 +153,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
 
         mGridAlbum = (GridViewWithHeaderAndFooter) root.findViewById(R.id.usedGrid);
         mProfilePhotoGridAdapter = new OwnPhotoGridAdapter(getActivity().getApplicationContext(), getPhotoLinks(),
-                CacheProfile.totalPhotos, new LoadingListAdapter.Updater() {
+                CacheProfile.getProfile().photosCount, new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
                 sendAlbumRequest();
@@ -236,7 +234,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
                             @Override
                             public void success(IApiResponse response) {
                                 super.success(response);
-                                CacheProfile.photo = photo;
+                                CacheProfile.getProfile().photo = photo;
                                 CacheProfile.sendUpdateProfileBroadcast();
                             }
 
@@ -277,10 +275,10 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
                             public void success(IApiResponse response) {
                                 super.success(response);
                                 //Декрементим общее количество фотографий
-                                CacheProfile.totalPhotos -= 1;
-                                CacheProfile.photos.remove(photo);
+                                CacheProfile.getProfile().photosCount -= 1;
+                                CacheProfile.getProfile().photos.remove(photo);
                                 mProfilePhotoGridAdapter.removePhoto(photo);
-                                if (position < CacheProfile.photo.position) {
+                                if (position < CacheProfile.getProfile().photo.position) {
                                     CacheProfile.incrementPhotoPosition(-1);
                                 }
                             }
@@ -299,7 +297,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
     }
 
     private boolean needDialog(Photo photo) {
-        return CacheProfile.photo != null && photo != null && !photo.isFake() && CacheProfile.photo.getId() != photo.getId();
+        return CacheProfile.getProfile().photo != null && photo != null && !photo.isFake() && CacheProfile.getProfile().photo.getId() != photo.getId();
     }
 
     @Override
@@ -325,10 +323,10 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
     }
 
     private void initData() {
-        if (mProfilePhotoGridAdapter != null && CacheProfile.photos != null) {
+        if (mProfilePhotoGridAdapter != null && CacheProfile.getProfile().photos != null) {
             mProfilePhotoGridAdapter.setData(
-                    CacheProfile.photos,
-                    CacheProfile.photos.size() < CacheProfile.totalPhotos
+                    CacheProfile.getProfile().photos,
+                    CacheProfile.getProfile().photos.size() < CacheProfile.getProfile().photosCount
             );
         }
     }

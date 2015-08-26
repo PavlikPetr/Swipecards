@@ -82,7 +82,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
                 @Override
                 public void success(IApiResponse response) {
                     Utils.showToastNotification(R.string.email_confirmed, Toast.LENGTH_SHORT);
-                    CacheProfile.emailConfirmed = true;
+                    CacheProfile.getProfile().emailConfirmed = true;
                     if (isAdded()) {
                         setViewsState();
                     }
@@ -131,7 +131,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
 
             @Override
             protected void success(Boolean isEmailConfirmed, IApiResponse response) {
-                CacheProfile.emailConfirmed = isEmailConfirmed;
+                CacheProfile.getProfile().emailConfirmed = isEmailConfirmed;
                 if (isShowEmailConfirmMessage) {
                     onProfileUpdated();
                 }
@@ -193,7 +193,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     }
 
     private void setTextViewsState() {
-        if (CacheProfile.emailConfirmed) {
+        if (CacheProfile.getProfile().emailConfirmed) {
             mEditText.setVisibility(View.GONE);
             mText.setVisibility(View.VISIBLE);
             mBtnCodeWasSend.setVisibility(View.GONE);
@@ -223,7 +223,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     }
 
     private void setButtonsState() {
-        if (CacheProfile.emailConfirmed) {
+        if (CacheProfile.getProfile().emailConfirmed) {
             mBtnLogout.setVisibility(View.VISIBLE);
             mBtnChangeEmail.setVisibility(View.VISIBLE);
             setChangeBtnAction(ACTION_CHANGE_PASSWORD);
@@ -449,7 +449,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
     }
 
     private void onProfileUpdated() {
-        if (CacheProfile.emailConfirmed) {
+        if (CacheProfile.getProfile().emailConfirmed) {
             Toast.makeText(App.getContext(), R.string.general_email_success_confirmed, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(App.getContext(), R.string.general_email_not_confirmed, Toast.LENGTH_SHORT).show();
