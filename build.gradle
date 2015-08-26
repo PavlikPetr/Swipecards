@@ -1,14 +1,5 @@
 def versionProps = new Properties()
 
-enum FlavourType {
-    Google,
-    Amazon,
-    Nokia,
-    IFree,
-    BlueStacks
-}
-
-FlavourType flavourType = FlavourType.Google
 def versionPropsFile = file('version.properties')
 if (!versionPropsFile.canRead()) {
     throw new GradleException("Could not read version.properties! Create file in project root")
@@ -84,38 +75,33 @@ android {
     productFlavors {
         //Основной flavor, в нашем случае работает с Google Play
         google {
-            flavourType = FlavourType.Google
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappandroid\"";
         }
         //flavor для версии приложения для Amazon
         amazon {
-            flavourType = FlavourType.Amazon
             buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.AMAZON";
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappamazon\"";
         }
         //flavor для версии приложения для Nokia X
         //Пока не используется, поэтому закоментирован
         /*nokia {
-            flavourType = FlavourType.Nokia
             buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                     "com.topface.billing.MarketApiType.NOKIA_STORE";
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappandroidnokia\"";
         }*/
-        ifree {
-            flavourType = FlavourType.IFree
-            applicationId "com.topface.topface.ifree";
-            buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.I_FREE";
-            buildConfigField "String", "STATISTICS_APP", "\"topfacemobappifree\"";
-            buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
-                    "com.topface.billing.MarketApiType.I_FREE";
-        }
         blueStacks {
-            flavourType = FlavourType.BlueStacks
-            applicationId "com.topface.topface.bluestacks";
+            applicationId "com.topface.topface.bluestacks"
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappbluestack\"";
             buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.BLUE_STACKS";
             buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                     "com.topface.billing.MarketApiType.BLUE_STACKS";
+        }
+        ifree {
+            applicationId "com.topface.topface.ifree"
+            buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.I_FREE";
+            buildConfigField "String", "STATISTICS_APP", "\"topfacemobappifree\"";
+            buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
+                    "com.topface.billing.MarketApiType.I_FREE";
         }
     }
 
@@ -125,7 +111,7 @@ android {
     }
 
     defaultConfig {
-        applicationId 'com.topface.topface'
+        applicationId "com.topface.topface"
         //noinspection GroovyAssignabilityCheck
         minSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MIN_SDK_VERSION)
         //noinspection GroovyAssignabilityCheck
@@ -147,34 +133,29 @@ android {
     }
 
     signingConfigs {
+        google {
+            logger.error("build release apk with default flavourType")
+            storeFile file("misc/keys/topface.keystore")
+            storePassword "Sonetica2012"
+            keyAlias "topface"
+            keyPassword "Sonetica2012"
+        }
+        ifree {
+            logger.error("build release apk with IFree flavourType")
+            storeFile file("misc/keys/topfaceIFree.keystore")
+            storePassword "Sonetica2012"
+            keyAlias "topfaceifree"
+            keyPassword "Sonetica2012"
+        }
+        blueStacks {
+            logger.error("build release apk with BlueStacks flavourType")
+            storeFile file("misc/keys/topfaceBlueStacks.keystore")
+            storePassword "Sonetica2012"
+            keyAlias "topfacebluestacks"
+            keyPassword "Sonetica2012"
+        }
         debug {
             storeFile file("misc/keys/debug.keystore")
-        }
-
-        release {
-            switch (flavourType) {
-                case FlavourType.IFree:
-                    storeFile file("misc/keys/topfaceIFree.keystore")
-                    storePassword "Sonetica2012"
-                    keyAlias "topfaceIFree"
-                    keyPassword "Sonetica2012"
-                    break;
-                case FlavourType.BlueStacks:
-                    storeFile file("misc/keys/topfaceBlueStacks.keystore")
-                    storePassword "Sonetica2012"
-                    keyAlias "topfaceBlueStacks"
-                    keyPassword "Sonetica2012"
-                    break
-                case FlavourType.Google:
-                case FlavourType.Amazon:
-                case FlavourType.Nokia:
-                default:
-                    storeFile file("misc/keys/topface.keystore")
-                    storePassword "Sonetica2012"
-                    keyAlias "topface"
-                    keyPassword "Sonetica2012"
-                    break;
-            }
         }
     }
 
@@ -188,7 +169,10 @@ android {
         }
         release {
             minifyEnabled true
-            signingConfig signingConfigs.release
+            productFlavors.google.signingConfig signingConfigs.google
+            productFlavors.ifree.signingConfig signingConfigs.ifree
+            productFlavors.blueStacks.signingConfig signingConfigs.blueStacks
+            productFlavors.amazon.signingConfig signingConfigs.google
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-config.txt'
