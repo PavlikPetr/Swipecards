@@ -8,9 +8,8 @@ incrementQaBuildVersion(versionProps, versionPropsFile);
 
 def getVersionCode(versionProps) {
     def versionCode = versionProps['VERSION_CODE'].toInteger()
-    if (project.gradle.startParameter.taskNames.contains("assembleGoogleQa")) {
-        versionCode = versionCode + getQaVersion(versionProps)
-    } else if (project.gradle.startParameter.taskNames.contains("assembleIfreeQa")) {
+    def taskNames = project.gradle.startParameter.taskNames
+    if (taskNames.contains("assembleGoogleQa") || taskNames.contains("assembleIfreeQa")) {
         versionCode = versionCode + getQaVersion(versionProps)
     }
     return versionCode;
@@ -27,7 +26,8 @@ def getQaVersion(versionProps) {
 }
 
 def incrementQaBuildVersion(versionProps, versionPropsFile) {
-    if (project.gradle.startParameter.taskNames.contains("assembleGoogleQa") && versionProps != null) {
+    def taskNames = project.gradle.startParameter.taskNames
+    if ((taskNames.contains("assembleGoogleQa") || taskNames.contains("assembleIfreeQa")) && versionProps != null) {
         def versionQaBuild = versionProps['VERSION_QA_BUILD'].toInteger() + 1
         versionProps['VERSION_QA_BUILD'] = versionQaBuild.toString()
         versionProps.store(versionPropsFile.newWriter(), null)

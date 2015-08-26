@@ -69,3 +69,7 @@
 -dontwarn com.topface.topface.data.**
 -keep class com.topface.topface.ui.fragments.feed.** { *; }
 -dontwarn com.topface.topface.ui.fragments.feed.**
+
+#Ifree
+-keep class com.ifree.monetize.core.** { *; }
+-dontwarn com.ifree.monetize.core.**
