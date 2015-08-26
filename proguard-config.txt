@@ -73,3 +73,5 @@
 #Ifree
 -keep class com.ifree.monetize.core.** { *; }
 -dontwarn com.ifree.monetize.core.**
+-keep class com.ifree.monetize.core.HandlerType
+-dontwarn com.ifree.monetize.core.HandlerType
