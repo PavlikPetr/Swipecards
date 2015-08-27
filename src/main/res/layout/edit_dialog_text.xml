@@ -10,7 +10,6 @@
         style="@style/topfaceEditText.Holo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:layout_gravity="center_horizontal"
         android:layout_margin="15dp"
         android:gravity="center_vertical"
