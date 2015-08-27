@@ -70,16 +70,16 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
     }
 
     @Override
-    public String getItem(int index) {
-        if (mDataList.get(index).id == EMPTY_ID) {
+    public String getItem(int position) {
+        if (mDataList.get(position).id == EMPTY_ID) {
             return getUserCity().getFullName();
         }
-        return mDataList.get(index).getFullName();
+        return mDataList.get(position).getFullName();
     }
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return mDataList.get(position).id;
     }
 
     @Override
@@ -92,14 +92,13 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
         }
         holder.cityName = (TextView) convertView.findViewById(R.id.citySearchText);
         holder.progress = (ProgressBar) convertView.findViewById(R.id.citySearchProgress);
-        City city = mDataList.get(position);
-        if (city.id == EMPTY_ID) {
+        if (getItemId(position) == EMPTY_ID) {
             holder.progress.setVisibility(View.VISIBLE);
             holder.cityName.setVisibility(View.GONE);
         } else {
             holder.progress.setVisibility(View.GONE);
             holder.cityName.setVisibility(View.VISIBLE);
-            holder.cityName.setText(city.getFullName());
+            holder.cityName.setText(getItem(position));
         }
         return convertView;
     }

@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed;
 
 import android.location.Location;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -31,6 +32,7 @@ import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.geo.GeoLocationManager;
 
@@ -45,18 +47,21 @@ import rx.functions.Action1;
 
 public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
+    private final static int WAIT_LOCATION_DELAY = 10000;
+
     @Inject
     TopfaceAppState mAppState;
     protected View mEmptyFeedView;
-    private Boolean mIsHistoryLoad;
-    private Boolean mIsMakeItemsRead;
+    private boolean mIsHistoryLoad = false;
+    private boolean mIsMakeItemsRead = false;
     private GeoLocationManager mGeoLocationManager;
     private Subscription mSubscriptionLocation;
+    private CountDownTimer mWaitLocationTimer;
     private int mCoins;
     private Action1<Location> mLocationAction = new Action1<Location>() {
         @Override
         public void call(Location location) {
-            if (null != mIsHistoryLoad && null != mIsMakeItemsRead) {
+            if (isGeoEnabled()) {
                 sendPeopleNearbyRequest(location, mIsHistoryLoad, mIsMakeItemsRead);
             }
         }
@@ -72,18 +77,20 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         App.from(getActivity()).inject(this);
-        mSubscriptionLocation = mAppState.getObservable(Location.class).subscribe(mLocationAction);
-        mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
+        startWaitLocationTimer();
         mGeoLocationManager = new GeoLocationManager(getActivity());
         mGeoLocationManager.registerProvidersChangedActionReceiver();
+        mSubscriptionLocation = mAppState.getObservable(Location.class).subscribe(mLocationAction);
+        mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
         super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void allViewsInitialized() {
         super.allViewsInitialized();
-        if (mGeoLocationManager.getEnabledProvider() == GeoLocationManager.NavigationType.DISABLE) {
-            onEmptyFeed(ErrorCodes.CANNOT_GET_GEO);
+        if (!isGeoEnabled()) {
+            stopWaitLocationTimer();
+            showCannotGetGeoErrorOnEmptyScreen();
         }
     }
 
@@ -100,14 +107,17 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     @Override
     public void onDestroy() {
+        stopWaitLocationTimer();
         if (null != mSubscriptionLocation) {
             mSubscriptionLocation.unsubscribe();
         }
         if (null != mBalanceSubscription) {
             mBalanceSubscription.unsubscribe();
         }
-        mGeoLocationManager.unregisterProvidersChangedActionReceiver();
-        mGeoLocationManager.stopLocationListener();
+        if (mGeoLocationManager != null) {
+            mGeoLocationManager.unregisterProvidersChangedActionReceiver();
+            mGeoLocationManager.stopLocationListener();
+        }
         super.onDestroy();
     }
 
@@ -136,13 +146,26 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         mIsUpdating = true;
         mIsHistoryLoad = isHistoryLoad;
         mIsMakeItemsRead = makeItemsRead;
-        if (null != mGeoLocationManager) {
+        if (isGeoEnabled()) {
             mGeoLocationManager.getLastKnownLocation();
+        } else {
+            showCannotGetGeoErrorOnEmptyScreen();
+            refreshCompleted();
         }
+    }
+
+    private void showCannotGetGeoErrorOnEmptyScreen() {
+        FeedAdapter<FeedGeo> adapter = getListAdapter();
+        if (adapter != null) {
+            adapter.removeAllData();
+            adapter.notifyDataSetChanged();
+        }
+        showCannotGetGeoError();
     }
 
     private void sendPeopleNearbyRequest(Location location, final boolean isHistoryLoad, final boolean makeItemsRead) {
         if (location != null) {
+            stopWaitLocationTimer();
             PeopleNearbyRequest request = new PeopleNearbyRequest(getActivity(), location.getLatitude(), location.getLongitude());
             request.callback(new DataApiHandler<FeedListData<FeedGeo>>() {
 
@@ -159,6 +182,12 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                 @Override
                 public void fail(int codeError, IApiResponse response) {
                     processFailUpdate(codeError, isHistoryLoad, getListAdapter(), false);
+                }
+
+                @Override
+                public void always(IApiResponse response) {
+                    super.always(response);
+                    refreshCompleted();
                 }
             }).exec();
         } else {
@@ -267,6 +296,48 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         startActivity(
                 PurchasesActivity.createBuyingIntent("PeoplePaidNearby", PurchasesFragment.TYPE_PEOPLE_NEARBY, blockPeopleNearby.price)
         );
+    }
+
+    private void startWaitLocationTimer() {
+        stopWaitLocationTimer();
+        mWaitLocationTimer = new CountDownTimer(WAIT_LOCATION_DELAY, WAIT_LOCATION_DELAY) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+            }
+
+            @Override
+            public void onFinish() {
+                updateListWithOldGeo();
+                stopWaitLocationTimer();
+            }
+        }.start();
+    }
+
+    private void stopWaitLocationTimer() {
+        if (mWaitLocationTimer != null) {
+            mWaitLocationTimer.cancel();
+        }
+        mWaitLocationTimer = null;
+    }
+
+    private void updateListWithOldGeo() {
+        Location location = App.getUserConfig().getUserGeoLocation();
+        if (!isGeoEnabled()) {
+            showCannotGetGeoError();
+        } else if (location.getLatitude() != UserConfig.DEFAULT_USER_LATITUDE_LOCATION && location.getLongitude() != UserConfig.DEFAULT_USER_LONGITUDE_LOCATION) {
+            sendPeopleNearbyRequest(location, mIsHistoryLoad, mIsMakeItemsRead);
+        }
+    }
+
+    private void showCannotGetGeoError() {
+        FeedAdapter<FeedGeo> adapter = getListAdapter();
+        if (adapter == null || adapter.getCount() <= 0) {
+            onEmptyFeed(ErrorCodes.CANNOT_GET_GEO);
+        }
+    }
+
+    private boolean isGeoEnabled() {
+        return mGeoLocationManager != null && mGeoLocationManager.getEnabledProvider() != GeoLocationManager.NavigationType.DISABLE;
     }
 
     @Override

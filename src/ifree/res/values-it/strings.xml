@@ -186,6 +186,7 @@
     <string name="filter_age">Età</string>
     <string name="filter_age_start_prefix">Dai %s</string>
     <string name="filter_age_end_prefix">ai %s</string>
+    <string name="filter_constitution_template">Da %1$d a %2$d</string>
     <string name="filter_cities_all">In tutte le città</string>
     <string name="purchase_header_title">Credito:</string>
     <string name="buying_header_title">Acquisti</string>
@@ -315,6 +316,7 @@
     <string name="ban_complain">Reclamare ban</string>
     <string name="general_ready">Fatto</string>
     <string name="buying_store_ok">L’acquisto è stato completato con successo</string>
+    <string name="buying_store_fail">Non è stato possibile effettuare il pagamento.</string>
     <string name="vip_privileges">Privilegi di essere VIP</string>
     <string name="vip_rest">Non hai abbonamento VIP</string>
     <string name="vip_invis">Stato di invisibilità</string>
@@ -356,6 +358,7 @@
     <string name="user_actions_chat">Chat</string>
     <string name="profile_edit_age_ranges">L’età deve entrare nel campo tra 16 e 99 anni. Per favore, inserisci il numero valido e riprova.</string>
     <string name="wrong_password_format">Formato password inammissibile</string>
+    <string name="edit_value_error">Il valore deve essere compreso tra %1$d e %2$d</string>
     <string name="sign_in">Accedi</string>
     <string name="create_account">Creare profilo</string>
     <string name="email">E-mail</string>
@@ -622,6 +625,8 @@
     <string name="send_feedback">Invia il messaggio</string>
     <string name="get_vip_free">Ricevi VIP gratis</string>
     <string name="buy_more_sympathies">“Ricevi più simpatie, diventa più popolare”</string>
+    <string name="transaction_code_help">Inviandoci il codice di transazione ci aiuterai  ad eseguire la tua richiesta e ad accelerare il trattamento.Ottieni ulteriori informazioni sull\'ordine attraverso %s.</string>
+    <string name="google_wallet">Google- portafoglio</string>
     <string name="google_service_general_title">Notifiche non disponibili</string>
     <string name="google_service_disabled_title">Hai disabilitato i Servizi Google Play che servono per il corretto funzionamento di notifiche.</string>
     <string name="google_service_disabled_button">Abilita</string>
@@ -653,6 +658,9 @@
     <string name="balance">Saldo (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
     <string name="trial_vip_text">Modalità VIP gratis per 7 giorni</string>
     <string name="trial_vip_button_text">Connettere VIP</string>
+    <string name="settings_check_vip_title">Verifica attività stato VIP</string>
+    <string name="settings_check_vip_cell">Verifica Stato VIP</string>
+    <string name="settings_check_vip_alert">Richiesta di verifica inviata</string>
     <string name="novice_sympathy">Invia le simpatie solo alle persone che ti\npiacciono veramente\nper iniziare una piacevole relazione</string>
     <string name="novice_sympathies_bonus">Riceverai %1$d simpatie in\nregalo! Significa che\ndi sicuro piacerai a %2$d persone\nche ti dimostreranno la loro simpatia</string>
 </resources>

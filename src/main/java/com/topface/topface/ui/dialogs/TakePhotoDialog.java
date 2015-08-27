@@ -83,7 +83,7 @@ public class TakePhotoDialog extends AbstractDialogFragment implements View.OnCl
             mBtnFromGallery.setVisibility(View.VISIBLE);
             mPhotoLayout.setVisibility(View.GONE);
             mBtnTakePhoto.setText(R.string.take_photo);
-            mText.setText(TextUtils.isEmpty(mMessage) ? getString(R.string.no_photo_take_photo) : mMessage);
+            mText.setText(TextUtils.isEmpty(mMessage) ? getString(R.string.need_set_avatar) : mMessage);
         } else {
             mBtnSendPhoto.setVisibility(View.VISIBLE);
             mBtnFromGallery.setVisibility(View.INVISIBLE);

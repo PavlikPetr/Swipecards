@@ -49,6 +49,15 @@ public abstract class AbstractConfig {
                     case Long:
                         field.value = preferences.getLong(field.key, (Long) field.value);
                         break;
+                    case Double:
+                        String value;
+                        if (field.value instanceof Double) {
+                            value = Double.toString((Double) field.value);
+                        } else {
+                            value = (String) field.value;
+                        }
+                        field.value = Double.parseDouble(preferences.getString(field.key, value));
+                        break;
                 }
             }
         }
@@ -123,7 +132,6 @@ public abstract class AbstractConfig {
         return settingsMap.getLongField(key);
     }
 
-    @SuppressWarnings("UnusedDeclaration")
     protected Double getDoubleField(SettingsMap settingsMap, String key) {
         return settingsMap.getDoubleField(key);
     }
@@ -200,6 +208,9 @@ public abstract class AbstractConfig {
                 case Long:
                     editor.putLong(field.key, (Long) field.value);
                     break;
+                case Double:
+                    editor.putString(field.key, Double.toString((Double) field.value));
+                    break;
             }
         }
         editor.commit();
@@ -220,7 +231,7 @@ public abstract class AbstractConfig {
      * Types for SettingsField
      */
     public enum FieldType {
-        String, Integer, Boolean, Long, List, Unknown
+        String, Integer, Boolean, Long, Double, List, Unknown
     }
 
     /**
@@ -246,6 +257,8 @@ public abstract class AbstractConfig {
                 return FieldType.Boolean;
             } else if (value instanceof Long) {
                 return FieldType.Long;
+            } else if (value instanceof Double) {
+                return FieldType.Double;
             } else if (value instanceof List) {
                 return FieldType.List;
             }

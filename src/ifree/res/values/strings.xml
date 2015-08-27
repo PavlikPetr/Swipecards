@@ -18,6 +18,7 @@
     <string name="waiting_a_products">Please wait, we\'re loading our available products</string>
     <string name="likes_background_text">No likes</string>
     <string name="visitors_background_text">No guests</string>
+    <string name="need_set_avatar">No one can get to know you! Upload a profile photo.</string>
     <string name="chat_background_text">No incoming messages</string>
     <string name="entrance">Enter</string>
     <string name="filter_only_online">Online only</string>
