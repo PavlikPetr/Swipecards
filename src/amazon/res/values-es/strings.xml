@@ -185,6 +185,8 @@
     <string name="general_visitors_tab_views">visitas</string>
     <string name="general_profile">Perfil</string>
     <string name="general_settings">Ajustes</string>
+    <string name="auth_btn_vk">VKontakte</string>
+    <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Intentar de nuevo</string>
     <string name="dating_header_girls">Chicas desde %1$d hasta %2$d</string>
     <string name="dating_header_guys">Chicos desde %1$d hasta %2$d</string>
@@ -357,6 +359,7 @@
     <string name="ban_complain">Denunciar baneo</string>
     <string name="general_ready">Listo</string>
     <string name="buying_store_ok">Compra efectuada con éxito</string>
+    <string name="buying_store_fail">No ha sido posible realizar la compra.</string>
     <string name="vip_privileges">VIP-ventajas</string>
     <string name="vip_rest">Estás suscrito al VIP</string>
     <string name="vip_invis">Modo invisible</string>
@@ -682,6 +685,7 @@
     <string name="settings_feedback_transaction_link">¿dónde puedo encontrar el número del pedido?
     </string>
     <string name="general_logout_error">Lamentablemente, no se ha podido salir de la cuenta</string>
+    <string name="auth_btn_ok">Odnoklassniki</string>
     <string name="auth_btn_tf">Cuenta Topface</string>
     <string name="birthday">Cumpleaños</string>
     <string name="other_auth">Entrar usando otros servicios</string>
@@ -789,6 +793,7 @@
         resolver tu solicitud y también accelerará el proceso. La información detallada sobre el
         pedido se puede obtener a través de %s.
     </string>
+    <string name="google_wallet">Google Wallet</string>
     <string name="google_service_general_title">Avisos no disponibles</string>
     <string name="google_service_disabled_title">Tienes desconectados algunos servicios Google Play
         que hacen falta para que los avisos funcionen.
@@ -817,6 +822,7 @@
     <string name="receive_mutual_notification">Recibir notificación\nsobre simpatía mutua nueva
     </string>
     <string name="receive_sympathy_notification">Recibir notificación\nsobre simpatía nueva</string>
+    <string name="receive_rate_notification">key: receive_rate_notification</string>
     <string name="receive_guest_notification">Recibir notificación\nsobre visitante nuevo</string>
     <string name="on_phone">Al teléfono</string>
     <string name="on_mail">A e-mail</string>
