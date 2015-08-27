@@ -2,7 +2,6 @@ package com.topface.topface.banners.ad_providers;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -25,6 +24,7 @@ import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 /**
@@ -169,7 +169,7 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
                     intent.putExtra(PurchasesConstants.ARG_TAG_SOURCE, "Banner_" + mBanner.name);
                     break;
                 case Banner.ACTION_URL:
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mBanner.parameter));
+                    intent = Utils.getIntentToOpenUrl(mBanner.parameter);
                     break;
                 case Banner.ACTION_OFFERWALL:
                     switch (mBanner.parameter) {
