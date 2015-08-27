@@ -547,12 +547,13 @@ public class OverflowMenu {
     }
 
     private void setBlackListState(Boolean value) {
-        if (getOverflowMenuFieldsListener() == null) {
+        OverflowMenuUser overflowMenuFieldsListener = getOverflowMenuFieldsListener();
+        if (overflowMenuFieldsListener == null) {
             return;
         }
-        getOverflowMenuFieldsListener().setBlackListValue(value);
-        if (getOverflowMenuFieldsListener().getBlackListValue()) {
-            getOverflowMenuFieldsListener().setBookmarkValue(false);
+        overflowMenuFieldsListener.setBlackListValue(value);
+        if (overflowMenuFieldsListener.getBlackListValue()) {
+            overflowMenuFieldsListener.setBookmarkValue(false);
         }
     }
 
@@ -565,8 +566,9 @@ public class OverflowMenu {
     }
 
     private void setSympathySentState(boolean state, boolean isNeedSentBroadcast) {
-        if (getOverflowMenuFieldsListener() != null) {
-            getOverflowMenuFieldsListener().setSympathySentValue(state);
+        OverflowMenuUser overflowMenuFieldsListener = getOverflowMenuFieldsListener();
+        if (overflowMenuFieldsListener != null) {
+            overflowMenuFieldsListener.setSympathySentValue(state);
             if (isNeedSentBroadcast) {
                 LocalBroadcastManager.getInstance(mActivity.getApplicationContext()).
                         sendBroadcast(BlackListAndBookmarkHandler.getIntentForSympathyUpdate(BlackListAndBookmarkHandler.ActionTypes.SYMPATHY, state));

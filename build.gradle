@@ -1,4 +1,14 @@
 def versionProps = new Properties()
+
+enum FlavourType {
+    Google,
+    Amazon,
+    Nokia,
+    IFree,
+    BlueStacks
+}
+
+FlavourType flavourType = FlavourType.Google
 def versionPropsFile = file('version.properties')
 if (!versionPropsFile.canRead()) {
     throw new GradleException("Could not read version.properties! Create file in project root")
@@ -74,26 +84,38 @@ android {
     productFlavors {
         //Основной flavor, в нашем случае работает с Google Play
         google {
+            flavourType = FlavourType.Google
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappandroid\"";
         }
         //flavor для версии приложения для Amazon
         amazon {
+            flavourType = FlavourType.Amazon
             buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.AMAZON";
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappamazon\"";
         }
         //flavor для версии приложения для Nokia X
         //Пока не используется, поэтому закоментирован
         /*nokia {
+            flavourType = FlavourType.Nokia
             buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                     "com.topface.billing.MarketApiType.NOKIA_STORE";
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappandroidnokia\"";
         }*/
         ifree {
+            flavourType = FlavourType.IFree
             applicationId "com.topface.topface.ifree";
             buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.I_FREE";
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappifree\"";
             buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                     "com.topface.billing.MarketApiType.I_FREE";
+        }
+        blueStacks {
+            flavourType = FlavourType.BlueStacks
+            applicationId "com.topface.topface.bluestacks";
+            buildConfigField "String", "STATISTICS_APP", "\"topfacemobappbluestack\"";
+            buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.BLUE_STACKS";
+            buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
+                    "com.topface.billing.MarketApiType.BLUE_STACKS";
         }
     }
 
@@ -122,7 +144,6 @@ android {
                 "com.topface.billing.MarketApiType.GOOGLE_PLAY";
 
         multiDexEnabled true
-
     }
 
     signingConfigs {
@@ -131,10 +152,29 @@ android {
         }
 
         release {
-            storeFile file("misc/keys/topface.keystore")
-            storePassword "Sonetica2012"
-            keyAlias "topface"
-            keyPassword "Sonetica2012"
+            switch (flavourType) {
+                case FlavourType.IFree:
+                    storeFile file("misc/keys/topfaceIFree.keystore")
+                    storePassword "Sonetica2012"
+                    keyAlias "topfaceIFree"
+                    keyPassword "Sonetica2012"
+                    break;
+                case FlavourType.BlueStacks:
+                    storeFile file("misc/keys/topfaceBlueStacks.keystore")
+                    storePassword "Sonetica2012"
+                    keyAlias "topfaceBlueStacks"
+                    keyPassword "Sonetica2012"
+                    break
+                case FlavourType.Google:
+                case FlavourType.Amazon:
+                case FlavourType.Nokia:
+                default:
+                    storeFile file("misc/keys/topface.keystore")
+                    storePassword "Sonetica2012"
+                    keyAlias "topface"
+                    keyPassword "Sonetica2012"
+                    break;
+            }
         }
     }
 
@@ -271,7 +311,7 @@ dependencies {
     qaCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
 
     // I-FREE dependency
-    ifreeCompile('com.ifree.monetize:monetization-library:2.2.3') {
+    ifreeCompile('com.ifree.monetize:monetization-library:2.2.4') {
         exclude group: "com.fasterxml.jackson.core"
         exclude module: "support-v4"
     }

@@ -214,10 +214,8 @@ public class Products extends AbstractData {
     public static View createBuyButtonLayout(Context context, BuyButtonData buyBtn,
                                              final BuyButtonClickListener listener) {
         String value;
-        String economy;
         if (buyBtn.type == ProductType.COINS_SUBSCRIPTION && buyBtn.price == 0) {
             value = buyBtn.hint;
-            economy = null;
         } else {
             ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
             DecimalFormat decimalFormat = new DecimalFormat("#.##");
@@ -232,11 +230,10 @@ public class Products extends AbstractData {
                     value = buyBtn.totalTemplate.replace(PRICE, getPriceAndCurrencyAbbreviation(String.valueOf((float) buyBtn.price / 100), USD));
                 }
             }
-            economy = buyBtn.hint;
         }
         return createBuyButtonLayout(
                 context, buyBtn.id, buyBtn.title, buyBtn.discount > 0,
-                buyBtn.showType, economy, value, listener
+                buyBtn.showType, value, listener
         );
     }
 
@@ -248,14 +245,13 @@ public class Products extends AbstractData {
      * @param title    for button
      * @param discount true if button background has to be with sale badge
      * @param showType 0 - gray, 1 - blue button, 2 - disabled button
-     * @param economy  hint under button with highlighted background
      * @param value    hint under button
      * @param listener to process click
      * @return created view
      */
     public static View createBuyButtonLayout(
             Context context, final String id, String title, boolean discount, int showType,
-            String economy, String value, final BuyButtonClickListener listener
+            String value, final BuyButtonClickListener listener
     ) {
         if (context == null || TextUtils.isEmpty(title)) return null;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

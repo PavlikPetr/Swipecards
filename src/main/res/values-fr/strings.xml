@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Topface</string>
     <string name="app_locale">fr_FR</string>
     <string name="photofeed_title">Mettre dans l\'actualité</string>
     <string name="general_warning">AVERTISSEMENT</string>
     <string name="general_ok">OK</string>
+    <string name="general_any">N\'importe quel</string>
     <string name="general_settings_abbr">Paramètres</string>
     <string name="general_disallow">Interdire</string>
     <string name="general_allow">Autoriser</string>
@@ -19,6 +19,7 @@
     <string name="likes_background_text">Aucun J\'aime</string>
     <string name="visitors_background_text">Aucun visiteurs</string>
     <string name="chat_background_text">Aucun message reçu</string>
+    <string name="entrance">Entrer</string>
     <string name="filter_only_online">Seulement en ligne</string>
     <string name="filter_city_age_parameters">Âge et ville</string>
     <string name="filter_select_city">Sélectionner la ville</string>
@@ -158,6 +159,8 @@
     <string name="general_visitors_tab_views">Visites</string>
     <string name="general_profile">Profil</string>
     <string name="general_settings">Paramètres</string>
+    <string name="auth_btn_vk">Vkontakte</string>
+    <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Réessayer</string>
     <string name="dating_header_girls">Filles de %1$d à %2$d</string>
     <string name="dating_header_guys">Garçons de %1$d à %2$d</string>
@@ -183,6 +186,7 @@
     <string name="filter_age">Sélectionner l\'âge</string>
     <string name="filter_age_start_prefix">De %s</string>
     <string name="filter_age_end_prefix">jusqu\'à %s</string>
+    <string name="filter_constitution_template">De %1$d à %2$d</string>
     <string name="filter_cities_all">Toutes les villes</string>
     <string name="purchase_header_title">Solde :</string>
     <string name="buying_header_title">Achats</string>
@@ -312,6 +316,7 @@
     <string name="ban_complain">Plainte pour bloquage</string>
     <string name="general_ready">Fait</string>
     <string name="buying_store_ok">Achat réalisé avec succès.</string>
+    <string name="buying_store_fail">Impossible de terminer votre achat.</string>
     <string name="vip_privileges">Privilèges VIP</string>
     <string name="vip_rest">Vous êtes inscrit au statut VIP</string>
     <string name="vip_invis">Mode invisible</string>
@@ -353,6 +358,7 @@
     <string name="user_actions_chat">Tchater</string>
     <string name="profile_edit_age_ranges">L\'âge doit être compris entre 16 et 99 ans. Veuillez saisir le nombre correct et réessayer.</string>
     <string name="wrong_password_format">Format de mot de passe incorrect</string>
+    <string name="edit_value_error">La valeur doit être comprise entre %1$d et %2$d</string>
     <string name="sign_in">Se connecter</string>
     <string name="create_account">Créer un compte</string>
     <string name="email">E-mail</string>
@@ -368,6 +374,9 @@
     <string name="birthdate_confirm">Vous devez indiquer votre âge, pour pouvoir faire connaissance</string>
     <string name="set_birthdate">Indiquer l\'âge</string>
     <string name="welcome_to_topface">Bienvenue sur Topface !</string>
+    <string name="im_boy">Je suis un garçon</string>
+    <string name="im_girl">Je suis une fille</string>
+    <string name="u_sex">Votre sexe</string>
     <string name="incorrect_email">E-mail incorrect</string>
     <string name="incorrect_login">Nom d\'utilisateur incorrect</string>
     <string name="incorrect_password">Mot de passe incorrect</string>
@@ -382,6 +391,7 @@
     <string name="gallery">Galerie de photos</string>
     <string name="no_photo_take_photo">Personne ne peut faire connaissance avec vous ! Prenez une photo ou choisissez une photo de votre galerie de photos.</string>
     <string name="photo_for_avatar">Votre photo est prête à être envoyée sur votre profil ! C\'est votre première photo et elle sera utilisée comme photo de profil.</string>
+    <string name="add_photo_before">Vous devez d\'abord ajouter une photo</string>
     <string name="change_email">Changer l\'e-mail</string>
     <string name="send_confirmation_email">Envoyer un e-mail de confirmation</string>
     <string name="change_password">Changer le mot de passe</string>
@@ -535,6 +545,9 @@
     <string name="settings_feedback_transaction_number">Numéro de la commande</string>
     <string name="settings_feedback_transaction_link">Où puis-je trouver le numéro de la commande ?</string>
     <string name="general_logout_error">Malheureusement, il est impossible de vous déconnecter de votre compte.</string>
+    <string name="auth_btn_ok">Odnoklassniki</string>
+    <string name="auth_btn_tf">Compte Topface</string>
+    <string name="birthday">Anniversaire</string>
     <string name="other_auth">Se connecter via d\'autres services</string>
     <string name="settings_feedback_transaction_number_hint">Saisissez le numéro de la commande</string>
     <string name="delete_visitors">Supprimer les visiteurs</string>
@@ -612,6 +625,8 @@
     <string name="send_feedback">Envoyer un message</string>
     <string name="get_vip_free">Obtenez gratuitement le statut VIP</string>
     <string name="buy_more_sympathies">\"Obtenez plus de J\'aime, augmentez votre popularité\"</string>
+    <string name="transaction_code_help">En nous envoyant un code de transaction, vous nous aidez à satisfaire votre demande en accélérant le temps de traitement. Pour obtenir plus d\'informations sur une commande, rendez-vous sur %s.</string>
+    <string name="google_wallet">Google Wallet</string>
     <string name="google_service_general_title">Les rappels ne sont pas disponibles</string>
     <string name="google_service_disabled_title">Vous avez désactivé Google Play. Vous devez l\'activer pour recevoir des rappels.</string>
     <string name="google_service_disabled_button">Activer</string>
@@ -640,6 +655,12 @@
     <string name="status_invilid_phone_number">Le nombre est incorrect</string>
     <string name="status_confirmation_was_sent">En attente d\'enregistrement</string>
     <string name="status_user_registered">Déjà enregistré</string>
+    <string name="balance">Solde (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
+    <string name="trial_vip_text">Statut VIP gratuit \nPour 7 jours</string>
+    <string name="trial_vip_button_text">Recevez le statut VIP</string>
+    <string name="settings_check_vip_title">Vérifier si le statut VIP est activé.</string>
+    <string name="settings_check_vip_cell">Vérification du statut VIP</string>
+    <string name="settings_check_vip_alert">Votre demande de vérification du statut VIP a été envoyée.</string>
     <string name="novice_sympathy">Envoyez des J\'aime aux personnes qui vous\nplaisent vraiment.\nVous allez peut être rencontrer quelqu\'un d\'unique !</string>
     <string name="novice_sympathies_bonus">Vous recevez %1$d J\'aime\nen cadeau ! Cela signifie que\n%2$d personne va vous donner un J\'aime,\nà qui vous plaisez réellement.</string>
 </resources>

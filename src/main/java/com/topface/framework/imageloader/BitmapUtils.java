@@ -439,26 +439,15 @@ public class BitmapUtils {
     private static Bitmap getScaledBitmapInsideSquare(Bitmap bitmap, final int destSize, float radiusMult) {
         final int bitmapWidth = bitmap.getWidth();
         final int bitmapHeight = bitmap.getHeight();
-
         int size = (int) (((bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
-        Bitmap output = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        Bitmap output = Bitmap.createBitmap(destSize, destSize, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
-        final Rect src = new Rect(0, 0, bitmapWidth, bitmapHeight);
-        final Rect dst = new Rect((size - bitmapWidth) / 2, (size - bitmapHeight) / 2, (size + bitmapWidth) / 2, (size - bitmapHeight) / 2 + bitmapHeight);
+        final Rect src = new Rect((size - bitmapWidth) / 2, (size - bitmapHeight) / 2, (size + bitmapWidth) / 2, (size - bitmapHeight) / 2 + bitmapHeight);
         Paint canvasPaint = new Paint();
         canvasPaint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
-        canvas.drawBitmap(bitmap, src, dst, canvasPaint);
-        Bitmap scaledBitmap;
-        if (size != destSize) {
-            scaledBitmap = Bitmap.createScaledBitmap(output, destSize, destSize, true);
-            if (!output.isRecycled()) {
-                output.recycle();
-            }
-        } else {
-            scaledBitmap = output;
-        }
-        return scaledBitmap;
+        canvas.drawBitmap(bitmap, src, new Rect(0,0,destSize,destSize), canvasPaint);
+        return output;
     }
 
     public static Bitmap squareCrop(Bitmap bitmap) {

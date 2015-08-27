@@ -52,6 +52,8 @@
 
     <dimen name="tab_bar_default_bottom_border_height">1px</dimen>
 
+    <dimen name="tablayout_padding">72dp</dimen>
+
     <!--Gray/Blue buttons corner radius-->
     <dimen name="button_corners_radius">2dp</dimen>
 
