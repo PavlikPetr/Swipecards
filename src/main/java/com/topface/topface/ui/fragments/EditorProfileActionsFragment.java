@@ -61,11 +61,11 @@ public class EditorProfileActionsFragment extends BaseFragment {
             this.mViewId = viewId;
         }
 
-        public int getmViewId() {
+        public int getViewId() {
             return mViewId;
         }
 
-        public String getmText() {
+        public String getText() {
             return mText;
         }
 
@@ -253,8 +253,8 @@ public class EditorProfileActionsFragment extends BaseFragment {
 
     private String getTextByViewId(int viewId) {
         for (BAN_ACTION action : BAN_ACTION.values()) {
-            if (action.getmViewId() == viewId) {
-                return action.getmText();
+            if (action.getViewId() == viewId) {
+                return action.getText();
             }
         }
         return null;
