@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.UnderlineSpan;
@@ -18,6 +17,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -72,9 +72,10 @@ public class AboutAppDialog {
         extra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(CacheProfile.getOptions().aboutApp.url));
-                mContext.startActivity(i);
+                Intent i = Utils.getIntentToOpenUrl(CacheProfile.getOptions().aboutApp.url);
+                if (i != null) {
+                    mContext.startActivity(i);
+                }
             }
         });
         new AlertDialog.Builder(mContext)

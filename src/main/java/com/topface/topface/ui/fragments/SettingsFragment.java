@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -154,11 +153,9 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_ACCOUNT);
                 break;
             case R.id.loHelp:
-                String helpUrl = CacheProfile.getOptions().helpUrl;
-                if (!TextUtils.isEmpty(helpUrl)) {
-                    intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(helpUrl));
-                    startActivity(intent);
+                Intent i = Utils.getIntentToOpenUrl(CacheProfile.getOptions().helpUrl);
+                if (i != null) {
+                    startActivity(i);
                 }
                 break;
             case R.id.loFeedback:

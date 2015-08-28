@@ -2,7 +2,6 @@ package com.topface.topface.utils.ads;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -27,6 +26,7 @@ import com.topface.topface.statistics.TopfaceAdStatistics;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
@@ -260,8 +260,10 @@ public class FullscreenController {
                                 config.addFullscreenUrl(data.parameter);
                                 config.saveConfig();
                                 hideFullscreenBanner(bannerContainer);
-                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(data.parameter));
-                                mActivity.startActivity(intent);
+                                Intent i = Utils.getIntentToOpenUrl(data.parameter);
+                                if (i != null) {
+                                    mActivity.startActivity(i);
+                                }
                                 TopfaceAdStatistics.sendFullscreenClicked(data);
                             }
                         });
