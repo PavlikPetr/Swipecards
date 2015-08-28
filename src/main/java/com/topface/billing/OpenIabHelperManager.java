@@ -90,6 +90,7 @@ public class OpenIabHelperManager implements IabHelper.OnIabSetupFinishedListene
         //Нам нужен конкретный AppStore, т.к. у каждого типа сборки свои продукты и поддержка других маркетов все равно не нужна
         switch (BuildConfig.MARKET_API_TYPE) {
             case GOOGLE_PLAY:
+            case BLUE_STACKS:
                 optsBuilder.addAvailableStores(new GooglePlay(context, null));
                 optsBuilder.addPreferredStoreName(OpenIabHelper.NAME_GOOGLE);
                 break;
