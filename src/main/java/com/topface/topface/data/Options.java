@@ -172,6 +172,10 @@ public class Options extends AbstractData {
     public NotShown notShown = new NotShown();
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
     public InterstitialInFeeds interstitial = new InterstitialInFeeds();
+    /**
+     * {Number} fullscreenInterval — интервал отображения стартового фулскрин баннера в секундах
+     */
+    public long fullscreenInterval;
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -354,6 +358,7 @@ public class Options extends AbstractData {
             feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
             interstitial = JsonUtils.optFromJson(response.optString("interstitial"),
                     InterstitialInFeeds.class, interstitial);
+            fullscreenInterval = response.optLong("fullscreenInterval", DateUtils.DAY_IN_SECONDS);
 
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
