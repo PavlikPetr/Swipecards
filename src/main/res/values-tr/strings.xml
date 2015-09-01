@@ -320,6 +320,7 @@
     <string name="ban_complain">Engellemeyi şikayet etmek</string>
     <string name="general_ready">Hazır</string>
     <string name="buying_store_ok">Alış başarılıyla tamamlanmıştır</string>
+    <string name="buying_store_fail">Satın alma işleminiz tamamlanamadı.</string>
     <string name="vip_privileges">VIP-ayrıcalık</string>
     <string name="vip_rest">VIP’e abone oldunuz</string>
     <string name="vip_invis">Görünmez durumu</string>
@@ -397,6 +398,9 @@
     <string name="save">Kaydetmek</string>
     <string name="saving_in_progress">Tasarruf …</string>
     <string name="confirmation_successfully_sent">Gösterdiğiniz e-mailinize onay gönderildi</string>
+    <string name="email_successfully_confirmed">E-posta başarılı bir şekilde onaylandı</string>
+    <string name="email_not_confirmed">E-posta onaylanmadı</string>
+    <string name="email_already_confirmed">E-posta zaten onaylanmış</string>
     <string name="password_confirmation_hint">Parola onaylaması</string>
     <string name="password_hint">parola</string>
     <string name="enter_new_password">Yeni parolaya girin</string>
@@ -496,6 +500,8 @@
     <string name="general_no_notifications">Maalesef, cihazınızda bildirimler uygulanmıyor</string>
     <string name="black_list_add_short">Kara listeye</string>
     <string name="confirm_email_for_dating">Biz spama karşıyız. Topface’de tanışmak için posta adresinizi onaylayın!</string>
+    <string name="confirm_email_for_dating_title">Biz Spam\'lere karşıyız</string>
+    <string name="confirm_email_for_dating_desc">Topface\'de yeni insanlarla tanışabilmek için e-posta adresinizi onaylayın!</string>
     <string name="send_confirm_link">Onaylama için link göndermek</string>
     <string name="complain_type_swearing_msg">Kabalık, tehdit, küfür</string>
     <string name="general_exit">Çıkış</string>
@@ -641,9 +647,21 @@
     <string name="receive_message_notification">Yeni mesajı hakkında bildirimleri alın\nо</string>
     <string name="receive_mutual_notification">Yeni karşılıklı beğeni hakkında bildirimleri alın\nо</string>
     <string name="receive_sympathy_notification">Yeni beğeni hakkında bildirimleri alın\nо</string>
+    <string name="receive_rate_notification">sil</string>
     <string name="receive_guest_notification">Yeni misafiri hakkında bildirimleri alın\nо</string>
     <string name="on_phone">telefona</string>
     <string name="on_mail">e-postaya</string>
     <string name="add_leader_hint">Tebriksiniz …</string>
     <string name="more">daha</string>
+    <string name="premium_for_invitations">1 günlük bir VIP statüsü elde etmek için kayıt yaptıracak 5 kişi bulmanız gerekecek</string>
+    <string name="premium_for_invitations_current_status">Gerçekleştirmiş olduğunuz: :\nDavetiye: %1$d\nKayıt: %2$d</string>
+    <string name="no_contacts_available">Cihazda, görüntülenebilecek hiçbir kişi bulunmuyor</string>
+    <string name="sms_invite_title">Bir günlük bir VIP statüsü alın!</string>
+    <string name="status_can_send_confirmation">Davet Et</string>
+    <string name="status_invilid_phone_number">Numara geçersiz</string>
+    <string name="status_confirmation_was_sent">Kayıt Bekleniyor</string>
+    <string name="status_user_registered">Önceden kayıt olunmuş</string>
+    <string name="balance">Bakiye (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
+    <string name="trial_vip_text">7 günlük bedava VIP \n statüsü</string>
+    <string name="trial_vip_button_text">VIP statüsü edinin</string>
 </resources>

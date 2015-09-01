@@ -112,7 +112,9 @@
     <string name="pincode_auth_input">Du behöver ange dina login och lösenord</string>
     <string name="pincode_will_be_reset">Vid lyckad auktorisation återställs applikationens samtliga inställningar.</string>
     <plurals name="pincode_interval">
-        <item quantity="zero">Omedelbart efter stängande</item>
+        <item quantity="zero">Omedelbart efter stängning</item>
+        <item quantity="other">%d min.</item>
+        <item quantity="one">%d min.</item>
     </plurals>
     <string name="general_error">FEL</string>
     <string name="general_yes">Ja</string>
@@ -311,6 +313,7 @@
     <string name="ban_complain">Klaga på bannlysning</string>
     <string name="general_ready">Klart</string>
     <string name="buying_store_ok">Inköpet har framgångsrikt avklarats</string>
+    <string name="buying_store_fail">Lyckades inte genomföra köpet.</string>
     <string name="vip_privileges">VIP-förmåner</string>
     <string name="vip_rest">Du är prenumererad på VIP</string>
     <string name="vip_invis">\"Osynlig\" funktion</string>
@@ -388,6 +391,9 @@
     <string name="save">Spara</string>
     <string name="saving_in_progress">Sparar…</string>
     <string name="confirmation_successfully_sent">Bekräftelsen har mailats till den adress du angivit</string>
+    <string name="email_successfully_confirmed">E-mail har blivit bekräftad</string>
+    <string name="email_not_confirmed">E-mail är inte bekräftad</string>
+    <string name="email_already_confirmed">Redan bekräftad</string>
     <string name="password_confirmation_hint">Bekärfta lösenord</string>
     <string name="password_hint">lösenord</string>
     <string name="enter_new_password">Skriv ett nytt lösenord</string>
@@ -483,6 +489,8 @@
     <string name="general_no_notifications">Det är tyvärr omöjligt att erhålla notifikationer på din mobila enhet</string>
     <string name="black_list_add_short">Till svartlista</string>
     <string name="confirm_email_for_dating">VI är emot spam. Bekräfta din epost-adress för att dejta på Topface!</string>
+    <string name="confirm_email_for_dating_title">Vi är emot spam</string>
+    <string name="confirm_email_for_dating_desc">Bekräfta din e-postadress för att dejta på Topface!</string>
     <string name="send_confirm_link">Skicka länken för bekräftelse</string>
     <string name="complain_type_swearing_msg">Grovheter, hot, svordomar</string>
     <string name="general_exit">Logga ut</string>
@@ -634,4 +642,7 @@
     <string name="status_invilid_phone_number">Numret är ogiltigt</string>
     <string name="status_confirmation_was_sent">Väntar på registrering</string>
     <string name="status_user_registered">Redan registrerad</string>
+    <string name="balance">Balans (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
+    <string name="trial_vip_text">Kostnadsfritt VIP\n i 7 dagar</string>
+    <string name="trial_vip_button_text">Anslut VIP</string>
 </resources>

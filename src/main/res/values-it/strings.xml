@@ -313,6 +313,7 @@
     <string name="ban_complain">Reclamare ban</string>
     <string name="general_ready">Fatto</string>
     <string name="buying_store_ok">L’acquisto è stato completato con successo</string>
+    <string name="buying_store_fail">Non è stato possibile effettuare il pagamento.</string>
     <string name="vip_privileges">Privilegi di essere VIP</string>
     <string name="vip_rest">Non hai abbonamento VIP</string>
     <string name="vip_invis">Stato di invisibilità</string>
@@ -628,6 +629,7 @@
     <string name="receive_message_notification">Ricevere notifiche\ndei nuovi messaggi</string>
     <string name="receive_mutual_notification">Ricevere notifiche\ndelle nuove simpatie reciproche</string>
     <string name="receive_sympathy_notification">Ricevere notifiche\ndelle nuove simpatie</string>
+    <string name="receive_rate_notification">key: receive_rate_notification</string>
     <string name="receive_guest_notification">Ricevere notifiche\ndei nuovi visitatori</string>
     <string name="on_phone">Sul cellulare</string>
     <string name="on_mail">Sull’e-mail</string>

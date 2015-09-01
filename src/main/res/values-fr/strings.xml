@@ -313,6 +313,7 @@
     <string name="ban_complain">Plainte pour bloquage</string>
     <string name="general_ready">Fait</string>
     <string name="buying_store_ok">Achat réalisé avec succès.</string>
+    <string name="buying_store_fail">Impossible de terminer votre achat.</string>
     <string name="vip_privileges">Privilèges VIP</string>
     <string name="vip_rest">Vous êtes inscrit au statut VIP</string>
     <string name="vip_invis">Mode invisible</string>
@@ -642,4 +643,7 @@
     <string name="status_invilid_phone_number">Le nombre est incorrect</string>
     <string name="status_confirmation_was_sent">En attente d\'enregistrement</string>
     <string name="status_user_registered">Déjà enregistré</string>
+    <string name="balance">Solde (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
+    <string name="trial_vip_text">Statut VIP gratuit \nPour 7 jours</string>
+    <string name="trial_vip_button_text">Recevez le statut VIP</string>
 </resources>
