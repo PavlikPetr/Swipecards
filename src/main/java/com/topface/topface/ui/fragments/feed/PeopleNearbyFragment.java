@@ -326,6 +326,8 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
             showCannotGetGeoError();
         } else if (location.getLatitude() != UserConfig.DEFAULT_USER_LATITUDE_LOCATION && location.getLongitude() != UserConfig.DEFAULT_USER_LONGITUDE_LOCATION) {
             sendPeopleNearbyRequest(location, mIsHistoryLoad, mIsMakeItemsRead);
+        } else {
+            showCannotGetGeoError();
         }
     }
 
