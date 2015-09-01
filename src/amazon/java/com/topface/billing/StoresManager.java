@@ -3,6 +3,7 @@ package com.topface.billing;
 import android.content.Context;
 
 import com.topface.topface.BuildConfig;
+import com.topface.topface.requests.ApiRequest;
 
 import org.onepf.oms.OpenIabHelper;
 import org.onepf.oms.appstore.AmazonAppstore;
@@ -25,5 +26,9 @@ public class StoresManager {
             optsBuilder.addAvailableStores(new AmazonAppstore(context));
         }
         optsBuilder.addPreferredStoreName(OpenIabHelper.NAME_AMAZON);
+    }
+
+    public static ApiRequest getPaymentwallProductsRequest() {
+        return null;
     }
 }
