@@ -28,11 +28,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 public class Products extends AbstractData {
     public static final String PRICE = "{{price}}";
@@ -40,6 +42,7 @@ public class Products extends AbstractData {
     private static final String EUR = "EUR";
     private static final String RUB = "RUB";
     private static final String USD = "USD";
+    private static final String ZERO = ",00";
 
     public enum ProductType {
         COINS("coins"),
@@ -169,18 +172,6 @@ public class Products extends AbstractData {
         }
     }
 
-    private static String getPriceAndCurrencyAbbreviation(String price, String currency) {
-        switch (currency) {
-            case EUR:
-                return price + App.getContext().getString(R.string.eur);
-            case USD:
-                return App.getContext().getString(R.string.usd) + price;
-            case RUB:
-                return price + App.getContext().getString(R.string.rub);
-        }
-        return price + currency;
-    }
-
     public BuyButtonData createBuyButtonFromJSON(JSONObject purchaseItem) {
         BuyButtonData button = null;
         if (purchaseItem != null) {
@@ -218,16 +209,25 @@ public class Products extends AbstractData {
             value = buyBtn.hint;
         } else {
             ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
-            DecimalFormat decimalFormat = new DecimalFormat("#.##");
-            value = buyBtn.totalTemplate.replace(PRICE, decimalFormat.format((float) buyBtn.price / 100) +
-                    context.getString(R.string.usd));
+            Currency currency;
+            NumberFormat currencyFormatter;
+            currency = Currency.getInstance(USD);
+            currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
+            currencyFormatter.setCurrency(currency);
+            value = buyBtn.totalTemplate.replace(PRICE, currencyFormatter.format((float) buyBtn.price / 100));
             if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
-                if (detail != null && !detail.currency.equals(USD)) {
+
+                if (detail != null) {
                     double price = detail.price / ProductsDetails.MICRO_AMOUNT;
-                    value = buyBtn.totalTemplate.replace(PRICE, getPriceAndCurrencyAbbreviation(decimalFormat.format(price), detail.currency));
+                    currency = Currency.getInstance(detail.currency);
+                    currencyFormatter = detail.currency.equalsIgnoreCase(USD)
+                            ? NumberFormat.getCurrencyInstance(Locale.US) : NumberFormat.getCurrencyInstance();
+                    currencyFormatter.setCurrency(currency);
+                    //При форматировании NumberFormat автоматом прилепляет к целой цене дробную часть
+                    value = buyBtn.titleTemplate.replace(PRICE, currencyFormatter.format(price)).replace(ZERO, "");
                 } else {
-                    value = buyBtn.totalTemplate.replace(PRICE, getPriceAndCurrencyAbbreviation(String.valueOf((float) buyBtn.price / 100), USD));
+                    value = buyBtn.titleTemplate.replace(PRICE, currencyFormatter.format(buyBtn.price / 100)).replace(ZERO, "");
                 }
             }
         }
@@ -317,7 +317,7 @@ public class Products extends AbstractData {
         // title text
         TextView tvTitle = (TextView) view.findViewById(R.id.itText);
         setBuyButtonTextColor(showType, tvTitle);
-        tvTitle.setText(title);
+        tvTitle.setText(TextUtils.isEmpty(value) ? title : value);
     }
 
     private static void setSelectorTextColor(int selector, TextView view) {
