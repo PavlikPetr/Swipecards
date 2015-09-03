@@ -165,7 +165,19 @@ public class Utils {
     }
 
     public static void goToUrl(Context context, String url) {
-        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        Intent i = Utils.getIntentToOpenUrl(url);
+        if (i != null) {
+            context.startActivity(i);
+        }
+    }
+
+    public static Intent getIntentToOpenUrl(String url) {
+        if (!TextUtils.isEmpty(url)) {
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            return i;
+        }
+        return null;
     }
 
     public static void startOldVersionPopup(final Activity activity) {

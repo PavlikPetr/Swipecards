@@ -21,6 +21,7 @@ import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.ui.analytics.TrackedDialogFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -80,9 +81,10 @@ public class AboutAppDialog extends TrackedDialogFragment {
         extra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(CacheProfile.getOptions().aboutApp.url));
-                getActivity().startActivity(i);
+                Intent i = Utils.getIntentToOpenUrl(CacheProfile.getOptions().aboutApp.url);
+                if (i != null) {
+                    mContext.startActivity(i);
+                }
             }
         });
         return new AlertDialog.Builder(getActivity())
