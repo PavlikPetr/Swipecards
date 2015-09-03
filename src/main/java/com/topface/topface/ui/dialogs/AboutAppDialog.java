@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.SpannableString;
@@ -83,7 +82,7 @@ public class AboutAppDialog extends TrackedDialogFragment {
             public void onClick(View v) {
                 Intent i = Utils.getIntentToOpenUrl(CacheProfile.getOptions().aboutApp.url);
                 if (i != null) {
-                    mContext.startActivity(i);
+                    getActivity().startActivity(i);
                 }
             }
         });
