@@ -88,6 +88,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                     paddingTop = ((TabbedDialogsFragment) fragment).getTabLayoutHeight();
                 }
                 new PromoExpressMessages().setExtraPaddingTop(paddingTop).show(getFragmentManager(), PromoExpressMessages.TAG);
+                mNeedRefresh = true;
             }
         }
     }
