@@ -304,7 +304,7 @@ public class RegistrationFragment extends BaseFragment {
                 mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
                         android.R.anim.fade_out));
             }
-            mRedAlertView.setVisibility(View.INVISIBLE);
+            mRedAlertView.setVisibility(View.GONE);
         }
     }
 
