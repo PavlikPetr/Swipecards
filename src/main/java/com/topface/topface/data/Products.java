@@ -42,7 +42,6 @@ public class Products extends AbstractData {
     public static final String PRICE = "{{price}}";
     public static final String PRICE_PER_ITEM = "{{price_per_item}}";
     private static final String USD = "USD";
-    private static final String ZERO = ",00";
 
     public enum ProductType {
         COINS("coins"),
