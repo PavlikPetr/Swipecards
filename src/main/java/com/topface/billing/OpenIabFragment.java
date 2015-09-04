@@ -242,22 +242,26 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                         getResources().getString(R.string.editor_test_buy)
                 );
                 //Выставляем значение из конфига
-                checkBox.setChecked(App.getUserConfig().getTestPaymentFlag());
+                if (App.getUserConfig().getTestPaymentFlag()) {
+                    switchTestPatment(checkBox);
+                }
 
                 layout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //Переключаем режим тестовых покупок
-                        setTestPaymentsState(
-                                checkBox.doSwitch()
-                        );
-                        setTestPaymentsState(checkBox.isChecked());
-                        App.getUserConfig().setTestPaymentFlag(checkBox.isChecked());
-                        App.getUserConfig().saveConfig();
+                        switchTestPatment(checkBox);
                     }
                 });
             }
         }
+    }
+
+    private void switchTestPatment(EditSwitcher checkBox) {
+        setTestPaymentsState(checkBox.doSwitch());
+        setTestPaymentsState(checkBox.isChecked());
+        App.getUserConfig().setTestPaymentFlag(checkBox.isChecked());
+        App.getUserConfig().saveConfig();
     }
 
     @Override
