@@ -19,7 +19,6 @@ import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
 import java.text.SimpleDateFormat;

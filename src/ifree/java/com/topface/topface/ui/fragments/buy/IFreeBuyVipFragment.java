@@ -17,9 +17,11 @@ import android.widget.TextView;
 
 import com.topface.billing.IFreePurchases;
 import com.topface.billing.OpenIabFragment;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.Products;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -41,7 +43,7 @@ public class IFreeBuyVipFragment extends IFreePurchases implements OnClickListen
         public void onReceive(Context context, Intent intent) {
             switchLayouts();
             if (mInvisSwitcher != null) {
-                mInvisSwitcher.setChecked(getProfile().invisible);
+                mInvisSwitcher.setChecked(App.from(context).getProfile().invisible);
             }
         }
     };
@@ -103,7 +105,7 @@ public class IFreeBuyVipFragment extends IFreePurchases implements OnClickListen
         setProgressVisibility(false);
         if (!isLibraryInitialised()) {
             Products products = CacheProfile.getMarketProducts();
-            if (!getProfile().premium) {
+            if (!App.from(getActivity()).getProfile().premium) {
                 initBuyVipViews(mRoot, products != null ? validateProducts(products.premium) : null);
             }
         }
@@ -115,7 +117,7 @@ public class IFreeBuyVipFragment extends IFreePurchases implements OnClickListen
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(OpenIabFragment.UPDATE_RESOURCE_INFO));
-        mInvisSwitcher.setProgressState(false, getProfile().invisible);
+        mInvisSwitcher.setProgressState(false, App.from(getActivity()).getProfile().invisible);
         switchLayouts();
     }
 
@@ -137,7 +139,7 @@ public class IFreeBuyVipFragment extends IFreePurchases implements OnClickListen
         setResourceInfoText();
         initViews(view);
         initActionBar();
-        if (!getProfile().premium) {
+        if (!App.from(getActivity()).getProfile().premium) {
             setProgressVisibility(true);
         }
         return view;
@@ -166,7 +168,7 @@ public class IFreeBuyVipFragment extends IFreePurchases implements OnClickListen
 
     private void switchLayouts() {
         if (mBuyVipViewsContainer != null && mEditPremiumContainer != null) {
-            if (getProfile().premium) {
+            if (App.from(getActivity()).getProfile().premium) {
                 mEditPremiumContainer.setVisibility(View.VISIBLE);
                 mBuyVipViewsContainer.setVisibility(View.GONE);
             } else {
@@ -255,18 +257,19 @@ public class IFreeBuyVipFragment extends IFreePurchases implements OnClickListen
         final boolean invisibility = !mInvisSwitcher.isChecked();
         request.invisible = invisibility;
         mInvisSwitcher.setProgressState(true);
+        final Profile profile = App.from(getActivity()).getProfile();
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) throws NullPointerException {
-                getProfile().invisible = invisibility;
+                profile.invisible = invisibility;
                 CacheProfile.sendUpdateProfileBroadcast();
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) throws NullPointerException {
                 if (mInvisSwitcher != null && getActivity() != null) {
-                    if (getProfile().invisible != mInvisSwitcher.isChecked()) {
-                        mInvisSwitcher.setChecked(getProfile().invisible);
+                    if (profile.invisible != mInvisSwitcher.isChecked()) {
+                        mInvisSwitcher.setChecked(profile.invisible);
                     }
                 }
             }
@@ -275,7 +278,7 @@ public class IFreeBuyVipFragment extends IFreePurchases implements OnClickListen
             public void always(IApiResponse response) {
                 super.always(response);
                 if (mInvisSwitcher != null && getActivity() != null) {
-                    mInvisSwitcher.setProgressState(false, getProfile().invisible);
+                    mInvisSwitcher.setProgressState(false, profile.invisible);
                 }
             }
         }).exec();

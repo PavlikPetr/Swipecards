@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
 import java.text.SimpleDateFormat;
