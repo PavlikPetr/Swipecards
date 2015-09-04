@@ -8,26 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.topface.topface.Static;
-import com.topface.topface.data.Options;
-import com.topface.topface.state.OptionsProvider;
 import com.topface.topface.ui.analytics.TrackedDialogFragment;
 
 /**
  * Created by kirussell on 26/05/15.
  * Basic dialog fragment for common logic
  */
-public abstract class BaseDialog extends TrackedDialogFragment implements OptionsProvider.IOptionsUpdater {
+public abstract class BaseDialog extends TrackedDialogFragment {
 
     private DialogInterface.OnDismissListener mDismissListener;
-    private OptionsProvider optionsProvider = new OptionsProvider(this);
+    ;
 
-    public Options getOptions() {
-        return mOptions;
-    }
-
-    private Options mOptions;
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NO_FRAME, getDialogStyleResId());
@@ -61,14 +52,8 @@ public abstract class BaseDialog extends TrackedDialogFragment implements Option
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        optionsProvider.unsubscribe();
         if (mDismissListener != null) {
             mDismissListener.onDismiss(dialog);
         }
-    }
-
-    @Override
-    public void onOptionsUpdate(Options options) {
-        mOptions = options;
     }
 }

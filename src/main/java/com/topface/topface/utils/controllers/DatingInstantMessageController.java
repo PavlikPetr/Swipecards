@@ -21,6 +21,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.History;
 import com.topface.topface.data.HistoryListData;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -28,13 +29,11 @@ import com.topface.topface.requests.HistoryRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.state.OptionsProvider;
 import com.topface.topface.statistics.DatingMessageStatistics;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
@@ -45,11 +44,8 @@ import com.topface.topface.utils.http.IRequestClient;
  */
 public class DatingInstantMessageController {
     public static final String DEFAULT_MESSAGE = "default_message";
-    private OptionsProvider.IOptionsUpdater mUpdater;
-
     private Activity mActivity;
     private IRequestClient mRequestClient;
-
     private ImageButton mMessageSend;
     private View mGiftSend;
     private ViewFlipper mFooterFlipper;
@@ -65,14 +61,11 @@ public class DatingInstantMessageController {
 
     public DatingInstantMessageController(Activity activity, KeyboardListenerLayout root,
                                           View.OnClickListener clickListener,
-                                          IRequestClient requestClient, String text,
+                                          IRequestClient requestClient,
                                           final View datingButtons, final View userInfoStatus,
-                                          SendLikeAction sendLikeAction, TextView.OnEditorActionListener mEditorActionListener
-            , OptionsProvider.IOptionsUpdater updater) {
+                                          SendLikeAction sendLikeAction, TextView.OnEditorActionListener mEditorActionListener) {
         mActivity = activity;
         mSendLikeAction = sendLikeAction;
-        mUpdater = updater;
-
         root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
             @Override
             public void keyboardOpened() {
@@ -115,11 +108,12 @@ public class DatingInstantMessageController {
         });
         UserConfig userConfig = App.getUserConfig();
         String defaultMessage = userConfig.getDatingMessage();
-        if (TextUtils.isEmpty(defaultMessage) && !TextUtils.isEmpty(text)) {
-            userConfig.setDatingMessage(text);
+        Options options = App.from(activity).getOptions();
+        if (TextUtils.isEmpty(defaultMessage) && !TextUtils.isEmpty(options.instantMessageFromSearch.getText())) {
+            userConfig.setDatingMessage(options.instantMessageFromSearch.getText());
             userConfig.saveConfig();
         }
-        setInstantMessageText(defaultMessage.isEmpty() ? text : defaultMessage);
+        setInstantMessageText(defaultMessage.isEmpty() ? options.instantMessageFromSearch.getText() : defaultMessage);
         mMessageText.setHint(activity.getString(R.string.dating_message));
         mMessageText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         mMessageSend.setOnClickListener(clickListener);
@@ -127,7 +121,7 @@ public class DatingInstantMessageController {
         root.findViewById(R.id.chat_btn).setOnClickListener(clickListener);
         root.findViewById(R.id.skip_btn).setOnClickListener(clickListener);
 
-        mMaxMessageSize = updater.getOptions().maxMessageSize;
+        mMaxMessageSize = options.maxMessageSize;
         mRequestClient = requestClient;
     }
 
@@ -176,7 +170,7 @@ public class DatingInstantMessageController {
             @Override
             public void fail(int codeError, IApiResponse response) {
                 if (response.isCodeEqual(ErrorCodes.PREMIUM_ACCESS_ONLY)) {
-                    startPurchasesActivity(mUpdater.getOptions().instantMessagesForNewbies.getText(), "InstantMessageLimitExceeded");
+                    startPurchasesActivity(App.from(mActivity).getOptions().instantMessagesForNewbies.getText(), "InstantMessageLimitExceeded");
                 } else {
                     Utils.showErrorMessage();
                 }
@@ -208,11 +202,12 @@ public class DatingInstantMessageController {
     }
 
     private boolean tryChat(SearchUser user) {
-        if (mUpdater.getOptions().instantMessagesForNewbies.isEnabled()) {
+        Options options = App.from(mActivity).getOptions();
+        if (options.instantMessagesForNewbies.isEnabled()) {
             return true;
         }
 
-        if (CacheProfile.getProfile().premium || user.isMutualPossible || !mUpdater.getOptions().blockChatNotMutual) {
+        if (App.from(mActivity).getProfile().premium || user.isMutualPossible || !options.blockChatNotMutual) {
             return true;
         } else {
             startPurchasesActivity(mActivity.getString(R.string.chat_block_not_mutual),
@@ -244,7 +239,7 @@ public class DatingInstantMessageController {
      */
     public void updateMessageIfNeed() {
         String textCurrent = mMessageText.getText().toString();
-        String textNewFromConfig = mUpdater.getOptions().instantMessageFromSearch.getText();
+        String textNewFromConfig = App.from(mActivity).getOptions().instantMessageFromSearch.getText();
 
         if (TextUtils.isEmpty(mLastMsgFromConfig)) {
             // такое бывает при первом запуске приложения после установки

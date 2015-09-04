@@ -1,5 +1,6 @@
 package com.topface.topface.ui.adapters;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.DrawableRes;
@@ -16,11 +17,10 @@ import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.CountersData;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
-import com.topface.topface.state.OptionsProvider;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ResourcesUtils;
 
 public class LeftMenuAdapter extends BaseAdapter {
@@ -29,12 +29,12 @@ public class LeftMenuAdapter extends BaseAdapter {
     public static final int TYPE_MENU_BUTTON_WITH_PHOTO = 2;
     private static final int TYPE_COUNT = 3;
     private final SparseArray<ILeftMenuItem> mItems;
+    private Context mContext;
     private CountersData mCountersData;
-    private OptionsProvider.IOptionsUpdater mUpdater;
 
-    public LeftMenuAdapter(SparseArray<ILeftMenuItem> items, OptionsProvider.IOptionsUpdater updater) {
+    public LeftMenuAdapter(SparseArray<ILeftMenuItem> items, Context context) {
         mItems = items;
-        mUpdater = updater;
+        mContext = context;
     }
 
     public static ILeftMenuItem newLeftMenuItem(BaseFragment.FragmentId menuId, int menuType,
@@ -148,6 +148,7 @@ public class LeftMenuAdapter extends BaseAdapter {
             holder.item = item;
         }
         // initiate views' state in holder
+        Options options = App.from(mContext).getOptions();
         switch (type) {
             case TYPE_MENU_BUTTON:
                 holder.btnMenu.setText(item.getMenuText());
@@ -156,7 +157,7 @@ public class LeftMenuAdapter extends BaseAdapter {
                 break;
             case TYPE_MENU_BUTTON_WITH_BADGE:
                 if (item.getMenuId() == BaseFragment.FragmentId.BONUS) {
-                    holder.btnMenu.setText(mUpdater.getOptions().bonus.buttonText);
+                    holder.btnMenu.setText(options.bonus.buttonText);
                 } else {
                     holder.btnMenu.setText(item.getMenuText());
                 }
@@ -168,7 +169,7 @@ public class LeftMenuAdapter extends BaseAdapter {
             case TYPE_MENU_BUTTON_WITH_PHOTO:
                 holder.btnMenu.setText(item.getMenuText());
                 if (holder.icon instanceof ImageViewRemote) {
-                    ((ImageViewRemote) holder.icon).setPhoto(CacheProfile.getProfile().photo);
+                    ((ImageViewRemote) holder.icon).setPhoto(App.from(mContext).getProfile().photo);
                 }
                 if (holder.extraIcon != null) {
                     int extraIconDrawable = item.getExtraIconDrawable();
@@ -185,9 +186,9 @@ public class LeftMenuAdapter extends BaseAdapter {
         holder.item = item;
         // init button state
         if (item.getMenuId() == BaseFragment.FragmentId.BONUS) {
-            if (mUpdater.getOptions().bonus.buttonPicture != null) {
+            if (options.bonus.buttonPicture != null) {
                 // set custom button ico from server
-                DefaultImageLoader.getInstance(App.getContext()).preloadImage(mUpdater.getOptions().bonus.buttonPicture, new SimpleImageLoadingListener() {
+                DefaultImageLoader.getInstance(App.getContext()).preloadImage(options.bonus.buttonPicture, new SimpleImageLoadingListener() {
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                         holder.icon.setImageDrawable(new BitmapDrawable(App.getContext().getResources(), loadedImage));

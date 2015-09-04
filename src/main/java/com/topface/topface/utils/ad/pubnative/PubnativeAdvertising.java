@@ -1,5 +1,6 @@
 package com.topface.topface.utils.ad.pubnative;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
@@ -27,14 +28,14 @@ public class PubnativeAdvertising extends Advertising {
 
     private PubnativeInfo mPubnativeInfo;
 
-    public PubnativeAdvertising(Options options) {
+    public PubnativeAdvertising(Options options, Context context) {
         mOptions = options;
         DisplayMetrics metrics = App.getContext().getResources().getDisplayMetrics();
         String locale = new LocaleConfig(App.getContext()).getApplicationLocale();
         PubnativeInfo.Builder pubnativeBuilder = new PubnativeInfo.Builder().displayMetrics(metrics).
                 adId(TFCredentials.getAdId(App.getContext())).locale(locale);
         pubnativeBuilder.location(App.getLastKnownLocation());
-        mPubnativeInfo = pubnativeBuilder.create(options.feedNativeAd.dailyShows);
+        mPubnativeInfo = pubnativeBuilder.create(options.feedNativeAd.dailyShows, context);
     }
 
     @Override

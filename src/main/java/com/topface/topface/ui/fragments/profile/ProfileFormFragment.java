@@ -56,7 +56,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
                 if (form.type == data.type && form.titleId == data.titleId) {
                     if (form.dataId != data.dataId ||
                             data.dataId == FormItem.NO_RESOURCE_ID && !TextUtils.equals(form.value, data.value)) {
-                        FormInfo info = new FormInfo(App.getContext(), CacheProfile.getProfile().sex, Profile.TYPE_OWN_PROFILE);
+                        FormInfo info = new FormInfo(App.getContext(), App.from(getActivity()).getProfile().sex, Profile.TYPE_OWN_PROFILE);
                         boolean isSettingsRequest = mMainFormTypes.contains(data.type);
                         ApiRequest request = isSettingsRequest ?
                                 getSettingsRequest(data) : info.getFormRequest(data);
@@ -134,7 +134,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (mProfileFormListAdapter != null) {
-                mProfileFormListAdapter.setUserData(CacheProfile.getStatus(), CacheProfile.getProfile().forms);
+                mProfileFormListAdapter.setUserData(CacheProfile.getStatus(getActivity()), App.from(getActivity()).getProfile().forms);
                 mProfileFormListAdapter.notifyDataSetChanged();
             }
         }

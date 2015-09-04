@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.CountersData;
@@ -16,7 +17,7 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
     protected void onBeforeCountersUpdate(CountersData countersData) {
         updatePageCounter(LikesFragment.class.getName(), countersData.likes);
         updatePageCounter(MutualFragment.class.getName(), countersData.mutual);
-        if (!getOptions().isHideAdmirations) {
+        if (!App.from(getActivity()).getOptions().isHideAdmirations) {
             updatePageCounter(AdmirationFragment.class.getName(), countersData.admirations);
         }
     }
@@ -30,7 +31,7 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
     protected void addPages() {
         addBodyPage(LikesFragment.class.getName(), getString(R.string.general_likes), mCountersData.likes);
         addBodyPage(MutualFragment.class.getName(), getString(R.string.general_mutual), mCountersData.mutual);
-        if (!getOptions().isHideAdmirations) {
+        if (!App.from(getActivity()).getOptions().isHideAdmirations) {
             addBodyPage(AdmirationFragment.class.getName(), getString(R.string.general_admirations), mCountersData.admirations);
         }
     }

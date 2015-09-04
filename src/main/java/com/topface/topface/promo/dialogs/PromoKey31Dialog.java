@@ -1,13 +1,16 @@
 package com.topface.topface.promo.dialogs;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.Utils;
 
 public class PromoKey31Dialog extends PromoDialog {
+
+
     @Override
     public Options.PromoPopupEntity getPremiumEntity() {
-        return getOptions().premiumMessages;
+        return App.from(App.getContext()).getOptions().premiumMessages;
     }
 
     @Override

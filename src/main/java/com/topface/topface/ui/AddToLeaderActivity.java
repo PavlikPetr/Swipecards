@@ -23,6 +23,7 @@ import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.requests.AddPhotoFeedRequest;
 import com.topface.topface.requests.AlbumRequest;
@@ -38,7 +39,6 @@ import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.AddPhotoHelper;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.PhotoTaker;
 import com.topface.topface.utils.Utils;
@@ -86,7 +86,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            AddPhotoHelper.handlePhotoMessage(msg);
+            AddPhotoHelper.handlePhotoMessage(msg, AddToLeaderActivity.this);
         }
     };
     Photos mPhotos = null;
@@ -136,7 +136,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         }
         if (isNeedShow) {
             mAddPhotoHelper = initAddPhotoHelper();
-            if (CacheProfile.getProfile().photo == null && takePhotoDialog == null) {
+            if (App.from(this).getProfile().photo == null && takePhotoDialog == null) {
                 mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null, message);
                 mIsPhotoDialogShown = true;
             }
@@ -152,10 +152,11 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     @Override
     protected void onProfileUpdated() {
         super.onProfileUpdated();
-        mPhotos = CacheProfile.getProfile().photos;
+        Profile profile = App.from(this).getProfile();
+        mPhotos = profile.photos;
         LeadersPhotoGridAdapter adapter = getAdapter();
         adapter.setData(mPhotos, false);
-        setSeletedPosition(0, CacheProfile.getProfile().photos.isEmpty() ? 0 : CacheProfile.getProfile().photos.get(0).getId());
+        setSeletedPosition(0, profile.photos.isEmpty() ? 0 : profile.photos.get(0).getId());
     }
 
     @Override
@@ -199,7 +200,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private void initButtons(View headerView) {
         LinearLayout buttonsLayout = (LinearLayout) headerView.findViewById(R.id.buttonsContainer);
         buttonsLayout.removeAllViews();
-        List<Options.LeaderButton> buttons = getOptions().buyLeaderButtons;
+        List<Options.LeaderButton> buttons = App.from(this).getOptions().buyLeaderButtons;
         for (int i = 0; i < buttons.size(); i++) {
             getLayoutInflater().inflate(R.layout.add_leader_button, buttonsLayout);
             // get last added view
@@ -229,7 +230,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     }
 
     private void pressedAddToLeader(int position) {
-        final Options.LeaderButton buttonData = getOptions().buyLeaderButtons.get(position);
+        final Options.LeaderButton buttonData = App.from(this).getOptions().buyLeaderButtons.get(position);
         int selectedPhotoId = getAdapter().getSelectedPhotoId();
         if (getAdapter().getCount() > 0) {
             if (mCoins < buttonData.price) {
@@ -266,7 +267,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private void showPurchasesFragment(int price) {
         Debug.error("money price " + price);
         startActivity(PurchasesActivity.createBuyingIntent(this.getLocalClassName()
-                , PurchasesFragment.TYPE_LEADERS, price, getOptions().topfaceOfferwallRedirect));
+                , PurchasesFragment.TYPE_LEADERS, price, App.from(this).getOptions().topfaceOfferwallRedirect));
     }
 
 
@@ -300,8 +301,9 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private Photos getPhotoLinks() {
         Photos photoLinks = new Photos();
         photoLinks.clear();
-        if (CacheProfile.getProfile().photos != null) {
-            photoLinks.addAll(CacheProfile.getProfile().photos);
+        Profile profile = App.from(this).getProfile();
+        if (profile.photos != null) {
+            photoLinks.addAll(profile.photos);
         }
         return checkPhotos(photoLinks);
     }
@@ -341,7 +343,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         int position = photo.getPosition();
         AlbumRequest request = new AlbumRequest(
                 this.getApplicationContext(),
-                CacheProfile.getProfile().uid,
+                App.from(this).getProfile().uid,
                 position + 1,
                 AlbumRequest.MODE_ALBUM,
                 AlbumLoadController.FOR_GALLERY,

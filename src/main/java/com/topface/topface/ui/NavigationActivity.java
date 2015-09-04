@@ -29,6 +29,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.City;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
 import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
@@ -111,7 +112,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (CacheProfile.getProfile().age < App.getAppOptions().getUserAgeMin()) {
+            if (App.from(context).getProfile().age < App.getAppOptions().getUserAgeMin()) {
                 SetAgeDialog.newInstance().show(getSupportFragmentManager(), SetAgeDialog.TAG);
             }
         }
@@ -207,7 +208,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         sequencedStartAction.addAction(popupsAction);
         // fullscreen
         if (mFullscreenController != null) {
-            sequencedStartAction.addAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
+            sequencedStartAction.addAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW, this));
         }
         // trial vip popup
         startActionsController.registerMandatoryAction(sequencedStartAction);
@@ -227,7 +228,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         mPopupManager = new PopupManager(this);
         startActionsController.registerAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
         startActionsController.registerAction(mPopupManager.createRatePopupStartAction(AC_PRIORITY_LOW
-                , getOptions().ratePopupTimeout, getOptions().ratePopupEnabled));
+                , App.from(this).getOptions().ratePopupTimeout, App.from(this).getOptions().ratePopupEnabled));
         startActionsController.registerAction(mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
     }
 
@@ -237,7 +238,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     private void initBonusCounterConfig() {
         long lastTime = App.getUserConfig().getBonusCounterLastShowTime();
-        CacheProfile.needShowBonusCounter = lastTime < getOptions().bonus.timestamp;
+        CacheProfile.needShowBonusCounter = lastTime < App.from(this).getOptions().bonus.timestamp;
     }
 
     @SuppressWarnings("deprecation")
@@ -345,7 +346,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         //Получаем id фрагмента, если он открыт
         FragmentId currentFragment = (FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT);
         Debug.log(PAGE_SWITCH + "show fragment from NEXT_INTENT: " + currentFragment);
-        showFragment(currentFragment == null ? getOptions().startPageFragmentId : currentFragment);
+        showFragment(currentFragment == null ? App.from(this).getOptions().startPageFragmentId : currentFragment);
     }
 
     @Override
@@ -370,7 +371,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         super.onResume();
         //restart -> open NavigationActivity
         if (App.getLocaleConfig().fetchToSystemLocale()) {
-            LocaleConfig.changeLocale(this, App.getLocaleConfig().getApplicationLocale(), this);
+            LocaleConfig.changeLocale(this, App.getLocaleConfig().getApplicationLocale());
             return;
         } else {
             LocaleConfig.localeChangeInitiated = false;
@@ -440,7 +441,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             }
 
             private boolean isTakePhotoApplicable() {
-                return !AuthToken.getInstance().isEmpty() && (CacheProfile.getProfile().photo == null)
+                return !AuthToken.getInstance().isEmpty() && (App.from(NavigationActivity.this).getProfile().photo == null)
                         && !App.getConfig().getUserConfig().isUserAvatarAvailable();
             }
 
@@ -494,14 +495,15 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     @Override
     protected void onLoadProfile() {
         super.onLoadProfile();
+        Profile profile = App.from(this).getProfile();
         //Интеграция наших id юзера с AppsFlyer
-        if (CacheProfile.getProfile().uid > 0) {
+        if (profile.uid > 0) {
             try {
-                AppsFlyerLib.setAppUserId(Integer.toString(CacheProfile.getProfile().uid));
+                AppsFlyerLib.setAppUserId(Integer.toString(profile.uid));
             } catch (Exception e) {
                 Debug.error(e);
             }
-            Debug.log("Current User ID:" + CacheProfile.getProfile().uid);
+            Debug.log("Current User ID:" + profile.uid);
         }
         if (mDrawerToggle != null) {
             mDrawerToggle.syncState();
@@ -510,7 +512,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         Initialize Topface offerwall here to be able to start it quickly instead of PurchasesActivity
          */
         OfferwallsManager.initTfOfferwall(this, null);
-        AdmobInterstitialUtils.preloadInterstitials(this, getOptions().interstitial);
+        AdmobInterstitialUtils.preloadInterstitials(this, App.from(this).getOptions().interstitial);
     }
 
     @Override
@@ -563,7 +565,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                                 request.callback(new ApiHandler() {
                                     @Override
                                     public void success(IApiResponse response) {
-                                        CacheProfile.getProfile().city = city;
+                                        App.from(NavigationActivity.this).getProfile().city = city;
                                         CacheProfile.sendUpdateProfileBroadcast();
                                     }
 

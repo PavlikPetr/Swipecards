@@ -120,7 +120,7 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
         } else if (rating >= 4) {
             sendRateRequest(rating);
             saveRatingPopupStatus(0);
-            Utils.goToMarket(getActivity(), GPLAY_ACTIVITY, getOptions().updateUrl);
+            Utils.goToMarket(getActivity(), GPLAY_ACTIVITY, App.from(getActivity()).getOptions().updateUrl);
         } else {
             sendRateRequest(rating);
             saveRatingPopupStatus(0);

@@ -17,6 +17,7 @@ import com.topface.offerwall.publisher.TFOfferwallSDK;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.ProfileRequest;
@@ -24,7 +25,6 @@ import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
@@ -86,7 +86,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         App.from(this).inject(this);
-        mTopfaceOfferwallRedirect = getOptions().topfaceOfferwallRedirect;
+        mTopfaceOfferwallRedirect = App.from(this).getOptions().topfaceOfferwallRedirect;
         if (TFOfferwallSDK.isInitialized()) {
             mIsOfferwallsReady = TFCredentials.getAdId() != null;
         }
@@ -108,8 +108,9 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     @Override
     protected void onLoadProfile() {
         super.onLoadProfile();
-        mBonusRedirect = getOptions().forceOfferwallRedirect;
-        mTopfaceOfferwallRedirect = getOptions().topfaceOfferwallRedirect;
+        Options options = App.from(this).getOptions();
+        mBonusRedirect = options.forceOfferwallRedirect;
+        mTopfaceOfferwallRedirect = options.topfaceOfferwallRedirect;
         if (!TFOfferwallSDK.isInitialized()) {
             OfferwallsManager.initTfOfferwall(this, new TFCredentials.OnInitializeListener() {
                 @Override
@@ -136,7 +137,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         TopfaceOfferwallRedirect topfaceOfferwallRedirectRestored =
                 savedInstanceState.getParcelable(TopfaceOfferwallRedirect.TOPFACE_OFFERWAL_REDIRECT);
         if (mTopfaceOfferwallRedirect == null) {
-            mTopfaceOfferwallRedirect = getOptions().topfaceOfferwallRedirect;
+            mTopfaceOfferwallRedirect = App.from(this).getOptions().topfaceOfferwallRedirect;
         }
         mTopfaceOfferwallRedirect.setComplited(topfaceOfferwallRedirectRestored.isCompleted());
     }
@@ -227,7 +228,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     }
 
     private boolean needTFOfferwallOnCloseRedirect() {
-        return isTopfaceOfferwallRedirectEnabled(getOptions().topfaceOfferwallRedirect) && mTopfaceOfferwallRedirect.isExpOnClose() &&
+        return isTopfaceOfferwallRedirectEnabled(App.from(this).getOptions().topfaceOfferwallRedirect) && mTopfaceOfferwallRedirect.isExpOnClose() &&
                 !mTopfaceOfferwallRedirect.isCompleted() && mIsOfferwallsReady && !getFragment().isVipProducts();
     }
 
@@ -236,16 +237,16 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     }
 
     private boolean isBonusAvailable() {
-        return !((isTopfaceOfferwallRedirectEnabled(getOptions().topfaceOfferwallRedirect) && mTopfaceOfferwallRedirect.isExpOnClose()) ||
+        return !((isTopfaceOfferwallRedirectEnabled(App.from(this).getOptions().topfaceOfferwallRedirect) && mTopfaceOfferwallRedirect.isExpOnClose()) ||
                 mTopfaceOfferwallRedirect.isCompleted() || getFragment().isBonusSkiped() ||
                 !getFragment().isBonusPageAvailable() || !(mBonusRedirect != null && mBonusRedirect.isEnabled()));
     }
 
     private boolean isSMSInviteAvailable() {
-        return !CacheProfile.getProfile().premium && !(mTopfaceOfferwallRedirect != null &&
+        return !App.from(this).getProfile().premium && !(mTopfaceOfferwallRedirect != null &&
                 (mTopfaceOfferwallRedirect.isExpOnClose() ||
                         mTopfaceOfferwallRedirect.isCompleted())) &&
-                getOptions().forceSmsInviteRedirect.enabled;
+                App.from(this).getOptions().forceSmsInviteRedirect.enabled;
     }
 
     private boolean showExtraScreen(EXTRA_SCREEN screen) {

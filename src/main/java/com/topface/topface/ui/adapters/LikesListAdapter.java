@@ -9,12 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.nineoldandroids.view.ViewHelper;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
-import com.topface.topface.state.OptionsProvider;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ad.NativeAd;
 import com.topface.topface.utils.ad.NativeAdManager;
 
@@ -26,8 +25,8 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
         void onMutual(FeedItem item);
     }
 
-    public LikesListAdapter(Context context, Updater updateCallback, OptionsProvider.IOptionsUpdater optionsUpdater) {
-        super(context, updateCallback, optionsUpdater);
+    public LikesListAdapter(Context context, Updater updateCallback) {
+        super(context, updateCallback);
     }
 
     @Override
@@ -103,7 +102,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
 
     @Override
     public boolean isNeedFeedAd() {
-        return CacheProfile.getProfile().showAd && NativeAdManager.hasAvailableAd()
-                && !mOptionsUpdater.getOptions().interstitial.canShow();
+        return App.from(getContext()).getProfile().showAd && NativeAdManager.hasAvailableAd()
+                && !App.from(getContext()).getOptions().interstitial.canShow();
     }
 }

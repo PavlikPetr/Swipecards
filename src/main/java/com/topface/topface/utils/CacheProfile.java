@@ -19,6 +19,7 @@ import com.topface.topface.data.Products;
 import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.utils.config.SessionConfig;
@@ -50,11 +51,7 @@ public class CacheProfile {
     public static long profileUpdateTime;               // время последнего вызова setProfile(...)
     public static boolean wasCityAsked = false;         // был ли показан экран выбора города новичку
     public static boolean needShowBonusCounter = false;
-    private static AtomicBoolean mIsLoaded = new AtomicBoolean(false);
-
-
-    public static Profile profile;
-
+    public static AtomicBoolean isLoaded = new AtomicBoolean(false);
 
     private static void setProfileCache(final JSONObject response) {
         if (response != null) {
@@ -64,54 +61,22 @@ public class CacheProfile {
         }
     }
 
-
-    public static Profile getProfile() {
-        return profile;
-    }
-
     public static void setProfile(Profile profile, JSONObject response, int part) {
         switch (part) {
             case ProfileRequest.P_ALL:
                 Editor.init(profile);
-                CacheProfile.profile = profile;
                 setProfileCache(response);
                 break;
         }
         setProfileUpdateTime();
     }
 
-    public static String getStatus() {
-        return profile.status;
+    public static String getStatus(Context context) {
+        return App.from(context).getProfile().status;
     }
 
-    public static void setStatus(String status) {
-        profile.status = Profile.normilizeStatus(status);
-    }
-
-    /**
-     * Загружает профиль из кэша
-     *
-     * @return profile loaded
-     */
-    public static boolean loadProfile() {
-        boolean result = false;
-        if (profile == null) {
-            SessionConfig config = App.getSessionConfig();
-            String profileCache = config.getProfileData();
-            if (!TextUtils.isEmpty(profileCache)) {
-                //Получаем опции из кэша
-                try {
-                    JSONObject profileJson = new JSONObject(profileCache);
-                    CacheProfile.profile = new Profile(profileJson);
-                    result = true;
-                } catch (JSONException e) {
-                    config.resetProfileData();
-                    Debug.error(e);
-                }
-            }
-        }
-        mIsLoaded.set(true);
-        return result;
+    public static void setStatus(Context context, String status) {
+        App.from(context).getProfile().status = Profile.normilizeStatus(status);
     }
 
     /**
@@ -182,15 +147,16 @@ public class CacheProfile {
         return products;
     }
 
-    public static boolean isDataFilled() {
+    public static boolean isDataFilled(Context context) {
+        Profile profile = App.from(context).getProfile();
         return profile.city != null && !profile.city.isEmpty() && profile.age != 0 && profile.firstName != null && profile.photo != null;
     }
 
     /**
      * Clears CacheProfile fields (does not affect cached data from ProfileConfig)
      */
-    public static void clearProfileAndOptions() {
-        CacheProfile.profile = new Profile();
+    public static void clearProfileAndOptions(TopfaceAppState state) {
+        state.destroyObservable(Profile.class);
         setProfileCache(null);
         wasCityAsked = false;
     }
@@ -200,11 +166,12 @@ public class CacheProfile {
     }
 
     public static boolean isLoaded() {
-        return mIsLoaded.get();
+        return App.from(App.getContext()).getProfile() != null;
     }
 
-    public static boolean isEmpty() {
-        return isLoaded() && profile.uid == 0;
+    public static boolean isEmpty(Context context) {
+        Profile profile = App.from(context).getProfile();
+        return isLoaded() && profile != null && profile.uid == 0;
     }
 
     public static void setOptions(final JSONObject response) {
@@ -248,10 +215,9 @@ public class CacheProfile {
         }
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    public static String getUserNameAgeString() {
-        return CacheProfile.getProfile().firstName +
-                (CacheProfile.isAgeOk(CacheProfile.getProfile().age) ? ", " + CacheProfile.getProfile().age : "");
+    public static String getUserNameAgeString(Profile profile) {
+        return profile.firstName +
+                (CacheProfile.isAgeOk(profile.age) ? ", " + profile.age : "");
     }
 
     private static boolean isAgeOk(int age) {
@@ -306,18 +272,20 @@ public class CacheProfile {
     }
 
     public static boolean needToSelectCity(Context context) {
+        Profile profile = App.from(context).getProfile();
         return (
-                !CacheProfile.isEmpty() &&
+                !CacheProfile.isEmpty(context) &&
                         (
-                                CacheProfile.getProfile().city == null ||
-                                        CacheProfile.getProfile().city.isEmpty() ||
+                                profile.city == null ||
+                                        profile.city.isEmpty() ||
                                         CacheProfile.needCityConfirmation(context)
                         )
                         && !CacheProfile.wasCityAsked
         );
     }
 
-    public static void incrementPhotoPosition(int diff, boolean needBroadcast) {
+    public static void incrementPhotoPosition(Context context, int diff, boolean needBroadcast) {
+        Profile profile = App.from(context).getProfile();
         if (profile.photo != null) {
             profile.photo.position += diff;
             if (needBroadcast) {
@@ -328,15 +296,12 @@ public class CacheProfile {
         }
     }
 
-    public static void incrementPhotoPosition(int diff) {
-        incrementPhotoPosition(diff, true);
+    public static void incrementPhotoPosition(Context context, int diff) {
+        incrementPhotoPosition(context, diff, true);
     }
 
-    public static boolean isSetSympathiesBonus() {
-        return profile.giveNoviceLikes;
-    }
-
-    public static void completeSetNoviceSympathiesBonus() {
+    public static void completeSetNoviceSympathiesBonus(Context context) {
+        Profile profile = App.from(context).getProfile();
         profile.giveNoviceLikes = false;
     }
 

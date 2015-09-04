@@ -76,7 +76,6 @@ import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Device;
@@ -159,7 +158,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             });
         }
     };
-    private int mMaxMessageSize = getOptions().maxMessageSize;
+    private int mMaxMessageSize = App.from(getActivity()).getOptions().maxMessageSize;
     // Managers
     private RelativeLayout mLockScreen;
     private PopularUserChatController mPopularUserLockController;
@@ -940,9 +939,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     public boolean sendMessage(String text, final boolean cancelable) {
         final History messageItem = new History(text, IListLoader.ItemType.TEMP_MESSAGE);
-        final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity(), getOptions().blockUnconfirmed);
+        final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity(), App.from(getActivity()).getOptions().blockUnconfirmed);
         if (TextUtils.equals(AuthToken.getInstance().getSocialNet(), AuthToken.SN_TOPFACE)) {
-            if (!CacheProfile.getProfile().emailConfirmed) {
+            if (!App.from(getActivity()).getProfile().emailConfirmed) {
                 Toast.makeText(App.getContext(), R.string.confirm_email, Toast.LENGTH_SHORT).show();
                 ConfirmEmailDialog.newInstance().show(getActivity().getSupportFragmentManager(), CONFIRM_EMAIL_DIALOG_TAG);
                 return false;

@@ -16,16 +16,16 @@ public class BannersController {
                 return;
             }
         }
-        getFeedBannerController().injectBanner(page);
+        getFeedBannerController(page).injectBanner(page);
     }
 
     public void onDestroy() {
         if (mFeedBannersInjector != null) mFeedBannersInjector.cleanUp();
     }
 
-    public IBannerInjector getFeedBannerController() {
+    public IBannerInjector getFeedBannerController(IPageWithAds page) {
         if (mFeedBannersInjector == null) {
-            mFeedBannersInjector = new BannerInjector(new AdProvidersFactory());
+            mFeedBannersInjector = new BannerInjector(new AdProvidersFactory(), page.getActivity());
         }
         return mFeedBannersInjector;
     }

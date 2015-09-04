@@ -130,7 +130,7 @@ public class AuthorizationManager {
         }
         authToken.removeToken();
         mAppState.destroyObservable(Options.class);
-        CacheProfile.clearProfileAndOptions();
+        CacheProfile.clearProfileAndOptions(mAppState);
         App.getConfig().onLogout();
         StartActionsController.onLogout();
         SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);

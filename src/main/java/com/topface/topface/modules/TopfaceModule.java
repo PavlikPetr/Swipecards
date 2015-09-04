@@ -9,11 +9,12 @@ import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.User;
 import com.topface.topface.promo.dialogs.PromoKey71Dialog;
 import com.topface.topface.promo.dialogs.PromoKey81Dialog;
 import com.topface.topface.state.CacheDataInterface;
 import com.topface.topface.state.CountersDataProvider;
-import com.topface.topface.state.OptionsProvider;
+import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.AddToLeaderActivity;
 import com.topface.topface.ui.NavigationActivity;
@@ -70,15 +71,18 @@ import dagger.Provides;
                 PromoKey81Dialog.class,
 
                 //Other
+                TopfaceAppState.class,
                 CountersDataProvider.class,
                 AuthorizationManager.class,
-                OptionsProvider.class,
+                OptionsAndProfileProvider.class,
                 GeoLocationManager.class,
                 App.class,
                 CountersManager.class,
                 OverflowMenu.class,
                 Profile.class,
-                Options.class
+                Options.class,
+                Profile.class,
+                User.class
         }
 )
 public class TopfaceModule {
@@ -102,8 +106,21 @@ public class TopfaceModule {
                 //кэш для Options сохраняем в SessionConfig в конце парсинга опций
             }
 
+            @Override
+            public <T> T getDataFromCache(Class<T> classType) {
+                if (BalanceData.class.equals(classType)) {
+                    return (T) (CacheProfile.balanceData != null ? new BalanceData(CacheProfile.balanceData) : new BalanceData());
+                } else if (CountersData.class.equals(classType)) {
+                    return (T) (CacheProfile.countersData != null ? new CountersData(CacheProfile.countersData) : new CountersData());
+                } else if (Options.class.equals(classType)) {
+                    return (T) getOptions();
+                } else if (Profile.class.equals(classType)) {
+                    return (T) getProfile();
+                }
+                return null;
+            }
 
-            public Options getOptions() {
+            private Options getOptions() {
                 SessionConfig config = App.getSessionConfig();
                 String optionsCache = config.getOptionsData();
                 Options options = null;
@@ -122,17 +139,23 @@ public class TopfaceModule {
                 return new Options(null, false);
             }
 
-            @Override
-            public <T> T getDataFromCache(Class<T> classType) {
-                if (BalanceData.class.equals(classType)) {
-                    return (T) (CacheProfile.balanceData != null ? new BalanceData(CacheProfile.balanceData) : new BalanceData());
-                } else if (CountersData.class.equals(classType)) {
-                    return (T) (CacheProfile.countersData != null ? new CountersData(CacheProfile.countersData) : new CountersData());
-                } else if (Options.class.equals(classType)) {
-                    return (T) getOptions();
+            private Profile getProfile() {
+                SessionConfig config = App.getSessionConfig();
+                String profileCache = config.getProfileData();
+                if (!TextUtils.isEmpty(profileCache)) {
+                    //Получаем опции из кэша
+                    try {
+                        JSONObject profileJson = new JSONObject(profileCache);
+                        return new Profile(profileJson);
+                    } catch (JSONException e) {
+                        config.resetProfileData();
+                        Debug.error(e);
+                    }
                 }
-                return null;
+                CacheProfile.isLoaded.set(true);
+                return new Profile();
             }
+
         });
     }
 

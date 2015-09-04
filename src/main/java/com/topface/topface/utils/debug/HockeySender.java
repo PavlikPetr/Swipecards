@@ -4,8 +4,9 @@ import android.content.Context;
 import android.os.Build;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.data.Profile;
 
 import org.acra.ReportField;
 import org.acra.collector.CrashReportData;
@@ -59,19 +60,19 @@ public class HockeySender implements ReportSender {
 
     @Override
     public void send(Context context, CrashReportData report) throws ReportSenderException {
-        send(report);
+        send(report, context);
     }
 
     @SuppressWarnings("deprecation")
-    public void send(CrashReportData report) {
-        send(report, HockeySettings.APP_ID);
+    public void send(CrashReportData report, Context context) {
+        send(report, HockeySettings.APP_ID, context);
     }
 
     public void sendDebug(CrashReportData report) {
-        send(report, HockeySettings.DEBUG_APP_ID);
+        send(report, HockeySettings.DEBUG_APP_ID, App.getContext());
     }
 
-    public void send(CrashReportData report, String formUri) {
+    public void send(CrashReportData report, String formUri, Context context) {
         String log = createCrashLog(report);
         Debug.log("HockeyAppSender", log);
         String url = BASE_URL + formUri + CRASHES_PATH;
@@ -81,8 +82,9 @@ public class HockeySender implements ReportSender {
             List<NameValuePair> parameters = new ArrayList<>();
             parameters.add(new BasicNameValuePair("raw", log));
             String uid;
-            if (CacheProfile.getProfile().uid > 0) {
-                uid = Integer.toString(CacheProfile.getProfile().uid);
+            Profile profile = App.from(context).getProfile();
+            if (profile.uid > 0) {
+                uid = Integer.toString(profile.uid);
             } else {
                 uid = report.get(ReportField.INSTALLATION_ID);
             }

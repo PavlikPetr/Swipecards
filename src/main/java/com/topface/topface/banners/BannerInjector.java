@@ -1,13 +1,12 @@
 package com.topface.topface.banners;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.topface.topface.App;
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.banners.ad_providers.IAdsProvider;
-import com.topface.topface.data.Options;
-import com.topface.topface.state.OptionsProvider;
-import com.topface.topface.utils.CacheProfile;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -23,15 +22,15 @@ import java.util.Map;
  * When page with banner is destroyed call {@link #cleanUp()} to remove banner and clean container
  * (for example, in onDestroy method of Activity or Fragment)
  */
-class BannerInjector implements IBannerInjector, OptionsProvider.IOptionsUpdater {
+class BannerInjector implements IBannerInjector {
 
     private final AdProvidersFactory mProvidersFactory;
     private final List<WeakReference<IPageWithAds>> mUsedPages = new ArrayList<>();
-    private Options mOptions;
-    private OptionsProvider mOptionsProvider = new OptionsProvider(this);
+    private Context mContext;
 
-    public BannerInjector(AdProvidersFactory providersFactory) {
+    public BannerInjector(AdProvidersFactory providersFactory, Context context) {
         mProvidersFactory = providersFactory;
+        mContext = context;
     }
 
     @Override
@@ -44,12 +43,12 @@ class BannerInjector implements IBannerInjector, OptionsProvider.IOptionsUpdater
     }
 
     private boolean canInject(IPageWithAds page) {
-        if (!CacheProfile.getProfile().showAd || page == null) {
+        if (!App.from(mContext).getProfile().showAd || page == null) {
             return false;
         }
         PageInfo.PageName pageId = page.getPageName();
         String pageName = pageId.getName();
-        Map<String, PageInfo> pagesInfo = getOptions().getPagesInfo();
+        Map<String, PageInfo> pagesInfo = App.from(mContext).getOptions().getPagesInfo();
         if (pagesInfo.containsKey(pageName)) {
             String floatType = pagesInfo.get(pageName).floatType;
             if (floatType.equals(PageInfo.FLOAT_TYPE_BANNER)) {
@@ -87,15 +86,15 @@ class BannerInjector implements IBannerInjector, OptionsProvider.IOptionsUpdater
     }
 
     private void injectGag(IPageWithAds page) {
-        showAd(page, getProvider(getOptions().fallbackTypeBanner), true);
+        showAd(page, getProvider(App.from(mContext).getOptions().fallbackTypeBanner), true);
     }
 
     private IAdsProvider getProvider(String banner) {
-        return mProvidersFactory != null ? mProvidersFactory.createProvider(banner, getOptions()) : null;
+        return mProvidersFactory != null ? mProvidersFactory.createProvider(banner, App.from(mContext).getOptions()) : null;
     }
 
     private String lookupBannerFor(IPageWithAds page) {
-        Map<String, PageInfo> pagesInfo = getOptions() != null ? getOptions().getPagesInfo() : null;
+        Map<String, PageInfo> pagesInfo = App.from(mContext).getOptions() != null ? App.from(mContext).getOptions().getPagesInfo() : null;
         String pageName = page.getPageName().getName();
         if (pagesInfo != null && pagesInfo.containsKey(pageName)) {
             PageInfo pageInfo = pagesInfo.get(pageName);
@@ -113,7 +112,6 @@ class BannerInjector implements IBannerInjector, OptionsProvider.IOptionsUpdater
                 cleanUp(pageWithAds);
             }
         }
-        mOptionsProvider.unsubscribe();
     }
 
     private void cleanUp(IPageWithAds page) {
@@ -136,15 +134,5 @@ class BannerInjector implements IBannerInjector, OptionsProvider.IOptionsUpdater
                 ((ViewGroup) view).removeAllViews();
             }
         }
-    }
-
-    @Override
-    public void onOptionsUpdate(Options options) {
-        mOptions = options;
-    }
-
-    @Override
-    public Options getOptions() {
-        return mOptions;
     }
 }

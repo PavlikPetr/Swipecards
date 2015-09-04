@@ -11,8 +11,10 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -198,7 +200,8 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     @Override
     public void onSendGift(final Gift item) {
         EasyTracker.sendEvent("Gifts", "Send", "GiftId=" + item.id, (long) item.price);
-        final SendGiftRequest sendGiftRequest = new SendGiftRequest(this, getOptions().blockUnconfirmed);
+        final Options options = App.from(this).getOptions();
+        final SendGiftRequest sendGiftRequest = new SendGiftRequest(this, options.blockUnconfirmed);
         sendGiftRequest.giftId = item.id;
         sendGiftRequest.userId = mUserIdToSendGift;
         registerRequest(sendGiftRequest);
@@ -227,7 +230,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 setSupportProgressBarIndeterminateVisibility(false);
                 if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
                     startActivity(PurchasesActivity.createBuyingIntent("Gifts"
-                            , PurchasesFragment.TYPE_GIFT, item.price, getOptions().topfaceOfferwallRedirect));
+                            , PurchasesFragment.TYPE_GIFT, item.price, options.topfaceOfferwallRedirect));
                 } else {
                     Utils.showErrorMessage();
                 }

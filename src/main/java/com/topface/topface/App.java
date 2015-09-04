@@ -51,6 +51,8 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.transport.HttpApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
+import com.topface.topface.state.IStateDataUpdater;
+import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.ui.ApplicationBase;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
@@ -79,7 +81,7 @@ import java.util.Locale;
 import dagger.ObjectGraph;
 
 @ReportsCrashes(formUri = "817b00ae731c4a663272b4c4e53e4b61")
-public class App extends ApplicationBase {
+public class App extends ApplicationBase implements IStateDataUpdater {
 
     public static final String TAG = "Topface";
     public static final String CONNECTIVITY_CHANGE_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
@@ -186,7 +188,7 @@ public class App extends ApplicationBase {
                     protected void success(Options data, IApiResponse response) {
                         LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Options.OPTIONS_RECEIVED_ACTION));
                         mUserOptionsObtainedFromServer = true;
-                        NativeAdManager.init(data);
+                        NativeAdManager.init(data, getContext());
                     }
 
                     @Override
@@ -341,6 +343,7 @@ public class App extends ApplicationBase {
         LeakCanary.install(this);
         mContext = getApplicationContext();
         initObjectGraphForInjections();
+        mProvider = new OptionsAndProfileProvider(this);
         //Включаем отладку, если это дебаг версия
         enableDebugLogs();
         //Включаем логирование ошибок
@@ -415,10 +418,9 @@ public class App extends ApplicationBase {
         Debug.log("App", "+onCreateAsync");
         DateUtils.syncTime();
         Ssid.load();
-        CacheProfile.loadProfile();
         //Оповещаем о том, что профиль загрузился
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
-        if (!GcmIntentService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty()) {
+        if (!GcmIntentService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty(getContext())) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -580,5 +582,30 @@ public class App extends ApplicationBase {
             return HttpApiTransport.TRANSPORT_NAME;
         }
     }
+
+    private Profile mProfile;
+    private Options mOptions;
+    private OptionsAndProfileProvider mProvider;
+
+    @Override
+    public void onOptionsUpdate(Options options) {
+        mOptions = options;
+    }
+
+    @Override
+    public Options getOptions() {
+        return mOptions;
+    }
+
+    @Override
+    public void onProfileUpdate(Profile profile) {
+        mProfile = profile;
+    }
+
+    @Override
+    public Profile getProfile() {
+        return mProfile;
+    }
+
 }
 

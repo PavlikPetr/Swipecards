@@ -8,8 +8,6 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.topface.framework.utils.Debug;
-import com.topface.topface.data.Options;
-import com.topface.topface.state.OptionsProvider;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.gcmutils.GcmBroadcastReceiver;
@@ -19,11 +17,9 @@ import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class GcmIntentService extends IntentService implements OptionsProvider.IOptionsUpdater {
+public class GcmIntentService extends IntentService {
     public static final String SENDER_ID = "932206034265";
     public static AtomicBoolean isOnMessageReceived = new AtomicBoolean(false);
-    private OptionsProvider mOptionsProvider = new OptionsProvider(this);
-    private Options mOptions;
 
     public GcmIntentService() {
         super(SENDER_ID);
@@ -75,7 +71,7 @@ public class GcmIntentService extends IntentService implements OptionsProvider.I
                 }
             }
             // try to show notification
-            GCMUtils.showNotificationIfNeed(intent, context, getOptions().updateUrl);
+            GCMUtils.showNotificationIfNeed(intent, context, App.from(context).getOptions().updateUrl);
         }
     }
 
@@ -95,7 +91,6 @@ public class GcmIntentService extends IntentService implements OptionsProvider.I
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mOptionsProvider.unsubscribe();
     }
 
     @Override
@@ -114,15 +109,5 @@ public class GcmIntentService extends IntentService implements OptionsProvider.I
             }
         }
         GcmBroadcastReceiver.completeWakefulIntent(intent);
-    }
-
-    @Override
-    public void onOptionsUpdate(Options options) {
-        mOptions = options;
-    }
-
-    @Override
-    public Options getOptions() {
-        return mOptions;
     }
 }

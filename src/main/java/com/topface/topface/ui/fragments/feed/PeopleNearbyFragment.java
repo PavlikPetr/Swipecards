@@ -198,7 +198,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
         if (mEmptyFeedView == null) mEmptyFeedView = inflated;
-        Options.BlockPeopleNearby blockPeopleNearby = getOptions().blockPeople;
+        Options.BlockPeopleNearby blockPeopleNearby = App.from(getActivity()).getOptions().blockPeople;
         if (errorCode == ErrorCodes.BLOCKED_PEOPLE_NEARBY) {
             initEmptyScreenOnBlocked(inflated, blockPeopleNearby);
         } else {
@@ -227,7 +227,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     private void initBuyVipButton(View emptyView, final Options.BlockPeopleNearby blockPeopleNearby) {
         final Button buyButton = (Button) emptyView.findViewById(R.id.buy_vip_button);
         TextView buyText = (TextView) emptyView.findViewById(R.id.buy_vip_text);
-        if (getOptions().unlockAllForPremium) {
+        if (App.from(getActivity()).getOptions().unlockAllForPremium) {
             initButtonForBlockedScreen(
                     buyText, blockPeopleNearby.textPremium,
                     buyButton, blockPeopleNearby.buttonTextPremium,
@@ -294,7 +294,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     private void openBuyScreenOnBlockedGeo(Options.BlockPeopleNearby blockPeopleNearby) {
         startActivity(
                 PurchasesActivity.createBuyingIntent("PeoplePaidNearby"
-                        , PurchasesFragment.TYPE_PEOPLE_NEARBY, blockPeopleNearby.price, getOptions().topfaceOfferwallRedirect)
+                        , PurchasesFragment.TYPE_PEOPLE_NEARBY, blockPeopleNearby.price, App.from(getActivity()).getOptions().topfaceOfferwallRedirect)
         );
     }
 

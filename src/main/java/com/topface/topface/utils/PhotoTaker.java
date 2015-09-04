@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -34,16 +35,17 @@ public class PhotoTaker implements IPhotoTakerWithDialog {
 
     @Override
     public void onTakePhotoDialogSentSuccess(final Photo photo) {
-        if (CacheProfile.getProfile().photos != null) {
-            CacheProfile.getProfile().photos.add(photo);
-            CacheProfile.getProfile().photosCount += 1;
+        final Profile profile = App.from(mActivity).getProfile();
+        if (profile.photos != null) {
+            profile.photos.add(photo);
+            profile.photosCount += 1;
         }
         PhotoMainRequest request = new PhotoMainRequest(mActivity);
         request.photoId = photo.getId();
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                CacheProfile.getProfile().photo = photo;
+                profile.photo = photo;
                 App.sendProfileRequest();
                 Utils.showToastNotification(R.string.photo_add_or, Toast.LENGTH_SHORT);
             }
@@ -51,8 +53,8 @@ public class PhotoTaker implements IPhotoTakerWithDialog {
             @Override
             public void fail(int codeError, IApiResponse response) {
                 if (codeError == ErrorCodes.NON_EXIST_PHOTO_ERROR) {
-                    if (CacheProfile.getProfile().photos != null && CacheProfile.getProfile().photos.contains(photo)) {
-                        CacheProfile.getProfile().photos.remove(photo);
+                    if (profile.photos != null && profile.photos.contains(photo)) {
+                        profile.photos.remove(photo);
                     }
                     Utils.showToastNotification(App.getContext().getString(R.string.general_wrong_photo_upload), Toast.LENGTH_LONG);
                 }

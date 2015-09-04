@@ -134,7 +134,7 @@ public class IFreePurchases extends BaseFragment implements LibraryInitListener 
     private String getMetaInfo(String place) {
         JSONObject metaData = new JSONObject();
         try {
-            metaData.put("uid", CacheProfile.getProfile().uid);
+            metaData.put("uid", App.from(getActivity()).getProfile().uid);
             metaData.put("place", place);
         } catch (JSONException e) {
             e.printStackTrace();

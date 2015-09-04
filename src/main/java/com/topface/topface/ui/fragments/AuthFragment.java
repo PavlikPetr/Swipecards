@@ -272,7 +272,7 @@ public class AuthFragment extends BaseAuthFragment {
         Activity activity = getActivity();
         if (isAdded() && activity instanceof BaseFragmentActivity) {
             ((BaseFragmentActivity) activity).close(this, true);
-            MenuFragment.selectFragment(getOptions().startPageFragmentId);
+            MenuFragment.selectFragment(App.from(getActivity()).getOptions().startPageFragmentId);
         }
     }
 

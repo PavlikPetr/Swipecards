@@ -16,6 +16,7 @@ import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.requests.RegistrationTokenRequest;
@@ -259,7 +260,8 @@ public class GCMUtils {
                     new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD));
             return false;
         }
-        String uid = Integer.toString(CacheProfile.getProfile().uid);
+        Profile profile = App.from(context).getProfile();
+        String uid = Integer.toString(profile.uid);
         String targetUserId = extra.getStringExtra("receiver");
         targetUserId = targetUserId != null ? targetUserId : uid;
 
@@ -267,13 +269,13 @@ public class GCMUtils {
         //другому пользователю. Такое может произойти, если не было нормального разлогина,
         //например если удалить приложения будучи залогиненым
         if (!TextUtils.equals(targetUserId, uid)) {
-            Debug.error("GCM: target id # " + targetUserId + " dont equal current user id " + CacheProfile.getProfile().uid);
+            Debug.error("GCM: target id # " + targetUserId + " dont equal current user id " + profile.uid);
             return false;
         }
 
         final String data = extra.getStringExtra("text");
         if (data != null) {
-            loadNotificationSettings();
+            loadNotificationSettings(context);
             setCounters(extra, context);
             int type = getType(extra);
             final User user = getUser(extra);
@@ -372,13 +374,14 @@ public class GCMUtils {
         return user;
     }
 
-    private static void loadNotificationSettings() {
-        if (CacheProfile.getProfile().notifications != null) {
-            if (CacheProfile.getProfile().notifications.size() > 0) {
-                showMessage = CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
-                showLikes = CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
-                showSympathy = CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
-                showVisitors = CacheProfile.getProfile().notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
+    private static void loadNotificationSettings(Context context) {
+        Profile profile = App.from(context).getProfile();
+        if (profile.notifications != null) {
+            if (profile.notifications.size() > 0) {
+                showMessage = profile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
+                showLikes = profile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
+                showSympathy = profile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
+                showVisitors = profile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
             }
         }
     }

@@ -30,7 +30,6 @@ import com.topface.topface.requests.PurchaseRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
@@ -355,7 +354,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
 
     protected String getDeveloperPayload(String productId) {
         DeveloperPayload payload = new DeveloperPayload(
-                CacheProfile.getProfile().uid,
+                App.from(getActivity()).getProfile().uid,
                 productId,
                 getSourceValue()
         );
@@ -364,7 +363,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
 
     @SuppressWarnings("unused")
     protected void editSubscriptions() {
-        Utils.goToMarket(getActivity(), getOptions().updateUrl);
+        Utils.goToMarket(getActivity(), App.from(getActivity()).getOptions().updateUrl);
     }
 
     protected void onError(String message) {
@@ -500,7 +499,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     }
 
     private boolean isNeedSendPurchasesStatistics() {
-        return !CacheProfile.getProfile().isEditor() && !BuildConfig.DEBUG;
+        return !App.from(getActivity()).getProfile().isEditor() && !BuildConfig.DEBUG;
     }
 
     private boolean consumeTestPurchase(Purchase purchase, PurchaseRequest validateRequest) {

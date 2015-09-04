@@ -1,5 +1,6 @@
 package com.topface.billing;
 
+import com.topface.topface.App;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 
@@ -22,7 +23,7 @@ public abstract class AbstractBillingFragment extends BaseFragment {
      * Доступны ли тестовые платежи
      */
     public boolean isTestPurchasesAvailable() {
-        return mIsTestPurchasesAvailable || (!CacheProfile.isEmpty() && CacheProfile.getProfile().isEditor());
+        return mIsTestPurchasesAvailable || (!CacheProfile.isEmpty(getActivity()) && App.from(getActivity()).getProfile().isEditor());
     }
 
     /**

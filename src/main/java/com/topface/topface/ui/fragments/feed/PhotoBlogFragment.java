@@ -29,7 +29,6 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.PhotoBlogListAdapter;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
@@ -122,7 +121,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
                                     Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                                 }
                             }
-                        }, getOptions().blockUnconfirmed
+                        }, App.from(getActivity()).getOptions().blockUnconfirmed
                 );
             }
         });
@@ -159,7 +158,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     }
 
     private boolean isNotYourOwnId(int id) {
-        return CacheProfile.getProfile().uid != id;
+        return App.from(getActivity()).getProfile().uid != id;
     }
 
     private void openOwnProfile() {

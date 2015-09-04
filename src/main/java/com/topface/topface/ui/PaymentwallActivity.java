@@ -125,7 +125,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     private String getWidgetUrl() {
         String url = getIntent().getStringExtra(PW_URL);
         if (url == null) {
-            url = getOptions().getPaymentwallLink();
+            url = App.from(this).getOptions().getPaymentwallLink();
         }
         return url;
     }

@@ -12,10 +12,11 @@ import com.topface.framework.utils.Debug;
 import com.topface.offerwall.common.OfferwallPayload;
 import com.topface.offerwall.common.TFCredentials;
 import com.topface.offerwall.publisher.TFOfferwallSDK;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.offerwalls.supersonicads.SupersonicWallActivity;
 
@@ -71,7 +72,7 @@ public class OfferwallsManager {
     public static void startOfferwall(Activity activity, String offerwall, Options options) {
         offerwall = offerwall == null ? "" : offerwall;
 
-        if (CacheProfile.getProfile().uid <= 0) {
+        if (App.from(activity).getProfile().uid <= 0) {
             Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
             return;
         }
@@ -130,7 +131,7 @@ public class OfferwallsManager {
         try {
             SponsorPay.start(
                     SPONSORPAY_APP_ID,
-                    Integer.toString(CacheProfile.getProfile().uid),
+                    Integer.toString(App.from(activity).getProfile().uid),
                     SPONSORPAY_SECURITY_TOKEN,
                     activity
             );
@@ -145,7 +146,7 @@ public class OfferwallsManager {
             activity.startActivityForResult(offerWallIntent, SPONSORPAY_OFFERWALL_REQUEST_CODE);
         } catch (Exception e) {
             Debug.error(e);
-            if (activity != null && CacheProfile.getProfile().uid > 0) {
+            if (activity != null && App.from(activity).getProfile().uid > 0) {
                 initSponsorpay(activity);
                 Intent offerWallIntent = SponsorPayPublisher.getIntentForOfferWallActivity(activity, true);
                 activity.startActivityForResult(offerWallIntent, SPONSORPAY_OFFERWALL_REQUEST_CODE);
@@ -154,8 +155,9 @@ public class OfferwallsManager {
     }
 
     public static void initTfOfferwall(Context context, TFCredentials.OnInitializeListener listener) {
-        TFOfferwallSDK.initialize(context, Integer.toString(CacheProfile.getProfile().uid), "53edb54b0fdc7", listener);
-        TFOfferwallSDK.setTarget(new TFOfferwallSDK.Target().setAge(CacheProfile.getProfile().age).setSex(CacheProfile.getProfile().sex));
+        Profile profile = App.from(context).getProfile();
+        TFOfferwallSDK.initialize(context, Integer.toString(profile.uid), "53edb54b0fdc7", listener);
+        TFOfferwallSDK.setTarget(new TFOfferwallSDK.Target().setAge(profile.age).setSex(profile.sex));
     }
 
     public static void startTfOfferwall(Context context) {

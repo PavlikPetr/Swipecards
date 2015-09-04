@@ -4,12 +4,13 @@ import android.text.TextUtils;
 
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedUser;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.loadcontollers.DatingLoadController;
 
 import org.json.JSONArray;
@@ -340,7 +341,8 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
     }
 
     public boolean updateSignature() {
-        return useSignature && setSignature(CacheProfile.getProfile().dating != null ? CacheProfile.getProfile().dating.getFilterSignature() : "");
+        Profile profile = App.from(App.getContext()).getProfile();
+        return useSignature && setSignature(profile.dating != null ? profile.dating.getFilterSignature() : "");
     }
 
     public void updateSignatureAndUpdate() {

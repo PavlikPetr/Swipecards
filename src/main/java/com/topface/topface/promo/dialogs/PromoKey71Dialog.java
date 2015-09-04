@@ -37,7 +37,7 @@ public class PromoKey71Dialog extends PromoDialog {
 
     @Override
     public Options.PromoPopupEntity getPremiumEntity() {
-        return getOptions().premiumVisitors;
+        return App.from(App.getContext()).getOptions().premiumVisitors;
     }
 
     @Override

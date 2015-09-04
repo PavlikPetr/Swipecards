@@ -45,7 +45,8 @@ public class InvitePopupAction extends LinkedStartAction {
 
     @Override
     public boolean isApplicable() {
-        return InvitesPopup.isApplicable(mActivity.get().getOptions().popup_timeout) && getContactsCount() >= mActivity.get().getOptions().contacts_count;
+        return InvitesPopup.isApplicable(App.from(mActivity.get()).getOptions().popup_timeout, mActivity.get())
+                && getContactsCount() >= App.from(mActivity.get()).getOptions().contacts_count;
     }
 
     @Override

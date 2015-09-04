@@ -35,7 +35,7 @@ public class PopupManager {
 
             @Override
             public boolean isApplicable() {
-                return isOldVersion(mActivity.getOptions().maxVersion);
+                return isOldVersion(App.from(mActivity).getOptions().maxVersion);
             }
 
             @Override
@@ -97,7 +97,7 @@ public class PopupManager {
             @Override
             public boolean isApplicable() {
                 return App.isOnline() && RateAppDialog.isApplicable(ratePopupTimeout, ratePopupEnabled) &&
-                        !isOldVersion(mActivity.getOptions().maxVersion);
+                        !isOldVersion(App.from(mActivity).getOptions().maxVersion);
             }
 
             @Override

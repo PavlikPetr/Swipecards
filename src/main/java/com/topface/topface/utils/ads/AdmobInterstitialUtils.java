@@ -9,7 +9,6 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.config.UserConfig;
 
 import java.util.ArrayList;
@@ -81,7 +80,7 @@ public class AdmobInterstitialUtils {
         // Создание запроса объявления.
         AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
         adRequestBuilder.setGender(
-                CacheProfile.getProfile().sex == Static.BOY ?
+                App.from(activity).getProfile().sex == Static.BOY ?
                         AdRequest.GENDER_MALE :
                         AdRequest.GENDER_FEMALE
         );

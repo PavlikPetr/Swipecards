@@ -8,6 +8,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
@@ -18,7 +19,6 @@ import com.topface.topface.ui.RestoreAccountActivity;
 import com.topface.topface.ui.SslErrorActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.ui.fragments.BanFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.json.JSONObject;
@@ -169,6 +169,7 @@ public class ConnectionManager {
 
     private boolean processResponse(final IApiRequest apiRequest, final IApiResponse apiResponse) {
         boolean needResend = false;
+        final Profile profile = App.from(App.getContext()).getProfile();
         //Некоторые ошибки обрабатываем дополнительно, не возвращая в клиентский код
         if (apiResponse.isCodeEqual(ErrorCodes.BAN)) {
             //Если в результате получили ответ, что забанен, прекращаем обработку, сообщаем об этом
@@ -187,7 +188,7 @@ public class ConnectionManager {
         } else if (isNeedResend(apiResponse)) {
             //Переотправляем запрос, если это возможно
             needResend = resendRequest(apiRequest, apiResponse);
-        } else if (apiResponse.isCodeEqual(ErrorCodes.PREMIUM_ACCESS_ONLY) && CacheProfile.getProfile().premium) {
+        } else if (apiResponse.isCodeEqual(ErrorCodes.PREMIUM_ACCESS_ONLY) && profile.premium) {
             // Перезапрашиваем профиль и настройки, т.к. локальный флаг преимиума устарел
             apiRequest.getHandler().post(new Runnable() {
                 @Override
@@ -198,7 +199,7 @@ public class ConnectionManager {
                             // мы были локально премиум и получили ошибку PREMIUM_ACCESS_ONLY при перезапросе
                             // возвращается что мы премиум, следовательно, прокидываем ошибку чтобы не
                             // перепосылать запрос и не зацикливаться
-                            if (CacheProfile.getProfile().premium) {
+                            if (profile.premium) {
                                 apiRequest.sendHandlerMessage(apiResponse);
                             } else {
                                 resendRequest(apiRequest, apiResponse);

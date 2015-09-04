@@ -1,5 +1,6 @@
 package com.topface.topface.ui.analytics;
 
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 
 import com.comscore.analytics.comScore;
@@ -10,12 +11,11 @@ import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
 import com.topface.topface.data.ExperimentTags;
 import com.topface.topface.data.Options;
-import com.topface.topface.ui.StateTaransportFragmentActivity;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.data.Profile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.social.AuthToken;
 
-public class TrackedFragmentActivity extends StateTaransportFragmentActivity {
+public class TrackedFragmentActivity extends ActionBarActivity {
 
     @Override
     public void onStart() {
@@ -24,7 +24,7 @@ public class TrackedFragmentActivity extends StateTaransportFragmentActivity {
         if (isTrackable()) {
             Tracker tracker = EasyTracker.getTracker();
             tracker.setScreenName(getTrackName());
-            tracker.send(setCustomMeticsAndDimensions(getOptions()).build());
+            tracker.send(setCustomMeticsAndDimensions(App.from(this).getOptions(), App.from(this).getProfile()).build());
         }
     }
 
@@ -35,16 +35,16 @@ public class TrackedFragmentActivity extends StateTaransportFragmentActivity {
         comScore.onEnterForeground();
     }
 
-    public static HitBuilders.AppViewBuilder setCustomMeticsAndDimensions(Options options) {
+    public static HitBuilders.AppViewBuilder setCustomMeticsAndDimensions(Options options, Profile profile) {
         //Дополнительные параметры для статистики
         HitBuilders.AppViewBuilder builder = new HitBuilders.AppViewBuilder();
         String socialNet = AuthToken.getInstance().getSocialNet();
         builder.setCustomDimension(1, TextUtils.isEmpty(socialNet) ? "Unauthorized" : socialNet);
-        builder.setCustomDimension(2, CacheProfile.getProfile().sex == 0 ? "Female" : "Male");
-        builder.setCustomDimension(3, CacheProfile.getProfile().paid ? "Yes" : "No");
-        builder.setCustomDimension(4, CacheProfile.getProfile().emailConfirmed ? "Yes" : "No");
-        builder.setCustomDimension(5, CacheProfile.getProfile().premium ? "Yes" : "No");
-        builder.setCustomDimension(6, Integer.toString(CacheProfile.getProfile().age));
+        builder.setCustomDimension(2, profile.sex == 0 ? "Female" : "Male");
+        builder.setCustomDimension(3, profile.paid ? "Yes" : "No");
+        builder.setCustomDimension(4, profile.emailConfirmed ? "Yes" : "No");
+        builder.setCustomDimension(5, profile.premium ? "Yes" : "No");
+        builder.setCustomDimension(6, Integer.toString(profile.age));
         builder.set(EasyTracker.SESSION_CONTROL, "start");
         /**
          * Абстрактное поле для подсчета статистики экспериментов

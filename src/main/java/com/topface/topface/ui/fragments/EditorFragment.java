@@ -23,6 +23,8 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiResponse;
@@ -31,7 +33,6 @@ import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.ui.EditorBannersActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
@@ -114,7 +115,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         testNetworkSwitcherView.setOnClickListener(this);
         switcherTestNetwork = new EditSwitcher(testNetworkSwitcherView);
 
-        standard_timeout = getOptions().popup_timeout;
+        standard_timeout = App.from(getActivity()).getOptions().popup_timeout;
 
         initNavigationBar();
         initApiUrl(root);
@@ -186,7 +187,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (mConfigInited) {
-                    getOptions().offerwall = OfferwallsManager.OFFERWALLS[position];
+                    App.from(getActivity()).getOptions().offerwall = OfferwallsManager.OFFERWALLS[position];
                 }
             }
 
@@ -262,16 +263,17 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void initUserInfo(View rootLayout) {
-        setInfoText(rootLayout, R.id.EditorInfoName, CacheProfile.getProfile().firstName);
+        Profile profile = App.from(getActivity()).getProfile();
+        setInfoText(rootLayout, R.id.EditorInfoName, profile.firstName);
         setInfoText(rootLayout, R.id.EditorInfoEditorStatus,
-                CacheProfile.getProfile().isEditor() ?
+                profile.isEditor() ?
                         getString(R.string.general_yes) :
                         getString(R.string.general_no)
         );
         setInfoText(rootLayout, R.id.EditorInfoSsid, Ssid.get());
         AuthToken authToken = AuthToken.getInstance();
         setInfoText(rootLayout, R.id.EditorInfoToken, authToken.getTokenKey());
-        setInfoText(rootLayout, R.id.EditorInfoId, Integer.toString(CacheProfile.getProfile().uid));
+        setInfoText(rootLayout, R.id.EditorInfoId, Integer.toString(profile.uid));
         setInfoText(
                 rootLayout,
                 R.id.EditorInfoSocialNetwork,
@@ -358,6 +360,8 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+        Profile profile = App.from(getActivity()).getProfile();
+        Options options = App.from(getActivity()).getOptions();
         switch (v.getId()) {
             case R.id.ReconnectWebSocket:
                 ScruffyRequestManager.getInstance().connect(new ScruffyRequestManager.ConnectedListener() {
@@ -396,12 +400,12 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.loPopupSwitcher:
                 switcher.doSwitch();
-                if (CacheProfile.getProfile().canInvite) {
-                    getOptions().popup_timeout = standard_timeout;
+                if (profile.canInvite) {
+                    options.popup_timeout = standard_timeout;
                 } else {
-                    getOptions().popup_timeout = 1;
+                    options.popup_timeout = 1;
                 }
-                CacheProfile.getProfile().canInvite = switcher.isChecked();
+                profile.canInvite = switcher.isChecked();
 
                 break;
             case R.id.loTestNetworkSwitcher:
@@ -431,7 +435,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 }
                 break;
             case R.id.EditorClearAirMessages:
-                getOptions().premiumMessages.clearPopupShowTime();
+                options.premiumMessages.clearPopupShowTime();
                 break;
             case R.id.EditorSendGCMToken:
                 new GCMUtils(getActivity()).registerGCM("");
@@ -473,8 +477,8 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         mEditorModeSpinner.setSelection(mAppConfig.getEditorMode());
         mDebugModeSpinner.setSelection(mAppConfig.getDebugMode());
         switcherTestNetwork.setChecked(mAppConfig.getTestNetwork());
-        switcher.setChecked(CacheProfile.getProfile().canInvite);
-        mOfferwallTypeChoose.setSelection(getOfferwallIndexInArray(getOptions().offerwall));
+        switcher.setChecked(App.from(getActivity()).getProfile().canInvite);
+        mOfferwallTypeChoose.setSelection(getOfferwallIndexInArray(App.from(getActivity()).getOptions().offerwall));
     }
 
     @Override

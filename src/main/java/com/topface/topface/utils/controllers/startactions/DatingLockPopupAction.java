@@ -45,7 +45,7 @@ public class DatingLockPopupAction extends DailyPopupAction {
 
     @Override
     public boolean isApplicable() {
-        Options options = mActivity.get().getOptions();
+        Options options = App.from(mActivity.get()).getOptions();
         return options.notShown.enabledDatingLockPopup
                 && isTimeoutEnded(options.notShown.datingLockPopupTimeout,
                 getUserConfig().getDatingLockPopupRedirect());

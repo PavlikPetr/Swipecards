@@ -11,10 +11,10 @@ import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserSetLocaleRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.state.OptionsProvider;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
@@ -50,13 +50,13 @@ public class LocaleConfig {
         return resources.getString(R.string.app_locale);
     }
 
-    public static void changeLocale(final Activity activity, String selectedLocale, final OptionsProvider.IOptionsUpdater updater) {
+    public static void changeLocale(final Activity activity, String selectedLocale) {
         localeChangeInitiated = true;
         final ProgressDialog progress = new ProgressDialog(activity);
         progress.setTitle(R.string.locale_changing);
         progress.setMessage(activity.getResources().getString(R.string.general_dialog_loading));
         progress.show();
-
+        final Options options = App.from(activity).getOptions();
         LocaleConfig.updateConfiguration(activity.getBaseContext());
         //save application locale to preferences
         App.getLocaleConfig().setApplicationLocale(selectedLocale);
@@ -69,7 +69,7 @@ public class LocaleConfig {
                 @Override
                 public void success(IApiResponse response) {
                     App.sendUserOptionsAndPurchasesRequest();
-                    NavigationActivity.restartNavigationActivity(activity, updater.getOptions());
+                    NavigationActivity.restartNavigationActivity(activity, options);
                 }
 
                 @Override
@@ -85,7 +85,7 @@ public class LocaleConfig {
             }).exec();
         } else {
             progress.dismiss();
-            NavigationActivity.restartNavigationActivity(activity, updater.getOptions());
+            NavigationActivity.restartNavigationActivity(activity, options);
         }
     }
 

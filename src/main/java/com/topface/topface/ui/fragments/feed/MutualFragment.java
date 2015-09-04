@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments.feed;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedMutual;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -62,7 +63,7 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
         inflated.findViewById(R.id.btnRefill).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(PurchasesActivity.createBuyingIntent("EmptyMutual", getOptions().topfaceOfferwallRedirect));
+                startActivity(PurchasesActivity.createBuyingIntent("EmptyMutual", App.from(getActivity()).getOptions().topfaceOfferwallRedirect));
             }
         });
     }

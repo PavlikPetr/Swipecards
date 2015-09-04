@@ -219,7 +219,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     }
 
     protected boolean isLoggedIn() {
-        return !CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty();
+        return !CacheProfile.isEmpty(this) && !AuthToken.getInstance().isEmpty();
     }
 
     private void registerLoadProfileReceiver() {
@@ -228,7 +228,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     //Уведомлять о загрузке профиля следует только если мы авторизованы
-                    if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
+                    if (!CacheProfile.isEmpty(context) && !AuthToken.getInstance().isEmpty()) {
                         checkProfileLoad();
                     }
                 }
@@ -242,7 +242,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
 
     protected void onLoadProfile() {
         Debug.log("onLoadProfile in " + ((Object) this).getClass().getSimpleName());
-        if (CacheProfile.isEmpty() || AuthToken.getInstance().isEmpty()) {
+        if (CacheProfile.isEmpty(this) || AuthToken.getInstance().isEmpty()) {
             startAuth();
         } else {
             mStartActionsController.onProcessAction();

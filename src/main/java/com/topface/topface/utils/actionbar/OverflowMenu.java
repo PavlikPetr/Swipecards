@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BalanceData;
-import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BlackListAddRequest;
@@ -28,14 +27,12 @@ import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
-import com.topface.topface.state.OptionsProvider;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.EditorProfileActionsActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
 
@@ -59,7 +56,7 @@ import static com.topface.topface.utils.actionbar.OverflowMenu.OverflowMenuItem.
  * you need to call OverflowMenu.onDestroy inside onDestroy method your native class for unregister
  * broadcast receiver and remove interface OverflowMenuUser
  */
-public class OverflowMenu implements OptionsProvider.IOptionsUpdater {
+public class OverflowMenu {
 
     @Inject
     TopfaceAppState mAppState;
@@ -106,19 +103,6 @@ public class OverflowMenu implements OptionsProvider.IOptionsUpdater {
             }
         }
     };
-    private Options mOptions;
-    private OptionsProvider mOptionsProvider = new OptionsProvider(this);
-
-    @Override
-    public void onOptionsUpdate(Options options) {
-        mOptions = options;
-    }
-
-    @Override
-    public Options getOptions() {
-        return mOptions;
-    }
-
 
     public OverflowMenu(Activity activity, Menu barActions) {
         mBarActions = barActions;
@@ -150,7 +134,7 @@ public class OverflowMenu implements OptionsProvider.IOptionsUpdater {
         ArrayList<OverflowMenuItem> result = new ArrayList<>();
         if (!isBanned) {
             result.add(SEND_SYMPATHY_ACTION);
-            if (!getOptions().isHideAdmirations) {
+            if (!App.from(mActivity).getOptions().isHideAdmirations) {
                 result.add(SEND_ADMIRATION_ACTION);
             }
             result.add(OPEN_CHAT_ACTION);
@@ -185,7 +169,7 @@ public class OverflowMenu implements OptionsProvider.IOptionsUpdater {
             Boolean isBookmarked = isBookmarked();
             Boolean isInBlackList = isInBlackList();
             Boolean isSympathySent = isSympathySent();
-            ArrayList<OverflowMenuItem> overflowMenuItemArray = getProfileOverflowMenu(CacheProfile.getProfile().isEditor(), isBanned());
+            ArrayList<OverflowMenuItem> overflowMenuItemArray = getProfileOverflowMenu(App.from(mActivity).getProfile().isEditor(), isBanned());
             for (int i = 0; i < overflowMenuItemArray.size(); i++) {
                 OverflowMenuItem item = overflowMenuItemArray.get(i);
                 Integer resourceId = null;
@@ -358,7 +342,7 @@ public class OverflowMenu implements OptionsProvider.IOptionsUpdater {
                         }
                         initOverfowMenu();
                     }
-                }, getOptions().blockUnconfirmed
+                }, App.from(mActivity).getOptions().blockUnconfirmed
         );
         setSympathySentState(true, true);
     }
@@ -389,7 +373,7 @@ public class OverflowMenu implements OptionsProvider.IOptionsUpdater {
                         setSympathySentState(false, true);
                         initOverfowMenu();
                     }
-                }, getOptions()
+                }, App.from(mActivity).getOptions()
         );
         if (isSentAdmiration) {
             setSympathySentState(true, true);
@@ -501,7 +485,7 @@ public class OverflowMenu implements OptionsProvider.IOptionsUpdater {
                         }
                     });
         } else {
-            request = new BookmarkAddRequest(userId, mActivity, getOptions().blockUnconfirmed).
+            request = new BookmarkAddRequest(userId, mActivity, App.from(mActivity).getOptions().blockUnconfirmed).
                     callback(new BlackListAndBookmarkHandler(mActivity,
                             BlackListAndBookmarkHandler.ActionTypes.BOOKMARK,
                             userId,
@@ -649,7 +633,6 @@ public class OverflowMenu implements OptionsProvider.IOptionsUpdater {
     }
 
     public void onReleaseOverflowMenu() {
-        mOptionsProvider.unsubscribe();
         if (mBalanceSubscription != null) {
             mBalanceSubscription.unsubscribe();
         }

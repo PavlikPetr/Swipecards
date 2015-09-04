@@ -177,7 +177,7 @@ public class Utils {
         builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Utils.goToMarket(activity, activity.getOptions().updateUrl);
+                Utils.goToMarket(activity, App.from(activity).getOptions().updateUrl);
             }
         });
         if (cancelable) {

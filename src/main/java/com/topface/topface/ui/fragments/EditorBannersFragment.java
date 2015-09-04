@@ -18,7 +18,8 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.BannersConfig;
@@ -43,17 +44,18 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
 
     private void initShowAdsCheckbox(View root) {
         final CheckBox showAsCheckBox = ((CheckBox) root.findViewById(R.id.show_ad_checkbox));
-        showAsCheckBox.setChecked(CacheProfile.getProfile().showAd);
+        final Profile profile = App.from(getActivity()).getProfile();
+        showAsCheckBox.setChecked(profile.showAd);
         showAsCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CacheProfile.getProfile().showAd = showAsCheckBox.isChecked();
+                profile.showAd = showAsCheckBox.isChecked();
             }
         });
     }
 
     private void initOnStartLoadingControls(View root) {
-        final BannersConfig config = App.getBannerConfig(getOptions());
+        final BannersConfig config = App.getBannerConfig(App.from(getActivity()).getOptions());
         final CheckBox checkBoxOnStart = ((CheckBox) root.findViewById(R.id.cbOnStart));
         checkBoxOnStart.setChecked(config.needLoadOnStart());
         View.OnClickListener listener = new View.OnClickListener() {
@@ -68,7 +70,7 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
     private void initConfigContainer() {
         if (mConfigContainer != null) {
             for (PageInfo.PageName pageName : PageInfo.PageName.values()) {
-                PageInfo pageInfo = getOptions().getPagesInfo().get(pageName.getName());
+                PageInfo pageInfo = App.from(getActivity()).getOptions().getPagesInfo().get(pageName.getName());
                 if (pageInfo != null) {
                     PageConfigurator configurator = new PageConfigurator(getActivity());
                     configurator.setPage(pageInfo);
@@ -101,13 +103,14 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void onClick(View v) {
+        Options options = App.from(getActivity()).getOptions();
         switch (v.getId()) {
             case R.id.btnSaveSettings:
-                App.getBannerConfig(getOptions()).saveBannersSettings(getOptions().getPagesInfo());
+                App.getBannerConfig(options).saveBannersSettings(options.getPagesInfo());
                 showCompleteMessage();
                 break;
             case R.id.btnResetSettings:
-                App.getBannerConfig(getOptions()).resetBannersSettings();
+                App.getBannerConfig(options).resetBannersSettings();
                 clearConfigContainer();
                 initConfigContainer();
                 showCompleteMessage();
