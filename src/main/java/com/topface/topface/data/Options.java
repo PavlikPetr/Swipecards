@@ -442,8 +442,8 @@ public class Options extends AbstractData {
         }
 
         public AboutApp() {
-            title = App.getContext().getString(R.string.settings_topface_url);
-            url = App.getContext().getString(R.string.settings_topface_url_title);
+            title = App.getContext().getString(R.string.settings_topface_url_title);
+            url = App.getContext().getString(R.string.settings_topface_url);
         }
     }
 
