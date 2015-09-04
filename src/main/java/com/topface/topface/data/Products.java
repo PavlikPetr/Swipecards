@@ -28,6 +28,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,8 +41,6 @@ import java.util.Locale;
 public class Products extends AbstractData {
     public static final String PRICE = "{{price}}";
     public static final String PRICE_PER_ITEM = "{{price_per_item}}";
-    private static final String EUR = "EUR";
-    private static final String RUB = "RUB";
     private static final String USD = "USD";
     private static final String ZERO = ",00";
 
@@ -214,7 +214,7 @@ public class Products extends AbstractData {
             currency = Currency.getInstance(USD);
             currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
             currencyFormatter.setCurrency(currency);
-            value = buyBtn.totalTemplate.replace(PRICE, currencyFormatter.format((float) buyBtn.price / 100));
+            value = formatPrice(buyBtn.price / 100, currencyFormatter,buyBtn.totalTemplate);
             if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
 
@@ -224,10 +224,9 @@ public class Products extends AbstractData {
                     currencyFormatter = detail.currency.equalsIgnoreCase(USD)
                             ? NumberFormat.getCurrencyInstance(Locale.US) : NumberFormat.getCurrencyInstance();
                     currencyFormatter.setCurrency(currency);
-                    //При форматировании NumberFormat автоматом прилепляет к целой цене дробную часть
-                    value = buyBtn.titleTemplate.replace(PRICE, currencyFormatter.format(price)).replace(ZERO, "");
+                    value = formatPrice(price,currencyFormatter,buyBtn.titleTemplate);
                 } else {
-                    value = buyBtn.titleTemplate.replace(PRICE, currencyFormatter.format(buyBtn.price / 100)).replace(ZERO, "");
+                    value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn.titleTemplate);
                 }
             }
         }
@@ -236,6 +235,11 @@ public class Products extends AbstractData {
                 buyBtn.showType, value, listener
         );
     }
+
+    private static String formatPrice(double price, NumberFormat currencyFormatter, String template){
+        currencyFormatter.setMaximumFractionDigits(price % 1 != 0 ? 2 : 0);
+        return template.replace(PRICE, currencyFormatter.format(price));
+        }
 
     /**
      * Creates view for buy actions. Button with hints
