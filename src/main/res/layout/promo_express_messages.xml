@@ -52,7 +52,7 @@
             android:maxWidth="320dp"
             android:paddingBottom="24dp"
             android:singleLine="false"
-            android:textColor="#222222"
+            android:textColor="@color/eighty_seven_opacity_from_black"
             android:textSize="16sp"
             android:textStyle="normal" />
 

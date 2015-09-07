@@ -139,4 +139,5 @@
 
     <color name="status_bar_color">#8c9698</color>
     <color name="registration_hint_color">#808080</color>
+    <color name="eighty_seven_opacity_from_black">#222222</color>
 </resources>
