@@ -46,12 +46,13 @@
         <TextView
             android:id="@+id/airMessagesText"
             style="@style/TitleBlackText"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:maxWidth="320dp"
             android:paddingBottom="24dp"
-            android:paddingLeft="2dp"
-            android:paddingRight="2dp"
+            android:singleLine="false"
+            android:textColor="#222222"
             android:textSize="16sp"
             android:textStyle="normal" />
 
@@ -62,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:ellipsize="end"
-            android:minWidth="204dp"
+            android:minWidth="@dimen/express_message_button_min_width"
             android:singleLine="true"
             android:text="@string/buying_vip_status" />
 
@@ -72,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:minWidth="204dp"
+            android:minWidth="@dimen/express_message_button_min_width"
             android:singleLine="true"
             android:text="@string/general_delete_messages" />
 

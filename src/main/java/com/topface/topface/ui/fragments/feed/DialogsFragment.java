@@ -20,7 +20,6 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -251,7 +250,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         if (CacheProfile.premium) return false;
         Options options = CacheProfile.getOptions();
         Options.PromoPopupEntity expressMessagesPopup = options.getPremiumEntityByType(AIR_MESSAGES);
-        return expressMessagesPopup != null && expressMessagesPopup.isNeedShow() &&
-                expressMessagesPopup.getPageId() == BaseFragment.FragmentId.TABBED_DIALOGS.getId();
+        return expressMessagesPopup != null && expressMessagesPopup.isNeedShow();
     }
 }

@@ -110,8 +110,8 @@
     <color name="button_blue_bg_disable_color">#b3e5fb</color>
 
     <!-- Big red buttons states color -->
-    <color name="button_red_bg_pressed_color">#ef5350</color>
-    <color name="button_red_bg_released_color">#bf4240</color>
+    <color name="button_red_bg_pressed_color">#FF7466</color>
+    <color name="button_red_bg_released_color">#F9584C</color>
     <color name="button_red_bg_disable_color">#fab9b9</color>
 
     <!-- Big white buttons states color -->
