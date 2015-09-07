@@ -103,6 +103,13 @@ android {
             buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                     "com.topface.billing.MarketApiType.I_FREE";
         }
+        derived {
+            applicationId "com.topface.topface.derived"
+            buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.DERIVED";
+            buildConfigField "String", "STATISTICS_APP", "\"topfacemobappderived\"";
+            buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
+                    "com.topface.billing.MarketApiType.DERIVED";
+        }
     }
 
     compileOptions {
