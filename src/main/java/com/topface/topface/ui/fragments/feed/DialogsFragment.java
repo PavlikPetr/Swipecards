@@ -43,6 +43,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     private boolean mNeedRefresh = false;
     private Subscription mDrawerLayoutSubscription;
+    private boolean mIsExpressPopupVisible = false;
 
     public DialogsFragment() {
         super();
@@ -52,9 +53,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-            if (savedInstanceState.getBoolean(IS_PROMO_EXPRESS_MESSAGES_VISIBLE, false)) {
-                showExpressMessagesPopupIfNeeded();
-            }
+            mIsExpressPopupVisible = savedInstanceState.getBoolean(IS_PROMO_EXPRESS_MESSAGES_VISIBLE, false);
         }
         if (getActivity() instanceof NavigationActivity) {
             Observable<NavigationActivity.DRAWER_LAYOUT_STATE> observable = ((NavigationActivity) getActivity()).getDrawerLayoutStateObservable();
@@ -79,8 +78,9 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     private void showExpressMessagesPopupIfNeeded() {
+        boolean isPopupAvailable = isExpressPopupAvailable();
         if (!isPromoExpressMessagesDialogAttached()) {
-            if (isExpressPopupAvailable()) {
+            if (isPopupAvailable) {
                 int paddingTop = 0;
                 Fragment fragment = getParentFragment();
                 if (fragment != null && fragment instanceof TabbedDialogsFragment) {
@@ -88,6 +88,16 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                 }
                 new PromoExpressMessages().setExtraPaddingTop(paddingTop).show(getFragmentManager(), PromoExpressMessages.TAG);
                 mNeedRefresh = true;
+            }
+        } else if (!isPopupAvailable) {
+            PromoExpressMessages fragment = null;
+            try {
+                fragment = (PromoExpressMessages) getFragmentManager().findFragmentByTag(PromoExpressMessages.TAG);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (fragment != null) {
+                fragment.dismiss();
             }
         }
     }
@@ -103,7 +113,8 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(IS_PROMO_EXPRESS_MESSAGES_VISIBLE, isPromoExpressMessagesDialogAttached());
+        mIsExpressPopupVisible = isPromoExpressMessagesDialogAttached();
+        outState.putBoolean(IS_PROMO_EXPRESS_MESSAGES_VISIBLE, mIsExpressPopupVisible);
     }
 
     @Override
@@ -113,6 +124,9 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         if (mNeedRefresh) {
             updateData(true, false);
             mNeedRefresh = false;
+        }
+        if (mIsExpressPopupVisible) {
+            showExpressMessagesPopupIfNeeded();
         }
     }
 
