@@ -161,6 +161,13 @@ android {
             keyAlias "topfacebluestacks"
             keyPassword "Sonetica2012"
         }
+        derived {
+            logger.error("build release apk with Derived flavourType")
+            storeFile file("misc/keys/topfaceDerived.keystore")
+            storePassword "Sonetica2012"
+            keyAlias "topfacederived"
+            keyPassword "Sonetica2012"
+        }
         debug {
             storeFile file("misc/keys/debug.keystore")
         }
@@ -179,6 +186,7 @@ android {
             productFlavors.google.signingConfig signingConfigs.google
             productFlavors.ifree.signingConfig signingConfigs.ifree
             productFlavors.blueStacks.signingConfig signingConfigs.blueStacks
+            productFlavors.derived.signingConfig signingConfigs.derived
             productFlavors.amazon.signingConfig signingConfigs.google
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     getDefaultProguardFile('proguard-android-optimize.txt'),
