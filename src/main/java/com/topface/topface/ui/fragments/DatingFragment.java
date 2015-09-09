@@ -522,7 +522,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onClick(View v) {
                 EasyTracker.sendEvent("EmptySearch", "ClickTryAgain", "", 0L);
-                updateData(false);
+                updateData(false, true);
             }
         }).setImageVisibility(View.GONE).message(getString(R.string.general_search_null_response_error))
                 .setMessageTextColor(Color.parseColor("#FFFFFF"))
@@ -574,18 +574,27 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void updateData(final boolean isAddition) {
+        updateData(isAddition, false);
+    }
+
+
+        private void updateData(final boolean isAddition, boolean isNeedRefresh) {
         if (!mUpdateInProcess) {
             lockControls();
             hideEmptySearchDialog();
             if (!isAddition) {
                 onUpdateStart(false);
             }
+            if(isNeedRefresh){
+                mUserSearchList.clear();
+                mCurrentUser = null;
+            }
 
             mUpdateInProcess = true;
 
             UsersList.log("Update start: " + (isAddition ? "addition" : "replace"));
 
-            getSearchRequest().callback(new DataApiHandler<UsersList>() {
+            getSearchRequest(isNeedRefresh).callback(new DataApiHandler<UsersList>() {
 
                 @Override
                 protected void success(UsersList usersList, IApiResponse response) {
@@ -699,8 +708,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         );
     }
 
-    private SearchRequest getSearchRequest() {
-        SearchRequest searchRequest = new SearchRequest(getFilterOnlyOnline(), getActivity());
+    private SearchRequest getSearchRequest(boolean isNeedRefresh) {
+        SearchRequest searchRequest = new SearchRequest(getFilterOnlyOnline(), getActivity(), isNeedRefresh);
         registerRequest(searchRequest);
         return searchRequest;
     }
