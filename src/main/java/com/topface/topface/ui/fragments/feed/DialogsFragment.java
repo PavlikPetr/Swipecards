@@ -38,12 +38,8 @@ import rx.functions.Action1;
 import static com.topface.topface.data.Options.PromoPopupEntity.AIR_MESSAGES;
 
 public class DialogsFragment extends FeedFragment<FeedDialog> {
-
-    private final static String IS_PROMO_EXPRESS_MESSAGES_VISIBLE = "is_promo_express_messages_visible";
-
     private boolean mNeedRefresh = false;
     private Subscription mDrawerLayoutSubscription;
-    private boolean mIsExpressPopupVisible = false;
 
     public DialogsFragment() {
         super();
@@ -52,9 +48,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            mIsExpressPopupVisible = savedInstanceState.getBoolean(IS_PROMO_EXPRESS_MESSAGES_VISIBLE, false);
-        }
         if (getActivity() instanceof NavigationActivity) {
             Observable<NavigationActivity.DRAWER_LAYOUT_STATE> observable = ((NavigationActivity) getActivity()).getDrawerLayoutStateObservable();
             if (observable != null) {
@@ -106,13 +99,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mIsExpressPopupVisible = isPromoExpressMessagesDialogAttached();
-        outState.putBoolean(IS_PROMO_EXPRESS_MESSAGES_VISIBLE, mIsExpressPopupVisible);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         //Проверяем флаг, нужно ли обновлять диалоги
@@ -120,7 +106,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
             updateData(true, false);
             mNeedRefresh = false;
         }
-        if (mIsExpressPopupVisible) {
+        if (isPromoExpressMessagesDialogAttached()) {
             showExpressMessagesPopupIfNeeded();
         }
     }
