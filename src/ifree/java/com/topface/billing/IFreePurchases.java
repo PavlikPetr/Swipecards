@@ -107,6 +107,11 @@ public class IFreePurchases extends BaseFragment implements LibraryInitListener 
     }
 
     public LinkedList<BuyButtonData> validateProducts(LinkedList<BuyButtonData> products) {
+        // some gsm operators not supported by ifree monetization
+        if (mMonetization != null && !mMonetization.isPaymentsAvailable(getActivity())) {
+            products.clear();
+            return products;
+        }
         String price;
         for (Iterator<BuyButtonData> product = products.iterator(); product.hasNext(); ) {
             BuyButtonData entry = product.next();

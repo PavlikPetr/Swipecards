@@ -4,7 +4,6 @@
     <!-- Status ******************************************************************************** -->
     <string-array name="profile_form_status_male">
         <item>@string/profile_form_status_male_0</item>
-        <item>@string/profile_form_status_male_1</item>
         <item>@string/profile_form_status_male_2</item>
         <item>@string/profile_form_status_male_3</item>
         <item>@string/profile_form_status_male_4</item>
@@ -13,7 +12,6 @@
 
     <string-array name="profile_form_status_female">
         <item>@string/profile_form_status_female_0</item>
-        <item>@string/profile_form_status_female_1</item>
         <item>@string/profile_form_status_female_2</item>
         <item>@string/profile_form_status_female_3</item>
         <item>@string/profile_form_status_female_4</item>
@@ -22,7 +20,6 @@
 
     <integer-array name="profile_form_status_ids">
         <item>1</item>
-        <item>2</item>
         <item>3</item>
         <item>4</item>
         <item>5</item>
