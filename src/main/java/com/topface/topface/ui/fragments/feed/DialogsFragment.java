@@ -38,9 +38,6 @@ import rx.functions.Action1;
 import static com.topface.topface.data.Options.PromoPopupEntity.AIR_MESSAGES;
 
 public class DialogsFragment extends FeedFragment<FeedDialog> {
-
-    private final static String IS_PROMO_EXPRESS_MESSAGES_VISIBLE = "is_promo_express_messages_visible";
-
     private boolean mNeedRefresh = false;
     private Subscription mDrawerLayoutSubscription;
 
@@ -51,11 +48,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            if (savedInstanceState.getBoolean(IS_PROMO_EXPRESS_MESSAGES_VISIBLE, false)) {
-                showExpressMessagesPopupIfNeeded();
-            }
-        }
         if (getActivity() instanceof NavigationActivity) {
             Observable<NavigationActivity.DRAWER_LAYOUT_STATE> observable = ((NavigationActivity) getActivity()).getDrawerLayoutStateObservable();
             if (observable != null) {
@@ -79,8 +71,9 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     private void showExpressMessagesPopupIfNeeded() {
+        boolean isPopupAvailable = isExpressPopupAvailable();
         if (!isPromoExpressMessagesDialogAttached()) {
-            if (isExpressPopupAvailable()) {
+            if (isPopupAvailable) {
                 int paddingTop = 0;
                 Fragment fragment = getParentFragment();
                 if (fragment != null && fragment instanceof TabbedDialogsFragment) {
@@ -88,6 +81,11 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                 }
                 new PromoExpressMessages().setExtraPaddingTop(paddingTop).show(getFragmentManager(), PromoExpressMessages.TAG);
                 mNeedRefresh = true;
+            }
+        } else if (!isPopupAvailable) {
+            PromoExpressMessages expressPopup = (PromoExpressMessages) getFragmentManager().findFragmentByTag(PromoExpressMessages.TAG);
+            if (expressPopup != null) {
+                expressPopup.dismiss();
             }
         }
     }
@@ -101,18 +99,15 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(IS_PROMO_EXPRESS_MESSAGES_VISIBLE, isPromoExpressMessagesDialogAttached());
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         //Проверяем флаг, нужно ли обновлять диалоги
         if (mNeedRefresh) {
             updateData(true, false);
             mNeedRefresh = false;
+        }
+        if (isPromoExpressMessagesDialogAttached()) {
+            showExpressMessagesPopupIfNeeded();
         }
     }
 
