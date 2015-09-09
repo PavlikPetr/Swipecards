@@ -243,21 +243,21 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 );
                 //Выставляем значение из конфига
                 if (App.getUserConfig().getTestPaymentFlag()) {
-                    switchTestPatment(checkBox);
+                    switchTestPayment(checkBox);
                 }
 
                 layout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //Переключаем режим тестовых покупок
-                        switchTestPatment(checkBox);
+                        switchTestPayment(checkBox);
                     }
                 });
             }
         }
     }
 
-    private void switchTestPatment(EditSwitcher checkBox) {
+    private void switchTestPayment(EditSwitcher checkBox) {
         setTestPaymentsState(checkBox.doSwitch());
         setTestPaymentsState(checkBox.isChecked());
         App.getUserConfig().setTestPaymentFlag(checkBox.isChecked());
