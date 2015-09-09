@@ -41,7 +41,7 @@ import java.util.Locale;
 public class Products extends AbstractData {
     public static final String PRICE = "{{price}}";
     public static final String PRICE_PER_ITEM = "{{price_per_item}}";
-    private static final String USD = "USD";
+    public static final String USD = "USD";
 
     public enum ProductType {
         COINS("coins"),
@@ -213,7 +213,7 @@ public class Products extends AbstractData {
             currency = Currency.getInstance(USD);
             currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
             currencyFormatter.setCurrency(currency);
-            value = formatPrice(buyBtn.price / 100, currencyFormatter,buyBtn.totalTemplate);
+            value = formatPrice(buyBtn.price / 100, currencyFormatter,buyBtn.totalTemplate, PRICE);
             if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
 
@@ -223,9 +223,9 @@ public class Products extends AbstractData {
                     currencyFormatter = detail.currency.equalsIgnoreCase(USD)
                             ? NumberFormat.getCurrencyInstance(Locale.US) : NumberFormat.getCurrencyInstance();
                     currencyFormatter.setCurrency(currency);
-                    value = formatPrice(price,currencyFormatter,buyBtn.titleTemplate);
+                    value = formatPrice(price,currencyFormatter,buyBtn.titleTemplate, PRICE);
                 } else {
-                    value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn.titleTemplate);
+                    value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn.titleTemplate, PRICE);
                 }
             }
         }
@@ -235,9 +235,9 @@ public class Products extends AbstractData {
         );
     }
 
-    private static String formatPrice(double price, NumberFormat currencyFormatter, String template){
+    public static String formatPrice(double price, NumberFormat currencyFormatter, String template, String replaceTemplate){
         currencyFormatter.setMaximumFractionDigits(price % 1 != 0 ? 2 : 0);
-        return template.replace(PRICE, currencyFormatter.format(price));
+        return template.replace(replaceTemplate, currencyFormatter.format(price));
         }
 
     /**
