@@ -127,6 +127,9 @@ public abstract class BaseAuthFragment extends BaseFragment {
 
             @Override
             public void fail(final int codeError, IApiResponse response) {
+                if (codeError == ErrorCodes.USER_DELETED) {
+                    showButtons();
+                }
                 authorizationFailed(codeError, authRequest);
             }
 
