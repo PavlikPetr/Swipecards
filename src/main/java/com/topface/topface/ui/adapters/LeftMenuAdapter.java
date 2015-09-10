@@ -216,7 +216,7 @@ public class LeftMenuAdapter extends BaseAdapter {
     public class ViewHolder {
         TextView btnMenu;
         TextView counterBadge;
-        ILeftMenuItem item;
+        public ILeftMenuItem item;
         ImageView icon;
         ImageView extraIcon;
     }
