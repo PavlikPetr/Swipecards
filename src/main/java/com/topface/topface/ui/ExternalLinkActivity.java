@@ -51,7 +51,14 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setHasContent(false);
         super.onCreate(savedInstanceState);
-        new ExternalLinkExecuter(mListener).execute(this, getIntent());
+        if (!AuthToken.getInstance().isEmpty()) {
+            new ExternalLinkExecuter(mListener).execute(this, getIntent());
+        }
+    }
+
+    @Override
+    protected boolean isRestorePsw() {
+        return true;
     }
 
     @Override
@@ -62,12 +69,16 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        new ExternalLinkExecuter(mListener).execute(this, getIntent());
+        if (!AuthToken.getInstance().isEmpty()) {
+            new ExternalLinkExecuter(mListener).execute(this, getIntent());
+        }
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        new ExternalLinkExecuter(mListener).execute(this, getIntent());
+        if (!AuthToken.getInstance().isEmpty()) {
+            new ExternalLinkExecuter(mListener).execute(this, getIntent());
+        }
     }
 }

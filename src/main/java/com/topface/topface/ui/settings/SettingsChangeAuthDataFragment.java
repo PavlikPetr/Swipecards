@@ -29,6 +29,9 @@ import com.topface.topface.utils.social.AuthorizationManager;
 
 public class SettingsChangeAuthDataFragment extends BaseFragment implements OnClickListener {
 
+    private static final String NEED_EXIT = "restore_from_auth";
+    private static final String CHANGE_PASSWORD = "restore_from_auth";
+    private static final String RESTORE_FROM_AUTH = "restore_from_auth";
     private View mLockerView;
     private EditText mEdMainField;
     private EditText mEdConfirmationField;
@@ -37,12 +40,21 @@ public class SettingsChangeAuthDataFragment extends BaseFragment implements OnCl
     private AuthToken mToken = AuthToken.getInstance();
     private boolean mNeedExit;
     private boolean mChangePassword;
+    private boolean mRestoreFromAuth;
 
     public static SettingsChangeAuthDataFragment newInstance(boolean needExit, boolean changePassword) {
         Bundle args = new Bundle();
-        args.putBoolean("needExit", needExit);
-        args.putBoolean("changePassword", changePassword);
+        args.putBoolean(NEED_EXIT, needExit);
+        args.putBoolean(CHANGE_PASSWORD, changePassword);
         SettingsChangeAuthDataFragment fragment = new SettingsChangeAuthDataFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static SettingsChangeAuthDataFragment newInstance(boolean needExit, boolean changePassword, boolean restoreFromAuth) {
+        SettingsChangeAuthDataFragment fragment = SettingsChangeAuthDataFragment.newInstance(needExit, changePassword);
+        Bundle args = fragment.getArguments();
+        args.putBoolean(RESTORE_FROM_AUTH, restoreFromAuth);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,13 +63,13 @@ public class SettingsChangeAuthDataFragment extends BaseFragment implements OnCl
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_change_auth_data, container, false);
-        mChangePassword = getArguments().getBoolean("changePassword");
+        mChangePassword = getArguments().getBoolean(CHANGE_PASSWORD);
         mLockerView = root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
 
         TextView mSetPasswordText = (TextView) root.findViewById(R.id.setPasswordText);
 
-        if (mNeedExit) {
+        if (mNeedExit && !mRestoreFromAuth) {
             mSetPasswordText.setVisibility(View.VISIBLE);
         }
 
@@ -73,8 +85,12 @@ public class SettingsChangeAuthDataFragment extends BaseFragment implements OnCl
         if (mChangePassword) {
             mEdMainField.setHint(R.string.enter_new_password);
             mEdMainField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            mOldPassword.setHint(R.string.enter_old_password);
-            mOldPassword.setInputType(mEdMainField.getInputType());
+            if (mRestoreFromAuth) {
+                mOldPassword.setVisibility(View.GONE);
+            } else {
+                mOldPassword.setHint(R.string.enter_old_password);
+                mOldPassword.setInputType(mEdMainField.getInputType());
+            }
             mEdConfirmationField.setHint(R.string.password_confirmation_hint);
             mEdConfirmationField.setInputType(mEdMainField.getInputType());
         } else {
@@ -101,8 +117,9 @@ public class SettingsChangeAuthDataFragment extends BaseFragment implements OnCl
     protected void restoreState() {
         Bundle arguments = getArguments();
         if (arguments != null) {
-            mNeedExit = arguments.getBoolean("needExit");
-            mChangePassword = getArguments().getBoolean("changePassword");
+            mNeedExit = arguments.getBoolean(NEED_EXIT);
+            mChangePassword = getArguments().getBoolean(CHANGE_PASSWORD);
+            mRestoreFromAuth = getArguments().getBoolean(RESTORE_FROM_AUTH);
         }
     }
 

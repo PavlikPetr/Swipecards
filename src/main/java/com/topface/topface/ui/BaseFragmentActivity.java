@@ -29,6 +29,7 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
+import com.topface.topface.ui.settings.SettingsChangeAuthDataFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
@@ -315,7 +316,18 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
     }
 
+
+    protected boolean isRestorePsw() {
+        return false;
+    }
+
+
     public boolean startAuth() {
+        if (isRestorePsw()) {
+            getSupportFragmentManager().beginTransaction().replace(android.R.id.content, SettingsChangeAuthDataFragment.newInstance(false, true, true)
+                    , SettingsChangeAuthDataFragment.class.getSimpleName()).commit();
+            return false;
+        }
         Fragment authFragment = getSupportFragmentManager().findFragmentByTag(AUTH_TAG);
         if (isNeedAuth() && (authFragment == null || !authFragment.isAdded())) {
             if (authFragment == null) {
