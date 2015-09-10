@@ -163,7 +163,7 @@ public class Options extends AbstractData {
     public boolean forceCoinsSubscriptions;
 
     public boolean unlockAllForPremium;
-    public int maxMessageSize;
+    public int maxMessageSize = 10000;
     public SixCoinsSubscribeExperiment sixCoinsSubscribeExperiment = new SixCoinsSubscribeExperiment();
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
     public TopfaceOfferwallRedirect topfaceOfferwallRedirect = new TopfaceOfferwallRedirect();
@@ -335,7 +335,7 @@ public class Options extends AbstractData {
             forceCoinsSubscriptions = response.optBoolean("forceCoinsSubscriptions");
             unlockAllForPremium = response.optBoolean("unlockAllForPremium");
 
-            maxMessageSize = response.optInt("maxMessageSize");
+            maxMessageSize = response.optInt("maxMessageSize", 10000);
 
             // experiments init
             forceOfferwallRedirect.init(response);
