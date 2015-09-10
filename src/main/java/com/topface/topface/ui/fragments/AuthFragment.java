@@ -318,6 +318,7 @@ public class AuthFragment extends BaseAuthFragment {
     protected void showButtons() {
         setSocNetBtnVisibility(mIsSocNetBtnHidden, false, false);
         setTfLoginBtnVisibility(mIsTfBtnHidden, false, false);
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
