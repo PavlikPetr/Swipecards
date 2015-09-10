@@ -9,9 +9,8 @@ incrementQaBuildVersion(versionProps, versionPropsFile);
 
 def getVersionCode(versionProps) {
     def versionCode = versionProps['VERSION_CODE'].toInteger()
-    if (project.gradle.startParameter.taskNames.contains("assembleGoogleQa")) {
-        versionCode = versionCode + getQaVersion(versionProps)
-    } else if (project.gradle.startParameter.taskNames.contains("assembleIfreeQa")) {
+    def taskNames = project.gradle.startParameter.taskNames
+    if (taskNames.contains("assembleGoogleQa") || taskNames.contains("assembleIfreeQa")) {
         versionCode = versionCode + getQaVersion(versionProps)
     }
     return versionCode;
@@ -28,7 +27,8 @@ def getQaVersion(versionProps) {
 }
 
 def incrementQaBuildVersion(versionProps, versionPropsFile) {
-    if (project.gradle.startParameter.taskNames.contains("assembleGoogleQa") && versionProps != null) {
+    def taskNames = project.gradle.startParameter.taskNames
+    if ((taskNames.contains("assembleGoogleQa") || taskNames.contains("assembleIfreeQa")) && versionProps != null) {
         def versionQaBuild = versionProps['VERSION_QA_BUILD'].toInteger() + 1
         versionProps['VERSION_QA_BUILD'] = versionQaBuild.toString()
         versionProps.store(versionPropsFile.newWriter(), null)
@@ -295,7 +295,7 @@ dependencies {
     qaCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
 
     // I-FREE dependency
-    ifreeCompile('com.ifree.monetize:monetization-library:2.2.4') {
+    ifreeCompile('com.ifree.monetize:monetization-library:2.2.5') {
         exclude group: "com.fasterxml.jackson.core"
         exclude module: "support-v4"
     }

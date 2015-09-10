@@ -550,7 +550,7 @@
     <string name="settings_feedback_transaction_number">Order number</string>
     <string name="settings_feedback_transaction_link">Where do I find my order number?</string>
     <string name="general_logout_error">An error occurred during logout. Please try again.</string>
-    <string name="auth_btn_ok">Odnoklassniki</string>
+    <string name="auth_btn_ok">Log in with Odnoklassniki</string>
     <string name="auth_btn_tf">Topface Account</string>
     <string name="birthday">Birthday</string>
     <string name="other_auth">Login with other services</string>
