@@ -40,7 +40,7 @@ import static com.topface.topface.data.Options.PromoPopupEntity.AIR_MESSAGES;
 
 public class DialogsFragment extends FeedFragment<FeedDialog> {
     private Subscription mDrawerLayoutSubscription;
-    private boolean isNeedRefresh;
+    private boolean mIsNeedRefresh;
 
     public DialogsFragment() {
         super();
@@ -84,7 +84,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                 popup.setOnCloseListener(new PromoDialog.OnCloseListener() {
                     @Override
                     public void onClose() {
-                        isNeedRefresh = true;
+                        mIsNeedRefresh = true;
                     }
                 });
                 popup.show(getFragmentManager(), PromoExpressMessages.TAG);
@@ -109,9 +109,9 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     public void onResume() {
         super.onResume();
-        if (isNeedRefresh) {
+        if (mIsNeedRefresh) {
             updateData(true, false);
-            isNeedRefresh = false;
+            mIsNeedRefresh = false;
         }
         if (isPromoExpressMessagesDialogAttached()) {
             showExpressMessagesPopupIfNeeded();
