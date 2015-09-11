@@ -369,3 +369,20 @@ subprojects {
         buildToolsVersion rootProject.ANDROID_BUILD_TOOLS_VERSION
     }
 }
+
+task runScript(type: Exec) {
+    def listFlavours = []
+    android.productFlavors.each { flavor ->
+        listFlavours << flavor.name
+    }
+    def listBuildTypes = []
+    android.buildTypes.each { buildType ->
+        listBuildTypes << buildType.name
+    }
+
+
+
+
+    commandLine 'groovy', '/home/ppetr/work/projects/topface-android/src/main/groovy/MoveStrings.groovy', listFlavours, listBuildTypes
+}
+defaultTasks 'runScript'
