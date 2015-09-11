@@ -10,6 +10,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
 import com.topface.topface.data.Options;
+import com.topface.topface.promo.dialogs.PromoDialog;
 import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteDialogsRequest;
@@ -38,8 +39,8 @@ import rx.functions.Action1;
 import static com.topface.topface.data.Options.PromoPopupEntity.AIR_MESSAGES;
 
 public class DialogsFragment extends FeedFragment<FeedDialog> {
-    private boolean mNeedRefresh = false;
     private Subscription mDrawerLayoutSubscription;
+    private boolean mIsNeedRefresh;
 
     public DialogsFragment() {
         super();
@@ -79,13 +80,20 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                 if (fragment != null && fragment instanceof TabbedDialogsFragment) {
                     paddingTop = ((TabbedDialogsFragment) fragment).getTabLayoutHeight();
                 }
-                new PromoExpressMessages().setExtraPaddingTop(paddingTop).show(getFragmentManager(), PromoExpressMessages.TAG);
-                mNeedRefresh = true;
+                PromoExpressMessages popup = new PromoExpressMessages().setExtraPaddingTop(paddingTop);
+                popup.setOnCloseListener(new PromoDialog.OnCloseListener() {
+                    @Override
+                    public void onClose() {
+                        mIsNeedRefresh = true;
+                    }
+                });
+                popup.show(getFragmentManager(), PromoExpressMessages.TAG);
             }
         } else if (!isPopupAvailable) {
             PromoExpressMessages expressPopup = (PromoExpressMessages) getFragmentManager().findFragmentByTag(PromoExpressMessages.TAG);
             if (expressPopup != null) {
                 expressPopup.dismiss();
+                updateData(true, false);
             }
         }
     }
@@ -101,10 +109,9 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     public void onResume() {
         super.onResume();
-        //Проверяем флаг, нужно ли обновлять диалоги
-        if (mNeedRefresh) {
+        if (mIsNeedRefresh) {
             updateData(true, false);
-            mNeedRefresh = false;
+            mIsNeedRefresh = false;
         }
         if (isPromoExpressMessagesDialogAttached()) {
             showExpressMessagesPopupIfNeeded();
