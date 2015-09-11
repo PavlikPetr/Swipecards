@@ -221,11 +221,11 @@ public class LeftMenuAdapter extends BaseAdapter {
             if (wantedView == null) {
                 continue;
             }
-            LeftMenuAdapter.ViewHolder viewHolder = (LeftMenuAdapter.ViewHolder) wantedView.getTag();
-            if (viewHolder == null) {
+            Object viewHolder = wantedView.getTag();
+            if(viewHolder == null || !(viewHolder instanceof LeftMenuAdapter.ViewHolder)){
                 continue;
             }
-            BaseFragment.FragmentId item = viewHolder.item.getMenuId();
+            BaseFragment.FragmentId item = ((LeftMenuAdapter.ViewHolder)viewHolder).item.getMenuId();
             if (fragmentId == item) {
                 wantedView.setActivated(true);
                 view = wantedView;
