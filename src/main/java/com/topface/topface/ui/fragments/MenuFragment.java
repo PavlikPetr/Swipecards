@@ -125,21 +125,10 @@ public class MenuFragment extends Fragment {
                         }
                     }
                     selectMenu(fragmentId);
-                    int firstVisiblePosition = mListView.getFirstVisiblePosition();
-                    int lastVisiblePosition = mListView.getLastVisiblePosition();
-                    for (int j = firstVisiblePosition; j <= lastVisiblePosition; j++) {
-                        View wantedView = mListView.getChildAt(j);
-                        LeftMenuAdapter.ViewHolder viewHolder = (LeftMenuAdapter.ViewHolder) wantedView.getTag();
-                        if (viewHolder == null) {
-                            continue;
-                        }
-                        FragmentId item = viewHolder.item.getMenuId();
-                        if (fragmentId == item) {
-                            wantedView.setActivated(true);
-                            mLastActivated = wantedView;
-                        } else {
-                            wantedView.setActivated(false);
-                        }
+                    View view = mAdapter.getViewForActivate(mListView, fragmentId);
+                    if (view != null) {
+                        mLastActivated = view;
+                        mLastActivated.setActivated(true);
                     }
                     break;
             }

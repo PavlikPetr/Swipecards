@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
@@ -213,10 +214,32 @@ public class LeftMenuAdapter extends BaseAdapter {
         }
     }
 
-    public class ViewHolder {
+    public View getViewForActivate(ListView listView, BaseFragment.FragmentId fragmentId) {
+        View view = null;
+        for (int j = 0; j <= getCount(); j++) {
+            View wantedView = listView.getChildAt(j);
+            if (wantedView == null) {
+                continue;
+            }
+            LeftMenuAdapter.ViewHolder viewHolder = (LeftMenuAdapter.ViewHolder) wantedView.getTag();
+            if (viewHolder == null) {
+                continue;
+            }
+            BaseFragment.FragmentId item = viewHolder.item.getMenuId();
+            if (fragmentId == item) {
+                wantedView.setActivated(true);
+                view = wantedView;
+            } else {
+                wantedView.setActivated(false);
+            }
+        }
+        return view;
+    }
+
+    private class ViewHolder {
         TextView btnMenu;
         TextView counterBadge;
-        public ILeftMenuItem item;
+        ILeftMenuItem item;
         ImageView icon;
         ImageView extraIcon;
     }
