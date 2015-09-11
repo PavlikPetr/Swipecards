@@ -28,7 +28,6 @@ public class PromoExpressMessages extends PromoDialog {
     private int mCurrentPosition = Integer.MAX_VALUE;
 
     private int mExtraPaddingTop = 0;
-    private PopupRedirectListener mPopupRedirectListener;
 
     @Override
     public Options.PromoPopupEntity getPremiumEntity() {
