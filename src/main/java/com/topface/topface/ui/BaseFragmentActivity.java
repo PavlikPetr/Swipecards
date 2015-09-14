@@ -316,18 +316,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
     }
 
-
-    protected boolean isRestorePsw() {
-        return false;
-    }
-
-
     public boolean startAuth() {
-        if (isRestorePsw()) {
-            getSupportFragmentManager().beginTransaction().replace(android.R.id.content, SettingsChangeAuthDataFragment.newInstance(false, true, true)
-                    , SettingsChangeAuthDataFragment.class.getSimpleName()).commit();
-            return false;
-        }
         Fragment authFragment = getSupportFragmentManager().findFragmentByTag(AUTH_TAG);
         if (isNeedAuth() && (authFragment == null || !authFragment.isAdded())) {
             if (authFragment == null) {

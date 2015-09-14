@@ -3,7 +3,9 @@ package com.topface.topface.ui;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.Static;
+import com.topface.topface.ui.settings.SettingsChangeAuthDataFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.ExternalLinkExecuter;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
@@ -27,9 +29,19 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
                 intent.putExtra(Static.INTENT_REQUEST_KEY, SettingsContainerActivity.INTENT_ACCOUNT);
                 intent.putExtra(SettingsContainerActivity.CONFIRMATION_CODE, code);
                 startActivity(intent);
+                getIntent().setData(null);
+                finish();
+            } else {
+                mIsNeedRestorePwd = true;
+                SettingsChangeAuthDataFragment fragment = (SettingsChangeAuthDataFragment) getSupportFragmentManager()
+                        .findFragmentByTag(SettingsChangeAuthDataFragment.class.getSimpleName());
+                if (fragment == null) {
+                    fragment = SettingsChangeAuthDataFragment.newInstance(true, true, code);
+                }
+                getSupportFragmentManager().beginTransaction().replace(android.R.id.content, fragment
+                        , SettingsChangeAuthDataFragment.class.getSimpleName()).commit();
             }
-            getIntent().setData(null);
-            finish();
+
         }
 
         @Override
@@ -47,18 +59,13 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
         }
     };
 
+    private boolean mIsNeedRestorePwd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setHasContent(false);
         super.onCreate(savedInstanceState);
-        if (!AuthToken.getInstance().isEmpty()) {
-            new ExternalLinkExecuter(mListener).execute(this, getIntent());
-        }
-    }
-
-    @Override
-    protected boolean isRestorePsw() {
-        return true;
+        new ExternalLinkExecuter(mListener).execute(this, getIntent());
     }
 
     @Override
@@ -72,6 +79,11 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
         if (!AuthToken.getInstance().isEmpty()) {
             new ExternalLinkExecuter(mListener).execute(this, getIntent());
         }
+    }
+
+    @Override
+    public boolean startAuth() {
+        return !mIsNeedRestorePwd && super.startAuth();
     }
 
     @Override

@@ -3,7 +3,9 @@ package com.topface.topface.ui.settings;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,10 +15,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.ChangeLoginRequest;
 import com.topface.topface.requests.ChangePasswordRequest;
+import com.topface.topface.requests.ChangePwdFromAuthRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -32,15 +36,25 @@ public class SettingsChangeAuthDataFragment extends BaseFragment implements OnCl
     private static final String NEED_EXIT = "restore_from_auth";
     private static final String CHANGE_PASSWORD = "restore_from_auth";
     private static final String RESTORE_FROM_AUTH = "restore_from_auth";
+    private static final String HASH = "hash";
+    private static final String PASSWORD = "password";
+    private static final String PASSWORD_CONFIRMATION = "password_confirmation";
+    private static final String OLD_PASSWORD = "old_password";
+    private static final String EMPTY = "";
     private View mLockerView;
     private EditText mEdMainField;
     private EditText mEdConfirmationField;
-    private EditText mOldPassword;
+    private EditText mEdOldPassword;
     private Button mBtnSave;
     private AuthToken mToken = AuthToken.getInstance();
     private boolean mNeedExit;
     private boolean mChangePassword;
     private boolean mRestoreFromAuth;
+    private String mHash;
+    private String mPassword;
+    private String mPasswordConfirmation;
+    private String mOldPassword;
+
 
     public static SettingsChangeAuthDataFragment newInstance(boolean needExit, boolean changePassword) {
         Bundle args = new Bundle();
@@ -51,10 +65,11 @@ public class SettingsChangeAuthDataFragment extends BaseFragment implements OnCl
         return fragment;
     }
 
-    public static SettingsChangeAuthDataFragment newInstance(boolean needExit, boolean changePassword, boolean restoreFromAuth) {
-        SettingsChangeAuthDataFragment fragment = SettingsChangeAuthDataFragment.newInstance(needExit, changePassword);
+    public static SettingsChangeAuthDataFragment newInstance(boolean changePassword, boolean restoreFromAuth, String hash) {
+        SettingsChangeAuthDataFragment fragment = SettingsChangeAuthDataFragment.newInstance(false, changePassword);
         Bundle args = fragment.getArguments();
         args.putBoolean(RESTORE_FROM_AUTH, restoreFromAuth);
+        args.putString(HASH, hash);
         fragment.setArguments(args);
         return fragment;
     }
@@ -75,7 +90,7 @@ public class SettingsChangeAuthDataFragment extends BaseFragment implements OnCl
 
         mEdMainField = (EditText) root.findViewById(R.id.edMainField);
         mEdConfirmationField = (EditText) root.findViewById(R.id.edConfirmationField);
-        mOldPassword = (EditText) root.findViewById(R.id.edOldPassword);
+        mEdOldPassword = (EditText) root.findViewById(R.id.edOldPassword);
 
         mBtnSave = (Button) root.findViewById(R.id.btnSave);
         if (mNeedExit) {
@@ -83,22 +98,30 @@ public class SettingsChangeAuthDataFragment extends BaseFragment implements OnCl
         }
         mBtnSave.setOnClickListener(this);
         if (mChangePassword) {
-            mEdMainField.setHint(R.string.enter_new_password);
+            setTextOrHint(mEdMainField, mPassword, R.string.enter_new_password);
             mEdMainField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             if (mRestoreFromAuth) {
-                mOldPassword.setVisibility(View.GONE);
+                mEdOldPassword.setVisibility(View.GONE);
             } else {
-                mOldPassword.setHint(R.string.enter_old_password);
-                mOldPassword.setInputType(mEdMainField.getInputType());
+                setTextOrHint(mEdOldPassword, mOldPassword, R.string.enter_old_password);
+                mEdOldPassword.setInputType(mEdMainField.getInputType());
             }
-            mEdConfirmationField.setHint(R.string.password_confirmation_hint);
+            setTextOrHint(mEdConfirmationField, mPasswordConfirmation, R.string.password_confirmation_hint);
             mEdConfirmationField.setInputType(mEdMainField.getInputType());
         } else {
             mEdMainField.setHint(R.string.email);
             mEdConfirmationField.setVisibility(View.GONE);
-            mOldPassword.setVisibility(View.GONE);
+            mEdOldPassword.setVisibility(View.GONE);
         }
         return root;
+    }
+
+    private void setTextOrHint(EditText editText, String text, @StringRes int hintId) {
+        if (TextUtils.isEmpty(text)) {
+            editText.setHint(hintId);
+        } else {
+            editText.setText(text);
+        }
     }
 
     @Override
@@ -114,13 +137,28 @@ public class SettingsChangeAuthDataFragment extends BaseFragment implements OnCl
     }
 
     @Override
-    protected void restoreState() {
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            mNeedExit = arguments.getBoolean(NEED_EXIT);
-            mChangePassword = getArguments().getBoolean(CHANGE_PASSWORD);
-            mRestoreFromAuth = getArguments().getBoolean(RESTORE_FROM_AUTH);
+    protected void restoreState(Bundle state) {
+        if (state != null) {
+            mNeedExit = state.getBoolean(NEED_EXIT);
+            mChangePassword = state.getBoolean(CHANGE_PASSWORD);
+            mRestoreFromAuth = state.getBoolean(RESTORE_FROM_AUTH);
+            mHash = state.getString(HASH);
+            mPassword = state.getString(PASSWORD, EMPTY);
+            mPasswordConfirmation = state.getString(PASSWORD_CONFIRMATION, EMPTY);
+            mOldPassword = state.getString(OLD_PASSWORD, EMPTY);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(NEED_EXIT, mNeedExit);
+        outState.putBoolean(CHANGE_PASSWORD, mChangePassword);
+        outState.putBoolean(RESTORE_FROM_AUTH, mRestoreFromAuth);
+        outState.putString(HASH, mHash);
+        outState.putString(PASSWORD, mEdMainField.getText().toString());
+        outState.putString(PASSWORD_CONFIRMATION, mEdConfirmationField.getText().toString());
+        outState.putString(OLD_PASSWORD, mEdOldPassword.getText().toString());
     }
 
     @Override
@@ -138,7 +176,11 @@ public class SettingsChangeAuthDataFragment extends BaseFragment implements OnCl
             case R.id.btnSave:
                 Utils.hideSoftKeyboard(getActivity(), mEdMainField, mEdConfirmationField);
                 if (mChangePassword) {
-                    changePassword();
+                    if (mRestoreFromAuth) {
+                        changePasswordFromAuth();
+                    } else {
+                        changePassword();
+                    }
                 } else {
                     changeEmail();
                 }
@@ -148,23 +190,63 @@ public class SettingsChangeAuthDataFragment extends BaseFragment implements OnCl
         }
     }
 
+    private void changePasswordFromAuth() {
+        final String password = mEdMainField.getText().toString();
+        final String passwordConfirmation = mEdConfirmationField.getText().toString();
+        if (isValidPassword(password, passwordConfirmation, null, false)) {
+            ChangePwdFromAuthRequest request = new ChangePwdFromAuthRequest(getActivity(), mHash, password);
+            request.callback(new ApiHandler() {
+                @Override
+                public void success(IApiResponse response) {
+                    if (response.isCompleted()) {
+                        Utils.showToastNotification(R.string.passwords_changed, Toast.LENGTH_LONG);
+                        mEdMainField.getText().clear();
+                        mEdConfirmationField.getText().clear();
+                        mEdOldPassword.getText().clear();
+                    }
+                }
+
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+                    Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
+                }
+            }).exec();
+        }
+    }
+
+    private boolean isValidPassword(String password, String passwordConfirmation, String oldPassword, boolean isNeedHandleOldPwd) {
+        if (password.trim().length() <= 0) {
+            Utils.showToastNotification(R.string.enter_new_password, Toast.LENGTH_LONG);
+            return false;
+        } else if (passwordConfirmation.trim().length() <= 0) {
+            Utils.showToastNotification(R.string.enter_password_confirmation, Toast.LENGTH_LONG);
+            return false;
+        } else if (!password.equals(passwordConfirmation)) {
+            Utils.showToastNotification(R.string.passwords_mismatched, Toast.LENGTH_LONG);
+            return false;
+        }
+        if (!isNeedHandleOldPwd) {
+            return true;
+        } else {
+            if (oldPassword.trim().length() <= 0) {
+                Utils.showToastNotification(R.string.enter_old_password, Toast.LENGTH_LONG);
+                return false;
+            } else if (!oldPassword.equals(mToken.getPassword())) {
+                Utils.showToastNotification(R.string.old_password_mismatched, Toast.LENGTH_LONG);
+                return false;
+            } else if (oldPassword.equals(password)) {
+                Utils.showToastNotification(R.string.passwords_matched, Toast.LENGTH_LONG);
+                return false;
+            }
+            return true;
+        }
+    }
+
     private void changePassword() {
         final String password = mEdMainField.getText().toString();
         final String passwordConfirmation = mEdConfirmationField.getText().toString();
-        final String oldPassword = mOldPassword.getText().toString();
-        if (oldPassword.trim().length() <= 0) {
-            Utils.showToastNotification(R.string.enter_old_password, Toast.LENGTH_LONG);
-        } else if (password.trim().length() <= 0) {
-            Utils.showToastNotification(R.string.enter_new_password, Toast.LENGTH_LONG);
-        } else if (passwordConfirmation.trim().length() <= 0) {
-            Utils.showToastNotification(R.string.enter_password_confirmation, Toast.LENGTH_LONG);
-        } else if (!password.equals(passwordConfirmation)) {
-            Utils.showToastNotification(R.string.passwords_mismatched, Toast.LENGTH_LONG);
-        } else if (!oldPassword.equals(mToken.getPassword())) {
-            Utils.showToastNotification(R.string.old_password_mismatched, Toast.LENGTH_LONG);
-        } else if (oldPassword.equals(password)) {
-            Utils.showToastNotification(R.string.passwords_matched, Toast.LENGTH_LONG);
-        } else {
+        final String oldPassword = mEdOldPassword.getText().toString();
+        if (isValidPassword(password, passwordConfirmation, oldPassword, true)) {
             ChangePasswordRequest request = new ChangePasswordRequest(getActivity(), mToken.getPassword(), password);
             lock();
             request.callback(new ApiHandler() {
@@ -176,7 +258,7 @@ public class SettingsChangeAuthDataFragment extends BaseFragment implements OnCl
                         CacheProfile.onPasswordChanged(getContext());
                         mEdMainField.getText().clear();
                         mEdConfirmationField.getText().clear();
-                        mOldPassword.getText().clear();
+                        mEdOldPassword.getText().clear();
                         if (mNeedExit) {
                             logout();
                         }

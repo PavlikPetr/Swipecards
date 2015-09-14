@@ -45,7 +45,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        restoreState();
+        restoreState(savedInstanceState != null ? savedInstanceState : getArguments());
         setHasOptionsMenu(needOptionsMenu());
         super.onCreate(savedInstanceState);
         try {
@@ -303,7 +303,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         return null;
     }
 
-    protected void restoreState() {
+    protected void restoreState(Bundle savedInstanceState) {
     }
 
     protected void setNeedTitles(boolean needTitles) {
