@@ -28,18 +28,20 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
-import java.text.DecimalFormat;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 public class Products extends AbstractData {
     public static final String PRICE = "{{price}}";
     public static final String PRICE_PER_ITEM = "{{price_per_item}}";
-    private static final String EUR = "EUR";
-    private static final String RUB = "RUB";
-    private static final String USD = "USD";
+    public static final String USD = "USD";
 
     public enum ProductType {
         COINS("coins"),
@@ -169,18 +171,6 @@ public class Products extends AbstractData {
         }
     }
 
-    private static String getPriceAndCurrencyAbbreviation(String price, String currency) {
-        switch (currency) {
-            case EUR:
-                return price + App.getContext().getString(R.string.eur);
-            case USD:
-                return App.getContext().getString(R.string.usd) + price;
-            case RUB:
-                return price + App.getContext().getString(R.string.rub);
-        }
-        return price + currency;
-    }
-
     public BuyButtonData createBuyButtonFromJSON(JSONObject purchaseItem) {
         BuyButtonData button = null;
         if (purchaseItem != null) {
@@ -218,16 +208,24 @@ public class Products extends AbstractData {
             value = buyBtn.hint;
         } else {
             ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
-            DecimalFormat decimalFormat = new DecimalFormat("#.##");
-            value = buyBtn.totalTemplate.replace(PRICE, decimalFormat.format((float) buyBtn.price / 100) +
-                    context.getString(R.string.usd));
+            Currency currency;
+            NumberFormat currencyFormatter;
+            currency = Currency.getInstance(USD);
+            currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
+            currencyFormatter.setCurrency(currency);
+            value = formatPrice(buyBtn.price / 100, currencyFormatter,buyBtn.totalTemplate, PRICE);
             if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
-                if (detail != null && !detail.currency.equals(USD)) {
+
+                if (detail != null) {
                     double price = detail.price / ProductsDetails.MICRO_AMOUNT;
-                    value = buyBtn.totalTemplate.replace(PRICE, getPriceAndCurrencyAbbreviation(decimalFormat.format(price), detail.currency));
+                    currency = Currency.getInstance(detail.currency);
+                    currencyFormatter = detail.currency.equalsIgnoreCase(USD)
+                            ? NumberFormat.getCurrencyInstance(Locale.US) : NumberFormat.getCurrencyInstance();
+                    currencyFormatter.setCurrency(currency);
+                    value = formatPrice(price,currencyFormatter,buyBtn.titleTemplate, PRICE);
                 } else {
-                    value = buyBtn.totalTemplate.replace(PRICE, getPriceAndCurrencyAbbreviation(String.valueOf((float) buyBtn.price / 100), USD));
+                    value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn.titleTemplate, PRICE);
                 }
             }
         }
@@ -236,6 +234,11 @@ public class Products extends AbstractData {
                 buyBtn.showType, value, listener
         );
     }
+
+    public static String formatPrice(double price, NumberFormat currencyFormatter, String template, String replaceTemplate){
+        currencyFormatter.setMaximumFractionDigits(price % 1 != 0 ? 2 : 0);
+        return template.replace(replaceTemplate, currencyFormatter.format(price));
+        }
 
     /**
      * Creates view for buy actions. Button with hints
@@ -317,7 +320,7 @@ public class Products extends AbstractData {
         // title text
         TextView tvTitle = (TextView) view.findViewById(R.id.itText);
         setBuyButtonTextColor(showType, tvTitle);
-        tvTitle.setText(title);
+        tvTitle.setText(TextUtils.isEmpty(value) ? title : value);
     }
 
     private static void setSelectorTextColor(int selector, TextView view) {
