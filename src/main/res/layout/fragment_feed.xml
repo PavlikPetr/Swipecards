@@ -32,7 +32,8 @@
                 android:dividerHeight="0dp"
                 android:fadeScrollbars="true"
                 android:fadingEdge="none"
-                android:listSelector="@android:color/transparent" />
+                android:listSelector="@android:color/transparent"
+                android:visibility="gone" />
         </android.support.v4.widget.SwipeRefreshLayout>
 
         <com.topface.topface.ui.views.LockerView

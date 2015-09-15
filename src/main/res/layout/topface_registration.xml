@@ -96,7 +96,7 @@
                     android:gravity="center"
                     android:paddingTop="10dp"
                     android:text="@string/birthday"
-                    android:textColor="#234144"
+                    android:textColor="@color/registration_hint_color"
                     android:textSize="16sp" />
             </LinearLayout>
 

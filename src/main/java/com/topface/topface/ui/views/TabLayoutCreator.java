@@ -74,6 +74,8 @@ public class TabLayoutCreator {
             if (counter > 0) {
                 container.counterView.setEnabled(i == position);
                 container.counterView.setText(String.valueOf(counter));
+            } else {
+                container.counterView.setText("");
             }
         }
     }

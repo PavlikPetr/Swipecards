@@ -7,12 +7,17 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
+import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.controllers.startactions.IStartAction;
+import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import static com.topface.topface.data.Options.PromoPopupEntity.AIR_MESSAGES;
 
 public class PromoExpressMessages extends PromoDialog {
 
@@ -38,7 +43,7 @@ public class PromoExpressMessages extends PromoDialog {
     protected String getMessage() {
         Options.PromoPopupEntity premiumEntity = getPremiumEntity();
         int count = premiumEntity.getCount();
-        return Utils.getQuantityString(getPluralForm(), count, count);
+        return Utils.replaceDashWithHyphen(Utils.getQuantityString(getPluralForm(), count, count));
     }
 
     @Override
@@ -53,7 +58,7 @@ public class PromoExpressMessages extends PromoDialog {
 
     @Override
     public String getMainTag() {
-        return "promo.expressMessages";
+        return "promo.key31";
     }
 
     @Override
@@ -110,5 +115,44 @@ public class PromoExpressMessages extends PromoDialog {
     public PromoExpressMessages setExtraPaddingTop(int extraPaddingTopValue) {
         mExtraPaddingTop = extraPaddingTopValue;
         return this;
+    }
+
+    public interface PopupRedirectListener {
+        void onRedirect();
+    }
+
+    public static IStartAction createPromoPopupStartAction(final int priority, final PopupRedirectListener listener) {
+        return new IStartAction() {
+            @Override
+            public void callInBackground() {
+            }
+
+            @Override
+            public void callOnUi() {
+                if (listener != null) {
+                    listener.onRedirect();
+                }
+            }
+
+            @Override
+            public boolean isApplicable() {
+                return !CacheProfile.premium && PromoPopupManager.checkIsNeedShow(CacheProfile.getOptions().getPremiumEntityByType(AIR_MESSAGES));
+            }
+
+            @Override
+            public int getPriority() {
+                return priority;
+            }
+
+            @Override
+            public String getActionName() {
+                return "PromoPopup";
+            }
+
+            @Override
+            public void setStartActionCallback(OnNextActionListener startActionCallback) {
+
+            }
+        };
     }
 }

@@ -29,6 +29,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.City;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.promo.PromoPopupManager;
+import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -125,9 +126,9 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         Intent intent = new Intent(activity, NavigationActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(GCMUtils.NEXT_INTENT, CacheProfile.getOptions().startPageFragmentId);
-        if(App.getUserConfig().getDatingMessage().equals(CacheProfile.getOptions()
-                .instantMessageFromSearch.getText())){
-            intent.putExtra(DatingInstantMessageController.DEFAULT_MESSAGE,true);
+        if (App.getUserConfig().getDatingMessage().equals(CacheProfile.getOptions()
+                .instantMessageFromSearch.getText())) {
+            intent.putExtra(DatingInstantMessageController.DEFAULT_MESSAGE, true);
         }
         activity.startActivity(intent);
     }
@@ -221,7 +222,17 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         startActionsController.registerAction(new NotificationsDisablePopup(NavigationActivity.this, AC_PRIORITY_NORMAL));
         // promo popups
         PromoPopupManager promoPopupManager = new PromoPopupManager(this);
-        startActionsController.registerAction(promoPopupManager.createPromoPopupStartAction(AC_PRIORITY_NORMAL));
+        IStartAction promoPopupsAction = new ChosenStartAction().chooseFrom(
+                PromoExpressMessages.createPromoPopupStartAction(AC_PRIORITY_NORMAL, new PromoExpressMessages.PopupRedirectListener() {
+                    @Override
+                    public void onRedirect() {
+                        showFragment(FragmentId.TABBED_DIALOGS);
+                        mDrawerLayoutStateObservable.onNext(DRAWER_LAYOUT_STATE.CLOSED);
+                    }
+                }),
+                promoPopupManager.createPromoPopupStartAction(AC_PRIORITY_NORMAL)
+        );
+        startActionsController.registerAction(promoPopupsAction);
         // popups
         mPopupManager = new PopupManager(this);
         startActionsController.registerAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
@@ -230,7 +241,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     private void initFullscreen() {
-        mFullscreenController = new FullscreenController(this);
+        mFullscreenController = new FullscreenController(this, CacheProfile.getOptions());
     }
 
     private void initBonusCounterConfig() {
@@ -667,5 +678,4 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     public Observable<DRAWER_LAYOUT_STATE> getDrawerLayoutStateObservable() {
         return mDrawerLayoutStateObservable;
     }
-
 }
