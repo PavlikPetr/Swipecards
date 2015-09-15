@@ -126,7 +126,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         if (getActivity() instanceof BaseFragmentActivity) {
             ((BaseFragmentActivity) getActivity()).registerRequest(profileRequest);
         }
-        profileRequest.part = ProfileRequest.P_EMAIL_CONFIRMED;
         profileRequest.callback(new DataApiHandler<Boolean>() {
 
             @Override

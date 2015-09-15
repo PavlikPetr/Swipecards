@@ -176,7 +176,6 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
             ((BaseFragmentActivity) getActivity()).registerRequest(profileRequest);
         }
         onRequestStart();
-        profileRequest.part = ProfileRequest.P_EMAIL_CONFIRMED;
         profileRequest.callback(new DataApiHandler<Boolean>() {
             @Override
             protected void success(Boolean isEmailConfirmed, IApiResponse response) {

@@ -71,7 +71,7 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean giveNoviceLikes;
     protected Context mContext;
     @Inject
-    TopfaceAppState mAppState;
+    transient TopfaceAppState mAppState;
 
     public Profile() {
         super();

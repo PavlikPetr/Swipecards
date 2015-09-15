@@ -3,6 +3,7 @@ package com.topface.topface.modules;
 import android.location.Location;
 import android.text.TextUtils;
 
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
@@ -102,8 +103,11 @@ public class TopfaceModule {
                     UserConfig config = App.getUserConfig();
                     config.setUserGeoLocation((Location) data);
                     config.saveConfig();
+                } else if (data.getClass() == Options.class) {
+                    CacheProfile.setOptions(JsonUtils.toJson(data));
+                } else if (data.getClass() == Profile.class) {
+                    CacheProfile.setProfile((Profile) data, JsonUtils.toJson(data));
                 }
-                //кэш для Options сохраняем в SessionConfig в конце парсинга опций
             }
 
             @Override

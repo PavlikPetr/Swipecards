@@ -24,7 +24,6 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.CitySearchActivity;
@@ -86,7 +85,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
                         if (isSettingsRequest) {
                             new ParallelApiRequest(getActivity())
                                     .addRequest(request)
-                                    .addRequest(App.getProfileRequest(ProfileRequest.P_ALL))
+                                    .addRequest(App.getProfileRequest())
                                     .setFrom(getClass().getSimpleName())
                                     .exec();
                         } else {

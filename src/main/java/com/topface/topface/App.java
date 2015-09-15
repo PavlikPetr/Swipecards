@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -113,7 +114,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 .addRequest(getUserOptionsRequest())
                 .addRequest(getProductsRequest())
                 .addRequest(getPaymentwallProductsRequest())
-                .addRequest(getProfileRequest(ProfileRequest.P_ALL))
+                .addRequest(getProfileRequest())
                 .setFrom(App.class.getSimpleName() + " profile and options requests")
                 .callback(handler)
                 .exec();
@@ -173,7 +174,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
 
     public static void sendUserOptionsAndPurchasesRequest() {
         new ParallelApiRequest(App.getContext())
-                .addRequest(getProfileRequest(ProfileRequest.P_ALL))
+                .addRequest(getProfileRequest())
                 .addRequest(getUserOptionsRequest())
                 .addRequest(getPaymentwallProductsRequest())
                 .addRequest(getProductsRequest())
@@ -204,12 +205,12 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     }
 
     public static void sendProfileRequest() {
-        getProfileRequest(ProfileRequest.P_ALL).exec();
+        getProfileRequest().exec();
     }
 
-    public static ApiRequest getProfileRequest(final int part) {
+    public static ApiRequest getProfileRequest() {
         mLastProfileUpdate = System.currentTimeMillis();
-        return new ProfileRequest(part, App.getContext())
+        return new ProfileRequest(App.getContext())
                 .callback(new DataApiHandler<Profile>() {
 
                     @Override
@@ -218,7 +219,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                             App.getConfig().getUserConfig().setUserAvatarAvailable(false);
                             App.getConfig().getUserConfig().saveConfig();
                         }
-                        CacheProfile.setProfile(data, response.getJsonResult(), part);
                         CacheProfile.sendUpdateProfileBroadcast();
                     }
 
@@ -252,7 +252,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     public static void checkProfileUpdate() {
         if (System.currentTimeMillis() > mLastProfileUpdate + PROFILE_UPDATE_TIMEOUT) {
             mLastProfileUpdate = System.currentTimeMillis();
-            getProfileRequest(ProfileRequest.P_ALL).exec();
+            getProfileRequest().exec();
         }
     }
 
@@ -588,20 +588,22 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     private OptionsAndProfileProvider mProvider;
 
     @Override
-    public void onOptionsUpdate(Options options) {
+    public void onOptionsUpdate(@NonNull Options options) {
         mOptions = options;
     }
 
+    @NonNull
     @Override
     public Options getOptions() {
         return mOptions;
     }
 
     @Override
-    public void onProfileUpdate(Profile profile) {
+    public void onProfileUpdate(@NonNull Profile profile) {
         mProfile = profile;
     }
 
+    @NonNull
     @Override
     public Profile getProfile() {
         return mProfile;

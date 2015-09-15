@@ -452,7 +452,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     protected void initFloatBlock() {
         if (!getListAdapter().isNeedFeedAd()) {
-            mBannersController = new BannersController(this, App.from(getActivity()).getOptions().interstitial.canShow());
+            mBannersController = new BannersController(this, App.from(getActivity()).getOptions());
         }
     }
 

@@ -22,7 +22,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
@@ -169,14 +168,14 @@ public class Options extends AbstractData {
     public int maxMessageSize;
     public SixCoinsSubscribeExperiment sixCoinsSubscribeExperiment = new SixCoinsSubscribeExperiment();
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
-    public TopfaceOfferwallRedirect topfaceOfferwallRedirect = new TopfaceOfferwallRedirect();
+    transient public TopfaceOfferwallRedirect topfaceOfferwallRedirect = new TopfaceOfferwallRedirect();
     public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
     public FeedNativeAd feedNativeAd = new FeedNativeAd();
     public NotShown notShown = new NotShown();
-    public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
+    transient public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
     public InterstitialInFeeds interstitial = new InterstitialInFeeds();
     @Inject
-    TopfaceAppState mAppState;
+    transient TopfaceAppState mAppState;
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -366,13 +365,6 @@ public class Options extends AbstractData {
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
-
-        if (response != null && cacheToPreferences) {
-            CacheProfile.setOptions(response);
-        } else {
-            Debug.error(cacheToPreferences ? "Options from preferences" : "Options response is null");
-        }
-
     }
 
     private void fillOffers(List<Offerwalls.Offer> list, JSONArray offersArrObj) throws JSONException {

@@ -18,7 +18,6 @@ import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.data.Profile;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
@@ -53,21 +52,17 @@ public class CacheProfile {
     public static boolean needShowBonusCounter = false;
     public static AtomicBoolean isLoaded = new AtomicBoolean(false);
 
-    private static void setProfileCache(final JSONObject response) {
-        if (response != null) {
+    private static void setProfileCache(final String profile) {
+        if (profile != null) {
             SessionConfig config = App.getSessionConfig();
-            config.setProfileData(response.toString());
+            config.setProfileData(profile);
             config.saveConfig();
         }
     }
 
-    public static void setProfile(Profile profile, JSONObject response, int part) {
-        switch (part) {
-            case ProfileRequest.P_ALL:
-                Editor.init(profile);
-                setProfileCache(response);
-                break;
-        }
+    public static void setProfile(Profile profile, String profileStr) {
+        Editor.init(profile);
+        setProfileCache(profileStr);
         setProfileUpdateTime();
     }
 
@@ -174,11 +169,11 @@ public class CacheProfile {
         return isLoaded() && profile != null && profile.uid == 0;
     }
 
-    public static void setOptions(final JSONObject response) {
+    public static void setOptions(final String options) {
         //Каждый раз не забываем кешировать запрос опций, но делаем это в отдельном потоке
-        if (response != null) {
+        if (options != null) {
             SessionConfig config = App.getSessionConfig();
-            config.setOptionsData(response.toString());
+            config.setOptionsData(options.toString());
             config.saveConfig();
         }
     }

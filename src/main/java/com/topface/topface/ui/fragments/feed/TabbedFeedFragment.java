@@ -172,7 +172,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
                     }
                 }
                 if (!needNativeAd) {
-                    mBannersController = new BannersController(TabbedFeedFragment.this, App.from(getActivity()).getOptions().interstitial.canShow());
+                    mBannersController = new BannersController(TabbedFeedFragment.this, App.from(getActivity()).getOptions());
                 }
             }
         });
