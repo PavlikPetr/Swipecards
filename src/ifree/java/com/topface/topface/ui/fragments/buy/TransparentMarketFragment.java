@@ -9,10 +9,12 @@ import com.ifree.monetize.core.PurchaseListener;
 import com.ifree.monetize.core.PurchaseResponse;
 import com.topface.billing.IFreePurchases;
 
+import java.lang.Override;
+
 import static com.topface.topface.ui.fragments.buy.PurchasesConstants.ARG_TAG_SOURCE;
 
 
-public class TransparentMarketFragment extends IFreePurchases implements PurchaseListener {
+public class TransparentMarketFragment extends IFreePurchases implements PurchaseListener, ITransparentMarketFragmentRunner {
 
     public final static String PRODUCT_ID = "product_id";
     public final static String IS_SUBSCRIPTION = "is_subscription";
@@ -69,6 +71,7 @@ public class TransparentMarketFragment extends IFreePurchases implements Purchas
         }
     }
 
+    @Override
     public void setOnPurchaseCompleteAction(onPurchaseActions purchaseCompliteAction) {
         mPurchaseActions = purchaseCompliteAction;
     }
