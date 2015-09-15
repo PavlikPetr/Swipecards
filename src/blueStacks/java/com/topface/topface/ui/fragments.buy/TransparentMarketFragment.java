@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.topface.topface.App;
+import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
 

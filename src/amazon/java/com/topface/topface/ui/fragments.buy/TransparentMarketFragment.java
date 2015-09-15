@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.topface.topface.App;
+import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
@@ -16,7 +17,7 @@ import java.lang.Override;
 import static com.topface.topface.ui.fragments.buy.PurchasesConstants.ARG_TAG_SOURCE;
 
 
-public class TransparentMarketFragment extends GoogleMarketBuyingFragment  implements ITransparentMarketFragmentRunner{
+public class TransparentMarketFragment extends GoogleMarketBuyingFragment  implements ITransparentMarketFragmentRunner {
 
     public final static String PRODUCT_ID = "product_id";
     public final static String IS_SUBSCRIPTION = "is_subscription";

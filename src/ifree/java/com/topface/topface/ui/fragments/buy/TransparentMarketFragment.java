@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.ifree.monetize.core.PurchaseListener;
 import com.ifree.monetize.core.PurchaseResponse;
 import com.topface.billing.IFreePurchases;
+import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 
 import java.lang.Override;
 
