@@ -6,6 +6,7 @@ import com.topface.topface.App;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
+import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GoogleMarketApiManager;
 
@@ -74,24 +75,25 @@ public class TrialVipPopupAction implements IStartAction {
     private void showSubscriptionPopup() {
         if (mActivity != null && mActivity.get() != null) {
             Fragment f = mActivity.get().getSupportFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
-            final TransparentMarketFragment fragment = f == null ?
-                    TransparentMarketFragment.newInstance(CacheProfile.getOptions().trialVipExperiment.subscriptionSku, true, "TrialVipPopup") :
-                    (TransparentMarketFragment) f;
-            fragment.setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
-                @Override
-                public void onPurchaseSuccess() {
-                    if (null != mTrialVipPopup) {
-                        mTrialVipPopup.dismiss();
+            final Fragment fragment = f == null ?
+                    TransparentMarketFragment.newInstance(CacheProfile.getOptions().trialVipExperiment.subscriptionSku, true, "TrialVipPopup") : f;
+            if(fragment instanceof ITransparentMarketFragmentRunner){
+                ((ITransparentMarketFragmentRunner)fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
+                    @Override
+                    public void onPurchaseSuccess() {
+                        if (null != mTrialVipPopup) {
+                            mTrialVipPopup.dismiss();
+                        }
                     }
-                }
 
-                @Override
-                public void onPopupClosed() {
-                    if (fragment.isAdded()) {
-                        removeTransparentMarketFragment(fragment);
+                    @Override
+                    public void onPopupClosed() {
+                        if (fragment.isAdded()) {
+                            removeTransparentMarketFragment(fragment);
+                        }
                     }
-                }
-            });
+                });
+            }
             if (!fragment.isAdded()) {
                 addTransparentMarketFragment(fragment);
             } else {

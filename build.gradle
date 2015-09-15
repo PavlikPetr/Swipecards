@@ -103,6 +103,13 @@ android {
             buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                     "com.topface.billing.MarketApiType.I_FREE";
         }
+        derived {
+            applicationId "com.topface.topface.derived"
+            buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.DERIVED";
+            buildConfigField "String", "STATISTICS_APP", "\"topfacemobappderived\"";
+            buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
+                    "com.topface.billing.MarketApiType.DERIVED";
+        }
     }
 
     compileOptions {
@@ -154,6 +161,13 @@ android {
             keyAlias "topfacebluestacks"
             keyPassword "Sonetica2012"
         }
+        derived {
+            logger.error("build release apk with Derived flavourType")
+            storeFile file("misc/keys/topfaceDerived.jks")
+            storePassword "Sonetica2012"
+            keyAlias "topfacederived"
+            keyPassword "Sonetica2012"
+        }
         debug {
             storeFile file("misc/keys/debug.keystore")
         }
@@ -172,6 +186,7 @@ android {
             productFlavors.google.signingConfig signingConfigs.google
             productFlavors.ifree.signingConfig signingConfigs.ifree
             productFlavors.blueStacks.signingConfig signingConfigs.blueStacks
+            productFlavors.derived.signingConfig signingConfigs.derived
             productFlavors.amazon.signingConfig signingConfigs.google
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     getDefaultProguardFile('proguard-android-optimize.txt'),
