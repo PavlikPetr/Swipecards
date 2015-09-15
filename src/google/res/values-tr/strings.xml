@@ -29,9 +29,7 @@
     <string name="filter_city_age_parameters">Yaş ve şehir</string>
     <string name="filter_select_city">Şehir seçeneği</string>
     <string name="edit_block_photo">Fotoğraflar</string>
-    <string name="dashbrd_popup_rating">Ekimizi mi beğendin? Reytingimizi yükselt! Reyting ne kadar
-        yüksekse o kadar çok ilginç insanlarla Topface’de karşılaşırsın
-    </string>
+    <string name="dashbrd_popup_rating">Ekimizi mi beğendin? Reytingimizi yükselt! Reyting ne kadar yüksekse o kadar çok ilginç insanlarla Topface’de karşılaşırsın</string>
     <string name="dashbrd_popup_title">Reyting</string>
     <string name="dashbrd_popup_cancel">Bir daha sorma</string>
     <string name="dashbrd_popup_rate">Reyting göstermek</string>
@@ -223,12 +221,9 @@
         <item quantity="one">Bir mesaj atmak için %d para alın</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
-        <item quantity="zero">Birinin sizi beğendiğini görmek için daha fazla %d para satın alın
-        </item>
-        <item quantity="other">Birinin sizi beğendiğini görmek için daha fazla %d para satın alın
-        </item>
-        <item quantity="one">Birinin sizi beğendiğini görmek için daha fazla %d para satın alın
-        </item>
+        <item quantity="zero">Birinin sizi beğendiğini görmek için daha fazla  %d para satın alın</item>
+        <item quantity="other">Birinin sizi beğendiğini görmek için daha fazla  %d para satın alın</item>
+        <item quantity="one">Birinin sizi beğendiğini görmek için daha fazla  %d para satın alın</item>
     </plurals>
     <plurals name="buying_leaders_you_need_coins">
         <item quantity="zero">Görünmek için daha fazla %d para gerekli</item>
@@ -310,8 +305,7 @@
     <string name="settings_ask_developer">Geliştiricilere soru</string>
     <string name="settings_payment_problems">Ödeme sorunları</string>
     <string name="settings_cooperation">Ortaklık</string>
-    <string name="settings_feedback_success_msg">Teşekkürler, mesaj başarılıyla gönderilmiştir
-    </string>
+    <string name="settings_feedback_success_msg">Teşekkürler, mesaj başarılıyla gönderilmiştir</string>
     <string name="settings_switch_on">aç</string>
     <string name="settings_switch_off">kapat</string>
     <string name="leaders_go_date">Buraya istiyorum</string>
@@ -354,7 +348,7 @@
     <string name="edit_refresh_status">Durumu yenilemek</string>
     <string name="ban_title">Tebrikler! Siz ban edildiniz</string>
     <string name="ban_title_forever">Tebrikler! Hayat boyu engellendiniz!</string>
-    <string name="ban_title_until">Tebrikler! %s kadar engellendiniz.</string>
+    <string name="ban_title_until">Tebrikler!  %s kadar engellendiniz.</string>
     <string name="ban_complain">Engellemeyi şikayet etmek</string>
     <string name="general_ready">Hazır</string>
     <string name="buying_store_ok">Alış başarılıyla tamamlanmıştır</string>
@@ -823,8 +817,7 @@
     <string name="trial_vip_button_text">VIP statüsü edinin</string>
     <string name="settings_check_vip_title">VIP statüsünün aktif olup olmadığını kontrol et</string>
     <string name="settings_check_vip_cell">VIP statüsünü kontrol et</string>
-    <string name="settings_check_vip_alert">VIP statüsünün kontrol edilmesi talebiniz iletildi.
-    </string>
+    <string name="settings_check_vip_alert">VIP statüsünün kontrol edilmesi talebiniz iletildi.</string>
     <string name="novice_sympathy">Hoş bir tanışma başlamak \niçin \ngerçekten hoşlandığınız
         kişilere sempati gönderin
     </string>

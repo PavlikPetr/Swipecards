@@ -199,7 +199,8 @@
         <activity
             android:name=".ui.settings.SettingsContainerActivity"
             android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Topface">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />

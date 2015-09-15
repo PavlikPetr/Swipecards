@@ -12,8 +12,7 @@
     <string name="notification_popup_title">Erlauben Sie die Benachrichtigungen, und erfahren Sie
         sofort über neue Sympathien, Bewunderungen oder Nachrichten
     </string>
-    <string name="email_successfully_changed">Ihre E-Mail Adresse wurde erfolgreich geändert
-    </string>
+    <string name="email_successfully_changed">Ihre E-Mail Adresse wurde erfolgreich geändert</string>
     <string name="auth_vk_name">VKontakte</string>
     <string name="dating_switch_button">Noch…</string>
     <string name="dating_prev_button">Vorige</string>
@@ -25,9 +24,7 @@
     <string name="filter_city_age_parameters">Alter und Stadt</string>
     <string name="filter_select_city">Stadt auswählen</string>
     <string name="edit_block_photo">Fotos</string>
-    <string name="dashbrd_popup_rating">Gefällt unsere Anwendung? Erhöhen Sie unser Rating! Je höher
-        das Rating ist, desto mehr interessante Leute treffen Sie in Topface
-    </string>
+    <string name="dashbrd_popup_rating">Gefällt unsere Anwendung? Erhöhen Sie unser Rating! Je höher das Rating ist, desto mehr interessante Leute treffen Sie in Topface</string>
     <string name="dashbrd_popup_title">Rating</string>
     <string name="dashbrd_popup_cancel">Nicht fragen mehr</string>
     <string name="dashbrd_popup_rate">Rating ausstellen</string>
@@ -43,12 +40,10 @@
     <string name="settings_block_additional">Zusätzlich</string>
     <string name="leaders_select_photo">Wählen Sie ein effektvolles Foto:</string>
     <string name="locking_screen_button_answer">Antworten</string>
-    <string name="locking_screen_advice">Antworten Sie bitte auf alle empfangenen Sympathien
-    </string>
+    <string name="locking_screen_advice">Antworten Sie bitte auf alle empfangenen Sympathien</string>
     <string name="locking_screen_advice2">Befreien Sie sich von allen Begrenzungen</string>
     <string name="general_bookmarks_is_deleted">Nutzer wurde aus Favoriten entfernt</string>
-    <string name="general_blacklist_is_deleted">Der Nutzer ist aus der schwarzen Liste gelöscht
-    </string>
+    <string name="general_blacklist_is_deleted">Der Nutzer ist aus der schwarzen Liste gelöscht</string>
     <string name="invite_friends_title_short">Alle Freunde in Topface einladen</string>
     <string name="general_bookmarks_add_short">Zu Favoriten</string>
     <string name="general_complaint">Melden</string>
@@ -69,9 +64,7 @@
     <string name="profile_mygifts_empty">Sie haben noch keine Geschenke bekommen</string>
     <string name="dating_people_unnoticed">Sie lassen 10 Leute ohne Ihre Aufmerksamkeit!</string>
     <string name="dating_continue">Sich weiter unterhalten</string>
-    <string name="dating_better_look">Sehen Sie sich genau an!\nVielleicht verpassen Sie Ihr
-        Schicksal!
-    </string>
+    <string name="dating_better_look">Sehen Sie sich genau an!\nVielleicht verpassen Sie Ihr Schicksal!</string>
     <string name="edit_my_photos">Meine Fotos</string>
     <string name="general_search_empty_title">Leider, nichts gefunden</string>
     <string name="general_search_empty_text">Sie können Ihre Suche wiederholen, oder die Filter
@@ -88,9 +81,7 @@
     <string name="black_list_info">Sie haben den Nutzer in die schwarze Liste hinzugefügt. Sie
         können das in Ihrem Profil in Einstellungen von VIP-Status ändern.
     </string>
-    <string name="black_list_activation">Aktivieren Sie VIP-Status und benutzen Sie die schwarze
-        Liste
-    </string>
+    <string name="black_list_activation">Aktivieren Sie VIP-Status und benutzen Sie die schwarze Liste</string>
     <string name="buying_total">Insgesamt</string>
     <string name="we_dont_detect_your_city">Wollen Sie die Menschen in der Nähe finden? Wir müssen
         wissen, wo Sie sich befinden. Geben Sie bitte Ihre Stadt an.
@@ -283,8 +274,7 @@
     <string name="settings_ask_developer">Frage für Entwickler</string>
     <string name="settings_payment_problems">Probleme mit der Bezahlung</string>
     <string name="settings_cooperation">Zusammenarbeit</string>
-    <string name="settings_feedback_success_msg">Danke, die Nachricht wurde erfolgreich gesendet
-    </string>
+    <string name="settings_feedback_success_msg">Danke, die Nachricht wurde erfolgreich gesendet</string>
     <string name="settings_switch_on">on</string>
     <string name="settings_switch_off">off</string>
     <string name="leaders_go_date">Will hierher</string>
@@ -343,9 +333,7 @@
     <string name="black_list_delete">Von der schwarzen Liste entfernen</string>
     <string name="vip_buy_vip">VIP kaufen</string>
     <string name="vip_state_off">Ihr VIP-Status ist nicht aktiviert</string>
-    <string name="vip_info_guest">Erfahren Sie, wer für Sie sich interessierte - sehen Sie Ihre
-        Gäste durch!
-    </string>
+    <string name="vip_info_guest">Erfahren Sie, wer für Sie sich interessierte - sehen Sie Ihre Gäste durch!</string>
     <string name="vip_info_invisible">Bleiben Sie unscihtbar und besuchen Sie andere Seiten mit dem
         \"unsichtbaren\" Regime
     </string>
@@ -385,9 +373,7 @@
         nicht mehr unterstützt. Aktualisieren Sie Ihre Anwendung
     </string>
     <string name="default_price_format">Insgesamt: %.2f USD</string>
-    <string name="leaders_pick_condition">Sie können das Foto mit dem Rating niedriger als %d%%
-        nicht auswählen:
-    </string>
+    <string name="leaders_pick_condition">Sie können das Foto mit dem Rating niedriger als %d%% nicht auswählen:</string>
     <string name="general_gift">Geschenk</string>
     <string name="user_actions_chat">Konversation</string>
     <string name="profile_edit_age_ranges">Alter muss von 16 bis 99 Jahre sein. Geben Sie bitte eine
@@ -411,8 +397,7 @@
     <string name="incorrect_login">Login ist falsch</string>
     <string name="incorrect_password">Passwort ist falsch</string>
     <string name="empty_fields">Nicht alle Felder sind ausgefüllt</string>
-    <string name="email_already_registered">Nutzer mit dieser E-Mail-Adresse existiert schon
-    </string>
+    <string name="email_already_registered">Nutzer mit dieser E-Mail-Adresse existiert schon</string>
     <string name="enter_email_from_registration">Geben Sie die E-Mail, die Sie bei der Registrierung
         eingegeben haben
     </string>
@@ -504,12 +489,9 @@
         <item quantity="one">VIP für %d Tag bekommen</item>
     </plurals>
     <plurals name="invite_friends_plurals">
-        <item quantity="zero">Laden Sie %1$d Freunde ein, um VIP-Status für %2$d Tage zu bekommen
-        </item>
-        <item quantity="other">Laden Sie %1$d Freunde ein, um VIP-Status für %2$d Tage zu bekommen
-        </item>
-        <item quantity="one">Laden Sie %1$d Freunde ein, um VIP-Status für %2$d Tage zu bekommen
-        </item>
+        <item quantity="zero">Laden Sie %1$d Freunde ein, um VIP-Status für %2$d Tage zu bekommen</item>
+        <item quantity="other">Laden Sie %1$d Freunde ein, um VIP-Status für %2$d Tage zu bekommen</item>
+        <item quantity="one">Laden Sie %1$d Freunde ein, um VIP-Status für %2$d Tage zu bekommen</item>
     </plurals>
     <plurals name="get_vip_for_invites_plurals">
         <item quantity="other">Bekommen Sie VIP kostenlos für %d Einladungen</item>
@@ -534,9 +516,7 @@
     <string name="on_avatar">Zum Profilbild</string>
     <string name="your_avatar">Ihr Profilbild</string>
     <string name="avatar_set_successfully">Das Avatar wurde erfolgreich gespeichert</string>
-    <string name="incorrect_photo">Das Foto ist nicht korrekt. Versuchen Sie ein anderes
-        hochzuladen
-    </string>
+    <string name="incorrect_photo">Das Foto ist nicht korrekt. Versuchen Sie ein anderes hochzuladen</string>
     <string name="incorrect_photo_format">Unkorrektes Format des Fotos. Versuchen Sie jpg oder png
         hochzuladen
     </string>
@@ -578,12 +558,10 @@
     <string name="send_confirm_link">Link für die Bestätigung senden</string>
     <string name="complain_type_swearing_msg">Grobheit, Bedrohung, Fluhen</string>
     <string name="general_exit">Ausloggen</string>
-    <string name="likes_can_help_you">Die Sympathien helfen Ihnen neue Bekanntschaften zu knüpfen
-    </string>
+    <string name="likes_can_help_you">Die Sympathien helfen Ihnen neue Bekanntschaften zu knüpfen</string>
     <string name="general_get_dating">Kennen lernen</string>
     <string name="settings_select_language">Sprache wählen</string>
-    <string name="restart_to_change_locale">Für den Sprachwechsel wird die App neu gestartet
-    </string>
+    <string name="restart_to_change_locale">Für den Sprachwechsel wird die App neu gestartet</string>
     <string name="locale_changing">Sprache ändern</string>
     <plurals name="you_were_liked">
         <item quantity="other">Sie gefallen %d Menschen</item>

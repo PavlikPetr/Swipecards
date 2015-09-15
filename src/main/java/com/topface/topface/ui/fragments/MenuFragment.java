@@ -96,6 +96,7 @@ public class MenuFragment extends Fragment {
     };
     private Subscription mBalanceSubscription;
     private Subscription mCountersSubscription;
+    private View mLastActivated;
     private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -124,6 +125,11 @@ public class MenuFragment extends Fragment {
                         }
                     }
                     selectMenu(fragmentId);
+                    View view = mAdapter.getViewForActivate(mListView, fragmentId);
+                    if (view != null) {
+                        mLastActivated = view;
+                        mLastActivated.setActivated(true);
+                    }
                     break;
             }
         }
@@ -266,17 +272,15 @@ public class MenuFragment extends Fragment {
         mListView = (ListView) root.findViewById(R.id.lvMenu);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            View lastActivated;
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position < mAdapter.getCount()) {
                     onMenuSelected(mAdapter.getItem(position).getMenuId());
-                    if (lastActivated != null) {
-                        lastActivated.setActivated(false);
+                    if (mLastActivated != null) {
+                        mLastActivated.setActivated(false);
                     }
                     view.setActivated(true);
-                    lastActivated = view;
+                    mLastActivated = view;
                 } else {
                     onBalanceSelected();
                 }

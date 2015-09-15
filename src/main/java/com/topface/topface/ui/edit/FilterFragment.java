@@ -356,12 +356,18 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private void setText(int titleId, String text, ViewGroup frame) {
         ((TextView) frame.findViewWithTag("tvFilterTitle")).setText(mFormInfo.getFormTitle(titleId));
         TextView textView = (TextView) frame.findViewWithTag("tvFilterText");
+        if (TextUtils.isEmpty(text)) {
+            text = getString(R.string.form_not_specified);
+        }
         textView.setText(text);
         textView.setVisibility(View.VISIBLE);
         hashTextViewByTitleId.put(titleId, textView);
     }
 
     private void setText(String title, ViewGroup frame) {
+        if (TextUtils.isEmpty(title)) {
+            title = getString(R.string.form_not_specified);
+        }
         ((TextView) frame.findViewWithTag("tvFilterText")).setText(title);
     }
 
