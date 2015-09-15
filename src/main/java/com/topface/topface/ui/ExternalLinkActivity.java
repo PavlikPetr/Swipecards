@@ -31,17 +31,19 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
                 startActivity(intent);
                 getIntent().setData(null);
                 finish();
-            } else {
-                mIsNeedRestorePwd = true;
-                SettingsChangeAuthDataFragment fragment = (SettingsChangeAuthDataFragment) getSupportFragmentManager()
-                        .findFragmentByTag(SettingsChangeAuthDataFragment.class.getSimpleName());
-                if (fragment == null) {
-                    fragment = SettingsChangeAuthDataFragment.newInstance(true, true, code);
-                }
-                getSupportFragmentManager().beginTransaction().replace(android.R.id.content, fragment
-                        , SettingsChangeAuthDataFragment.class.getSimpleName()).commit();
             }
+        }
 
+        @Override
+        public void onRestorePassword(String code) {
+            mIsNeedRestorePwd = true;
+            SettingsChangeAuthDataFragment fragment = (SettingsChangeAuthDataFragment) getSupportFragmentManager()
+                    .findFragmentByTag(SettingsChangeAuthDataFragment.class.getSimpleName());
+            if (fragment == null) {
+                fragment = SettingsChangeAuthDataFragment.newInstance(true, true, code);
+            }
+            getSupportFragmentManager().beginTransaction().replace(android.R.id.content, fragment
+                    , SettingsChangeAuthDataFragment.class.getSimpleName()).commit();
         }
 
         @Override
