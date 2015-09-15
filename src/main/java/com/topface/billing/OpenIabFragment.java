@@ -259,7 +259,6 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
 
     private void switchTestPayment(EditSwitcher checkBox) {
         setTestPaymentsState(checkBox.doSwitch());
-        setTestPaymentsState(checkBox.isChecked());
         App.getUserConfig().setTestPaymentFlag(checkBox.isChecked());
         App.getUserConfig().saveConfig();
     }
