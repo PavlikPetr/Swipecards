@@ -163,7 +163,7 @@ android {
         }
         derived {
             logger.error("build release apk with Derived flavourType")
-            storeFile file("misc/keys/topfaceDerived.keystore")
+            storeFile file("misc/keys/topfaceDerived.jks")
             storePassword "Sonetica2012"
             keyAlias "topfacederived"
             keyPassword "Sonetica2012"
