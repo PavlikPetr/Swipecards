@@ -3,6 +3,7 @@ package com.topface.topface.requests.blacklist;
 import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.data.BlackListItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.AbstractThreadTest;
@@ -10,7 +11,6 @@ import com.topface.topface.requests.BlackListAddRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.utils.CacheProfile;
 
 /**
  * Тест функционала черного списка (добавление, получение списка, удаление)
@@ -40,7 +40,7 @@ public class BlackListAddTest extends AbstractThreadTest {
                             @Override
                             public void fail(int codeError, IApiResponse response) {
                                 if (codeError == ErrorCodes.PREMIUM_ACCESS_ONLY) {
-                                    assertFalse("User has premium, but does not get premium", CacheProfile.premium);
+                                    assertFalse("User has premium, but does not get premium", App.from(App.getContext()).getProfile().premium);
                                 } else {
                                     assertTrue("Request exec fail: " + codeError, false);
                                 }

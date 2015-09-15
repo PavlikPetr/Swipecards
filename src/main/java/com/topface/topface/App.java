@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -51,6 +52,8 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.transport.HttpApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
+import com.topface.topface.state.IStateDataUpdater;
+import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.ui.ApplicationBase;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
@@ -79,7 +82,7 @@ import java.util.Locale;
 import dagger.ObjectGraph;
 
 @ReportsCrashes(formUri = "817b00ae731c4a663272b4c4e53e4b61")
-public class App extends ApplicationBase {
+public class App extends ApplicationBase implements IStateDataUpdater {
 
     public static final String TAG = "Topface";
     public static final String CONNECTIVITY_CHANGE_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
@@ -92,7 +95,7 @@ public class App extends ApplicationBase {
     private static long mLastProfileUpdate;
     private static Configurations mBaseConfig;
     private static AppOptions mAppOptions;
-
+    public static boolean isScruffyEnabled;
     private static Boolean mIsGmsSupported;
     private static String mStartLabel;
     private static Location mCurLocation;
@@ -111,7 +114,7 @@ public class App extends ApplicationBase {
                 .addRequest(getUserOptionsRequest())
                 .addRequest(getProductsRequest())
                 .addRequest(getPaymentwallProductsRequest())
-                .addRequest(getProfileRequest(ProfileRequest.P_ALL))
+                .addRequest(getProfileRequest())
                 .setFrom(App.class.getSimpleName() + " profile and options requests")
                 .callback(handler)
                 .exec();
@@ -171,7 +174,7 @@ public class App extends ApplicationBase {
 
     public static void sendUserOptionsAndPurchasesRequest() {
         new ParallelApiRequest(App.getContext())
-                .addRequest(getProfileRequest(ProfileRequest.P_ALL))
+                .addRequest(getProfileRequest())
                 .addRequest(getUserOptionsRequest())
                 .addRequest(getPaymentwallProductsRequest())
                 .addRequest(getProductsRequest())
@@ -186,7 +189,7 @@ public class App extends ApplicationBase {
                     protected void success(Options data, IApiResponse response) {
                         LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Options.OPTIONS_RECEIVED_ACTION));
                         mUserOptionsObtainedFromServer = true;
-                        NativeAdManager.init();
+                        NativeAdManager.init(data, getContext());
                     }
 
                     @Override
@@ -202,12 +205,12 @@ public class App extends ApplicationBase {
     }
 
     public static void sendProfileRequest() {
-        getProfileRequest(ProfileRequest.P_ALL).exec();
+        getProfileRequest().exec();
     }
 
-    public static ApiRequest getProfileRequest(final int part) {
+    public static ApiRequest getProfileRequest() {
         mLastProfileUpdate = System.currentTimeMillis();
-        return new ProfileRequest(part, App.getContext())
+        return new ProfileRequest(App.getContext())
                 .callback(new DataApiHandler<Profile>() {
 
                     @Override
@@ -216,7 +219,6 @@ public class App extends ApplicationBase {
                             App.getConfig().getUserConfig().setUserAvatarAvailable(false);
                             App.getConfig().getUserConfig().saveConfig();
                         }
-                        CacheProfile.setProfile(data, response.getJsonResult(), part);
                         CacheProfile.sendUpdateProfileBroadcast();
                     }
 
@@ -250,7 +252,7 @@ public class App extends ApplicationBase {
     public static void checkProfileUpdate() {
         if (System.currentTimeMillis() > mLastProfileUpdate + PROFILE_UPDATE_TIMEOUT) {
             mLastProfileUpdate = System.currentTimeMillis();
-            getProfileRequest(ProfileRequest.P_NECESSARY_DATA).exec();
+            getProfileRequest().exec();
         }
     }
 
@@ -285,8 +287,8 @@ public class App extends ApplicationBase {
         return getConfig().getLocaleConfig();
     }
 
-    public static BannersConfig getBannerConfig() {
-        return getConfig().getBannerConfig();
+    public static BannersConfig getBannerConfig(Options options) {
+        return getConfig().getBannerConfig(options);
     }
 
     public static AppOptions getAppOptions() {
@@ -341,6 +343,7 @@ public class App extends ApplicationBase {
         LeakCanary.install(this);
         mContext = getApplicationContext();
         initObjectGraphForInjections();
+        mProvider = new OptionsAndProfileProvider(this);
         //Включаем отладку, если это дебаг версия
         enableDebugLogs();
         //Включаем логирование ошибок
@@ -415,10 +418,9 @@ public class App extends ApplicationBase {
         Debug.log("App", "+onCreateAsync");
         DateUtils.syncTime();
         Ssid.load();
-        CacheProfile.loadProfile();
         //Оповещаем о том, что профиль загрузился
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
-        if (!GcmIntentService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty()) {
+        if (!GcmIntentService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty(getContext())) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -570,7 +572,7 @@ public class App extends ApplicationBase {
         if (!mAppOptionsObtainedFromServer && !mUserOptionsObtainedFromServer) {
             return HttpApiTransport.TRANSPORT_NAME;
         } else {
-            boolean userOptions = mAppOptionsObtainedFromServer && CacheProfile.getOptions().isScruffyEnabled();
+            boolean userOptions = mAppOptionsObtainedFromServer && isScruffyEnabled;
             boolean appOptions = mUserOptionsObtainedFromServer && getAppOptions().isScruffyEnabled();
             if (appOptions || userOptions) {
                 if (ScruffyRequestManager.getInstance().isAvailable()) {
@@ -580,5 +582,32 @@ public class App extends ApplicationBase {
             return HttpApiTransport.TRANSPORT_NAME;
         }
     }
+
+    private Profile mProfile;
+    private Options mOptions;
+    private OptionsAndProfileProvider mProvider;
+
+    @Override
+    public void onOptionsUpdate(@NonNull Options options) {
+        mOptions = options;
+    }
+
+    @NonNull
+    @Override
+    public Options getOptions() {
+        return mOptions;
+    }
+
+    @Override
+    public void onProfileUpdate(@NonNull Profile profile) {
+        mProfile = profile;
+    }
+
+    @NonNull
+    @Override
+    public Profile getProfile() {
+        return mProfile;
+    }
+
 }
 

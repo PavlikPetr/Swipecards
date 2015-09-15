@@ -15,6 +15,7 @@ import com.topface.topface.requests.ConfirmedApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
@@ -57,8 +58,8 @@ abstract public class ApiHandler extends Handler {
                 } else if (response.isCodeEqual(ErrorCodes.CODE_OLD_APPLICATION_VERSION)) {
                     fail(result, response);
                     Context context = getContext();
-                    if (context instanceof Activity) {
-                        Utils.startOldVersionPopup((Activity) context, false);
+                    if (context instanceof BaseFragmentActivity) {
+                        Utils.startOldVersionPopup((BaseFragmentActivity) context, false);
                     }
                 } else if (result != ErrorCodes.RESULT_OK) {
                     fail(result, response);

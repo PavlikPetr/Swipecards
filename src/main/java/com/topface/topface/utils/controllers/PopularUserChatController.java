@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.TextView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.History;
 import com.topface.topface.data.Photo;
@@ -19,7 +20,6 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.PopularUserDialog;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.EasyTracker;
 
@@ -121,7 +121,7 @@ public class PopularUserChatController extends BroadcastReceiver {
     }
 
     public boolean isAccessAllowed() {
-        return CacheProfile.premium || TextUtils.isEmpty(mBlockText) || mOff;
+        return App.from(mChatFragment.getActivity()).getProfile().premium || TextUtils.isEmpty(mBlockText) || mOff;
     }
 
     public boolean checkChatBlock(History message) {

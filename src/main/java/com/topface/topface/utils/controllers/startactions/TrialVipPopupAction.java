@@ -3,10 +3,10 @@ package com.topface.topface.utils.controllers.startactions;
 import android.support.v4.app.Fragment;
 
 import com.topface.topface.App;
+import com.topface.topface.data.Options;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GoogleMarketApiManager;
 
 import java.lang.ref.WeakReference;
@@ -51,9 +51,10 @@ public class TrialVipPopupAction implements IStartAction {
 
     @Override
     public boolean isApplicable() {
-        return !CacheProfile.paid && !CacheProfile.premium &&
-                App.getUserConfig().getTrialVipCounter() < CacheProfile.getOptions().getMaxShowCountTrialVipPopup() &&
-                CacheProfile.getOptions().trialVipExperiment.enabled && new GoogleMarketApiManager().isMarketApiAvailable();
+        Options options = App.from(mActivity.get()).getOptions();
+        return !App.from(mActivity.get()).getProfile().paid && !App.from(mActivity.get()).getProfile().premium &&
+                App.getUserConfig().getTrialVipCounter() < options.getMaxShowCountTrialVipPopup() &&
+                options.trialVipExperiment.enabled && new GoogleMarketApiManager().isMarketApiAvailable();
     }
 
     @Override
@@ -75,7 +76,7 @@ public class TrialVipPopupAction implements IStartAction {
         if (mActivity != null && mActivity.get() != null) {
             Fragment f = mActivity.get().getSupportFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
             final TransparentMarketFragment fragment = f == null ?
-                    TransparentMarketFragment.newInstance(CacheProfile.getOptions().trialVipExperiment.subscriptionSku, true, "TrialVipPopup") :
+                    TransparentMarketFragment.newInstance(App.from(mActivity.get()).getOptions().trialVipExperiment.subscriptionSku, true, "TrialVipPopup") :
                     (TransparentMarketFragment) f;
             fragment.setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
                 @Override

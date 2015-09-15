@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
@@ -22,7 +23,6 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
@@ -156,7 +156,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(PurchasesActivity.createBuyingIntent("EmptyDialogs"));
+                startActivity(PurchasesActivity.createBuyingIntent("EmptyDialogs", App.from(getActivity()).getOptions().topfaceOfferwallRedirect));
             }
         });
 
@@ -247,9 +247,8 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     private boolean isExpressPopupAvailable() {
-        if (CacheProfile.premium) return false;
-        Options options = CacheProfile.getOptions();
-        Options.PromoPopupEntity expressMessagesPopup = options.getPremiumEntityByType(AIR_MESSAGES);
+        if (App.from(getActivity()).getProfile().premium) return false;
+        Options.PromoPopupEntity expressMessagesPopup = App.from(getActivity()).getOptions().getPremiumEntityByType(AIR_MESSAGES);
         return expressMessagesPopup != null && expressMessagesPopup.isNeedShow() &&
                 expressMessagesPopup.getPageId() == BaseFragment.FragmentId.TABBED_DIALOGS.getId();
     }

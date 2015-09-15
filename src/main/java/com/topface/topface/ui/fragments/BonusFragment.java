@@ -18,9 +18,9 @@ import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
 import com.topface.offerwall.common.TFCredentials;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
@@ -55,7 +55,7 @@ public class BonusFragment extends BaseFragment {
     @Override
     protected void onLoadProfile() {
         super.onLoadProfile();
-        OfferwallsManager.init(getActivity());
+        OfferwallsManager.init(getActivity(), App.from(getActivity()).getOptions());
         OfferwallsManager.initTfOfferwall(getActivity(), new TFCredentials.OnInitializeListener() {
             @Override
             public void onInitialized() {
@@ -79,7 +79,7 @@ public class BonusFragment extends BaseFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View root;
 
-        mIntegrationUrl = CacheProfile.getOptions().bonus.integrationUrl;
+        mIntegrationUrl = App.from(getActivity()).getOptions().bonus.integrationUrl;
         if (!TextUtils.isEmpty(mIntegrationUrl)) {
             root = getIntegrationWebView(inflater);
         } else {
@@ -106,7 +106,7 @@ public class BonusFragment extends BaseFragment {
 
     private View getOfferwallView(LayoutInflater inflater) {
         View root = inflater.inflate(R.layout.fragment_bonus, null);
-        Options.Offerwalls offerwalls = CacheProfile.getOptions().offerwalls;
+        Options.Offerwalls offerwalls = App.from(getActivity()).getOptions().offerwalls;
         // main offerwalls - blue buttons
         ((TextView) root.findViewById(R.id.tvOfferMain)).setText(offerwalls.mainText);
         ViewGroup mainOffersContainer = (ViewGroup) root.findViewById(R.id.loContainerMain);
@@ -164,7 +164,7 @@ public class BonusFragment extends BaseFragment {
         return createButton(activity, style, offer.text, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OfferwallsManager.startOfferwall(activity, offer.action);
+                OfferwallsManager.startOfferwall(activity, offer.action, App.from(getActivity()).getOptions());
                 Intent intent = new Intent(OFFERWALL_OPENED);
                 intent.putExtra(OFFERWALL_NAME, offer.action);
                 LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);

@@ -3,6 +3,7 @@ package com.topface.topface.ui;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.ExternalLinkExecuter;
@@ -34,7 +35,7 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
 
         @Override
         public void onOfferWall() {
-            OfferwallsManager.startOfferwall(ExternalLinkActivity.this);
+            OfferwallsManager.startOfferwall(ExternalLinkActivity.this, App.from(ExternalLinkActivity.this).getOptions());
             getIntent().setData(null);
             finish();
         }

@@ -97,7 +97,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         RateController.OnRateControllerListener {
 
     private static final String CURRENT_USER = "current_user";
-
     @Inject
     TopfaceAppState mAppState;
     AtomicBoolean isAdmirationFailed = new AtomicBoolean(false);
@@ -217,7 +216,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                     mDatingInstantMessageController != null &&
                             TextUtils.isEmpty(userConfig.getDatingMessage())
                     ) {
-                Options.InstantMessageFromSearch message = CacheProfile.getOptions().instantMessageFromSearch;
+                Options.InstantMessageFromSearch message = App.from(context).getOptions().instantMessageFromSearch;
                 mDatingInstantMessageController.setInstantMessageText(message.getText());
                 userConfig.setDatingMessage(message.getText());
                 userConfig.saveConfig();
@@ -318,7 +317,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
-        isHideAdmirations = CacheProfile.getOptions().isHideAdmirations;
+        isHideAdmirations = App.from(getActivity()).getOptions().isHideAdmirations;
         mRoot = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_dating, null);
         initViews(mRoot);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
@@ -461,7 +460,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void setHighRatePrice() {
         // Dating Love Price
-        final int delightPrice = CacheProfile.getOptions().priceAdmiration;
+        final int delightPrice = App.from(getActivity()).getOptions().priceAdmiration;
         if (null != mDatingLovePrice) {
             if (delightPrice > 0) {
                 mDatingLovePrice.setVisibility(View.VISIBLE);
@@ -690,8 +689,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void initInstantMessageController(KeyboardListenerLayout root) {
         mDatingInstantMessageController = new DatingInstantMessageController(getActivity(), root,
-                this, this, CacheProfile.getOptions().instantMessageFromSearch.getText(),
-                mDatingButtons, mUserInfoStatus, new DatingInstantMessageController.SendLikeAction() {
+                this, this, mDatingButtons, mUserInfoStatus, new DatingInstantMessageController.SendLikeAction() {
             @Override
             public void sendLike() {
                 sendSympathy();
@@ -704,8 +702,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 }
                 return false;
             }
-        }
-        );
+        });
     }
 
     private SearchRequest getSearchRequest(boolean isNeedRefresh) {
@@ -723,10 +720,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (!CacheProfile.isLoaded()) {
             return;
         }
+        final Options options = App.from(getActivity()).getOptions();
         switch (view.getId()) {
             case R.id.loDatingResources: {
                 EasyTracker.sendEvent("Dating", "BuyClick", "", 1L);
-                startActivity(PurchasesActivity.createBuyingIntent("Dating"));
+                startActivity(PurchasesActivity.createBuyingIntent("Dating", options.topfaceOfferwallRedirect));
             }
             break;
             case R.id.btnDatingAdmiration: {
@@ -744,7 +742,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                     isAdmirationFailed.set(true);
                                     EasyTracker.sendEvent("Dating", "Rate",
                                             "AdmirationSend" + (mutualId == SendLikeRequest.DEFAULT_MUTUAL ? "mutual" : ""),
-                                            (long) CacheProfile.getOptions().priceAdmiration);
+                                            (long) options.priceAdmiration);
                                 }
 
                                 @Override
@@ -757,11 +755,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                         unlockControls();
                                     }
                                 }
-                            }
+                            }, options
                     );
                     if (canSendAdmiration && !isAdmirationFailed.get()) {
                         BalanceData balance = new BalanceData(mBalanceData.premium, mBalanceData.likes, mBalanceData.money);
-                        balance.money = balance.money - CacheProfile.getOptions().priceAdmiration;
+                        balance.money = balance.money - options.priceAdmiration;
                         moneyDecreased.set(true);
                         updateResources(balance);
                     }
@@ -815,11 +813,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private boolean isChatAvailable() {
-        return !(!CacheProfile.premium && CacheProfile.getOptions().blockChatNotMutual && !mCurrentUser.isMutualPossible);
+        return !(!App.from(getActivity()).getProfile().premium
+                && App.from(getActivity()).getOptions().blockChatNotMutual && !mCurrentUser.isMutualPossible);
     }
 
     private boolean isAddToFavoritsAvailable() {
-        return CacheProfile.premium;
+        return App.from(getActivity()).getProfile().premium;
     }
 
     private void sendSympathy() {
@@ -843,7 +842,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                 }
                                 unlockControls();
                             }
-                        }
+                        }, App.from(getActivity()).getOptions().blockUnconfirmed
                 );
             } else {
                 showNextUser();
@@ -1001,7 +1000,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setLikesForNovice() {
-        if (CacheProfile.isSetSympathiesBonus()) {
+        if (App.from(getActivity()).getProfile().giveNoviceLikes) {
             NoviceLikesRequest noviceLikesRequest = new NoviceLikesRequest(getActivity());
             registerRequest(noviceLikesRequest);
             noviceLikesRequest.callback(new DataApiHandler<NoviceLikes>() {
@@ -1010,7 +1009,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 protected void success(NoviceLikes noviceLikes, IApiResponse response) {
                     if (noviceLikes.increment > 0) {
                         showControls();
-                        CacheProfile.completeSetNoviceSympathiesBonus();
+                        CacheProfile.completeSetNoviceSympathiesBonus(getActivity());
                         setEnableInputButtons(true);
                     }
                 }
@@ -1090,7 +1089,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void successRate() {
         moneyDecreased.set(false);
-        if (CacheProfile.getOptions().isActivityAllowed) {
+        if (App.from(getActivity()).getOptions().isActivityAllowed) {
             if (mCurrentUser != null) {
                 mCurrentUser.rated = true;
             }
@@ -1242,7 +1241,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
         @Override
         protected void success(DatingFilter filter, IApiResponse response) {
-            CacheProfile.dating = filter;
+            App.from(getActivity()).getProfile().dating = filter;
             updateFilterData();
             updateData(false);
         }

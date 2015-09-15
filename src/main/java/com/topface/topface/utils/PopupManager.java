@@ -35,7 +35,7 @@ public class PopupManager {
 
             @Override
             public boolean isApplicable() {
-                return isOldVersion(CacheProfile.getOptions().maxVersion);
+                return isOldVersion(App.from(mActivity).getOptions().maxVersion);
             }
 
             @Override
@@ -83,7 +83,7 @@ public class PopupManager {
         return false;
     }
 
-    public IStartAction createRatePopupStartAction(final int priority) {
+    public IStartAction createRatePopupStartAction(final int priority, final long ratePopupTimeout, final boolean ratePopupEnabled) {
         return new IStartAction() {
             @Override
             public void callInBackground() {
@@ -96,8 +96,8 @@ public class PopupManager {
 
             @Override
             public boolean isApplicable() {
-                return App.isOnline() && RateAppDialog.isApplicable() &&
-                        !isOldVersion(CacheProfile.getOptions().maxVersion);
+                return App.isOnline() && RateAppDialog.isApplicable(ratePopupTimeout, ratePopupEnabled) &&
+                        !isOldVersion(App.from(mActivity).getOptions().maxVersion);
             }
 
             @Override

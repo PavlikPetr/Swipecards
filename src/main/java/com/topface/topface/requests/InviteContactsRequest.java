@@ -15,8 +15,9 @@ public class InviteContactsRequest extends ConfirmedApiRequest {
     private ArrayList<ContactsProvider.Contact> emails;
     private ArrayList<ContactsProvider.Contact> phones;
 
-    public InviteContactsRequest(Context context, ArrayList<ContactsProvider.Contact> contacts) {
-        super(context);
+    public InviteContactsRequest(Context context, ArrayList<ContactsProvider.Contact> contacts
+            , boolean blockUnconfirmed) {
+        super(context, blockUnconfirmed);
         parseContacts(contacts);
     }
 
