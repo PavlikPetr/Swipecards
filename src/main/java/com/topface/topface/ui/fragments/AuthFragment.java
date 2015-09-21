@@ -75,6 +75,8 @@ public class AuthFragment extends BaseAuthFragment {
     Button mCreateTfAccount;
     @Bind(R.id.tf_auth_back)
     ImageView mTfAuthBack;
+    @Bind(R.id.ivAuthLogo)
+    ImageView mTfLogo;
 
     @OnClick(R.id.btnAuthFB)
     public void btnFBClick() {
@@ -244,7 +246,7 @@ public class AuthFragment extends BaseAuthFragment {
 
     @Override
     protected int getStatusBarColor() {
-        return R.color.status_bar_dark_gray_color;
+        return R.color.status_bar_color;
     }
 
     @Override
@@ -315,6 +317,7 @@ public class AuthFragment extends BaseAuthFragment {
     protected void showButtons() {
         setSocNetBtnVisibility(mIsSocNetBtnHidden, false, false);
         setTfLoginBtnVisibility(mIsTfBtnHidden, false, false);
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override

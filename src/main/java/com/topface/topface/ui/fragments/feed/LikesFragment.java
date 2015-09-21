@@ -41,6 +41,7 @@ import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
+import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.EasyTracker;
@@ -290,22 +291,23 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                     public void onClick(View v) {
                         if (experiment.isEnabled) {
                             Fragment f = getChildFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
-                            final TransparentMarketFragment fragment = f == null ?
-                                    TransparentMarketFragment.newInstance(experiment.productId, experiment.isSubscription, "Likes") :
-                                    (TransparentMarketFragment) f;
-                            fragment.setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
-                                @Override
-                                public void onPurchaseSuccess() {
-                                    updateData(false, true);
-                                }
-
-                                @Override
-                                public void onPopupClosed() {
-                                    if (fragment.isAdded()) {
-                                        removeTransparentMarketFragment(fragment);
+                            final Fragment fragment = f == null ?
+                                    TransparentMarketFragment.newInstance(experiment.productId, experiment.isSubscription, "Likes") : f;
+                            if(fragment instanceof ITransparentMarketFragmentRunner){
+                                ((ITransparentMarketFragmentRunner)fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
+                                    @Override
+                                    public void onPurchaseSuccess() {
+                                        updateData(false, true);
                                     }
-                                }
-                            });
+
+                                    @Override
+                                    public void onPopupClosed() {
+                                        if (fragment.isAdded()) {
+                                            removeTransparentMarketFragment(fragment);
+                                        }
+                                    }
+                                });
+                            }
                             if (!fragment.isAdded()) {
                                 addTransparentMarketFragment(fragment);
                             } else {

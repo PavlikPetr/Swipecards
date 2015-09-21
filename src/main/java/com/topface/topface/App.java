@@ -21,6 +21,7 @@ import com.flurry.android.FlurryAgent;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.squareup.leakcanary.LeakCanary;
 import com.topface.billing.OpenIabHelperManager;
+import com.topface.billing.StoresManager;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.imageloader.ImageLoaderStaticFactory;
 import com.topface.framework.utils.BackgroundThread;
@@ -31,7 +32,6 @@ import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.data.Options;
-import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.social.AppSocialAppsIds;
 import com.topface.topface.modules.TopfaceModule;
@@ -43,7 +43,6 @@ import com.topface.topface.requests.AppGetSocialAppsIdsRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
-import com.topface.topface.requests.PaymentwallProductsRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
@@ -113,7 +112,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         new ParallelApiRequest(App.getContext())
                 .addRequest(getUserOptionsRequest())
                 .addRequest(getProductsRequest())
-                .addRequest(getPaymentwallProductsRequest())
+                .addRequest(StoresManager.getPaymentwallProductsRequest())
                 .addRequest(getProfileRequest())
                 .setFrom(App.class.getSimpleName() + " profile and options requests")
                 .callback(handler)
@@ -134,37 +133,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         return (App) context.getApplicationContext();
     }
 
-    private static ApiRequest getPaymentwallProductsRequest() {
-        switch (BuildConfig.MARKET_API_TYPE) {
-            case GOOGLE_PLAY:
-                return new PaymentwallProductsRequest(App.getContext()).callback(new DataApiHandler<PaymentWallProducts>() {
-                    @Override
-                    protected void success(PaymentWallProducts data, IApiResponse response) {
-                        //ВНИМАНИЕ! Сюда возвращается только Direct продукты,
-                        //парсим и записываем в кэш мы их внутри конструктора PaymentWallProducts
-                    }
-
-                    @Override
-                    protected PaymentWallProducts parseResponse(ApiResponse response) {
-                        //При создании нового объекта продуктов, все данные о них записываются в кэш,
-                        //поэтому здесь просто создаются два объекта продуктов.
-                        new PaymentWallProducts(response, PaymentWallProducts.TYPE.MOBILE);
-                        return new PaymentWallProducts(response, PaymentWallProducts.TYPE.DIRECT);
-                    }
-
-                    @Override
-                    public void fail(int codeError, IApiResponse response) {
-
-                    }
-                });
-            //Для амазона и nokia Paymentwall не должен включаться
-            case NOKIA_STORE:
-            case AMAZON:
-            default:
-                return null;
-        }
-    }
-
     /**
      * Множественный запрос Options и профиля
      */
@@ -176,7 +144,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         new ParallelApiRequest(App.getContext())
                 .addRequest(getProfileRequest())
                 .addRequest(getUserOptionsRequest())
-                .addRequest(getPaymentwallProductsRequest())
+                .addRequest(StoresManager.getPaymentwallProductsRequest())
                 .addRequest(getProductsRequest())
                 .setFrom(App.class.getSimpleName() + " user options and purchases requests")
                 .exec();
@@ -609,5 +577,8 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         return mProfile;
     }
 
+    public static App get() {
+        return from(getContext());
+    }
 }
 

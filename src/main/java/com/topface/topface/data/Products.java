@@ -28,8 +28,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;

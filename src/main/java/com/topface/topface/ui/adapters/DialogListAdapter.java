@@ -205,6 +205,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         FeedDialog item = getData().get(position);
         item.type = dialog.type;
         item.text = dialog.text;
+        item.target = dialog.target;
         notifyDataSetChanged();
     }
 }

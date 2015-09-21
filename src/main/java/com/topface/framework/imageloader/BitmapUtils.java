@@ -433,20 +433,39 @@ public class BitmapUtils {
     }
 
     public static Bitmap squareBitmap(Bitmap bitmap, int width) {
-        return getScaledBitmapInsideSquare(bitmap, width, 1.0f);
+        return getScaledBitmapInsideSquare(bitmap, width);
     }
 
-    private static Bitmap getScaledBitmapInsideSquare(Bitmap bitmap, final int destSize, float radiusMult) {
+    private static Bitmap getScaledBitmapInsideSquare(Bitmap bitmap, final int destSize) {
         final int bitmapWidth = bitmap.getWidth();
         final int bitmapHeight = bitmap.getHeight();
-        int size = (int) (((bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
         Bitmap output = Bitmap.createBitmap(destSize, destSize, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
-        final Rect src = new Rect((size - bitmapWidth) / 2, (size - bitmapHeight) / 2, (size + bitmapWidth) / 2, (size - bitmapHeight) / 2 + bitmapHeight);
         Paint canvasPaint = new Paint();
         canvasPaint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
-        canvas.drawBitmap(bitmap, src, new Rect(0, 0, destSize, destSize), canvasPaint);
+        float aspectRatio;
+        int scaledSize;
+        int left;
+        int top;
+        int bottom;
+        int right;
+        if (bitmapWidth > bitmapHeight) {
+            aspectRatio = (float) destSize / (float) bitmapWidth;
+            left = 0;
+            right = destSize;
+            scaledSize = (int) (bitmapHeight * aspectRatio);
+            top = (destSize - scaledSize) / 2;
+            bottom = scaledSize + top;
+        } else {
+            aspectRatio = (float) destSize / (float) bitmapHeight;
+            top = 0;
+            bottom = destSize;
+            scaledSize = (int) (bitmapWidth * aspectRatio);
+            left = (destSize - scaledSize) / 2;
+            right = scaledSize + left;
+        }
+        canvas.drawBitmap(bitmap, new Rect(0, 0, bitmapWidth, bitmapHeight), new Rect(left, top, right, bottom), canvasPaint);
         return output;
     }
 

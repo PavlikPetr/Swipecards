@@ -31,6 +31,7 @@ import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.promo.PromoPopupManager;
+import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -223,7 +224,17 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         startActionsController.registerAction(new NotificationsDisablePopup(NavigationActivity.this, AC_PRIORITY_NORMAL));
         // promo popups
         PromoPopupManager promoPopupManager = new PromoPopupManager(this);
-        startActionsController.registerAction(promoPopupManager.createPromoPopupStartAction(AC_PRIORITY_NORMAL));
+        IStartAction promoPopupsAction = new ChosenStartAction().chooseFrom(
+                PromoExpressMessages.createPromoPopupStartAction(AC_PRIORITY_NORMAL, new PromoExpressMessages.PopupRedirectListener() {
+                    @Override
+                    public void onRedirect() {
+                        showFragment(FragmentId.TABBED_DIALOGS);
+                        mDrawerLayoutStateObservable.onNext(DRAWER_LAYOUT_STATE.CLOSED);
+                    }
+                }),
+                promoPopupManager.createPromoPopupStartAction(AC_PRIORITY_NORMAL)
+        );
+        startActionsController.registerAction(promoPopupsAction);
         // popups
         mPopupManager = new PopupManager(this);
         startActionsController.registerAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
@@ -233,7 +244,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     private void initFullscreen() {
-        mFullscreenController = new FullscreenController(this);
+        mFullscreenController = new FullscreenController(this, App.get().getOptions());
     }
 
     private void initBonusCounterConfig() {
@@ -671,5 +682,4 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     public Observable<DRAWER_LAYOUT_STATE> getDrawerLayoutStateObservable() {
         return mDrawerLayoutStateObservable;
     }
-
 }

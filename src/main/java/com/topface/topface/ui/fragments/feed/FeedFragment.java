@@ -100,7 +100,7 @@ import static com.topface.topface.utils.CountersManager.NULL_METHOD;
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         implements FeedAdapter.OnAvatarClickListener<T>, IPageWithAds {
     private static final int FEED_MULTI_SELECTION_LIMIT = 100;
-    private static final int FIRST_SHOW_LIST_DELAY = 500;
+    private static final int FIRST_SHOW_LIST_DELAY = 1500;
 
     private static final String FEEDS = "FEEDS";
     private static final String POSITION = "POSITION";
@@ -328,6 +328,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
         initViews(root);
         createObservables();
+        mCountersDataProvider = new CountersDataProvider(this);
         restoreInstanceState(saved);
         mReadItemReceiver = new BroadcastReceiver() {
             @Override
@@ -509,7 +510,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCountersDataProvider = new CountersDataProvider(this);
         registerGcmReceiver();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBlacklistedReceiver, new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
@@ -978,8 +978,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (getIsNeedFirstShowListDelay()) {
             startListShowDelayTimer();
         } else {
-            mListView.setVisibility(View.VISIBLE);
-            mBackgroundController.hide();
+            showListWithoutDelay();
         }
     }
 
@@ -1096,7 +1095,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     protected void onUpdateFail(boolean isPushUpdating) {
         if (!isPushUpdating) {
-            mListView.setVisibility(View.VISIBLE);
+            showListWithoutDelay();
         }
     }
 
@@ -1241,7 +1240,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         // then FragmentActivity passes onActivityResult to child fragment that has that index
         // but FeedFragment that is in TabbedFeedFragment is not Activity's straight child
         // so we need to call startActivityForResult from TabbedFeedFragment for Activity call passing
-        // then TabbedFeedFragment.onActivityResult will pass it to its childs
+        // then TabbedFeedFragment.onActivityResult will pass it to its childsF
         if (fr != null && fr instanceof TabbedFeedFragment) {
             fr.startActivityForResult(intent, requestCode);
             // otherwise current fragment is straight child of Activity
@@ -1306,6 +1305,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (mListView != null) {
             mListView.setVisibility(View.VISIBLE);
             isNeedFirstShowListDelay = false;
+            mBackgroundController.hide();
         }
     }
 

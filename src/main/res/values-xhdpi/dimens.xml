@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="tab_bar_default_bottom_border_height">1px</dimen>
+    <dimen name="tf_logo_top">72dp</dimen>
+    <dimen name="tf_logo_bottom">44dp</dimen>
+    <dimen name="tf_auth_btn_top">44dp</dimen>
 </resources>
