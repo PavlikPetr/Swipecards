@@ -63,7 +63,9 @@ public class HockeySender implements ReportSender {
         send(report, context);
     }
 
-    @SuppressWarnings("deprecation")
+    /**
+     * @deprecated send debug messages with sendDebug, it will separate hockey crashes
+     */
     public void send(CrashReportData report, Context context) {
         send(report, HockeySettings.APP_ID, context);
     }

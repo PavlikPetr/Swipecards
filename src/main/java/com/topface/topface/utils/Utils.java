@@ -46,7 +46,6 @@ import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.social.AuthToken;
 
-import org.acra.sender.ReportSenderException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -433,9 +432,9 @@ public class Utils {
             public void execute() {
                 HockeySender hockeySender = new HockeySender();
                 try {
-                    hockeySender.send(context, hockeySender.createLocalReport(context, new Exception(message)));
-                } catch (ReportSenderException e) {
-                    e.printStackTrace();
+                    hockeySender.sendDebug(hockeySender.createLocalReport(context, new Exception(message)));
+                } catch (Exception e) {
+                    Debug.error(e.toString());
                 }
             }
         };
