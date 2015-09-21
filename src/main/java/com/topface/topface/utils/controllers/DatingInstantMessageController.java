@@ -109,11 +109,7 @@ public class DatingInstantMessageController {
         UserConfig userConfig = App.getUserConfig();
         String defaultMessage = userConfig.getDatingMessage();
         Options options = App.from(activity).getOptions();
-        if (TextUtils.isEmpty(defaultMessage) && !TextUtils.isEmpty(options.instantMessageFromSearch.getText())) {
-            userConfig.setDatingMessage(options.instantMessageFromSearch.getText());
-            userConfig.saveConfig();
-        }
-        setInstantMessageText(defaultMessage.isEmpty() ? options.instantMessageFromSearch.getText() : defaultMessage);
+        setInstantMessageText(defaultMessage);
         mMessageText.setHint(activity.getString(R.string.dating_message));
         mMessageText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         mMessageSend.setOnClickListener(clickListener);
