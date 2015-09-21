@@ -13,8 +13,8 @@ public class StandardMessageSendRequest extends ConfirmedApiRequest {
     private int userId;
     private int messageId;
 
-    public StandardMessageSendRequest(Context context, int msgId, int userId) {
-        super(context);
+    public StandardMessageSendRequest(Context context, int msgId, int userId, boolean blockUnconfirmed) {
+        super(context, blockUnconfirmed);
         this.userId = userId;
         this.messageId = msgId;
     }

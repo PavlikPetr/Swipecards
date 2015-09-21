@@ -6,10 +6,11 @@ import com.appodeal.ads.Appodeal;
 import com.appodeal.ads.BannerCallbacks;
 import com.appodeal.ads.BannerView;
 import com.appodeal.ads.UserSettings;
+import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.Static;
 import com.topface.topface.banners.IPageWithAds;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.data.Profile;
 
 public class AppodealProvider extends AbstractAdsProvider {
 
@@ -18,6 +19,7 @@ public class AppodealProvider extends AbstractAdsProvider {
     @Override
     boolean injectBannerInner(final IPageWithAds page, final IAdProviderCallbacks callbacks) {
         Activity activity = page.getActivity();
+        Profile profile = App.from(page.getActivity()).getProfile();
         Appodeal.initialize(activity, APPODEAL_APP_KEY, Appodeal.BANNER_VIEW);
         final BannerView adView = Appodeal.getBannerView(page.getActivity());
         page.getContainerForAd().addView(adView);
@@ -26,10 +28,10 @@ public class AppodealProvider extends AbstractAdsProvider {
         }
         Appodeal.getUserSettings(activity)
                 .setGender(
-                        CacheProfile.getProfile().sex == Static.BOY ?
+                        profile.sex == Static.BOY ?
                                 UserSettings.Gender.MALE :
                                 UserSettings.Gender.FEMALE)
-                .setAge(CacheProfile.getProfile().age);
+                .setAge(profile.age);
         Appodeal.setBannerCallbacks(new BannerCallbacks() {
 
             @Override

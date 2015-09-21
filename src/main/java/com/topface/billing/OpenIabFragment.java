@@ -30,7 +30,6 @@ import com.topface.topface.requests.PurchaseRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
@@ -242,22 +241,25 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                         getResources().getString(R.string.editor_test_buy)
                 );
                 //Выставляем значение из конфига
-                checkBox.setChecked(App.getUserConfig().getTestPaymentFlag());
+                if (App.getUserConfig().getTestPaymentFlag()) {
+                    switchTestPayment(checkBox);
+                }
 
                 layout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //Переключаем режим тестовых покупок
-                        setTestPaymentsState(
-                                checkBox.doSwitch()
-                        );
-                        setTestPaymentsState(checkBox.isChecked());
-                        App.getUserConfig().setTestPaymentFlag(checkBox.isChecked());
-                        App.getUserConfig().saveConfig();
+                        switchTestPayment(checkBox);
                     }
                 });
             }
         }
+    }
+
+    private void switchTestPayment(EditSwitcher checkBox) {
+        setTestPaymentsState(checkBox.doSwitch());
+        App.getUserConfig().setTestPaymentFlag(checkBox.isChecked());
+        App.getUserConfig().saveConfig();
     }
 
     @Override
@@ -355,7 +357,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
 
     protected String getDeveloperPayload(String productId) {
         DeveloperPayload payload = new DeveloperPayload(
-                CacheProfile.uid,
+                App.from(getActivity()).getProfile().uid,
                 productId,
                 getSourceValue()
         );
@@ -364,7 +366,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
 
     @SuppressWarnings("unused")
     protected void editSubscriptions() {
-        Utils.goToMarket(getActivity());
+        Utils.goToMarket(getActivity(), App.from(getActivity()).getOptions().updateUrl);
     }
 
     protected void onError(String message) {
@@ -500,7 +502,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     }
 
     private boolean isNeedSendPurchasesStatistics() {
-        return !CacheProfile.isEditor() && !BuildConfig.DEBUG;
+        return !App.from(getActivity()).getProfile().isEditor() && !BuildConfig.DEBUG;
     }
 
     private boolean consumeTestPurchase(Purchase purchase, PurchaseRequest validateRequest) {

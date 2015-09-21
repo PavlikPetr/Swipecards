@@ -4,11 +4,12 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.data.Options;
 import com.topface.topface.promo.dialogs.PromoDialog;
 import com.topface.topface.promo.dialogs.PromoKey71Dialog;
 import com.topface.topface.promo.dialogs.PromoKey81Dialog;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
@@ -25,10 +26,13 @@ public class PromoPopupManager {
 
     private boolean startFragment() {
         //Пробуем по очереди показать каждый тип попапа
-        if (showPromoPopup(AIR_VISITORS) && CacheProfile.getOptions().premiumVisitors != null) {
+        Options options = App.from(mActivity).getOptions();
+        if (options.premiumMessages != null && options.premiumMessages.getPageId() != BaseFragment.FragmentId.TABBED_DIALOGS.getId() && showPromoPopup(AIR_MESSAGES)) {
             return true;
-        } else if (!CacheProfile.getOptions().isHideAdmirations) {
-            if (showPromoPopup(AIR_ADMIRATIONS) && CacheProfile.getOptions().premiumAdmirations != null) {
+        } else if (showPromoPopup(AIR_VISITORS) && options.premiumVisitors != null) {
+            return true;
+        } else if (!options.isHideAdmirations) {
+            if (showPromoPopup(AIR_ADMIRATIONS) && options.premiumAdmirations != null) {
                 return true;
             }
         }
@@ -39,7 +43,7 @@ public class PromoPopupManager {
         PromoDialog promo = null;
         FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
         Debug.log("Promo: try showPromoPopup #" + type);
-        if (checkIsNeedShow(CacheProfile.getOptions().getPremiumEntityByType(type))) {
+        if (checkIsNeedShow(App.from(mActivity).getOptions().getPremiumEntityByType(type))) {
             Debug.log("Promo: need show popup #" + type);
             promo = (PromoDialog) fragmentManager.findFragmentByTag(PROMO_POPUP_TAG);
             //Проверяем, показывается ли в данный момент попап
@@ -107,8 +111,8 @@ public class PromoPopupManager {
 
             @Override
             public boolean isApplicable() {
-                if (CacheProfile.premium) return false;
-                Options options = CacheProfile.getOptions();
+                Options options = App.from(mActivity).getOptions();
+                if (App.from(mActivity).getProfile().premium) return false;
                 return checkIsNeedShow(options.getPremiumEntityByType(AIR_VISITORS)) ||
                         checkIsNeedShow(options.getPremiumEntityByType(AIR_ADMIRATIONS));
             }

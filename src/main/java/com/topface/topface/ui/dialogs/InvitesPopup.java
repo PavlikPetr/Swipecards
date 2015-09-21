@@ -12,12 +12,12 @@ import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
@@ -44,11 +44,12 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
     protected void initViews(View root) {
         root.setClickable(true);
         final Activity activity = getActivity();
+        Options options = App.from(activity).getOptions();
         if (activity instanceof NavigationActivity) {
             ((NavigationActivity) activity).setPopupVisible(true);
         }
         TextView invitesTitle = (TextView) root.findViewById(R.id.invitesTitle);
-        int neededContact = CacheProfile.getOptions().contacts_count;
+        int neededContact = options.contacts_count;
         invitesTitle.setText(Utils.getQuantityString(R.plurals.get_vip_for_invites_plurals, neededContact, neededContact));
         if (getArguments() != null) {
             contacts = getArguments().getParcelableArrayList(CONTACTS);
@@ -60,7 +61,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
         mLocker = root.findViewById(R.id.ipLocker);
         final Button sendContacts = (Button) root.findViewById(R.id.sendContacts);
         sendContacts.setText(Utils.getQuantityString(R.plurals.vip_status_period_btn,
-                CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period));
+                options.premium_period, options.premium_period));
         sendContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,7 +91,9 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
     }
 
     private void sendInvitesRequest() {
-        InviteContactsRequest request = new InviteContactsRequest(getActivity(), contacts);
+        final Options options = App.from(getActivity()).getOptions();
+        InviteContactsRequest request = new InviteContactsRequest(getActivity(), contacts
+                , options.blockUnconfirmed);
         mLocker.setVisibility(View.VISIBLE);
         request.callback(new ApiHandler() {
             @Override
@@ -100,12 +103,12 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
                     EasyTracker.sendEvent("InvitesPopup", "SuccessWithNotChecked",
                             "premiumTrue", (long) contacts.size());
                     EasyTracker.sendEvent("InvitesPopup", "PremiumReceived",
-                            "", (long) CacheProfile.getOptions().premium_period);
+                            "", (long) options.premium_period);
                     Utils.showToastNotification(
-                            Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period),
+                            Utils.getQuantityString(R.plurals.vip_status_period, options.premium_period, options.premium_period),
                             Toast.LENGTH_LONG
                     );
-                    CacheProfile.canInvite = false;
+                    App.from(getActivity()).getProfile().canInvite = false;
                 } else {
                     EasyTracker.sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumFalse", (long) contacts.size());
                     Utils.showToastNotification(getString(R.string.invalid_contacts), Toast.LENGTH_LONG);
@@ -127,8 +130,8 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
         }).exec();
     }
 
-    public static boolean isApplicable() {
-        if (CacheProfile.canInvite) {
+    public static boolean isApplicable(long timeout, Activity activity) {
+        if (App.from(activity).getProfile().canInvite) {
             final SharedPreferences preferences = App.getContext().getSharedPreferences(
                     Static.PREFERENCES_TAG_SHARED,
                     Context.MODE_PRIVATE
@@ -136,7 +139,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
             long date_start = preferences.getLong(INVITE_POPUP_PREF_KEY, 1);
             long date_now = System.currentTimeMillis();
 
-            if ((date_now - date_start) >= CacheProfile.getOptions().popup_timeout) {
+            if ((date_now - date_start) >= timeout) {
                 return true;
             }
         }

@@ -3,7 +3,6 @@ package com.topface.topface.ui.settings;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.SpannableString;
@@ -15,10 +14,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
+import com.topface.topface.data.Options;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -69,15 +70,17 @@ public class SettingsAboutFragment extends BaseFragment {
 
         // Extra
         TextView extra = (TextView) root.findViewById(R.id.tvExtra);
-        SpannableString title = new SpannableString(CacheProfile.getOptions().aboutApp.title);
+        final Options options = App.from(getActivity()).getOptions();
+        SpannableString title = new SpannableString(options.aboutApp.title);
         title.setSpan(new UnderlineSpan(), 0, title.length(), 0);
         extra.setText(title);
         extra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(CacheProfile.getOptions().aboutApp.url));
-                startActivity(i);
+                Intent i = Utils.getIntentToOpenUrl(options.aboutApp.url);
+                if (i != null) {
+                    startActivity(i);
+                }
             }
         });
         return root;

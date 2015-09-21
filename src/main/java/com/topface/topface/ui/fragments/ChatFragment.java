@@ -39,7 +39,6 @@ import com.nhaarman.listviewanimations.appearance.ChatListAnimatedAdapter;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
 import com.topface.framework.JsonUtils;
-import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -77,7 +76,6 @@ import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Device;
@@ -86,12 +84,9 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
 import com.topface.topface.utils.controllers.PopularUserChatController;
-import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.social.AuthToken;
-
-import org.acra.sender.ReportSenderException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -163,7 +158,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             });
         }
     };
-    private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
+    private int mMaxMessageSize = App.from(getActivity()).getOptions().maxMessageSize;
     // Managers
     private RelativeLayout mLockScreen;
     private PopularUserChatController mPopularUserLockController;
@@ -944,9 +939,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     public boolean sendMessage(String text, final boolean cancelable) {
         final History messageItem = new History(text, IListLoader.ItemType.TEMP_MESSAGE);
-        final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity());
+        final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity(), App.from(getActivity()).getOptions().blockUnconfirmed);
         if (TextUtils.equals(AuthToken.getInstance().getSocialNet(), AuthToken.SN_TOPFACE)) {
-            if (!CacheProfile.emailConfirmed) {
+            if (!App.from(getActivity()).getProfile().emailConfirmed) {
                 Toast.makeText(App.getContext(), R.string.confirm_email, Toast.LENGTH_SHORT).show();
                 ConfirmEmailDialog.newInstance().show(getActivity().getSupportFragmentManager(), CONFIRM_EMAIL_DIALOG_TAG);
                 return false;

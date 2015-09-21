@@ -42,6 +42,7 @@ import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedUser;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
@@ -134,7 +135,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (!CacheProfile.show_ad) {
+            if (!App.from(context).getProfile().showAd) {
                 getListAdapter().removeAdItems();
             }
         }
@@ -373,7 +374,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             isCurrentCounterChanged = saved.getBoolean(FEED_COUNTER_CHANGED);
             currentCounter = saved.getInt(FEED_COUNTER);
             mIdForRemove = saved.getInt(BLACK_LIST_USER);
-            if (CacheProfile.show_ad) {
+            Profile profile = App.from(getActivity()).getProfile();
+            if (profile.showAd) {
                 mListAdapter.setHasFeedAd(saved.getBoolean(HAS_AD));
                 mListAdapter.setFeedAd(saved.<NativeAd>getParcelable(FEED_AD));
             }
@@ -382,7 +384,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             if (feeds != null) {
                 for (Parcelable p : feeds) {
                     T feed = (T) p;
-                    if (feed.isAd() && !CacheProfile.show_ad) {
+                    if (feed.isAd() && !profile.showAd) {
                         continue;
                     }
                     feedsList.add((T) p);
@@ -451,7 +453,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     protected void initFloatBlock() {
         if (!getListAdapter().isNeedFeedAd()) {
-            mBannersController = new BannersController(this);
+            mBannersController = new BannersController(this, App.from(getActivity()).getOptions());
         }
     }
 

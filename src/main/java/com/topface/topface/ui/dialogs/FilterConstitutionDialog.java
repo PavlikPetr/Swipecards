@@ -145,7 +145,7 @@ public class FilterConstitutionDialog extends DialogFragment {
                         }
                     }
                 })
-                .setPositiveButton(getActivity().getString(R.string.general_any), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getActivity().getString(R.string.reset_filter), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (mListener != null) {

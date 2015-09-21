@@ -1,12 +1,13 @@
 package com.topface.topface.utils.ad.pubnative;
 
+import android.content.Context;
 import android.location.Location;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 import com.topface.topface.App;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.data.Profile;
 import com.topface.topface.utils.ad.RequestInfo;
 
 /**
@@ -29,13 +30,15 @@ public class PubnativeInfo extends RequestInfo {
     private String device_type;
     private double lat;
     private double longitude;
-    private String gender = CacheProfile.sex == 0 ? "female" : "male";
-    private int age = CacheProfile.age;
+    private String gender;
+    private int age;
     private String android_advertiser_id;
     private int no_user_id;
 
-    private PubnativeInfo() {
-
+    private PubnativeInfo(Context context) {
+        Profile profile = App.from(context).getProfile();
+        gender = profile.sex == 0 ? "female" : "male";
+        age = profile.age;
     }
 
     public static class Builder {
@@ -142,10 +145,10 @@ public class PubnativeInfo extends RequestInfo {
             return this;
         }
 
-        public PubnativeInfo create() {
-            PubnativeInfo pubnativeInfo = new PubnativeInfo();
+        public PubnativeInfo create(int dailyShows, Context context) {
+            PubnativeInfo pubnativeInfo = new PubnativeInfo(context);
             pubnativeInfo.zone_id = mZoneId;
-            pubnativeInfo.ad_count = mAdCount != 0 ? mAdCount : App.getUserConfig().getRemainedPubnativeShows();
+            pubnativeInfo.ad_count = mAdCount != 0 ? mAdCount : App.getUserConfig().getRemainedPubnativeShows(dailyShows);
             pubnativeInfo.locale = mLocale;
             pubnativeInfo.icon_size = mIconSize;
             pubnativeInfo.banner_size = mBannerSize;

@@ -12,8 +12,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 public class UserFormListAdapter extends AbstractFormListAdapter {
+    private Context mContext;
     private boolean isItemsEnabled;
 
+    @SuppressWarnings("unused")
     public UserFormListAdapter(Context context) {
         this(context, true);
     }
@@ -21,6 +23,7 @@ public class UserFormListAdapter extends AbstractFormListAdapter {
     public UserFormListAdapter(Context context, boolean isItemsEnabled) {
         super(context);
         this.isItemsEnabled = isItemsEnabled;
+        mContext = context;
     }
 
     // control items selectable
@@ -37,7 +40,7 @@ public class UserFormListAdapter extends AbstractFormListAdapter {
                 @Override
                 public void copy(FormItem formItem) {
                     super.copy(formItem);
-                    CacheProfile.setStatus(formItem.value);
+                    CacheProfile.setStatus(mContext, formItem.value);
                 }
             };
             statusItem.setTextLimitInterface(new FormItem.DefaultTextLimiter(App.getAppOptions().getUserStatusMaxLength()));

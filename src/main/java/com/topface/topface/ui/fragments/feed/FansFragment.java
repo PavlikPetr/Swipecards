@@ -5,11 +5,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.config.FeedsCache;
 
 import org.jetbrains.annotations.NotNull;
@@ -35,13 +35,13 @@ public class FansFragment extends BookmarksFragment {
     protected void initEmptyFeedView(View inflated, int errorCode) {
         Button buttonBuy = (Button) inflated.findViewById(R.id.btnBuy);
         TextView message = ((TextView) inflated.findViewById(R.id.tvText));
-        if (CacheProfile.premium) {
+        if (App.from(getActivity()).getProfile().premium) {
             message.setText(R.string.buy_more_sympathies);
             buttonBuy.setText(R.string.buy_sympathies);
             buttonBuy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(PurchasesActivity.createBuyingIntent(FANS));
+                    startActivity(PurchasesActivity.createBuyingIntent(FANS, App.from(getActivity()).getOptions().topfaceOfferwallRedirect));
                 }
             });
         } else {

@@ -20,7 +20,6 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.RemindRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.social.AuthToken;
@@ -177,12 +176,11 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
             ((BaseFragmentActivity) getActivity()).registerRequest(profileRequest);
         }
         onRequestStart();
-        profileRequest.part = ProfileRequest.P_EMAIL_CONFIRMED;
         profileRequest.callback(new DataApiHandler<Boolean>() {
             @Override
             protected void success(Boolean isEmailConfirmed, IApiResponse response) {
-                CacheProfile.emailConfirmed = isEmailConfirmed;
-                CacheProfile.getOptions().isActivityAllowed = true;
+                App.from(getActivity()).getProfile().emailConfirmed = isEmailConfirmed;
+                App.from(getActivity()).getOptions().isActivityAllowed = true;
                 onProfileUpdated();
             }
 
@@ -205,7 +203,7 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
     }
 
     private void onProfileUpdated() {
-        if (CacheProfile.emailConfirmed) {
+        if (App.from(getActivity()).getProfile().emailConfirmed) {
             Utils.showToastNotification(R.string.general_email_success_confirmed, Toast.LENGTH_LONG);
             closeDialog();
         } else {

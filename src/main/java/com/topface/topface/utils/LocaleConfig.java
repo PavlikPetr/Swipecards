@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserSetLocaleRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -55,7 +56,7 @@ public class LocaleConfig {
         progress.setTitle(R.string.locale_changing);
         progress.setMessage(activity.getResources().getString(R.string.general_dialog_loading));
         progress.show();
-
+        final Options options = App.from(activity).getOptions();
         LocaleConfig.updateConfiguration(activity.getBaseContext());
         //save application locale to preferences
         App.getLocaleConfig().setApplicationLocale(selectedLocale);
@@ -68,7 +69,7 @@ public class LocaleConfig {
                 @Override
                 public void success(IApiResponse response) {
                     App.sendUserOptionsAndPurchasesRequest();
-                    NavigationActivity.restartNavigationActivity(activity);
+                    NavigationActivity.restartNavigationActivity(activity, options);
                 }
 
                 @Override
@@ -84,7 +85,7 @@ public class LocaleConfig {
             }).exec();
         } else {
             progress.dismiss();
-            NavigationActivity.restartNavigationActivity(activity);
+            NavigationActivity.restartNavigationActivity(activity, options);
         }
     }
 

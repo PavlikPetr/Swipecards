@@ -2,7 +2,6 @@ package com.topface.topface.banners.ad_providers;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -15,6 +14,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.data.Banner;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.DataApiHandler;
@@ -25,6 +25,7 @@ import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 /**
@@ -35,6 +36,12 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
 
     public static final String CLICK = "click";
     public static final String VIEW = "view";
+    private Options mOptions;
+
+    public TopfaceBannerProvider(Options options) {
+        super();
+        mOptions = options;
+    }
 
     @Override
     public final boolean injectBannerInner(final IPageWithAds page, final IAdProviderCallbacks callbacks) {
@@ -169,7 +176,7 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
                     intent.putExtra(PurchasesConstants.ARG_TAG_SOURCE, "Banner_" + mBanner.name);
                     break;
                 case Banner.ACTION_URL:
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mBanner.parameter));
+                    intent = Utils.getIntentToOpenUrl(mBanner.parameter);
                     break;
                 case Banner.ACTION_OFFERWALL:
                     switch (mBanner.parameter) {
@@ -177,7 +184,7 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
                             OfferwallsManager.startSponsorpay(mPage.getActivity());
                             break;
                         default:
-                            OfferwallsManager.startOfferwall(mPage.getActivity());
+                            OfferwallsManager.startOfferwall(mPage.getActivity(), mOptions);
                             break;
                     }
                     break;

@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +22,7 @@ import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
@@ -193,7 +195,10 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 showRetryView(getString(R.string.general_maintenance), strBuilder.toString(), request);
                 break;
             case ErrorCodes.CODE_OLD_APPLICATION_VERSION:
-                Utils.startOldVersionPopup(getActivity());
+                Activity activity = getActivity();
+                if (activity instanceof BaseFragmentActivity) {
+                    Utils.startOldVersionPopup((BaseFragmentActivity) activity);
+                }
                 break;
             default:
                 showRetryView(getString(R.string.general_data_error), strBuilder.toString(), request);
