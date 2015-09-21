@@ -9,7 +9,6 @@ import com.topface.topface.data.Options;
 import com.topface.topface.promo.dialogs.PromoDialog;
 import com.topface.topface.promo.dialogs.PromoKey71Dialog;
 import com.topface.topface.promo.dialogs.PromoKey81Dialog;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
@@ -27,9 +26,7 @@ public class PromoPopupManager {
     private boolean startFragment() {
         //Пробуем по очереди показать каждый тип попапа
         Options options = App.from(mActivity).getOptions();
-        if (options.premiumMessages != null && options.premiumMessages.getPageId() != BaseFragment.FragmentId.TABBED_DIALOGS.getId() && showPromoPopup(AIR_MESSAGES)) {
-            return true;
-        } else if (showPromoPopup(AIR_VISITORS) && options.premiumVisitors != null) {
+        if (showPromoPopup(AIR_VISITORS) && options.premiumVisitors != null) {
             return true;
         } else if (!options.isHideAdmirations) {
             if (showPromoPopup(AIR_ADMIRATIONS) && options.premiumAdmirations != null) {

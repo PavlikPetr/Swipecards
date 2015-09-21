@@ -17,7 +17,6 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.VisitorsListAdapter;
 import com.topface.topface.ui.fragments.MenuFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
@@ -81,7 +80,7 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
         btnBuyVip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (CacheProfile.premium) {
+                if (App.get().getProfile().premium) {
                     MenuFragment.selectFragment(FragmentId.DATING);
                 } else {
                     Intent intent = PurchasesActivity.createVipBuyIntent(null, "Visitors");

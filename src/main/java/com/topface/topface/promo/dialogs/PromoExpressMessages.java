@@ -135,7 +135,7 @@ public class PromoExpressMessages extends PromoDialog {
 
             @Override
             public boolean isApplicable() {
-                return !CacheProfile.premium && PromoPopupManager.checkIsNeedShow(CacheProfile.getOptions().getPremiumEntityByType(AIR_MESSAGES));
+                return !App.get().getProfile().premium && PromoPopupManager.checkIsNeedShow(App.get().getOptions().getPremiumEntityByType(AIR_MESSAGES));
             }
 
             @Override
