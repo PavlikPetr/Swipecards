@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 
 public class ExternalLinkExecuter {
 
+    private static final CharSequence CHANGE_PWD_PART = "confirm-e";
     private OnExternalLinkListener listener;
 
     public ExternalLinkExecuter(OnExternalLinkListener listener) {
@@ -38,7 +39,7 @@ public class ExternalLinkExecuter {
                         String path = data.getPath();
                         String[] splittedPath = path.split("/");
 
-                        if (executeLinkAction(splittedPath)) {
+                        if (executeLinkAction(splittedPath, isChangePwdLink(path))) {
                             return;
                         }
                     }
@@ -46,6 +47,10 @@ public class ExternalLinkExecuter {
             }
         }
         listener.onNothingToShow();
+    }
+
+    public boolean isChangePwdLink(String path){
+        return path.contains(CHANGE_PWD_PART);
     }
 
     private boolean checkHost(Uri data) {
@@ -57,7 +62,7 @@ public class ExternalLinkExecuter {
         return false;
     }
 
-    private boolean executeLinkAction(String[] splittedPath) {
+    private boolean executeLinkAction(String[] splittedPath, boolean changePwdLink) {
         Pattern profilePattern = Pattern.compile("profile");
         Pattern confirmPattern = Pattern.compile("confirm.*");
 
@@ -70,7 +75,11 @@ public class ExternalLinkExecuter {
             Matcher matcher = codePattern.matcher(splittedPath[1]);
             if (matcher.find()) {
                 String code = matcher.group();
-                listener.onConfirmLink(code);
+                if(changePwdLink){
+                    listener.onRestorePassword(code);
+                }else{
+                    listener.onConfirmLink(code);
+                }
                 return true;
             }
 
@@ -83,6 +92,8 @@ public class ExternalLinkExecuter {
         void onProfileLink(int profileID);
 
         void onConfirmLink(String code);
+
+        void onRestorePassword(String code);
 
         void onOfferWall();
 
