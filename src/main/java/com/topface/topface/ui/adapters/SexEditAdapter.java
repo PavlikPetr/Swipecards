@@ -4,14 +4,15 @@ import android.content.Context;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.Profile;
 import com.topface.topface.utils.FormItem;
 
 /**
  * Adapter for sex.
  */
 public class SexEditAdapter extends FormItemEditAdapter {
-    public SexEditAdapter(Context context, FormItem formItem) {
-        super(context, formItem);
+    public SexEditAdapter(Context context, FormItem formItem, Profile profile) {
+        super(context, formItem, profile);
     }
 
     @Override

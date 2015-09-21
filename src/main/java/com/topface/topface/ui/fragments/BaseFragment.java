@@ -33,6 +33,7 @@ import java.util.LinkedList;
 
 import butterknife.ButterKnife;
 
+
 public abstract class BaseFragment extends TrackedFragment implements IRequestClient {
 
     private static final String STATE_NEED_TITLES = "STATE_NEED_TITLES";

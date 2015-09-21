@@ -46,7 +46,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            AddPhotoHelper.handlePhotoMessage(msg);
+            AddPhotoHelper.handlePhotoMessage(msg, getActivity());
         }
     };
 
@@ -71,13 +71,15 @@ public class OwnProfileFragment extends OwnAvatarFragment {
                 onProfileUpdated();
             }
         };
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         showTakePhotoDialog();
     }
 
     private void showTakePhotoDialog() {
         TakePhotoDialog takePhotoDialog = (TakePhotoDialog) mPhotoTaker.getActivityFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
-        if (CacheProfile.photo == null && mAddPhotoHelper != null && takePhotoDialog == null && !App.getConfig().getUserConfig().isUserAvatarAvailable()) {
+        if (App.from(getActivity()).getProfile().photo == null && mAddPhotoHelper != null && takePhotoDialog == null
+                && !App.getConfig().getUserConfig().isUserAvatarAvailable()) {
             mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
         }
     }
@@ -97,7 +99,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     @Override
     protected void onProfileUpdated() {
         super.onProfileUpdated();
-        setProfile(CacheProfile.getProfile());
+        setProfile(App.from(getActivity()).getProfile());
     }
 
     @Override
@@ -178,7 +180,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
 
     @Override
     protected IUniversalUser createUniversalUser() {
-        return UniversalUserFactory.create(getProfile());
+        return UniversalUserFactory.create(App.from(getActivity()).getProfile());
     }
 
     @Override
@@ -193,7 +195,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
 
     @Override
     public void onAvatarClick() {
-        Profile profile = getProfile();
+        Profile profile = App.from(getActivity()).getProfile();
         if (profile != null && profile.photo != null) {
             startActivity(PhotoSwitcherActivity.
                     getPhotoSwitcherIntent(profile.gifts, profile.photo.position,

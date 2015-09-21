@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.Products;
@@ -79,7 +80,7 @@ public class MarketBuyingFragment extends CoinsBuyingFragment {
 
     @Override
     public void buy(BuyButtonData btn) {
-        PushButtonVipUniqueStatistics.sendPushButtonNoVip(btn.id, ((Object) this).getClass().getSimpleName(), getFrom());
+        PushButtonVipUniqueStatistics.sendPushButtonNoVip(btn.id, ((Object) this).getClass().getSimpleName(), getFrom(), App.from(getActivity()).getProfile());
         PushButtonVipStatistics.send(btn.id, ((Object) this).getClass().getSimpleName(), getFrom());
         super.buy(btn);
     }

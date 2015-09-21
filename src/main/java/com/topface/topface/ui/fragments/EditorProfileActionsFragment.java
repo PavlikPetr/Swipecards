@@ -67,7 +67,7 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
             } catch (JSONException e) {
                 Debug.error(e);
             }
-            mUser = new User(mUserId, jsonResponse);
+            mUser = new User(mUserId, jsonResponse, getActivity());
         }
         initViews(root);
 

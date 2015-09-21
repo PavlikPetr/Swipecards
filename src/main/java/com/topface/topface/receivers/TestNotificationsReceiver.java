@@ -19,7 +19,6 @@ public class TestNotificationsReceiver extends BroadcastReceiver {
     public static final String ACTION_TEST_NETWORK_ERRORS_ON = "com.topface.topface.actions.TEST_NETWORK_ERRORS_ON";
     public static final String ACTION_TEST_NETWORK_ERRORS_OFF = "com.topface.topface.actions.TEST_NETWORK_ERRORS_OFF";
     public static final String ACTION_CANCEL_TEST_NETWORK_ERRORS = "com.topface.topface.actions.TEST_NETWORK_ERRORS_CANCEL";
-
     private static final String EXTRA_ACTION_PARAMETER = "extraParameter";
 
     @Override
@@ -49,7 +48,7 @@ public class TestNotificationsReceiver extends BroadcastReceiver {
                 break;
             case ACTION_NOTIFY:
                 Debug.log("TOPFACE_NOTIFICATION:" + intent.getStringExtra("text"));
-                GCMUtils.showNotificationIfNeed(intent, context);
+                GCMUtils.showNotificationIfNeed(intent, context, App.from(context).getOptions().updateUrl);
                 break;
         }
     }

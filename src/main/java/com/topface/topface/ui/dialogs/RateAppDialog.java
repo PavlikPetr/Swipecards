@@ -13,11 +13,9 @@ import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
-import com.topface.topface.data.Options;
 import com.topface.topface.requests.AppRateRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 
@@ -122,7 +120,7 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
         } else if (rating >= 4) {
             sendRateRequest(rating);
             saveRatingPopupStatus(0);
-            Utils.goToMarket(getActivity(), GPLAY_ACTIVITY);
+            Utils.goToMarket(getActivity(), GPLAY_ACTIVITY, App.from(getActivity()).getOptions().updateUrl);
         } else {
             sendRateRequest(rating);
             saveRatingPopupStatus(0);
@@ -170,7 +168,7 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
      *
      * @return whether the rate popup is applicable or not
      */
-    public static boolean isApplicable() {
+    public static boolean isApplicable(long ratePopupTimeout, boolean ratePopupEnabled) {
         // need ProfileConfig
         final SharedPreferences preferences = App.getContext().getSharedPreferences(
                 Static.PREFERENCES_TAG_SHARED,
@@ -183,9 +181,8 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
             return false;
         }
         long date_now = System.currentTimeMillis();
-        Options options = CacheProfile.getOptions();
         return (date_start != 0
-                && (date_now - date_start > options.ratePopupTimeout)
-                && options.ratePopupEnabled);
+                && (date_now - date_start > ratePopupTimeout)
+                && ratePopupEnabled);
     }
 }

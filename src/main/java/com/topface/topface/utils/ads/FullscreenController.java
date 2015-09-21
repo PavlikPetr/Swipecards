@@ -53,10 +53,11 @@ public class FullscreenController {
         private PageInfo startPageInfo;
         private int priority;
 
-        public FullscreenStartAction(int priority) {
+        public FullscreenStartAction(int priority, Activity activity) {
             this.priority = priority;
-            if (!CacheProfile.isEmpty()) {
-                startPageInfo = CacheProfile.getOptions().getPagesInfo().get(PageInfo.PageName.START.getName());
+            mActivity = activity;
+            if (!CacheProfile.isEmpty(mActivity)) {
+                startPageInfo = App.from(mActivity).getOptions().getPagesInfo().get(PageInfo.PageName.START.getName());
             }
         }
 
@@ -69,7 +70,7 @@ public class FullscreenController {
 
         @Override
         public void callOnUi() {
-            if (CacheProfile.getOptions().interstitial.enabled) {
+            if (App.from(mActivity).getOptions().interstitial.enabled) {
                 FullscreenController.this.requestFullscreen(BANNER_ADMOB_FULLSCREEN_START_APP);
             } else if (startPageInfo != null) {
                 FullscreenController.this.requestFullscreen(startPageInfo.getBanner());
@@ -78,7 +79,7 @@ public class FullscreenController {
 
         @Override
         public boolean isApplicable() {
-            return CacheProfile.getOptions().interstitial.enabled || CacheProfile.show_ad &&
+            return App.from(mActivity).getOptions().interstitial.enabled || App.from(mActivity).getProfile().showAd &&
                     FullscreenController.this.isTimePassed() && startPageInfo != null
                     && startPageInfo.floatType.equals(PageInfo.FLOAT_TYPE_BANNER);
         }
@@ -144,7 +145,7 @@ public class FullscreenController {
     }
 
     private void requestGagFullscreen() {
-        requestFullscreen(CacheProfile.getOptions().gagTypeFullscreen);
+        requestFullscreen(App.from(mActivity).getOptions().gagTypeFullscreen);
     }
 
     public void requestFullscreen(String type) {
@@ -341,7 +342,7 @@ public class FullscreenController {
         //Пока не требуется, но на будущее
     }
 
-    public IStartAction createFullscreenStartAction(final int priority) {
-        return new FullscreenStartAction(priority);
+    public IStartAction createFullscreenStartAction(final int priority, Activity activity) {
+        return new FullscreenStartAction(priority, activity);
     }
 }

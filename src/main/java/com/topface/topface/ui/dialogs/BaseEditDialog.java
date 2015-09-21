@@ -10,6 +10,7 @@ import android.view.ViewStub;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.adapters.AbstractEditAdapter;
 import com.topface.topface.ui.adapters.EditAdapterFactory;
@@ -46,7 +47,7 @@ public class BaseEditDialog<T extends Parcelable> extends BaseDialog {
         if (args != null) {
             mTitle = args.getString(DIALOG_TITLE);
             T data = args.getParcelable(DATA);
-            mAdapter = new EditAdapterFactory().createAdapterFor(activity, data);
+            mAdapter = new EditAdapterFactory().createAdapterFor(activity, data, App.from(getActivity()).getProfile());
         }
     }
 

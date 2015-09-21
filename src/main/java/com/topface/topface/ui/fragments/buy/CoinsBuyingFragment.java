@@ -20,12 +20,11 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BuyButtonData;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.Products;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.utils.BuyVipFragmentManager;
-import com.topface.topface.utils.CacheProfile;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
@@ -116,7 +115,7 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
                                 ((PurchasesActivity) activity).skipBonus();
                             }
 
-                            CacheProfile.getOptions().topfaceOfferwallRedirect.setComplited(true);
+                            App.from(getActivity()).getOptions().topfaceOfferwallRedirect.setComplited(true);
                         }
                     }
             );
@@ -133,7 +132,8 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
         if (products == null) {
             return;
         }
-        boolean coinsMaskedExperiment = CacheProfile.getOptions().forceCoinsSubscriptions;
+        final Options options = App.from(getActivity()).getOptions();
+        boolean coinsMaskedExperiment = options.forceCoinsSubscriptions;
         List<BuyButtonData> coinsProducts = getCoinsProducts(products, coinsMaskedExperiment);
         root.findViewById(R.id.coins_title).setVisibility(
                 coinsProducts.isEmpty() ? View.GONE : View.VISIBLE
@@ -154,7 +154,7 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
                                 ((PurchasesActivity) activity).skipBonus();
                             }
 
-                            CacheProfile.getOptions().topfaceOfferwallRedirect.setComplited(true);
+                            options.topfaceOfferwallRedirect.setComplited(true);
                         }
                     }
             );

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.ui.settings.SettingsChangeAuthDataFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
@@ -32,6 +33,8 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
                 getIntent().setData(null);
                 finish();
             }
+            getIntent().setData(null);
+            finish();
         }
 
         @Override
@@ -48,7 +51,7 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
 
         @Override
         public void onOfferWall() {
-            OfferwallsManager.startOfferwall(ExternalLinkActivity.this);
+            OfferwallsManager.startOfferwall(ExternalLinkActivity.this, App.from(ExternalLinkActivity.this).getOptions());
             getIntent().setData(null);
             finish();
         }

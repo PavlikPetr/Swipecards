@@ -9,7 +9,7 @@ import com.topface.topface.ui.fragments.BaseFragment;
  * Counters data
  * Created by onikitin on 24.06.15.
  */
-public class CountersData implements Parcelable{
+public class CountersData implements Parcelable {
 
     public int likes = 0;
     public int mutual = 0;

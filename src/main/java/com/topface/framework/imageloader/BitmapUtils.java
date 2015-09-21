@@ -446,7 +446,7 @@ public class BitmapUtils {
         Paint canvasPaint = new Paint();
         canvasPaint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
-        canvas.drawBitmap(bitmap, src, new Rect(0,0,destSize,destSize), canvasPaint);
+        canvas.drawBitmap(bitmap, src, new Rect(0, 0, destSize, destSize), canvasPaint);
         return output;
     }
 

@@ -11,7 +11,6 @@ import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -331,65 +330,6 @@ public class UserConfig extends AbstractConfig {
         return PreloadPhotoSelectorTypes.values()[getIntegerField(getSettingsMap(), SETTINGS_PRELOAD_PHOTO)];
     }
 
-    // =======================Novice=======================
-
-    /**
-     * "Send sympathy hint" for novice user
-     *
-     * @return true if hint needs to be shown
-     */
-    public boolean getNoviceSympathy() {
-        return getBooleanField(getSettingsMap(), DATA_NOVICE_SYMPATHY);
-    }
-
-    /**
-     * Sets "send sympathy hint" flag for novice user
-     *
-     * @param needShow true if hint needs to be shown
-     * @return true on success
-     */
-    public boolean setNoviceSympathy(boolean needShow) {
-        return setField(getSettingsMap(), DATA_NOVICE_SYMPATHY, needShow);
-    }
-
-    /**
-     * "Buy sympathy hint" flag for novice user
-     *
-     * @return true if hint need to be shown
-     */
-    public boolean getNoviceBuySympathy() {
-        return getBooleanField(getSettingsMap(), DATA_NOVICE_BUY_SYMPATHY);
-    }
-
-    /**
-     * Sets "buy sympathy hint" flag for novice user
-     *
-     * @param needShow true if hint need to be shown
-     * @return true on success
-     */
-    public boolean setNoviceBuySympathy(boolean needShow) {
-        return setField(getSettingsMap(), DATA_NOVICE_BUY_SYMPATHY, needShow);
-    }
-
-    /**
-     * First trial to show "Buy sympathy hint" for delay hint purposes
-     *
-     * @return time of first trial
-     */
-    public long getNoviceBuySympathyDate() {
-        return getLongField(getSettingsMap(), DATA_NOVICE_BUY_SYMPATHY_DATE);
-    }
-
-    /**
-     * Sets time of first trial to show "Buy sympathy hint" for delay hint purposes
-     *
-     * @param lastTime time of show
-     * @return true on success
-     */
-    public Boolean setNoviceBuySympathyDate(long lastTime) {
-        return setField(getSettingsMap(), DATA_NOVICE_BUY_SYMPATHY_DATE, lastTime);
-    }
-
     /**
      * Sets last time of click on bonus menu item
      *
@@ -596,12 +536,12 @@ public class UserConfig extends AbstractConfig {
         return getIntegerField(getSettingsMap(), TOPFACE_OFFERWALL_REDIRECT_COUNTER);
     }
 
-    public int getRemainedPubnativeShows() {
+    public int getRemainedPubnativeShows(int dailyShows) {
         long lastDay = getLongField(getSettingsMap(), LAST_DAY_PUBNATIVE_SHOWN);
         long now = Calendar.getInstance().getTimeInMillis();
         if (now - lastDay > DAY_IN_MILLIS) {
             setField(getSettingsMap(), LAST_DAY_PUBNATIVE_SHOWN, now - now % (DAY_IN_MILLIS));
-            setField(getSettingsMap(), REMAINED_DAILY_PUBNATIVE_SHOWS, CacheProfile.getOptions().feedNativeAd.dailyShows);
+            setField(getSettingsMap(), REMAINED_DAILY_PUBNATIVE_SHOWS, dailyShows);
         }
         return getIntegerField(getSettingsMap(), REMAINED_DAILY_PUBNATIVE_SHOWS);
     }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.topface.topface.data.BalanceData;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.Rate;
 import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.data.search.UsersList;
@@ -31,14 +32,16 @@ public class RateController {
         mPlace = place;
     }
 
-    public void onLike(final int userId, final int mutualId, final OnRateRequestListener requestListener) {
-        sendRate(new SendLikeRequest(mContext, userId, mutualId, mPlace), requestListener);
+    public void onLike(final int userId, final int mutualId
+            , final OnRateRequestListener requestListener, boolean blockUnconfirmed) {
+        sendRate(new SendLikeRequest(mContext, userId, mutualId, mPlace, blockUnconfirmed), requestListener);
     }
 
-    public boolean onAdmiration(BalanceData balanceData, final int userId, final int mutualId, final OnRateRequestListener requestListener) {
-        int admirationPrice = CacheProfile.getOptions().priceAdmiration;
-        if (balanceData.money < admirationPrice) {
-            mContext.startActivity(PurchasesActivity.createBuyingIntent("RateAdmiration", PurchasesFragment.TYPE_ADMIRATION, admirationPrice));
+    public boolean onAdmiration(BalanceData balanceData, final int userId, final int mutualId
+            , final OnRateRequestListener requestListener, Options options) {
+        if (balanceData.money < options.priceAdmiration) {
+            mContext.startActivity(PurchasesActivity.createBuyingIntent("RateAdmiration"
+                    , PurchasesFragment.TYPE_ADMIRATION, options.priceAdmiration, options.topfaceOfferwallRedirect));
             if (mOnRateControllerUiListener != null) {
                 mOnRateControllerUiListener.failRate();
             }
@@ -47,7 +50,7 @@ public class RateController {
             }
             return false;
         }
-        sendRate(new SendAdmirationRequest(mContext, userId, mutualId, mPlace), requestListener);
+        sendRate(new SendAdmirationRequest(mContext, userId, mutualId, mPlace, options.blockUnconfirmed), requestListener);
         return true;
     }
 
