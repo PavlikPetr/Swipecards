@@ -36,6 +36,7 @@ import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 
+import org.json.JSONObject;
 import org.onepf.oms.OpenIabHelper;
 import org.onepf.oms.appstore.googleUtils.IabHelper;
 import org.onepf.oms.appstore.googleUtils.IabResult;
@@ -445,7 +446,8 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 if (TextUtils.equals(purchase.getItemType(), OpenIabHelper.ITEM_TYPE_INAPP)) {
                     App.getOpenIabHelperManager().consumeAsync(purchase, OpenIabFragment.this);
                 }
-                if (response.getBalance().optBoolean("premium")) {
+                JSONObject balance = response.getBalance();
+                if (balance != null && balance.optBoolean("premium")) {
                     //Если покупка произошла из какого либо таб-фрагмента,
                     // то отправляем интент, чтобы скрыть баннер снизу
                     LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(TabbedFeedFragment.HAS_FEED_AD));
