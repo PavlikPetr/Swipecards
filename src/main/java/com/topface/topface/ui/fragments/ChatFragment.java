@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GestureDetectorCompat;
 import android.text.Editable;
@@ -158,7 +159,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             });
         }
     };
-    private int mMaxMessageSize = App.from(getActivity()).getOptions().maxMessageSize;
+    private int mMaxMessageSize;
     // Managers
     private RelativeLayout mLockScreen;
     private PopularUserChatController mPopularUserLockController;
@@ -209,6 +210,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        mMaxMessageSize = App.from(activity).getOptions().maxMessageSize;
         mUserType = getArguments().getInt(ChatFragment.USER_TYPE);
         // do not recreate Adapter cause of setRetainInstance(true)
         if (mAdapter == null) {
@@ -939,11 +941,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     public boolean sendMessage(String text, final boolean cancelable) {
         final History messageItem = new History(text, IListLoader.ItemType.TEMP_MESSAGE);
-        final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity(), App.from(getActivity()).getOptions().blockUnconfirmed);
+        Activity activity = getActivity();
+        final MessageRequest messageRequest = new MessageRequest(mUserId, text, activity, App.from(activity).getOptions().blockUnconfirmed);
         if (TextUtils.equals(AuthToken.getInstance().getSocialNet(), AuthToken.SN_TOPFACE)) {
-            if (!App.from(getActivity()).getProfile().emailConfirmed) {
+            if (!App.from(activity).getProfile().emailConfirmed) {
                 Toast.makeText(App.getContext(), R.string.confirm_email, Toast.LENGTH_SHORT).show();
-                ConfirmEmailDialog.newInstance().show(getActivity().getSupportFragmentManager(), CONFIRM_EMAIL_DIALOG_TAG);
+                ConfirmEmailDialog.newInstance().show(((FragmentActivity) activity).getSupportFragmentManager(), CONFIRM_EMAIL_DIALOG_TAG);
                 return false;
             }
         }
