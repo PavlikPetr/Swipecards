@@ -215,11 +215,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     private int mIdForRemove;
-    protected boolean mNeedRefresh;
     private BroadcastReceiver mRefreshReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            mNeedRefresh = true;
             if (intent.hasExtra(OverflowMenu.USER_ID_FOR_REMOVE)) {
                 mIdForRemove = intent.getIntExtra(OverflowMenu.USER_ID_FOR_REMOVE, -1);
             }
@@ -847,7 +845,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     protected void updateData(final boolean isPullToRefreshUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
-        if (getUserVisibleHint()) {
+        if (isAdded()) {
             needUpdate = false;
             mIsUpdating = true;
             onUpdateStart(isPullToRefreshUpdating || isHistoryLoad);
