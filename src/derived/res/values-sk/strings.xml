@@ -13,7 +13,7 @@
     <string name="filter_only_online">Iba online</string>
     <string name="filter_select_city">Výber mesta</string>
     <string name="dashbrd_popup_rating">Páči sa naša aplikácia? Pomôžte zdvihnúť náš rating! Čím
-        vyšší je rating, tým viac zaujímavých ľudí stretnete v Topface
+        vyšší je rating, tým viac zaujímavých ľudí stretnete v Alcatel
     </string>
     <string name="dashbrd_popup_title">Rating</string>
     <string name="dashbrd_popup_cancel">Viac sa nepýtať</string>
@@ -21,11 +21,11 @@
     <string name="dashbrd_popup_later">Spýtať sa neskôr</string>
     <string name="buying_store_connect">Požiadavka v iTunes Store</string>
     <string name="buying_store_purchase">Nakupujem v iTunes Store</string>
-    <string name="buying_tf_ack_sending">Odosielam informáciu o nákupe v Topface</string>
+    <string name="buying_tf_ack_sending">Odosielam informáciu o nákupe v Alcatel</string>
     <string name="leaders_select_photo">Vyberte efektnú fotografiu:</string>
     <string name="general_bookmarks_is_deleted">Užívateľ bol z Obľúbených odstránený</string>
     <string name="general_blacklist_is_deleted">Užívateľ bol z čiernej listiny odstránený</string>
-    <string name="invite_friends_title_short">Pozvať vštkých priateľov do Topface</string>
+    <string name="invite_friends_title_short">Pozvať vštkých priateľov do Alcatel</string>
     <string name="general_bookmarks_add_short">Do Obľúbených</string>
     <string name="general_complaint">Sťažovať sa</string>
     <string name="general_type_complain">Predmet sťažnosti</string>
@@ -190,7 +190,7 @@
     <string name="settings_about">O aplikácii</string>
     <string name="settings_version">Verzia</string>
     <string name="settings_copyright">Autorské práva 2010-</string>
-    <string name="settings_rights_reserved">Topface \nVšetky práva sú vyhradené.</string>
+    <string name="settings_rights_reserved">Alcatel \nVšetky práva sú vyhradené.</string>
     <string name="settings_extra">Viac informácií nájdete na</string>
     <string name="settings_logout">Odhlásiť sa</string>
     <string name="settings_logout_msg">Naozaj sa chcete odhlásiť?</string>
@@ -302,7 +302,7 @@
     <string name="girl">dievča</string>
     <string name="start_communication">Začať si dopisovať</string>
     <string name="birthdate">Narodeniny</string>
-    <string name="welcome_to_topface">Vitajte v Topface</string>
+    <string name="welcome_to_topface">Vitajte v Alcatel</string>
     <string name="incorrect_email">Nesprávne zadaný e-mail</string>
     <string name="incorrect_login">Nesprávne zadaný Login</string>
     <string name="incorrect_password">Nesprávne zadané heslo</string>
@@ -313,7 +313,7 @@
     <string name="default_photo_upload">Nahrávanie fotografie</string>
     <string name="default_photo_upload_error">Chyba pri nahrávaní</string>
     <string name="default_photo_upload_complete">Nahrávanie je dokončené!</string>
-    <string name="general_error_try_again_later">K Topface sa nedá pripojiť. Skúste to neskôr.
+    <string name="general_error_try_again_later">K Alcatel sa nedá pripojiť. Skúste to neskôr.
     </string>
     <string name="search_city_by_name">Vyhľadanie mesta podľa názvu</string>
     <string name="gallery">Galéria</string>
@@ -379,7 +379,7 @@
     <string name="general_add">Pridať</string>
     <string name="general_invite_friends">Pozvite priateľov</string>
     <string name="general_rest_contacts">Zostalo Vám %d kontaktov</string>
-    <string name="invite_friends_title">Pozvať všetkých priateľov na Topface</string>
+    <string name="invite_friends_title">Pozvať všetkých priateľov na Alcatel</string>
     <string name="invalid_contacts">Niektoré z kontaktov neboli správne. Prosím, pošlite nám správne
         kontakty
     </string>
@@ -458,7 +458,7 @@
     </string>
     <string name="black_list_add_short">Na čiernu listinu</string>
     <string name="confirm_email_for_dating">Sme proti spamu. Potvrďte svoju e-mailovú adresu, aby
-        ste sa mohli zoznámiť v Topface!
+        ste sa mohli zoznámiť v Alcatel!
     </string>
     <string name="complain_type_swearing_msg">Hrubosť, hrozby, nadávky</string>
     <string name="general_exit">Odísť</string>
@@ -478,7 +478,7 @@
     </string>
     <string name="delete_account_are_you_sure">Ste si istí?</string>
     <string name="delete">Vymazať</string>
-    <string name="delete_account_warning">Pozor! Pokúšate sa zrušiť svoj profil na Topface.</string>
+    <string name="delete_account_warning">Pozor! Pokúšate sa zrušiť svoj profil na Alcatel.</string>
     <string name="delete_account_error">Váš účet sa bohužiaľ nepodarilo zrušiť. Môžete sa o to
         pokúsiť ešte raz.
     </string>

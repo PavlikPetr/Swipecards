@@ -13,7 +13,7 @@
     <string name="filter_only_online">온라인에서만</string>
     <string name="filter_select_city">도시 선택</string>
     <string name="dashbrd_popup_rating">어플이 마음에 드시나요? 그렇다면 평가 부탁드립니다. 더 높은 평가를 할 수록 더 흥미 있는 사람들이
-        Topface에 참여하게 됩니다.
+        Alcatel에 참여하게 됩니다.
     </string>
     <string name="dashbrd_popup_title">순위</string>
     <string name="dashbrd_popup_cancel">더 이상 묻지 않기</string>
@@ -21,11 +21,11 @@
     <string name="dashbrd_popup_later">나중에 질문해 주세요.</string>
     <string name="buying_store_connect">iTunes Store에서 충전하기</string>
     <string name="buying_store_purchase">iTunes Store에서 구입을 완료하기</string>
-    <string name="buying_tf_ack_sending">구입 정보를 Topface에 전송하기.</string>
+    <string name="buying_tf_ack_sending">구입 정보를 Alcatel에 전송하기.</string>
     <string name="leaders_select_photo">효과적인 사진을 선택하십시오.</string>
     <string name="general_bookmarks_is_deleted">사용자가 북마크에서 제거 되었습니다.</string>
     <string name="general_blacklist_is_deleted">사용자가 블랙리스트에서 제거 되었습니다.</string>
-    <string name="invite_friends_title_short">전체 친구를 Topface로 초대하기</string>
+    <string name="invite_friends_title_short">전체 친구를 Alcatel로 초대하기</string>
     <string name="general_bookmarks_add_short">북마크로</string>
     <string name="general_complaint">불만 토로하기</string>
     <string name="general_type_complain">불만 주제</string>
@@ -179,7 +179,7 @@
     <string name="settings_about">프로그램에 대해</string>
     <string name="settings_version">버젼</string>
     <string name="settings_copyright">copyright 2010</string>
-    <string name="settings_rights_reserved">Topface의 \n 모든 법적 권한은 보호되어 있습니다.</string>
+    <string name="settings_rights_reserved">Alcatel의 \n 모든 법적 권한은 보호되어 있습니다.</string>
     <string name="settings_extra">상세한 정보는 -에서 찾을 수 있습니다.</string>
     <string name="settings_logout">로그아웃하기</string>
     <string name="settings_logout_msg">정말 로그 아웃 하시겠습니까?</string>
@@ -270,7 +270,7 @@
     <string name="girl">여성</string>
     <string name="start_communication">교제를 시작하기</string>
     <string name="birthdate">생년월일</string>
-    <string name="welcome_to_topface">Topface에 오신것을 환영합니다!</string>
+    <string name="welcome_to_topface">Alcatel에 오신것을 환영합니다!</string>
     <string name="incorrect_email">이메일을 잘못 입력하셨습니다.</string>
     <string name="incorrect_login">로그인을 잘못 입력하셨습니다.</string>
     <string name="incorrect_password">비밀번호를 잘못 입력하셨습니다.</string>
@@ -280,7 +280,7 @@
     <string name="default_photo_upload">사진 업로드</string>
     <string name="default_photo_upload_error">업로드 오류입니다.</string>
     <string name="default_photo_upload_complete">업로드가 완료되었습니다!</string>
-    <string name="general_error_try_again_later">Topface에 접속할 수 없습니다. 조금 후에 다시 시도해 보세요.</string>
+    <string name="general_error_try_again_later">Alcatel에 접속할 수 없습니다. 조금 후에 다시 시도해 보세요.</string>
     <string name="search_city_by_name">이름으로 도시 찾기</string>
     <string name="gallery">갤러리</string>
     <string name="no_photo_take_photo">아무도 당신과 교제나 만남을 신청할 수 없습니다! 사진을 설정하거나 앨범에서 선택하여 주세요.</string>
@@ -335,7 +335,7 @@
     <string name="general_add">추가하기</string>
     <string name="general_invite_friends">친구들을 초대해 주세요.</string>
     <string name="general_rest_contacts">%d 연락처만 남았습니다.</string>
-    <string name="invite_friends_title">Topface에 모든 친구들을 초대해 보세요.</string>
+    <string name="invite_friends_title">Alcatel에 모든 친구들을 초대해 보세요.</string>
     <string name="invalid_contacts">몇몇의 연락처가 옳지 않습니다. 옳바른 연락처로 기입바랍니다.</string>
     <plurals name="vip_status_period">
         <item quantity="other">%d일간 이용할 수 있는 VIP 상태를 받으셨습니다.</item>
@@ -386,7 +386,7 @@
     <string name="notifications">알림</string>
     <string name="general_no_notifications">유감스럽게도 통지서 받기 설정을 이용 불가능으로 해놓으셨습니다.</string>
     <string name="black_list_add_short">블랙 리스트로</string>
-    <string name="confirm_email_for_dating">톱페이스에서는 스팸을 금지하고 있습니다. Topface를 계속 사용하기 위해서 자신의 이메일을 확인
+    <string name="confirm_email_for_dating">톱페이스에서는 스팸을 금지하고 있습니다. Alcatel를 계속 사용하기 위해서 자신의 이메일을 확인
         해주십시오.
     </string>
     <string name="complain_type_swearing_msg">비방, 욕설, 위협</string>
@@ -406,7 +406,7 @@
     </string>
     <string name="delete_account_are_you_sure">계속 하시겠습니까?</string>
     <string name="delete">삭제하기</string>
-    <string name="delete_account_warning">주의 하십시오. Topface의 자신의 프로필 삭제 작업을 시도하였습니다.</string>
+    <string name="delete_account_warning">주의 하십시오. Alcatel의 자신의 프로필 삭제 작업을 시도하였습니다.</string>
     <string name="delete_account_error">유감스럽게도 당신의 계정 삭제 작업을 실패하였습니다. 다시 시도하실 수 있습니다.</string>
     <string name="restore">저장하기</string>
     <string name="admiration_sended">감탄사가 전송되었습니다.</string>

@@ -13,7 +13,7 @@
     <string name="filter_only_online">Numai onlain</string>
     <string name="filter_select_city">Alege orasul</string>
     <string name="dashbrd_popup_rating">Va placut aplicatia noastra? Marestene ratingul! Cat mai
-        mare e ratingul, cu atat mai multi oameni interesanti vei intalni in Topface
+        mare e ratingul, cu atat mai multi oameni interesanti vei intalni in Alcatel
     </string>
     <string name="dashbrd_popup_title">Rating</string>
     <string name="dashbrd_popup_cancel">Nu intreba mai mult</string>
@@ -21,11 +21,11 @@
     <string name="dashbrd_popup_later">Intreaba mai tarziu</string>
     <string name="buying_store_connect">Solicit Tunes Store</string>
     <string name="buying_store_purchase">Fac cumparaturi in iTunes Store</string>
-    <string name="buying_tf_ack_sending">Trimit informatia despre cumparatura in Topface</string>
+    <string name="buying_tf_ack_sending">Trimit informatia despre cumparatura in Alcatel</string>
     <string name="leaders_select_photo">Alege cea mai tare poza:</string>
     <string name="general_bookmarks_is_deleted">Utilizatorul a fost sters din alese</string>
     <string name="general_blacklist_is_deleted">Utilizatorul a fost sters din lista neagra</string>
-    <string name="invite_friends_title_short">Invita toti prietenii in Topface</string>
+    <string name="invite_friends_title_short">Invita toti prietenii in Alcatel</string>
     <string name="general_bookmarks_add_short">In alese</string>
     <string name="general_complaint">A se plange</string>
     <string name="general_type_complain">Tema plangerii</string>
@@ -181,7 +181,7 @@
     <string name="settings_about">Despre programa</string>
     <string name="settings_version">Versiunea</string>
     <string name="settings_copyright">Drepturi de autor 201-</string>
-    <string name="settings_rights_reserved">Topface \nиToate drepturile sunt rezervate</string>
+    <string name="settings_rights_reserved">Alcatel \nиToate drepturile sunt rezervate</string>
     <string name="settings_extra">Informatia detailata se poate gasi pe</string>
     <string name="settings_logout">Iesi din acaunt</string>
     <string name="settings_logout_msg">Sunteti siguri ca doriti sa iesiti?</string>
@@ -295,7 +295,7 @@
     <string name="girl">fata</string>
     <string name="start_communication">Incepe discutia</string>
     <string name="birthdate">DR</string>
-    <string name="welcome_to_topface">Bun venit in Topface!</string>
+    <string name="welcome_to_topface">Bun venit in Alcatel!</string>
     <string name="incorrect_email">E-mail introdus incorect</string>
     <string name="incorrect_login">Loghin introdus incorect</string>
     <string name="incorrect_password">Parola introdusa incorect</string>
@@ -307,7 +307,7 @@
     <string name="default_photo_upload">Incarcare poze</string>
     <string name="default_photo_upload_error">Eroare incarcare</string>
     <string name="default_photo_upload_complete">Incarcare reusita!</string>
-    <string name="general_error_try_again_later">Conectare Topface imposibila. Incarcati mai
+    <string name="general_error_try_again_later">Conectare Alcatel imposibila. Incarcati mai
         tarziu
     </string>
     <string name="search_city_by_name">Cautare orasi dupa denumire</string>
@@ -374,7 +374,7 @@
     <string name="general_add">Adauga</string>
     <string name="general_invite_friends">Invita prietenii</string>
     <string name="general_rest_contacts">Vau mai ramas %d contacte</string>
-    <string name="invite_friends_title">Invita toti prietenii din agenda telefonica in Topface
+    <string name="invite_friends_title">Invita toti prietenii din agenda telefonica in Alcatel
     </string>
     <string name="invalid_contacts">Careva din contacte sunt incorecte. Va rugam, sa trimiteti date
         corecte
@@ -445,7 +445,7 @@
     </string>
     <string name="black_list_add_short">In lista neagra</string>
     <string name="confirm_email_for_dating">Noi suntem contra la spam. Va rugam sa confirmati adresa
-        electronica a Dmv, pentru a face cunostinta in Topface!
+        electronica a Dmv, pentru a face cunostinta in Alcatel!
     </string>
     <string name="complain_type_swearing_msg">Amenintari, injuraturi, purtare urata</string>
     <string name="general_exit">Iesire</string>
@@ -463,7 +463,7 @@
     <string name="delete_account_are_you_sure">Sunteti increzut?</string>
     <string name="delete">Sterge</string>
     <string name="delete_account_warning">Atentie! Dmv incercati sa stergeti profilul sau in
-        Topface.
+        Alcatel.
     </string>
     <string name="delete_account_error">Din pacate nu am reusit sa stergem acauntul Dmv. Puteti sa
         mai faceti o incercare mai tarziu.

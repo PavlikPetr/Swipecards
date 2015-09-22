@@ -30,7 +30,7 @@
     <string name="filter_select_city">Şehir seçeneği</string>
     <string name="edit_block_photo">Fotoğraflar</string>
     <string name="dashbrd_popup_rating">Ekimizi mi beğendin? Reytingimizi yükselt! Reyting ne kadar
-        yüksekse o kadar çok ilginç insanlarla Topface’de karşılaşırsın
+        yüksekse o kadar çok ilginç insanlarla Alcatel’de karşılaşırsın
     </string>
     <string name="dashbrd_popup_title">Reyting</string>
     <string name="dashbrd_popup_cancel">Bir daha sorma</string>
@@ -38,7 +38,7 @@
     <string name="dashbrd_popup_later">Daha sonra sormak</string>
     <string name="buying_store_connect">iTunes Store istiyorum</string>
     <string name="buying_store_purchase">iTunes Store’de alış veriş yapıyorum</string>
-    <string name="buying_tf_ack_sending">Topface’ye alış veriş hakkında bilgi gönderiyorum</string>
+    <string name="buying_tf_ack_sending">Alcatel’ye alış veriş hakkında bilgi gönderiyorum</string>
     <string name="ok_label">Sınıf arkadaşlar</string>
     <string name="autorefill">Otomatik tekrar doldu</string>
     <string name="coins">Paralar</string>
@@ -51,7 +51,7 @@
     <string name="locking_screen_advice2">Tüm sınırlarınızı kaldırın</string>
     <string name="general_bookmarks_is_deleted">Kullanıcı seçilmişlerden silinmiştir</string>
     <string name="general_blacklist_is_deleted">Kullanıcı kara listeden silinmiştir</string>
-    <string name="invite_friends_title_short">Tüm arkadaşları Topface’ye davet etmek</string>
+    <string name="invite_friends_title_short">Tüm arkadaşları Alcatel’ye davet etmek</string>
     <string name="general_bookmarks_add_short">Seçilmişlere</string>
     <string name="general_complaint">Şikâyet etmek</string>
     <string name="general_type_complain">Şikâyet konusu</string>
@@ -296,7 +296,7 @@
     <string name="settings_about">Program hakkında</string>
     <string name="settings_version">Versiyon</string>
     <string name="settings_copyright">Copyright 2010-</string>
-    <string name="settings_rights_reserved">Topface \nTüm hakları saklıdır.</string>
+    <string name="settings_rights_reserved">Alcatel \nTüm hakları saklıdır.</string>
     <string name="settings_extra">Daha detaylı bilgi şurada bulabilirsiniz</string>
     <string name="settings_logout">Hesaptan çıkmak</string>
     <string name="settings_code_confirmation">Doğrulama kodunu gönderin</string>
@@ -433,7 +433,7 @@
         doldurunuz, lütfen
     </string>
     <string name="set_birthdate">Yaşınıza doldurun</string>
-    <string name="welcome_to_topface">Topface’ye hoş geldiniz!</string>
+    <string name="welcome_to_topface">Alcatel’ye hoş geldiniz!</string>
     <string name="im_boy">Erkeğim</string>
     <string name="im_girl">Kızım</string>
     <string name="u_sex">Cinsiyetiniz</string>
@@ -446,7 +446,7 @@
     <string name="default_photo_upload">Fotoğraf yüklemesi</string>
     <string name="default_photo_upload_error">Yükleme hatası</string>
     <string name="default_photo_upload_complete">Yükleme tamamlanmıştır!</string>
-    <string name="general_error_try_again_later">Topface’ye bağlanamıyor. Daha sonra tekrar
+    <string name="general_error_try_again_later">Alcatel’ye bağlanamıyor. Daha sonra tekrar
         deneyin.
     </string>
     <string name="search_city_by_name">İsmine göre şehir araması</string>
@@ -521,7 +521,7 @@
     <string name="general_add">Eklemek</string>
     <string name="general_invite_friends">Arkadaşlarınızı davet edin</string>
     <string name="general_rest_contacts">Sizin %d kişiniz kaldı</string>
-    <string name="invite_friends_title">Telefon defterinden tüm arkadaşları Topface’ye davet etmek
+    <string name="invite_friends_title">Telefon defterinden tüm arkadaşları Alcatel’ye davet etmek
     </string>
     <string name="invalid_contacts">Bazı iletişim bilgileriniz uygunsuz biçimindeydi. Lütfen,
         iletişim bilgilerinizi uygun biçimde gönderin
@@ -599,11 +599,11 @@
     <string name="notifications">Bildirimler</string>
     <string name="general_no_notifications">Maalesef, cihazınızda bildirimler uygulanmıyor</string>
     <string name="black_list_add_short">Kara listeye</string>
-    <string name="confirm_email_for_dating">Biz spama karşıyız. Topface’de tanışmak için posta
+    <string name="confirm_email_for_dating">Biz spama karşıyız. Alcatel’de tanışmak için posta
         adresinizi onaylayın!
     </string>
     <string name="confirm_email_for_dating_title">Biz Spam\'lere karşıyız</string>
-    <string name="confirm_email_for_dating_desc">Topface\'de yeni insanlarla tanışabilmek için
+    <string name="confirm_email_for_dating_desc">Alcatel\'de yeni insanlarla tanışabilmek için
         e-posta adresinizi onaylayın!
     </string>
     <string name="send_confirm_link">Onaylama için link göndermek</string>
@@ -632,7 +632,7 @@
     </string>
     <string name="delete_account_are_you_sure">Kesinlikle emin misiniz?</string>
     <string name="delete">Silmek</string>
-    <string name="delete_account_warning">Dikkat! Topface’deki profilinizi silmeye çalışıyorsunuz.
+    <string name="delete_account_warning">Dikkat! Alcatel’deki profilinizi silmeye çalışıyorsunuz.
     </string>
     <string name="delete_account_error">Maalesef, hesabınız silinemedi. Bir daha deneyebilirsiniz.
     </string>
@@ -665,7 +665,7 @@
     <string name="settings_feedback_transaction_link">Siparişin numarası nerede bulunur?</string>
     <string name="general_logout_error">Maalesef, hesaptan çıkış yapılamadı</string>
     <string name="auth_btn_ok">Odnoklassniki</string>
-    <string name="auth_btn_tf">Topface Hesabı</string>
+    <string name="auth_btn_tf">Alcatel Hesabı</string>
     <string name="birthday">Doğum Günü</string>
     <string name="other_auth">Diğer servislerin yardımıyla giriş yap</string>
     <string name="settings_feedback_transaction_number_hint">Sipariş numarasına girin</string>
@@ -710,7 +710,7 @@
     <string name="general_distance_km">%.02f км</string>
     <string name="general_distance_m">%d м</string>
     <string name="cannot_get_geo">Yeriniz Tespit edilemedi</string>
-    <string name="press_back_more_to_close_app">Topface\'den çıkmak için bir daha geri düğmesine
+    <string name="press_back_more_to_close_app">Alcatel\'den çıkmak için bir daha geri düğmesine
         tıklayın
     </string>
     <string name="waiting_for_load">Bekleyin, yükleme yapılıyor…</string>

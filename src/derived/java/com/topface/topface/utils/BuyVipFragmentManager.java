@@ -16,6 +16,6 @@ public class BuyVipFragmentManager {
     }
 
     public static VipBuyFragment getVipInstance(boolean needActionBar, String from, String text) {
-        return VipPaymentWallBuyFragment.newInstance(needActionBar, from, PaymentWallProducts.TYPE.MOBILE, text);
+        return VipBuyFragment.newInstance(needActionBar, from, text);
     }
 }
