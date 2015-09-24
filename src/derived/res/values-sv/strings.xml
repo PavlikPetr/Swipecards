@@ -31,7 +31,7 @@
     <string name="filter_select_city">Val av staden</string>
     <string name="edit_block_photo">Foton</string>
     <string name="dashbrd_popup_rating">Gillar du vår applikation? Höj vår rating! Ju högre rating
-        vi har, desto fler intressanta människor kan du möta på Topface
+        vi har, desto fler intressanta människor kan du möta på Alcatel
     </string>
     <string name="dashbrd_popup_title">Rating</string>
     <string name="dashbrd_popup_cancel">Fråga inte mer</string>
@@ -39,7 +39,7 @@
     <string name="dashbrd_popup_later">Fråga senare</string>
     <string name="buying_store_connect">Söker kontakt med iTunes Store</string>
     <string name="buying_store_purchase">Gör ett köp i iTunes Store</string>
-    <string name="buying_tf_ack_sending">Skickar information om köpet på Topface</string>
+    <string name="buying_tf_ack_sending">Skickar information om köpet på Alcatel</string>
     <string name="ok_label">Klasskamrater</string>
     <string name="autorefill">Autopåfyllning</string>
     <string name="coins">Mynt</string>
@@ -52,7 +52,7 @@
     <string name="locking_screen_advice2">Ta bort alla begränsningar</string>
     <string name="general_bookmarks_is_deleted">Användaren har raderats från favoriter</string>
     <string name="general_blacklist_is_deleted">Användaren har raderats från svartlistan.</string>
-    <string name="invite_friends_title_short">Bjud in samtliga vänner till Topface</string>
+    <string name="invite_friends_title_short">Bjud in samtliga vänner till Alcatel</string>
     <string name="general_bookmarks_add_short">Till favoriter</string>
     <string name="general_complaint">Klaga</string>
     <string name="general_type_complain">Klagomålets rubrik</string>
@@ -290,7 +290,7 @@
     <string name="settings_about">Om programmet</string>
     <string name="settings_version">Version</string>
     <string name="settings_copyright">Copyright 2010-</string>
-    <string name="settings_rights_reserved">Topface \nKopiering förbjudet</string>
+    <string name="settings_rights_reserved">Alcatel \nKopiering förbjudet</string>
     <string name="settings_extra">Läs mer här</string>
     <string name="settings_logout">Logga ut</string>
     <string name="settings_code_confirmation">Skicka bekräftelsekod</string>
@@ -427,7 +427,7 @@
     <string name="birthdate">Födelsedag</string>
     <string name="birthdate_confirm">Var snäll och konfirmer</string>
     <string name="set_birthdate">Ange ålder</string>
-    <string name="welcome_to_topface">Välkommen till Topface!</string>
+    <string name="welcome_to_topface">Välkommen till Alcatel!</string>
     <string name="im_boy">Jag är en kille</string>
     <string name="im_girl">Jag är en tjej</string>
     <string name="u_sex">Ditt kön</string>
@@ -518,7 +518,7 @@
     <string name="general_add">Lägg till</string>
     <string name="general_invite_friends">Bjud in vänner</string>
     <string name="general_rest_contacts">Du har %d kontakter kvar</string>
-    <string name="invite_friends_title">Bjud alla vänner från telefonboken till Topface.</string>
+    <string name="invite_friends_title">Bjud alla vänner från telefonboken till Alcatel.</string>
     <string name="invalid_contacts">Vissa kontakter är inkorrekta. Vänligen skicka korrekta
         kontakter.
     </string>
@@ -591,11 +591,11 @@
     </string>
     <string name="black_list_add_short">Till svartlista</string>
     <string name="confirm_email_for_dating">VI är emot spam. Bekräfta din epost-adress för att dejta
-        på Topface!
+        på Alcatel!
     </string>
     <string name="confirm_email_for_dating_title">Vi är emot spam</string>
     <string name="confirm_email_for_dating_desc">Bekräfta din e-postadress för att dejta på
-        Topface!
+        Alcatel!
     </string>
     <string name="send_confirm_link">Skicka länken för bekräftelse</string>
     <string name="complain_type_swearing_msg">Grovheter, hot, svordomar</string>
@@ -624,7 +624,7 @@
     </string>
     <string name="delete_account_are_you_sure">Är du säker?</string>
     <string name="delete">Radera</string>
-    <string name="delete_account_warning">OBS! Du försöker att radera din profil på Topface.
+    <string name="delete_account_warning">OBS! Du försöker att radera din profil på Alcatel.
     </string>
     <string name="delete_account_error">Det gick tyvärr inte att radera ditt konto. Du kan försöka
         en gång till.
@@ -656,7 +656,7 @@
     <string name="settings_feedback_transaction_link">var kan man hitta order nr?</string>
     <string name="general_logout_error">Det gick tyvärr inte att logga ut</string>
     <string name="auth_btn_ok">Odnoklassniki</string>
-    <string name="auth_btn_tf">Topface-account</string>
+    <string name="auth_btn_tf">Alcatel-account</string>
     <string name="birthday">Födelsedag</string>
     <string name="other_auth">Logga in via andra applikationer</string>
     <string name="settings_feedback_transaction_number_hint">Välj order nr</string>
@@ -700,7 +700,7 @@
     <string name="general_distance_m">%d m</string>
     <string name="cannot_get_geo">Det gick inte att identifiera läget</string>
     <string name="press_back_more_to_close_app">Tryck på knappen en gång till för att lägga ut från
-        Topface
+        Alcatel
     </string>
     <string name="waiting_for_load">Väntar på uppladdningen…</string>
     <string name="loading_photo_percent">%d%% foto laddas</string>

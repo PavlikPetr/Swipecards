@@ -27,7 +27,7 @@
     <string name="edit_block_photo">Οι φωτογραφίες</string>
     <string name="dashbrd_popup_rating">Άρεσε εφαρμογή μας? Ανασηκώστε το βαθμολογίας μας! Όσο
         υψηλότερη είναι η βαθμολογίας, τόσο πιο πολλοί ενδιαφέροντες ανθρώπους μπορείς να
-        συναντήσεις στο Topface
+        συναντήσεις στο Alcatel
     </string>
     <string name="dashbrd_popup_title">Βαθμολογίας</string>
     <string name="dashbrd_popup_cancel">Μην ρωτήσετε</string>
@@ -35,7 +35,7 @@
     <string name="dashbrd_popup_later">Ρωτήστε αργότερα</string>
     <string name="buying_store_connect">Ζήτώ από το iTunes Store</string>
     <string name="buying_store_purchase">Κάνω καταχώρηση αγοράς από το iTunes Store</string>
-    <string name="buying_tf_ack_sending">Στέλνω πληροφορίες σχετικά με την αγορά στο Topface
+    <string name="buying_tf_ack_sending">Στέλνω πληροφορίες σχετικά με την αγορά στο Alcatel
     </string>
     <string name="ok_label">Odnoklassniki</string>
     <string name="autorefill">Αυτόματη αναπλήρωση</string>
@@ -49,7 +49,7 @@
     <string name="locking_screen_advice2">Απαλλαγή από όλους τους περιορισμούς</string>
     <string name="general_bookmarks_is_deleted">Ο χρήστης διαγράφεται από τα αγαπημένες</string>
     <string name="general_blacklist_is_deleted">Ο χρήστης διαγράφεται από τη μαύρη λίστα</string>
-    <string name="invite_friends_title_short">Προσκαλέστε όλους τους φίλους σας στο Topface!
+    <string name="invite_friends_title_short">Προσκαλέστε όλους τους φίλους σας στο Alcatel!
     </string>
     <string name="general_bookmarks_add_short">Στις αγαπημένες σας</string>
     <string name="general_complaint">Καταγγελία</string>
@@ -272,7 +272,7 @@
     <string name="settings_about">Σχετικά με το πρόγραμμα</string>
     <string name="settings_version">εκδοχή</string>
     <string name="settings_copyright">Πνευματικά δικαιώματα 2010 -</string>
-    <string name="settings_rights_reserved">Topface \n\'Ολα τα δικαιώματα διατηρούνται</string>
+    <string name="settings_rights_reserved">Alcatel \n\'Ολα τα δικαιώματα διατηρούνται</string>
     <string name="settings_extra">Περισσότερα πληροφορία μπορείτε να βρείτε στην</string>
     <string name="settings_logout">Έξοδος από το λογαριασμό</string>
     <string name="settings_logout_msg">Θέλετε πραγματικά να εγκαταλείψετε?</string>
@@ -406,7 +406,7 @@
     <string name="girl">η κοπέλα</string>
     <string name="start_communication">Ξεκινάω μια συνομιλία</string>
     <string name="birthdate">Γενέθλια</string>
-    <string name="welcome_to_topface">Καλώς ήρθατε στον Topface</string>
+    <string name="welcome_to_topface">Καλώς ήρθατε στον Alcatel</string>
     <string name="incorrect_email">Μη έγκυρο e-mail</string>
     <string name="incorrect_login">Μη έγκυρη συνδεση</string>
     <string name="incorrect_password">Μη έγκυρο κωδικό</string>
@@ -418,7 +418,7 @@
     <string name="default_photo_upload">Ανέβασμα φωτογραφίων</string>
     <string name="default_photo_upload_error">Σφάλμα κατά τη φόρτωση</string>
     <string name="default_photo_upload_complete">Ανέβασμα ολοκληρώθηκε!</string>
-    <string name="general_error_try_again_later">Δεν είναι δυνατή η σύνδεση στο Topface. Παρακαλώ
+    <string name="general_error_try_again_later">Δεν είναι δυνατή η σύνδεση στο Alcatel. Παρακαλώ
         δοκιμάστε ξανά αργότερα.
     </string>
     <string name="search_city_by_name">Αναζήτηση πόλεων με το όνομα</string>
@@ -490,7 +490,7 @@
     <string name="general_invite_friends">Προσκαλέστε τους φίλους σας</string>
     <string name="general_rest_contacts">Υπάρχουν μόνο %d επαφών</string>
     <string name="invite_friends_title">Προσκαλέστε όλους τους φίλους σας από τον τηλεφωνικό
-        κατάλογο στο Topface
+        κατάλογο στο Alcatel
     </string>
     <string name="invalid_contacts">Μερικές από τις επαφές ήταν λανθασμένες. Παρακαλώ, στείλτε τις
         σωστές επαφές
@@ -572,7 +572,7 @@
     </string>
     <string name="black_list_add_short">Στη μαύρη λίστα</string>
     <string name="confirm_email_for_dating">Είμαστε αντίθετοι με την τοποθέτηση spam.Επιβεβαιώστε το
-        email για να εξοικείωσετε στο Topface!
+        email για να εξοικείωσετε στο Alcatel!
     </string>
     <string name="send_confirm_link">Στείλτε ένα σύνδεσμο για την επιβεβαίωση</string>
     <string name="complain_type_swearing_msg">Ευγένειας, απειλές, ύβρεις</string>
@@ -671,7 +671,7 @@
     <string name="general_distance_km">%.02f χιλ.</string>
     <string name="general_distance_m">%d μ</string>
     <string name="cannot_get_geo">Δεν μπορούμε να προσδιορίσουμε την τοποθεσία σας</string>
-    <string name="press_back_more_to_close_app">Πατήστε το κουμπί ξανά για να βγείτε από Topface
+    <string name="press_back_more_to_close_app">Πατήστε το κουμπί ξανά για να βγείτε από Alcatel
     </string>
     <string name="waiting_for_load">Αναμονή φόρτωσης</string>
     <string name="loading_photo_percent">Ανέβασμα εικόνας %d%%</string>

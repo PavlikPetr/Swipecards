@@ -31,7 +31,7 @@
     <string name="filter_select_city">Selecionar cidade</string>
     <string name="edit_block_photo">Fotos</string>
     <string name="dashbrd_popup_rating">Gostaste da nossa aplicação? Aumenta a nossa classificação!
-        Quanto maior a classificação, mais pessoas irás conhecer no Topface!
+        Quanto maior a classificação, mais pessoas irás conhecer no Alcatel!
     </string>
     <string name="dashbrd_popup_title">Avalia-me</string>
     <string name="dashbrd_popup_cancel">Não perguntar novamente</string>
@@ -39,7 +39,7 @@
     <string name="dashbrd_popup_later">Perguntar mais tarde</string>
     <string name="buying_store_connect">A ligar-se à iTunes Store</string>
     <string name="buying_store_purchase">A processar compra na iTunes Store</string>
-    <string name="buying_tf_ack_sending">A enviar informações sobre a compra para o Topface</string>
+    <string name="buying_tf_ack_sending">A enviar informações sobre a compra para o Alcatel</string>
     <string name="ok_label">Odnoklassniki</string>
     <string name="autorefill">Preencher automaticamente</string>
     <string name="coins">Moedas</string>
@@ -52,7 +52,7 @@
     <string name="locking_screen_advice2">Eliminar todas as Restrições de Acesso</string>
     <string name="general_bookmarks_is_deleted">O utilizador foi eliminado dos Favoritos</string>
     <string name="general_blacklist_is_deleted">O utilizador foi removido da Lista Negra</string>
-    <string name="invite_friends_title_short">Convidar todos os amigos para o Topface</string>
+    <string name="invite_friends_title_short">Convidar todos os amigos para o Alcatel</string>
     <string name="general_bookmarks_add_short">Aos Favoritos</string>
     <string name="general_complaint">Reclamar</string>
     <string name="general_type_complain">Assunto da reclamação</string>
@@ -296,7 +296,7 @@
     <string name="settings_about">Sobre</string>
     <string name="settings_version">Versão</string>
     <string name="settings_copyright">Direitos de autor 2010 -</string>
-    <string name="settings_rights_reserved">Topface \nTodos os direitos reservados.</string>
+    <string name="settings_rights_reserved">Alcatel \nTodos os direitos reservados.</string>
     <string name="settings_extra">Podes encontrar mais informações em</string>
     <string name="settings_logout">Terminar sessão</string>
     <string name="settings_code_confirmation">Enviar código de confirmação</string>
@@ -444,7 +444,7 @@
         pessoas.
     </string>
     <string name="set_birthdate">Especificar idade</string>
-    <string name="welcome_to_topface">Bem-vindo ao Topface!</string>
+    <string name="welcome_to_topface">Bem-vindo ao Alcatel!</string>
     <string name="im_boy">Sou um rapaz</string>
     <string name="im_girl">Sou uma rapariga</string>
     <string name="u_sex">O teu género</string>
@@ -460,7 +460,7 @@
     <string name="default_photo_upload_error">Erro no upload</string>
     <string name="default_photo_upload_complete">Upload concluído!</string>
     <string name="general_error_try_again_later">Não é possível estabelecer uma ligação com o
-        Topface. Tenta novamente mais tarde.
+        Alcatel. Tenta novamente mais tarde.
     </string>
     <string name="search_city_by_name">Pesquisar pelo nome da cidade</string>
     <string name="gallery">Galeria de fotos</string>
@@ -542,7 +542,7 @@
     <string name="general_invite_friends">Convidar amigos</string>
     <string name="general_rest_contacts">Tens %d contactos restantes.</string>
     <string name="invite_friends_title">Convida todos os amigos da tua lista de contactos do teu
-        telemóvel para o Topface
+        telemóvel para o Alcatel
     </string>
     <string name="invalid_contacts">Alguns dos contactos eram inválidos. Por favor envia os
         contactos válidos.
@@ -618,11 +618,11 @@
     </string>
     <string name="black_list_add_short">Para a Lista Negra</string>
     <string name="confirm_email_for_dating">Nós não aprovamos spam. Confirma o teu e-mail para que
-        possas conhecer pessoas no Topface!
+        possas conhecer pessoas no Alcatel!
     </string>
     <string name="confirm_email_for_dating_title">Não aprovamos spam</string>
     <string name="confirm_email_for_dating_desc">Confirme o seu endereço de e-mail para que possa
-        conhecer pessoas no Topface!
+        conhecer pessoas no Alcatel!
     </string>
     <string name="send_confirm_link">Enviar um link para confirmação</string>
     <string name="complain_type_swearing_msg">Comportamento ofensivo, linguagem inadequada,
@@ -656,7 +656,7 @@
     <string name="delete_account_are_you_sure">Tens a certeza?</string>
     <string name="delete">Eliminar</string>
     <string name="delete_account_warning">Atenção! Estás a tentar eliminar o teu perfil no
-        Topface.
+        Alcatel.
     </string>
     <string name="delete_account_error">Infelizmente, a tua tentativa de eliminar a tua conta
         falhou. Por favor tenta novamente.
@@ -690,7 +690,7 @@
         novamente.
     </string>
     <string name="auth_btn_ok">Entrar com Odnoklassniki</string>
-    <string name="auth_btn_tf">Conta Topface</string>
+    <string name="auth_btn_tf">Conta Alcatel</string>
     <string name="birthday">Aniversário</string>
     <string name="other_auth">Iniciar sessão com outros serviços</string>
     <string name="settings_feedback_transaction_number_hint">Introduz o teu número do pedido
@@ -734,7 +734,7 @@
     <string name="general_distance_km">%.02f km</string>
     <string name="general_distance_m">%d m</string>
     <string name="cannot_get_geo">Não foi possível determinar a localização</string>
-    <string name="press_back_more_to_close_app">Para sair do Topface, prime o botão Voltar outra
+    <string name="press_back_more_to_close_app">Para sair do Alcatel, prime o botão Voltar outra
         vez.
     </string>
     <string name="waiting_for_load">A aguardar pelo carregamento…</string>

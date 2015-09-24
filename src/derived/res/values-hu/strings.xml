@@ -13,7 +13,7 @@
     <string name="filter_only_online">Csak online</string>
     <string name="filter_select_city">Város kiválasztása</string>
     <string name="dashbrd_popup_rating">Tetszett az alkalmazásunk? Növeld a népszerűségünket! Minél
-        magasabb a népszerűségünk, annál több érdekes emberrel találkozhatsz a Topface-n
+        magasabb a népszerűségünk, annál több érdekes emberrel találkozhatsz a Alcatel-n
     </string>
     <string name="dashbrd_popup_title">Értékelés</string>
     <string name="dashbrd_popup_cancel">Ne kérdezd</string>
@@ -21,7 +21,7 @@
     <string name="dashbrd_popup_later">Kérdezd meg később</string>
     <string name="buying_store_connect">iTunes Store kérése</string>
     <string name="buying_store_purchase">Vásárolok az iTunes Store-ban</string>
-    <string name="buying_tf_ack_sending">Információt küldök vásárlásról a Topface-n</string>
+    <string name="buying_tf_ack_sending">Információt küldök vásárlásról a Alcatel-n</string>
     <string name="leaders_select_photo">Válassz egy látványos képet:</string>
     <string name="profile_deleted_user">Törölt felhasználó</string>
     <string name="filter_main_parameters">Érdekel</string>
@@ -158,7 +158,7 @@
     <string name="settings_about">A programról</string>
     <string name="settings_version">Verzió</string>
     <string name="settings_copyright">Copyright 2010-</string>
-    <string name="settings_rights_reserved">Topface \nMinden jog fenntartva</string>
+    <string name="settings_rights_reserved">Alcatel \nMinden jog fenntartva</string>
     <string name="settings_extra">Részletes információkat találhatsz</string>
     <string name="settings_logout">Kijelentkezés</string>
     <string name="settings_logout_msg">Valóban ki akarsz lépni?</string>
