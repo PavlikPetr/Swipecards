@@ -212,7 +212,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             /*
             Если нет стандартного сообщения в конфиге, устанавливаем из опций
              */
-            if (
+            if (getActivity().getIntent().hasExtra(DatingInstantMessageController.DEFAULT_MESSAGE) ||
                     mDatingInstantMessageController != null &&
                             TextUtils.isEmpty(userConfig.getDatingMessage())
                     ) {
