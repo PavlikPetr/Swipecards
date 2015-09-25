@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
+import com.topface.topface.data.Profile;
 import com.topface.topface.ui.IGiftSendListener;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
@@ -23,9 +24,8 @@ import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragment {
+public class PlainGiftsFragment extends ProfileInnerFragment {
 
     public static final String DATA = "data";
     public static final String POSITION = "position";
@@ -37,7 +37,7 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
     protected GiftsAdapter mGridAdapter;
     private GridView mGridView;
     private IGiftSendListener mGiftSendListener;
-    private T mGiftsFirstPortion;
+    private Profile.Gifts mGiftsFirstPortion;
 
     @Override
     public void onAttach(Activity activity) {
@@ -100,7 +100,7 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
         return 0;
     }
 
-    protected void postGiftsLoadInfoUpdate(T gifts) {
+    protected void postGiftsLoadInfoUpdate(Profile.Gifts gifts) {
         mGroupInfo.setVisibility(View.GONE);
         mTextInfo.setVisibility(View.GONE);
     }
@@ -136,12 +136,12 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
         mGridView.setSelection(savedState.getInt(POSITION, 0));
     }
 
-    public void setGifts(final T gifts) {
+    public void setGifts(final Profile.Gifts gifts) {
         if (isAdded() && getView() != null) { // getView() to check that view is created
             FeedList<FeedGift> data = mGridAdapter.getData();
             if (data != null && gifts != null) {
                 data.clear();
-                for (Gift gift : gifts) {
+                for (Gift gift : gifts.getGifts()) {
                     FeedGift item = new FeedGift();
                     item.gift = gift;
                     data.add(item);

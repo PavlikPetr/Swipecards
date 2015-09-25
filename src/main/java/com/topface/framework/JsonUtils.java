@@ -1,8 +1,16 @@
 package com.topface.framework;
 
+import android.util.SparseArray;
+
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.topface.topface.data.Profile;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /**
  * Класс для работы с Json
@@ -33,5 +41,22 @@ public class JsonUtils {
     public static <T> T optFromJson(String json, Class<T> classOfT, T defaultObj) {
         T obj = fromJson(json, classOfT);
         return obj == null ? defaultObj : obj;
+    }
+
+    public static String profileToJson(Profile profile) {
+        Gson gson = new GsonBuilder().registerTypeAdapter(SparseArray.class
+                , new JsonSerializer<SparseArray<Profile.TopfaceNotifications>>() {
+            @Override
+            public JsonElement serialize(SparseArray<Profile.TopfaceNotifications> sparseArray, Type typeOfSrc, JsonSerializationContext context) {
+                ArrayList<Profile.TopfaceNotifications> list = new ArrayList<>();
+                for (int i = 0; i < sparseArray.size(); i++) {
+                    int key = sparseArray.keyAt(i);
+                    Profile.TopfaceNotifications notifications = sparseArray.get(key);
+                    list.add(notifications);
+                }
+                return context.serialize(list);
+            }
+        }).create();
+        return gson.toJson(profile);
     }
 }

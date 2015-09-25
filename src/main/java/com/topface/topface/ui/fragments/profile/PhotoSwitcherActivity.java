@@ -168,11 +168,11 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     private ImageButton mDeleteButton;
     private UserProfileLoader mUserProfileLoader;
 
-    public static Intent getPhotoSwitcherIntent(Profile.Gifts gifts, int position, int userId, int photosCount, PhotoGridAdapter adapter) {
+    public static Intent getPhotoSwitcherIntent(ArrayList<Gift> gifts, int position, int userId, int photosCount, PhotoGridAdapter adapter) {
         return getPhotoSwitcherIntent(gifts, position, userId, photosCount, adapter.getPhotos());
     }
 
-    public static Intent getPhotoSwitcherIntent(Profile.Gifts gifts, int position, int userId, int photosCount, Photos photos) {
+    public static Intent getPhotoSwitcherIntent(ArrayList<Gift> gifts, int position, int userId, int photosCount, Photos photos) {
         Intent intent = new Intent(App.getContext(), PhotoSwitcherActivity.class);
         intent.putExtra(INTENT_USER_ID, userId);
         // если позиция невалидная смещаем до последней в "колоде" хуяк-хуяк и в продакшн

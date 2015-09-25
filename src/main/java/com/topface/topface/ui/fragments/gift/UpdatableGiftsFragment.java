@@ -19,7 +19,7 @@ import com.topface.topface.ui.adapters.IListLoader;
 /**
  * Fragment displaying updatable gifts feed
  */
-public class UpdatableGiftsFragment extends PlainGiftsFragment<Profile.Gifts> {
+public class UpdatableGiftsFragment extends PlainGiftsFragment {
 
     private static final int GIFTS_LOAD_COUNT = 30;
     private static final String PROFILE_ID = "profile_id";

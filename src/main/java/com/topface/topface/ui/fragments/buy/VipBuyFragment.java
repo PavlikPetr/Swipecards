@@ -140,7 +140,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     private void switchLayouts() {
         if (mBuyVipViewsContainer != null && mEditPremiumContainer != null) {
-            if (App.from(getActivity()).getProfile().premium) {
+            if (App.get().getProfile().premium) {
                 mEditPremiumContainer.setVisibility(View.VISIBLE);
                 mBuyVipViewsContainer.setVisibility(View.GONE);
             } else {
