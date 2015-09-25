@@ -7,10 +7,15 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.topface.topface.banners.PageInfo;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Класс для работы с Json
@@ -58,5 +63,17 @@ public class JsonUtils {
             }
         }).create();
         return gson.toJson(profile);
+    }
+
+    public static String optionsToJson(Options options) {
+        Gson gson = new GsonBuilder().registerTypeAdapter(HashMap.class
+                , new JsonSerializer<HashMap<String, PageInfo>>() {
+            @Override
+            public JsonElement serialize(HashMap<String, PageInfo> hashMap, Type typeOfSrc, JsonSerializationContext context) {
+                Collection<PageInfo> list = hashMap.values();
+                return context.serialize(list);
+            }
+        }).create();
+        return gson.toJson(options);
     }
 }

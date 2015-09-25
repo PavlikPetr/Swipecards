@@ -104,7 +104,7 @@ public class TopfaceModule {
                     config.setUserGeoLocation((Location) data);
                     config.saveConfig();
                 } else if (data.getClass() == Options.class) {
-                    CacheProfile.setOptions(JsonUtils.toJson(data));
+                    CacheProfile.setOptions(JsonUtils.optionsToJson((Options)data));
                 } else if (data.getClass() == Profile.class) {
                     Profile profile = (Profile) data;
                     CacheProfile.setProfile(profile, JsonUtils.profileToJson(profile));
