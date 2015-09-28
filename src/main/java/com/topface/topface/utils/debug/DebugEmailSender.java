@@ -3,7 +3,7 @@ package com.topface.topface.utils.debug;
 import android.content.Context;
 import android.content.Intent;
 
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.App;
 
 import org.acra.ACRA;
 import org.acra.ReportField;
@@ -58,7 +58,7 @@ public class DebugEmailSender implements ReportSender {
 
     @Override
     public void send(Context context, CrashReportData errorContent) throws ReportSenderException {
-        final String subject = "[Crash Report] [uid: " + CacheProfile.uid + "] Topface";
+        final String subject = "[Crash Report] [uid: " + App.from(context).getProfile().uid + "] Topface";
 
         final String body = buildBody(errorContent);
 

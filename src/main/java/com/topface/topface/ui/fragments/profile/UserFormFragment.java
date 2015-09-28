@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.IApiResponse;
@@ -67,7 +68,8 @@ public class UserFormFragment extends AbstractFormFragment implements OnClickLis
             case R.id.btnEmptyForm:
                 int userId = getUserId();
                 if (userId == 0) break;
-                StandardMessageSendRequest request = new StandardMessageSendRequest(getActivity(), StandardMessageSendRequest.MESSAGE_FILL_INTERESTS, userId);
+                StandardMessageSendRequest request = new StandardMessageSendRequest(getActivity()
+                        , StandardMessageSendRequest.MESSAGE_FILL_INTERESTS, userId, App.from(getActivity()).getOptions().blockUnconfirmed);
                 registerRequest(request);
                 mAskToFillForm.setVisibility(View.GONE);
                 mPgb.setVisibility(View.VISIBLE);

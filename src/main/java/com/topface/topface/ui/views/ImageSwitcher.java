@@ -253,7 +253,7 @@ public class ImageSwitcher extends ViewPager {
             if (tag == null || !((Boolean) tag)) {
                 View progressBar = baseLayout.findViewById(R.id.pgrsAlbum);
                 progressBar.setVisibility(View.VISIBLE);
-                if(mIsNeedAnimateLoader){
+                if (mIsNeedAnimateLoader) {
                     AnimationUtils.createProgressBarAnimator(progressBar).start();
                 }
                 Photo photo = mPhotoLinks.get(realPosition);

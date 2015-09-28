@@ -29,6 +29,7 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
+import com.topface.topface.ui.settings.SettingsChangeAuthDataFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
@@ -144,6 +145,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         mRunning = false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setSupportProgressBarIndeterminateVisibility(boolean visible) {
         if (mIndeterminateSupported) {
@@ -218,7 +220,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     }
 
     protected boolean isLoggedIn() {
-        return !CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty();
+        return !CacheProfile.isEmpty(this) && !AuthToken.getInstance().isEmpty();
     }
 
     private void registerLoadProfileReceiver() {
@@ -227,7 +229,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     //Уведомлять о загрузке профиля следует только если мы авторизованы
-                    if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
+                    if (!CacheProfile.isEmpty(context) && !AuthToken.getInstance().isEmpty()) {
                         checkProfileLoad();
                     }
                 }
@@ -241,7 +243,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
 
     protected void onLoadProfile() {
         Debug.log("onLoadProfile in " + ((Object) this).getClass().getSimpleName());
-        if (CacheProfile.isEmpty() || AuthToken.getInstance().isEmpty()) {
+        if (CacheProfile.isEmpty(this) || AuthToken.getInstance().isEmpty()) {
             startAuth();
         } else {
             mStartActionsController.onProcessAction();
@@ -490,6 +492,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
      * Set the window content overlay on device's that don't respect the theme
      * attribute.
      */
+    @SuppressWarnings("deprecation")
     private void setWindowContentOverlayCompat() {
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN_MR2) {
             // Get the content view

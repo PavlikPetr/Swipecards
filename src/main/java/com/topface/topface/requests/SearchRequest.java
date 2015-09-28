@@ -12,21 +12,24 @@ public class SearchRequest extends LimitedApiRequest {
     public static final int SEARCH_LIMIT = 30;
     // Data
     public static final String SERVICE_NAME = "search.getList";
-    private boolean onlyOnline = false; // необходимость выборки только онлайн-пользователей
+    private boolean mIsNeedRefresh;
+    private boolean mOnlyOnline = false; // необходимость выборки только онлайн-пользователей
 
-    public SearchRequest(int limit, boolean onlyOnline, Context context) {
+    public SearchRequest(int limit, boolean onlyOnline, Context context, boolean isNeedRefresh) {
         super(context);
-        this.onlyOnline = onlyOnline;
+        mOnlyOnline = onlyOnline;
+        mIsNeedRefresh = isNeedRefresh;
     }
 
-    public SearchRequest(boolean onlyOnline, Context context) {
-        this(SEARCH_LIMIT, onlyOnline, context);
+    public SearchRequest(boolean onlyOnline, Context context, boolean isRefresh) {
+        this(SEARCH_LIMIT, onlyOnline, context, isRefresh);
     }
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
         return super.getRequestData()
-                .put("online", onlyOnline);
+                .put("online", mOnlyOnline)
+                .put("refresh", mIsNeedRefresh);
     }
 
     @Override

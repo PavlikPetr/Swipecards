@@ -25,10 +25,11 @@ public class BannersConfig {
 
     public static final String BANNERS_CONFIG_SETTINGS = "banners_config_settings";
     private static final String BANNERS_CONFIG_ON_START = "banners_config_settings_on_start";
-
+    private Options mOptions;
     private final Context mContext;
 
-    public BannersConfig(Context context) {
+    public BannersConfig(Context context, Options options) {
+        mOptions = options;
         mContext = context;
         initSavedOptionsPages();
         LocalBroadcastManager.getInstance(context).registerReceiver(new BroadcastReceiver() {
@@ -49,11 +50,9 @@ public class BannersConfig {
         return getPreferences().getBoolean(BANNERS_CONFIG_ON_START, false);
     }
 
-    public void saveBannersSettings() {
+    public void saveBannersSettings(Map<String, PageInfo> pagesInfo) {
         SharedPreferences preferences = getPreferences();
         SharedPreferences.Editor editor = preferences.edit();
-        Options options = CacheProfile.getOptions();
-        Map<String, PageInfo> pagesInfo = options.getPagesInfo();
         for (String pageName : pagesInfo.keySet()) {
             editor.putString(pageName, pagesInfo.get(pageName).toString());
         }
@@ -69,11 +68,10 @@ public class BannersConfig {
                 pagesInfo.put(pageName.getName(), PageInfo.parseFromString(str));
             }
         }
-        CacheProfile.getOptions().setPagesInfo(pagesInfo);
+        mOptions.setPagesInfo(pagesInfo);
     }
 
     public void resetBannersSettings() {
-        CacheProfile.clearOptions();
         getPreferences().edit().clear().commit();
     }
 

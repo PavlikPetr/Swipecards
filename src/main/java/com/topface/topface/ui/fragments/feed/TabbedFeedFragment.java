@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.banners.BannersController;
 import com.topface.topface.banners.PageInfo;
@@ -171,7 +172,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
                     }
                 }
                 if (!needNativeAd) {
-                    mBannersController = new BannersController(TabbedFeedFragment.this);
+                    mBannersController = new BannersController(TabbedFeedFragment.this, App.from(getActivity()).getOptions());
                 }
             }
         });

@@ -44,14 +44,14 @@ public class SendLikeRequest extends ConfirmedApiRequest {
     private int mutualid; // идентификатор сообщения из ленты, на который отправляется взаимная симпатия
     private Place place; //TODO место отправки лайка
 
-    public SendLikeRequest(Context context, int userId, Place place) {
-        super(context);
+    public SendLikeRequest(Context context, int userId, Place place, boolean blockUnconfirmed) {
+        super(context, blockUnconfirmed);
         this.userid = userId;
         this.place = place;
     }
 
-    public SendLikeRequest(Context context, int userId, int mutualId, Place place) {
-        super(context);
+    public SendLikeRequest(Context context, int userId, int mutualId, Place place, boolean blockUnconfirmed) {
+        super(context, blockUnconfirmed);
         this.mutualid = mutualId;
         this.userid = userId;
         this.place = place;

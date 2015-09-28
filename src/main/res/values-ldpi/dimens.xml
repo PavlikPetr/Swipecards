@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tf_logo_top">30dp</dimen>
+    <dimen name="tf_logo_bottom">20dp</dimen>
+    <dimen name="tf_auth_btn_top">16dp</dimen>
+</resources>

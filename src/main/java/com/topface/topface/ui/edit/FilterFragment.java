@@ -30,7 +30,6 @@ import com.topface.topface.ui.adapters.SpinnerAdapter;
 import com.topface.topface.ui.dialogs.FilterConstitutionDialog;
 import com.topface.topface.ui.dialogs.FilterListDialog;
 import com.topface.topface.ui.views.CitySearchView;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.Utils;
 
@@ -43,7 +42,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     private static final String FILTER_DIALOG_SHOWN = "dialog_shown";
     private static final String CONSTITUTION_DIALOG_MARK = "constitution_mark";
-    public static Profile mTargetUser = new User();
+    public static Profile mTargetUser;
     public static final String INTENT_DATING_FILTER = "Topface_Dating_Filter";
     public static String TAG = "filter_fragment_tag";
 
@@ -148,10 +147,12 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        mTargetUser = new User(getActivity());
         if (savedInstanceState != null) {
             mIsHeight = savedInstanceState.getBoolean(CONSTITUTION_DIALOG_MARK);
         }
-        mTargetUser.sex = CacheProfile.dating != null ? CacheProfile.dating.sex : Static.BOY;
+        DatingFilter datingFilter = App.from(getActivity()).getProfile().dating;
+        mTargetUser.sex = datingFilter != null ? datingFilter.sex : Static.BOY;
         mFormInfo = new FormInfo(getActivity().getApplicationContext(), mTargetUser.sex, mTargetUser.getType());
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_filter_light_theme, container, false);
@@ -171,9 +172,8 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private void initFilter() {
         try {
             //Странный, достаточно редкий баг, но бывает что CacheProfile.dating == null
-            mFilter = (CacheProfile.dating != null) ?
-                    CacheProfile.dating.clone() :
-                    new DatingFilter();
+            DatingFilter dating = App.from(getActivity()).getProfile().dating;
+            mFilter = (dating != null) ? dating.clone() : new DatingFilter();
             mInitFilter = mFilter.clone();
             mInitFilterOnline = DatingFilter.getOnlyOnlineField();
         } catch (CloneNotSupportedException e) {
@@ -356,12 +356,18 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private void setText(int titleId, String text, ViewGroup frame) {
         ((TextView) frame.findViewWithTag("tvFilterTitle")).setText(mFormInfo.getFormTitle(titleId));
         TextView textView = (TextView) frame.findViewWithTag("tvFilterText");
+        if (TextUtils.isEmpty(text)) {
+            text = getString(R.string.form_not_specified);
+        }
         textView.setText(text);
         textView.setVisibility(View.VISIBLE);
         hashTextViewByTitleId.put(titleId, textView);
     }
 
     private void setText(String title, ViewGroup frame) {
+        if (TextUtils.isEmpty(title)) {
+            title = getString(R.string.form_not_specified);
+        }
         ((TextView) frame.findViewWithTag("tvFilterText")).setText(title);
     }
 
@@ -421,14 +427,15 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 break;
             case R.id.loFilterButtonHome:
                 City city = null;
+                Profile profile = App.from(getActivity()).getProfile();
                 try {
-                    city = new City(new JSONObject(CacheProfile.city.getName()));
+                    city = new City(new JSONObject(profile.city.getName()));
                 } catch (JSONException e) {
                     Debug.error(e);
                 }
                 if (city == null) {
-                    mLoFilterChooseCity.setDefaultCity(CacheProfile.city);
-                    mFilter.city = CacheProfile.city;
+                    mLoFilterChooseCity.setDefaultCity(profile.city);
+                    mFilter.city = profile.city;
                 } else {
                     mLoFilterChooseCity.setDefaultCity(city);
                     mFilter.city = city;

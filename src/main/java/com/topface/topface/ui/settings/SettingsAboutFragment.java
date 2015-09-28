@@ -14,10 +14,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
+import com.topface.topface.data.Options;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
 import java.text.SimpleDateFormat;
@@ -69,13 +70,14 @@ public class SettingsAboutFragment extends BaseFragment {
 
         // Extra
         TextView extra = (TextView) root.findViewById(R.id.tvExtra);
-        SpannableString title = new SpannableString(CacheProfile.getOptions().aboutApp.title);
+        final Options options = App.from(getActivity()).getOptions();
+        SpannableString title = new SpannableString(options.aboutApp.title);
         title.setSpan(new UnderlineSpan(), 0, title.length(), 0);
         extra.setText(title);
         extra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = Utils.getIntentToOpenUrl(CacheProfile.getOptions().aboutApp.url);
+                Intent i = Utils.getIntentToOpenUrl(options.aboutApp.url);
                 if (i != null) {
                     startActivity(i);
                 }

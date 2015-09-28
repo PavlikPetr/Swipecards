@@ -28,7 +28,9 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.Profile;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.NavigationActivity;
@@ -77,7 +79,6 @@ public class MenuFragment extends Fragment {
     public static final String SELECT_MENU_ITEM = "com.topface.topface.action.menu.selectitem";
     public static final String SELECTED_FRAGMENT_ID = "com.topface.topface.action.menu.item";
     private static final String CURRENT_FRAGMENT_STATE = "menu_fragment_current_fragment";
-
     @Inject
     TopfaceAppState mAppState;
     private OnFragmentSelectedListener mOnFragmentSelected;
@@ -96,6 +97,7 @@ public class MenuFragment extends Fragment {
     };
     private Subscription mBalanceSubscription;
     private Subscription mCountersSubscription;
+    private View mLastActivated;
     private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -120,10 +122,15 @@ public class MenuFragment extends Fragment {
                         if (Arrays.asList(FragmentId.values()).contains(menuItem)) {
                             fragmentId = (FragmentId) menuItem;
                         } else {
-                            fragmentId = CacheProfile.getOptions().startPageFragmentId;
+                            fragmentId = App.from(context).getOptions().startPageFragmentId;
                         }
                     }
                     selectMenu(fragmentId);
+                    View view = mAdapter.getViewForActivate(mListView, fragmentId);
+                    if (view != null) {
+                        mLastActivated = view;
+                        mLastActivated.setActivated(true);
+                    }
                     break;
             }
         }
@@ -156,7 +163,7 @@ public class MenuFragment extends Fragment {
     }
 
     private void initBonus() {
-        if (CacheProfile.getOptions().bonus.enabled && !mAdapter.hasFragment(BONUS)) {
+        if (App.from(getActivity()).getOptions().bonus.enabled && !mAdapter.hasFragment(BONUS)) {
             mAdapter.addItem(LeftMenuAdapter.newLeftMenuItem(BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE, R.drawable.ic_bonus_selector));
         }
     }
@@ -184,7 +191,7 @@ public class MenuFragment extends Fragment {
                 }
             }
             Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment to default from onCreate().");
-            switchFragment(CacheProfile.getOptions().startPageFragmentId, false);
+            switchFragment(App.from(getActivity()).getOptions().startPageFragmentId, false);
         }
     }
 
@@ -220,9 +227,10 @@ public class MenuFragment extends Fragment {
     }
 
     private void initAdapter() {
+        final Options options = App.from(getActivity()).getOptions();
         SparseArray<LeftMenuAdapter.ILeftMenuItem> menuItems = new SparseArray<>();
         mProfileMenuItem = LeftMenuAdapter.newLeftMenuItem(PROFILE, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_PHOTO,
-                CacheProfile.getProfile().photo);
+                App.from(getActivity()).getProfile().photo);
         menuItems.put(PROFILE.getId(), mProfileMenuItem);
         menuItems.put(DATING.getId(), LeftMenuAdapter.newLeftMenuItem(DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
                 R.drawable.ic_dating_selector));
@@ -236,18 +244,18 @@ public class MenuFragment extends Fragment {
                 R.drawable.ic_likes_selector));
         menuItems.put(GEO.getId(), LeftMenuAdapter.newLeftMenuItem(GEO, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.icon_people_close_selector));
-        if (CacheProfile.getOptions().bonus.enabled) {
+        if (options.bonus.enabled) {
             menuItems.put(BONUS.getId(), LeftMenuAdapter.newLeftMenuItem(BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                     R.drawable.ic_bonus_selector));
         }
         if (mAdapter == null) {
-            mAdapter = new LeftMenuAdapter(menuItems);
+            mAdapter = new LeftMenuAdapter(menuItems, getActivity());
             mListView.setAdapter(mAdapter);
             mCountersSubscription = mAppState.getObservable(CountersData.class)
                     .map(new Func1<CountersData, CountersData>() {
                         @Override
                         public CountersData call(CountersData countersData) {
-                            countersData.bonus = CacheProfile.needShowBonusCounter ? CacheProfile.getOptions().bonus.counter : 0;
+                            countersData.bonus = CacheProfile.needShowBonusCounter ? options.bonus.counter : 0;
                             return countersData;
                         }
                     })
@@ -266,17 +274,15 @@ public class MenuFragment extends Fragment {
         mListView = (ListView) root.findViewById(R.id.lvMenu);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            View lastActivated;
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position < mAdapter.getCount()) {
                     onMenuSelected(mAdapter.getItem(position).getMenuId());
-                    if (lastActivated != null) {
-                        lastActivated.setActivated(false);
+                    if (mLastActivated != null) {
+                        mLastActivated.setActivated(false);
                     }
                     view.setActivated(true);
-                    lastActivated = view;
+                    mLastActivated = view;
                 } else {
                     onBalanceSelected();
                 }
@@ -288,7 +294,7 @@ public class MenuFragment extends Fragment {
     }
 
     private void onBalanceSelected() {
-        startActivity(PurchasesActivity.createBuyingIntent("Menu"));
+        startActivity(PurchasesActivity.createBuyingIntent("Menu", App.from(getActivity()).getOptions().topfaceOfferwallRedirect));
     }
 
     private void initFooter() {
@@ -309,16 +315,17 @@ public class MenuFragment extends Fragment {
         boolean notify = false;
         if (profileMenuItem != null) {
             // update photo
+            Profile profile = App.from(getActivity()).getProfile();
             Photo photo = profileMenuItem.getMenuIconPhoto();
             if (photo != null) {
-                if (!photo.equals(CacheProfile.getProfile().photo)) {
-                    profileMenuItem.setMenuIconPhoto(CacheProfile.getProfile().photo);
+                if (!photo.equals(profile.photo)) {
+                    profileMenuItem.setMenuIconPhoto(profile.photo);
                     notify = true;
                 }
             }
             // fill data warning icon
             int res = 0;
-            if (!CacheProfile.isDataFilled() && CacheProfile.isLoaded()) {
+            if (!CacheProfile.isDataFilled(getActivity()) && CacheProfile.isLoaded()) {
                 res = R.drawable.ic_not_enough_data;
             }
             if (res != profileMenuItem.getExtraIconDrawable()) {
@@ -469,7 +476,7 @@ public class MenuFragment extends Fragment {
     }
 
     public FragmentId getCurrentFragmentId() {
-        return mSelectedFragment == UNDEFINED ? CacheProfile.getOptions().startPageFragmentId : mSelectedFragment;
+        return mSelectedFragment == UNDEFINED ? App.from(getActivity()).getOptions().startPageFragmentId : mSelectedFragment;
     }
 
     private BaseFragment getFragmentNewInstanceById(FragmentId id) {
@@ -518,21 +525,22 @@ public class MenuFragment extends Fragment {
 
     public void onMenuSelected(FragmentId id) {
         if (mListView.isClickable()) {
+            Options options = App.from(getActivity()).getOptions();
             //Тут сложная работа счетчика, которая отличается от стандартной логики. Мы контроллируем
             //его локально, а не серверно, как это происходит с остальными счетчиками.
             if (id == BONUS) {
                 if (CacheProfile.needShowBonusCounter) {
                     UserConfig config = App.getUserConfig();
-                    config.setBonusCounterLastShowTime(CacheProfile.getOptions().bonus.timestamp);
+                    config.setBonusCounterLastShowTime(options.bonus.timestamp);
                     config.saveConfig();
                 }
                 CacheProfile.needShowBonusCounter = false;
-                if (!TextUtils.isEmpty(CacheProfile.getOptions().bonus.integrationUrl) ||
-                        CacheProfile.getOptions().offerwalls.hasOffers()
+                if (!TextUtils.isEmpty(options.bonus.integrationUrl) ||
+                        options.offerwalls.hasOffers()
                         ) {
                     selectMenu(BONUS);
                 } else {
-                    OfferwallsManager.startOfferwall(getActivity());
+                    OfferwallsManager.startOfferwall(getActivity(), options);
                 }
             } else {
                 selectMenu(id);

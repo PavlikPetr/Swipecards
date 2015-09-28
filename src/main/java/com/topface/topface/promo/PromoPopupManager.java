@@ -4,18 +4,15 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.data.Options;
 import com.topface.topface.promo.dialogs.PromoDialog;
-import com.topface.topface.promo.dialogs.PromoKey31Dialog;
 import com.topface.topface.promo.dialogs.PromoKey71Dialog;
 import com.topface.topface.promo.dialogs.PromoKey81Dialog;
-import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
 import static com.topface.topface.data.Options.PromoPopupEntity.AIR_ADMIRATIONS;
-import static com.topface.topface.data.Options.PromoPopupEntity.AIR_MESSAGES;
 import static com.topface.topface.data.Options.PromoPopupEntity.AIR_VISITORS;
 
 public class PromoPopupManager {
@@ -28,12 +25,11 @@ public class PromoPopupManager {
 
     private boolean startFragment() {
         //Пробуем по очереди показать каждый тип попапа
-        if (CacheProfile.getOptions().premiumMessages != null && CacheProfile.getOptions().premiumMessages.getPageId() != BaseFragment.FragmentId.TABBED_DIALOGS.getId() && showPromoPopup(AIR_MESSAGES)) {
+        Options options = App.from(mActivity).getOptions();
+        if (showPromoPopup(AIR_VISITORS) && options.premiumVisitors != null) {
             return true;
-        } else if (showPromoPopup(AIR_VISITORS) && CacheProfile.getOptions().premiumVisitors != null) {
-            return true;
-        } else if (!CacheProfile.getOptions().isHideAdmirations) {
-            if (showPromoPopup(AIR_ADMIRATIONS) && CacheProfile.getOptions().premiumAdmirations != null) {
+        } else if (!options.isHideAdmirations) {
+            if (showPromoPopup(AIR_ADMIRATIONS) && options.premiumAdmirations != null) {
                 return true;
             }
         }
@@ -44,7 +40,7 @@ public class PromoPopupManager {
         PromoDialog promo = null;
         FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
         Debug.log("Promo: try showPromoPopup #" + type);
-        if (checkIsNeedShow(CacheProfile.getOptions().getPremiumEntityByType(type))) {
+        if (checkIsNeedShow(App.from(mActivity).getOptions().getPremiumEntityByType(type))) {
             Debug.log("Promo: need show popup #" + type);
             promo = (PromoDialog) fragmentManager.findFragmentByTag(PROMO_POPUP_TAG);
             //Проверяем, показывается ли в данный момент попап
@@ -87,9 +83,6 @@ public class PromoPopupManager {
             case AIR_VISITORS:
                 fragment = new PromoKey71Dialog();
                 break;
-            case AIR_MESSAGES:
-                fragment = new PromoKey31Dialog();
-                break;
         }
 
         if (fragment != null && fragment.getPremiumEntity() == null) {
@@ -98,7 +91,7 @@ public class PromoPopupManager {
         return fragment;
     }
 
-    private boolean checkIsNeedShow(Options.PromoPopupEntity entity) {
+    public static boolean checkIsNeedShow(Options.PromoPopupEntity entity) {
         return entity != null && entity.isNeedShow();
     }
 
@@ -115,11 +108,9 @@ public class PromoPopupManager {
 
             @Override
             public boolean isApplicable() {
-                if (CacheProfile.premium) return false;
-                Options options = CacheProfile.getOptions();
-                return (checkIsNeedShow(options.getPremiumEntityByType(AIR_MESSAGES)) &&
-                        options.getPremiumEntityByType(AIR_MESSAGES).getPageId() != BaseFragment.FragmentId.TABBED_DIALOGS.getId()) ||
-                        checkIsNeedShow(options.getPremiumEntityByType(AIR_VISITORS)) ||
+                Options options = App.from(mActivity).getOptions();
+                if (App.from(mActivity).getProfile().premium) return false;
+                return checkIsNeedShow(options.getPremiumEntityByType(AIR_VISITORS)) ||
                         checkIsNeedShow(options.getPremiumEntityByType(AIR_ADMIRATIONS));
             }
 

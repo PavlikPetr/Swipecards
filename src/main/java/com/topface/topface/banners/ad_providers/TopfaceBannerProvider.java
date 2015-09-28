@@ -14,6 +14,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.data.Banner;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.DataApiHandler;
@@ -35,6 +36,12 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
 
     public static final String CLICK = "click";
     public static final String VIEW = "view";
+    private Options mOptions;
+
+    public TopfaceBannerProvider(Options options) {
+        super();
+        mOptions = options;
+    }
 
     @Override
     public final boolean injectBannerInner(final IPageWithAds page, final IAdProviderCallbacks callbacks) {
@@ -177,7 +184,7 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
                             OfferwallsManager.startSponsorpay(mPage.getActivity());
                             break;
                         default:
-                            OfferwallsManager.startOfferwall(mPage.getActivity());
+                            OfferwallsManager.startOfferwall(mPage.getActivity(), mOptions);
                             break;
                     }
                     break;

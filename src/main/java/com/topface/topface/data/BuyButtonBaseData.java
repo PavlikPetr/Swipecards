@@ -1,12 +1,12 @@
 package com.topface.topface.data;
 
-import com.topface.topface.App;
-import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
 
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Currency;
+import java.util.Locale;
 
 public class BuyButtonBaseData {
     public String id;
@@ -36,15 +36,15 @@ public class BuyButtonBaseData {
             paymentwallLink = json.optString("url");
             ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
             if (type == Products.ProductType.PREMIUM) {
-                DecimalFormat decimalFormat = new DecimalFormat("0.00");
                 double tempPrice = price / amount;
                 double pricePerItem = tempPrice / 100;
+                Currency currency = Currency.getInstance(Products.USD);
+                NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
+                currencyFormatter.setCurrency(currency);
                 if (titleTemplate.contains(Products.PRICE)) {
-                    title = titleTemplate.replace(Products.PRICE, decimalFormat.format(pricePerItem) + App.getContext().getString(R.string.usd));
-
+                    title = Products.formatPrice(pricePerItem, currencyFormatter, titleTemplate, Products.PRICE);
                 } else if (titleTemplate.contains(Products.PRICE_PER_ITEM)) {
-                    title = titleTemplate.replace(Products.PRICE_PER_ITEM, decimalFormat.format(pricePerItem) + App.getContext().getString(R.string.usd));
-
+                    title = Products.formatPrice(pricePerItem, currencyFormatter, titleTemplate, Products.PRICE_PER_ITEM);
                 }
             }
             if (productsDetails != null) {

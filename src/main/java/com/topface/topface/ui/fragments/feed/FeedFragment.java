@@ -42,6 +42,7 @@ import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedUser;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
@@ -99,7 +100,7 @@ import static com.topface.topface.utils.CountersManager.NULL_METHOD;
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         implements FeedAdapter.OnAvatarClickListener<T>, IPageWithAds {
     private static final int FEED_MULTI_SELECTION_LIMIT = 100;
-    private static final int FIRST_SHOW_LIST_DELAY = 500;
+    private static final int FIRST_SHOW_LIST_DELAY = 1500;
 
     private static final String FEEDS = "FEEDS";
     private static final String POSITION = "POSITION";
@@ -134,7 +135,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (!CacheProfile.show_ad) {
+            if (!App.from(context).getProfile().showAd) {
                 getListAdapter().removeAdItems();
             }
         }
@@ -214,11 +215,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     private int mIdForRemove;
-    protected boolean mNeedRefresh;
     private BroadcastReceiver mRefreshReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            mNeedRefresh = true;
             if (intent.hasExtra(OverflowMenu.USER_ID_FOR_REMOVE)) {
                 mIdForRemove = intent.getIntExtra(OverflowMenu.USER_ID_FOR_REMOVE, -1);
             }
@@ -327,6 +326,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
         initViews(root);
         createObservables();
+        mCountersDataProvider = new CountersDataProvider(this);
         restoreInstanceState(saved);
         mReadItemReceiver = new BroadcastReceiver() {
             @Override
@@ -372,7 +372,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             isCurrentCounterChanged = saved.getBoolean(FEED_COUNTER_CHANGED);
             currentCounter = saved.getInt(FEED_COUNTER);
             mIdForRemove = saved.getInt(BLACK_LIST_USER);
-            if (CacheProfile.show_ad) {
+            Profile profile = App.from(getActivity()).getProfile();
+            if (profile.showAd) {
                 mListAdapter.setHasFeedAd(saved.getBoolean(HAS_AD));
                 mListAdapter.setFeedAd(saved.<NativeAd>getParcelable(FEED_AD));
             }
@@ -381,7 +382,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             if (feeds != null) {
                 for (Parcelable p : feeds) {
                     T feed = (T) p;
-                    if (feed.isAd() && !CacheProfile.show_ad) {
+                    if (feed.isAd() && !profile.showAd) {
                         continue;
                     }
                     feedsList.add((T) p);
@@ -450,7 +451,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     protected void initFloatBlock() {
         if (!getListAdapter().isNeedFeedAd()) {
-            mBannersController = new BannersController(this);
+            mBannersController = new BannersController(this, App.from(getActivity()).getOptions());
         }
     }
 
@@ -507,7 +508,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCountersDataProvider = new CountersDataProvider(this);
         registerGcmReceiver();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBlacklistedReceiver, new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
@@ -845,7 +845,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     protected void updateData(final boolean isPullToRefreshUpdating, final boolean isHistoryLoad, final boolean makeItemsRead) {
-        if (getUserVisibleHint()) {
+        if (isAdded()) {
             needUpdate = false;
             mIsUpdating = true;
             onUpdateStart(isPullToRefreshUpdating || isHistoryLoad);
@@ -976,8 +976,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (getIsNeedFirstShowListDelay()) {
             startListShowDelayTimer();
         } else {
-            mListView.setVisibility(View.VISIBLE);
-            mBackgroundController.hide();
+            showListWithoutDelay();
         }
     }
 
@@ -1094,7 +1093,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     protected void onUpdateFail(boolean isPushUpdating) {
         if (!isPushUpdating) {
-            mListView.setVisibility(View.VISIBLE);
+            showListWithoutDelay();
         }
     }
 
@@ -1239,7 +1238,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         // then FragmentActivity passes onActivityResult to child fragment that has that index
         // but FeedFragment that is in TabbedFeedFragment is not Activity's straight child
         // so we need to call startActivityForResult from TabbedFeedFragment for Activity call passing
-        // then TabbedFeedFragment.onActivityResult will pass it to its childs
+        // then TabbedFeedFragment.onActivityResult will pass it to its childsF
         if (fr != null && fr instanceof TabbedFeedFragment) {
             fr.startActivityForResult(intent, requestCode);
             // otherwise current fragment is straight child of Activity
@@ -1304,6 +1303,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (mListView != null) {
             mListView.setVisibility(View.VISIBLE);
             isNeedFirstShowListDelay = false;
+            mBackgroundController.hide();
         }
     }
 

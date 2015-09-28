@@ -15,15 +15,17 @@ public class MessageRequest extends ConfirmedApiRequest {
     private String mMessage; // текст сообщения в UTF-8. min размер текста - 1 символ, max - 1024
     private boolean mIsInstant; // Flag for dating screen instant messages
 
-    public MessageRequest(int userId, String message, Context context) {
-        super(context);
+    public MessageRequest(int userId, String message, Context context
+            , boolean blockUnconfirmed) {
+        super(context, blockUnconfirmed);
         mUserId = userId;
         mMessage = message;
         mIsInstant = false;
     }
 
-    public MessageRequest(int userId, String message, Context context, boolean isInstant) {
-        super(context);
+    public MessageRequest(int userId, String message, Context context
+            , boolean isInstant, boolean blockUnconfirmed) {
+        super(context, blockUnconfirmed);
         mUserId = userId;
         mMessage = message;
         mIsInstant = isInstant;

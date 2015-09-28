@@ -9,8 +9,8 @@ public class BookmarkAddRequest extends ConfirmedApiRequest {
     private int uid;
     public static final String SERVICE_NAME = "bookmark.add";
 
-    public BookmarkAddRequest(int userId, Context context) {
-        super(context);
+    public BookmarkAddRequest(int userId, Context context, boolean blockUnconfirmed) {
+        super(context, blockUnconfirmed);
         uid = userId;
     }
 

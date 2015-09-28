@@ -16,6 +16,7 @@ import java.util.Arrays;
 public class ChosenStartAction implements IStartAction {
 
     ArrayList<IStartAction> mActions = new ArrayList<>(2);
+    private OnNextActionListener mStartActionCallback;
 
     public ChosenStartAction chooseFrom(IStartAction... actions) {
         mActions.addAll(Arrays.asList(actions));
@@ -82,6 +83,9 @@ public class ChosenStartAction implements IStartAction {
 
     @Override
     public void setStartActionCallback(OnNextActionListener startActionCallback) {
-        //empty
+        mStartActionCallback = startActionCallback;
+        for(IStartAction action:mActions){
+            action.setStartActionCallback(mStartActionCallback);
+        }
     }
 }

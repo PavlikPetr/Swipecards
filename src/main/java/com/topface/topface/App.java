@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -20,6 +21,7 @@ import com.flurry.android.FlurryAgent;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.squareup.leakcanary.LeakCanary;
 import com.topface.billing.OpenIabHelperManager;
+import com.topface.billing.StoresManager;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.imageloader.ImageLoaderStaticFactory;
 import com.topface.framework.utils.BackgroundThread;
@@ -30,7 +32,6 @@ import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.data.Options;
-import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.social.AppSocialAppsIds;
 import com.topface.topface.modules.TopfaceModule;
@@ -42,7 +43,6 @@ import com.topface.topface.requests.AppGetSocialAppsIdsRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
-import com.topface.topface.requests.PaymentwallProductsRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
@@ -51,6 +51,8 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.transport.HttpApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
+import com.topface.topface.state.IStateDataUpdater;
+import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.ui.ApplicationBase;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
@@ -79,7 +81,7 @@ import java.util.Locale;
 import dagger.ObjectGraph;
 
 @ReportsCrashes(formUri = "817b00ae731c4a663272b4c4e53e4b61")
-public class App extends ApplicationBase {
+public class App extends ApplicationBase implements IStateDataUpdater {
 
     public static final String TAG = "Topface";
     public static final String CONNECTIVITY_CHANGE_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
@@ -92,7 +94,7 @@ public class App extends ApplicationBase {
     private static long mLastProfileUpdate;
     private static Configurations mBaseConfig;
     private static AppOptions mAppOptions;
-
+    public static boolean isScruffyEnabled;
     private static Boolean mIsGmsSupported;
     private static String mStartLabel;
     private static Location mCurLocation;
@@ -110,8 +112,8 @@ public class App extends ApplicationBase {
         new ParallelApiRequest(App.getContext())
                 .addRequest(getUserOptionsRequest())
                 .addRequest(getProductsRequest())
-                .addRequest(getPaymentwallProductsRequest())
-                .addRequest(getProfileRequest(ProfileRequest.P_ALL))
+                .addRequest(StoresManager.getPaymentwallProductsRequest())
+                .addRequest(getProfileRequest())
                 .setFrom(App.class.getSimpleName() + " profile and options requests")
                 .callback(handler)
                 .exec();
@@ -131,37 +133,6 @@ public class App extends ApplicationBase {
         return (App) context.getApplicationContext();
     }
 
-    private static ApiRequest getPaymentwallProductsRequest() {
-        switch (BuildConfig.MARKET_API_TYPE) {
-            case GOOGLE_PLAY:
-                return new PaymentwallProductsRequest(App.getContext()).callback(new DataApiHandler<PaymentWallProducts>() {
-                    @Override
-                    protected void success(PaymentWallProducts data, IApiResponse response) {
-                        //ВНИМАНИЕ! Сюда возвращается только Direct продукты,
-                        //парсим и записываем в кэш мы их внутри конструктора PaymentWallProducts
-                    }
-
-                    @Override
-                    protected PaymentWallProducts parseResponse(ApiResponse response) {
-                        //При создании нового объекта продуктов, все данные о них записываются в кэш,
-                        //поэтому здесь просто создаются два объекта продуктов.
-                        new PaymentWallProducts(response, PaymentWallProducts.TYPE.MOBILE);
-                        return new PaymentWallProducts(response, PaymentWallProducts.TYPE.DIRECT);
-                    }
-
-                    @Override
-                    public void fail(int codeError, IApiResponse response) {
-
-                    }
-                });
-            //Для амазона и nokia Paymentwall не должен включаться
-            case NOKIA_STORE:
-            case AMAZON:
-            default:
-                return null;
-        }
-    }
-
     /**
      * Множественный запрос Options и профиля
      */
@@ -171,9 +142,9 @@ public class App extends ApplicationBase {
 
     public static void sendUserOptionsAndPurchasesRequest() {
         new ParallelApiRequest(App.getContext())
-                .addRequest(getProfileRequest(ProfileRequest.P_ALL))
+                .addRequest(getProfileRequest())
                 .addRequest(getUserOptionsRequest())
-                .addRequest(getPaymentwallProductsRequest())
+                .addRequest(StoresManager.getPaymentwallProductsRequest())
                 .addRequest(getProductsRequest())
                 .setFrom(App.class.getSimpleName() + " user options and purchases requests")
                 .exec();
@@ -186,7 +157,7 @@ public class App extends ApplicationBase {
                     protected void success(Options data, IApiResponse response) {
                         LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Options.OPTIONS_RECEIVED_ACTION));
                         mUserOptionsObtainedFromServer = true;
-                        NativeAdManager.init();
+                        NativeAdManager.init(data, getContext());
                     }
 
                     @Override
@@ -202,12 +173,12 @@ public class App extends ApplicationBase {
     }
 
     public static void sendProfileRequest() {
-        getProfileRequest(ProfileRequest.P_ALL).exec();
+        getProfileRequest().exec();
     }
 
-    public static ApiRequest getProfileRequest(final int part) {
+    public static ApiRequest getProfileRequest() {
         mLastProfileUpdate = System.currentTimeMillis();
-        return new ProfileRequest(part, App.getContext())
+        return new ProfileRequest(App.getContext())
                 .callback(new DataApiHandler<Profile>() {
 
                     @Override
@@ -216,7 +187,6 @@ public class App extends ApplicationBase {
                             App.getConfig().getUserConfig().setUserAvatarAvailable(false);
                             App.getConfig().getUserConfig().saveConfig();
                         }
-                        CacheProfile.setProfile(data, response.getJsonResult(), part);
                         CacheProfile.sendUpdateProfileBroadcast();
                     }
 
@@ -250,7 +220,7 @@ public class App extends ApplicationBase {
     public static void checkProfileUpdate() {
         if (System.currentTimeMillis() > mLastProfileUpdate + PROFILE_UPDATE_TIMEOUT) {
             mLastProfileUpdate = System.currentTimeMillis();
-            getProfileRequest(ProfileRequest.P_NECESSARY_DATA).exec();
+            getProfileRequest().exec();
         }
     }
 
@@ -285,8 +255,8 @@ public class App extends ApplicationBase {
         return getConfig().getLocaleConfig();
     }
 
-    public static BannersConfig getBannerConfig() {
-        return getConfig().getBannerConfig();
+    public static BannersConfig getBannerConfig(Options options) {
+        return getConfig().getBannerConfig(options);
     }
 
     public static AppOptions getAppOptions() {
@@ -341,6 +311,7 @@ public class App extends ApplicationBase {
         LeakCanary.install(this);
         mContext = getApplicationContext();
         initObjectGraphForInjections();
+        mProvider = new OptionsAndProfileProvider(this);
         //Включаем отладку, если это дебаг версия
         enableDebugLogs();
         //Включаем логирование ошибок
@@ -415,10 +386,9 @@ public class App extends ApplicationBase {
         Debug.log("App", "+onCreateAsync");
         DateUtils.syncTime();
         Ssid.load();
-        CacheProfile.loadProfile();
         //Оповещаем о том, что профиль загрузился
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
-        if (!GcmIntentService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty()) {
+        if (!GcmIntentService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty(getContext())) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -570,7 +540,7 @@ public class App extends ApplicationBase {
         if (!mAppOptionsObtainedFromServer && !mUserOptionsObtainedFromServer) {
             return HttpApiTransport.TRANSPORT_NAME;
         } else {
-            boolean userOptions = mAppOptionsObtainedFromServer && CacheProfile.getOptions().isScruffyEnabled();
+            boolean userOptions = mAppOptionsObtainedFromServer && isScruffyEnabled;
             boolean appOptions = mUserOptionsObtainedFromServer && getAppOptions().isScruffyEnabled();
             if (appOptions || userOptions) {
                 if (ScruffyRequestManager.getInstance().isAvailable()) {
@@ -579,6 +549,36 @@ public class App extends ApplicationBase {
             }
             return HttpApiTransport.TRANSPORT_NAME;
         }
+    }
+
+    private Profile mProfile;
+    private Options mOptions;
+    private OptionsAndProfileProvider mProvider;
+
+    @Override
+    public void onOptionsUpdate(@NonNull Options options) {
+        mOptions = options;
+    }
+
+    @NonNull
+    @Override
+    public Options getOptions() {
+        return mOptions;
+    }
+
+    @Override
+    public void onProfileUpdate(@NonNull Profile profile) {
+        mProfile = profile;
+    }
+
+    @NonNull
+    @Override
+    public Profile getProfile() {
+        return mProfile;
+    }
+
+    public static App get() {
+        return from(getContext());
     }
 }
 

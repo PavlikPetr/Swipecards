@@ -33,7 +33,6 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.PasswordRecoverActivity;
 import com.topface.topface.ui.RegistrationActivity;
 import com.topface.topface.ui.TopfaceAuthActivity;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
@@ -76,6 +75,8 @@ public class AuthFragment extends BaseAuthFragment {
     Button mCreateTfAccount;
     @Bind(R.id.tf_auth_back)
     ImageView mTfAuthBack;
+    @Bind(R.id.ivAuthLogo)
+    ImageView mTfLogo;
 
     @OnClick(R.id.btnAuthFB)
     public void btnFBClick() {
@@ -245,7 +246,7 @@ public class AuthFragment extends BaseAuthFragment {
 
     @Override
     protected int getStatusBarColor() {
-        return R.color.status_bar_dark_gray_color;
+        return R.color.status_bar_color;
     }
 
     @Override
@@ -273,7 +274,7 @@ public class AuthFragment extends BaseAuthFragment {
         Activity activity = getActivity();
         if (isAdded() && activity instanceof BaseFragmentActivity) {
             ((BaseFragmentActivity) activity).close(this, true);
-            MenuFragment.selectFragment(CacheProfile.getOptions().startPageFragmentId);
+            MenuFragment.selectFragment(App.from(getActivity()).getOptions().startPageFragmentId);
         }
     }
 
@@ -316,6 +317,7 @@ public class AuthFragment extends BaseAuthFragment {
     protected void showButtons() {
         setSocNetBtnVisibility(mIsSocNetBtnHidden, false, false);
         setTfLoginBtnVisibility(mIsTfBtnHidden, false, false);
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override

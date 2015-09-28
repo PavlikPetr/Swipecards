@@ -130,8 +130,8 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
     }
 
     @Override
-    protected void restoreState() {
-        super.restoreState();
+    protected void restoreState(Bundle state) {
+        super.restoreState(state);
         Bundle extras = getArguments();
         if (extras != null) {
             mFeedbackType = (FeedbackType) extras.getSerializable(INTENT_FEEDBACK_TYPE);

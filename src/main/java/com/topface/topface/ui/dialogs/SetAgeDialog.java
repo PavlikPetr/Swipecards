@@ -8,7 +8,6 @@ import android.widget.Button;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.MultipartApiRequest;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
@@ -45,7 +44,7 @@ public class SetAgeDialog extends AbstractDialogFragment implements View.OnClick
     public void onClick(View v) {
         closeDialog();
         FragmentManager fm = getFragmentManager();
-        final FormItem item = ProfileFormListAdapter.getAgeItem();
+        final FormItem item = ProfileFormListAdapter.getAgeItem(App.from(getActivity()).getProfile());
         BaseEditDialog.EditingFinishedListener<FormItem> formEditedListener = new BaseEditDialog.EditingFinishedListener<FormItem>() {
             @Override
             public void onEditingFinished(final FormItem data) {
@@ -54,7 +53,7 @@ public class SetAgeDialog extends AbstractDialogFragment implements View.OnClick
                 request.age = Integer.valueOf(data.value);
                 ApiRequest updateAgeProfileRequest = new ParallelApiRequest(getActivity())
                         .addRequest(request)
-                        .addRequest(new ProfileRequest(ProfileRequest.P_ALL, App.getContext()))
+                        .addRequest(new ProfileRequest(App.getContext()))
                         .setFrom(getClass().getSimpleName());
                 updateAgeProfileRequest.exec();
             }

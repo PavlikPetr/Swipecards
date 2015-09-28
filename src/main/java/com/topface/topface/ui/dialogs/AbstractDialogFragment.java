@@ -91,7 +91,7 @@ public abstract class AbstractDialogFragment extends BaseDialog {
     public void show(FragmentManager manager, String tag) {
         try {
             Fragment dialog = manager.findFragmentByTag(tag);
-            if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty() && !mShowingDialogs.contains(tag) &&
+            if (!CacheProfile.isEmpty(getActivity()) && !AuthToken.getInstance().isEmpty() && !mShowingDialogs.contains(tag) &&
                     ((dialog != null && !dialog.isAdded()) || dialog == null)
                     ) {
                 mTag = tag;

@@ -18,12 +18,12 @@ import android.widget.TextView;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.Options;
 import com.topface.topface.ui.dialogs.AboutAppDialog;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelector;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.MarketApiManager;
 import com.topface.topface.utils.Utils;
@@ -91,7 +91,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         // Help
         View help = root.findViewById(R.id.loHelp);
         help.setOnClickListener(this);
-        if (TextUtils.isEmpty(CacheProfile.getOptions().helpUrl)) {
+        if (TextUtils.isEmpty(App.from(getActivity()).getOptions().helpUrl)) {
             help.setVisibility(View.GONE);
         }
 
@@ -126,7 +126,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
     private void setNotificationsState() {
         boolean isMarketApiAvailable = mMarketApiManager.isMarketApiAvailable();
         if ((!isMarketApiAvailable && mMarketApiManager.isMarketApiSupportByUs()) ||
-                (!isMarketApiAvailable && !CacheProfile.email)) {
+                (!isMarketApiAvailable && !App.from(getActivity()).getProfile().email)) {
             TextView text = (TextView) mNoNotificationViewGroup.findViewById(R.id.textNoNotificationDescription);
             text.setVisibility(mMarketApiManager.isTitleVisible() ? View.VISIBLE : View.GONE);
             text.setText(mMarketApiManager.getTitleTextId());
@@ -147,13 +147,14 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
     public void onClick(View v) {
         Intent intent;
         Context applicationContext = App.getContext();
+        Options options = App.from(getActivity()).getOptions();
         switch (v.getId()) {
             case R.id.loAccount:
                 intent = new Intent(applicationContext, SettingsContainerActivity.class);
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_ACCOUNT);
                 break;
             case R.id.loHelp:
-                Intent i = Utils.getIntentToOpenUrl(CacheProfile.getOptions().helpUrl);
+                Intent i = Utils.getIntentToOpenUrl(options.helpUrl);
                 if (i != null) {
                     startActivity(i);
                 }
@@ -163,7 +164,8 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_FEEDBACK);
                 break;
             case R.id.loAbout:
-                new AboutAppDialog(getActivity(), App.getContext().getString(R.string.settings_about));
+                new AboutAppDialog(getActivity(), App.getContext().getString(R.string.settings_about)
+                        , options.aboutApp.title, options.aboutApp.url);
                 break;
             case R.id.loLanguage:
                 startLanguageSelection();

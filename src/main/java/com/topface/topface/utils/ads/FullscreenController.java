@@ -17,6 +17,7 @@ import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AppodealProvider;
 import com.topface.topface.data.Banner;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.DataApiHandler;
@@ -47,16 +48,18 @@ public class FullscreenController {
     private static final String ADMOB_INTERSTITIAL_START_APP_ID = "ca-app-pub-9530442067223936/3776010801";
     private static final String BANNER_APPODEAL_FULLSCREEN = "APPODEAL_FULLSCREEN";
     private static boolean isFullScreenBannerVisible = false;
+    private final Options mOptions;
     private Activity mActivity;
 
     private class FullscreenStartAction implements IStartAction {
         private PageInfo startPageInfo;
         private int priority;
 
-        public FullscreenStartAction(int priority) {
+        public FullscreenStartAction(int priority, Activity activity) {
             this.priority = priority;
-            if (!CacheProfile.isEmpty()) {
-                startPageInfo = CacheProfile.getOptions().getPagesInfo().get(PageInfo.PageName.START.getName());
+            mActivity = activity;
+            if (!CacheProfile.isEmpty(mActivity)) {
+                startPageInfo = App.from(mActivity).getOptions().getPagesInfo().get(PageInfo.PageName.START.getName());
             }
         }
 
@@ -69,7 +72,7 @@ public class FullscreenController {
 
         @Override
         public void callOnUi() {
-            if (CacheProfile.getOptions().interstitial.enabled) {
+            if (App.from(mActivity).getOptions().interstitial.enabled) {
                 FullscreenController.this.requestFullscreen(BANNER_ADMOB_FULLSCREEN_START_APP);
             } else if (startPageInfo != null) {
                 FullscreenController.this.requestFullscreen(startPageInfo.getBanner());
@@ -78,7 +81,7 @@ public class FullscreenController {
 
         @Override
         public boolean isApplicable() {
-            return CacheProfile.getOptions().interstitial.enabled || CacheProfile.show_ad &&
+            return App.from(mActivity).getOptions().interstitial.enabled || App.from(mActivity).getProfile().showAd &&
                     FullscreenController.this.isTimePassed() && startPageInfo != null
                     && startPageInfo.floatType.equals(PageInfo.FLOAT_TYPE_BANNER);
         }
@@ -99,8 +102,9 @@ public class FullscreenController {
         }
     }
 
-    public FullscreenController(Activity activity) {
+    public FullscreenController(Activity activity, Options options) {
         mActivity = activity;
+        mOptions = options;
     }
 
     private void requestFallbackFullscreen() {
@@ -129,7 +133,10 @@ public class FullscreenController {
             addLastFullscreenShowedTime();
             return false;
         } else {
-            return Math.abs(currentTime - lastCall) > DateUtils.DAY_IN_MILLISECONDS;
+            return Math.abs(currentTime - lastCall) >
+                    (mOptions != null
+                    ? 1000 * mOptions.fullscreenInterval
+                    : DateUtils.DAY_IN_MILLISECONDS);
         }
     }
 
@@ -144,7 +151,7 @@ public class FullscreenController {
     }
 
     private void requestGagFullscreen() {
-        requestFullscreen(CacheProfile.getOptions().gagTypeFullscreen);
+        requestFullscreen(App.from(mActivity).getOptions().gagTypeFullscreen);
     }
 
     public void requestFullscreen(String type) {
@@ -341,7 +348,7 @@ public class FullscreenController {
         //Пока не требуется, но на будущее
     }
 
-    public IStartAction createFullscreenStartAction(final int priority) {
-        return new FullscreenStartAction(priority);
+    public IStartAction createFullscreenStartAction(final int priority, Activity activity) {
+        return new FullscreenStartAction(priority, activity);
     }
 }
