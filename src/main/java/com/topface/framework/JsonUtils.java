@@ -70,6 +70,10 @@ public class JsonUtils {
                 , new JsonSerializer<HashMap<String, PageInfo>>() {
             @Override
             public JsonElement serialize(HashMap<String, PageInfo> hashMap, Type typeOfSrc, JsonSerializationContext context) {
+                /*
+                Немножечко магии, чтоб при сериализации получался такой же json объект,
+                который присылает нам сервер.(Чтоб метод fillData в Options отработал как нужно)
+                */
                 Collection<PageInfo> list = hashMap.values();
                 return context.serialize(list);
             }
