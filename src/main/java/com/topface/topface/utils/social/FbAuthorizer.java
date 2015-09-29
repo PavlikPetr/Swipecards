@@ -20,7 +20,7 @@ import com.topface.topface.utils.config.SessionConfig;
  */
 public class FbAuthorizer extends Authorizer {
 
-    public static final String[] PERMISSIONS = new String[]{"email", "public_profile", "user_friends"};
+    public static final String[] PERMISSIONS = new String[]{"user_photos", "email", "user_birthday", "public_profile", "user_location"};
     private UiLifecycleHelper mUiHelper;
     private Request mRequest;
     private Session.StatusCallback mStatusCallback;
