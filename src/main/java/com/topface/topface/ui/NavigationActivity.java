@@ -77,7 +77,6 @@ import rx.subjects.BehaviorSubject;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_HIGH;
-import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
 
 public class NavigationActivity extends ParentNavigationActivity implements INavigationFragmentsListener, SequencedStartAction.IUiRunner {
@@ -194,36 +193,33 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     protected void onRegisterMandatoryStartActions(StartActionsController startActionsController) {
         super.onRegisterMandatoryStartActions(startActionsController);
         final SequencedStartAction sequencedStartAction = new SequencedStartAction(this, AC_PRIORITY_HIGH);
-        final IStartAction popupsAction = new ChosenStartAction().chooseFrom(
-                new TrialVipPopupAction(this, AC_PRIORITY_HIGH),
-                new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH,
-                        new DatingLockPopup.DatingLockPopupRedirectListener() {
-                            @Override
-                            public void onRedirect() {
-                                showFragment(FragmentId.TABBED_LIKES);
-                            }
-                        })
+        mPopupManager = new PopupManager(this);
+        sequencedStartAction.addAction(createAfterRegistrationStartAction(AC_PRIORITY_HIGH));
+        sequencedStartAction.addAction(new NotificationsDisablePopup(NavigationActivity.this, AC_PRIORITY_HIGH));
+        IStartAction thirdStageActions = new ChosenStartAction().chooseFrom(
+                mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_HIGH),
+                mPopupManager.createRatePopupStartAction(AC_PRIORITY_NORMAL)
         );
-        sequencedStartAction.addAction(popupsAction);
-        // fullscreen
+        sequencedStartAction.addAction(thirdStageActions);
+        IStartAction fourthStageActions = new ChosenStartAction().chooseFrom(
+                new TrialVipPopupAction(this, AC_PRIORITY_NORMAL)
+        );
         if (mFullscreenController != null) {
-            sequencedStartAction.addAction(mFullscreenController.createFullscreenStartAction(AC_PRIORITY_LOW));
+            fourthStageActions = new ChosenStartAction().chooseFrom(
+                    mFullscreenController.createFullscreenStartAction(AC_PRIORITY_HIGH)
+            );
         }
-        // trial vip popup
-        startActionsController.registerMandatoryAction(sequencedStartAction);
-    }
-
-    @Override
-    protected void onRegisterStartActions(StartActionsController startActionsController) {
-        super.onRegisterStartActions(startActionsController);
-        // actions after registration
-        startActionsController.registerAction(createAfterRegistrationStartAction(AC_PRIORITY_HIGH));
-        // show popup when services disable
-        startActionsController.registerAction(new NotificationsDisablePopup(NavigationActivity.this, AC_PRIORITY_NORMAL));
-        // promo popups
+        sequencedStartAction.addAction(fourthStageActions);
+        sequencedStartAction.addAction(new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH,
+                new DatingLockPopup.DatingLockPopupRedirectListener() {
+                    @Override
+                    public void onRedirect() {
+                        showFragment(FragmentId.TABBED_LIKES);
+                    }
+                }));
         PromoPopupManager promoPopupManager = new PromoPopupManager(this);
-        IStartAction promoPopupsAction = new ChosenStartAction().chooseFrom(
-                PromoExpressMessages.createPromoPopupStartAction(AC_PRIORITY_NORMAL, new PromoExpressMessages.PopupRedirectListener() {
+        IStartAction sixthStageActions = new ChosenStartAction().chooseFrom(
+                PromoExpressMessages.createPromoPopupStartAction(AC_PRIORITY_HIGH, new PromoExpressMessages.PopupRedirectListener() {
                     @Override
                     public void onRedirect() {
                         showFragment(FragmentId.TABBED_DIALOGS);
@@ -232,12 +228,9 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 }),
                 promoPopupManager.createPromoPopupStartAction(AC_PRIORITY_NORMAL)
         );
-        startActionsController.registerAction(promoPopupsAction);
-        // popups
-        mPopupManager = new PopupManager(this);
-        startActionsController.registerAction(new InvitePopupAction(this, AC_PRIORITY_LOW));
-        startActionsController.registerAction(mPopupManager.createRatePopupStartAction(AC_PRIORITY_LOW));
-        startActionsController.registerAction(mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_LOW));
+        sequencedStartAction.addAction(sixthStageActions);
+        sequencedStartAction.addAction(new InvitePopupAction(this, AC_PRIORITY_HIGH));
+        startActionsController.registerMandatoryAction(sequencedStartAction);
     }
 
     private void initFullscreen() {
