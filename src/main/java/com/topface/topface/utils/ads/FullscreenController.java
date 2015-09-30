@@ -134,8 +134,8 @@ public class FullscreenController {
         } else {
             return Math.abs(currentTime - lastCall) >
                     (mOptions != null
-                    ? 1000 * mOptions.fullscreenInterval
-                    : DateUtils.DAY_IN_MILLISECONDS);
+                            ? 1000 * mOptions.fullscreenInterval
+                            : DateUtils.DAY_IN_MILLISECONDS);
         }
     }
 
