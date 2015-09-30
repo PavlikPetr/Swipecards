@@ -20,6 +20,7 @@ public class SequencedStartAction implements IStartAction {
     private IUiRunner mUiRunner;
     private List<IStartAction> mActions = Collections.synchronizedList(new ArrayList<IStartAction>());
     private int mPriority = -1;
+    private int mCurrentActionPosition = 0;
 
     public SequencedStartAction(IUiRunner uiRunner, int priority) {
         mPriority = priority;
@@ -89,11 +90,11 @@ public class SequencedStartAction implements IStartAction {
     private void runActionQueue() {
         removeNonApplicableActions();
         for (int i = 0; i < mActions.size() - 1; i++) {
-            final IStartAction nextAction = mActions.get(i + 1);
             mActions.get(i).setStartActionCallback(new OnNextActionListener() {
                 @Override
                 public void onNextAction() {
-                    if (nextAction.isApplicable()) {
+                    IStartAction nextAction = getNextAction();
+                    if (nextAction != null) {
                         runAction(nextAction);
                     }
                 }
@@ -103,6 +104,18 @@ public class SequencedStartAction implements IStartAction {
         if (!mActions.isEmpty()) {
             runAction(mActions.get(0));
         }
+    }
+
+    private IStartAction getNextAction() {
+        if (mActions != null && mCurrentActionPosition < mActions.size()) {
+            for (int i = mCurrentActionPosition + 1; i < mActions.size() - 1; i++) {
+                if (mActions.get(i).isApplicable()) {
+                    mCurrentActionPosition = i;
+                    return mActions.get(i);
+                }
+            }
+        }
+        return null;
     }
 
     private void runAction(final IStartAction action) {

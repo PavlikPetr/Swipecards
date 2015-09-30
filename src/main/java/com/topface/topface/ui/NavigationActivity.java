@@ -3,6 +3,7 @@ package com.topface.topface.ui;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
@@ -106,6 +107,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private PopupManager mPopupManager;
     private Subscription mCountersSubscription;
     private BehaviorSubject<DRAWER_LAYOUT_STATE> mDrawerLayoutStateObservable;
+    private OnNextActionListener mSelectPhotoNextActionListener;
+    private OnNextActionListener mChooseCityNextActionListener;
 
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -194,22 +197,26 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         super.onRegisterMandatoryStartActions(startActionsController);
         final SequencedStartAction sequencedStartAction = new SequencedStartAction(this, AC_PRIORITY_HIGH);
         mPopupManager = new PopupManager(this);
-        sequencedStartAction.addAction(createAfterRegistrationStartAction(AC_PRIORITY_HIGH));
+        sequencedStartAction.addAction(chooseCityStartAction(AC_PRIORITY_HIGH));
+        sequencedStartAction.addAction(selectPhotoStartAction(AC_PRIORITY_HIGH));
         sequencedStartAction.addAction(new NotificationsDisablePopup(NavigationActivity.this, AC_PRIORITY_HIGH));
-        IStartAction thirdStageActions = new ChosenStartAction().chooseFrom(
+        IStartAction fourthStageActions = new ChosenStartAction().chooseFrom(
                 mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_HIGH),
                 mPopupManager.createRatePopupStartAction(AC_PRIORITY_NORMAL)
         );
-        sequencedStartAction.addAction(thirdStageActions);
-        IStartAction fourthStageActions = new ChosenStartAction().chooseFrom(
-                new TrialVipPopupAction(this, AC_PRIORITY_NORMAL)
-        );
+        sequencedStartAction.addAction(fourthStageActions);
+        IStartAction fifthStageActions;
         if (mFullscreenController != null) {
-            fourthStageActions = new ChosenStartAction().chooseFrom(
-                    mFullscreenController.createFullscreenStartAction(AC_PRIORITY_HIGH)
+            fifthStageActions = new ChosenStartAction().chooseFrom(
+                    new TrialVipPopupAction(this, AC_PRIORITY_HIGH),
+                    mFullscreenController.createFullscreenStartAction(AC_PRIORITY_NORMAL)
+            );
+        } else {
+            fifthStageActions = new ChosenStartAction().chooseFrom(
+                    new TrialVipPopupAction(this, AC_PRIORITY_HIGH)
             );
         }
-        sequencedStartAction.addAction(fourthStageActions);
+        sequencedStartAction.addAction(fifthStageActions);
         sequencedStartAction.addAction(new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH,
                 new DatingLockPopup.DatingLockPopupRedirectListener() {
                     @Override
@@ -218,7 +225,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                     }
                 }));
         PromoPopupManager promoPopupManager = new PromoPopupManager(this);
-        IStartAction sixthStageActions = new ChosenStartAction().chooseFrom(
+        IStartAction seventhStageActions = new ChosenStartAction().chooseFrom(
                 PromoExpressMessages.createPromoPopupStartAction(AC_PRIORITY_HIGH, new PromoExpressMessages.PopupRedirectListener() {
                     @Override
                     public void onRedirect() {
@@ -228,7 +235,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 }),
                 promoPopupManager.createPromoPopupStartAction(AC_PRIORITY_NORMAL)
         );
-        sequencedStartAction.addAction(sixthStageActions);
+        sequencedStartAction.addAction(seventhStageActions);
         sequencedStartAction.addAction(new InvitePopupAction(this, AC_PRIORITY_HIGH));
         startActionsController.registerMandatoryAction(sequencedStartAction);
     }
@@ -401,11 +408,11 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     /**
-     * Take photo then select city if profile is empty
+     * Select city if profile is empty
      *
      * @return start action object to register
      */
-    private IStartAction createAfterRegistrationStartAction(final int priority) {
+    private IStartAction chooseCityStartAction(final int priority) {
         return new IStartAction() {
 
             @Override
@@ -414,16 +421,12 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
             @Override
             public void callOnUi() {
-                if (isTakePhotoApplicable()) {
-                    takePhoto();
-                } else if (isSelectCityApplicable()) {
-                    CacheProfile.selectCity(NavigationActivity.this);
-                }
+                CacheProfile.selectCity(NavigationActivity.this);
             }
 
             @Override
             public boolean isApplicable() {
-                return isTakePhotoApplicable() || isSelectCityApplicable();
+                return CacheProfile.needToSelectCity(NavigationActivity.this);
             }
 
             @Override
@@ -433,21 +436,53 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
             @Override
             public String getActionName() {
-                return "TakePhoto-SelectCity";
+                return "SelectCity";
             }
 
             @Override
             public void setStartActionCallback(OnNextActionListener startActionCallback) {
+                mChooseCityNextActionListener = startActionCallback;
+            }
+        };
+    }
 
+    /**
+     * Take photo if profile is empty
+     * F
+     *
+     * @return start action object to register
+     */
+    private IStartAction selectPhotoStartAction(final int priority) {
+        return new IStartAction() {
+
+            @Override
+            public void callInBackground() {
             }
 
-            private boolean isTakePhotoApplicable() {
+            @Override
+            public void callOnUi() {
+                takePhoto();
+            }
+
+            @Override
+            public boolean isApplicable() {
                 return !AuthToken.getInstance().isEmpty() && (CacheProfile.photo == null)
                         && !App.getConfig().getUserConfig().isUserAvatarAvailable();
             }
 
-            private boolean isSelectCityApplicable() {
-                return CacheProfile.needToSelectCity(NavigationActivity.this);
+            @Override
+            public int getPriority() {
+                return priority;
+            }
+
+            @Override
+            public String getActionName() {
+                return "TakePhoto";
+            }
+
+            @Override
+            public void setStartActionCallback(OnNextActionListener startActionCallback) {
+                mSelectPhotoNextActionListener = startActionCallback;
             }
         };
     }
@@ -551,6 +586,10 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 data,
                 OwnProfileFragment.class
         );
+        // call next popup on CitySearchActivity close
+        if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION && !isBillingRequestProcessed && mChooseCityNextActionListener != null) {
+            mChooseCityNextActionListener.onNextAction();
+        }
         if (resultCode == Activity.RESULT_OK && !isBillingRequestProcessed) {
             switch (requestCode) {
                 case CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION:
@@ -589,7 +628,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
-
     }
 
     private void toggleDrawerLayout() {
@@ -625,6 +663,14 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     private void takePhoto() {
         getAddPhotoHelper().showTakePhotoDialog(new PhotoTaker(getAddPhotoHelper(), this), null);
+        getAddPhotoHelper().setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (mSelectPhotoNextActionListener != null) {
+                    mSelectPhotoNextActionListener.onNextAction();
+                }
+            }
+        });
     }
 
     private void switchContentTopMargin(boolean actionbarOverlay) {
