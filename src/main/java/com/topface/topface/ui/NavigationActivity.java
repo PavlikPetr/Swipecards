@@ -492,21 +492,23 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     @Override
     public void onBackPressed() {
-        if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible() && !isPopupVisible) {
-            mFullscreenController.hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
-        } else if (!mBackPressedOnce.get()) {
-            (new Timer()).schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    mBackPressedOnce.set(false);
-                }
-            }, 3000);
-            mBackPressedOnce.set(true);
-            Utils.showToastNotification(R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT);
-            isPopupVisible = false;
-        } else {
-            super.onBackPressed();
-            isPopupVisible = false;
+        if (getBackPressedListener() == null || !getBackPressedListener().onBackPressed()) {
+            if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible() && !isPopupVisible) {
+                mFullscreenController.hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
+            } else if (!mBackPressedOnce.get()) {
+                (new Timer()).schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        mBackPressedOnce.set(false);
+                    }
+                }, 3000);
+                mBackPressedOnce.set(true);
+                Utils.showToastNotification(R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT);
+                isPopupVisible = false;
+            } else {
+                super.onBackPressed();
+                isPopupVisible = false;
+            }
         }
     }
 
