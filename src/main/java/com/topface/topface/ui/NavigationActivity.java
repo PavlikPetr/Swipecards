@@ -448,7 +448,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     /**
      * Take photo if profile is empty
-     * F
      *
      * @return start action object to register
      */
