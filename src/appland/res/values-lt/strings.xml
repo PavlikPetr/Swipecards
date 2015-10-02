@@ -1,0 +1,856 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_locale">lt_LT</string>
+    <string name="photofeed_title">Įstoti į juostą</string>
+    <string name="general_warning">ĮSPĖJIMAS</string>
+    <string name="general_ok">OK</string>
+    <string name="general_any">Bet koks</string>
+    <string name="general_settings_abbr">Nustat.</string>
+    <string name="general_disallow">Uždrausti</string>
+    <string name="general_allow">Leisti</string>
+    <string name="notification_denied_popup_title">Įgalinkite pranešimus. kad sužinoti apie
+        įeinančias žinutes, simpatijas ir kitas naujienas.
+    </string>
+    <string name="notification_popup_title">Laiskite atsiųsti jums pranešimą, kad jūs galėtumėte
+        sužinoti apie naują simpatiją, susižavėjimą ar neperskaitytą pranešimą
+    </string>
+    <string name="email_successfully_changed">Jūsų el. paštas sėkmingai pakeistas</string>
+    <string name="auth_vk_name">VKontakte</string>
+    <string name="dating_switch_button">Daugiau…</string>
+    <string name="dating_prev_button">Ankstesnis</string>
+    <string name="dating_chat_button">Paplepėti</string>
+    <string name="waiting_a_products">Prašome, palaukite. Mes įkrauname parduodamas prekes</string>
+    <string name="likes_background_text">Nėra simpatijų</string>
+    <string name="visitors_background_text">Nėra svečių</string>
+    <string name="chat_background_text">Įeinančių pranešimų nėra</string>
+    <string name="entrance">Įėjimas</string>
+    <string name="filter_only_online">Tiktai online</string>
+    <string name="filter_city_age_parameters">Amžius ir miestas</string>
+    <string name="filter_select_city">Miesto pasirinkimas</string>
+    <string name="edit_block_photo">fotografijos</string>
+    <string name="dashbrd_popup_rating">Patiko mūsų priedas? Pakelk mūsų reitingą! Kuo aukštesnis
+        reitingas, tuo daugiau įdomių žmonių tu sutiksi Alcatel
+    </string>
+    <string name="dashbrd_popup_title">Reitingas</string>
+    <string name="dashbrd_popup_cancel">Daugiau neklausti</string>
+    <string name="dashbrd_popup_rate">Duoti reitingą</string>
+    <string name="dashbrd_popup_later">Paklausti vėliau</string>
+    <string name="buying_store_connect">Kviečiu į Tune Store</string>
+    <string name="buying_store_purchase">Perku Tunes Store</string>
+    <string name="buying_tf_ack_sending">Siunčiu informaciją apie pirkinį į Alcatel</string>
+    <string name="ok_label">Bendraklasiai</string>
+    <string name="autorefill">Autopapildymas</string>
+    <string name="coins">Monetos</string>
+    <string name="photo_info_deleted">Pašalinta</string>
+    <string name="settings_block_main">Pagrindiniai</string>
+    <string name="settings_block_additional">Papildomai</string>
+    <string name="leaders_select_photo">Išrinkite efektingą fotografiją</string>
+    <string name="locking_screen_button_answer">Atsakyti</string>
+    <string name="locking_screen_advice">Atsakykite į visas įeinančias simpatijas</string>
+    <string name="locking_screen_advice2">Atsikratykite visų apribojimų</string>
+    <string name="general_bookmarks_is_deleted">Vartotojas pašalintas iš išrinktųjų</string>
+    <string name="general_blacklist_is_deleted">Vartotojas pašalintas iš juodojo sąrašo</string>
+    <string name="invite_friends_title_short">Pakviesti visus draugus į Alcatel</string>
+    <string name="general_bookmarks_add_short">Į išrinktuosius</string>
+    <string name="general_complaint">Pasiskųsti</string>
+    <string name="general_type_complain">Skundo tema</string>
+    <string name="address_book_access_error">Ši programa neturi priėjimo prie jūsų kontaktų. Jūs
+        galite leisti priėjimą jūsų įrenginio privatumo nustatymuose
+    </string>
+    <string name="profile_deleted_user">Vartotojas pašalintas</string>
+    <string name="filter_main_parameters">Man įdomūs</string>
+    <string name="dating_prev_button_ext">Ankstesnis</string>
+    <string name="dating_skip_button_ext">Sekantis</string>
+    <string name="profile_services">Paslaugos</string>
+    <string name="black_list_add">Pridėti į juodąjį sąrašą</string>
+    <string name="vip_invisible_mode">Nematomas režimas</string>
+    <string name="buying_profile_coins">Jūsų sąskaitoje</string>
+    <string name="vip_info_title">VIP privilegijos</string>
+    <string name="profile_gifts_empty">Šiam vartotojui dar niekas nedovanojo dovanų</string>
+    <string name="profile_mygifts_empty">Jums dar niekas nedovanojo dovanų</string>
+    <string name="dating_people_unnoticed">Be jūsų dėmesio liko dešimt žmonių!</string>
+    <string name="dating_continue">Pratęsti pažintį</string>
+    <string name="dating_better_look">Įsižiūrėkite!\nGalbūt jūs praleidžiate savo likimą!</string>
+    <string name="edit_my_photos">Mano fotografijos</string>
+    <string name="general_search_empty_title">Gaila, bet nieko nerasta</string>
+    <string name="general_search_empty_text">Jūs galite pabandyti pakartoti paiešką arba pakeisti
+        filtro nustatymus
+    </string>
+    <string name="map_title">Žemėlapis</string>
+    <string name="general_buying">Pirkti simpatijas ir monetas</string>
+    <string name="popup_version_title">Yra nauja priedo versija</string>
+    <string name="popup_version_message">Laikas atnaujinti savo versiją!</string>
+    <string name="leaders_select_photo_info">Pasirinkite pačią efektingiausią fotografiją!
+        Fotografijos su mažu reitingu pasirinkti negalima
+    </string>
+    <string name="map_popup_address">Adresas</string>
+    <string name="black_list_info">Jūs pridėjote pašnekovą į juodąjį sąrašą. Pakeisti tai galima
+        savo profilyje, VIP statuso nustatymuose.
+    </string>
+    <string name="black_list_activation">Aktyvuokite VIP statusą ir naudokite juodąjį sąrašą
+    </string>
+    <string name="buying_total">Viso</string>
+    <string name="we_dont_detect_your_city">Tam, kad rastumėte žmonės šalia jūsų, mums reikia
+        žinoti, kur jūs esate. Prašome nurodyti savo miestą.
+    </string>
+    <string name="confirm_email">Prašome patvirtinti el. paštą.</string>
+    <string name="password_sent">Naujas slaptažodis išsiųstas į jūsų el. paštą</string>
+    <string name="buy_vip_month_one">%1$d mėnesį už %2$.2f %3$@</string>
+    <string name="buy_vip_month_few">%1$d mėnesio už %2$.2f %3$@</string>
+    <string name="buy_vip_month_other">%1$d mėnesių už %2$.2f %3$@</string>
+    <string name="general_bookmarks_title">Išrinktieji</string>
+    <string name="general_no_fans">Nėra gerbėjų</string>
+    <string name="general_user_bookmarkadd">Vartotojas įtrauktas į išrinktuosius</string>
+    <string name="settings_invalid_name">Pavadinime yra netinkamų simbolių</string>
+    <string name="filter_hint">Įveskite vardą</string>
+    <plurals name="vip_add_more_friends">
+        <item quantity="few">Pakvieskite dar %d draugus</item>
+        <item quantity="other">Pakvieskite dar %d draugų</item>
+        <item quantity="one">Pakvieskite dar %d draugą</item>
+    </plurals>
+    <plurals name="get_free_money">
+        <item quantity="few">%d monetos nemokamai</item>
+        <item quantity="other">%d monetų nemokamai</item>
+        <item quantity="one">%d moneta nemokamai</item>
+    </plurals>
+    <string name="pincode_blocking_app">Įėjimo į programą blokavimas</string>
+    <string name="pincode_blocking">Blokavimas</string>
+    <string name="pincode_reset">Atstatyti pradinį PIN-kodą</string>
+    <string name="pincode_set">Nustatyti PIN-kodą</string>
+    <string name="pincode_change">Pakeisti PIN-kodą</string>
+    <string name="pincode_delete">Pašalinti PIN-kodą</string>
+    <string name="pincode_input_label">PIN-kodo įvedimas</string>
+    <string name="pincode_check_label">PIN-kodo patikrinimas</string>
+    <string name="pincode_change_label">PIN-kodo keitimas</string>
+    <string name="pincode_delete_label">PIN-kodo pašalinimas.</string>
+    <string name="pincode_turning_on">Blokavimo įjungimas</string>
+    <string name="pincode_dont_match">PIN-kodai nesutapo. Bandykite dar kartą.</string>
+    <string name="pincode_wrong">Neteisingas PIN-kodas</string>
+    <string name="pincode_input">Įveskite PIN-kodą</string>
+    <string name="pincode_input_previous">Įveskite seną PIN-kodą</string>
+    <string name="pincode_repeat">pakartokite PIN-kodą</string>
+    <string name="pincode_forget">Pamiršote PIN-kodą?</string>
+    <string name="pincode_auth_input">Jums būtina įvesti loginą ir slaptažodį.</string>
+    <string name="pincode_will_be_reset">Sėkmingai autorizavus, visi programos nustatymai bus
+        atstatyti į pradinius.
+    </string>
+    <plurals name="pincode_interval">
+        <item quantity="few">%d min.</item>
+        <item quantity="zero">iškart po uždarymo</item>
+        <item quantity="other">%d min.</item>
+        <item quantity="one">%d min.</item>
+    </plurals>
+    <string name="general_error">KLAIDA</string>
+    <string name="general_yes">Taip</string>
+    <string name="general_no">Ne</string>
+    <string name="general_cancel">Atšaukti</string>
+    <string name="general_delete_title">Pašalinti</string>
+    <string name="general_dialog_loading">Užkrovimas</string>
+    <string name="general_fill_button">Užpildyti</string>
+    <string name="general_send_full">Išsiųsti</string>
+    <string name="general_dialog_retry">Pakartoti</string>
+    <string name="general_copy_title">Kopijuoti</string>
+    <string name="general_back">Atgal</string>
+    <string name="general_server_error">Klaida. Bandykite vėliau</string>
+    <string name="general_non_exist_photo_error">Nepavyko užbaigti veiksmo, kadangi fotografija
+        pašalinta.
+    </string>
+    <string name="general_data_error">Klaida. Bandykite dar kartą</string>
+    <string name="general_internet_off">Negalima prisijungti prie interneto</string>
+    <string name="general_msg_copied">Tekstas nukopijuotas</string>
+    <string name="general_spinner_title">Pasirinkite veiksmą</string>
+    <string name="general_profile_error">Profilio užkrovimo klaida</string>
+    <string name="general_dbl_all">Visi</string>
+    <string name="general_dbl_unread">Neperskaityti</string>
+    <string name="general_empty_code_confirmation">Įveskite patvirtinimo kodą</string>
+    <string name="general_email_success_confirmed">El. pašto adresas sėkmingai patvirtintas.
+    </string>
+    <string name="general_email_not_confirmed">El. pašto adresas nebuvo patvirtintas.</string>
+    <string name="time_yesterday">Vakar</string>
+    <string name="time_today">Šiandien</string>
+    <string name="general_send_button">Išsiųsti</string>
+    <string name="general_boys">Vaikinai</string>
+    <string name="general_girls">Merginos</string>
+    <string name="general_city">Miestas</string>
+    <string name="general_dating">Pažintys</string>
+    <string name="general_likes">Aš patinku</string>
+    <string name="general_photoblog">Fotojuosta</string>
+    <string name="general_sympathies">Simpatijos</string>
+    <string name="general_sympathy">Simpatija</string>
+    <string name="general_delight">Susižavėjimas</string>
+    <string name="general_mutual">Abipusiai</string>
+    <string name="general_dialogs">Dialogai</string>
+    <string name="general_visitors">Svečiai</string>
+    <string name="general_visitors_tab_views">peržiūros</string>
+    <string name="general_profile">Profilis</string>
+    <string name="general_settings">Nustatymai</string>
+    <string name="auth_btn_vk">ВКонтакте</string>
+    <string name="auth_btn_fb">Facebook</string>
+    <string name="auth_retry">Pakartoti bandymą</string>
+    <string name="dating_header_girls">Merginos nuo %1$d iki %2$d</string>
+    <string name="dating_header_guys">Vaikinai nuo %1$d iki %2$d</string>
+    <string name="dating_skip_button">Sekantis</string>
+    <string name="message_too_long">Jūs surinkote pernelyg ilgą pranešimą. Ženklų skaičius negali
+        viršyti %d.
+    </string>
+    <string name="chat_gift_in">Jūs gavote dovaną.</string>
+    <string name="chat_gift_out">Jūs išsiuntėte dovaną.</string>
+    <string name="chat_like_in">Jums atsiuntė simpatiją</string>
+    <string name="chat_like_out">Jūs išsiuntėte simpatiją</string>
+    <string name="chat_mutual_in">Jums atsiuntė susižavėjimą</string>
+    <string name="chat_mutual_out">Jūs išsiuntėte susižavėjimą</string>
+    <string name="chat_wish_in">Jums išsiuntė Slaptą Norą.</string>
+    <string name="chat_wish_out">Jūs išsiuntėte Slaptą Norą.</string>
+    <string name="chat_sexuality_in">Jūsų seksualumą įvertino.</string>
+    <string name="chat_sexuality_out">Jūs įvertinote seksualumą.</string>
+    <string name="chat_wink_in">Jums mirktelėjo.</string>
+    <string name="chat_wink_out">Jūs mirktelėjote.</string>
+    <string name="filter_search">Paieška</string>
+    <string name="filter_filter">Filtras</string>
+    <string name="filter_age_string">Nuo %1$d iki %2$d</string>
+    <string name="filter_only_beautiful">Tiktai gražūs</string>
+    <string name="filter_extra_parameters">Papildomi parametrai</string>
+    <string name="filter_age">Amžius</string>
+    <string name="filter_age_start_prefix">Nuo %s</string>
+    <string name="filter_age_end_prefix">iki %s</string>
+    <string name="filter_constitution_template">Nuo %1$d iki %2$d</string>
+    <string name="filter_cities_all">Visuose miestuose</string>
+    <string name="purchase_header_title">Balansas:</string>
+    <string name="buying_header_title">Pirkimai</string>
+    <plurals name="buying_gift_you_need_coins">
+        <item quantity="few">Tam, kad išsiųsti dovaną, pirkite dar %d monetas</item>
+        <item quantity="other">Tam, kad išsiųsti dovaną, pirkite dar %d monetų</item>
+        <item quantity="one">Tam, kad išsiųsti dovaną, pirkite dar %d monetą</item>
+    </plurals>
+    <plurals name="buying_admiration_you_need_coins">
+        <item quantity="few">Kad išsiųsti susižavjimą, pirkite dar %d monetas</item>
+        <item quantity="other">Kad išsiųsti susižavjimą, pirkite dar %d monetų</item>
+        <item quantity="one">Kad išsiųsti susižavjimą, pirkite dar %d monetą</item>
+    </plurals>
+    <plurals name="buying_unlock_likes_you_need_coins">
+        <item quantity="few">Kad pamatyti, kam jūs patikote, pirkite dar %d monetas</item>
+        <item quantity="other">Kad pamatyti, kam jūs patikote, pirkite dar %d monetų</item>
+        <item quantity="one">Kad pamatyti, kam jūs patikote, pirkite dar %d monetą</item>
+    </plurals>
+    <plurals name="buying_leaders_you_need_coins">
+        <item quantity="few">Tam, kad jus visi pamatytų, pirkite dar %d monetas</item>
+        <item quantity="other">Tam, kad jus visi pamatytų, pirkite dar %d monetų</item>
+        <item quantity="one">Tam, kad jus visi pamatytų, pirkite dar %d monetą</item>
+    </plurals>
+    <plurals name="buying_you_need_coins">
+        <item quantity="few">Jums nepakanka %d monetų</item>
+        <item quantity="other">Jums nepakanka %d monetų</item>
+        <item quantity="one">Jums nepakanka %d monetos</item>
+    </plurals>
+    <string name="buying_default_message">Jūs galite siųsti dovanas ir susižavėjimus už monetas
+    </string>
+    <string name="buying_money">Monetų pirkimas</string>
+    <string name="gifts_title">Pasirinkite dovaną</string>
+    <string name="profile_header_title">Mano profilis</string>
+    <string name="album_add_photo_title">Pridėti foto</string>
+    <string name="profile_add_album">Pasirinkti iš esančių</string>
+    <string name="profile_add_camera">Padaryti nuotrauką</string>
+    <string name="profile_photo">Fotografija</string>
+    <string name="profile_form">Anketa</string>
+    <string name="profile_gifts">Dovanos</string>
+    <string name="profile_actions">Veiksmai</string>
+    <string name="profile_empty_form">Vartotojas neužpildė anketos</string>
+    <string name="profile_ask_form">Paprašyti užpildyti anketą</string>
+    <string name="edit_title">Redagavimas</string>
+    <string name="edit_bg_photo">Foninė fotografija</string>
+    <string name="edit_album">Albumas</string>
+    <string name="edit_profile_photo">Pakeisti fotografiją</string>
+    <string name="edit_interests">interesų</string>
+    <string name="edit_selected">Pasirinkta</string>
+    <string name="edit_name">Vardas</string>
+    <string name="edit_age">Amžius</string>
+    <string name="edit_age_error">Kad naudotis programa, jūsų amžius turi būti nuo %1$d iki %2$d
+    </string>
+    <string name="edit_status">Statusas</string>
+    <string name="edit_set_as_main">Padaryti pagrindine</string>
+    <string name="edit_delete">Pašalinti</string>
+    <string name="edit_restore">Atstatyti</string>
+    <string name="form_not_specified">Nenurodyta</string>
+    <string name="form_main">Pagrindinis</string>
+    <string name="form_physique">Fiziniai duomenys</string>
+    <string name="form_social">Socialinis</string>
+    <string name="form_habits">Įpročiai</string>
+    <string name="form_detail">Smulkiau</string>
+    <plurals name="form_matches">
+        <item quantity="few">Pas jus %d sutapimų</item>
+        <item quantity="zero">Pas jus nėra sutapimų</item>
+        <item quantity="other">Pas jus %d sutapimų</item>
+        <item quantity="one">Pas jus %d sutapimas</item>
+    </plurals>
+    <string name="settings_header_title">Nustatymai</string>
+    <string name="settings_vibration">Vibroskambutis</string>
+    <string name="settings_notifications_header">Pranešimai</string>
+    <string name="settings_likes">Simpatijos</string>
+    <string name="settings_mutual">Abipusės simpatijos</string>
+    <string name="settings_messages">Pranešimai</string>
+    <string name="settings_guests">Svečiai</string>
+    <string name="settings_help">Pagalba</string>
+    <string name="settings_faq">Klausimai ir atsakymai</string>
+    <string name="settings_faq_title">Tikėtina, kad problema jau yra aprašyta, pažiūrėkite skyriuje
+        \"Klausimai ir atsakymai\"
+    </string>
+    <string name="settings_account">Paskyra</string>
+    <string name="settings_feedback">Palikti atsiliepimą</string>
+    <string name="settings_about">Apie programą</string>
+    <string name="settings_version">Versija</string>
+    <string name="settings_copyright">Copyright 2010-</string>
+    <string name="settings_rights_reserved">Alcatel \nVisos teisės apsaugotos</string>
+    <string name="settings_extra">Detalią informaciją galima rasti</string>
+    <string name="settings_logout">Išeiti iš paskyros</string>
+    <string name="settings_code_confirmation">Išsiųsti patvirtinimo kodą</string>
+    <string name="settings_email_was_confirmed">Jau patvirtintas</string>
+    <string name="settings_email_was_confirmed_textview_text">Jei jūs jau patvirtinote paštą per
+        kompiuterį
+    </string>
+    <string name="settings_code_confirmation_hint">Patvirtinimo kodas</string>
+    <string name="settings_logout_msg">Jūs tikrai norite išeiti?</string>
+    <string name="settings_error_message">Pranešimas apie klaidą</string>
+    <string name="settings_ask_developer">Klausimas programuotojams</string>
+    <string name="settings_payment_problems">Problemos su apmokėjimu</string>
+    <string name="settings_cooperation">Bendradarbiavimas</string>
+    <string name="settings_feedback_success_msg">Ačiū, pranešimas buvo sėkmingai išsiųstas</string>
+    <string name="settings_switch_on">įjungti</string>
+    <string name="settings_switch_off">išjungti</string>
+    <string name="leaders_go_date">Noriu čionai</string>
+    <string name="leaders_leader_now">Dabar jus pamatys visi!</string>
+    <string name="leaders_need_photo">Pirmiausiai reikia išrinkti fotografiją!</string>
+    <plurals name="leaders_price">
+        <item quantity="few">Tapti už %d monetų</item>
+        <item quantity="other">Tapti už %d monetas</item>
+        <item quantity="one">Tapti už %d monetą</item>
+    </plurals>
+    <string name="photo_add_or">Fotografija pridėta</string>
+    <string name="photo_add_error">Nepavyko pridėti fotografijos</string>
+    <plurals name="photo">
+        <item quantity="few">%d fotografijos</item>
+        <item quantity="zero">Nėra fotografijų</item>
+        <item quantity="other">%d fotografijų</item>
+        <item quantity="one">%d fotografija</item>
+    </plurals>
+    <string name="general_edit_profile_message">Prašome užpildyti visus būtinus anketos laukelius
+    </string>
+    <string name="general_search_null_response_error">Nieko nerasta. Pabandykite pakeisti filtrus
+    </string>
+    <string name="change_filters">Pakeisti filtrus</string>
+    <string name="reset_filter">Perkrauti</string>
+    <string name="general_sex">Lytis</string>
+    <string name="general_girl">Moteriška</string>
+    <string name="general_boy">Vyriška</string>
+    <string name="filter_city_fail">Nerastas nei vienas miestas prasidedantis \"%s\"</string>
+    <string name="age_filter_man">Jus domina vaikinai</string>
+    <string name="age_filter_girl">Jus domina merginos</string>
+    <string name="rate_popup_title">Prašom, įvertinkite mūsų programą</string>
+    <string name="rate_popup_set_rate">Įvertinti</string>
+    <string name="rate_popup_later">Paklausti vėliau</string>
+    <string name="rate_popup_cancel">Ne, dėkuj</string>
+    <string name="rate_popup_error">Jūs turite nurodyti, kiek žvaigždučių suteikiate mūsų
+        programai
+    </string>
+    <string name="feedback_popup_title">Jūs prastai įvertinote. Papasakokite, kas jums nepatinka
+        programoje. Padėkite mums tapti geresniais. Ačiū!
+    </string>
+    <string name="settings_melody">Pranešimo melodija</string>
+    <string name="settings_loading_photo">Fotografijų išankstinė įkrova</string>
+    <string name="edit_refresh_status">Atnaujinti statusą</string>
+    <string name="ban_title">Sveikiname! Jūs užbanintas</string>
+    <string name="ban_title_forever">Sveikiname! Jūs užbanintas visam laikui</string>
+    <string name="ban_title_until">Sveikiname! Jūs užbanintas iki %s</string>
+    <string name="ban_complain">Pasiskųsti dėl bano</string>
+    <string name="general_ready">Paruošta</string>
+    <string name="buying_store_ok">Pirkimas sėkmingai baigtas</string>
+    <string name="buying_store_fail">Pirkimo užbaigti nepavyko.</string>
+    <string name="vip_privileges">VIP privilegijos</string>
+    <string name="vip_rest">Jūs prenumeruojate VIP</string>
+    <string name="vip_invis">Nematomas režimas</string>
+    <string name="vip_black_list">Juodasis sąrašas</string>
+    <string name="vip_profile_bg">Foninė fotografija</string>
+    <string name="vip_status">VIP-statusas</string>
+    <string name="black_list_title">Juodasis sąrašas</string>
+    <string name="black_list_empty">Jūsų juodasis sąrašas tuščias</string>
+    <string name="black_list_delete">Pašalinti iš juodojo sąrašo</string>
+    <string name="vip_buy_vip">VIP pirkimas</string>
+    <string name="vip_state_off">Jūsų VIP-statusas neaktyvuotas</string>
+    <string name="vip_info_guest">Sužinokite, kas jumis domėjosi - peržiūrėkite savo svečius!
+    </string>
+    <string name="vip_info_invisible">Likite nepastebėti, kai lankotės svetimuose puslapiuose
+        \"nematomo\" režimo dėka
+    </string>
+    <string name="vip_info_message">Įgykite pranašumą - jūsų pranešimai bus išskirti iš bendro
+        fono!
+    </string>
+    <string name="vip_info_blackList">Atsikratykite nusibodusių asmenų \"juodojo sąrašo\" pagalba
+    </string>
+    <string name="vip_info_vip">Išsiskirkite savo VIP-statuso pagalba atliekant paiešką ir savo
+        profilyje!
+    </string>
+    <string name="buying_vip_status">Pirkti VIP statusą</string>
+    <string name="edit_my_city">Mano miestas</string>
+    <string name="settings_feedback_email">El. paštas kontaktams</string>
+    <string name="settings_invalid_email">Neteisingas el. paštas</string>
+    <string name="chat_write_message">Parašyti pranešimą</string>
+    <string name="dating_message">Pranešimas…</string>
+    <string name="buying_sympathies">Simpatijų pirkimas</string>
+    <string name="general_reconnect_social">Neįmanoma prisijungti prie soc. tinklo. Pabandykite
+        vėliau.
+    </string>
+    <string name="general_block">Blokuoti</string>
+    <string name="general_buying_disabled">Šiuo metu pirkimas negalimas</string>
+    <string name="ban_flood_detected">Jūs per dažnai duodate užklausas serveriui. Dėl tolesnio
+        priedo vartojimo palaukite.
+    </string>
+    <string name="general_maintenance">Serveryje yra atliekami techniniai darbai ir jūsų užklausa
+        negali būti įvykdyta. Pabandykite vėliau.
+    </string>
+    <string name="virus_chat_btn">Gauti simpatijas</string>
+    <string name="profile_ask_sent">Prašymas išsiųstas</string>
+    <string name="virus_error">Per parą jūsų draugas gali padovanoti simpatijas tiktai 1 kartą!
+        Pabandykite rytoj!
+    </string>
+    <string name="popup_version_update">Atnaujinti</string>
+    <string name="popup_version_cancel">Priminti vėliau</string>
+    <string name="general_version_not_supported">Jūsų priedo versija paseno ir daugiau nėra
+        palaikoma. Prašome atnaujinti priedą
+    </string>
+    <string name="default_price_format">Viso: %.2f USD</string>
+    <string name="default_price_format_extended">Viso: %1$.2f %2$s</string>
+    <string name="leaders_pick_condition">Jūs negalite pasirinkti fotografijos su reitingu, mažesniu
+        nei %d%%:
+    </string>
+    <string name="general_gift">Dovana</string>
+    <string name="user_actions_chat">Pokalbis</string>
+    <string name="profile_edit_age_ranges">Amžius turi būti nuo 16 iki 99 metų. Prašome įvesti
+        teisingą skaičių ir bandyti dar kartą.
+    </string>
+    <string name="wrong_password_format">Neleistinas slaptažodžio formatas</string>
+    <string name="edit_value_error">Įvestis turi būti nuo %1$d iki %2$d</string>
+    <string name="sign_in">Įeiti</string>
+    <string name="create_account">Sukurti paskyrą</string>
+    <string name="email">El. paštas</string>
+    <string name="password">Slaptažodis</string>
+    <string name="error_login_password">Neteisingas prisijungimo vardas/slaptažodis</string>
+    <string name="recover_password">Atstatyti slaptažodį</string>
+    <string name="recovering_password">Slaptažodžio atstatymas</string>
+    <string name="send_password">Išsiųsti slaptažodį</string>
+    <string name="boy">vaikinas</string>
+    <string name="girl">mergina</string>
+    <string name="start_communication">Pradėti bendravimą</string>
+    <string name="birthdate">GD</string>
+    <string name="birthdate_confirm">Prašome, nurodykite savo amžių, antraip jūs negalėsite
+        susipažinti
+    </string>
+    <string name="set_birthdate">Nurodyti amžių</string>
+    <string name="welcome_to_topface">Sveiki atvykę į Alcatel!</string>
+    <string name="im_boy">Aš - vaikinas</string>
+    <string name="im_girl">Aš - mergina</string>
+    <string name="u_sex">Jūsų lytis</string>
+    <string name="incorrect_email">Neteisingai įvestas el. paštas</string>
+    <string name="incorrect_login">Neteisingai įvestas prisijungimo vardas</string>
+    <string name="incorrect_password">Neteisingai įvestas slaptažodis</string>
+    <string name="empty_fields">Užpildyti ne visi laukeliai</string>
+    <string name="email_already_registered">Vartotojas su tokiu el. paštu jau egzistuoja</string>
+    <string name="enter_email_from_registration">Įveskite el. paštą, kurį nurodėte registracijos
+        metu
+    </string>
+    <string name="default_photo_upload">Fotografijos įkėlimas</string>
+    <string name="default_photo_upload_error">Įkėlimo klaida</string>
+    <string name="default_photo_upload_complete">Įkėlimas atliktas!</string>
+    <string name="general_error_try_again_later">Neįmanoma prisijungti prie Alcatel. Pabandykite
+        vėliau.
+    </string>
+    <string name="search_city_by_name">Miesto paieška pagal pavadinimą</string>
+    <string name="gallery">Galerija</string>
+    <string name="no_photo_take_photo">Su jumis niekas negali susipažinti! Padarykite fotografiją
+        arba pasirinkite esamą iš albumo
+    </string>
+    <string name="photo_for_avatar">Fotografija paruošta siuntimui į profilį! Tai jūsų pirmoji
+        fotografija ir ji bus naudojama kaip jūsų avataras.
+    </string>
+    <string name="add_photo_before">Pirmiausia būtina įkelti foto</string>
+    <string name="change_email">Pakeisti el. pašto adresą</string>
+    <string name="send_confirmation_email">Išsiųsti patvirtinimą el. paštu</string>
+    <string name="change_password">Pakeisti slaptažodį</string>
+    <string name="password_changing">Slaptažodžio keitimas</string>
+    <string name="save">Išsaugoti</string>
+    <string name="saving_in_progress">Išsaugojimas…</string>
+    <string name="confirmation_successfully_sent">Patvirtinimas išsiųstas jūsų nurodytu el. pašto
+        adresu
+    </string>
+    <string name="email_successfully_confirmed">El. pašto adresas sėkmingai patvirtintas.</string>
+    <string name="email_not_confirmed">El. pašto adresas nepatvirtintas.</string>
+    <string name="email_already_confirmed">Jau patvirtintas</string>
+    <string name="password_confirmation_hint">Slaptažodžio patvirtinimas</string>
+    <string name="password_hint">slaptažodis</string>
+    <string name="enter_new_password">Įveskite naują slaptažodį</string>
+    <string name="enter_old_password">Įveskite seną slaptažodį</string>
+    <string name="enter_password_confirmation">Įveskite slaptažodžio patvirtinimą</string>
+    <string name="passwords_mismatched">Slaptažodžiai nesutampa</string>
+    <string name="old_password_mismatched">Neteisingas senas slaptažodis.</string>
+    <string name="passwords_matched">Naujas ir senas slaptažodžiai nesutampa</string>
+    <string name="passwords_changed">Slaptažodis pakeistas</string>
+    <string name="take_photo">Padaryti fotografiją</string>
+    <string name="take_another_photo">Kita fotografija</string>
+    <string name="we_detect_your_city">Mes nustatėme jūsų miestą:</string>
+    <string name="reselect_city">Pasirinkti kitą miestą:</string>
+    <string name="choose_cool_photo">Pasirinkite savo geriausią fotografiją ir statusą, kuris
+        atitinka jūsų nuotaiką!
+    </string>
+    <string name="email_confirmed">el. paštas patvirtintas!</string>
+    <string name="sympathy_sended">Simpatija išsiųsta</string>
+    <string name="general_photo_deleted">Jūsų fotografija neatitinka taisyklių ir buvo pašalinta
+    </string>
+    <string name="general_change">Pakeisti</string>
+    <string name="user_does_not_have_gifts">Šis vartotojas dar neturi dovanų, būkite pirmas ir jūs
+        pastebės
+    </string>
+    <string name="status_is_empty">Jūsų statusas nenustatytas</string>
+    <string name="you_dont_have_gifts_yet">Pas jus kol kas nėra dovanų</string>
+    <string name="buy_sympathies">Pirkti simpatijas</string>
+    <string name="upload_photos">Įkelkite fotografijas</string>
+    <string name="user_baned">Vartotojas užbanintas</string>
+    <string name="general_choose_city">Pasirinkite miestą</string>
+    <string name="buy_mobile_payments">Kiti apmokėjimo būdai</string>
+    <string name="general_save_and_exit">Išsaugoti ir išeiti</string>
+    <string name="general_set_password">Prieš išeidami iš priedo, nustatykite slaptažodį</string>
+    <string name="user_is_deleted">Vartotojas pašalintas</string>
+    <string name="general_bookmarks">Išrinktieji</string>
+    <string name="general_fans">Gerbėjai</string>
+    <string name="settings_edit_profile">Redaguoti profilį</string>
+    <string name="general_bookmarks_delete">Šalinti iš išrinktųjų</string>
+    <string name="general_bookmarks_add">Pridėti prie išrinktųjų</string>
+    <string name="buy_resources">Papildyti atsargas</string>
+    <string name="user_is_banned">Vartotojas užbanintas</string>
+    <string name="profile_empty_name">Vardo laukelis negali būti tuščias</string>
+    <string name="general_wrong_photo_upload">Jūsų fotografija neatitinka reikalavimų. Pamėginkite
+        kitą
+    </string>
+    <string name="general_input_email">Įveskite savo el.pašto adresą</string>
+    <string name="cant_delete_fake_item">Šis pranešimas dar neatsiųstas, jūs negalite jo ištrinti.
+        Pamėginkite vėliau.
+    </string>
+    <string name="vip_stop_ads">Tik bendravimas, jokių trukdžių. VIP-vartotojams nėra reklamos
+    </string>
+    <string name="friend_email_hint">Įveskite draugo el. pašto adresą</string>
+    <string name="general_add">Pridėti</string>
+    <string name="general_invite_friends">Pasikvieskite draugų</string>
+    <string name="general_rest_contacts">Jums liko %d kontaktų</string>
+    <string name="invite_friends_title">Pakviesti visus draugus iš telefoninės knygos į Alcatel
+    </string>
+    <string name="invalid_contacts">Kai kurie kontaktai buvo netinkami. Prašome, išsiųskite tinkamus
+        kontaktus
+    </string>
+    <plurals name="vip_status_period">
+        <item quantity="few">Jūs gavote VIP-statusą %d dienoms</item>
+        <item quantity="other">Jūs gavote VIP-statusą %d dienų</item>
+        <item quantity="one">Jūs gavote VIP-statusą %d dienai</item>
+    </plurals>
+    <plurals name="vip_status_period_btn">
+        <item quantity="few">Gauti VIP %d dienoms</item>
+        <item quantity="other">Gauti VIP %d dienų</item>
+        <item quantity="one">Gauti VIP %d dienai</item>
+    </plurals>
+    <plurals name="invite_friends_plurals">
+        <item quantity="few">Pakvieskite %1$d draugų, kad gautumėte VIP-statusą %2$d dienoms</item>
+        <item quantity="other">Pakvieskite %1$d draugų, kad gautumėte VIP-statusą %2$d dienų</item>
+        <item quantity="one">Pakvieskite %1$d draugų, kad gautumėte VIP-statusą %2$d dienai</item>
+    </plurals>
+    <plurals name="get_vip_for_invites_plurals">
+        <item quantity="few">Gauk VIP nemokamai už %d pakvietimus</item>
+        <item quantity="other">Gauk VIP nemokamai už %d pakvietimų</item>
+        <item quantity="one">Gauk VIP nemokamai už %d pakvietimą</item>
+    </plurals>
+    <string name="buy_status_and_watch_your_fans">Pirkite VIP-statusą ir sužinokite, kas įtraukė jus
+        į išrinktuosius
+    </string>
+    <string name="add_bookmarks_to_be_connected">Pridėkite naujus pažįstamus į šį skyrių ir
+        neprarasite ryšio su jais
+    </string>
+    <string name="nobody_chat_with_you_sympathies_will_help">Jums dar niekas nerašė. Simpatijos
+        padės pašnekovo paieškoje
+    </string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">Išreikškite simpatijas jums patikusiems
+        žmonėms ir gaukite abipuses. Arba pirkite simpatijas ir pradėkite bendravimą su tais, kam
+        jūs patinkate!
+    </string>
+    <string name="with_vip_find_your_visitors">Su VIP-statusu jūs sužinosite, kas buvo užsukęs į
+        jūsų puslapį
+    </string>
+    <string name="on_avatar">Paveiksliukui</string>
+    <string name="your_avatar">Jūsų avataras</string>
+    <string name="avatar_set_successfully">Avataras sėkmingai nustatytas</string>
+    <string name="incorrect_photo">Netinkama foto. Pamėginkite įkelti kitą</string>
+    <string name="incorrect_photo_format">Netinkamas foto formatas. Pamėginkite įkelti jpg arba
+        png
+    </string>
+    <string name="incorrect_photo_size">Neleistinas fotografijos dydis</string>
+    <string name="input_contact_name">Įveskite kontakto vardą</string>
+    <string name="incorrect_locale">Jei Jūs norite, kad mes galėtume perskaityti Jūsų atsiliepimą,
+        rašykite jį rusų arba anglų kalba
+    </string>
+    <string name="complain_photo_header">Netinkama fotografija</string>
+    <string name="complain_msg_header">Netinkamas pranešimas</string>
+    <string name="complain_info_header">Netinkama informacija</string>
+    <string name="complain_type_porn">Porno (genitalijų vaizdai)</string>
+    <string name="complain_type_ero">Erotika pagrindinėje fotografijoje</string>
+    <string name="complain_type_picture">Paveiksliukas</string>
+    <string name="complain_type_fake_user">Žinomas žmogus</string>
+    <string name="complain_type_spam_msg">Komerciniai pasiūlymai, brukalas, reklama, nuorodos į
+        svetaines, telefonai
+    </string>
+    <string name="complain_type_spam_profile">Laukeliuose \"statusas\", \"spie save\" yra komercinis
+        pasiūlymas
+    </string>
+    <string name="complain_type_swearing_profile">Laukeliuose \"statusas\", \"spie save\" yra
+        chamiškumo, keiksmažodžių, nuorodų į soc. tinklalapius
+    </string>
+    <string name="complain_type_fake_data">Vardas, lytis, amžius ir žmogaus fotografija nesutampa
+    </string>
+    <string name="complain_description">Papasakokite plačiau apie skundo priežastį</string>
+    <string name="general_complain_sended">Jūsų skundas išsiųstas, labai dėkojame už pagalbą
+    </string>
+    <string name="general_complain">Skundas</string>
+    <string name="general_msg">Pranešimas</string>
+    <string name="notifications">Pranešimai</string>
+    <string name="general_no_notifications">Deja, jūsų įrenginyje pranešimai neprieinami</string>
+    <string name="black_list_add_short">Į juodąjį sąrašą</string>
+    <string name="confirm_email_for_dating">Mes esame prieš brukalą. Patvirtinkite savo el. pašto
+        adresą, kad pažindintis Alcatel!
+    </string>
+    <string name="confirm_email_for_dating_title">Mes prieš brukalus</string>
+    <string name="confirm_email_for_dating_desc">Kad pažindintis Tpface, patvirtinkite savo el.
+        pašto adresą!
+    </string>
+    <string name="send_confirm_link">Išsiųsti nuorodą patvirtinimui</string>
+    <string name="complain_type_swearing_msg">Chamiškumas, grąsinimai, keiksmažodžiai</string>
+    <string name="general_exit">Išeiti</string>
+    <string name="likes_can_help_you">Simpatijos padės susipažinti</string>
+    <string name="general_get_dating">Pažindintis</string>
+    <string name="settings_select_language">Programos kalbos pasirinkimas</string>
+    <string name="settings_select_preload_photo_type">Pasirinkite, kada fotografijų išankstinė
+        įkrova įjungta
+    </string>
+    <string name="restart_to_change_locale">Kad pasikeistų kalba, programa bus perkrauta</string>
+    <string name="locale_changing">Kalbos pakeitimas</string>
+    <plurals name="you_were_liked">
+        <item quantity="few">Jūs patikote %d žmonėms</item>
+        <item quantity="other">Jūs patikote %d žmonėms</item>
+        <item quantity="one">Jūs patikote %d žmogui</item>
+    </plurals>
+    <string name="likes_buy_vip">Kad nedelsiant sužinotumėte, kam jūs patikote, suaktyvinkite
+        VIP-statusą
+    </string>
+    <string name="or">arba</string>
+    <string name="settings_delete_account">Pašalinti paskyrą</string>
+    <string name="chat_block_not_mutual">Pradėti bendravimą su vartotoju galima, jei jis išsiuntė
+        jums simpatiją arba jūs turite VIP-statusą
+    </string>
+    <string name="add_to_favorite_block_not_vip">Tik VIP vartotojai gali iš pažinčių ekrano įtraukti
+        į išrinktuosius
+    </string>
+    <string name="delete_account_are_you_sure">Jūs tikrai įsitikinę?</string>
+    <string name="delete">Pašalinti</string>
+    <string name="delete_account_warning">Dėmesio! Jūs mėginate pašalinti savo Alcatel profilį.
+    </string>
+    <string name="delete_account_error">Apgailestaujame, pašalinti jūsų paskyrą nepavyko. Jūs galite
+        pakartoti dar kartą.
+    </string>
+    <string name="delete_account_will_be_restored_are_you_sure">Jūs mėginate įeitį į pašalintą
+        paskyrą. Įeinant paskyra bus atstatyta.
+    </string>
+    <string name="restore">Atstatyti</string>
+    <string name="admiration_sended">Susižavėjimas išsiųstas</string>
+    <string name="skip">Praleisti</string>
+    <string name="chat">Parašyti</string>
+    <plurals name="number_of_sympathies">
+        <item quantity="few">%d simpatijos</item>
+        <item quantity="zero">%d simpatijų</item>
+        <item quantity="other">%d simpatijų</item>
+        <item quantity="one">%d simpatija</item>
+    </plurals>
+    <plurals name="popup_vip_messages">
+        <item quantity="few">Gauti %d pranešimai su ekspress-pristatymu</item>
+        <item quantity="other">Gauta %d pranešimų su ekspress-pristatymu</item>
+        <item quantity="one">Gautas %d pranešimas su ekspress-pristatymu</item>
+    </plurals>
+    <plurals name="popup_vip_visitors">
+        <item quantity="few">Pas jus %d svečiai</item>
+        <item quantity="other">Pas jus %d svečių</item>
+        <item quantity="one">Pas jus %d svečias</item>
+    </plurals>
+    <string name="general_attention">Dėmesio!</string>
+    <string name="general_delete_messages">Pašalinti pranešimus</string>
+    <string name="skip_all">Praleisti visus</string>
+    <string name="settings_feedback_transaction_number">Užsakymo numeris</string>
+    <string name="settings_feedback_transaction_link">kur rasti užsakymo numerį?</string>
+    <string name="general_logout_error">Apgailestaujame, nepavyko išeiti iš paskyros.</string>
+    <string name="auth_btn_ok">Bendraklasiai</string>
+    <string name="auth_btn_tf">Alcatel paskyra</string>
+    <string name="birthday">Gimimo diena</string>
+    <string name="other_auth">Įeiti per kitas svetaines</string>
+    <string name="settings_feedback_transaction_number_hint">Įveskite užsakymo numerį</string>
+    <string name="delete_visitors">Pašalinti svečius</string>
+    <string name="delete_admirations">Pašalinti susižavėjimus</string>
+    <string name="general_admirations">Susižavėjimai</string>
+    <plurals name="popup_vip_admirations">
+        <item quantity="few">Jums išsiuntė susižavėjimą %d žmonės</item>
+        <item quantity="other">Jums išsiuntė susižavėjimą %d žmonių</item>
+        <item quantity="one">Jums išsiuntė susižavėjimą %d žmogus</item>
+    </plurals>
+    <string name="select_all">Pasirinkti visus</string>
+    <string name="silent_ringtone">Be garso</string>
+    <plurals name="selected">
+        <item quantity="few">%d išrinkta</item>
+        <item quantity="other">%d išrinkta</item>
+        <item quantity="one">%d išrinktas</item>
+    </plurals>
+    <string name="photo_is_uploading">Foto įkrova</string>
+    <string name="default_ringtone">Pagal nutylėjimą</string>
+    <string name="user_deleted_or_banned">Vartotojas pašalintas arba užbanintas</string>
+    <string name="locking_popup_button_answer">Atsakyti į simpatijas</string>
+    <string name="locking_menu_message">Prieiga prie kai kurių programos puslapių apribota. Kad
+        pašalinti apribojimus atsakykite į visas įeinančias simpatijas arba gaukite VIP.
+    </string>
+    <string name="current_city">Dabartinis miestas</string>
+    <string name="general_bonus">Bonus</string>
+    <plurals name="notification_many_messages">
+        <item quantity="few">%d nauji pranešimai</item>
+        <item quantity="other">%d naujų pranešimų</item>
+        <item quantity="one">%d naujas pranešimas</item>
+    </plurals>
+    <string name="coins_subscription">Monetų prenumerata</string>
+    <plurals name="general_some_more">
+        <item quantity="few">ir dar %d</item>
+        <item quantity="other">ir dar %d</item>
+        <item quantity="one">ir dar %d</item>
+    </plurals>
+    <string name="subscriptions_can_be_changed">Prenumerata įforminta. Pakeisti prenumeratos sąlygas
+        galima Google Play
+    </string>
+    <string name="people_nearby">Žmonės šalia</string>
+    <string name="nobody_nearby">Aplinkui nė gyvos dvasios!</string>
+    <string name="general_distance_km">%.02f km</string>
+    <string name="general_distance_m">%d m</string>
+    <string name="cannot_get_geo">Nepavyko nustatyti buvimo vietos</string>
+    <string name="press_back_more_to_close_app">Spauskite mygtuką atgal dar sykį kad išeiti iš
+        Alcatel
+    </string>
+    <string name="waiting_for_load">Įkrovos laukimas…</string>
+    <string name="loading_photo_percent">Fotografijos įkrova %d%%</string>
+    <string name="profile_update_error">Duomenų atnaujinimo klaida</string>
+    <string name="retry_cancel_editing">Duomenų siuntimo į serverį klaida. Išeiti neišsaugant ar
+        pakartoti bandymą?
+    </string>
+    <string name="retry_cancel_editing_bad_value">Jūs įvedėte neteisingus duomenis. Pakartoti
+        bandymą ar išeiti, neišsaugant duomenų?
+    </string>
+    <string name="user_does_not_exist">Vartotojas nerastas</string>
+    <string name="feedback_subject_ban">Skundas dėl neteisingo bano</string>
+    <string name="settings_led">LED pranešimas</string>
+    <string name="open_market_error">Nepavyksta atverti programos lango</string>
+    <string name="billing_item_already_owned">Jūsų praeitas pirkinys apdorojamas, prašome palaukti
+    </string>
+    <string name="dialog">Susirašinėjimas</string>
+    <string name="reply">Atsakyti</string>
+    <string name="measurement_unit_weight">kg</string>
+    <string name="measurement_unit_height">cm</string>
+    <string name="maximum_number_of_users">Pasirinktas maksimalus vartotojų kiekis</string>
+    <string name="logout_if_email_already_registred">Vartotojas su tokiu el. paštu jau egzistuoja.
+        Jeigu tai jūsų el. paštas, jums būtina išeiti iš dabartinės paskyros ir įeiti į paskyrą %s
+    </string>
+    <string name="recover_password_instructions">Jūsų el. pašto adresu išsiųstas laiškas su
+        slaptažodžio atstatymo instrukcija
+    </string>
+    <string name="email_changing">el. pašto keitimas</string>
+    <string name="hint_faces_filter">Keikite paieškos parametrus ir pažindinkitės su įdomiais
+        žmonėmis
+    </string>
+    <string name="hint_faces_buy_like">Kuo daugiau pas jus simpatijų, tuo dažniau jus įvertina.
+        Nepamirškite papildyti simpatijų atsargos.
+    </string>
+    <string name="hint_myprofile_buy_vip">Pirkite VIP-statusą ir mėgaukitės neapribotu bendravimu
+    </string>
+    <string name="pull_to_refresh_pull_label">Patempkite, kad atnaujinti…</string>
+    <string name="pull_to_refresh_release_label">Paleiskite, kad atnaujinti…</string>
+    <string name="messaging_block_buy_vip">Dialogo pratęsimui būtinas VIP\u2011statusas</string>
+    <string name="pull_to_refresh_refreshing_label">Kraunasi…</string>
+    <string name="user_added_to_black_list">Vartotojas įtrauktas į juodąjį sąrašą</string>
+    <string name="user_deleted_from_black_list">Vartotojas pašalintas iš juodojo sąrašo</string>
+    <string name="user_added_to_bookmark">Vartotojas įtrauktas į išrinktuosius</string>
+    <string name="user_deleted_from_bookmark">Vartotojas pašalintas iš išrinktųjų</string>
+    <string name="preload_photo_type_wifi_3g">WiFi ir 3G</string>
+    <string name="preload_photo_type_wifi">Tik WiFi</string>
+    <string name="preload_photo_type_always_on">Visada įjungta</string>
+    <string name="preload_photo_type_preload_off">Įjungta</string>
+    <string name="wrong_time_popup_text">Nepavyko užmegzti saugaus ryšio su serveriu.\nGalbūta data
+        arba laikas jūsų įrenginyje nurodyti neteisingai.
+    </string>
+    <string name="wrong_time_popup_button">Atverti nustatymus</string>
+    <string name="enter_text">Įveskite tekstą</string>
+    <string name="send_feedback">Išsiųsti pranešimą</string>
+    <string name="get_vip_free">Gauk VIP nemokamai</string>
+    <string name="buy_more_sympathies">\"Gauk daugiau simpatijų, populiarėk\"</string>
+    <string name="transaction_code_help">Jei jūs atsiųsite mums transakcijos kodą, tai gali
+        pagelbėti vykdant jūsų užklausą, o taip pat pagreitins jos apdorojimą. Išsamią informaciją
+        apie užsakymą galima gauti per %s.
+    </string>
+    <string name="google_wallet">Google-piniginė</string>
+    <string name="google_service_general_title">Pranešimai nepasiekiami</string>
+    <string name="google_service_disabled_title">Pas jus yra išjungtos Google Play paslaugos, kurias
+        būtina įjungti, kad veiktų pranešimai.
+    </string>
+    <string name="google_service_disabled_button">Įjungti</string>
+    <string name="google_service_missing_title">Pas jus neįdiegtos Google plays paslaugos, kurios
+        yra būtinos pranešimų veikimui.
+    </string>
+    <string name="google_service_missing_button">Įdiegti</string>
+    <string name="google_service_version_update_required_title">Pas jus įdiegta sena Google Play
+        paslaugų versija, korektiškam pranešimų veikimui, prašome, atnaujinkite.
+    </string>
+    <string name="google_service_version_update_required_button">Atnaujinti</string>
+    <string name="google_invalid_account_title">Pasitikrinte jūsų Google paskyros duomenis arba
+        susisiekite su Google techniniu palaikymu.
+    </string>
+    <string name="google_sign_in_account_title">Pas jus nepridėta Google paskyra, jūs turite
+        autorizuotis, jei norite gauti pranešimus.
+    </string>
+    <string name="google_sign_in_account_button">Autorizuotis</string>
+    <string name="google_unavailable_services_title">Deja, pranešimai nepalaikomi jūsų įrenginyje.
+    </string>
+    <string name="receive_message_notification">Gauti informavimą\apie naują pranešimą</string>
+    <string name="receive_mutual_notification">Gauti informavimą\apie naują abipusę simpatiją
+    </string>
+    <string name="receive_sympathy_notification">Gauti informavimą\apie naują simpatiją</string>
+    <string name="receive_guest_notification">Gauti informavimą\apie naują svečią</string>
+    <string name="on_phone">Į telefoną</string>
+    <string name="on_mail">Į el. paštą</string>
+    <string name="add_leader_hint">Jūsų pasisveikinimas…</string>
+    <string name="more">dar</string>
+    <string name="premium_for_invitations">Kad gauti VIP-statusą 1 dienai, jums būtina surinkti 5
+        registracijas.
+    </string>
+    <string name="premium_for_invitations_current_status">Jūs jau surinkote:\nPakvietimų:
+        %1$d\nRegistracijų: %2$d
+    </string>
+    <string name="no_contacts_available">Įrenginyje nėra atvaizduotinų kontaktų</string>
+    <string name="sms_invite_title">Gaukite VIP parai!</string>
+    <string name="status_can_send_confirmation">Pakviesti</string>
+    <string name="status_invilid_phone_number">Numeris negaliojantis</string>
+    <string name="status_confirmation_was_sent">Laukia registracijos</string>
+    <string name="status_user_registered">Jau užregistruotas</string>
+    <string name="balance">Balansas (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
+    <string name="trial_vip_text">Nemokamas VIP\n 7 dienoms</string>
+    <string name="trial_vip_button_text">Prijungti VIP</string>
+    <string name="settings_check_vip_title">Patikrinti VIP-statuso aktyvumą</string>
+    <string name="settings_check_vip_cell">Patikrinti VIP-statusą</string>
+    <string name="settings_check_vip_alert">Patikrinimo užklausa išsiųsta</string>
+    <string name="novice_sympathy">Siųskite simpatijas tiems, kas jums\ntikrai patinka,\nkad
+        pradėtumėte malonią pažintį
+    </string>
+    <string name="novice_sympathies_bonus">Jūs gaunate %1$d simpatijų\ndovanų! Tai reiškia, kad
+        jūs\ntikrai patinkate %2$d žmonių,\nkurie išreikš jums savo simpatiją
+    </string>
+</resources>

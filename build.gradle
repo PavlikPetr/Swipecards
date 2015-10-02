@@ -110,6 +110,13 @@ android {
             buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                     "com.topface.billing.MarketApiType.DERIVED";
         }
+        appland {
+            applicationId "com.topface.topface.appland"
+            buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.APPLAND";
+            buildConfigField "String", "STATISTICS_APP", "\"topfacemobappappland\"";
+            buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
+                    "com.topface.billing.MarketApiType.APPLAND";
+        }
     }
 
     compileOptions {
@@ -141,31 +148,33 @@ android {
 
     signingConfigs {
         google {
-            logger.error("build release apk with default flavourType")
             storeFile file("misc/keys/topface.keystore")
             storePassword "Sonetica2012"
             keyAlias "topface"
             keyPassword "Sonetica2012"
         }
         ifree {
-            logger.error("build release apk with IFree flavourType")
             storeFile file("misc/keys/topfaceIFree.keystore")
             storePassword "Sonetica2012"
             keyAlias "topfaceifree"
             keyPassword "Sonetica2012"
         }
         blueStacks {
-            logger.error("build release apk with BlueStacks flavourType")
             storeFile file("misc/keys/topfaceBlueStacks.keystore")
             storePassword "Sonetica2012"
             keyAlias "topfacebluestacks"
             keyPassword "Sonetica2012"
         }
         derived {
-            logger.error("build release apk with Derived flavourType")
             storeFile file("misc/keys/topfaceDerived.jks")
             storePassword "Sonetica2012"
             keyAlias "topfacederived"
+            keyPassword "Sonetica2012"
+        }
+        appland {
+            storeFile file("misc/keys/topfaceAppLand.jks")
+            storePassword "Sonetica2012"
+            keyAlias "topfaceappland"
             keyPassword "Sonetica2012"
         }
         debug {
@@ -187,6 +196,7 @@ android {
             productFlavors.ifree.signingConfig signingConfigs.ifree
             productFlavors.blueStacks.signingConfig signingConfigs.blueStacks
             productFlavors.derived.signingConfig signingConfigs.derived
+            productFlavors.appland.signingConfig signingConfigs.appland
             productFlavors.amazon.signingConfig signingConfigs.google
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     getDefaultProguardFile('proguard-android-optimize.txt'),
