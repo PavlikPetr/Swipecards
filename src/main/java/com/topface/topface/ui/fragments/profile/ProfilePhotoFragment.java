@@ -44,7 +44,7 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 
-public class ProfilePhotoFragment extends ProfileInnerFragment {
+public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackPressedListener {
 
     private static final String POSITION = "POSITION";
     private static final String FLIPPER_VISIBLE_CHILD = "FLIPPER_VISIBLE_CHILD";
@@ -350,9 +350,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     @OnClick(R.id.btnCancel)
     protected void cancelClick() {
         mViewFlipper.setDisplayedChild(0);
-            }
-        }
-
     }
 
     @Override

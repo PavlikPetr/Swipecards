@@ -4,6 +4,7 @@ import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -15,8 +16,8 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.Html;
@@ -40,8 +41,6 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.ui.IDialogListener;
-import com.topface.topface.ui.dialogs.OldVersionDialog;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.debug.HockeySender;
@@ -174,6 +173,8 @@ public class Utils {
 
     public static void startOldVersionPopup(final Activity activity, OnNextActionListener startActionCallback) {
         startOldVersionPopup(activity, true, startActionCallback);
+    }
+
     public static Intent getIntentToOpenUrl(String url) {
         if (!TextUtils.isEmpty(url)) {
             Intent i = new Intent(Intent.ACTION_VIEW);
@@ -183,24 +184,12 @@ public class Utils {
         return null;
     }
 
-    public static void startOldVersionPopup(final Activity activity) {
-        startOldVersionPopup(activity, true);
-    }
-
     public static void startOldVersionPopup(final Activity activity, boolean cancelable, final OnNextActionListener startActionCallback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
             @Override
-            public void onPositiveButtonClick() {
+            public void onClick(DialogInterface dialog, int which) {
                 Utils.goToMarket(activity);
-            }
-
-            @Override
-            public void onNegativeButtonClick() {
-            }
-
-            @Override
-            public void onDismissListener() {
             }
         });
         if (cancelable) {

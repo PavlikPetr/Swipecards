@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -28,27 +27,27 @@ public class NotificationsDisablePopup implements IStartAction {
 
     private MarketApiManager mMarketApiManager;
 
-    private void showPopup() {
-        NotificationDisableDialog notificationDisableDialog = NotificationDisableDialog.newInstance(
-                getMarketApiManager().getTitleTextId(),
-                getMarketApiManager().getButtonTextId(),
-                getMarketApiManager().isButtonVisible());
-        notificationDisableDialog.setDialogInterface(new IDialogListener() {
-            @Override
-            public void onPositiveButtonClick() {
-                getMarketApiManager().onProblemResolve(mActivity);
-            }
-
-            @Override
-            public void onNegativeButtonClick() {
-            }
-
-            @Override
-            public void onDismissListener() {
-                mActivity = null;
-            }
-        });
-        notificationDisableDialog.show(((FragmentActivity) mActivity).getSupportFragmentManager(), NotificationDisableDialog.class.getName());
+    private AlertDialog getPopup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        builder.setIcon(android.R.drawable.ic_dialog_alert).setTitle(R.string.google_service_general_title).setMessage(getMarketApiManager().getTitleTextId())
+                .setCancelable(true)
+                .setNegativeButton(mActivity.getResources().getString(R.string.general_cancel),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                mActivity = null;
+                            }
+                        });
+        if (getMarketApiManager().isButtonVisible()) {
+            builder.setPositiveButton(getMarketApiManager().getButtonTextId(), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    getMarketApiManager().onProblemResolve(mActivity);
+                    dialog.cancel();
+                    mActivity = null;
+                }
+            });
+        }
+        return builder.create();
     }
 
     @Override
