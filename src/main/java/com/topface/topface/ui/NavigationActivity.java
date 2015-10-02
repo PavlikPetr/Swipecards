@@ -125,9 +125,9 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         Intent intent = new Intent(activity, NavigationActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(GCMUtils.NEXT_INTENT, CacheProfile.getOptions().startPageFragmentId);
-        if(App.getUserConfig().getDatingMessage().equals(CacheProfile.getOptions()
-                .instantMessageFromSearch.getText())){
-            intent.putExtra(DatingInstantMessageController.DEFAULT_MESSAGE,true);
+        if (App.getUserConfig().getDatingMessage().equals(CacheProfile.getOptions()
+                .instantMessageFromSearch.getText())) {
+            intent.putExtra(DatingInstantMessageController.DEFAULT_MESSAGE, true);
         }
         activity.startActivity(intent);
     }
