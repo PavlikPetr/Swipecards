@@ -136,6 +136,7 @@ public class RegistrationFragment extends BaseFragment {
                     Date date = DateUtils.getDate(year, monthOfYear, dayOfMonth);
                     String dateStr = DateFormat.getDateFormat(getActivity()).format(date);
                     mBirthdayText.setText(dateStr);
+                    mBirthdayText.setTextColor(getResources().getColor(R.color.list_text_black));
                     mBirthday = date;
                 }
             }

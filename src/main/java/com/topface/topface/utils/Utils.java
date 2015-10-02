@@ -43,6 +43,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.IDialogListener;
 import com.topface.topface.ui.dialogs.OldVersionDialog;
 import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -171,6 +172,8 @@ public class Utils {
         }
     }
 
+    public static void startOldVersionPopup(final Activity activity, OnNextActionListener startActionCallback) {
+        startOldVersionPopup(activity, true, startActionCallback);
     public static Intent getIntentToOpenUrl(String url) {
         if (!TextUtils.isEmpty(url)) {
             Intent i = new Intent(Intent.ACTION_VIEW);
@@ -184,9 +187,9 @@ public class Utils {
         startOldVersionPopup(activity, true);
     }
 
-    public static void startOldVersionPopup(final Activity activity, boolean cancelable) {
-        OldVersionDialog oldVersionDialog = OldVersionDialog.newInstance(cancelable);
-        oldVersionDialog.setDialogInterface(new IDialogListener() {
+    public static void startOldVersionPopup(final Activity activity, boolean cancelable, final OnNextActionListener startActionCallback) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
             @Override
             public void onPositiveButtonClick() {
                 Utils.goToMarket(activity);
@@ -200,7 +203,25 @@ public class Utils {
             public void onDismissListener() {
             }
         });
-        oldVersionDialog.show(((FragmentActivity) activity).getSupportFragmentManager(), OldVersionDialog.class.getName());
+        if (cancelable) {
+            builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+        }
+        builder.setMessage(R.string.general_version_not_supported);
+        builder.setCancelable(cancelable);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (startActionCallback != null) {
+                    startActionCallback.onNextAction();
+                }
+            }
+        });
+        alertDialog.show();
     }
 
     public static void goToMarket(Activity context) {

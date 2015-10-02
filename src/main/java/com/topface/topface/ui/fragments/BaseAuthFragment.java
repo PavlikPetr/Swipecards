@@ -127,6 +127,9 @@ public abstract class BaseAuthFragment extends BaseFragment {
 
             @Override
             public void fail(final int codeError, IApiResponse response) {
+                if (codeError == ErrorCodes.USER_DELETED) {
+                    showButtons();
+                }
                 authorizationFailed(codeError, authRequest);
             }
 
@@ -190,7 +193,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 showRetryView(getString(R.string.general_maintenance), strBuilder.toString(), request);
                 break;
             case ErrorCodes.CODE_OLD_APPLICATION_VERSION:
-                Utils.startOldVersionPopup(getActivity());
+                Utils.startOldVersionPopup(getActivity(), null);
                 break;
             default:
                 showRetryView(getString(R.string.general_data_error), strBuilder.toString(), request);

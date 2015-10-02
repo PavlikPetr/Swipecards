@@ -20,6 +20,9 @@
             android:value="UA-57607575-45"
             tools:node="replace" />
 
+        <meta-data android:value="5015934"
+                   android:name="vk_id"/>
+
         <activity
             android:name="com.ifree.monetize.core.MonetizePayActivity"
             android:theme="@android:style/Theme.Dialog"

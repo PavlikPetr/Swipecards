@@ -37,6 +37,10 @@ public class ChosenStartAction implements IStartAction {
         return maxAction;
     }
 
+    public ArrayList<IStartAction> getActions() {
+        return mActions;
+    }
+
     @Override
     public void callInBackground() {
         IStartAction action = chooseAction();
@@ -82,6 +86,8 @@ public class ChosenStartAction implements IStartAction {
 
     @Override
     public void setStartActionCallback(OnNextActionListener startActionCallback) {
-        //empty
+        for (IStartAction action : mActions) {
+            action.setStartActionCallback(startActionCallback);
+        }
     }
 }

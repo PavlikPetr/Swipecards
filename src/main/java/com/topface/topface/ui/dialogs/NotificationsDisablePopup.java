@@ -19,6 +19,7 @@ import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 public class NotificationsDisablePopup implements IStartAction {
     private Activity mActivity;
     private int mPriority;
+    private OnNextActionListener mOnNextActionListener;
 
     public NotificationsDisablePopup(Activity activity, int priority) {
         mActivity = activity;
@@ -58,7 +59,16 @@ public class NotificationsDisablePopup implements IStartAction {
 
     @Override
     public void callOnUi() {
-        showPopup();
+        AlertDialog notificationDisableDialog = getPopup();
+        notificationDisableDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (mOnNextActionListener != null) {
+                    mOnNextActionListener.onNextAction();
+                }
+            }
+        });
+        notificationDisableDialog.show();
     }
 
     @Override
@@ -85,7 +95,7 @@ public class NotificationsDisablePopup implements IStartAction {
 
     @Override
     public void setStartActionCallback(OnNextActionListener startActionCallback) {
-
+        mOnNextActionListener = startActionCallback;
     }
 
     private MarketApiManager getMarketApiManager() {

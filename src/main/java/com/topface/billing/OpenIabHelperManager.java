@@ -6,7 +6,6 @@ import android.content.Intent;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.BuildConfig;
 import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.ProductsDetails;
@@ -14,9 +13,6 @@ import com.topface.topface.utils.CacheProfile;
 
 import org.jetbrains.annotations.NotNull;
 import org.onepf.oms.OpenIabHelper;
-import org.onepf.oms.appstore.AmazonAppstore;
-import org.onepf.oms.appstore.GooglePlay;
-import org.onepf.oms.appstore.NokiaStore;
 import org.onepf.oms.appstore.googleUtils.IabHelper;
 import org.onepf.oms.appstore.googleUtils.IabResult;
 import org.onepf.oms.appstore.googleUtils.Inventory;
@@ -88,29 +84,7 @@ public class OpenIabHelperManager implements IabHelper.OnIabSetupFinishedListene
      */
     protected void addAvailableStores(Context context, OpenIabHelper.Options.Builder optsBuilder) {
         //Нам нужен конкретный AppStore, т.к. у каждого типа сборки свои продукты и поддержка других маркетов все равно не нужна
-        switch (BuildConfig.MARKET_API_TYPE) {
-            case GOOGLE_PLAY:
-                optsBuilder.addAvailableStores(new GooglePlay(context, null));
-                optsBuilder.addPreferredStoreName(OpenIabHelper.NAME_GOOGLE);
-                break;
-            case AMAZON:
-                //Нужно для тестирования покупок в Amazon
-                if (BuildConfig.DEBUG) {
-                    optsBuilder.addAvailableStores(new AmazonAppstore(context) {
-                        public boolean isBillingAvailable(String packageName) {
-                            return true;
-                        }
-                    });
-                } else {
-                    optsBuilder.addAvailableStores(new AmazonAppstore(context));
-                }
-                optsBuilder.addPreferredStoreName(OpenIabHelper.NAME_AMAZON);
-                break;
-            case NOKIA_STORE:
-                optsBuilder.addAvailableStores(new NokiaStore(context));
-                optsBuilder.addPreferredStoreName(OpenIabHelper.NAME_NOKIA);
-                break;
-        }
+        StoresManager.addStores(context, optsBuilder);
     }
 
     public boolean handleActivityResult(int requestCode, int resultCode, Intent data) {

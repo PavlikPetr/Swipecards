@@ -1,0 +1,867 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_locale">sr_RS</string>
+    <string name="photofeed_title">Стави у фид</string>
+    <string name="general_warning">УПОЗОРЕЊЕ</string>
+    <string name="general_ok">ОК</string>
+    <string name="general_any">Било који/која</string>
+    <string name="general_settings_abbr">Под.</string>
+    <string name="general_disallow">Забранити</string>
+    <string name="general_allow">Дозволити</string>
+    <string name="notification_denied_popup_title">Дозволите обавештења како бисте сазнали о нови
+        порукама, свиђањима и осталим вестима.
+    </string>
+    <string name="notification_popup_title">Дозволите нам да Вам пошаљемо обавештења како бисте
+        одмах сазнали о свиђањима, дивљењима и порукама.
+    </string>
+    <string name="email_successfully_changed">Ваша адреса е-поште је успешно промењена</string>
+    <string name="auth_vk_name">ВКонтакте</string>
+    <string name="dating_switch_button">Још…</string>
+    <string name="dating_prev_button">Претходна</string>
+    <string name="dating_chat_button">Ћаскање</string>
+    <string name="waiting_a_products">Молимо сачекајте, учитавамо доступне производе.</string>
+    <string name="likes_background_text">Нема свиђања</string>
+    <string name="visitors_background_text">Нема гостију</string>
+    <string name="chat_background_text">Нема долазних порука</string>
+    <string name="entrance">Улаз</string>
+    <string name="filter_only_online">Само на вези</string>
+    <string name="filter_city_age_parameters">Године и град</string>
+    <string name="filter_select_city">Изабери град</string>
+    <string name="edit_block_photo">Фотографије</string>
+    <string name="dashbrd_popup_rating">Свиђа Вам се наша апликација? Подигните наш рејтинг! Што је
+        већи рејтинг, више људи ћеш срести у Alcatel!
+    </string>
+    <string name="dashbrd_popup_title">Оцени ме</string>
+    <string name="dashbrd_popup_cancel">Не питај више</string>
+    <string name="dashbrd_popup_rate">Оцени</string>
+    <string name="dashbrd_popup_later">Питај касније</string>
+    <string name="buying_store_connect">Повезујем се на iTunes Store</string>
+    <string name="buying_store_purchase">Обављам куповину у iTunes Store</string>
+    <string name="buying_tf_ack_sending">Шаљем информацију о куповини у Alcatel</string>
+    <string name="ok_label">Одноклассники</string>
+    <string name="autorefill">Аутоматско попуњавање</string>
+    <string name="coins">Новчићи</string>
+    <string name="photo_info_deleted">Обрисано</string>
+    <string name="settings_block_main">Главно</string>
+    <string name="settings_block_additional">Додатно</string>
+    <string name="leaders_select_photo">Одаберите упечатљиву фотографију:</string>
+    <string name="locking_screen_button_answer">Одговорити</string>
+    <string name="locking_screen_advice">Одговорите на сва долазна Свиђања</string>
+    <string name="locking_screen_advice2">Набавите неограничен приступ</string>
+    <string name="general_bookmarks_is_deleted">Корисник је уклоњен из омиљених</string>
+    <string name="general_blacklist_is_deleted">Корисник је уклоњен са црне листе</string>
+    <string name="invite_friends_title_short">Позови све пријатеље у Alcatel</string>
+    <string name="general_bookmarks_add_short">У омиљене</string>
+    <string name="general_complaint">Жалите се</string>
+    <string name="general_type_complain">Предмет жалбе</string>
+    <string name="address_book_access_error">Ова апликација нема приступ Вашим контактима. Можете
+        дозволити приступ преко Подешавања приватности на свом уређају.
+    </string>
+    <string name="profile_deleted_user">Корисник је уклоњен.</string>
+    <string name="filter_main_parameters">Заинтересован сам за</string>
+    <string name="dating_prev_button_ext">Претходни</string>
+    <string name="dating_skip_button_ext">Следећи</string>
+    <string name="profile_services">Услуге</string>
+    <string name="black_list_add">Додати на црну листу</string>
+    <string name="vip_invisible_mode">Режим Невидљив</string>
+    <string name="buying_profile_coins">Ваш налог</string>
+    <string name="vip_info_title">VIP привилегије</string>
+    <string name="profile_gifts_empty">Овом кориснику још нико ништа није поклонио.</string>
+    <string name="profile_mygifts_empty">Још вам нико ништа није поклонио.</string>
+    <string name="dating_people_unnoticed">Десет људи је остало без ваше пажње!</string>
+    <string name="dating_continue">Наставити познанство</string>
+    <string name="dating_better_look">Пажљиво погледајте!\nМожда пропуштате шансу!</string>
+    <string name="edit_my_photos">Моје фотографије</string>
+    <string name="general_search_empty_title">Жао нам је, ништа није пронађено. :-(</string>
+    <string name="general_search_empty_text">Можете да претражите поново, или да промените
+        подешавања филтера.
+    </string>
+    <string name="map_title">Мапа</string>
+    <string name="general_buying">Купи новчиће и свиђања</string>
+    <string name="popup_version_title">Доступна је нова верзија апликације</string>
+    <string name="popup_version_message">Време је да ажурирате своју верзију апликације!</string>
+    <string name="leaders_select_photo_info">Одаберите најупечатљивију фотографију! Не могу се
+        одабрати фотографије са ниским рејтингом.
+    </string>
+    <string name="map_popup_address">Адреса</string>
+    <string name="black_list_info">Додали сте саговорника на црну листу. То можете изменити у свом
+        профилу, или у подешаваниима VIP-статуса
+    </string>
+    <string name="black_list_activation">Активирајте VIP-статус и искористите црну листу.</string>
+    <string name="buying_total">Укупно</string>
+    <string name="we_dont_detect_your_city">Да бисмо нашли људе у близини, морамо знати где се
+        налазите. Молимо Вас да наведете свој град.
+    </string>
+    <string name="confirm_email">Молимо Вас да потврдите адресу е-поште.</string>
+    <string name="password_sent">Нова лозинка је послата на адресу Ваше е-поште</string>
+    <string name="buy_vip_month_one">%1$d месеци по %2$.2f %3$@ по месецу</string>
+    <string name="buy_vip_month_few">%1$d месеци по %2$.2f %3$@ по месецу</string>
+    <string name="buy_vip_month_other">%1$d месеци по %2$.2f %3$@ по месецу</string>
+    <string name="general_bookmarks_title">Омиљени</string>
+    <string name="general_no_fans">Нема обожаваоца</string>
+    <string name="general_user_bookmarkadd">Корисник је додат у омиљене</string>
+    <string name="settings_invalid_name">Име садржи неважеће симболе</string>
+    <string name="filter_hint">Унесите име</string>
+    <plurals name="vip_add_more_friends">
+        <item quantity="few">Позовите још %d пријатеља</item>
+        <item quantity="other">Позовите још %d пријатеља</item>
+        <item quantity="one">Позовите још %d пријатеља</item>
+    </plurals>
+    <plurals name="get_free_money">
+        <item quantity="few">%d бесплатних новчића</item>
+        <item quantity="other">%d бесплатних новчића</item>
+        <item quantity="one">%d бесплатан новчић</item>
+    </plurals>
+    <string name="pincode_blocking_app">Закључај пријаву у апликацију</string>
+    <string name="pincode_blocking">Закључај</string>
+    <string name="pincode_reset">Ресетуј PIN код</string>
+    <string name="pincode_set">Постави PIN код</string>
+    <string name="pincode_change">Промени PIN код</string>
+    <string name="pincode_delete">Уклони PIN код</string>
+    <string name="pincode_input_label">Унос PIN кода</string>
+    <string name="pincode_check_label">Провера PIN кода</string>
+    <string name="pincode_change_label">Промена PIN кода</string>
+    <string name="pincode_delete_label">Уклањам PIN код</string>
+    <string name="pincode_turning_on">Укључи закључавање</string>
+    <string name="pincode_dont_match">PIN кодови се не подударају. Молимо, покушајте поново.
+    </string>
+    <string name="pincode_wrong">Неисправан PIN код</string>
+    <string name="pincode_input">Унесите PIN код</string>
+    <string name="pincode_input_previous">Унесите стари PIN код</string>
+    <string name="pincode_repeat">Поновите PIN код</string>
+    <string name="pincode_forget">Заборавили сте свој PIN код?</string>
+    <string name="pincode_auth_input">Треба да унесете корисничко име и лозинку.</string>
+    <string name="pincode_will_be_reset">Ако ауторизација буде успешна, сва подешавања апликације ће
+        бити ресетована.
+    </string>
+    <plurals name="pincode_interval">
+        <item quantity="few">%d мин.</item>
+        <item quantity="zero">одмах после затварања</item>
+        <item quantity="other">%d мин.</item>
+        <item quantity="one">%d мин.</item>
+    </plurals>
+    <string name="general_error">ГРЕШКА</string>
+    <string name="general_yes">Да</string>
+    <string name="general_no">Не</string>
+    <string name="general_cancel">Откажи</string>
+    <string name="general_delete_title">Избрисати</string>
+    <string name="general_dialog_loading">Учитавање</string>
+    <string name="general_fill_button">Попунити</string>
+    <string name="general_send_full">Послати</string>
+    <string name="general_dialog_retry">Поновити</string>
+    <string name="general_copy_title">Копирати</string>
+    <string name="general_back">Назад</string>
+    <string name="general_server_error">Грешка. Покушајте поново касније.</string>
+    <string name="general_non_exist_photo_error">Нисмо могли да наставимо јер је фотографија
+        обрисана.
+    </string>
+    <string name="general_data_error">Грешка. Молимо, покушајте опет.</string>
+    <string name="general_internet_off">Нема интерент конекције. Молимо, покушајте поново.</string>
+    <string name="general_msg_copied">Текст је копиран</string>
+    <string name="general_spinner_title">Изаберите радњу</string>
+    <string name="general_profile_error">Грешка приликом учитавања профила</string>
+    <string name="general_dbl_all">Сви</string>
+    <string name="general_dbl_unread">Непрочитано</string>
+    <string name="general_empty_code_confirmation">Унесите код за потврду</string>
+    <string name="general_email_success_confirmed">Адреса Ваше е-поште је успешно потврђена</string>
+    <string name="general_email_not_confirmed">Адреса е-поште није била потврђена</string>
+    <string name="time_yesterday">Јуче</string>
+    <string name="time_today">Данас</string>
+    <string name="general_send_button">Посл.</string>
+    <string name="general_boys">Момци</string>
+    <string name="general_girls">Девојке</string>
+    <string name="general_city">Град</string>
+    <string name="general_dating">Познанства</string>
+    <string name="general_likes">Ја се допадам</string>
+    <string name="general_photoblog">Фотофид</string>
+    <string name="general_sympathies">Свиђања</string>
+    <string name="general_sympathy">Свиђање</string>
+    <string name="general_delight">Дивљење</string>
+    <string name="general_mutual">Узајамно</string>
+    <string name="general_dialogs">Разговори</string>
+    <string name="general_visitors">Гости</string>
+    <string name="general_visitors_tab_views">прегледи</string>
+    <string name="general_profile">Профил</string>
+    <string name="general_settings">Подешавања</string>
+    <string name="auth_btn_vk">ВКонтакте</string>
+    <string name="auth_btn_fb">Facebook</string>
+    <string name="auth_retry">Покушај поново</string>
+    <string name="dating_header_girls">Девојке од %1$d до %2$d</string>
+    <string name="dating_header_guys">Момци од %1$d до %2$d</string>
+    <string name="dating_skip_button">Следећа</string>
+    <string name="message_too_long">Порука коју сте унели је превише дугачка. Број симбола не може
+        прећи %d.
+    </string>
+    <string name="chat_gift_in">Добили сте поклон.</string>
+    <string name="chat_gift_out">Поклон је послат.</string>
+    <string name="chat_like_in">Некоме се свиђате!</string>
+    <string name="chat_like_out">Послали сте свиђање.</string>
+    <string name="chat_mutual_in">Добили сте дивљење.</string>
+    <string name="chat_mutual_out">Послали сте дивљење</string>
+    <string name="chat_wish_in">Неко Вам је послао Тајну Жељу.</string>
+    <string name="chat_wish_out">Тајна Жеља је послата.</string>
+    <string name="chat_sexuality_in">Ваша сексуалност је оцењена.</string>
+    <string name="chat_sexuality_out">Оценили сте њихову сексуалност.</string>
+    <string name="chat_wink_in">Намигнули су вам ;)</string>
+    <string name="chat_wink_out">Послали сте миг.</string>
+    <string name="filter_search">Претрага</string>
+    <string name="filter_filter">Филтер</string>
+    <string name="filter_age_string">Од %1$d до %2$d</string>
+    <string name="filter_only_beautiful">Само атрактивни</string>
+    <string name="filter_extra_parameters">Напредна претрага</string>
+    <string name="filter_age">Изабери године</string>
+    <string name="filter_age_start_prefix">Од %s</string>
+    <string name="filter_age_end_prefix">до %s</string>
+    <string name="filter_constitution_template">Од %1$d до %2$d</string>
+    <string name="filter_cities_all">По свим градовима</string>
+    <string name="purchase_header_title">Стање:</string>
+    <string name="buying_header_title">Куповине</string>
+    <plurals name="buying_gift_you_need_coins">
+        <item quantity="few">Да бисте могли да пошаљете поклон, набавите још %d новчића</item>
+        <item quantity="other">Да бисте могли да пошаљете поклон, набавите још %d новчића</item>
+        <item quantity="one">Да бисте могли да пошаљете поклон, набавите још %d новчић</item>
+    </plurals>
+    <plurals name="buying_admiration_you_need_coins">
+        <item quantity="few">Да бисте послали дивљење, сакупите још %d новчића</item>
+        <item quantity="other">Да бисте послали дивљење, сакупите још %d новчића</item>
+        <item quantity="one">Да бисте послали дивљење, сакупите још %d новчића</item>
+    </plurals>
+    <plurals name="buying_unlock_likes_you_need_coins">
+        <item quantity="few">Како бисте могли да видите коме се свиђате, набавите још %d новчића
+        </item>
+        <item quantity="other">Како бисте могли да видите коме се свиђате, набавите још %d новчића
+        </item>
+        <item quantity="one">Како бисте могли да видите коме се свиђате, набавите још %d новчић
+        </item>
+    </plurals>
+    <plurals name="buying_leaders_you_need_coins">
+        <item quantity="few">Како би Вас сви видели, набавите још %d новчића</item>
+        <item quantity="other">Како би Вас сви видели, набавите још %d новчића</item>
+        <item quantity="one">Како би Вас сви видели, набавите још %d новчић</item>
+    </plurals>
+    <plurals name="buying_you_need_coins">
+        <item quantity="few">Имате %d новчића мање</item>
+        <item quantity="other">Имате %d новчића мање</item>
+        <item quantity="one">Имате %d новчић мање</item>
+    </plurals>
+    <string name="buying_default_message">Можете слати поклоне и дивљења за новчиће</string>
+    <string name="buying_money">Купи новчиће</string>
+    <string name="gifts_title">Одабери поклон</string>
+    <string name="profile_header_title">Мој профил</string>
+    <string name="album_add_photo_title">Додај фотографију</string>
+    <string name="profile_add_album">Изабрати из постојећих</string>
+    <string name="profile_add_camera">Направи слику</string>
+    <string name="profile_photo">Фотографије</string>
+    <string name="profile_form">О мени</string>
+    <string name="profile_gifts">Поклони</string>
+    <string name="profile_actions">Радње</string>
+    <string name="profile_empty_form">Корисник није попунио свој профил још увек.</string>
+    <string name="profile_ask_form">Замолити да се попуни профил</string>
+    <string name="edit_title">Измени</string>
+    <string name="edit_bg_photo">Фотографије за позадину</string>
+    <string name="edit_album">Албум</string>
+    <string name="edit_profile_photo">Замени фотографију</string>
+    <string name="edit_interests">интереси</string>
+    <string name="edit_selected">Одабрана</string>
+    <string name="edit_name">Име</string>
+    <string name="edit_age">Године</string>
+    <string name="edit_age_error">Да бисте користили апликацију, морате имати између %1$d и %2$d
+        година.
+    </string>
+    <string name="edit_status">Статус</string>
+    <string name="edit_set_as_main">Подеси као главну</string>
+    <string name="edit_delete">Обрисати</string>
+    <string name="edit_restore">Врати</string>
+    <string name="form_not_specified">Није наведено</string>
+    <string name="form_main">Главно</string>
+    <string name="form_physique">Стас</string>
+    <string name="form_social">Друштвено</string>
+    <string name="form_habits">Навике</string>
+    <string name="form_detail">Детаљи</string>
+    <plurals name="form_matches">
+        <item quantity="few">Имате %d подударања</item>
+        <item quantity="zero">Нема подударања</item>
+        <item quantity="other">Имате %d подударања</item>
+        <item quantity="one">Имате %d подударање</item>
+    </plurals>
+    <string name="settings_header_title">Подешавања</string>
+    <string name="settings_vibration">Вибрација</string>
+    <string name="settings_notifications_header">Обавештења</string>
+    <string name="settings_likes">Свиђања</string>
+    <string name="settings_mutual">Свиђам се</string>
+    <string name="settings_messages">Порука</string>
+    <string name="settings_guests">Гости</string>
+    <string name="settings_help">Помоћ</string>
+    <string name="settings_faq">Питања и одговори</string>
+    <string name="settings_faq_title">Можда је Ваш проблем већ решен. Молимо, погледајте «Питања и
+        одговоре»
+    </string>
+    <string name="settings_account">Налог</string>
+    <string name="settings_feedback">Остави повратну информацију</string>
+    <string name="settings_about">О програму</string>
+    <string name="settings_version">Верзија</string>
+    <string name="settings_copyright">Copyright 2010-</string>
+    <string name="settings_rights_reserved">Alcatel \nСва права заштићена.</string>
+    <string name="settings_extra">Још информације се може наћи на</string>
+    <string name="settings_logout">Одјави се</string>
+    <string name="settings_code_confirmation">Пошаљи код за потврду</string>
+    <string name="settings_email_was_confirmed">Већ потврђено</string>
+    <string name="settings_email_was_confirmed_textview_text">Ако сте већ потврдили адресу своје
+        е-поште преко интернета
+    </string>
+    <string name="settings_code_confirmation_hint">Код за потврду</string>
+    <string name="settings_logout_msg">Да ли заиста желите да се одјавите?</string>
+    <string name="settings_error_message">Обавештење о грешци</string>
+    <string name="settings_ask_developer">Питај ауторе</string>
+    <string name="settings_payment_problems">Проблеми у плаћању</string>
+    <string name="settings_cooperation">Допринос</string>
+    <string name="settings_feedback_success_msg">Хвала, порука је успешно послата.</string>
+    <string name="settings_switch_on">укљ.</string>
+    <string name="settings_switch_off">искљ.</string>
+    <string name="leaders_go_date">Хоћу овде!</string>
+    <string name="leaders_leader_now">Сада ће Вас сви видети!</string>
+    <string name="leaders_need_photo">Најпре морате одабрати фотографију!</string>
+    <plurals name="leaders_price">
+        <item quantity="few">Постави ме овде за %d новчића</item>
+        <item quantity="other">Постави ме овде %d новчића</item>
+        <item quantity="one">Постави ме овде за %d новчић</item>
+    </plurals>
+    <string name="photo_add_or">Фотографија је додата</string>
+    <string name="photo_add_error">Није успео покушај додавања фотографије. Покушај поново?</string>
+    <plurals name="photo">
+        <item quantity="few">%d фотографије</item>
+        <item quantity="zero">Нема фотографија</item>
+        <item quantity="other">%d фотографија</item>
+        <item quantity="one">%d фотографија</item>
+    </plurals>
+    <string name="general_edit_profile_message">Молимо Вас да попуните сва неопходна поља на
+        профилу
+    </string>
+    <string name="general_search_null_response_error">Ништа није пронађено. Покушајте да измените
+        филтер.
+    </string>
+    <string name="change_filters">Промени филтере</string>
+    <string name="reset_filter">Ресетуј</string>
+    <string name="general_sex">Пол</string>
+    <string name="general_girl">Женски</string>
+    <string name="general_boy">Мушки</string>
+    <string name="filter_city_fail">Нисмо пронашли градове који почињу на «%s»</string>
+    <string name="age_filter_man">Интересују Вас момци</string>
+    <string name="age_filter_girl">Интересују Вас девојке</string>
+    <string name="rate_popup_title">Молимо, оцените нашу апликацију!</string>
+    <string name="rate_popup_set_rate">Оцени</string>
+    <string name="rate_popup_later">Питајте поново касније</string>
+    <string name="rate_popup_cancel">Не, хвала</string>
+    <string name="rate_popup_error">Молимо, реците нам колико звездица заслужује наша апликација!
+    </string>
+    <string name="feedback_popup_title">Дали сте нам ниску оцену. Кажите нам шта Вам се није свиђало
+        у апликацији. Помозите нам да постанемо бољи. Хвала Вам!
+    </string>
+    <string name="settings_melody">Тон обавештења</string>
+    <string name="settings_loading_photo">Фотографије су већ учитане</string>
+    <string name="edit_refresh_status">Обнови статус</string>
+    <string name="ban_title">Бановани сте</string>
+    <string name="ban_title_forever">Приступ Вам је трајно забрањен.</string>
+    <string name="ban_title_until">Приступ Вам је забрањен до %s</string>
+    <string name="ban_complain">Пожали се на бановање</string>
+    <string name="general_ready">Готово</string>
+    <string name="buying_store_ok">Куповина је успешно завршена</string>
+    <string name="buying_store_fail">Ваша куповина није могла бити извршена.</string>
+    <string name="vip_privileges">VIP привилегије</string>
+    <string name="vip_rest">Претплаћени сте на VIP</string>
+    <string name="vip_invis">Режим Невидљив</string>
+    <string name="vip_black_list">Црна листа</string>
+    <string name="vip_profile_bg">Фотографија позадине</string>
+    <string name="vip_status">VIP</string>
+    <string name="black_list_title">Црна листа</string>
+    <string name="black_list_empty">Ваша црна лист је празна</string>
+    <string name="black_list_delete">Уклонити из црне листе</string>
+    <string name="vip_buy_vip">Куповина VIP-статуса</string>
+    <string name="vip_state_off">Ваш VIP-статус није активиран.</string>
+    <string name="vip_info_guest">Сазнајте ко је заинтересован за Вас - погледајте своје госте!
+    </string>
+    <string name="vip_info_invisible">Останите непримећени док посећујете туђе странице користећи
+        режим \"Невидљив\"
+    </string>
+    <string name="vip_info_message">Добијте више пажње - ваше поруке ће се издвајати на општој
+        позадини!
+    </string>
+    <string name="vip_info_blackList">Отарасите се непожељних уз помоћ \"Црне листе\"</string>
+    <string name="vip_info_vip">Уз VIP-статус ћете се истицати из гомиле у секцији \"Познанства\"
+        као и на свом профилу
+    </string>
+    <string name="buying_vip_status">Купи VIP-статус</string>
+    <string name="edit_my_city">Мој град</string>
+    <string name="settings_feedback_email">Оставите адресу своје е-поште да бисте добили одговор од
+        нас.
+    </string>
+    <string name="settings_invalid_email">Неважећа адреса е-поште</string>
+    <string name="chat_write_message">Написати поруку</string>
+    <string name="dating_message">Порука…</string>
+    <string name="buying_sympathies">Купи свиђања</string>
+    <string name="general_reconnect_social">Не можемо се повезати на друштвену мрежу. Молимо,
+        покушајте поново касније.
+    </string>
+    <string name="general_block">Закључати</string>
+    <string name="general_buying_disabled">У овом тренутку куповина није могућа</string>
+    <string name="ban_flood_detected">Веома често шаљете упите серверу. Сачекајте неколико тренутака
+        пре него што наставите.
+    </string>
+    <string name="general_maintenance">На серверу се обављају технички радови и Ваш захтев не може
+        бити обрађен. Молимо, покушајте поново касније.
+    </string>
+    <string name="virus_chat_btn">Добиј Свиђања</string>
+    <string name="profile_ask_sent">Захтев је послат.</string>
+    <string name="virus_error">Током једног дана пријатељ Вам може дати само 1 Свиђање! Молимо,
+        покушајте сутра поново!
+    </string>
+    <string name="popup_version_update">Ажурирај</string>
+    <string name="popup_version_cancel">Подсети ме касније</string>
+    <string name="general_version_not_supported">Ваша верзија апликације је застарела и више није
+        подржана. Молимо да је ажурирате.
+    </string>
+    <string name="default_price_format">Укупно: %2f USD</string>
+    <string name="default_price_format_extended">Укупно: %1$.2f %2$s</string>
+    <string name="leaders_pick_condition">Не можете одабрати фотографију чији је рејтинг нижи од
+        %d%%:
+    </string>
+    <string name="general_gift">Поклон</string>
+    <string name="user_actions_chat">Ћаскање</string>
+    <string name="profile_edit_age_ranges">Године морају бити у граници између 16 и 99. Молимо да
+        унесете тачан број и покушате поново.
+    </string>
+    <string name="wrong_password_format">Неисправан формат лозинке</string>
+    <string name="edit_value_error">Вредност море бити између %1$d и %2$d</string>
+    <string name="sign_in">Пријави се</string>
+    <string name="create_account">Направи налог</string>
+    <string name="email">Е-пошта</string>
+    <string name="password">Лозинка</string>
+    <string name="error_login_password">Неисправно корисничко име/лозинка</string>
+    <string name="recover_password">Опорави лозинку</string>
+    <string name="recovering_password">Опорављање лозинке</string>
+    <string name="send_password">Послати лозинку</string>
+    <string name="boy">момак</string>
+    <string name="girl">девојка</string>
+    <string name="start_communication">Започни ћаскање</string>
+    <string name="birthdate">ДР</string>
+    <string name="birthdate_confirm">Морате да наведете своје године како бисте могли да упознате
+        људе.
+    </string>
+    <string name="set_birthdate">Наведи године</string>
+    <string name="welcome_to_topface">Добродошли у Alcatel!</string>
+    <string name="im_boy">Ја сам момак</string>
+    <string name="im_girl">Ја сам девојка</string>
+    <string name="u_sex">Ваш пол</string>
+    <string name="incorrect_email">Неважећа адреса е-поште</string>
+    <string name="incorrect_login">Неважеће корисничко име</string>
+    <string name="incorrect_password">Неважећа лозинка</string>
+    <string name="empty_fields">Мисте попунили сва поља.</string>
+    <string name="email_already_registered">Жао нам је, ове адреса е-поште већ постоји.</string>
+    <string name="enter_email_from_registration">Унесите адресу е-поште коју сте навели приликом
+        регистрације.
+    </string>
+    <string name="default_photo_upload">Пренос фотографија</string>
+    <string name="default_photo_upload_error">Грешка у преносу</string>
+    <string name="default_photo_upload_complete">Пренос је завршен!</string>
+    <string name="general_error_try_again_later">Не можемо се повезати на Alcatel. Молимо, покушајте
+        поново касније.
+    </string>
+    <string name="search_city_by_name">Тражи по имену града</string>
+    <string name="gallery">Фото галерија</string>
+    <string name="no_photo_take_photo">Са вама се нико не може упознати! Направите фотографију или
+        одаберите постојећу из фото албума
+    </string>
+    <string name="photo_for_avatar">Фотографија је спремна за слање у Ваш профил! Ово ја Ваша прва
+        фотографија и она ће бити искоришћена као ваша профилна слика.
+    </string>
+    <string name="add_photo_before">Прво морате да додате фотографију</string>
+    <string name="change_email">Промени адресу е-поште</string>
+    <string name="send_confirmation_email">Послати потврду на е-пошту</string>
+    <string name="change_password">Промени лозинку</string>
+    <string name="password_changing">Промени лозинку</string>
+    <string name="save">Сачувати</string>
+    <string name="saving_in_progress">Чување…</string>
+    <string name="confirmation_successfully_sent">Потврда је послата на Вашу е-пошту</string>
+    <string name="email_successfully_confirmed">Адреса е-поште је успешно потврђена.</string>
+    <string name="email_not_confirmed">E-пошта није потврђена.</string>
+    <string name="email_already_confirmed">Већ потврђено</string>
+    <string name="password_confirmation_hint">Потврди лозинку</string>
+    <string name="password_hint">лозинка</string>
+    <string name="enter_new_password">Унесите нову лозинку</string>
+    <string name="enter_old_password">Унесите претходну лозинку</string>
+    <string name="enter_password_confirmation">Потврдите лозинку</string>
+    <string name="passwords_mismatched">Лозинке се не подударају</string>
+    <string name="old_password_mismatched">Неисправна стара лозинка</string>
+    <string name="passwords_matched">Нова и претходна лозинка се не подударају</string>
+    <string name="passwords_changed">Лозинка је промењена</string>
+    <string name="take_photo">Сликај се</string>
+    <string name="take_another_photo">Друга фотографија</string>
+    <string name="we_detect_your_city">Одредили смо ваш град као:</string>
+    <string name="reselect_city">Одаберите други град:</string>
+    <string name="choose_cool_photo">Одаберите своју најбољу фотографију и статус који одражава Ваше
+        расположење!
+    </string>
+    <string name="email_confirmed">адреса е-поште је потврђена!</string>
+    <string name="sympathy_sended">Свиђање је послато.</string>
+    <string name="general_photo_deleted">Ваша фотографија је уклоњена јер крши једно од правила.
+    </string>
+    <string name="general_change">Промени</string>
+    <string name="user_does_not_have_gifts">Овај корисник још нема поклоне, дајте му први и
+        приметиће Вас!
+    </string>
+    <string name="status_is_empty">Ваш статус је празан</string>
+    <string name="you_dont_have_gifts_yet">Још увек немате поклоне.</string>
+    <string name="buy_sympathies">Купи свиђања</string>
+    <string name="upload_photos">Учитај фотографије</string>
+    <string name="user_baned">Корисник је банован.</string>
+    <string name="general_choose_city">Изаберите свој град</string>
+    <string name="buy_mobile_payments">Други начини плаћања</string>
+    <string name="general_save_and_exit">Сачувај и одјави се</string>
+    <string name="general_set_password">Подесите лозинку пре одјављивања</string>
+    <string name="user_is_deleted">Корисник је избрисан.</string>
+    <string name="general_bookmarks">Омиљени</string>
+    <string name="general_fans">Обожаваоци</string>
+    <string name="settings_edit_profile">Измени профил</string>
+    <string name="general_bookmarks_delete">Уклони из омиљених</string>
+    <string name="general_bookmarks_add">Додај у омиљене</string>
+    <string name="buy_resources">Допуни</string>
+    <string name="user_is_banned">Корисник је банован.</string>
+    <string name="profile_empty_name">Поље за име не може бити празно.</string>
+    <string name="general_wrong_photo_upload">Ваша фотографија не одговара прописима. Покушајте да
+        направите још једну.
+    </string>
+    <string name="general_input_email">Унесите адресу Ваше е-поште</string>
+    <string name="cant_delete_fake_item">Ова порука још није послата, не можете је уклонити.
+        Покушајте поново касније.
+    </string>
+    <string name="vip_stop_ads">Само ћаскање, ништа друго. VIP корисници неће видети огласе!
+    </string>
+    <string name="friend_email_hint">Унесите адресу е-поште или број телефона Вашег пријатеља
+    </string>
+    <string name="general_add">Додати</string>
+    <string name="general_invite_friends">Позови пријатеље</string>
+    <string name="general_rest_contacts">Остало Вам је %d контаката</string>
+    <string name="invite_friends_title">Позови све пријатеље из свог телефонског именика у Alcatel
+    </string>
+    <string name="invalid_contacts">Неки контакти су били неисправни. Молимо, пошаљите исправне
+        контакте.
+    </string>
+    <plurals name="vip_status_period">
+        <item quantity="few">Добили сте VIP-статус на %d дана</item>
+        <item quantity="other">Добили сте VIP-статус на %d дана</item>
+        <item quantity="one">Добили сте VIP-статус на %d дан</item>
+    </plurals>
+    <plurals name="vip_status_period_btn">
+        <item quantity="few">Добијте Vip на %d дана</item>
+        <item quantity="other">Добијте Vip на %d дана</item>
+        <item quantity="one">Добијте Vip на %d дан</item>
+    </plurals>
+    <plurals name="invite_friends_plurals">
+        <item quantity="few">Позовите %1$d пријатеља да бисте добили VIP-статус на %2$d дана</item>
+        <item quantity="other">Позовите %1$d пријатеља да бисте добили VIP-статус на %2$d дана
+        </item>
+        <item quantity="one">Позовите %1$d пријатеља да бисте добили VIP-статус на %2$d дан</item>
+    </plurals>
+    <plurals name="get_vip_for_invites_plurals">
+        <item quantity="few">Добиј VIP бесплатно за %d позива</item>
+        <item quantity="other">Добиј VIP бесплатно за %d позива</item>
+        <item quantity="one">Добиј VIP бесплатно за %d позив</item>
+    </plurals>
+    <string name="buy_status_and_watch_your_fans">Купите VIP-статус и сазнајте ко Вас је додао у
+        омиљене.
+    </string>
+    <string name="add_bookmarks_to_be_connected">Додајте нове познанике овде и нећете изгубити везу
+        са њима.
+    </string>
+    <string name="nobody_chat_with_you_sympathies_will_help">Још Вам нико није писао. Свиђања ће Вам
+        помоћи да нађете саговорника
+    </string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">Пошаљите свиђања и добијте их заузврат.
+        Започните ћаскање одмах!
+    </string>
+    <string name="with_vip_find_your_visitors">Са VIP-статусом можете сазнати ко је посећивао на
+        Вашу страницу
+    </string>
+    <string name="on_avatar">Подесите као слику профила</string>
+    <string name="your_avatar">Слика профила</string>
+    <string name="avatar_set_successfully">Слика профила је успешно постављена</string>
+    <string name="incorrect_photo">Неподесна фотографија. Покушајте да поставите другу.</string>
+    <string name="incorrect_photo_format">Неподесан формат фотографије. Покушајте да поставите .jpg
+        или .png формат
+    </string>
+    <string name="incorrect_photo_size">Неодговарајућа величина фотографије</string>
+    <string name="input_contact_name">Унеси име контакта</string>
+    <string name="incorrect_locale">Ако желите да прочитамо Ваше критике, напишите је на руском или
+        енглеском језику.
+    </string>
+    <string name="complain_photo_header">Неодговарајућа фотографија</string>
+    <string name="complain_msg_header">Неодговарајућа порука</string>
+    <string name="complain_info_header">Неодговарајућа информација</string>
+    <string name="complain_type_porn">Порнографија</string>
+    <string name="complain_type_ero">Главна фотографија садржи еротски материјал</string>
+    <string name="complain_type_picture">Није слика</string>
+    <string name="complain_type_fake_user">Позната особа</string>
+    <string name="complain_type_spam_msg">Пословне понуде, непожељне поруке, огласи, везе,
+        телефони
+    </string>
+    <string name="complain_type_spam_profile">Поља \"статус\" и/или \"о мени\" садрже пословну
+        понуду
+    </string>
+    <string name="complain_type_swearing_profile">Поља \"статус\", \"о мени\" садрже увредљиво
+        изражавање, везе ка друштвеним мрежама
+    </string>
+    <string name="complain_type_fake_data">Име, пол, године, или фотографија се не слажу</string>
+    <string name="complain_description">Реците нам нешто више о разлогу жалбе.</string>
+    <string name="general_complain_sended">Ваша жалба је послата, хвала Вам на помоћи!</string>
+    <string name="general_complain">Жалба</string>
+    <string name="general_msg">Порука</string>
+    <string name="notifications">Обавештења</string>
+    <string name="general_no_notifications">На жалост, обавештења на вашем уређају нису доступна
+    </string>
+    <string name="black_list_add_short">На црну листу</string>
+    <string name="confirm_email_for_dating">Ми смо против непожељних порука. Потврдите своју адресу
+        е-поште како бисте упознали људе у Alcatel!
+    </string>
+    <string name="confirm_email_for_dating_title">Ми смо против непожељних порука</string>
+    <string name="confirm_email_for_dating_desc">Потврдите своју адресу е-поште како бисте могли да
+        упознате људе на Alcatel!
+    </string>
+    <string name="send_confirm_link">Пошаљи линк за потврду</string>
+    <string name="complain_type_swearing_msg">Увредљиво понашање, неправилно изражавање, претње
+    </string>
+    <string name="general_exit">Изаћи</string>
+    <string name="likes_can_help_you">Свиђања Вам помажу да упознате људе</string>
+    <string name="general_get_dating">Упознати</string>
+    <string name="settings_select_language">Изабери језик апликације</string>
+    <string name="settings_select_preload_photo_type">Изаберите када ће предучитавање фотографија
+        бити укључено
+    </string>
+    <string name="restart_to_change_locale">Да бисте променили језик, апликација мора бити поново
+        стартована
+    </string>
+    <string name="locale_changing">Промени језик</string>
+    <plurals name="you_were_liked">
+        <item quantity="few">Свидели сте се %d особама</item>
+        <item quantity="other">Свидели сте се %d људи</item>
+        <item quantity="one">Свидели сте се %d особи</item>
+    </plurals>
+    <string name="likes_buy_vip">Да бисте сазнали коме се сада свиђате, активирајте VIP-статус
+    </string>
+    <string name="or">или</string>
+    <string name="settings_delete_account">Избриши свој налог</string>
+    <string name="chat_block_not_mutual">Можете започети ћаскање само са корисником који Вам је
+        послао свиђање или ако имате VIP-статус
+    </string>
+    <string name="add_to_favorite_block_not_vip">Само VIP корисници могу да додају Омиљене са Екрана
+        за састанке
+    </string>
+    <string name="delete_account_are_you_sure">Да ли сте сигурни?</string>
+    <string name="delete">Обрисати</string>
+    <string name="delete_account_warning">Упозорење! Покушавате да обришете свој Alcatel налог!
+    </string>
+    <string name="delete_account_error">На жалост, Ваш покушај уклањања налога није успео. Молимо,
+        покушајте поново.
+    </string>
+    <string name="delete_account_will_be_restored_are_you_sure">Покушавате да се пријавите на налог
+        који је обрисан. Налог ће бити обновљен.
+    </string>
+    <string name="restore">Вратити</string>
+    <string name="admiration_sended">Дивљење је послато</string>
+    <string name="skip">Прескочи</string>
+    <string name="chat">Ћаскање</string>
+    <plurals name="number_of_sympathies">
+        <item quantity="few">%d свиђања</item>
+        <item quantity="zero">%d свиђања</item>
+        <item quantity="other">%d свиђања</item>
+        <item quantity="one">%d свиђање</item>
+    </plurals>
+    <plurals name="popup_vip_messages">
+        <item quantity="few">Имате %d нове брзодоставне поруке</item>
+        <item quantity="other">Имате %d нових брзодоставних порука</item>
+        <item quantity="one">Имате %d нову брзодоставну поруку</item>
+    </plurals>
+    <plurals name="popup_vip_visitors">
+        <item quantity="few">Имате %d посетиоца</item>
+        <item quantity="other">Имате %d посетиоца</item>
+        <item quantity="one">Имате %d посетиоца</item>
+    </plurals>
+    <string name="general_attention">Важно!</string>
+    <string name="general_delete_messages">Избрисати поруке</string>
+    <string name="skip_all">Прескочи све</string>
+    <string name="settings_feedback_transaction_number">Број поруџбине</string>
+    <string name="settings_feedback_transaction_link">Где могу наћи број поруџбине?</string>
+    <string name="general_logout_error">Дошло је до грешке приликом одјављивања. Молимо, покушајте
+        поново.
+    </string>
+    <string name="auth_btn_ok">Одноклассники</string>
+    <string name="auth_btn_tf">Alcatel налог</string>
+    <string name="birthday">Датум рођења</string>
+    <string name="other_auth">Пријава преко других сервиса</string>
+    <string name="settings_feedback_transaction_number_hint">Унесите број поруџбине</string>
+    <string name="delete_visitors">Обришите посетиоце</string>
+    <string name="delete_admirations">Обришите дивљења</string>
+    <string name="general_admirations">Дивљења</string>
+    <plurals name="popup_vip_admirations">
+        <item quantity="few">Имате %d дивљења</item>
+        <item quantity="other">Имате %d дивљења</item>
+        <item quantity="one">Имате %d дивљење</item>
+    </plurals>
+    <string name="select_all">Изабери све</string>
+    <string name="silent_ringtone">Тихо</string>
+    <plurals name="selected">
+        <item quantity="few">%d изабрана</item>
+        <item quantity="other">%d изабрано</item>
+        <item quantity="one">%d изабран</item>
+    </plurals>
+    <string name="photo_is_uploading">Додавање слике</string>
+    <string name="default_ringtone">Подразумевано</string>
+    <string name="user_deleted_or_banned">Корисник је банован или избрисан.</string>
+    <string name="locking_popup_button_answer">Одговорите на Свиђања</string>
+    <string name="locking_menu_message">Важно! Приступ неким страницама апликације је ограничен. Да
+        бисте добили пун приступ, одговорите на сва долазна Свиђања или набавите VIP-статус.
+    </string>
+    <string name="current_city">Тренутни град</string>
+    <string name="general_bonus">Бонус</string>
+    <plurals name="notification_many_messages">
+        <item quantity="few">%d нове поруке</item>
+        <item quantity="other">%d нових порука</item>
+        <item quantity="one">%d нова порука</item>
+    </plurals>
+    <string name="coins_subscription">Претплата на новчиће</string>
+    <plurals name="general_some_more">
+        <item quantity="few">и %d</item>
+        <item quantity="other">и %d</item>
+        <item quantity="one">и %d</item>
+    </plurals>
+    <string name="subscriptions_can_be_changed">Сада сте се претплатили. Можете променити подешавања
+        претплате на Google Play.
+    </string>
+    <string name="people_nearby">Људи у близини</string>
+    <string name="nobody_nearby">Ни живе душе у близини!</string>
+    <string name="general_distance_km">%.02f км</string>
+    <string name="general_distance_m">%d м</string>
+    <string name="cannot_get_geo">Локација није могла бити одређена</string>
+    <string name="press_back_more_to_close_app">Да бисте изашли из Alcatel, притисните дугме
+        \'\'назад\'\' још једном.
+    </string>
+    <string name="waiting_for_load">Чекам на учитавање…</string>
+    <string name="loading_photo_percent">Преношење фотографија %d%%</string>
+    <string name="profile_update_error">Грешка у ажурирању датума</string>
+    <string name="retry_cancel_editing">Дошло је до грешке на интернет вези у току слања података на
+        сервер. Изађите без чувања или покушајте поново?
+    </string>
+    <string name="retry_cancel_editing_bad_value">Унели сте нетачне податке. Покушај поново или се
+        одјави без чувања?
+    </string>
+    <string name="user_does_not_exist">Корисник није пронађен.</string>
+    <string name="feedback_subject_ban">Жалба у вези неправедног бановања</string>
+    <string name="settings_led">LED обавештења</string>
+    <string name="open_market_error">Страница апликације се не може отворити</string>
+    <string name="billing_item_already_owned">Ваша куповина се обрађује, молимо сачекајте.</string>
+    <string name="dialog">Преписка</string>
+    <string name="reply">Одговори</string>
+    <string name="measurement_unit_weight">кг</string>
+    <string name="measurement_unit_height">цм</string>
+    <string name="maximum_number_of_users">Изабрали сте максималан број корисника.</string>
+    <string name="logout_if_email_already_registred">Већ постоји корисник са овом адресом е-поште.
+        Ако је ово Ваш адреса, морате се одјавити са тренутног налога и пријавити се на %s налог.
+    </string>
+    <string name="recover_password_instructions">На адресу Ваше е-поште је послата порука са
+        инструкцијама за опоравак лозинке.
+    </string>
+    <string name="email_changing">Промена адресе е-поште</string>
+    <string name="hint_faces_filter">Промените параметре претраге и упознајте нове, занимљиве
+        људе.
+    </string>
+    <string name="hint_faces_buy_like">Што више свиђања имате, чешће ћете бити оцењивани. Немојте да
+        заборавите да допуните Свиђања.
+    </string>
+    <string name="hint_myprofile_buy_vip">Набавите VIP-статус и уживајте у неограниченој
+        комуникацији
+    </string>
+    <string name="pull_to_refresh_pull_label">Повуците да бисте освежили…</string>
+    <string name="pull_to_refresh_release_label">Пустите да бисте освежили…</string>
+    <string name="messaging_block_buy_vip">Да бисте наставили разговор, треба да имате
+        VIP\u2011статус
+    </string>
+    <string name="pull_to_refresh_refreshing_label">Учитавање…</string>
+    <string name="user_added_to_black_list">Корисник је додат на Црну листу.</string>
+    <string name="user_deleted_from_black_list">Корисник је уклоњен са Црне листе.</string>
+    <string name="user_added_to_bookmark">Корисник је додат у Омиљене.</string>
+    <string name="user_deleted_from_bookmark">Корисник је уклоњен из Омиљених.</string>
+    <string name="preload_photo_type_wifi_3g">WiFi и 3G</string>
+    <string name="preload_photo_type_wifi">Само WiFi</string>
+    <string name="preload_photo_type_always_on">Увек уључено</string>
+    <string name="preload_photo_type_preload_off">Искључено</string>
+    <string name="wrong_time_popup_text">Није било могуће успоставити безбедну везу.\nМожда су
+        подешавања датума и времена на Вашем уређају неисправна?
+    </string>
+    <string name="wrong_time_popup_button">Отвори подешавања</string>
+    <string name="enter_text">Унесите текст</string>
+    <string name="send_feedback">Послати поруку</string>
+    <string name="get_vip_free">Добиј бесплатан VIP-статус</string>
+    <string name="buy_more_sympathies">\"Сакупите више свиђања, постаните популарнији\"</string>
+    <string name="transaction_code_help">Ако нам пошаљете код трансакције, то ће нам помоћи да
+        комплетирамо Ваш захтев убрзавајући процес. Додатне информације о поруџбини се могу наћи
+        кроз %s.
+    </string>
+    <string name="google_wallet">Google Wallet</string>
+    <string name="google_service_general_title">Подсетници нису доступни</string>
+    <string name="google_service_disabled_title">Сервис Google Play је онемогућен. Морате га
+        омогућити како бисте добијали обавештења.
+    </string>
+    <string name="google_service_disabled_button">Омогућити</string>
+    <string name="google_service_missing_title">Сервис Google Play није инсталиран. Морате га
+        инсталирати како бисте добијали обавештења.
+    </string>
+    <string name="google_service_missing_button">Инсталирати</string>
+    <string name="google_service_version_update_required_title">Имате стару верзију сервиса Google
+        Play. Молимо, ажурирајте Google Play како би oбавештења радила исправно.
+    </string>
+    <string name="google_service_version_update_required_button">Ажурирати</string>
+    <string name="google_invalid_account_title">Проверите свој Google налог или контактирајте Google
+        техничку подршку.
+    </string>
+    <string name="google_sign_in_account_title">Ваш Google налог није додат. Морате се пријавити
+        како бисте примали обавештења.
+    </string>
+    <string name="google_sign_in_account_button">Пријавити се</string>
+    <string name="google_unavailable_services_title">На жалост, обавештења нису омогућена на Вашем
+        уређају.
+    </string>
+    <string name="receive_message_notification">Добијте обавештење\nо новој поруци</string>
+    <string name="receive_mutual_notification">Добијте обавештење\nо новим узајамним свиђањима
+    </string>
+    <string name="receive_sympathy_notification">Добијте обавештење\nо новом свиђању</string>
+    <string name="receive_rate_notification">обриши</string>
+    <string name="receive_guest_notification">Добијте обавештење\nо новом госту</string>
+    <string name="on_phone">На телефон</string>
+    <string name="on_mail">На е-пошту</string>
+    <string name="add_leader_hint">Ваш поздрав…</string>
+    <string name="more">још</string>
+    <string name="premium_for_invitations">Да бисте добили VIP-статус на један дан, мораћете да
+        сакупите 5 регистрација.
+    </string>
+    <string name="premium_for_invitations_current_status">Већ сте сакупили:\nInvitations:
+        %1$d\nRegistrations: %2$d
+    </string>
+    <string name="no_contacts_available">Уређај не садржи контакте који би могли бити приказани
+    </string>
+    <string name="sms_invite_title">Добиј VIP на један дан!</string>
+    <string name="status_can_send_confirmation">Позови</string>
+    <string name="status_invilid_phone_number">Број је неважећи</string>
+    <string name="status_confirmation_was_sent">Чекање на регистрацију</string>
+    <string name="status_user_registered">Већ регистрован</string>
+    <string name="balance">Стање (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
+    <string name="trial_vip_text">Бесплатан VIP\nна 7 дана</string>
+    <string name="trial_vip_button_text">Набави VIP</string>
+    <string name="settings_check_vip_title">Провери да ли је VIP-статус активан</string>
+    <string name="settings_check_vip_cell">Провери VIP-статус</string>
+    <string name="settings_check_vip_alert">Ваш захтев за проверу VIP-статуса је послат.</string>
+    <string name="novice_sympathy">Шаљите свиђања само онима који\nВас заиста привлаче.\nМожда ћете
+        наћи неког посебног!
+    </string>
+    <string name="novice_sympathies_bonus">Добијате %1$d свиђања на\nпоклон! То значи да ће Вам %2$d
+        људи,\nдати своје свиђање и то заиста мислити.
+    </string>
+</resources>

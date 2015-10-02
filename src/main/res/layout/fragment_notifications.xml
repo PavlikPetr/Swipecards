@@ -21,17 +21,23 @@
             android:id="@+id/notification_messages"
             layout="@layout/item_edit_form_select" />
 
-        <include
-            android:id="@+id/notification_guests"
-            layout="@layout/item_edit_form_select" />
+    <CheckBox
+        android:tag="tvTitle"
+        style="@style/WhiteListItem.Underline"
+        android:id="@+id/notification_vibro"
+        android:drawableLeft="@null"
+        android:drawableRight="@drawable/selector_checkbox"
+        android:button="@null"
+        android:checked="false" />
 
-        <CheckBox
-            android:id="@+id/notification_vibro"
-            style="@style/WhiteListItem.Underline"
-            android:checked="false"
-            android:drawableLeft="@null"
-            android:drawableRight="@drawable/selector_checkbox"
-            android:tag="tvTitle" />
+    <CheckBox
+        android:tag="tvTitle"
+        style="@style/WhiteListItem.Underline"
+        android:id="@+id/notification_led"
+        android:drawableLeft="@null"
+        android:drawableRight="@drawable/selector_checkbox"
+        android:button="@null"
+        android:checked="false" />
 
         <CheckBox
             android:id="@+id/notification_led"

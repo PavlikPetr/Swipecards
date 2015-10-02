@@ -17,6 +17,8 @@ public class PopupManager {
     private BaseFragmentActivity mActivity;
 
     private AbstractDialogFragment mCurrentDialog;
+    private OnNextActionListener mOldVersionPopupNextActionListener;
+    private OnNextActionListener mRatePopupNextActionListener;
 
     public PopupManager(BaseFragmentActivity activity) {
         mActivity = activity;
@@ -30,7 +32,7 @@ public class PopupManager {
 
             @Override
             public void callOnUi() {
-                Utils.startOldVersionPopup(mActivity);
+                Utils.startOldVersionPopup(mActivity, mOldVersionPopupNextActionListener);
             }
 
             @Override
@@ -50,7 +52,7 @@ public class PopupManager {
 
             @Override
             public void setStartActionCallback(OnNextActionListener startActionCallback) {
-
+                mOldVersionPopupNextActionListener = startActionCallback;
             }
         };
     }
@@ -112,7 +114,7 @@ public class PopupManager {
 
             @Override
             public void setStartActionCallback(OnNextActionListener startActionCallback) {
-
+                mRatePopupNextActionListener = startActionCallback;
             }
         };
     }
@@ -124,6 +126,9 @@ public class PopupManager {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 mCurrentDialog = null;
+                if (mRatePopupNextActionListener != null) {
+                    mRatePopupNextActionListener.onNextAction();
+                }
             }
         });
         mCurrentDialog = rateAppDialog;

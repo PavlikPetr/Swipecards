@@ -30,7 +30,9 @@ import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.GridViewWithHeaderAndFooter;
+import com.topface.topface.ui.IBackPressedListener;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
+import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
@@ -159,6 +161,9 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        if (getActivity() instanceof TrackedFragmentActivity) {
+            ((TrackedFragmentActivity) getActivity()).setBackPressedListener(this);
+        }
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
         ButterKnife.bind(this, root);
         mGridFooterView = createGridViewFooter();
@@ -345,5 +350,17 @@ public class ProfilePhotoFragment extends ProfileInnerFragment {
     @OnClick(R.id.btnCancel)
     protected void cancelClick() {
         mViewFlipper.setDisplayedChild(0);
+            }
+        }
+
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (mViewFlipper != null && mViewFlipper.getDisplayedChild() == 1) {
+            mViewFlipper.setDisplayedChild(0);
+            return true;
+        }
+        return false;
     }
 }

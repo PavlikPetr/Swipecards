@@ -58,7 +58,7 @@ abstract public class ApiHandler extends Handler {
                     fail(result, response);
                     Context context = getContext();
                     if (context instanceof Activity) {
-                        Utils.startOldVersionPopup((Activity) context, false);
+                        Utils.startOldVersionPopup((Activity) context, false, null);
                     }
                 } else if (result != ErrorCodes.RESULT_OK) {
                     fail(result, response);

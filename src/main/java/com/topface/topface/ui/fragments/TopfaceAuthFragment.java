@@ -331,6 +331,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
             this.mEye = imageButton;
             this.mPass = editText;
             mPasswordMethod = new PasswordTransformationMethod();
+            mPass.setTransformationMethod(mPasswordMethod);
         }
 
         @Override

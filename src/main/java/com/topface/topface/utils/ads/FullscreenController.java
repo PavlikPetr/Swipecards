@@ -17,6 +17,7 @@ import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AppodealProvider;
 import com.topface.topface.data.Banner;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.DataApiHandler;
@@ -47,6 +48,7 @@ public class FullscreenController {
     private static final String ADMOB_INTERSTITIAL_START_APP_ID = "ca-app-pub-9530442067223936/3776010801";
     private static final String BANNER_APPODEAL_FULLSCREEN = "APPODEAL_FULLSCREEN";
     private static boolean isFullScreenBannerVisible = false;
+    private final Options mOptions;
     private Activity mActivity;
 
     private class FullscreenStartAction implements IStartAction {
@@ -99,8 +101,9 @@ public class FullscreenController {
         }
     }
 
-    public FullscreenController(Activity activity) {
+    public FullscreenController(Activity activity, Options options) {
         mActivity = activity;
+        mOptions = options;
     }
 
     private void requestFallbackFullscreen() {
@@ -129,7 +132,10 @@ public class FullscreenController {
             addLastFullscreenShowedTime();
             return false;
         } else {
-            return Math.abs(currentTime - lastCall) > DateUtils.DAY_IN_MILLISECONDS;
+            return Math.abs(currentTime - lastCall) >
+                    (mOptions != null
+                            ? 1000 * mOptions.fullscreenInterval
+                            : DateUtils.DAY_IN_MILLISECONDS);
         }
     }
 
