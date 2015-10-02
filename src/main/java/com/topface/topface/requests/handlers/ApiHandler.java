@@ -58,8 +58,8 @@ abstract public class ApiHandler extends Handler {
                 } else if (response.isCodeEqual(ErrorCodes.CODE_OLD_APPLICATION_VERSION)) {
                     fail(result, response);
                     Context context = getContext();
-                    if (context instanceof BaseFragmentActivity) {
-                        Utils.startOldVersionPopup((BaseFragmentActivity) context, false);
+                    if (context instanceof Activity) {
+                        Utils.startOldVersionPopup((Activity) context, false, null);
                     }
                 } else if (result != ErrorCodes.RESULT_OK) {
                     fail(result, response);

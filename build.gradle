@@ -90,7 +90,7 @@ android {
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappandroidnokia\"";
         }*/
         blueStacks {
-            applicationId "com.topface.topface.bluestacks"
+            applicationId "com.topface.spark.bst"
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappbluestack\"";
             buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.BLUE_STACKS";
             buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",

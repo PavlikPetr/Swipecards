@@ -26,7 +26,7 @@
     <string name="filter_select_city">Stadt auswählen</string>
     <string name="edit_block_photo">Fotos</string>
     <string name="dashbrd_popup_rating">Gefällt unsere Anwendung? Erhöhen Sie unser Rating! Je höher
-        das Rating ist, desto mehr interessante Leute treffen Sie in Topface
+        das Rating ist, desto mehr interessante Leute treffen Sie in Alcatel
     </string>
     <string name="dashbrd_popup_title">Rating</string>
     <string name="dashbrd_popup_cancel">Nicht fragen mehr</string>
@@ -34,7 +34,7 @@
     <string name="dashbrd_popup_later">Später fragen</string>
     <string name="buying_store_connect">Verbindung mit iTunes Store</string>
     <string name="buying_store_purchase">Verarbeitung der Kauf in iTunes Store</string>
-    <string name="buying_tf_ack_sending">Sende die Informationen über den Kauf in Topface</string>
+    <string name="buying_tf_ack_sending">Sende die Informationen über den Kauf in Alcatel</string>
     <string name="ok_label">Odnoklassniki</string>
     <string name="autorefill">Autorefill</string>
     <string name="coins">Coins</string>
@@ -49,7 +49,7 @@
     <string name="general_bookmarks_is_deleted">Nutzer wurde aus Favoriten entfernt</string>
     <string name="general_blacklist_is_deleted">Der Nutzer ist aus der schwarzen Liste gelöscht
     </string>
-    <string name="invite_friends_title_short">Alle Freunde in Topface einladen</string>
+    <string name="invite_friends_title_short">Alle Freunde in Alcatel einladen</string>
     <string name="general_bookmarks_add_short">Zu Favoriten</string>
     <string name="general_complaint">Melden</string>
     <string name="general_type_complain">Meldung Betreff</string>
@@ -275,7 +275,7 @@
     <string name="settings_about">Über das Programm</string>
     <string name="settings_version">Version</string>
     <string name="settings_copyright">Copyright 2010-</string>
-    <string name="settings_rights_reserved">Topface \nAlle Rechte vorbehalten</string>
+    <string name="settings_rights_reserved">Alcatel \nAlle Rechte vorbehalten</string>
     <string name="settings_extra">Ausführliche Information finden Sie auf</string>
     <string name="settings_logout">Abmelden</string>
     <string name="settings_logout_msg">Wollen Sie wirklich abmelden?</string>
@@ -406,7 +406,7 @@
     <string name="girl">Frau</string>
     <string name="start_communication">Kommunikation anfangen</string>
     <string name="birthdate">Geburtsdatum</string>
-    <string name="welcome_to_topface">Herzlich willkommen in Topface!</string>
+    <string name="welcome_to_topface">Herzlich willkommen in Alcatel!</string>
     <string name="incorrect_email">E-Mail ist falsch</string>
     <string name="incorrect_login">Login ist falsch</string>
     <string name="incorrect_password">Passwort ist falsch</string>
@@ -419,7 +419,7 @@
     <string name="default_photo_upload">Foto hochladen</string>
     <string name="default_photo_upload_error">Fehler</string>
     <string name="default_photo_upload_complete">Download abgeschlossen!</string>
-    <string name="general_error_try_again_later">Es gibt keine Verbindung mit Topface. Versuchen Sie
+    <string name="general_error_try_again_later">Es gibt keine Verbindung mit Alcatel. Versuchen Sie
         später
     </string>
     <string name="search_city_by_name">Stadtsuche nach Namen</string>
@@ -490,7 +490,7 @@
     <string name="general_add">Hinzufügen</string>
     <string name="general_invite_friends">Laden Sie Freunde ein</string>
     <string name="general_rest_contacts">Es bleibt noch %d Kontakte</string>
-    <string name="invite_friends_title">Alle Freunde aus dem Telefonbuch in Topface einladen
+    <string name="invite_friends_title">Alle Freunde aus dem Telefonbuch in Alcatel einladen
     </string>
     <string name="invalid_contacts">Einige von Kontakten waren unkorrekt. Senden Sie bitte korrekte
         Kontakte
@@ -573,7 +573,7 @@
     </string>
     <string name="black_list_add_short">In die schwarze Liste</string>
     <string name="confirm_email_for_dating">Wir sind gegen Spam. Bestätigen Sie Ihre E-Mail-Adresse,
-        um in Topface sich kennen zu lernen!
+        um in Alcatel sich kennen zu lernen!
     </string>
     <string name="send_confirm_link">Link für die Bestätigung senden</string>
     <string name="complain_type_swearing_msg">Grobheit, Bedrohung, Fluhen</string>
@@ -599,7 +599,7 @@
     </string>
     <string name="delete_account_are_you_sure">Sind Sie sicher?</string>
     <string name="delete">Löschen</string>
-    <string name="delete_account_warning">Achtung! Sie versuchen Ihren Profil in Topface zu
+    <string name="delete_account_warning">Achtung! Sie versuchen Ihren Profil in Alcatel zu
         löschen.
     </string>
     <string name="delete_account_error">Leider, wurde Ihr Account nicht gelöscht. Sie können noch
@@ -670,7 +670,7 @@
     <string name="general_distance_km">%.02f km</string>
     <string name="general_distance_m">%d m</string>
     <string name="cannot_get_geo">Es ist misslungen, die Lage festzustellen</string>
-    <string name="press_back_more_to_close_app">Klicken Sie noch einmal, um Topface zu verlassen
+    <string name="press_back_more_to_close_app">Klicken Sie noch einmal, um Alcatel zu verlassen
     </string>
     <string name="waiting_for_load">Warten auf Download…</string>
     <string name="loading_photo_percent">Foto wird hochgeladen %d%%</string>

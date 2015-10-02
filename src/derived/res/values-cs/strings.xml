@@ -28,7 +28,7 @@
     <string name="filter_select_city">Zvolit město</string>
     <string name="edit_block_photo">Fotografie</string>
     <string name="dashbrd_popup_rating">Líbí se naše aplikace? Pomozte zvednout náš raiting! Čím
-        vyšší je rating, tím více zajímavých lidí potkáte v Topface
+        vyšší je rating, tím více zajímavých lidí potkáte v Alcatel
     </string>
     <string name="dashbrd_popup_title">Raiting</string>
     <string name="dashbrd_popup_cancel">Příště se neptat</string>
@@ -36,7 +36,7 @@
     <string name="dashbrd_popup_later">Zeptat se později</string>
     <string name="buying_store_connect">Požadavek v iTunes Store</string>
     <string name="buying_store_purchase">Nakupuji v iTunes Store</string>
-    <string name="buying_tf_ack_sending">Odesílám informaci o nákupu v Topface</string>
+    <string name="buying_tf_ack_sending">Odesílám informaci o nákupu v Alcatel</string>
     <string name="ok_label">Spolužáci</string>
     <string name="autorefill">Automatické rozšíření</string>
     <string name="coins">Mince</string>
@@ -49,7 +49,7 @@
     <string name="locking_screen_advice2">Zbavte se všech omezení</string>
     <string name="general_bookmarks_is_deleted">Uživatel byl odstraněn z oblíbených</string>
     <string name="general_blacklist_is_deleted">Uživatel byl odstraněn z černé listiny</string>
-    <string name="invite_friends_title_short">Pozvat všechny přátele na Topface</string>
+    <string name="invite_friends_title_short">Pozvat všechny přátele na Alcatel</string>
     <string name="general_bookmarks_add_short">Přidat k oblíbeným</string>
     <string name="general_complaint">Stěžovat se</string>
     <string name="general_type_complain">Téma stížnosti</string>
@@ -265,7 +265,7 @@
     <string name="settings_about">O programu</string>
     <string name="settings_version">Verze</string>
     <string name="settings_copyright">Autorská práva 2010-</string>
-    <string name="settings_rights_reserved">Topface \nVeškerá práva jsou vyhrazena.</string>
+    <string name="settings_rights_reserved">Alcatel \nVeškerá práva jsou vyhrazena.</string>
     <string name="settings_extra">Více informací naleztnete na</string>
     <string name="settings_logout">Odhlásit se</string>
     <string name="settings_code_confirmation">Odeslat potvrzující kód</string>
@@ -401,7 +401,7 @@
     <string name="birthdate_confirm">Uveďte prosím váš věk, jinak nemáte možnost se seznámit
     </string>
     <string name="set_birthdate">Uvést věk</string>
-    <string name="welcome_to_topface">Vítáme Vás na Topface!</string>
+    <string name="welcome_to_topface">Vítáme Vás na Alcatel!</string>
     <string name="incorrect_email">Je zadan chybný e-mail</string>
     <string name="incorrect_login">Chybně zadané uživatelské jména</string>
     <string name="incorrect_password">Chybně zadané heslo</string>
@@ -412,7 +412,7 @@
     <string name="default_photo_upload">Nahrání fotky</string>
     <string name="default_photo_upload_error">Chyba při načítání</string>
     <string name="default_photo_upload_complete">Načítání je dokončeno</string>
-    <string name="general_error_try_again_later">Nelze se připojit k Topface. Zkuste to později.
+    <string name="general_error_try_again_later">Nelze se připojit k Alcatel. Zkuste to později.
     </string>
     <string name="search_city_by_name">Vyhledávání města dle názvu</string>
     <string name="gallery">Galerie</string>
@@ -488,7 +488,7 @@
     <string name="general_add">Přidat</string>
     <string name="general_invite_friends">Pozvěte přátele</string>
     <string name="general_rest_contacts">Zbylo Vám %d kontaktů</string>
-    <string name="invite_friends_title">Pozvat všechny přátele z telefonního seznamu na Topface
+    <string name="invite_friends_title">Pozvat všechny přátele z telefonního seznamu na Alcatel
     </string>
     <string name="invalid_contacts">Některé z kontaktů byly chybné. Prosím, zadejte správné
         kontakty
@@ -566,10 +566,10 @@
     </string>
     <string name="black_list_add_short">Na černou listinu</string>
     <string name="confirm_email_for_dating">Jsme proti spamu. Potvrďte svou emailovou adresu pro
-        seznámení na Topface!
+        seznámení na Alcatel!
     </string>
     <string name="confirm_email_for_dating_title">Nesouhlasíme se spamy</string>
-    <string name="confirm_email_for_dating_desc">Abyste se mohli seznamovat na Topface, potvrďte
+    <string name="confirm_email_for_dating_desc">Abyste se mohli seznamovat na Alcatel, potvrďte
         svou e-mailovou adresu
     </string>
     <string name="send_confirm_link">Pro potvrzení odeslat odkaz</string>
@@ -601,7 +601,7 @@
     </string>
     <string name="delete_account_are_you_sure">Jste si jistí?</string>
     <string name="delete">Odstranit</string>
-    <string name="delete_account_warning">Pozor! Pokoušíte se smazat svůj profil na Topface.
+    <string name="delete_account_warning">Pozor! Pokoušíte se smazat svůj profil na Alcatel.
     </string>
     <string name="delete_account_error">Bohužel se odstranění Vašého účtu nezdařilo. Můžete opakovat
         ještě jednou.
@@ -644,7 +644,7 @@
     <string name="general_distance_km">%.02f km</string>
     <string name="general_distance_m">%d m</string>
     <string name="cannot_get_geo">Nepodařilo se určit Vaši polohu</string>
-    <string name="press_back_more_to_close_app">Abyste se mohli odhlásit z Topface, stiskněte
+    <string name="press_back_more_to_close_app">Abyste se mohli odhlásit z Alcatel, stiskněte
         tlačítko zpět ještě jednou
     </string>
     <string name="waiting_for_load">Čekání na načítání…</string>

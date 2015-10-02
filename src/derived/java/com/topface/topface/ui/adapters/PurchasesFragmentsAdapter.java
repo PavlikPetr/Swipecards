@@ -62,6 +62,13 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
         String from = mArguments.getString(PurchasesConstants.ARG_TAG_SOURCE);
         String text = mArguments.getString(PurchasesConstants.ARG_RESOURCE_INFO_TEXT);
         switch (mTabs.get(position).type) {
+            case PurchasesTabData.GPLAY:
+                if (!mIsVip) {
+                    fragment = MarketBuyingFragment.newInstance(from, text);
+                } else {
+                    fragment = VipBuyFragment.newInstance(true, from, text);
+                }
+                break;
             case PurchasesTabData.BONUS:
                 if (!mIsVip) {
                     fragment = BonusFragment.newInstance(false);

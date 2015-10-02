@@ -29,7 +29,7 @@
     <string name="filter_select_city">Miesto pasirinkimas</string>
     <string name="edit_block_photo">fotografijos</string>
     <string name="dashbrd_popup_rating">Patiko mūsų priedas? Pakelk mūsų reitingą! Kuo aukštesnis
-        reitingas, tuo daugiau įdomių žmonių tu sutiksi Topface
+        reitingas, tuo daugiau įdomių žmonių tu sutiksi Alcatel
     </string>
     <string name="dashbrd_popup_title">Reitingas</string>
     <string name="dashbrd_popup_cancel">Daugiau neklausti</string>
@@ -37,7 +37,7 @@
     <string name="dashbrd_popup_later">Paklausti vėliau</string>
     <string name="buying_store_connect">Kviečiu į Tune Store</string>
     <string name="buying_store_purchase">Perku Tunes Store</string>
-    <string name="buying_tf_ack_sending">Siunčiu informaciją apie pirkinį į Topface</string>
+    <string name="buying_tf_ack_sending">Siunčiu informaciją apie pirkinį į Alcatel</string>
     <string name="ok_label">Bendraklasiai</string>
     <string name="autorefill">Autopapildymas</string>
     <string name="coins">Monetos</string>
@@ -50,7 +50,7 @@
     <string name="locking_screen_advice2">Atsikratykite visų apribojimų</string>
     <string name="general_bookmarks_is_deleted">Vartotojas pašalintas iš išrinktųjų</string>
     <string name="general_blacklist_is_deleted">Vartotojas pašalintas iš juodojo sąrašo</string>
-    <string name="invite_friends_title_short">Pakviesti visus draugus į Topface</string>
+    <string name="invite_friends_title_short">Pakviesti visus draugus į Alcatel</string>
     <string name="general_bookmarks_add_short">Į išrinktuosius</string>
     <string name="general_complaint">Pasiskųsti</string>
     <string name="general_type_complain">Skundo tema</string>
@@ -299,7 +299,7 @@
     <string name="settings_about">Apie programą</string>
     <string name="settings_version">Versija</string>
     <string name="settings_copyright">Copyright 2010-</string>
-    <string name="settings_rights_reserved">Topface \nVisos teisės apsaugotos</string>
+    <string name="settings_rights_reserved">Alcatel \nVisos teisės apsaugotos</string>
     <string name="settings_extra">Detalią informaciją galima rasti</string>
     <string name="settings_logout">Išeiti iš paskyros</string>
     <string name="settings_code_confirmation">Išsiųsti patvirtinimo kodą</string>
@@ -444,7 +444,7 @@
         susipažinti
     </string>
     <string name="set_birthdate">Nurodyti amžių</string>
-    <string name="welcome_to_topface">Sveiki atvykę į Topface!</string>
+    <string name="welcome_to_topface">Sveiki atvykę į Alcatel!</string>
     <string name="im_boy">Aš - vaikinas</string>
     <string name="im_girl">Aš - mergina</string>
     <string name="u_sex">Jūsų lytis</string>
@@ -459,7 +459,7 @@
     <string name="default_photo_upload">Fotografijos įkėlimas</string>
     <string name="default_photo_upload_error">Įkėlimo klaida</string>
     <string name="default_photo_upload_complete">Įkėlimas atliktas!</string>
-    <string name="general_error_try_again_later">Neįmanoma prisijungti prie Topface. Pabandykite
+    <string name="general_error_try_again_later">Neįmanoma prisijungti prie Alcatel. Pabandykite
         vėliau.
     </string>
     <string name="search_city_by_name">Miesto paieška pagal pavadinimą</string>
@@ -538,7 +538,7 @@
     <string name="general_add">Pridėti</string>
     <string name="general_invite_friends">Pasikvieskite draugų</string>
     <string name="general_rest_contacts">Jums liko %d kontaktų</string>
-    <string name="invite_friends_title">Pakviesti visus draugus iš telefoninės knygos į Topface
+    <string name="invite_friends_title">Pakviesti visus draugus iš telefoninės knygos į Alcatel
     </string>
     <string name="invalid_contacts">Kai kurie kontaktai buvo netinkami. Prašome, išsiųskite tinkamus
         kontaktus
@@ -618,7 +618,7 @@
     <string name="general_no_notifications">Deja, jūsų įrenginyje pranešimai neprieinami</string>
     <string name="black_list_add_short">Į juodąjį sąrašą</string>
     <string name="confirm_email_for_dating">Mes esame prieš brukalą. Patvirtinkite savo el. pašto
-        adresą, kad pažindintis Topface!
+        adresą, kad pažindintis Alcatel!
     </string>
     <string name="confirm_email_for_dating_title">Mes prieš brukalus</string>
     <string name="confirm_email_for_dating_desc">Kad pažindintis Tpface, patvirtinkite savo el.
@@ -653,7 +653,7 @@
     </string>
     <string name="delete_account_are_you_sure">Jūs tikrai įsitikinę?</string>
     <string name="delete">Pašalinti</string>
-    <string name="delete_account_warning">Dėmesio! Jūs mėginate pašalinti savo Topface profilį.
+    <string name="delete_account_warning">Dėmesio! Jūs mėginate pašalinti savo Alcatel profilį.
     </string>
     <string name="delete_account_error">Apgailestaujame, pašalinti jūsų paskyrą nepavyko. Jūs galite
         pakartoti dar kartą.
@@ -688,7 +688,7 @@
     <string name="settings_feedback_transaction_link">kur rasti užsakymo numerį?</string>
     <string name="general_logout_error">Apgailestaujame, nepavyko išeiti iš paskyros.</string>
     <string name="auth_btn_ok">Bendraklasiai</string>
-    <string name="auth_btn_tf">Topface paskyra</string>
+    <string name="auth_btn_tf">Alcatel paskyra</string>
     <string name="birthday">Gimimo diena</string>
     <string name="other_auth">Įeiti per kitas svetaines</string>
     <string name="settings_feedback_transaction_number_hint">Įveskite užsakymo numerį</string>
@@ -736,7 +736,7 @@
     <string name="general_distance_m">%d m</string>
     <string name="cannot_get_geo">Nepavyko nustatyti buvimo vietos</string>
     <string name="press_back_more_to_close_app">Spauskite mygtuką atgal dar sykį kad išeiti iš
-        Topface
+        Alcatel
     </string>
     <string name="waiting_for_load">Įkrovos laukimas…</string>
     <string name="loading_photo_percent">Fotografijos įkrova %d%%</string>

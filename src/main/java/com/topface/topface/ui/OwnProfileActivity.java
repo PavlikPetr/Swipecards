@@ -24,4 +24,11 @@ public class OwnProfileActivity extends CheckAuthActivity<OwnProfileFragment> {
         super.finish();
         overridePendingTransition(0, 0);
     }
+
+    @Override
+    public void onBackPressed() {
+        if (getBackPressedListener() == null || !getBackPressedListener().onBackPressed()) {
+            super.onBackPressed();
+        }
+    }
 }

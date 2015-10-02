@@ -31,13 +31,15 @@ import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.GridViewWithHeaderAndFooter;
+import com.topface.topface.ui.IBackPressedListener;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
+import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
-public class ProfilePhotoFragment extends ProfileInnerFragment implements View.OnClickListener {
+public class ProfilePhotoFragment extends ProfileInnerFragment implements View.OnClickListener, IBackPressedListener {
 
     private static final String POSITION = "POSITION";
     private static final String FLIPPER_VISIBLE_CHILD = "FLIPPER_VISIBLE_CHILD";
@@ -140,6 +142,9 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        if (getActivity() instanceof TrackedFragmentActivity) {
+            ((TrackedFragmentActivity) getActivity()).setBackPressedListener(this);
+        }
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
         mGridFooterView = createGridViewFooter();
         //Navigation bar
@@ -353,5 +358,14 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
             }
         }
 
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (mViewFlipper != null && mViewFlipper.getDisplayedChild() == 1) {
+            mViewFlipper.setDisplayedChild(0);
+            return true;
+        }
+        return false;
     }
 }
