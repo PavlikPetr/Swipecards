@@ -448,6 +448,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void initMutualDrawables() {
         if (isAdded()) {
             singleMutual = getResources().getDrawable(R.drawable.dating_like_selector);
@@ -577,14 +578,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
 
-        private void updateData(final boolean isAddition, boolean isNeedRefresh) {
+    private void updateData(final boolean isAddition, boolean isNeedRefresh) {
         if (!mUpdateInProcess) {
             lockControls();
             hideEmptySearchDialog();
             if (!isAddition) {
                 onUpdateStart(false);
             }
-            if(isNeedRefresh){
+            if (isNeedRefresh) {
                 mUserSearchList.clear();
                 mCurrentUser = null;
             }
@@ -911,6 +912,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void setUserSex(SearchUser currUser, Resources res) {
         if (currUser.sex == Static.BOY) {
             mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, res

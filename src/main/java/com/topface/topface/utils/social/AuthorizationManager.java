@@ -52,7 +52,6 @@ public class AuthorizationManager {
     private Map<Platform, Authorizer> mAuthorizers = new HashMap<>();
 
     public void onCreate(Bundle savedInstanceState) {
-        App.from(App.getContext()).inject(this);
         for (Authorizer authorizer : mAuthorizers.values()) {
             authorizer.onCreate(savedInstanceState);
         }
@@ -77,6 +76,7 @@ public class AuthorizationManager {
     }
 
     public AuthorizationManager(Activity parent) {
+        App.from(App.getContext()).inject(this);
         mAuthorizers.put(Platform.VKONTAKTE, new VkAuthorizer(parent));
         mAuthorizers.put(Platform.FACEBOOK, new FbAuthorizer(parent));
         mAuthorizers.put(Platform.ODNOKLASSNIKI, new OkAuthorizer(parent));

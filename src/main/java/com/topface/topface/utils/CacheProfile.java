@@ -61,6 +61,7 @@ public class CacheProfile {
     }
 
     public static void setProfile(Profile profile, String profileStr) {
+        CacheProfile.isLoaded.set(true);
         Editor.init(profile);
         setProfileCache(profileStr);
         setProfileUpdateTime();
@@ -161,12 +162,11 @@ public class CacheProfile {
     }
 
     public static boolean isLoaded() {
-        return App.from(App.getContext()).getProfile() != null;
+        return isLoaded.get();
     }
 
     public static boolean isEmpty(Context context) {
-        Profile profile = App.from(context).getProfile();
-        return isLoaded() && profile != null && profile.uid == 0;
+        return App.from(context).getProfile().uid == 0;
     }
 
     public static void setOptions(final String options) {

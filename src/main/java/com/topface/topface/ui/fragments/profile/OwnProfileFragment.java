@@ -99,7 +99,9 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     @Override
     protected void onProfileUpdated() {
         super.onProfileUpdated();
-        setProfile(App.from(getActivity()).getProfile());
+        if (isAdded()) {
+            setProfile(App.from(getActivity()).getProfile());
+        }
     }
 
     @Override
@@ -196,9 +198,9 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     @Override
     public void onAvatarClick() {
         Profile profile = App.from(getActivity()).getProfile();
-        if (profile != null && profile.photo != null) {
+        if (profile.photo != null) {
             startActivity(PhotoSwitcherActivity.
-                    getPhotoSwitcherIntent(profile.gifts, profile.photo.position,
+                    getPhotoSwitcherIntent(profile.gifts.getGifts(), profile.photo.position,
                             profile.uid, profile.photosCount,
                             profile.photos));
         } else {

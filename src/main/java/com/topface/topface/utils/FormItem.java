@@ -33,8 +33,8 @@ public class FormItem implements Parcelable {
 
     public static final int NO_RESOURCE_ID = -1;
 
-    private TextLimitInterface mTextLimitInterface;
-    private ValueLimitInterface mValueLimitInterface;
+    transient private TextLimitInterface mTextLimitInterface;
+    transient private ValueLimitInterface mValueLimitInterface;
     private boolean mOnlyForWomen = false;
     private boolean mIsCanBeEmpty = true;
 

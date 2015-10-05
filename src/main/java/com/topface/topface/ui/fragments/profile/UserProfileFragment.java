@@ -271,9 +271,9 @@ public class UserProfileFragment extends AbstractProfileFragment {
                         @Override
                         public void success(IApiResponse response) {
                             if (mRequestedGifts != null) {
-                                mRequestedUser.gifts.clear();
+                                mRequestedUser.gifts.getGifts().clear();
                                 for (FeedGift feedGift : mRequestedGifts.items) {
-                                    mRequestedUser.gifts.add(feedGift.gift);
+                                    mRequestedUser.gifts.getGifts().add(feedGift.gift);
                                 }
                             }
                             onSuccess(mRequestedUser, mUserResponse);
@@ -511,7 +511,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
         if (data != null) {
             Profile profile = getProfile();
             if (profile != null) {
-                profile.gifts.add(0, data.gift);
+                profile.gifts.getGifts().add(0, data.gift);
             }
             if (mNewGifts == null) {
                 mNewGifts = new ArrayList<>();
