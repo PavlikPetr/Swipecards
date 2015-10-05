@@ -78,7 +78,6 @@ public class AuthFragment extends BaseAuthFragment {
     @Bind(R.id.ivAuthLogo)
     ImageView mTfLogo;
 
-    @SuppressWarnings("unused")
     @OnClick(R.id.btnAuthFB)
     public void btnFBClick() {
         EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "LoginMainFb", "", 1L);
@@ -94,7 +93,6 @@ public class AuthFragment extends BaseAuthFragment {
         }
     }
 
-    @SuppressWarnings("unused")
     @OnClick(R.id.btnAuthVK)
     public void btnVKClick() {
         EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "LoginMainVk", "", 1L);
@@ -108,8 +106,6 @@ public class AuthFragment extends BaseAuthFragment {
         }
     }
 
-
-    @SuppressWarnings("unused")
     @OnClick(R.id.btnAuthOk)
     public void btnOKClick() {
         EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "LoginMainOk", "", 1L);
@@ -123,8 +119,6 @@ public class AuthFragment extends BaseAuthFragment {
         }
     }
 
-
-    @SuppressWarnings("unused")
     @OnClick(R.id.btnTfAccount)
     public void startTfAuthClick() {
         ObjectAnimator animator = ObjectAnimator.ofFloat(mAuthGroup, TRANSLATION_Y, 0, Utils.getPxFromDp(ANIMATION_PATH));
@@ -142,8 +136,6 @@ public class AuthFragment extends BaseAuthFragment {
         animator.setDuration(ANIMATION_DURATION).start();
     }
 
-
-    @SuppressWarnings("unused")
     @OnClick(R.id.btnEntrance)
     public void signInClick() {
         if (getActivity() != null) {
@@ -153,8 +145,6 @@ public class AuthFragment extends BaseAuthFragment {
         }
     }
 
-
-    @SuppressWarnings("unused")
     @OnClick(R.id.btnCreateAccount)
     public void createAccountClick() {
         EasyTracker.sendEvent("Registration", "StartActivity", "FromAuth", 1L);
@@ -162,8 +152,6 @@ public class AuthFragment extends BaseAuthFragment {
         startActivityForResult(intent, RegistrationActivity.INTENT_REGISTRATION);
     }
 
-
-    @SuppressWarnings("unused")
     @OnClick(R.id.tf_auth_back)
     public void tfAuthBackClick() {
         ObjectAnimator animator = ObjectAnimator.ofFloat(mAuthGroup, TRANSLATION_Y, Utils.getPxFromDp(ANIMATION_PATH), 0);

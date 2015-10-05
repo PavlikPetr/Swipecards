@@ -2,15 +2,15 @@ package com.topface.topface.ui.settings;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,8 +33,6 @@ import com.topface.topface.requests.RemindRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.IDialogListener;
-import com.topface.topface.ui.analytics.TrackedDialogFragment;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -43,14 +41,19 @@ import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnTextChanged;
-
-public class SettingsTopfaceAccountFragment extends BaseFragment {
+public class SettingsTopfaceAccountFragment extends BaseFragment implements OnClickListener {
 
     public static final String NEED_EXIT = "NEED_EXIT";
+    private View mLockerView;
+    private EditText mEditText;
+    private TextView mText;
+    private Button mBtnChange;
+    private Button mBtnChangeEmail;
+    private Button mBtnLogout;
+    private Button mBtnCodeWasSend;
+    private TextView mTxtCodeWasSend;
+
+    RelativeLayout fieldContainer;
 
     private final AuthToken mToken = AuthToken.getInstance();
 
@@ -60,41 +63,14 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
     private int mChangeButtonAction = ACTION_CHANGE_PASSWORD;
     private boolean mChangeEmail = false;
 
-    @Bind(R.id.llvLogoutLoading)
-    View mLockerView;
-    @Bind(R.id.edText)
-    EditText mEditText;
-    @Bind(R.id.tvText)
-    TextView mText;
-    @Bind(R.id.btnChange)
-    Button mBtnChange;
-    @Bind(R.id.btnChangeEmail)
-    Button mBtnChangeEmail;
-    @Bind(R.id.btnLogout)
-    Button mBtnLogout;
-    @Bind(R.id.btnCodeWasSend)
-    Button mBtnCodeWasSend;
-    @Bind(R.id.txtCodeWasSend)
-    Button mTxtCodeWasSend;
-
-    @SuppressWarnings("unused")
-    @OnTextChanged(value = R.id.edText, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
-    protected void afterTextChanged(Editable s) {
-        String text = s.toString();
-        if (text.equals(mToken.getLogin())) {
-            setChangeBtnAction(ACTION_RESEND_CONFIRM);
-            mChangeEmail = false;
-        } else {
-            setChangeBtnAction(ACTION_CHANGE_EMAIL);
-            mChangeEmail = true;
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_topface_account, container, false);
-        ButterKnife.bind(this, root);
+
+        fieldContainer = (RelativeLayout) root.findViewById(R.id.fieldContainer_layout);
+
+        mLockerView = root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
 
         String code = ((SettingsContainerActivity) getActivity()).getConfirmationCode();
@@ -129,8 +105,8 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
             requestEmailConfirmedFlag(false);
         }
 
-        initTextViews();
-        mBtnChange.setVisibility(View.VISIBLE);
+        initTextViews(root);
+        initButtons(root);
         return root;
     }
 
@@ -184,10 +160,33 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
         setButtonsState();
     }
 
-    private void initTextViews() {
+    private void initTextViews(ViewGroup root) {
         Drawable icon = getResources().getDrawable(R.drawable.ic_logo_account);
+        mEditText = (EditText) root.findViewById(R.id.edText);
         mEditText.setText(mToken.getLogin());
         mEditText.setSelection(mEditText.getText().length());
+        mEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String text = s.toString();
+                if (text.equals(mToken.getLogin())) {
+                    setChangeBtnAction(ACTION_RESEND_CONFIRM);
+                    mChangeEmail = false;
+                } else {
+                    setChangeBtnAction(ACTION_CHANGE_EMAIL);
+                    mChangeEmail = true;
+                }
+            }
+        });
+        mText = (TextView) root.findViewById(R.id.tvText);
         mText.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
         mText.setText(mToken.getLogin());
     }
@@ -206,6 +205,20 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
             mBtnCodeWasSend.setVisibility(View.VISIBLE);
             mTxtCodeWasSend.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void initButtons(ViewGroup root) {
+        mBtnChange = (Button) root.findViewById(R.id.btnChange);
+        mBtnChange.setOnClickListener(this);
+        mBtnChange.setVisibility(View.VISIBLE);
+        mBtnChangeEmail = (Button) root.findViewById(R.id.btnChangeEmail);
+        mBtnChangeEmail.setOnClickListener(this);
+        mBtnLogout = (Button) root.findViewById(R.id.btnLogout);
+        mBtnLogout.setOnClickListener(this);
+        root.findViewById(R.id.btnDeleteAccount).setOnClickListener(this);
+        mBtnCodeWasSend = (Button) root.findViewById(R.id.btnCodeWasSend);
+        mBtnCodeWasSend.setOnClickListener(this);
+        mTxtCodeWasSend = (TextView) root.findViewById(R.id.txtCodeWasSend);
     }
 
     private void setButtonsState() {
@@ -239,39 +252,46 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
         mChangeButtonAction = action;
     }
 
-    @SuppressWarnings("unused")
-    @OnClick(R.id.btnLogout)
-    protected void onLogoutButtonClick() {
+    @Override
+    public void onClick(View v) {
         Utils.hideSoftKeyboard(getActivity(), mEditText);
-        if (CacheProfile.needToChangePassword(App.getContext())) {
-            Intent intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
-            intent.putExtra(NEED_EXIT, true);
-            startActivityForResult(intent, SettingsContainerActivity.INTENT_CHANGE_PASSWORD);
-        } else {
-            showExitPopup();
+        switch (v.getId()) {
+            case R.id.btnLogout:
+                if (CacheProfile.needToChangePassword(App.getContext())) {
+                    Intent intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
+                    intent.putExtra(NEED_EXIT, true);
+                    startActivityForResult(intent, SettingsContainerActivity.INTENT_CHANGE_PASSWORD);
+                } else {
+                    showExitPopup();
+                }
+                break;
+            case R.id.btnChange:
+                onChangeButtonClick();
+                break;
+            case R.id.btnDeleteAccount:
+                deleteAccount();
+                break;
+            case R.id.btnCodeWasSend:
+                updateProfile();
+                break;
+            case R.id.btnChangeEmail:
+                onChangeEmailButtonClick();
+            default:
+                break;
         }
     }
 
-    @SuppressWarnings("unused")
-    @OnClick(R.id.btnChangeEmail)
-    protected void onChangeEmailButtonClick() {
-        Utils.hideSoftKeyboard(getActivity(), mEditText);
+    private void onChangeEmailButtonClick() {
         Intent intent = new Intent(getActivity().getApplicationContext(), SettingsContainerActivity.class);
         startActivityForResult(intent, SettingsContainerActivity.INTENT_CHANGE_EMAIL);
     }
 
-    @SuppressWarnings("unused")
-    @OnClick(R.id.btnCodeWasSend)
-    protected void updateProfile() {
-        Utils.hideSoftKeyboard(getActivity(), mEditText);
+    private void updateProfile() {
         mText.setText(mToken.getLogin());
         requestEmailConfirmedFlag(true);
     }
 
-    @SuppressWarnings("unused")
-    @OnClick(R.id.btnDeleteAccount)
-    protected void deleteAccount() {
-        Utils.hideSoftKeyboard(getActivity(), mEditText);
+    private void deleteAccount() {
         DeleteAccountDialog newFragment = DeleteAccountDialog.newInstance();
         newFragment.show(getActivity().getSupportFragmentManager(), DeleteAccountDialog.TAG);
     }
@@ -282,10 +302,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
         config.saveConfig();
     }
 
-    @SuppressWarnings("unused")
-    @OnClick(R.id.btnChange)
-    protected void onChangeButtonClick() {
-        Utils.hideSoftKeyboard(getActivity(), mEditText);
+    private void onChangeButtonClick() {
         switch (mChangeButtonAction) {
             case ACTION_RESEND_CONFIRM:
                 RemindRequest remindRequest = new RemindRequest(getActivity());
@@ -362,44 +379,55 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
     }
 
     private void showLogoutPopup(final String email) {
-        final LogoutDialog logoutDialog = LogoutDialog.newInstance(email);
-        logoutDialog.setDialogInterface(new IDialogListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(String.format(getActivity().getString(R.string.logout_if_email_already_registred), email));
+        builder.setPositiveButton(R.string.general_exit, new DialogInterface.OnClickListener() {
             @Override
-            public void onPositiveButtonClick() {
+            public void onClick(DialogInterface dialog, int which) {
                 logout();
             }
-
+        });
+        builder.setNegativeButton(R.string.general_cancel, new DialogInterface.OnClickListener() {
             @Override
-            public void onNegativeButtonClick() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
             }
-
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
-            public void onDismissListener() {
+            public void onDismiss(DialogInterface dialog) {
                 setClickableAccountManagmentButtons(true);
             }
         });
-        logoutDialog.show(getFragmentManager(), LogoutDialog.class.getName());
+        alertDialog.show();
     }
 
     private void showExitPopup() {
         setClickableAccountManagmentButtons(false);
-        final ExitDialog exitDialog = new ExitDialog();
-        exitDialog.setDialogInterface(new IDialogListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(R.string.settings_logout_msg);
+        builder.setNegativeButton(R.string.general_no, new DialogInterface.OnClickListener() {
             @Override
-            public void onPositiveButtonClick() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.setPositiveButton(R.string.general_yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
                 logout();
             }
-
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
-            public void onNegativeButtonClick() {
-            }
-
-            @Override
-            public void onDismissListener() {
+            public void onDismiss(DialogInterface dialog) {
                 setClickableAccountManagmentButtons(true);
             }
         });
-        exitDialog.show(getFragmentManager(), ExitDialog.class.getName());
+        alertDialog.show();
     }
 
     private void setClickableAccountManagmentButtons(boolean b) {
@@ -424,100 +452,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
             Toast.makeText(App.getContext(), R.string.general_email_success_confirmed, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(App.getContext(), R.string.general_email_not_confirmed, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public static class ExitDialog extends TrackedDialogFragment {
-        private IDialogListener mIDialogListener;
-
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            return new AlertDialog.Builder(getActivity())
-                    .setMessage(R.string.settings_logout_msg)
-                    .setNegativeButton(R.string.general_no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                            if (mIDialogListener != null) {
-                                mIDialogListener.onNegativeButtonClick();
-                            }
-                        }
-                    })
-                    .setPositiveButton(R.string.general_yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (mIDialogListener != null) {
-                                mIDialogListener.onPositiveButtonClick();
-                            }
-                        }
-                    }).create();
-        }
-
-        public void setDialogInterface(IDialogListener dialogInterface) {
-            mIDialogListener = dialogInterface;
-        }
-
-        @Override
-        public void onDismiss(DialogInterface dialog) {
-            super.onDismiss(dialog);
-            if (mIDialogListener != null) {
-                mIDialogListener.onDismissListener();
-            }
-        }
-    }
-
-    public static class LogoutDialog extends TrackedDialogFragment {
-        private static final String EMAIL = "logout_dialog_email";
-        private IDialogListener mIDialogListener;
-
-        public static LogoutDialog newInstance(String email) {
-            LogoutDialog logoutDialog = new LogoutDialog();
-            Bundle bundle = new Bundle();
-            bundle.putString(EMAIL, email);
-            logoutDialog.setArguments(bundle);
-            return logoutDialog;
-        }
-
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            String email = "";
-            Bundle bundle = getArguments();
-            if (bundle != null) {
-                email = bundle.getString(EMAIL);
-            }
-            return new AlertDialog.Builder(getActivity())
-                    .setMessage(String.format(getActivity().getString(R.string.logout_if_email_already_registred), email))
-                    .setPositiveButton(R.string.general_exit, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (mIDialogListener != null) {
-                                mIDialogListener.onPositiveButtonClick();
-                            }
-                        }
-                    })
-                    .setNegativeButton(R.string.general_cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                            if (mIDialogListener != null) {
-                                mIDialogListener.onNegativeButtonClick();
-                            }
-                        }
-                    }).create();
-        }
-
-        public void setDialogInterface(IDialogListener dialogInterface) {
-            mIDialogListener = dialogInterface;
-        }
-
-        @Override
-        public void onDismiss(DialogInterface dialog) {
-            super.onDismiss(dialog);
-            if (mIDialogListener != null) {
-                mIDialogListener.onDismissListener();
-            }
         }
     }
 }

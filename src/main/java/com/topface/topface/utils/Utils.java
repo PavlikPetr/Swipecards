@@ -3,6 +3,7 @@ package com.topface.topface.utils;
 import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,7 +18,6 @@ import android.os.IBinder;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.Html;
@@ -170,10 +170,6 @@ public class Utils {
         }
     }
 
-    public static void startOldVersionPopup(final Activity activity, OnNextActionListener startActionCallback) {
-        startOldVersionPopup(activity, true, startActionCallback);
-    }
-
     public static Intent getIntentToOpenUrl(String url) {
         if (!TextUtils.isEmpty(url)) {
             Intent i = new Intent(Intent.ACTION_VIEW);
@@ -181,6 +177,10 @@ public class Utils {
             return i;
         }
         return null;
+    }
+
+    public static void startOldVersionPopup(Activity activity, OnNextActionListener startActionCallback) {
+        startOldVersionPopup(activity, true, startActionCallback);
     }
 
     public static void startOldVersionPopup(final Activity activity, boolean cancelable, final OnNextActionListener startActionCallback) {

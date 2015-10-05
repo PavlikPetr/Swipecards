@@ -15,7 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:imeOptions="flagNoExtractUi"
         android:layout_margin="15dp"
         app:request_key="CITY_SEARCH_ACTIVITY">
 

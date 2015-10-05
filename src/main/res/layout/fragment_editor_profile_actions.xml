@@ -4,7 +4,6 @@
     android:layout_height="match_parent">
 
     <ScrollView
-        android:id="@+id/editor_profile_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -113,30 +112,35 @@
             <!-- Это просто текстовая информация о пользователе -->
             <TextView
                 android:id="@+id/editor_ban_profile_name"
-                style="@style/UserInfoTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/editor_title_name" />
 
             <TextView
                 android:id="@+id/editor_ban_profile_id"
-                style="@style/UserInfoTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:autoLink="web"
                 android:text="@string/editor_title_id" />
 
             <TextView
                 android:id="@+id/editor_ban_profile_social"
-                style="@style/UserInfoTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:autoLink="web"
                 android:text="@string/editor_title_social_link"
-                android:textColorLink="@color/link_color" />
+                android:textColorLink="@color/text_white" />
 
             <TextView
                 android:id="@+id/editor_ban_profile_social_id"
-                style="@style/UserInfoTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/editor_title_social_id" />
 
             <TextView
                 android:id="@+id/editor_ban_profile_banned"
-                style="@style/UserInfoTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/editor_title_banned" />
 
             <!-- big user info, unparsed json -->
@@ -152,7 +156,8 @@
 
             <TextView
                 android:id="@+id/editor_ban_profile_full_info"
-                style="@style/UserInfoTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:visibility="gone" />
 
         </LinearLayout>

@@ -97,11 +97,6 @@ public class NotificationEditAdapter extends AbstractEditAdapter<Profile.Topface
         return new Profile.TopfaceNotifications(mItems[0], mItems[1], mNotification.type);
     }
 
-    @Override
-    public Profile.TopfaceNotifications getCurrentData() {
-        return getData();
-    }
-
     /**
      * This adapter saves data automatically
      */
