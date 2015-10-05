@@ -171,6 +171,11 @@ public class Profile extends AbstractDataWithPhotos {
                             public int getMaxValue() {
                                 return App.getAppOptions().getUserWeightMax();
                             }
+
+                            @Override
+                            public boolean isEmptyValueAvailable() {
+                                return true;
+                            }
                         });
                         break;
                     case R.array.form_habits_restaurants:
@@ -257,6 +262,11 @@ public class Profile extends AbstractDataWithPhotos {
                 public int getMaxValue() {
                     return App.getAppOptions().getUserHeightMax();
                 }
+
+                @Override
+                public boolean isEmptyValueAvailable() {
+                    return true;
+                }
             });
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
@@ -274,6 +284,11 @@ public class Profile extends AbstractDataWithPhotos {
                 @Override
                 public int getMaxValue() {
                     return App.getAppOptions().getUserWeightMax();
+                }
+
+                @Override
+                public boolean isEmptyValueAvailable() {
+                    return true;
                 }
             });
             formInfo.fillFormItem(formItem);

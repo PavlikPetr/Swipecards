@@ -54,7 +54,7 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
                     profile.firstName = formItem.value;
                 }
             };
-            nameItem.setTextLimitInterface(new FormItem.DefaultTextLimiter(){
+            nameItem.setTextLimitInterface(new FormItem.DefaultTextLimiter() {
                 @Override
                 public boolean isVisible() {
                     return false;
@@ -89,6 +89,11 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
                 @Override
                 public int getMaxValue() {
                     return App.getAppOptions().getUserAgeMax();
+                }
+
+                @Override
+                public boolean isEmptyValueAvailable() {
+                    return false;
                 }
             });
             forms.add(ageItem);
@@ -130,6 +135,11 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
             @Override
             public int getMaxValue() {
                 return App.getAppOptions().getUserAgeMax();
+            }
+
+            @Override
+            public boolean isEmptyValueAvailable() {
+                return false;
             }
         });
         return ageItem;
