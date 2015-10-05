@@ -58,7 +58,7 @@ public class BaseEditDialog<T extends Parcelable> extends BaseDialog {
         if (savedInstanceState != null && savedInstanceState.containsKey(DATA)) {
             mData = savedInstanceState.getParcelable(DATA);
         }
-        mAdapter = new EditAdapterFactory().createAdapterFor(getActivity(), mData);
+        mAdapter = new EditAdapterFactory().createAdapterFor(getActivity(), mData, App.from(getActivity()).getProfile());
         View view = inflater.inflate(getDialogLayoutRes(), container, false);
         initViews(view);
         return view;

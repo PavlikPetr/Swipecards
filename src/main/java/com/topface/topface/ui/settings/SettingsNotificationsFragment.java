@@ -256,7 +256,7 @@ public class SettingsNotificationsFragment extends BaseFragment {
                 break;
         }
         NotificationEditDialog.newInstance(App.getContext().getResources().getString(textId),
-                CacheProfile.notifications.get(notificationTypeId),
+                App.from(getActivity()).getProfile().notifications.get(notificationTypeId),
                 mEditingFinishedListener).show(getFragmentManager(), NotificationEditDialog.class.getName());
     }
 

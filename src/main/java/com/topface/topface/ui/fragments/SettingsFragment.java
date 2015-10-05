@@ -23,7 +23,6 @@ import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.ui.dialogs.SelectLanguageDialog;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
-import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.MarketApiManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -43,6 +42,8 @@ public class SettingsFragment extends ProfileInnerFragment {
     View mLoNotifications;
     @Bind(R.id.loNoNotifications)
     ViewGroup mNoNotificationViewGroup;
+    @Bind(R.id.loHelp)
+    View mHelp;
 
     @SuppressWarnings("unused")
     @OnClick(R.id.loNotifications)
@@ -68,7 +69,8 @@ public class SettingsFragment extends ProfileInnerFragment {
     @SuppressWarnings("unused")
     @OnClick(R.id.loAbout)
     protected void aboutClick() {
-        AboutAppDialog.newInstance(getActivity().getString(R.string.settings_about)).show(getFragmentManager(),
+        Options options = App.from(getActivity()).getOptions();
+        AboutAppDialog.newInstance(getActivity().getString(R.string.settings_about), options.aboutApp.title, options.aboutApp.url).show(getFragmentManager(),
                 AboutAppDialog.class.getName());
     }
 
@@ -81,7 +83,7 @@ public class SettingsFragment extends ProfileInnerFragment {
     @SuppressWarnings("unused")
     @OnClick(R.id.loHelp)
     protected void helpClick() {
-        String helpUrl = CacheProfile.getOptions().helpUrl;
+        String helpUrl = App.from(getActivity()).getOptions().helpUrl;
         if (!TextUtils.isEmpty(helpUrl)) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(helpUrl));
@@ -131,11 +133,8 @@ public class SettingsFragment extends ProfileInnerFragment {
                 });
         setNotificationsState();
 
-        // Help
-        View help = root.findViewById(R.id.loHelp);
-        help.setOnClickListener(this);
         if (TextUtils.isEmpty(App.from(getActivity()).getOptions().helpUrl)) {
-            help.setVisibility(View.GONE);
+            mHelp.setVisibility(View.GONE);
         }
 
         //Preload photo

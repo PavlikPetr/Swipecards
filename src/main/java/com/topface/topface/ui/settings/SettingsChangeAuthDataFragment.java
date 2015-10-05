@@ -11,9 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.ChangeLoginRequest;
@@ -44,11 +44,6 @@ private static final String PASSWORD_CONFIRMATION = "password_confirmation";
 private static final String OLD_PASSWORD = "old_password";
 private static final String EMPTY = "";
 
-    private View mLockerView;
-    private EditText mEdMainField;
-    private EditText mEdConfirmationField;
-    private EditText mOldPassword;
-    private Button mBtnSave;
     private AuthToken mToken = AuthToken.getInstance();
     private boolean mNeedExit;
     private boolean mChangePassword;
@@ -65,7 +60,7 @@ private static final String EMPTY = "";
     @Bind(R.id.edConfirmationField)
     EditText mEdConfirmationField;
     @Bind(R.id.edOldPassword)
-    EditText mOldPassword;
+    EditText mEdOldPassword;
     @Bind(R.id.btnSave)
     Button mBtnSave;
 
@@ -104,7 +99,6 @@ private static final String EMPTY = "";
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_change_auth_data, container, false);
         ButterKnife.bind(this, root);
         mChangePassword = getArguments().getBoolean(CHANGE_PASSWORD);
-        mLockerView = root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
 
         TextView mSetPasswordText = (TextView) root.findViewById(R.id.setPasswordText);
@@ -112,12 +106,6 @@ private static final String EMPTY = "";
         if (mNeedExit && !mRestoreFromAuth) {
             mSetPasswordText.setVisibility(View.VISIBLE);
         }
-
-        mEdMainField = (EditText) root.findViewById(R.id.edMainField);
-        mEdConfirmationField = (EditText) root.findViewById(R.id.edConfirmationField);
-        mEdOldPassword = (EditText) root.findViewById(R.id.edOldPassword);
-
-        mBtnSave = (Button) root.findViewById(R.id.btnSave);
         ButterKnife.findById(root, R.id.setPasswordText).setVisibility(mNeedExit ? View.VISIBLE : View.GONE);
         if (mNeedExit) {
             mBtnSave.setText(getString(R.string.general_save_and_exit));

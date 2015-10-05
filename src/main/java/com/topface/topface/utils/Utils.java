@@ -183,10 +183,6 @@ public class Utils {
         return null;
     }
 
-    public static void startOldVersionPopup(Activity activity, OnNextActionListener startActionCallback) {
-        startOldVersionPopup(activity, true, startActionCallback);
-    }
-
     public static void startOldVersionPopup(final Activity activity, boolean cancelable, final OnNextActionListener startActionCallback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {

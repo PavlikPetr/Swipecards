@@ -84,7 +84,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
         Profile profile = App.from(getActivity()).getProfile();
         if (position == 0) {
             mViewFlipper.setDisplayedChild(1);
-        } else if (position <= CacheProfile.totalPhotos) {
+        } else if (position <= profile.photosCount) {
             startActivity(PhotoSwitcherActivity.getPhotoSwitcherIntent(
                     null,
                     position - 1,
@@ -314,7 +314,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                 mPhotosReceiver,
                 new IntentFilter(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT)
         );
-        mProfilePhotoGridAdapter.updateData();
+        mProfilePhotoGridAdapter.updateData(App.from(getActivity()).getProfile().photos, App.from(getActivity()).getProfile().photosCount);
         super.onResume();
     }
 

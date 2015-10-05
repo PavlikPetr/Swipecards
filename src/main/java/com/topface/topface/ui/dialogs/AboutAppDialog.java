@@ -19,7 +19,6 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.ui.analytics.TrackedDialogFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
 import java.text.SimpleDateFormat;
@@ -29,11 +28,15 @@ import java.util.zip.ZipFile;
 
 public class AboutAppDialog extends TrackedDialogFragment {
     private static final String DIALOG_TITLE = "dialog_title";
+    private static final String ABOUT_TITLE = "about_title";
+    private static final String ABOUT_URL = "about_url";
 
-    public static AboutAppDialog newInstance(String title) {
+    public static AboutAppDialog newInstance(String title, String aboutTitle, String aboutUrl) {
         AboutAppDialog dialog = new AboutAppDialog();
         Bundle args = new Bundle();
         args.putString(DIALOG_TITLE, title);
+        args.putString(ABOUT_TITLE, aboutTitle);
+        args.putString(ABOUT_URL, aboutUrl);
         dialog.setArguments(args);
         return dialog;
     }
@@ -42,6 +45,8 @@ public class AboutAppDialog extends TrackedDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         String titleDialog = getArguments().getString(DIALOG_TITLE);
+        String aboutTitle = getArguments().getString(ABOUT_TITLE, "");
+        final String aboutUrl = getArguments().getString(ABOUT_URL, "");
         View view = LayoutInflater.from(getActivity())
                 .inflate(R.layout.fragment_about, null);
         // Version
@@ -74,13 +79,13 @@ public class AboutAppDialog extends TrackedDialogFragment {
 
         // Extra
         TextView extra = (TextView) view.findViewById(R.id.tvExtra);
-        SpannableString title = new SpannableString(mAboutTitle);
+        SpannableString title = new SpannableString(aboutTitle);
         title.setSpan(new UnderlineSpan(), 0, title.length(), 0);
         extra.setText(title);
         extra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = Utils.getIntentToOpenUrl(mAboutUrl);
+                Intent i = Utils.getIntentToOpenUrl(aboutUrl);
                 if (i != null) {
                     getActivity().startActivity(i);
                 }
