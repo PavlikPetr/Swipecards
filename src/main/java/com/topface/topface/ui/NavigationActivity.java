@@ -131,8 +131,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(GCMUtils.NEXT_INTENT, options.startPageFragmentId);
         if (App.getUserConfig().getDatingMessage().equals(options
-                .instantMessageFromSearch.getText())){
-            intent.putExtra(DatingInstantMessageController.DEFAULT_MESSAGE,true);
+                .instantMessageFromSearch.getText())) {
+            intent.putExtra(DatingInstantMessageController.DEFAULT_MESSAGE, true);
         }
         activity.startActivity(intent);
     }
@@ -204,14 +204,14 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         sequencedStartAction.addAction(new NotificationsDisablePopup(NavigationActivity.this, AC_PRIORITY_HIGH));
         IStartAction fourthStageActions = new ChosenStartAction().chooseFrom(
                 mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_HIGH),
-                mPopupManager.createRatePopupStartAction(AC_PRIORITY_NORMAL)
+                mPopupManager.createRatePopupStartAction(AC_PRIORITY_NORMAL, App.from(this).getOptions().ratePopupTimeout, App.from(this).getOptions().ratePopupEnabled)
         );
         sequencedStartAction.addAction(fourthStageActions);
         IStartAction fifthStageActions;
         if (mFullscreenController != null) {
             fifthStageActions = new ChosenStartAction().chooseFrom(
                     new TrialVipPopupAction(this, AC_PRIORITY_HIGH),
-                    mFullscreenController.createFullscreenStartAction(AC_PRIORITY_NORMAL)
+                    mFullscreenController.createFullscreenStartAction(AC_PRIORITY_NORMAL, this)
             );
         } else {
             fifthStageActions = new ChosenStartAction().chooseFrom(
@@ -225,7 +225,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                     public void onRedirect() {
                         showFragment(FragmentId.TABBED_LIKES);
                     }
-                }));
+                }, this));
         PromoPopupManager promoPopupManager = new PromoPopupManager(this);
         IStartAction seventhStageActions = new ChosenStartAction().chooseFrom(
                 PromoExpressMessages.createPromoPopupStartAction(AC_PRIORITY_HIGH, new PromoExpressMessages.PopupRedirectListener() {
@@ -467,7 +467,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
             @Override
             public boolean isApplicable() {
-                return !AuthToken.getInstance().isEmpty() && (CacheProfile.photo == null)
+                return !AuthToken.getInstance().isEmpty() && (App.from(NavigationActivity.this).getProfile().photo == null)
                         && !App.getConfig().getUserConfig().isUserAvatarAvailable();
             }
 
