@@ -40,7 +40,7 @@ public class DatingLockPopupAction extends DailyPopupAction {
 
     @Override
     public void callOnUi() {
-        DatingLockPopup datingLockPopup = new DatingLockPopup();
+        final DatingLockPopup datingLockPopup = new DatingLockPopup();
         datingLockPopup.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
@@ -49,7 +49,15 @@ public class DatingLockPopupAction extends DailyPopupAction {
                 }
             }
         });
-        datingLockPopup.setDatingLockPopupRedirectListener(mDatingLockPopupRedirect);
+        datingLockPopup.setDatingLockPopupRedirectListener(new DatingLockPopup.DatingLockPopupRedirectListener() {
+            @Override
+            public void onRedirect() {
+                datingLockPopup.setOnDismissListener(null);
+                if (mDatingLockPopupRedirect != null) {
+                    mDatingLockPopupRedirect.onRedirect();
+                }
+            }
+        });
         datingLockPopup.show(mFragmentManager, DatingLockPopup.TAG);
     }
 

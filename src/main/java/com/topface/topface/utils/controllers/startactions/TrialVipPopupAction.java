@@ -19,6 +19,7 @@ public class TrialVipPopupAction implements IStartAction {
     private WeakReference<BaseFragmentActivity> mActivity;
     private TrialVipPopup mTrialVipPopup;
     private OnNextActionListener mOnNextActionListener;
+    private boolean mIsNeedNext = true;
 
     public TrialVipPopupAction(BaseFragmentActivity activity, int priority) {
         mActivity = new WeakReference<>(activity);
@@ -40,7 +41,7 @@ public class TrialVipPopupAction implements IStartAction {
 
             @Override
             public void onFragmentFinish() {
-                if (mOnNextActionListener != null) {
+                if (mOnNextActionListener != null && mIsNeedNext) {
                     mOnNextActionListener.onNextAction();
                 }
             }
@@ -82,6 +83,7 @@ public class TrialVipPopupAction implements IStartAction {
                 ((ITransparentMarketFragmentRunner)fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
                     @Override
                     public void onPurchaseSuccess() {
+                        mIsNeedNext = false;
                         if (null != mTrialVipPopup) {
                             mTrialVipPopup.dismiss();
                         }

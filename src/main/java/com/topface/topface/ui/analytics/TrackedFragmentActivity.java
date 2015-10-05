@@ -12,10 +12,12 @@ import com.topface.topface.App;
 import com.topface.topface.data.ExperimentTags;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
+import com.topface.topface.ui.IBackPressedListener;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.social.AuthToken;
 
 public class TrackedFragmentActivity extends ActionBarActivity {
+    private IBackPressedListener mBackPressedListener;
 
     @Override
     public void onStart() {
@@ -76,5 +78,14 @@ public class TrackedFragmentActivity extends ActionBarActivity {
         super.onPause();
         comScore.onExitForeground();
         StatisticsTracker.getInstance().activityStop(this);
+    }
+
+
+    public void setBackPressedListener(IBackPressedListener listener) {
+        mBackPressedListener = listener;
+    }
+
+    public IBackPressedListener getBackPressedListener() {
+        return mBackPressedListener;
     }
 }

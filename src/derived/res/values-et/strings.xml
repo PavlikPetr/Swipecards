@@ -18,13 +18,13 @@
     <string name="dashbrd_popup_later">Küsida hiljem</string>
     <string name="buying_store_connect">Ühendan iTunes Store\'iga</string>
     <string name="buying_store_purchase">Sooritan ostu iTunes Store\'is</string>
-    <string name="buying_tf_ack_sending">Saadan info Topface\'ist ostu kohta</string>
+    <string name="buying_tf_ack_sending">Saadan info Alcatel\'ist ostu kohta</string>
     <string name="leaders_select_photo">Vali efektse foto</string>
     <string name="general_bookmarks_is_deleted">Kasutaja on väljavalitute hulgast ära kustutatud
     </string>
     <string name="general_blacklist_is_deleted">Kasutaja on mustast nimekirjast ära kustutatud
     </string>
-    <string name="invite_friends_title_short">Kutsuda kõik sõbrad Topface\'i</string>
+    <string name="invite_friends_title_short">Kutsuda kõik sõbrad Alcatel\'i</string>
     <string name="general_bookmarks_add_short">Väljavalitute hulka</string>
     <string name="general_complaint">Edasi kaevata</string>
     <string name="general_type_complain">Kaebuse teema</string>
@@ -174,7 +174,7 @@
     <string name="settings_about">Programmist</string>
     <string name="settings_version">Versioon</string>
     <string name="settings_copyright">Copyright 2010-</string>
-    <string name="settings_rights_reserved">Topface Kõik õigused on kaitstud</string>
+    <string name="settings_rights_reserved">Alcatel Kõik õigused on kaitstud</string>
     <string name="settings_extra">Täpsema info leiad</string>
     <string name="settings_logout">Profiilist väljuda</string>
     <string name="settings_logout_msg">Kas sa oled kindel, et tahad väljuda?</string>
@@ -265,7 +265,7 @@
     <string name="girl">neiu</string>
     <string name="start_communication">Alustada suhtlemist/suhtlust</string>
     <string name="birthdate">Sünnikuupäev</string>
-    <string name="welcome_to_topface">Tere tulemast Topface\'i!</string>
+    <string name="welcome_to_topface">Tere tulemast Alcatel\'i!</string>
     <string name="incorrect_email">E-posti aadress on vale./ Vale e-posti aadress</string>
     <string name="incorrect_login">Kasutajanimi on vale/ Vale kasutajanimi</string>
     <string name="incorrect_password">Salasõna on vale/ Vale salasõna</string>
@@ -275,7 +275,7 @@
     <string name="default_photo_upload">Foto ülesselaadimine</string>
     <string name="default_photo_upload_error">Laadimise viga</string>
     <string name="default_photo_upload_complete">Ülesselaadimine on lõpetatud!</string>
-    <string name="general_error_try_again_later">Ei ole võimalik Topface\'iga liituda. Proovi
+    <string name="general_error_try_again_later">Ei ole võimalik Alcatel\'iga liituda. Proovi
         korrata katse hiljem.
     </string>
     <string name="search_city_by_name">Linna otsing nimetuse järgi</string>
@@ -325,7 +325,7 @@
     <string name="friend_email_hint">Sisesta sõbra e-posti aadress või telefoninumber</string>
     <string name="general_add">Lisada</string>
     <string name="general_invite_friends">Kutsu/kutsuge sõpru</string>
-    <string name="invite_friends_title">Kutsuda kõik sõbrad telefoniraamatust Topface\'i</string>
+    <string name="invite_friends_title">Kutsuda kõik sõbrad telefoniraamatust Alcatel\'i</string>
     <plurals name="vip_status_period">
         <item quantity="other">Sa oled/te olete VIP staatuse %d päevaks saanud</item>
         <item quantity="one">Teie olete VIP staatuse %d päevaks saanud</item>

@@ -41,8 +41,8 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -179,16 +179,16 @@ public class Utils {
         return null;
     }
 
-    public static void startOldVersionPopup(final BaseFragmentActivity activity) {
-        startOldVersionPopup(activity, true);
+    public static void startOldVersionPopup(Activity activity, OnNextActionListener startActionCallback) {
+        startOldVersionPopup(activity, true, startActionCallback);
     }
 
-    public static void startOldVersionPopup(final BaseFragmentActivity activity, boolean cancelable) {
+    public static void startOldVersionPopup(final Activity activity, boolean cancelable, final OnNextActionListener startActionCallback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Utils.goToMarket(activity, App.from(activity).getOptions().updateUrl);
+                Utils.goToMarket(activity);
             }
         });
         if (cancelable) {
@@ -200,15 +200,24 @@ public class Utils {
         }
         builder.setMessage(R.string.general_version_not_supported);
         builder.setCancelable(cancelable);
-        builder.create().show();
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (startActionCallback != null) {
+                    startActionCallback.onNextAction();
+                }
+            }
+        });
+        alertDialog.show();
     }
 
-    public static void goToMarket(Activity context, String updateUrl) {
-        goToMarket(context, null, updateUrl);
+    public static void goToMarket(Activity context) {
+        goToMarket(context, null);
     }
 
-    public static void goToMarket(Activity context, Integer requestCode, String updateUrl) {
-        Intent marketIntent = getMarketIntent(updateUrl);
+    public static void goToMarket(Activity context, Integer requestCode) {
+        Intent marketIntent = getMarketIntent();
         if (isCallableIntent(marketIntent, context)) {
             if (requestCode == null) {
                 context.startActivity(marketIntent);
@@ -226,8 +235,8 @@ public class Utils {
         return list.size() > 0;
     }
 
-    public static Intent getMarketIntent(String updateUrl) {
-        return new Intent(Intent.ACTION_VIEW, Uri.parse(updateUrl));
+    public static Intent getMarketIntent() {
+        return new Intent(Intent.ACTION_VIEW, Uri.parse(App.get().getOptions().updateUrl));
     }
 
     public static String getClientDeviceName() {

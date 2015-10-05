@@ -16,6 +16,8 @@ import org.onepf.oms.appstore.GooglePlay;
 public class StoresManager {
 
     public static void addStores(Context context, OpenIabHelper.Options.Builder optsBuilder) {
+        optsBuilder.addAvailableStores(new GooglePlay(context, null));
+        optsBuilder.addPreferredStoreName(OpenIabHelper.NAME_GOOGLE);
     }
 
     public static ApiRequest getPaymentwallProductsRequest() {

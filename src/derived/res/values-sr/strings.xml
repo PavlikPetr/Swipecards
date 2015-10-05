@@ -29,7 +29,7 @@
     <string name="filter_select_city">Изабери град</string>
     <string name="edit_block_photo">Фотографије</string>
     <string name="dashbrd_popup_rating">Свиђа Вам се наша апликација? Подигните наш рејтинг! Што је
-        већи рејтинг, више људи ћеш срести у Topface!
+        већи рејтинг, више људи ћеш срести у Alcatel!
     </string>
     <string name="dashbrd_popup_title">Оцени ме</string>
     <string name="dashbrd_popup_cancel">Не питај више</string>
@@ -37,7 +37,7 @@
     <string name="dashbrd_popup_later">Питај касније</string>
     <string name="buying_store_connect">Повезујем се на iTunes Store</string>
     <string name="buying_store_purchase">Обављам куповину у iTunes Store</string>
-    <string name="buying_tf_ack_sending">Шаљем информацију о куповини у Topface</string>
+    <string name="buying_tf_ack_sending">Шаљем информацију о куповини у Alcatel</string>
     <string name="ok_label">Одноклассники</string>
     <string name="autorefill">Аутоматско попуњавање</string>
     <string name="coins">Новчићи</string>
@@ -50,7 +50,7 @@
     <string name="locking_screen_advice2">Набавите неограничен приступ</string>
     <string name="general_bookmarks_is_deleted">Корисник је уклоњен из омиљених</string>
     <string name="general_blacklist_is_deleted">Корисник је уклоњен са црне листе</string>
-    <string name="invite_friends_title_short">Позови све пријатеље у Topface</string>
+    <string name="invite_friends_title_short">Позови све пријатеље у Alcatel</string>
     <string name="general_bookmarks_add_short">У омиљене</string>
     <string name="general_complaint">Жалите се</string>
     <string name="general_type_complain">Предмет жалбе</string>
@@ -301,7 +301,7 @@
     <string name="settings_about">О програму</string>
     <string name="settings_version">Верзија</string>
     <string name="settings_copyright">Copyright 2010-</string>
-    <string name="settings_rights_reserved">Topface \nСва права заштићена.</string>
+    <string name="settings_rights_reserved">Alcatel \nСва права заштићена.</string>
     <string name="settings_extra">Још информације се може наћи на</string>
     <string name="settings_logout">Одјави се</string>
     <string name="settings_code_confirmation">Пошаљи код за потврду</string>
@@ -448,7 +448,7 @@
         људе.
     </string>
     <string name="set_birthdate">Наведи године</string>
-    <string name="welcome_to_topface">Добродошли у Topface!</string>
+    <string name="welcome_to_topface">Добродошли у Alcatel!</string>
     <string name="im_boy">Ја сам момак</string>
     <string name="im_girl">Ја сам девојка</string>
     <string name="u_sex">Ваш пол</string>
@@ -463,7 +463,7 @@
     <string name="default_photo_upload">Пренос фотографија</string>
     <string name="default_photo_upload_error">Грешка у преносу</string>
     <string name="default_photo_upload_complete">Пренос је завршен!</string>
-    <string name="general_error_try_again_later">Не можемо се повезати на Topface. Молимо, покушајте
+    <string name="general_error_try_again_later">Не можемо се повезати на Alcatel. Молимо, покушајте
         поново касније.
     </string>
     <string name="search_city_by_name">Тражи по имену града</string>
@@ -541,7 +541,7 @@
     <string name="general_add">Додати</string>
     <string name="general_invite_friends">Позови пријатеље</string>
     <string name="general_rest_contacts">Остало Вам је %d контаката</string>
-    <string name="invite_friends_title">Позови све пријатеље из свог телефонског именика у Topface
+    <string name="invite_friends_title">Позови све пријатеље из свог телефонског именика у Alcatel
     </string>
     <string name="invalid_contacts">Неки контакти су били неисправни. Молимо, пошаљите исправне
         контакте.
@@ -620,11 +620,11 @@
     </string>
     <string name="black_list_add_short">На црну листу</string>
     <string name="confirm_email_for_dating">Ми смо против непожељних порука. Потврдите своју адресу
-        е-поште како бисте упознали људе у Topface!
+        е-поште како бисте упознали људе у Alcatel!
     </string>
     <string name="confirm_email_for_dating_title">Ми смо против непожељних порука</string>
     <string name="confirm_email_for_dating_desc">Потврдите своју адресу е-поште како бисте могли да
-        упознате људе на Topface!
+        упознате људе на Alcatel!
     </string>
     <string name="send_confirm_link">Пошаљи линк за потврду</string>
     <string name="complain_type_swearing_msg">Увредљиво понашање, неправилно изражавање, претње
@@ -657,7 +657,7 @@
     </string>
     <string name="delete_account_are_you_sure">Да ли сте сигурни?</string>
     <string name="delete">Обрисати</string>
-    <string name="delete_account_warning">Упозорење! Покушавате да обришете свој Topface налог!
+    <string name="delete_account_warning">Упозорење! Покушавате да обришете свој Alcatel налог!
     </string>
     <string name="delete_account_error">На жалост, Ваш покушај уклањања налога није успео. Молимо,
         покушајте поново.
@@ -694,7 +694,7 @@
         поново.
     </string>
     <string name="auth_btn_ok">Одноклассники</string>
-    <string name="auth_btn_tf">Topface налог</string>
+    <string name="auth_btn_tf">Alcatel налог</string>
     <string name="birthday">Датум рођења</string>
     <string name="other_auth">Пријава преко других сервиса</string>
     <string name="settings_feedback_transaction_number_hint">Унесите број поруџбине</string>
@@ -741,7 +741,7 @@
     <string name="general_distance_km">%.02f км</string>
     <string name="general_distance_m">%d м</string>
     <string name="cannot_get_geo">Локација није могла бити одређена</string>
-    <string name="press_back_more_to_close_app">Да бисте изашли из Topface, притисните дугме
+    <string name="press_back_more_to_close_app">Да бисте изашли из Alcatel, притисните дугме
         \'\'назад\'\' још једном.
     </string>
     <string name="waiting_for_load">Чекам на учитавање…</string>
