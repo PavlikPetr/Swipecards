@@ -25,8 +25,6 @@ public abstract class AbstractEditAdapter<T> extends BaseAdapter {
 
     public abstract T getData();
 
-    public abstract T getCurrentData();
-
     protected View inflate(ViewGroup parent) {
         return mInflater.inflate(getItemLayoutRes(), parent, false);
     }

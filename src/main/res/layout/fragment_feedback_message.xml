@@ -3,9 +3,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/bg_white"
     android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/bg_white">
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -15,65 +15,63 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingTop="8dp"
             android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="8dp">
+            android:paddingRight="16dp">
 
             <TextView
                 android:id="@+id/tvLocale"
+                android:textColor="#8A8A8A"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/incorrect_locale"
-                android:textColor="#8A8A8A"
                 android:textSize="14sp" />
 
             <EditText
-                android:id="@+id/edText"
                 style="@style/FeedbackEditText"
+                android:id="@+id/edText"
+                android:paddingTop="24dp"
                 android:layout_height="wrap_content"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:hint="@string/enter_text"
-                android:imeOptions="flagNoExtractUi"
                 android:inputType="textMultiLine"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:paddingTop="24dp"
-                android:singleLine="false" />
+                android:singleLine="false"
+                android:focusable="true"
+                android:hint="@string/enter_text"
+                android:focusableInTouchMode="true" />
 
             <TextView
-                android:id="@+id/tvEmailTitle"
                 style="@style/FeedbackTextView"
+                android:id="@+id/tvEmailTitle"
                 android:text="@string/settings_feedback_email"
                 android:visibility="visible" />
 
             <EditText
-                android:id="@+id/edEmail"
                 style="@style/FeedbackEditText"
+                android:id="@+id/edEmail"
                 android:layout_height="34dp"
-                android:hint="@string/general_input_email"
-                android:imeOptions="flagNoExtractUi"
                 android:inputType="textEmailAddress"
                 android:singleLine="true"
+                android:hint="@string/general_input_email"
                 android:visibility="visible" />
 
             <TextView
-                android:id="@+id/tvTransactionIdInfoLink"
                 style="@style/FeedbackTextView"
+                android:id="@+id/tvTransactionIdInfoLink"
                 android:visibility="gone" />
 
             <Button
-                android:id="@+id/sendFeedback"
                 style="@style/Widget.Topface.Button.Big.Blue"
+                android:id="@+id/sendFeedback"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="24dp"
-                android:minHeight="40dp"
-                android:minWidth="286dp"
                 android:text="@string/send_feedback"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="20dp"
+                android:minWidth="286dp"
+                android:minHeight="40dp"
+                android:layout_gravity="center_horizontal" />
 
         </LinearLayout>
     </ScrollView>

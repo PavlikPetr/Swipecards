@@ -23,7 +23,7 @@
         android:background="@android:color/transparent"
         android:gravity="center_vertical"
         android:hint="@string/chat_write_message"
-        android:imeOptions="actionSend|flagNoExtractUi"
+        android:imeOptions="actionSend"
         android:inputType="textCapSentences|textMultiLine"
         android:maxLines="5"
         android:shadowColor="#E6FFFFFF"

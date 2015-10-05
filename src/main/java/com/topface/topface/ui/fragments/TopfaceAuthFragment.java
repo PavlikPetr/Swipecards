@@ -65,13 +65,13 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     private String mEmailForNewReg;
     private Timer mTimer = new Timer();
 
+
     @OnClick(R.id.btnEntrance)
     public void onTFLoginClick() {
         btnTFClick();
         Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
     }
 
-    @SuppressWarnings("unused")
     @OnEditorAction(R.id.edPassword)
     public boolean passwordAction(int action) {
         boolean handled = false;
@@ -93,7 +93,6 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         }
     }
 
-    @SuppressWarnings("unused")
     @OnClick(R.id.redAlertButton)
     public void createAccountClick() {
         EasyTracker.sendEvent("Registration", "StartActivity", "FromAuth", 1L);
@@ -102,7 +101,6 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         startActivityForResult(intent, RegistrationActivity.INTENT_REGISTRATION);
     }
 
-    @SuppressWarnings("unused")
     @OnClick(R.id.btnRecoverPassword)
     public void recoverPasswordClick() {
         Intent intent = new Intent(getActivity(), PasswordRecoverActivity.class);
@@ -147,6 +145,12 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         removeRedAlert();
         mPassword.setText("");
         mPassword.clearFocus();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
     }
 
     @Override
@@ -345,4 +349,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
             }
         }
     }
+
+
+
 }

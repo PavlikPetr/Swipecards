@@ -9,7 +9,6 @@ import android.os.Message;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -52,8 +51,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.functions.Action1;
 
@@ -78,7 +75,9 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private int mPosition;
     private int mSelectedPosition;
     private boolean mIsPhotoDialogShown;
-
+    private GridViewWithHeaderAndFooter mGridView;
+    private LockerView mLoadingLocker;
+    private EditText mEditText;
     private View mGridFooterView;
     private LeadersPhotoGridAdapter mUsePhotosAdapter;
     private AddPhotoHelper mAddPhotoHelper;
@@ -92,25 +91,15 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     };
     Photos mPhotos = null;
 
-
-    @Bind(R.id.user_photos_grid)
-    GridViewWithHeaderAndFooter mGridView;
-    @Bind(R.id.llvLeaderSending)
-    LockerView mLoadingLocker;
-    @Bind(R.id.yourGreetingEditText)
-    EditText mEditText;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        }
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(this, this);
         App.from(this).inject(this);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
         mGridFooterView = createGridViewFooter();
+        mGridView = (GridViewWithHeaderAndFooter) findViewById(R.id.user_photos_grid);
         addFooterView();
+        mLoadingLocker = (LockerView) findViewById(R.id.llvLeaderSending);
         if (savedInstanceState != null) {
             mPhotos = JsonUtils.fromJson(savedInstanceState.getString(PHOTOS), Photos.class);
             mPosition = savedInstanceState.getInt(POSITION, 0);
@@ -158,7 +147,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     protected void onDestroy() {
         super.onDestroy();
         mBalanceSubscription.unsubscribe();
-        ButterKnife.unbind(this);
     }
 
     @Override
@@ -202,6 +190,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
     private View getHeaderView() {
         View headerView = getLayoutInflater().inflate(R.layout.add_leader_grid_view_header, null);
+        mEditText = (EditText) headerView.findViewById(R.id.yourGreetingEditText);
         // set max symbol count for input status
         mEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_SYMBOL_COUNT)});
         initButtons(headerView);
@@ -231,6 +220,9 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
     @Override
     protected void onPause() {
+        if (mEditText != null) {
+            Utils.hideSoftKeyboard(this, mEditText);
+        }
         mPosition = mGridView.getFirstVisiblePosition();
         mSelectedPosition = getAdapter().getSelectedPhotoId();
         mIsPhotoDialogShown = true;
