@@ -57,7 +57,7 @@
                     android:layout_marginTop="28dp"
                     android:completionThreshold="1"
                     android:hint="@string/email"
-                    android:imeOptions="actionNext"
+                    android:imeOptions="actionNext|flagNoExtractUi"
                     android:inputType="textEmailAddress" />
 
                 <RelativeLayout
@@ -72,7 +72,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:hint="@string/password"
-                        android:imeOptions="actionDone"
+                        android:imeOptions="actionDone|flagNoExtractUi"
                         android:paddingRight="24dp" />
 
 

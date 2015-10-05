@@ -40,6 +40,11 @@ public class EditAdapterFactory {
                 }
 
                 @Override
+                public Object getCurrentData() {
+                    return getData();
+                }
+
+                @Override
                 public void saveData() {
 
                 }

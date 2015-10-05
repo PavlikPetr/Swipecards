@@ -879,7 +879,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         super.onPause();
         LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(mNewMessageReceiver);
         stopTimer();
-        Utils.hideSoftKeyboard(getActivity(), mEditBox);
     }
 
     @Override

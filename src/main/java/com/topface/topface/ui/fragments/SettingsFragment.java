@@ -1,9 +1,7 @@
 package com.topface.topface.ui.fragments;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,34 +18,84 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.dialogs.AboutAppDialog;
-import com.topface.topface.ui.dialogs.PreloadPhotoSelector;
+import com.topface.topface.ui.dialogs.PreloadPhotoSelectorDialog;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
+import com.topface.topface.ui.dialogs.SelectLanguageDialog;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
-import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.MarketApiManager;
-import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-import java.util.Locale;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class SettingsFragment extends ProfileInnerFragment implements OnClickListener {
+public class SettingsFragment extends ProfileInnerFragment {
 
     private TextView mSocialNameText;
     private MarketApiManager mMarketApiManager;
 
-    private View mLoNotifications;
-
     private TextView preloadPhotoName;
-    private ViewGroup mNoNotificationViewGroup;
+
+    @Bind(R.id.loNotifications)
+    View mLoNotifications;
+    @Bind(R.id.loNoNotifications)
+    ViewGroup mNoNotificationViewGroup;
+    @Bind(R.id.loHelp)
+    View mHelp;
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.loNotifications)
+    protected void notificationClick() {
+        Intent intent = new Intent(App.getContext(), SettingsContainerActivity.class);
+        startActivityForResult(intent, SettingsContainerActivity.INTENT_NOTIFICATIONS);
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.loAccount)
+    protected void accountClick() {
+        Intent intent = new Intent(App.getContext(), SettingsContainerActivity.class);
+        startActivityForResult(intent, SettingsContainerActivity.INTENT_ACCOUNT);
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.loFeedback)
+    protected void feedbackClick() {
+        Intent intent = new Intent(App.getContext(), SettingsContainerActivity.class);
+        startActivityForResult(intent, SettingsContainerActivity.INTENT_FEEDBACK);
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.loAbout)
+    protected void aboutClick() {
+        Options options = App.from(getActivity()).getOptions();
+        AboutAppDialog.newInstance(getActivity().getString(R.string.settings_about), options.aboutApp.title, options.aboutApp.url).show(getFragmentManager(),
+                AboutAppDialog.class.getName());
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.loLanguage)
+    protected void languageClick() {
+        new SelectLanguageDialog().show(getFragmentManager(), SelectLanguageDialog.class.getName());
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.loHelp)
+    protected void helpClick() {
+        String helpUrl = App.from(getActivity()).getOptions().helpUrl;
+        if (!TextUtils.isEmpty(helpUrl)) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(helpUrl));
+            startActivity(intent);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
         View view = inflater.inflate(R.layout.fragment_settings, null);
-
+        ButterKnife.bind(this, view);
         mMarketApiManager = new MarketApiManager();
 
         // Account
@@ -74,9 +122,6 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         View frame;
 
         // Notifications
-        mLoNotifications = root.findViewById(R.id.loNotifications);
-        mLoNotifications.setOnClickListener(this);
-        mNoNotificationViewGroup = (ViewGroup) root.findViewById(R.id.loNoNotifications);
         mNoNotificationViewGroup.findViewById(R.id.buttonNoNotificationsSetServices)
                 .setOnClickListener(new OnClickListener() {
                     @Override
@@ -88,21 +133,9 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                 });
         setNotificationsState();
 
-        // Help
-        View help = root.findViewById(R.id.loHelp);
-        help.setOnClickListener(this);
         if (TextUtils.isEmpty(App.from(getActivity()).getOptions().helpUrl)) {
-            help.setVisibility(View.GONE);
+            mHelp.setVisibility(View.GONE);
         }
-
-        // Feedback
-        root.findViewById(R.id.loFeedback).setOnClickListener(this);
-
-        // Language app
-        root.findViewById(R.id.loLanguage).setOnClickListener(this);
-
-        // About
-        root.findViewById(R.id.loAbout).setOnClickListener(this);
 
         //Preload photo
         frame = root.findViewById(R.id.loPreloadPhoto);
@@ -110,7 +143,6 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         preloadPhotoName = (TextView) frame.findViewWithTag("tvText");
         preloadPhotoName.setVisibility(View.VISIBLE);
         preloadPhotoName.setText(App.getUserConfig().getPreloadPhotoType().getName());
-        frame.setOnClickListener(this);
     }
 
     private void initAccountViews(View root) {
@@ -120,7 +152,6 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         getSocialAccountName(mSocialNameText);
         getSocialAccountIcon(mSocialNameText);
         mSocialNameText.setVisibility(View.VISIBLE);
-        frame.setOnClickListener(this);
     }
 
     private void setNotificationsState() {
@@ -143,101 +174,17 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        Intent intent;
-        Context applicationContext = App.getContext();
-        Options options = App.from(getActivity()).getOptions();
-        switch (v.getId()) {
-            case R.id.loAccount:
-                intent = new Intent(applicationContext, SettingsContainerActivity.class);
-                startActivityForResult(intent, SettingsContainerActivity.INTENT_ACCOUNT);
-                break;
-            case R.id.loHelp:
-                Intent i = Utils.getIntentToOpenUrl(options.helpUrl);
-                if (i != null) {
-                    startActivity(i);
-                }
-                break;
-            case R.id.loFeedback:
-                intent = new Intent(applicationContext, SettingsContainerActivity.class);
-                startActivityForResult(intent, SettingsContainerActivity.INTENT_FEEDBACK);
-                break;
-            case R.id.loAbout:
-                new AboutAppDialog(getActivity(), App.getContext().getString(R.string.settings_about)
-                        , options.aboutApp.title, options.aboutApp.url);
-                break;
-            case R.id.loLanguage:
-                startLanguageSelection();
-                break;
-            case R.id.loPreloadPhoto:
-                PreloadPhotoSelector preloadPhotoSelector = new PreloadPhotoSelector(getActivity());
-                preloadPhotoSelector.setPreloadPhotoTypeListener(new PreloadPhotoSelector.PreloadPhotoTypeListener() {
-                    @Override
-                    public void onSelected(PreloadPhotoSelectorTypes type) {
-                        preloadPhotoName.setText(type.getName());
-                    }
-                });
-                break;
-            case R.id.loNotifications:
-                intent = new Intent(applicationContext, SettingsContainerActivity.class);
-                startActivityForResult(intent, SettingsContainerActivity.INTENT_NOTIFICATIONS);
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void startLanguageSelection() {
-        final String[] locales = getResources().getStringArray(R.array.application_locales);
-        final String[] languages = new String[locales.length];
-        int selectedLocaleIndex = 0;
-        Locale appLocale = new Locale(App.getLocaleConfig().getApplicationLocale());
-        for (int i = 0; i < locales.length; i++) {
-            Locale locale = new Locale(locales[i]);
-            languages[i] = Utils.capitalize(locale.getDisplayName(locale));
-            if (locale.equals(appLocale)) {
-                selectedLocaleIndex = i;
+    @SuppressWarnings("unused")
+    @OnClick(R.id.loPreloadPhoto)
+    protected void showPreloadPhotoSelectorDialog() {
+        PreloadPhotoSelectorDialog preloadPhotoSelectorDialog = new PreloadPhotoSelectorDialog();
+        preloadPhotoSelectorDialog.setPreloadPhotoTypeListener(new PreloadPhotoSelectorDialog.PreloadPhotoTypeListener() {
+            @Override
+            public void onSelected(PreloadPhotoSelectorTypes type) {
+                preloadPhotoName.setText(type.getName());
             }
-        }
-        final int selectedLocaleIndexFinal = selectedLocaleIndex;
-        new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.settings_select_language)
-                .setSingleChoiceItems(languages, selectedLocaleIndex, null)
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogLocales, int which) {
-                        dialogLocales.dismiss();
-                    }
-                })
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialogLocales, int whichButton) {
-                        final int selectedPosition = ((AlertDialog) dialogLocales).getListView().getCheckedItemPosition();
-                        if (selectedLocaleIndexFinal == selectedPosition) {
-                            dialogLocales.dismiss();
-                            return;
-                        }
-                        new AlertDialog.Builder(getActivity())
-                                .setTitle(R.string.settings_select_language)
-                                .setMessage(R.string.restart_to_change_locale)
-                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogConfirm, int which) {
-                                        String selectedLocale = locales[selectedPosition];
-                                        (new SearchCacheManager()).clearCache();
-
-                                        LocaleConfig.changeLocale(getActivity(), selectedLocale);
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogConfirm, int which) {
-                                        dialogLocales.dismiss();
-                                    }
-                                }).show();
-                    }
-                }).show();
-
+        });
+        preloadPhotoSelectorDialog.show(getFragmentManager(), PreloadPhotoSelectorDialog.class.getName());
     }
 
     @Override
@@ -313,10 +260,5 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             mSocialNameText.setText(authToken.getLogin());
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 }

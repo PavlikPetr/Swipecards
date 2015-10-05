@@ -35,6 +35,11 @@ public class FormItemEditAdapter extends AbstractEditAdapter<FormItem> {
         return mFormItem;
     }
 
+    @Override
+    public FormItem getCurrentData() {
+        return getData();
+    }
+
     /**
      * This adapter saves data automatically
      */
