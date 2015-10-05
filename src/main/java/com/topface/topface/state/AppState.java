@@ -47,6 +47,12 @@ public class AppState {
         }
     }
 
+    public <T> void destroyObservable(Class<T> dataClass) {
+        if (getCachableData().contains(dataClass)) {
+            getCachableData().remove(dataClass);
+        }
+    }
+
     public <T> Observable<T> getObservable(Class<T> dataClass) {
         synchronized (getCachableData()) {
             if (!getCachableData().containsKey(dataClass)) {

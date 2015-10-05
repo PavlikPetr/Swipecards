@@ -23,6 +23,7 @@ import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.experiments.SixCoinsSubscribeExperiment;
 import com.topface.topface.requests.BuyLikesAccessRequest;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -42,7 +43,6 @@ import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.RateController;
@@ -160,7 +160,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         if (!(item.user.deleted || item.user.banned)) {
             if (item instanceof FeedLike) {
                 if (!((FeedLike) item).mutualed) {
-                    mRateController.onLike(item.user.id, 0, null);
+                    mRateController.onLike(item.user.id, 0, null, App.from(getActivity()).getOptions().blockUnconfirmed);
                     ((FeedLike) item).mutualed = true;
                     getListAdapter().notifyDataSetChanged();
                     Utils.showToastNotification(R.string.general_mutual, Toast.LENGTH_SHORT);
@@ -227,14 +227,14 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             currentView.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(PurchasesActivity.createBuyingIntent("EmptyLikes"));
+                    startActivity(PurchasesActivity.createBuyingIntent("EmptyLikes", App.from(getActivity()).getOptions().topfaceOfferwallRedirect));
                 }
             });
         }
     }
 
     private void initEmptyScreenOnBlockedLikes(final View inflated, ViewFlipper viewFlipper) {
-        final Options.BlockSympathy blockSympathyOptions = CacheProfile.getOptions().blockSympathy;
+        final Options.BlockSympathy blockSympathyOptions = App.from(getActivity()).getOptions().blockSympathy;
         // send stat to google analytics
         sendBlockSympathyStatistics(blockSympathyOptions);
         // set paid likes view
@@ -251,7 +251,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     private void initBuyVipButton(View currentView, Options.BlockSympathy blockSympathyOptions) {
         Button btnBuy = (Button) currentView.findViewById(R.id.buy_vip_button);
         TextView buyText = (TextView) currentView.findViewById(R.id.buy_vip_text);
-        if (CacheProfile.getOptions().unlockAllForPremium) {
+        if (App.from(getActivity()).getOptions().unlockAllForPremium) {
             initButtonForBlockedScreen(
                     buyText, blockSympathyOptions.textPremium,
                     btnBuy, blockSympathyOptions.buttonTextPremium,
@@ -284,7 +284,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     private void initBuyCoinsButton(final View inflated, final Options.BlockSympathy blockSympathyOptions, View currentView) {
         final Button btnBuy = (Button) currentView.findViewById(R.id.buy_coins_button);
         final ProgressBar progress = (ProgressBar) currentView.findViewById(R.id.prsLoading);
-        final SixCoinsSubscribeExperiment experiment = CacheProfile.getOptions().sixCoinsSubscribeExperiment;
+        final SixCoinsSubscribeExperiment experiment = App.from(getActivity()).getOptions().sixCoinsSubscribeExperiment;
         initButtonForBlockedScreen(btnBuy, experiment.isEnabled ? experiment.buttonText : blockSympathyOptions.buttonText,
                 new View.OnClickListener() {
                     @Override
@@ -364,7 +364,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                 PurchasesActivity.createBuyingIntent(
                         "VipPaidSympathies." + group,
                         PurchasesFragment.TYPE_UNLOCK_SYMPATHIES,
-                        blockSympathyOptions.price
+                        blockSympathyOptions.price,
+                        App.from(getActivity()).getOptions().topfaceOfferwallRedirect
                 )
         );
     }
@@ -401,9 +402,9 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         ImageViewRemote ivOne = (ImageViewRemote) currentView.findViewById(R.id.ivOne);
         ImageViewRemote ivTwo = (ImageViewRemote) currentView.findViewById(R.id.ivTwo);
         ImageViewRemote ivThree = (ImageViewRemote) currentView.findViewById(R.id.ivThree);
-
+        Profile profile = App.from(getActivity()).getProfile();
         // if profile still not cached - show girls by default
-        if (CacheProfile.dating != null && CacheProfile.dating.sex == Static.GIRL) {
+        if (profile.dating != null && profile.dating.sex == Static.GIRL) {
             ivOne.setResourceSrc(R.drawable.likes_male_one);
             ivTwo.setResourceSrc(R.drawable.likes_male_two);
             ivThree.setResourceSrc(R.drawable.likes_male_three);
@@ -467,7 +468,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     private void showInterstitial() {
         if (getFeedType() == CountersManager.LIKES) {
-            AdmobInterstitialUtils.requestPreloadedInterstitial(getActivity());
+            AdmobInterstitialUtils.requestPreloadedInterstitial(getActivity(), App.from(getActivity()).getOptions().interstitial);
         }
     }
 }

@@ -16,9 +16,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.topface.billing.OpenIabFragment;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.Products;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -42,7 +44,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         public void onReceive(Context context, Intent intent) {
             switchLayouts();
             if (mInvisSwitcher != null) {
-                mInvisSwitcher.setChecked(CacheProfile.invisible);
+                mInvisSwitcher.setChecked(App.from(context).getProfile().invisible);
             }
         }
     };
@@ -102,7 +104,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         super.onResume();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(OpenIabFragment.UPDATE_RESOURCE_INFO));
-        mInvisSwitcher.setProgressState(false, CacheProfile.invisible);
+        mInvisSwitcher.setProgressState(false, App.from(getActivity()).getProfile().invisible);
         switchLayouts();
     }
 
@@ -138,7 +140,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     private void switchLayouts() {
         if (mBuyVipViewsContainer != null && mEditPremiumContainer != null) {
-            if (CacheProfile.premium) {
+            if (App.get().getProfile().premium) {
                 mEditPremiumContainer.setVisibility(View.VISIBLE);
                 mBuyVipViewsContainer.setVisibility(View.GONE);
             } else {
@@ -174,7 +176,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     protected void buy(String id, BuyButtonData curBtn) {
         buy(curBtn);
-        PushButtonVipUniqueStatistics.sendPushButtonVip(id, ((Object) this).getClass().getSimpleName(), getFrom());
+        PushButtonVipUniqueStatistics.sendPushButtonVip(id, ((Object) this).getClass().getSimpleName(), getFrom(), App.from(getActivity()).getProfile());
         PushButtonVipStatistics.send(id, ((Object) this).getClass().getSimpleName(), getFrom());
         EasyTracker.sendEvent("Subscription", "ButtonClick" + getFrom(), id, 0L);
     }
@@ -232,18 +234,19 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         final boolean invisibility = !mInvisSwitcher.isChecked();
         request.invisible = invisibility;
         mInvisSwitcher.setProgressState(true);
+        final Profile profile = App.from(getActivity()).getProfile();
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) throws NullPointerException {
-                CacheProfile.invisible = invisibility;
+                profile.invisible = invisibility;
                 CacheProfile.sendUpdateProfileBroadcast();
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) throws NullPointerException {
                 if (mInvisSwitcher != null && getActivity() != null) {
-                    if (CacheProfile.invisible != mInvisSwitcher.isChecked()) {
-                        mInvisSwitcher.setChecked(CacheProfile.invisible);
+                    if (profile.invisible != mInvisSwitcher.isChecked()) {
+                        mInvisSwitcher.setChecked(profile.invisible);
                     }
                 }
             }
@@ -252,7 +255,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
             public void always(IApiResponse response) {
                 super.always(response);
                 if (mInvisSwitcher != null && getActivity() != null) {
-                    mInvisSwitcher.setProgressState(false, CacheProfile.invisible);
+                    mInvisSwitcher.setProgressState(false, profile.invisible);
                 }
             }
         }).exec();

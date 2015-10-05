@@ -71,7 +71,7 @@ public class GcmIntentService extends IntentService {
                 }
             }
             // try to show notification
-            GCMUtils.showNotificationIfNeed(intent, context);
+            GCMUtils.showNotificationIfNeed(intent, context, App.from(context).getOptions().updateUrl);
         }
     }
 
@@ -86,6 +86,11 @@ public class GcmIntentService extends IntentService {
         }
 
         return id;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     @Override

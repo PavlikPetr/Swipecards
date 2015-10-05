@@ -20,8 +20,8 @@ import com.topface.topface.data.experiments.SixCoinsSubscribeExperiment;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
@@ -36,6 +36,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import javax.inject.Inject;
 
 /**
  * Опции приложения
@@ -166,12 +168,14 @@ public class Options extends AbstractData {
     public int maxMessageSize = 10000;
     public SixCoinsSubscribeExperiment sixCoinsSubscribeExperiment = new SixCoinsSubscribeExperiment();
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
-    public TopfaceOfferwallRedirect topfaceOfferwallRedirect = new TopfaceOfferwallRedirect();
+    transient public TopfaceOfferwallRedirect topfaceOfferwallRedirect = new TopfaceOfferwallRedirect();
     public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
     public FeedNativeAd feedNativeAd = new FeedNativeAd();
     public NotShown notShown = new NotShown();
-    public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
+    transient public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
     public InterstitialInFeeds interstitial = new InterstitialInFeeds();
+    @Inject
+    transient TopfaceAppState mAppState;
     /**
      * {Number} fullscreenInterval — интервал отображения стартового фулскрин баннера в секундах
      */
@@ -188,6 +192,8 @@ public class Options extends AbstractData {
     public Options(JSONObject data, boolean cacheToPreferences) {
         if (data != null) {
             fillData(data, cacheToPreferences);
+            App.from(App.getContext().getApplicationContext()).inject(this);
+            mAppState.setData(this);
         }
     }
 
@@ -304,6 +310,7 @@ public class Options extends AbstractData {
             fallbackTypeBanner = response.optString("gag_type_banner", AdProvidersFactory.BANNER_ADMOB);
             gagTypeFullscreen = response.optString("gag_type_fullscreen", AdProvidersFactory.BANNER_NONE);
             scruffy = response.optBoolean("scruffy", false);
+            App.isScruffyEnabled = scruffy;
             JSONObject bonusObject = response.optJSONObject("bonus");
             if (bonusObject != null) {
                 bonus.enabled = bonusObject.optBoolean("enabled");
@@ -363,13 +370,6 @@ public class Options extends AbstractData {
         } catch (Exception e) {
             Debug.error("Options parsing error", e);
         }
-
-        if (response != null && cacheToPreferences) {
-            CacheProfile.setOptions(this, response);
-        } else {
-            Debug.error(cacheToPreferences ? "Options from preferences" : "Options response is null");
-        }
-
     }
 
     private void fillOffers(List<Offerwalls.Offer> list, JSONArray offersArrObj) throws JSONException {

@@ -28,6 +28,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.AddedPhoto;
 import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
@@ -278,7 +279,8 @@ public class AddPhotoHelper {
             return;
         }
         // если начинаем грузить аватарку, то выставляем флаг, чтобы resumeFragment не вызвал показ попапа
-        if (CacheProfile.photos != null && CacheProfile.photos.size() == 0) {
+        Profile profile = App.from(mContext).getProfile();
+        if (profile.photos != null && profile.photos.size() == 0) {
             App.getConfig().getUserConfig().setUserAvatarAvailable(true);
             App.getConfig().getUserConfig().saveConfig();
         }
@@ -330,7 +332,7 @@ public class AddPhotoHelper {
                         0,
                         mContext.getString(R.string.default_photo_upload_complete), "", false,
                         uri.toString(), 1, getIntentForNotification(), true, null, null);
-                CacheProfile.incrementPhotoPosition(1);
+                CacheProfile.incrementPhotoPosition(mContext, 1);
             }
 
             @Override
@@ -469,7 +471,7 @@ public class AddPhotoHelper {
                     public void handleMessage(Message msg) {
                         super.handleMessage(msg);
                         if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
-                            handlePhotoMessage(msg);
+                            handlePhotoMessage(msg, mContext);
                         }
                     }
                 });
@@ -481,23 +483,24 @@ public class AddPhotoHelper {
         mOnDialogDismissListener = listener;
     }
 
-    public static void handlePhotoMessage(Message msg) {
+    public static void handlePhotoMessage(Message msg, Context mContext) {
+        Profile profile = App.from(mContext).getProfile();
         if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
             Photo photo = (Photo) msg.obj;
             // ставим фото на аватарку только если она едиснтвенная
-            if (CacheProfile.photos.size() == 0) {
-                CacheProfile.photo = photo;
+            if (profile.photos.size() == 0) {
+                profile.photo = photo;
             }
             // добавляется фото в начало списка
-            CacheProfile.photos.addFirst(photo);
+            profile.photos.addFirst(photo);
             // Увеличиваем общее количество фотографий юзера
-            CacheProfile.totalPhotos += 1;
+            profile.photosCount += 1;
             // оповещаем всех об изменениях
             CacheProfile.sendUpdateProfileBroadcast();
             Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
         } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
             // если загрузка аватраки не завершилась успехом, то сбрасываем флаг
-            if (CacheProfile.photos.size() == 0) {
+            if (profile.photos.size() == 0) {
                 App.getConfig().getUserConfig().setUserAvatarAvailable(false);
                 App.getConfig().getUserConfig().saveConfig();
             }

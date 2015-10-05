@@ -7,11 +7,11 @@ import android.view.ViewGroup;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.banners.RefreshablePageWithAds;
-import com.topface.topface.utils.CacheProfile;
 
 import java.util.Calendar;
 
@@ -47,7 +47,7 @@ class AdMobProvider extends AbstractAdsProvider {
     private Calendar getUserAge() {
         Calendar rightNow = Calendar.getInstance();
         int year = rightNow.get(Calendar.YEAR);
-        rightNow.set(Calendar.YEAR, year - CacheProfile.getProfile().age);
+        rightNow.set(Calendar.YEAR, year - App.from(mContext).getProfile().age);
         return rightNow;
     }
 
@@ -91,7 +91,7 @@ class AdMobProvider extends AbstractAdsProvider {
     public AdRequest.Builder getAdRequest() {
         return new AdRequest.Builder()
                 .setGender(
-                        CacheProfile.getProfile().sex == Static.BOY ?
+                        App.from(mContext).getProfile().sex == Static.BOY ?
                                 AdRequest.GENDER_MALE :
                                 AdRequest.GENDER_FEMALE
                 ).setBirthday(getUserAge().getTime());

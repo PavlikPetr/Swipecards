@@ -15,6 +15,7 @@ import com.topface.topface.requests.ConfirmedApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;

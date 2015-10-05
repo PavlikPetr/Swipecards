@@ -74,13 +74,13 @@ public class AboutAppDialog extends TrackedDialogFragment {
 
         // Extra
         TextView extra = (TextView) view.findViewById(R.id.tvExtra);
-        SpannableString title = new SpannableString(CacheProfile.getOptions().aboutApp.title);
+        SpannableString title = new SpannableString(mAboutTitle);
         title.setSpan(new UnderlineSpan(), 0, title.length(), 0);
         extra.setText(title);
         extra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = Utils.getIntentToOpenUrl(CacheProfile.getOptions().aboutApp.url);
+                Intent i = Utils.getIntentToOpenUrl(mAboutUrl);
                 if (i != null) {
                     getActivity().startActivity(i);
                 }

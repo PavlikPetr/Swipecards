@@ -2,7 +2,6 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
-
 import com.topface.topface.utils.EasyTracker;
 
 import org.json.JSONException;
@@ -17,8 +16,8 @@ public class SendGiftRequest extends ConfirmedApiRequest {
     public int userId;
     public int giftId;
 
-    public SendGiftRequest(Context context) {
-        super(context);
+    public SendGiftRequest(Context context, boolean blockUnconfirmed) {
+        super(context, blockUnconfirmed);
     }
 
     @Override

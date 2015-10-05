@@ -96,7 +96,6 @@ public class UsersListCacheManager extends PreferencesCacheManager {
         getEditor()
                 .remove(getPositionCacheKey(mCacheKey))
                 .remove(getDataCacheKey(mCacheKey))
-                        //.remove(getExpireDateCacheKey(mCacheKey))
                 .commit();
     }
 

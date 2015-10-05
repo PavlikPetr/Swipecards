@@ -9,7 +9,6 @@ import android.widget.CheckedTextView;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 
@@ -23,10 +22,10 @@ public class FormItemEditAdapter extends AbstractEditAdapter<FormItem> {
     private String[] mEntries;
     private int[] mIds;
 
-    public FormItemEditAdapter(Context context, FormItem formItem) {
+    public FormItemEditAdapter(Context context, FormItem formItem, Profile profile) {
         super(context);
         mFormItem = new FormItem(formItem);
-        mFormInfo = new FormInfo(App.getContext(), CacheProfile.sex, Profile.TYPE_OWN_PROFILE);
+        mFormInfo = new FormInfo(App.getContext(), profile.sex, Profile.TYPE_OWN_PROFILE);
         mEntries = createEntries(mFormItem);
         mIds = createIds(mFormItem);
     }

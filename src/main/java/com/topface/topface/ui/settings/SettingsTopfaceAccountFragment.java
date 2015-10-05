@@ -106,7 +106,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
                 @Override
                 public void success(IApiResponse response) {
                     Utils.showToastNotification(R.string.email_confirmed, Toast.LENGTH_SHORT);
-                    CacheProfile.emailConfirmed = true;
+                    App.from(getActivity()).getProfile().emailConfirmed = true;
                     if (isAdded()) {
                         setViewsState();
                     }
@@ -150,12 +150,11 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
         if (getActivity() instanceof BaseFragmentActivity) {
             ((BaseFragmentActivity) getActivity()).registerRequest(profileRequest);
         }
-        profileRequest.part = ProfileRequest.P_EMAIL_CONFIRMED;
         profileRequest.callback(new DataApiHandler<Boolean>() {
 
             @Override
             protected void success(Boolean isEmailConfirmed, IApiResponse response) {
-                CacheProfile.emailConfirmed = isEmailConfirmed;
+                App.from(getActivity()).getProfile().emailConfirmed = isEmailConfirmed;
                 if (isShowEmailConfirmMessage) {
                     onProfileUpdated();
                 }
@@ -194,7 +193,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
     }
 
     private void setTextViewsState() {
-        if (CacheProfile.emailConfirmed) {
+        if (App.from(getActivity()).getProfile().emailConfirmed) {
             mEditText.setVisibility(View.GONE);
             mText.setVisibility(View.VISIBLE);
             mBtnCodeWasSend.setVisibility(View.GONE);
@@ -210,7 +209,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
     }
 
     private void setButtonsState() {
-        if (CacheProfile.emailConfirmed) {
+        if (App.from(getActivity()).getProfile().emailConfirmed) {
             mBtnLogout.setVisibility(View.VISIBLE);
             mBtnChangeEmail.setVisibility(View.VISIBLE);
             setChangeBtnAction(ACTION_CHANGE_PASSWORD);
@@ -421,7 +420,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
     }
 
     private void onProfileUpdated() {
-        if (CacheProfile.emailConfirmed) {
+        if (App.from(getActivity()).getProfile().emailConfirmed) {
             Toast.makeText(App.getContext(), R.string.general_email_success_confirmed, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(App.getContext(), R.string.general_email_not_confirmed, Toast.LENGTH_SHORT).show();

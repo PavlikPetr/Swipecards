@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
@@ -45,7 +46,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     ProfileInnerUpdater mProfileUpdater = new ProfileInnerUpdater() {
         @Override
         public void update() {
-            setProfile(getProfile());
+            setProfile(App.from(getActivity()).getProfile());
         }
 
         public void bindFragment(Fragment fragment) {

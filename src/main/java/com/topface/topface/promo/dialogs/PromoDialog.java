@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
@@ -132,7 +133,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
         @Override
         public void onReceive(Context context, Intent intent) {
             //Если мы узнаем что пользователь премиум после обновления профиля, то закрываем фрагмент
-            if (CacheProfile.premium) {
+            if (App.from(getActivity()).getProfile().premium) {
                 Debug.log("Promo: Close fragment after profile update");
                 closeFragment();
                 EasyTracker.sendEvent(getMainTag(), "VipClose", "CloseAfterUpdateProfile", 1L);

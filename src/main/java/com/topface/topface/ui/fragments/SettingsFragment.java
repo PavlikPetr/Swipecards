@@ -16,13 +16,14 @@ import android.widget.TextView;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.Options;
 import com.topface.topface.ui.dialogs.AboutAppDialog;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorDialog;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.ui.dialogs.SelectLanguageDialog;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.MarketApiManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -132,7 +133,8 @@ public class SettingsFragment extends ProfileInnerFragment {
 
         // Help
         View help = root.findViewById(R.id.loHelp);
-        if (TextUtils.isEmpty(CacheProfile.getOptions().helpUrl)) {
+        help.setOnClickListener(this);
+        if (TextUtils.isEmpty(App.from(getActivity()).getOptions().helpUrl)) {
             help.setVisibility(View.GONE);
         }
 
@@ -156,7 +158,7 @@ public class SettingsFragment extends ProfileInnerFragment {
     private void setNotificationsState() {
         boolean isMarketApiAvailable = mMarketApiManager.isMarketApiAvailable();
         if ((!isMarketApiAvailable && mMarketApiManager.isMarketApiSupportByUs()) ||
-                (!isMarketApiAvailable && !CacheProfile.email)) {
+                (!isMarketApiAvailable && !App.from(getActivity()).getProfile().email)) {
             TextView text = (TextView) mNoNotificationViewGroup.findViewById(R.id.textNoNotificationDescription);
             text.setVisibility(mMarketApiManager.isTitleVisible() ? View.VISIBLE : View.GONE);
             text.setText(mMarketApiManager.getTitleTextId());

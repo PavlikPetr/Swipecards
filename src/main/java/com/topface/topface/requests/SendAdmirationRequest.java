@@ -6,12 +6,12 @@ public class SendAdmirationRequest extends SendLikeRequest {
 
     public static final String service = "admiration.send";
 
-    public SendAdmirationRequest(Context context, int userId, Place place) {
-        super(context, userId, place);
+    public SendAdmirationRequest(Context context, int userId, Place place, boolean blockUnconfirmed) {
+        super(context, userId, place, blockUnconfirmed);
     }
 
-    public SendAdmirationRequest(Context context, int userId, int mutualId, Place place) {
-        super(context, userId, mutualId, place);
+    public SendAdmirationRequest(Context context, int userId, int mutualId, Place place, boolean blockUnconfirmed) {
+        super(context, userId, mutualId, place, blockUnconfirmed);
     }
 
     @Override

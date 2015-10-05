@@ -8,14 +8,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteAdmirationsRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.FeedsCache;
 
@@ -45,13 +47,15 @@ public class AdmirationFragment extends LikesFragment {
 
     @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
+        Profile profile = App.from(getActivity()).getProfile();
+        final Options options = App.from(getActivity()).getOptions();
         if (mEmptyFeedView == null) mEmptyFeedView = inflated;
-        if (CacheProfile.premium) {
+        if (profile.premium) {
             ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
             inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations"));
+                    startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations", options.topfaceOfferwallRedirect));
                 }
             });
         } else {
@@ -59,7 +63,7 @@ public class AdmirationFragment extends LikesFragment {
                 ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(1);
                 int curCounter = mCountersData.admirations;
                 if (curCounter == 0) {
-                    curCounter = CacheProfile.getOptions().premiumAdmirations.getCount();
+                    curCounter = options.premiumAdmirations.getCount();
                 }
 
                 String title = Utils.getQuantityString(R.plurals.popup_vip_admirations, curCounter, curCounter);
@@ -72,17 +76,17 @@ public class AdmirationFragment extends LikesFragment {
                     }
                 });
                 ((ImageViewRemote) inflated.findViewById(R.id.ivOne))
-                        .setResourceSrc(CacheProfile.dating.sex == Static.GIRL ? R.drawable.likes_male_one : R.drawable.likes_female_one);
+                        .setResourceSrc(profile.dating.sex == Static.GIRL ? R.drawable.likes_male_one : R.drawable.likes_female_one);
                 ((ImageViewRemote) inflated.findViewById(R.id.ivTwo))
-                        .setResourceSrc(CacheProfile.dating.sex == Static.GIRL ? R.drawable.likes_male_two : R.drawable.likes_female_two);
+                        .setResourceSrc(profile.dating.sex == Static.GIRL ? R.drawable.likes_male_two : R.drawable.likes_female_two);
                 ((ImageViewRemote) inflated.findViewById(R.id.ivThree))
-                        .setResourceSrc(CacheProfile.dating.sex == Static.GIRL ? R.drawable.likes_male_three : R.drawable.likes_female_three);
+                        .setResourceSrc(profile.dating.sex == Static.GIRL ? R.drawable.likes_male_three : R.drawable.likes_female_three);
             } else {
                 ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
                 inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations"));
+                        startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations", options.topfaceOfferwallRedirect));
                     }
                 });
             }

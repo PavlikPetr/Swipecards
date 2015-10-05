@@ -120,12 +120,12 @@ public class SettingsNotificationsFragment extends BaseFragment {
         setTitle(R.string.settings_mutual, mLoMutual);
         setTitle(R.string.settings_messages, mLoChat);
         setTitle(R.string.settings_guests, mLoGuests);
-
-        if (CacheProfile.notifications != null) {
-            setText(CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES), mLoLikes);
-            setText(CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY), mLoMutual);
-            setText(CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE), mLoChat);
-            setText(CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR), mLoGuests);
+        Profile profile = App.from(getActivity()).getProfile();
+        if (profile.notifications != null) {
+            setText(profile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES), mLoLikes);
+            setText(profile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY), mLoMutual);
+            setText(profile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE), mLoChat);
+            setText(profile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR), mLoGuests);
         }
 
         setTitle(R.string.settings_vibration, mLoVibration);
@@ -196,7 +196,7 @@ public class SettingsNotificationsFragment extends BaseFragment {
 
     private void setNotificationState() {
         boolean isMarketApiAvailable = mMarketApiManager.isMarketApiAvailable();
-        if (!CacheProfile.email && !isMarketApiAvailable) {
+        if (!App.from(getActivity()).getProfile().email && !isMarketApiAvailable) {
             mMelodyName.setVisibility(View.GONE);
             setNotificationVisibility(View.GONE);
         } else {
@@ -276,11 +276,12 @@ public class SettingsNotificationsFragment extends BaseFragment {
             view.setEnabled(false);
             setText(mSavingText, view);
         }
+        final Profile profile = App.from(getActivity()).getProfile();
         getMailNotificationRequest(notification, App.getContext()).callback(new DataApiHandler<SendMailNotificationResponse>() {
             @Override
             public void fail(int codeError, IApiResponse response) {
                 if (getView() != null) {
-                    setText(CacheProfile.notifications.get(notification.type), view);
+                    setText(profile.notifications.get(notification.type), view);
                     Utils.showToastNotification(R.string.general_data_error, Toast.LENGTH_SHORT);
                 }
             }
@@ -288,7 +289,7 @@ public class SettingsNotificationsFragment extends BaseFragment {
             @Override
             protected void success(SendMailNotificationResponse data, IApiResponse response) {
                 if (data.saved) {
-                    CacheProfile.notifications.put(notification.type, notification);
+                    profile.notifications.put(notification.type, notification);
                     CacheProfile.sendUpdateProfileBroadcast();
                     if (getView() != null) {
                         setText(notification, view);
@@ -327,8 +328,8 @@ public class SettingsNotificationsFragment extends BaseFragment {
     }
 
     private boolean hasChanges(Profile.TopfaceNotifications notification) {
-        if (CacheProfile.notifications != null) {
-            Profile.TopfaceNotifications cachedNotification = CacheProfile.notifications.get(notification.type);
+        if (App.from(getActivity()).getProfile().notifications != null) {
+            Profile.TopfaceNotifications cachedNotification = App.from(getActivity()).getProfile().notifications.get(notification.type);
             return cachedNotification.mail != notification.mail || cachedNotification.apns != notification.apns;
         }
         return false;
@@ -380,21 +381,22 @@ public class SettingsNotificationsFragment extends BaseFragment {
      */
     public SendMailNotificationsRequest getMailNotificationRequest(Context context) {
         SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
-        if (CacheProfile.notifications != null) {
+        Profile profile = App.from(getActivity()).getProfile();
+        if (profile.notifications != null) {
             try {
-                request.mailSympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
-                request.mailMutual = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail;
-                request.mailChat = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail;
-                request.mailGuests = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).mail;
+                request.mailSympathy = profile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
+                request.mailMutual = profile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).mail;
+                request.mailChat = profile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).mail;
+                request.mailGuests = profile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).mail;
             } catch (Exception e) {
                 Debug.error(e);
             }
 
             try {
-                request.apnsSympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
-                request.apnsMutual = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
-                request.apnsChat = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
-                request.apnsVisitors = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
+                request.apnsSympathy = profile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
+                request.apnsMutual = profile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
+                request.apnsChat = profile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
+                request.apnsVisitors = profile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
             } catch (Exception e) {
                 Debug.error(e);
             }

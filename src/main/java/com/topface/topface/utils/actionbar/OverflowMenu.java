@@ -33,7 +33,6 @@ import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.EditorProfileActionsActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
 
@@ -135,7 +134,7 @@ public class OverflowMenu {
         ArrayList<OverflowMenuItem> result = new ArrayList<>();
         if (!isBanned) {
             result.add(SEND_SYMPATHY_ACTION);
-            if (!CacheProfile.getOptions().isHideAdmirations) {
+            if (!App.from(mActivity).getOptions().isHideAdmirations) {
                 result.add(SEND_ADMIRATION_ACTION);
             }
             result.add(OPEN_CHAT_ACTION);
@@ -170,7 +169,7 @@ public class OverflowMenu {
             Boolean isBookmarked = isBookmarked();
             Boolean isInBlackList = isInBlackList();
             Boolean isSympathySent = isSympathySent();
-            ArrayList<OverflowMenuItem> overflowMenuItemArray = getProfileOverflowMenu(CacheProfile.isEditor(), isBanned());
+            ArrayList<OverflowMenuItem> overflowMenuItemArray = getProfileOverflowMenu(App.from(mActivity).getProfile().isEditor(), isBanned());
             for (int i = 0; i < overflowMenuItemArray.size(); i++) {
                 OverflowMenuItem item = overflowMenuItemArray.get(i);
                 Integer resourceId = null;
@@ -343,7 +342,7 @@ public class OverflowMenu {
                         }
                         initOverfowMenu();
                     }
-                }
+                }, App.from(mActivity).getOptions().blockUnconfirmed
         );
         setSympathySentState(true, true);
     }
@@ -374,7 +373,7 @@ public class OverflowMenu {
                         setSympathySentState(false, true);
                         initOverfowMenu();
                     }
-                }
+                }, App.from(mActivity).getOptions()
         );
         if (isSentAdmiration) {
             setSympathySentState(true, true);
@@ -486,7 +485,7 @@ public class OverflowMenu {
                         }
                     });
         } else {
-            request = new BookmarkAddRequest(userId, mActivity).
+            request = new BookmarkAddRequest(userId, mActivity, App.from(mActivity).getOptions().blockUnconfirmed).
                     callback(new BlackListAndBookmarkHandler(mActivity,
                             BlackListAndBookmarkHandler.ActionTypes.BOOKMARK,
                             userId,

@@ -46,7 +46,6 @@ import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.social.AuthToken;
 
-import org.acra.sender.ReportSenderException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -184,6 +183,10 @@ public class Utils {
         return null;
     }
 
+    public static void startOldVersionPopup(Activity activity, OnNextActionListener startActionCallback) {
+        startOldVersionPopup(activity, true, startActionCallback);
+    }
+
     public static void startOldVersionPopup(final Activity activity, boolean cancelable, final OnNextActionListener startActionCallback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
@@ -237,7 +240,7 @@ public class Utils {
     }
 
     public static Intent getMarketIntent() {
-        return new Intent(Intent.ACTION_VIEW, Uri.parse(CacheProfile.getOptions().updateUrl));
+        return new Intent(Intent.ACTION_VIEW, Uri.parse(App.get().getOptions().updateUrl));
     }
 
     public static String getClientDeviceName() {
@@ -442,9 +445,9 @@ public class Utils {
             public void execute() {
                 HockeySender hockeySender = new HockeySender();
                 try {
-                    hockeySender.send(context, hockeySender.createLocalReport(context, new Exception(message)));
-                } catch (ReportSenderException e) {
-                    e.printStackTrace();
+                    hockeySender.sendDebug(hockeySender.createLocalReport(context, new Exception(message)));
+                } catch (Exception e) {
+                    Debug.error(e.toString());
                 }
             }
         };

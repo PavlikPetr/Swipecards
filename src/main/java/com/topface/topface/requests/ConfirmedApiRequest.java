@@ -4,10 +4,9 @@ import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
-import com.topface.topface.data.Options;
+import com.topface.topface.App;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.dialogs.ConfirmEmailDialog;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
 
 /**
@@ -15,9 +14,13 @@ import com.topface.topface.utils.social.AuthToken;
  */
 abstract public class ConfirmedApiRequest extends ApiRequest {
     public static final String CONFIGRM_EMAIL_DIALOG_TAG = "configrm_email_dialog_tag";
+    private boolean mBlockUnconfirmed;
+    private Context mContext;
 
-    public ConfirmedApiRequest(Context context) {
+    public ConfirmedApiRequest(Context context, boolean blockUnconfirmed) {
         super(context);
+        mContext = context;
+        mBlockUnconfirmed = blockUnconfirmed;
     }
 
     @Override
@@ -41,8 +44,7 @@ abstract public class ConfirmedApiRequest extends ApiRequest {
     }
 
     private boolean isNeedBlock() {
-        Options options = CacheProfile.getOptions();
-        return options.blockUnconfirmed && !CacheProfile.getProfile().emailConfirmed;
+        return mBlockUnconfirmed && !App.from(mContext).getProfile().emailConfirmed;
     }
 
     private boolean isTopfaceProfile(String socialNet) {
