@@ -24,6 +24,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.onepf.oms.appstore.googleUtils.Purchase;
@@ -211,7 +212,7 @@ public class Products extends AbstractData {
             currency = Currency.getInstance(USD);
             currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
             currencyFormatter.setCurrency(currency);
-            value = formatPrice(buyBtn.price / 100, currencyFormatter,buyBtn.totalTemplate, PRICE);
+            value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn.totalTemplate, PRICE, PRICE_PER_ITEM);
             if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
 
@@ -221,9 +222,9 @@ public class Products extends AbstractData {
                     currencyFormatter = detail.currency.equalsIgnoreCase(USD)
                             ? NumberFormat.getCurrencyInstance(Locale.US) : NumberFormat.getCurrencyInstance();
                     currencyFormatter.setCurrency(currency);
-                    value = formatPrice(price,currencyFormatter,buyBtn.titleTemplate, PRICE);
+                    value = formatPrice(price, currencyFormatter, buyBtn.titleTemplate, PRICE, PRICE_PER_ITEM);
                 } else {
-                    value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn.titleTemplate, PRICE);
+                    value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn.titleTemplate, PRICE, PRICE_PER_ITEM);
                 }
             }
         }
@@ -233,10 +234,15 @@ public class Products extends AbstractData {
         );
     }
 
-    public static String formatPrice(double price, NumberFormat currencyFormatter, String template, String replaceTemplate){
+    public static String formatPrice(double price, NumberFormat currencyFormatter, String template, @NotNull String... replaceTemplateArray) {
         currencyFormatter.setMaximumFractionDigits(price % 1 != 0 ? 2 : 0);
-        return template.replace(replaceTemplate, currencyFormatter.format(price));
+        for (String replaceTemplate : replaceTemplateArray) {
+            if (template.contains(replaceTemplate)) {
+                return template.replace(replaceTemplate, currencyFormatter.format(price));
+            }
         }
+        return template.replace(replaceTemplateArray[0], currencyFormatter.format(price));
+    }
 
     /**
      * Creates view for buy actions. Button with hints
