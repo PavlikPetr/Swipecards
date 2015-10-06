@@ -41,11 +41,7 @@ public class BuyButtonBaseData {
                 Currency currency = Currency.getInstance(Products.USD);
                 NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
                 currencyFormatter.setCurrency(currency);
-                if (titleTemplate.contains(Products.PRICE)) {
-                    title = Products.formatPrice(pricePerItem, currencyFormatter, titleTemplate, Products.PRICE);
-                } else if (titleTemplate.contains(Products.PRICE_PER_ITEM)) {
-                    title = Products.formatPrice(pricePerItem, currencyFormatter, titleTemplate, Products.PRICE_PER_ITEM);
-                }
+                title = Products.formatPrice(pricePerItem, currencyFormatter, titleTemplate, Products.PRICE, Products.PRICE_PER_ITEM);
             }
             if (productsDetails != null) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(id);
