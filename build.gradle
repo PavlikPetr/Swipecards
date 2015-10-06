@@ -172,7 +172,7 @@ android {
             keyPassword "Sonetica2012"
         }
         appland {
-            storeFile file("misc/keys/topfaceAppLand.jks")
+            storeFile file("misc/keys/topfaceAppLand.keystore")
             storePassword "Sonetica2012"
             keyAlias "topfaceappland"
             keyPassword "Sonetica2012"
