@@ -9,13 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.nineoldandroids.view.ViewHelper;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedPhotoBlog;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ad.NativeAd;
 
 import java.util.ArrayList;
@@ -168,7 +168,7 @@ public class PhotoBlogListAdapter extends FeedAdapter<FeedPhotoBlog> {
     }
 
     private boolean isNotOwnId(int id) {
-        return CacheProfile.getProfile().uid != id;
+        return App.from(getContext()).getProfile().uid != id;
     }
 
     public List<Integer> getSympathySentArray() {

@@ -2,6 +2,8 @@ package com.topface.topface.data;
 
 import com.topface.topface.Static;
 
+import java.util.ArrayList;
+
 /**
  * Uneversal user from profile
  */
@@ -59,11 +61,11 @@ public class UniversalProfileWrapper implements IUniversalUser {
     }
 
     @Override
-    public Profile.Gifts getGifts() {
+    public ArrayList<Gift> getGifts() {
         if (mProfile != null) {
-            return mProfile.gifts;
+            return mProfile.gifts.getGifts();
         } else {
-            return new Profile.Gifts();
+            return new ArrayList<>();
         }
     }
 

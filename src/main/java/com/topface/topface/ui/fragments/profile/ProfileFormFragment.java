@@ -24,7 +24,6 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.CitySearchActivity;
@@ -56,7 +55,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
                 if (form.type == data.type && form.titleId == data.titleId) {
                     if (form.dataId != data.dataId ||
                             data.dataId == FormItem.NO_RESOURCE_ID && !TextUtils.equals(form.value, data.value)) {
-                        FormInfo info = new FormInfo(App.getContext(), CacheProfile.sex, Profile.TYPE_OWN_PROFILE);
+                        FormInfo info = new FormInfo(App.getContext(), App.from(getActivity()).getProfile().sex, Profile.TYPE_OWN_PROFILE);
                         boolean isSettingsRequest = mMainFormTypes.contains(data.type);
                         ApiRequest request = isSettingsRequest ?
                                 getSettingsRequest(data) : info.getFormRequest(data);
@@ -86,7 +85,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
                         if (isSettingsRequest) {
                             new ParallelApiRequest(getActivity())
                                     .addRequest(request)
-                                    .addRequest(App.getProfileRequest(ProfileRequest.P_ALL))
+                                    .addRequest(App.getProfileRequest())
                                     .setFrom(getClass().getSimpleName())
                                     .exec();
                         } else {
@@ -134,7 +133,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (mProfileFormListAdapter != null) {
-                mProfileFormListAdapter.setUserData(CacheProfile.getStatus(), CacheProfile.forms);
+                mProfileFormListAdapter.setUserData(CacheProfile.getStatus(getActivity()), App.from(getActivity()).getProfile().forms);
                 mProfileFormListAdapter.notifyDataSetChanged();
             }
         }

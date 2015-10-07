@@ -62,11 +62,12 @@ public class RegistrationFragment extends BaseFragment {
     public static final String BIRTHDAY = "birthday";
     public static final String SEX_MESSAGE = "sex_message";
 
-    private static final int START_SHIFT = 33;
+    private static final int START_SHIFT = 16;
 
     private Date mBirthday;
     private int mSex = Static.BOY;
     private Timer mTimer = new Timer();
+    private DateObject mDateObject = new DateObject();
 
     @Bind(R.id.ivShowPassword)
     ImageButton mShowPassword;
@@ -116,11 +117,18 @@ public class RegistrationFragment extends BaseFragment {
     public void birthdayClick() {
         Calendar c = Calendar.getInstance();
         c.add(Calendar.YEAR, -START_SHIFT);
-        DatePickerFragment datePicker = DatePickerFragment.newInstance(c.get(Calendar.YEAR)
-                , c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        DatePickerFragment datePicker;
+        if (mDateObject.isEmpty()) {
+            datePicker = DatePickerFragment.newInstance(c.get(Calendar.YEAR)
+                    , c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        } else {
+            datePicker = DatePickerFragment.newInstance(mDateObject.year
+                    , mDateObject.monthOfYear, mDateObject.dayOfMonth);
+        }
         datePicker.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                mDateObject.setDate(year,monthOfYear,dayOfMonth);
                 final Calendar c = Calendar.getInstance();
                 c.add(Calendar.YEAR, -Static.MIN_AGE);
                 long maxDate = c.getTimeInMillis();
@@ -305,7 +313,7 @@ public class RegistrationFragment extends BaseFragment {
                 mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
                         android.R.anim.fade_out));
             }
-            mRedAlertView.setVisibility(View.INVISIBLE);
+            mRedAlertView.setVisibility(View.GONE);
         }
     }
 
@@ -331,9 +339,9 @@ public class RegistrationFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == SEX_SELECTED){
-            mSex = (data.getIntExtra(SEX,1));
-            mTvSex.setText(data.getIntExtra(SEX_MESSAGE,R.string.im_boy));
+        if (requestCode == SEX_SELECTED) {
+            mSex = (data.getIntExtra(SEX, 1));
+            mTvSex.setText(data.getIntExtra(SEX_MESSAGE, R.string.im_boy));
         }
     }
 
@@ -362,6 +370,22 @@ public class RegistrationFragment extends BaseFragment {
                         }
                     })
                     .create();
+        }
+    }
+
+    private class DateObject {
+        public int year = 0;
+        public int monthOfYear = 0;
+        public int dayOfMonth = 0;
+
+        public void setDate(int year, int monthOfYear, int dayOfMonth) {
+            this.year = year;
+            this.monthOfYear = monthOfYear;
+            this.dayOfMonth = dayOfMonth;
+        }
+
+        public boolean isEmpty() {
+            return year == 0 || monthOfYear == 0 || dayOfMonth == 0;
         }
     }
 }

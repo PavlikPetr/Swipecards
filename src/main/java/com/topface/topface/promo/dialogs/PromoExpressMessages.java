@@ -9,7 +9,6 @@ import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
@@ -31,7 +30,7 @@ public class PromoExpressMessages extends PromoDialog {
 
     @Override
     public Options.PromoPopupEntity getPremiumEntity() {
-        return CacheProfile.getOptions().premiumMessages;
+        return App.from(getActivity()).getOptions().premiumMessages;
     }
 
     @Override
@@ -78,13 +77,13 @@ public class PromoExpressMessages extends PromoDialog {
     }
 
     private ArrayList<Integer> getFakeAvatars() {
-        int arrayId = CacheProfile.dating != null && CacheProfile.dating.sex == Static.GIRL ? R.array.fake_girl_avatars : R.array.fake_boy_avatars;
+        int arrayId = App.from(getActivity()).getProfile().dating != null && App.from(getActivity()).getProfile().dating.sex == Static.GIRL ? R.array.fake_girl_avatars : R.array.fake_boy_avatars;
         ArrayList<Integer> avatarsIdArray = new ArrayList<>();
         int randomValue;
         TypedArray imgs = App.getContext().getResources().obtainTypedArray(arrayId);
         ArrayList<Integer> usersFakeArray = new ArrayList<>();
         for (int i = 0; i < imgs.length(); i++) {
-            usersFakeArray.add(imgs.getResourceId(i, CacheProfile.dating != null && CacheProfile.dating.sex == Static.GIRL ? R.drawable.fake_girl1 : R.drawable.fake_boy1));
+            usersFakeArray.add(imgs.getResourceId(i, App.from(getActivity()).getProfile().dating != null && App.from(getActivity()).getProfile().dating.sex == Static.GIRL ? R.drawable.fake_girl1 : R.drawable.fake_boy1));
         }
         for (int i = 0; i < AVATARS_ID_ARRAY_LENGTH; i++) {
             int iterCounter = 0;
@@ -136,7 +135,7 @@ public class PromoExpressMessages extends PromoDialog {
 
             @Override
             public boolean isApplicable() {
-                return !CacheProfile.premium && PromoPopupManager.checkIsNeedShow(CacheProfile.getOptions().getPremiumEntityByType(AIR_MESSAGES));
+                return !App.get().getProfile().premium && PromoPopupManager.checkIsNeedShow(App.get().getOptions().getPremiumEntityByType(AIR_MESSAGES));
             }
 
             @Override

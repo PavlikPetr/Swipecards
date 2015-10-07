@@ -46,7 +46,9 @@
     <string name="general_buying">Osta sümpaatiad/meeldimised ja mündid</string>
     <string name="popup_version_title">On saadaval rakenduse uus versioon</string>
     <string name="popup_version_message">Õige aeg versiooni uuendamiseks!</string>
-    <string name="leaders_select_photo_info">Vali kõige efektsem foto välja! Madalama reitinguga fotode valimine ei ole lubatud.</string>
+    <string name="leaders_select_photo_info">Vali kõige efektsem foto välja! Madalama reitinguga
+        fotode valimine ei ole lubatud.
+    </string>
     <string name="map_popup_address">Aadress</string>
     <string name="black_list_activation">Aktiveeri VIP-staatust ja kasuta musta nimekirja</string>
     <string name="buying_total">Kokku</string>
@@ -191,7 +193,9 @@ Sa oled müksanud.</string>
         <item quantity="one">%d fotodest</item>
     </plurals>
     <string name="general_edit_profile_message">Palun, täida ankeedi vajalikud väljad ära</string>
-    <string name="general_search_null_response_error">Ei ole midagi leitud. Proovi muuta otsingu parameetrid/filtrid</string>
+    <string name="general_search_null_response_error">Ei ole midagi leitud. Proovi muuta otsingu
+        parameetrid/filtrid
+    </string>
     <string name="change_filters">Filtrid muuta</string>
     <string name="general_sex">Sugu</string>
     <string name="general_girl">Nais-, naiste</string>
@@ -215,21 +219,26 @@ Sa oled müksanud.</string>
     <string name="vip_buy_vip">VIP\'i ost/ostmine</string>
     <string name="vip_state_off">Sinu VIP-staatust ei ole aktiveeritud.</string>
     <string name="vip_info_guest">Saa teada, kes on sinu vastu huvi tundnud - vaata omad külalised ära!</string>
-    <string name="vip_info_blackList">Saa tüütudest isikutest lahti \"musta nimekirja\" abil</string>
+    <string name="vip_info_blackList">Saa tüütudest isikutest lahti \"musta nimekirja\" abil
+    </string>
     <string name="buying_vip_status">VIP-staatust osta</string>
     <string name="edit_my_city">Minu linn</string>
     <string name="settings_feedback_email">Kontakt e-posti aadress</string>
     <string name="settings_invalid_email">Vale e-posti aadress</string>
     <string name="chat_write_message">Sõnumi kirjutada</string>
     <string name="buying_sympathies">Sümpaatiate/meeldimiste ost/ostmine</string>
-    <string name="general_reconnect_social">Sotsiaalvõrgustikuga ühendus ei ole võimalik. Korda katset hiljem.</string>
+    <string name="general_reconnect_social">Sotsiaalvõrgustikuga ühendus ei ole võimalik. Korda
+        katset hiljem.
+    </string>
     <string name="general_block">Blokeerida</string>
     <string name="general_buying_disabled">Käesoleval hetkel/momendil on ostmine võimatu.</string>
     <string name="virus_chat_btn">Meeldimised saada</string>
     <string name="profile_ask_sent">Palve on ära saadetud.</string>
     <string name="popup_version_update">Uuendada</string>
     <string name="popup_version_cancel">Tuletada hiljem meelde</string>
-    <string name="general_version_not_supported">Sinu rakenduse versioon on vananenud ja seda enam ei toetata. Palun uuenda oma rakenduse versioon ära.</string>
+    <string name="general_version_not_supported">Sinu rakenduse versioon on vananenud ja seda enam
+        ei toetata. Palun uuenda oma rakenduse versioon ära.
+    </string>
     <string name="default_price_format">Kokku:</string>
     <string name="general_gift">Kingitus</string>
     <string name="user_actions_chat">Jutt</string>
@@ -254,7 +263,9 @@ Sa oled müksanud.</string>
     <string name="default_photo_upload">Foto ülesselaadimine</string>
     <string name="default_photo_upload_error">Laadimise viga</string>
     <string name="default_photo_upload_complete">Ülesselaadimine on lõpetatud!</string>
-    <string name="general_error_try_again_later">Ei ole võimalik Topface\'iga liituda. Proovi korrata katse hiljem.</string>
+    <string name="general_error_try_again_later">Ei ole võimalik Topface\'iga liituda. Proovi
+        korrata katse hiljem.
+    </string>
     <string name="search_city_by_name">Linna otsing nimetuse järgi</string>
     <string name="gallery">Galerii</string>
     <string name="change_password">Muuta salasõna</string>
@@ -272,7 +283,9 @@ Sa oled müksanud.</string>
     <string name="reselect_city">Valida teine linn:</string>
     <string name="email_confirmed">e-posti aadress on ära kinnitatud!</string>
     <string name="sympathy_sended">Meeldimine on ära saadetud.</string>
-    <string name="general_photo_deleted">Sinu foto ei vasta reeglite nõuetele ja oli eemaldatud/kustutatud.</string>
+    <string name="general_photo_deleted">Sinu foto ei vasta reeglite nõuetele ja oli
+        eemaldatud/kustutatud.
+    </string>
     <string name="general_change">Ära muuta</string>
     <string name="status_is_empty">Sinu/teie staatus ei ole kindlaks määratud</string>
     <string name="you_dont_have_gifts_yet">Sa pole siiamani kingitusi saanud</string>
@@ -292,7 +305,9 @@ Sa oled müksanud.</string>
     <string name="user_is_banned">Kasutaja on ära keelatud</string>
     <string name="profile_empty_name">Väli \"Nimi\" ei tohi tühi olema</string>
     <string name="general_input_email">Sisesta oma e-posti aadress/e-mail</string>
-    <string name="vip_stop_ads">Ainult suhtlemine, mitte midagi muud.VIP-kasutajatel reklaam puudub.</string>
+    <string name="vip_stop_ads">Ainult suhtlemine, mitte midagi muud.VIP-kasutajatel reklaam
+        puudub.
+    </string>
     <string name="friend_email_hint">Sisesta sõbra e-posti aadress või telefoninumber</string>
     <string name="general_add">Lisada</string>
     <string name="general_invite_friends">Kutsu/kutsuge sõpru</string>
@@ -309,8 +324,12 @@ Sa oled müksanud.</string>
         <item quantity="other">Saa VIP tasuta %d kutse eest</item>
         <item quantity="one">Saa VIP tasuta %d kutse eest</item>
     </plurals>
-    <string name="buy_status_and_watch_your_fans">Osta VIP-staatus ja saa teada, kes on sind \"Välja valitute\" hulka lisanud</string>
-    <string name="with_vip_find_your_visitors">VIP-staatusega saad sa teada kes on sinu lehekülge külastanud</string>
+    <string name="buy_status_and_watch_your_fans">Osta VIP-staatus ja saa teada, kes on sind \"Välja
+        valitute\" hulka lisanud
+    </string>
+    <string name="with_vip_find_your_visitors">VIP-staatusega saad sa teada kes on sinu lehekülge
+        külastanud
+    </string>
     <string name="incorrect_photo_size">Foto lubamatu suurus</string>
     <string name="input_contact_name">Sisesta kontakti nimi</string>
     <string name="complain_photo_header">Ebakorrektne foto</string>

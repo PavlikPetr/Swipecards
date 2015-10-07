@@ -10,11 +10,14 @@ import com.google.android.gms.analytics.Tracker;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
 import com.topface.topface.data.ExperimentTags;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
+import com.topface.topface.ui.IBackPressedListener;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.social.AuthToken;
 
 public class TrackedFragmentActivity extends ActionBarActivity {
+    private IBackPressedListener mBackPressedListener;
 
     @Override
     public void onStart() {
@@ -23,7 +26,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
         if (isTrackable()) {
             Tracker tracker = EasyTracker.getTracker();
             tracker.setScreenName(getTrackName());
-            tracker.send(setCustomMeticsAndDimensions().build());
+            tracker.send(setCustomMeticsAndDimensions(App.from(this).getOptions(), App.from(this).getProfile()).build());
         }
     }
 
@@ -34,22 +37,22 @@ public class TrackedFragmentActivity extends ActionBarActivity {
         comScore.onEnterForeground();
     }
 
-    public static HitBuilders.AppViewBuilder setCustomMeticsAndDimensions() {
+    public static HitBuilders.AppViewBuilder setCustomMeticsAndDimensions(Options options, Profile profile) {
         //Дополнительные параметры для статистики
         HitBuilders.AppViewBuilder builder = new HitBuilders.AppViewBuilder();
         String socialNet = AuthToken.getInstance().getSocialNet();
         builder.setCustomDimension(1, TextUtils.isEmpty(socialNet) ? "Unauthorized" : socialNet);
-        builder.setCustomDimension(2, CacheProfile.sex == 0 ? "Female" : "Male");
-        builder.setCustomDimension(3, CacheProfile.paid ? "Yes" : "No");
-        builder.setCustomDimension(4, CacheProfile.emailConfirmed ? "Yes" : "No");
-        builder.setCustomDimension(5, CacheProfile.premium ? "Yes" : "No");
-        builder.setCustomDimension(6, Integer.toString(CacheProfile.age));
+        builder.setCustomDimension(2, profile.sex == 0 ? "Female" : "Male");
+        builder.setCustomDimension(3, profile.paid ? "Yes" : "No");
+        builder.setCustomDimension(4, profile.emailConfirmed ? "Yes" : "No");
+        builder.setCustomDimension(5, profile.premium ? "Yes" : "No");
+        builder.setCustomDimension(6, Integer.toString(profile.age));
         builder.set(EasyTracker.SESSION_CONTROL, "start");
         /**
          * Абстрактное поле для подсчета статистики экспериментов
          * Т.е. сервер может прислать любые данные для п
          */
-        ExperimentTags tags = CacheProfile.getOptions().experimentTags;
+        ExperimentTags tags = options.experimentTags;
         if (tags != null) {
             tags.setToStatistics(builder);
         }
@@ -75,5 +78,14 @@ public class TrackedFragmentActivity extends ActionBarActivity {
         super.onPause();
         comScore.onExitForeground();
         StatisticsTracker.getInstance().activityStop(this);
+    }
+
+
+    public void setBackPressedListener(IBackPressedListener listener) {
+        mBackPressedListener = listener;
+    }
+
+    public IBackPressedListener getBackPressedListener() {
+        return mBackPressedListener;
     }
 }

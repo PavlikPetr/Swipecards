@@ -47,6 +47,12 @@ public class AppState {
         }
     }
 
+    public <T> void destroyObservable(Class<T> dataClass) {
+        if (getCachableData().contains(dataClass)) {
+            getCachableData().remove(dataClass);
+        }
+    }
+
     public <T> Observable<T> getObservable(Class<T> dataClass) {
         synchronized (getCachableData()) {
             if (!getCachableData().containsKey(dataClass)) {
@@ -139,7 +145,8 @@ public class AppState {
         public void emmit(final T data) {
             if (data != null) {
                 AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
-                    @Override public void call() {
+                    @Override
+                    public void call() {
                         getBehaviorSubject().onNext(data);
                     }
                 });

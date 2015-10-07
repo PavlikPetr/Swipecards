@@ -33,8 +33,8 @@ public class FormItem implements Parcelable {
 
     public static final int NO_RESOURCE_ID = -1;
 
-    private TextLimitInterface mTextLimitInterface;
-    private ValueLimitInterface mValueLimitInterface;
+    transient private TextLimitInterface mTextLimitInterface;
+    transient private ValueLimitInterface mValueLimitInterface;
     private boolean mOnlyForWomen = false;
     private boolean mIsCanBeEmpty = true;
 
@@ -194,6 +194,8 @@ public class FormItem implements Parcelable {
         int getMinValue();
 
         int getMaxValue();
+
+        boolean isEmptyValueAvailable();
     }
 
     public void setTextLimitInterface(TextLimitInterface TextLimitInterface) {
@@ -226,7 +228,7 @@ public class FormItem implements Parcelable {
             return false;
         } else if (mValueLimitInterface != null) {
             if (TextUtils.isEmpty(value)) {
-                return false;
+                return mValueLimitInterface.isEmptyValueAvailable();
             }
             if (TextUtils.isDigitsOnly(value)) {
                 int val = Integer.parseInt(value);
@@ -252,7 +254,7 @@ public class FormItem implements Parcelable {
 
         private final int mLimit;
 
-        public DefaultTextLimiter(){
+        public DefaultTextLimiter() {
             mLimit = App.getAppOptions().getUserStringSettingMaxLength();
         }
 

@@ -11,6 +11,10 @@ import com.topface.topface.ui.fragments.BaseFragment;
 public class ResourcesUtils {
 
     public static String getFragmentNameResId(BaseFragment.FragmentId id) {
+        return getFragmentNameResId(id, null);
+    }
+
+    public static String getFragmentNameResId(BaseFragment.FragmentId id, String bonusText) {
         int titleId;
         switch (id) {
             case VIP_PROFILE:
@@ -33,7 +37,7 @@ public class ResourcesUtils {
                 titleId = R.string.general_photoblog;
                 break;
             case BONUS:
-                return CacheProfile.getOptions().bonus.buttonText;
+                return null;
             case GEO:
                 titleId = R.string.people_nearby;
                 break;

@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.topface.billing.IFreePurchases;
 import com.topface.billing.OpenIabFragment;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.Products;
@@ -177,7 +178,7 @@ public class IFreeBuyFragment extends IFreePurchases {
                                 ((PurchasesActivity) activity).skipBonus();
                             }
 
-                            CacheProfile.getOptions().topfaceOfferwallRedirect.setComplited(true);
+                            App.from(getActivity()).getOptions().topfaceOfferwallRedirect.setComplited(true);
                         }
                     }
             );
@@ -208,7 +209,7 @@ public class IFreeBuyFragment extends IFreePurchases {
                                 ((PurchasesActivity) activity).skipBonus();
                             }
 
-                            CacheProfile.getOptions().topfaceOfferwallRedirect.setComplited(true);
+                            App.from(getActivity()).getOptions().topfaceOfferwallRedirect.setComplited(true);
                         }
                     }
             );

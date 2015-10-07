@@ -34,7 +34,9 @@
     <string name="general_bookmarks_add_short">В обрані</string>
     <string name="general_complaint">Поскаржитися</string>
     <string name="general_type_complain">Тема скарги</string>
-    <string name="address_book_access_error">Цей додаток не має доступу до ваших контактів. Ви можете дозволити доступ в налаштуваннях приватності вашого пристрою</string>
+    <string name="address_book_access_error">Цей додаток не має доступу до ваших контактів. Ви
+        можете дозволити доступ в налаштуваннях приватності вашого пристрою
+    </string>
     <string name="profile_deleted_user">Користувач знищен</string>
     <string name="filter_main_parameters">Мені цікаві</string>
     <string name="dating_prev_button_ext">Попередній</string>
@@ -51,17 +53,25 @@
     <string name="dating_better_look">Придивіться!\nМожливо ви втрачаєте свою долю!</string>
     <string name="edit_my_photos">Мої фотографії</string>
     <string name="general_search_empty_title">На жаль, нічого не знайдено</string>
-    <string name="general_search_empty_text">Ви можете спробувати повторити пошук, або змінити налаштування фільтра</string>
+    <string name="general_search_empty_text">Ви можете спробувати повторити пошук, або змінити
+        налаштування фільтра
+    </string>
     <string name="map_title">Карта</string>
     <string name="general_buying">Купити симпатії та монети</string>
     <string name="popup_version_title">Доступна нова версія додатка</string>
     <string name="popup_version_message">Час оновити свою версію!</string>
-    <string name="leaders_select_photo_info">Вибрати найефектніше фото! Фотографії з низьким рейтингом вибрати не можна</string>
+    <string name="leaders_select_photo_info">Вибрати найефектніше фото! Фотографії з низьким
+        рейтингом вибрати не можна
+    </string>
     <string name="map_popup_address">Адреса</string>
-    <string name="black_list_info">Ви додали співрозмовника в чорний список. Змінити це можна у своєму профілі, у налаштуваннях VIP-статусу.</string>
+    <string name="black_list_info">Ви додали співрозмовника в чорний список. Змінити це можна у
+        своєму профілі, у налаштуваннях VIP-статусу.
+    </string>
     <string name="black_list_activation">Активуйте VIP-статус і використовуйте чорний список</string>
     <string name="buying_total">Разом</string>
-    <string name="we_dont_detect_your_city">Щоб знайти людей поблизу нам потрібно знати де ви знаходитеся. Будь ласка, вкажіть ваше місто.</string>
+    <string name="we_dont_detect_your_city">Щоб знайти людей поблизу нам потрібно знати де ви
+        знаходитеся. Будь ласка, вкажіть ваше місто.
+    </string>
     <string name="confirm_email">Будь ласка, підтвердіть e-mail.</string>
     <string name="password_sent">Новий пароль відправлено на ваш E-mail</string>
     <string name="buy_vip_month_one">%1$d місяц за %2$.2f %3$@</string>
@@ -147,7 +157,8 @@
     <string name="filter_age">Вік</string>
     <string name="filter_cities_all">По всіх містах</string>
     <string name="buying_header_title">Покупки</string>
-    <string name="buying_default_message">Ви можете відправляти подарунки та захоплення за монети</string>
+    <string name="buying_default_message">Ви можете відправляти подарунки та захоплення за монети
+    </string>
     <string name="buying_money">Покупка монет</string>
     <string name="gifts_title">Виберіть подарунок</string>
     <string name="profile_header_title">Мій профіль</string>
@@ -224,7 +235,9 @@
         <item quantity="one">%d фотографія</item>
     </plurals>
     <string name="general_edit_profile_message">Будь ласка, заповніть необхідні поля анкети</string>
-    <string name="general_search_null_response_error">Нічого не знайдено. Спробуйте змінити фільтри</string>
+    <string name="general_search_null_response_error">Нічого не знайдено. Спробуйте змінити
+        фільтри
+    </string>
     <string name="change_filters">Змінити фільтри</string>
     <string name="general_sex">Стать</string>
     <string name="general_girl">Жіночий</string>
@@ -253,10 +266,18 @@
     <string name="vip_buy_vip">Купівля VIP</string>
     <string name="vip_state_off">Ваш VIP-статус не активований</string>
     <string name="vip_info_guest">Дізнайтеся, хто вами цікавився - дивіться своїх гостей!</string>
-    <string name="vip_info_invisible">Залишайтеся непоміченими, відвідуючи чужі сторінки, завдяки режиму \"невидимка\"</string>
-    <string name="vip_info_message">Отримайте перевага - ваші повідомлення будуть виділятися на загальному фоні!</string>
-    <string name="vip_info_blackList">Позбавляйтеся від обридлих персон за допомогою \"чорного списку\"</string>
-    <string name="vip_info_vip">Виділяйтеся за допомогою свого VIP-статусу в пошуку та своєму профілі!</string>
+    <string name="vip_info_invisible">Залишайтеся непоміченими, відвідуючи чужі сторінки, завдяки
+        режиму \"невидимка\"
+    </string>
+    <string name="vip_info_message">Отримайте перевага - ваші повідомлення будуть виділятися на
+        загальному фоні!
+    </string>
+    <string name="vip_info_blackList">Позбавляйтеся від обридлих персон за допомогою \"чорного
+        списку\"
+    </string>
+    <string name="vip_info_vip">Виділяйтеся за допомогою свого VIP-статусу в пошуку та своєму
+        профілі!
+    </string>
     <string name="buying_vip_status">Купити VIP-статус</string>
     <string name="edit_my_city">Моє місто</string>
     <string name="settings_feedback_email">Email для зв\'язку</string>
@@ -264,22 +285,34 @@
     <string name="chat_write_message">Написати повідомлення</string>
     <string name="dating_message">Повідомлення…</string>
     <string name="buying_sympathies">Покупка симпатій</string>
-    <string name="general_reconnect_social">Неможливо підключитися до соцмережі. Повторіть спробу пізніше.</string>
+    <string name="general_reconnect_social">Неможливо підключитися до соцмережі. Повторіть спробу
+        пізніше.
+    </string>
     <string name="general_block">Блокувати</string>
     <string name="general_buying_disabled">У даний момент покупка неможлива</string>
-    <string name="ban_flood_detected">Ви занадто часто здійснюєте запити до сервера. Для подальшого використання додатка почекайте.</string>
-    <string name="general_maintenance">На сервері проводяться технічні роботи і ваш запит не може бути виконаний. Спробуйте повторити пізніше.</string>
+    <string name="ban_flood_detected">Ви занадто часто здійснюєте запити до сервера. Для подальшого
+        використання додатка почекайте.
+    </string>
+    <string name="general_maintenance">На сервері проводяться технічні роботи і ваш запит не може
+        бути виконаний. Спробуйте повторити пізніше.
+    </string>
     <string name="virus_chat_btn">Отримати симпатії</string>
     <string name="profile_ask_sent">Прохання відправлено</string>
-    <string name="virus_error">За добу ваш друг може подарувати симпатії тільки 1 раз! Спробуйте завтра!</string>
+    <string name="virus_error">За добу ваш друг може подарувати симпатії тільки 1 раз! Спробуйте
+        завтра!
+    </string>
     <string name="popup_version_update">Оновити</string>
     <string name="popup_version_cancel">Нагадати пізніше</string>
-    <string name="general_version_not_supported">Ваша версія додатку застаріла і більше не підтримується. Будь ласка, поновіть додаток</string>
+    <string name="general_version_not_supported">Ваша версія додатку застаріла і більше не
+        підтримується. Будь ласка, поновіть додаток
+    </string>
     <string name="default_price_format">Разом: %.2f USD</string>
     <string name="leaders_pick_condition">Ви не можете вибрати фото з рейтингом нижче %d%%:</string>
     <string name="general_gift">Подарунок</string>
     <string name="user_actions_chat">Розмова</string>
-    <string name="profile_edit_age_ranges">Вік повинен бути у діапазоні від 16 до 99 років. Будь ласка, введіть коректне число і повторіть спробу.</string>
+    <string name="profile_edit_age_ranges">Вік повинен бути у діапазоні від 16 до 99 років. Будь
+        ласка, введіть коректне число і повторіть спробу.
+    </string>
     <string name="sign_in">Увійти</string>
     <string name="create_account">Створити аккаунт</string>
     <string name="email">E-mail</string>
@@ -298,20 +331,28 @@
     <string name="incorrect_password">Неправильно введений пароль</string>
     <string name="empty_fields">Не всі поля заповнені</string>
     <string name="email_already_registered">Користувач з таким e-mail вже існує</string>
-    <string name="enter_email_from_registration">Введіть e-mail, який ви вказували при реєстрації</string>
+    <string name="enter_email_from_registration">Введіть e-mail, який ви вказували при реєстрації
+    </string>
     <string name="default_photo_upload">Завантаження фотографії</string>
     <string name="default_photo_upload_error">Помилка завантаження</string>
     <string name="default_photo_upload_complete">Звантаження завершено!</string>
-    <string name="general_error_try_again_later">Неможливо підключитися до Topface. Повторіть спробу пізніше.</string>
+    <string name="general_error_try_again_later">Неможливо підключитися до Topface. Повторіть спробу
+        пізніше.
+    </string>
     <string name="search_city_by_name">Пошук міста за назвою</string>
     <string name="gallery">Галерея</string>
-    <string name="no_photo_take_photo">З вами ніхто не може познайомиться! Зробіть фото або виберіть наявне з альбому</string>
-    <string name="photo_for_avatar">Фотографія готова до відправки в профіль! Це ваша перша фотографія і вона буде використовуватися як ваша аватарка.</string>
+    <string name="no_photo_take_photo">З вами ніхто не може познайомиться! Зробіть фото або виберіть
+        наявне з альбому
+    </string>
+    <string name="photo_for_avatar">Фотографія готова до відправки в профіль! Це ваша перша
+        фотографія і вона буде використовуватися як ваша аватарка.
+    </string>
     <string name="send_confirmation_email">Вислати підтвердження на e-mail</string>
     <string name="change_password">Змінити пароль</string>
     <string name="password_changing">Зміна пароля</string>
     <string name="save">Зберегти</string>
-    <string name="confirmation_successfully_sent">Підтвердження вислано на вказаний вами e-mail</string>
+    <string name="confirmation_successfully_sent">Підтвердження вислано на вказаний вами e-mail
+    </string>
     <string name="password_hint">пароль</string>
     <string name="enter_new_password">Введіть новий пароль</string>
     <string name="enter_password_confirmation">Введіть підтвердження пароля</string>
@@ -321,12 +362,17 @@
     <string name="take_another_photo">Інша фото</string>
     <string name="we_detect_your_city">Ми визначили ваше місто:</string>
     <string name="reselect_city">Обрати інше місто:</string>
-    <string name="choose_cool_photo">Виберіть свою кращу фотографію і статус, який відображає ваш настрій!</string>
+    <string name="choose_cool_photo">Виберіть свою кращу фотографію і статус, який відображає ваш
+        настрій!
+    </string>
     <string name="email_confirmed">e-mail підтверджений!</string>
     <string name="sympathy_sended">Симпатія відправлена</string>
-    <string name="general_photo_deleted">Ваша фотографія не відповідає правилам і була видалена</string>
+    <string name="general_photo_deleted">Ваша фотографія не відповідає правилам і була видалена
+    </string>
     <string name="general_change">Змінити</string>
-    <string name="user_does_not_have_gifts">У цього користувача немає подарунків, будьте першим і вас помітять</string>
+    <string name="user_does_not_have_gifts">У цього користувача немає подарунків, будьте першим і
+        вас помітять
+    </string>
     <string name="status_is_empty">У вас не встановлений статус</string>
     <string name="you_dont_have_gifts_yet">У вас поки немає подарунків</string>
     <string name="buy_sympathies">Купити симпатії</string>
@@ -345,17 +391,25 @@
     <string name="buy_resources">Поповнити запас</string>
     <string name="user_is_banned">Користувач забанений</string>
     <string name="profile_empty_name">Ім\'я не може бути порожнім</string>
-    <string name="general_wrong_photo_upload">Ваша фотографія не відповідає правилам. Спробуйте зробити іншу</string>
+    <string name="general_wrong_photo_upload">Ваша фотографія не відповідає правилам. Спробуйте
+        зробити іншу
+    </string>
     <string name="general_input_email">Введіть ваш e-mail</string>
-    <string name="cant_delete_fake_item">Це повідомлення ще доставлено, ви не можете видалити його. Спробуйте
-        пізніше.</string>
-    <string name="vip_stop_ads">Тільки спілкування, нічого зайвого. У VIP-користувачів немає реклами</string>
+    <string name="cant_delete_fake_item">Це повідомлення ще доставлено, ви не можете видалити його.
+        Спробуйте
+                пізніше.
+    </string>
+    <string name="vip_stop_ads">Тільки спілкування, нічого зайвого. У VIP-користувачів немає
+        реклами
+    </string>
     <string name="friend_email_hint">Введіть e-mail або телефон друга</string>
     <string name="general_add">Додати</string>
     <string name="general_invite_friends">Запросіть друзів</string>
     <string name="general_rest_contacts">Вам залишилося %d контактів</string>
     <string name="invite_friends_title">Запросити всіх друзів з телефонної книги в Topface</string>
-    <string name="invalid_contacts">Деякі з контактів були некоректними. Будь ласка, відправте коректні контакти</string>
+    <string name="invalid_contacts">Деякі з контактів були некоректними. Будь ласка, відправте
+        коректні контакти
+    </string>
     <plurals name="vip_status_period">
         <item quantity="few">Ви отримали VIP статус на %d дня</item>
         <item quantity="other">Ви отримали VIP статус на %d днів</item>
@@ -376,19 +430,33 @@
         <item quantity="other">Отримай VIP безкоштовно за %d запрошень</item>
         <item quantity="one">Отримай VIP безкоштовно за %d запрошення</item>
     </plurals>
-    <string name="buy_status_and_watch_your_fans">Купуйте VIP-статус і дізнайтеся, хто додав вас в обране</string>
-    <string name="add_bookmarks_to_be_connected">Додавайте нових знайомих в цей розділ, і ви не втратите з ними зв\'язок</string>
-    <string name="nobody_chat_with_you_sympathies_will_help">Вам ще ніхто не писав. Симпатії допоможуть у пошуку співрозмовника</string>
-    <string name="rate_and_have_mutual_or_buy_and_chat">Ставте симпатії вподобаним вам людям та отримуйте взаємні. Або купіть симпатії і починайте спілкування з тими, кому ви подобаєтеся!</string>
-    <string name="with_vip_find_your_visitors">З VIP-статусом ви дізнаєтеся, хто заходив до вас на сторінку</string>
+    <string name="buy_status_and_watch_your_fans">Купуйте VIP-статус і дізнайтеся, хто додав вас в
+        обране
+    </string>
+    <string name="add_bookmarks_to_be_connected">Додавайте нових знайомих в цей розділ, і ви не
+        втратите з ними зв\'язок
+    </string>
+    <string name="nobody_chat_with_you_sympathies_will_help">Вам ще ніхто не писав. Симпатії
+        допоможуть у пошуку співрозмовника
+    </string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">Ставте симпатії вподобаним вам людям та
+        отримуйте взаємні. Або купіть симпатії і починайте спілкування з тими, кому ви подобаєтеся!
+    </string>
+    <string name="with_vip_find_your_visitors">З VIP-статусом ви дізнаєтеся, хто заходив до вас на
+        сторінку
+    </string>
     <string name="on_avatar">На аватарку</string>
     <string name="your_avatar">Ваша аватарка</string>
     <string name="avatar_set_successfully">Аватарка успішно встановлена</string>
     <string name="incorrect_photo">Некоректне фото. Спробуйте завантажити інше</string>
-    <string name="incorrect_photo_format">Некоректний формат фото. Спробуйте завантажити jpg або png</string>
+    <string name="incorrect_photo_format">Некоректний формат фото. Спробуйте завантажити jpg або
+        png
+    </string>
     <string name="incorrect_photo_size">Неприпустимий розмір фотографії</string>
     <string name="input_contact_name">Введіть ім\'я контакту</string>
-    <string name="incorrect_locale">Якщо Ви хочете, щоб ми змогли прочитати Ваш відгук, пишіть його російською або англійською мовою</string>
+    <string name="incorrect_locale">Якщо Ви хочете, щоб ми змогли прочитати Ваш відгук, пишіть його
+        російською або англійською мовою
+    </string>
     <string name="complain_photo_header">Некоректна фотографія</string>
     <string name="complain_msg_header">Некоректне повідомлення</string>
     <string name="complain_info_header">Некоректна інформація</string>
@@ -396,27 +464,43 @@
     <string name="complain_type_ero">Еротика на головному фото</string>
     <string name="complain_type_picture">Картинка</string>
     <string name="complain_type_fake_user">Відома людина</string>
-    <string name="complain_type_spam_msg">Комерційна пропозиція, спам, реклама, посилання на сайти, телефони</string>
-    <string name="complain_type_spam_profile">Поля «статус», «про себе» містять комерційну пропозицію</string>
-    <string name="complain_type_swearing_profile">Поля «статус», «про себе» містять хамство, мат, посилання на соц. мережі</string>
-    <string name="complain_type_fake_data">Ім\'я, стать, вік і фотографія людини не збігаються</string>
+    <string name="complain_type_spam_msg">Комерційна пропозиція, спам, реклама, посилання на сайти,
+        телефони
+    </string>
+    <string name="complain_type_spam_profile">Поля «статус», «про себе» містять комерційну
+        пропозицію
+    </string>
+    <string name="complain_type_swearing_profile">Поля «статус», «про себе» містять хамство, мат,
+        посилання на соц. мережі
+    </string>
+    <string name="complain_type_fake_data">Ім\'я, стать, вік і фотографія людини не збігаються
+    </string>
     <string name="complain_description">Розкажіть про причину скарги з подробицями</string>
-    <string name="general_complain_sended">Ваша скарга відправлена, велике спасибі за допомогу</string>
+    <string name="general_complain_sended">Ваша скарга відправлена, велике спасибі за допомогу
+    </string>
     <string name="general_complain">Скарга</string>
     <string name="general_msg">Повідомлення</string>
     <string name="notifications">Повідомлення</string>
-    <string name="general_no_notifications">На жаль, повідомлення, на вашому пристрої, не доступні</string>
+    <string name="general_no_notifications">На жаль, повідомлення, на вашому пристрої, не доступні
+    </string>
     <string name="black_list_add_short">У чорний список</string>
-    <string name="confirm_email_for_dating">Ми проти спаму. Підтвердіть свою поштову адресу, щоб знайомиться в Topface!</string>
+    <string name="confirm_email_for_dating">Ми проти спаму. Підтвердіть свою поштову адресу, щоб
+        знайомиться в Topface!
+    </string>
     <string name="complain_type_swearing_msg">Хамство, загрози, мат</string>
     <string name="general_exit">Вийти</string>
     <string name="general_get_dating">Знайомитися</string>
     <string name="or">або</string>
-    <string name="chat_block_not_mutual">Розпочати спілкування з користувачем можна якщо він відправив вам симпатію чи у вас є VIP-статус</string>
+    <string name="chat_block_not_mutual">Розпочати спілкування з користувачем можна якщо він
+        відправив вам симпатію чи у вас є VIP-статус
+    </string>
     <string name="delete_account_are_you_sure">Ви точно впевнені?</string>
     <string name="delete">Видалити</string>
-    <string name="delete_account_warning">Увага! Ви намагаєтеся видалити свій профіль в Topface.</string>
-    <string name="delete_account_error">На жаль, видалити ваш аккаунт не вдалося. Ви можете повторити ще раз.</string>
+    <string name="delete_account_warning">Увага! Ви намагаєтеся видалити свій профіль в Topface.
+    </string>
+    <string name="delete_account_error">На жаль, видалити ваш аккаунт не вдалося. Ви можете
+        повторити ще раз.
+    </string>
     <string name="restore">Відновити</string>
     <string name="admiration_sended">Захоплення відправлено</string>
     <string name="chat">Написати</string>
@@ -434,9 +518,15 @@
     <string name="cannot_get_geo">Не вдалося визначити місцерозташування</string>
     <string name="user_does_not_exist">Користувач не знайден</string>
     <string name="feedback_subject_ban">Скарга на несправедливий бан</string>
-    <string name="billing_item_already_owned">Ваша попередня покупка в обробці, будь ласка почекайте</string>
+    <string name="billing_item_already_owned">Ваша попередня покупка в обробці, будь ласка
+        почекайте
+    </string>
     <string name="dialog">Переписка</string>
     <string name="reply">Відповісти</string>
-    <string name="novice_sympathy">Відправляйте симпатії тим, хто вам\nдійсно подобається,\nщоб почати приємне знайомство</string>
-    <string name="novice_sympathies_bonus">- Ви отримуєте %1$d симпатій у\nподарунок! Це означає, що ви\nточно сподобаєтеся %2$d людям, \nякі висловлять вам свою симпатію</string>
+    <string name="novice_sympathy">Відправляйте симпатії тим, хто вам\nдійсно подобається,\nщоб
+        почати приємне знайомство
+    </string>
+    <string name="novice_sympathies_bonus">- Ви отримуєте %1$d симпатій у\nподарунок! Це означає, що
+        ви\nточно сподобаєтеся %2$d людям, \nякі висловлять вам свою симпатію
+    </string>
 </resources>

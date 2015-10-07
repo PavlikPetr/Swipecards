@@ -42,10 +42,10 @@ import com.topface.topface.Static;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.social.AuthToken;
 
-import org.acra.sender.ReportSenderException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -164,14 +164,26 @@ public class Utils {
     }
 
     public static void goToUrl(Context context, String url) {
-        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        Intent i = Utils.getIntentToOpenUrl(url);
+        if (i != null) {
+            context.startActivity(i);
+        }
     }
 
-    public static void startOldVersionPopup(final Activity activity) {
-        startOldVersionPopup(activity, true);
+    public static Intent getIntentToOpenUrl(String url) {
+        if (!TextUtils.isEmpty(url)) {
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            return i;
+        }
+        return null;
     }
 
-    public static void startOldVersionPopup(final Activity activity, boolean cancelable) {
+    public static void startOldVersionPopup(Activity activity, OnNextActionListener startActionCallback) {
+        startOldVersionPopup(activity, true, startActionCallback);
+    }
+
+    public static void startOldVersionPopup(final Activity activity, boolean cancelable, final OnNextActionListener startActionCallback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
             @Override
@@ -188,7 +200,16 @@ public class Utils {
         }
         builder.setMessage(R.string.general_version_not_supported);
         builder.setCancelable(cancelable);
-        builder.create().show();
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (startActionCallback != null) {
+                    startActionCallback.onNextAction();
+                }
+            }
+        });
+        alertDialog.show();
     }
 
     public static void goToMarket(Activity context) {
@@ -196,7 +217,7 @@ public class Utils {
     }
 
     public static void goToMarket(Activity context, Integer requestCode) {
-        Intent marketIntent = getMarketIntent(context);
+        Intent marketIntent = getMarketIntent();
         if (isCallableIntent(marketIntent, context)) {
             if (requestCode == null) {
                 context.startActivity(marketIntent);
@@ -214,8 +235,8 @@ public class Utils {
         return list.size() > 0;
     }
 
-    public static Intent getMarketIntent(Context context) {
-        return new Intent(Intent.ACTION_VIEW, Uri.parse(CacheProfile.getOptions().updateUrl));
+    public static Intent getMarketIntent() {
+        return new Intent(Intent.ACTION_VIEW, Uri.parse(App.get().getOptions().updateUrl));
     }
 
     public static String getClientDeviceName() {
@@ -420,9 +441,9 @@ public class Utils {
             public void execute() {
                 HockeySender hockeySender = new HockeySender();
                 try {
-                    hockeySender.send(context, hockeySender.createLocalReport(context, new Exception(message)));
-                } catch (ReportSenderException e) {
-                    e.printStackTrace();
+                    hockeySender.sendDebug(hockeySender.createLocalReport(context, new Exception(message)));
+                } catch (Exception e) {
+                    Debug.error(e.toString());
                 }
             }
         };

@@ -15,8 +15,10 @@ import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.data.Auth;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -27,6 +29,8 @@ import com.topface.topface.utils.notifications.UserNotificationManager;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.inject.Inject;
 
 /**
  * AuthorizationManager has to be attached to some Activity (setted on getInstance(...))
@@ -42,7 +46,8 @@ import java.util.Map;
 public class AuthorizationManager {
 
     public static final int RESULT_LOGOUT = 666;
-
+    @Inject
+    TopfaceAppState mAppState;
 
     private Map<Platform, Authorizer> mAuthorizers = new HashMap<>();
 
@@ -71,6 +76,7 @@ public class AuthorizationManager {
     }
 
     public AuthorizationManager(Activity parent) {
+        App.from(App.getContext()).inject(this);
         mAuthorizers.put(Platform.VKONTAKTE, new VkAuthorizer(parent));
         mAuthorizers.put(Platform.FACEBOOK, new FbAuthorizer(parent));
         mAuthorizers.put(Platform.ODNOKLASSNIKI, new OkAuthorizer(parent));
@@ -123,7 +129,8 @@ public class AuthorizationManager {
             authorizer.logout();
         }
         authToken.removeToken();
-        CacheProfile.clearProfileAndOptions();
+        mAppState.destroyObservable(Options.class);
+        CacheProfile.clearProfileAndOptions(mAppState);
         App.getConfig().onLogout();
         StartActionsController.onLogout();
         SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);

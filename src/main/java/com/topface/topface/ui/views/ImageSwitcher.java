@@ -33,6 +33,7 @@ public class ImageSwitcher extends ViewPager {
     private int mPreviousPhotoPosition;
     private int mPrev;
     private int mNext;
+    private boolean mIsNeedAnimateLoader;
 
     public ImageSwitcher(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -141,6 +142,10 @@ public class ImageSwitcher extends ViewPager {
         }
     };
 
+    public void needAnimateLoader(boolean animate) {
+        mIsNeedAnimateLoader = animate;
+    }
+
     /*
     *  class ImageSwitcherAdapter
     */
@@ -248,7 +253,9 @@ public class ImageSwitcher extends ViewPager {
             if (tag == null || !((Boolean) tag)) {
                 View progressBar = baseLayout.findViewById(R.id.pgrsAlbum);
                 progressBar.setVisibility(View.VISIBLE);
-                AnimationUtils.createProgressBarAnimator(progressBar).start();
+                if (mIsNeedAnimateLoader) {
+                    AnimationUtils.createProgressBarAnimator(progressBar).start();
+                }
                 Photo photo = mPhotoLinks.get(realPosition);
                 imageView.setPhoto(photo, mUpdatedHandler, progressBar);
                 imageView.setTag(R.string.photo_is_set_tag, !photo.isFake());

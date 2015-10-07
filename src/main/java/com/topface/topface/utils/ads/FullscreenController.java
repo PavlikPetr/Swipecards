@@ -2,7 +2,6 @@ package com.topface.topface.utils.ads;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -28,6 +27,7 @@ import com.topface.topface.statistics.TopfaceAdStatistics;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
@@ -55,10 +55,11 @@ public class FullscreenController {
         private PageInfo startPageInfo;
         private int priority;
 
-        public FullscreenStartAction(int priority) {
+        public FullscreenStartAction(int priority, Activity activity) {
             this.priority = priority;
-            if (!CacheProfile.isEmpty()) {
-                startPageInfo = CacheProfile.getOptions().getPagesInfo().get(PageInfo.PageName.START.getName());
+            mActivity = activity;
+            if (!CacheProfile.isEmpty(mActivity)) {
+                startPageInfo = App.from(mActivity).getOptions().getPagesInfo().get(PageInfo.PageName.START.getName());
             }
         }
 
@@ -71,7 +72,7 @@ public class FullscreenController {
 
         @Override
         public void callOnUi() {
-            if (CacheProfile.getOptions().interstitial.enabled) {
+            if (App.from(mActivity).getOptions().interstitial.enabled) {
                 FullscreenController.this.requestFullscreen(BANNER_ADMOB_FULLSCREEN_START_APP);
             } else if (startPageInfo != null) {
                 FullscreenController.this.requestFullscreen(startPageInfo.getBanner());
@@ -80,7 +81,7 @@ public class FullscreenController {
 
         @Override
         public boolean isApplicable() {
-            return CacheProfile.getOptions().interstitial.enabled || CacheProfile.show_ad &&
+            return App.from(mActivity).getOptions().interstitial.enabled || App.from(mActivity).getProfile().showAd &&
                     FullscreenController.this.isTimePassed() && startPageInfo != null
                     && startPageInfo.floatType.equals(PageInfo.FLOAT_TYPE_BANNER);
         }
@@ -134,8 +135,8 @@ public class FullscreenController {
         } else {
             return Math.abs(currentTime - lastCall) >
                     (mOptions != null
-                    ? 1000 * mOptions.fullscreenInterval
-                    : DateUtils.DAY_IN_MILLISECONDS);
+                            ? 1000 * mOptions.fullscreenInterval
+                            : DateUtils.DAY_IN_MILLISECONDS);
         }
     }
 
@@ -150,7 +151,7 @@ public class FullscreenController {
     }
 
     private void requestGagFullscreen() {
-        requestFullscreen(CacheProfile.getOptions().gagTypeFullscreen);
+        requestFullscreen(App.from(mActivity).getOptions().gagTypeFullscreen);
     }
 
     public void requestFullscreen(String type) {
@@ -266,8 +267,10 @@ public class FullscreenController {
                                 config.addFullscreenUrl(data.parameter);
                                 config.saveConfig();
                                 hideFullscreenBanner(bannerContainer);
-                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(data.parameter));
-                                mActivity.startActivity(intent);
+                                Intent i = Utils.getIntentToOpenUrl(data.parameter);
+                                if (i != null) {
+                                    mActivity.startActivity(i);
+                                }
                                 TopfaceAdStatistics.sendFullscreenClicked(data);
                             }
                         });
@@ -345,7 +348,7 @@ public class FullscreenController {
         //Пока не требуется, но на будущее
     }
 
-    public IStartAction createFullscreenStartAction(final int priority) {
-        return new FullscreenStartAction(priority);
+    public IStartAction createFullscreenStartAction(final int priority, Activity activity) {
+        return new FullscreenStartAction(priority, activity);
     }
 }

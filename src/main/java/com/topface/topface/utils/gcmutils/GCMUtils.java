@@ -16,6 +16,7 @@ import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.requests.RegistrationTokenRequest;
@@ -224,7 +225,7 @@ public class GCMUtils {
     }
 
 
-    public static boolean showNotificationIfNeed(final Intent extra, Context context) {
+    public static boolean showNotificationIfNeed(final Intent extra, Context context, String updateUrl) {
         //Проверяем, не отключены ли уведомления
         if (!App.getUserConfig().isNotificationEnabled()) {
             Debug.log("GCM: notification is disabled");
@@ -237,7 +238,7 @@ public class GCMUtils {
             return false;
         }
         try {
-            return showNotification(extra, context);
+            return showNotification(extra, context, updateUrl);
         } catch (Exception e) {
             Debug.error("GCM: Notifcation error", e);
         }
@@ -245,13 +246,13 @@ public class GCMUtils {
         return false;
     }
 
-    private static boolean showNotification(final Intent extra, Context context) {
+    private static boolean showNotification(final Intent extra, Context context, final String updateUrl) {
         if (!CacheProfile.isLoaded()) {
             Debug.log("GCM: wait for profile load to show notification");
             BroadcastReceiver profileLoadReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    showNotification(extra, context);
+                    showNotification(extra, context, updateUrl);
                     LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
                 }
             };
@@ -259,7 +260,8 @@ public class GCMUtils {
                     new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD));
             return false;
         }
-        String uid = Integer.toString(CacheProfile.uid);
+        Profile profile = App.from(context).getProfile();
+        String uid = Integer.toString(profile.uid);
         String targetUserId = extra.getStringExtra("receiver");
         targetUserId = targetUserId != null ? targetUserId : uid;
 
@@ -267,18 +269,18 @@ public class GCMUtils {
         //другому пользователю. Такое может произойти, если не было нормального разлогина,
         //например если удалить приложения будучи залогиненым
         if (!TextUtils.equals(targetUserId, uid)) {
-            Debug.error("GCM: target id # " + targetUserId + " dont equal current user id " + CacheProfile.uid);
+            Debug.error("GCM: target id # " + targetUserId + " dont equal current user id " + profile.uid);
             return false;
         }
 
         final String data = extra.getStringExtra("text");
         if (data != null) {
-            loadNotificationSettings();
+            loadNotificationSettings(context);
             setCounters(extra, context);
             int type = getType(extra);
             final User user = getUser(extra);
             String title = getTitle(context, extra.getStringExtra("title"));
-            Intent intent = getIntentByType(context, type, user);
+            Intent intent = getIntentByType(context, type, user, updateUrl);
 
             if (intent != null) {
                 intent.putExtra(GCMUtils.NOTIFICATION_INTENT, true);
@@ -372,13 +374,14 @@ public class GCMUtils {
         return user;
     }
 
-    private static void loadNotificationSettings() {
-        if (CacheProfile.notifications != null) {
-            if (CacheProfile.notifications.size() > 0) {
-                showMessage = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
-                showLikes = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
-                showSympathy = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
-                showVisitors = CacheProfile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
+    private static void loadNotificationSettings(Context context) {
+        Profile profile = App.from(context).getProfile();
+        if (profile.notifications != null) {
+            if (profile.notifications.size() > 0) {
+                showMessage = profile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE).apns;
+                showLikes = profile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).apns;
+                showSympathy = profile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY).apns;
+                showVisitors = profile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR).apns;
             }
         }
     }
@@ -437,7 +440,7 @@ public class GCMUtils {
         return null;
     }
 
-    private static Intent getIntentByType(Context context, int type, User user) {
+    private static Intent getIntentByType(Context context, int type, User user, String updateUrl) {
         Intent i = null;
         switch (type) {
             case GCM_TYPE_MESSAGE:
@@ -476,7 +479,7 @@ public class GCMUtils {
                 i.putExtra(NEXT_INTENT, GEO);
                 break;
             case GCM_TYPE_UPDATE:
-                i = Utils.getMarketIntent(context);
+                i = Utils.getMarketIntent();
                 //Есть шанс что ссылка на маркет не будет поддерживаться
                 if (!Utils.isCallableIntent(i, context)) {
                     i = new Intent(context, NavigationActivity.class);

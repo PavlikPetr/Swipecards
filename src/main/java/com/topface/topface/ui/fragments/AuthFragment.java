@@ -33,7 +33,6 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.PasswordRecoverActivity;
 import com.topface.topface.ui.RegistrationActivity;
 import com.topface.topface.ui.TopfaceAuthActivity;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
@@ -275,7 +274,7 @@ public class AuthFragment extends BaseAuthFragment {
         Activity activity = getActivity();
         if (isAdded() && activity instanceof BaseFragmentActivity) {
             ((BaseFragmentActivity) activity).close(this, true);
-            MenuFragment.selectFragment(CacheProfile.getOptions().startPageFragmentId);
+            MenuFragment.selectFragment(App.from(getActivity()).getOptions().startPageFragmentId);
         }
     }
 

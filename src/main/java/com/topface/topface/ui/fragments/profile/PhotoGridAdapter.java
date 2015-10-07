@@ -11,7 +11,6 @@ import com.topface.topface.data.Photos;
 import com.topface.topface.ui.GridViewWithHeaderAndFooter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
 public class PhotoGridAdapter extends BaseAdapter
@@ -42,14 +41,14 @@ public class PhotoGridAdapter extends BaseAdapter
         notifyDataSetChanged();
     }
 
-    public void updateData() {
-        if (isNeedUpadate() && CacheProfile.photos != null) {
-            setData((Photos) CacheProfile.photos.clone(), CacheProfile.photos.size() != CacheProfile.totalPhotos, true);
+    public void updateData(Photos photos, int photosCount) {
+        if (isNeedUpadate(photos) && photos != null) {
+            setData((Photos) photos.clone(), photos.size() != photosCount, true);
         }
     }
 
-    private boolean isNeedUpadate() {
-        return !(getPhotos().equals(CacheProfile.photos));
+    private boolean isNeedUpadate(Photos photos) {
+        return !(getPhotos().equals(photos));
     }
 
     public void setData(Photos photoLinks, boolean needMore) {

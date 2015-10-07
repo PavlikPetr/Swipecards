@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
+import com.topface.topface.App;
 import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
@@ -38,7 +39,7 @@ public class VipPaymentWallBuyFragment extends VipBuyFragment {
 
     @Override
     protected void buy(String id, BuyButtonData btn) {
-        PushButtonVipUniqueStatistics.sendPushButtonVip(id, ((Object) this).getClass().getSimpleName(), getFrom());
+        PushButtonVipUniqueStatistics.sendPushButtonVip(id, ((Object) this).getClass().getSimpleName(), getFrom(), App.from(getActivity()).getProfile());
         PushButtonVipStatistics.send(id, ((Object) this).getClass().getSimpleName(), getFrom());
         FragmentActivity activity = getActivity();
         if (activity != null) {
