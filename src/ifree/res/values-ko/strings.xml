@@ -48,12 +48,16 @@
     <string name="general_buying">호감도와 코인을 구입하기</string>
     <string name="popup_version_title">어플의 새로운 버전을 이용 가능합니다.</string>
     <string name="popup_version_message">자신의 버전을 설정할 때 입니다!</string>
-    <string name="leaders_select_photo_info">가장 자신이 잘 나온 사진을 선택해 주세요! 낮은 순위의 사진은 선택할 수 없습니다.</string>
+    <string name="leaders_select_photo_info">가장 자신이 잘 나온 사진을 선택해 주세요! 낮은 순위의 사진은 선택할 수 없습니다.
+    </string>
     <string name="map_popup_address">주소</string>
-    <string name="black_list_info">당신은 블랙 리스트에 이웃을 추가하였습니다. VIP상태 설정의 프로필에서 해당 사항을 변경할 수 있습니다.</string>
+    <string name="black_list_info">당신은 블랙 리스트에 이웃을 추가하였습니다. VIP상태 설정의 프로필에서 해당 사항을 변경할 수 있습니다.
+    </string>
     <string name="black_list_activation">VIP 상태를 등록하여 블랙 리스트를 이용해 보세요.</string>
     <string name="buying_total">총합</string>
-    <string name="we_dont_detect_your_city">더 많은 사람과 가깝게 교제를 하기 위해서 당신의 위치를 알아야 합니다. 자신의 도시를 선택해보세요.</string>
+    <string name="we_dont_detect_your_city">더 많은 사람과 가깝게 교제를 하기 위해서 당신의 위치를 알아야 합니다. 자신의 도시를
+        선택해보세요.
+    </string>
     <string name="confirm_email">이메일을 확인해 주십시오.</string>
     <string name="password_sent">새로운 비밀번호가 당신의 이메일로 전송되었습니다.</string>
     <string name="buy_vip_month_one">%1$d 달 이용을 %2$.2f %3$@가격에</string>
@@ -235,18 +239,23 @@
     <string name="general_block">차단하기</string>
     <string name="general_buying_disabled">현재 구입이 불가능합니다.</string>
     <string name="ban_flood_detected">너무 자주 서버에 대한 요청을 하고 있습니다. 다음 사용자를 위해 조금만 대기 바랍니다.</string>
-    <string name="general_maintenance">현재 서버의 기술적인 작업을 진행중인 관계로 당신의 요청 작업이 이행되지 않았습니다. 나중에 다시 시도해 주세요.</string>
+    <string name="general_maintenance">현재 서버의 기술적인 작업을 진행중인 관계로 당신의 요청 작업이 이행되지 않았습니다. 나중에 다시 시도해
+        주세요.
+    </string>
     <string name="virus_chat_btn">호감도 받기</string>
     <string name="profile_ask_sent">요청사항이 전송되었습니다.</string>
     <string name="virus_error">당신의 친구는 하루에 한번 만 호감도를 보낼 수 있습니다! 내일 다시 한번 시도해 보십시오!</string>
     <string name="popup_version_update">업데이트하기</string>
     <string name="popup_version_cancel">나중을 위해 기억해 두십시오.</string>
-    <string name="general_version_not_supported">당신의 어플 버젼이 더 이상 지원하지 않는 이전 버전입니다. 새롭게 업데이트 해주세요.</string>
+    <string name="general_version_not_supported">당신의 어플 버젼이 더 이상 지원하지 않는 이전 버전입니다. 새롭게 업데이트 해주세요.
+    </string>
     <string name="default_price_format">전체 금액은 %.2f USD 입니다.</string>
     <string name="leaders_pick_condition">%d%% 이하의 사진은 선택할 수 없습니다.</string>
     <string name="general_gift">선물</string>
     <string name="user_actions_chat">대화</string>
-    <string name="profile_edit_age_ranges">연령은 16세에서 99에까지 설정이 되어야 합니다. 다시 한번 확인하시어 옳바른 숫자를 입력해 주시기 바랍니다.</string>
+    <string name="profile_edit_age_ranges">연령은 16세에서 99에까지 설정이 되어야 합니다. 다시 한번 확인하시어 옳바른 숫자를 입력해 주시기
+        바랍니다.
+    </string>
     <string name="sign_in">들어가기</string>
     <string name="create_account">계정 만들기</string>
     <string name="email">E-mail</string>
@@ -273,7 +282,8 @@
     <string name="search_city_by_name">이름으로 도시 찾기</string>
     <string name="gallery">갤러리</string>
     <string name="no_photo_take_photo">아무도 당신과 교제나 만남을 신청할 수 없습니다! 사진을 설정하거나 앨범에서 선택하여 주세요.</string>
-    <string name="photo_for_avatar">사진이 프로필에 전송될 준비가 되었습니다! 당신의 첫번째 사진이며, 당신의 아바타로 사용 되어집니다.</string>
+    <string name="photo_for_avatar">사진이 프로필에 전송될 준비가 되었습니다! 당신의 첫번째 사진이며, 당신의 아바타로 사용 되어집니다.
+    </string>
     <string name="send_confirmation_email">이메일로 확인 메일 전송하기</string>
     <string name="change_password">비밀번호 변경하기</string>
     <string name="password_changing">비밀번호 변경</string>
@@ -294,7 +304,9 @@
     <string name="sympathy_sended">호감도가 전송되었습니다.</string>
     <string name="general_photo_deleted">업로딩한 사진이 톱페이스 규칙에 어긋나는 사항이 있어 삭제 되었습니다.</string>
     <string name="general_change">변경하기</string>
-    <string name="user_does_not_have_gifts">아직 해당 사용자는 받은 선물이 없습니다. 당신이 맨 처음으로 선물을 한다면 상대도 당신을 알아보게 될 것입니다.</string>
+    <string name="user_does_not_have_gifts">아직 해당 사용자는 받은 선물이 없습니다. 당신이 맨 처음으로 선물을 한다면 상대도 당신을 알아보게
+        될 것입니다.
+    </string>
     <string name="status_is_empty">현재 상태 설정이 되어 있지 않습니다.</string>
     <string name="you_dont_have_gifts_yet">아직 받은 선물이 없습니다.</string>
     <string name="buy_sympathies">호감도 구입하기</string>
@@ -337,8 +349,12 @@
     </plurals>
     <string name="buy_status_and_watch_your_fans">VIP 상태를 구입하여 누가 당신의 팬인지 알아보세요.</string>
     <string name="add_bookmarks_to_be_connected">새롭게 만난 사람들을 이곳에 추가하여 지속적인 관계를 유지하여 보세요.</string>
-    <string name="nobody_chat_with_you_sympathies_will_help">아직 당신에게 보내온 메세지가 없습니다. 호감도가 아마도 대화 상대를 찾아줄 수 있을것 같군요.</string>
-    <string name="rate_and_have_mutual_or_buy_and_chat">당신의 마음에 들어하는 상대에게 호감도를 보내고 상대방에게도 받아보세요. 또는 호감도를 구입하여 당신의 마음에 들어하는 상대와 대화를 할 수 있습니다.</string>
+    <string name="nobody_chat_with_you_sympathies_will_help">아직 당신에게 보내온 메세지가 없습니다. 호감도가 아마도 대화 상대를
+        찾아줄 수 있을것 같군요.
+    </string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">당신의 마음에 들어하는 상대에게 호감도를 보내고 상대방에게도 받아보세요. 또는
+        호감도를 구입하여 당신의 마음에 들어하는 상대와 대화를 할 수 있습니다.
+    </string>
     <string name="with_vip_find_your_visitors">VIP 상태를 이용하면 누가 당신의 페이지에 왔었는지 알 수 있습니다.</string>
     <string name="on_avatar">아바타로</string>
     <string name="your_avatar">당신의 아바타.</string>
@@ -357,16 +373,20 @@
     <string name="complain_type_fake_user">유명인</string>
     <string name="complain_type_spam_msg">상업적 광고, 스팸, 광고, 타 사이트로 연결하는 링크, 전화</string>
     <string name="complain_type_spam_profile">\"상태\" \"자신에 관해\" 항목에 상업적인 내용이 있습니다.</string>
-    <string name="complain_type_swearing_profile">\"상태\" 및 \"자신에 대한\" 항목에서 비방,욕설, 위협적인 내용이 포함되어 있습니다.</string>
+    <string name="complain_type_swearing_profile">\"상태\" 및 \"자신에 대한\" 항목에서 비방,욕설, 위협적인 내용이 포함되어
+        있습니다.
+    </string>
     <string name="complain_type_fake_data">이름, 성별, 나이 및 사진이 일치하지 않습니다.</string>
     <string name="complain_description">불만의 원인에 대해 상세히 이야기 해주세요.</string>
     <string name="general_complain_sended">당신의 불만 사항이 접수 되었습니다. 도움을 주셔서 대단히 감사합니다.</string>
     <string name="general_complain">불만</string>
     <string name="general_msg">메세지</string>
     <string name="notifications">알림</string>
-    <string name="general_no_notifications">유감스럽게도  통지서 받기 설정을 이용 불가능으로 해놓으셨습니다.</string>
+    <string name="general_no_notifications">유감스럽게도 통지서 받기 설정을 이용 불가능으로 해놓으셨습니다.</string>
     <string name="black_list_add_short">블랙 리스트로</string>
-    <string name="confirm_email_for_dating">톱페이스에서는 스팸을 금지하고 있습니다. Topface를 계속 사용하기 위해서 자신의 이메일을 확인 해주십시오.</string>
+    <string name="confirm_email_for_dating">톱페이스에서는 스팸을 금지하고 있습니다. Topface를 계속 사용하기 위해서 자신의 이메일을 확인
+        해주십시오.
+    </string>
     <string name="complain_type_swearing_msg">비방, 욕설, 위협</string>
     <string name="general_exit">나가기</string>
     <string name="likes_can_help_you">호감도는 당신이 타인과 만날 수 있게 도와 줍니다.</string>
@@ -379,7 +399,9 @@
     </plurals>
     <string name="or">또는</string>
     <string name="settings_delete_account">계정 삭제</string>
-    <string name="chat_block_not_mutual">특정 사용자와의 교제를 시작하려면 VIP 상태를 소지하고 있거나 상대가 당신에게 호감을 보내야만 합니다.</string>
+    <string name="chat_block_not_mutual">특정 사용자와의 교제를 시작하려면 VIP 상태를 소지하고 있거나 상대가 당신에게 호감을 보내야만
+        합니다.
+    </string>
     <string name="delete_account_are_you_sure">계속 하시겠습니까?</string>
     <string name="delete">삭제하기</string>
     <string name="delete_account_warning">주의 하십시오. Topface의 자신의 프로필 삭제 작업을 시도하였습니다.</string>
@@ -387,5 +409,7 @@
     <string name="restore">저장하기</string>
     <string name="admiration_sended">감탄사가 전송되었습니다.</string>
     <string name="novice_sympathy">당신이 \n 정말 호감이 있는 상대에게 \n 기분 좋은 만남을 이끌어내기 위해 호감도를 전달해보세요.</string>
-    <string name="novice_sympathies_bonus">%1$d호감도를 선물로 받습니다! 이 선물의 의미는 당신에게 \n자신의 호감을 표현하는 %2$d 사람들이 당신을 \n마음에 들어한다는 의미입니다.</string>
+    <string name="novice_sympathies_bonus">%1$d호감도를 선물로 받습니다! 이 선물의 의미는 당신에게 \n자신의 호감을 표현하는 %2$d
+        사람들이 당신을 \n마음에 들어한다는 의미입니다.
+    </string>
 </resources>

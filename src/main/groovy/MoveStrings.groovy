@@ -11,6 +11,7 @@ class Globals {
         HashMap<String, String> map = new HashMap<>();
         map.put("google", "Topface");
         map.put("blueStacks", "Spark");
+        map.put("derived", "Alcatel");
         FLAVOURS_WITH_APP_NAME = Collections.unmodifiableMap(map);
     }
 
@@ -141,7 +142,7 @@ def compareSecondaryFlavourWithMain(String flavour) {
                 parse.string.each { name ->
                     String key = String.format(Globals.STRING_RESOURCE_FORMAT, "${name.'@name'}");
                     if (!resXmlMainFlavour.contains(key)) {
-                        println("Отсутствует строка ".concat(key).concat(" в flavour ").concat(Globals.MAIN_FLAVOUR_NAME).concat("\nПеренесите ее из flavour ").concat(flavour));
+                        println("\nОтсутствует строка ".concat(key).concat(" в flavour ").concat(Globals.MAIN_FLAVOUR_NAME).concat("\nПеренесите ее из flavour ").concat(flavour));
                         System.exit(1);
                     }
                 }
@@ -246,22 +247,21 @@ def replaceAppName() {
 
 def printRes(String flavour, String defaultName) {
     println("replace AppName flavour " + flavour + " from " + defaultName + " to " + Globals.FLAVOURS_WITH_APP_NAME.get(flavour));
-    /*
-    теперь надо взять все файлы из данного флейвора (список дирректорий с ресурсами можно получить в методе getAllResFolderfByFlavour("имя флейвора"))
-    пройтись по всем файлам в каждой из дирректорий
-    файлы можно распарсить с помощью класса XmlParser
-
-     def parse = new XmlParser().parse("путь к файлу");
-                parse.string.each { name ->
-                name.text() //вернет именно value
-                // получили значение, нашли вхождение дефолтного названия App  и зареплейсили его именем для текущего флейвора
+    for (String path : getAllResFolderfByFlavour(flavour)) {
+        for (String fileName : Globals.FILES_NAME) {
+            String filePath = path.concat(Globals.FOLDER_SPLITTER).concat(fileName);
+            Node parse = new XmlParser().parse(filePath);
+            parse.string.each { name ->
+                if (name.text().contains(defaultName)) {
+                    name.setValue(name.text().replace(defaultName, Globals.FLAVOURS_WITH_APP_NAME.get(flavour)));
                 }
-    на данном этапе есть xml  со всеми необходимыми изменениями
-    осталось только понять как их выгрузить в файл
+            }
 
-    АХТУНГ только сейчас понял,что прохожусь в скрипте по строкам, но не трогаю plurals. Блин, печаль(((
-     */
-
+            XmlNodePrinter nodePrinter = new XmlNodePrinter(new PrintWriter(new FileWriter(filePath)))
+            nodePrinter.setPreserveWhitespace(true)
+            nodePrinter.print(parse)
+        }
+    }
 }
 
 saveFlavoursList(args[0]);
