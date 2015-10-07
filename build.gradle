@@ -141,28 +141,24 @@ android {
 
     signingConfigs {
         google {
-            logger.error("build release apk with default flavourType")
             storeFile file("misc/keys/topface.keystore")
             storePassword "Sonetica2012"
             keyAlias "topface"
             keyPassword "Sonetica2012"
         }
         ifree {
-            logger.error("build release apk with IFree flavourType")
             storeFile file("misc/keys/topfaceIFree.keystore")
             storePassword "Sonetica2012"
             keyAlias "topfaceifree"
             keyPassword "Sonetica2012"
         }
         blueStacks {
-            logger.error("build release apk with BlueStacks flavourType")
             storeFile file("misc/keys/topfaceBlueStacks.keystore")
             storePassword "Sonetica2012"
             keyAlias "topfacebluestacks"
             keyPassword "Sonetica2012"
         }
         derived {
-            logger.error("build release apk with Derived flavourType")
             storeFile file("misc/keys/topfaceDerived.jks")
             storePassword "Sonetica2012"
             keyAlias "topfacederived"
@@ -369,6 +365,9 @@ subprojects {
     }
 }
 
+// простите за этот кусок унылого ..., но пока не удалось запустить внешнюю таску из build.gradle, поэтому
+// в данный момент придется довольствоваться этим вариантом синхронизации строк
+
 task runScript(type: Exec) {
     def listFlavours = []
     android.productFlavors.each { flavor ->
@@ -378,10 +377,6 @@ task runScript(type: Exec) {
     android.buildTypes.each { buildType ->
         listBuildTypes << buildType.name
     }
-
-
-
-
-    commandLine 'groovy', '/home/ppetr/work/projects/topface-android/src/main/groovy/MoveStrings.groovy', listFlavours, listBuildTypes
+    commandLine 'groovy', projectDir.toString().concat('/src/main/groovy/MoveStrings.groovy'), listFlavours, listBuildTypes
 }
 defaultTasks 'runScript'

@@ -249,39 +249,19 @@ def printRes(String flavour, String defaultName) {
     println("replace AppName flavour " + flavour + " from " + defaultName + " to " + Globals.FLAVOURS_WITH_APP_NAME.get(flavour));
     for (String path : getAllResFolderfByFlavour(flavour)) {
         for (String fileName : Globals.FILES_NAME) {
-//            File file = new File(path.concat(Globals.FOLDER_SPLITTER).concat(fileName));
             String filePath = path.concat(Globals.FOLDER_SPLITTER).concat(fileName);
             Node parse = new XmlParser().parse(filePath);
-//            while (parse.iterator().hasNext()){
-//                parse.iterator().next()
-//            }
             parse.string.each { name ->
                 if (name.text().contains(defaultName)) {
-                    parse.setValue(name.text().replace(defaultName, Globals.FLAVOURS_WITH_APP_NAME.get(flavour)));
+                    name.setValue(name.text().replace(defaultName, Globals.FLAVOURS_WITH_APP_NAME.get(flavour)));
                 }
-//                name.text().replace(defaultName, Globals.FLAVOURS_WITH_APP_NAME.get(flavour));
             }
-            def writer = new FileWriter(filePath)
-            new XmlNodePrinter(new PrintWriter(writer)).print(parse)
+
+            XmlNodePrinter nodePrinter = new XmlNodePrinter(new PrintWriter(new FileWriter(filePath)))
+            nodePrinter.setPreserveWhitespace(true)
+            nodePrinter.print(parse)
         }
     }
-
-    /*
-    теперь надо взять все файлы из данного флейвора (список дирректорий с ресурсами можно получить в методе getAllResFolderfByFlavour("имя флейвора"))
-    пройтись по всем файлам в каждой из дирректорий
-    файлы можно распарсить с помощью класса XmlParser
-
-     def parse = new XmlParser().parse("путь к файлу");
-                parse.string.each { name ->
-                name.text() //вернет именно value
-                // получили значение, нашли вхождение дефолтного названия App  и зареплейсили его именем для текущего флейвора
-                }
-    на данном этапе есть xml  со всеми необходимыми изменениями
-    осталось только понять как их выгрузить в файл
-
-    АХТУНГ только сейчас понял,что прохожусь в скрипте по строкам, но не трогаю plurals. Блин, печаль(((
-     */
-
 }
 
 saveFlavoursList(args[0]);
