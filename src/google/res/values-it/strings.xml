@@ -22,6 +22,8 @@
     <string name="waiting_a_products">Attendere, prego. Caricamento prodotti da acquistare</string>
     <string name="likes_background_text">Non hai simpatie</string>
     <string name="visitors_background_text">Non ci sono le visite</string>
+    <string name="need_set_avatar">Non puoi fare conoscenze! Imposta l\'immagine del profilo.
+    </string>
     <string name="chat_background_text">Non ci sono i messaggi in entrata</string>
     <string name="entrance">Entrata</string>
     <string name="filter_only_online">Solo online</string>

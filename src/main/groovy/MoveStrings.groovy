@@ -11,7 +11,6 @@ class Globals {
         HashMap<String, String> map = new HashMap<>();
         map.put("google", "Topface");
         map.put("blueStacks", "Spark");
-        map.put("derived", "Alcatel");
         FLAVOURS_WITH_APP_NAME = Collections.unmodifiableMap(map);
     }
 

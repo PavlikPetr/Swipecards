@@ -110,6 +110,13 @@ android {
             buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                     "com.topface.billing.MarketApiType.DERIVED";
         }
+        appland {
+            applicationId "com.topface.topface.appland"
+            buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.APPLAND";
+            buildConfigField "String", "STATISTICS_APP", "\"topfacemobappappland\"";
+            buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
+                    "com.topface.billing.MarketApiType.APPLAND";
+        }
     }
 
     compileOptions {
@@ -164,6 +171,12 @@ android {
             keyAlias "topfacederived"
             keyPassword "Sonetica2012"
         }
+        appland {
+            storeFile file("misc/keys/topfaceAppLand.keystore")
+            storePassword "Sonetica2012"
+            keyAlias "topfaceappland"
+            keyPassword "Sonetica2012"
+        }
         debug {
             storeFile file("misc/keys/debug.keystore")
         }
@@ -183,6 +196,7 @@ android {
             productFlavors.ifree.signingConfig signingConfigs.ifree
             productFlavors.blueStacks.signingConfig signingConfigs.blueStacks
             productFlavors.derived.signingConfig signingConfigs.derived
+            productFlavors.appland.signingConfig signingConfigs.appland
             productFlavors.amazon.signingConfig signingConfigs.google
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     getDefaultProguardFile('proguard-android-optimize.txt'),
