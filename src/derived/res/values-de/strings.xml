@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_locale">de_DE</string>
+    <string name="photofeed_title">Dem Feed hinzufügen</string>
     <string name="general_warning">WARNUNG</string>
     <string name="general_ok">OK</string>
+    <string name="general_any">Irgendwelche</string>
     <string name="general_settings_abbr">Einst.</string>
     <string name="general_disallow">Verboten</string>
     <string name="general_allow">Erlauben</string>
@@ -20,7 +22,10 @@
     <string name="dating_chat_button">Plaudern</string>
     <string name="likes_background_text">Keine Sympathien</string>
     <string name="visitors_background_text">Keine Gäste</string>
+    <string name="need_set_avatar">Niemand kann dich kennenlernen! Lade ein Profilbild hoch.
+    </string>
     <string name="chat_background_text">Keine neuen Nachrichten</string>
+    <string name="entrance">Eingabe</string>
     <string name="filter_only_online">Nur on-line</string>
     <string name="filter_city_age_parameters">Alter und Stadt</string>
     <string name="filter_select_city">Stadt auswählen</string>
@@ -152,6 +157,9 @@
     <string name="general_copy_title">Kopieren</string>
     <string name="general_back">Zurück</string>
     <string name="general_server_error">Fehler. Versuchen Sie später</string>
+    <string name="general_non_exist_photo_error">Konnte nicht fortfahren, da das Foto gelöscht
+        wurde
+    </string>
     <string name="general_data_error">Fehler! Versuchen Sie noch einmal</string>
     <string name="general_internet_off">Keine Internetverbindung. Bitte, warten Sie</string>
     <string name="general_msg_copied">Text ist kopiert</string>
@@ -159,6 +167,9 @@
     <string name="general_profile_error">Fehler bei der Ladung des Profils</string>
     <string name="general_dbl_all">Alle</string>
     <string name="general_dbl_unread">Ungelesene</string>
+    <string name="general_empty_code_confirmation">Bestätigungscode eingeben</string>
+    <string name="general_email_success_confirmed">Deine Email wurde erfolgreich bestätigt</string>
+    <string name="general_email_not_confirmed">Email nicht bestätigt</string>
     <string name="time_yesterday">Gestern</string>
     <string name="time_today">Heute</string>
     <string name="general_send_button">Send</string>
@@ -167,14 +178,18 @@
     <string name="general_city">Stadt</string>
     <string name="general_dating">Bekanntschaften</string>
     <string name="general_likes">Ich gefalle</string>
+    <string name="general_photoblog">Fotofeed</string>
     <string name="general_sympathies">Sympathien</string>
     <string name="general_sympathy">Sympathie</string>
     <string name="general_delight">Bewunderung</string>
     <string name="general_mutual">Gegenseitig</string>
     <string name="general_dialogs">Konversationen</string>
     <string name="general_visitors">Gäste</string>
+    <string name="general_visitors_tab_views">Ansichten</string>
     <string name="general_profile">Profil</string>
     <string name="general_settings">Einstellungen</string>
+    <string name="auth_btn_vk">Vkontakte</string>
+    <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Nochmal versuchen</string>
     <string name="dating_header_girls">Frauen von %1$d bis %2$d</string>
     <string name="dating_header_guys">Männer von %1$d bis %2$d</string>
@@ -202,7 +217,9 @@
     <string name="filter_age">Alter</string>
     <string name="filter_age_start_prefix">Von %s</string>
     <string name="filter_age_end_prefix">bis %s</string>
+    <string name="filter_constitution_template">Von %1$d bis %2$d</string>
     <string name="filter_cities_all">Nach allen Städten</string>
+    <string name="purchase_header_title">Konto:</string>
     <string name="buying_header_title">Käufe</string>
     <plurals name="buying_gift_you_need_coins">
         <item quantity="other">Um ein Geschenk zu senden, kaufen Sie noch %d Coins</item>
@@ -246,6 +263,9 @@
     <string name="edit_selected">Ist ausgewählt</string>
     <string name="edit_name">Name</string>
     <string name="edit_age">Alter</string>
+    <string name="edit_age_error">Um die App zu benutzen musst du zwischen %1$d und %2$d Jahre alt
+        sein.
+    </string>
     <string name="edit_status">Status</string>
     <string name="edit_set_as_main">Als Titelfoto machen</string>
     <string name="edit_delete">Löschen</string>
@@ -278,6 +298,12 @@
     <string name="settings_rights_reserved">Topface \nAlle Rechte vorbehalten</string>
     <string name="settings_extra">Ausführliche Information finden Sie auf</string>
     <string name="settings_logout">Abmelden</string>
+    <string name="settings_code_confirmation">Bestätigungscode schicken</string>
+    <string name="settings_email_was_confirmed">Bereits bestätigt</string>
+    <string name="settings_email_was_confirmed_textview_text">Wenn du deine Email bereits durch das
+        Internet bestätigt hast.
+    </string>
+    <string name="settings_code_confirmation_hint">Bestätigungscode</string>
     <string name="settings_logout_msg">Wollen Sie wirklich abmelden?</string>
     <string name="settings_error_message">Fehlermeldung</string>
     <string name="settings_ask_developer">Frage für Entwickler</string>
@@ -332,6 +358,7 @@
     <string name="ban_complain">Auf Ban beklagen</string>
     <string name="general_ready">Fertig</string>
     <string name="buying_store_ok">Kauf ist erfolgreich beendet</string>
+    <string name="buying_store_fail">Dein Einkauf konnte nicht abgeschloßen werden.</string>
     <string name="vip_privileges">VIP-Privilegien</string>
     <string name="vip_rest">Sie abonnieren VIP</string>
     <string name="vip_invis">Unsichtbares Regime</string>
@@ -385,6 +412,7 @@
         nicht mehr unterstützt. Aktualisieren Sie Ihre Anwendung
     </string>
     <string name="default_price_format">Insgesamt: %.2f USD</string>
+    <string name="default_price_format_extended">Gesamtsumme: %1$.2f %2$s</string>
     <string name="leaders_pick_condition">Sie können das Foto mit dem Rating niedriger als %d%%
         nicht auswählen:
     </string>
@@ -394,6 +422,7 @@
         korrekte Zahl ein und versuchen Sie noch einmal.
     </string>
     <string name="wrong_password_format">Ungültiges Passwort-Format</string>
+    <string name="edit_value_error">Der Wert muss zwischen %1$d und %2$d sein</string>
     <string name="sign_in">Einloggen</string>
     <string name="create_account">Account erstellen</string>
     <string name="email">E-mail</string>
@@ -406,7 +435,11 @@
     <string name="girl">Frau</string>
     <string name="start_communication">Kommunikation anfangen</string>
     <string name="birthdate">Geburtsdatum</string>
+    <string name="birthdate_confirm">Du musst dein Alter angeben um Leute kennenzulernen.</string>
+    <string name="set_birthdate">Alter angeben</string>
     <string name="welcome_to_topface">Herzlich willkommen in Topface!</string>
+    <string name="im_boy">Ich bin ein Typ</string>
+    <string name="im_girl">Ich bin ein Mädchen</string>
     <string name="incorrect_email">E-Mail ist falsch</string>
     <string name="incorrect_login">Login ist falsch</string>
     <string name="incorrect_password">Passwort ist falsch</string>
@@ -430,18 +463,27 @@
     <string name="photo_for_avatar">Ihr Foto ist schon bereit zur Absendung in den Profil! Das Ihr
         erstes Foto und es wird als Ihr Avatar benutzt.
     </string>
+    <string name="add_photo_before">Du musst zuerst ein Foto hinzufügen</string>
+    <string name="change_email">Email ändern</string>
     <string name="send_confirmation_email">Die Bestätigung auf die E-Mail-Adresse senden</string>
     <string name="change_password">Passwort ändern</string>
     <string name="password_changing">Passwort ändern</string>
     <string name="save">Speichern</string>
+    <string name="saving_in_progress">Speichern…</string>
     <string name="confirmation_successfully_sent">Die Bestätigung wurde auf Ihre E-Mail-Adresse
         gesendet
     </string>
+    <string name="email_successfully_confirmed">Email erfolgreich bestätigt</string>
+    <string name="email_not_confirmed">Email noch nicht bestätigt</string>
+    <string name="email_already_confirmed">Bereits bestätigt</string>
     <string name="password_confirmation_hint">Passwort Bestätigung</string>
     <string name="password_hint">Passwort</string>
     <string name="enter_new_password">Geben Sie ein neues Passwort ein</string>
+    <string name="enter_old_password">Gebe dein altes Passwort ein</string>
     <string name="enter_password_confirmation">Geben Sie eine Passwortbestätigung ein</string>
     <string name="passwords_mismatched">Passwörter fallen nicht zusammen</string>
+    <string name="old_password_mismatched">Fehlerhaftes altes Passwort</string>
+    <string name="passwords_matched">Neues und altes Passwort stimmen nicht überein.</string>
     <string name="passwords_changed">Passwort ist geändert</string>
     <string name="take_photo">Foto aufnehmen</string>
     <string name="take_another_photo">Anderes Foto</string>
@@ -575,6 +617,10 @@
     <string name="confirm_email_for_dating">Wir sind gegen Spam. Bestätigen Sie Ihre E-Mail-Adresse,
         um in Topface sich kennen zu lernen!
     </string>
+    <string name="confirm_email_for_dating_title">Wir sind gegen Spam</string>
+    <string name="confirm_email_for_dating_desc">Wir sind gegen Spam. Bitte bestätige deine
+        Emailadresse damit du auf Topface Leute kennenlernen kannst!
+    </string>
     <string name="send_confirm_link">Link für die Bestätigung senden</string>
     <string name="complain_type_swearing_msg">Grobheit, Bedrohung, Fluhen</string>
     <string name="general_exit">Ausloggen</string>
@@ -597,6 +643,9 @@
     <string name="chat_block_not_mutual">Sie können sich mit dem Nutzer unterhalten, falls er eine
         Sympathie Ihnen gesendet hat oder falls Sie einen VIP-Status haben
     </string>
+    <string name="add_to_favorite_block_not_vip">Nur VIP-User können vom Datingbildschirm aus zu den
+        Favoriten hinzufügen
+    </string>
     <string name="delete_account_are_you_sure">Sind Sie sicher?</string>
     <string name="delete">Löschen</string>
     <string name="delete_account_warning">Achtung! Sie versuchen Ihren Profil in Topface zu
@@ -604,6 +653,9 @@
     </string>
     <string name="delete_account_error">Leider, wurde Ihr Account nicht gelöscht. Sie können noch
         einmal versuchen.
+    </string>
+    <string name="delete_account_will_be_restored_are_you_sure">Du versuchst in ein gelöschtes Konto
+        einzuloggen. Das Konto wird wiederhergestellt, wenn du fertig bist.
     </string>
     <string name="restore">Wiederherstellen</string>
     <string name="admiration_sended">Bewunderung ist gesendet</string>
@@ -628,6 +680,9 @@
     <string name="settings_feedback_transaction_number">Bestellnummer</string>
     <string name="settings_feedback_transaction_link">Wo kann man Bestellnummer finden?</string>
     <string name="general_logout_error">Leider, konnte man nicht abmelden</string>
+    <string name="auth_btn_ok">Odnoklassniki</string>
+    <string name="auth_btn_tf">Topface Konto</string>
+    <string name="birthday">Geburtsdatum</string>
     <string name="other_auth">Via andere Services einloggen</string>
     <string name="settings_feedback_transaction_number_hint">Geben Sie Bestellnummer ein</string>
     <string name="delete_visitors">Gäste löschen</string>
@@ -678,6 +733,9 @@
     <string name="retry_cancel_editing">Fehler beim Senden von Daten an den Server. Beenden ohne
         Speichern oder nochmal versuchen?
     </string>
+    <string name="retry_cancel_editing_bad_value">Du hast ungültige Daten eingegeben. Weiter ohne zu
+        speichern oder erneut versuchen?
+    </string>
     <string name="user_does_not_exist">Nutzer ist nicht gefunden</string>
     <string name="feedback_subject_ban">Meldung auf ungerechtes Ban</string>
     <string name="settings_led">LED Benachrichtigung</string>
@@ -687,13 +745,92 @@
     </string>
     <string name="dialog">Dialog</string>
     <string name="reply">Antworten</string>
+    <string name="measurement_unit_weight">kg</string>
+    <string name="measurement_unit_height">cm</string>
+    <string name="maximum_number_of_users">Du hast das Maximum an Usern ausgewählt</string>
+    <string name="logout_if_email_already_registred">Es gibt bereits einen User mit dieser Email.
+        Wenn das deine Email ist, musst du dich aus deinem jetzigen Konto ausloggen und in %s Konto
+        einloggen.
+    </string>
+    <string name="recover_password_instructions">Dir wurde eine Email geschickt mit Anweisungen zur
+        Wiederherstellung des Passworts.
+    </string>
     <string name="email_changing">E-Mail ändern</string>
+    <string name="hint_faces_filter">Verändere die Parameter deiner Suche und treffe neue,
+        interessante Leute.
+    </string>
+    <string name="hint_faces_buy_like">Umso mehr Likes du hast, desto öfter wirst du geschätzt.
+        Vergesse nicht dein Likes-Konto aufzufüllen.
+    </string>
+    <string name="hint_myprofile_buy_vip">Hole dir den VIP-Status und genieße uneingeschränkte
+        Kommunikation
+    </string>
+    <string name="pull_to_refresh_pull_label">Ziehen zum neu laden</string>
+    <string name="pull_to_refresh_release_label">Loslassen um neu zu laden</string>
+    <string name="messaging_block_buy_vip">Um die Konversation fortzuführen brauchst du
+        VIP\u2011Status
+    </string>
     <string name="pull_to_refresh_refreshing_label">Laden…</string>
     <string name="preload_photo_type_wifi_3g">WiFi und 3G</string>
     <string name="preload_photo_type_wifi">Nur WiFi</string>
+    <string name="preload_photo_type_always_on">Immer an</string>
+    <string name="preload_photo_type_preload_off">Aus</string>
     <string name="wrong_time_popup_button">Einstellungen öffnen</string>
+    <string name="enter_text">Text eingeben</string>
+    <string name="send_feedback">Nachricht verschicken</string>
+    <string name="get_vip_free">Hole dir gratis VIP-Status</string>
+    <string name="buy_more_sympathies">\"Hole dir mehr Likes, werde beliebt\"</string>
+    <string name="google_wallet">Google Geldbeutel</string>
+    <string name="google_service_general_title">Erinnerungen sind nicht verfügbar</string>
+    <string name="google_service_disabled_title">Du hast Google Play nicht zugelassen. Du musst es
+        zulassen, um neue Benachrichtigungen zu erhalten.
+    </string>
+    <string name="google_service_disabled_button">Zulassen</string>
+    <string name="google_service_missing_title">Du hast Google Play nicht installiert. Du musst es
+        installieren, um Benachrichtigungen zu erhalten.
+    </string>
     <string name="google_service_missing_button">Installieren</string>
+    <string name="google_service_version_update_required_title">Deine Google Play Version ist
+        veraltet. Bitte erneuere das Programm, um Benachrichtigungen zu erhalten.
+    </string>
     <string name="google_service_version_update_required_button">Aktualisieren</string>
+    <string name="google_invalid_account_title">Überprüfe deine Google Kontoangaben oder kontaktiere
+        den technischen Support Googles.
+    </string>
+    <string name="google_sign_in_account_title">Dein Google Konto wurde nicht hinzugefügt. Du musst
+        dich einloggen, wenn du Benachrichtigungen erhalten willst.
+    </string>
+    <string name="google_sign_in_account_button">Einloggen</string>
+    <string name="google_unavailable_services_title">Leider sind Benachrichtigungen auf deinem Gerät
+        nicht möglich.
+    </string>
+    <string name="receive_message_notification">Werde benachrichtigt über \na neue Nachrichten
+    </string>
+    <string name="receive_mutual_notification">Werde benachrichtigt über \na neue beidseitige
+        Likes
+    </string>
+    <string name="receive_sympathy_notification">Werde benachrichtigt über \na neue Likes</string>
+    <string name="receive_rate_notification">löschen</string>
+    <string name="receive_guest_notification">Werde benachrichtigt über \na neue Gäste</string>
+    <string name="on_phone">Zum Handy</string>
+    <string name="on_mail">Zur Email</string>
+    <string name="add_leader_hint">Dein Gruß…</string>
+    <string name="more">Mehr</string>
+    <string name="premium_for_invitations">Um einen Tag lang VIP-Status zu erhalten musst du 5
+        Registrierungen erreichen.
+    </string>
+    <string name="premium_for_invitations_current_status">Du hast bereits verfasst:\nEinladungen:
+        %1$d\nRegistrierungen: %2$d
+    </string>
+    <string name="no_contacts_available">Das Gerät hat keine Kontakte, die angezeigt werden
+        können.
+    </string>
+    <string name="balance">Guthaben (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
+    <string name="settings_check_vip_title">Überprüfen ob VIP-Status aktiv ist</string>
+    <string name="settings_check_vip_cell">VIP-Status überprüfen</string>
+    <string name="settings_check_vip_alert">Deine Anfrage zur Überprüfung des VIP-Status wurde
+        verschickt
+    </string>
     <string name="novice_sympathy">Senden Sie Sympathien den Menschen, die Ihnen\nwirklich
         gefallen,\num eine angenehme Bekanntschaft anzufangen
     </string>

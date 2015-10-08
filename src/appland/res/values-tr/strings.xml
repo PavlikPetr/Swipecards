@@ -23,6 +23,7 @@
     </string>
     <string name="likes_background_text">Sempati yok</string>
     <string name="visitors_background_text">Misafirler yok</string>
+    <string name="need_set_avatar">Bu şekilde seni kimse tanıyamaz! Hemen bir profil resmi yükle.</string>
     <string name="chat_background_text">Gelen mesaj yok</string>
     <string name="entrance">Gir</string>
     <string name="filter_only_online">Sadece çevrim içi</string>

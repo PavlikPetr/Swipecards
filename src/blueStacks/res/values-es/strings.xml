@@ -24,6 +24,7 @@
   </string>
   <string name="likes_background_text">No hay simpatías</string>
   <string name="visitors_background_text">No hay visitantes</string>
+  <string name="need_set_avatar">¡Nadie puede conocerte así! Agregue una foto de avatar.</string>
   <string name="chat_background_text">No hay mensajes entrantes</string>
   <string name="entrance">Entrar</string>
   <string name="filter_only_online">Solamente en línea</string>
