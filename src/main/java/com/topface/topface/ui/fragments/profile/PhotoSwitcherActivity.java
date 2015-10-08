@@ -423,7 +423,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 @Override
                 public void onClick(View v) {
                     final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
-                    if (profile.photo == null || !(currentPhoto != null
+                    if (profile.photo == null || (currentPhoto != null
                             && currentPhoto.getId() != profile.photo.getId())) {
                         if (!mDeletedPhotos.contains(currentPhoto)) {
                             setAsMainRequest(currentPhoto);
