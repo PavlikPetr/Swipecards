@@ -55,12 +55,6 @@ public class SettingsFeedbackFragment extends BaseFragment implements AdapterVie
                         FeedbackMessageFragment.FeedbackType.PAYMENT_MESSAGE
                 );
                 break;
-            case 3:
-                intent = SettingsContainerActivity.getFeedbackMessageIntent(
-                        getActivity(),
-                        FeedbackMessageFragment.FeedbackType.COOPERATION_MESSAGE
-                );
-                break;
         }
         if (intent != null) {
             startActivityForResult(intent, SettingsContainerActivity.INTENT_SEND_FEEDBACK);
