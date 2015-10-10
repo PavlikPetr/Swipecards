@@ -44,6 +44,11 @@ public class FormItemEditAdapter extends AbstractEditAdapter<FormItem> {
     }
 
     @Override
+    public FormItem getCurrentData() {
+        return getData();
+    }
+
+    @Override
     protected int getItemLayoutRes() {
         return R.layout.edit_dialog_radiobutton;
     }

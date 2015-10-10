@@ -45,6 +45,7 @@
                 android:layout_toLeftOf="@id/addButton"
                 android:gravity="left|center_vertical"
                 android:hint="@string/friend_email_hint"
+                android:imeOptions="flagNoExtractUi"
                 android:textSize="12sp" />
 
         </RelativeLayout>

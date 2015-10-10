@@ -104,6 +104,7 @@
         <item name="android:focusable">true</item>
         <item name="android:focusableInTouchMode">true</item>
         <item name="android:clickable">true</item>
+        <item name="android:imeOptions">flagNoExtractUi</item>
         <item name="android:enabled">true</item>
         <item name="android:minHeight">@dimen/edit_text_min_height</item>
         <item name="android:textSize">16sp</item>
@@ -730,6 +731,7 @@
         <item name="android:textColorHint">#AAAAAA</item>
         <item name="android:padding">8dp</item>
         <item name="android:gravity">center_vertical</item>
+        <item name="android:imeOptions">flagNoExtractUi</item>
         <item name="android:textSize">12sp</item>
         <item name="android:includeFontPadding">false</item>
     </style>
@@ -961,8 +963,17 @@
         <item name="android:paddingLeft">6dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:imeOptions">flagNoExtractUi</item>
         <item name="android:singleLine">true</item>
         <item name="android:gravity">left</item>
+    </style>
+
+    <style name="UserInfoTextStyle">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="EditTextEnterLeaderText" parent="topfaceEditText.Holo">
