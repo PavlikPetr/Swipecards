@@ -65,8 +65,8 @@ public class OldVersionDialog extends TrackedDialogFragment {
     }
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
         if (mIDialogListener != null) {
             mIDialogListener.onDismissListener();
         }

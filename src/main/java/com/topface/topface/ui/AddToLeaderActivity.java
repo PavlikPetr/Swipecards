@@ -104,7 +104,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(this, this);
+        ButterKnife.bind(this);
         App.from(this).inject(this);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
         mGridFooterView = createGridViewFooter();

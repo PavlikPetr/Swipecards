@@ -29,7 +29,6 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
-import com.topface.topface.ui.settings.SettingsChangeAuthDataFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
@@ -124,6 +123,9 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         setWindowContentOverlayCompat();
+    }
+
+    private void initStartActionsController() {
         mStartActionsController = new StartActionsController(this);
         onRegisterMandatoryStartActions(mStartActionsController);
         onRegisterStartActions(mStartActionsController);
@@ -285,6 +287,8 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         http://stackoverflow.com/questions/16265733/failure-delivering-result-onactivityforresult
          */
         super.onResumeFragments();
+        initStartActionsController();
+        mStartActionsController.dropDownProcessedActionsState();
         mIsActivityRestoredState = true;
         checkProfileLoad();
         registerReauthReceiver();

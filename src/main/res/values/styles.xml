@@ -1222,4 +1222,10 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minWidth">240dp</item>
     </style>
+
+    <style name="EmptyFeedsViewImageVisibility">
+        <item name="android:visibility">visible</item>
+    </style>
+
+    <style name="EmptyFeedsViewGravity" />
 </resources>

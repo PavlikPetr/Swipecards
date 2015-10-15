@@ -1,11 +1,11 @@
 package com.topface.topface.ui.dialogs;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -16,38 +16,19 @@ import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
 public class NotificationsDisablePopup implements IStartAction {
-    private Activity mActivity;
+    private FragmentActivity mActivity;
     private int mPriority;
     private OnNextActionListener mOnNextActionListener;
 
-    public NotificationsDisablePopup(Activity activity, int priority) {
-        mActivity = activity;
+    public NotificationsDisablePopup(FragmentActivity activity, int priority) {
         mPriority = priority;
+        mActivity = activity;
     }
 
     private MarketApiManager mMarketApiManager;
 
-    private AlertDialog getPopup() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-        builder.setIcon(android.R.drawable.ic_dialog_alert).setTitle(R.string.google_service_general_title).setMessage(getMarketApiManager().getTitleTextId())
-                .setCancelable(true)
-                .setNegativeButton(mActivity.getResources().getString(R.string.general_cancel),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                                mActivity = null;
-                            }
-                        });
-        if (getMarketApiManager().isButtonVisible()) {
-            builder.setPositiveButton(getMarketApiManager().getButtonTextId(), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    getMarketApiManager().onProblemResolve(mActivity);
-                    dialog.cancel();
-                    mActivity = null;
-                }
-            });
-        }
-        return builder.create();
+    private NotificationDisableDialog getPopup() {
+        return NotificationDisableDialog.newInstance(getMarketApiManager().getTitleTextId(), getMarketApiManager().getButtonTextId(), getMarketApiManager().isButtonVisible());
     }
 
     @Override
@@ -58,16 +39,29 @@ public class NotificationsDisablePopup implements IStartAction {
 
     @Override
     public void callOnUi() {
-        AlertDialog notificationDisableDialog = getPopup();
-        notificationDisableDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        final NotificationDisableDialog notificationDisableDialog = getPopup();
+        notificationDisableDialog.setDialogInterface(new IDialogListener() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
+            public void onPositiveButtonClick() {
+                getMarketApiManager().onProblemResolve(mActivity);
+                notificationDisableDialog.dismiss();
+                mActivity = null;
+            }
+
+            @Override
+            public void onNegativeButtonClick() {
+                notificationDisableDialog.dismiss();
+                mActivity = null;
+            }
+
+            @Override
+            public void onDismissListener() {
                 if (mOnNextActionListener != null) {
                     mOnNextActionListener.onNextAction();
                 }
             }
         });
-        notificationDisableDialog.show();
+        notificationDisableDialog.show(mActivity.getSupportFragmentManager(), NotificationDisableDialog.class.getName());
     }
 
     @Override
@@ -162,8 +156,8 @@ public class NotificationsDisablePopup implements IStartAction {
         }
 
         @Override
-        public void onDismiss(DialogInterface dialog) {
-            super.onDismiss(dialog);
+        public void onCancel(DialogInterface dialog) {
+            super.onCancel(dialog);
             if (mIDialogListener != null) {
                 mIDialogListener.onDismissListener();
             }

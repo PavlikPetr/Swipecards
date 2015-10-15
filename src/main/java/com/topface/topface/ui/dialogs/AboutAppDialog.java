@@ -143,6 +143,7 @@ public class AboutAppDialog extends TrackedDialogFragment {
             ZipFile zf = new ZipFile(ai.sourceDir);
             ZipEntry ze = zf.getEntry("classes.dex");
             time = ze.getTime();
+            zf.close();
         } catch (Exception e) {
             Debug.error("BUILD_TIME access error", e);
         }

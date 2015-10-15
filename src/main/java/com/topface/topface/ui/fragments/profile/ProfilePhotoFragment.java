@@ -97,10 +97,10 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
 
     @SuppressWarnings("unused")
     @OnItemLongClick(R.id.usedGrid)
-    protected boolean gridItemLongCkick(AdapterView<?> parent, View view, int position11, long id) {
-        Photo item = (Photo) parent.getItemAtPosition(position11);
+    protected boolean gridItemLongCkick(AdapterView<?> parent, int position) {
+        Photo item = (Photo) parent.getItemAtPosition(position);
         if (needDialog(item)) {
-            startPhotoDialog(item, position11 - 1);
+            startPhotoDialog(item, position - 1);
             return true;
         }
         return false;
