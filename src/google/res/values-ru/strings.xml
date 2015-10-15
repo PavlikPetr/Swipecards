@@ -68,6 +68,9 @@
     <string name="address_book_access_error">Это приложение не имеет доступа к вашим контактам. Вы
         можете разрешить доступ в настройках приватности вашего устройства
     </string>
+    <string name="camera_access_error">Это приложение не имеет доступа к камере. Вы
+        можете разрешить доступ в настройках приватности вашего устройства
+    </string>
     <string name="profile_deleted_user">Пользователь удален</string>
     <string name="filter_main_parameters">Мне интересны</string>
     <string name="dating_prev_button_ext">Предыдущий</string>
