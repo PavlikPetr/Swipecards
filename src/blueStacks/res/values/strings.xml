@@ -819,4 +819,10 @@
   <string name="novice_sympathies_bonus">You are getting %1$d Likes as a gift! It means that %2$d
     people will give you a Like and genuinely mean it!
   </string>
+  <string name="go_dating_message">Start getting to know people and here will appear the names of
+    those users who visited your profile.
+  </string>
+  <string name="photo_not_from_main_album">A moderator has decided that this photo may not be used
+    as a profile photo.
+  </string>
 </resources>

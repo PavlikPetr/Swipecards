@@ -21,8 +21,7 @@
     <string name="dating_chat_button">Plaudern</string>
     <string name="likes_background_text">Keine Sympathien</string>
     <string name="visitors_background_text">Keine Gäste</string>
-    <string name="need_set_avatar">Niemand kann dich kennenlernen! Lade ein Profilbild hoch.
-    </string>
+    <string name="need_set_avatar">Niemand kann dich kennenlernen! Lade ein Profilbild hoch.</string>
     <string name="chat_background_text">Keine neuen Nachrichten</string>
     <string name="entrance">Eingabe</string>
     <string name="filter_only_online">Nur on-line</string>
@@ -148,9 +147,7 @@
     <string name="general_copy_title">Kopieren</string>
     <string name="general_back">Zurück</string>
     <string name="general_server_error">Fehler. Versuchen Sie später</string>
-    <string name="general_non_exist_photo_error">Konnte nicht fortfahren, da das Foto gelöscht
-        wurde
-    </string>
+    <string name="general_non_exist_photo_error">Konnte nicht fortfahren, da das Foto gelöscht wurde</string>
     <string name="general_data_error">Fehler! Versuchen Sie noch einmal</string>
     <string name="general_internet_off">Keine Internetverbindung. Bitte, warten Sie</string>
     <string name="general_msg_copied">Text ist kopiert</string>
@@ -254,9 +251,7 @@
     <string name="edit_selected">Ist ausgewählt</string>
     <string name="edit_name">Name</string>
     <string name="edit_age">Alter</string>
-    <string name="edit_age_error">Um die App zu benutzen musst du zwischen %1$d und %2$d Jahre alt
-        sein.
-    </string>
+    <string name="edit_age_error">Um die App zu benutzen musst du zwischen %1$d und %2$d Jahre alt sein.</string>
     <string name="edit_status">Status</string>
     <string name="edit_set_as_main">Als Titelfoto machen</string>
     <string name="edit_delete">Löschen</string>
@@ -291,9 +286,7 @@
     <string name="settings_logout">Abmelden</string>
     <string name="settings_code_confirmation">Bestätigungscode schicken</string>
     <string name="settings_email_was_confirmed">Bereits bestätigt</string>
-    <string name="settings_email_was_confirmed_textview_text">Wenn du deine Email bereits durch das
-        Internet bestätigt hast.
-    </string>
+    <string name="settings_email_was_confirmed_textview_text">Wenn du deine Email bereits durch das Internet bestätigt hast.</string>
     <string name="settings_code_confirmation_hint">Bestätigungscode</string>
     <string name="settings_logout_msg">Wollen Sie wirklich abmelden?</string>
     <string name="settings_error_message">Fehlermeldung</string>
@@ -598,9 +591,7 @@
         um in Topface sich kennen zu lernen!
     </string>
     <string name="confirm_email_for_dating_title">Wir sind gegen Spam</string>
-    <string name="confirm_email_for_dating_desc">Wir sind gegen Spam. Bitte bestätige deine
-        Emailadresse damit du auf Topface Leute kennenlernen kannst!
-    </string>
+    <string name="confirm_email_for_dating_desc">Wir sind gegen Spam. Bitte bestätige deine Emailadresse damit du auf Topface Leute kennenlernen kannst!</string>
     <string name="send_confirm_link">Link für die Bestätigung senden</string>
     <string name="complain_type_swearing_msg">Grobheit, Bedrohung, Fluhen</string>
     <string name="general_exit">Ausloggen</string>
@@ -621,9 +612,7 @@
     <string name="chat_block_not_mutual">Sie können sich mit dem Nutzer unterhalten, falls er eine
         Sympathie Ihnen gesendet hat oder falls Sie einen VIP-Status haben
     </string>
-    <string name="add_to_favorite_block_not_vip">Nur VIP-User können vom Datingbildschirm aus zu den
-        Favoriten hinzufügen
-    </string>
+    <string name="add_to_favorite_block_not_vip">Nur VIP-User können vom Datingbildschirm aus zu den Favoriten hinzufügen</string>
     <string name="delete_account_are_you_sure">Sind Sie sicher?</string>
     <string name="delete">Löschen</string>
     <string name="delete_account_warning">Achtung! Sie versuchen Ihren Profil in Topface zu
@@ -632,9 +621,7 @@
     <string name="delete_account_error">Leider, wurde Ihr Account nicht gelöscht. Sie können noch
         einmal versuchen.
     </string>
-    <string name="delete_account_will_be_restored_are_you_sure">Du versuchst in ein gelöschtes Konto
-        einzuloggen. Das Konto wird wiederhergestellt, wenn du fertig bist.
-    </string>
+    <string name="delete_account_will_be_restored_are_you_sure">Du versuchst in ein gelöschtes Konto einzuloggen. Das Konto wird wiederhergestellt, wenn du fertig bist.</string>
     <string name="restore">Wiederherstellen</string>
     <string name="admiration_sended">Bewunderung ist gesendet</string>
     <string name="skip">Überspringen</string>
@@ -711,9 +698,7 @@
     <string name="retry_cancel_editing">Fehler beim Senden von Daten an den Server. Beenden ohne
         Speichern oder nochmal versuchen?
     </string>
-    <string name="retry_cancel_editing_bad_value">Du hast ungültige Daten eingegeben. Weiter ohne zu
-        speichern oder erneut versuchen?
-    </string>
+    <string name="retry_cancel_editing_bad_value">Du hast ungültige Daten eingegeben. Weiter ohne zu speichern oder erneut versuchen?</string>
     <string name="user_does_not_exist">Nutzer ist nicht gefunden</string>
     <string name="feedback_subject_ban">Meldung auf ungerechtes Ban</string>
     <string name="settings_led">LED Benachrichtigung</string>
@@ -726,28 +711,15 @@
     <string name="measurement_unit_weight">kg</string>
     <string name="measurement_unit_height">cm</string>
     <string name="maximum_number_of_users">Du hast das Maximum an Usern ausgewählt</string>
-    <string name="logout_if_email_already_registred">Es gibt bereits einen User mit dieser Email.
-        Wenn das deine Email ist, musst du dich aus deinem jetzigen Konto ausloggen und in %s Konto
-        einloggen.
-    </string>
-    <string name="recover_password_instructions">Dir wurde eine Email geschickt mit Anweisungen zur
-        Wiederherstellung des Passworts.
-    </string>
+    <string name="logout_if_email_already_registred">Es gibt bereits einen User mit dieser Email. Wenn das deine Email ist, musst du dich aus deinem jetzigen Konto ausloggen und in %s Konto einloggen.</string>
+    <string name="recover_password_instructions">Dir wurde eine Email geschickt mit Anweisungen zur Wiederherstellung des Passworts.</string>
     <string name="email_changing">E-Mail ändern</string>
-    <string name="hint_faces_filter">Verändere die Parameter deiner Suche und treffe neue,
-        interessante Leute.
-    </string>
-    <string name="hint_faces_buy_like">Umso mehr Likes du hast, desto öfter wirst du geschätzt.
-        Vergesse nicht dein Likes-Konto aufzufüllen.
-    </string>
-    <string name="hint_myprofile_buy_vip">Hole dir den VIP-Status und genieße uneingeschränkte
-        Kommunikation
-    </string>
+    <string name="hint_faces_filter">Verändere die Parameter deiner Suche und treffe neue, interessante Leute.</string>
+    <string name="hint_faces_buy_like">Umso mehr Likes du hast, desto öfter wirst du geschätzt. Vergesse nicht dein Likes-Konto aufzufüllen.</string>
+    <string name="hint_myprofile_buy_vip">Hole dir den VIP-Status und genieße uneingeschränkte Kommunikation</string>
     <string name="pull_to_refresh_pull_label">Ziehen zum neu laden</string>
     <string name="pull_to_refresh_release_label">Loslassen um neu zu laden</string>
-    <string name="messaging_block_buy_vip">Um die Konversation fortzuführen brauchst du
-        VIP\u2011Status
-    </string>
+    <string name="messaging_block_buy_vip">Um die Konversation fortzuführen brauchst du VIP\u2011Status</string>
     <string name="pull_to_refresh_refreshing_label">Laden…</string>
     <string name="preload_photo_type_wifi_3g">WiFi und 3G</string>
     <string name="preload_photo_type_wifi">Nur WiFi</string>
@@ -760,33 +732,18 @@
     <string name="buy_more_sympathies">\"Hole dir mehr Likes, werde beliebt\"</string>
     <string name="google_wallet">Google Geldbeutel</string>
     <string name="google_service_general_title">Erinnerungen sind nicht verfügbar</string>
-    <string name="google_service_disabled_title">Du hast Google Play nicht zugelassen. Du musst es
-        zulassen, um neue Benachrichtigungen zu erhalten.
-    </string>
+    <string name="google_service_disabled_title">Du hast Google Play nicht zugelassen. Du musst es zulassen, um neue Benachrichtigungen zu erhalten.</string>
     <string name="google_service_disabled_button">Zulassen</string>
-    <string name="google_service_missing_title">Du hast Google Play nicht installiert. Du musst es
-        installieren, um Benachrichtigungen zu erhalten.
-    </string>
+    <string name="google_service_missing_title">Du hast Google Play nicht installiert. Du musst es installieren, um Benachrichtigungen zu erhalten.</string>
     <string name="google_service_missing_button">Installieren</string>
-    <string name="google_service_version_update_required_title">Deine Google Play Version ist
-        veraltet. Bitte erneuere das Programm, um Benachrichtigungen zu erhalten.
-    </string>
+    <string name="google_service_version_update_required_title">Deine Google Play Version ist veraltet. Bitte erneuere das Programm, um Benachrichtigungen zu erhalten.</string>
     <string name="google_service_version_update_required_button">Aktualisieren</string>
-    <string name="google_invalid_account_title">Überprüfe deine Google Kontoangaben oder kontaktiere
-        den technischen Support Googles.
-    </string>
-    <string name="google_sign_in_account_title">Dein Google Konto wurde nicht hinzugefügt. Du musst
-        dich einloggen, wenn du Benachrichtigungen erhalten willst.
-    </string>
+    <string name="google_invalid_account_title">Überprüfe deine Google Kontoangaben oder kontaktiere den technischen Support Googles.</string>
+    <string name="google_sign_in_account_title">Dein Google Konto wurde nicht hinzugefügt. Du musst dich einloggen, wenn du Benachrichtigungen erhalten willst.</string>
     <string name="google_sign_in_account_button">Einloggen</string>
-    <string name="google_unavailable_services_title">Leider sind Benachrichtigungen auf deinem Gerät
-        nicht möglich.
-    </string>
-    <string name="receive_message_notification">Werde benachrichtigt über \na neue Nachrichten
-    </string>
-    <string name="receive_mutual_notification">Werde benachrichtigt über \na neue beidseitige
-        Likes
-    </string>
+    <string name="google_unavailable_services_title">Leider sind Benachrichtigungen auf deinem Gerät nicht möglich.</string>
+    <string name="receive_message_notification">Werde benachrichtigt über \na neue Nachrichten</string>
+    <string name="receive_mutual_notification">Werde benachrichtigt über \na neue beidseitige Likes</string>
     <string name="receive_sympathy_notification">Werde benachrichtigt über \na neue Likes</string>
     <string name="receive_rate_notification">löschen</string>
     <string name="receive_guest_notification">Werde benachrichtigt über \na neue Gäste</string>
@@ -794,21 +751,13 @@
     <string name="on_mail">Zur Email</string>
     <string name="add_leader_hint">Dein Gruß…</string>
     <string name="more">Mehr</string>
-    <string name="premium_for_invitations">Um einen Tag lang VIP-Status zu erhalten musst du 5
-        Registrierungen erreichen.
-    </string>
-    <string name="premium_for_invitations_current_status">Du hast bereits verfasst:\nEinladungen:
-        %1$d\nRegistrierungen: %2$d
-    </string>
-    <string name="no_contacts_available">Das Gerät hat keine Kontakte, die angezeigt werden
-        können.
-    </string>
+    <string name="premium_for_invitations">Um einen Tag lang VIP-Status zu erhalten musst du 5 Registrierungen erreichen.</string>
+    <string name="premium_for_invitations_current_status">Du hast bereits verfasst:\nEinladungen: %1$d\nRegistrierungen: %2$d</string>
+    <string name="no_contacts_available">Das Gerät hat keine Kontakte, die angezeigt werden können.</string>
     <string name="balance">Guthaben (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
     <string name="settings_check_vip_title">Überprüfen ob VIP-Status aktiv ist</string>
     <string name="settings_check_vip_cell">VIP-Status überprüfen</string>
-    <string name="settings_check_vip_alert">Deine Anfrage zur Überprüfung des VIP-Status wurde
-        verschickt
-    </string>
+    <string name="settings_check_vip_alert">Deine Anfrage zur Überprüfung des VIP-Status wurde verschickt</string>
     <string name="novice_sympathy">Senden Sie Sympathien den Menschen, die Ihnen\nwirklich
         gefallen,\num eine angenehme Bekanntschaft anzufangen
     </string>
