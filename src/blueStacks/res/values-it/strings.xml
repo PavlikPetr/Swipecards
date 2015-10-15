@@ -844,4 +844,10 @@
   <string name="novice_sympathies_bonus">Riceverai %1$d simpatie in\nregalo! Significa che\ndi
     sicuro piacerai a %2$d persone\nche ti dimostreranno la loro simpatia
   </string>
+  <string name="go_dating_message">Comincia a fare conoscenze ed in questa sezione vedrai gli utenti
+    che hanno visitato il tuo profilo
+  </string>
+  <string name="photo_not_from_main_album">Non puoi impostare questa foto come profilo perché non
+    conforme ai canoni della moderazione
+  </string>
 </resources>

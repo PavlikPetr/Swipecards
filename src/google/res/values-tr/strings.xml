@@ -23,8 +23,7 @@
     </string>
     <string name="likes_background_text">Sempati yok</string>
     <string name="visitors_background_text">Misafirler yok</string>
-    <string name="need_set_avatar">Bu şekilde seni kimse tanıyamaz! Hemen bir profil resmi yükle.
-    </string>
+    <string name="need_set_avatar">Bu şekilde seni kimse tanıyamaz! Hemen bir profil resmi yükle.</string>
     <string name="chat_background_text">Gelen mesaj yok</string>
     <string name="entrance">Gir</string>
     <string name="filter_only_online">Sadece çevrim içi</string>
@@ -826,4 +825,6 @@
     <string name="novice_sympathies_bonus">Siz %1$d \nhediye olarak kazandınız! – Bu demek ki %2$d
         kişi sizi \nkesinlikle beğenir ve sempatileri size \ngösterir.
     </string>
+    <string name="go_dating_message">İnsanlarla tanışmaya başla ve profilini ziyaret edenlerin listesi burada gözükecek.</string>
+    <string name="photo_not_from_main_album">Yönetim bu fotoğrafın profil resmi olarak kullanılmayacağına karar verdi.</string>
 </resources>

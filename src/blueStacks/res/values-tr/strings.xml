@@ -828,4 +828,10 @@
   <string name="novice_sympathies_bonus">Siz %1$d \nhediye olarak kazandınız! – Bu demek ki %2$d
     kişi sizi \nkesinlikle beğenir ve sempatileri size \ngösterir.
   </string>
+  <string name="go_dating_message">İnsanlarla tanışmaya başla ve profilini ziyaret edenlerin listesi
+    burada gözükecek.
+  </string>
+  <string name="photo_not_from_main_album">Yönetim bu fotoğrafın profil resmi olarak
+    kullanılmayacağına karar verdi.
+  </string>
 </resources>
