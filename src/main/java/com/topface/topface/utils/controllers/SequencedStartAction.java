@@ -79,7 +79,8 @@ public class SequencedStartAction implements IStartAction {
             action.setStartActionCallback(new OnNextActionListener() {
                 @Override
                 public void onNextAction() {
-                    setNewAction(getNextAction());
+                    IStartAction act = getNextAction();
+                    setNewAction(act);
                 }
 
                 @Override
@@ -87,8 +88,16 @@ public class SequencedStartAction implements IStartAction {
                     SequencedStartAction.this.saveNextActionPosition();
                 }
             });
+        } else {
+            int pos = getAnavailableActionPosition();
+            setCurrentActionPosition(pos);
+            saveCurrentActionPosition();
         }
 
+    }
+
+    private int getAnavailableActionPosition() {
+        return mActions != null ? mActions.size() : Integer.MAX_VALUE;
     }
 
     private void runActionQueue() {
@@ -101,7 +110,7 @@ public class SequencedStartAction implements IStartAction {
 
     private void saveNextActionPosition() {
         Integer pos = getFirstAvailableActionPosition(getCurrentActionPosition(), 1);
-        saveActionPosition(pos != null ? pos : 0);
+        saveActionPosition(pos != null ? pos : getAnavailableActionPosition());
     }
 
     private IStartAction getFirstAction() {

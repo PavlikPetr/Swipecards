@@ -50,8 +50,8 @@ public abstract class BaseDialog extends TrackedDialogFragment {
     }
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
         if (mDismissListener != null) {
             mDismissListener.onDismiss(dialog);
         }

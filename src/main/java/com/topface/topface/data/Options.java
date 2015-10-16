@@ -743,7 +743,7 @@ public class Options extends AbstractData {
     }
 
     public class TrialVipExperiment {
-        public boolean enabled = true;
+        public boolean enabled = false;
         public String subscriptionSku = "com.topface.topface.sub.trial.vip.13";
         public int maxShowCount = TRIAL_VIP_MAX_SHOW_COUNT;
     }

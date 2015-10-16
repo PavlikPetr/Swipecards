@@ -125,12 +125,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         setWindowContentOverlayCompat();
     }
 
-    private void initStartActionsController() {
-        mStartActionsController = new StartActionsController(this);
-        onRegisterMandatoryStartActions(mStartActionsController);
-        onRegisterStartActions(mStartActionsController);
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -295,7 +289,9 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
 
     private StartActionsController getStartActionsController() {
         if (mStartActionsController == null) {
-            initStartActionsController();
+            mStartActionsController = new StartActionsController(this);
+            onRegisterMandatoryStartActions(mStartActionsController);
+            onRegisterStartActions(mStartActionsController);
         }
         return mStartActionsController;
     }
