@@ -1,114 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
-             android:id="@+id/vfEmptyViews"
-             android:layout_width="fill_parent"
-             android:layout_height="fill_parent"
-             android:clickable="true">
+    android:id="@+id/vfEmptyViews"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true">
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <TextView
-            android:id="@+id/tvText"
-            style="@style/ListItemEmptyText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="24dp"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:text="@string/likes_can_help_you" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            style="@style/EmptyFeedsViewGravity"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvText"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:orientation="horizontal">
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                style="@style/EmptyFeedsViewImageVisibility"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_sympathy_back" />
+
+            <TextView
+                android:id="@+id/tvText"
+                style="@style/ListItemEmptyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="@string/likes_can_help_you" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnStartRate"
+                    style="@style/BigStretchedBlueButton"
+                    android:layout_weight="1"
+                    android:text="@string/buy_resources" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            style="@style/EmptyFeedsViewGravity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|top"
+            android:orientation="vertical"
+            android:paddingTop="24dp">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                style="@style/ListItemEmptyText.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center" />
+
+            <LinearLayout
+                style="@style/EmptyFeedsViewImageVisibility"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <com.topface.topface.ui.views.ImageViewRemote
+                    android:id="@+id/ivOne"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/likes_male_one" />
+
+                <com.topface.topface.ui.views.ImageViewRemote
+                    android:id="@+id/ivTwo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/likes_male_two" />
+
+                <com.topface.topface.ui.views.ImageViewRemote
+                    android:id="@+id/ivThree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/likes_male_three" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvTextOne"
+                style="@style/ListItemEmptyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:maxWidth="300dp"
+                android:text="@string/likes_buy_vip" />
 
             <Button
-                android:id="@+id/btnStartRate"
-                style="@style/BigStretchedBlueButton"
-                android:layout_weight="1"
-                android:text="@string/buy_resources" />
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/tvText"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_sympathy_back" />
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center_horizontal|top"
-        android:orientation="vertical"
-        android:paddingTop="24dp">
-
-        <TextView
-            android:id="@+id/tvTitle"
-            style="@style/ListItemEmptyText.Bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center" />
-
-        <LinearLayout
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal">
-
-            <com.topface.topface.ui.views.ImageViewRemote
-                android:id="@+id/ivOne"
+                android:id="@+id/btnBuyVip"
+                style="@style/Widget.Topface.Button.Big.Blue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/likes_male_one"/>
-
-            <com.topface.topface.ui.views.ImageViewRemote
-                android:id="@+id/ivTwo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/likes_male_two"/>
-
-            <com.topface.topface.ui.views.ImageViewRemote
-                android:id="@+id/ivThree"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/likes_male_three"/>
+                android:layout_marginTop="16dp"
+                android:text="@string/buying_vip_status" />
 
         </LinearLayout>
+    </ScrollView>
 
-        <TextView
-            android:id="@+id/tvTextOne"
-            style="@style/ListItemEmptyText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:maxWidth="300dp"
-            android:text="@string/likes_buy_vip" />
-
-        <Button
-            android:id="@+id/btnBuyVip"
-            style="@style/Widget.Topface.Button.Big.Blue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/buying_vip_status" />
-
-    </LinearLayout>
-
-    <include layout="@layout/layout_paid_likes_for_vip"/>
+    <include layout="@layout/layout_paid_likes_for_vip" />
 
 </ViewFlipper>

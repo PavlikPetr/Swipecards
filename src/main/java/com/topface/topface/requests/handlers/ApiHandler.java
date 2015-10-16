@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
 import com.topface.framework.utils.Debug;
@@ -15,10 +16,9 @@ import com.topface.topface.requests.ConfirmedApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
-import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.dialogs.OldVersionDialog;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Utils;
 
 import org.json.JSONObject;
 
@@ -59,7 +59,7 @@ abstract public class ApiHandler extends Handler {
                     fail(result, response);
                     Context context = getContext();
                     if (context instanceof Activity) {
-                        Utils.startOldVersionPopup((Activity) context, false, null);
+                        OldVersionDialog.newInstance(false).show(((FragmentActivity) context).getSupportFragmentManager(), OldVersionDialog.class.getName());
                     }
                 } else if (result != ErrorCodes.RESULT_OK) {
                     fail(result, response);

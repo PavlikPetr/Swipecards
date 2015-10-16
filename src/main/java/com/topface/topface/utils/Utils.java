@@ -3,9 +3,7 @@ package com.topface.topface.utils;
 import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -42,7 +40,6 @@ import com.topface.topface.Static;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.config.AppConfig;
-import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -177,39 +174,6 @@ public class Utils {
             return i;
         }
         return null;
-    }
-
-    public static void startOldVersionPopup(Activity activity, OnNextActionListener startActionCallback) {
-        startOldVersionPopup(activity, true, startActionCallback);
-    }
-
-    public static void startOldVersionPopup(final Activity activity, boolean cancelable, final OnNextActionListener startActionCallback) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Utils.goToMarket(activity);
-            }
-        });
-        if (cancelable) {
-            builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-        }
-        builder.setMessage(R.string.general_version_not_supported);
-        builder.setCancelable(cancelable);
-        AlertDialog alertDialog = builder.create();
-        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                if (startActionCallback != null) {
-                    startActionCallback.onNextAction();
-                }
-            }
-        });
-        alertDialog.show();
     }
 
     public static void goToMarket(Activity context) {

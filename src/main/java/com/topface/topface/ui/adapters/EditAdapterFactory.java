@@ -45,6 +45,11 @@ public class EditAdapterFactory {
                 }
 
                 @Override
+                public Object getCurrentData() {
+                    return getData();
+                }
+
+                @Override
                 protected int getItemLayoutRes() {
                     return R.layout.about_view;
                 }

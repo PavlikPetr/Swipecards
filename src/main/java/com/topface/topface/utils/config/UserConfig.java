@@ -76,6 +76,7 @@ public class UserConfig extends AbstractConfig {
     public static final String LAST_CATCHED_GEO_LATITUDE = "last_catched_geo_latitude";
     public static final String LAST_CATCHED_GEO_LONGITUDE = "last_catched_geo_longitude";
     public static final String LAST_CATCHED_GEO_PROVIDER = "last_catched_geo_provider";
+    public static final String START_POSITION_OF_ACTIONS = "start_position_of_actions";
     private String mUnique;
 
     public UserConfig(String uniqueKey, Context context) {
@@ -174,6 +175,7 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, LAST_CATCHED_GEO_LATITUDE, DEFAULT_USER_LATITUDE_LOCATION);
         addField(settingsMap, LAST_CATCHED_GEO_LONGITUDE, DEFAULT_USER_LONGITUDE_LOCATION);
         addField(settingsMap, LAST_CATCHED_GEO_PROVIDER, LOCATION_PROVIDER);
+        addField(settingsMap, START_POSITION_OF_ACTIONS, 0);
     }
 
     @Override
@@ -637,5 +639,23 @@ public class UserConfig extends AbstractConfig {
         location.setLatitude(getDoubleField(getSettingsMap(), LAST_CATCHED_GEO_LATITUDE));
         location.setLongitude(getDoubleField(getSettingsMap(), LAST_CATCHED_GEO_LONGITUDE));
         return location;
+    }
+
+    /**
+     * save current position of popups sequenced
+     *
+     * @param count position
+     */
+    public void setStartPositionOfActions(int count) {
+        setField(getSettingsMap(), START_POSITION_OF_ACTIONS, count);
+    }
+
+    /**
+     * get current position of popups sequenced
+     *
+     * @return position
+     */
+    public int getStartPositionOfActions() {
+        return getIntegerField(getSettingsMap(), START_POSITION_OF_ACTIONS);
     }
 }

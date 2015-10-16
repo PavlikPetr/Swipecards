@@ -55,6 +55,11 @@ public class NotificationEditAdapter extends AbstractEditAdapter<Profile.Topface
     }
 
     @Override
+    public Profile.TopfaceNotifications getCurrentData() {
+        return getData();
+    }
+
+    @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = inflate(parent);

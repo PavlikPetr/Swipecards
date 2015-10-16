@@ -99,6 +99,7 @@
                 android:inputType="text"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:imeOptions="flagNoExtractUi"
                 android:layout_toRightOf="@id/EditorLoginText"
                 android:layout_alignTop="@id/EditorApiCheckbox"
                 android:id="@+id/EditorLogin" />

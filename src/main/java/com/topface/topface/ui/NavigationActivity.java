@@ -54,6 +54,7 @@ import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.ChosenStartAction;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.controllers.SequencedStartAction;
@@ -156,6 +157,11 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            UserConfig config = App.getUserConfig();
+            config.setStartPositionOfActions(0);
+            config.saveConfig();
+        }
         App.from(getApplicationContext()).inject(this);
         Intent intent = getIntent();
         if (intent.getBooleanExtra(INTENT_EXIT, false)) {

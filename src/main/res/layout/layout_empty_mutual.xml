@@ -1,52 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:clickable="true">
 
-    <TextView
-        android:id="@+id/tvText"
-        style="@style/ListItemEmptyText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="24dp"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:maxWidth="290dp"
-        android:text="@string/nobody_chat_with_you_sympathies_will_help" />
-
     <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="wrap_content"
+        style="@style/EmptyFeedsViewGravity"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:clickable="true"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnRefill"
-            style="@style/BigStretchedBlueButton"
-            android:text="@string/buy_resources" />
+        <ImageView
+            style="@style/EmptyFeedsViewImageVisibility"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_mutual" />
 
-        <Button
-            android:id="@+id/btnGetDating"
-            style="@style/BigStretchedGrayButton"
-            android:layout_marginTop="12dp"
-            android:text="@string/general_get_dating" />
+        <TextView
+            android:id="@+id/tvText"
+            style="@style/ListItemEmptyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:maxWidth="290dp"
+            android:text="@string/nobody_chat_with_you_sympathies_will_help" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnRefill"
+                style="@style/BigStretchedBlueButton"
+                android:text="@string/buy_resources" />
+
+            <Button
+                android:id="@+id/btnGetDating"
+                style="@style/BigStretchedGrayButton"
+                android:layout_marginTop="12dp"
+                android:text="@string/general_get_dating" />
+
+        </LinearLayout>
 
     </LinearLayout>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/tvText"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_mutual" />
-
-</RelativeLayout>
+</ScrollView>

@@ -10,7 +10,6 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
-import com.topface.topface.data.Options;
 import com.topface.topface.promo.dialogs.PromoDialog;
 import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -35,8 +34,6 @@ import java.util.List;
 import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
-
-import static com.topface.topface.data.Options.PromoPopupEntity.AIR_MESSAGES;
 
 public class DialogsFragment extends FeedFragment<FeedDialog> {
     private Subscription mDrawerLayoutSubscription;
@@ -249,8 +246,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     private boolean isExpressPopupAvailable() {
-        if (App.from(getActivity()).getProfile().premium) return false;
-        Options.PromoPopupEntity expressMessagesPopup = App.from(getActivity()).getOptions().getPremiumEntityByType(AIR_MESSAGES);
-        return expressMessagesPopup != null && expressMessagesPopup.isNeedShow();
+        return PromoExpressMessages.isPromoExpressMessagesAvailable();
     }
 }

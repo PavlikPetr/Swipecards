@@ -135,7 +135,7 @@ public class PromoExpressMessages extends PromoDialog {
 
             @Override
             public boolean isApplicable() {
-                return !App.get().getProfile().premium && PromoPopupManager.checkIsNeedShow(App.get().getOptions().getPremiumEntityByType(AIR_MESSAGES));
+                return isPromoExpressMessagesAvailable();
             }
 
             @Override
@@ -153,5 +153,10 @@ public class PromoExpressMessages extends PromoDialog {
 
             }
         };
+    }
+
+    public static boolean isPromoExpressMessagesAvailable() {
+        return !App.get().getProfile().premium && PromoPopupManager.checkIsNeedShow(App.get().getOptions().getPremiumEntityByType(AIR_MESSAGES));
+
     }
 }

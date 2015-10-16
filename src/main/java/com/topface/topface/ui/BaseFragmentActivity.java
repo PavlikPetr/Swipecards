@@ -29,7 +29,6 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
-import com.topface.topface.ui.settings.SettingsChangeAuthDataFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
@@ -124,6 +123,9 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         setWindowContentOverlayCompat();
+    }
+
+    private void initStartActionsController() {
         mStartActionsController = new StartActionsController(this);
         onRegisterMandatoryStartActions(mStartActionsController);
         onRegisterStartActions(mStartActionsController);
@@ -246,7 +248,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         if (CacheProfile.isEmpty(this) || AuthToken.getInstance().isEmpty()) {
             startAuth();
         } else {
-            mStartActionsController.onProcessAction();
+            getStartActionsController().onProcessAction();
         }
     }
 
@@ -288,6 +290,14 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         mIsActivityRestoredState = true;
         checkProfileLoad();
         registerReauthReceiver();
+        getStartActionsController().dropDownProcessedActionsState();
+    }
+
+    private StartActionsController getStartActionsController() {
+        if (mStartActionsController == null) {
+            initStartActionsController();
+        }
+        return mStartActionsController;
     }
 
     public boolean isActivityRestoredState() {

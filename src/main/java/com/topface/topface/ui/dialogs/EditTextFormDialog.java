@@ -15,7 +15,6 @@ import com.topface.topface.R;
 import com.topface.topface.ui.adapters.AbstractEditAdapter;
 import com.topface.topface.ui.adapters.TextFormEditAdapter;
 import com.topface.topface.utils.FormItem;
-import com.topface.topface.utils.Utils;
 
 /**
  * Dialog for editing text form items
@@ -98,19 +97,7 @@ public class EditTextFormDialog extends BaseEditDialog<FormItem> {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new Dialog(getActivity(), getTheme()) {
-            @Override
-            public void dismiss() {
-                hideKeyboard(this);
-                super.dismiss();
-            }
-        };
-    }
-
-    private void hideKeyboard(Dialog dialog) {
-        if (dialog != null) {
-            Utils.hideSoftKeyboard(getActivity(), dialog.getCurrentFocus().getWindowToken());
-        }
+        return new Dialog(getActivity(), getTheme());
     }
 
     @Override

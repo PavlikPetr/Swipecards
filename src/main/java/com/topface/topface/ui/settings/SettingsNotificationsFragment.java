@@ -4,20 +4,17 @@ import android.app.Activity;
 import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,25 +36,22 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
+
 import static com.topface.topface.ui.dialogs.BaseEditDialog.EditingFinishedListener;
 
 /**
  * Notifications settings
  */
-public class SettingsNotificationsFragment extends BaseFragment implements View.OnClickListener {
+public class SettingsNotificationsFragment extends BaseFragment {
     public static final int REQUEST_CODE_RINGTONE = 333;
 
     private MarketApiManager mMarketApiManager;
     private UserConfig mUserConfig = App.getUserConfig();
     private String mSavingText = App.getContext().getString(R.string.saving_in_progress);
-
-    private View mLoLikes;
-    private View mLoMutual;
-    private View mLoChat;
-    private View mLoGuests;
-    private CheckBox mLoVibration;
-    private CheckBox mLoLED;
-    private View mLoMelody;
 
     private TextView mMelodyName;
 
@@ -70,6 +64,44 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
                     }
                 }
             };
+    @Bind(R.id.notification_sympathies)
+    View mLoLikes;
+    @Bind(R.id.notification_mutuals)
+    View mLoMutual;
+    @Bind(R.id.notification_messages)
+    View mLoChat;
+    @Bind(R.id.notification_guests)
+    View mLoGuests;
+    @Bind(R.id.notification_vibro)
+    CheckBox mLoVibration;
+    @Bind(R.id.notification_led)
+    CheckBox mLoLED;
+    @Bind(R.id.notification_melody)
+    View mLoMelody;
+
+    @SuppressWarnings("unused")
+    @OnCheckedChanged(R.id.notification_led)
+    protected void notificationLedCheckedChanged(boolean isChecked) {
+        mUserConfig.setLEDEnabled(isChecked);
+        mUserConfig.saveConfig();
+        Debug.log(App.getUserConfig(), "UserConfig changed");
+    }
+
+    @SuppressWarnings("unused")
+    @OnCheckedChanged(R.id.notification_vibro)
+    protected void vibrationCheckedChanged(boolean isChecked) {
+        mUserConfig.setGCMVibrationEnabled(isChecked);
+        mUserConfig.saveConfig();
+        Debug.log(mUserConfig, "UserConfig changed");
+
+        // Send empty vibro notification to demonstrate
+        if (isChecked) {
+            UserNotificationManager.getInstance().showSimpleNotification(
+                    new NotificationCompat.Builder(getActivity()).setDefaults(Notification.
+                            DEFAULT_VIBRATE).build()
+            );
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,26 +112,11 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_notifications, null);
-
+        ButterKnife.bind(this, view);
         mMarketApiManager = new MarketApiManager();
-
-        mLoLikes = view.findViewById(R.id.notification_sympathies);
-        mLoMutual = view.findViewById(R.id.notification_mutuals);
-        mLoChat = view.findViewById(R.id.notification_messages);
-        mLoGuests = view.findViewById(R.id.notification_guests);
-        mLoVibration = (CheckBox) view.findViewById(R.id.notification_vibro);
-        mLoLED = (CheckBox) view.findViewById(R.id.notification_led);
-        mLoMelody = view.findViewById(R.id.notification_melody);
 
         mMelodyName = (TextView) mLoMelody.findViewWithTag("tvText");
 
-        mLoLikes.setOnClickListener(this);
-        mLoMutual.setOnClickListener(this);
-        mLoChat.setOnClickListener(this);
-        mLoGuests.setOnClickListener(this);
-        mLoVibration.setOnClickListener(this);
-        mLoLED.setOnClickListener(this);
-        mLoMelody.setOnClickListener(this);
 
         setTitle(R.string.settings_likes, mLoLikes);
         setTitle(R.string.settings_mutual, mLoMutual);
@@ -115,39 +132,11 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
 
         setTitle(R.string.settings_vibration, mLoVibration);
         mLoVibration.setChecked(App.getUserConfig().isVibrationEnabled());
-        mLoVibration.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mUserConfig.setGCMVibrationEnabled(isChecked);
-                mUserConfig.saveConfig();
-                Debug.log(mUserConfig, "UserConfig changed");
-
-                // Send empty vibro notification to demonstrate
-                if (isChecked) {
-                    UserNotificationManager.getInstance().showSimpleNotification(
-                            new NotificationCompat.Builder(getActivity()).setDefaults(Notification.
-                                    DEFAULT_VIBRATE).build()
-                    );
-                }
-            }
-        });
-
         setTitle(R.string.settings_led, mLoLED);
         mLoLED.setChecked(mUserConfig.isLEDEnabled());
-        mLoLED.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mUserConfig.setLEDEnabled(isChecked);
-                mUserConfig.saveConfig();
-                Debug.log(App.getUserConfig(), "UserConfig changed");
-            }
-        });
-
         setTitle(R.string.settings_melody, mLoMelody);
         setRingtonNameByUri(mUserConfig.getGCMRingtone());
-
         setNotificationState();
-
         return view;
     }
 
@@ -241,40 +230,46 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
         return getString(R.string.notifications);
     }
 
-    @Override
-    public void onClick(View v) {
-        FragmentManager fm = getChildFragmentManager();
-        Resources res = App.getContext().getResources();
-        Profile profile = App.from(getActivity()).getProfile();
+    @SuppressWarnings("unused")
+    @OnClick({R.id.notification_sympathies,
+            R.id.notification_mutuals,
+            R.id.notification_messages,
+            R.id.notification_guests})
+    protected void showNotificationeditDialog(View v) {
+        int notificationTypeId;
+        int textId;
         switch (v.getId()) {
             case R.id.notification_sympathies:
-                NotificationEditDialog.newInstance(res.getString(R.string.receive_sympathy_notification),
-                        profile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES),
-                        mEditingFinishedListener).show(fm, NotificationEditDialog.class.getName());
+                notificationTypeId = CacheProfile.NOTIFICATIONS_LIKES;
+                textId = R.string.receive_sympathy_notification;
                 break;
             case R.id.notification_mutuals:
-                NotificationEditDialog.newInstance(res.getString(R.string.receive_mutual_notification),
-                        profile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY),
-                        mEditingFinishedListener).show(fm, NotificationEditDialog.class.getName());
-                break;
-            case R.id.notification_messages:
-                NotificationEditDialog.newInstance(res.getString(R.string.receive_message_notification),
-                        profile.notifications.get(CacheProfile.NOTIFICATIONS_MESSAGE),
-                        mEditingFinishedListener).show(fm, NotificationEditDialog.class.getName());
+                notificationTypeId = CacheProfile.NOTIFICATIONS_SYMPATHY;
+                textId = R.string.receive_mutual_notification;
                 break;
             case R.id.notification_guests:
-                NotificationEditDialog.newInstance(res.getString(R.string.receive_guest_notification),
-                        profile.notifications.get(CacheProfile.NOTIFICATIONS_VISITOR),
-                        mEditingFinishedListener).show(fm, NotificationEditDialog.class.getName());
+                notificationTypeId = CacheProfile.NOTIFICATIONS_VISITOR;
+                textId = R.string.receive_guest_notification;
                 break;
-            case R.id.notification_melody:
-                Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.settings_melody));
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, App.getUserConfig().getGCMRingtone());
-                startActivityForResult(intent, REQUEST_CODE_RINGTONE);
+            case R.id.notification_messages:
+            default:
+                notificationTypeId = CacheProfile.NOTIFICATIONS_MESSAGE;
+                textId = R.string.receive_message_notification;
                 break;
         }
+        NotificationEditDialog.newInstance(App.getContext().getResources().getString(textId),
+                App.from(getActivity()).getProfile().notifications.get(notificationTypeId),
+                mEditingFinishedListener).show(getFragmentManager(), NotificationEditDialog.class.getName());
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.notification_melody)
+    protected void notificationMelofyClick() {
+        Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.settings_melody));
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, App.getUserConfig().getGCMRingtone());
+        startActivityForResult(intent, REQUEST_CODE_RINGTONE);
     }
 
     private void updateNotificationSettings(final Profile.TopfaceNotifications notification) {

@@ -179,7 +179,7 @@ public class Options extends AbstractData {
     /**
      * {Number} fullscreenInterval — интервал отображения стартового фулскрин баннера в секундах
      */
-    public long fullscreenInterval;
+    public long fullscreenInterval = DateUtils.DAY_IN_SECONDS;
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());

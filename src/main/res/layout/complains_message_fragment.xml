@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        style="@style/ComplainsTitle"
-        android:id="@+id/tvReason"
-        android:layout_margin="8dp"
-        android:textSize="18sp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/etDescription"
-        android:layout_below="@id/tvReason"
-        style="@style/ComplainsMessageEdit" />
+        <TextView
+            android:id="@+id/tvReason"
+            style="@style/ComplainsTitle"
+            android:layout_margin="8dp"
+            android:textSize="18sp" />
 
-    <com.topface.topface.ui.views.LockerView
-        android:id="@+id/complainLocker"
-        style="@style/LoadingLocker"
-        android:visibility="gone" />
+        <EditText
+            android:id="@+id/etDescription"
+            style="@style/ComplainsMessageEdit"
+            android:layout_below="@id/tvReason"
+            android:imeOptions="flagNoExtractUi" />
 
-</RelativeLayout>
+        <com.topface.topface.ui.views.LockerView
+            android:id="@+id/complainLocker"
+            style="@style/LoadingLocker"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+</ScrollView>
