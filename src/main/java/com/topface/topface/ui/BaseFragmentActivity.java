@@ -248,7 +248,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         if (CacheProfile.isEmpty(this) || AuthToken.getInstance().isEmpty()) {
             startAuth();
         } else {
-            mStartActionsController.onProcessAction();
+            getStartActionsController().onProcessAction();
         }
     }
 
@@ -290,8 +290,14 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         mIsActivityRestoredState = true;
         checkProfileLoad();
         registerReauthReceiver();
-        initStartActionsController();
-        mStartActionsController.dropDownProcessedActionsState();
+        getStartActionsController().dropDownProcessedActionsState();
+    }
+
+    private StartActionsController getStartActionsController() {
+        if (mStartActionsController == null) {
+            initStartActionsController();
+        }
+        return mStartActionsController;
     }
 
     public boolean isActivityRestoredState() {
