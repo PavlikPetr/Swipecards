@@ -287,11 +287,11 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         http://stackoverflow.com/questions/16265733/failure-delivering-result-onactivityforresult
          */
         super.onResumeFragments();
-        initStartActionsController();
-        mStartActionsController.dropDownProcessedActionsState();
         mIsActivityRestoredState = true;
         checkProfileLoad();
         registerReauthReceiver();
+        initStartActionsController();
+        mStartActionsController.dropDownProcessedActionsState();
     }
 
     public boolean isActivityRestoredState() {
