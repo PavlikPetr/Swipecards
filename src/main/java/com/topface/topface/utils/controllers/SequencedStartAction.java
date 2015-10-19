@@ -75,8 +75,7 @@ public class SequencedStartAction implements IStartAction {
     }
 
     private void setNewAction(IStartAction action) {
-        String nextActionName = action != null ? action.getActionName() : "action = NULL";
-        Debug.log("SequencedStartAction nextAction " + nextActionName);
+        Debug.log("SequencedStartAction nextAction " + (action != null ? action.getActionName() : "action = NULL"));
         if (action != null) {
             runAction(action);
             action.setStartActionCallback(new OnNextActionListener() {
@@ -91,8 +90,7 @@ public class SequencedStartAction implements IStartAction {
                 }
             });
         } else {
-            int pos = getAnavailableActionPosition();
-            setCurrentActionPosition(pos);
+            setCurrentActionPosition(getAnavailableActionPosition());
             saveCurrentActionPosition();
         }
 

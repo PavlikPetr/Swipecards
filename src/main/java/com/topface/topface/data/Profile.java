@@ -88,14 +88,14 @@ public class Profile extends AbstractDataWithPhotos {
         this(response.getJsonResult());
     }
 
-    public boolean mIsFromCache;
+    public boolean isFromCache;
 
     public Profile(JSONObject jsonObject) {
         this(jsonObject, false);
     }
 
     public Profile(JSONObject jsonObject, boolean isFromCache) {
-        mIsFromCache = isFromCache;
+        this.isFromCache = isFromCache;
         fillData(jsonObject);
         App.from(App.getContext()).inject(this);
         mAppState.setData(this);
@@ -140,7 +140,7 @@ public class Profile extends AbstractDataWithPhotos {
             profile.setEditor(editor);
             initPhotos(resp, profile);
             parseGifts(profile, resp);
-            if (mIsFromCache) {
+            if (isFromCache) {
                 profile.forms = JsonUtils.fromJson(resp.getJSONArray("form").toString(), new TypeToken<LinkedList<FormItem>>() {
                 }.getType());
                 setFornItemListeners(profile.forms);

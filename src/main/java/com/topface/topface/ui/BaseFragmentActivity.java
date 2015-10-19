@@ -576,7 +576,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
      * start sequence when options and profile was loaded from server
      */
     private void startPopupActionsIfNeeded() {
-        if (!App.get().getProfile().mIsFromCache
+        if (!App.get().getProfile().isFromCache
                 && App.get().isUserOptionsObtainedFromServer()
                 && !getStartActionsController().isProcessedMandatoryActionForSession()
                 && !getStartActionsController().isProcessedActionForSession()
