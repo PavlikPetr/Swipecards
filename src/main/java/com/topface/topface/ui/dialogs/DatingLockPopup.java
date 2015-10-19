@@ -68,7 +68,7 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
                 dismiss();
                 break;
             case R.id.iv_close:
-                dismiss();
+                getDialog().cancel();
                 break;
         }
     }

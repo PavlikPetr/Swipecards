@@ -17,7 +17,6 @@ import com.topface.topface.ui.analytics.TrackedDialogFragment;
 public abstract class BaseDialog extends TrackedDialogFragment {
 
     private DialogInterface.OnDismissListener mDismissListener;
-    ;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

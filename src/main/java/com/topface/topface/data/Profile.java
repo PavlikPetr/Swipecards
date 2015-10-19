@@ -88,12 +88,10 @@ public class Profile extends AbstractDataWithPhotos {
         this(response.getJsonResult());
     }
 
-    private boolean mIsFromCache;
+    public boolean mIsFromCache;
 
     public Profile(JSONObject jsonObject) {
-        fillData(jsonObject);
-        App.from(App.getContext()).inject(this);
-        mAppState.setData(this);
+        this(jsonObject, false);
     }
 
     public Profile(JSONObject jsonObject, boolean isFromCache) {

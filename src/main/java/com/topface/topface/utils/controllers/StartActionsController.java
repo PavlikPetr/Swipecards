@@ -43,6 +43,14 @@ public class StartActionsController {
         processedMandatoryActionForSession = false;
     }
 
+    public boolean isProcessedMandatoryActionForSession() {
+        return processedMandatoryActionForSession;
+    }
+
+    public boolean isProcessedActionForSession() {
+        return processedActionForSession;
+    }
+
     public void dropDownProcessedActionsState() {
         onLogout();
     }

@@ -25,6 +25,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
@@ -61,7 +62,14 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            startPopupActionsIfNeeded();
             onProfileUpdated();
+        }
+    };
+    private BroadcastReceiver mOptionsUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            startPopupActionsIfNeeded();
         }
     };
     private boolean mRunning;
@@ -123,6 +131,20 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         setWindowContentOverlayCompat();
+    }
+
+    private StartActionsController initStartActionController() {
+        mStartActionsController = new StartActionsController(this);
+        onRegisterMandatoryStartActions(mStartActionsController);
+        onRegisterStartActions(mStartActionsController);
+        return mStartActionsController;
+    }
+
+    private StartActionsController getStartActionsController() {
+        if (mStartActionsController == null) {
+            initStartActionController();
+        }
+        return mStartActionsController;
     }
 
     @Override
@@ -241,8 +263,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         Debug.log("onLoadProfile in " + ((Object) this).getClass().getSimpleName());
         if (CacheProfile.isEmpty(this) || AuthToken.getInstance().isEmpty()) {
             startAuth();
-        } else {
-            getStartActionsController().onProcessAction();
         }
     }
 
@@ -256,6 +276,8 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(mOptionsUpdateReceiver, new IntentFilter(Options.OPTIONS_RECEIVED_ACTION));
 
         /*
         Sending notification open event to statistics. Only done once when activity started from notification.
@@ -285,15 +307,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         checkProfileLoad();
         registerReauthReceiver();
         getStartActionsController().dropDownProcessedActionsState();
-    }
-
-    private StartActionsController getStartActionsController() {
-        if (mStartActionsController == null) {
-            mStartActionsController = new StartActionsController(this);
-            onRegisterMandatoryStartActions(mStartActionsController);
-            onRegisterStartActions(mStartActionsController);
-        }
-        return mStartActionsController;
+        startPopupActionsIfNeeded();
     }
 
     public boolean isActivityRestoredState() {
@@ -373,6 +387,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
             Debug.error(ex);
         }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mProfileUpdateReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mOptionsUpdateReceiver);
     }
 
     private void removeAllRequests() {
@@ -555,5 +570,18 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
 
     protected void setHasContent(boolean value) {
         mHasContent = value;
+    }
+
+    /**
+     * start sequence when options and profile was loaded from server
+     */
+    private void startPopupActionsIfNeeded() {
+        if (!App.get().getProfile().mIsFromCache
+                && App.get().isUserOptionsObtainedFromServer()
+                && !getStartActionsController().isProcessedMandatoryActionForSession()
+                && !getStartActionsController().isProcessedActionForSession()
+                && !CacheProfile.isEmpty(this) && !AuthToken.getInstance().isEmpty()) {
+            getStartActionsController().onProcessAction();
+        }
     }
 }

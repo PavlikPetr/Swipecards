@@ -79,8 +79,8 @@ public class TrialVipPopupAction implements IStartAction {
             Fragment f = mActivity.get().getSupportFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
             final Fragment fragment = f == null ?
                     TransparentMarketFragment.newInstance(App.from(mActivity.get()).getOptions().trialVipExperiment.subscriptionSku, true, "TrialVipPopup") : f;
-            if(fragment instanceof ITransparentMarketFragmentRunner){
-                ((ITransparentMarketFragmentRunner)fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
+            if (fragment instanceof ITransparentMarketFragmentRunner) {
+                ((ITransparentMarketFragmentRunner) fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
                     @Override
                     public void onPurchaseSuccess() {
                         mIsNeedNext = false;

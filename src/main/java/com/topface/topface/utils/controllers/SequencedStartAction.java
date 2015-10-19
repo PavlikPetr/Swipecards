@@ -1,6 +1,7 @@
 package com.topface.topface.utils.controllers;
 
 import com.topface.framework.utils.BackgroundThread;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -74,13 +75,14 @@ public class SequencedStartAction implements IStartAction {
     }
 
     private void setNewAction(IStartAction action) {
+        String nextActionName = action != null ? action.getActionName() : "action = NULL";
+        Debug.log("SequencedStartAction nextAction " + nextActionName);
         if (action != null) {
             runAction(action);
             action.setStartActionCallback(new OnNextActionListener() {
                 @Override
                 public void onNextAction() {
-                    IStartAction act = getNextAction();
-                    setNewAction(act);
+                    setNewAction(getNextAction());
                 }
 
                 @Override
@@ -155,6 +157,7 @@ public class SequencedStartAction implements IStartAction {
                         }
                         if (isRestored && running && !mUiRunner.isFinishing()) {
                             saveCurrentActionPosition();
+                            Debug.log("SequencedStartAction action " + action.getActionName());
                             action.callOnUi();
                         }
                     }
