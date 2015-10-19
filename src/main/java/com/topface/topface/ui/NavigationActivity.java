@@ -584,7 +584,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        AbstractDialogFragment currentPopup = mPopupManager.getCurrentDialog();
+        AbstractDialogFragment currentPopup = mPopupManager != null ? mPopupManager.getCurrentDialog() : null;
         if (currentPopup != null) {
             currentPopup.onActivityResult(requestCode, resultCode, data);
         }

@@ -105,6 +105,10 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     private static boolean mUserOptionsObtainedFromServer = false;
     private static AppSocialAppsIds mAppSocialAppsIds;
 
+    private Profile mProfile;
+    private Options mOptions;
+    private OptionsAndProfileProvider mProvider;
+
     /**
      * Множественный запрос Options и профиля
      */
@@ -551,10 +555,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         }
     }
 
-    private Profile mProfile;
-    private Options mOptions;
-    private OptionsAndProfileProvider mProvider;
-
     @Override
     public void onOptionsUpdate(@NonNull Options options) {
         mOptions = options;
@@ -579,6 +579,10 @@ public class App extends ApplicationBase implements IStateDataUpdater {
 
     public static App get() {
         return from(getContext());
+    }
+
+    public boolean isUserOptionsObtainedFromServer() {
+        return mUserOptionsObtainedFromServer;
     }
 }
 

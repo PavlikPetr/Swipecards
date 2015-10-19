@@ -1,6 +1,7 @@
 package com.topface.topface.utils.controllers;
 
 import com.topface.framework.utils.BackgroundThread;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -74,6 +75,7 @@ public class SequencedStartAction implements IStartAction {
     }
 
     private void setNewAction(IStartAction action) {
+        Debug.log("SequencedStartAction nextAction " + (action != null ? action.getActionName() : "action = NULL"));
         if (action != null) {
             runAction(action);
             action.setStartActionCallback(new OnNextActionListener() {
@@ -87,8 +89,15 @@ public class SequencedStartAction implements IStartAction {
                     SequencedStartAction.this.saveNextActionPosition();
                 }
             });
+        } else {
+            setCurrentActionPosition(getAnavailableActionPosition());
+            saveCurrentActionPosition();
         }
 
+    }
+
+    private int getAnavailableActionPosition() {
+        return mActions != null ? mActions.size() : Integer.MAX_VALUE;
     }
 
     private void runActionQueue() {
@@ -101,7 +110,7 @@ public class SequencedStartAction implements IStartAction {
 
     private void saveNextActionPosition() {
         Integer pos = getFirstAvailableActionPosition(getCurrentActionPosition(), 1);
-        saveActionPosition(pos != null ? pos : 0);
+        saveActionPosition(pos != null ? pos : getAnavailableActionPosition());
     }
 
     private IStartAction getFirstAction() {
@@ -146,6 +155,7 @@ public class SequencedStartAction implements IStartAction {
                         }
                         if (isRestored && running && !mUiRunner.isFinishing()) {
                             saveCurrentActionPosition();
+                            Debug.log("SequencedStartAction action " + action.getActionName());
                             action.callOnUi();
                         }
                     }
