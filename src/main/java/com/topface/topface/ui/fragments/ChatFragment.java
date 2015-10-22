@@ -14,6 +14,7 @@ import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -314,11 +315,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private void setActionbarVisibility(boolean visible) {
-        getSupportActionBar().setShowHideAnimationEnabled(false);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setShowHideAnimationEnabled(false);
         if (visible) {
-            getSupportActionBar().show();
+            actionBar.show();
         } else {
-            getSupportActionBar().hide();
+            actionBar.hide();
         }
     }
 
