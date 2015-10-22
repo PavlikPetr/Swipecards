@@ -9,7 +9,6 @@ import android.util.AttributeSet;
 import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 
-import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.utils.Utils;
 
@@ -40,7 +39,6 @@ public class KeyboardListenerLayout extends RelativeLayout implements ViewTreeOb
                 mKeyboardOpened = isKeyboardOpenedAfterStart(h, mMaxViewSize);
             }
         }
-        Debug.error("KeyboardListenerLayout " + (mKeyboardOpened ? "opened" : "closed"));
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
@@ -58,6 +56,7 @@ public class KeyboardListenerLayout extends RelativeLayout implements ViewTreeOb
     @Override
     public void onGlobalLayout() {
         if (mKeyboardListener != null && mWasToggled) {
+            mKeyboardListener.keyboardChangeState();
             if (mKeyboardOpened) {
                 mKeyboardListener.keyboardOpened();
             } else {
@@ -129,6 +128,8 @@ public class KeyboardListenerLayout extends RelativeLayout implements ViewTreeOb
         void keyboardOpened();
 
         void keyboardClosed();
+
+        void keyboardChangeState();
     }
 
     private void initVariables(Context context) {

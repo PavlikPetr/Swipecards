@@ -78,6 +78,11 @@ public class DatingInstantMessageController {
                 datingButtons.setVisibility(View.VISIBLE);
                 userInfoStatus.setVisibility(View.VISIBLE);
             }
+
+            @Override
+            public void keyboardChangeState() {
+
+            }
         });
         mFooterFlipper = (ViewFlipper) root.findViewById(R.id.dating_footer);
         mFooterFlipper.setVisibility(View.VISIBLE);

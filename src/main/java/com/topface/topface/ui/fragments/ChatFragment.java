@@ -7,8 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
@@ -62,7 +62,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
@@ -248,21 +247,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             @Override
             public void keyboardOpened() {
                 mKeyboardWasShown = true;
-                if (getSupportActionBar().isShowing()) {
-                    new CountDownTimer(500, 500) {
-
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-
-                        }
-
-                        @Override
-                        public void onFinish() {
-                            ((BaseFragmentActivity) getActivity()).setToolBarVisibility(false);
-//                            getSupportActionBar().hide();
-                        }
-                    }.start();
-
+                if (getSupportActionBar().isShowing()
+                        && getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
+                    setActionbarVisibility(false);
                 }
             }
 
@@ -270,20 +257,15 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             public void keyboardClosed() {
                 mKeyboardWasShown = false;
                 if (!getSupportActionBar().isShowing()) {
-                    new CountDownTimer(500, 500) {
+                    setActionbarVisibility(true);
+                }
+            }
 
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-
-                        }
-
-                        @Override
-                        public void onFinish() {
-                            ((BaseFragmentActivity) getActivity()).setToolBarVisibility(false);
-//                            getSupportActionBar().show();
-                        }
-                    }.start();
-//                    getSupportActionBar().show();
+            @Override
+            public void keyboardChangeState() {
+                if (getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT
+                        && !getSupportActionBar().isShowing()) {
+                    setActionbarVisibility(true);
                 }
             }
         });
@@ -329,6 +311,19 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
         }
         return root;
+    }
+
+    private void setActionbarVisibility(boolean visible) {
+        getSupportActionBar().setShowHideAnimationEnabled(false);
+        if (visible) {
+            getSupportActionBar().show();
+        } else {
+            getSupportActionBar().hide();
+        }
+    }
+
+    private int getScreenOrientation() {
+        return getActivity().getResources().getConfiguration().orientation;
     }
 
     @Override
