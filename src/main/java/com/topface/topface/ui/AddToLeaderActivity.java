@@ -82,6 +82,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private LeadersPhotoGridAdapter mUsePhotosAdapter;
     private AddPhotoHelper mAddPhotoHelper;
     private TakePhotoDialog takePhotoDialog;
+    private EditText mEditText;
     private IPhotoTakerWithDialog mPhotoTaker;
     private Handler mHandler = new Handler() {
         @Override
@@ -95,8 +96,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     GridViewWithHeaderAndFooter mGridView;
     @Bind(R.id.llvLeaderSending)
     LockerView mLoadingLocker;
-    @Bind(R.id.yourGreetingEditText)
-    EditText mEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,6 +199,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
     private View getHeaderView() {
         View headerView = getLayoutInflater().inflate(R.layout.add_leader_grid_view_header, null);
+        mEditText = (EditText) headerView.findViewById(R.id.yourGreetingEditText);
         // set max symbol count for input status
         mEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_SYMBOL_COUNT)});
         initButtons(headerView);
