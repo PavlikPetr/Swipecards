@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="flurry_key">F5MMD85P2J58YBR27DN9</string>
+    <string name="app_update_url">amzn://apps/android?p=com.topface.topface</string>
 </resources>

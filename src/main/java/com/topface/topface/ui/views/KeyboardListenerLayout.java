@@ -2,32 +2,41 @@ package com.topface.topface.ui.views;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.Configuration;
+import android.content.res.TypedArray;
+import android.graphics.Point;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 
+import com.topface.topface.R;
+import com.topface.topface.utils.Utils;
+
 /**
  * Simple RelativeLayout with listener for keyboard close/open.
  */
 public class KeyboardListenerLayout extends RelativeLayout implements ViewTreeObserver.OnGlobalLayoutListener {
+    private static final int DEFAULT_LAYOUT_SIZE_IN_PERCENT = 70;
+    private static final int KEYBOARD_SIZE_IN_PERCENT = 25;
 
     private KeyboardListener mKeyboardListener;
     private boolean mKeyboardOpened;
     private boolean mWasToggled;
+    private int mLayoutSizeInPercent = DEFAULT_LAYOUT_SIZE_IN_PERCENT;
+    private int mMaxViewSize;
+
+    private Context mContext;
+
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            mKeyboardOpened = false;
-        } else if (w == oldw) {
-            if ((float) oldh / h > 1.25) {
-                mKeyboardOpened = true;
-                mWasToggled = true;
-            } else if ((float) oldh / h < 0.75) {
-                mKeyboardOpened = false;
-                mWasToggled = true;
+        if (w == oldw || oldw == 0) {
+            mMaxViewSize = mMaxViewSize < oldh ? oldh : mMaxViewSize;
+            mWasToggled = true;
+            if (oldh == 0) {
+                mKeyboardOpened = isKeyboardOpenedOnStart(h);
+            } else {
+                mKeyboardOpened = isKeyboardOpenedAfterStart(h, mMaxViewSize);
             }
         }
         super.onSizeChanged(w, h, oldw, oldh);
@@ -47,6 +56,7 @@ public class KeyboardListenerLayout extends RelativeLayout implements ViewTreeOb
     @Override
     public void onGlobalLayout() {
         if (mKeyboardListener != null && mWasToggled) {
+            mKeyboardListener.keyboardChangeState();
             if (mKeyboardOpened) {
                 mKeyboardListener.keyboardOpened();
             } else {
@@ -76,25 +86,74 @@ public class KeyboardListenerLayout extends RelativeLayout implements ViewTreeOb
     @SuppressWarnings("unused")
     public KeyboardListenerLayout(Context context) {
         super(context);
+        initVariables(context);
     }
 
     @SuppressWarnings("unused")
     public KeyboardListenerLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initVariables(context);
+        getAttributes(attrs);
     }
 
     @SuppressWarnings("unused")
     public KeyboardListenerLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        initVariables(context);
+        getAttributes(attrs);
     }
 
+    private void getAttributes(AttributeSet attrs) {
+        if (attrs == null) {
+            return;
+        }
+
+        TypedArray a = null;
+        try {
+            a = getContext().obtainStyledAttributes(attrs, R.styleable.SoftKeyBoardListenerView);
+            setLayoutSizeInPercent(a.getInt(R.styleable.SoftKeyBoardListenerView_estimatedLayoutHeight, DEFAULT_LAYOUT_SIZE_IN_PERCENT));
+        } finally {
+            if (a != null) {
+                a.recycle();
+            }
+        }
+    }
+
+    public void setLayoutSizeInPercent(int size) {
+        mLayoutSizeInPercent = size > 100 ? 100 : size;
+        mLayoutSizeInPercent = size <= 0 ? DEFAULT_LAYOUT_SIZE_IN_PERCENT : mLayoutSizeInPercent;
+    }
 
     public interface KeyboardListener {
         void keyboardOpened();
+
         void keyboardClosed();
+
+        void keyboardChangeState();
     }
 
-    public boolean isKeyboardOpened() {
-        return mKeyboardOpened;
+    private void initVariables(Context context) {
+        mContext = context;
+        getScreenSize(context);
+    }
+
+    private int getScreenHeight() {
+        return getScreenSize().y;
+    }
+
+    private Point getScreenSize() {
+        return getScreenSize(mContext);
+    }
+
+    private Point getScreenSize(Context context) {
+        return Utils.getSrceenSize(context);
+    }
+
+    private boolean isKeyboardOpenedOnStart(int height) {
+        return (float) getScreenHeight() * mLayoutSizeInPercent / 100 * (1 - (float) KEYBOARD_SIZE_IN_PERCENT / 100) > height;
+    }
+
+    private boolean isKeyboardOpenedAfterStart(int height, int maxHeight) {
+        return (float) height / maxHeight < (1 - (float) KEYBOARD_SIZE_IN_PERCENT / 100);
     }
 }

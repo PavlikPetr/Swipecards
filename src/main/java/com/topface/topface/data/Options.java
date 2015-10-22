@@ -213,7 +213,7 @@ public class Options extends AbstractData {
             }
             fillLeaderButtons(response.optJSONObject("photofeed"));
             JSONObject aboutAppJson = response.optJSONObject("aboutApp");
-            updateUrl = response.optString("updateUrl");
+            updateUrl = response.optString("updateUrl", App.getContext().getString(R.string.app_update_url));
             aboutApp = new AboutApp(aboutAppJson.optString("title"), aboutAppJson.optString("url"));
             offerwall = response.optString("offerwall");
             maxVersion = response.optString("maxVersion");

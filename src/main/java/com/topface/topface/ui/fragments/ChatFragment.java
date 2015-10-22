@@ -7,12 +7,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -246,11 +248,26 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             @Override
             public void keyboardOpened() {
                 mKeyboardWasShown = true;
+                if (getSupportActionBar().isShowing()
+                        && getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
+                    setActionbarVisibility(false);
+                }
             }
 
             @Override
             public void keyboardClosed() {
                 mKeyboardWasShown = false;
+                if (!getSupportActionBar().isShowing()) {
+                    setActionbarVisibility(true);
+                }
+            }
+
+            @Override
+            public void keyboardChangeState() {
+                if (getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT
+                        && !getSupportActionBar().isShowing()) {
+                    setActionbarVisibility(true);
+                }
             }
         });
         Debug.log(this, "+onCreate");
@@ -295,6 +312,20 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
         }
         return root;
+    }
+
+    private void setActionbarVisibility(boolean visible) {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setShowHideAnimationEnabled(false);
+        if (visible) {
+            actionBar.show();
+        } else {
+            actionBar.hide();
+        }
+    }
+
+    private int getScreenOrientation() {
+        return getActivity().getResources().getConfiguration().orientation;
     }
 
     @Override
