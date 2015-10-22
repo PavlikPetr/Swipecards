@@ -82,10 +82,10 @@ public class TrialVipPopup extends AbstractDialogFragment implements View.OnClic
     }
 
     @Override
-    public void dismiss() {
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
         if (mOnFragmentActionsListener != null) {
             mOnFragmentActionsListener.onFragmentFinish();
         }
-        super.dismiss();
     }
 }
