@@ -56,6 +56,7 @@
     <string name="address_book_access_error">This app does not have access to your contacts. You can
         allow access via the Privacy Settings of your device.
     </string>
+    <string name="camera_access_error">Application does not have access to the camera. You can grant access in your device\'s Privacy Settings.</string>
     <string name="profile_deleted_user">User has been deleted</string>
     <string name="filter_main_parameters">I am interested in</string>
     <string name="dating_prev_button_ext">Previous</string>
