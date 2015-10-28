@@ -1011,4 +1011,16 @@
     <string name="photo_not_from_main_album">По результатам модерации это фото запрещено ставить на
         аватар
     </string>
+
+    <string name="sidebar_vk_profile">Профиль ВКонтакте</string>
+    <string name="title_vk_profile">Профиль ВК</string>
+    <string name="vk_profile_button_tf_group">Группа Topface</string>
+    <string name="vk_profile_button_join_tf_group">Вступить в группу Topface</string>
+    <string name="vk_profile_button_join_vkgames_group">Вступить в группу "Игры ВК"</string>
+    <string name="vk_profile_button_invite_friends">Пригласить друзей</string>
+    <string name="vk_profile_invite_friends_title">Пригласить друзей</string>
+    <string name="invite_friend_button">Пригласить</string>
+    <string name="invitation_sended_button">Отправлено</string>
+    <string name="friends_empty_list_error">Список ваших друзей пуст</string>
+
 </resources>
