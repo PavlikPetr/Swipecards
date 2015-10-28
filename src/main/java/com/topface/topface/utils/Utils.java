@@ -137,15 +137,18 @@ public class Utils {
         return size;
     }
 
-    public static boolean isIntentAvailable(Context context, String action) {
+    public static boolean isIntentAvailable(Context context, Intent intent) {
         final PackageManager packageManager = context.getPackageManager();
-        final Intent intent = new Intent(action);
         if (packageManager != null) {
             List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
             return list.size() > 0;
         } else {
             return false;
         }
+    }
+
+    public static boolean isIntentAvailable(Context context, String action) {
+        return isIntentAvailable(context, new Intent(action));
     }
 
     public static Integer getGooglePlayServicesVersion() {

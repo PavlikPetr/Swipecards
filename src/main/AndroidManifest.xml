@@ -173,6 +173,13 @@
                 android:value=".ui.NavigationActivity" />
         </activity>
         <activity
+            android:name=".ui.InviteVkFriendsActivity"
+            android:parentActivityName=".ui.NavigationActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+        <activity
             android:name=".ui.SslErrorActivity"
             android:launchMode="singleTask"
             android:theme="@style/Theme.Transparent" />

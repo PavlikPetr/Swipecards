@@ -66,6 +66,7 @@ import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.geo.GeoLocationManager;
+import com.vk.sdk.VKSdk;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
@@ -308,6 +309,7 @@ public class App extends ApplicationBase {
         super.onCreate();
         LeakCanary.install(this);
         mContext = getApplicationContext();
+        VKSdk.customInitialize(App.getContext(), 0, null);
         initObjectGraphForInjections();
         //Включаем отладку, если это дебаг версия
         enableDebugLogs();

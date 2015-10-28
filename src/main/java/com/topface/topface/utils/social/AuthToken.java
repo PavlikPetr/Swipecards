@@ -15,12 +15,9 @@ import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.utils.config.SessionConfig;
-import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKSdk;
-import com.vk.sdk.VKSdkListener;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
-import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -96,19 +93,7 @@ public class AuthToken {
     }
 
     public static void getVkName(final String user_id, final Handler handler) {
-        VKSdk.initialize(new VKSdkListener() {
-            @Override
-            public void onCaptchaError(VKError vkError) {
-            }
-
-            @Override
-            public void onTokenExpired(VKAccessToken vkAccessToken) {
-            }
-
-            @Override
-            public void onAccessDenied(VKError vkError) {
-            }
-        }, VkAuthorizer.getVkId());
+        VKSdk.customInitialize(App.getContext(), VkAuthorizer.getVkId(), null);
         new BackgroundThread() {
             @Override
             public void execute() {

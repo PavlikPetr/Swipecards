@@ -39,7 +39,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import com.topface.topface.utils.social.Authorizer;
-import com.vk.sdk.VKOpenAuthActivity;
+import com.vk.sdk.dialogs.VKOpenAuthDialog;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -306,7 +306,7 @@ public class AuthFragment extends BaseAuthFragment {
             hideButtons();
             if (!authToken.isEmpty()) {
                 auth(AuthToken.getInstance());
-            } else if (TextUtils.equals(data.getAction(), VKOpenAuthActivity.VK_RESULT_INTENT_NAME)) {
+            } else if (TextUtils.equals(data.getAction(), VKOpenAuthDialog.VK_RESULT_INTENT_NAME)) {
                 hideProgress();
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {

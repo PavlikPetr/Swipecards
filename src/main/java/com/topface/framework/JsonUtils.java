@@ -1,6 +1,7 @@
 package com.topface.framework;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 
@@ -28,6 +29,10 @@ public class JsonUtils {
             mGson = new Gson();
         }
         return mGson;
+    }
+
+    public static <T> T fromJson(String json, TypeToken<T> typeToken) {
+        return getGson().fromJson(json, typeToken.getType());
     }
 
     public static <T> T optFromJson(String json, Class<T> classOfT, T defaultObj) {

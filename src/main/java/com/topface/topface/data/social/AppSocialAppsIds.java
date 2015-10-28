@@ -46,7 +46,7 @@ public class AppSocialAppsIds extends AbstractData {
     /**
      * {String} vkId - идентификатор приложения в vk
      */
-    public String vkId = VkSocialAppsIdsHolder.VK_ID;
+    public int vkId = VkSocialAppsIdsHolder.VK_ID;
 
     public AppSocialAppsIds(JSONObject data) {
         if (data != null) {

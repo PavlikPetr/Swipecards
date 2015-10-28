@@ -26,12 +26,14 @@ import com.topface.topface.data.UniversalUserFactory;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
+import com.topface.topface.ui.fragments.VkProfileFragment;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.BuyVipFragmentManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.IPhotoTakerWithDialog;
 import com.topface.topface.utils.PhotoTaker;
 import com.topface.topface.utils.actionbar.OverflowMenu;
+import com.topface.topface.utils.social.AuthToken;
 
 /**
  * Created by kirussell on 18.03.14.
@@ -107,6 +109,9 @@ public class OwnProfileFragment extends OwnAvatarFragment {
         addBodyPage(ProfileFormFragment.class.getName(), getResources().getString(R.string.profile_form));
         addBodyPage(BuyVipFragmentManager.getClassName(), getResources().getString(R.string.vip_status));
         addBodyPage(SettingsFragment.class.getName(), getResources().getString(R.string.settings_header_title));
+        if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
+            addBodyPage(VkProfileFragment.class.getName(), getResources().getString(R.string.general_vk_profile));
+        }
     }
 
     @Override

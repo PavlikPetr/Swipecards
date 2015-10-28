@@ -211,6 +211,7 @@
     <string name="general_visitors_tab_views">просмотры</string>
     <string name="general_profile">Профиль</string>
     <string name="general_settings">Настройки</string>
+    <string name="general_vk_profile">ВК</string>
 
     <!-- Auth -->
     <string name="auth_btn_vk">ВКонтакте</string>
@@ -1003,4 +1004,8 @@
         вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию
     </string>
     <string name="go_dating_message">Начните знакомиться, и здесь вы увидите пользователей, посетивших ваш профиль</string>
+    <string name="vk_profile_button_topface_team">Группа Topface</string>
+    <string name="vk_profile_button_enter_topface_team">Вступить в группу Topface</string>
+    <string name="vk_profile_button_enter_vk_games_team">Вступить в группу &#171;Игры ВК&#187;</string>
+    <string name="vk_profile_button_invite_friends">Пригласить друзей</string>
 </resources>
