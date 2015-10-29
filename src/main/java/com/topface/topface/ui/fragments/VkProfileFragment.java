@@ -122,6 +122,7 @@ public class VkProfileFragment extends ProfileInnerFragment {
             showButton(mShowTopfaceTeamButton, true);
             showButton(mEnterTopfaceTeamButton, !isTopfaceMember);
             showButton(mEnterVkGamesTeamButton, !isVkGamesMember);
+            setProgressVisible(false);
         } else {
             initVkRequests();
             checkCurrentRequests();
@@ -138,15 +139,21 @@ public class VkProfileFragment extends ProfileInnerFragment {
         super.onSaveInstanceState(outState);
         outState.putParcelable(VK_USER_DATA, mVkUser);
         outState.putParcelable(VK_COMMUNITIES_DATA, mVkCommunities);
-        outState.putBoolean(IS_MEMER_OF_TOPFACE_TEAM, isTopfaceMember);
-        outState.putBoolean(IS_MEMER_OF_VK_GAMES_TEAM, isVkGamesMember);
+        if (isTopfaceMember != null) {
+            outState.putBoolean(IS_MEMER_OF_TOPFACE_TEAM, isTopfaceMember);
+        }
+        if (isVkGamesMember != null) {
+            outState.putBoolean(IS_MEMER_OF_VK_GAMES_TEAM, isVkGamesMember);
+        }
     }
 
     private void setAvatar(boolean isVisible) {
-        mAvatar.setVisibility(isVisible ? View.VISIBLE : View.GONE);
-        if (isVisible) {
-            if (mVkUser != null) {
-                mAvatar.setRemoteSrc(mVkUser.photo_200);
+        if (mAvatar != null) {
+            mAvatar.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+            if (isVisible) {
+                if (mVkUser != null) {
+                    mAvatar.setRemoteSrc(mVkUser.photo_200);
+                }
             }
         }
     }
@@ -169,10 +176,12 @@ public class VkProfileFragment extends ProfileInnerFragment {
     }
 
     private void setUserName(boolean isVisible) {
-        mUserName.setVisibility(isVisible ? View.VISIBLE : View.GONE);
-        if (isVisible) {
-            if (mVkUser != null) {
-                mUserName.setText(mVkUser.first_name.concat(" ").concat(mVkUser.last_name));
+        if (mUserName != null) {
+            mUserName.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+            if (isVisible) {
+                if (mVkUser != null) {
+                    mUserName.setText(mVkUser.first_name.concat(" ").concat(mVkUser.last_name));
+                }
             }
         }
     }
@@ -313,8 +322,12 @@ public class VkProfileFragment extends ProfileInnerFragment {
     }
 
     private void setProgressVisible(boolean isVisible) {
-        mRootControlView.setVisibility(!isVisible ? View.VISIBLE : View.GONE);
-        mMainProgress.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+        if (mRootControlView != null) {
+            mRootControlView.setVisibility(!isVisible ? View.VISIBLE : View.GONE);
+        }
+        if (mMainProgress != null) {
+            mMainProgress.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+        }
     }
 
     private void initVkRequests() {

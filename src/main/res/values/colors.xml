@@ -109,6 +109,9 @@
     <color name="button_blue_bg_released_color">#03a9f4</color>
     <color name="button_blue_bg_disable_color">#b3e5fb</color>
 
+    <!-- Big blue invite vk friends buttons disable state color -->
+    <color name="button_blue_invite_vk_friends_bg_disable_color">#d4d4d4</color>
+
     <!-- Big red buttons states color -->
     <color name="button_red_bg_pressed_color">#FF7466</color>
     <color name="button_red_bg_released_color">#F9584C</color>
@@ -128,6 +131,11 @@
     <color name="button_blue_text_pressed_color">#FFFFFF</color>
     <color name="button_blue_text_released_color">#FFFFFF</color>
     <color name="button_blue_text_disable_color">#FFFFFF</color>
+
+    <!--Button blue invite vk friends text color in different states-->
+    <color name="button_blue_invite_vk_friends_text_pressed_color">#FFFFFF</color>
+    <color name="button_blue_invite_vk_friends_text_released_color">#FFFFFF</color>
+    <color name="button_blue_invite_vk_friends_text_disable_color">#868686</color>
 
     <!--Button red text color in different states-->
     <color name="button_red_text_pressed_color">#FFFFFF</color>

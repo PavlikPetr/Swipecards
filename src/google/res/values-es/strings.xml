@@ -24,6 +24,7 @@
     </string>
     <string name="likes_background_text">No hay simpatías</string>
     <string name="visitors_background_text">No hay visitantes</string>
+    <string name="need_set_avatar">¡Nadie puede conocerte así! Agregue una foto de avatar.</string>
     <string name="chat_background_text">No hay mensajes entrantes</string>
     <string name="entrance">Entrar</string>
     <string name="filter_only_online">Solamente en línea</string>
@@ -843,4 +844,5 @@
     <string name="novice_sympathies_bonus">¡Recibes %1$d simpatías de\nregalo! Esto significa
         que\nseguro les gustarás a las %2$d personas,\nque te mostrarán su simpatía
     </string>
+    <string name="go_dating_message">Comienzo a conocer esto y podrá ver a los usuarios que visitan su perfil</string>
 </resources>

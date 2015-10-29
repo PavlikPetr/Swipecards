@@ -225,7 +225,7 @@ public class SettingsChangeAuthDataFragment extends BaseFragment implements OnCl
         logoutRequest.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                new AuthorizationManager(getActivity()).logout(getActivity());
+                new AuthorizationManager().logout(getActivity());
             }
 
             @Override

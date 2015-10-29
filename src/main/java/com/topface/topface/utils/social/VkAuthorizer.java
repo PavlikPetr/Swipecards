@@ -29,8 +29,8 @@ public class VkAuthorizer extends Authorizer {
             VKScope.GROUPS
     };
 
-    public VkAuthorizer(Activity activity) {
-        super(activity);
+    public VkAuthorizer() {
+        super();
     }
 
     public static int getVkId() {
@@ -40,8 +40,8 @@ public class VkAuthorizer extends Authorizer {
     }
 
     @Override
-    public void authorize() {
-        VKSdk.login(getActivity(), VK_SCOPE);
+    public void authorize(Activity activity) {
+        VKSdk.login(activity, VK_SCOPE);
     }
 
     @Override

@@ -1004,8 +1004,12 @@
         вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию
     </string>
     <string name="go_dating_message">Начните знакомиться, и здесь вы увидите пользователей, посетивших ваш профиль</string>
-    <string name="vk_profile_button_topface_team">Группа Topface</string>
-    <string name="vk_profile_button_enter_topface_team">Вступить в группу Topface</string>
-    <string name="vk_profile_button_enter_vk_games_team">Вступить в группу &#171;Игры ВК&#187;</string>
+    <string name="vk_profile_button_tf_group">Группа Topface</string>
+    <string name="vk_profile_button_join_tf_group">Вступить в группу Topface</string>
+    <string name="vk_profile_button_join_vkgames_group">Вступить в группу "Игры ВК"</string>
     <string name="vk_profile_button_invite_friends">Пригласить друзей</string>
+    <string name="vk_profile_invite_friends_title">Пригласить друзей</string>
+    <string name="invite_friend_button">Пригласить</string>
+    <string name="invitation_sended_button">Отправлено</string>
+    <string name="friends_empty_list_error">Список ваших друзей пуст</string>
 </resources>

@@ -22,17 +22,15 @@
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:paddingLeft="16dp"
-        android:text="sdfsad"
         android:textColor="#404040"
         android:textSize="14sp" />
 
     <Button
         android:id="@+id/vkFrienInviteButton"
-        style="@style/Widget.Topface.Button.Big.Blue"
-        android:layout_width="108dp"
+        style="@style/Widget.Topface.Button.Big.InviteVkFriends"
+        android:layout_width="114dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:text="Invite"
         android:textSize="14sp" />
 
 </LinearLayout>

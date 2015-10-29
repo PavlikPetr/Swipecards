@@ -36,17 +36,17 @@
             <Button
                 android:id="@+id/vkProfileButtonTopfaceTeam"
                 style="@style/VkProfileButtons"
-                android:text="@string/vk_profile_button_topface_team" />
+                android:text="@string/vk_profile_button_tf_group" />
 
             <Button
                 android:id="@+id/vkProfileButtonEnterTopfaceTeam"
                 style="@style/VkProfileButtons"
-                android:text="@string/vk_profile_button_enter_topface_team" />
+                android:text="@string/vk_profile_button_join_tf_group" />
 
             <Button
                 android:id="@+id/vkProfileButtonEnterVkGamesTeam"
                 style="@style/VkProfileButtons"
-                android:text="@string/vk_profile_button_enter_vk_games_team" />
+                android:text="@string/vk_profile_button_join_vkgames_group" />
 
             <Button
                 android:id="@+id/vkProfileButtonInviteFriends"

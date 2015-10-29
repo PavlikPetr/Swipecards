@@ -31,16 +31,22 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class InviteVkFriendsActivity extends BaseFragmentActivity {
     private final static int ITEMS_COUNT_BEFORE_END = 5;
+    private final static int MAX_RE_REQUEST_COUNT = 3;
+
+    private final static String USER_ID_VK_PARAM = "user_id";
 
     private VKRequest mFriendsRequest;
-    private int mAvailableFriendsCount;
+    private int mAvailableFriendsCount = 0;
     private VKFriendsAdapter mAdapter;
+    private boolean mIsGettingExtraFriends = false;
+    private View mFooterView;
 
     @Bind(R.id.vkFriendsList)
     ListView mListView;
@@ -52,7 +58,11 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         setMainProgressVisibility(true);
-        new ActionBarTitleSetterDelegate(getSupportActionBar()).setActionBarTitles(R.string.vk_profile_button_invite_friends, null);
+        new ActionBarTitleSetterDelegate(getSupportActionBar()).setActionBarTitles(R.string.vk_profile_invite_friends_title, null);
+        mFooterView = getLayoutInflater().inflate(R.layout.gridview_footer_progress_bar, null);
+        mListView.addFooterView(mFooterView);
+        mAdapter = new VKFriendsAdapter(new ArrayList<VKApiUser>());
+        mListView.setAdapter(mAdapter);
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -61,24 +71,25 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (totalItemCount - (firstVisibleItem + visibleItemCount) <= ITEMS_COUNT_BEFORE_END && totalItemCount > 0) {
+                int totalItemsWithoutHeadersAndFooters = totalItemCount - mListView.getHeaderViewsCount() - mListView.getFooterViewsCount();
+                if (totalItemsWithoutHeadersAndFooters - (firstVisibleItem + visibleItemCount) <= ITEMS_COUNT_BEFORE_END
+                        && !mIsGettingExtraFriends
+                        && (totalItemsWithoutHeadersAndFooters == 0 || totalItemsWithoutHeadersAndFooters < mAvailableFriendsCount)) {
+                    mIsGettingExtraFriends = true;
                     loadNewPackData();
                 }
             }
         });
-        mAdapter = new VKFriendsAdapter(new ArrayList<VKApiUser>());
-        mListView.setAdapter(mAdapter);
         mAdapter.setInviteClickListener(new VKFriendsAdapter.InViteClickListener() {
             @Override
             public void onClick(int id) {
                 Debug.error("INVITE_FRIENDS_CLICK " + id);
                 VKRequest inviteRequest = new VKRequest("apps.sendRequest");
-                inviteRequest.addExtraParameter("user_id", id);
+                inviteRequest.addExtraParameter(USER_ID_VK_PARAM, id);
+                inviteRequest.attempts = 0;
                 inviteRequest.executeWithListener(mVkInviteListener);
             }
         });
-        mFriendsRequest = getVkFriendsRequest(0);
-        mFriendsRequest.executeWithListener(mFriendsListener);
     }
 
     private void loadNewPackData() {
@@ -90,18 +101,18 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         @Override
         public void onComplete(VKResponse response) {
             Debug.error("INVITE_FRIENDS_CLICK mVkInviteListener onComplete");
+            if (mAdapter != null) {
+                mAdapter.setButtonState((Integer) response.request.getPreparedParameters().get(USER_ID_VK_PARAM), false);
+            }
             Toast.makeText(App.getContext(), R.string.invite_friends_title, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
-            Debug.error("INVITE_FRIENDS_CLICK mVkInviteListener attemptFailed");
-            Toast.makeText(App.getContext(), R.string.general_error, Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onError(VKError error) {
             Debug.error("INVITE_FRIENDS_CLICK mVkInviteListener onError " + error);
+            if (mAdapter != null) {
+                mAdapter.setButtonState((Integer) error.request.getPreparedParameters().get(USER_ID_VK_PARAM), true);
+            }
             Toast.makeText(App.getContext(), R.string.general_error, Toast.LENGTH_SHORT).show();
         }
     };
@@ -131,7 +142,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
 
     private VKRequest getVkFriendsRequest(int offset) {
         VKRequest friendsRequest = new VKRequest("apps.getFriendsList");
-        friendsRequest.attempts = 0;
+        friendsRequest.attempts = MAX_RE_REQUEST_COUNT;
         friendsRequest.addExtraParameters(VKParameters.from(VKApiConst.FIELDS, "photo_200", VKApiConst.COUNT, 30, VKApiConst.EXTENDED, 1));
         if (offset > 0) {
             friendsRequest.addExtraParameter(VKApiConst.OFFSET, mAdapter.getCount());
@@ -141,8 +152,17 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
 
     private VKRequest.VKRequestListener mFriendsListener = new VKRequest.VKRequestListener() {
         @Override
+        public void onProgress(VKRequest.VKProgressType progressType, long bytesLoaded, long bytesTotal) {
+            super.onProgress(progressType, bytesLoaded, bytesTotal);
+            Debug.error("INVITE_FRIENDS_CLICK mFriendsListener onProgress");
+            showProgress(true);
+        }
+
+        @Override
         public void onComplete(VKResponse response) {
             super.onComplete(response);
+            Debug.error("INVITE_FRIENDS_CLICK mFriendsListener onComplete");
+            showProgress(false);
             try {
                 JSONObject responseJSON = response.json.getJSONObject("response");
                 setAdapterData(JsonUtils.fromJson(responseJSON.getJSONArray("items").toString(), new TypeToken<List<VKApiUser>>() {
@@ -151,13 +171,15 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
             } catch (JSONException e) {
                 Debug.error(e);
             }
-//            mIsGettingExtraFriends = false;
+            mIsGettingExtraFriends = false;
         }
 
         @Override
         public void onError(VKError error) {
             super.onError(error);
-//            mIsGettingExtraFriends = false;
+            Debug.error("INVITE_FRIENDS_CLICK mFriendsListener onError " + error);
+            showProgress(false);
+            mIsGettingExtraFriends = false;
         }
     };
 
@@ -165,9 +187,36 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
 
         List<VKApiUser> mFriendsList;
         private InViteClickListener mInViteClickListener;
+        private ConcurrentHashMap<Integer, Boolean> mButtonsStateList = new ConcurrentHashMap<>();
 
         VKFriendsAdapter(List<VKApiUser> friends) {
             mFriendsList = friends;
+            fillButtonsState();
+        }
+
+        VKFriendsAdapter(List<VKApiUser> friends, ConcurrentHashMap<Integer, Boolean> buttonsStateList) {
+            mFriendsList = friends;
+            mButtonsStateList = buttonsStateList;
+        }
+
+        private void fillButtonsState() {
+            for (VKApiUser user : mFriendsList) {
+                mButtonsStateList.put(user.getId(), true);
+            }
+        }
+
+        private boolean isButtonEnabled(int userId) {
+            if (mButtonsStateList != null && mButtonsStateList.containsKey(userId)) {
+                return mButtonsStateList.get(userId);
+            }
+            return true;
+        }
+
+        public void setButtonState(int userId, boolean isEnabled) {
+            if (mButtonsStateList != null && mButtonsStateList.containsKey(userId)) {
+                mButtonsStateList.replace(userId, isEnabled);
+                notifyDataSetChanged();
+            }
         }
 
         @Override
@@ -182,6 +231,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
 
         public void addFriends(List<VKApiUser> friends) {
             mFriendsList.addAll(friends);
+            fillButtonsState();
         }
 
         public List<VKApiUser> getAllData() {
@@ -216,11 +266,15 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         private void initHolder(ViewHolder holder, final VKApiUser friend) {
             holder.photo.setRemoteSrc(friend.photo_200);
             holder.name.setText(friend.first_name.concat(" ").concat(friend.last_name));
+            boolean isEnabled = isButtonEnabled(friend.getId());
+            holder.invite.setEnabled(isEnabled);
+            holder.invite.setText(isEnabled ? R.string.invite_friend_button : R.string.invitation_sended_button);
             holder.invite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    setButtonState(friend.getId(), false);
                     if (mInViteClickListener != null) {
-                        mInViteClickListener.onClick(friend.id);
+                        mInViteClickListener.onClick(friend.getId());
                     }
                 }
             });
@@ -250,5 +304,11 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         mAdapter.addFriends(friends);
         mAdapter.notifyDataSetChanged();
         setMainProgressVisibility(false);
+    }
+
+    private void showProgress(boolean visibility) {
+        if (mAdapter == null || mAdapter.getCount() == 0 && mFooterView != null) {
+            mFooterView.setVisibility(visibility ? View.VISIBLE : View.GONE);
+        }
     }
 }

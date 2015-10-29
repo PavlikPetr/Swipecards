@@ -87,7 +87,7 @@ public class AuthFragment extends BaseAuthFragment {
             waitUntilAuthSocialOptions(new Runnable() {
                 @Override
                 public void run() {
-                    mAuthorizationManager.facebookAuth();
+                    mAuthorizationManager.facebookAuth(getActivity());
                 }
             });
 
@@ -101,7 +101,7 @@ public class AuthFragment extends BaseAuthFragment {
             waitUntilAuthSocialOptions(new Runnable() {
                 @Override
                 public void run() {
-                    mAuthorizationManager.vkontakteAuth();
+                    mAuthorizationManager.vkontakteAuth(getActivity());
                 }
             });
         }
@@ -114,7 +114,7 @@ public class AuthFragment extends BaseAuthFragment {
             waitUntilAuthSocialOptions(new Runnable() {
                 @Override
                 public void run() {
-                    mAuthorizationManager.odnoklassnikiAuth();
+                    mAuthorizationManager.odnoklassnikiAuth(getActivity());
                 }
             });
         }
@@ -141,7 +141,7 @@ public class AuthFragment extends BaseAuthFragment {
     public void signInClick() {
         if (getActivity() != null) {
             if (checkOnline() && mAuthorizationManager != null) {
-                mAuthorizationManager.topfaceAuth();
+                mAuthorizationManager.topfaceAuth(getActivity());
             }
         }
     }
@@ -376,7 +376,7 @@ public class AuthFragment extends BaseAuthFragment {
         Activity activity = getActivity();
         mButtonAnimation = AnimationUtils.loadAnimation(activity,
                 R.anim.auth_button_anim);
-        mAuthorizationManager = new AuthorizationManager(activity);
+        mAuthorizationManager = new AuthorizationManager();
         mAuthorizationManager.onCreate(savedInstanceState);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mTokenReadyReceiver,
                 new IntentFilter(Authorizer.AUTH_TOKEN_READY_ACTION));

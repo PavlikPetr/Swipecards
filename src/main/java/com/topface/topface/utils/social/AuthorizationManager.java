@@ -70,11 +70,11 @@ public class AuthorizationManager {
         }
     }
 
-    public AuthorizationManager(Activity parent) {
-        mAuthorizers.put(Platform.VKONTAKTE, new VkAuthorizer(parent));
-        mAuthorizers.put(Platform.FACEBOOK, new FbAuthorizer(parent));
-        mAuthorizers.put(Platform.ODNOKLASSNIKI, new OkAuthorizer(parent));
-        mAuthorizers.put(Platform.TOPFACE, new TfAuthorizer(parent));
+    public AuthorizationManager() {
+        mAuthorizers.put(Platform.VKONTAKTE, new VkAuthorizer());
+        mAuthorizers.put(Platform.FACEBOOK, new FbAuthorizer());
+        mAuthorizers.put(Platform.ODNOKLASSNIKI, new OkAuthorizer());
+        mAuthorizers.put(Platform.TOPFACE, new TfAuthorizer());
     }
 
     public static void saveAuthInfo(IApiResponse response) {
@@ -97,21 +97,25 @@ public class AuthorizationManager {
     }
 
     // vkontakte methods
-    public void vkontakteAuth() {
-        mAuthorizers.get(Platform.VKONTAKTE).authorize();
+    public void vkontakteAuth(Activity activity) {
+        mAuthorizers.get(Platform.VKONTAKTE).authorize(activity);
     }
 
     // Facebook methods
-    public void facebookAuth() {
-        mAuthorizers.get(Platform.FACEBOOK).authorize();
+    public void facebookAuth(Activity activity) {
+        mAuthorizers.get(Platform.FACEBOOK).authorize(activity);
     }
 
-    public void odnoklassnikiAuth() {
-        mAuthorizers.get(Platform.ODNOKLASSNIKI).authorize();
+    public void odnoklassnikiAuth(Activity activity) {
+        mAuthorizers.get(Platform.ODNOKLASSNIKI).authorize(activity);
     }
 
-    public void topfaceAuth() {
-        mAuthorizers.get(Platform.TOPFACE).authorize();
+    public void topfaceAuth(Activity activity) {
+        mAuthorizers.get(Platform.TOPFACE).authorize(activity);
+    }
+
+    public void logout() {
+        logout(null);
     }
 
     public void logout(Activity activity) {
@@ -126,11 +130,11 @@ public class AuthorizationManager {
         CacheProfile.clearProfileAndOptions();
         App.getConfig().onLogout();
         StartActionsController.onLogout();
-        SharedPreferences preferences = activity.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        SharedPreferences preferences = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         if (preferences != null) {
             preferences.edit().clear().apply();
         }
-        LocalBroadcastManager.getInstance(activity).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
+        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
         //Чистим список тех, кого нужно оценить
         new BackgroundThread() {
             @Override
@@ -138,7 +142,7 @@ public class AuthorizationManager {
                 new SearchCacheManager().clearCache();
             }
         };
-        if (!(activity instanceof NavigationActivity)) {
+        if (activity != null && !(activity instanceof NavigationActivity)) {
             activity.setResult(RESULT_LOGOUT);
             activity.finish();
         }

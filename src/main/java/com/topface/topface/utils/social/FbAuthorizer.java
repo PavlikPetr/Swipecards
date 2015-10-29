@@ -4,134 +4,101 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.facebook.FacebookOperationCanceledException;
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.UiLifecycleHelper;
-import com.facebook.model.GraphUser;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.utils.config.SessionConfig;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Class that starts Facebook authorization
  */
 public class FbAuthorizer extends Authorizer {
 
-    public static final String[] PERMISSIONS = new String[]{"email", "public_profile", "user_friends"};
-    private UiLifecycleHelper mUiHelper;
-    private Request mRequest;
-    private Session.StatusCallback mStatusCallback;
+    private CallbackManager mCallbackManager;
+    private ProfileTracker mProfileTracker;
 
-    private Request getRequest(final Session session, final Intent intent) {
-        mRequest = Request.newMeRequest(session, new Request.GraphUserCallback() {
+    private Collection<String> PERMISSIONS = Arrays.asList("email", "public_profile", "user_friends", "user_photos", "user_birthday");
+
+    public FbAuthorizer() {
+        super();
+        if (!FacebookSdk.isInitialized()) {
+            FacebookSdk.sdkInitialize(App.getContext());
+        }
+        mCallbackManager = CallbackManager.Factory.create();
+        mProfileTracker = new ProfileTracker() {
             @Override
-            public void onCompleted(GraphUser user, Response response) {
-                if (user != null) {
-                    if (AuthToken.getInstance().isEmpty()) {
-                        AuthToken.getInstance().saveToken(
-                                AuthToken.SN_FACEBOOK,
-                                user.getId(),
-                                session.getAccessToken(),
-                                session.getExpirationDate().toString()
-                        );
-
-                        String name = user.getFirstName() + " " + user.getLastName();
-                        SessionConfig sessionConfig = App.getSessionConfig();
-                        sessionConfig.setSocialAccountName(name);
-                        sessionConfig.saveConfig();
-
-                        intent.putExtra(TOKEN_STATUS, TOKEN_READY);
-                    }
-                } else if (AuthToken.getInstance().isEmpty()) {
-                    intent.putExtra(TOKEN_STATUS, TOKEN_FAILED);
+            protected void onCurrentProfileChanged(
+                    Profile oldProfile,
+                    Profile currentProfile) {
+                if (currentProfile != null) {
+                    SessionConfig sessionConfig = App.getSessionConfig();
+                    sessionConfig.setSocialAccountName(currentProfile.getName());
+                    sessionConfig.saveConfig();
                 }
-                broadcastAuthTokenStatus(intent);
+            }
+        };
+        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                AccessToken accessToken = loginResult.getAccessToken();
+                if (AuthToken.getInstance().isEmpty()) {
+                    AuthToken.getInstance().saveToken(
+                            AuthToken.SN_FACEBOOK,
+                            accessToken.getUserId(),
+                            accessToken.getToken(),
+                            accessToken.getExpires().toString()
+                    );
+                }
+            }
+
+            @Override
+            public void onCancel() {
+            }
+
+            @Override
+            public void onError(FacebookException e) {
             }
         });
-        return mRequest;
-    }
-
-    private Session.StatusCallback getStatusCallback() {
-        if (mStatusCallback == null) {
-            mStatusCallback = new Session.StatusCallback() {
-                @Override
-                public void call(Session session, SessionState state, Exception exception) {
-                    Intent intent = new Intent(AUTH_TOKEN_READY_ACTION);
-
-                    switch (state) {
-                        case OPENED:
-                        case OPENED_TOKEN_UPDATED:
-                            getRequest(session, intent).executeAsync();
-                            break;
-                        case CREATED:
-                        case OPENING:
-                        case CREATED_TOKEN_LOADED:
-                            intent.putExtra(TOKEN_STATUS, TOKEN_PREPARING);
-                            break;
-                        case CLOSED_LOGIN_FAILED:
-                            if (exception instanceof FacebookOperationCanceledException) {
-                                intent.putExtra(TOKEN_STATUS, TOKEN_NOT_READY);
-                            } else {
-                                intent.putExtra(TOKEN_STATUS, TOKEN_FAILED);
-                            }
-                            break;
-                        default:
-                            intent.putExtra(TOKEN_STATUS, TOKEN_NOT_READY);
-                            break;
-                    }
-
-                    broadcastAuthTokenStatus(intent);
-                }
-            };
-        }
-        return mStatusCallback;
-    }
-
-    public FbAuthorizer(Activity activity) {
-        super(activity);
-        mUiHelper = new UiLifecycleHelper(activity, null);
-        mUiHelper.onStop();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUiHelper.onCreate(savedInstanceState);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mUiHelper.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mUiHelper.onPause();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mUiHelper.onDestroy();
-        mStatusCallback = null;
-        mRequest = null;
+        mProfileTracker.startTracking();
     }
 
     @Override
-    public void authorize() {
-        Session session = Session.getActiveSession();
-        if (!(session != null && !session.isOpened() && !session.isClosed() && session.getApplicationId().equals(getFbId()))) {
-            session = (new Session.Builder(getActivity())).setApplicationId(getFbId()).build();
-            Session.setActiveSession(session);
+    public void authorize(Activity activity) {
+        if (!FacebookSdk.isInitialized()) {
+            FacebookSdk.sdkInitialize(App.getContext());
         }
-        session.openForRead((new Session.OpenRequest(getActivity()))
-                .setCallback(getStatusCallback())
-                .setPermissions(PERMISSIONS));
+        LoginManager.getInstance().logInWithReadPermissions(activity, PERMISSIONS);
     }
 
     public static String getFbId() {
@@ -142,19 +109,15 @@ public class FbAuthorizer extends Authorizer {
 
     @Override
     public void logout() {
-        Session session = Session.getActiveSession();
-        if (session != null) {
-            session.closeAndClearTokenInformation();
-            if (mStatusCallback != null) {
-                session.removeCallback(mStatusCallback);
-            }
+        if (!FacebookSdk.isInitialized()) {
+            FacebookSdk.sdkInitialize(App.getContext());
         }
-        Session.setActiveSession(null);
+        LoginManager.getInstance().logOut();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mUiHelper.onActivityResult(requestCode, resultCode, data);
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -803,6 +803,12 @@
         <item name="android:textColor">@drawable/btn_blue_text_color_selector</item>
     </style>
 
+    <style name="Widget.Topface.Button.Big.InviteVkFriends">
+        <item name="android:background">@drawable/btn_blue_invite_vk_friends_selector</item>
+        <item name="android:textColor">@drawable/btn_blue_invite_vk_friends_text_color_selector
+        </item>
+    </style>
+
     <style name="Widget.Topface.Button.Blue">
         <item name="android:background">@drawable/btn_blue_selector</item>
         <item name="android:textColor">@drawable/btn_blue_text_color_selector</item>
@@ -1225,5 +1231,10 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:visibility">gone</item>
         <item name="android:layout_marginBottom">12dp</item>
+    </style>
+
+
+    <style name="InvisibleProgress">
+        <item name="android:visibility">gone</item>
     </style>
 </resources>

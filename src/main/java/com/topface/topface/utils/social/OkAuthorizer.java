@@ -84,7 +84,7 @@ public class OkAuthorizer extends Authorizer {
                 intent.putExtra(TOKEN_STATUS, TOKEN_NOT_READY);
             }
 
-            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+            LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
         }
 
         @Override
@@ -94,20 +94,20 @@ public class OkAuthorizer extends Authorizer {
         }
     }
 
-    public OkAuthorizer(Activity activity) {
-        super(activity);
+    public OkAuthorizer() {
+        super();
         AppSocialAppsIds ids = App.getAppSocialAppsIds();
     }
 
     private Odnoklassniki getOkAuthObj(AppSocialAppsIds ids) {
         if (!Odnoklassniki.hasInstance()) {
-            Odnoklassniki.createInstance(getActivity(), ids.okId, ids.getOkSecretKey(), ids.getOkPublicKey());
+            Odnoklassniki.createInstance(App.getContext(), ids.okId, ids.getOkSecretKey(), ids.getOkPublicKey());
         }
-        return Odnoklassniki.createInstance(getActivity(), ids.okId, ids.getOkSecretKey(), ids.getOkPublicKey());
+        return Odnoklassniki.createInstance(App.getContext(), ids.okId, ids.getOkSecretKey(), ids.getOkPublicKey());
     }
 
     @Override
-    public void authorize() {
+    public void authorize(Activity activity) {
         final AppSocialAppsIds ids = App.getAppSocialAppsIds();
         getOkAuthObj(ids).setTokenRequestListener(new OkTokenRequestListener() {
             @Override
@@ -116,7 +116,7 @@ public class OkAuthorizer extends Authorizer {
                 new GetCurrentUserTask(getOkAuthObj(ids), token).execute();
                 Intent intent = new Intent(AUTH_TOKEN_READY_ACTION);
                 intent.putExtra(TOKEN_STATUS, TOKEN_PREPARING);
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+                LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
             }
 
             @Override
@@ -129,11 +129,11 @@ public class OkAuthorizer extends Authorizer {
                 Debug.error("Odnoklassniki auth cancel");
             }
         });
-        getOkAuthObj(ids).requestAuthorization(getActivity(), false, OkScope.SET_STATUS, OkScope.PHOTO_CONTENT, OkScope.VALUABLE_ACCESS);
+        getOkAuthObj(ids).requestAuthorization(App.getContext(), false, OkScope.SET_STATUS, OkScope.PHOTO_CONTENT, OkScope.VALUABLE_ACCESS);
     }
 
     @Override
     public void logout() {
-        getOkAuthObj(App.getAppSocialAppsIds()).clearTokens(getActivity());
+        getOkAuthObj(App.getAppSocialAppsIds()).clearTokens(App.getContext());
     }
 }

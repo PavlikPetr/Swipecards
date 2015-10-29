@@ -9,13 +9,12 @@ import com.topface.topface.ui.TopfaceAuthActivity;
  * Class that starts Topface authorization
  */
 public class TfAuthorizer extends Authorizer {
-    public TfAuthorizer(Activity activity) {
-        super(activity);
+    public TfAuthorizer() {
+        super();
     }
 
     @Override
-    public void authorize() {
-        Activity activity = getActivity();
+    public void authorize(Activity activity) {
         Intent intent = new Intent(activity, TopfaceAuthActivity.class);
         activity.startActivityForResult(intent, TopfaceAuthActivity.INTENT_TOPFACE_AUTH);
     }

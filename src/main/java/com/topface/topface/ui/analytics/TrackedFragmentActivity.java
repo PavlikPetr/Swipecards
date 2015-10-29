@@ -4,11 +4,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 
 import com.comscore.analytics.comScore;
-import com.facebook.AppEventsLogger;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.topface.statistics.android.StatisticsTracker;
-import com.topface.topface.App;
 import com.topface.topface.data.ExperimentTags;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
@@ -30,7 +28,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        AppEventsLogger.activateApp(this, App.getAppSocialAppsIds().fbId);
+//        AppEventsLogger.activateApp(this, App.getAppSocialAppsIds().fbId);
         comScore.onEnterForeground();
     }
 

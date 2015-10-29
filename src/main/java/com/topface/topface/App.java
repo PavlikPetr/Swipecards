@@ -66,6 +66,11 @@ import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.geo.GeoLocationManager;
+import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.utils.social.AuthorizationManager;
+import com.topface.topface.utils.social.VkAuthorizer;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKAccessTokenTracker;
 import com.vk.sdk.VKSdk;
 
 import org.acra.ACRA;
@@ -295,6 +300,22 @@ public class App extends ApplicationBase {
         MultiDex.install(this);
     }
 
+    private void initVkSdk() {
+        VKAccessTokenTracker vkTokenTracker = new VKAccessTokenTracker() {
+            @Override
+            public void onVKAccessTokenChanged(VKAccessToken oldToken, VKAccessToken newToken) {
+                if (newToken == null && AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
+                    new AuthorizationManager().logout();
+                }
+            }
+        };
+        vkTokenTracker.startTracking();
+        VKSdk.customInitialize(App.getContext(), VkAuthorizer.getVkId(), null);
+        if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_VKONTAKTE) && VKAccessToken.currentToken() == null) {
+            new AuthorizationManager().logout();
+        }
+    }
+
     @Override
     public void onCreate() {
         /**
@@ -309,7 +330,7 @@ public class App extends ApplicationBase {
         super.onCreate();
         LeakCanary.install(this);
         mContext = getApplicationContext();
-        VKSdk.customInitialize(App.getContext(), 0, null);
+        initVkSdk();
         initObjectGraphForInjections();
         //Включаем отладку, если это дебаг версия
         enableDebugLogs();

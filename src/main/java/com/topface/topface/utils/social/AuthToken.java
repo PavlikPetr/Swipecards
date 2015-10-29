@@ -5,16 +5,11 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.model.GraphUser;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.utils.config.SessionConfig;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
@@ -72,24 +67,24 @@ public class AuthToken {
     }
 
     public static void getFbName(final Handler handler) {
-        Session session = Session.getActiveSession();
-        if (session != null) {
-            Request request = Request.newMeRequest(session, new Request.GraphUserCallback() {
-                @Override
-                public void onCompleted(GraphUser user, Response response) {
-                    if (user != null) {
-                        String name = user.getFirstName() + " " + user.getLastName();
-                        SessionConfig sessionConfig = App.getSessionConfig();
-                        sessionConfig.setSocialAccountName(name);
-                        sessionConfig.saveConfig();
-                        handler.sendMessage(Message.obtain(null, AuthToken.SUCCESS_GET_NAME, name));
-                    } else {
-                        handler.sendMessage(Message.obtain(null, AuthToken.FAILURE_GET_NAME, ""));
-                    }
-                }
-            });
-            request.executeAsync();
-        }
+//        Session session = Session.getActiveSession();
+//        if (session != null) {
+//            Request request = Request.newMeRequest(session, new Request.GraphUserCallback() {
+//                @Override
+//                public void onCompleted(GraphUser user, Response response) {
+//                    if (user != null) {
+//                        String name = user.getFirstName() + " " + user.getLastName();
+//                        SessionConfig sessionConfig = App.getSessionConfig();
+//                        sessionConfig.setSocialAccountName(name);
+//                        sessionConfig.saveConfig();
+//                        handler.sendMessage(Message.obtain(null, AuthToken.SUCCESS_GET_NAME, name));
+//                    } else {
+//                        handler.sendMessage(Message.obtain(null, AuthToken.FAILURE_GET_NAME, ""));
+//                    }
+//                }
+//            });
+//            request.executeAsync();
+//        }
     }
 
     public static void getVkName(final String user_id, final Handler handler) {
