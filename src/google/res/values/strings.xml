@@ -538,9 +538,7 @@
     <string name="buy_status_and_watch_your_fans">Get VIP-status and find out who added you to their
         favorites.
     </string>
-    <string name="add_bookmarks_to_be_connected">Add new contacts to this section and you\'ll never
-        lose touch with them.
-    </string>
+    <string name="add_bookmarks_to_be_connected">Add new contacts to this section and you will never lose touch with them.</string>
     <string name="nobody_chat_with_you_sympathies_will_help">No one has written to you yet! Likes
         will help you find someone to chat with!
     </string>
@@ -820,4 +818,12 @@
         people will give you a Like and genuinely mean it!
     </string>
     <string name="go_dating_message">Start dating and you will who view you page here</string>
+    <string name="vk_profile_button_tf_group">Topface group</string>
+    <string name="vk_profile_button_join_tf_group">Join the Topface group</string>
+    <string name="vk_profile_button_join_vkgames_group">Join the group \"VK games\"</string>
+    <string name="vk_profile_button_invite_friends">Invite friends</string>
+    <string name="vk_profile_invite_friends_title">Invite friends</string>
+    <string name="invite_friend_button">Invite</string>
+    <string name="invitation_sended_button">Sent</string>
+    <string name="friends_empty_list_error">Your list of friends is empty</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.topface.topface.ui;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,10 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     private final static int ITEMS_COUNT_BEFORE_END = 5;
     private final static int MAX_RE_REQUEST_COUNT = 3;
 
+    private final static String VK_FRIENDS_LIST_DATA = "vk_friends_list_data";
+    private final static String VK_FRIENDS_BUTTONS_STATE_DATA = "vk_friends_buttons_state_data";
+    private final static String VK_FRIENDS_GETTING_EXTRA = "vk_friends_getting_extra";
+
     private final static String USER_ID_VK_PARAM = "user_id";
 
     private VKRequest mFriendsRequest;
@@ -52,6 +57,11 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     ListView mListView;
     @Bind(R.id.mainProgressBar)
     ProgressBar mProgress;
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +93,6 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         mAdapter.setInviteClickListener(new VKFriendsAdapter.InViteClickListener() {
             @Override
             public void onClick(int id) {
-                Debug.error("INVITE_FRIENDS_CLICK " + id);
                 VKRequest inviteRequest = new VKRequest("apps.sendRequest");
                 inviteRequest.addExtraParameter(USER_ID_VK_PARAM, id);
                 inviteRequest.attempts = 0;
@@ -100,20 +109,18 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     private VKRequest.VKRequestListener mVkInviteListener = new VKRequest.VKRequestListener() {
         @Override
         public void onComplete(VKResponse response) {
-            Debug.error("INVITE_FRIENDS_CLICK mVkInviteListener onComplete");
             if (mAdapter != null) {
                 mAdapter.setButtonState((Integer) response.request.getPreparedParameters().get(USER_ID_VK_PARAM), false);
             }
-            Toast.makeText(App.getContext(), R.string.invite_friends_title, Toast.LENGTH_SHORT).show();
+            Toast.makeText(App.getContext(), R.string.vk_friends_success_invite, Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onError(VKError error) {
-            Debug.error("INVITE_FRIENDS_CLICK mVkInviteListener onError " + error);
             if (mAdapter != null) {
                 mAdapter.setButtonState((Integer) error.request.getPreparedParameters().get(USER_ID_VK_PARAM), true);
             }
-            Toast.makeText(App.getContext(), R.string.general_error, Toast.LENGTH_SHORT).show();
+            Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -154,14 +161,12 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         @Override
         public void onProgress(VKRequest.VKProgressType progressType, long bytesLoaded, long bytesTotal) {
             super.onProgress(progressType, bytesLoaded, bytesTotal);
-            Debug.error("INVITE_FRIENDS_CLICK mFriendsListener onProgress");
             showProgress(true);
         }
 
         @Override
         public void onComplete(VKResponse response) {
             super.onComplete(response);
-            Debug.error("INVITE_FRIENDS_CLICK mFriendsListener onComplete");
             showProgress(false);
             try {
                 JSONObject responseJSON = response.json.getJSONObject("response");
@@ -177,7 +182,6 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         @Override
         public void onError(VKError error) {
             super.onError(error);
-            Debug.error("INVITE_FRIENDS_CLICK mFriendsListener onError " + error);
             showProgress(false);
             mIsGettingExtraFriends = false;
         }
@@ -236,6 +240,10 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
 
         public List<VKApiUser> getAllData() {
             return mFriendsList;
+        }
+
+        public ConcurrentHashMap<Integer, Boolean> getButtonsStateList() {
+            return mButtonsStateList;
         }
 
         @Override

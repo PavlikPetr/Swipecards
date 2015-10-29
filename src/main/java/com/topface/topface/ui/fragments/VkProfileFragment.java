@@ -11,7 +11,6 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.ui.InviteVkFriendsActivity;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
@@ -379,13 +378,11 @@ public class VkProfileFragment extends ProfileInnerFragment {
                     public void onError(VKError error) {
                         super.onError(error);
                         showButton(btn, true);
-                        Debug.error("VK_FRAGMENT joinCommunity onError " + error);
                     }
 
                     @Override
                     public void onComplete(VKResponse response) {
                         super.onComplete(response);
-                        Debug.error("VK_FRAGMENT joinCommunity onComplete");
                         showButton(btn, false);
                         if (community.screen_name.equals(VK_GAMES_TEAM_ID)) {
                             isVkGamesMember = true;

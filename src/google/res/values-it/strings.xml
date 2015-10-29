@@ -839,5 +839,12 @@
         sicuro piacerai a %2$d persone\nche ti dimostreranno la loro simpatia
     </string>
     <string name="go_dating_message">Comincia a fare conoscenze e in questa sezione vedrai gli utenti che hanno visitato il tuo profilo</string>
+    <string name="vk_profile_button_tf_group">Gruppo Topface</string>
+    <string name="vk_profile_button_join_tf_group">Entra nel gruppo Topface</string>
+    <string name="vk_profile_button_join_vkgames_group">Entra nel gruppo \" Giochi  Vkontakte\"</string>
     <string name="vk_profile_button_invite_friends">Invita amici</string>
+    <string name="vk_profile_invite_friends_title">Invita amici</string>
+    <string name="invite_friend_button">Invita</string>
+    <string name="invitation_sended_button">Inviato</string>
+    <string name="friends_empty_list_error">La lista dei tuoi amici è vuota</string>
 </resources>
