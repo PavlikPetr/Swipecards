@@ -1,7 +1,6 @@
 package com.topface.topface.ui;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +43,8 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     private final static String VK_FRIENDS_LIST_DATA = "vk_friends_list_data";
     private final static String VK_FRIENDS_BUTTONS_STATE_DATA = "vk_friends_buttons_state_data";
     private final static String VK_FRIENDS_GETTING_EXTRA = "vk_friends_getting_extra";
+    private final static String VK_FRIENDS_LIST_SCROLL_POSITION = "vk_friends_list_scroll_position";
+    private final static String VK_FRIENDS_AVAILABLE_COUNT = "vk_friends_available_count";
 
     private final static String USER_ID_VK_PARAM = "user_id";
 
@@ -57,22 +58,29 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     ListView mListView;
     @Bind(R.id.mainProgressBar)
     ProgressBar mProgress;
-
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-    }
+    @Bind(R.id.noOneFriendLoaded)
+    TextView mNoFriendsTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        setMainProgressVisibility(true);
         new ActionBarTitleSetterDelegate(getSupportActionBar()).setActionBarTitles(R.string.vk_profile_invite_friends_title, null);
         mFooterView = getLayoutInflater().inflate(R.layout.gridview_footer_progress_bar, null);
         mListView.addFooterView(mFooterView);
-        mAdapter = new VKFriendsAdapter(new ArrayList<VKApiUser>());
+        int position = 0;
+        if (savedInstanceState != null) {
+            mAdapter = new VKFriendsAdapter(parseFriendsList(savedInstanceState.getString(VK_FRIENDS_LIST_DATA)), (ConcurrentHashMap<Integer, Boolean>) savedInstanceState.getSerializable(VK_FRIENDS_BUTTONS_STATE_DATA));
+            mIsGettingExtraFriends = savedInstanceState.getBoolean(VK_FRIENDS_GETTING_EXTRA);
+            position = savedInstanceState.getInt(VK_FRIENDS_LIST_SCROLL_POSITION);
+            mAvailableFriendsCount = savedInstanceState.getInt(VK_FRIENDS_AVAILABLE_COUNT);
+        } else {
+            mAdapter = new VKFriendsAdapter(new ArrayList<VKApiUser>());
+        }
         mListView.setAdapter(mAdapter);
+        setMainProgressVisibility(mAdapter == null || mAdapter.getCount() == 0);
+        showProgress(false);
+        mListView.scrollTo(0, position);
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -102,6 +110,8 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     }
 
     private void loadNewPackData() {
+        Debug.error("INVITE_FRIENDS_ACTIVITY loadNewPackData");
+        showProgress(true);
         mFriendsRequest = getVkFriendsRequest(mAdapter.getCount());
         mFriendsRequest.executeWithListener(mFriendsListener);
     }
@@ -137,6 +147,11 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putString(VK_FRIENDS_LIST_DATA, packFriendsList());
+        outState.putSerializable(VK_FRIENDS_BUTTONS_STATE_DATA, mAdapter != null ? mAdapter.getButtonsStateList() : new ConcurrentHashMap<Integer, Boolean>());
+        outState.putBoolean(VK_FRIENDS_GETTING_EXTRA, mIsGettingExtraFriends);
+        outState.putInt(VK_FRIENDS_LIST_SCROLL_POSITION, mListView != null ? mListView.getScrollY() : 0);
+        outState.putInt(VK_FRIENDS_AVAILABLE_COUNT, mAvailableFriendsCount);
     }
 
     @Override
@@ -170,8 +185,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
             showProgress(false);
             try {
                 JSONObject responseJSON = response.json.getJSONObject("response");
-                setAdapterData(JsonUtils.fromJson(responseJSON.getJSONArray("items").toString(), new TypeToken<List<VKApiUser>>() {
-                }));
+                setAdapterData(parseFriendsList(responseJSON.getJSONArray("items").toString()));
                 mAvailableFriendsCount = responseJSON.getInt("count");
             } catch (JSONException e) {
                 Debug.error(e);
@@ -187,6 +201,19 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         }
     };
 
+    private List<VKApiUser> parseFriendsList(String resp) {
+        return JsonUtils.fromJson(resp, new TypeToken<List<VKApiUser>>() {
+        });
+    }
+
+    private String packFriendsList() {
+        return packFriendsList(mAdapter != null ? mAdapter.getAllData() : new ArrayList<VKApiUser>());
+    }
+
+    private String packFriendsList(List<VKApiUser> friends) {
+        return JsonUtils.toJson(friends);
+    }
+
     private static class VKFriendsAdapter extends BaseAdapter {
 
         List<VKApiUser> mFriendsList;
@@ -194,13 +221,16 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         private ConcurrentHashMap<Integer, Boolean> mButtonsStateList = new ConcurrentHashMap<>();
 
         VKFriendsAdapter(List<VKApiUser> friends) {
-            mFriendsList = friends;
-            fillButtonsState();
+            this(friends, null);
         }
 
         VKFriendsAdapter(List<VKApiUser> friends, ConcurrentHashMap<Integer, Boolean> buttonsStateList) {
-            mFriendsList = friends;
-            mButtonsStateList = buttonsStateList;
+            mFriendsList = friends != null ? friends : new ArrayList<VKApiUser>();
+            if (buttonsStateList != null) {
+                mButtonsStateList = buttonsStateList;
+            } else {
+                fillButtonsState();
+            }
         }
 
         private void fillButtonsState() {
@@ -306,6 +336,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     private void setMainProgressVisibility(boolean isVisible) {
         mProgress.setVisibility(isVisible ? View.VISIBLE : View.GONE);
         mListView.setVisibility(!isVisible ? View.VISIBLE : View.GONE);
+        setNoFriendsTitleVisibility(!isVisible && mAdapter != null && mAdapter.getCount() == 0);
     }
 
     private void setAdapterData(List<VKApiUser> friends) {
@@ -315,8 +346,13 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     }
 
     private void showProgress(boolean visibility) {
-        if (mAdapter == null || mAdapter.getCount() == 0 && mFooterView != null) {
-            mFooterView.setVisibility(visibility ? View.VISIBLE : View.GONE);
+        if (mFooterView != null) {
+            mFooterView.setVisibility(visibility && mAdapter != null && mAdapter.getCount() != 0 ? View.VISIBLE : View.GONE);
         }
+    }
+
+    private void setNoFriendsTitleVisibility(boolean isVisible) {
+        mNoFriendsTitle.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+        mListView.setVisibility(!isVisible ? View.VISIBLE : View.GONE);
     }
 }

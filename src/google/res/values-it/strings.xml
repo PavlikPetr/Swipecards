@@ -180,6 +180,7 @@
     <string name="general_visitors_tab_views">visite</string>
     <string name="general_profile">Profilo</string>
     <string name="general_settings">Impostazioni</string>
+    <string name="general_vk_profile">VK</string>
     <string name="auth_btn_vk">Vkontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Riprovare</string>
@@ -847,4 +848,5 @@
     <string name="invite_friend_button">Invita</string>
     <string name="invitation_sended_button">Inviato</string>
     <string name="friends_empty_list_error">La lista dei tuoi amici è vuota</string>
+    <string name="vk_friends_success_invite">Invito inviato</string>
 </resources>
