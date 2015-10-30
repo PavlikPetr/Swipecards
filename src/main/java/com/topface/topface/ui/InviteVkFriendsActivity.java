@@ -110,7 +110,6 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     }
 
     private void loadNewPackData() {
-        Debug.error("INVITE_FRIENDS_ACTIVITY loadNewPackData");
         showProgress(true);
         mFriendsRequest = getVkFriendsRequest(mAdapter.getCount());
         mFriendsRequest.executeWithListener(mFriendsListener);

@@ -10,7 +10,9 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.InviteVkFriendsActivity;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
@@ -377,12 +379,14 @@ public class VkProfileFragment extends ProfileInnerFragment {
                     @Override
                     public void onError(VKError error) {
                         super.onError(error);
+                        Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
                         showButton(btn, true);
                     }
 
                     @Override
                     public void onComplete(VKResponse response) {
                         super.onComplete(response);
+                        Toast.makeText(App.getContext(), R.string.join_group_success, Toast.LENGTH_SHORT).show();
                         showButton(btn, false);
                         if (community.screen_name.equals(VK_GAMES_TEAM_ID)) {
                             isVkGamesMember = true;

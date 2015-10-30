@@ -849,4 +849,5 @@
     <string name="invitation_sended_button">Inviato</string>
     <string name="friends_empty_list_error">La lista dei tuoi amici è vuota</string>
     <string name="vk_friends_success_invite">Invito inviato</string>
+    <string name="join_group_success">Adesso fai parte del gruppo</string>
 </resources>

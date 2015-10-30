@@ -301,6 +301,7 @@ public class App extends ApplicationBase {
     }
 
     private void initVkSdk() {
+        VKSdk.customInitialize(App.getContext(), VkAuthorizer.getVkId(), null);
         VKAccessTokenTracker vkTokenTracker = new VKAccessTokenTracker() {
             @Override
             public void onVKAccessTokenChanged(VKAccessToken oldToken, VKAccessToken newToken) {
@@ -310,7 +311,6 @@ public class App extends ApplicationBase {
             }
         };
         vkTokenTracker.startTracking();
-        VKSdk.customInitialize(App.getContext(), VkAuthorizer.getVkId(), null);
         if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_VKONTAKTE) && VKAccessToken.currentToken() == null) {
             new AuthorizationManager().logout();
         }
