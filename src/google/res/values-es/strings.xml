@@ -182,6 +182,7 @@
     <string name="general_visitors_tab_views">visitas</string>
     <string name="general_profile">Perfil</string>
     <string name="general_settings">Ajustes</string>
+    <string name="general_vk_profile">VK</string>
     <string name="auth_btn_vk">VKontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Intentar de nuevo</string>
@@ -845,4 +846,14 @@
         que\nseguro les gustarás a las %2$d personas,\nque te mostrarán su simpatía
     </string>
     <string name="go_dating_message">Comienzo a conocer esto y podrá ver a los usuarios que visitan su perfil</string>
+    <string name="vk_profile_button_tf_group">Grupo Topface</string>
+    <string name="vk_profile_button_join_tf_group">Entrar en el grupo Topface</string>
+    <string name="vk_profile_button_join_vkgames_group">Entrar en el grupo \"Juegos VK\"</string>
+    <string name="vk_profile_button_invite_friends">Invitar a los amigos</string>
+    <string name="vk_profile_invite_friends_title">Invitar a los amigos</string>
+    <string name="invite_friend_button">Invitar</string>
+    <string name="invitation_sended_button">Enviado</string>
+    <string name="friends_empty_list_error">El listado de tus amigos está vacío</string>
+    <string name="vk_friends_success_invite">Invitación enviado</string>
+    <string name="join_group_success">Has entrado en el grupo</string>
 </resources>

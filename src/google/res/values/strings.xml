@@ -178,6 +178,7 @@
     <string name="general_visitors_tab_views">views</string>
     <string name="general_profile">Profile</string>
     <string name="general_settings">Settings</string>
+    <string name="general_vk_profile">VK</string>
     <string name="auth_btn_vk">Vkontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Retry</string>
@@ -826,5 +827,6 @@
     <string name="invite_friend_button">Invite</string>
     <string name="invitation_sended_button">Sent</string>
     <string name="friends_empty_list_error">Your list of friends is empty</string>
+    <string name="vk_friends_success_invite">Invitation has been sent</string>
     <string name="join_group_success">You have joined the group</string>
 </resources>
