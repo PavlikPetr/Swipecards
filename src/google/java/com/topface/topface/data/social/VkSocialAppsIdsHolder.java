@@ -10,11 +10,11 @@ class VkSocialAppsIdsHolder {
     /**
      * {String} VK_ID - идентификатор приложения в vk
      */
-    static final int VK_ID = 2664589;
+    static final int VK_ID = 2257829;
     static final ArrayList<String> ALLOWED_VK_IDS = new ArrayList<>(1);
 
     static {
-        ALLOWED_VK_IDS.add("2664589");
+        ALLOWED_VK_IDS.add("2257829");
     }
 
     public static int checkAllowedVkId(String serverId) {
