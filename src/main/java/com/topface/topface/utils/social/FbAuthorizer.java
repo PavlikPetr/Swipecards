@@ -32,9 +32,7 @@ public class FbAuthorizer extends Authorizer {
 
     public FbAuthorizer() {
         super();
-        if (!FacebookSdk.isInitialized()) {
-            FacebookSdk.sdkInitialize(App.getContext());
-        }
+        initFB();
         mCallbackManager = CallbackManager.Factory.create();
         mProfileTracker = new ProfileTracker() {
             @Override
@@ -95,9 +93,7 @@ public class FbAuthorizer extends Authorizer {
 
     @Override
     public void authorize(Activity activity) {
-        if (!FacebookSdk.isInitialized()) {
-            FacebookSdk.sdkInitialize(App.getContext());
-        }
+        initFB();
         LoginManager.getInstance().logInWithReadPermissions(activity, PERMISSIONS);
     }
 
@@ -109,10 +105,15 @@ public class FbAuthorizer extends Authorizer {
 
     @Override
     public void logout() {
+        initFB();
+        LoginManager.getInstance().logOut();
+    }
+
+    private void initFB() {
         if (!FacebookSdk.isInitialized()) {
+            FacebookSdk.setApplicationId(getFbId());
             FacebookSdk.sdkInitialize(App.getContext());
         }
-        LoginManager.getInstance().logOut();
     }
 
     @Override
