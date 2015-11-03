@@ -103,6 +103,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
             public void onClick(int id) {
                 VKRequest inviteRequest = new VKRequest("apps.sendRequest");
                 inviteRequest.addExtraParameter(USER_ID_VK_PARAM, id);
+                inviteRequest.addExtraParameter("type", "invite");
                 inviteRequest.attempts = 0;
                 inviteRequest.executeWithListener(mVkInviteListener);
             }
@@ -126,10 +127,12 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
 
         @Override
         public void onError(VKError error) {
-            if (mAdapter != null) {
-                mAdapter.setButtonState((Integer) error.request.getPreparedParameters().get(USER_ID_VK_PARAM), true);
+            if (error.errorCode == VKError.VK_API_ERROR && error.apiError.errorCode == 15 && mAdapter != null) {
+                mAdapter.setButtonState((int) error.request.getMethodParameters().get(USER_ID_VK_PARAM), true);
             }
-            Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+            if (error.errorCode != VKError.VK_CANCELED) {
+                Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+            }
         }
     };
 
@@ -309,7 +312,6 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
             holder.invite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setButtonState(friend.getId(), false);
                     if (mInViteClickListener != null) {
                         mInViteClickListener.onClick(friend.getId());
                     }
