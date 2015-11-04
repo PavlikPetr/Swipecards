@@ -45,6 +45,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     private final static String VK_FRIENDS_GETTING_EXTRA = "vk_friends_getting_extra";
     private final static String VK_FRIENDS_LIST_SCROLL_POSITION = "vk_friends_list_scroll_position";
     private final static String VK_FRIENDS_AVAILABLE_COUNT = "vk_friends_available_count";
+    private final static String VK_FRIENDS_CURRENT_COUNT = "vk_friends_current_count";
 
     private final static String USER_ID_VK_PARAM = "user_id";
 
@@ -74,6 +75,11 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
             mIsGettingExtraFriends = savedInstanceState.getBoolean(VK_FRIENDS_GETTING_EXTRA);
             position = savedInstanceState.getInt(VK_FRIENDS_LIST_SCROLL_POSITION);
             mAvailableFriendsCount = savedInstanceState.getInt(VK_FRIENDS_AVAILABLE_COUNT);
+            int friendsCount = savedInstanceState.getInt(VK_FRIENDS_CURRENT_COUNT, 0);
+            if (friendsCount != 0) {
+                mAdapter.setFriendsCount(friendsCount);
+            }
+
         } else {
             mAdapter = new VKFriendsAdapter(new ArrayList<VKApiUser>());
         }
@@ -112,7 +118,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
 
     private void loadNewPackData() {
         showProgress(true);
-        mFriendsRequest = getVkFriendsRequest(mAdapter.getCount());
+        mFriendsRequest = getVkFriendsRequest(mAdapter.getFriendsCount());
         mFriendsRequest.executeWithListener(mFriendsListener);
     }
 
@@ -127,14 +133,25 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
 
         @Override
         public void onError(VKError error) {
-            if (error.errorCode == VKError.VK_API_ERROR && error.apiError.errorCode == 15 && mAdapter != null) {
-                mAdapter.setButtonState((int) error.request.getMethodParameters().get(USER_ID_VK_PARAM), true);
+            int userId = getUSerIDFromVkError(error);
+            if (userId != 0) {
+                mAdapter.setButtonState(userId, true);
             }
-            if (error.errorCode != VKError.VK_CANCELED) {
+            if (error != null && error.errorCode == VKError.VK_API_ERROR && error.apiError.errorCode == 15 && mAdapter != null && userId != 0) {
+                mAdapter.removeUserById(userId);
+            }
+            if (error != null && error.errorCode != VKError.VK_CANCELED) {
                 Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
             }
         }
     };
+
+    private int getUSerIDFromVkError(VKError error) {
+        if (error != null && error.request != null && error.request.getMethodParameters() != null && error.request.getMethodParameters().get(USER_ID_VK_PARAM) != null) {
+            return (int) error.request.getMethodParameters().get(USER_ID_VK_PARAM);
+        }
+        return 0;
+    }
 
     @Override
     protected int getContentLayout() {
@@ -154,6 +171,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         outState.putBoolean(VK_FRIENDS_GETTING_EXTRA, mIsGettingExtraFriends);
         outState.putInt(VK_FRIENDS_LIST_SCROLL_POSITION, mListView != null ? mListView.getScrollY() : 0);
         outState.putInt(VK_FRIENDS_AVAILABLE_COUNT, mAvailableFriendsCount);
+        outState.putInt(VK_FRIENDS_CURRENT_COUNT, mAdapter != null ? mAdapter.getFriendsCount() : 0);
     }
 
     @Override
@@ -221,6 +239,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         List<VKApiUser> mFriendsList;
         private InViteClickListener mInViteClickListener;
         private ConcurrentHashMap<Integer, Boolean> mButtonsStateList = new ConcurrentHashMap<>();
+        private int mCurrentFriendsCount;
 
         VKFriendsAdapter(List<VKApiUser> friends) {
             this(friends, null);
@@ -228,6 +247,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
 
         VKFriendsAdapter(List<VKApiUser> friends, ConcurrentHashMap<Integer, Boolean> buttonsStateList) {
             mFriendsList = friends != null ? friends : new ArrayList<VKApiUser>();
+            mCurrentFriendsCount = mFriendsList.size();
             if (buttonsStateList != null) {
                 mButtonsStateList = buttonsStateList;
             } else {
@@ -267,6 +287,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
 
         public void addFriends(List<VKApiUser> friends) {
             mFriendsList.addAll(friends);
+            mCurrentFriendsCount += friends.size();
             fillButtonsState();
         }
 
@@ -301,6 +322,23 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
                 initHolder(holder, getItem(position));
             }
             return convertView;
+        }
+
+        public int getFriendsCount() {
+            return mCurrentFriendsCount;
+        }
+
+        public void setFriendsCount(int count) {
+            mCurrentFriendsCount = count;
+        }
+
+        public void removeUserById(int id) {
+            for (int i = 0; i < mFriendsList.size(); i++) {
+                if (mFriendsList.get(i).getId() == id) {
+                    mFriendsList.remove(i);
+                    break;
+                }
+            }
         }
 
         private void initHolder(ViewHolder holder, final VKApiUser friend) {
