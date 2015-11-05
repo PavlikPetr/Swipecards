@@ -79,7 +79,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     private void showTakePhotoDialog() {
         TakePhotoDialog takePhotoDialog = (TakePhotoDialog) mPhotoTaker.getActivityFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
         if (App.from(getActivity()).getProfile().photo == null && mAddPhotoHelper != null && takePhotoDialog == null
-                && !App.getConfig().getUserConfig().isUserAvatarAvailable()) {
+                && !App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().uid > 0) {
             mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
         }
     }

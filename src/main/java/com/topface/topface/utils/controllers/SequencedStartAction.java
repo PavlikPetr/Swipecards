@@ -22,7 +22,7 @@ public class SequencedStartAction implements IStartAction {
     private IUiRunner mUiRunner;
     private List<IStartAction> mActions = Collections.synchronizedList(new ArrayList<IStartAction>());
     private int mPriority = -1;
-    private Integer mCurrentActionPosition;
+    private static Integer mCurrentActionPosition;
 
     public SequencedStartAction(IUiRunner uiRunner, int priority) {
         mPriority = priority;
@@ -202,5 +202,9 @@ public class SequencedStartAction implements IStartAction {
         UserConfig config = App.getUserConfig();
         config.setStartPositionOfActions(pos);
         config.saveConfig();
+    }
+
+    public static void dropDownCurrentPosition() {
+        mCurrentActionPosition = null;
     }
 }
