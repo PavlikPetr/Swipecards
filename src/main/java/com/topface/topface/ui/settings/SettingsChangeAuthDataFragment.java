@@ -68,7 +68,11 @@ public class SettingsChangeAuthDataFragment extends BaseFragment {
     protected void saveBtnClick() {
         Utils.hideSoftKeyboard(getActivity(), mEdMainField, mEdConfirmationField);
         if (mChangePassword) {
-            changePassword();
+            if(mRestoreFromAuth){
+                changePasswordFromAuth();
+            }else{
+                changePassword();
+            }
         } else {
             changeEmail();
         }
@@ -100,14 +104,7 @@ public class SettingsChangeAuthDataFragment extends BaseFragment {
         ButterKnife.bind(this, root);
         mChangePassword = getArguments().getBoolean(CHANGE_PASSWORD);
         mLockerView.setVisibility(View.GONE);
-
-        TextView mSetPasswordText = (TextView) root.findViewById(R.id.setPasswordText);
-
-        if (mNeedExit && !mRestoreFromAuth) {
-            mSetPasswordText.setVisibility(View.VISIBLE);
-        }
-
-        ButterKnife.findById(root, R.id.setPasswordText).setVisibility(mNeedExit ? View.VISIBLE : View.GONE);
+        ButterKnife.findById(root, R.id.setPasswordText).setVisibility(mNeedExit && !mRestoreFromAuth ? View.VISIBLE : View.GONE);
         if (mNeedExit) {
             mBtnSave.setText(getString(R.string.general_save_and_exit));
         }
