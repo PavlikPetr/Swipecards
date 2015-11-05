@@ -45,7 +45,6 @@ public class KeyboardListenerLayout extends RelativeLayout implements ViewTreeOb
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-
         getViewTreeObserver().addOnGlobalLayoutListener(this);
     }
 
