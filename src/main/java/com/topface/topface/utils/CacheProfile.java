@@ -153,7 +153,13 @@ public class CacheProfile {
      */
     public static void clearProfileAndOptions(TopfaceAppState state) {
         state.destroyObservable(Profile.class);
-        setProfileCache(null);
+        // try to write profile with default value
+        try {
+            JSONObject profileJson = new JSONObject(JsonUtils.profileToJson(new Profile()));
+            new Profile(profileJson, false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         wasCityAsked = false;
     }
 

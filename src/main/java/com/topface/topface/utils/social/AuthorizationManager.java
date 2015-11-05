@@ -24,6 +24,8 @@ import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.cache.SearchCacheManager;
+import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.controllers.SequencedStartAction;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
@@ -121,6 +123,10 @@ public class AuthorizationManager {
     }
 
     public void logout(Activity activity) {
+        UserConfig config = App.getUserConfig();
+        config.setStartPositionOfActions(0);
+        config.saveConfig();
+        SequencedStartAction.dropDownCurrentPosition();
         Ssid.remove();
         UserNotificationManager.getInstance().removeNotifications();
         TabbedDialogsFragment.setTabsDefaultPosition();
