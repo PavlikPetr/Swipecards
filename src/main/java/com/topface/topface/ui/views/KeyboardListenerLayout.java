@@ -33,11 +33,7 @@ public class KeyboardListenerLayout extends RelativeLayout implements ViewTreeOb
         if (w == oldw || oldw == 0) {
             mMaxViewSize = mMaxViewSize < oldh ? oldh : mMaxViewSize;
             mWasToggled = true;
-            if (oldh == 0) {
-                mKeyboardOpened = isKeyboardOpenedOnStart(h);
-            } else {
-                mKeyboardOpened = isKeyboardOpenedAfterStart(h, mMaxViewSize);
-            }
+            mKeyboardOpened = isKeyboardOpenedOnStart(h);
         }
         super.onSizeChanged(w, h, oldw, oldh);
     }
@@ -49,7 +45,6 @@ public class KeyboardListenerLayout extends RelativeLayout implements ViewTreeOb
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-
         getViewTreeObserver().addOnGlobalLayoutListener(this);
     }
 
@@ -153,6 +148,7 @@ public class KeyboardListenerLayout extends RelativeLayout implements ViewTreeOb
         return (float) getScreenHeight() * mLayoutSizeInPercent / 100 * (1 - (float) KEYBOARD_SIZE_IN_PERCENT / 100) > height;
     }
 
+    @SuppressWarnings("unused")
     private boolean isKeyboardOpenedAfterStart(int height, int maxHeight) {
         return (float) height / maxHeight < (1 - (float) KEYBOARD_SIZE_IN_PERCENT / 100);
     }
