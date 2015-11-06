@@ -129,7 +129,7 @@ public class OkAuthorizer extends Authorizer {
                 Debug.error("Odnoklassniki auth cancel");
             }
         });
-        getOkAuthObj(ids).requestAuthorization(App.getContext(), false, OkScope.SET_STATUS, OkScope.PHOTO_CONTENT, OkScope.VALUABLE_ACCESS);
+        getOkAuthObj(ids).requestAuthorization(activity, false, OkScope.SET_STATUS, OkScope.PHOTO_CONTENT, OkScope.VALUABLE_ACCESS);
     }
 
     @Override

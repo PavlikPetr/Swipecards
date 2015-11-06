@@ -235,7 +235,7 @@ public class Options extends AbstractData {
                         response.optJSONObject("premiumMessages"), PromoPopupEntity.AIR_MESSAGES
                 );
             } else {
-                premiumMessages = new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_MESSAGES, "");
+                premiumMessages = new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_MESSAGES, "", 0);
             }
 
             if (response.has("visitorsPopup")) {
@@ -243,7 +243,7 @@ public class Options extends AbstractData {
                         response.optJSONObject("visitorsPopup"), PromoPopupEntity.AIR_VISITORS
                 );
             } else {
-                premiumVisitors = new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_VISITORS, "");
+                premiumVisitors = new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_VISITORS, "", 0);
             }
 
             if (response.has("admirationPopup")) {
@@ -251,7 +251,7 @@ public class Options extends AbstractData {
                         response.optJSONObject("admirationPopup"), PromoPopupEntity.AIR_ADMIRATIONS
                 );
             } else {
-                premiumAdmirations = new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_ADMIRATIONS, "");
+                premiumAdmirations = new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_ADMIRATIONS, "", 0);
             }
 
             if (response.has("links")) {
@@ -482,6 +482,11 @@ public class Options extends AbstractData {
         public static final int DEFAULT_COUNT = 10;
         private static final int DEFAULT_TIMEOUT = 1000;
 
+        /**
+         * визуализация попапа меняется в зависимости от версии
+         */
+        private int mPopupVersion;
+
         private int airType;
         /**
          * включен ли механизм для данного пользователя в булевых константах
@@ -512,15 +517,17 @@ public class Options extends AbstractData {
                 mCount = premiumMessages.optInt("count", DEFAULT_COUNT);
                 mTimeout = premiumMessages.optInt("timeout", DEFAULT_TIMEOUT);
                 mPageId = getPageId(premiumMessages.optString("page"));
+                mPopupVersion = premiumMessages.optInt("popupVersion", 0);
             }
         }
 
-        public PromoPopupEntity(boolean enabled, int count, int timeout, int type, String page) {
+        public PromoPopupEntity(boolean enabled, int count, int timeout, int type, String page, int popupVersion) {
             mEnabled = enabled;
             mCount = count;
             mTimeout = timeout;
             airType = type;
             mPageId = getPageId(page);
+            mPopupVersion = popupVersion;
         }
 
         private int getPageId(String page) {
@@ -538,6 +545,10 @@ public class Options extends AbstractData {
 
         public int getCount() {
             return mCount;
+        }
+
+        public int getPopupVersion() {
+            return mPopupVersion;
         }
 
         public int getPageId() {

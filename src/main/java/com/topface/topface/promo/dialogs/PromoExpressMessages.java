@@ -1,7 +1,9 @@
 package com.topface.topface.promo.dialogs;
 
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.view.View;
+import android.widget.Button;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -69,6 +71,18 @@ public class PromoExpressMessages extends PromoDialog {
     @Override
     public void initViews(View root) {
         super.initViews(root);
+        Button btnDelete = (Button) root.findViewById(R.id.deleteMessages);
+        switch (getPremiumEntity().getPopupVersion()) {
+            case 0:
+                btnDelete.setTextColor(getResources().getColorStateList(R.color.btn_red_text_color_selector));
+                btnDelete.setBackgroundResource(R.drawable.btn_red_selector);
+                break;
+
+            case 1:
+                btnDelete.setTextColor(getResources().getColorStateList(R.color.delete_messages_text_color_selector));
+                btnDelete.setBackgroundColor(Color.TRANSPARENT);
+                break;
+        }
         ArrayList<Integer> avatarArray = getFakeAvatars();
         if (avatarArray.size() != 0) {
             ((ImageViewRemote) root.findViewById(R.id.firstFakeUser)).setResourceSrc(getAvatarId(avatarArray));

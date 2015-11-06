@@ -148,4 +148,9 @@
     <color name="status_bar_color">#8c9698</color>
     <color name="registration_hint_color">#808080</color>
     <color name="eighty_seven_opacity_from_black">#222222</color>
+
+    <!--Delete messages text color in different states-->
+    <color name="delete_messages_red_text_pressed_color">#ff2400</color>
+    <color name="delete_messages_red_text_released_color">#ef5350</color>
+    <color name="delete_messages_red_text_disable_color">#96ef5350</color>
 </resources>
