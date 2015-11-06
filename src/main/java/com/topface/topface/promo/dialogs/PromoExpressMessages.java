@@ -72,16 +72,9 @@ public class PromoExpressMessages extends PromoDialog {
     public void initViews(View root) {
         super.initViews(root);
         Button btnDelete = (Button) root.findViewById(R.id.deleteMessages);
-        switch (getPremiumEntity().getPopupVersion()) {
-            case 0:
-                btnDelete.setTextColor(getResources().getColorStateList(R.color.btn_red_text_color_selector));
-                btnDelete.setBackgroundResource(R.drawable.btn_red_selector);
-                break;
-
-            case 1:
-                btnDelete.setTextColor(getResources().getColorStateList(R.color.delete_messages_text_color_selector));
-                btnDelete.setBackgroundColor(Color.TRANSPARENT);
-                break;
+        if (getPremiumEntity().getPopupVersion() == 1) {
+            btnDelete.setTextColor(getResources().getColorStateList(R.color.delete_messages_text_color_selector));
+            btnDelete.setBackgroundColor(Color.TRANSPARENT);
         }
         ArrayList<Integer> avatarArray = getFakeAvatars();
         if (avatarArray.size() != 0) {
