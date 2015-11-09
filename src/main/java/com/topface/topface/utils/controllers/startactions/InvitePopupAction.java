@@ -75,9 +75,9 @@ public class InvitePopupAction extends LinkedStartAction {
             @Override
             public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
                 InvitesPopup popup = InvitesPopup.newInstance(contacts);
-                popup.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                popup.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
-                    public void onDismiss(DialogInterface dialog) {
+                    public void onCancel(DialogInterface dialog) {
                         if (mOnNextActionListener != null) {
                             mOnNextActionListener.onNextAction();
                         }
