@@ -12,6 +12,6 @@ public class ExpressMessagesUniqueStatistics {
     public static final String OPEN_EXPRESS_MESSAGES_UNIQUE = "open_express_messages_unique";
 
     public static void send() {
-        StatisticsTracker.getInstance().setContext(App.getContext()).sendUniqueEvent(OPEN_EXPRESS_MESSAGES_UNIQUE, 1, null, Integer.toString(CacheProfile.getProfile().uid) + "_" + OPEN_EXPRESS_MESSAGES_UNIQUE);
+        StatisticsTracker.getInstance().setContext(App.getContext()).sendUniqueEvent(OPEN_EXPRESS_MESSAGES_UNIQUE, 1, ExpressMessagesStastics.getSlices(), Integer.toString(CacheProfile.getProfile().uid) + "_" + OPEN_EXPRESS_MESSAGES_UNIQUE);
     }
 }
