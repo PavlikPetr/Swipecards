@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +38,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.adapters.LeadersPhotoGridAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
+import com.topface.topface.ui.adapters.PhotoRecyclerViewAdapter;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.views.LockerView;
@@ -79,7 +82,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private int mSelectedPosition;
     private boolean mIsPhotoDialogShown;
     private View mGridFooterView;
-    private LeadersPhotoGridAdapter mUsePhotosAdapter;
+    private PhotoRecyclerViewAdapter mUsePhotosAdapter;
     private AddPhotoHelper mAddPhotoHelper;
     private TakePhotoDialog takePhotoDialog;
     private EditText mEditText;
@@ -93,7 +96,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     Photos mPhotos = null;
 
     @Bind(R.id.user_photos_grid)
-    GridViewWithHeaderAndFooter mGridView;
+    RecyclerView mGridView;
     @Bind(R.id.llvLeaderSending)
     LockerView mLoadingLocker;
 
@@ -114,7 +117,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
             mSelectedPosition = savedInstanceState.getInt(SELECTED_POSITION, 0);
             mIsPhotoDialogShown = savedInstanceState.getBoolean(ALREADY_SHOWN);
         }
-        mGridView.addHeaderView(getHeaderView());
+        // mGridView.addHeaderView(getHeaderView());
         // add title to actionbar
         new ActionBarTitleSetterDelegate(getSupportActionBar()).setActionBarTitles(R.string.general_photoblog, null);
         // init grid view and create adapter
@@ -163,7 +166,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         super.onProfileUpdated();
         Profile profile = App.from(this).getProfile();
         mPhotos = profile.photos;
-        LeadersPhotoGridAdapter adapter = getAdapter();
+        PhotoRecyclerViewAdapter adapter = getAdapter();
         adapter.setData(mPhotos, false);
         setSeletedPosition(0, profile.photos.isEmpty() ? 0 : profile.photos.get(0).getId());
     }
@@ -229,7 +232,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
     @Override
     protected void onPause() {
-        mPosition = mGridView.getFirstVisiblePosition();
+        //mPosition = mGridView.getFirstVisiblePosition();
         mSelectedPosition = getAdapter().getSelectedPhotoId();
         mIsPhotoDialogShown = true;
         super.onPause();
@@ -238,7 +241,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private void pressedAddToLeader(int position) {
         final Options.LeaderButton buttonData = App.from(this).getOptions().buyLeaderButtons.get(position);
         int selectedPhotoId = getAdapter().getSelectedPhotoId();
-        if (getAdapter().getCount() > 0) {
+        if (getAdapter().getItemCount() > 0) {
             if (mCoins < buttonData.price) {
                 showPurchasesFragment(buttonData.price);
             } else if (selectedPhotoId > LeadersPhotoGridAdapter.EMPTY_SELECTED_ID) {
@@ -277,7 +280,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     }
 
 
-    private LeadersPhotoGridAdapter getAdapter() {
+    private PhotoRecyclerViewAdapter getAdapter() {
         if (mUsePhotosAdapter == null) {
             mUsePhotosAdapter = createAdapter();
         }
@@ -288,18 +291,19 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         mGridView.post(new Runnable() {
             @Override
             public void run() {
-                LeadersPhotoGridAdapter adapter = getAdapter();
+                PhotoRecyclerViewAdapter adapter = getAdapter();
+                mGridView.setLayoutManager(new GridLayoutManager(AddToLeaderActivity.this, 3));
                 mGridView.setAdapter(adapter);
-                mGridView.setOnScrollListener(adapter);
+                //mGridView.setOnScrollListener(adapter);
                 setSeletedPosition(position, selectedPosition);
             }
         });
     }
 
     private void setSeletedPosition(int position, int selectedPosition) {
-        mGridView.setSelection(position);
-        LeadersPhotoGridAdapter adapter = getAdapter();
-        if (adapter != null && adapter.getPhotoLinks().size() > 0 && selectedPosition != 0) {
+        //mGridView.setSelection(position);
+        PhotoRecyclerViewAdapter adapter = getAdapter();
+        if (adapter != null && adapter.getAdapterData().size() > 0 && selectedPosition != 0) {
             adapter.setSelectedPhotoId(selectedPosition);
         }
     }
@@ -326,12 +330,11 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     }
 
 
-    private LeadersPhotoGridAdapter createAdapter() {
+    private PhotoRecyclerViewAdapter createAdapter() {
         Photos photos = getPhotoLinks();
-        return new LeadersPhotoGridAdapter(this.getApplicationContext(),
+        return new PhotoRecyclerViewAdapter(this.getApplicationContext(),
                 photos,
-                photos.size(),
-                mGridView.getGridViewColumnWidth(), new LoadingListAdapter.Updater() {
+                photos.size(), new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
                 sendAlbumRequest();
@@ -384,9 +387,9 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
     private void addFooterView() {
         if (mGridView != null) {
-            if (mGridView.getFooterViewCount() == 0) {
-                mGridView.addFooterView(mGridFooterView);
-            }
+            //if (mGridView.getFooterViewCount() == 0) {
+            //      mGridView.addFooterView(mGridFooterView);
+            //  }
             mGridFooterView.setVisibility(View.GONE);
         }
     }

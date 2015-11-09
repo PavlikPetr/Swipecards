@@ -1,35 +1,101 @@
-package com.topface.topface.ui.fragments.profile;
+package com.topface.topface.ui.adapters;
 
+import android.content.Context;
+import android.databinding.DataBindingUtil;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.AbsListView;
-import android.widget.BaseAdapter;
 
+import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
-import com.topface.topface.ui.GridViewWithHeaderAndFooter;
-import com.topface.topface.ui.adapters.LoadingListAdapter;
+import com.topface.topface.databinding.PhotoBlogLeadersPhotoItemBinding;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
-public class PhotoGridAdapter extends BaseAdapter
-        implements AbsListView.OnScrollListener, GridViewWithHeaderAndFooter.IGridSizes {
+/**
+ * Created by onikitin on 06.11.15.
+ */
+public class PhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoRecyclerViewAdapter.ViewHolder>
+        implements AbsListView.OnScrollListener {
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        return new PhotoRecyclerViewAdapter.ViewHolder(DataBindingUtil
+                .inflate(inflater, R.layout.photo_blog_leaders_photo_item, parent, false).getRoot());
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        Photo photo = getAdapterData().get(position);
+        int itemId = photo.getId();
+        holder.binding.ivLeadPhoto.setPhoto(photo);
+        holder.binding.lpiCheckMark.setVisibility(itemId == mSelectedPhotoId ? View.VISIBLE : View.GONE);
+        holder.binding.checkedPhoto.setVisibility(itemId == mSelectedPhotoId ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public int getItemCount() {
+        return mPhotoLinks != null ? mPhotoLinks.size() : 0;
+    }
+
+    public Photo getItem(int pos) {
+        return getAdapterData().get(pos);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        public PhotoBlogLeadersPhotoItemBinding binding;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            binding = DataBindingUtil.bind(itemView);
+        }
+    }
+
+    public static final int EMPTY_SELECTED_ID = -1;
+
+    private LayoutInflater mInflater;
+
+    private int mSelectedPhotoId;
+
+    private void setSelectedItemOnStart(Photos photoLinks) {
+        if (photoLinks.size() > 0) {
+            setSelectedPhotoId(photoLinks.getFirst().getId());
+        } else {
+            setSelectedPhotoId(EMPTY_SELECTED_ID);
+        }
+    }
+
+    public int getSelectedPhotoId() {
+        return mSelectedPhotoId;
+    }
+
+    public void setSelectedPhotoId(int id) {
+        mSelectedPhotoId = id;
+        notifyDataSetChanged();
+    }
+
+//-----------------------------------------------------------------
+
     private final LoadingListAdapter.Updater mUpdater;
     private final AlbumLoadController mLoadController;
     private Photos mPhotoLinks;
     private boolean needLoadNewItems = false;
-    private int mGridWidth;
 
-    public PhotoGridAdapter(Photos photoLinks,
-                            int totalPhotos,
-                            LoadingListAdapter.Updater callback) {
+    public PhotoRecyclerViewAdapter(Context context, Photos photoLinks, int totalPhotos, LoadingListAdapter.Updater callback) {
         mPhotoLinks = new Photos();
         mUpdater = callback;
         if (photoLinks != null) {
             setData(photoLinks, totalPhotos > photoLinks.size());
         }
         mLoadController = new AlbumLoadController(AlbumLoadController.FOR_GALLERY);
+        mInflater = LayoutInflater.from(context);
+        setSelectedItemOnStart(photoLinks);
     }
 
     public void addFirst(Photo photo) {
@@ -102,10 +168,6 @@ public class PhotoGridAdapter extends BaseAdapter
         }
     }
 
-    @Override
-    public int getCount() {
-        return mPhotoLinks != null ? mPhotoLinks.size() : 0;
-    }
 
     public Photos getAdapterData() {
         return mPhotoLinks;
@@ -120,20 +182,6 @@ public class PhotoGridAdapter extends BaseAdapter
         return photoLinks;
     }
 
-    @Override
-    public Photo getItem(int position) {
-        return mPhotoLinks.get(position);
-    }
-
-    @Override
-    public long getItemId(int i) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        return null;
-    }
 
     @Override
     public void onScrollStateChanged(AbsListView absListView, int i) {
@@ -150,18 +198,10 @@ public class PhotoGridAdapter extends BaseAdapter
         }
     }
 
-    @Override
-    public void setColumnWidth(int width) {
-        mGridWidth = width;
-    }
-
-    protected int getGridItemWidth() {
-        return mGridWidth;
-    }
-
     protected void setImageViewRemoteAnimation(ImageViewRemote view, int duration) {
         AlphaAnimation animation = new AlphaAnimation(0, 1);
         animation.setDuration(duration);
         view.setViewDisplayAnimate(animation);
     }
+
 }

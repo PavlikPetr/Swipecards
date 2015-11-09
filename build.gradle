@@ -50,6 +50,7 @@ buildscript {
     dependencies {
         classpath rootProject.ANDROID_BUILD_GRADLE_PLUGIN_VERSION
         classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
+        classpath 'com.android.databinding:dataBinder:1.0-rc4'
     }
 }
 
@@ -67,6 +68,7 @@ allprojects {
 
 apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
+apply plugin: 'com.android.databinding'
 
 android {
     compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
@@ -294,6 +296,7 @@ dependencies {
         //и на нее ругается gradle
         exclude group: 'org.json'
     }
+    compile 'com.android.support:recyclerview-v7:22.2.0'
     compile 'com.google.code.gson:gson:2.3'
     //Library for WebSocket and other network requests
     compile 'com.koushikdutta.async:androidasync:2.1.5'
