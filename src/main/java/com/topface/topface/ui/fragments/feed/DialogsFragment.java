@@ -15,8 +15,6 @@ import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteDialogsRequest;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.statistics.ExpressMessagesStastics;
-import com.topface.topface.statistics.ExpressMessagesUniqueStatistics;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
@@ -90,8 +88,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                     }
                 });
                 popup.show(getFragmentManager(), PromoExpressMessages.TAG);
-                ExpressMessagesStastics.send();
-                ExpressMessagesUniqueStatistics.send();
             }
         } else if (!isPopupAvailable) {
             PromoExpressMessages expressPopup = (PromoExpressMessages) getFragmentManager().findFragmentByTag(PromoExpressMessages.TAG);

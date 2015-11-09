@@ -16,6 +16,8 @@ import com.topface.topface.R;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
 import com.topface.topface.state.CountersDataProvider;
+import com.topface.topface.statistics.PromoDialogStastics;
+import com.topface.topface.statistics.PromoDialogUniqueStatistics;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
@@ -118,6 +120,8 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
         popupText.setText(getMessage());
 
         EasyTracker.sendEvent(getMainTag(), "Show", "", 0L);
+        PromoDialogStastics.promoDialogShowSend(getMainTag());
+        PromoDialogUniqueStatistics.send(getMainTag());
     }
 
     private BroadcastReceiver mVipPurchasedReceiver = new BroadcastReceiver() {
@@ -126,6 +130,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
             Debug.log("Promo: Close fragment after VIP buy");
             closeFragment();
             EasyTracker.sendEvent(getMainTag(), "VipClose", "CloseAfterBuyVip", 1L);
+            PromoDialogStastics.promoDialogCloseAfterBuyVipSend(getMainTag());
         }
     };
     private BroadcastReceiver mProfileReceiver = new BroadcastReceiver() {
@@ -136,6 +141,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
                 Debug.log("Promo: Close fragment after profile update");
                 closeFragment();
                 EasyTracker.sendEvent(getMainTag(), "VipClose", "CloseAfterUpdateProfile", 1L);
+                PromoDialogStastics.promoDialogCloseAfterUpdateProfileSend(getMainTag());
             }
         }
     };
@@ -149,10 +155,12 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
                         PurchasesActivity.INTENT_BUY_VIP
                 );
                 EasyTracker.sendEvent(getMainTag(), "ClickBuyVip", "", 0L);
+                PromoDialogStastics.promoDialogClickBuyVipSend(getMainTag());
                 break;
             case R.id.deleteMessages:
                 deleteMessages();
                 EasyTracker.sendEvent(getMainTag(), "Dismiss", "Delete", 0L);
+                PromoDialogStastics.promoDialogDismissSend(getMainTag());
                 closeFragment();
                 break;
             default:
