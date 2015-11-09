@@ -224,8 +224,15 @@ public class GCMUtils {
         return registrationId;
     }
 
+    private static void getEmailConfirmationState(Intent intent) {
+        Debug.error("EMAIL_CONFIRMATION" + " getEmailConfirmationState intent = " + intent);
+        if (intent != null) {
+            Utils.onProfileUpdated(Boolean.parseBoolean(intent.getStringExtra("emailConfirmed")), false);
+        }
+    }
 
     public static boolean showNotificationIfNeed(final Intent extra, Context context, String updateUrl) {
+        getEmailConfirmationState(extra);
         //Проверяем, не отключены ли уведомления
         if (!App.getUserConfig().isNotificationEnabled()) {
             Debug.log("GCM: notification is disabled");

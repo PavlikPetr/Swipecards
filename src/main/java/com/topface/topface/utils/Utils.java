@@ -37,6 +37,7 @@ import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.config.AppConfig;
@@ -413,4 +414,13 @@ public class Utils {
         };
     }
 
+    public static void onProfileUpdated(boolean isEmailConfirmed, boolean isNeedShowToastAnyway) {
+        Debug.error("EMAIL_CONFIRMATION" + " onProfileUpdated isEmailConfirmed = " + isEmailConfirmed + " isNeedShowToastAnyway = " + isNeedShowToastAnyway);
+        Profile profile = App.get().getProfile();
+        if (profile.emailConfirmed != isEmailConfirmed || isNeedShowToastAnyway) {
+            profile.emailConfirmed = isEmailConfirmed;
+            App.get().getOptions().isActivityAllowed = true;
+            Utils.showToastNotification(isEmailConfirmed ? R.string.general_email_success_confirmed : R.string.general_email_not_confirmed, Toast.LENGTH_LONG);
+        }
+    }
 }

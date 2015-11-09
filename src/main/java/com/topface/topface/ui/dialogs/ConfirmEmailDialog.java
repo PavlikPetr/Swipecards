@@ -119,7 +119,7 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
 
             @Override
             public void always(IApiResponse response) {
-                onRequestEnd();                
+                onRequestEnd();
             }
         }).exec();
     }
@@ -141,7 +141,7 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
 
             @Override
             public void always(IApiResponse response) {
-                onRequestEnd();                
+                onRequestEnd();
             }
         }).exec();
     }
@@ -179,9 +179,10 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
         profileRequest.callback(new DataApiHandler<Boolean>() {
             @Override
             protected void success(Boolean isEmailConfirmed, IApiResponse response) {
-                App.from(getActivity()).getProfile().emailConfirmed = isEmailConfirmed;
-                App.from(getActivity()).getOptions().isActivityAllowed = true;
-                onProfileUpdated();
+                Utils.onProfileUpdated(isEmailConfirmed, true);
+                if (isEmailConfirmed) {
+                    closeDialog();
+                }
             }
 
             @Override
@@ -200,15 +201,6 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
                 onRequestEnd();
             }
         }).exec();
-    }
-
-    private void onProfileUpdated() {
-        if (App.from(getActivity()).getProfile().emailConfirmed) {
-            Utils.showToastNotification(R.string.general_email_success_confirmed, Toast.LENGTH_LONG);
-            closeDialog();
-        } else {
-            Utils.showToastNotification(R.string.general_email_not_confirmed, Toast.LENGTH_LONG);
-        }
     }
 
     private void saveButtonSendConfirmationPressed() {
