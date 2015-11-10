@@ -18,6 +18,7 @@ import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
+import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -225,6 +226,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             mUnrealItems.add(item);
         }
         notifyDataSetChanged();
+    }
+
+    public void addGift(SendGiftAnswer giftAnswer) {
+        addSentMessage(giftAnswer.history);
     }
 
     public void addSentMessage(History item, ListView parentView, ApiRequest request) {
@@ -441,7 +446,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (clipboard != null) {
             clipboard.setText(text);
             Utils.showToastNotification(R.string.general_msg_copied, Toast.LENGTH_SHORT);
-        }        
+        }
     }
 
     public void removeItem(int position) {

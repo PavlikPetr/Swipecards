@@ -213,7 +213,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra(INTENT_SEND_GIFT_ANSWER, answer);
                 resultIntent.putExtra(INTENT_GIFT_PRICE, item.price);
-                setResult(Activity.RESULT_OK, resultIntent);                
+                setResult(Activity.RESULT_OK, resultIntent);
                 if (mIsSuccessToastAvailable) {
                     Utils.showToastNotification(R.string.chat_gift_out, Toast.LENGTH_SHORT);
                 }

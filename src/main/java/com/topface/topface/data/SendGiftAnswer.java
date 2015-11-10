@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.ui.adapters.IListLoader;
 
 public class SendGiftAnswer extends AbstractData implements Parcelable {
     public History history;
@@ -37,6 +38,10 @@ public class SendGiftAnswer extends AbstractData implements Parcelable {
         }
 
         return sendGift;
+    }
+
+    public void setLoaderType(IListLoader.ItemType type) {
+        history.setLoaderTypeFlags(type);
     }
 
     @Override

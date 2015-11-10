@@ -46,6 +46,7 @@ import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.search.CachableSearchList;
 import com.topface.topface.data.search.OnUsersListEventsListener;
 import com.topface.topface.data.search.SearchUser;
@@ -1142,7 +1143,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         } else if (resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
             if (mDatingInstantMessageController != null) {
                 // открываем чат с пустой строкой в footer
-                mDatingInstantMessageController.openChat(getActivity(), mCurrentUser);
+                mDatingInstantMessageController.openChat(getActivity(), mCurrentUser, data != null ? (SendGiftAnswer) data.getParcelableExtra(GiftsActivity.INTENT_SEND_GIFT_ANSWER) : null);
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
