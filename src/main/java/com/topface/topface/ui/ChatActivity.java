@@ -7,6 +7,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.ui.fragments.ChatFragment;
 
@@ -39,15 +40,16 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
 
     //Если itemType соответствует популярному юзеру не показываем клаву в чате
     public static Intent createIntent(int id, String nameAndAge, String city, String feedItemId, Photo photo, boolean fromGcm, int itemType, String from) {
-        return createIntent(id, nameAndAge, city, feedItemId, photo, fromGcm, from).putExtra(ChatFragment.USER_TYPE, itemType);
+        return createIntent(id, nameAndAge, city, feedItemId, photo, fromGcm, from, null).putExtra(ChatFragment.USER_TYPE, itemType);
     }
 
-    public static Intent createIntent(int id, String nameAndAge, String city, String feedItemId, Photo photo, boolean fromGcm, String from) {
+    public static Intent createIntent(int id, String nameAndAge, String city, String feedItemId, Photo photo, boolean fromGcm, String from, SendGiftAnswer answer) {
         Intent intent = new Intent(App.getContext(), ChatActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_ID, id);
         intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, nameAndAge);
         intent.putExtra(ChatFragment.INTENT_USER_CITY, city);
         intent.putExtra(ChatFragment.FROM, from);
+        intent.putExtra(ChatFragment.GIFT_DATA, answer);
         if (!TextUtils.isEmpty(feedItemId)) {
             intent.putExtra(ChatFragment.INTENT_ITEM_ID, feedItemId);
         }

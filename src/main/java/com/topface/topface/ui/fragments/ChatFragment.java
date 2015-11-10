@@ -118,6 +118,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private static final String SOFT_KEYBOARD_LOCK_STATE = "keyboard_state";
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
     public static final String FROM = "from";
+    public static final String GIFT_DATA = "gift_data";
 
     // Data
     private int mUserId;
@@ -134,6 +135,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         }
     };
     private String mMessage;
+    private SendGiftAnswer mSendGiftAnswer;
     private ArrayList<History> mHistoryFeedList;
     private Handler mUpdater;
     private boolean mIsUpdating;
@@ -226,6 +228,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         mInitialMessage = args.getString(INITIAL_MESSAGE);
         mPhoto = args.getParcelable(INTENT_AVATAR);
         mFrom = args.getString(FROM);
+        mSendGiftAnswer = args.getParcelable(GIFT_DATA);
+        if (mSendGiftAnswer != null) {
+            mSendGiftAnswer.setLoaderType(IListLoader.ItemType.TEMP_MESSAGE);
+            mAdapter.addGift(mSendGiftAnswer);
+        }
         // only DialogsFragment will hear this
         Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ_BY_UID);
         intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
