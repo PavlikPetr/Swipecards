@@ -41,9 +41,9 @@ public class DatingLockPopupAction extends DailyPopupAction {
     @Override
     public void callOnUi() {
         final DatingLockPopup datingLockPopup = new DatingLockPopup();
-        datingLockPopup.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        datingLockPopup.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
+            public void onCancel(DialogInterface dialog) {
                 if (mStartActionCallback != null) {
                     mStartActionCallback.onNextAction();
                 }

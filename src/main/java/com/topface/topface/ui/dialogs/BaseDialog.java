@@ -16,7 +16,8 @@ import com.topface.topface.ui.analytics.TrackedDialogFragment;
  */
 public abstract class BaseDialog extends TrackedDialogFragment {
 
-    private DialogInterface.OnDismissListener mDismissListener;
+    private DialogInterface.OnCancelListener mCancelListener;
+    private DialogInterface.OnDismissListener mDismisslListener;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,14 +46,27 @@ public abstract class BaseDialog extends TrackedDialogFragment {
     }
 
     public void setOnDismissListener(DialogInterface.OnDismissListener listener) {
-        mDismissListener = listener;
+        mDismisslListener = listener;
+    }
+
+    public void setOnCancelListener(DialogInterface.OnCancelListener listener) {
+        mCancelListener = listener;
     }
 
     @Override
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
-        if (mDismissListener != null) {
-            mDismissListener.onDismiss(dialog);
+        if (mCancelListener != null) {
+            mCancelListener.onCancel(dialog);
         }
     }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (mDismisslListener != null) {
+            mDismisslListener.onDismiss(dialog);
+        }
+    }
+
 }

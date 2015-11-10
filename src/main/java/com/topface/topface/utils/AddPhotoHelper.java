@@ -71,7 +71,7 @@ public class AddPhotoHelper {
     private AppOptions.MinPhotoSize minPhotoSize;
     private UserNotificationManager mNotificationManager;
     private File outputFile;
-    private DialogInterface.OnDismissListener mOnDialogDismissListener;
+    private DialogInterface.OnCancelListener mOnDialogCancelListener;
     private View.OnClickListener mOnAddPhotoClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -460,11 +460,11 @@ public class AddPhotoHelper {
             }
         });
         takePhotoDialog.setPhotoTaker(photoTaker);
-        takePhotoDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        takePhotoDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
-                if (mOnDialogDismissListener != null) {
-                    mOnDialogDismissListener.onDismiss(dialog);
+            public void onCancel(DialogInterface dialog) {
+                if (mOnDialogCancelListener != null) {
+                    mOnDialogCancelListener.onCancel(dialog);
                 }
                 setOnResultHandler(new Handler() {
                     @Override
@@ -479,8 +479,8 @@ public class AddPhotoHelper {
         });
     }
 
-    public void setOnDismissListener(DialogInterface.OnDismissListener listener) {
-        mOnDialogDismissListener = listener;
+    public void setOnCancelListener(DialogInterface.OnCancelListener listener) {
+        mOnDialogCancelListener = listener;
     }
 
     public static void handlePhotoMessage(Message msg, Context mContext) {
