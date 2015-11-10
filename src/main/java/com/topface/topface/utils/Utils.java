@@ -12,6 +12,7 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.Fragment;
@@ -414,13 +415,24 @@ public class Utils {
         };
     }
 
-    public static void onProfileUpdated(boolean isEmailConfirmed, boolean isNeedShowToastAnyway) {
-        Debug.error("EMAIL_CONFIRMATION" + " onProfileUpdated isEmailConfirmed = " + isEmailConfirmed + " isNeedShowToastAnyway = " + isNeedShowToastAnyway);
+    public static void onProfileUpdated(boolean isEmailConfirmed, boolean isNeedShowToast) {
         Profile profile = App.get().getProfile();
-        if (profile.emailConfirmed != isEmailConfirmed || isNeedShowToastAnyway) {
-            profile.emailConfirmed = isEmailConfirmed;
-            App.get().getOptions().isActivityAllowed = true;
+        boolean profileEmailConfirmedValue = profile.emailConfirmed;
+        if (profileEmailConfirmedValue != isEmailConfirmed) {
+            App.get().getOptions().isActivityAllowed = isEmailConfirmed;
+            if (!isNeedShowToast) {
+                Handler mHandler = new Handler(App.get().getMainLooper());
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Utils.showToastNotification(R.string.general_email_success_confirmed, Toast.LENGTH_LONG);
+                    }
+                });
+            }
+        }
+        if (isNeedShowToast) {
             Utils.showToastNotification(isEmailConfirmed ? R.string.general_email_success_confirmed : R.string.general_email_not_confirmed, Toast.LENGTH_LONG);
         }
+        profile.emailConfirmed = isEmailConfirmed;
     }
 }

@@ -225,7 +225,6 @@ public class GCMUtils {
     }
 
     private static void getEmailConfirmationState(Intent intent) {
-        Debug.error("EMAIL_CONFIRMATION" + " getEmailConfirmationState intent = " + intent);
         if (intent != null) {
             Utils.onProfileUpdated(Boolean.parseBoolean(intent.getStringExtra("emailConfirmed")), false);
         }
