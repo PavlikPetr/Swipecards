@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
@@ -226,7 +227,13 @@ public class GCMUtils {
 
     private static void getEmailConfirmationState(Intent intent) {
         if (intent != null) {
-            Utils.onProfileUpdated(Boolean.parseBoolean(intent.getStringExtra("emailConfirmed")), false);
+            Handler mHandler = new Handler(App.get().getMainLooper());
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Utils.checkEmailConfirmation(null, false);
+                }
+            });
         }
     }
 
