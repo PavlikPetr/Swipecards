@@ -15,6 +15,7 @@ import com.appsflyer.AppsFlyerLib;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Ssid;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.AuthRequest;
@@ -41,7 +42,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (!AuthToken.getInstance().isEmpty()) {
+        if (!AuthToken.getInstance().isEmpty() && Ssid.isLoaded()) {
             //Если мы попали на этот фрагмент с работающей авторизацией, то просто перезапрашиваем профиль
             loadAllProfileData();
         }
