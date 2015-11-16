@@ -1014,4 +1014,8 @@
     <string name="friends_empty_list_error">Список ваших друзей пуст</string>
     <string name="vk_friends_success_invite">Приглашение отправлено</string>
     <string name="join_group_success">Вы вступили в группу</string>
+    <string name="settings_auto_greeting_title">Автоприветствие</string>
+    <string name="settings_auto_greeting_subtitle">Позволяет автоматически начинать диалог
+        приветствием при получении симпатии
+    </string>
 </resources>

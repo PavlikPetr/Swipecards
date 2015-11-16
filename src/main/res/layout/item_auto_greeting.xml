@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/WhiteListItem.Underline"
+    android:layout_centerVertical="true"
+    android:gravity="left|center_vertical"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/GrayText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:drawablePadding="4dp"
+            android:tag="tvTitle"
+            android:text="@string/settings_auto_greeting_title" />
+
+        <CheckBox
+            android:id="@+id/auto_greeting_state"
+            style="@style/Switcher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical" />
+
+    </LinearLayout>
+
+    <TextView
+        style="@style/ItemText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="4dp"
+        android:tag="tvText"
+        android:text="@string/settings_auto_greeting_subtitle"
+        android:visibility="visible" />
+</LinearLayout>
