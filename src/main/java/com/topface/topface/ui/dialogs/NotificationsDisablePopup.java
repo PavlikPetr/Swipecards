@@ -61,7 +61,9 @@ public class NotificationsDisablePopup implements IStartAction {
                 }
             }
         });
-        notificationDisableDialog.show(mActivity.getSupportFragmentManager(), NotificationDisableDialog.class.getName());
+        if (mActivity != null) {
+            notificationDisableDialog.show(mActivity.getSupportFragmentManager(), NotificationDisableDialog.class.getName());
+        }
     }
 
     @Override
