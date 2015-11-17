@@ -16,8 +16,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
+            android:clickable="false"
             android:drawablePadding="4dp"
-            android:tag="tvTitle"
             android:text="@string/settings_auto_greeting_title" />
 
         <CheckBox
@@ -32,9 +32,9 @@
     <TextView
         style="@style/ItemText"
         android:layout_width="wrap_content"
+        android:clickable="false"
         android:layout_height="wrap_content"
         android:drawablePadding="4dp"
-        android:tag="tvText"
         android:text="@string/settings_auto_greeting_subtitle"
         android:visibility="visible" />
 </LinearLayout>

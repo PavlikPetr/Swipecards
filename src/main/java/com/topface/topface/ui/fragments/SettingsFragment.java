@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.topface.framework.utils.BackgroundThread;
@@ -43,6 +45,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
 
     private TextView preloadPhotoName;
     private ViewGroup mNoNotificationViewGroup;
+    private CheckBox mAutoGreetingSttings;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -53,6 +56,9 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
 
         // Account
         initAccountViews(view);
+
+        // Auto greeting settings
+        initAutoGreeting(view);
 
         // Init settings views
         /*
@@ -69,6 +75,24 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
     @Override
     protected String getTitle() {
         return getString(R.string.settings_header_title);
+    }
+
+    private void initAutoGreeting(View root) {
+        mAutoGreetingSttings = (CheckBox) root.findViewById(R.id.auto_greeting_state);
+        mAutoGreetingSttings.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            }
+        });
+        mAutoGreetingSttings.setChecked(true);
+        root.findViewById(R.id.autoGreetingItem).setOnClickListener(this);
+    }
+
+    private void switchAutoGreetingButton() {
+        if (mAutoGreetingSttings != null) {
+            mAutoGreetingSttings.setChecked(!mAutoGreetingSttings.isChecked());
+        }
     }
 
     private void initViews(View root) {
@@ -160,6 +184,9 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                     intent.setData(Uri.parse(helpUrl));
                     startActivity(intent);
                 }
+                break;
+            case R.id.autoGreetingItem:
+                switchAutoGreetingButton();
                 break;
             case R.id.loFeedback:
                 intent = new Intent(applicationContext, SettingsContainerActivity.class);
