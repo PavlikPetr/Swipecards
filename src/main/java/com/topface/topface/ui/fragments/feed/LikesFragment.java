@@ -54,6 +54,7 @@ import com.topface.topface.utils.gcmutils.GCMUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -293,8 +294,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                             Fragment f = getChildFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
                             final Fragment fragment = f == null ?
                                     TransparentMarketFragment.newInstance(experiment.productId, experiment.isSubscription, "Likes") : f;
-                            if(fragment instanceof ITransparentMarketFragmentRunner){
-                                ((ITransparentMarketFragmentRunner)fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
+                            if (fragment instanceof ITransparentMarketFragmentRunner) {
+                                ((ITransparentMarketFragmentRunner) fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
                                     @Override
                                     public void onPurchaseSuccess() {
                                         updateData(false, true);
@@ -422,22 +423,31 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     public void onAvatarClick(FeedLike item, View view) {
         super.onAvatarClick(item, view);
-        sendLikeReadRequest(item.id);
+        sendLikeReadRequest(getIdArray(item));
         showInterstitial();
     }
 
     @Override
     protected void onFeedItemClick(FeedItem item) {
         super.onFeedItemClick(item);
-        sendLikeReadRequest(item.id);
+        sendLikeReadRequest(getIdArray(item));
         showInterstitial();
     }
 
-    private void sendLikeReadRequest(String id) {
-        if (!TextUtils.isEmpty(id)) {
-            ReadLikeRequest request = new ReadLikeRequest(getActivity(), Integer.valueOf(id), AdmobInterstitialUtils.canShowInterstitialAds());
-            request.exec();
+    private void sendLikeReadRequest(ArrayList<Integer> idArray) {
+        new ReadLikeRequest(getActivity(), idArray, AdmobInterstitialUtils.canShowInterstitialAds()).exec();
+    }
+
+    private ArrayList<Integer> getIdArray(FeedItem item) {
+        ArrayList<Integer> array = new ArrayList<>();
+        if (item != null && !item.isAd() && item.user != null) {
+            for (FeedLike data : getListAdapter().getData()) {
+                if (data != null && !data.isAd() && data.user != null && data.user.id == item.user.id && !TextUtils.isEmpty(data.id)) {
+                    array.add(Integer.valueOf(data.id));
+                }
+            }
         }
+        return array;
     }
 
 
