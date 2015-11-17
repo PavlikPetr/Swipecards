@@ -46,7 +46,10 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     ProfileInnerUpdater mProfileUpdater = new ProfileInnerUpdater() {
         @Override
         public void update() {
-            setProfile(App.from(getActivity()).getProfile());
+            // load owners profile in OwnProfileFragment only
+            if (isOwnersProfileFragment()) {
+                setProfile(App.from(getActivity()).getProfile());
+            }
         }
 
         public void bindFragment(Fragment fragment) {
@@ -232,5 +235,9 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     @Override
     protected boolean isAnimationRequire() {
         return false;
+    }
+
+    protected boolean isOwnersProfileFragment() {
+        return true;
     }
 }
