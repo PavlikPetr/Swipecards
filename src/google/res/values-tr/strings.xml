@@ -181,6 +181,7 @@
     <string name="general_visitors_tab_views">görüntülemeler</string>
     <string name="general_profile">Profil</string>
     <string name="general_settings">Ayarlar</string>
+    <string name="general_vk_profile">VK</string>
     <string name="auth_btn_vk">VKontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Tekrar deneyin</string>
@@ -826,4 +827,14 @@
         kişi sizi \nkesinlikle beğenir ve sempatileri size \ngösterir.
     </string>
     <string name="go_dating_message">Yeni arkadaşlar bulmaya başla, bu sayfada profile bakanları görebilirsin.</string>
+    <string name="vk_profile_button_tf_group">Topface grubu</string>
+    <string name="vk_profile_button_join_tf_group">Topface grubuna katıl</string>
+    <string name="vk_profile_button_join_vkgames_group">\"VK oyunları\" grubuna katıl</string>
+    <string name="vk_profile_button_invite_friends">Arkadaşlarını davet et</string>
+    <string name="vk_profile_invite_friends_title">Arkadaşlarını davet et</string>
+    <string name="invite_friend_button">Davet et</string>
+    <string name="invitation_sended_button">Davet gönder</string>
+    <string name="friends_empty_list_error">Arkadaş listen boş</string>
+    <string name="vk_friends_success_invite">Davet gönderildi</string>
+    <string name="join_group_success">Gruba üye oldunuz</string>
 </resources>

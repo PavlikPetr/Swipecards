@@ -15,12 +15,14 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.AboutAppDialog;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelector;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
@@ -45,7 +47,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
 
     private TextView preloadPhotoName;
     private ViewGroup mNoNotificationViewGroup;
-    private CheckBox mAutoGreetingSttings;
+    private CheckBox mAutoReplySettings;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -57,8 +59,8 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         // Account
         initAccountViews(view);
 
-        // Auto greeting settings
-        initAutoGreeting(view);
+        // Auto reply settings
+        initAutoReply(view);
 
         // Init settings views
         /*
@@ -77,21 +79,38 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         return getString(R.string.settings_header_title);
     }
 
-    private void initAutoGreeting(View root) {
-        mAutoGreetingSttings = (CheckBox) root.findViewById(R.id.auto_greeting_state);
-        mAutoGreetingSttings.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-            }
-        });
-        mAutoGreetingSttings.setChecked(true);
-        root.findViewById(R.id.autoGreetingItem).setOnClickListener(this);
+    private void initAutoReply(View root) {
+        mAutoReplySettings = (CheckBox) root.findViewById(R.id.auto_reply_state);
+        setAutoReplySettings(CacheProfile.getOptions().isAutoreplyAllow);
+        root.findViewById(R.id.autoReplyItem).setOnClickListener(this);
     }
 
-    private void switchAutoGreetingButton() {
-        if (mAutoGreetingSttings != null) {
-            mAutoGreetingSttings.setChecked(!mAutoGreetingSttings.isChecked());
+    private void setAutoReplySettings(boolean isChecked) {
+        if (mAutoReplySettings != null) {
+            mAutoReplySettings.setChecked(isChecked);
+        }
+    }
+
+    private void switchAutoReplyButton() {
+        if (mAutoReplySettings != null) {
+
+
+            SettingsRequest settingsRequest = new SettingsRequest(getActivity());
+            final boolean newValue = !mAutoReplySettings.isChecked();
+            settingsRequest.isAutoReplyAllowed = newValue;
+            setAutoReplySettings(newValue);
+            settingsRequest.callback(new ApiHandler() {
+                @Override
+                public void success(IApiResponse response) {
+                    CacheProfile.getOptions().isAutoreplyAllow = newValue;
+                }
+
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+                    setAutoReplySettings(!newValue);
+                }
+            }).exec();
+
         }
     }
 
@@ -185,8 +204,8 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                     startActivity(intent);
                 }
                 break;
-            case R.id.autoGreetingItem:
-                switchAutoGreetingButton();
+            case R.id.autoReplyItem:
+                switchAutoReplyButton();
                 break;
             case R.id.loFeedback:
                 intent = new Intent(applicationContext, SettingsContainerActivity.class);

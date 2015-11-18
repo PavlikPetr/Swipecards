@@ -23,8 +23,8 @@
             android:text="@string/notifications" />
 
         <include
-            android:id="@+id/autoGreetingItem"
-            layout="@layout/item_auto_greeting" />
+            android:id="@+id/autoReplyItem"
+            layout="@layout/item_auto_reply" />
 
         <TextView
             android:id="@+id/loHelp"

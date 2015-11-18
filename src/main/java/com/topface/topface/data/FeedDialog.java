@@ -41,6 +41,7 @@ public class FeedDialog extends FeedLike implements Parcelable {
     public static final int LIKE_REQUEST = 15; // Вирус "Получи 5 лайков"
     public static final int MESSAGE_POPULAR_STAGE_1 = 35; // Первый этап блокировки сообщений от популярного пользователя
     public static final int MESSAGE_POPULAR_STAGE_2 = 36; // Второй этап блокировки сообщений от популярного пользователя
+    public static final int MESSAGE_AUTO_REPLY = 43; // Второй этап блокировки сообщений от популярного пользователя
 
 
     public static final int OUTPUT_USER_MESSAGE = 0;

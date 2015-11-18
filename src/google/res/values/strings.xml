@@ -829,4 +829,6 @@
     <string name="friends_empty_list_error">Your list of friends is empty</string>
     <string name="vk_friends_success_invite">Invitation has been sent</string>
     <string name="join_group_success">You have joined the group</string>
+    <string name="settings_auto_greeting_title">Auto-Greetings</string>
+    <string name="settings_auto_greeting_subtitle">Allow Topface to automatically start a conversation with a greeting whenever someone sends you a Like</string>
 </resources>

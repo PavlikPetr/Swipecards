@@ -1018,4 +1018,7 @@
     <string name="settings_auto_greeting_subtitle">Позволяет автоматически начинать диалог
         приветствием при получении симпатии
     </string>
+    <string name="chat_auto_reply_title">Текст сообщения скрыт</string>
+    <string name="chat_auto_reply_message">Чтобы открыть и ответить на него, станьте VIP-пользователем</string>
+    <string name="chat_auto_reply_button">Стать VIP</string>
 </resources>
