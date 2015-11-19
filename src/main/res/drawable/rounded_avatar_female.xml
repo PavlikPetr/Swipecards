@@ -2,6 +2,11 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:drawable="@drawable/rounded_avatar" />
-    <item android:drawable="@drawable/user_female" />
+    <item
+        android:bottom="@dimen/avatar_rounded_padding"
+        android:drawable="@drawable/user_female"
+        android:left="@dimen/avatar_rounded_padding"
+        android:right="@dimen/avatar_rounded_padding"
+        android:top="@dimen/avatar_rounded_padding" />
 
 </layer-list>

@@ -17,6 +17,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Static;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
@@ -169,8 +170,13 @@ public class LeftMenuAdapter extends BaseAdapter {
                 break;
             case TYPE_MENU_BUTTON_WITH_PHOTO:
                 holder.btnMenu.setText(item.getMenuText());
-                if (holder.icon instanceof ImageViewRemote) {
-                    ((ImageViewRemote) holder.icon).setPhoto(App.from(mContext).getProfile().photo);
+                Photo photo = App.from(mContext).getProfile().photo;
+                if (photo == null || photo.isEmpty()) {
+                    holder.icon.setImageResource(App.from(mContext).getProfile().sex == Static.GIRL ?
+                            R.drawable.rounded_avatar_female :
+                            R.drawable.rounded_avatar_male);
+                } else if (holder.icon instanceof ImageViewRemote) {
+                    ((ImageViewRemote) holder.icon).setPhoto(photo);
                 }
                 if (holder.extraIcon != null) {
                     int extraIconDrawable = item.getExtraIconDrawable();
@@ -230,10 +236,10 @@ public class LeftMenuAdapter extends BaseAdapter {
                 continue;
             }
             Object viewHolder = wantedView.getTag();
-            if(viewHolder == null || !(viewHolder instanceof LeftMenuAdapter.ViewHolder)){
+            if (viewHolder == null || !(viewHolder instanceof LeftMenuAdapter.ViewHolder)) {
                 continue;
             }
-            BaseFragment.FragmentId item = ((LeftMenuAdapter.ViewHolder)viewHolder).item.getMenuId();
+            BaseFragment.FragmentId item = ((LeftMenuAdapter.ViewHolder) viewHolder).item.getMenuId();
             if (fragmentId == item) {
                 wantedView.setActivated(true);
                 view = wantedView;
