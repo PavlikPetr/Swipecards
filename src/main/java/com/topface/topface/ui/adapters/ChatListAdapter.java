@@ -41,8 +41,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private static final int T_FRIEND_GIFT = 7;
     private static final int T_USER_POPULAR_1 = 8;
     private static final int T_USER_POPULAR_2 = 9;
-    private static final int T_COUNT = 10;
-    private static final int T_AUTO_REPLY = 11;
+    private static final int T_AUTO_REPLY = 10;
+    private static final int T_COUNT = 11;
     private HashMap<History, ApiRequest> mHashRequestByWaitingRetryItem = new HashMap<>();
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
@@ -321,9 +321,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 holder.message.setVisibility(View.GONE);
                 break;
             case T_AUTO_REPLY:
-                boolean isLast = position == getCount() - 1;
-                holder.buyVip.setVisibility(isLast ? View.VISIBLE : View.GONE);
-                if (isLast) {
+                if (position == getCount() - 1) {
+                    holder.buyVip.setVisibility(View.VISIBLE);
                     holder.buyVip.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -332,6 +331,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                             }
                         }
                     });
+                } else {
+                    holder.buyVip.setVisibility(View.GONE);
+                    holder.buyVip.setOnClickListener(null);
                 }
                 break;
         }
@@ -404,6 +406,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 break;
             case FeedDialog.MESSAGE_WISH:
                 holder.message.setText(mContext.getString(output ? R.string.chat_wish_out : R.string.chat_wish_in));
+                break;
+            case FeedDialog.MESSAGE_AUTO_REPLY:
+                holder.message.setText(mContext.getString(R.string.chat_auto_reply_message));
                 break;
             case FeedDialog.MESSAGE_SEXUALITY:
                 holder.message.setText(mContext.getString(output ? R.string.chat_sexuality_out :

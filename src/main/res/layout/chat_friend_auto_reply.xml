@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout"
-    android:layout_width="match_parent"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:gravity="left">
@@ -29,6 +29,7 @@
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/chat_message"
             style="@style/ChatMessage"
             android:layout_marginTop="0dp"
             android:background="@null"
@@ -39,13 +40,11 @@
         <Button
             android:id="@+id/chat_auto_reoly_buy_vip"
             style="@style/Widget.Topface.Button.Big.Blue"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="@string/chat_auto_reply_button"
             android:visibility="gone" />
-
-
     </LinearLayout>
 
     <!-- date -->
@@ -55,4 +54,4 @@
         android:layout_alignBottom="@id/chat_buble"
         android:layout_toRightOf="@id/chat_buble" />
 
-</RelativeLayout>    
+</RelativeLayout>

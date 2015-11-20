@@ -94,7 +94,6 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
     private void switchAutoReplyButton() {
         if (mAutoReplySettings != null) {
 
-
             SettingsRequest settingsRequest = new SettingsRequest(getActivity());
             final boolean newValue = !mAutoReplySettings.isChecked();
             settingsRequest.isAutoReplyAllowed = newValue;

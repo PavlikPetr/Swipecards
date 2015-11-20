@@ -116,6 +116,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private static final String SOFT_KEYBOARD_LOCK_STATE = "keyboard_state";
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
     public static final String FROM = "from";
+    private static final String AUTO_REPLY_MESSAGE_SOURCE = "AutoReplyMessage";
+    private static final String SEND_MESSAGE_SOURCE = "SendMessage";
+
 
     // Data
     private int mUserId;
@@ -216,7 +219,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback(), new ChatListAdapter.OnBuyVipButtonClick() {
                 @Override
                 public void onClick() {
-                    startBuyVipActivity("AutoReplyMessage");
+                    startBuyVipActivity(AUTO_REPLY_MESSAGE_SOURCE);
                 }
             });
         }
@@ -906,6 +909,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     }
                 }
                 break;
+            case PurchasesActivity.INTENT_BUY_VIP:
+                if (mAdapter != null) {
+                    mAdapter.getData().clear();
+                }
+                update(false, "initial");
+                break;
         }
     }
 
@@ -981,7 +990,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 if (codeError == ErrorCodes.PREMIUM_ACCESS_ONLY) {
                     mMessage = mAdapter.getData().get(0).text;
                     mAdapter.removeLastItem();
-                    startBuyVipActivity("SendMessage");
+                    startBuyVipActivity(SEND_MESSAGE_SOURCE);
                     return;
                 }
                 if (mAdapter != null && cancelable) {
