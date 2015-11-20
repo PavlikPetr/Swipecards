@@ -75,6 +75,10 @@ public class Options extends AbstractData {
     public int priceAdmiration = 1;
 
     /**
+     *
+     */
+    public boolean isAutoreplyAllow = true;
+    /**
      * data for experiment of Trial VIP
      */
     public TrialVipExperiment trialVipExperiment = new TrialVipExperiment();
@@ -194,6 +198,7 @@ public class Options extends AbstractData {
     protected void fillData(JSONObject response, boolean cacheToPreferences) {
         try {
             priceAdmiration = response.optInt("admirationPrice");
+            isAutoreplyAllow = response.optBoolean("allowAutoreply", true);
             trialVipExperiment = JsonUtils.optFromJson(response.optString("experimentTrialVip"), TrialVipExperiment.class, new TrialVipExperiment());
             forceSmsInviteRedirect = JsonUtils.optFromJson(response.optString("forceSmsInviteRedirect"), ForceSmsInviteRedirect.class, new ForceSmsInviteRedirect());
             // по умолчанию превью в диалогах всегда отображаем

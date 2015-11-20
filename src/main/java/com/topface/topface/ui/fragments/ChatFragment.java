@@ -39,7 +39,6 @@ import com.nhaarman.listviewanimations.appearance.ChatListAnimatedAdapter;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
 import com.topface.framework.JsonUtils;
-import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -86,12 +85,9 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
 import com.topface.topface.utils.controllers.PopularUserChatController;
-import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.social.AuthToken;
-
-import org.acra.sender.ReportSenderException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,6 +116,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private static final String SOFT_KEYBOARD_LOCK_STATE = "keyboard_state";
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
     public static final String FROM = "from";
+    private static final String AUTO_REPLY_MESSAGE_SOURCE = "AutoReplyMessage";
+    private static final String SEND_MESSAGE_SOURCE = "SendMessage";
+
 
     // Data
     private int mUserId;
@@ -217,7 +216,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         mUserType = getArguments().getInt(ChatFragment.USER_TYPE);
         // do not recreate Adapter cause of setRetainInstance(true)
         if (mAdapter == null) {
-            mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
+            mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback(), new ChatListAdapter.OnBuyVipButtonClick() {
+                @Override
+                public void onClick() {
+                    startBuyVipActivity(AUTO_REPLY_MESSAGE_SOURCE);
+                }
+            });
         }
         Bundle args = getArguments();
         mItemId = args.getString(INTENT_ITEM_ID);
@@ -905,6 +909,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     }
                 }
                 break;
+            case PurchasesActivity.INTENT_BUY_VIP:
+                if (mAdapter != null) {
+                    mAdapter.getData().clear();
+                }
+                update(false, "initial");
+                break;
         }
     }
 
@@ -980,9 +990,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 if (codeError == ErrorCodes.PREMIUM_ACCESS_ONLY) {
                     mMessage = mAdapter.getData().get(0).text;
                     mAdapter.removeLastItem();
-                    startActivityForResult(PurchasesActivity.createVipBuyIntent(getResources()
-                                    .getString(R.string.messaging_block_buy_vip), "SendMessage"),
-                            PurchasesActivity.INTENT_BUY_VIP);
+                    startBuyVipActivity(SEND_MESSAGE_SOURCE);
                     return;
                 }
                 if (mAdapter != null && cancelable) {
@@ -993,6 +1001,13 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         }).exec();
         return true;
     }
+
+    private void startBuyVipActivity(String from) {
+        startActivityForResult(PurchasesActivity.createVipBuyIntent(getResources()
+                        .getString(R.string.messaging_block_buy_vip), from),
+                PurchasesActivity.INTENT_BUY_VIP);
+    }
+
 
     private void startTimer() {
         if (mUpdater != null) {

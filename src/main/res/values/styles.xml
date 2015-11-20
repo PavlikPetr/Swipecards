@@ -1233,8 +1233,13 @@
         <item name="android:layout_marginBottom">12dp</item>
     </style>
 
-
     <style name="InvisibleProgress">
         <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="Switcher">
+        <item name="android:button">@drawable/edit_switch</item>
+        <item name="android:drawableLeft">@null</item>
+        <item name="android:drawableRight">@null</item>
     </style>
 </resources>
