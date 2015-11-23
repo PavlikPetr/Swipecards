@@ -17,7 +17,6 @@ import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.InstantMessagesForNewbies;
-import com.topface.topface.data.experiments.SixCoinsSubscribeExperiment;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
@@ -170,7 +169,6 @@ public class Options extends AbstractData {
 
     public boolean unlockAllForPremium;
     public int maxMessageSize = 10000;
-    public SixCoinsSubscribeExperiment sixCoinsSubscribeExperiment = new SixCoinsSubscribeExperiment();
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
     public TopfaceOfferwallRedirect topfaceOfferwallRedirect = new TopfaceOfferwallRedirect();
     public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
@@ -346,9 +344,6 @@ public class Options extends AbstractData {
 
             // experiments init
             forceOfferwallRedirect.init(response);
-            sixCoinsSubscribeExperiment = JsonUtils.
-                    optFromJson(response.optJSONObject("unlockLikeList").toString(),
-                            SixCoinsSubscribeExperiment.class, new SixCoinsSubscribeExperiment());
             topfaceOfferwallRedirect.init(response);
 
             instantMessageFromSearch = JsonUtils.optFromJson(response.optString(INSTANT_MSG),
@@ -366,7 +361,6 @@ public class Options extends AbstractData {
             interstitial = JsonUtils.optFromJson(response.optString("interstitial"),
                     InterstitialInFeeds.class, interstitial);
             fullscreenInterval = response.optLong("fullscreenInterval", DateUtils.DAY_IN_SECONDS);
-            String text = response.optJSONObject("feedNativeAd12").toString();
         } catch (Exception e) {
             // отображение максимально заметного тоста, чтобы на этапе тестирования любого функционала
             // не пропустить ошибку парсинга опций, т.к. это может приветси к денежным потерям проекта

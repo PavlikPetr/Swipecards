@@ -23,7 +23,6 @@ import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.Options;
-import com.topface.topface.data.experiments.SixCoinsSubscribeExperiment;
 import com.topface.topface.requests.BuyLikesAccessRequest;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
@@ -283,37 +282,9 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     private void initBuyCoinsButton(final View inflated, final Options.BlockSympathy blockSympathyOptions, View currentView) {
         final Button btnBuy = (Button) currentView.findViewById(R.id.buy_coins_button);
         final ProgressBar progress = (ProgressBar) currentView.findViewById(R.id.prsLoading);
-        final SixCoinsSubscribeExperiment experiment = CacheProfile.getOptions().sixCoinsSubscribeExperiment;
-        initButtonForBlockedScreen(btnBuy, experiment.isEnabled ? experiment.buttonText : blockSympathyOptions.buttonText,
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (experiment.isEnabled) {
-                            Fragment f = getChildFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
-                            final TransparentMarketFragment fragment = f == null ?
-                                    TransparentMarketFragment.newInstance(experiment.productId, experiment.isSubscription, "Likes") :
-                                    (TransparentMarketFragment) f;
-                            fragment.setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
-                                @Override
-                                public void onPurchaseSuccess() {
-                                    updateData(false, true);
-                                }
-
-                                @Override
-                                public void onPopupClosed() {
-                                    if (fragment.isAdded()) {
-                                        removeTransparentMarketFragment(fragment);
-                                    }
-                                }
-                            });
-                            if (!fragment.isAdded()) {
-                                addTransparentMarketFragment(fragment);
-                            } else {
-                                removeTransparentMarketFragment(fragment);
-                                addTransparentMarketFragment(fragment);
-                            }
-                            return;
-                        }
+        initButtonForBlockedScreen(btnBuy, blockSympathyOptions.buttonText, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                         if (mCoins >= blockSympathyOptions.price) {
                             btnBuy.setVisibility(View.INVISIBLE);
                             progress.setVisibility(View.VISIBLE);
