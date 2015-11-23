@@ -2,6 +2,7 @@ package com.topface.topface.data;
 
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.webkit.URLUtil;
@@ -23,6 +24,7 @@ import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
@@ -364,8 +366,20 @@ public class Options extends AbstractData {
             interstitial = JsonUtils.optFromJson(response.optString("interstitial"),
                     InterstitialInFeeds.class, interstitial);
             fullscreenInterval = response.optLong("fullscreenInterval", DateUtils.DAY_IN_SECONDS);
-
+            String text = response.optJSONObject("feedNativeAd12").toString();
         } catch (Exception e) {
+            // отображение максимально заметного тоста, чтобы на этапе тестирования любого функционала
+            // не пропустить ошибку парсинга опций, т.к. это может приветси к денежным потерям проекта
+            // gjrfзывается только для сборок debug & qa
+            Handler mHandler = new Handler(App.getContext().getMainLooper());
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (Debug.isDebugLogsEnabled()) {
+                        Utils.showCustomToast(R.string.options_parsing_error);
+                    }
+                }
+            });
             Debug.error("Options parsing error", e);
         }
 

@@ -24,6 +24,8 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Display;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -31,6 +33,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.topface.framework.utils.BackgroundThread;
@@ -172,6 +175,24 @@ public class Utils {
 
     public static void startOldVersionPopup(final Activity activity) {
         startOldVersionPopup(activity, true);
+    }
+
+    public static void showCustomToast(int text) {
+        Context context = App.getContext();
+        if (context != null) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View layout = inflater.inflate(R.layout.custom_toast, null, false);
+
+            ImageView image = (ImageView) layout.findViewById(R.id.image);
+            image.setImageResource(R.drawable.ic_not_enough_data);
+            ((TextView) layout.findViewById(R.id.text)).setText(text);
+
+            Toast toast = new Toast(context);
+            toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.setView(layout);
+            toast.show();
+        }
     }
 
     public static void startOldVersionPopup(final Activity activity, boolean cancelable) {
