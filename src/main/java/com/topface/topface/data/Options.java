@@ -11,6 +11,7 @@ import com.google.gson.annotations.SerializedName;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Static;
 import com.topface.topface.banners.PageInfo;
@@ -369,7 +370,7 @@ public class Options extends AbstractData {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (Debug.isDebugLogsEnabled()) {
+                    if (BuildConfig.DEBUG) {
                         Utils.showCustomToast(R.string.options_parsing_error);
                     }
                 }
