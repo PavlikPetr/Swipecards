@@ -26,7 +26,8 @@ public class VkAuthorizer extends Authorizer {
             VKScope.PHOTOS,
             VKScope.FRIENDS,
             VKScope.OFFLINE,
-            VKScope.GROUPS
+            VKScope.GROUPS,
+            VKScope.EMAIL
     };
 
     public VkAuthorizer() {
