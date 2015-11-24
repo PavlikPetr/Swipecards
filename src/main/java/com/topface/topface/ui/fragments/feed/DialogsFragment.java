@@ -113,6 +113,17 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
             updateData(true, false);
             mIsNeedRefresh = false;
         }
+        if (getListAdapter() != null) {
+            boolean isVip = CacheProfile.getProfile().premium;
+            for (FeedDialog feed : getListAdapter().getData()) {
+                if (feed.type == FeedDialog.MESSAGE_AUTO_REPLY && isVip) {
+                    getListAdapter().getData().clear();
+                    updateData(false, false);
+                    break;
+                }
+            }
+
+        }
         if (isPromoExpressMessagesDialogAttached()) {
             showExpressMessagesPopupIfNeeded();
         }
