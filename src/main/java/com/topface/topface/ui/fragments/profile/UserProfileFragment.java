@@ -541,4 +541,9 @@ public class UserProfileFragment extends AbstractProfileFragment {
     protected boolean isAnimationRequire() {
         return true;
     }
+
+    @Override
+    protected boolean isOwnersProfileFragment() {
+        return false;
+    }
 }
