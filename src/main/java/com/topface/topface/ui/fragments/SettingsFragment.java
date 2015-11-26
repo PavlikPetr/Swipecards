@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.topface.framework.utils.BackgroundThread;
@@ -81,6 +82,12 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
 
     private void initAutoReply(View root) {
         mAutoReplySettings = (CheckBox) root.findViewById(R.id.auto_reply_state);
+        mAutoReplySettings.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                switchAutoReplyButton(isChecked);
+            }
+        });
         setAutoReplySettings(CacheProfile.getOptions().isAutoreplyAllow);
         root.findViewById(R.id.autoReplyItem).setOnClickListener(this);
     }
@@ -91,26 +98,35 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         }
     }
 
+    private void setInversAutoReplySettings() {
+        if (mAutoReplySettings != null) {
+            setAutoReplySettings(!mAutoReplySettings.isChecked());
+        }
+    }
+
     private void switchAutoReplyButton() {
         if (mAutoReplySettings != null) {
-
-            SettingsRequest settingsRequest = new SettingsRequest(getActivity());
-            final boolean newValue = !mAutoReplySettings.isChecked();
-            settingsRequest.isAutoReplyAllowed = newValue;
-            setAutoReplySettings(newValue);
-            settingsRequest.callback(new ApiHandler() {
-                @Override
-                public void success(IApiResponse response) {
-                    CacheProfile.getOptions().isAutoreplyAllow = newValue;
-                }
-
-                @Override
-                public void fail(int codeError, IApiResponse response) {
-                    setAutoReplySettings(!newValue);
-                }
-            }).exec();
-
+            switchAutoReplyButton(!mAutoReplySettings.isChecked());
         }
+    }
+
+    private void switchAutoReplyButton(boolean isChecked) {
+        SettingsRequest settingsRequest = new SettingsRequest(getActivity());
+        final boolean newValue = isChecked;
+        settingsRequest.isAutoReplyAllowed = newValue;
+        setAutoReplySettings(newValue);
+        settingsRequest.callback(new ApiHandler() {
+            @Override
+            public void success(IApiResponse response) {
+                CacheProfile.getOptions().isAutoreplyAllow = newValue;
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+                setAutoReplySettings(!newValue);
+            }
+        }).exec();
+
     }
 
     private void initViews(View root) {
@@ -204,7 +220,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                 }
                 break;
             case R.id.autoReplyItem:
-                switchAutoReplyButton();
+                setInversAutoReplySettings();
                 break;
             case R.id.loFeedback:
                 intent = new Intent(applicationContext, SettingsContainerActivity.class);
