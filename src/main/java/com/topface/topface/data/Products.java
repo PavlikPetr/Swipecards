@@ -24,15 +24,18 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 public class Products extends AbstractData {
     public static final String PRICE = "{{price}}";
@@ -218,16 +221,24 @@ public class Products extends AbstractData {
             value = buyBtn.hint;
         } else {
             ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
-            DecimalFormat decimalFormat = new DecimalFormat("#.##");
-            value = buyBtn.titleTemplate.replace(PRICE, decimalFormat.format((float) buyBtn.price / 100) +
-                    context.getString(R.string.usd));
+            Currency currency;
+            NumberFormat currencyFormatter;
+            currency = Currency.getInstance(USD);
+            currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
+            currencyFormatter.setCurrency(currency);
+            value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn.titleTemplate, PRICE, PRICE_PER_ITEM);
             if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
-                if (detail != null && !detail.currency.equals(USD)) {
+
+                if (detail != null) {
                     double price = detail.price / ProductsDetails.MICRO_AMOUNT;
-                    value = buyBtn.totalTemplate.replace(PRICE, getPriceAndCurrencyAbbreviation(decimalFormat.format(price), detail.currency));
+                    currency = Currency.getInstance(detail.currency);
+                    currencyFormatter = detail.currency.equalsIgnoreCase(USD)
+                            ? NumberFormat.getCurrencyInstance(Locale.US) : NumberFormat.getCurrencyInstance(new Locale(App.getLocaleConfig().getApplicationLocale()));
+                    currencyFormatter.setCurrency(currency);
+                    value = formatPrice(price, currencyFormatter, buyBtn.titleTemplate, PRICE, PRICE_PER_ITEM);
                 } else {
-                    value = buyBtn.totalTemplate.replace(PRICE, getPriceAndCurrencyAbbreviation(String.valueOf((float) buyBtn.price / 100), USD));
+                    value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn.titleTemplate, PRICE, PRICE_PER_ITEM);
                 }
             }
         }
@@ -235,6 +246,16 @@ public class Products extends AbstractData {
                 context, buyBtn.id, buyBtn.title, buyBtn.discount > 0,
                 buyBtn.showType, value, listener
         );
+    }
+
+    public static String formatPrice(double price, NumberFormat currencyFormatter, String template, @NotNull String... replaceTemplateArray) {
+        currencyFormatter.setMaximumFractionDigits(price % 1 != 0 ? 2 : 0);
+        for (String replaceTemplate : replaceTemplateArray) {
+            if (template.contains(replaceTemplate)) {
+                return template.replace(replaceTemplate, currencyFormatter.format(price));
+            }
+        }
+        return template.replace(replaceTemplateArray[0], currencyFormatter.format(price));
     }
 
     /**
@@ -317,7 +338,7 @@ public class Products extends AbstractData {
         // title text
         TextView tvTitle = (TextView) view.findViewById(R.id.itText);
         setBuyButtonTextColor(showType, tvTitle);
-        tvTitle.setText(title);
+        tvTitle.setText(TextUtils.isEmpty(value) ? title : value);
     }
 
     private static void setSelectorTextColor(int selector, TextView view) {
