@@ -1023,5 +1023,7 @@
     <string name="invitation_sended_button">Отправлено</string>
     <string name="friends_empty_list_error">Список ваших друзей пуст</string>
     <string name="join_group_success">Вы вступили в группу</string>
+
+    <string name="foreign_profile_empty_gifts_title">Отправьте подарок и вы будете в центре внимания</string>
     
 </resources>
