@@ -1025,5 +1025,13 @@
     <string name="join_group_success">Вы вступили в группу</string>
 
     <string name="foreign_profile_empty_gifts_title">Отправьте подарок и вы будете в центре внимания</string>
+    <string name="vk_friends_success_invite">Приглашение отправлено</string>
+    <string name="settings_auto_greeting_title">Автоприветствие</string>
+    <string name="settings_auto_greeting_subtitle">Позволяет автоматически начинать диалог
+        приветствием при получении симпатии
+    </string>
+    <string name="chat_auto_reply_title">Текст сообщения скрыт</string>
+    <string name="chat_auto_reply_message">Чтобы открыть и ответить на него, станьте VIP-пользователем</string>
+    <string name="chat_auto_reply_button">Стать VIP</string>
     
 </resources>
