@@ -15,12 +15,11 @@ public class ReadLikeRequest extends ApiRequest {
     private ArrayList<Integer> mIdArray;
     public final static String SERVICE_NAME = "like.read";
     private boolean mInterstitialShown;
+    private int mSenderId;
 
-    public ReadLikeRequest(Context context, int id, boolean interstitialShown) {
+    public ReadLikeRequest(Context context, int senderId, boolean interstitialShown) {
         super(context);
-        ArrayList<Integer> array = new ArrayList<>();
-        array.add(id);
-        mIdArray = array;
+        mSenderId = senderId;
         mInterstitialShown = interstitialShown;
     }
 
@@ -32,19 +31,23 @@ public class ReadLikeRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
-        for (int id : mIdArray) {
-            jsonArray.put(id);
+        if (mIdArray == null && mSenderId > 0) {
+            jsonObject.put("senderId", mSenderId);
+        } else {
+            JSONArray jsonArray = new JSONArray();
+            for (int id : mIdArray) {
+                jsonArray.put(id);
+            }
+            jsonObject.put("ids", jsonArray);
+            jsonObject.put("interstitialShown", mInterstitialShown);
         }
-        jsonObject.put("ids", jsonArray);
-        jsonObject.put("interstitialShown", mInterstitialShown);
         return jsonObject;
     }
 
     @Override
     public void exec() {
-        if (!isContainEmptuId()) {
+        if (!isContainEmptuId() || mSenderId != 0) {
             super.exec();
         } else {
             handleFail(ErrorCodes.ERRORS_PROCESSED, "Invalid id");
