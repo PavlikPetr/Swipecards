@@ -19,6 +19,7 @@
     <string name="dating_switch_button">Noch…</string>
     <string name="dating_prev_button">Vorige</string>
     <string name="dating_chat_button">Plaudern</string>
+    <string name="waiting_a_products">Bitte warten, wir laden unsere verfügbare Produkte</string>
     <string name="likes_background_text">Keine Sympathien</string>
     <string name="visitors_background_text">Keine Gäste</string>
     <string name="need_set_avatar">Niemand kann dich kennenlernen! Lade ein Profilbild hoch.</string>
@@ -55,6 +56,7 @@
     <string name="address_book_access_error">Diese App hat keinen Zugang zu Ihren Kontakten. Sie
         können den Zugang in Datenschutzeinstellungen Ihres Geräts erlauben
     </string>
+    <string name="camera_access_error">App hat keinen Zugang zur Kamera. Du kannst den Zugang erlauben, indem du zu den Privatsphäre Einstellungen deines Gerätes gehst.</string>
     <string name="profile_deleted_user">Nutzer ist gelöscht</string>
     <string name="filter_main_parameters">Ich interessiere mich für</string>
     <string name="dating_prev_button_ext">Voriger</string>
@@ -276,6 +278,7 @@
     <string name="settings_guests">Gäste</string>
     <string name="settings_help">Hilfe</string>
     <string name="settings_faq">Fragen und antworten</string>
+    <string name="settings_faq_title">Vielleicht wurde dein Problem schon gelöst, bitte schaue zu den häufig gestellten Fragen.</string>
     <string name="settings_account">Account</string>
     <string name="settings_feedback">Meinung abgeben</string>
     <string name="settings_about">Über das Programm</string>
@@ -334,6 +337,7 @@
         in unserer App nicht gefällt. Helfen Sie uns besser werden. Danke!
     </string>
     <string name="settings_melody">Sound-Benachrichtigungen</string>
+    <string name="settings_loading_photo">Fotos vorladen</string>
     <string name="edit_refresh_status">Den Status aktualisieren</string>
     <string name="ban_title">Gratulation! Sie sind gebannt</string>
     <string name="ban_title_forever">Gratulation! Sie sind für immer gebannt</string>
@@ -419,6 +423,7 @@
     <string name="welcome_to_topface">Herzlich willkommen in Topface!</string>
     <string name="im_boy">Ich bin ein Typ</string>
     <string name="im_girl">Ich bin ein Mädchen</string>
+    <string name="u_sex">Dein Geschlecht</string>
     <string name="incorrect_email">E-Mail ist falsch</string>
     <string name="incorrect_login">Login ist falsch</string>
     <string name="incorrect_password">Passwort ist falsch</string>
@@ -598,6 +603,7 @@
     <string name="likes_can_help_you">Die Sympathien helfen Ihnen neue Bekanntschaften zu knüpfen</string>
     <string name="general_get_dating">Kennen lernen</string>
     <string name="settings_select_language">Sprache wählen</string>
+    <string name="settings_select_preload_photo_type">Wähle, wann Fotos Vorladen angeschaltet sein soll</string>
     <string name="restart_to_change_locale">Für den Sprachwechsel wird die App neu gestartet</string>
     <string name="locale_changing">Sprache ändern</string>
     <plurals name="you_were_liked">
@@ -721,15 +727,21 @@
     <string name="pull_to_refresh_release_label">Loslassen um neu zu laden</string>
     <string name="messaging_block_buy_vip">Um die Konversation fortzuführen brauchst du VIP\u2011Status</string>
     <string name="pull_to_refresh_refreshing_label">Laden…</string>
+    <string name="user_added_to_black_list">Der Nutzer wurde deiner schwarzen Liste hinzugefügt.</string>
+    <string name="user_deleted_from_black_list">Der Nutzer wurde von deiner schwarzen Liste entfernt.</string>
+    <string name="user_added_to_bookmark">Der Nutzer wurde deinen Favoriten zugefügt.</string>
+    <string name="user_deleted_from_bookmark">Der Nutzer wurde von deinen Favoriten entfernt.</string>
     <string name="preload_photo_type_wifi_3g">WiFi und 3G</string>
     <string name="preload_photo_type_wifi">Nur WiFi</string>
     <string name="preload_photo_type_always_on">Immer an</string>
     <string name="preload_photo_type_preload_off">Aus</string>
+    <string name="wrong_time_popup_text">Keine sichere Verbindung möglich. Vielleicht sind deine Datums- und Zeiteinstellungen nicht korrekt.</string>
     <string name="wrong_time_popup_button">Einstellungen öffnen</string>
     <string name="enter_text">Text eingeben</string>
     <string name="send_feedback">Nachricht verschicken</string>
     <string name="get_vip_free">Hole dir gratis VIP-Status</string>
     <string name="buy_more_sympathies">\"Hole dir mehr Likes, werde beliebt\"</string>
+    <string name="transaction_code_help">Wenn du uns einen Transaktionscode schickst, wird uns das helfen deine Anfrage zu bearbeiten indem die Überarbeitungszeit verkürzt wird. Mehr Informationen gibt es unter %s.</string>
     <string name="google_wallet">Google Geldbeutel</string>
     <string name="google_service_general_title">Erinnerungen sind nicht verfügbar</string>
     <string name="google_service_disabled_title">Du hast Google Play nicht zugelassen. Du musst es zulassen, um neue Benachrichtigungen zu erhalten.</string>
@@ -754,7 +766,14 @@
     <string name="premium_for_invitations">Um einen Tag lang VIP-Status zu erhalten musst du 5 Registrierungen erreichen.</string>
     <string name="premium_for_invitations_current_status">Du hast bereits verfasst:\nEinladungen: %1$d\nRegistrierungen: %2$d</string>
     <string name="no_contacts_available">Das Gerät hat keine Kontakte, die angezeigt werden können.</string>
+    <string name="sms_invite_title">Hole dir einen Tag lang VIP-Status!</string>
+    <string name="status_can_send_confirmation">Einladen</string>
+    <string name="status_invilid_phone_number">Nummer ist nicht gültig</string>
+    <string name="status_confirmation_was_sent">Warten auf Registrierung</string>
+    <string name="status_user_registered">Bereits registriert</string>
     <string name="balance">Guthaben (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
+    <string name="trial_vip_text">Gratis VIP für 7 Tage</string>
+    <string name="trial_vip_button_text">Hole dir VIP</string>
     <string name="settings_check_vip_title">Überprüfen ob VIP-Status aktiv ist</string>
     <string name="settings_check_vip_cell">VIP-Status überprüfen</string>
     <string name="settings_check_vip_alert">Deine Anfrage zur Überprüfung des VIP-Status wurde verschickt</string>
@@ -764,4 +783,18 @@
     <string name="novice_sympathies_bonus">Sie bekommen %1$d Sympathien als\nGeschenk! Das heißt,
         dass Sie\ngenau %2$d Menschen gefallen,\ndie Ihnen ihre Sympathie zeigen werden
     </string>
+    <string name="go_dating_message">Fange an, Leute kennenzulernen und die Namen derjenigen, die dein Profil besucht haben, werden hier erscheinen.</string>
+    <string name="photo_not_from_main_album">Unsere Moderatoren haben entschieden, dass dieses Foto nicht als Profilfoto verwendet werden darf.</string>
+    <string name="sidebar_vk_profile">VK Profil</string>
+    <string name="title_vk_profile">VK Profil</string>
+    <string name="vk_profile_button_tf_group">Topface-Gruppe</string>
+    <string name="vk_profile_button_join_tf_group">Der Topface-Gruppe beitreten</string>
+    <string name="vk_profile_button_join_vkgames_group">Der Gruppe \"VK Spiele\" beitreten</string>
+    <string name="vk_profile_button_invite_friends">Freunde einladen</string>
+    <string name="vk_profile_invite_friends_title">Freunde einladen</string>
+    <string name="invite_friend_button">Einladen</string>
+    <string name="invitation_sended_button">Verschickt</string>
+    <string name="friends_empty_list_error">Deine Freundesliste ist leer</string>
+    <string name="join_group_success">Du bist der Gruppe beigetreten</string>
+    <string name="vk_friends_success_invite">Die Einladung wurde verschickt</string>
 </resources>

@@ -892,4 +892,27 @@
   <string name="photo_not_from_main_album">По результатам модерации это фото запрещено ставить на
     аватар
   </string>
+  <string name="sidebar_vk_profile">Профиль ВКонтакте</string>
+  <string name="title_vk_profile">Профиль ВК</string>
+  <string name="vk_profile_button_tf_group">Группа Spark</string>
+  <string name="vk_profile_button_join_tf_group">Вступить в группу Spark</string>
+  <string name="vk_profile_button_join_vkgames_group">Вступить в группу &quot;Игры ВК&quot;</string>
+  <string name="vk_profile_button_invite_friends">Пригласить друзей</string>
+  <string name="vk_profile_invite_friends_title">Пригласить друзей</string>
+  <string name="invite_friend_button">Пригласить</string>
+  <string name="invitation_sended_button">Отправлено</string>
+  <string name="friends_empty_list_error">Список ваших друзей пуст</string>
+  <string name="join_group_success">Вы вступили в группу</string>
+  <string name="foreign_profile_empty_gifts_title">Отправьте подарок и вы будете в центре внимания
+  </string>
+  <string name="vk_friends_success_invite">Приглашение отправлено</string>
+  <string name="settings_auto_greeting_title">Автоприветствие</string>
+  <string name="settings_auto_greeting_subtitle">Позволяет автоматически начинать диалог
+    приветствием при получении симпатии
+  </string>
+  <string name="chat_auto_reply_title">Текст сообщения скрыт</string>
+  <string name="chat_auto_reply_message">Чтобы открыть и ответить на него, станьте
+    VIP-пользователем
+  </string>
+  <string name="chat_auto_reply_button">Стать VIP</string>
 </resources>
