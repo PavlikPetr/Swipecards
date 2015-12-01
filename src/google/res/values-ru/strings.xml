@@ -1036,4 +1036,6 @@
     
     <string name="photo_list_load_info">Поделитесь фотографиями и вас увидят миллионы</string>
 
+    <string name="%lu of %lu">%lu/%lu</string>
+
 </resources>
