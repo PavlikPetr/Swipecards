@@ -39,7 +39,7 @@ public class RecoverPwdFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNeedTitles(false);
+        setNeedTitles(true);
     }
 
     @Override
@@ -179,5 +179,10 @@ public class RecoverPwdFragment extends BaseFragment {
                 mRedAlertView.setVisibility(View.INVISIBLE);
             }
         }
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.recovering_password);
     }
 }
