@@ -91,13 +91,6 @@ public class RecoverPwdFragment extends BaseFragment {
         if (args != null) {
             mBtnRecover.setEnabled(!TextUtils.isEmpty(getArguments().getString(ARG_EMAIL)));
         }
-        root.findViewById(R.id.tvBackToMainAuth).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.hideSoftKeyboard(getActivity(), mEdEmail);
-                getActivity().finish();
-            }
-        });
     }
 
     private void hideSoftKeyboard() {
