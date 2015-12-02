@@ -839,6 +839,7 @@
     <string name="invitation_sended_button">Davet gönder</string>
     <string name="friends_empty_list_error">Arkadaş listen boş</string>
     <string name="join_group_success">Gruba üye oldunuz</string>
+    <string name="foreign_profile_empty_gifts_title">Bir hediye göndererek ilginin merkezi olabilirsin</string>
     <string name="vk_friends_success_invite">Davet gönderildi</string>
     <string name="settings_auto_greeting_title">Otomatik-selam</string>
     <string name="settings_auto_greeting_subtitle">Birisi size beğeni gönderdiğinde otomatik olarak selam gönderilmesi ve sohbet başlatılması için Topface\'e izin verin.</string>

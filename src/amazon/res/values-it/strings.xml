@@ -876,5 +876,15 @@
     <string name="invitation_sended_button">Inviato</string>
     <string name="friends_empty_list_error">La lista dei tuoi amici è vuota</string>
     <string name="join_group_success">Adesso fai parte del gruppo</string>
+    <string name="foreign_profile_empty_gifts_title">Invia regali e stai al centro
+        dell\'attenzione
+    </string>
     <string name="vk_friends_success_invite">Invito inviato</string>
+    <string name="settings_auto_greeting_title">Auto</string>
+    <string name="settings_auto_greeting_subtitle">Permette di cominciare automaticamente un dialogo
+        di conoscenza dopo la ricezione della simpatia
+    </string>
+    <string name="chat_auto_reply_title">Il testo del messaggio è nascosto</string>
+    <string name="chat_auto_reply_message">Per aprirlo e rispondere diventa utente- VIP</string>
+    <string name="chat_auto_reply_button">Diventa VIP</string>
 </resources>
