@@ -47,14 +47,14 @@ public class ReadLikeRequest extends ApiRequest {
 
     @Override
     public void exec() {
-        if (!isContainEmptuId() || mSenderId != 0) {
+        if (!isContainEmptyId() || mSenderId != 0) {
             super.exec();
         } else {
             handleFail(ErrorCodes.ERRORS_PROCESSED, "Invalid id");
         }
     }
 
-    private boolean isContainEmptuId() {
+    private boolean isContainEmptyId() {
         if (mIdArray == null || mIdArray.size() == 0) {
             return true;
         }
