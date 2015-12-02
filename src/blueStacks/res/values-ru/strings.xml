@@ -903,6 +903,8 @@
   <string name="invitation_sended_button">Отправлено</string>
   <string name="friends_empty_list_error">Список ваших друзей пуст</string>
   <string name="join_group_success">Вы вступили в группу</string>
+  <string name="vk_profile_invite_friends_error">Пользователь запретил отправлять ему приглашения
+  </string>
   <string name="foreign_profile_empty_gifts_title">Отправьте подарок и вы будете в центре внимания
   </string>
   <string name="vk_friends_success_invite">Приглашение отправлено</string>
@@ -915,4 +917,5 @@
     VIP-пользователем
   </string>
   <string name="chat_auto_reply_button">Стать VIP</string>
+  <string name="photo_list_load_info">Поделитесь фотографиями и вас увидят миллионы</string>
 </resources>
