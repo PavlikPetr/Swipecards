@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/auth_bg"
-    android:orientation="vertical">
-
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_white">
     <TextView
         android:id="@+id/tvRedAlert"
         style="@style/RedAlertTextView"
@@ -14,35 +11,37 @@
         android:textSize="12sp"
         android:visibility="invisible" />
 
-    <LinearLayout
-        android:id="@+id/loLoginGroup"
-        android:layout_width="225dp"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="20dp">
 
         <TextView
-            style="@style/AuthButtonsSmallText"
+            android:id="@+id/setPasswordText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:gravity="left"
-            android:text="@string/enter_email_from_registration" />
+            android:paddingBottom="16dp"
+            android:text="@string/enter_email_from_registration"
+            android:textColor="#89000000"
+            android:textSize="13sp" />
 
         <EditText
             android:id="@+id/edEmail"
-            style="@style/EditTextAuth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/text_input_signin"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress" />
+            style="@style/SettingsAccountEditText"
+            android:paddingLeft="0dp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="28dp">
 
             <ProgressBar
                 android:id="@+id/prsRecoverSending"
@@ -54,33 +53,11 @@
 
             <Button
                 android:id="@+id/btnRecover"
-                style="@style/RecoveryButtonsBigText"
-                android:layout_width="match_parent"
+                style="@style/Widget.Topface.Button.Big.Blue"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_signin_selector"
                 android:text="@string/send_password" />
         </RelativeLayout>
     </LinearLayout>
-
-    <TextView
-        style="@style/AuthButtonsBigText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/loLoginGroup"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="55dp"
-        android:text="@string/recovering_password" />
-
-    <TextView
-        android:id="@+id/tvBackToMainAuth"
-        style="@style/AuthButtonsBigText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:drawableLeft="@drawable/ic_back"
-        android:drawablePadding="8dp"
-        android:gravity="center_vertical"
-        android:text="@string/general_back" />
+    </ScrollView>
 </RelativeLayout>
