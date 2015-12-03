@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -54,7 +53,6 @@ import com.topface.topface.utils.gcmutils.GCMUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -423,33 +421,24 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     public void onAvatarClick(FeedLike item, View view) {
         super.onAvatarClick(item, view);
-        sendLikeReadRequest(getIdArray(item));
+        sendLikeReadRequest(getSenderId(item));
         showInterstitial();
     }
 
     @Override
     protected void onFeedItemClick(FeedItem item) {
         super.onFeedItemClick(item);
-        sendLikeReadRequest(getIdArray(item));
+        sendLikeReadRequest(getSenderId(item));
         showInterstitial();
     }
 
-    private void sendLikeReadRequest(ArrayList<Integer> idArray) {
-        new ReadLikeRequest(getActivity(), idArray, AdmobInterstitialUtils.canShowInterstitialAds()).exec();
+    private int getSenderId(FeedItem item) {
+        return item != null && !item.isAd() && item.user != null ? item.user.id : 0;
     }
 
-    private ArrayList<Integer> getIdArray(FeedItem item) {
-        ArrayList<Integer> array = new ArrayList<>();
-        if (item != null && !item.isAd() && item.user != null) {
-            for (FeedLike data : getListAdapter().getData()) {
-                if (data != null && !data.isAd() && data.user != null && data.user.id == item.user.id && !TextUtils.isEmpty(data.id)) {
-                    array.add(Integer.valueOf(data.id));
-                }
-            }
-        }
-        return array;
+    private void sendLikeReadRequest(int senderId) {
+        new ReadLikeRequest(getActivity(), senderId, AdmobInterstitialUtils.canShowInterstitialAds()).exec();
     }
-
 
     @Override
     protected int getEmptyFeedLayout() {
