@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
@@ -188,9 +189,22 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     }
 
     private void initBalanceCounters() {
-        findViewById(R.id.resources_layout).setVisibility(View.VISIBLE);
+        final LinearLayout containerView = (LinearLayout) findViewById(R.id.resources_layout);
+        containerView.setVisibility(View.VISIBLE);
+        containerView.post(new Runnable() {
+            @Override
+            public void run() {
+                int containerWidth = containerView.getMeasuredWidth();
+                if (mCurCoins != null && mCurLikes != null) {
+                    mCurCoins.setMaxWidth(containerWidth / 2);
+                    mCurLikes.setMaxWidth(containerWidth / 2);
+                }
+            }
+        });
         mCurCoins = (TextView) findViewById(R.id.coins_textview);
         mCurLikes = (TextView) findViewById(R.id.likes_textview);
+        mCurCoins.setSelected(true);
+        mCurLikes.setSelected(true);
         updateBalanceCounters();
     }
 
