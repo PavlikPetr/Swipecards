@@ -1036,6 +1036,7 @@
     
     <string name="photo_list_load_info">Поделитесь фотографиями и вас увидят миллионы</string>
 
-    <string name="%lu of %lu">%lu/%lu</string>
+    <string name="buy_vip_title_from_input">Начать общение с пользователем можно, если у вас есть VIP-статус</string>
+
 
 </resources>
