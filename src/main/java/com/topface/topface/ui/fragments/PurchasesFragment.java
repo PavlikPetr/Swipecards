@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.topface.billing.OpenIabFragment;
@@ -259,9 +260,22 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     private void initBalanceCounters(View root) {
-        root.findViewById(R.id.resources_layout).setVisibility(View.VISIBLE);
+        final LinearLayout containerView = (LinearLayout) root.findViewById(R.id.resources_layout);
+        containerView.setVisibility(View.VISIBLE);
+        containerView.post(new Runnable() {
+            @Override
+            public void run() {
+                int containerWidth = containerView.getMeasuredWidth();
+                if (mCurCoins != null && mCurLikes != null) {
+                    mCurCoins.setMaxWidth(containerWidth / 2);
+                    mCurLikes.setMaxWidth(containerWidth / 2);
+                }
+            }
+        });
         mCurCoins = (TextView) root.findViewById(R.id.coins_textview);
         mCurLikes = (TextView) root.findViewById(R.id.likes_textview);
+        mCurCoins.setSelected(true);
+        mCurLikes.setSelected(true);
         updateBalanceCounters(mBalanceData);
     }
 
