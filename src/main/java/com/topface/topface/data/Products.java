@@ -24,7 +24,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.onepf.oms.appstore.googleUtils.Purchase;
@@ -40,6 +39,7 @@ import java.util.Locale;
 public class Products extends AbstractData {
     public static final String PRICE = "{{price}}";
     public static final String PRICE_PER_ITEM = "{{price_per_item}}";
+    public static String[] PRICE_TEMPLATES = {PRICE, PRICE_PER_ITEM};
     private static final String EUR = "EUR";
     private static final String RUB = "RUB";
     private static final String USD = "USD";
@@ -172,18 +172,6 @@ public class Products extends AbstractData {
         }
     }
 
-    private static String getPriceAndCurrencyAbbreviation(String price, String currency) {
-        switch (currency) {
-            case EUR:
-                return price + App.getContext().getString(R.string.eur);
-            case USD:
-                return App.getContext().getString(R.string.usd) + price;
-            case RUB:
-                return price + App.getContext().getString(R.string.rub);
-        }
-        return price + currency;
-    }
-
     public BuyButtonData createBuyButtonFromJSON(JSONObject purchaseItem) {
         BuyButtonData button = null;
         if (purchaseItem != null) {
@@ -226,7 +214,7 @@ public class Products extends AbstractData {
             currency = Currency.getInstance(USD);
             currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
             currencyFormatter.setCurrency(currency);
-            value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn.titleTemplate, PRICE, PRICE_PER_ITEM);
+            value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn);
             if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
 
@@ -236,9 +224,9 @@ public class Products extends AbstractData {
                     currencyFormatter = detail.currency.equalsIgnoreCase(USD)
                             ? NumberFormat.getCurrencyInstance(Locale.US) : NumberFormat.getCurrencyInstance(new Locale(App.getLocaleConfig().getApplicationLocale()));
                     currencyFormatter.setCurrency(currency);
-                    value = formatPrice(price, currencyFormatter, buyBtn.titleTemplate, PRICE, PRICE_PER_ITEM);
+                    value = formatPrice(price, currencyFormatter, buyBtn);
                 } else {
-                    value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn.titleTemplate, PRICE, PRICE_PER_ITEM);
+                    value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn);
                 }
             }
         }
@@ -248,14 +236,24 @@ public class Products extends AbstractData {
         );
     }
 
-    public static String formatPrice(double price, NumberFormat currencyFormatter, String template, @NotNull String... replaceTemplateArray) {
+    public static String formatPrice(double price, NumberFormat currencyFormatter, BuyButtonData buyBtn) {
         currencyFormatter.setMaximumFractionDigits(price % 1 != 0 ? 2 : 0);
-        for (String replaceTemplate : replaceTemplateArray) {
-            if (template.contains(replaceTemplate)) {
-                return template.replace(replaceTemplate, currencyFormatter.format(price));
+        for (String replaceTemplate : PRICE_TEMPLATES) {
+            if (buyBtn.titleTemplate.contains(replaceTemplate)) {
+                return buyBtn.titleTemplate.replace(replaceTemplate, currencyFormatter.format(getPriceByTemplate(price, buyBtn)));
             }
         }
-        return template.replace(replaceTemplateArray[0], currencyFormatter.format(price));
+        return buyBtn.title;
+    }
+
+    private static double getPriceByTemplate(double price, BuyButtonData buyBtn) {
+        switch (buyBtn.titleTemplate) {
+            case PRICE_PER_ITEM:
+                return price / buyBtn.amount;
+            case PRICE:
+            default:
+                return price;
+        }
     }
 
     /**
