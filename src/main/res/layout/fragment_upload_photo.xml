@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:scrollbars="none"
     android:layout_height="match_parent">
@@ -10,27 +9,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:paddingTop="40dp">
+        android:paddingLeft="@dimen/take_photo_padding_24"
+        android:paddingRight="@dimen/take_photo_padding_24"
+        android:paddingTop="@dimen/take_photo_padding_40">
 
         <View
             android:id="@+id/upload_photo_placeholder"
-            android:layout_width="148dp"
-            android:layout_height="148dp"
+            android:layout_width="@dimen/take_photo_placeholder_size"
+            android:layout_height="@dimen/take_photo_placeholder_size"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/upload_photo_male"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:lineSpacingExtra="2dp"
             android:paddingBottom="20dp"
             android:paddingTop="32dp"
-            android:textColor="#de000000"
-            android:textSize="16sp"
-            android:text="@string/take_photo_text_1"/>
+            android:text="@string/take_photo_text_1"
+            style="@style/TakePhotoText"/>
 
         <Button
             android:id="@+id/btn_take_photo"
@@ -48,13 +42,8 @@
             android:text="@string/profile_add_album"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:lineSpacingExtra="2dp"
-            android:paddingTop="40dp"
-            android:textColor="#8F000000"
-            android:textSize="12sp"
+            style="@style/TakePhotoText.Medium"
+            android:paddingTop="@dimen/take_photo_padding_40"
             android:text="@string/take_photo_text_2"/>
     </LinearLayout>
 </ScrollView>
