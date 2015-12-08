@@ -30,7 +30,7 @@
             android:paddingTop="32dp"
             android:textColor="#de000000"
             android:textSize="16sp"
-            tools:text="Никто не сможет познакомиться с вами без фото. Пожалуйста, загрузите свою фотографию, чтобы продолжить."/>
+            android:text="@string/take_photo_text_1"/>
 
         <Button
             android:id="@+id/btn_take_photo"
@@ -38,14 +38,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            tools:text="Сделать снимок"/>
+            android:text="@string/profile_add_camera"/>
 
         <Button
             android:id="@+id/btn_choose_photo"
             style="@style/Widget.Topface.Button.Big.Blue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Выбрать из имеющихся"/>
+            android:text="@string/profile_add_album"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -55,6 +55,6 @@
             android:paddingTop="40dp"
             android:textColor="#8F000000"
             android:textSize="12sp"
-            tools:text="На фото должны быть именно вы. Все фотографии модерируются."/>
+            android:text="@string/take_photo_text_2"/>
     </LinearLayout>
 </ScrollView>
