@@ -856,4 +856,9 @@
     <string name="friends_empty_list_error">El listado de tus amigos está vacío</string>
     <string name="vk_friends_success_invite">Invitación enviado</string>
     <string name="join_group_success">Has entrado en el grupo</string>
+    <string name="settings_auto_greeting_title">Saludo automático</string>
+    <string name="settings_auto_greeting_subtitle">Permite comenzar automáticamente la conversación con un saludo al obtener simpatías</string>
+    <string name="chat_auto_reply_title">El texto del mensaje está oculto</string>
+    <string name="chat_auto_reply_message">Para abrir y responder a esto, hazte usuario VIP</string>
+    <string name="chat_auto_reply_button">Hacerse VIP</string>
 </resources>

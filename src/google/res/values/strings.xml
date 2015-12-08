@@ -109,7 +109,7 @@
         <item quantity="other">%d free coins</item>
         <item quantity="one">%d free coin</item>
     </plurals>
-    <string name="pincode_blocking_app">Lock app. login</string>
+    <string name="pincode_blocking_app">Lock app</string>
     <string name="pincode_blocking">Lock</string>
     <string name="pincode_reset">Reset your PIN code</string>
     <string name="pincode_set">Set a PIN code</string>
