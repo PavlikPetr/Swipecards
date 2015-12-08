@@ -30,8 +30,8 @@
     <string name="likes_background_text">Нет симпатий</string>
 
     <string name="visitors_background_text">Нет гостей</string>
-    <string name="need_set_avatar">Никто не сможет познакомиться с вами без фото. Пожалуйста, загрузите свою фотографию, чтобы продолжить.</string>
-    <string name="need_set_avatar_warning">На фото должны быть именно вы. Все фотографии модерируются.</string>
+    <string name="need_set_avatar">С вами никто не может познакомиться! Установите фото на аватар.
+    </string>
     <string name="chat_background_text">Входящих сообщений нет</string>
     <string name="entrance">Вход</string>
     <string name="filter_only_online">Только онлайн</string>
@@ -1021,4 +1021,6 @@
     <string name="chat_auto_reply_title">Текст сообщения скрыт</string>
     <string name="chat_auto_reply_message">Чтобы открыть и ответить на него, станьте VIP-пользователем</string>
     <string name="chat_auto_reply_button">Стать VIP</string>
+    <string name="take_photo_text_1">Пожалуйста, загрузите свою фотографию, чтобы начать знакомиться.</string>
+    <string name="take_photo_text_2">На фото должны быть именно вы. Все фотографии модерируются.</string>
 </resources>

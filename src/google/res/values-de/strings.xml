@@ -794,4 +794,9 @@
     <string name="friends_empty_list_error">Deine Freundesliste ist leer</string>
     <string name="vk_friends_success_invite">Die Einladung wurde verschickt</string>
     <string name="join_group_success">Du bist der Gruppe beigetreten</string>
+    <string name="settings_auto_greeting_title">Automatische Grüße</string>
+    <string name="settings_auto_greeting_subtitle">Erlaube Topface, automatisch ein Gespräch zu starten, wenn dir jemand ein Like schickt</string>
+    <string name="chat_auto_reply_title">Der Text der Nachricht ist verborgen</string>
+    <string name="chat_auto_reply_message">Um diese Nachricht zu öffnen oder um auf sie zu antworten, musst du zum VIP werden.</string>
+    <string name="chat_auto_reply_button">Werde zum VIP</string>
 </resources>

@@ -837,4 +837,9 @@
     <string name="friends_empty_list_error">Arkadaş listen boş</string>
     <string name="vk_friends_success_invite">Davet gönderildi</string>
     <string name="join_group_success">Gruba üye oldunuz</string>
+    <string name="settings_auto_greeting_title">Otomatik-selam</string>
+    <string name="settings_auto_greeting_subtitle">Birisi size beğeni gönderdiğinde otomatik olarak selam gönderilmesi ve sohbet başlatılması için Topface\'e izin verin.</string>
+    <string name="chat_auto_reply_title">Mesaj yazısı gizlenmiş.</string>
+    <string name="chat_auto_reply_message">Bu mesajı açmak ve okumak için VIP üye olman gerekiyor.</string>
+    <string name="chat_auto_reply_button">VIP üye ol</string>
 </resources>
