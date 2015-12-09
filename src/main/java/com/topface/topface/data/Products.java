@@ -28,6 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -237,22 +238,21 @@ public class Products extends AbstractData {
     }
 
     public static String formatPrice(double price, NumberFormat currencyFormatter, BuyButtonData buyBtn) {
+        price = getPriceByTemplate(price, buyBtn);
         currencyFormatter.setMaximumFractionDigits(price % 1 != 0 ? 2 : 0);
         for (String replaceTemplate : PRICE_TEMPLATES) {
             if (buyBtn.titleTemplate.contains(replaceTemplate)) {
-                return buyBtn.titleTemplate.replace(replaceTemplate, currencyFormatter.format(getPriceByTemplate(price, buyBtn)));
+                return buyBtn.titleTemplate.replace(replaceTemplate, currencyFormatter.format(price));
             }
         }
         return buyBtn.title;
     }
 
     private static double getPriceByTemplate(double price, BuyButtonData buyBtn) {
-        switch (buyBtn.titleTemplate) {
-            case PRICE_PER_ITEM:
-                return price / buyBtn.amount;
-            case PRICE:
-            default:
-                return price;
+        if (buyBtn.titleTemplate.contains((PRICE_PER_ITEM))) {
+            return price / buyBtn.amount;
+        } else {
+            return price;
         }
     }
 
