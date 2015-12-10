@@ -28,7 +28,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -215,7 +214,7 @@ public class Products extends AbstractData {
             currency = Currency.getInstance(USD);
             currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
             currencyFormatter.setCurrency(currency);
-            value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn);
+            value = formatPrice((double) buyBtn.price / 100, currencyFormatter, buyBtn);
             if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
 
@@ -227,7 +226,7 @@ public class Products extends AbstractData {
                     currencyFormatter.setCurrency(currency);
                     value = formatPrice(price, currencyFormatter, buyBtn);
                 } else {
-                    value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn);
+                    value = formatPrice((double) buyBtn.price / 100, currencyFormatter, buyBtn);
                 }
             }
         }
