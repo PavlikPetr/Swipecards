@@ -42,17 +42,25 @@
     <string name="dating_continue">Kontynuuj znajomość</string>
     <string name="edit_my_photos">Moje zdjęcia</string>
     <string name="general_search_empty_title">Niestety niczego nie znaleziono</string>
-    <string name="general_search_empty_text">Możesz spróbować powtórzyć wyszukiwanie lub zmienić ustawienia filtru</string>
+    <string name="general_search_empty_text">Możesz spróbować powtórzyć wyszukiwanie lub zmienić
+        ustawienia filtru
+    </string>
     <string name="map_title">Mapa</string>
     <string name="general_buying">Kup sympatie i monety</string>
     <string name="popup_version_title">Dostępna nowa wersja aplikacji</string>
     <string name="popup_version_message">Czas na odnowienie swojej wersji!</string>
-    <string name="leaders_select_photo_info">Wybierz najbardziej efektowne zdjęcie! Zdjęcia o niskim rankingu wybrać nie można</string>
+    <string name="leaders_select_photo_info">Wybierz najbardziej efektowne zdjęcie! Zdjęcia o niskim
+        rankingu wybrać nie można
+    </string>
     <string name="map_popup_address">Adres</string>
-    <string name="black_list_info">Rozmówca został dodany do czarnej listy. Możesz to zmienić w swoim profilu w ustawieniach VIP-statusu.</string>
+    <string name="black_list_info">Rozmówca został dodany do czarnej listy. Możesz to zmienić w
+        swoim profilu w ustawieniach VIP-statusu.
+    </string>
     <string name="black_list_activation">Aktywuj VIP-status i używaj czarnej listy</string>
     <string name="buying_total">Razem</string>
-    <string name="we_dont_detect_your_city">Aby znaleźć ludzi z okolic musimy wiedzieć gdzie się znajdujesz. Prosimy o ustalenie swojego miasta</string>
+    <string name="we_dont_detect_your_city">Aby znaleźć ludzi z okolic musimy wiedzieć gdzie się
+        znajdujesz. Prosimy o ustalenie swojego miasta
+    </string>
     <string name="confirm_email">Prosimy o potwierdzenie adresu e-mail</string>
     <string name="password_sent">Nowe hasło zostało wysłane na Twój e-mail</string>
     <string name="buy_vip_month_one">%1$d miesiąc za %2$.2f %3$@</string>
@@ -205,8 +213,11 @@
         <item quantity="other">%d zdjęć</item>
         <item quantity="one">%d zdjęcie</item>
     </plurals>
-    <string name="general_edit_profile_message">Prosimy o uzupełnienie wszystkich pól ankiety</string>
-    <string name="general_search_null_response_error">Niczego nie znaleziono. Spróbuj zmienić filtry</string>
+    <string name="general_edit_profile_message">Prosimy o uzupełnienie wszystkich pól ankiety
+    </string>
+    <string name="general_search_null_response_error">Niczego nie znaleziono. Spróbuj zmienić
+        filtry
+    </string>
     <string name="change_filters">Zmień filtry</string>
     <string name="general_sex">Płeć</string>
     <string name="general_girl">Żeński</string>
@@ -230,30 +241,45 @@
     <string name="vip_buy_vip">Kupowanie VIP</string>
     <string name="vip_state_off">Twój VIP-status nie jest aktywowany</string>
     <string name="vip_info_guest">Dowiedz się, kto interesuje się Tobą - sprawdź swoich gości!</string>
-    <string name="vip_info_invisible">Bądź niewidoczny podczas przeglądu cudzych stron dzięki statusu \"niewidoczny\"</string>
-    <string name="vip_info_message">Zdobądź przewagę - Twoje wiadomości będą się wyświetlały w ogólnym tle</string>
-    <string name="vip_info_blackList">Pozbywaj się dokuczliwych osób za pomocą \"czarnej listy\"</string>
-    <string name="vip_info_vip">Wyróżniaj się za pomocą swojego VIP-statusu w wyszukiwaniu i swoim profilu!</string>
+    <string name="vip_info_invisible">Bądź niewidoczny podczas przeglądu cudzych stron dzięki
+        statusu \"niewidoczny\"
+    </string>
+    <string name="vip_info_message">Zdobądź przewagę - Twoje wiadomości będą się wyświetlały w
+        ogólnym tle
+    </string>
+    <string name="vip_info_blackList">Pozbywaj się dokuczliwych osób za pomocą \"czarnej listy\"
+    </string>
+    <string name="vip_info_vip">Wyróżniaj się za pomocą swojego VIP-statusu w wyszukiwaniu i swoim
+        profilu!
+    </string>
     <string name="buying_vip_status">Kup VIP-status</string>
     <string name="edit_my_city">Moje miasto</string>
     <string name="settings_feedback_email">E-mail kontaktowy</string>
     <string name="settings_invalid_email">Niewłaściwy e-mail</string>
     <string name="chat_write_message">Napisz wiadomość</string>
     <string name="buying_sympathies">Zakup sympatie</string>
-    <string name="general_reconnect_social">Nie ma dostępu do sieci socjalnej. Spróbuj ponownie później.</string>
+    <string name="general_reconnect_social">Nie ma dostępu do sieci socjalnej. Spróbuj ponownie
+        później.
+    </string>
     <string name="general_block">Zablokuj</string>
     <string name="general_buying_disabled">Teraz kupowanie jest niemożliwe</string>
     <string name="virus_chat_btn">Zdobądź sympatie</string>
     <string name="profile_ask_sent">Prośba została wysłana</string>
-    <string name="virus_error">Za dobę Twój znajomy może wysłać sympatie tylko 1 raz! Spróbuj jutro!</string>
+    <string name="virus_error">Za dobę Twój znajomy może wysłać sympatie tylko 1 raz! Spróbuj
+        jutro!
+    </string>
     <string name="popup_version_update">Odnów</string>
     <string name="popup_version_cancel">Przypomnieć później</string>
-    <string name="general_version_not_supported">Twoja wersja aplikacji nie jest aktualna. Prosimy o odnowienie aplikacji</string>
+    <string name="general_version_not_supported">Twoja wersja aplikacji nie jest aktualna. Prosimy o
+        odnowienie aplikacji
+    </string>
     <string name="default_price_format">Razem: %.2f USD</string>
     <string name="leaders_pick_condition">Nie możesz wybrać zdjęcie o rankingu poniżej %d%%:</string>
     <string name="general_gift">Prezent</string>
     <string name="user_actions_chat">Rozmowa</string>
-    <string name="profile_edit_age_ranges">Wiek ma być od 16 do 99 lat. Prosimy o wpisanie poprawnej liczby i powtórzenie próby zapisywania</string>
+    <string name="profile_edit_age_ranges">Wiek ma być od 16 do 99 lat. Prosimy o wpisanie poprawnej
+        liczby i powtórzenie próby zapisywania
+    </string>
     <string name="sign_in">Wejdź</string>
     <string name="create_account">Utwórz account</string>
     <string name="email">E-mail</string>
@@ -272,20 +298,30 @@
     <string name="incorrect_password">Nieprawidłowo wpisane hasło</string>
     <string name="empty_fields">Nie wszystkie pola są uzupełnione</string>
     <string name="email_already_registered">Użytkownik z takim adresem e-mail już istnieje</string>
-    <string name="enter_email_from_registration">Wpisz swój e-mail, który zaznaczyłeś/-aś przy rejestracji</string>
+    <string name="enter_email_from_registration">Wpisz swój e-mail, który zaznaczyłeś/-aś przy
+        rejestracji
+    </string>
     <string name="default_photo_upload">Ładowanie zdjęć</string>
     <string name="default_photo_upload_error">Błąd podczas ładowania</string>
     <string name="default_photo_upload_complete">Ładowanie zostało zakończone</string>
-    <string name="general_error_try_again_later">Połączenie z Topface jest niemożliwe. Spróbuj później</string>
+    <string name="general_error_try_again_later">Połączenie z Topface jest niemożliwe. Spróbuj
+        później
+    </string>
     <string name="search_city_by_name">Wyszukiwanie miasta według nazwy</string>
     <string name="gallery">Galeria</string>
-    <string name="no_photo_take_photo">Nikt nie może z Tobą się poznać! Zrób zdjęcie lub wybierz z albumu</string>
-    <string name="photo_for_avatar">Zdjęcie jest gotowe do zapisywania się w profilu! To Twoje pierwsze zdjęcie i ono będzie wykorzystywane jako zdjęcie profilowe</string>
+    <string name="no_photo_take_photo">Nikt nie może z Tobą się poznać! Zrób zdjęcie lub wybierz z
+        albumu
+    </string>
+    <string name="photo_for_avatar">Zdjęcie jest gotowe do zapisywania się w profilu! To Twoje
+        pierwsze zdjęcie i ono będzie wykorzystywane jako zdjęcie profilowe
+    </string>
     <string name="send_confirmation_email">Wysłać potwierdzenie na e-mail</string>
     <string name="change_password">Zmień hasło</string>
     <string name="password_changing">Zmiana hasła</string>
     <string name="save">Zapisz</string>
-    <string name="confirmation_successfully_sent">Potwierdzenie zostało wysłane na wskazany przez Ciebie e-mail</string>
+    <string name="confirmation_successfully_sent">Potwierdzenie zostało wysłane na wskazany przez
+        Ciebie e-mail
+    </string>
     <string name="password_hint">hasło</string>
     <string name="enter_new_password">Wpisz nowe hasło</string>
     <string name="enter_password_confirmation">Wpisz potwierdzenie hasła</string>
@@ -295,12 +331,17 @@
     <string name="take_another_photo">Inne zdjęcie</string>
     <string name="we_detect_your_city">Ustaliliśmy Twoje miasto:</string>
     <string name="reselect_city">Wybierz inne miasto:</string>
-    <string name="choose_cool_photo">Wybierz najlepsze zdjęcie i status, które odzwierciadlają Twój nastrój!</string>
+    <string name="choose_cool_photo">Wybierz najlepsze zdjęcie i status, które odzwierciadlają Twój
+        nastrój!
+    </string>
     <string name="email_confirmed">e-mail został potwierdzony!</string>
     <string name="sympathy_sended">Sympatia została wysłana</string>
-    <string name="general_photo_deleted">Twoje zdjęcie nie przestrzegało zasad i zostało usunięte</string>
+    <string name="general_photo_deleted">Twoje zdjęcie nie przestrzegało zasad i zostało usunięte
+    </string>
     <string name="general_change">Zmień</string>
-    <string name="user_does_not_have_gifts">Ten użytkownik na razie nie ma prezentów. Zostań pierwszym a Cię zauważą</string>
+    <string name="user_does_not_have_gifts">Ten użytkownik na razie nie ma prezentów. Zostań
+        pierwszym a Cię zauważą
+    </string>
     <string name="status_is_empty">Nie masz statusu</string>
     <string name="you_dont_have_gifts_yet">Na razie nie masz prezentów</string>
     <string name="buy_sympathies">Kup sympatie</string>
@@ -319,16 +360,25 @@
     <string name="buy_resources">Uzupełnij zasób</string>
     <string name="user_is_banned">Użytkownik został zablokowany</string>
     <string name="profile_empty_name">Imię nie może być puste</string>
-    <string name="general_wrong_photo_upload">Twoje zdjęcie nie przestrzega zasad. Spróbuj zrobić nowe</string>
+    <string name="general_wrong_photo_upload">Twoje zdjęcie nie przestrzega zasad. Spróbuj zrobić
+        nowe
+    </string>
     <string name="general_input_email">Wpisz swój e-mail</string>
-    <string name="cant_delete_fake_item">Dana wiadomość jeszcze nie dostarczona, więc nie możesz usunąć ją. Spróbuj ponownie później</string>
-    <string name="vip_stop_ads">Tylko rozmowy, nic zbytecznego. VIP-użytkownicy nie mają reklamy</string>
+    <string name="cant_delete_fake_item">Dana wiadomość jeszcze nie dostarczona, więc nie możesz
+        usunąć ją. Spróbuj ponownie później
+    </string>
+    <string name="vip_stop_ads">Tylko rozmowy, nic zbytecznego. VIP-użytkownicy nie mają reklamy
+    </string>
     <string name="friend_email_hint">Wpisz e-mail lub numer telefonu znajomego</string>
     <string name="general_add">Dodaj</string>
     <string name="general_invite_friends">Zaproś znajomych</string>
     <string name="general_rest_contacts">Zostało Ci %d kontaktów</string>
-    <string name="invite_friends_title">Zaproś wszystkich znajomych z książki telefonicznej w Topface</string>
-    <string name="invalid_contacts">Niektóre z kontaktów są niewłaściwe. Prosimy o dodanie właściwych kontaktów</string>
+    <string name="invite_friends_title">Zaproś wszystkich znajomych z książki telefonicznej w
+        Topface
+    </string>
+    <string name="invalid_contacts">Niektóre z kontaktów są niewłaściwe. Prosimy o dodanie
+        właściwych kontaktów
+    </string>
     <plurals name="vip_status_period">
         <item quantity="few">Zdobyłeś VIP-status na %d dni</item>
         <item quantity="other">Zdobyłeś VIP-status na %d dni</item>
@@ -349,19 +399,33 @@
         <item quantity="other">Zdobądź VIP za darmo za %d zaproszeń</item>
         <item quantity="one">Zdobądź VIP za darmo za %d zaproszenie</item>
     </plurals>
-    <string name="buy_status_and_watch_your_fans">Kup VIP-status a dowiedz się, kto dodał Cię do ulubionych</string>
-    <string name="add_bookmarks_to_be_connected">Dodawaj nowych znajomych do tego rozdziału a nie stracisz z nimi kontaktu</string>
-    <string name="nobody_chat_with_you_sympathies_will_help">Nikt jeszcze do Ciebie nie napisał. Sympatie pomogą w poszukiwaniu rozmówcy</string>
-    <string name="rate_and_have_mutual_or_buy_and_chat">Wysyłaj sympatie tym, kto Ci się podoba a otrzymasz odwzajemnione. Albo kup sympatie i zacznij rozmowę z tymi, komu się podobasz!</string>
-    <string name="with_vip_find_your_visitors">Z VIP-statusem dowiesz się, kto odwiedzał Twoją stronę</string>
+    <string name="buy_status_and_watch_your_fans">Kup VIP-status a dowiedz się, kto dodał Cię do
+        ulubionych
+    </string>
+    <string name="add_bookmarks_to_be_connected">Dodawaj nowych znajomych do tego rozdziału a nie
+        stracisz z nimi kontaktu
+    </string>
+    <string name="nobody_chat_with_you_sympathies_will_help">Nikt jeszcze do Ciebie nie napisał.
+        Sympatie pomogą w poszukiwaniu rozmówcy
+    </string>
+    <string name="rate_and_have_mutual_or_buy_and_chat">Wysyłaj sympatie tym, kto Ci się podoba a
+        otrzymasz odwzajemnione. Albo kup sympatie i zacznij rozmowę z tymi, komu się podobasz!
+    </string>
+    <string name="with_vip_find_your_visitors">Z VIP-statusem dowiesz się, kto odwiedzał Twoją
+        stronę
+    </string>
     <string name="on_avatar">Zapisz jako zdjęcie profilowe</string>
     <string name="your_avatar">Twoje zdjęcie profilowe</string>
     <string name="avatar_set_successfully">Zdjęcie profilowe z powodzeniem zostało zainstalowane</string>
     <string name="incorrect_photo">Niewłaściwe zdjęcie. Spróbuj dodać inne</string>
-    <string name="incorrect_photo_format">Niewłaściwy format zdjęcia. Spróbuj dodać w formacie jpg lub png</string>
+    <string name="incorrect_photo_format">Niewłaściwy format zdjęcia. Spróbuj dodać w formacie jpg
+        lub png
+    </string>
     <string name="incorrect_photo_size">Niedopuszczalny rozmiar zdjęcia</string>
     <string name="input_contact_name">Wpisz imię kontaktu</string>
-    <string name="incorrect_locale">Jeśli chcesz abyśmy mogli przeczytać Twoją opinię, napisz ją w języku rosyjskim lub angielskim</string>
+    <string name="incorrect_locale">Jeśli chcesz abyśmy mogli przeczytać Twoją opinię, napisz ją w
+        języku rosyjskim lub angielskim
+    </string>
     <string name="complain_photo_header">Niewłaściwe zdjęcie</string>
     <string name="complain_msg_header">Niewłaściwa wiadomość</string>
     <string name="complain_info_header">Niewłaściwa informacja</string>
@@ -369,18 +433,31 @@
     <string name="complain_type_ero">Erotyka na zdjęciu profilowym</string>
     <string name="complain_type_picture">Obrazek</string>
     <string name="complain_type_fake_user">Znana osoba</string>
-    <string name="complain_type_spam_msg">Oferta komercyjna, spam, reklama, linki na strony internetowe, telefony</string>
-    <string name="complain_type_spam_profile">Pola \"status\", \"o sobie\" zawierają ofertę komercujną</string>
-    <string name="complain_type_swearing_profile">Pola \"status\", \"o sobie\" zawierają chamstwo, przekleństwa, linki do sieci socjlanych</string>
-    <string name="complain_type_fake_data">Imię, płeć, wiek i zdjęcie użytkownika nie pokrywają się</string>
+    <string name="complain_type_spam_msg">Oferta komercyjna, spam, reklama, linki na strony
+        internetowe, telefony
+    </string>
+    <string name="complain_type_spam_profile">Pola \"status\", \"o sobie\" zawierają ofertę
+        komercujną
+    </string>
+    <string name="complain_type_swearing_profile">Pola \"status\", \"o sobie\" zawierają chamstwo,
+        przekleństwa, linki do sieci socjlanych
+    </string>
+    <string name="complain_type_fake_data">Imię, płeć, wiek i zdjęcie użytkownika nie pokrywają
+        się
+    </string>
     <string name="complain_description">Opowiedz o przyczynach skargi szczególniej</string>
-    <string name="general_complain_sended">Twoja skarga została wysłana, dziękujemy za pomoc</string>
+    <string name="general_complain_sended">Twoja skarga została wysłana, dziękujemy za pomoc
+    </string>
     <string name="general_complain">Skarga</string>
     <string name="general_msg">Wiadomość</string>
     <string name="notifications">Powiadomienia</string>
-    <string name="general_no_notifications">Niestety, powiadomienia na Twoim urządzeniu są niedostępne</string>
+    <string name="general_no_notifications">Niestety, powiadomienia na Twoim urządzeniu są
+        niedostępne
+    </string>
     <string name="black_list_add_short">Do czarnej listy</string>
-    <string name="confirm_email_for_dating">Jesteśmy przeciwko spamowi. Potwierdź swój adres e-mail aby korzystać z Topface!</string>
+    <string name="confirm_email_for_dating">Jesteśmy przeciwko spamowi. Potwierdź swój adres e-mail
+        aby korzystać z Topface!
+    </string>
     <string name="complain_type_swearing_msg">Chamstwo, groźby, przekleństwa</string>
     <string name="general_exit">Wyloguj się</string>
     <string name="general_get_dating">Poznawaj</string>
@@ -392,6 +469,10 @@
         <item quantity="one">Podobasz się %d osobie</item>
     </plurals>
     <string name="or">lub</string>
-    <string name="novice_sympathy">Wysyłaj sympatie tym, kto Ci\nrzeczywiście się podoba,\naby zacząć miłą znajomość</string>
-    <string name="novice_sympathies_bonus">Otrzymasz %1$d sympatii\nprezencie! To oznacza, że\nna pewno się spodobasz %2$d osobom,\nktóre wyrażą Ci swoją sympatię</string>
+    <string name="novice_sympathy">Wysyłaj sympatie tym, kto Ci\nrzeczywiście się podoba,\naby
+        zacząć miłą znajomość
+    </string>
+    <string name="novice_sympathies_bonus">Otrzymasz %1$d sympatii\nprezencie! To oznacza, że\nna
+        pewno się spodobasz %2$d osobom,\nktóre wyrażą Ci swoją sympatię
+    </string>
 </resources>

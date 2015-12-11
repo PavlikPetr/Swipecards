@@ -12,9 +12,7 @@
     <string name="chat_background_text">Nemáte došlé správy</string>
     <string name="filter_only_online">Iba online</string>
     <string name="filter_select_city">Výber mesta</string>
-    <string name="dashbrd_popup_rating">Páči sa naša aplikácia? Pomôžte zdvihnúť náš rating! Čím
-        vyšší je rating, tým viac zaujímavých ľudí stretnete v Topface
-    </string>
+    <string name="dashbrd_popup_rating">Páči sa naša aplikácia? Pomôžte zdvihnúť náš rating! Čím vyšší je rating, tým viac zaujímavých ľudí stretnete v Topface</string>
     <string name="dashbrd_popup_title">Rating</string>
     <string name="dashbrd_popup_cancel">Viac sa nepýtať</string>
     <string name="dashbrd_popup_rate">Vystaviť rating</string>
@@ -59,8 +57,7 @@
     <string name="black_list_info">Pridali ste osobu na čiarnu listiny. Môžete to zmeniť vo svojich
         profilových nastaveniach v časti VIP status
     </string>
-    <string name="black_list_activation">Aktivujte si VIP status a využívajte čiernu listinu
-    </string>
+    <string name="black_list_activation">Aktivujte si VIP status a využívajte čiernu listinu</string>
     <string name="buying_total">Celkovo</string>
     <string name="we_dont_detect_your_city">Aby ste mohli nájsť ľudí, ktorí sú blízko Vás, musíme
         vedieť kde sa nachádzate. Zadajte prosím Vaše mesto
@@ -244,9 +241,7 @@
     <string name="black_list_delete">Vymazať z čiernej listiny</string>
     <string name="vip_buy_vip">Nákup VIP</string>
     <string name="vip_state_off">Váš VIP status nie je aktivovaný</string>
-    <string name="vip_info_guest">Zistite, kto sa o Vás zaujíma - prezrite si svojich
-        návštevníkov!
-    </string>
+    <string name="vip_info_guest">Zistite, kto sa o Vás zaujíma - prezrite si svojich návštevníkov!</string>
     <string name="vip_info_invisible">Zostaňte neodhalený pri návšteve cudzích stránok vďaka režimu
         \"neviditeľný\"
     </string>
@@ -282,9 +277,7 @@
         podporovaná. Prosím obnovte si verziu aplikácie
     </string>
     <string name="default_price_format">Celkovo: %.2f USD</string>
-    <string name="leaders_pick_condition">Nemôžete si vybrať fotografiu s hodnotením nižším ako
-        %d%%:
-    </string>
+    <string name="leaders_pick_condition">Nemôžete si vybrať fotografiu s hodnotením nižším ako %d%%:</string>
     <string name="general_gift">Darček</string>
     <string name="user_actions_chat">Rozhovor</string>
     <string name="profile_edit_age_ranges">Vek musí byť v rozmedzí od 16 do 99 rokov. Zadajte prosím
@@ -362,7 +355,7 @@
     <string name="general_bookmarks">Vybrané</string>
     <string name="general_fans">Fanúšikovia</string>
     <string name="settings_edit_profile">Upraviť profil</string>
-    <string name="general_bookmarks_delete">Vymazať vybraných</string>
+    <string name="general_bookmarks_delete">Vymazať  vybraných</string>
     <string name="general_bookmarks_add">Pridať do vybraných</string>
     <string name="buy_resources">Doplňiť zásoby</string>
     <string name="user_is_banned">Užívateľ dostal BAN</string>
@@ -394,9 +387,9 @@
         <item quantity="one">Získať VIP na %d deň</item>
     </plurals>
     <plurals name="invite_friends_plurals">
-        <item quantity="few">Pozvite %1$d priateľov, aby ste získali VIP status na %2$d dni</item>
-        <item quantity="other">Pozvite %1$d priateľov, aby ste získali VIP status na %2$d dní</item>
-        <item quantity="one">Pozvite %1$d priateľov, aby ste získali VIP status na %2$d deň</item>
+        <item quantity="few">Pozvite %1$d priateľov, aby ste získali VIP status na  %2$d dni</item>
+        <item quantity="other">Pozvite %1$d priateľov, aby ste získali VIP status na  %2$d dní</item>
+        <item quantity="one">Pozvite %1$d priateľov, aby ste získali VIP status na  %2$d deň</item>
     </plurals>
     <plurals name="get_vip_for_invites_plurals">
         <item quantity="few">Získaj VIP zadarmo za %d pozvania</item>

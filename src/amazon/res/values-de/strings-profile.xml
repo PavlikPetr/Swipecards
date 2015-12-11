@@ -25,16 +25,13 @@
     <string name="profile_form_education_female_5">Weniger als Mittelschulbildung</string>
     <string name="profile_form_education_female_6">Ich bin einfach klug</string>
     <string name="profile_form_communication_male_0">Sehr kontaktfreudig</string>
-    <string name="profile_form_communication_male_1">Bin geöffnet für die interessanten Menschen
-    </string>
+    <string name="profile_form_communication_male_1">Bin geöffnet für die interessanten Menschen</string>
     <string name="profile_form_communication_male_2">Schreib - dann werden wir ja sehen</string>
     <string name="profile_form_communication_male_3">Ich unterhalte mich nur mit den besten</string>
     <string name="profile_form_communication_female_0">Sehr Kontaktfreudig</string>
-    <string name="profile_form_communication_female_1">Bin geöffnet für die interessanten Menschen
-    </string>
+    <string name="profile_form_communication_female_1">Bin geöffnet für die interessanten Menschen</string>
     <string name="profile_form_communication_female_2">Schreib - dann werden wir ja sehen</string>
-    <string name="profile_form_communication_female_3">Ich unterhalte mich nur mit den besten
-    </string>
+    <string name="profile_form_communication_female_3">Ich unterhalte mich nur mit den besten</string>
     <string name="profile_form_character_male_0">Leicht</string>
     <string name="profile_form_character_male_1">Schwer</string>
     <string name="profile_form_character_male_2">Hart</string>
@@ -92,17 +89,14 @@
     <string name="profile_form_finances_male_2">Mehr als Durchschnittslohn</string>
     <string name="profile_form_finances_male_3">Stabiler Durchschnittslohn</string>
     <string name="profile_form_finances_male_4">Geld ist nicht so wichtig</string>
-    <string name="profile_form_finances_male_5">Ich hab kärglicher Verdienst, aber das reicht mir
-    </string>
+    <string name="profile_form_finances_male_5">Ich hab kärglicher Verdienst, aber das reicht mir</string>
     <string name="profile_form_finances_male_6">Ich brauche materielle Hilfe</string>
     <string name="profile_form_finances_female_0">Sehr hohes Einkommen</string>
     <string name="profile_form_finances_female_1">Kann mit jemandem teilen</string>
     <string name="profile_form_finances_female_2">Mehr als Durchschnittslohn</string>
     <string name="profile_form_finances_female_3">Stabiler Durchschnittslohn</string>
     <string name="profile_form_finances_female_4">Geld ist nicht so wichtig</string>
-    <string name="profile_form_finances_female_5">Ich hab kärglicher Verdienst, aber das reicht
-        mir
-    </string>
+    <string name="profile_form_finances_female_5">Ich hab kärglicher Verdienst, aber das reicht mir</string>
     <string name="profile_form_finances_female_6">Ich brauche materielle Hilfe</string>
     <string name="profile_form_smoking_male_0">Hab nicht geraucht</string>
     <string name="profile_form_smoking_male_1">Hab augegeben</string>
@@ -229,8 +223,7 @@
     <string name="form_habits_restaurants_3">Ihre Lieblingsrestaurants</string>
     <string name="form_detail_about_dating_0">Über das erste Date mit einem Mädchen</string>
     <string name="form_detail_about_dating_1">Über das ideale erste Date</string>
-    <string name="form_detail_about_dating_2">Wie wird Ihr erstes Date mit einem Mädchen aussehen?
-    </string>
+    <string name="form_detail_about_dating_2">Wie wird Ihr erstes Date mit einem Mädchen aussehen?</string>
     <string name="form_detail_about_dating_3">Beschreiben Sie ein ideales Date</string>
     <string name="form_detail_archievements_0">Beste Leistungen im Leben</string>
     <string name="form_detail_archievements_1">Beste Leistungen im Leben</string>
