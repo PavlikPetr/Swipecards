@@ -842,4 +842,6 @@
     <string name="chat_auto_reply_title">Mesaj yazısı gizlenmiş.</string>
     <string name="chat_auto_reply_message">Bu mesajı açmak ve okumak için VIP üye olman gerekiyor.</string>
     <string name="chat_auto_reply_button">VIP üye ol</string>
+    <string name="take_photo_text_1">Arkadaş bulmaya başlamak için lütfen fotoğrafınızı yükleyiniz.</string>
+    <string name="take_photo_text_2">Fotoğraf size ait olmalı ve içerisinde siz olmalısınız. Modaratörlerimiz tüm fotoğrafları kontrol etmektedir.</string>
 </resources>

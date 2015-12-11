@@ -353,3 +353,19 @@ subprojects {
         buildToolsVersion rootProject.ANDROID_BUILD_TOOLS_VERSION
     }
 }
+
+// простите за этот кусок унылого ..., но пока не удалось запустить внешнюю таску из build.gradle, поэтому
+// в данный момент придется довольствоваться этим вариантом синхронизации строк
+
+task runScript(type: Exec) {
+    def listFlavours = []
+    android.productFlavors.each { flavor ->
+        listFlavours << flavor.name
+    }
+    def listBuildTypes = []
+    android.buildTypes.each { buildType ->
+        listBuildTypes << buildType.name
+    }
+    commandLine 'groovy', projectDir.toString().concat('/src/main/groovy/MoveStrings.groovy'), listFlavours, listBuildTypes
+}
+defaultTasks 'runScript'

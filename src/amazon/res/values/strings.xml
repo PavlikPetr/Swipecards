@@ -29,9 +29,7 @@
     <string name="filter_city_age_parameters">Age and city</string>
     <string name="filter_select_city">Select city</string>
     <string name="edit_block_photo">Photos</string>
-    <string name="dashbrd_popup_rating">Like our app? Raise our rating! The higher the rating, the
-        more people you\'ll meet on Topface!
-    </string>
+    <string name="dashbrd_popup_rating">Like our app? Raise our rating! The higher the rating, the more people you\'ll meet on Topface!</string>
     <string name="dashbrd_popup_title">Rate me</string>
     <string name="dashbrd_popup_cancel">Don\'t ask me again</string>
     <string name="dashbrd_popup_rate">Rate</string>
@@ -111,7 +109,7 @@
         <item quantity="other">%d free coins</item>
         <item quantity="one">%d free coin</item>
     </plurals>
-    <string name="pincode_blocking_app">Lock app. login</string>
+    <string name="pincode_blocking_app">Lock app</string>
     <string name="pincode_blocking">Lock</string>
     <string name="pincode_reset">Reset your PIN code</string>
     <string name="pincode_set">Set a PIN code</string>
@@ -180,6 +178,7 @@
     <string name="general_visitors_tab_views">views</string>
     <string name="general_profile">Profile</string>
     <string name="general_settings">Settings</string>
+    <string name="general_vk_profile">VK</string>
     <string name="auth_btn_vk">Vkontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Retry</string>
@@ -403,8 +402,7 @@
     </string>
     <string name="default_price_format">Total: %.2f USD</string>
     <string name="default_price_format_extended">Total: %1$.2f %2$s</string>
-    <string name="leaders_pick_condition">You cannot select a photo with a rating lower than %d%%:
-    </string>
+    <string name="leaders_pick_condition">You cannot select a photo with a rating lower than %d%%:</string>
     <string name="general_gift">Gift</string>
     <string name="user_actions_chat">Chat</string>
     <string name="profile_edit_age_ranges">Age has to be between 16 and 99 years. Please enter a
@@ -541,9 +539,7 @@
     <string name="buy_status_and_watch_your_fans">Get VIP-status and find out who added you to their
         favorites.
     </string>
-    <string name="add_bookmarks_to_be_connected">Add new contacts to this section and you\'ll never
-        lose touch with them.
-    </string>
+    <string name="add_bookmarks_to_be_connected">Add new contacts to this section and you will never lose touch with them.</string>
     <string name="nobody_chat_with_you_sympathies_will_help">No one has written to you yet! Likes
         will help you find someone to chat with!
     </string>
@@ -581,8 +577,7 @@
         offensive language, links to social networks
     </string>
     <string name="complain_type_fake_data">Name, sex, age, or photo don\'t match</string>
-    <string name="complain_description">Tell us the details regarding the cause for complaint.
-    </string>
+    <string name="complain_description">Tell us the details regarding the cause for complaint.</string>
     <string name="general_complain_sended">Your complaint has been submitted, thank you for your
         help!
     </string>
@@ -601,8 +596,7 @@
         people on Topface!
     </string>
     <string name="send_confirm_link">Send a link for confirmation</string>
-    <string name="complain_type_swearing_msg">Offensive behavior, improper language, threats
-    </string>
+    <string name="complain_type_swearing_msg">Offensive behavior, improper language, threats</string>
     <string name="general_exit">Exit</string>
     <string name="likes_can_help_you">Likes help you meet people</string>
     <string name="general_get_dating">Meet</string>
@@ -824,4 +818,22 @@
     <string name="novice_sympathies_bonus">You are getting %1$d Likes as a gift! It means that %2$d
         people will give you a Like and genuinely mean it!
     </string>
+    <string name="go_dating_message">Start dating and you will who view you page here</string>
+    <string name="vk_profile_button_tf_group">Topface group</string>
+    <string name="vk_profile_button_join_tf_group">Join the Topface group</string>
+    <string name="vk_profile_button_join_vkgames_group">Join the group \"VK games\"</string>
+    <string name="vk_profile_button_invite_friends">Invite friends</string>
+    <string name="vk_profile_invite_friends_title">Invite friends</string>
+    <string name="invite_friend_button">Invite</string>
+    <string name="invitation_sended_button">Sent</string>
+    <string name="friends_empty_list_error">Your list of friends is empty</string>
+    <string name="vk_friends_success_invite">Invitation has been sent</string>
+    <string name="join_group_success">You have joined the group</string>
+    <string name="settings_auto_greeting_title">Auto-Greetings</string>
+    <string name="settings_auto_greeting_subtitle">Allow Topface to automatically start a conversation with a greeting whenever someone sends you a Like</string>
+    <string name="chat_auto_reply_title">Message\'s text is hidden</string>
+    <string name="chat_auto_reply_message">In order to open/reply to this message, become a VIP</string>
+    <string name="chat_auto_reply_button">Become VIP</string>
+    <string name="take_photo_text_1">Please upload a photo of yourself to start chatting.</string>
+    <string name="take_photo_text_2">Only you should be in the photo; all photos are reviewed by moderators to ensure rules are followed.</string>
 </resources>
