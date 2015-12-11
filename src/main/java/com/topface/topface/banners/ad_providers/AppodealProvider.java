@@ -10,6 +10,7 @@ import com.topface.topface.BuildConfig;
 import com.topface.topface.Static;
 import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.social.AuthToken;
 
 public class AppodealProvider extends AbstractAdsProvider {
 
@@ -30,6 +31,15 @@ public class AppodealProvider extends AbstractAdsProvider {
                                 UserSettings.Gender.MALE :
                                 UserSettings.Gender.FEMALE)
                 .setAge(CacheProfile.getProfile().age);
+        // добавляем в UserSettings id социальной сети, в зависимости от типа текущей авторизации
+        switch (AuthToken.getInstance().getSocialNet()) {
+            case AuthToken.SN_VKONTAKTE:
+                Appodeal.getUserSettings(activity).setVkId(AuthToken.getInstance().getUserSocialId());
+                break;
+            case AuthToken.SN_FACEBOOK:
+                Appodeal.getUserSettings(activity).setFacebookId(AuthToken.getInstance().getUserSocialId());
+                break;
+        }
         Appodeal.setBannerCallbacks(new BannerCallbacks() {
 
             @Override
@@ -53,5 +63,4 @@ public class AppodealProvider extends AbstractAdsProvider {
         });
         return true;
     }
-
 }
