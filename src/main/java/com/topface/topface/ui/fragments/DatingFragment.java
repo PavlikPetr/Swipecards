@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
@@ -64,10 +65,12 @@ import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.SkipRateRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.TakePhotoActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
@@ -75,6 +78,7 @@ import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.AnimationHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
@@ -124,6 +128,17 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private RetryViewCreator mRetryView;
     private ImageButton mRetryBtn;
     private PreloadManager<SearchUser> mPreloadManager;
+
+    private boolean mIsPhotoAsked;
+    private AddPhotoHelper mAddPhotoHelper;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            AddPhotoHelper.handlePhotoMessage(msg);
+        }
+    };
+
+
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -333,6 +348,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mDatingCounter.setVisibility(View.GONE);
             mDatingResources.setVisibility(View.GONE);
         }
+        mAddPhotoHelper = new AddPhotoHelper(this, null);
+        mAddPhotoHelper.setOnResultHandler(mHandler);
+
         return mRoot;
     }
 
@@ -766,7 +784,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.btnDatingSympathy: {
-                sendSympathy();
+                if(!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_LIKE)) {
+                    sendSympathy();
+                }
             }
             break;
             case R.id.skip_btn:
@@ -791,7 +811,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.btnSend: {
-                mDatingInstantMessageController.instantSend(mCurrentUser);
+                if(!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_SEND)) {
+                    mDatingInstantMessageController.instantSend(mCurrentUser);
+                }
             }
             break;
             case R.id.send_gift_button: {
@@ -805,11 +827,24 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.chat_btn: {
-                mDatingInstantMessageController.openChat(getActivity(), mCurrentUser);
+                if(!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_CHAT)) {
+                    mDatingInstantMessageController.openChat(getActivity(), mCurrentUser);
+                }
             }
             break;
             default:
         }
+    }
+
+    private boolean takePhotoIfNeed(String plc) {
+        if(CacheProfile.photo == null) {
+            if(!mIsPhotoAsked && mAddPhotoHelper != null) {
+                mIsPhotoAsked = true;
+                startActivityForResult(TakePhotoActivity.createIntent(getActivity(), plc), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isChatAvailable() {
@@ -1155,6 +1190,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
+            if (mAddPhotoHelper != null) {
+                mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+            }
         }
     }
 

@@ -34,6 +34,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
@@ -46,7 +47,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CustomViewNotificationController;
 import com.topface.topface.utils.IActionbarNotifier;
 import com.topface.topface.utils.LocaleConfig;
-import com.topface.topface.utils.PhotoTaker;
 import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
@@ -104,6 +104,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     TopfaceAppState mAppState;
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     private AddPhotoHelper mAddPhotoHelper;
+    private boolean mIsPhotoAsked;
     private PopupManager mPopupManager;
     private Subscription mCountersSubscription;
     private BehaviorSubject<DRAWER_LAYOUT_STATE> mDrawerLayoutStateObservable;
@@ -183,6 +184,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
             mPendingNextIntent = intent;
         }
+        mIsPhotoAsked = false;
     }
 
     @Override
@@ -584,11 +586,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                         }
                     }
                     break;
-                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:
-                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG:
-                    AddPhotoHelper helper = getAddPhotoHelper();
-                    helper.showTakePhotoDialog(new PhotoTaker(helper, this), helper.processActivityResult(requestCode, resultCode, data, false));
-                    break;
                 default:
                     super.onActivityResult(requestCode, resultCode, data);
                     break;
@@ -596,7 +593,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
-
+        AddPhotoHelper helper = getAddPhotoHelper();
+        helper.processActivityResult(requestCode, resultCode, data);
     }
 
     private void toggleDrawerLayout() {
@@ -631,7 +629,10 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     private void takePhoto() {
-        getAddPhotoHelper().showTakePhotoDialog(new PhotoTaker(getAddPhotoHelper(), this), null);
+        if(!mIsPhotoAsked) {
+            mIsPhotoAsked = true;
+            startActivityForResult(TakePhotoActivity.createIntent(this, TakePhotoStatistics.PLC_AFTER_REGISTRATION_ACTION), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
+        }
     }
 
     private void switchContentTopMargin(boolean actionbarOverlay) {

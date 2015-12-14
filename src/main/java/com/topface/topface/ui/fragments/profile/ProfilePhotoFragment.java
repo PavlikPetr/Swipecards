@@ -32,11 +32,10 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.GridViewWithHeaderAndFooter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.edit.EditContainerActivity;
+import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
-
-import org.json.JSONException;
 
 public class ProfilePhotoFragment extends ProfileInnerFragment implements View.OnClickListener {
 
@@ -342,7 +341,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
                 case R.id.btnAddPhotoCamera:
                     mViewFlipper.setDisplayedChild(0);
                     LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
-                            new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", id));
+                            new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra(AddPhotoHelper.EXTRA_BUTTON_ID, id));
                     break;
                 case R.id.btnCancel:
                     mViewFlipper.setDisplayedChild(0);

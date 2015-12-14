@@ -13,7 +13,6 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.View;
@@ -34,10 +33,13 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoAddProfileRequest;
 import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.TakePhotoActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
+import com.topface.topface.ui.fragments.profile.TakePhotoFragment;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
@@ -59,6 +61,7 @@ public class AddPhotoHelper {
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA = 1702;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG = 1701;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY = 1700;
+    public static final String EXTRA_BUTTON_ID = "btn_id";
     public static String PATH_TO_FILE;
     private static HashMap<String, File> fileNames = new HashMap<>();
     private String mFileName = "/tmp.jpg";
@@ -151,8 +154,6 @@ public class AddPhotoHelper {
                 if (Utils.isIntentAvailable(mContext, intent.getAction())) {
                     startAddPhotoActivity(intent, requestCode);
                 }
-
-
             }
         };
     }
@@ -187,11 +188,11 @@ public class AddPhotoHelper {
             }
         } else {
             if (mActivity != null) {
-                TakePhotoDialog takePhotoDialog = (TakePhotoDialog) ((FragmentActivity) mActivity).getSupportFragmentManager()
-                        .findFragmentByTag(TakePhotoDialog.TAG);
-                if (takePhotoDialog != null) {
-                    mActivity.startActivityForResult(intent, requestCode);
-                }
+//                TakePhotoDialog takePhotoDialog = (TakePhotoDialog) ((FragmentActivity) mActivity).getSupportFragmentManager()
+//                        .findFragmentByTag(TakePhotoDialog.TAG);
+//                if (takePhotoDialog != null) {
+                mActivity.startActivityForResult(intent, requestCode);
+//                }
             }
 
         }
@@ -209,6 +210,25 @@ public class AddPhotoHelper {
     }
 
     public Uri processActivityResult(int requestCode, int resultCode, Intent data) {
+        //check for result from TakePhotoActivity
+        if(requestCode == TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO && data != null) {
+            String plc = data.getStringExtra(TakePhotoActivity.EXTRA_PLC);
+            if (resultCode == Activity.RESULT_OK) {
+                switch (data.getIntExtra(TakePhotoActivity.EXTRA_TAKE_PHOTO_USER_ACTION, 0)) {
+                    case TakePhotoFragment.ACTION_CAMERA_CHOOSEN:
+                        startCamera(false);
+                        TakePhotoStatistics.sendCameraAction(plc);
+                        break;
+                    case TakePhotoFragment.ACTION_GALLERY_CHOOSEN:
+                        startChooseFromGallery(false);
+                        TakePhotoStatistics.sendGalleryAction(plc);
+                        break;
+                }
+
+            } else {
+                TakePhotoStatistics.sendCancelAction(plc);
+            }
+        }
         return processActivityResult(requestCode, resultCode, data, true);
     }
 
