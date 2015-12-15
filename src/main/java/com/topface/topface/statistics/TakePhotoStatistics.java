@@ -1,7 +1,6 @@
 package com.topface.topface.statistics;
 
 import com.topface.framework.JsonUtils;
-import com.topface.framework.utils.Debug;
 import com.topface.statistics.android.Slices;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.utils.CacheProfile;
@@ -16,7 +15,7 @@ public class TakePhotoStatistics {
     private static final String MOBILE_TF_TAKE_PHOTO = "mobile_tf_take_photo";
     public static final String PLC_DATING_LIKE = "dating_like";
     public static final String PLC_DATING_SEND = "dating_send";
-    public static final String PLC_DATING_CHAT = "dating_cat";
+    public static final String PLC_DATING_CHAT = "dating_chat";
     public static final String PLC_OWN_PROFILE_ON_RESUME = "own_profile_on_resume";
     public static final String PLC_OWN_PROFILE_AVATAR_CLICK = "own_profile_on_avatar_click";
     public static final String PLC_ADD_TO_LEADER = "add_to_leader";
@@ -32,11 +31,9 @@ public class TakePhotoStatistics {
     private static Slices getOriginalSlices() {
         Slices slices = new Slices();
         HashMap<String, Object> serverSlices = CacheProfile.getOptions().statisticsSlices;
-        Debug.log("from max ", "pognali! ");
         for(String key: serverSlices.keySet()) {
             slices.put(key, JsonUtils.toJson(serverSlices.get(key)));
         }
-        Debug.log("from max ", slices.toString());
         return slices;
     }
 
