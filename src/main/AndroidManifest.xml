@@ -219,6 +219,15 @@
                 android:value=".ui.NavigationActivity" />
         </activity>
         <activity
+            android:name=".ui.TakePhotoActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Topface">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity" />
+        </activity>
+        <activity
             android:name=".ui.BanActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Topface.Ban" />

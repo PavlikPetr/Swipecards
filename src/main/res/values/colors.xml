@@ -153,4 +153,8 @@
     <color name="delete_messages_red_text_pressed_color">#ff2400</color>
     <color name="delete_messages_red_text_released_color">#ef5350</color>
     <color name="delete_messages_red_text_disable_color">#96ef5350</color>
+
+    <!-- Take photo screen -->
+    <color name="take_photo_screen_text_dark">#DE000000</color>
+    <color name="take_photo_screen_text_medium">#8F000000</color>
 </resources>

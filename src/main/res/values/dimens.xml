@@ -61,4 +61,10 @@
     <dimen name="buttons_elevation_value">1dp</dimen>
 
     <dimen name="express_message_button_min_width">214dp</dimen>
+
+    <!-- Take photo screen -->
+    <dimen name="take_photo_placeholder_size">148dp</dimen>
+    <dimen name="take_photo_extra_spacing">2dp</dimen>
+    <dimen name="take_photo_padding_24">24dp</dimen>
+    <dimen name="take_photo_padding_40">40dp</dimen>
 </resources>

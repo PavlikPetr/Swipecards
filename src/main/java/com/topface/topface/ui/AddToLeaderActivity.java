@@ -32,15 +32,13 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.adapters.LeadersPhotoGridAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
-import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.IPhotoTakerWithDialog;
-import com.topface.topface.utils.PhotoTaker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
@@ -83,8 +81,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private View mGridFooterView;
     private LeadersPhotoGridAdapter mUsePhotosAdapter;
     private AddPhotoHelper mAddPhotoHelper;
-    private TakePhotoDialog takePhotoDialog;
-    private IPhotoTakerWithDialog mPhotoTaker;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -113,8 +109,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         new ActionBarTitleSetterDelegate(getSupportActionBar()).setActionBarTitles(R.string.general_photoblog, null);
         // init grid view and create adapter
         initPhotosGrid(mPosition, mSelectedPosition);
-        mPhotoTaker = new PhotoTaker(initAddPhotoHelper(), this);
-        takePhotoDialog = (TakePhotoDialog) getSupportFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
+        initAddPhotoHelper();
     }
 
     @Override
@@ -133,13 +128,9 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     }
 
     private void showPhotoHelper(String message, boolean isNeedShow) {
-        if (takePhotoDialog != null) {
-            takePhotoDialog.setPhotoTaker(mPhotoTaker);
-        }
         if (isNeedShow) {
-            mAddPhotoHelper = initAddPhotoHelper();
-            if (CacheProfile.photo == null && takePhotoDialog == null) {
-                mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null, message);
+            if (CacheProfile.photo == null) {
+                startActivityForResult(TakePhotoActivity.createIntent(this, TakePhotoStatistics.PLC_ADD_TO_LEADER), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
                 mIsPhotoDialogShown = true;
             }
         }
@@ -163,16 +154,8 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            switch (requestCode) {
-                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:
-                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG:
-                    if (mAddPhotoHelper != null) {
-                        mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, mAddPhotoHelper.processActivityResult(requestCode, resultCode, data, false));
-                        mIsPhotoDialogShown = true;
-                    }
-                    break;
-            }
+        if (mAddPhotoHelper != null) {
+            mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -226,7 +209,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         }
         mPosition = mGridView.getFirstVisiblePosition();
         mSelectedPosition = getAdapter().getSelectedPhotoId();
-        mIsPhotoDialogShown = true;
         super.onPause();
     }
 

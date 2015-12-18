@@ -182,6 +182,11 @@ public class Options extends AbstractData {
      */
     public long fullscreenInterval;
 
+    /**
+     * Набор разнообразных параметров срезов по пользователю, для статистики
+     */
+    public HashMap<String, Object> statisticsSlices;
+
     public Options(IApiResponse data) {
         this(data.getJsonResult());
     }
@@ -198,6 +203,12 @@ public class Options extends AbstractData {
 
     protected void fillData(JSONObject response, boolean cacheToPreferences) {
         try {
+            JSONObject statisticsSlicesSource = response.optJSONObject("statisticsSlices");
+            if(statisticsSlicesSource != null) {
+                statisticsSlices = JsonUtils.fromJson(statisticsSlicesSource.toString(), HashMap.class);
+            } else {
+                statisticsSlices = new HashMap<>();
+            }
             priceAdmiration = response.optInt("admirationPrice");
             isAutoreplyAllow = response.optBoolean("allowAutoreply", true);
             trialVipExperiment = JsonUtils.optFromJson(response.optString("experimentTrialVip"), TrialVipExperiment.class, new TrialVipExperiment());
