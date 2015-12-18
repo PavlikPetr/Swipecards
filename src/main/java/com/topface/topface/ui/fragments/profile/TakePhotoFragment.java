@@ -13,18 +13,21 @@ import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 public class TakePhotoFragment extends BaseFragment implements View.OnClickListener {
     public static final int ACTION_CAMERA_CHOOSEN = 1;
     public static final int ACTION_GALLERY_CHOOSEN = 2;
     public static final int ACTION_CANCEL = 3;
 
     @IntDef({ACTION_CAMERA_CHOOSEN, ACTION_GALLERY_CHOOSEN, ACTION_CANCEL})
+    @Retention(RetentionPolicy.SOURCE)
     public @interface TakePhotoUserAction{
     }
 
     public static TakePhotoFragment newInstance() {
-        TakePhotoFragment fragment = new TakePhotoFragment();
-        return fragment;
+        return new TakePhotoFragment();
     }
 
     @Override
