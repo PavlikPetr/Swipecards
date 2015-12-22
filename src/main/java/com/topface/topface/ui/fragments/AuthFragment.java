@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -311,6 +312,10 @@ public class AuthFragment extends BaseAuthFragment {
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
             hideProgress();
+            //show buttons back, if fb-login was canceled
+            if(FacebookSdk.isFacebookRequestCode(requestCode)) {
+                showButtons();
+            }
         }
     }
 
