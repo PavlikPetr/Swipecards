@@ -377,8 +377,4 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 }
