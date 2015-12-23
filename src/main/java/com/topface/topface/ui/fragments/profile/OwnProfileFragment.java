@@ -76,7 +76,12 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     }
 
     private void showTakePhotoDialog(String plc) {
-        if (CacheProfile.photo == null && mAddPhotoHelper != null && !mIsPhotoAsked && !App.getConfig().getUserConfig().isUserAvatarAvailable()) {
+        showTakePhotoDialog(plc, false);
+    }
+
+    private void showTakePhotoDialog(String plc, boolean forceShow) {
+        if (!CacheProfile.isEmpty() && CacheProfile.photo == null && mAddPhotoHelper != null
+                && (!mIsPhotoAsked || forceShow) && !App.getConfig().getUserConfig().isUserAvatarAvailable()) {
             startActivityForResult(TakePhotoActivity.createIntent(getContext(), plc), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
             mIsPhotoAsked = true;
         }
@@ -190,7 +195,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
                             profile.uid, profile.photosCount,
                             profile.photos));
         } else {
-            showTakePhotoDialog(TakePhotoStatistics.PLC_OWN_PROFILE_AVATAR_CLICK);
+            showTakePhotoDialog(TakePhotoStatistics.PLC_OWN_PROFILE_AVATAR_CLICK, true);
         }
     }
 }
