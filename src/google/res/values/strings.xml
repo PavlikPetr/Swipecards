@@ -835,5 +835,5 @@
     <string name="chat_auto_reply_message">In order to open/reply to this message, become a VIP</string>
     <string name="chat_auto_reply_button">Become VIP</string>
     <string name="take_photo_text_1">Please upload a photo of yourself to start chatting.</string>
-    <string name="take_photo_text_2">Only you should be in the photo; all photos are reviewed by moderators to ensure rules are followed.</string>
+    <string name="take_photo_text_2">Only you should be in the photo. All photos are reviewed by moderators to ensure rules are followed.</string>
 </resources>

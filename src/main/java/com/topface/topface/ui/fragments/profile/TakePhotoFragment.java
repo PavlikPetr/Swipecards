@@ -59,10 +59,26 @@ public class TakePhotoFragment extends BaseFragment implements View.OnClickListe
             switch (viewId) {
                 case R.id.btn_take_photo:
                     ((ITakePhotoUserActionListener) activity).onTakePhotoUserAction(ACTION_CAMERA_CHOOSEN);
+                    enableButtons(false);
                     break;
                 case R.id.btn_choose_photo:
                     ((ITakePhotoUserActionListener) activity).onTakePhotoUserAction(ACTION_GALLERY_CHOOSEN);
+                    enableButtons(false);
                     break;
+            }
+        }
+    }
+
+    private void enableButtons(boolean enable) {
+        View root = getView();
+        if(root != null) {
+            View button = root.findViewById(R.id.btn_take_photo);
+            if(button != null) {
+                button.setEnabled(enable);
+            }
+            button = root.findViewById(R.id.btn_choose_photo);
+            if(button != null) {
+                button.setEnabled(enable);
             }
         }
     }

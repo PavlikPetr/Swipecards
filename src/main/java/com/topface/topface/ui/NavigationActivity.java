@@ -525,11 +525,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     @Override
-    public void startActivityForResult(Intent intent, int requestCode) {
-        super.startActivityForResult(intent, requestCode);
-    }
-
-    @Override
     protected void onDestroy() {
         //Для запроса фото при следующем создании NavigationActivity
         if (mFullscreenController != null) {

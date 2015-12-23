@@ -3,6 +3,7 @@ package com.topface.topface.statistics;
 import com.topface.framework.JsonUtils;
 import com.topface.statistics.android.Slices;
 import com.topface.statistics.android.StatisticsTracker;
+import com.topface.topface.data.Options;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 public class TakePhotoStatistics {
     private static final String MOBILE_TF_TAKE_PHOTO = "mobile_tf_take_photo";
     public static final String PLC_DATING_LIKE = "dating_like";
+    public static final String PLC_DATING_ADMIRATION = "dating_admiration";
     public static final String PLC_DATING_SEND = "dating_send";
     public static final String PLC_DATING_CHAT = "dating_chat";
     public static final String PLC_OWN_PROFILE_ON_RESUME = "own_profile_on_resume";
@@ -30,9 +32,14 @@ public class TakePhotoStatistics {
 
     private static Slices getOriginalSlices() {
         Slices slices = new Slices();
-        HashMap<String, Object> serverSlices = CacheProfile.getOptions().statisticsSlices;
-        for(String key: serverSlices.keySet()) {
-            slices.put(key, JsonUtils.toJson(serverSlices.get(key)));
+        Options options = CacheProfile.getOptions();
+        if(options != null) {
+            HashMap<String, Object> serverSlices = options.statisticsSlices;
+            if(serverSlices != null && serverSlices.size() > 0) {
+                for (String key : serverSlices.keySet()) {
+                    slices.put(key, JsonUtils.toJson(serverSlices.get(key)));
+                }
+            }
         }
         return slices;
     }
