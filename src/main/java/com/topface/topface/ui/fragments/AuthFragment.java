@@ -312,10 +312,6 @@ public class AuthFragment extends BaseAuthFragment {
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
             hideProgress();
-            //show buttons back, if fb-login was canceled
-            if(FacebookSdk.isFacebookRequestCode(requestCode)) {
-                showButtons();
-            }
         }
     }
 

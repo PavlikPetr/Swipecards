@@ -3,6 +3,7 @@ package com.topface.topface.utils.social;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -62,6 +63,9 @@ public class FbAuthorizer extends Authorizer {
 
             @Override
             public void onCancel() {
+                Intent intent = new Intent(AUTH_TOKEN_READY_ACTION);
+                intent.putExtra(TOKEN_STATUS, TOKEN_NOT_READY);
+                LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
             }
 
             @Override
