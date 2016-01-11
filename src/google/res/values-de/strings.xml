@@ -799,4 +799,6 @@
     <string name="chat_auto_reply_title">Der Text der Nachricht ist verborgen</string>
     <string name="chat_auto_reply_message">Um diese Nachricht zu öffnen oder um auf sie zu antworten, musst du zum VIP werden.</string>
     <string name="chat_auto_reply_button">Werde zum VIP</string>
+    <string name="take_photo_text_1">Bitte lade ein Foto von dir hoch, um zu chatten.</string>
+    <string name="take_photo_text_2">Nur du selbst solltest auf dem Foto abgebildet sein; alle Fotos werden von Moderatoren überprüft um sicherzustellen, dass den Regeln gefolgt wird.</string>
 </resources>
