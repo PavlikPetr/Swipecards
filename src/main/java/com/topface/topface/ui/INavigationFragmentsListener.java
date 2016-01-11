@@ -7,9 +7,9 @@ import com.topface.topface.ui.fragments.BaseFragment;
  * Listener for events from child fargment to NavigationActivity
  */
 public interface INavigationFragmentsListener {
-    public void onFragmentSwitch(BaseFragment.FragmentId fragment);
+    void onFragmentSwitch(BaseFragment.FragmentSettings fragment);
 
-    public void onHideActionBar();
+    void onHideActionBar();
 
-    public void onShowActionBar();
+    void onShowActionBar();
 }

@@ -2,7 +2,10 @@ package com.topface.topface.utils;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Static;
+import com.topface.topface.data.Options;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.MenuFragment;
 
 /**
  * Created by kirussell on 20.11.13.
@@ -10,9 +13,9 @@ import com.topface.topface.ui.fragments.BaseFragment;
  */
 public class ResourcesUtils {
 
-    public static String getFragmentNameResId(BaseFragment.FragmentId id) {
+    public static String getFragmentNameResId(BaseFragment.FragmentSettings id) {
         int titleId;
-        switch (id) {
+        switch (id.getFragmentId()) {
             case VIP_PROFILE:
             case PROFILE:
                 titleId = R.string.general_profile;
@@ -43,6 +46,9 @@ public class ResourcesUtils {
             case SETTINGS:
                 titleId = R.string.general_settings;
                 break;
+            case INTEGRATION_PAGE:
+                Options.LeftMenuIntegrationItems item = MenuFragment.getServerLeftMenuItemById(id.getPos());
+                return item != null ? item.title : Static.EMPTY;
             case UNDEFINED:
             default:
                 throw new IllegalArgumentException("Illegal fragmentId: do not have resources for this fragment id");

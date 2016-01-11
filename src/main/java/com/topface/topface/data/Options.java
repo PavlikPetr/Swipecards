@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.webkit.URLUtil;
 
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -99,7 +100,7 @@ public class Options extends AbstractData {
      * Id фрагмента, который будет отображаться при старте приложения
      * По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
      */
-    public BaseFragment.FragmentId startPageFragmentId = BaseFragment.FragmentId.DATING;
+    public BaseFragment.FragmentSettings startPageFragmentSettings = BaseFragment.DATING;
 
     /**
      * Флаг отображения превью в диалогах
@@ -187,6 +188,11 @@ public class Options extends AbstractData {
      */
     public HashMap<String, Object> statisticsSlices;
 
+    /**
+     * массив пунктов левого меню от интеграторов
+     */
+    public ArrayList<LeftMenuIntegrationItems> leftMenuItems = new ArrayList<>();
+
     public Options(IApiResponse data) {
         this(data.getJsonResult());
     }
@@ -204,7 +210,7 @@ public class Options extends AbstractData {
     protected void fillData(JSONObject response, boolean cacheToPreferences) {
         try {
             JSONObject statisticsSlicesSource = response.optJSONObject("statisticsSlices");
-            if(statisticsSlicesSource != null) {
+            if (statisticsSlicesSource != null) {
                 statisticsSlices = JsonUtils.fromJson(statisticsSlicesSource.toString(), HashMap.class);
             } else {
                 statisticsSlices = new HashMap<>();
@@ -363,7 +369,7 @@ public class Options extends AbstractData {
 
             instantMessagesForNewbies.init(response);
 
-            startPageFragmentId = getStartPageFragmentId(response);
+            startPageFragmentSettings = getStartPageFragmentId(response);
 
             JSONObject jsonNotShown = response.optJSONObject("notShown");
             if (jsonNotShown != null) {
@@ -373,6 +379,10 @@ public class Options extends AbstractData {
             interstitial = JsonUtils.optFromJson(response.optString("interstitial"),
                     InterstitialInFeeds.class, interstitial);
             fullscreenInterval = response.optLong("fullscreenInterval", DateUtils.DAY_IN_SECONDS);
+            if (response.has("leftMenuItems")) {
+                leftMenuItems = JsonUtils.fromJson(response.getJSONArray("leftMenuItems").toString(), new TypeToken<ArrayList<LeftMenuIntegrationItems>>() {
+                });
+            }
         } catch (Exception e) {
             // отображение максимально заметного тоста, чтобы на этапе тестирования любого функционала
             // не пропустить ошибку парсинга опций, т.к. это может приветси к денежным потерям проекта
@@ -741,14 +751,14 @@ public class Options extends AbstractData {
         }
     }
 
-    private BaseFragment.FragmentId getStartPageFragmentId(JSONObject response) {
-        BaseFragment.FragmentId fragmentId = startPageFragmentId;
+    private BaseFragment.FragmentSettings getStartPageFragmentId(JSONObject response) {
+        BaseFragment.FragmentId fragmentId = startPageFragmentSettings.getFragmentId();
         try {
             fragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
         } catch (IllegalArgumentException e) {
             Debug.error("Illegal value of startPage", e);
         }
-        return fragmentId;
+        return BaseFragment.FragmentSettings.getFragmentSettingsById(fragmentId);
     }
 
     public boolean isScruffyEnabled() {
@@ -792,5 +802,17 @@ public class Options extends AbstractData {
 
     public class ForceSmsInviteRedirect {
         public boolean enabled = false;
+    }
+
+    public static class LeftMenuIntegrationItems {
+        public String iconURL = Static.EMPTY;
+        public String title = Static.EMPTY;
+        public String url = Static.EMPTY;
+
+        public LeftMenuIntegrationItems(String icon, String title, String url) {
+            iconURL = icon;
+            this.title = title;
+            this.url = url;
+        }
     }
 }

@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.topface.topface.R;
-import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Visitor;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteVisitorsRequest;
@@ -16,6 +15,7 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.VisitorsListAdapter;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -23,7 +23,6 @@ import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -84,7 +83,7 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
             @Override
             public void onClick(View v) {
                 if (CacheProfile.premium) {
-                    MenuFragment.selectFragment(FragmentId.DATING);
+                    MenuFragment.selectFragment(BaseFragment.DATING);
                 } else {
                     Intent intent = PurchasesActivity.createVipBuyIntent(null, "Visitors");
                     startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);

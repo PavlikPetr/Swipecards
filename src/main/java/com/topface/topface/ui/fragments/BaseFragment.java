@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -310,10 +312,139 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         mNeedTitles = needTitles;
     }
 
+    public static FragmentSettings VIP_PROFILE = new FragmentSettings(FragmentId.VIP_PROFILE);
+    public static FragmentSettings PROFILE = new FragmentSettings(FragmentId.PROFILE);
+    public static FragmentSettings DATING = new FragmentSettings(FragmentId.DATING, true);
+    public static FragmentSettings TABBED_DIALOGS = new FragmentSettings(FragmentId.TABBED_DIALOGS);
+    public static FragmentSettings TABBED_VISITORS = new FragmentSettings(FragmentId.TABBED_VISITORS);
+    public static FragmentSettings TABBED_LIKES = new FragmentSettings(FragmentId.TABBED_LIKES);
+    public static FragmentSettings PHOTO_BLOG = new FragmentSettings(FragmentId.PHOTO_BLOG);
+    public static FragmentSettings GEO = new FragmentSettings(FragmentId.GEO);
+    public static FragmentSettings BONUS = new FragmentSettings(FragmentId.BONUS);
+    public static FragmentSettings EDITOR = new FragmentSettings(FragmentId.EDITOR);
+    public static FragmentSettings SETTINGS = new FragmentSettings(FragmentId.SETTINGS);
+    public static FragmentSettings INTEGRATION_PAGE = new FragmentSettings(FragmentId.INTEGRATION_PAGE, 0);
+    public static FragmentSettings UNDEFINED = new FragmentSettings(FragmentId.UNDEFINED);
+
+    public static class FragmentSettings implements Parcelable {
+        private FragmentId mFragmentId;
+        private boolean mIsOverlayed;
+        private int mPos;
+
+        public static FragmentSettings getFragmentSettingsById(FragmentId id) {
+            switch (id) {
+                case VIP_PROFILE:
+                    return VIP_PROFILE;
+                case PROFILE:
+                    return PROFILE;
+                case DATING:
+                    return DATING;
+                case TABBED_DIALOGS:
+                    return TABBED_DIALOGS;
+                case TABBED_VISITORS:
+                    return TABBED_VISITORS;
+                case TABBED_LIKES:
+                    return TABBED_LIKES;
+                case PHOTO_BLOG:
+                    return PHOTO_BLOG;
+                case GEO:
+                    return GEO;
+                case BONUS:
+                    return BONUS;
+                case EDITOR:
+                    return EDITOR;
+                case SETTINGS:
+                    return SETTINGS;
+                case INTEGRATION_PAGE:
+                    return INTEGRATION_PAGE;
+                case UNDEFINED:
+                default:
+                    return UNDEFINED;
+            }
+        }
+
+        public FragmentSettings(FragmentId number) {
+            this(number, false);
+        }
+
+        public FragmentSettings(FragmentId fragmentId, boolean isOverlayed) {
+            mFragmentId = fragmentId;
+            mIsOverlayed = isOverlayed;
+        }
+
+        public FragmentSettings(FragmentId fragmentId, int pos) {
+            mFragmentId = fragmentId;
+            mPos = pos;
+        }
+
+        protected FragmentSettings(Parcel in) {
+            try {
+                mFragmentId = FragmentId.valueOf(in.readString());
+            } catch (IllegalArgumentException x) {
+                mFragmentId = null;
+            }
+            mIsOverlayed = in.readByte() != 0;
+            mPos = in.readInt();
+        }
+
+        public static final Creator<FragmentSettings> CREATOR = new Creator<FragmentSettings>() {
+            @Override
+            public FragmentSettings createFromParcel(Parcel in) {
+                return new FragmentSettings(in);
+            }
+
+            @Override
+            public FragmentSettings[] newArray(int size) {
+                return new FragmentSettings[size];
+            }
+        };
+
+        public int getPos() {
+            return mPos;
+        }
+
+        public FragmentId getFragmentId() {
+            return mFragmentId;
+        }
+
+        public int getId() {
+            return mFragmentId.getId();
+        }
+
+        public boolean isOverlayed() {
+            return mIsOverlayed;
+        }
+
+        public boolean equals(FragmentSettings data) {
+            return equalsId(data) && this.mIsOverlayed == data.mIsOverlayed && this.mPos == data.mPos;
+        }
+
+        @Override
+        protected Object clone() throws CloneNotSupportedException {
+            return super.clone();
+        }
+
+        public boolean equalsId(FragmentSettings frId) {
+            return this.mFragmentId == frId.mFragmentId;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            out.writeString(mFragmentId == null ? FragmentId.UNDEFINED.name() : mFragmentId.name());
+            out.writeInt(mIsOverlayed ? 1 : 0);
+            out.writeInt(mPos);
+        }
+    }
+
     public enum FragmentId {
         VIP_PROFILE(0),
         PROFILE(1),
-        DATING(2, true),
+        DATING(2),
         TABBED_DIALOGS(3),
         TABBED_VISITORS(4),
         TABBED_LIKES(5),
@@ -322,10 +453,10 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         BONUS(10),
         EDITOR(1000),
         SETTINGS(11),
+        INTEGRATION_PAGE(12),
         UNDEFINED(-1);
 
         private int mNumber;
-        private boolean mIsOverlayed;
 
         /**
          * Constructor for enum type of fragment ids
@@ -334,26 +465,11 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
          * @param number integer id
          */
         FragmentId(int number) {
-            this(number, false);
-        }
-
-        /**
-         * Constructor for enum type of fragment ids
-         *
-         * @param number      integer id
-         * @param isOverlayed true if fragment will be overlayed by actionbar
-         */
-        FragmentId(int number, boolean isOverlayed) {
             mNumber = number;
-            mIsOverlayed = isOverlayed;
         }
 
         public int getId() {
             return mNumber;
-        }
-
-        public boolean isOverlayed() {
-            return mIsOverlayed;
         }
     }
 }
