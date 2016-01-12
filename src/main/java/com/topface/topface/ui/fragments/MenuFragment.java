@@ -24,6 +24,7 @@ import com.topface.IllustratedTextView.IllustratedTextView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Ssid;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
@@ -248,7 +249,7 @@ public class MenuFragment extends Fragment {
             for (int i = 0; i < array.size(); i++) {
                 Options.LeftMenuIntegrationItems item = array.get(i);
                 menuItems.add(LeftMenuAdapter.newLeftMenuItem(new FragmentSettings(BaseFragment.INTEGRATION_PAGE.getFragmentId(), i), LeftMenuAdapter.TYPE_MENU_BUTTON,
-                        R.drawable.ic_bonus_selector, item.iconURL));
+                        R.drawable.ic_bonus_selector, item.iconUrl));
             }
         }
         if (mAdapter == null) {
@@ -542,7 +543,7 @@ public class MenuFragment extends Fragment {
     }
 
     private String convertIntegrationUrl(String url) {
-        return url.replace(USER_ID, AuthToken.getInstance().getUserSocialId()).replace(SECRET_KEY, AuthToken.getInstance().getTokenKey());
+        return url.replace(USER_ID, AuthToken.getInstance().getUserSocialId()).replace(SECRET_KEY, Ssid.get());
     }
 
     public static Options.LeftMenuIntegrationItems getServerLeftMenuItemById(int pos) {

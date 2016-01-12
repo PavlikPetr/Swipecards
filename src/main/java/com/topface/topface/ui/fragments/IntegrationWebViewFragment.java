@@ -22,14 +22,12 @@ public class IntegrationWebViewFragment extends WebViewFragment {
 
     @Override
     String getIntegrationUrl() {
-        Bundle args = getArguments();
-        return args.getString(INTEGRATION_FRAGMENT_URL);
+        return  getArguments().getString(INTEGRATION_FRAGMENT_URL);
     }
 
     @Override
     protected String getTitle() {
-        Bundle args = getArguments();
-        return args.getString(INTEGRATION_FRAGMENT_TITLE);
+        return  getArguments().getString(INTEGRATION_FRAGMENT_TITLE);
     }
 
     @Override

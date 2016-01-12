@@ -805,12 +805,12 @@ public class Options extends AbstractData {
     }
 
     public static class LeftMenuIntegrationItems {
-        public String iconURL = Static.EMPTY;
+        public String iconUrl = Static.EMPTY;
         public String title = Static.EMPTY;
         public String url = Static.EMPTY;
 
         public LeftMenuIntegrationItems(String icon, String title, String url) {
-            iconURL = icon;
+            iconUrl = icon;
             this.title = title;
             this.url = url;
         }

@@ -415,19 +415,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
             return mIsOverlayed;
         }
 
-        public boolean equals(FragmentSettings data) {
-            return equalsId(data) && this.mIsOverlayed == data.mIsOverlayed && this.mPos == data.mPos;
-        }
-
-        @Override
-        protected Object clone() throws CloneNotSupportedException {
-            return super.clone();
-        }
-
-        public boolean equalsId(FragmentSettings frId) {
-            return this.mFragmentId == frId.mFragmentId;
-        }
-
         @Override
         public int describeContents() {
             return 0;
