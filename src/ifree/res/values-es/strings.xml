@@ -861,4 +861,6 @@
     <string name="chat_auto_reply_title">El texto del mensaje está oculto</string>
     <string name="chat_auto_reply_message">Para abrir y responder a esto, hazte usuario VIP</string>
     <string name="chat_auto_reply_button">Hacerse VIP</string>
+    <string name="take_photo_text_1">Por favor, carga tu fotografía para empezar a conocer gente.</string>
+    <string name="take_photo_text_2">En la foto debes aparecer tú. Todas las fotografías están sujetas a moderación.</string>
 </resources>

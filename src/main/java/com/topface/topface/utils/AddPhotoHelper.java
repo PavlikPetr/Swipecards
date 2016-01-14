@@ -207,7 +207,7 @@ public class AddPhotoHelper {
 
     public Uri processActivityResult(int requestCode, int resultCode, Intent data) {
         //check for result from TakePhotoActivity
-        if(requestCode == TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO && data != null) {
+        if (requestCode == TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO && data != null) {
             String plc = data.getStringExtra(TakePhotoActivity.EXTRA_PLC);
             if (resultCode == Activity.RESULT_OK) {
                 switch (data.getIntExtra(TakePhotoActivity.EXTRA_TAKE_PHOTO_USER_ACTION, 0)) {
