@@ -125,4 +125,8 @@ public class FbAuthorizer extends Authorizer {
         super.onActivityResult(requestCode, resultCode, data);
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
+
+    public static boolean isMainScreenLoginEnable() {
+        return true;
+    }
 }

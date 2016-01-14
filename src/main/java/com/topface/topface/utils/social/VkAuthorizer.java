@@ -16,6 +16,8 @@ import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 
+import java.util.Locale;
+
 /**
  * Class that starts Vkontakte authorization
  */
@@ -88,5 +90,9 @@ public class VkAuthorizer extends Authorizer {
                 super.onActivityResult(requestCode, resultCode, data);
             }
         }
+    }
+
+    public static boolean isMainScreenLoginEnable() {
+        return new Locale(App.getLocaleConfig().getApplicationLocale()).getLanguage().equals(new Locale("ru").getLanguage());
     }
 }

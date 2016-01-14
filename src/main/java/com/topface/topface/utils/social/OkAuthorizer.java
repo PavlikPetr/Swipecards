@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Locale;
 
 import ru.ok.android.sdk.Odnoklassniki;
 import ru.ok.android.sdk.OkTokenRequestListener;
@@ -135,5 +136,9 @@ public class OkAuthorizer extends Authorizer {
     @Override
     public void logout() {
         getOkAuthObj(App.getAppSocialAppsIds()).clearTokens(App.getContext());
+    }
+
+    public static boolean isMainScreenLoginEnable() {
+        return new Locale(App.getLocaleConfig().getApplicationLocale()).getLanguage().equals(new Locale("ru").getLanguage());
     }
 }
