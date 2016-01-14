@@ -459,7 +459,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             }
 
             private boolean isTakePhotoApplicable() {
-                return !AuthToken.getInstance().isEmpty() && !App.getConfig().getUserConfig().isUserAvatarAvailable();
+                return !AuthToken.getInstance().isEmpty() && !App.getConfig().getUserConfig().isUserAvatarAvailable() && CacheProfile.photo == null;
             }
 
             private boolean isSelectCityApplicable() {
