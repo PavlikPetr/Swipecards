@@ -80,7 +80,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     }
 
     private void showTakePhotoDialog(String plc, boolean forceShow) {
-        if (!CacheProfile.isEmpty() && CacheProfile.photo == null && mAddPhotoHelper != null
+        if (!CacheProfile.isEmpty() && mAddPhotoHelper != null
                 && (!mIsPhotoAsked || forceShow) && !App.getConfig().getUserConfig().isUserAvatarAvailable()) {
             startActivityForResult(TakePhotoActivity.createIntent(getContext(), plc), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
             mIsPhotoAsked = true;

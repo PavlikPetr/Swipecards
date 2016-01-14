@@ -9,6 +9,8 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -108,6 +110,12 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private PopupManager mPopupManager;
     private Subscription mCountersSubscription;
     private BehaviorSubject<DRAWER_LAYOUT_STATE> mDrawerLayoutStateObservable;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            AddPhotoHelper.handlePhotoMessage(msg);
+        }
+    };
 
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -451,8 +459,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             }
 
             private boolean isTakePhotoApplicable() {
-                return !AuthToken.getInstance().isEmpty() && (CacheProfile.photo == null)
-                        && !App.getConfig().getUserConfig().isUserAvatarAvailable();
+                return !AuthToken.getInstance().isEmpty() && !App.getConfig().getUserConfig().isUserAvatarAvailable();
             }
 
             private boolean isSelectCityApplicable() {
@@ -619,12 +626,13 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private AddPhotoHelper getAddPhotoHelper() {
         if (mAddPhotoHelper == null) {
             mAddPhotoHelper = new AddPhotoHelper(this);
+            mAddPhotoHelper.setOnResultHandler(mHandler);
         }
         return mAddPhotoHelper;
     }
 
     private void takePhoto() {
-        if(!mIsPhotoAsked) {
+        if (!mIsPhotoAsked) {
             mIsPhotoAsked = true;
             startActivityForResult(TakePhotoActivity.createIntent(this, TakePhotoStatistics.PLC_AFTER_REGISTRATION_ACTION), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
         }

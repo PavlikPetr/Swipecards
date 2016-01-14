@@ -839,7 +839,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private boolean takePhotoIfNeed(String plc) {
-        if(CacheProfile.photo == null) {
+        if(!App.getConfig().getUserConfig().isUserAvatarAvailable()) {
             if(mAddPhotoHelper != null) {
                 startActivityForResult(TakePhotoActivity.createIntent(getActivity(), plc), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
                 return true;
