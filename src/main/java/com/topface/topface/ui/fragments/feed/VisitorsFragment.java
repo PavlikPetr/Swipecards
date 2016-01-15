@@ -83,7 +83,7 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
             @Override
             public void onClick(View v) {
                 if (CacheProfile.premium) {
-                    MenuFragment.selectFragment(FragmentSettings.getFragmentSettings(FragmentId.DATING));
+                    MenuFragment.selectFragment(FragmentId.DATING.getFragmentSettings());
                 } else {
                     Intent intent = PurchasesActivity.createVipBuyIntent(null, "Visitors");
                     startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);

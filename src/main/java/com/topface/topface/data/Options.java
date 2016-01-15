@@ -22,7 +22,6 @@ import com.topface.topface.data.experiments.InstantMessagesForNewbies;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
@@ -39,6 +38,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 
 /**
  * Опции приложения
@@ -100,7 +101,7 @@ public class Options extends AbstractData {
      * Id фрагмента, который будет отображаться при старте приложения
      * По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
      */
-    public FragmentSettings startPageFragmentSettings = FragmentSettings.getFragmentSettings(BaseFragment.FragmentId.DATING);
+    public FragmentSettings startPageFragmentSettings = FragmentId.DATING.getFragmentSettings();
 
     /**
      * Флаг отображения превью в диалогах
@@ -566,11 +567,11 @@ public class Options extends AbstractData {
         }
 
         private int getPageId(String page) {
-            BaseFragment.FragmentId fragmentId = BaseFragment.FragmentId.UNDEFINED;
+            FragmentId fragmentId = FragmentId.UNDEFINED;
             if (!TextUtils.isEmpty(page)) {
                 try {
 
-                    fragmentId = BaseFragment.FragmentId.valueOf(page);
+                    fragmentId = FragmentId.valueOf(page);
                 } catch (IllegalArgumentException e) {
                     Debug.error("Illegal value of pageId", e);
                 }
@@ -752,13 +753,13 @@ public class Options extends AbstractData {
     }
 
     private FragmentSettings getStartPageFragmentId(JSONObject response) {
-        BaseFragment.FragmentId fragmentId = startPageFragmentSettings.getFragmentId();
+        FragmentId fragmentId = startPageFragmentSettings.getFragmentId();
         try {
-            fragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
+            fragmentId = FragmentId.valueOf(response.optString("startPage"));
         } catch (IllegalArgumentException e) {
             Debug.error("Illegal value of startPage", e);
         }
-        return FragmentSettings.getFragmentSettings(fragmentId);
+        return fragmentId.getFragmentSettings();
     }
 
     public boolean isScruffyEnabled() {

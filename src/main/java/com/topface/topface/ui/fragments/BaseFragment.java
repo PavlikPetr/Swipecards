@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.Static;
+import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
@@ -339,6 +340,10 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
         public int getId() {
             return mNumber;
+        }
+
+        public FragmentSettings getFragmentSettings() {
+            return FragmentSettings.getFragmentSettings(this);
         }
     }
 }

@@ -42,7 +42,6 @@ import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
@@ -79,6 +78,7 @@ import rx.Subscription;
 import rx.functions.Action1;
 import rx.subjects.BehaviorSubject;
 
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_HIGH;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_LOW;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
@@ -211,7 +211,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                         new DatingLockPopup.DatingLockPopupRedirectListener() {
                             @Override
                             public void onRedirect() {
-                                showFragment(FragmentSettings.getFragmentSettings(BaseFragment.FragmentId.TABBED_LIKES));
+                                showFragment(FragmentId.TABBED_LIKES.getFragmentSettings());
                             }
                         })
         );
@@ -237,7 +237,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 PromoExpressMessages.createPromoPopupStartAction(AC_PRIORITY_NORMAL, new PromoExpressMessages.PopupRedirectListener() {
                     @Override
                     public void onRedirect() {
-                        showFragment(FragmentSettings.getFragmentSettings(BaseFragment.FragmentId.TABBED_DIALOGS));
+                        showFragment(FragmentId.TABBED_DIALOGS.getFragmentSettings());
                         mDrawerLayoutStateObservable.onNext(DRAWER_LAYOUT_STATE.CLOSED);
                     }
                 }),

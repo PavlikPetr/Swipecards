@@ -58,7 +58,7 @@ public class LeftMenuAdapter extends BaseAdapter {
     }
     public static ILeftMenuItem newLeftMenuItem(final BaseFragment.FragmentId menuId, final int menuType,
                                                 final int menuIconResId, final Photo menuIconPhoto, final String menuIconUrl) {
-        return newLeftMenuItem(FragmentSettings.getFragmentSettings(menuId),menuType,menuIconResId,menuIconPhoto,menuIconUrl);
+        return newLeftMenuItem(menuId.getFragmentSettings(),menuType,menuIconResId,menuIconPhoto,menuIconUrl);
     }
 
     public static ILeftMenuItem newLeftMenuItem(final FragmentSettings menuId, final int menuType,

@@ -59,7 +59,7 @@ public class FragmentSettings implements Parcelable {
         try {
             mFragmentId = FragmentId.valueOf(in.readString());
         } catch (IllegalArgumentException x) {
-            mFragmentId = null;
+            mFragmentId = FragmentId.UNDEFINED;
         }
         mIsOverlayed = in.readByte() != 0;
         mPos = in.readInt();
