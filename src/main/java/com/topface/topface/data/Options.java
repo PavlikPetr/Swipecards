@@ -100,7 +100,7 @@ public class Options extends AbstractData {
      * Id фрагмента, который будет отображаться при старте приложения
      * По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
      */
-    public BaseFragment.FragmentSettings startPageFragmentSettings = BaseFragment.DATING;
+    public FragmentSettings startPageFragmentSettings = FragmentSettings.getFragmentSettings(BaseFragment.FragmentId.DATING);
 
     /**
      * Флаг отображения превью в диалогах
@@ -751,14 +751,14 @@ public class Options extends AbstractData {
         }
     }
 
-    private BaseFragment.FragmentSettings getStartPageFragmentId(JSONObject response) {
+    private FragmentSettings getStartPageFragmentId(JSONObject response) {
         BaseFragment.FragmentId fragmentId = startPageFragmentSettings.getFragmentId();
         try {
             fragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
         } catch (IllegalArgumentException e) {
             Debug.error("Illegal value of startPage", e);
         }
-        return BaseFragment.FragmentSettings.getFragmentSettingsById(fragmentId);
+        return FragmentSettings.getFragmentSettings(fragmentId);
     }
 
     public boolean isScruffyEnabled() {

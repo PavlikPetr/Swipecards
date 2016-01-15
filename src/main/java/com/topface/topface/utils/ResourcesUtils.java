@@ -3,8 +3,8 @@ package com.topface.topface.utils;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.data.Options;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 
 /**
@@ -13,7 +13,7 @@ import com.topface.topface.ui.fragments.MenuFragment;
  */
 public class ResourcesUtils {
 
-    public static String getFragmentNameResId(BaseFragment.FragmentSettings id) {
+    public static String getFragmentNameResId(FragmentSettings id) {
         int titleId;
         switch (id.getFragmentId()) {
             case VIP_PROFILE:

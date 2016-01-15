@@ -27,6 +27,7 @@ import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
+import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.state.TopfaceAppState;
@@ -60,7 +61,6 @@ import rx.functions.Func1;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.BONUS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentSettings;
 
 /**
  * Created by kirussell on 05.11.13.
@@ -78,7 +78,7 @@ public class MenuFragment extends Fragment {
     @Inject
     TopfaceAppState mAppState;
     private OnFragmentSelectedListener mOnFragmentSelected;
-    private FragmentSettings mSelectedFragment = BaseFragment.UNDEFINED;
+    private FragmentSettings mSelectedFragment = FragmentSettings.getFragmentSettings(FragmentId.UNDEFINED);
     private LeftMenuAdapter mAdapter;
     private boolean mHardwareAccelerated;
     private View mEditorItem;
@@ -199,12 +199,12 @@ public class MenuFragment extends Fragment {
                     mEditorItem = View.inflate(getActivity(), R.layout.item_left_menu_button_with_badge, null);
                     TextView btnMenu = (TextView) mEditorItem.findViewById(R.id.btnMenu);
                     //noinspection ResourceType
-                    btnMenu.setText(ResourcesUtils.getFragmentNameResId(BaseFragment.EDITOR));
+                    btnMenu.setText(ResourcesUtils.getFragmentNameResId(FragmentSettings.getFragmentSettings(FragmentId.EDITOR)));
                     mEditorItem.setTag(FragmentId.EDITOR);
                     mEditorItem.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            onMenuSelected(BaseFragment.EDITOR);
+                            onMenuSelected(FragmentSettings.getFragmentSettings(FragmentId.EDITOR));
                         }
                     });
                     mListView.addFooterView(mEditorItem);
@@ -225,31 +225,31 @@ public class MenuFragment extends Fragment {
 
     private void initAdapter() {
         ArrayList<LeftMenuAdapter.ILeftMenuItem> menuItems = new ArrayList<>();
-        mProfileMenuItem = LeftMenuAdapter.newLeftMenuItem(BaseFragment.PROFILE, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_PHOTO,
+        mProfileMenuItem = LeftMenuAdapter.newLeftMenuItem(FragmentId.PROFILE, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_PHOTO,
                 CacheProfile.getProfile().photo);
         menuItems.add(mProfileMenuItem);
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(BaseFragment.DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
                 R.drawable.ic_dating_selector));
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(BaseFragment.TABBED_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.TABBED_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_dialog_selector));
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(BaseFragment.PHOTO_BLOG, LeftMenuAdapter.TYPE_MENU_BUTTON,
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.PHOTO_BLOG, LeftMenuAdapter.TYPE_MENU_BUTTON,
                 R.drawable.ic_photolenta_selector));
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(BaseFragment.TABBED_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.TABBED_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(BaseFragment.TABBED_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.TABBED_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_likes_selector));
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(BaseFragment.GEO, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.GEO, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.icon_people_close_selector));
         if (CacheProfile.getOptions().bonus.enabled) {
-            menuItems.add(LeftMenuAdapter.newLeftMenuItem(BaseFragment.BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+            menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                     R.drawable.ic_bonus_selector, CacheProfile.getOptions().bonus.buttonPicture));
         }
         ArrayList<Options.LeftMenuIntegrationItems> array = CacheProfile.getOptions().leftMenuItems;
         if (array != null && array.size() > 0) {
             for (int i = 0; i < array.size(); i++) {
                 Options.LeftMenuIntegrationItems item = array.get(i);
-                menuItems.add(LeftMenuAdapter.newLeftMenuItem(new FragmentSettings(BaseFragment.INTEGRATION_PAGE.getFragmentId(), i), LeftMenuAdapter.TYPE_MENU_BUTTON,
-                        R.drawable.ic_bonus_selector, item.iconUrl));
+                menuItems.add(LeftMenuAdapter.newLeftMenuItem(new FragmentSettings(FragmentId.INTEGRATION_PAGE, i), LeftMenuAdapter.TYPE_MENU_BUTTON,
+                        R.drawable.ic_bonus_selector, null, item.iconUrl));
             }
         }
         if (mAdapter == null) {
@@ -411,7 +411,7 @@ public class MenuFragment extends Fragment {
         } else if (mOnFragmentSelected != null) {
             mOnFragmentSelected.onFragmentSelected(fragmentSettings);
         }
-        if (fragmentSettings == BaseFragment.BONUS && CacheProfile.countersData != null) {
+        if (fragmentSettings == FragmentSettings.getFragmentSettings(FragmentId.BONUS) && CacheProfile.countersData != null) {
             mAppState.setData(CacheProfile.countersData);
         }
     }
@@ -483,7 +483,7 @@ public class MenuFragment extends Fragment {
     }
 
     public FragmentSettings getCurrentFragmentId() {
-        return mSelectedFragment.equals(BaseFragment.UNDEFINED) ? CacheProfile.getOptions().startPageFragmentSettings : mSelectedFragment;
+        return mSelectedFragment.equals(FragmentSettings.getFragmentSettings(FragmentId.UNDEFINED)) ? CacheProfile.getOptions().startPageFragmentSettings : mSelectedFragment;
     }
 
     private BaseFragment getFragmentNewInstanceById(FragmentSettings id) {
@@ -565,7 +565,7 @@ public class MenuFragment extends Fragment {
                 if (!TextUtils.isEmpty(CacheProfile.getOptions().bonus.integrationUrl) ||
                         CacheProfile.getOptions().offerwalls.hasOffers()
                         ) {
-                    selectMenu(BaseFragment.BONUS);
+                    selectMenu(FragmentSettings.getFragmentSettings(FragmentId.BONUS));
                 } else {
                     OfferwallsManager.startOfferwall(getActivity());
                 }

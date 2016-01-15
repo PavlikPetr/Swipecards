@@ -17,6 +17,7 @@ import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.CountersData;
+import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.data.Photo;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -41,22 +42,26 @@ public class LeftMenuAdapter extends BaseAdapter {
         mItems = items;
     }
 
-    public static ILeftMenuItem newLeftMenuItem(BaseFragment.FragmentSettings menuId, int menuType,
+    public static ILeftMenuItem newLeftMenuItem(BaseFragment.FragmentId menuId, int menuType,
                                                 int menuIcon) {
         return newLeftMenuItem(menuId, menuType, menuIcon, null, null);
     }
 
-    public static ILeftMenuItem newLeftMenuItem(BaseFragment.FragmentSettings menuId, int menuType,
+    public static ILeftMenuItem newLeftMenuItem(BaseFragment.FragmentId menuId, int menuType,
                                                 int menuIcon, String menuIconUrl) {
         return newLeftMenuItem(menuId, menuType, menuIcon, null, menuIconUrl);
     }
 
-    public static ILeftMenuItem newLeftMenuItem(BaseFragment.FragmentSettings menuId, int menuType,
+    public static ILeftMenuItem newLeftMenuItem(BaseFragment.FragmentId menuId, int menuType,
                                                 Photo menuIcon) {
         return newLeftMenuItem(menuId, menuType, -1, menuIcon, null);
     }
+    public static ILeftMenuItem newLeftMenuItem(final BaseFragment.FragmentId menuId, final int menuType,
+                                                final int menuIconResId, final Photo menuIconPhoto, final String menuIconUrl) {
+        return newLeftMenuItem(FragmentSettings.getFragmentSettings(menuId),menuType,menuIconResId,menuIconPhoto,menuIconUrl);
+    }
 
-    public static ILeftMenuItem newLeftMenuItem(final BaseFragment.FragmentSettings menuId, final int menuType,
+    public static ILeftMenuItem newLeftMenuItem(final FragmentSettings menuId, final int menuType,
                                                 final int menuIconResId, final Photo menuIconPhoto, final String menuIconUrl) {
         return new ILeftMenuItem() {
 
@@ -64,7 +69,7 @@ public class LeftMenuAdapter extends BaseAdapter {
             private int menuExtraIconId = -1;
 
             @Override
-            public BaseFragment.FragmentSettings getMenuId() {
+            public FragmentSettings getMenuId() {
                 return menuId;
             }
 
@@ -220,7 +225,7 @@ public class LeftMenuAdapter extends BaseAdapter {
         }
     }
 
-    public View getViewForActivate(ListView listView, BaseFragment.FragmentSettings fragmentSettings) {
+    public View getViewForActivate(ListView listView, FragmentSettings fragmentSettings) {
         View view = null;
         for (int j = 0; j <= getCount(); j++) {
             View wantedView = listView.getChildAt(j);
@@ -231,7 +236,7 @@ public class LeftMenuAdapter extends BaseAdapter {
             if (viewHolder == null || !(viewHolder instanceof LeftMenuAdapter.ViewHolder)) {
                 continue;
             }
-            BaseFragment.FragmentSettings item = ((LeftMenuAdapter.ViewHolder) viewHolder).item.getMenuId();
+            FragmentSettings item = ((LeftMenuAdapter.ViewHolder) viewHolder).item.getMenuId();
             if (fragmentSettings == item) {
                 wantedView.setActivated(true);
                 view = wantedView;
@@ -251,7 +256,7 @@ public class LeftMenuAdapter extends BaseAdapter {
     }
 
     public interface ILeftMenuItem {
-        BaseFragment.FragmentSettings getMenuId();
+        FragmentSettings getMenuId();
 
         int getMenuType();
 

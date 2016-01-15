@@ -5,13 +5,13 @@ import android.view.View;
 import com.google.gson.reflect.TypeToken;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedMutual;
+import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteMutualsRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.MutualListAdapter;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.config.FeedsCache;
@@ -56,7 +56,7 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
         inflated.findViewById(R.id.btnGetDating).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MenuFragment.selectFragment(BaseFragment.DATING);
+                MenuFragment.selectFragment(FragmentSettings.getFragmentSettings(FragmentId.DATING));
             }
         });
 

@@ -1,13 +1,13 @@
 package com.topface.topface.ui;
 
-import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.data.FragmentSettings;
 
 /**
  * Created by kirussell on 19.03.14.
  * Listener for events from child fargment to NavigationActivity
  */
 public interface INavigationFragmentsListener {
-    void onFragmentSwitch(BaseFragment.FragmentSettings fragment);
+    void onFragmentSwitch(FragmentSettings fragment);
 
     void onHideActionBar();
 

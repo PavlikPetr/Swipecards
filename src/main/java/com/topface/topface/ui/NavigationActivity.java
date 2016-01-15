@@ -30,6 +30,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
 import com.topface.topface.data.CountersData;
+import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.requests.IApiResponse;
@@ -210,7 +211,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                         new DatingLockPopup.DatingLockPopupRedirectListener() {
                             @Override
                             public void onRedirect() {
-                                showFragment(BaseFragment.TABBED_LIKES);
+                                showFragment(FragmentSettings.getFragmentSettings(BaseFragment.FragmentId.TABBED_LIKES));
                             }
                         })
         );
@@ -236,7 +237,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 PromoExpressMessages.createPromoPopupStartAction(AC_PRIORITY_NORMAL, new PromoExpressMessages.PopupRedirectListener() {
                     @Override
                     public void onRedirect() {
-                        showFragment(BaseFragment.TABBED_DIALOGS);
+                        showFragment(FragmentSettings.getFragmentSettings(BaseFragment.FragmentId.TABBED_DIALOGS));
                         mDrawerLayoutStateObservable.onNext(DRAWER_LAYOUT_STATE.CLOSED);
                     }
                 }),
@@ -268,7 +269,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
         mMenuFragment.setOnFragmentSelected(new MenuFragment.OnFragmentSelectedListener() {
             @Override
-            public void onFragmentSelected(BaseFragment.FragmentSettings fragmentSettings) {
+            public void onFragmentSelected(FragmentSettings fragmentSettings) {
                 mDrawerLayout.closeDrawer(GravityCompat.START);
             }
         });
@@ -355,14 +356,14 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
     }
 
-    public void showFragment(BaseFragment.FragmentSettings fragmentSettings) {
+    public void showFragment(FragmentSettings fragmentSettings) {
         Debug.log(PAGE_SWITCH + "show fragment: " + fragmentSettings);
         mMenuFragment.selectMenu(fragmentSettings);
     }
 
     private void showFragment(Intent intent) {
         //Получаем id фрагмента, если он открыт
-        BaseFragment.FragmentSettings currentFragment = (BaseFragment.FragmentSettings) intent.getSerializableExtra(GCMUtils.NEXT_INTENT);
+        FragmentSettings currentFragment = (FragmentSettings) intent.getSerializableExtra(GCMUtils.NEXT_INTENT);
         Debug.log(PAGE_SWITCH + "show fragment from NEXT_INTENT: " + currentFragment);
         showFragment(currentFragment == null ? CacheProfile.getOptions().startPageFragmentSettings : currentFragment);
     }
@@ -648,7 +649,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     @Override
-    public void onFragmentSwitch(BaseFragment.FragmentSettings fragmentSettings) {
+    public void onFragmentSwitch(FragmentSettings fragmentSettings) {
         if (fragmentSettings.isOverlayed()) {
             switchContentTopMargin(true);
         } else if (mActionBarOverlayed) {
