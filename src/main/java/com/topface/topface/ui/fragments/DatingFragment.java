@@ -745,7 +745,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.btnDatingAdmiration: {
-                if(!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_ADMIRATION)) {
+                if (!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_ADMIRATION)) {
                     if (mCurrentUser != null) {
                         lockControls();
                         isAdmirationFailed.set(false);
@@ -786,7 +786,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.btnDatingSympathy: {
-                if(!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_LIKE)) {
+                if (!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_LIKE)) {
                     sendSympathy();
                 }
             }
@@ -813,7 +813,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.btnSend: {
-                if(!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_SEND)) {
+                if (!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_SEND)) {
                     mDatingInstantMessageController.instantSend(mCurrentUser);
                 }
             }
@@ -829,7 +829,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.chat_btn: {
-                if(!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_CHAT)) {
+                if (!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_CHAT)) {
                     mDatingInstantMessageController.openChat(getActivity(), mCurrentUser);
                 }
             }
@@ -839,8 +839,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private boolean takePhotoIfNeed(String plc) {
-        if(CacheProfile.photo == null) {
-            if(mAddPhotoHelper != null) {
+        if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && CacheProfile.photo == null) {
+            if (mAddPhotoHelper != null) {
                 startActivityForResult(TakePhotoActivity.createIntent(getActivity(), plc), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
                 return true;
             }
