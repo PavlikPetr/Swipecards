@@ -42,8 +42,7 @@ public class BonusFragment extends WebViewFragment {
 
     @Override
     boolean isNeedTitles() {
-        Bundle args = getArguments();
-        return args.getBoolean(NEED_SHOW_TITLE);
+        return getArguments().getBoolean(NEED_SHOW_TITLE);
     }
 
     @Override
