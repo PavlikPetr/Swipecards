@@ -14,8 +14,8 @@ import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
-import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.requests.RegistrationTokenRequest;
@@ -427,7 +427,7 @@ public class GCMUtils {
                     i.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.TABBED_DIALOGS);
                     i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, DialogsFragment.class.getName());
                     // add the same request code like Chat intent
-                    i.putExtra(Static.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
+                    i.putExtra(App.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
                 } else {
                     return ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city, null, null, true, GCMUtils.class.getSimpleName());
                 }
@@ -556,7 +556,7 @@ public class GCMUtils {
                 JSONObject obj = new JSONObject(json);
                 id = obj.optInt("id");
                 name = obj.optString("name");
-                sex = obj.optInt("sex", Static.BOY);
+                sex = obj.optInt("sex", Profile.BOY);
                 JSONObject photo = obj.optJSONObject("photo");
                 if (photo != null && photo.has(Photo.SIZE_128)) {
                     photoUrl = obj.optJSONObject("photo").optString(Photo.SIZE_128);

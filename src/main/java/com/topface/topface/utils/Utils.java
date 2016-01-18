@@ -41,7 +41,6 @@ import com.topface.framework.utils.Debug;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.config.AppConfig;
@@ -59,9 +58,11 @@ import java.util.regex.Pattern;
 public class Utils {
     public static final long DAY = 86400000;
     public static final long WEEK_IN_SECONDS = 604800;
+    public static final String EMPTY = "";
+    public static final String AMPERSAND = "&";
+    public static final String SEMICOLON = ":";
     private static final String DASH_SYMBOL = "-";
     private static final String HYPHEN_SYMBOL = "&#8209;";
-    // from android.util.Patterns.EMAIL_ADDRESS
     private final static Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
             "[a-zA-Z0-9\\+\\._%\\-\\+]{1,256}@" +
                     "" +
@@ -312,11 +313,11 @@ public class Utils {
 
     public static String getText(EditText editText) {
         if (editText == null) {
-            return Static.EMPTY;
+            return EMPTY;
         }
         Editable text = editText.getText();
         if (text == null) {
-            return Static.EMPTY;
+            return EMPTY;
         }
         return text.toString();
     }

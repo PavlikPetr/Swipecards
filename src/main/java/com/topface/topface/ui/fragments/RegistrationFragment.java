@@ -26,7 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.topface.topface.R;
-import com.topface.topface.Static;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.Register;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -61,11 +61,12 @@ public class RegistrationFragment extends BaseFragment {
     public static final String SEX = "sex";
     public static final String BIRTHDAY = "birthday";
     public static final String SEX_MESSAGE = "sex_message";
+    public static final int RED_ALERT_APPEARANCE_TIME = 3000;
 
     private static final int START_SHIFT = 33;
 
     private Date mBirthday;
-    private int mSex = Static.BOY;
+    private int mSex = Profile.BOY;
     private Timer mTimer = new Timer();
 
     @Bind(R.id.ivShowPassword)
@@ -122,10 +123,10 @@ public class RegistrationFragment extends BaseFragment {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 final Calendar c = Calendar.getInstance();
-                c.add(Calendar.YEAR, -Static.MIN_AGE);
+                c.add(Calendar.YEAR, -Profile.MIN_AGE);
                 long maxDate = c.getTimeInMillis();
 
-                c.add(Calendar.YEAR, -(Static.MAX_AGE - Static.MIN_AGE));
+                c.add(Calendar.YEAR, -(Profile.MAX_AGE - Profile.MIN_AGE));
                 long minDate = c.getTimeInMillis();
 
                 if (DatePickerFragment.isValidDate(year, monthOfYear, dayOfMonth, minDate, maxDate)) {
@@ -292,7 +293,7 @@ public class RegistrationFragment extends BaseFragment {
                     });
                 }
             }
-        }, Static.RED_ALERT_APPEARANCE_TIME);
+        }, RED_ALERT_APPEARANCE_TIME);
     }
 
     private void redAlert(int resId) {
@@ -354,7 +355,7 @@ public class RegistrationFragment extends BaseFragment {
                             Fragment fragment = getParentFragment();
                             if (fragment != null && fragment instanceof RegistrationFragment) {
                                 Intent result = new Intent();
-                                result.putExtra(RegistrationFragment.SEX, pos == 0 ? Static.BOY : Static.GIRL);
+                                result.putExtra(RegistrationFragment.SEX, pos == 0 ? Profile.BOY : Profile.GIRL);
                                 result.putExtra(RegistrationFragment.SEX_MESSAGE, mSexResIdArray[pos]);
                                 fragment.onActivityResult(SEX_SELECTED, Activity.RESULT_OK, result);
                             }

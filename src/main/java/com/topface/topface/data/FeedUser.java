@@ -3,7 +3,6 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.topface.topface.Static;
 import com.topface.topface.utils.Utils;
 
 import org.json.JSONException;
@@ -101,12 +100,12 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
         json.put("sex", sex);
         json.put("age", age);
         json.put("online", online);
-        json.put("city", city != null ? city.toJson() : Static.EMPTY);
+        json.put("city", city != null ? city.toJson() : Utils.EMPTY);
         json.put("photo", photo != null ? photo.toJson() : new Photo().toJson());
         json.put("premium", premium);
         json.put("bookmarked", bookmarked);
         json.put("inBlacklist", inBlacklist);
-        json.put("photos", photos != null ? photos.toJson() : Static.EMPTY);
+        json.put("photos", photos != null ? photos.toJson() : Utils.EMPTY);
         json.put("feedItemId", feedItemId);
         return json;
     }

@@ -7,8 +7,8 @@ import com.appodeal.ads.BannerCallbacks;
 import com.appodeal.ads.BannerView;
 import com.appodeal.ads.UserSettings;
 import com.topface.topface.BuildConfig;
-import com.topface.topface.Static;
 import com.topface.topface.banners.IPageWithAds;
+import com.topface.topface.data.Profile;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -27,7 +27,7 @@ public class AppodealProvider extends AbstractAdsProvider {
         }
         Appodeal.getUserSettings(activity)
                 .setGender(
-                        CacheProfile.getProfile().sex == Static.BOY ?
+                        CacheProfile.getProfile().sex == Profile.BOY ?
                                 UserSettings.Gender.MALE :
                                 UserSettings.Gender.FEMALE)
                 .setAge(CacheProfile.getProfile().age);

@@ -8,9 +8,9 @@ import com.nostra13.universalimageloader.utils.IoUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.statistics.android.StatisticsConfiguration;
 import com.topface.statistics.android.StatisticsTracker;
-import com.topface.topface.Static;
 import com.topface.topface.utils.IRequestConnectionListener;
 import com.topface.topface.utils.RequestConnectionListener;
+import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
 
 import java.io.BufferedInputStream;
@@ -65,7 +65,7 @@ public class ConnectionStatLogs extends InstrumentationTestCase {
     private static List<String> mApiUrls = new ArrayList<>();
 
     static {
-        mApiUrls.add(Static.API_URL);
+        mApiUrls.add(ConnectionManager.API_URL);
     }
 
     private StatisticsConfiguration mSourceConfig;
@@ -109,7 +109,7 @@ public class ConnectionStatLogs extends InstrumentationTestCase {
 
     public void testHttpUtilsOpenConnection() throws IOException {
         log("HttpUtils.openConnection test");
-        processHttpUtilsOpenConn(Static.API_URL);
+        processHttpUtilsOpenConn(ConnectionManager.API_URL);
     }
 
     /**

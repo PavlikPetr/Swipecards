@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.topface.topface.Static;
+import com.topface.topface.App;
 import com.topface.topface.ui.analytics.TrackedDialogFragment;
 
 /**
@@ -40,7 +40,7 @@ public abstract class BaseDialog extends TrackedDialogFragment {
     @Override
     public final void startActivityForResult(Intent intent, int requestCode) {
         if (requestCode != -1) {
-            intent.putExtra(Static.INTENT_REQUEST_KEY, requestCode);
+            intent.putExtra(App.INTENT_REQUEST_KEY, requestCode);
         }
         super.startActivityForResult(intent, requestCode);
     }

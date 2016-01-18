@@ -1,7 +1,7 @@
 package com.topface.topface.utils.geo;
 
 import com.topface.framework.utils.Debug;
-import com.topface.topface.Static;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.HttpUtils;
 
 import org.json.JSONObject;
@@ -21,6 +21,9 @@ public class OsmManager {
     public static final String zoom = "18";
     public static final String detalization = "1";
     public static String resultFormat = "json";
+    public static final String SLASH = "/";
+    public static final String QUESTION = "?";
+    public static final String EQUAL = "=";
 
     public static String getAddress(double lat, double lon) {
         StringBuilder resultSB = new StringBuilder();
@@ -54,13 +57,13 @@ public class OsmManager {
 
     private static String getAddressRequest(double lat, double lon) {
         StringBuilder sB = new StringBuilder();
-        sB.append(OSM_URL).append(Static.SLASH).append(OSM_REVERSE_SUB).append(Static.QUESTION);
-        sB.append(OSM_RESULT_FORMAT).append(Static.EQUAL).append(resultFormat);
-        sB.append(Static.AMPERSAND).append(OSM_LATITUDE).append(Static.EQUAL).append(lat);
-        sB.append(Static.AMPERSAND).append(OSM_LONGITUDE).append(Static.EQUAL).append(lon);
-        sB.append(Static.AMPERSAND).append(OSM_ZOOM).append(Static.EQUAL).append(zoom);
-        sB.append(Static.AMPERSAND).append(OSM_DETALIZATION).append(Static.EQUAL).append(detalization);
-        sB.append(Static.AMPERSAND).append(OSM_LOCALE).append(Static.EQUAL).append(Locale.getDefault());
+        sB.append(OSM_URL).append(SLASH).append(OSM_REVERSE_SUB).append(QUESTION);
+        sB.append(OSM_RESULT_FORMAT).append(EQUAL).append(resultFormat);
+        sB.append(Utils.AMPERSAND).append(OSM_LATITUDE).append(EQUAL).append(lat);
+        sB.append(Utils.AMPERSAND).append(OSM_LONGITUDE).append(EQUAL).append(lon);
+        sB.append(Utils.AMPERSAND).append(OSM_ZOOM).append(EQUAL).append(zoom);
+        sB.append(Utils.AMPERSAND).append(OSM_DETALIZATION).append(EQUAL).append(detalization);
+        sB.append(Utils.AMPERSAND).append(OSM_LOCALE).append(EQUAL).append(Locale.getDefault());
         return sB.toString();
     }
 

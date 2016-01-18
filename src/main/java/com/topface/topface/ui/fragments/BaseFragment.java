@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.topface.framework.utils.Debug;
-import com.topface.topface.Static;
+import com.topface.topface.App;
 import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -180,7 +180,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         if (requestCode != -1) {
-            intent.putExtra(Static.INTENT_REQUEST_KEY, requestCode);
+            intent.putExtra(App.INTENT_REQUEST_KEY, requestCode);
             super.startActivityForResult(intent, requestCode);
         }
     }

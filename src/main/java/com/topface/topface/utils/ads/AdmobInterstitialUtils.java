@@ -7,8 +7,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.config.UserConfig;
 
@@ -82,7 +82,7 @@ public class AdmobInterstitialUtils {
         // Создание запроса объявления.
         AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
         adRequestBuilder.setGender(
-                CacheProfile.getProfile().sex == Static.BOY ?
+                CacheProfile.getProfile().sex == Profile.BOY ?
                         AdRequest.GENDER_MALE :
                         AdRequest.GENDER_FEMALE
         );

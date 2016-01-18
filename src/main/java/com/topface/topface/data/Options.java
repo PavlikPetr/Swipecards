@@ -14,7 +14,6 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
@@ -54,6 +53,7 @@ public class Options extends AbstractData {
     public final static String INNER_MAIL_CONST = "mail";
     public final static String INNER_APNS_CONST = "apns";
     public final static String INNER_SEPARATOR = ":";
+    public static final String UNKNOWN = "unknown";
 
     public static final String PREMIUM_MESSAGES_POPUP_SHOW_TIME = "premium_messages_popup_last_show";
     public static final String PREMIUM_VISITORS_POPUP_SHOW_TIME = "premium_visitors_popup_last_show";
@@ -615,7 +615,7 @@ public class Options extends AbstractData {
     }
 
     public static class GetJar {
-        String id = Static.UNKNOWN;
+        String id = UNKNOWN;
         String name = "coins";
         long price = Integer.MAX_VALUE;
 
@@ -640,19 +640,19 @@ public class Options extends AbstractData {
 
     public static class BlockSympathy {
         public boolean enabled = false;
-        public String text = Static.EMPTY;
-        public String buttonText = Static.EMPTY;
+        public String text = Utils.EMPTY;
+        public String buttonText = Utils.EMPTY;
         public String textPremium;
         public String buttonTextPremium;
         public boolean showPhotos = true;
-        public String group = Static.UNKNOWN;
+        public String group = UNKNOWN;
         public int price = 0;
     }
 
     public static class BlockPeopleNearby {
         public boolean enabled = false;
-        public String text = Static.EMPTY;
-        public String buttonText = Static.EMPTY;
+        public String text = Utils.EMPTY;
+        public String buttonText = Utils.EMPTY;
         public String textPremium;
         public String buttonTextPremium;
         public int price = 0;
@@ -741,7 +741,7 @@ public class Options extends AbstractData {
     }
 
     public class InstantMessageFromSearch {
-        public String text = Static.EMPTY;
+        public String text = Utils.EMPTY;
 
         public void setText(String text) {
             this.text = text;
@@ -806,9 +806,9 @@ public class Options extends AbstractData {
     }
 
     public static class LeftMenuIntegrationItems {
-        public String iconUrl = Static.EMPTY;
-        public String title = Static.EMPTY;
-        public String url = Static.EMPTY;
+        public String iconUrl = Utils.EMPTY;
+        public String title = Utils.EMPTY;
+        public String url = Utils.EMPTY;
 
         public LeftMenuIntegrationItems(String icon, String title, String url) {
             iconUrl = icon;

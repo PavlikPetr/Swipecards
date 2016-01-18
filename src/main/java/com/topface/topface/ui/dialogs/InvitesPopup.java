@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -130,7 +129,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
     public static boolean isApplicable() {
         if (CacheProfile.canInvite) {
             final SharedPreferences preferences = App.getContext().getSharedPreferences(
-                    Static.PREFERENCES_TAG_SHARED,
+                    App.PREFERENCES_TAG_SHARED,
                     Context.MODE_PRIVATE
             );
             long date_start = preferences.getLong(INVITE_POPUP_PREF_KEY, 1);

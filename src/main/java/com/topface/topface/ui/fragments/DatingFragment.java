@@ -39,7 +39,6 @@ import com.topface.topface.R;
 import com.topface.topface.RetryDialog;
 import com.topface.topface.RetryRequestReceiver;
 import com.topface.topface.Ssid;
-import com.topface.topface.Static;
 import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.DatingFilter;
@@ -947,10 +946,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setUserSex(SearchUser currUser, Resources res) {
-        if (currUser.sex == Static.BOY) {
+        if (currUser.sex == Profile.BOY) {
             mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, res
                     .getDrawable(R.drawable.dating_man_selector), null, null);
-        } else if (currUser.sex == Static.GIRL) {
+        } else if (currUser.sex == Profile.GIRL) {
             mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, res
                     .getDrawable(R.drawable.dating_woman_selector), null, null);
         }
@@ -1151,7 +1150,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mCurrentUser = null;
             refreshActionBarTitles();
             getTitleSetter().setOnline(false);
-            mUserInfoStatus.setText(Static.EMPTY);
+            mUserInfoStatus.setText(Utils.EMPTY);
         }
     }
 

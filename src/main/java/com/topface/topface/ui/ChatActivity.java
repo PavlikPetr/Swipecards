@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.ui.fragments.ChatFragment;
@@ -52,7 +51,7 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
             intent.putExtra(ChatFragment.INTENT_ITEM_ID, feedItemId);
         }
         if (fromGcm) {
-            intent.putExtra(Static.INTENT_REQUEST_KEY, REQUEST_CHAT);
+            intent.putExtra(App.INTENT_REQUEST_KEY, REQUEST_CHAT);
         }
         if (photo != null) {
             intent.putExtra(ChatFragment.INTENT_AVATAR, photo);

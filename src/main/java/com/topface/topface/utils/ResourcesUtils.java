@@ -2,7 +2,6 @@ package com.topface.topface.utils;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.fragments.MenuFragment;
@@ -48,7 +47,7 @@ public class ResourcesUtils {
                 break;
             case INTEGRATION_PAGE:
                 Options.LeftMenuIntegrationItems item = MenuFragment.getServerLeftMenuItemById(id.getPos());
-                return item != null ? item.title : Static.EMPTY;
+                return item != null ? item.title : Utils.EMPTY;
             case UNDEFINED:
             default:
                 throw new IllegalArgumentException("Illegal fragmentId: do not have resources for this fragment id");

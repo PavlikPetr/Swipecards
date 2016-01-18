@@ -19,7 +19,6 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.Verify;
@@ -34,6 +33,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.http.ConnectionManager;
 
 import org.onepf.oms.OpenIabHelper;
 import org.onepf.oms.appstore.googleUtils.IabHelper;
@@ -218,7 +218,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     }
 
     private boolean isMainApi() {
-        return App.getAppConfig().getApiDomain().equals(Static.API_URL);
+        return App.getAppConfig().getApiDomain().equals(ConnectionManager.API_URL);
     }
 
     protected abstract Products getProducts();

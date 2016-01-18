@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.PasswordRecoverActivity;
@@ -275,7 +274,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
                             }
                         });
                     }
-                }, Static.RED_ALERT_APPEARANCE_TIME);
+                }, RegistrationFragment.RED_ALERT_APPEARANCE_TIME);
             }
         }
     }

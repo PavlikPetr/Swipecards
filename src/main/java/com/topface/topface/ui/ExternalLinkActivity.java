@@ -3,7 +3,7 @@ package com.topface.topface.ui;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.topface.topface.Static;
+import com.topface.topface.App;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.ExternalLinkExecuter;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
@@ -24,7 +24,7 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
             AuthToken token = AuthToken.getInstance();
             if (!token.isEmpty() && token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
                 Intent intent = new Intent(ExternalLinkActivity.this, SettingsContainerActivity.class);
-                intent.putExtra(Static.INTENT_REQUEST_KEY, SettingsContainerActivity.INTENT_ACCOUNT);
+                intent.putExtra(App.INTENT_REQUEST_KEY, SettingsContainerActivity.INTENT_ACCOUNT);
                 intent.putExtra(SettingsContainerActivity.CONFIRMATION_CODE, code);
                 startActivity(intent);
             }

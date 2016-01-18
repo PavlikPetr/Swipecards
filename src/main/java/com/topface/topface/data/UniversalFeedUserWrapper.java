@@ -1,7 +1,5 @@
 package com.topface.topface.data;
 
-import com.topface.topface.Static;
-
 /**
  * Universal user from FeedUser
  */
@@ -40,7 +38,7 @@ public class UniversalFeedUserWrapper implements IUniversalUser {
 
     @Override
     public int getSex() {
-        return mFeedUser == null ? Static.BOY : mFeedUser.sex;
+        return mFeedUser == null ? Profile.BOY : mFeedUser.sex;
     }
 
     @Override
