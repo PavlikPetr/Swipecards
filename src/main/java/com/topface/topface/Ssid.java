@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.topface.framework.utils.BackgroundThread;
+import com.topface.topface.utils.Utils;
 
 public class Ssid {
     public static final String PREFERENCES_SSID_KEY = "ssid";
@@ -20,8 +21,8 @@ public class Ssid {
     }
 
     public synchronized static String load() {
-        SharedPreferences preferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        mSsid = preferences.getString(PREFERENCES_SSID_KEY, Static.EMPTY);
+        SharedPreferences preferences = mContext.getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        mSsid = preferences.getString(PREFERENCES_SSID_KEY, Utils.EMPTY);
         mLastUpdate = preferences.getLong(PREFERENCES_LAST_UPDATE_KEY, 0);
         return mSsid;
     }
@@ -35,12 +36,12 @@ public class Ssid {
     }
 
     public synchronized static void save(String ssid) {
-        mSsid = TextUtils.isEmpty(ssid) ? Static.EMPTY : ssid;
+        mSsid = TextUtils.isEmpty(ssid) ? Utils.EMPTY : ssid;
         mLastUpdate = System.currentTimeMillis();
         new BackgroundThread() {
             @Override
             public void execute() {
-                SharedPreferences preferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                SharedPreferences preferences = mContext.getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(PREFERENCES_SSID_KEY, mSsid);
                 editor.putLong(PREFERENCES_LAST_UPDATE_KEY, mLastUpdate);
@@ -55,7 +56,7 @@ public class Ssid {
         new BackgroundThread() {
             @Override
             public void execute() {
-                SharedPreferences preferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                SharedPreferences preferences = mContext.getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putLong(PREFERENCES_LAST_UPDATE_KEY, mLastUpdate);
                 editor.apply();
@@ -64,13 +65,13 @@ public class Ssid {
     }
 
     public synchronized static void remove() {
-        mSsid = Static.EMPTY;
+        mSsid = Utils.EMPTY;
         new BackgroundThread() {
             @Override
             public void execute() {
-                SharedPreferences preferences = mContext.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                SharedPreferences preferences = mContext.getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(PREFERENCES_SSID_KEY, Static.EMPTY);
+                editor.putString(PREFERENCES_SSID_KEY, Utils.EMPTY);
                 editor.putLong(PREFERENCES_LAST_UPDATE_KEY, 0);
                 editor.apply();
             }

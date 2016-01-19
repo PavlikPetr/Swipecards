@@ -3,13 +3,11 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.topface.topface.ui.fragments.BaseFragment;
-
 /**
  * Counters data
  * Created by onikitin on 24.06.15.
  */
-public class CountersData implements Parcelable{
+public class CountersData implements Parcelable {
 
     public int likes = 0;
     public int mutual = 0;
@@ -73,8 +71,8 @@ public class CountersData implements Parcelable{
         dest.writeInt(bonus);
     }
 
-    public int getCounterByFragmentId(BaseFragment.FragmentId id) {
-        switch (id) {
+    public int getCounterByFragmentId(FragmentSettings id) {
+        switch (id.getFragmentId()) {
             case TABBED_DIALOGS:
                 return dialogs;
             case TABBED_VISITORS:

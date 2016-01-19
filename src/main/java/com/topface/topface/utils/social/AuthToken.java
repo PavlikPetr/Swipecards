@@ -8,8 +8,8 @@ import android.os.Message;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.utils.Utils;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
@@ -41,7 +41,7 @@ public class AuthToken {
     private static AuthToken mInstance = new AuthToken();
 
     private AuthToken() {
-        mPreferences = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        mPreferences = App.getContext().getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         mTokenInfo = new TokenInfo();
         loadToken();
     }
@@ -135,12 +135,12 @@ public class AuthToken {
 
 
     public void loadToken() {
-        mTokenInfo.mSnType = mPreferences.getString(TOKEN_NETWORK, Static.EMPTY);
-        mTokenInfo.mUserSocialId = mPreferences.getString(TOKEN_USER_SOCIAL_ID, Static.EMPTY);
-        mTokenInfo.mTokenKey = mPreferences.getString(TOKEN_TOKEN_KEY, Static.EMPTY);
-        mTokenInfo.mExpiresIn = mPreferences.getString(TOKEN_EXPIRES, Static.EMPTY);
-        mTokenInfo.mLogin = mPreferences.getString(TOKEN_LOGIN, Static.EMPTY);
-        mTokenInfo.mPassword = mPreferences.getString(TOKEN_PASSWORD, Static.EMPTY);
+        mTokenInfo.mSnType = mPreferences.getString(TOKEN_NETWORK, Utils.EMPTY);
+        mTokenInfo.mUserSocialId = mPreferences.getString(TOKEN_USER_SOCIAL_ID, Utils.EMPTY);
+        mTokenInfo.mTokenKey = mPreferences.getString(TOKEN_TOKEN_KEY, Utils.EMPTY);
+        mTokenInfo.mExpiresIn = mPreferences.getString(TOKEN_EXPIRES, Utils.EMPTY);
+        mTokenInfo.mLogin = mPreferences.getString(TOKEN_LOGIN, Utils.EMPTY);
+        mTokenInfo.mPassword = mPreferences.getString(TOKEN_PASSWORD, Utils.EMPTY);
     }
 
 
@@ -148,8 +148,8 @@ public class AuthToken {
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.putString(TOKEN_NETWORK, mTokenInfo.mSnType = SN_TOPFACE);
         editor.putString(TOKEN_USER_SOCIAL_ID, mTokenInfo.mUserSocialId = userSocialId);
-        editor.putString(TOKEN_TOKEN_KEY, mTokenInfo.mTokenKey = Static.EMPTY);
-        editor.putString(TOKEN_EXPIRES, mTokenInfo.mExpiresIn = Static.EMPTY);
+        editor.putString(TOKEN_TOKEN_KEY, mTokenInfo.mTokenKey = Utils.EMPTY);
+        editor.putString(TOKEN_EXPIRES, mTokenInfo.mExpiresIn = Utils.EMPTY);
         editor.putString(TOKEN_LOGIN, mTokenInfo.mLogin = login);
         editor.putString(TOKEN_PASSWORD, mTokenInfo.mPassword = password);
         editor.apply();
@@ -161,13 +161,13 @@ public class AuthToken {
         editor.putString(TOKEN_USER_SOCIAL_ID, mTokenInfo.mUserSocialId = userSocialId);
         editor.putString(TOKEN_TOKEN_KEY, mTokenInfo.mTokenKey = tokenKey);
         editor.putString(TOKEN_EXPIRES, mTokenInfo.mExpiresIn = expiresIn);
-        editor.putString(TOKEN_LOGIN, mTokenInfo.mLogin = Static.EMPTY);
-        editor.putString(TOKEN_PASSWORD, mTokenInfo.mPassword = Static.EMPTY);
+        editor.putString(TOKEN_LOGIN, mTokenInfo.mLogin = Utils.EMPTY);
+        editor.putString(TOKEN_PASSWORD, mTokenInfo.mPassword = Utils.EMPTY);
         editor.apply();
     }
 
     public void removeToken() {
-        saveToken(Static.EMPTY, Static.EMPTY, Static.EMPTY, Static.EMPTY);
+        saveToken(Utils.EMPTY, Utils.EMPTY, Utils.EMPTY, Utils.EMPTY);
     }
 
     public boolean isEmpty() {
@@ -229,9 +229,9 @@ public class AuthToken {
     @Override
     public String toString() {
         return getClass().getName() +
-                Static.AMPERSAND + getSocialNet() +
-                Static.AMPERSAND + getUserSocialId() +
-                Static.AMPERSAND + getTokenKey();
+                Utils.AMPERSAND + getSocialNet() +
+                Utils.AMPERSAND + getUserSocialId() +
+                Utils.AMPERSAND + getTokenKey();
     }
 
     public static class TokenInfo implements Cloneable {
@@ -244,12 +244,12 @@ public class AuthToken {
         private String mPassword;
 
         private TokenInfo() {
-            mSnType = Static.EMPTY;
-            mUserSocialId = Static.EMPTY;
-            mTokenKey = Static.EMPTY;
-            mExpiresIn = Static.EMPTY;
-            mLogin = Static.EMPTY;
-            mPassword = Static.EMPTY;
+            mSnType = Utils.EMPTY;
+            mUserSocialId = Utils.EMPTY;
+            mTokenKey = Utils.EMPTY;
+            mExpiresIn = Utils.EMPTY;
+            mLogin = Utils.EMPTY;
+            mPassword = Utils.EMPTY;
         }
 
         public String getLogin() {

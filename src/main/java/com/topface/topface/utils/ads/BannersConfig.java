@@ -8,10 +8,10 @@ import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
-import com.topface.topface.Static;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.Options;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,7 +64,7 @@ public class BannersConfig {
         SharedPreferences preferences = getPreferences();
         Map<String, PageInfo> pagesInfo = new HashMap<>();
         for (PageInfo.PageName pageName : PageInfo.PageName.values()) {
-            String str = preferences.getString(pageName.getName(), Static.EMPTY);
+            String str = preferences.getString(pageName.getName(), Utils.EMPTY);
             if (!TextUtils.isEmpty(str)) {
                 pagesInfo.put(pageName.getName(), PageInfo.parseFromString(str));
             }

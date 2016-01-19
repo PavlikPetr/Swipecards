@@ -203,7 +203,7 @@ public class AuthFragment extends BaseAuthFragment {
         Activity activity = getActivity();
         if (isAdded() && activity instanceof BaseFragmentActivity) {
             ((BaseFragmentActivity) activity).close(this, true);
-            MenuFragment.selectFragment(CacheProfile.getOptions().startPageFragmentId);
+            MenuFragment.selectFragment(CacheProfile.getOptions().startPageFragmentSettings);
         }
     }
 

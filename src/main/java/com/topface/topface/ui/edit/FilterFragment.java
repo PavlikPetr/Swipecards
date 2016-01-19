@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.Profile;
@@ -151,7 +150,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         if (savedInstanceState != null) {
             mIsHeight = savedInstanceState.getBoolean(CONSTITUTION_DIALOG_MARK);
         }
-        mTargetUser.sex = CacheProfile.dating != null ? CacheProfile.dating.sex : Static.BOY;
+        mTargetUser.sex = CacheProfile.dating != null ? CacheProfile.dating.sex : Profile.BOY;
         mFormInfo = new FormInfo(getActivity().getApplicationContext(), mTargetUser.sex, mTargetUser.getType());
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_filter_light_theme, container, false);
@@ -544,7 +543,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     }
 
     private void setBraSizeVisibility() {
-        if (mFilter.sex == Static.GIRL) {
+        if (mFilter.sex == Profile.GIRL) {
             mLoFilterShowOff.setVisibility(View.VISIBLE);
             mLoFilterFinance.setVisibility(View.GONE);
         } else {

@@ -39,7 +39,6 @@ import com.topface.topface.R;
 import com.topface.topface.RetryDialog;
 import com.topface.topface.RetryRequestReceiver;
 import com.topface.topface.Ssid;
-import com.topface.topface.Static;
 import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.DatingFilter;
@@ -745,7 +744,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.btnDatingAdmiration: {
-                if(!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_ADMIRATION)) {
+                if (!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_ADMIRATION)) {
                     if (mCurrentUser != null) {
                         lockControls();
                         isAdmirationFailed.set(false);
@@ -786,7 +785,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.btnDatingSympathy: {
-                if(!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_LIKE)) {
+                if (!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_LIKE)) {
                     sendSympathy();
                 }
             }
@@ -813,7 +812,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.btnSend: {
-                if(!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_SEND)) {
+                if (!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_SEND)) {
                     mDatingInstantMessageController.instantSend(mCurrentUser);
                 }
             }
@@ -829,7 +828,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.chat_btn: {
-                if(!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_CHAT)) {
+                if (!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_CHAT)) {
                     mDatingInstantMessageController.openChat(getActivity(), mCurrentUser);
                 }
             }
@@ -839,8 +838,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private boolean takePhotoIfNeed(String plc) {
-        if(CacheProfile.photo == null) {
-            if(mAddPhotoHelper != null) {
+        if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && CacheProfile.photo == null) {
+            if (mAddPhotoHelper != null) {
                 startActivityForResult(TakePhotoActivity.createIntent(getActivity(), plc), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
                 return true;
             }
@@ -947,10 +946,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setUserSex(SearchUser currUser, Resources res) {
-        if (currUser.sex == Static.BOY) {
+        if (currUser.sex == Profile.BOY) {
             mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, res
                     .getDrawable(R.drawable.dating_man_selector), null, null);
-        } else if (currUser.sex == Static.GIRL) {
+        } else if (currUser.sex == Profile.GIRL) {
             mProfileBtn.setCompoundDrawablesWithIntrinsicBounds(null, res
                     .getDrawable(R.drawable.dating_woman_selector), null, null);
         }
@@ -1151,7 +1150,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mCurrentUser = null;
             refreshActionBarTitles();
             getTitleSetter().setOnline(false);
-            mUserInfoStatus.setText(Static.EMPTY);
+            mUserInfoStatus.setText(Utils.EMPTY);
         }
     }
 

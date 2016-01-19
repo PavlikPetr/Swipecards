@@ -8,7 +8,6 @@ import android.os.Message;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.utils.config.SessionConfig;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
@@ -22,6 +21,8 @@ import java.util.Locale;
  * Class that starts Vkontakte authorization
  */
 public class VkAuthorizer extends Authorizer {
+
+    public static final int STAGE_AUTH_VK_ID = 4854621;
 
     private static final String[] VK_SCOPE = new String[]{
             VKScope.NOTIFY,
@@ -38,7 +39,7 @@ public class VkAuthorizer extends Authorizer {
 
     public static int getVkId() {
         return App.getAppConfig().getStageChecked()
-                ? Static.STAGE_AUTH_VK_ID
+                ? STAGE_AUTH_VK_ID
                 : App.getAppSocialAppsIds().vkId;
     }
 

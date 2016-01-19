@@ -24,7 +24,6 @@ import android.widget.FrameLayout;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
@@ -407,7 +406,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         if (requestCode != -1) {
-            intent.putExtra(Static.INTENT_REQUEST_KEY, requestCode);
+            intent.putExtra(App.INTENT_REQUEST_KEY, requestCode);
         }
         super.startActivityForResult(intent, requestCode);
     }

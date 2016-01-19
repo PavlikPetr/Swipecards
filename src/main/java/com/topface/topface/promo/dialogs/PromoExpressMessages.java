@@ -7,8 +7,8 @@ import android.widget.Button;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
 import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
@@ -86,13 +86,13 @@ public class PromoExpressMessages extends PromoDialog {
     }
 
     private ArrayList<Integer> getFakeAvatars() {
-        int arrayId = CacheProfile.dating != null && CacheProfile.dating.sex == Static.GIRL ? R.array.fake_girl_avatars : R.array.fake_boy_avatars;
+        int arrayId = CacheProfile.dating != null && CacheProfile.dating.sex == Profile.GIRL ? R.array.fake_girl_avatars : R.array.fake_boy_avatars;
         ArrayList<Integer> avatarsIdArray = new ArrayList<>();
         int randomValue;
         TypedArray imgs = App.getContext().getResources().obtainTypedArray(arrayId);
         ArrayList<Integer> usersFakeArray = new ArrayList<>();
         for (int i = 0; i < imgs.length(); i++) {
-            usersFakeArray.add(imgs.getResourceId(i, CacheProfile.dating != null && CacheProfile.dating.sex == Static.GIRL ? R.drawable.fake_girl1 : R.drawable.fake_boy1));
+            usersFakeArray.add(imgs.getResourceId(i, CacheProfile.dating != null && CacheProfile.dating.sex == Profile.GIRL ? R.drawable.fake_girl1 : R.drawable.fake_boy1));
         }
         for (int i = 0; i < AVATARS_ID_ARRAY_LENGTH; i++) {
             int iterCounter = 0;

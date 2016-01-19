@@ -8,12 +8,12 @@ import android.text.TextUtils;
 import android.webkit.URLUtil;
 
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
@@ -21,7 +21,6 @@ import com.topface.topface.data.experiments.InstantMessagesForNewbies;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
@@ -39,6 +38,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
+
 /**
  * Опции приложения
  * <p/>
@@ -52,6 +53,7 @@ public class Options extends AbstractData {
     public final static String INNER_MAIL_CONST = "mail";
     public final static String INNER_APNS_CONST = "apns";
     public final static String INNER_SEPARATOR = ":";
+    public static final String UNKNOWN = "unknown";
 
     public static final String PREMIUM_MESSAGES_POPUP_SHOW_TIME = "premium_messages_popup_last_show";
     public static final String PREMIUM_VISITORS_POPUP_SHOW_TIME = "premium_visitors_popup_last_show";
@@ -99,7 +101,7 @@ public class Options extends AbstractData {
      * Id фрагмента, который будет отображаться при старте приложения
      * По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
      */
-    public BaseFragment.FragmentId startPageFragmentId = BaseFragment.FragmentId.DATING;
+    public FragmentSettings startPageFragmentSettings = FragmentId.DATING.getFragmentSettings();
 
     /**
      * Флаг отображения превью в диалогах
@@ -187,6 +189,11 @@ public class Options extends AbstractData {
      */
     public HashMap<String, Object> statisticsSlices;
 
+    /**
+     * массив пунктов левого меню от интеграторов
+     */
+    public ArrayList<LeftMenuIntegrationItems> leftMenuItems = new ArrayList<>();
+
     public Options(IApiResponse data) {
         this(data.getJsonResult());
     }
@@ -204,7 +211,7 @@ public class Options extends AbstractData {
     protected void fillData(JSONObject response, boolean cacheToPreferences) {
         try {
             JSONObject statisticsSlicesSource = response.optJSONObject("statisticsSlices");
-            if(statisticsSlicesSource != null) {
+            if (statisticsSlicesSource != null) {
                 statisticsSlices = JsonUtils.fromJson(statisticsSlicesSource.toString(), HashMap.class);
             } else {
                 statisticsSlices = new HashMap<>();
@@ -363,7 +370,7 @@ public class Options extends AbstractData {
 
             instantMessagesForNewbies.init(response);
 
-            startPageFragmentId = getStartPageFragmentId(response);
+            startPageFragmentSettings = getStartPageFragmentId(response);
 
             JSONObject jsonNotShown = response.optJSONObject("notShown");
             if (jsonNotShown != null) {
@@ -373,6 +380,10 @@ public class Options extends AbstractData {
             interstitial = JsonUtils.optFromJson(response.optString("interstitial"),
                     InterstitialInFeeds.class, interstitial);
             fullscreenInterval = response.optLong("fullscreenInterval", DateUtils.DAY_IN_SECONDS);
+            if (response.has("leftMenuItems")) {
+                leftMenuItems = JsonUtils.fromJson(response.getJSONArray("leftMenuItems").toString(), new TypeToken<ArrayList<LeftMenuIntegrationItems>>() {
+                });
+            }
         } catch (Exception e) {
             // отображение максимально заметного тоста, чтобы на этапе тестирования любого функционала
             // не пропустить ошибку парсинга опций, т.к. это может приветси к денежным потерям проекта
@@ -556,11 +567,11 @@ public class Options extends AbstractData {
         }
 
         private int getPageId(String page) {
-            BaseFragment.FragmentId fragmentId = BaseFragment.FragmentId.UNDEFINED;
+            FragmentId fragmentId = FragmentId.UNDEFINED;
             if (!TextUtils.isEmpty(page)) {
                 try {
 
-                    fragmentId = BaseFragment.FragmentId.valueOf(page);
+                    fragmentId = FragmentId.valueOf(page);
                 } catch (IllegalArgumentException e) {
                     Debug.error("Illegal value of pageId", e);
                 }
@@ -604,7 +615,7 @@ public class Options extends AbstractData {
     }
 
     public static class GetJar {
-        String id = Static.UNKNOWN;
+        String id = UNKNOWN;
         String name = "coins";
         long price = Integer.MAX_VALUE;
 
@@ -629,19 +640,19 @@ public class Options extends AbstractData {
 
     public static class BlockSympathy {
         public boolean enabled = false;
-        public String text = Static.EMPTY;
-        public String buttonText = Static.EMPTY;
+        public String text = Utils.EMPTY;
+        public String buttonText = Utils.EMPTY;
         public String textPremium;
         public String buttonTextPremium;
         public boolean showPhotos = true;
-        public String group = Static.UNKNOWN;
+        public String group = UNKNOWN;
         public int price = 0;
     }
 
     public static class BlockPeopleNearby {
         public boolean enabled = false;
-        public String text = Static.EMPTY;
-        public String buttonText = Static.EMPTY;
+        public String text = Utils.EMPTY;
+        public String buttonText = Utils.EMPTY;
         public String textPremium;
         public String buttonTextPremium;
         public int price = 0;
@@ -730,7 +741,7 @@ public class Options extends AbstractData {
     }
 
     public class InstantMessageFromSearch {
-        public String text = Static.EMPTY;
+        public String text = Utils.EMPTY;
 
         public void setText(String text) {
             this.text = text;
@@ -741,14 +752,14 @@ public class Options extends AbstractData {
         }
     }
 
-    private BaseFragment.FragmentId getStartPageFragmentId(JSONObject response) {
-        BaseFragment.FragmentId fragmentId = startPageFragmentId;
+    private FragmentSettings getStartPageFragmentId(JSONObject response) {
+        FragmentId fragmentId = startPageFragmentSettings.getFragmentId();
         try {
-            fragmentId = BaseFragment.FragmentId.valueOf(response.optString("startPage"));
+            fragmentId = FragmentId.valueOf(response.optString("startPage"));
         } catch (IllegalArgumentException e) {
             Debug.error("Illegal value of startPage", e);
         }
-        return fragmentId;
+        return fragmentId.getFragmentSettings();
     }
 
     public boolean isScruffyEnabled() {
@@ -792,5 +803,17 @@ public class Options extends AbstractData {
 
     public class ForceSmsInviteRedirect {
         public boolean enabled = false;
+    }
+
+    public static class LeftMenuIntegrationItems {
+        public String iconUrl = Utils.EMPTY;
+        public String title = Utils.EMPTY;
+        public String url = Utils.EMPTY;
+
+        public LeftMenuIntegrationItems(String icon, String title, String url) {
+            iconUrl = icon;
+            this.title = title;
+            this.url = url;
+        }
     }
 }

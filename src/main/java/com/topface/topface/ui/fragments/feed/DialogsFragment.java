@@ -8,6 +8,7 @@ import android.view.View;
 import com.google.gson.reflect.TypeToken;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
+import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.data.History;
 import com.topface.topface.data.Options;
 import com.topface.topface.promo.dialogs.PromoDialog;
@@ -176,7 +177,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MenuFragment.selectFragment(FragmentId.DATING);
+                MenuFragment.selectFragment(FragmentId.DATING.getFragmentSettings());
             }
         });
     }

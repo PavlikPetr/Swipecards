@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.topface.topface.R;
-import com.topface.topface.Static;
+import com.topface.topface.data.Profile;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 
@@ -36,7 +36,7 @@ public class TakePhotoFragment extends BaseFragment implements View.OnClickListe
         super.onCreateView(inflater, container, saved);
         View root = inflater.inflate(R.layout.fragment_take_photo, null);
         View view = root.findViewById(R.id.upload_photo_placeholder);
-        view.setBackgroundResource(CacheProfile.sex == Static.GIRL ? R.drawable.upload_photo_female : R.drawable.upload_photo_male);
+        view.setBackgroundResource(CacheProfile.sex == Profile.GIRL ? R.drawable.upload_photo_female : R.drawable.upload_photo_male);
 
         Button btn = (Button) root.findViewById(R.id.btn_take_photo);
         btn.setOnClickListener(this);

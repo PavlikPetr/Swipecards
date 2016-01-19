@@ -17,12 +17,12 @@ import com.google.gson.reflect.TypeToken;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.BuyLikesAccessRequest;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
@@ -60,6 +60,8 @@ import rx.Subscription;
 import rx.functions.Action1;
 
 public class LikesFragment extends FeedFragment<FeedLike> {
+
+    public static final String PREFERENCES_PAID_LIKES_COUNT = "paid_likes_count";
 
     @Inject
     TopfaceAppState mAppState;
@@ -285,42 +287,42 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         initButtonForBlockedScreen(btnBuy, blockSympathyOptions.buttonText, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                        if (mCoins >= blockSympathyOptions.price) {
-                            btnBuy.setVisibility(View.INVISIBLE);
-                            progress.setVisibility(View.VISIBLE);
-                            EasyTracker.sendEvent(
-                                    getTrackName(), "VipPaidSympathies." + blockSympathyOptions.group,
-                                    "Buying", 1l
-                            );
-                            BuyLikesAccessRequest request = new BuyLikesAccessRequest(getActivity());
-                            request.callback(new SimpleApiHandler() {
-                                @Override
-                                public void success(IApiResponse response) {
-                                    super.success(response);
-                                    inflated.setVisibility(View.GONE);
-                                    updateData(false, true);
-                                }
-
-                                @Override
-                                public void fail(int codeError, IApiResponse response) {
-                                    super.fail(codeError, response);
-                                    if (codeError == ErrorCodes.PAYMENT) {
-                                        openBuyScreenOnBlockedLikes(blockSympathyOptions);
-                                    }
-                                }
-
-                                @Override
-                                public void always(IApiResponse response) {
-                                    super.always(response);
-                                    btnBuy.setVisibility(View.VISIBLE);
-                                    progress.setVisibility(View.GONE);
-                                }
-                            }).exec();
-                        } else {
-                            openBuyScreenOnBlockedLikes(blockSympathyOptions);
+                if (mCoins >= blockSympathyOptions.price) {
+                    btnBuy.setVisibility(View.INVISIBLE);
+                    progress.setVisibility(View.VISIBLE);
+                    EasyTracker.sendEvent(
+                            getTrackName(), "VipPaidSympathies." + blockSympathyOptions.group,
+                            "Buying", 1l
+                    );
+                    BuyLikesAccessRequest request = new BuyLikesAccessRequest(getActivity());
+                    request.callback(new SimpleApiHandler() {
+                        @Override
+                        public void success(IApiResponse response) {
+                            super.success(response);
+                            inflated.setVisibility(View.GONE);
+                            updateData(false, true);
                         }
-                    }
-                });
+
+                        @Override
+                        public void fail(int codeError, IApiResponse response) {
+                            super.fail(codeError, response);
+                            if (codeError == ErrorCodes.PAYMENT) {
+                                openBuyScreenOnBlockedLikes(blockSympathyOptions);
+                            }
+                        }
+
+                        @Override
+                        public void always(IApiResponse response) {
+                            super.always(response);
+                            btnBuy.setVisibility(View.VISIBLE);
+                            progress.setVisibility(View.GONE);
+                        }
+                    }).exec();
+                } else {
+                    openBuyScreenOnBlockedLikes(blockSympathyOptions);
+                }
+            }
+        });
     }
 
     private void openBuyScreenOnBlockedLikes(Options.BlockSympathy blockSympathyOptions) {
@@ -343,8 +345,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             @Override
             public void execute() {
                 SharedPreferences prefs = getActivity()
-                        .getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-                final long showsCount = prefs.getLong(Static.PREFERENCES_PAID_LIKES_COUNT, 1l);
+                        .getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+                final long showsCount = prefs.getLong(PREFERENCES_PAID_LIKES_COUNT, 1l);
                 if (showsCount > 1l) {
                     EasyTracker.sendEvent(
                             getTrackName(), "VipPaidSympathies." + blockSympathyOptions.group,
@@ -356,7 +358,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                             "ShownMoreThanOnce", showsCount
                     );
                 }
-                prefs.edit().putLong(Static.PREFERENCES_PAID_LIKES_COUNT, showsCount + 1l)
+                prefs.edit().putLong(PREFERENCES_PAID_LIKES_COUNT, showsCount + 1l)
                         .apply();
             }
         };
@@ -372,7 +374,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         ImageViewRemote ivThree = (ImageViewRemote) currentView.findViewById(R.id.ivThree);
 
         // if profile still not cached - show girls by default
-        if (CacheProfile.dating != null && CacheProfile.dating.sex == Static.GIRL) {
+        if (CacheProfile.dating != null && CacheProfile.dating.sex == Profile.GIRL) {
             ivOne.setResourceSrc(R.drawable.likes_male_one);
             ivTwo.setResourceSrc(R.drawable.likes_male_two);
             ivThree.setResourceSrc(R.drawable.likes_male_three);

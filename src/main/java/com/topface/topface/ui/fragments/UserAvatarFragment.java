@@ -10,12 +10,13 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.IUniversalUser;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.Profile;
 import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 
@@ -104,7 +105,7 @@ public abstract class UserAvatarFragment extends BaseFragment
         if (user.isEmpty() || user.isBanned() || user.isDeleted() || user.isPhotoEmpty()) {
             ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar)
                     .findViewById(R.id.ivBarAvatar))
-                    .setImageResource(user.getSex() == Static.GIRL ?
+                    .setImageResource(user.getSex() == Profile.GIRL ?
                             R.drawable.rounded_avatar_female :
                             R.drawable.rounded_avatar_male);
         } else {
@@ -179,7 +180,7 @@ public abstract class UserAvatarFragment extends BaseFragment
     protected String getSubtitle() {
         IUniversalUser user = getUniversalUser();
         if (user.isEmpty() || TextUtils.isEmpty(user.getCity())) {
-            return Static.EMPTY;
+            return Utils.EMPTY;
         } else {
             return user.getCity();
         }

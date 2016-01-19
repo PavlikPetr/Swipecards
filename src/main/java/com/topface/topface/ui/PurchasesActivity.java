@@ -16,7 +16,6 @@ import com.topface.offerwall.publisher.TFOfferwallActivity;
 import com.topface.offerwall.publisher.TFOfferwallSDK;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.ProfileRequest;
@@ -150,7 +149,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
     public static Intent createVipBuyIntent(String extraText, String from) {
         Intent intent = new Intent(App.getContext(), PurchasesActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY_VIP);
+        intent.putExtra(App.INTENT_REQUEST_KEY, INTENT_BUY_VIP);
         intent.putExtra(PurchasesFragment.ARG_TAG_EXRA_TEXT, extraText);
         intent.putExtra(PurchasesConstants.ARG_TAG_SOURCE, from);
         intent.putExtra(PurchasesFragment.IS_VIP_PRODUCTS, true);
@@ -168,7 +167,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         } else {
             intent = new Intent(context, PurchasesActivity.class);
         }
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY);
+        intent.putExtra(App.INTENT_REQUEST_KEY, INTENT_BUY);
         intent.putExtra(PurchasesConstants.ARG_TAG_SOURCE, from);
         if (itemType != -1) {
             intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, itemType);

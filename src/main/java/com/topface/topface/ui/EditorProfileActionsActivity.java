@@ -4,7 +4,6 @@ import android.content.Intent;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
 
@@ -15,7 +14,7 @@ public class EditorProfileActionsActivity extends SingleFragmentActivity {
 
     public static Intent createIntent(int profileId, IApiResponse response) {
         Intent intent = new Intent(App.getContext(), EditorProfileActionsActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_EDITOR_PROFILE_ACTIONS);
+        intent.putExtra(App.INTENT_REQUEST_KEY, INTENT_EDITOR_PROFILE_ACTIONS);
         intent.putExtra(EditorProfileActionsFragment.USERID, profileId);
         try {
             intent.putExtra(EditorProfileActionsFragment.PROFILE_RESPONSE, response.toJson().toString());
