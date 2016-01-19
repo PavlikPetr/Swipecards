@@ -42,7 +42,6 @@ import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.History;
@@ -520,7 +519,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     protected String getSubtitle() {
         if (TextUtils.isEmpty(mUserCity)) {
-            return Static.EMPTY;
+            return Utils.EMPTY;
         } else {
             return mUserCity;
         }

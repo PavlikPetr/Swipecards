@@ -22,7 +22,6 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
-import com.topface.topface.Static;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiResponse;
@@ -37,6 +36,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.gcmutils.GCMUtils;
+import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
@@ -78,8 +78,8 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         mAppConfig = App.getAppConfig();
 
         mApiUrlsMap = new SparseArray<>();
-        mApiUrlsMap.put(0, Static.API_URL);
-        mApiUrlsMap.put(1, Static.API_500_ERROR_URL);
+        mApiUrlsMap.put(0, ConnectionManager.API_URL);
+        mApiUrlsMap.put(1, ConnectionManager.API_500_ERROR_URL);
     }
 
     @Override

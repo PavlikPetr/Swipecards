@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
 import com.topface.topface.requests.ApiRequest;
@@ -445,7 +444,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private boolean setMessageHtmlContent(ViewHolder holder, History item) {
         if (holder != null && holder.message != null) {
-            if (item.text != null && !item.text.equals(Static.EMPTY)) {
+            if (item.text != null && !item.text.equals(Utils.EMPTY)) {
                 holder.message.setText(Html.fromHtml(item.text));
 
                 // Проверяем наличие в textView WEB_URLS | EMAIL_ADDRESSES | PHONE_NUMBERS | MAP_ADDRESSES;

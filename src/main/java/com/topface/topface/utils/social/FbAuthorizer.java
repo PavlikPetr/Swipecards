@@ -15,7 +15,6 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.utils.config.SessionConfig;
 
 import java.util.Arrays;
@@ -25,6 +24,8 @@ import java.util.Collection;
  * Class that starts Facebook authorization
  */
 public class FbAuthorizer extends Authorizer {
+
+    public static final String STAGE_AUTH_FACEBOOK_ID = "297350380464581";
 
     private CallbackManager mCallbackManager;
     private ProfileTracker mProfileTracker;
@@ -103,7 +104,7 @@ public class FbAuthorizer extends Authorizer {
 
     public static String getFbId() {
         return App.getAppConfig().getStageChecked()
-                ? Static.STAGE_AUTH_FACEBOOK_ID
+                ? STAGE_AUTH_FACEBOOK_ID
                 : App.getAppSocialAppsIds().fbId;
     }
 

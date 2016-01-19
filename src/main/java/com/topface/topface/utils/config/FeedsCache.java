@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.topface.framework.utils.config.AbstractConfig;
-import com.topface.topface.Static;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 
 import static com.topface.topface.utils.config.FeedsCache.FEEDS_TYPE.DATA_ADMIRATION_FEEDS;
@@ -82,7 +82,7 @@ public class FeedsCache extends AbstractConfig {
             mUnique = AuthToken.getInstance().getUserTokenUniqueId();
         }
         return getContext().getSharedPreferences(
-                FEEDS_CACHE + Static.AMPERSAND + mUnique,
+                FEEDS_CACHE + Utils.AMPERSAND + mUnique,
                 Context.MODE_PRIVATE
         );
     }

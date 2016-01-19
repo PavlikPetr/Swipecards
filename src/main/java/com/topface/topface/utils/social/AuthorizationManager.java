@@ -13,7 +13,6 @@ import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
-import com.topface.topface.Static;
 import com.topface.topface.data.Auth;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
@@ -42,6 +41,7 @@ import java.util.Map;
 public class AuthorizationManager {
 
     public static final int RESULT_LOGOUT = 666;
+    public static final String LOGOUT_INTENT = "com.topface.topface.intent.LOGOUT";
 
 
     private Map<Platform, Authorizer> mAuthorizers = new HashMap<>();
@@ -130,11 +130,11 @@ public class AuthorizationManager {
         CacheProfile.clearProfileAndOptions();
         App.getConfig().onLogout();
         StartActionsController.onLogout();
-        SharedPreferences preferences = App.getContext().getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        SharedPreferences preferences = App.getContext().getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         if (preferences != null) {
             preferences.edit().clear().apply();
         }
-        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(Static.LOGOUT_INTENT));
+        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(LOGOUT_INTENT));
         //Чистим список тех, кого нужно оценить
         new BackgroundThread() {
             @Override

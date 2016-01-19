@@ -12,7 +12,6 @@ import com.google.gson.JsonSyntaxException;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.DatingFilter;
@@ -37,6 +36,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /* Cache Profile */
 public class CacheProfile {
     public static final String ACTION_PROFILE_LOAD = "com.topface.topface.ACTION.PROFILE_LOAD";
+    public static final String PREFERENCES_NEED_CHANGE_PASSWORD = "need_change_password";
+    public static final String PREFERENCES_NEED_CITY_CONFIRM = "city_need_confirm";
     /**
      * Use sendProfileUpdateBroadcast() static method
      */
@@ -396,34 +397,34 @@ public class CacheProfile {
     }
 
     public static boolean needToChangePassword(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        return preferences != null && preferences.getBoolean(Static.PREFERENCES_NEED_CHANGE_PASSWORD, false);
+        SharedPreferences preferences = context.getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        return preferences != null && preferences.getBoolean(PREFERENCES_NEED_CHANGE_PASSWORD, false);
     }
 
     public static void onPasswordChanged(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(Static.PREFERENCES_NEED_CHANGE_PASSWORD, false);
+        editor.putBoolean(PREFERENCES_NEED_CHANGE_PASSWORD, false);
         editor.apply();
     }
 
     public static boolean needCityConfirmation(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        return preferences != null && preferences.getBoolean(Static.PREFERENCES_NEED_CITY_CONFIRM, false);
+        SharedPreferences preferences = context.getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        return preferences != null && preferences.getBoolean(PREFERENCES_NEED_CITY_CONFIRM, false);
     }
 
     public static void onCityConfirmed(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(Static.PREFERENCES_NEED_CITY_CONFIRM, false);
+        editor.putBoolean(PREFERENCES_NEED_CITY_CONFIRM, false);
         editor.apply();
     }
 
     public static void onRegistration(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(Static.PREFERENCES_NEED_CHANGE_PASSWORD, false);
-        editor.putBoolean(Static.PREFERENCES_NEED_CITY_CONFIRM, true);
+        editor.putBoolean(PREFERENCES_NEED_CHANGE_PASSWORD, false);
+        editor.putBoolean(PREFERENCES_NEED_CITY_CONFIRM, true);
         editor.apply();
     }
 

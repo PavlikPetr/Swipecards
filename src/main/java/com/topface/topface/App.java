@@ -88,6 +88,10 @@ public class App extends ApplicationBase {
 
     public static final String TAG = "Topface";
     public static final String CONNECTIVITY_CHANGE_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
+    public static final String COMSCORE_C2 = "19015876";
+    public static final String COMSCORE_SECRET_KEY = "b83e932c608c2e08273eeddf01c2a70e";
+    public static final String PREFERENCES_TAG_SHARED = "preferences_general";
+    public static final String INTENT_REQUEST_KEY = "requestCode";
     private static final long PROFILE_UPDATE_TIMEOUT = 1000 * 120;
 
     private ObjectGraph mGraph;
@@ -512,8 +516,8 @@ public class App extends ApplicationBase {
 
     private void initComScore() {
         comScore.setAppContext(mContext);
-        comScore.setCustomerC2(Static.COMSCORE_C2);
-        comScore.setPublisherSecret(Static.COMSCORE_SECRET_KEY);
+        comScore.setCustomerC2(COMSCORE_C2);
+        comScore.setPublisherSecret(COMSCORE_SECRET_KEY);
     }
 
     private void checkKeepAlive() {

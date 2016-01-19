@@ -8,9 +8,9 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.banners.RefreshablePageWithAds;
+import com.topface.topface.data.Profile;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.Calendar;
@@ -91,7 +91,7 @@ class AdMobProvider extends AbstractAdsProvider {
     public AdRequest.Builder getAdRequest() {
         return new AdRequest.Builder()
                 .setGender(
-                        CacheProfile.getProfile().sex == Static.BOY ?
+                        CacheProfile.getProfile().sex == Profile.BOY ?
                                 AdRequest.GENDER_MALE :
                                 AdRequest.GENDER_FEMALE
                 ).setBirthday(getUserAge().getTime());

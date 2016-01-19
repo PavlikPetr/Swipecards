@@ -22,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.facebook.FacebookSdk;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -276,7 +275,7 @@ public class AuthFragment extends BaseAuthFragment {
         Activity activity = getActivity();
         if (isAdded() && activity instanceof BaseFragmentActivity) {
             ((BaseFragmentActivity) activity).close(this, true);
-            MenuFragment.selectFragment(CacheProfile.getOptions().startPageFragmentId);
+            MenuFragment.selectFragment(CacheProfile.getOptions().startPageFragmentSettings);
         }
     }
 

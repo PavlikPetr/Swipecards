@@ -9,7 +9,6 @@ import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.ui.dialogs.InvitesPopup;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
@@ -31,7 +30,7 @@ public class InvitePopupAction extends LinkedStartAction {
     @Override
     public void callInBackground() {
         SharedPreferences preferences = App.getContext().getSharedPreferences(
-                Static.PREFERENCES_TAG_SHARED,
+                App.PREFERENCES_TAG_SHARED,
                 Context.MODE_PRIVATE
         );
         preferences.edit()

@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.BasePendingInit;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.FeedListData;
@@ -29,6 +28,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsStripAdapter;
 import com.topface.topface.utils.FormItem;
+import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -116,7 +116,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
                 gifts.addAll(parcelableGifts);
                 String status = savedInstanceState.getString(USER_STATUS);
                 setUserData(
-                        status != null ? status : Static.EMPTY,
+                        status != null ? status : Utils.EMPTY,
                         savedInstanceState.getInt(USER_ID, 0),
                         parcelableArrayList, gifts, giftsCount
                 );

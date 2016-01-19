@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.topface.framework.JsonUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
@@ -108,7 +107,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
 
                 if (item.type == FormItem.CITY) {
                     Intent intent = new Intent(getActivity(), CitySearchActivity.class);
-                    intent.putExtra(Static.INTENT_REQUEST_KEY, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
+                    intent.putExtra(App.INTENT_REQUEST_KEY, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
                     Fragment parent = getParentFragment();
                     if (parent != null) {
                         parent.startActivityForResult(intent, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
