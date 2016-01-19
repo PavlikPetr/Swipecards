@@ -16,33 +16,32 @@ import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 
 public class FragmentSettings implements Parcelable {
 
-    private static final HashMap<FragmentId, FragmentSettings> FragmentSettingsMap;
+    private static final HashMap<FragmentId, FragmentSettings> mFragmentSettingsMap;
 
     static {
-        FragmentSettingsMap = new HashMap<>();
-        FragmentSettingsMap.put(FragmentId.VIP_PROFILE, new FragmentSettings(FragmentId.VIP_PROFILE));
-        FragmentSettingsMap.put(FragmentId.PROFILE, new FragmentSettings(FragmentId.PROFILE));
-        FragmentSettingsMap.put(FragmentId.DATING, new FragmentSettings(FragmentId.DATING, true));
-        FragmentSettingsMap.put(FragmentId.TABBED_DIALOGS, new FragmentSettings(FragmentId.TABBED_DIALOGS));
-        FragmentSettingsMap.put(FragmentId.TABBED_VISITORS, new FragmentSettings(FragmentId.TABBED_VISITORS));
-        FragmentSettingsMap.put(FragmentId.TABBED_LIKES, new FragmentSettings(FragmentId.TABBED_LIKES));
-        FragmentSettingsMap.put(FragmentId.PHOTO_BLOG, new FragmentSettings(FragmentId.PHOTO_BLOG));
-        FragmentSettingsMap.put(FragmentId.GEO, new FragmentSettings(FragmentId.GEO));
-        FragmentSettingsMap.put(FragmentId.BONUS, new FragmentSettings(FragmentId.BONUS));
-        FragmentSettingsMap.put(FragmentId.EDITOR, new FragmentSettings(FragmentId.EDITOR));
-        FragmentSettingsMap.put(FragmentId.SETTINGS, new FragmentSettings(FragmentId.SETTINGS));
-        FragmentSettingsMap.put(FragmentId.INTEGRATION_PAGE, new FragmentSettings(FragmentId.INTEGRATION_PAGE, 0));
-        FragmentSettingsMap.put(FragmentId.UNDEFINED, new FragmentSettings(FragmentId.UNDEFINED));
+        mFragmentSettingsMap = new HashMap<>();
+        mFragmentSettingsMap.put(FragmentId.VIP_PROFILE, new FragmentSettings(FragmentId.VIP_PROFILE));
+        mFragmentSettingsMap.put(FragmentId.PROFILE, new FragmentSettings(FragmentId.PROFILE));
+        mFragmentSettingsMap.put(FragmentId.DATING, new FragmentSettings(FragmentId.DATING, true));
+        mFragmentSettingsMap.put(FragmentId.TABBED_DIALOGS, new FragmentSettings(FragmentId.TABBED_DIALOGS));
+        mFragmentSettingsMap.put(FragmentId.TABBED_VISITORS, new FragmentSettings(FragmentId.TABBED_VISITORS));
+        mFragmentSettingsMap.put(FragmentId.TABBED_LIKES, new FragmentSettings(FragmentId.TABBED_LIKES));
+        mFragmentSettingsMap.put(FragmentId.PHOTO_BLOG, new FragmentSettings(FragmentId.PHOTO_BLOG));
+        mFragmentSettingsMap.put(FragmentId.GEO, new FragmentSettings(FragmentId.GEO));
+        mFragmentSettingsMap.put(FragmentId.BONUS, new FragmentSettings(FragmentId.BONUS));
+        mFragmentSettingsMap.put(FragmentId.EDITOR, new FragmentSettings(FragmentId.EDITOR));
+        mFragmentSettingsMap.put(FragmentId.SETTINGS, new FragmentSettings(FragmentId.SETTINGS));
+        mFragmentSettingsMap.put(FragmentId.INTEGRATION_PAGE, new FragmentSettings(FragmentId.INTEGRATION_PAGE, 0));
+        mFragmentSettingsMap.put(FragmentId.UNDEFINED, new FragmentSettings(FragmentId.UNDEFINED));
     }
 
-    @NotNull
-    public static FragmentSettings getFragmentSettings(FragmentId id) {
+    public static FragmentSettings getFragmentSettings(@NotNull FragmentId id) {
         return getFragmentSettings(id, FragmentId.UNDEFINED);
     }
 
-    public static FragmentSettings getFragmentSettings(FragmentId id, FragmentId defValue) {
-        FragmentSettings fragmentSettings = FragmentSettingsMap.get(id);
-        return fragmentSettings != null ? fragmentSettings : FragmentSettingsMap.get(defValue);
+    public static FragmentSettings getFragmentSettings(@NotNull FragmentId id, @NotNull FragmentId defValue) {
+        FragmentSettings fragmentSettings = mFragmentSettingsMap.get(id);
+        return fragmentSettings != null ? fragmentSettings : mFragmentSettingsMap.get(defValue);
     }
 
     private FragmentId mFragmentId;
