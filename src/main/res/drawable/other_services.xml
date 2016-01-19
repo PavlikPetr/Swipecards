@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:drawable="@drawable/ic_vk"
-        android:right="15dp" />
-    <item
-        android:drawable="@drawable/ic_ok"
-        android:left="15dp" />
-</layer-list>

@@ -30,7 +30,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
-import com.facebook.internal.Utility;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -43,20 +42,15 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.PasswordRecoverActivity;
 import com.topface.topface.ui.RegistrationActivity;
 import com.topface.topface.ui.TopfaceAuthActivity;
+import com.topface.topface.utils.AuthServiceButtons;
+import com.topface.topface.utils.AuthServiceButtons.SocServicesAuthButtons;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import com.topface.topface.utils.social.Authorizer;
-import com.topface.topface.utils.social.FbAuthorizer;
-import com.topface.topface.utils.social.OkAuthorizer;
-import com.topface.topface.utils.social.VkAuthorizer;
 import com.vk.sdk.dialogs.VKOpenAuthDialog;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.HashMap;
 
 public class AuthFragment extends BaseAuthFragment {
 
@@ -112,15 +106,11 @@ public class AuthFragment extends BaseAuthFragment {
     }
 
     /**
-     * @param visibility            - показать/скрыть кнопки авторизации через тф
-     * @param isNeedChangeFlagState - запоминать состояние кнопок
-     * @param isNeedAnimate         - анимировать появление
+     * @param visibility    - показать/скрыть дополнительные кнопки авторизации
+     * @param isNeedAnimate - анимировать появление
      */
-    private void setExtraServicesBtnVisibility(boolean visibility, boolean isNeedChangeFlagState, boolean isNeedAnimate) {
+    private void setExtraServicesBtnVisibility(boolean visibility, boolean isNeedAnimate) {
         if (isAdded()) {
-            if (isNeedChangeFlagState) {
-                mIsExtraServicesBtnHidden = visibility;
-            }
             mBinding.tfAuthBack.setVisibility(visibility ? View.VISIBLE : View.GONE);
             mBinding.btnOtherServices.setVisibility(visibility ? View.GONE : isOtherServicesButtonAvailable() ? View.VISIBLE : View.GONE);
             setVisibilityAndAnimateView(mBinding.btnAuthFB, visibility && !SocServicesAuthButtons.FB_BUTTON.isMainScreenLoginEnable(), isNeedAnimate);
@@ -466,7 +456,7 @@ public class AuthFragment extends BaseAuthFragment {
             animator.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationStart(Animator animation) {
-                    setExtraServicesBtnVisibility(false, true, false);
+                    setExtraServicesBtnVisibility(false, false);
                     setTfLoginBtnVisibility(false, true, false);
                 }
 
@@ -489,7 +479,7 @@ public class AuthFragment extends BaseAuthFragment {
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    setExtraServicesBtnVisibility(true, true, true);
+                    setExtraServicesBtnVisibility(true, true);
                 }
             });
             animator.setDuration(ANIMATION_DURATION).start();
@@ -532,72 +522,5 @@ public class AuthFragment extends BaseAuthFragment {
             d.setGravity(Gravity.CENTER);
             return d;
         }
-    }
-
-    private static class AuthButtonSettings {
-        private int mIconButtonRes;
-        public AuthButtonMainScreenEnable isMainScreenLoginEnable;
-
-        public AuthButtonSettings(int iconRes, AuthButtonMainScreenEnable isEnable) {
-            mIconButtonRes = iconRes;
-            isMainScreenLoginEnable = isEnable;
-        }
-
-        public static AuthButtonSettings getAuthButtonSettingById(@NotNull SocServicesAuthButtons buttonId) {
-            return AUTH_BUTTONS.get(buttonId);
-        }
-
-        public int getSmallButtonsIconRes() {
-            return mIconButtonRes;
-        }
-    }
-
-    private interface AuthButtonMainScreenEnable {
-        boolean isEnable();
-    }
-
-    private static final HashMap<SocServicesAuthButtons, AuthButtonSettings> AUTH_BUTTONS;
-
-    static {
-        AUTH_BUTTONS = new HashMap<>();
-        AUTH_BUTTONS.put(SocServicesAuthButtons.VK_BUTTON, new AuthButtonSettings(R.drawable.ic_vk, new AuthButtonMainScreenEnable() {
-            @Override
-            public boolean isEnable() {
-                return VkAuthorizer.isMainScreenLoginEnable();
-            }
-        }));
-        AUTH_BUTTONS.put(SocServicesAuthButtons.OK_BUTTON, new AuthButtonSettings(R.drawable.ic_ok, new AuthButtonMainScreenEnable() {
-            @Override
-            public boolean isEnable() {
-                return OkAuthorizer.isMainScreenLoginEnable();
-            }
-        }));
-        AUTH_BUTTONS.put(SocServicesAuthButtons.FB_BUTTON, new AuthButtonSettings(R.drawable.ic_fb, new AuthButtonMainScreenEnable() {
-            @Override
-            public boolean isEnable() {
-                return FbAuthorizer.isMainScreenLoginEnable();
-            }
-        }));
-    }
-
-    private enum SocServicesAuthButtons {
-        VK_BUTTON,
-        OK_BUTTON,
-        FB_BUTTON;
-
-        private AuthButtonSettings getAuthButtonSettings() {
-            return AuthButtonSettings.getAuthButtonSettingById(this);
-        }
-
-        public int getSmallButtonsIconRes() {
-            AuthButtonSettings settings = getAuthButtonSettings();
-            return settings != null ? settings.getSmallButtonsIconRes() : 0;
-        }
-
-        public boolean isMainScreenLoginEnable() {
-            AuthButtonSettings settings = getAuthButtonSettings();
-            return settings == null || settings.isMainScreenLoginEnable.isEnable();
-        }
-
     }
 }

@@ -6,6 +6,7 @@ import android.widget.LinearLayout;
 
 /**
  * Created by ppetr on 14.01.16.
+ * Collection of bindings adapter methods
  */
 public class BindingAdapterMethods {
     @BindingAdapter("android:layout_marginTop")
