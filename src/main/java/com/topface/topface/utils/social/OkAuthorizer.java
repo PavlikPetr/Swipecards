@@ -8,6 +8,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.data.social.AppSocialAppsIds;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.SessionConfig;
 
 import org.json.JSONObject;
@@ -139,6 +140,6 @@ public class OkAuthorizer extends Authorizer {
     }
 
     public static boolean isMainScreenLoginEnable() {
-        return new Locale(App.getLocaleConfig().getApplicationLocale()).getLanguage().equals(new Locale("ru").getLanguage());
+        return new Locale(App.getLocaleConfig().getApplicationLocale()).getLanguage().equals(Utils.getRussianLocale().getLanguage());
     }
 }

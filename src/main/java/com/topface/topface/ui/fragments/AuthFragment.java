@@ -64,10 +64,9 @@ public class AuthFragment extends BaseAuthFragment {
     private AuthorizationManager mAuthorizationManager;
     private boolean mIsSocNetBtnHidden = true;
     private boolean mIsTfBtnHidden = false;
-    private boolean mIsExtraServicesBtnHidden = false;
     private Animation mButtonAnimation;
-    FragmentAuthBinding mBinding;
-    LoginFragmentHandler mLoginFragmentHandler;
+    private FragmentAuthBinding mBinding;
+    private LoginFragmentHandler mLoginFragmentHandler;
 
     /**
      * @param visibility            - показать/скрыть кнопки авторизации через соц сети
@@ -79,6 +78,8 @@ public class AuthFragment extends BaseAuthFragment {
             if (isNeedChangeFlagState) {
                 mIsSocNetBtnHidden = visibility;
             }
+            // если на главном экране авторизации будет только одна кнопка соц. сервисов + авторизации через ТФ аккаунт (по умолчанию),
+            // то отступ до кнопки ТФ уменьшаем, в противном случае отступ будет установлен в соответствии с плотностью экрана
             mLoginFragmentHandler.setTFButtonPaddingTop(getMainScreenServicesAvailable() > 1 ? R.dimen.tf_auth_btn_top : R.dimen.auth_buttons_padding);
             mBinding.btnOtherServices.setVisibility(visibility && isOtherServicesButtonAvailable() ? View.VISIBLE : View.GONE);
             setVisibilityAndAnimateView(mBinding.btnAuthVK, visibility && SocServicesAuthButtons.VK_BUTTON.isMainScreenLoginEnable(), isNeedAnimate);
@@ -116,6 +117,7 @@ public class AuthFragment extends BaseAuthFragment {
             setVisibilityAndAnimateView(mBinding.btnAuthFB, visibility && !SocServicesAuthButtons.FB_BUTTON.isMainScreenLoginEnable(), isNeedAnimate);
             setVisibilityAndAnimateView(mBinding.btnAuthOk, visibility && !SocServicesAuthButtons.OK_BUTTON.isMainScreenLoginEnable(), isNeedAnimate);
             setVisibilityAndAnimateView(mBinding.btnAuthVK, visibility && !SocServicesAuthButtons.VK_BUTTON.isMainScreenLoginEnable(), isNeedAnimate);
+            // на экране других соц. сервисов кнопка авторизации в ТФ не нужна
             mBinding.btnTfAccount.setVisibility(View.GONE);
         }
     }
@@ -417,7 +419,6 @@ public class AuthFragment extends BaseAuthFragment {
                         mAuthorizationManager.facebookAuth(getActivity());
                     }
                 });
-
             }
         }
 
@@ -447,8 +448,7 @@ public class AuthFragment extends BaseAuthFragment {
 
         public void CreateAccountButtonClick(View view) {
             EasyTracker.sendEvent("Registration", "StartActivity", "FromAuth", 1L);
-            Intent intent = new Intent(getActivity(), RegistrationActivity.class);
-            startActivityForResult(intent, RegistrationActivity.INTENT_REGISTRATION);
+            startActivityForResult(new Intent(getActivity(), RegistrationActivity.class), RegistrationActivity.INTENT_REGISTRATION);
         }
 
         public void UpButtonClick(View view) {
