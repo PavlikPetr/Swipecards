@@ -148,7 +148,7 @@ public class LeftMenuAdapter extends BaseAdapter {
                             : R.layout.item_left_menu_button_with_badge,
                     null
             );
-            holder.icon = (ImageView) convertView.findViewById(R.id.image_icon);
+            holder.icon = (ImageViewRemote) convertView.findViewById(R.id.image_icon);
             holder.extraIcon = (ImageView) convertView.findViewById(R.id.image_badge);
             holder.btnMenu = (TextView) convertView.findViewById(R.id.btnMenu);
             holder.counterBadge = (TextView) convertView.findViewById(R.id.tvCounterBadge);
@@ -193,12 +193,7 @@ public class LeftMenuAdapter extends BaseAdapter {
         holder.item = item;
         if (!TextUtils.isEmpty(item.getMenuIconUrl())) {
             holder.icon.setBackgroundResource(0);
-            DefaultImageLoader.getInstance(App.getContext()).preloadImage(item.getMenuIconUrl(), new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    holder.icon.setImageDrawable(new BitmapDrawable(App.getContext().getResources(), loadedImage));
-                }
-            });
+            holder.icon.setRemoteSrc(item.getMenuIconUrl());
         }
         return convertView;
     }
@@ -251,7 +246,7 @@ public class LeftMenuAdapter extends BaseAdapter {
         TextView btnMenu;
         TextView counterBadge;
         ILeftMenuItem item;
-        ImageView icon;
+        ImageViewRemote icon;
         ImageView extraIcon;
     }
 
