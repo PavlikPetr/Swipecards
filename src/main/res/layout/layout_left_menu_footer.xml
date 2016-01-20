@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/LeftMenuViewStyle">
 
-    <ImageView
+    <com.topface.topface.ui.views.ImageViewRemote
         android:id="@+id/image_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
