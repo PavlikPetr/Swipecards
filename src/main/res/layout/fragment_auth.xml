@@ -98,7 +98,7 @@
                             android:id="@+id/btnTfAccount"
                             style="@style/AuthButtonWhite"
                             android:layout_marginBottom="5dp"
-                            android:layout_marginTop="@{handler.getTFButtonPaddingTop}"
+                            android:layout_marginTop="@{handler.mTFButtonPaddingTop}"
                             android:gravity="center"
                             android:onClick="@{handler.TFButtonClick}"
                             android:text="@string/auth_btn_tf"

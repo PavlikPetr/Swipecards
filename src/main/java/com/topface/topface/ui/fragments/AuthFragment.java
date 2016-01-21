@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableFloat;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -80,7 +81,7 @@ public class AuthFragment extends BaseAuthFragment {
             }
             // если на главном экране авторизации будет только одна кнопка соц. сервисов + авторизации через ТФ аккаунт (по умолчанию),
             // то отступ до кнопки ТФ уменьшаем, в противном случае отступ будет установлен в соответствии с плотностью экрана
-            mLoginFragmentHandler.setTFButtonPaddingTop(getMainScreenServicesAvailable() > 1 ? R.dimen.tf_auth_btn_top : R.dimen.auth_buttons_padding);
+            mLoginFragmentHandler.mTFButtonPaddingTop.set(getMainScreenServicesAvailable() > 1 ? getResources().getDimension(R.dimen.tf_auth_btn_top) : getResources().getDimension(R.dimen.auth_buttons_padding));
             mBinding.btnOtherServices.setVisibility(visibility && isOtherServicesButtonAvailable() ? View.VISIBLE : View.GONE);
             setVisibilityAndAnimateView(mBinding.btnAuthVK, visibility && SocServicesAuthButtons.VK_BUTTON.isMainScreenLoginEnable(), isNeedAnimate);
             setVisibilityAndAnimateView(mBinding.btnAuthFB, visibility && SocServicesAuthButtons.FB_BUTTON.isMainScreenLoginEnable(), isNeedAnimate);
@@ -371,19 +372,9 @@ public class AuthFragment extends BaseAuthFragment {
         return buttonsCount;
     }
 
-    public class LoginFragmentHandler extends BaseObservable {
+    public class LoginFragmentHandler {
 
-        private float mTFButtonPaddingTop;
-
-        public void setTFButtonPaddingTop(@DimenRes int dimen) {
-            setTFButtonPaddingTop(getResources().getDimension(dimen));
-        }
-
-        @Bindable
-        public void setTFButtonPaddingTop(float paddingTop) {
-            mTFButtonPaddingTop = paddingTop;
-            notifyChange();
-        }
+        public final ObservableFloat mTFButtonPaddingTop = new ObservableFloat();
 
         public void VKButtonClick(View view) {
             EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "LoginMainVk", "", 1L);
@@ -492,10 +483,6 @@ public class AuthFragment extends BaseAuthFragment {
                     return getServiceIcon(source);
                 }
             }, null);
-        }
-
-        public int getTFButtonPaddingTop() {
-            return (int) mTFButtonPaddingTop;
         }
 
         private BitmapDrawable getServiceIcon(String name) {
