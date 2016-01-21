@@ -1,72 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
 
-    <ViewFlipper
-        android:id="@+id/vfFlipper"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:inAnimation="@android:anim/fade_in">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <com.topface.topface.ui.views.AccurateGridViewWithFooterAndHeader
-            android:id="@+id/usedGrid"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_margin="0px"
-            android:background="@android:color/transparent"
-            android:fadeScrollbars="true"
-            android:fadingEdge="none"
-            android:horizontalSpacing="@dimen/add_to_leader_spacing_value"
-            android:listSelector="@android:color/transparent"
-            android:numColumns="@integer/add_to_leader_column_count"
-            android:padding="@dimen/add_to_leader_spacing_value"
-            android:verticalSpacing="@dimen/add_to_leader_spacing_value" />
+    <data>
+        <variable
+            name="handlers"
+            type="com.topface.topface.ui.fragments.profile.ProfilePhotoFragment.Handlers" />
 
-        <ScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+    </data>
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+    <RelativeLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-                <Button
-                    android:id="@+id/btnAddPhotoCamera"
-                    style="@style/Widget.Topface.Button.Big.Gray"
-                    android:layout_width="fill_parent"
+        <ViewFlipper
+            android:id="@+id/vfFlipper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inAnimation="@android:anim/fade_in">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/usedGrid"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="0px"
+                android:background="@android:color/transparent"
+                android:fadeScrollbars="true"
+                android:fadingEdge="none"
+                android:horizontalSpacing="@dimen/add_to_leader_spacing_value"
+                android:listSelector="@android:color/transparent"
+                android:padding="@dimen/add_to_leader_spacing_value"
+                android:verticalSpacing="@dimen/add_to_leader_spacing_value" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="26dp"
-                    android:text="@string/profile_add_camera" />
+                    android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/btnAddPhotoAlbum"
-                    style="@style/Widget.Topface.Button.Big.Gray"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="14dp"
-                    android:text="@string/profile_add_album" />
+                    <Button
+                        android:id="@+id/btnAddPhotoCamera"
+                        style="@style/Widget.Topface.Button.Big.Gray"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="26dp"
+                        android:onClick="@{handlers.addPhotoClick}"
+                        android:text="@string/profile_add_camera" />
 
-                <Button
-                    android:id="@+id/btnCancel"
-                    style="@style/Widget.Topface.Button.Big.Gray"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="26dp"
-                    android:text="@string/general_cancel" />
-            </LinearLayout>
-        </ScrollView>
-    </ViewFlipper>
+                    <Button
+                        android:id="@+id/btnAddPhotoAlbum"
+                        style="@style/Widget.Topface.Button.Big.Gray"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="14dp"
+                        android:onClick="@{handlers.addPhotoClick}"
+                        android:text="@string/profile_add_album" />
 
-    <com.topface.topface.ui.views.LockerView
-        android:id="@+id/fppLocker"
-        style="@style/LoadingLocker"
-        android:visibility="gone" />
-</RelativeLayout>
+                    <Button
+                        android:id="@+id/btnCancel"
+                        style="@style/Widget.Topface.Button.Big.Gray"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="26dp"
+                        android:text="@string/general_cancel" />
+                </LinearLayout>
+            </ScrollView>
+        </ViewFlipper>
+
+        <com.topface.topface.ui.views.LockerView
+            android:id="@+id/fppLocker"
+            style="@style/LoadingLocker"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+</layout>

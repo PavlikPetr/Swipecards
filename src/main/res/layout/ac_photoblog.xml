@@ -10,17 +10,8 @@
         android:id="@+id/user_photos_grid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="@android:color/transparent"
-        android:fadeScrollbars="true"
-        android:fadingEdge="none"
-        android:gravity="center"
-        android:horizontalSpacing="@dimen/add_to_leader_spacing_value"
-        android:paddingBottom="2dp"
-        android:paddingLeft="@dimen/add_to_leader_spacing_value"
-        android:paddingRight="@dimen/add_to_leader_spacing_value"
-        android:scrollbars="vertical"
-        android:verticalSpacing="@dimen/add_to_leader_spacing_value" />
+        android:paddingLeft="@dimen/photo_grid_item_padding"
+        android:layout_alignParentTop="true"/>
 
     <com.topface.topface.ui.views.LockerView
         android:id="@+id/llvLeaderSending"

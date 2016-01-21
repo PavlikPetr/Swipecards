@@ -27,6 +27,8 @@ import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.feed.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
+import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
+import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.actionbar.OverflowMenu;
@@ -57,6 +59,7 @@ import dagger.Provides;
                 AddToLeaderActivity.class,
                 NavigationActivity.class,
                 PaymentwallActivity.class,
+                PhotoSwitcherActivity.class,
 
                 //Fragments
 
@@ -70,6 +73,7 @@ import dagger.Provides;
                 PeopleNearbyFragment.class,
                 PromoKey71Dialog.class,
                 PromoKey81Dialog.class,
+                ProfilePhotoFragment.class,
 
                 //Other
                 TopfaceAppState.class,
