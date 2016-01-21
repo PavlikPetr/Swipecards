@@ -56,6 +56,9 @@
     <string name="address_book_access_error">Questa applicazione non ha accesso ai tuoi contatti.
         Puoi cambiare le impostazioni di accesso nelle impostazioni di privacy del tuo dispositivo
     </string>
+    <string name="camera_access_error">Questa applicazione non dispone di accesso alla camera. Puoi
+        rendere possibile l\'accesso nelle impostazioni della privacy del tuo dispositivo
+    </string>
     <string name="profile_deleted_user">L’utente è stato eliminato</string>
     <string name="filter_main_parameters">Mi interessano</string>
     <string name="dating_prev_button_ext">Precedente</string>
@@ -845,4 +848,27 @@
     <string name="photo_not_from_main_album">Non puoi impostare questa foto come profilo perché non
         conforme ai canoni della moderazione
     </string>
+    <string name="sidebar_vk_profile">Profilo Vkontakte</string>
+    <string name="title_vk_profile">Profilo VKontakte</string>
+    <string name="vk_profile_button_tf_group">Gruppo Topface</string>
+    <string name="vk_profile_button_join_tf_group">Entra nel gruppo Topface</string>
+    <string name="vk_profile_button_join_vkgames_group">Entra nel gruppo \" Giochi Vkontakte\"
+    </string>
+    <string name="vk_profile_button_invite_friends">Invita amici</string>
+    <string name="vk_profile_invite_friends_title">Invita amici</string>
+    <string name="invite_friend_button">Invita</string>
+    <string name="invitation_sended_button">Inviato</string>
+    <string name="friends_empty_list_error">La lista dei tuoi amici è vuota</string>
+    <string name="join_group_success">Adesso fai parte del gruppo</string>
+    <string name="foreign_profile_empty_gifts_title">Invia regali e stai al centro
+        dell\'attenzione
+    </string>
+    <string name="vk_friends_success_invite">Invito inviato</string>
+    <string name="settings_auto_greeting_title">Auto</string>
+    <string name="settings_auto_greeting_subtitle">Permette di cominciare automaticamente un dialogo
+        di conoscenza dopo la ricezione della simpatia
+    </string>
+    <string name="chat_auto_reply_title">Il testo del messaggio è nascosto</string>
+    <string name="chat_auto_reply_message">Per aprirlo e rispondere diventa utente- VIP</string>
+    <string name="chat_auto_reply_button">Diventa VIP</string>
 </resources>

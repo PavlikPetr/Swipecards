@@ -673,9 +673,9 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     private void takePhoto() {
         getAddPhotoHelper().showTakePhotoDialog(new PhotoTaker(getAddPhotoHelper(), this), null);
-        getAddPhotoHelper().setOnDismissListener(new DialogInterface.OnDismissListener() {
+        getAddPhotoHelper().setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
+            public void onCancel(DialogInterface dialog) {
                 if (mSelectPhotoNextActionListener != null) {
                     mSelectPhotoNextActionListener.onNextAction();
                 }

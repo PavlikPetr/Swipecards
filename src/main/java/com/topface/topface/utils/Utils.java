@@ -37,8 +37,15 @@ import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Static;
+import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.UserGetAppOptionsRequest;
+import com.topface.topface.ui.IEmailConfirmationListener;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.social.AuthToken;
@@ -413,4 +420,52 @@ public class Utils {
         };
     }
 
+    public static void checkEmailConfirmation(final IEmailConfirmationListener emailConfirmationListener, final boolean isNeedShowToast) {
+        final boolean isEmailConfirmedCurrentValue = App.get().getProfile().emailConfirmed;
+        new ProfileRequest(App.getContext()).callback(new DataApiHandler<Profile>() {
+            @Override
+            protected void success(Profile data, IApiResponse response) {
+                if (data != null) {
+                    boolean isConfirmed = data.emailConfirmed;
+                    if (emailConfirmationListener != null) {
+                        emailConfirmationListener.onEmailConfirmed(isConfirmed);
+                    }
+                    if (isNeedShowToast) {
+                        Utils.showToastNotification(isConfirmed ? R.string.general_email_success_confirmed : R.string.general_email_not_confirmed, Toast.LENGTH_LONG);
+                    } else {
+                        if (isEmailConfirmedCurrentValue != isConfirmed && isConfirmed) {
+                            Utils.showToastNotification(R.string.general_email_success_confirmed, Toast.LENGTH_LONG);
+                        }
+                    }
+                    if (isConfirmed) {
+                        new UserGetAppOptionsRequest(App.getContext()).callback(new DataApiHandler<Options>() {
+
+                            @Override
+                            public void fail(int codeError, IApiResponse response) {
+                            }
+
+                            @Override
+                            protected void success(Options data, IApiResponse response) {
+                            }
+
+                            @Override
+                            protected Options parseResponse(ApiResponse response) {
+                                return new Options(response);
+                            }
+                        }).exec();
+                    }
+                }
+
+            }
+
+            @Override
+            protected Profile parseResponse(ApiResponse response) {
+                return new Profile(response);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+            }
+        }).exec();
+    }
 }

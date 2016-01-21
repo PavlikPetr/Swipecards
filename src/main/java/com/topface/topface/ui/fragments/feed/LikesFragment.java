@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -293,8 +292,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                             Fragment f = getChildFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
                             final Fragment fragment = f == null ?
                                     TransparentMarketFragment.newInstance(experiment.productId, experiment.isSubscription, "Likes") : f;
-                            if(fragment instanceof ITransparentMarketFragmentRunner){
-                                ((ITransparentMarketFragmentRunner)fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
+                            if (fragment instanceof ITransparentMarketFragmentRunner) {
+                                ((ITransparentMarketFragmentRunner) fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
                                     @Override
                                     public void onPurchaseSuccess() {
                                         updateData(false, true);
@@ -422,24 +421,24 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     public void onAvatarClick(FeedLike item, View view) {
         super.onAvatarClick(item, view);
-        sendLikeReadRequest(item.id);
+        sendLikeReadRequest(getSenderId(item));
         showInterstitial();
     }
 
     @Override
     protected void onFeedItemClick(FeedItem item) {
         super.onFeedItemClick(item);
-        sendLikeReadRequest(item.id);
+        sendLikeReadRequest(getSenderId(item));
         showInterstitial();
     }
 
-    private void sendLikeReadRequest(String id) {
-        if (!TextUtils.isEmpty(id)) {
-            ReadLikeRequest request = new ReadLikeRequest(getActivity(), Integer.valueOf(id), AdmobInterstitialUtils.canShowInterstitialAds());
-            request.exec();
-        }
+    private int getSenderId(FeedItem item) {
+        return item != null && !item.isAd() && item.user != null ? item.user.id : 0;
     }
 
+    private void sendLikeReadRequest(int senderId) {
+        new ReadLikeRequest(getActivity(), senderId, AdmobInterstitialUtils.canShowInterstitialAds()).exec();
+    }
 
     @Override
     protected int getEmptyFeedLayout() {

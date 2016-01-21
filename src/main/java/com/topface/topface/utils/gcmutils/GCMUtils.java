@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
@@ -224,8 +225,20 @@ public class GCMUtils {
         return registrationId;
     }
 
+    private static void getEmailConfirmationState(Intent intent) {
+        if (intent != null) {
+            Handler mHandler = new Handler(App.get().getMainLooper());
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Utils.checkEmailConfirmation(null, false);
+                }
+            });
+        }
+    }
 
     public static boolean showNotificationIfNeed(final Intent extra, Context context, String updateUrl) {
+        getEmailConfirmationState(extra);
         //Проверяем, не отключены ли уведомления
         if (!App.getUserConfig().isNotificationEnabled()) {
             Debug.log("GCM: notification is disabled");
@@ -432,7 +445,7 @@ public class GCMUtils {
                     // add the same request code like Chat intent
                     i.putExtra(Static.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
                 } else {
-                    return ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city, null, null, true, GCMUtils.class.getSimpleName());
+                    return ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city, null, null, true, GCMUtils.class.getSimpleName(), null);
                 }
                 return i;
             }

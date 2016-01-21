@@ -293,6 +293,11 @@ public class UserProfileFragment extends AbstractProfileFragment {
         }
     }
 
+    @Override
+    protected boolean isOwnersProfileFragment() {
+        return false;
+    }
+
     private void onSuccess(User user, IApiResponse response) {
         if (user != null) {
             saveResponseForEditor((ApiResponse) response);
@@ -424,7 +429,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
                         if (profile != null) {
                             return ChatActivity.createIntent(profile.uid, profile.getNameAndAge(),
                                     profile.city == null ? "" : profile.city.name,
-                                    null, profile.photo, false, UserProfileFragment.class.getSimpleName());
+                                    null, profile.photo, false, UserProfileFragment.class.getSimpleName(), null);
                         }
                         return null;
                     }

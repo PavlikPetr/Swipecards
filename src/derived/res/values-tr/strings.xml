@@ -60,6 +60,9 @@
     <string name="address_book_access_error">Bu uygulama iletişim bilgilerine ulaşılmaz. Cihazınızın
         özel ayarlarında etkinleştirebilirsiniz.
     </string>
+    <string name="camera_access_error">Uygulama kameranıza erişemedi, cihazınızın gizlilik
+        ayarlarından erişim izni verebilirsiniz.
+    </string>
     <string name="profile_deleted_user">Kullanıcı silinmiştir</string>
     <string name="filter_main_parameters">İlgi alanlarım</string>
     <string name="dating_prev_button_ext">Önceki</string>
@@ -839,4 +842,27 @@
     <string name="photo_not_from_main_album">Yönetim bu fotoğrafın profil resmi olarak
         kullanılmayacağına karar verdi.
     </string>
+    <string name="sidebar_vk_profile">Vkontakte profili</string>
+    <string name="title_vk_profile">VK profili</string>
+    <string name="vk_profile_button_tf_group">Topface grubu</string>
+    <string name="vk_profile_button_join_tf_group">Topface grubuna katıl</string>
+    <string name="vk_profile_button_join_vkgames_group">\"VK oyunları\" grubuna katıl</string>
+    <string name="vk_profile_button_invite_friends">Arkadaşlarını davet et</string>
+    <string name="vk_profile_invite_friends_title">Arkadaşlarını davet et</string>
+    <string name="invite_friend_button">Davet et</string>
+    <string name="invitation_sended_button">Davet gönder</string>
+    <string name="friends_empty_list_error">Arkadaş listen boş</string>
+    <string name="join_group_success">Gruba üye oldunuz</string>
+    <string name="foreign_profile_empty_gifts_title">Bir hediye göndererek ilginin merkezi
+        olabilirsin
+    </string>
+    <string name="vk_friends_success_invite">Davet gönderildi</string>
+    <string name="settings_auto_greeting_title">Otomatik-selam</string>
+    <string name="settings_auto_greeting_subtitle">Birisi size beğeni gönderdiğinde otomatik olarak
+        selam gönderilmesi ve sohbet başlatılması için Topface\'e izin verin.
+    </string>
+    <string name="chat_auto_reply_title">Mesaj yazısı gizlenmiş.</string>
+    <string name="chat_auto_reply_message">Bu mesajı açmak ve okumak için VIP üye olman gerekiyor.
+    </string>
+    <string name="chat_auto_reply_button">VIP üye ol</string>
 </resources>

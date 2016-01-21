@@ -212,7 +212,7 @@ public class Products extends AbstractData {
             currency = Currency.getInstance(USD);
             currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
             currencyFormatter.setCurrency(currency);
-            value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn.totalTemplate, PRICE, PRICE_PER_ITEM);
+            value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn.titleTemplate, PRICE, PRICE_PER_ITEM);
             if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
 
@@ -220,7 +220,7 @@ public class Products extends AbstractData {
                     double price = detail.price / ProductsDetails.MICRO_AMOUNT;
                     currency = Currency.getInstance(detail.currency);
                     currencyFormatter = detail.currency.equalsIgnoreCase(USD)
-                            ? NumberFormat.getCurrencyInstance(Locale.US) : NumberFormat.getCurrencyInstance();
+                            ? NumberFormat.getCurrencyInstance(Locale.US) : NumberFormat.getCurrencyInstance(new Locale(App.getLocaleConfig().getApplicationLocale()));
                     currencyFormatter.setCurrency(currency);
                     value = formatPrice(price, currencyFormatter, buyBtn.titleTemplate, PRICE, PRICE_PER_ITEM);
                 } else {

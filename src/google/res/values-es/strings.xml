@@ -58,6 +58,7 @@
     <string name="address_book_access_error">Esta aplicación no tiene acceso a tus contactos. Puedes
         permitir tal acceso desde los ajustes de privacidad de tu dispositivo
     </string>
+    <string name="camera_access_error">Esta aplicación no tiene activado el acceso a la cámara. Puedes permitir el acceso en los ajuste de privacidad de tu dispositivo.</string>
     <string name="profile_deleted_user">Usuario eliminado</string>
     <string name="filter_main_parameters">Me interesan</string>
     <string name="dating_prev_button_ext">Anterior</string>
@@ -844,4 +845,18 @@
     <string name="novice_sympathies_bonus">¡Recibes %1$d simpatías de\nregalo! Esto significa
         que\nseguro les gustarás a las %2$d personas,\nque te mostrarán su simpatía
     </string>
+    <string name="go_dating_message">Comienza  a conocer y aquí verás a los usuarios que visitan tu perfil.</string>
+    <string name="photo_not_from_main_album">Por los resultados de la moderación, está prohibida esta foto en el avatar</string>
+    <string name="sidebar_vk_profile">Perfil VKontakt</string>
+    <string name="title_vk_profile">Perfil VK</string>
+    <string name="vk_profile_button_tf_group">Grupo Topface</string>
+    <string name="vk_profile_button_join_tf_group">Entrar en el grupo Topface</string>
+    <string name="vk_profile_button_join_vkgames_group">Entrar en el grupo \"Juegos VK\"</string>
+    <string name="vk_profile_button_invite_friends">Invitar a los amigos</string>
+    <string name="vk_profile_invite_friends_title">Invitar a los amigos</string>
+    <string name="invite_friend_button">Invitar</string>
+    <string name="invitation_sended_button">Enviado</string>
+    <string name="friends_empty_list_error">El listado de tus amigos está vacío</string>
+    <string name="join_group_success">Has entrado en el grupo</string>
+    <string name="vk_friends_success_invite">Invitación enviado</string>
 </resources>

@@ -20,6 +20,11 @@ public class PasswordRecoverActivity extends NoAuthActivity<RecoverPwdFragment> 
     }
 
     @Override
+    protected boolean isNeedShowActionBar() {
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);

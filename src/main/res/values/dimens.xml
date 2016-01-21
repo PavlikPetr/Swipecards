@@ -46,7 +46,7 @@
 
     <dimen name="base_indent">8dp</dimen>
 
-    <dimen name="avatar_rounded_padding">2dp</dimen>
+    <dimen name="avatar_rounded_padding">4dp</dimen>
 
     <item name="actionbar_elevation" format="float" type="dimen">0.0</item>
 

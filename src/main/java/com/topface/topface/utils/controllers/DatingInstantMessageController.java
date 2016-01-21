@@ -22,6 +22,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.History;
 import com.topface.topface.data.HistoryListData;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -219,8 +220,12 @@ public class DatingInstantMessageController {
     }
 
     public void openChat(FragmentActivity activity, SearchUser user) {
+        openChat(activity, user, null);
+    }
+
+    public void openChat(FragmentActivity activity, SearchUser user, SendGiftAnswer answer) {
         if (user != null) {
-            Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false, this.getClass().getSimpleName());
+            Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false, this.getClass().getSimpleName(), answer);
             activity.startActivityForResult(intent, ChatActivity.REQUEST_CHAT);
             EasyTracker.sendEvent("Dating", "Additional", "Chat", 1L);
         }

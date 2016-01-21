@@ -143,9 +143,9 @@ public class PopupManager {
     private void showRatePopup() {
         RateAppDialog rateAppDialog = new RateAppDialog();
         rateAppDialog.show(mActivity.getSupportFragmentManager(), RateAppDialog.TAG);
-        rateAppDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        rateAppDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
+            public void onCancel(DialogInterface dialog) {
                 mCurrentDialog = null;
                 if (mRatePopupNextActionListener != null) {
                     mRatePopupNextActionListener.onNextAction();

@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.topface.topface.App;
@@ -35,8 +34,8 @@ import butterknife.OnClick;
 
 public class SettingsChangeAuthDataFragment extends BaseFragment {
 
-    private static final String NEED_EXIT = "restore_from_auth";
-    private static final String CHANGE_PASSWORD = "restore_from_auth";
+    private static final String NEED_EXIT = "need_exit";
+    private static final String CHANGE_PASSWORD = "change_password";
     private static final String RESTORE_FROM_AUTH = "restore_from_auth";
     private static final String HASH = "hash";
     private static final String PASSWORD = "password";
@@ -68,9 +67,9 @@ public class SettingsChangeAuthDataFragment extends BaseFragment {
     protected void saveBtnClick() {
         Utils.hideSoftKeyboard(getActivity(), mEdMainField, mEdConfirmationField);
         if (mChangePassword) {
-            if(mRestoreFromAuth){
+            if (mRestoreFromAuth) {
                 changePasswordFromAuth();
-            }else{
+            } else {
                 changePassword();
             }
         } else {
@@ -82,6 +81,7 @@ public class SettingsChangeAuthDataFragment extends BaseFragment {
     public static SettingsChangeAuthDataFragment newInstance(boolean needExit, boolean changePassword) {
         Bundle args = new Bundle();
         args.putBoolean(NEED_EXIT, needExit);
+        args.putBoolean(RESTORE_FROM_AUTH, false);
         args.putBoolean(CHANGE_PASSWORD, changePassword);
         SettingsChangeAuthDataFragment fragment = new SettingsChangeAuthDataFragment();
         fragment.setArguments(args);
@@ -103,6 +103,7 @@ public class SettingsChangeAuthDataFragment extends BaseFragment {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_change_auth_data, container, false);
         ButterKnife.bind(this, root);
         mChangePassword = getArguments().getBoolean(CHANGE_PASSWORD);
+        mRestoreFromAuth = getArguments().getBoolean(RESTORE_FROM_AUTH);
         mLockerView.setVisibility(View.GONE);
         ButterKnife.findById(root, R.id.setPasswordText).setVisibility(mNeedExit && !mRestoreFromAuth ? View.VISIBLE : View.GONE);
         if (mNeedExit) {
