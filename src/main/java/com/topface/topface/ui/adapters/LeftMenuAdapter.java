@@ -1,7 +1,5 @@
 package com.topface.topface.ui.adapters;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -12,9 +10,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.topface.framework.imageloader.DefaultImageLoader;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FragmentSettings;
@@ -56,9 +51,10 @@ public class LeftMenuAdapter extends BaseAdapter {
                                                 Photo menuIcon) {
         return newLeftMenuItem(menuId, menuType, -1, menuIcon, null);
     }
+
     public static ILeftMenuItem newLeftMenuItem(final BaseFragment.FragmentId menuId, final int menuType,
                                                 final int menuIconResId, final Photo menuIconPhoto, final String menuIconUrl) {
-        return newLeftMenuItem(menuId.getFragmentSettings(),menuType,menuIconResId,menuIconPhoto,menuIconUrl);
+        return newLeftMenuItem(menuId.getFragmentSettings(), menuType, menuIconResId, menuIconPhoto, menuIconUrl);
     }
 
     public static ILeftMenuItem newLeftMenuItem(final FragmentSettings menuId, final int menuType,
@@ -80,7 +76,7 @@ public class LeftMenuAdapter extends BaseAdapter {
 
             @Override
             public String getMenuText() {
-                    return ResourcesUtils.getFragmentNameResId(menuId);
+                return ResourcesUtils.getFragmentNameResId(menuId);
             }
 
             @Override
@@ -148,7 +144,7 @@ public class LeftMenuAdapter extends BaseAdapter {
                             : R.layout.item_left_menu_button_with_badge,
                     null
             );
-            holder.icon = (ImageView) convertView.findViewById(R.id.image_icon);
+            holder.icon = (ImageViewRemote) convertView.findViewById(R.id.image_icon);
             holder.extraIcon = (ImageView) convertView.findViewById(R.id.image_badge);
             holder.btnMenu = (TextView) convertView.findViewById(R.id.btnMenu);
             holder.counterBadge = (TextView) convertView.findViewById(R.id.tvCounterBadge);
@@ -159,25 +155,22 @@ public class LeftMenuAdapter extends BaseAdapter {
             holder.item = item;
         }
         // initiate views' state in holder
-        holder.icon.setImageDrawable(null);
         switch (type) {
             case TYPE_MENU_BUTTON:
                 holder.btnMenu.setText(item.getMenuText());
                 holder.counterBadge.setVisibility(View.GONE);
-                holder.icon.setBackgroundResource(item.getMenuIconResId());
+                holder.icon.setResourceSrc(item.getMenuIconResId());
                 break;
             case TYPE_MENU_BUTTON_WITH_BADGE:
                 holder.btnMenu.setText(item.getMenuText());
-                holder.icon.setBackgroundResource(item.getMenuIconResId());
+                holder.icon.setResourceSrc(item.getMenuIconResId());
                 if (mCountersData != null) {
                     updateCountersBadge(holder.counterBadge, mCountersData.getCounterByFragmentId(item.getMenuId()));
                 }
                 break;
             case TYPE_MENU_BUTTON_WITH_PHOTO:
                 holder.btnMenu.setText(item.getMenuText());
-                if (holder.icon instanceof ImageViewRemote) {
-                    ((ImageViewRemote) holder.icon).setPhoto(CacheProfile.photo);
-                }
+                holder.icon.setPhoto(CacheProfile.photo);
                 if (holder.extraIcon != null) {
                     int extraIconDrawable = item.getExtraIconDrawable();
                     if (extraIconDrawable > 0) {
@@ -192,13 +185,7 @@ public class LeftMenuAdapter extends BaseAdapter {
         }
         holder.item = item;
         if (!TextUtils.isEmpty(item.getMenuIconUrl())) {
-            holder.icon.setBackgroundResource(0);
-            DefaultImageLoader.getInstance(App.getContext()).preloadImage(item.getMenuIconUrl(), new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    holder.icon.setImageDrawable(new BitmapDrawable(App.getContext().getResources(), loadedImage));
-                }
-            });
+            holder.icon.setRemoteSrc(item.getMenuIconUrl());
         }
         return convertView;
     }
@@ -251,7 +238,7 @@ public class LeftMenuAdapter extends BaseAdapter {
         TextView btnMenu;
         TextView counterBadge;
         ILeftMenuItem item;
-        ImageView icon;
+        ImageViewRemote icon;
         ImageView extraIcon;
     }
 
