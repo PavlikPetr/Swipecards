@@ -505,7 +505,7 @@ public class AuthFragment extends BaseAuthFragment {
 
         private BitmapDrawable getResourceDrawable(int res) {
             BitmapDrawable d = new BitmapDrawable(getResources(), BitmapFactory.decodeResource(getResources(), res));
-            d.setBounds(new Rect(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight()));
+            d.setBounds(new Rect(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight() + (int) getResources().getDimension(R.dimen.other_services_button_img_padding)));
             d.setGravity(Gravity.CENTER);
             return d;
         }

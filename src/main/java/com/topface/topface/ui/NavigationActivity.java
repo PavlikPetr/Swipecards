@@ -363,7 +363,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     private void showFragment(Intent intent) {
         //Получаем id фрагмента, если он открыт
-        FragmentSettings currentFragment = (FragmentSettings) intent.getSerializableExtra(GCMUtils.NEXT_INTENT);
+        FragmentSettings currentFragment = (FragmentSettings) intent.getParcelableExtra(GCMUtils.NEXT_INTENT);
         Debug.log(PAGE_SWITCH + "show fragment from NEXT_INTENT: " + currentFragment);
         showFragment(currentFragment == null ? CacheProfile.getOptions().startPageFragmentSettings : currentFragment);
     }

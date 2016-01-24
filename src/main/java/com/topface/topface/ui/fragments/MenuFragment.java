@@ -479,7 +479,8 @@ public class MenuFragment extends Fragment {
     }
 
     private String getTagById(FragmentSettings id) {
-        return "fragment_switch_controller_" + id.getFragmentId() + "_" + id.getPos();
+        FragmentSettings fragmentSettings = id == null ? FragmentId.UNDEFINED.getFragmentSettings() : id;
+        return "fragment_switch_controller_" + fragmentSettings.getFragmentId() + "_" + fragmentSettings.getPos();
     }
 
     public FragmentSettings getCurrentFragmentId() {
