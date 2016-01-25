@@ -112,6 +112,8 @@ public class App extends ApplicationBase {
     private static boolean mUserOptionsObtainedFromServer = false;
     private static AppSocialAppsIds mAppSocialAppsIds;
 
+    public static boolean isNeedShowTrial = true;
+
     /**
      * Множественный запрос Options и профиля
      */
