@@ -428,6 +428,9 @@ public class MenuFragment extends Fragment {
      * @param newFragmentSettings id of fragment that is going to be shown
      */
     private void switchFragment(FragmentSettings newFragmentSettings, boolean executePending) {
+        if (newFragmentSettings == null) {
+            return;
+        }
         FragmentManager fragmentManager = getFragmentManager();
         Fragment oldFragment = fragmentManager.findFragmentById(R.id.fragment_content);
         String fragmentTag = getTagById(newFragmentSettings);
@@ -479,8 +482,7 @@ public class MenuFragment extends Fragment {
     }
 
     private String getTagById(FragmentSettings id) {
-        FragmentSettings fragmentSettings = id == null ? FragmentId.UNDEFINED.getFragmentSettings() : id;
-        return "fragment_switch_controller_" + fragmentSettings.getFragmentId() + "_" + fragmentSettings.getPos();
+        return "fragment_switch_controller_" + id.getFragmentId() + "_" + id.getPos();
     }
 
     public FragmentSettings getCurrentFragmentId() {

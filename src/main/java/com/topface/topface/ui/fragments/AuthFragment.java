@@ -8,8 +8,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableFloat;
 import android.graphics.BitmapFactory;
@@ -17,7 +15,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.DimenRes;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.text.Html;
@@ -43,7 +40,6 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.PasswordRecoverActivity;
 import com.topface.topface.ui.RegistrationActivity;
 import com.topface.topface.ui.TopfaceAuthActivity;
-import com.topface.topface.utils.AuthServiceButtons;
 import com.topface.topface.utils.AuthServiceButtons.SocServicesAuthButtons;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
@@ -496,6 +492,9 @@ public class AuthFragment extends BaseAuthFragment {
         }
 
         private String getOtherSocString() {
+            if (getActivity() == null || !isAdded()) {
+                return Utils.EMPTY;
+            }
             String resString = getString(R.string.other_auth);
             for (SocServicesAuthButtons item : SocServicesAuthButtons.values()) {
                 resString = (!item.isMainScreenLoginEnable() ? String.format(IMAGE_HTML_TEMPLATE, item.name()) : Utils.EMPTY).concat(resString);

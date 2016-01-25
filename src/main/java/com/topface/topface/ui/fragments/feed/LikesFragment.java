@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -38,7 +37,6 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
 import com.topface.topface.ui.fragments.PurchasesFragment;
-import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -269,16 +267,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             btnBuy.setVisibility(View.GONE);
             buyText.setVisibility(View.GONE);
         }
-    }
-
-    private void addTransparentMarketFragment(Fragment fragment) {
-        getChildFragmentManager().beginTransaction()
-                .add(fragment, TransparentMarketFragment.class.getSimpleName()).commit();
-    }
-
-    private void removeTransparentMarketFragment(Fragment fragment) {
-        getChildFragmentManager().
-                beginTransaction().remove(fragment).commit();
     }
 
     private void initBuyCoinsButton(final View inflated, final Options.BlockSympathy blockSympathyOptions, View currentView) {
