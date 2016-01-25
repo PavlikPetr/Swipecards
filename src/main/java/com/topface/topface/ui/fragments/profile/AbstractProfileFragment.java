@@ -106,11 +106,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
                 fromVip = false;
                 if (App.isNeedShowTrial && !CacheProfile.getProfile().premium && new GoogleMarketApiManager().isMarketApiAvailable()
                         && CacheProfile.getOptions().trialVipExperiment.enabled && !CacheProfile.paid) {
-                    TrialVipPopup trialVipPopup = new TrialVipPopup();
-                    Bundle arg = new Bundle();
-                    arg.putBoolean(TrialVipPopup.SKIP_SHOWING_CONDITION, true);
-                    trialVipPopup.setArguments(arg);
-                    trialVipPopup.show(getActivity().getSupportFragmentManager(), TrialVipPopup.TAG);
+                    TrialVipPopup.newInstance(true).show(getActivity().getSupportFragmentManager(), TrialVipPopup.TAG);
                     App.isNeedShowTrial = false;
                 }
             }

@@ -296,10 +296,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         if (getIntent().getIntExtra(App.INTENT_REQUEST_KEY, -1) == INTENT_BUY_VIP && App.isNeedShowTrial
                 && !CacheProfile.getProfile().premium && new GoogleMarketApiManager().isMarketApiAvailable()
                 && CacheProfile.getOptions().trialVipExperiment.enabled && !CacheProfile.paid) {
-            TrialVipPopup trialVipPopup = new TrialVipPopup();
-            Bundle arg = new Bundle();
-            arg.putBoolean(TrialVipPopup.SKIP_SHOWING_CONDITION, true);
-            trialVipPopup.setArguments(arg);
+            TrialVipPopup trialVipPopup = TrialVipPopup.newInstance(true);
             trialVipPopup.setOnDismissListener(dismissListener);
             trialVipPopup.show(getSupportFragmentManager(), TrialVipPopup.TAG);
             App.isNeedShowTrial = false;
