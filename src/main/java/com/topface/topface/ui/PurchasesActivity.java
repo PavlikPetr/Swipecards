@@ -2,6 +2,7 @@ package com.topface.topface.ui;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -20,10 +21,12 @@ import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
@@ -289,10 +292,44 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         return showExtraScreen(getRandomPosByProbability(getListOfExtraScreens()));
     }
 
+    private boolean callTrialVipPopup(DialogInterface.OnDismissListener dismissListener) {
+        if (getIntent().getIntExtra(App.INTENT_REQUEST_KEY, -1) == INTENT_BUY_VIP && App.isNeedShowTrial
+                && !CacheProfile.getProfile().premium && new GoogleMarketApiManager().isMarketApiAvailable()
+                && CacheProfile.getOptions().trialVipExperiment.enabled && !CacheProfile.paid) {
+            TrialVipPopup trialVipPopup = new TrialVipPopup();
+            Bundle arg = new Bundle();
+            arg.putBoolean(TrialVipPopup.SKIP_SHOWING_CONDITION, true);
+            trialVipPopup.setArguments(arg);
+            trialVipPopup.setOnDismissListener(dismissListener);
+            trialVipPopup.show(getSupportFragmentManager(), TrialVipPopup.TAG);
+            App.isNeedShowTrial = false;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onUpClick() {
+        boolean isCalled = callTrialVipPopup(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                PurchasesActivity.super.onUpClick();
+            }
+        });
+        if (!isCalled) {
+            super.onUpClick();
+        }
+    }
 
     @Override
     public void onBackPressed() {
-        if (!isScreenShow()) {
+        boolean isCalled = callTrialVipPopup(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                onBackPressed();
+            }
+        });
+        if (!isCalled && !isScreenShow()) {
             super.onBackPressed();
         }
     }

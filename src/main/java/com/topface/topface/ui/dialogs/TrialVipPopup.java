@@ -12,6 +12,7 @@ import com.topface.topface.utils.config.UserConfig;
 public class TrialVipPopup extends AbstractDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "TrialVipPopup";
+    public static final String SKIP_SHOWING_CONDITION = "skip_showing_condition";
     private OnFragmentActionsListener mOnFragmentActionsListener;
 
     @Override
@@ -68,7 +69,9 @@ public class TrialVipPopup extends AbstractDialogFragment implements View.OnClic
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        incrPopupShowCounter();
+        if(!getArguments().getBoolean(SKIP_SHOWING_CONDITION)){
+            incrPopupShowCounter();
+        }
     }
 
     public void setOnSubscribe(OnFragmentActionsListener listener) {
