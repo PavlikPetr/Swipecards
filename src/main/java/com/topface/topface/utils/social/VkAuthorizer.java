@@ -8,12 +8,15 @@ import android.os.Message;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.SessionConfig;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
+
+import java.util.Locale;
 
 /**
  * Class that starts Vkontakte authorization
@@ -89,5 +92,9 @@ public class VkAuthorizer extends Authorizer {
                 super.onActivityResult(requestCode, resultCode, data);
             }
         }
+    }
+
+    public static boolean isMainScreenLoginEnable() {
+        return new Locale(App.getLocaleConfig().getApplicationLocale()).getLanguage().equals(Utils.getRussianLocale().getLanguage());
     }
 }

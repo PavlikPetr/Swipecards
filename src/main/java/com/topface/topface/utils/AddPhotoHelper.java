@@ -403,7 +403,7 @@ public class AddPhotoHelper {
 
     private Intent getIntentForNotification() {
         return new Intent(mActivity, NavigationActivity.class)
-                .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.PROFILE)
+                .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.PROFILE.getFragmentSettings())
                 .putExtra(GCMUtils.NOTIFICATION_INTENT, true)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }

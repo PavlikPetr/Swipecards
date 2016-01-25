@@ -50,6 +50,7 @@ buildscript {
     dependencies {
         classpath rootProject.ANDROID_BUILD_GRADLE_PLUGIN_VERSION
         classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
+        classpath "com.android.databinding:dataBinder:1.0-rc2"
     }
 }
 
@@ -67,6 +68,7 @@ allprojects {
 
 apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
+apply plugin: 'com.android.databinding'
 
 android {
     compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)

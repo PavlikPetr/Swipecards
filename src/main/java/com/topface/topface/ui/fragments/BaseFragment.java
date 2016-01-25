@@ -83,7 +83,13 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        if (isButterKnifeAvailable()) {
+            ButterKnife.unbind(this);
+        }
+    }
+
+    protected boolean isButterKnifeAvailable(){
+        return true;
     }
 
     @Override

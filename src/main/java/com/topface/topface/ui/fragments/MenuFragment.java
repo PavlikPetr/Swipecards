@@ -428,6 +428,9 @@ public class MenuFragment extends Fragment {
      * @param newFragmentSettings id of fragment that is going to be shown
      */
     private void switchFragment(FragmentSettings newFragmentSettings, boolean executePending) {
+        if (newFragmentSettings == null) {
+            return;
+        }
         FragmentManager fragmentManager = getFragmentManager();
         Fragment oldFragment = fragmentManager.findFragmentById(R.id.fragment_content);
         String fragmentTag = getTagById(newFragmentSettings);

@@ -53,6 +53,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class Utils {
@@ -63,6 +64,7 @@ public class Utils {
     public static final String SEMICOLON = ":";
     private static final String DASH_SYMBOL = "-";
     private static final String HYPHEN_SYMBOL = "&#8209;";
+    public static String RU_LOCALE = "ru";
     private final static Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
             "[a-zA-Z0-9\\+\\._%\\-\\+]{1,256}@" +
                     "" +
@@ -87,6 +89,10 @@ public class Utils {
             Debug.error("Plural resources error", e);
         }
         return mPluralResources.getQuantityString(id, quantity, formatArgs);
+    }
+
+    public static Locale getRussianLocale(){
+        return new Locale(RU_LOCALE);
     }
 
     public static void showErrorMessage() {

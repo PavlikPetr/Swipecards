@@ -23,6 +23,4 @@ public class TfAuthorizer extends Authorizer {
     public void logout() {
         AuthToken.getInstance().removeToken();
     }
-
-
 }

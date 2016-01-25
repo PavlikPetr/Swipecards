@@ -68,6 +68,10 @@
     <dimen name="take_photo_padding_24">24dp</dimen>
     <dimen name="take_photo_padding_40">40dp</dimen>
 
+    <dimen name="auth_buttons_padding">16dp</dimen>
+
     <dimen name="left_menu_icon_width">24dp</dimen>
     <dimen name="left_menu_icon_height">24dp</dimen>
+
+    <dimen name="other_services_button_img_padding">7dp</dimen>
 </resources>

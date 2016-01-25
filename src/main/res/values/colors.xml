@@ -157,4 +157,6 @@
     <!-- Take photo screen -->
     <color name="take_photo_screen_text_dark">#DE000000</color>
     <color name="take_photo_screen_text_medium">#8F000000</color>
+
+    <color name="auth_fragment_text_color">#03A9F4</color>
 </resources>
