@@ -100,6 +100,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
             }
             if (mBodyPagerAdapter.getItem(position) instanceof VipBuyFragment) {
                 fromVip = true;
+                return;
             }
             if ((mBodyPagerAdapter.getItem(position) instanceof ProfileFormFragment
                     || mBodyPagerAdapter.getItem(position) instanceof SettingsFragment) && fromVip) {
