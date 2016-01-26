@@ -97,4 +97,7 @@ public class DateUtils {
         return date.getTime() / 1000;
     }
 
+    public static boolean isDayBehind(long lastTime) {
+        return lastTime == 0 || android.text.format.DateUtils.isToday(lastTime + DAY_IN_MILLISECONDS);
+    }
 }

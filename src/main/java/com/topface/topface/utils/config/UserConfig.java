@@ -77,6 +77,7 @@ public class UserConfig extends AbstractConfig {
     public static final String LAST_CATCHED_GEO_LATITUDE = "last_catched_geo_latitude";
     public static final String LAST_CATCHED_GEO_LONGITUDE = "last_catched_geo_longitude";
     public static final String LAST_CATCHED_GEO_PROVIDER = "last_catched_geo_provider";
+    public static final String TRIAL_LAST_TIME = "trial_last_time";
     private String mUnique;
 
     public UserConfig(String uniqueKey, Context context) {
@@ -173,6 +174,8 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, TRIAL_VIP_POPUP_COUNTER, 0);
         // последнее сохраненное местоположение пользователя
         addField(settingsMap, LAST_CATCHED_GEO_LATITUDE, DEFAULT_USER_LATITUDE_LOCATION);
+        // время последнего показа попапа триала
+        addField(settingsMap, TRIAL_LAST_TIME, 0L);
         addField(settingsMap, LAST_CATCHED_GEO_LONGITUDE, DEFAULT_USER_LONGITUDE_LOCATION);
         addField(settingsMap, LAST_CATCHED_GEO_PROVIDER, LOCATION_PROVIDER);
     }
@@ -287,6 +290,14 @@ public class UserConfig extends AbstractConfig {
 
     public long getDatingLockPopupRedirect() {
         return getLongField(getSettingsMap(), DATING_LOCK_POPUP_TIME);
+    }
+
+    public void setTrialLastTime(long lastTime) {
+        setField(getSettingsMap(), TRIAL_LAST_TIME, lastTime);
+    }
+
+    public long getTrialLastTime() {
+        return getLongField(getSettingsMap(), TRIAL_LAST_TIME);
     }
 
     // =======================PromoPopups=======================

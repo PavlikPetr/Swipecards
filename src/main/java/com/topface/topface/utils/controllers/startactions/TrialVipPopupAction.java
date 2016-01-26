@@ -7,7 +7,9 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.GoogleMarketApiManager;
+import com.topface.topface.utils.config.UserConfig;
 
 import java.lang.ref.WeakReference;
 
@@ -18,6 +20,7 @@ public class TrialVipPopupAction implements IStartAction {
     private WeakReference<BaseFragmentActivity> mActivity;
     private TrialVipPopup mTrialVipPopup;
     private OnNextActionListener mOnNextActionListener;
+    private final static int DEFAULT_DATE = 0;
 
     public TrialVipPopupAction(BaseFragmentActivity activity, int priority) {
         mActivity = new WeakReference<>(activity);
@@ -46,11 +49,19 @@ public class TrialVipPopupAction implements IStartAction {
         });
         if (mActivity != null && mActivity.get() != null) {
             mTrialVipPopup.show(mActivity.get().getSupportFragmentManager(), TrialVipPopup.TAG);
+            UserConfig userConfig = App.getUserConfig();
+            userConfig.setTrialLastTime(System.currentTimeMillis());
+            userConfig.saveConfig();
         }
     }
 
     @Override
     public boolean isApplicable() {
+        UserConfig userConfig = App.getUserConfig();
+        if (DateUtils.isDayBehind(userConfig.getTrialLastTime())) {
+            userConfig.setTrialVipPopupCounter(DEFAULT_DATE);
+            userConfig.saveConfig();
+        }
         return !CacheProfile.paid && !CacheProfile.premium &&
                 App.getUserConfig().getTrialVipCounter() < CacheProfile.getOptions().getMaxShowCountTrialVipPopup() &&
                 CacheProfile.getOptions().trialVipExperiment.enabled && new GoogleMarketApiManager().isMarketApiAvailable();
