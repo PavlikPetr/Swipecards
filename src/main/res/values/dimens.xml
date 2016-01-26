@@ -61,4 +61,5 @@
     <dimen name="buttons_elevation_value">1dp</dimen>
 
     <dimen name="express_message_button_min_width">214dp</dimen>
+
 </resources>

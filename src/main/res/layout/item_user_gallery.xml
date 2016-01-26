@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:foreground="@drawable/feed_avatar_overlay_selector"
-    android:background="@color/album_grid_item_bg">
 
-    <com.topface.topface.ui.views.ImageViewRemote
-        android:id="@+id/ivPhoto"
-        style="@style/GalleryItem" />
-</FrameLayout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="longClickListener"
+            type="android.view.View.OnLongClickListener" />
+    </data>
+
+    <FrameLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/album_grid_item_bg"
+        android:foreground="@drawable/feed_avatar_overlay_selector"
+        android:onClick="@{clickListener.onClick}"
+        app:onLongItemClick="@{longClickListener}">
+
+        <com.topface.topface.ui.views.ImageViewRemote
+            android:id="@+id/ivPhoto"
+            style="@style/GalleryItem"
+            app:animate="@{300}" />
+    </FrameLayout>
+
+</layout>
