@@ -98,15 +98,6 @@ public class DateUtils {
     }
 
     public static boolean isDayBehind(long lastTime) {
-        if (lastTime == 0) {
-            return true;
-        }
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(lastTime);
-        int lastDay = calendar.get(Calendar.DAY_OF_MONTH);
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        int now = calendar.get(Calendar.DAY_OF_MONTH);
-        return lastDay < now;
+        return lastTime == 0 || android.text.format.DateUtils.isToday(lastTime + DAY_IN_MILLISECONDS);
     }
-
 }
