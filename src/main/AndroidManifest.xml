@@ -77,6 +77,16 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/fb_app_id" />
 
+        <!--AdToApp meta-data start-->
+        <meta-data
+            android:name="applovin.sdk.key"
+            android:value="@string/adtoapp_key_value" />
+
+        <meta-data
+            android:name="adtoapp.sdk.plugin"
+            android:value="android" />
+        <!--AdToApp meta-data finish-->
+
         <!-- activity -->
         <activity
             android:name=".ui.NavigationActivity"
@@ -501,6 +511,15 @@
         <meta-data
             android:name="com.appodeal.framework"
             android:value="android" />
+        <receiver
+            android:name="com.appodeal.ads.AppodealPackageAddedReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name="com.appodeal.ads.InterstitialActivity"
@@ -548,10 +567,120 @@
             android:hardwareAccelerated="true"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
+            android:name="com.unity3d.ads.android2.view.UnityAdsFullscreenActivity"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
+            android:hardwareAccelerated="true"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:name="org.nexage.sourcekit.vast.activity.VASTActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:name="org.nexage.sourcekit.vast.activity.VPAIDActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:name="com.appodeal.ads.networks.SpotXActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:name="com.jirbo.adcolony.AdColonyOverlay"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
+        <activity
+            android:name="com.jirbo.adcolony.AdColonyFullscreen"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+        <activity
+            android:name="com.jirbo.adcolony.AdColonyBrowser"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+        <activity
+            android:name="com.startapp.android.publish.list3d.List3DActivity"
+            android:theme="@android:style/Theme" />
+        <!--suppress AndroidDomInspection -->
+        <activity
+            android:name="com.startapp.android.publish.OverlayActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Translucent" /> <!--suppress AndroidDomInspection -->
+        <activity
+            android:name="com.startapp.android.publish.FullScreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme" />
+        <service
+            android:name="com.yandex.metrica.MetricaService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":Metrica">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="com.yandex.metrica.IMetricaService" />
+                <data android:scheme="metrica" />
+            </intent-filter>
+            <meta-data
+                android:name="metrica:api:level"
+                android:value="39" />
+        </service>
+        <receiver
+            android:name="com.yandex.metrica.MetricaEventHandler"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+        <!--suppress AndroidDomInspection -->
+        <activity
+            android:name="com.yandex.mobile.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+        <activity
+            android:name="com.inmobi.rendering.InMobiAdActivity"
+            android:configChanges="keyboardHidden|orientation|keyboard|smallestScreenSize|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <receiver
+            android:name="com.inmobi.commons.core.utilities.uid.ImIdShareBroadCastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.inmobi.share.id" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="com.inmobi.signals.activityrecognition.ActivityRecognitionManager"
+            android:enabled="true" />
+        <!--suppress AndroidDomInspection -->
+        <activity
+            android:name="com.flurry.android.FlurryFullscreenTakeoverActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+        <activity
             android:name="ru.mail.android.mytarget.ads.MyTargetActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
 
         <!--КОНЕЦ-->
+
+        <!--AdToApp activities start-->
+
+        <!-- STARTAPP -->
+        <activity
+            android:name="com.startapp.android.publish.AppWallActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Translucent" />
+
+        <!-- APPLOVIN -->
+        <activity android:name="com.applovin.adview.AppLovinConfirmationActivity" />
+
+        <!-- PERSONAGRAPH -->
+        <receiver android:name="com.personagraph.sensor.service.StartupReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.HOME" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.personagraph.sensor.service.SensorService">
+            <intent-filter>
+                <action android:name="com.personagraph.SensorService" />
+            </intent-filter>
+        </service>
+        <!--AdToApp activities finish-->
 
     </application>
 

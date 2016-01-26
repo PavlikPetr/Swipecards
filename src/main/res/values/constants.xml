@@ -57,4 +57,7 @@
     <array name="extra_account_types">
         <item>"com.google"</item>
     </array>
+
+    <!--AdToApp key value-->
+    <string name="adtoapp_key_value">M_tom-o_IROTf2mZSF4GNGGleuARfi81i0qT-bTH2sqiuaGLrKcCbtyEm6gQqpSWpG_otS4vIvbBTtXJC8Wo0S</string>
 </resources>
