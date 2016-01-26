@@ -1,50 +1,34 @@
 package com.topface.topface.banners.ad_providers;
 
 import android.app.Activity;
+import android.view.View;
+import android.view.ViewGroup;
 
-import com.appodeal.ads.Appodeal;
-import com.appodeal.ads.BannerCallbacks;
-import com.appodeal.ads.BannerView;
-import com.appodeal.ads.UserSettings;
-import com.topface.topface.BuildConfig;
+import com.appintop.adbanner.BannerAdContainer;
+import com.appintop.adbanner.BannerListener;
+import com.appintop.init.AdToApp;
+import com.topface.topface.R;
 import com.topface.topface.banners.IPageWithAds;
-import com.topface.topface.data.Profile;
-import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.social.AuthToken;
 
 public class AdToAppProvider extends AbstractAdsProvider {
 
-    public static final String APPODEAL_APP_KEY = "2f48418b677cf24a3fa37eacfc7a4e76d385db08b51bd328";
+    public static final String ADTOAPP_APP_KEY = "361e95a8-3cf4-494d-89de-1a0f57f25ab3:b8942ef1-6fe1-4c7b-ab3d-2814072cedf3";
+    public static final int REFRESH_INTERVAL = 60;
 
     @Override
     boolean injectBannerInner(final IPageWithAds page, final IAdProviderCallbacks callbacks) {
         Activity activity = page.getActivity();
-        Appodeal.initialize(activity, APPODEAL_APP_KEY, Appodeal.BANNER_VIEW);
-        final BannerView adView = Appodeal.getBannerView(page.getActivity());
-        page.getContainerForAd().addView(adView);
-        if (BuildConfig.DEBUG) {
-            Appodeal.setTesting(true);
-        }
-        Appodeal.getUserSettings(activity)
-                .setGender(
-                        CacheProfile.getProfile().sex == Profile.BOY ?
-                                UserSettings.Gender.MALE :
-                                UserSettings.Gender.FEMALE)
-                .setAge(CacheProfile.getProfile().age);
-        // добавляем в UserSettings id социальной сети, в зависимости от типа текущей авторизации
-        switch (AuthToken.getInstance().getSocialNet()) {
-            case AuthToken.SN_VKONTAKTE:
-                Appodeal.getUserSettings(activity).setVkId(AuthToken.getInstance().getUserSocialId());
-                break;
-            case AuthToken.SN_FACEBOOK:
-                Appodeal.getUserSettings(activity).setFacebookId(AuthToken.getInstance().getUserSocialId());
-                break;
-        }
-        Appodeal.setBannerCallbacks(new BannerCallbacks() {
-
+        AdToApp.initializeSDK(activity,
+                ADTOAPP_APP_KEY,
+                AdToApp.MASK_BANNER);
+        ViewGroup container = page.getContainerForAd();
+        final BannerAdContainer adView = (BannerAdContainer) View
+                .inflate(container.getContext(), R.layout.banner_adtoapp, container)
+                .findViewById(R.id.adtoapp_banner);
+        adView.setRefreshInterval(REFRESH_INTERVAL);
+        adView.setBannerListener(new BannerListener() {
             @Override
-            public void onBannerLoaded() {
-                Appodeal.show(page.getActivity(), Appodeal.BANNER_VIEW);
+            public void onBannerLoad() {
                 callbacks.onAdLoadSuccess(adView);
             }
 
@@ -54,11 +38,8 @@ public class AdToAppProvider extends AbstractAdsProvider {
             }
 
             @Override
-            public void onBannerShown() {
-            }
-
-            @Override
             public void onBannerClicked() {
+
             }
         });
         return true;

@@ -13,16 +13,20 @@ public class AdProvidersFactory {
     public static final String BANNER_ADMOB = "ADMOB";
     public static final String BANNER_ADMOB_MEDIATION = "ADMOB_MEDIATION";
     public static final String BANNER_ADMOB_FULLSCREEN_START_APP = "ADMOB_FULLSCREEN_EXP";
+    public static final String BANNER_APPODEAL_FULLSCREEN = "APPODEAL_FULLSCREEN";
+    public static final String BANNER_ADTOAPP_FULLSCREEN = "ADTOAPP_FULLSCREEN";
     public static final String BANNER_GAG = "GAG";
     public static final String BANNER_NONE = "NONE";
     public static final String BANNER_APPODEAL = "APPODEAL";
+    public static final String BANNER_ADTOAPP = "ADTOAPP";
     public static final String[] BANNERS = new String[]{
             BANNER_TOPFACE,
             BANNER_ADMOB,
             BANNER_ADMOB_MEDIATION,
             BANNER_GAG,
             BANNER_NONE,
-            BANNER_APPODEAL
+            BANNER_APPODEAL,
+            BANNER_ADTOAPP
     };
 
     /**
@@ -41,6 +45,8 @@ public class AdProvidersFactory {
                 return new AdMobMediationProvider();
             case BANNER_APPODEAL:
                 return new AppodealProvider();
+            case BANNER_ADTOAPP:
+                return new AdToAppProvider();
             default:
                 return null;
         }
