@@ -43,7 +43,7 @@ public class UserPhotoFragment extends ProfileInnerFragment {
     private LoadingListAdapter.Updater mUpdater;
     private RecyclerView mGridAlbum;
     private BasePendingInit<User> mPendingUserInit = new BasePendingInit<>();
-    private BasePhotoRecyclerViewAdapter.onRecyclerViewItemClickListener listener = new BasePhotoRecyclerViewAdapter.onRecyclerViewItemClickListener() {
+    private BasePhotoRecyclerViewAdapter.OnRecyclerViewItemClickListener mClickListener = new BasePhotoRecyclerViewAdapter.OnRecyclerViewItemClickListener() {
         @Override
         public void itemClick(View view, int itemPosition, Photo photo) {
             if (itemPosition < mPhotosCount) {
@@ -184,7 +184,7 @@ public class UserPhotoFragment extends ProfileInnerFragment {
                     mPhotosCount,
                     mUpdater)
                     .setFooter(createGridViewFooter(), false);
-            mUserRecyclerViewAdapter.setOnItemClickListener(listener);
+            mUserRecyclerViewAdapter.setOnItemClickListener(mClickListener);
         }
     }
 

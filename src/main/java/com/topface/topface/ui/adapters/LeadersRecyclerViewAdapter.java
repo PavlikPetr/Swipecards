@@ -20,7 +20,7 @@ public class LeadersRecyclerViewAdapter extends BasePhotoRecyclerViewAdapter<Pho
     public LeadersRecyclerViewAdapter(Photos photoLinks, int totalPhotos, LoadingListAdapter.Updater callback) {
         super(photoLinks, totalPhotos, callback);
         setSelectedItemOnStart(photoLinks);
-        setOnItemClickListener(new onRecyclerViewItemClickListener() {
+        setOnItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
             public void itemClick(View view, int itemPosition, Photo photo) {
                 notifyItemChanged(mSelectedPhotoPos);

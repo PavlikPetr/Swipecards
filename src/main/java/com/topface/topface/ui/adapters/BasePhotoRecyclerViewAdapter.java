@@ -39,8 +39,8 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
     private int mColumnCount;
     private boolean mHeaderIsBindingView;
     private boolean mFooterIsBindingView;
-    private onRecyclerViewItemClickListener mRecyclerViewItemClickListener;
-    private onRecyclerViewItemLongClickListener mRecyclerViewItemLongClickListener;
+    private OnRecyclerViewItemClickListener mRecyclerViewItemClickListener;
+    private OnRecyclerViewItemLongClickListener mRecyclerViewItemLongClickListener;
     private RecyclerView mRecyclerView;
     private LoadingListAdapter.Updater mUpdater;
     private AlbumLoadController mLoadController;
@@ -93,12 +93,11 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
     }
 
     private void addFakePhoto(int fakePos) {
-        if (mPhotoLinks != null) {
-            mPhotoLinks.add(fakePos, Photo.createFakePhoto());
-        } else {
-            mPhotoLinks = new Photos();
-            mPhotoLinks.add(fakePos, Photo.createFakePhoto());
+        Photos photos = getAdapterData();
+        if (photos == null) {
+            photos = new Photos();
         }
+        photos.add(fakePos, Photo.createFakePhoto());
     }
 
     public RecyclerView.ItemDecoration getItemDecoration() {
@@ -109,7 +108,7 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
                 if (mPadding == 0) {
-                    mPadding = (int) view.getContext().getResources().getDimension(R.dimen.photo_grid_item_padding);
+                    mPadding = (int) view.getContext().getResources().getDimension(R.dimen.add_to_leader_spacing_value);
                 }
                 outRect.bottom = mPadding;
                 outRect.right = mPadding;
@@ -134,7 +133,7 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
                 mLastVisibleItemPos = last[last.length - 1];
                 int visibleItemCount = last[last.length - 1] - first[0];
                 if (visibleItemCount != 0 && first[0] + visibleItemCount >= getPhotos().size() - 1 - mLoadController.getItemsOffsetByConnectionType() && mNeedLoadNewItems) {
-                    if (mUpdater != null && !mPhotoLinks.isEmpty()) {
+                    if (mUpdater != null && !getAdapterData().isEmpty()) {
                         mNeedLoadNewItems = false;
                         mUpdater.onUpdate();
                     }
@@ -206,7 +205,7 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
 
     @Override
     public int getItemCount() {
-        return mPhotoLinks != null ? mPhotoLinks.size() : 0;
+        return getAdapterData().size();
     }
 
     public Photo getItem(int pos) {
@@ -224,13 +223,16 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
                 return TYPE_HEADER;
             }
         }
-        if (position == mPhotoLinks.size() - 1 && mFooterView != null){
+        if (position == getAdapterData().size() - 1 && mFooterView != null) {
             return getPhotos().size() != mTotalPhotos ? TYPE_FOOTER : TYPE_ITEM;
         }
         return TYPE_ITEM;
     }
 
     public Photos getAdapterData() {
+        if (mPhotoLinks == null) {
+            mPhotoLinks = new Photos();
+        }
         return mPhotoLinks;
     }
 
@@ -248,11 +250,11 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
     @LayoutRes
     protected abstract int getItemLayoutId();
 
-    public void setOnItemClickListener(onRecyclerViewItemClickListener itemClick) {
+    public void setOnItemClickListener(OnRecyclerViewItemClickListener itemClick) {
         mRecyclerViewItemClickListener = itemClick;
     }
 
-    public void setOnItemLongClickListener(onRecyclerViewItemLongClickListener itemLongClick) {
+    public void setOnItemLongClickListener(OnRecyclerViewItemLongClickListener itemLongClick) {
         mRecyclerViewItemLongClickListener = itemLongClick;
     }
 
@@ -261,42 +263,43 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
     }
 
     public void setData(Photos photoLinks, boolean needMore, boolean isAddPhotoButtonEnabled) {
-        mPhotoLinks.clear();
+        getAdapterData().clear();
         if (isAddPhotoButtonEnabled && !(!photoLinks.isEmpty() && photoLinks.get(0).isFake())) {
-            mPhotoLinks.add(0, Photo.createFakePhoto());
+            getAdapterData().add(0, Photo.createFakePhoto());
         }
         addPhotos(photoLinks, needMore, false);
     }
 
 
     public void addPhotos(Photos photoLinks, boolean needMore, boolean isReversed) {
-        int pos = getAdapterData().size();
-        if (mPhotoLinks.size() > 1 && mPhotoLinks.get(mPhotoLinks.size() - 1).isFake()) {
-            mPhotoLinks.remove(mPhotoLinks.size() - 1);
+        Photos photos = getAdapterData();
+        int pos = photos.size();
+        if (pos > 1 && photos.get(pos - 1).isFake()) {
+            photos.remove(pos - 1);
         }
         for (Photo photo : photoLinks) {
             if (isReversed) {
                 addFirst(photo);
             } else {
-                mPhotoLinks.add(photo);
+                photos.add(photo);
             }
         }
         if (mFooterView != null && needMore) {
-            mPhotoLinks.add(Photo.createFakePhoto());
+            photos.add(Photo.createFakePhoto());
         }
         mNeedLoadNewItems = needMore;
-        notifyItemRangeInserted(pos, mPhotoLinks.size());
+        notifyItemRangeInserted(pos, photos.size());
     }
 
     public void removePhoto(Photo photo, int position) {
-        if (null != mPhotoLinks) {
-            mPhotoLinks.remove(photo);
+        if (null != getAdapterData()) {
+            getAdapterData().remove(photo);
             notifyItemRemoved(position);
         }
     }
 
     public Photos getPhotos() {
-        Photos photoLinks = (Photos) mPhotoLinks.clone();
+        Photos photoLinks = (Photos) getAdapterData().clone();
         //Убираем первую фейковую фотографию
         if (photoLinks != null && photoLinks.size() > 0 && photoLinks.get(0).isFake()) {
             photoLinks.remove(0);
@@ -310,10 +313,11 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
     }
 
     public void addFirst(Photo photo) {
-        if (mPhotoLinks.size() > 1 && mPhotoLinks.get(mPhotoLinks.size() - 1).getId() == 0) {
-            mPhotoLinks.add(2, photo);
+        Photos photos = getAdapterData();
+        if (photos.size() > 1 && photos.get(photos.size() - 1).getId() == 0) {
+            photos.add(2, photo);
         } else {
-            mPhotoLinks.add(1, photo);
+            photos.add(1, photo);
         }
         notifyDataSetChanged();
     }
@@ -361,7 +365,7 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
                             return;
                         }
                         int pos = mRecyclerView.getLayoutManager().getPosition(v);
-                        mRecyclerViewItemClickListener.itemClick(v, pos, mPhotoLinks.get(pos));
+                        mRecyclerViewItemClickListener.itemClick(v, pos, getAdapterData().get(pos));
                     }
                 });
                 mBinding.setVariable(BR.longClickListener, new View.OnLongClickListener() {
@@ -373,7 +377,7 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
                             return true;
                         }
                         int pos = mRecyclerView.getLayoutManager().getPosition(v);
-                        mRecyclerViewItemLongClickListener.itemLongClick(v, pos, mPhotoLinks.get(pos));
+                        mRecyclerViewItemLongClickListener.itemLongClick(v, pos, getAdapterData().get(pos));
                         return false;
                     }
                 });
@@ -410,7 +414,7 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
      * <p/>
      * затем нужным вьюхам назначить атрибут onClick в XML
      */
-    public interface onRecyclerViewItemClickListener {
+    public interface OnRecyclerViewItemClickListener {
 
         /**
          * @param view         - вьюха на которую был произведен клик
@@ -433,7 +437,7 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
      * Затем, чтобы прийти к успеху, в нужной вьюхе прописать
      * app:onLongItemClick="@{longClickListener}"
      */
-    public interface onRecyclerViewItemLongClickListener {
+    public interface OnRecyclerViewItemLongClickListener {
 
         /**
          * @param view         - вьюха на которую был произведен клик

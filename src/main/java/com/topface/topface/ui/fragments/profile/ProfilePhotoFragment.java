@@ -61,14 +61,14 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
         }
     };
 
-    private FragmentProfilePhotosBinding binding;
+    private FragmentProfilePhotosBinding mBinding;
 
-    private BasePhotoRecyclerViewAdapter.onRecyclerViewItemClickListener listener = new BasePhotoRecyclerViewAdapter.onRecyclerViewItemClickListener() {
+    private BasePhotoRecyclerViewAdapter.OnRecyclerViewItemClickListener mClickListener = new BasePhotoRecyclerViewAdapter.OnRecyclerViewItemClickListener() {
         @Override
         public void itemClick(View view, int itemPosition, Photo photo) {
             Profile profile = App.from(getActivity()).getProfile();
             if (itemPosition == 0) {
-                binding.vfFlipper.setDisplayedChild(1);
+                mBinding.vfFlipper.setDisplayedChild(1);
             } else if (itemPosition <= profile.photosCount) {
                 startActivity(PhotoSwitcherActivity.getPhotoSwitcherIntent(
                         null,
@@ -81,7 +81,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
         }
     };
 
-    private BasePhotoRecyclerViewAdapter.onRecyclerViewItemLongClickListener longClickListener = new BasePhotoRecyclerViewAdapter.onRecyclerViewItemLongClickListener() {
+    private BasePhotoRecyclerViewAdapter.OnRecyclerViewItemLongClickListener longClickListener = new BasePhotoRecyclerViewAdapter.OnRecyclerViewItemLongClickListener() {
         @Override
         public void itemLongClick(View view, int itemPosition, Photo photo) {
             if (needDialog(photo)) {
@@ -141,8 +141,8 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
             ((TrackedFragmentActivity) getActivity()).setBackPressedListener(this);
         }
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
-        binding = DataBindingUtil.bind(root);
-        binding.setHandlers(new Handlers());
+        mBinding = DataBindingUtil.bind(root);
+        mBinding.setHandlers(new Handlers());
         if (getActivity() instanceof EditContainerActivity) {
             getActivity().setResult(Activity.RESULT_OK);
             setActionBarTitles(getString(R.string.edit_title), getString(R.string.edit_album));
@@ -154,24 +154,24 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                 sendAlbumRequest();
             }
         });
-        mOwnProfileRecyclerViewAdapter.setOnItemClickListener(listener);
+        mOwnProfileRecyclerViewAdapter.setOnItemClickListener(mClickListener);
         mOwnProfileRecyclerViewAdapter.setOnItemLongClickListener(longClickListener);
         mOwnProfileRecyclerViewAdapter.setFooter(createGridViewFooter(), false);
         final int position;
         if (savedInstanceState != null) {
             position = savedInstanceState.getInt(POSITION, 0);
-            binding.vfFlipper.setDisplayedChild(savedInstanceState.getInt(FLIPPER_VISIBLE_CHILD, 0));
+            mBinding.vfFlipper.setDisplayedChild(savedInstanceState.getInt(FLIPPER_VISIBLE_CHILD, 0));
         } else {
             position = 0;
         }
         int spanCount = getResources().getInteger(R.integer.add_to_leader_column_count);
         StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
-        binding.usedGrid.setLayoutManager(manager);
-        binding.usedGrid.post(new Runnable() {
+        mBinding.usedGrid.setLayoutManager(manager);
+        mBinding.usedGrid.post(new Runnable() {
             @Override
             public void run() {
-                binding.usedGrid.setAdapter(mOwnProfileRecyclerViewAdapter);
-                binding.usedGrid.scrollToPosition(position);
+                mBinding.usedGrid.setAdapter(mOwnProfileRecyclerViewAdapter);
+                mBinding.usedGrid.scrollToPosition(position);
             }
         });
         return root;
@@ -181,9 +181,9 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (mOwnProfileRecyclerViewAdapter != null) {
-            outState.putInt(POSITION, (binding.usedGrid != null) ? mOwnProfileRecyclerViewAdapter.getFirstVisibleItemPos() : 0);
+            outState.putInt(POSITION, (mBinding.usedGrid != null) ? mOwnProfileRecyclerViewAdapter.getFirstVisibleItemPos() : 0);
         }
-        outState.putInt(FLIPPER_VISIBLE_CHILD, binding.vfFlipper.getDisplayedChild());
+        outState.putInt(FLIPPER_VISIBLE_CHILD, mBinding.vfFlipper.getDisplayedChild());
     }
 
     public void startPhotoDialog(final Photo photo, final int position) {
@@ -191,7 +191,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
         builder.setItems(new String[]{getString(R.string.edit_set_as_main), getString(R.string.edit_delete)}, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                binding.fppLocker.setVisibility(View.VISIBLE);
+                mBinding.fppLocker.setVisibility(View.VISIBLE);
                 final Profile profile = App.from(getActivity()).getProfile();
                 switch (which) {
                     case 0:
@@ -230,7 +230,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                             @Override
                             public void always(IApiResponse response) {
                                 super.always(response);
-                                binding.fppLocker.setVisibility(View.GONE);
+                                mBinding.fppLocker.setVisibility(View.GONE);
                             }
                         }).exec();
                         break;
@@ -253,7 +253,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                             @Override
                             public void always(IApiResponse response) {
                                 super.always(response);
-                                binding.fppLocker.setVisibility(View.GONE);
+                                mBinding.fppLocker.setVisibility(View.GONE);
                             }
                         }).exec();
                         break;
@@ -285,8 +285,8 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
 
     @Override
     public boolean onBackPressed() {
-        if (binding.vfFlipper != null && binding.vfFlipper.getDisplayedChild() == 1) {
-            binding.vfFlipper.setDisplayedChild(0);
+        if (mBinding.vfFlipper != null && mBinding.vfFlipper.getDisplayedChild() == 1) {
+            mBinding.vfFlipper.setDisplayedChild(0);
             return true;
         }
         return false;
@@ -295,7 +295,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
     public class Handlers {
 
         public void addPhotoClick(View v) {
-            binding.vfFlipper.setDisplayedChild(0);
+            mBinding.vfFlipper.setDisplayedChild(0);
             LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
                     new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", v.getId()));
         }

@@ -92,7 +92,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     Photos mPhotos = null;
 
     @Bind(R.id.user_photos_grid)
-    RecyclerView mGridView;
+    RecyclerView mRecyclerView;
     @Bind(R.id.llvLeaderSending)
     LockerView mLoadingLocker;
 
@@ -280,9 +280,9 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private void initPhotosGrid(final int selectedPosition) {
         int spanCount = getResources().getInteger(R.integer.add_to_leader_column_count);
         StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
-        mGridView.setLayoutManager(manager);
-        mGridView.setAdapter(getAdapter());
-        mGridView.post(new Runnable() {
+        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setAdapter(getAdapter());
+        mRecyclerView.post(new Runnable() {
             @Override
             public void run() {
                 setSelectedPosition(selectedPosition);
@@ -293,7 +293,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
     private void setSelectedPosition(int selectedPosition) {
         LeadersRecyclerViewAdapter adapter = getAdapter();
-        if (adapter != null && adapter.getAdapterData().size() > 0 && selectedPosition != 0) {
+        if (adapter != null && !adapter.getAdapterData().isEmpty() && selectedPosition != 0) {
             adapter.setSelectedPhotoId(selectedPosition);
         }
     }

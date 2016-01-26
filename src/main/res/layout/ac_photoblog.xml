@@ -10,7 +10,7 @@
         android:id="@+id/user_photos_grid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/photo_grid_item_padding"
+        android:paddingLeft="@dimen/add_to_leader_spacing_value"
         android:layout_alignParentTop="true"/>
 
     <com.topface.topface.ui.views.LockerView

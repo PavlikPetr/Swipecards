@@ -62,6 +62,4 @@
 
     <dimen name="express_message_button_min_width">214dp</dimen>
 
-    <dimen name="photo_grid_item_padding">2dp</dimen>
-
 </resources>
