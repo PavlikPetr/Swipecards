@@ -7,7 +7,9 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.GoogleMarketApiManager;
+import com.topface.topface.utils.config.UserConfig;
 
 import java.lang.ref.WeakReference;
 
@@ -46,11 +48,16 @@ public class TrialVipPopupAction implements IStartAction {
         });
         if (mActivity != null && mActivity.get() != null) {
             mTrialVipPopup.show(mActivity.get().getSupportFragmentManager(), TrialVipPopup.TAG);
+            App.getUserConfig().setTrialLastTime(System.currentTimeMillis());
         }
     }
 
     @Override
     public boolean isApplicable() {
+        UserConfig userConfig = App.getUserConfig();
+        if (DateUtils.isDayBehind(userConfig.getTrialLastTime())) {
+            userConfig.setTrialVipPopupCounter(0);
+        }
         return !CacheProfile.paid && !CacheProfile.premium &&
                 App.getUserConfig().getTrialVipCounter() < CacheProfile.getOptions().getMaxShowCountTrialVipPopup() &&
                 CacheProfile.getOptions().trialVipExperiment.enabled && new GoogleMarketApiManager().isMarketApiAvailable();

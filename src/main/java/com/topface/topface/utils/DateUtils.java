@@ -97,4 +97,16 @@ public class DateUtils {
         return date.getTime() / 1000;
     }
 
+    public static boolean isDayBehind(long lastTime) {
+        if (lastTime == 0) {
+            return true;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(lastTime);
+        int lastDay = calendar.get(Calendar.DAY_OF_MONTH);
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        int now = calendar.get(Calendar.DAY_OF_MONTH);
+        return lastDay < now;
+    }
+
 }
