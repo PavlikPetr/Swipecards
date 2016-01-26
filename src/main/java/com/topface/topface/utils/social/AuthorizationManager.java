@@ -119,6 +119,7 @@ public class AuthorizationManager {
     }
 
     public void logout(Activity activity) {
+        App.isNeedShowTrial = true;
         Ssid.remove();
         UserNotificationManager.getInstance().removeNotifications();
         TabbedDialogsFragment.setTabsDefaultPosition();
