@@ -36,6 +36,7 @@ public class UserConfig extends AbstractConfig {
     public static final double DEFAULT_USER_LATITUDE_LOCATION = Double.MAX_VALUE;
     public static final double DEFAULT_USER_LONGITUDE_LOCATION = Double.MAX_VALUE;
     private static final String LOCATION_PROVIDER = "dummyprovider";
+    public final static int DEFAULT_SHOW_COUNT = 0;
     public static final int TOPFACE_OFFERWALL_REDIRECTION_FREQUENCY = 2;
     private static final int DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
     public static final String LISTS_SEPARATOR = "&";
@@ -171,7 +172,7 @@ public class UserConfig extends AbstractConfig {
         // отправленные контакты для отправки смс
         addField(settingsMap, INVITED_CONTACTS_FOR_SMS, "");
         // счетчик показа попапа триального VIP
-        addField(settingsMap, TRIAL_VIP_POPUP_COUNTER, 0);
+        addField(settingsMap, TRIAL_VIP_POPUP_COUNTER, DEFAULT_SHOW_COUNT);
         // последнее сохраненное местоположение пользователя
         addField(settingsMap, LAST_CATCHED_GEO_LATITUDE, DEFAULT_USER_LATITUDE_LOCATION);
         // время последнего показа попапа триала
