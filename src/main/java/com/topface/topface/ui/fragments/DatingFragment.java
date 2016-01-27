@@ -33,6 +33,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appintop.interstitialads.DefaultInterstitialListener;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -85,6 +86,7 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
@@ -127,6 +129,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private RetryViewCreator mRetryView;
     private ImageButton mRetryBtn;
     private PreloadManager<SearchUser> mPreloadManager;
+    private FullscreenController mFullscreenController;
 
     private boolean mIsPhotoAsked;
     private AddPhotoHelper mAddPhotoHelper;
@@ -221,6 +224,28 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     protected int getStatusBarColor() {
         return mCurrentStatusBarColor;
     }
+
+    private DefaultInterstitialListener mFullScreenVideoListener = new DefaultInterstitialListener() {
+        @Override
+        public void onFirstInterstitialLoad(String s, String s1) {
+            Debug.error("AdToApp onFirstInterstitialLoad " + s + " " + s1);
+        }
+
+        @Override
+        public void onInterstitialStarted(String s, String s1) {
+            Debug.error("AdToApp onInterstitialStarted " + s + " " + s1);
+        }
+
+        @Override
+        public void onInterstitialClicked(String s, String s1) {
+            Debug.error("AdToApp onInterstitialClicked " + s + " " + s1);
+        }
+
+        @Override
+        public void onInterstitialClosed(String s, String s1) {
+            Debug.error("AdToApp onInterstitialClosed " + s + " " + s1);
+        }
+    };
 
     private BroadcastReceiver mOptionsReceiver = new BroadcastReceiver() {
         @Override
@@ -792,8 +817,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.skip_btn:
             case R.id.btnDatingSkip: {
-                skipUser(mCurrentUser);
-                showNextUser();
+//                skipUser(mCurrentUser);
+//                showNextUser();
+                new FullscreenController(getActivity(), CacheProfile.getOptions()).showVideoAdToApp(mFullScreenVideoListener);
             }
             break;
             case R.id.btnDatingProfile: {

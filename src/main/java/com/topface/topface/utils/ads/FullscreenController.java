@@ -189,13 +189,7 @@ public class FullscreenController {
     }
 
     private void requestAdToAppFullscreen() {
-        requestAdToAppFullscreen(AdToApp.MASK_INTERSTITIAL);
-    }
-
-    private void requestAdToAppFullscreen(int mask) {
-        AdToApp.initializeSDK(mActivity,AdToAppProvider.ADTOAPP_APP_KEY,mask);
-        AdToApp.showInterstitialAd();
-        AdToApp.setInterstitialListener(new DefaultInterstitialListener() {
+        requestAdToAppFullscreen(AdToApp.MASK_INTERSTITIAL, new DefaultInterstitialListener() {
             @Override
             public void onFirstInterstitialLoad(String s, String s1) {
                 addLastFullscreenShowedTime();
@@ -203,12 +197,10 @@ public class FullscreenController {
 
             @Override
             public void onInterstitialStarted(String s, String s1) {
-
             }
 
             @Override
             public void onInterstitialClicked(String s, String s1) {
-
             }
 
             @Override
@@ -216,6 +208,16 @@ public class FullscreenController {
                 isFullScreenBannerVisible = false;
             }
         });
+    }
+
+    public void showVideoAdToApp(DefaultInterstitialListener listener) {
+        requestAdToAppFullscreen(AdToApp.MASK_VIDEO, listener);
+    }
+
+    private void requestAdToAppFullscreen(int mask, DefaultInterstitialListener listener) {
+        AdToApp.initializeSDK(mActivity, AdToAppProvider.ADTOAPP_APP_KEY, mask);
+        AdToApp.showInterstitialAd();
+        AdToApp.setInterstitialListener(listener);
     }
 
     private void requestAppodealFullscreen() {
