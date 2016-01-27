@@ -48,6 +48,11 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
         return true;
     }
 
+    @Override
+    public String getBannerName() {
+        return AdProvidersFactory.BANNER_TOPFACE;
+    }
+
     /**
      * Показываем баннер на всех устройствах, кроме устройств с маленьким экраном
      */
@@ -69,7 +74,7 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
                     try {
                         callbacks.onAdLoadSuccess(adView);
                         displayBanner(adView, page, topfaceBanner);
-                        adView.setOnClickListener(new ActionsOnClickListener(topfaceBanner, page));
+                        adView.setOnClickListener(new ActionsOnClickListener(topfaceBanner, page, callbacks));
                         sendStat(topfaceBanner, VIEW);
                     } catch (Exception e) {
                         Debug.error(e);
@@ -147,10 +152,12 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
 
         private final Banner mBanner;
         private final IPageWithAds mPage;
+        private final IAdProviderCallbacks mCallbacks;
 
-        ActionsOnClickListener(Banner banner, IPageWithAds page) {
+        ActionsOnClickListener(Banner banner, IPageWithAds page, IAdProviderCallbacks callbacks) {
             mBanner = banner;
             mPage = page;
+            mCallbacks = callbacks;
         }
 
         @Override
@@ -182,6 +189,7 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
                     break;
             }
             sendStat(mBanner, CLICK);
+            mCallbacks.onAdClick();
             if (intent != null) {
                 mPage.getActivity().startActivity(intent);
             }

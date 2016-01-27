@@ -59,8 +59,14 @@ public class AppodealProvider extends AbstractAdsProvider {
 
             @Override
             public void onBannerClicked() {
+                callbacks.onAdClick();
             }
         });
         return true;
+    }
+
+    @Override
+    public String getBannerName() {
+        return AdProvidersFactory.BANNER_APPODEAL;
     }
 }

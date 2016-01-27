@@ -20,9 +20,13 @@ public interface IAdsProvider {
      */
     boolean injectBanner(IPageWithAds page, IAdProviderCallbacks callbacks);
 
+    String getBannerName();
+
     interface IAdProviderCallbacks {
         void onAdLoadSuccess(View adView);
 
         void onFailedToLoadAd();
+
+        void onAdClick();
     }
 }
