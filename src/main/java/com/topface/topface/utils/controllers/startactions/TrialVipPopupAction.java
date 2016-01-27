@@ -20,7 +20,6 @@ public class TrialVipPopupAction implements IStartAction {
     private WeakReference<BaseFragmentActivity> mActivity;
     private TrialVipPopup mTrialVipPopup;
     private OnNextActionListener mOnNextActionListener;
-    private final static int DEFAULT_DATE = 0;
 
     public TrialVipPopupAction(BaseFragmentActivity activity, int priority) {
         mActivity = new WeakReference<>(activity);
@@ -58,8 +57,8 @@ public class TrialVipPopupAction implements IStartAction {
     @Override
     public boolean isApplicable() {
         UserConfig userConfig = App.getUserConfig();
-        if (DateUtils.isDayBehind(userConfig.getTrialLastTime())) {
-            userConfig.setTrialVipPopupCounter(DEFAULT_DATE);
+        if (DateUtils.isDayBeforeToday(userConfig.getTrialLastTime())) {
+            userConfig.setTrialVipPopupCounter(UserConfig.DEFAULT_SHOW_COUNT);
             userConfig.saveConfig();
         }
         return !CacheProfile.paid && !CacheProfile.premium &&
