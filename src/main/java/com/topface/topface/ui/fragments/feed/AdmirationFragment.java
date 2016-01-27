@@ -10,9 +10,8 @@ import android.widget.ViewFlipper;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
-import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteAdmirationsRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -76,11 +75,11 @@ public class AdmirationFragment extends LikesFragment {
                     }
                 });
                 ((ImageViewRemote) inflated.findViewById(R.id.ivOne))
-                        .setResourceSrc(profile.dating.sex == Static.GIRL ? R.drawable.likes_male_one : R.drawable.likes_female_one);
+                        .setResourceSrc(profile.dating.sex == Profile.GIRL ? R.drawable.likes_male_one : R.drawable.likes_female_one);
                 ((ImageViewRemote) inflated.findViewById(R.id.ivTwo))
-                        .setResourceSrc(profile.dating.sex == Static.GIRL ? R.drawable.likes_male_two : R.drawable.likes_female_two);
+                        .setResourceSrc(profile.dating.sex == Profile.GIRL ? R.drawable.likes_male_two : R.drawable.likes_female_two);
                 ((ImageViewRemote) inflated.findViewById(R.id.ivThree))
-                        .setResourceSrc(profile.dating.sex == Static.GIRL ? R.drawable.likes_male_three : R.drawable.likes_female_three);
+                        .setResourceSrc(profile.dating.sex == Profile.GIRL ? R.drawable.likes_male_three : R.drawable.likes_female_three);
             } else {
                 ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
                 inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {

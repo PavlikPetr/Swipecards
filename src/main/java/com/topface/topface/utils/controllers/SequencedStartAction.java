@@ -3,9 +3,9 @@ package com.topface.topface.utils.controllers;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
@@ -168,11 +168,11 @@ public class SequencedStartAction implements IStartAction {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         for (IStartAction startAction : mActions) {
-            stringBuilder.append(startAction.getActionName()).append(Static.SEMICOLON)
+            stringBuilder.append(startAction.getActionName()).append(Utils.SEMICOLON)
                     .append(startAction.getPriority())
-                    .append(Static.SEMICOLON)
+                    .append(Utils.SEMICOLON)
                     .append(startAction.isApplicable())
-                    .append(Static.SEMICOLON);
+                    .append(Utils.SEMICOLON);
         }
         return stringBuilder.toString();
     }

@@ -2,8 +2,8 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
-import com.topface.topface.Static;
 import com.topface.topface.data.DatingFilter;
+import com.topface.topface.data.Profile;
 import com.topface.topface.utils.EasyTracker;
 
 import org.json.JSONException;
@@ -39,7 +39,7 @@ public class FilterRequest extends ApiRequest {
             data.put("maxHeight", filter.maxHeight)
                     .put("minHeight", filter.minHeight);
         }
-        if (filter.sex == Static.GIRL) {
+        if (filter.sex == Profile.GIRL) {
             data.put("breast", filter.breast);
             data.put("finances", filter.finances);
         } else {

@@ -10,14 +10,20 @@ class VkSocialAppsIdsHolder {
     /**
      * {String} VK_ID - идентификатор приложения в vk
      */
-    static final String VK_ID = "2664589";
+    static final int VK_ID = 2257829;
     static final ArrayList<String> ALLOWED_VK_IDS = new ArrayList<>(1);
 
     static {
-        ALLOWED_VK_IDS.add("2664589");
+        ALLOWED_VK_IDS.add("2257829");
     }
 
-    public static String checkAllowedVkId(String serverId) {
-        return VkSocialAppsIdsHolder.ALLOWED_VK_IDS.contains(serverId) ? serverId : VK_ID;
+    public static int checkAllowedVkId(String serverId) {
+        int servIdValue = 0;
+        try {
+            servIdValue = Integer.parseInt(serverId);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return servIdValue != 0 && VkSocialAppsIdsHolder.ALLOWED_VK_IDS.contains(serverId) ? servIdValue : VK_ID;
     }
 }

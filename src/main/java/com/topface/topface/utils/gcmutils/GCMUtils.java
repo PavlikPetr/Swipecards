@@ -15,7 +15,6 @@ import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
-import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.SerializableToJson;
@@ -440,10 +439,10 @@ public class GCMUtils {
                 if (getUsersCountInMessageStack(user) > 1) {
                     // create intent to open Dialogs
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.TABBED_DIALOGS);
+                    i.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.TABBED_DIALOGS.getFragmentSettings());
                     i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, DialogsFragment.class.getName());
                     // add the same request code like Chat intent
-                    i.putExtra(Static.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
+                    i.putExtra(App.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
                 } else {
                     return ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city, null, null, true, GCMUtils.class.getSimpleName(), null);
                 }
@@ -464,7 +463,7 @@ public class GCMUtils {
                 if (showSympathy) {
                     lastNotificationType = GCM_TYPE_MUTUAL;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, TABBED_LIKES);
+                    i.putExtra(NEXT_INTENT, TABBED_LIKES.getFragmentSettings());
                     i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, MutualFragment.class.getName());
                 }
                 break;
@@ -473,7 +472,7 @@ public class GCMUtils {
                 if (showLikes) {
                     lastNotificationType = GCM_TYPE_LIKE;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, TABBED_LIKES);
+                    i.putExtra(NEXT_INTENT, TABBED_LIKES.getFragmentSettings());
                     i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, LikesFragment.class.getName());
                 }
                 break;
@@ -483,13 +482,13 @@ public class GCMUtils {
                     lastNotificationType = GCM_TYPE_GUESTS;
                     i = new Intent(context, NavigationActivity.class);
                     i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, VisitorsFragment.class.getName());
-                    i.putExtra(NEXT_INTENT, TABBED_VISITORS);
+                    i.putExtra(NEXT_INTENT, TABBED_VISITORS.getFragmentSettings());
                 }
                 break;
             case GCM_TYPE_PEOPLE_NEARBY:
                 lastNotificationType = GCM_TYPE_PEOPLE_NEARBY;
                 i = new Intent(context, NavigationActivity.class);
-                i.putExtra(NEXT_INTENT, GEO);
+                i.putExtra(NEXT_INTENT, GEO.getFragmentSettings());
                 break;
             case GCM_TYPE_UPDATE:
                 i = Utils.getMarketIntent();
@@ -572,7 +571,7 @@ public class GCMUtils {
                 JSONObject obj = new JSONObject(json);
                 id = obj.optInt("id");
                 name = obj.optString("name");
-                sex = obj.optInt("sex", Static.BOY);
+                sex = obj.optInt("sex", Profile.BOY);
                 JSONObject photo = obj.optJSONObject("photo");
                 if (photo != null && photo.has(Photo.SIZE_128)) {
                     photoUrl = obj.optJSONObject("photo").optString(Photo.SIZE_128);

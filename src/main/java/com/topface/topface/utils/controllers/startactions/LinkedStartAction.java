@@ -1,6 +1,6 @@
 package com.topface.topface.utils.controllers.startactions;
 
-import com.topface.topface.Static;
+import com.topface.topface.utils.Utils;
 
 /**
  * Класс для действий которые будут выполнятся в очереди. Если действие должно быть ежедневным и
@@ -14,8 +14,8 @@ public abstract class LinkedStartAction implements IStartAction {
 
     @Override
     public String toString() {
-        return getActionName() + Static.SEMICOLON +
-                getPriority() + Static.SEMICOLON +
+        return getActionName() + Utils.SEMICOLON +
+                getPriority() + Utils.SEMICOLON +
                 isApplicable();
     }
 

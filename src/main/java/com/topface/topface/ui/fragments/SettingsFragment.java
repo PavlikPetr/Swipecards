@@ -11,12 +11,17 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.SettingsRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.AboutAppDialog;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorDialog;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
@@ -37,6 +42,7 @@ public class SettingsFragment extends ProfileInnerFragment {
     private MarketApiManager mMarketApiManager;
 
     private TextView preloadPhotoName;
+    private CheckBox mAutoReplySettings;
 
     @Bind(R.id.loNotifications)
     View mLoNotifications;
@@ -101,6 +107,9 @@ public class SettingsFragment extends ProfileInnerFragment {
         // Account
         initAccountViews(view);
 
+        // Auto reply settings
+        initAutoReply(view);
+
         // Init settings views
         /*
          Hack for xiaomi. Maybe not only xiaomi. After finishing activity it keeps initializing it's fragments.
@@ -116,6 +125,55 @@ public class SettingsFragment extends ProfileInnerFragment {
     @Override
     protected String getTitle() {
         return getString(R.string.settings_header_title);
+    }
+
+    private void initAutoReply(View root) {
+        mAutoReplySettings = (CheckBox) root.findViewById(R.id.auto_reply_state);
+        mAutoReplySettings.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                switchAutoReplyButton(isChecked);
+            }
+        });
+        setAutoReplySettings(App.get().getOptions().isAutoreplyAllow);
+    }
+
+    private void setAutoReplySettings(boolean isChecked) {
+        if (mAutoReplySettings != null) {
+            mAutoReplySettings.setChecked(isChecked);
+        }
+    }
+
+    @OnClick(R.id.autoReplyItem)
+    public void setInversAutoReplySettings() {
+        if (mAutoReplySettings != null) {
+            setAutoReplySettings(!mAutoReplySettings.isChecked());
+        }
+    }
+
+    private void switchAutoReplyButton() {
+        if (mAutoReplySettings != null) {
+            switchAutoReplyButton(!mAutoReplySettings.isChecked());
+        }
+    }
+
+    private void switchAutoReplyButton(boolean isChecked) {
+        SettingsRequest settingsRequest = new SettingsRequest(getActivity());
+        final boolean newValue = isChecked;
+        settingsRequest.isAutoReplyAllowed = newValue;
+        setAutoReplySettings(newValue);
+        settingsRequest.callback(new ApiHandler() {
+            @Override
+            public void success(IApiResponse response) {
+                App.get().getOptions().isAutoreplyAllow = newValue;
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+                setAutoReplySettings(!newValue);
+            }
+        }).exec();
+
     }
 
     private void initViews(View root) {
@@ -262,4 +320,5 @@ public class SettingsFragment extends ProfileInnerFragment {
             mSocialNameText.setText(authToken.getLogin());
         }
     }
+
 }

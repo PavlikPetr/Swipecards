@@ -22,6 +22,10 @@
             style="@style/WhiteListItem.Underline"
             android:text="@string/notifications" />
 
+        <include
+            android:id="@+id/autoReplyItem"
+            layout="@layout/item_auto_reply" />
+
         <TextView
             android:id="@+id/loHelp"
             style="@style/WhiteListItem.Underline"
