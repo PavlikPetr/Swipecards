@@ -10,9 +10,9 @@ public class AdStatistics {
     private static final String FULLSCREEN_CLICK = "mobile_%s_fullscreen_click";
     private static final String FULLSCREEN_CLOSED = "mobile_%s_fullscreen_close";
 
-    private static void send(String bannerName, String label) {
+    private static void send(String command, String bannerName) {
         StatisticsTracker.getInstance()
-                .sendEvent(String.format(bannerName, label), 1);
+                .sendEvent(String.format(command, bannerName.toLowerCase()), 1);
     }
 
     public static void sendBannerShown(String bannerName) {
