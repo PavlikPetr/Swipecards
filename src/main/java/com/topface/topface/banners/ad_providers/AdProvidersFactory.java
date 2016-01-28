@@ -16,6 +16,7 @@ public class AdProvidersFactory {
     public static final String BANNER_GAG = "GAG";
     public static final String BANNER_NONE = "NONE";
     public static final String BANNER_APPODEAL = "APPODEAL";
+    public static final String BANNER_APPODEAL_FULLSCREEN = "APPODEAL_FULLSCREEN";
     public static final String[] BANNERS = new String[]{
             BANNER_TOPFACE,
             BANNER_ADMOB,

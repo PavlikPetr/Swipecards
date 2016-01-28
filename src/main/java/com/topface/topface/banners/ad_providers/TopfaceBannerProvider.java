@@ -76,6 +76,7 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
                         displayBanner(adView, page, topfaceBanner);
                         adView.setOnClickListener(new ActionsOnClickListener(topfaceBanner, page, callbacks));
                         sendStat(topfaceBanner, VIEW);
+                        callbacks.onAdShow();
                     } catch (Exception e) {
                         Debug.error(e);
                     }

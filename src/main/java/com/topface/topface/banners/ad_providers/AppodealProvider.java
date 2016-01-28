@@ -55,6 +55,7 @@ public class AppodealProvider extends AbstractAdsProvider {
 
             @Override
             public void onBannerShown() {
+                callbacks.onAdShow();
             }
 
             @Override

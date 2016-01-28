@@ -80,6 +80,12 @@ class AdMobProvider extends AbstractAdsProvider {
             @Override
             public void onAdOpened() {
                 super.onAdOpened();
+                callbacks.onAdShow();
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                super.onAdLeftApplication();
                 callbacks.onAdClick();
             }
 

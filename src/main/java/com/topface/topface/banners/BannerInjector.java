@@ -69,7 +69,6 @@ class BannerInjector implements IBannerInjector {
                     new IAdsProvider.IAdProviderCallbacks() {
                         @Override
                         public void onAdLoadSuccess(View adView) {
-                            AdStatistics.sendBannerShown(bannerName);
                             mUsedPages.add(new WeakReference<>(page));
                         }
 
@@ -84,6 +83,11 @@ class BannerInjector implements IBannerInjector {
                         @Override
                         public void onAdClick() {
                             AdStatistics.sendBannerClicked(bannerName);
+                        }
+
+                        @Override
+                        public void onAdShow() {
+                            AdStatistics.sendBannerShown(bannerName);
                         }
                     });
             if (!injectInitiated && !isFallbackAd) {

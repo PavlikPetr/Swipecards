@@ -28,5 +28,7 @@ public interface IAdsProvider {
         void onFailedToLoadAd();
 
         void onAdClick();
+
+        void onAdShow();
     }
 }

@@ -12,7 +12,7 @@ public class AdStatistics {
 
     private static void send(String bannerName, String label) {
         StatisticsTracker.getInstance()
-                .sendEvent(String.format(label, bannerName), 1);
+                .sendEvent(String.format(bannerName, label), 1);
     }
 
     public static void sendBannerShown(String bannerName) {
