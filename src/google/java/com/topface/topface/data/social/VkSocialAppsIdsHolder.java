@@ -8,7 +8,7 @@ import java.util.ArrayList;
 class VkSocialAppsIdsHolder {
 
     /**
-     * {String} VK_ID - идентификатор приложения в vk
+     * {int} VK_ID - идентификатор приложения в vk
      */
     static final int VK_ID = 2257829;
     static final ArrayList<String> ALLOWED_VK_IDS = new ArrayList<>(1);
