@@ -323,13 +323,17 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mRefreshReceiver, new IntentFilter(REFRESH_DIALOGS));
         View root = inflater.inflate(getLayout(), null);
         ButterKnife.bind(this, root);
+        mCountersDataProvider = new CountersDataProvider(new CountersDataProvider.ICountersUpdater() {
+            @Override
+            public void onUpdateCounters(CountersData countersData) {
+                updateCounters(countersData);
+            }
+        });
         initNavigationBar();
         mLockView.setVisibility(View.GONE);
         init();
-
         initViews(root);
         createObservables();
-        mCountersDataProvider = new CountersDataProvider(this);
         restoreInstanceState(saved);
         mReadItemReceiver = new BroadcastReceiver() {
             @Override
@@ -516,7 +520,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
 
-    protected void onCountersUpdated(CountersData countersData) {
+    protected void updateCounters(CountersData countersData) {
         mCountersData = countersData;
         updateDataAfterReceivingCounters();
     }
@@ -1219,17 +1223,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK
-                && requestCode == CountersDataProvider.COUNTERS_DATA_UPDATED) {
-            if (data.hasExtra(CountersDataProvider.COUNTERS_DATA)) {
-                onCountersUpdated((CountersData) data.getParcelableExtra(CountersDataProvider.COUNTERS_DATA));
-            }
-        }
         if (requestCode == ChatActivity.REQUEST_CHAT) {
             onChatActivityResult(resultCode, data);
-        }
-        if (requestCode == CountersDataProvider.COUNTERS_DATA_UPDATED && data.hasExtra(CountersDataProvider.COUNTERS_DATA)) {
-                mCountersData = data.getParcelableExtra(CountersDataProvider.COUNTERS_DATA);
         }
     }
 

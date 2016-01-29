@@ -70,6 +70,7 @@ public class Utils {
     public static final String SEMICOLON = ":";
     private static final String DASH_SYMBOL = "-";
     private static final String HYPHEN_SYMBOL = "&#8209;";
+    private static final String EMPTY_JSON = "{}";
     public static String RU_LOCALE = "ru";
     private final static Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
             "[a-zA-Z0-9\\+\\._%\\-\\+]{1,256}@" +
@@ -136,6 +137,10 @@ public class Utils {
                     duration
             ).show();
         }
+    }
+
+    public static boolean isEmptyJson(JSONObject object){
+        return object.toString().equals(EMPTY_JSON);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)

@@ -88,7 +88,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected void onCountersUpdated(CountersData countersData) {
+    protected void updateCounters(CountersData countersData) {
+        super.updateCounters(countersData);
         updateTitleWithCounter(countersData);
     }
 
