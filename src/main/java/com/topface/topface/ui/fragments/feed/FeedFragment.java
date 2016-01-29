@@ -1228,6 +1228,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (requestCode == ChatActivity.REQUEST_CHAT) {
             onChatActivityResult(resultCode, data);
         }
+        if (requestCode == CountersDataProvider.COUNTERS_DATA_UPDATED && data.hasExtra(CountersDataProvider.COUNTERS_DATA)) {
+                mCountersData = data.getParcelableExtra(CountersDataProvider.COUNTERS_DATA);
+        }
     }
 
     protected void onChatActivityResult(int resultCode, Intent data) {

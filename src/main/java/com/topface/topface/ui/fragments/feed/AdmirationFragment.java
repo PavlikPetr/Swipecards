@@ -27,11 +27,6 @@ import java.util.List;
 public class AdmirationFragment extends LikesFragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        return super.onCreateView(inflater, container, saved);
-    }
-
-    @Override
     protected String getTitle() {
         return getString(R.string.general_sympathies);
     }
