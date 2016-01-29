@@ -2,7 +2,6 @@ package com.topface.topface.utils.notifications;
 
 import com.topface.framework.JsonUtils;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.utils.SerializableList;
 import com.topface.topface.utils.Utils;
@@ -33,7 +32,7 @@ public class MessageStack extends SerializableList {
             mRestMessages++;
 
             //Добавляем строчку "и еще %d"
-            add(new Message(Utils.getQuantityString(R.plurals.general_some_more, mRestMessages, mRestMessages), Static.EMPTY, EMPTY_USER_ID));
+            add(new Message(Utils.getQuantityString(R.plurals.general_some_more, mRestMessages, mRestMessages), Utils.EMPTY, EMPTY_USER_ID));
         }
     }
 

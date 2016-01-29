@@ -92,6 +92,9 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
                             getContext().getString(R.string.chat_gift_in) :
                             getContext().getString(R.string.chat_gift_out);
                     break;
+                case FeedDialog.MESSAGE_AUTO_REPLY:
+                    text = "";
+                    break;
             }
         }
         if (dialog.unread && App.from(getContext()).getOptions().hidePreviewDialog) {

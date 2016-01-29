@@ -50,7 +50,7 @@ public class RestoreAccountActivity extends TrackedFragmentActivity implements V
                         }).exec();
                 break;
             case R.id.cancel_restore:
-                new AuthorizationManager(this).logout(this);
+                new AuthorizationManager().logout(this);
                 break;
         }
     }

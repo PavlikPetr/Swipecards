@@ -27,14 +27,11 @@
     <string name="profile_form_communication_male_0">Веома друштвен</string>
     <string name="profile_form_communication_male_1">Отворен за занимљиве људе</string>
     <string name="profile_form_communication_male_2">Хајде да ћаскамо и видећемо</string>
-    <string name="profile_form_communication_male_3">Комуницирам само са онима који ми се свиђају
-    </string>
+    <string name="profile_form_communication_male_3">Комуницирам само са онима који ми се свиђају</string>
     <string name="profile_form_communication_female_0">Веома друштвена</string>
     <string name="profile_form_communication_female_1">Отворена за занимљиве људе</string>
     <string name="profile_form_communication_female_2">Хајде да ћаскамо и видећемо</string>
-    <string name="profile_form_communication_female_3">Комуницирам само са онима који ми се
-        свиђају
-    </string>
+    <string name="profile_form_communication_female_3">Комуницирам само са онима који ми се свиђају</string>
     <string name="profile_form_character_male_0">Лак</string>
     <string name="profile_form_character_male_1">Тежак</string>
     <string name="profile_form_character_male_2">Чврст</string>

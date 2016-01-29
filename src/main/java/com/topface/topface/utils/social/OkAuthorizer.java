@@ -8,12 +8,14 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.data.social.AppSocialAppsIds;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.SessionConfig;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Locale;
 
 import ru.ok.android.sdk.Odnoklassniki;
 import ru.ok.android.sdk.OkTokenRequestListener;
@@ -84,7 +86,7 @@ public class OkAuthorizer extends Authorizer {
                 intent.putExtra(TOKEN_STATUS, TOKEN_NOT_READY);
             }
 
-            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+            LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
         }
 
         @Override
@@ -94,20 +96,20 @@ public class OkAuthorizer extends Authorizer {
         }
     }
 
-    public OkAuthorizer(Activity activity) {
-        super(activity);
+    public OkAuthorizer() {
+        super();
         AppSocialAppsIds ids = App.getAppSocialAppsIds();
     }
 
     private Odnoklassniki getOkAuthObj(AppSocialAppsIds ids) {
         if (!Odnoklassniki.hasInstance()) {
-            Odnoklassniki.createInstance(getActivity(), ids.okId, ids.getOkSecretKey(), ids.getOkPublicKey());
+            Odnoklassniki.createInstance(App.getContext(), ids.okId, ids.getOkSecretKey(), ids.getOkPublicKey());
         }
-        return Odnoklassniki.createInstance(getActivity(), ids.okId, ids.getOkSecretKey(), ids.getOkPublicKey());
+        return Odnoklassniki.createInstance(App.getContext(), ids.okId, ids.getOkSecretKey(), ids.getOkPublicKey());
     }
 
     @Override
-    public void authorize() {
+    public void authorize(Activity activity) {
         final AppSocialAppsIds ids = App.getAppSocialAppsIds();
         getOkAuthObj(ids).setTokenRequestListener(new OkTokenRequestListener() {
             @Override
@@ -116,7 +118,7 @@ public class OkAuthorizer extends Authorizer {
                 new GetCurrentUserTask(getOkAuthObj(ids), token).execute();
                 Intent intent = new Intent(AUTH_TOKEN_READY_ACTION);
                 intent.putExtra(TOKEN_STATUS, TOKEN_PREPARING);
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+                LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
             }
 
             @Override
@@ -129,11 +131,15 @@ public class OkAuthorizer extends Authorizer {
                 Debug.error("Odnoklassniki auth cancel");
             }
         });
-        getOkAuthObj(ids).requestAuthorization(getActivity(), false, OkScope.SET_STATUS, OkScope.PHOTO_CONTENT, OkScope.VALUABLE_ACCESS);
+        getOkAuthObj(ids).requestAuthorization(activity, false, OkScope.SET_STATUS, OkScope.PHOTO_CONTENT, OkScope.VALUABLE_ACCESS);
     }
 
     @Override
     public void logout() {
-        getOkAuthObj(App.getAppSocialAppsIds()).clearTokens(getActivity());
+        getOkAuthObj(App.getAppSocialAppsIds()).clearTokens(App.getContext());
+    }
+
+    public static boolean isMainScreenLoginEnable() {
+        return new Locale(App.getLocaleConfig().getApplicationLocale()).getLanguage().equals(Utils.getRussianLocale().getLanguage());
     }
 }

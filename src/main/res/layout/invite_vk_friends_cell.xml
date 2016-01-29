@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp">
+
+    <com.topface.topface.ui.views.ImageViewRemote
+        android:id="@+id/vkFriendAvatar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_vertical"
+        app:postProcessor="inscribedAvatar" />
+
+    <TextView
+        android:id="@+id/vkFriendName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:paddingLeft="16dp"
+        android:textColor="#404040"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/vkFrienInviteButton"
+        style="@style/Widget.Topface.Button.Big.InviteVkFriends"
+        android:layout_width="114dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textSize="14sp" />
+
+</LinearLayout>

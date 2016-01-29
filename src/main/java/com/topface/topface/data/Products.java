@@ -40,6 +40,9 @@ import java.util.Locale;
 public class Products extends AbstractData {
     public static final String PRICE = "{{price}}";
     public static final String PRICE_PER_ITEM = "{{price_per_item}}";
+    public static String[] PRICE_TEMPLATES = {PRICE, PRICE_PER_ITEM};
+    private static final String EUR = "EUR";
+    private static final String RUB = "RUB";
     public static final String USD = "USD";
 
     public enum ProductType {
@@ -212,7 +215,7 @@ public class Products extends AbstractData {
             currency = Currency.getInstance(USD);
             currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
             currencyFormatter.setCurrency(currency);
-            value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn.titleTemplate, PRICE, PRICE_PER_ITEM);
+            value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn.totalTemplate, PRICE, PRICE_PER_ITEM);
             if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
 
@@ -242,6 +245,14 @@ public class Products extends AbstractData {
             }
         }
         return template.replace(replaceTemplateArray[0], currencyFormatter.format(price));
+    }
+
+    private static double getPriceByTemplate(double price, BuyButtonData buyBtn) {
+        if (buyBtn.titleTemplate.contains((PRICE_PER_ITEM))) {
+            return price / buyBtn.amount;
+        } else {
+            return price;
+        }
     }
 
     /**

@@ -15,7 +15,6 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.receivers.NotificationClosedReceiver;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.utils.config.UserConfig;
@@ -243,7 +242,7 @@ public class UserNotificationManager {
                                               User user) {
         UserNotification notification = new UserNotification(mContext);
         MessageStack messagesStack = new MessageStack();
-        if (intent != null && intent.getIntExtra(Static.INTENT_REQUEST_KEY, -1) == ChatActivity.REQUEST_CHAT) {
+        if (intent != null && intent.getIntExtra(App.INTENT_REQUEST_KEY, -1) == ChatActivity.REQUEST_CHAT) {
             id = MESSAGES_ID;
             messagesStack = saveMessageStack(message, user);
             notification.setWearReply(mContext, intent);

@@ -32,7 +32,7 @@ public class TrialVipPopupAction implements IStartAction {
 
     @Override
     public void callOnUi() {
-        mTrialVipPopup = new TrialVipPopup();
+        mTrialVipPopup = TrialVipPopup.newInstance(false);
         mTrialVipPopup.setOnSubscribe(new TrialVipPopup.OnFragmentActionsListener() {
             @Override
             public void onSubscribeClick() {

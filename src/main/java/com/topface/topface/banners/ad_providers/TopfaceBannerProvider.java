@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.data.Banner;
 import com.topface.topface.data.Options;
@@ -169,9 +168,9 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
                     EasyTracker.sendEvent("Purchase", "Banner", "", 0L);
                     intent = new Intent(mPage.getActivity(), PurchasesActivity.class);
                     if (mBanner.parameter.equals("VIP")) {
-                        intent.putExtra(Static.INTENT_REQUEST_KEY, PurchasesActivity.INTENT_BUY_VIP);
+                        intent.putExtra(App.INTENT_REQUEST_KEY, PurchasesActivity.INTENT_BUY_VIP);
                     } else {
-                        intent.putExtra(Static.INTENT_REQUEST_KEY, PurchasesActivity.INTENT_BUY);
+                        intent.putExtra(App.INTENT_REQUEST_KEY, PurchasesActivity.INTENT_BUY);
                     }
                     intent.putExtra(PurchasesConstants.ARG_TAG_SOURCE, "Banner_" + mBanner.name);
                     break;

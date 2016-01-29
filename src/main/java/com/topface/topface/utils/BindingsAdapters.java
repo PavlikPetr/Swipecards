@@ -3,6 +3,7 @@ package com.topface.topface.utils;
 import android.databinding.BindingAdapter;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+import android.widget.LinearLayout;
 
 import com.topface.topface.ui.views.ImageViewRemote;
 
@@ -22,6 +23,12 @@ public class BindingsAdapters {
     @BindingAdapter("bind:onLongItemClick")
     public static void onLongItemClick(View view, View.OnLongClickListener longClickListener) {
         view.setOnLongClickListener(longClickListener);
+    }
+
+    @BindingAdapter("android:layout_marginTop")
+    public static void setMarginTop(View view, float padding) {
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
+        lp.setMargins(lp.leftMargin, (int) padding, lp.rightMargin, lp.bottomMargin);
     }
 
 }

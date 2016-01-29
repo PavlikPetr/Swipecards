@@ -3,14 +3,13 @@ package com.topface.topface.ui.edit;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.topface.topface.ui.views.Switcher;
-
 public class EditSwitcher {
     private TextView mTitle;
-    private Switcher mSwitcher;
+    private CheckBox mSwitcher;
     private ViewGroup mRoot;
     private ProgressBar mPrgrsBar;
 
@@ -20,7 +19,7 @@ public class EditSwitcher {
         if (!TextUtils.isEmpty(title)) {
             setTitle(title);
         }
-        mSwitcher = (Switcher) root.findViewWithTag("cbSwitch");
+        mSwitcher = (CheckBox) root.findViewWithTag("cbSwitch");
         mPrgrsBar = (ProgressBar) root.findViewWithTag("vsiLoadBar");
     }
 

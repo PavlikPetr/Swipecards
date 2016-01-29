@@ -24,6 +24,7 @@
     </string>
     <string name="likes_background_text">Aucun J\'aime</string>
     <string name="visitors_background_text">Aucun visiteurs</string>
+    <string name="need_set_avatar">Personne ne peut apprendre à vous connaître ! Ajoutez une photo de profil.</string>
     <string name="chat_background_text">Aucun message reçu</string>
     <string name="entrance">Entrer</string>
     <string name="filter_only_online">Seulement en ligne</string>
@@ -179,6 +180,7 @@
     <string name="general_visitors_tab_views">Visites</string>
     <string name="general_profile">Profil</string>
     <string name="general_settings">Paramètres</string>
+    <string name="general_vk_profile">VK</string>
     <string name="auth_btn_vk">Vkontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Réessayer</string>
@@ -846,4 +848,22 @@
     <string name="novice_sympathies_bonus">Vous recevez %1$d J\'aime\nen cadeau ! Cela signifie
         que\n%2$d personne va vous donner un J\'aime,\nà qui vous plaisez réellement.
     </string>
+    <string name="go_dating_message">Commencez à faire connaissance et découvrez ici qui regarde votre profil</string>
+    <string name="vk_profile_button_tf_group">Groupe Topface</string>
+    <string name="vk_profile_button_join_tf_group">Rejoindre le groupe Topface</string>
+    <string name="vk_profile_button_join_vkgames_group">Rejoindre le groupe \"jeux VK\"</string>
+    <string name="vk_profile_button_invite_friends">Inviter des amis</string>
+    <string name="vk_profile_invite_friends_title">Inviter des amis</string>
+    <string name="invite_friend_button">Inviter</string>
+    <string name="invitation_sended_button">Envoyé</string>
+    <string name="friends_empty_list_error">Votre liste d\'amis est vide</string>
+    <string name="vk_friends_success_invite">L\'invitation a été envoyée</string>
+    <string name="join_group_success">Vous avez rejoint le groupe</string>
+    <string name="settings_auto_greeting_title">Auto-salutations</string>
+    <string name="settings_auto_greeting_subtitle">Autoriser Topface à lancer automatiquement une conversation avec un message de salutation à chaque fois que quelqu\'un vous envoie un J\'aime</string>
+    <string name="chat_auto_reply_title">Le texte du message est caché</string>
+    <string name="chat_auto_reply_message">Pour ouvrir / répondre à ce message, devenez un VIP</string>
+    <string name="chat_auto_reply_button">Devenir VIP</string>
+    <string name="take_photo_text_1">Veuillez télécharger votre photo pour faire connaissance.</string>
+    <string name="take_photo_text_2">Seul vous êtes autorisé à apparaître sur la photo. Toutes les photos sont modérées.</string>
 </resources>

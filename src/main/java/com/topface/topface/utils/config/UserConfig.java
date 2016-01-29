@@ -8,9 +8,10 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import com.topface.framework.utils.config.AbstractConfig;
-import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -111,7 +112,7 @@ public class UserConfig extends AbstractConfig {
     @Override
     protected void fillSettingsMap(SettingsMap settingsMap) {
         // pincode value
-        addField(settingsMap, DATA_PIN_CODE, Static.EMPTY);
+        addField(settingsMap, DATA_PIN_CODE, Utils.EMPTY);
         // admirations promo popup last date of show
         addField(settingsMap, getPromoPopupKey(Options.PromoPopupEntity.AIR_ADMIRATIONS), 0L);
         // messages promo popup last date of show
@@ -125,13 +126,13 @@ public class UserConfig extends AbstractConfig {
         // flag show if "send sympathy hint" is passed
         addField(settingsMap, DATA_NOVICE_SYMPATHY, true);
         // список сообщений для сгруппированных нотификаций (сейчас группируются только сообщения)
-        addField(settingsMap, NOTIFICATIONS_MESSAGES_STACK, Static.EMPTY);
+        addField(settingsMap, NOTIFICATIONS_MESSAGES_STACK, Utils.EMPTY);
         // количество нотификаций, которые пишем в поле "еще %d сообщений"
         addField(settingsMap, NOTIFICATION_REST_MESSAGES, 0);
         // время последнего сброса счетчика вкладки бонусов
         addField(settingsMap, DATA_BONUS_LAST_SHOW_TIME, 0L);
         // default text for instant message on dating screen
-        addField(settingsMap, DEFAULT_DATING_MESSAGE, Static.EMPTY);
+        addField(settingsMap, DEFAULT_DATING_MESSAGE, Utils.EMPTY);
         // push notification melody
         addField(settingsMap, SETTINGS_GCM_RINGTONE, DEFAULT_SOUND);
         // preload photo default type WiFi and 3G
@@ -189,7 +190,7 @@ public class UserConfig extends AbstractConfig {
             mUnique = AuthToken.getInstance().getUserTokenUniqueId();
         }
         return getContext().getSharedPreferences(
-                PROFILE_CONFIG_SETTINGS + Static.AMPERSAND + mUnique,
+                PROFILE_CONFIG_SETTINGS + Utils.AMPERSAND + mUnique,
                 Context.MODE_PRIVATE
         );
     }
