@@ -194,8 +194,8 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
                 mGiftsHeader.setVisibility(View.GONE);
                 return;
             }
-
-            int giftsCount = mGiftsCount <= 0 ? mGiftAdapter.getCount() : mGiftsCount;
+            int adapterGiftCount = mGiftAdapter.getCount();
+            int giftsCount = mGiftsCount <= adapterGiftCount ? adapterGiftCount : mGiftsCount;
             int viewsNumber = mGiftsHeader.getChildCount();
             for (int i = (giftsCount < mVisibleGiftsNumber ? giftsCount : mVisibleGiftsNumber) - 1; i >= 0; i--) {
                 if (i < mGiftAdapter.getCount()) {
