@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.banners.ad_providers.IAdsProvider;
 import com.topface.topface.data.Options;
+import com.topface.topface.statistics.AdStatistics;
 import com.topface.topface.utils.CacheProfile;
 
 import java.lang.ref.WeakReference;
@@ -63,6 +64,7 @@ class BannerInjector implements IBannerInjector {
 
     private void showAd(final IPageWithAds page, IAdsProvider provider, final boolean isFallbackAd) {
         if (provider != null) {
+            final String bannerName = provider.getBannerName();
             final boolean injectInitiated = provider.injectBanner(page,
                     new IAdsProvider.IAdProviderCallbacks() {
                         @Override
@@ -76,6 +78,16 @@ class BannerInjector implements IBannerInjector {
                             if (!isFallbackAd) {
                                 injectGag(page);
                             }
+                        }
+
+                        @Override
+                        public void onAdClick() {
+                            AdStatistics.sendBannerClicked(bannerName);
+                        }
+
+                        @Override
+                        public void onAdShow() {
+                            AdStatistics.sendBannerShown(bannerName);
                         }
                     });
             if (!injectInitiated && !isFallbackAd) {
