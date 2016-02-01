@@ -18,8 +18,8 @@
             android:id="@+id/ifp_name_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <!--
             если Лена скажет, что имена о5 обрезаются нужно ей сказать, что в диалогах останется все как есть
@@ -30,9 +30,9 @@
             <TextView
                 android:id="@+id/ifp_name"
                 style="@style/ListName"
-                android:maxWidth="154dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:maxWidth="154dp" />
 
             <TextView
                 android:id="@+id/ifp_age"
@@ -44,29 +44,34 @@
             <TextView
                 android:id="@+id/ifp_time"
                 style="@style/ListTime"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ifp_name_container"
+            android:orientation="horizontal"
+            android:baselineAligned="false">
+
+            <include
+                android:id="@+id/ifp_text"
+                layout="@layout/item_feed_part_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <include
+                android:id="@+id/ifp_counter"
+                layout="@layout/item_feed_part_counter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
 
         </LinearLayout>
-
-        <include
-            android:id="@+id/ifp_counter"
-            layout="@layout/item_feed_part_counter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/ifp_text"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/ifp_name_container" />
-
-        <include
-            android:id="@+id/ifp_text"
-            layout="@layout/item_feed_part_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/ifp_name_container"
-            android:layout_toLeftOf="@id/ifp_counter" />
     </RelativeLayout>
 </RelativeLayout>
