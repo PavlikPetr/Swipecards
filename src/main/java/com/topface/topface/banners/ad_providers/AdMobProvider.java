@@ -40,6 +40,11 @@ class AdMobProvider extends AbstractAdsProvider {
         return true;
     }
 
+    @Override
+    public String getBannerName() {
+        return AdProvidersFactory.BANNER_ADMOB;
+    }
+
     public Context getContext() {
         return mContext;
     }
@@ -70,6 +75,18 @@ class AdMobProvider extends AbstractAdsProvider {
                 super.onAdLoaded();
                 adView.setVisibility(View.VISIBLE);
                 callbacks.onAdLoadSuccess(adView);
+            }
+
+            @Override
+            public void onAdOpened() {
+                super.onAdOpened();
+                callbacks.onAdShow();
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                super.onAdLeftApplication();
+                callbacks.onAdClick();
             }
 
             @Override

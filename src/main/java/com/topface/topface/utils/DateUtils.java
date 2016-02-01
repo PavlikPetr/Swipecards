@@ -97,4 +97,11 @@ public class DateUtils {
         return date.getTime() / 1000;
     }
 
+    public static boolean isDayBeforeToday(long lastTime) {
+        Calendar lastTimeCalendar = Calendar.getInstance();
+        lastTimeCalendar.setTimeInMillis(lastTime);
+        Calendar currentTimeCalendar = Calendar.getInstance();
+        return lastTimeCalendar.get(Calendar.YEAR) != currentTimeCalendar.get(Calendar.YEAR)
+                || lastTimeCalendar.get(Calendar.DAY_OF_YEAR) < currentTimeCalendar.get(Calendar.DAY_OF_YEAR);
+    }
 }
