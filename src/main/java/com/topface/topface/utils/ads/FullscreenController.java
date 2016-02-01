@@ -36,7 +36,6 @@ import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
-import static com.topface.topface.banners.ad_providers.AdProvidersFactory.*;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_FULLSCREEN_START_APP;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_MEDIATION;
@@ -244,7 +243,10 @@ public class FullscreenController {
     }
 
     private void requestAdToAppFullscreen(int mask, DefaultInterstitialListener listener) {
+        AdToApp.setLogging(true);
         AdToApp.initializeSDK(mActivity, AdToAppProvider.ADTOAPP_APP_KEY, mask);
+        Debug.error("AdToApp isSDKInitialized " + AdToApp.isSDKInitialized());
+        Debug.error("AdToApp isAvailableAd " + AdToApp.isAvailableAd(AdToApp.VIDEO));
         AdToApp.showInterstitialAd();
         AdToApp.setInterstitialListener(listener);
     }

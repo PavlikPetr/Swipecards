@@ -245,6 +245,12 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         public void onInterstitialClosed(String s, String s1) {
             Debug.error("AdToApp onInterstitialClosed " + s + " " + s1);
         }
+
+        @Override
+        public void onRewardedCompleted(String adProvider, String currencyName, String currencyValue) {
+            super.onRewardedCompleted(adProvider, currencyName, currencyValue);
+            Debug.error("AdToApp onRewardedCompleted " + adProvider + " " + currencyName + " " + currencyValue);
+        }
     };
 
     private BroadcastReceiver mOptionsReceiver = new BroadcastReceiver() {
@@ -820,6 +826,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 //                skipUser(mCurrentUser);
 //                showNextUser();
                 //TODO только для тестирования
+                Debug.error("AdToApp btnClick");
                 new FullscreenController(getActivity(), CacheProfile.getOptions()).showVideoAdToApp(mFullScreenVideoListener);
             }
             break;
