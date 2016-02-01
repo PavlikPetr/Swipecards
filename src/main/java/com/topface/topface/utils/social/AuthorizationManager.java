@@ -82,6 +82,7 @@ public class AuthorizationManager {
         mAuthorizers.put(Platform.FACEBOOK, new FbAuthorizer());
         mAuthorizers.put(Platform.ODNOKLASSNIKI, new OkAuthorizer());
         mAuthorizers.put(Platform.TOPFACE, new TfAuthorizer());
+        App.get().inject(this);
     }
 
     public static void saveAuthInfo(IApiResponse response) {
