@@ -220,7 +220,7 @@ public class FullscreenController {
         requestAdToAppFullscreen(AdToApp.MASK_INTERSTITIAL, new DefaultInterstitialListener() {
             @Override
             public void onFirstInterstitialLoad(String s, String s1) {
-                addLastFullscreenShowedTime();
+                mFullScreenBannerListener.onLoaded();
             }
 
             @Override
@@ -229,11 +229,12 @@ public class FullscreenController {
 
             @Override
             public void onInterstitialClicked(String s, String s1) {
+                mFullScreenBannerListener.onClick();
             }
 
             @Override
             public void onInterstitialClosed(String s, String s1) {
-                isFullScreenBannerVisible = false;
+                mFullScreenBannerListener.onClose();
             }
         });
     }

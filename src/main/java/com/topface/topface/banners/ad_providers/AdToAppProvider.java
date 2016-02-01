@@ -30,6 +30,7 @@ public class AdToAppProvider extends AbstractAdsProvider {
             @Override
             public void onBannerLoad() {
                 callbacks.onAdLoadSuccess(adView);
+                callbacks.onAdShow();
             }
 
             @Override
@@ -39,9 +40,14 @@ public class AdToAppProvider extends AbstractAdsProvider {
 
             @Override
             public void onBannerClicked() {
-
+                callbacks.onAdClick();
             }
         });
         return true;
+    }
+
+    @Override
+    public String getBannerName() {
+        return AdProvidersFactory.BANNER_ADTOAPP;
     }
 }

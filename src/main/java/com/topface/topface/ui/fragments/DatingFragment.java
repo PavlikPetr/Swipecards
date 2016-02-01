@@ -819,6 +819,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             case R.id.btnDatingSkip: {
 //                skipUser(mCurrentUser);
 //                showNextUser();
+                //TODO только для тестирования
                 new FullscreenController(getActivity(), CacheProfile.getOptions()).showVideoAdToApp(mFullScreenVideoListener);
             }
             break;
