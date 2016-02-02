@@ -816,4 +816,40 @@ public class Options extends AbstractData {
             this.url = url;
         }
     }
+
+    public static class UnlockByVideo {
+        private UnlockScreenCondition likes;
+        private UnlockScreenCondition admirations;
+        private UnlockScreenCondition visitors;
+        private UnlockScreenCondition fans;
+
+        public static class UnlockScreenCondition {
+            private boolean enabled;
+            private int seconds;
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public int getUnlockDuration() {
+                return seconds;
+            }
+        }
+
+        public UnlockScreenCondition getUnlockLikesCondition() {
+            return likes;
+        }
+
+        public UnlockScreenCondition getUnlockAdmirationCondition() {
+            return admirations;
+        }
+
+        public UnlockScreenCondition getUnlockVisitorsCondition() {
+            return visitors;
+        }
+
+        public UnlockScreenCondition getUnlockFansCondition() {
+            return fans;
+        }
+    }
 }

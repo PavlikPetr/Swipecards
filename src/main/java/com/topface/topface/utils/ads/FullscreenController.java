@@ -216,14 +216,20 @@ public class FullscreenController {
     }
 
     private void requestAdToAppFullscreen() {
-        requestAdToAppFullscreen(AdToApp.MASK_INTERSTITIAL, new DefaultInterstitialListener() {
+        AdToApp.setLogging(true);
+        AdToApp.initializeSDK(mActivity, AdToAppProvider.ADTOAPP_APP_KEY, AdToApp.MASK_INTERSTITIAL);
+        if (AdToApp.isAvailableAd(AdToApp.INTERSTITIAL)) {
+            AdToApp.showInterstitialAd();
+        }
+        AdToApp.setInterstitialListener(new DefaultInterstitialListener() {
             @Override
             public void onFirstInterstitialLoad(String s, String s1) {
-                mFullScreenBannerListener.onLoaded();
+                AdToApp.showInterstitialAd();
             }
 
             @Override
             public void onInterstitialStarted(String s, String s1) {
+                mFullScreenBannerListener.onLoaded();
             }
 
             @Override
@@ -236,19 +242,6 @@ public class FullscreenController {
                 mFullScreenBannerListener.onClose();
             }
         });
-    }
-
-    public void showVideoAdToApp(DefaultInterstitialListener listener) {
-        requestAdToAppFullscreen(AdToApp.MASK_VIDEO, listener);
-    }
-
-    private void requestAdToAppFullscreen(int mask, DefaultInterstitialListener listener) {
-        AdToApp.setLogging(true);
-        AdToApp.initializeSDK(mActivity, AdToAppProvider.ADTOAPP_APP_KEY, mask);
-        Debug.error("AdToApp isSDKInitialized " + AdToApp.isSDKInitialized());
-        Debug.error("AdToApp isAvailableAd " + AdToApp.isAvailableAd(AdToApp.VIDEO));
-        AdToApp.showInterstitialAd();
-        AdToApp.setInterstitialListener(listener);
     }
 
     private void requestAppodealFullscreen() {

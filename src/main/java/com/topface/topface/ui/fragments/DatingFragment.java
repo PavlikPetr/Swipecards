@@ -86,6 +86,7 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.ads.AdToAppVideoAdsController;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
@@ -225,31 +226,27 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         return mCurrentStatusBarColor;
     }
 
-    private DefaultInterstitialListener mFullScreenVideoListener = new DefaultInterstitialListener() {
+    private AdToAppVideoAdsController mAdToAppVideoAdsController;
+
+    private AdToAppVideoAdsController.OnVideoAdsListener mOnVideoAdsListener = new AdToAppVideoAdsController.OnVideoAdsListener() {
         @Override
-        public void onFirstInterstitialLoad(String s, String s1) {
-            Debug.error("AdToApp onFirstInterstitialLoad " + s + " " + s1);
+        public void onVideoWatched() {
+
         }
 
         @Override
-        public void onInterstitialStarted(String s, String s1) {
-            Debug.error("AdToApp onInterstitialStarted " + s + " " + s1);
+        public void onVideoStart() {
+
         }
 
         @Override
-        public void onInterstitialClicked(String s, String s1) {
-            Debug.error("AdToApp onInterstitialClicked " + s + " " + s1);
-        }
+        public void onClicked() {
 
-        @Override
-        public void onInterstitialClosed(String s, String s1) {
-            Debug.error("AdToApp onInterstitialClosed " + s + " " + s1);
         }
 
         @Override
         public void onRewardedCompleted(String adProvider, String currencyName, String currencyValue) {
-            super.onRewardedCompleted(adProvider, currencyName, currencyValue);
-            Debug.error("AdToApp onRewardedCompleted " + adProvider + " " + currencyName + " " + currencyValue);
+
         }
     };
 
@@ -733,6 +730,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         setHighRatePrice();
     }
 
+    private AdToAppVideoAdsController getAdToAppVideoAdsController() {
+        if (mAdToAppVideoAdsController == null) {
+            mAdToAppVideoAdsController = new AdToAppVideoAdsController(getActivity(), mOnVideoAdsListener);
+        }
+        return mAdToAppVideoAdsController;
+    }
+
     private void initInstantMessageController(KeyboardListenerLayout root) {
         mDatingInstantMessageController = new DatingInstantMessageController(getActivity(), root,
                 this, this, CacheProfile.getOptions().instantMessageFromSearch.getText(),
@@ -826,8 +830,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 //                skipUser(mCurrentUser);
 //                showNextUser();
                 //TODO только для тестирования
-                Debug.error("AdToApp btnClick");
-                new FullscreenController(getActivity(), CacheProfile.getOptions()).showVideoAdToApp(mFullScreenVideoListener);
+                Debug.error("AdToAppVideoAdsController btnClick");
+                getAdToAppVideoAdsController().showAd();
             }
             break;
             case R.id.btnDatingProfile: {
