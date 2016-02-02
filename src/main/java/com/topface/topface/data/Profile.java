@@ -24,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -507,10 +508,10 @@ public class Profile extends AbstractDataWithPhotos {
     public static class Gifts {
         public boolean more;
         public int count;
-        public ArrayList<Gift> gifts = new ArrayList<>();
+        public ArrayList<Gift> items = new ArrayList<>();
 
         public ArrayList<Gift> getGifts() {
-            return gifts;
+            return items;
         }
     }
 }
