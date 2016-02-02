@@ -782,7 +782,7 @@
     <string name="enter_text">Унесите текст</string>
     <string name="send_feedback">Послати поруку</string>
     <string name="get_vip_free">Добиј бесплатан VIP-статус</string>
-    <string name="buy_more_sympathies">\"Сакупите више свиђања, постаните популарнији\"</string>
+    <string name="buy_more_sympathies">Сакупите више свиђања, постаните популарнији</string>
     <string name="transaction_code_help">Ако нам пошаљете код трансакције, то ће нам помоћи да
         комплетирамо Ваш захтев убрзавајући процес. Додатне информације о поруџбини се могу наћи
         кроз %s.
