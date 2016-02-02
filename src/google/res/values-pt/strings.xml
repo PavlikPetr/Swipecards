@@ -771,7 +771,7 @@
     <string name="enter_text">Introduzir texto</string>
     <string name="send_feedback">Enviar mensagem</string>
     <string name="get_vip_free">Obtém estatuto VIP gratuito</string>
-    <string name="buy_more_sympathies">\"Obtém mais gostos, torna-te mais popular\"</string>
+    <string name="buy_more_sympathies">Obtém mais gostos, torna-te mais popular</string>
     <string name="transaction_code_help">Se nos enviares um código de transação, isto irá ajudar-nos
         a completar o teu pedido ao acelerar o tempo de processamento. Podes encontrar mais
         informação acerca de uma encomenda em %s.
