@@ -70,7 +70,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
             return mProfile;
         }
     };
-    // views
+
     private ViewPager mBodyPager;
     @Bind(R.id.profileTabs)
     TabLayout mTabLayout;
@@ -98,12 +98,13 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
                     }
                 }
             }
-            if (mBodyPagerAdapter.getItem(position) instanceof VipBuyFragment) {
+            String className = mBodyPagerAdapter.getClassNameByPos(position);
+            if (className.equals(VipBuyFragment.class.getName())) {
                 fromVip = true;
                 return;
             }
-            if ((mBodyPagerAdapter.getItem(position) instanceof ProfileFormFragment
-                    || mBodyPagerAdapter.getItem(position) instanceof SettingsFragment) && fromVip) {
+            if ((className.equals(ProfileFormFragment.class.getName())
+                    || className.equals(SettingsFragment.class.getName())) && fromVip) {
                 fromVip = false;
                 if (App.isNeedShowTrial && !CacheProfile.getProfile().premium && new GoogleMarketApiManager().isMarketApiAvailable()
                         && CacheProfile.getOptions().trialVipExperiment.enabled && !CacheProfile.paid) {

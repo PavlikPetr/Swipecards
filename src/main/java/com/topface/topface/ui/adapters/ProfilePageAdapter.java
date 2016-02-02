@@ -77,4 +77,9 @@ public class ProfilePageAdapter extends HackyFragmentStatePagerAdapter {
         }
         return fragment;
     }
+
+    public String getClassNameByPos(int pos){
+        return mFragmentsClasses.get(pos);
+    }
+
 }
