@@ -27,15 +27,11 @@
     <string name="profile_form_communication_male_0">Très sociable</string>
     <string name="profile_form_communication_male_1">Ouvert aux personnes intéressantes</string>
     <string name="profile_form_communication_male_2">Tchatons, on verra bien !</string>
-    <string name="profile_form_communication_male_3">Je ne réponds qu\'aux personnes qui me plaisent
-        !
-    </string>
+    <string name="profile_form_communication_male_3">Je ne réponds qu\'aux personnes qui me plaisent !</string>
     <string name="profile_form_communication_female_0">Très sociable</string>
     <string name="profile_form_communication_female_1">Ouverte aux personnes intéressantes</string>
     <string name="profile_form_communication_female_2">Tchatons, on verra bien !</string>
-    <string name="profile_form_communication_female_3">Je ne réponds qu\'aux personnes qui me
-        plaisent !
-    </string>
+    <string name="profile_form_communication_female_3">Je ne réponds qu\'aux personnes qui me plaisent !</string>
     <string name="profile_form_character_male_0">Facile</string>
     <string name="profile_form_character_male_1">Difficile</string>
     <string name="profile_form_character_male_2">Sévère</string>
@@ -55,8 +51,7 @@
     <string name="profile_form_alcohol_male_2">Parfois je me permets</string>
     <string name="profile_form_alcohol_male_3">J\'arrête bientôt</string>
     <string name="profile_form_alcohol_male_4">Oui, à la tienne !</string>
-    <string name="profile_form_alcohol_female_0">Je n\'ai pas besoin d\'alcool pour m\'amuser
-    </string>
+    <string name="profile_form_alcohol_female_0">Je n\'ai pas besoin d\'alcool pour m\'amuser</string>
     <string name="profile_form_alcohol_female_1">J\'ai arrêté</string>
     <string name="profile_form_alcohol_female_2">Parfois je me permets</string>
     <string name="profile_form_alcohol_female_3">J\'arrête bientôt</string>
@@ -93,16 +88,14 @@
     <string name="profile_form_finances_male_1">Élevés</string>
     <string name="profile_form_finances_male_2">Au dessus de la moyenne</string>
     <string name="profile_form_finances_male_3">Dans la moyenne, mais stable</string>
-    <string name="profile_form_finances_male_4">L\'argent, ce n\'est pas le plus important !
-    </string>
+    <string name="profile_form_finances_male_4">L\'argent, ce n\'est pas le plus important !</string>
     <string name="profile_form_finances_male_5">Suffisamment pour moi !</string>
     <string name="profile_form_finances_male_6">Besoin d\'une aide financière !</string>
     <string name="profile_form_finances_female_0">Très élevés</string>
     <string name="profile_form_finances_female_1">Élevés</string>
     <string name="profile_form_finances_female_2">Au dessus de la moyenne</string>
     <string name="profile_form_finances_female_3">Dans la moyenne, mais stable</string>
-    <string name="profile_form_finances_female_4">L\'argent, ce n\'est pas le plus important !
-    </string>
+    <string name="profile_form_finances_female_4">L\'argent, ce n\'est pas le plus important !</string>
     <string name="profile_form_finances_female_5">Suffisamment pour moi !</string>
     <string name="profile_form_finances_female_6">Besoin d\'une aide financière !</string>
     <string name="profile_form_smoking_male_0">Je n\'ai jamais fumé</string>
@@ -228,12 +221,9 @@
     <string name="form_habits_restaurants_1">Restaurants préférés</string>
     <string name="form_habits_restaurants_2">Vos restaurants préférés</string>
     <string name="form_habits_restaurants_3">Vos restaurants préférés</string>
-    <string name="form_detail_about_dating_0">À propos du premier rendez-vous avec une fille
-    </string>
+    <string name="form_detail_about_dating_0">À propos du premier rendez-vous avec une fille</string>
     <string name="form_detail_about_dating_1">À propos du rendez-vous idéal</string>
-    <string name="form_detail_about_dating_2">Comment voyez-vous votre premier rendez-vous avec une
-        fille ?
-    </string>
+    <string name="form_detail_about_dating_2">Comment voyez-vous votre premier rendez-vous avec une fille ?</string>
     <string name="form_detail_about_dating_3">Décrivez le rendez-vous idéal</string>
     <string name="form_detail_archievements_0">Les plus grands succès dans la vie</string>
     <string name="form_detail_archievements_1">Les plus grands succès dans la vie</string>

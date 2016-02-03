@@ -172,4 +172,7 @@
         <item name="android:windowBackground">@color/bg_white</item>
     </style>
 
+    <style name="FullyTranslucent" parent="android:Theme.Translucent.NoTitleBar">
+        <item name="android:progressBarStyle">@style/InvisibleProgress</item>
+    </style>
 </resources>

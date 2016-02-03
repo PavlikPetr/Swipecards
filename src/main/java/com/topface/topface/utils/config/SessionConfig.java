@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.topface.framework.utils.config.AbstractConfig;
-import com.topface.topface.Static;
 import com.topface.topface.data.PaymentWallProducts;
+import com.topface.topface.utils.Utils;
 
 /**
  * Created by kirussell on 14.01.14.
@@ -30,18 +30,18 @@ public class SessionConfig extends AbstractConfig {
     @Override
     protected void fillSettingsMap(SettingsMap settingsMap) {
         // user profile
-        addField(settingsMap, DATA_PROFILE, Static.EMPTY);
+        addField(settingsMap, DATA_PROFILE, Utils.EMPTY);
         // user options
-        addField(settingsMap, DATA_OPTIONS, Static.EMPTY);
+        addField(settingsMap, DATA_OPTIONS, Utils.EMPTY);
         // use market and paymentwall products
-        addField(settingsMap, DATA_MARKET_PRODUCTS, Static.EMPTY);
-        addField(settingsMap, DATA_MARKET_PRODUCTS_DETAILS, Static.EMPTY);
-        addField(settingsMap, DATA_PAYMENTWALL_PRODUCTS, Static.EMPTY);
-        addField(settingsMap, DATA_PAYMENTWALL_MOBILE_PRODUCTS, Static.EMPTY);
+        addField(settingsMap, DATA_MARKET_PRODUCTS, Utils.EMPTY);
+        addField(settingsMap, DATA_MARKET_PRODUCTS_DETAILS, Utils.EMPTY);
+        addField(settingsMap, DATA_PAYMENTWALL_PRODUCTS, Utils.EMPTY);
+        addField(settingsMap, DATA_PAYMENTWALL_MOBILE_PRODUCTS, Utils.EMPTY);
         //Social network account name
-        addField(settingsMap, SETTINGS_SOCIAL_ACCOUNT_NAME, Static.EMPTY);
+        addField(settingsMap, SETTINGS_SOCIAL_ACCOUNT_NAME, Utils.EMPTY);
         //Social network account email
-        addField(settingsMap, SETTINGS_SOCIAL_ACCOUNT_EMAIL, Static.EMPTY);
+        addField(settingsMap, SETTINGS_SOCIAL_ACCOUNT_EMAIL, Utils.EMPTY);
     }
 
     @Override

@@ -59,7 +59,7 @@ public class BanFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.logout_text:
-                new AuthorizationManager(getActivity()).logout(getActivity());
+                new AuthorizationManager().logout(getActivity());
                 break;
             case R.id.btnFeedback:
                 ConnectionManager.getInstance().onBanActivityFinish();

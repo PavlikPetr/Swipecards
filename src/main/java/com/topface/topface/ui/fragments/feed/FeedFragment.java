@@ -34,7 +34,6 @@ import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.banners.BannersController;
 import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.banners.PageInfo;
@@ -99,6 +98,10 @@ import static com.topface.topface.utils.CountersManager.NULL_METHOD;
 
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         implements FeedAdapter.OnAvatarClickListener<T>, IPageWithAds {
+
+    public static final boolean PAUSE_DOWNLOAD_ON_SCROLL = false;
+    public static final boolean PAUSE_DOWNLOAD_ON_FLING = true;
+
     private static final int FEED_MULTI_SELECTION_LIMIT = 100;
     private static final int FIRST_SHOW_LIST_DELAY = 1500;
 
@@ -616,8 +619,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         mListView.setOnScrollListener(
                 new PauseOnScrollListener(
                         DefaultImageLoader.getInstance(App.getContext()).getImageLoader(),
-                        Static.PAUSE_DOWNLOAD_ON_SCROLL,
-                        Static.PAUSE_DOWNLOAD_ON_FLING,
+                        PAUSE_DOWNLOAD_ON_SCROLL,
+                        PAUSE_DOWNLOAD_ON_FLING,
                         adapter
                 )
         );

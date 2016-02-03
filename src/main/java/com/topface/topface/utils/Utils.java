@@ -4,6 +4,7 @@ import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -16,12 +17,15 @@ import android.os.IBinder;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Display;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -29,6 +33,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.topface.framework.utils.BackgroundThread;
@@ -36,7 +41,6 @@ import com.topface.framework.utils.Debug;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
@@ -55,14 +59,18 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class Utils {
     public static final long DAY = 86400000;
     public static final long WEEK_IN_SECONDS = 604800;
+    public static final String EMPTY = "";
+    public static final String AMPERSAND = "&";
+    public static final String SEMICOLON = ":";
     private static final String DASH_SYMBOL = "-";
     private static final String HYPHEN_SYMBOL = "&#8209;";
-    // from android.util.Patterns.EMAIL_ADDRESS
+    public static String RU_LOCALE = "ru";
     private final static Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
             "[a-zA-Z0-9\\+\\._%\\-\\+]{1,256}@" +
                     "" +
@@ -87,6 +95,10 @@ public class Utils {
             Debug.error("Plural resources error", e);
         }
         return mPluralResources.getQuantityString(id, quantity, formatArgs);
+    }
+
+    public static Locale getRussianLocale(){
+        return new Locale(RU_LOCALE);
     }
 
     public static void showErrorMessage() {
@@ -141,15 +153,18 @@ public class Utils {
         return size;
     }
 
-    public static boolean isIntentAvailable(Context context, String action) {
+    public static boolean isIntentAvailable(Context context, Intent intent) {
         final PackageManager packageManager = context.getPackageManager();
-        final Intent intent = new Intent(action);
         if (packageManager != null) {
             List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
             return list.size() > 0;
         } else {
             return false;
         }
+    }
+
+    public static boolean isIntentAvailable(Context context, String action) {
+        return isIntentAvailable(context, new Intent(action));
     }
 
     public static Integer getGooglePlayServicesVersion() {
@@ -181,6 +196,48 @@ public class Utils {
             return i;
         }
         return null;
+    }
+
+    public static void startOldVersionPopup(final Activity activity) {
+        startOldVersionPopup(activity, true);
+    }
+
+    public static void showCustomToast(int text) {
+        Context context = App.getContext();
+        if (context != null) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View layout = inflater.inflate(R.layout.custom_toast, null, false);
+
+            ImageView image = (ImageView) layout.findViewById(R.id.image);
+            image.setImageResource(R.drawable.ic_not_enough_data);
+            ((TextView) layout.findViewById(R.id.text)).setText(text);
+
+            Toast toast = new Toast(context);
+            toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.setView(layout);
+            toast.show();
+        }
+    }
+
+    public static void startOldVersionPopup(final Activity activity, boolean cancelable) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Utils.goToMarket(activity);
+            }
+        });
+        if (cancelable) {
+            builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+        }
+        builder.setMessage(R.string.general_version_not_supported);
+        builder.setCancelable(cancelable);
+        builder.create().show();
     }
 
     public static void goToMarket(Activity context) {
@@ -280,11 +337,11 @@ public class Utils {
 
     public static String getText(EditText editText) {
         if (editText == null) {
-            return Static.EMPTY;
+            return EMPTY;
         }
         Editable text = editText.getText();
         if (text == null) {
-            return Static.EMPTY;
+            return EMPTY;
         }
         return text.toString();
     }

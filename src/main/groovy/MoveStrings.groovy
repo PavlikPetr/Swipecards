@@ -245,7 +245,6 @@ def replaceAppName() {
 }
 
 def printRes(String flavour, String defaultName) {
-    println("replace AppName flavour " + flavour + " from " + defaultName + " to " + Globals.FLAVOURS_WITH_APP_NAME.get(flavour));
     for (String path : getAllResFolderfByFlavour(flavour)) {
         for (String fileName : Globals.FILES_NAME) {
             String filePath = path.concat(Globals.FOLDER_SPLITTER).concat(fileName);
@@ -261,6 +260,7 @@ def printRes(String flavour, String defaultName) {
             nodePrinter.print(parse)
         }
     }
+    println("replaced AppName flavour " + flavour + " from " + defaultName + " to " + Globals.FLAVOURS_WITH_APP_NAME.get(flavour));
 }
 
 saveFlavoursList(args[0]);

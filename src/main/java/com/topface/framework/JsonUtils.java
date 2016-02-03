@@ -10,12 +10,12 @@ import com.google.gson.JsonSerializer;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
+import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * Класс для работы с Json
@@ -41,6 +41,10 @@ public class JsonUtils {
             mGson = new Gson();
         }
         return mGson;
+    }
+
+    public static <T> T fromJson(String json, TypeToken<T> typeToken) {
+        return getGson().fromJson(json, typeToken.getType());
     }
 
     public static <T> T optFromJson(String json, Class<T> classOfT, T defaultObj) {

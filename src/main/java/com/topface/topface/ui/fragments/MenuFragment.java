@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +13,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +24,11 @@ import com.topface.IllustratedTextView.IllustratedTextView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Ssid;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
+import com.topface.topface.data.FragmentSettings;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
@@ -51,6 +52,7 @@ import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.inject.Inject;
@@ -61,14 +63,6 @@ import rx.functions.Func1;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.BONUS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.DATING;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.GEO;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.PHOTO_BLOG;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.PROFILE;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_DIALOGS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_LIKES;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_VISITORS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.UNDEFINED;
 
 /**
  * Created by kirussell on 05.11.13.
@@ -79,10 +73,14 @@ public class MenuFragment extends Fragment {
     public static final String SELECT_MENU_ITEM = "com.topface.topface.action.menu.selectitem";
     public static final String SELECTED_FRAGMENT_ID = "com.topface.topface.action.menu.item";
     private static final String CURRENT_FRAGMENT_STATE = "menu_fragment_current_fragment";
+
+    private static final String USER_ID = "{userId}";
+    private static final String SECRET_KEY = "{secretKey}";
+
     @Inject
     TopfaceAppState mAppState;
     private OnFragmentSelectedListener mOnFragmentSelected;
-    private FragmentId mSelectedFragment = UNDEFINED;
+    private FragmentSettings mSelectedFragment = FragmentId.UNDEFINED.getFragmentSettings();
     private LeftMenuAdapter mAdapter;
     private boolean mHardwareAccelerated;
     private View mEditorItem;
@@ -98,6 +96,14 @@ public class MenuFragment extends Fragment {
     private Subscription mBalanceSubscription;
     private Subscription mCountersSubscription;
     private View mLastActivated;
+    private BroadcastReceiver mOptionsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (mListView != null) {
+                initAdapter();
+            }
+        }
+    };
     private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -108,11 +114,10 @@ public class MenuFragment extends Fragment {
                 case CacheProfile.PROFILE_UPDATE_ACTION:
                     initProfileMenuItem(mProfileMenuItem);
                     initEditor();
-                    initBonus();
                     break;
                 case SELECT_MENU_ITEM:
                     Bundle extras = intent.getExtras();
-                    FragmentId fragmentId = null;
+                    FragmentSettings fragmentSettings = null;
                     if (extras != null) {
                         Serializable menuItem = extras.getSerializable(SELECTED_FRAGMENT_ID);
                         /*
@@ -120,13 +125,13 @@ public class MenuFragment extends Fragment {
                         if it is still presented in BaseFragment.FragmentId enum.
                          */
                         if (Arrays.asList(FragmentId.values()).contains(menuItem)) {
-                            fragmentId = (FragmentId) menuItem;
+                            fragmentSettings = (FragmentSettings) menuItem;
                         } else {
-                            fragmentId = App.from(context).getOptions().startPageFragmentId;
+                            fragmentSettings = App.get().getOptions().startPageFragmentSettings;
                         }
                     }
-                    selectMenu(fragmentId);
-                    View view = mAdapter.getViewForActivate(mListView, fragmentId);
+                    selectMenu(fragmentSettings);
+                    View view = mAdapter.getViewForActivate(mListView, fragmentSettings);
                     if (view != null) {
                         mLastActivated = view;
                         mLastActivated.setActivated(true);
@@ -141,10 +146,10 @@ public class MenuFragment extends Fragment {
     private LeftMenuAdapter.ILeftMenuItem mProfileMenuItem;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (activity instanceof INavigationFragmentsListener) {
-            mFragmentSwitchListener = (INavigationFragmentsListener) activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof INavigationFragmentsListener) {
+            mFragmentSwitchListener = (INavigationFragmentsListener) context;
         }
     }
 
@@ -155,17 +160,11 @@ public class MenuFragment extends Fragment {
         mFragmentSwitchListener = null;
     }
 
-    public static void selectFragment(FragmentId fragmentId) {
+    public static void selectFragment(FragmentSettings fragmentSettings) {
         Intent intent = new Intent();
         intent.setAction(SELECT_MENU_ITEM);
-        intent.putExtra(SELECTED_FRAGMENT_ID, fragmentId);
+        intent.putExtra(SELECTED_FRAGMENT_ID, fragmentSettings);
         LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
-    }
-
-    private void initBonus() {
-        if (App.from(getActivity()).getOptions().bonus.enabled && !mAdapter.hasFragment(BONUS)) {
-            mAdapter.addItem(LeftMenuAdapter.newLeftMenuItem(BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE, R.drawable.ic_bonus_selector));
-        }
     }
 
     @Override
@@ -174,7 +173,7 @@ public class MenuFragment extends Fragment {
         //Показываем фрагмент только если мы авторизованы
         if (!AuthToken.getInstance().isEmpty()) {
             if (savedInstanceState != null) {
-                FragmentId savedId = (FragmentId) savedInstanceState.getSerializable(CURRENT_FRAGMENT_STATE);
+                FragmentSettings savedId = savedInstanceState.getParcelable(CURRENT_FRAGMENT_STATE);
                 if (savedId != null) {
                     Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment from saved instance state.");
                     switchFragment(savedId, false);
@@ -186,12 +185,12 @@ public class MenuFragment extends Fragment {
                 if (intent != null &&
                         intent.getSerializableExtra(GCMUtils.NEXT_INTENT) != null) {
                     Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment from activity intent.");
-                    switchFragment((FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT), false);
+                    switchFragment((FragmentSettings) intent.getParcelableExtra(GCMUtils.NEXT_INTENT), false);
                     return;
                 }
             }
             Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment to default from onCreate().");
-            switchFragment(App.from(getActivity()).getOptions().startPageFragmentId, false);
+            switchFragment(App.get().getOptions().startPageFragmentSettings, false);
         }
     }
 
@@ -202,12 +201,12 @@ public class MenuFragment extends Fragment {
                     mEditorItem = View.inflate(getActivity(), R.layout.item_left_menu_button_with_badge, null);
                     TextView btnMenu = (TextView) mEditorItem.findViewById(R.id.btnMenu);
                     //noinspection ResourceType
-                    btnMenu.setText(ResourcesUtils.getFragmentNameResId(FragmentId.EDITOR));
+                    btnMenu.setText(ResourcesUtils.getFragmentNameResId(FragmentId.EDITOR.getFragmentSettings()));
                     mEditorItem.setTag(FragmentId.EDITOR);
                     mEditorItem.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            onMenuSelected(FragmentId.EDITOR);
+                            onMenuSelected(FragmentId.EDITOR.getFragmentSettings());
                         }
                     });
                     mListView.addFooterView(mEditorItem);
@@ -228,28 +227,36 @@ public class MenuFragment extends Fragment {
 
     private void initAdapter() {
         final Options options = App.from(getActivity()).getOptions();
-        SparseArray<LeftMenuAdapter.ILeftMenuItem> menuItems = new SparseArray<>();
-        mProfileMenuItem = LeftMenuAdapter.newLeftMenuItem(PROFILE, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_PHOTO,
-                App.from(getActivity()).getProfile().photo);
-        menuItems.put(PROFILE.getId(), mProfileMenuItem);
-        menuItems.put(DATING.getId(), LeftMenuAdapter.newLeftMenuItem(DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
+        ArrayList<LeftMenuAdapter.ILeftMenuItem> menuItems = new ArrayList<>();
+        mProfileMenuItem = LeftMenuAdapter.newLeftMenuItem(FragmentId.PROFILE, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_PHOTO,
+                App.get().getProfile().photo);
+        menuItems.add(mProfileMenuItem);
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
                 R.drawable.ic_dating_selector));
-        menuItems.put(TABBED_DIALOGS.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.TABBED_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_dialog_selector));
-        menuItems.put(PHOTO_BLOG.getId(), LeftMenuAdapter.newLeftMenuItem(PHOTO_BLOG, LeftMenuAdapter.TYPE_MENU_BUTTON,
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.PHOTO_BLOG, LeftMenuAdapter.TYPE_MENU_BUTTON,
                 R.drawable.ic_photolenta_selector));
-        menuItems.put(TABBED_VISITORS.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.TABBED_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_guests_selector));
-        menuItems.put(TABBED_LIKES.getId(), LeftMenuAdapter.newLeftMenuItem(TABBED_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.TABBED_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.ic_likes_selector));
-        menuItems.put(GEO.getId(), LeftMenuAdapter.newLeftMenuItem(GEO, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+        menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.GEO, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
                 R.drawable.icon_people_close_selector));
         if (options.bonus.enabled) {
-            menuItems.put(BONUS.getId(), LeftMenuAdapter.newLeftMenuItem(BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                    R.drawable.ic_bonus_selector));
+            menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
+                    R.drawable.ic_bonus_selector, options.bonus.buttonPicture));
+        }
+        ArrayList<Options.LeftMenuIntegrationItems> array = options.leftMenuItems;
+        if (array != null && array.size() > 0) {
+            for (int i = 0; i < array.size(); i++) {
+                Options.LeftMenuIntegrationItems item = array.get(i);
+                menuItems.add(LeftMenuAdapter.newLeftMenuItem(new FragmentSettings(FragmentId.INTEGRATION_PAGE, i), LeftMenuAdapter.TYPE_MENU_BUTTON,
+                        R.drawable.ic_bonus_selector, null, item.iconUrl));
+            }
         }
         if (mAdapter == null) {
-            mAdapter = new LeftMenuAdapter(menuItems, getActivity());
+            mAdapter = new LeftMenuAdapter(menuItems);
             mListView.setAdapter(mAdapter);
             mCountersSubscription = mAppState.getObservable(CountersData.class)
                     .map(new Func1<CountersData, CountersData>() {
@@ -265,6 +272,9 @@ public class MenuFragment extends Fragment {
                             mAdapter.updateCounters(countersData);
                         }
                     });
+        } else {
+            mAdapter.replaceMenuItems(menuItems);
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -356,7 +366,7 @@ public class MenuFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(
+        outState.putParcelable(
                 CURRENT_FRAGMENT_STATE,
                 getCurrentFragmentId()
         );
@@ -369,6 +379,8 @@ public class MenuFragment extends Fragment {
         filter.addAction(CacheProfile.PROFILE_UPDATE_ACTION);
         filter.addAction(SELECT_MENU_ITEM);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, filter);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mOptionsReceiver,
+                new IntentFilter(Options.OPTIONS_RECEIVED_ACTION));
         initProfileMenuItem(mProfileMenuItem);
         updateBalance(mBalanceData);
     }
@@ -377,6 +389,7 @@ public class MenuFragment extends Fragment {
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mOptionsReceiver);
     }
 
     @Override
@@ -395,16 +408,16 @@ public class MenuFragment extends Fragment {
      * Note: incorrect behavior, when method is called in onCreate
      * (Exception: recursive call of executePendingTransactions)
      *
-     * @param fragmentId id of fragment that is going to be shown
+     * @param fragmentSettings id of fragment that is going to be shown
      */
-    public void selectMenu(FragmentId fragmentId) {
-        if (fragmentId != mSelectedFragment) {
+    public void selectMenu(FragmentSettings fragmentSettings) {
+        if (fragmentSettings != mSelectedFragment) {
             Debug.log("MenuFragment: Switch fragment in selectMenu().");
-            switchFragment(fragmentId, true);
+            switchFragment(fragmentSettings, true);
         } else if (mOnFragmentSelected != null) {
-            mOnFragmentSelected.onFragmentSelected(fragmentId);
+            mOnFragmentSelected.onFragmentSelected(fragmentSettings);
         }
-        if (fragmentId == BONUS && CacheProfile.countersData != null) {
+        if (fragmentSettings == FragmentId.BONUS.getFragmentSettings() && CacheProfile.countersData != null) {
             mAppState.setData(CacheProfile.countersData);
         }
     }
@@ -418,22 +431,25 @@ public class MenuFragment extends Fragment {
     /**
      * Shows fragment by id
      *
-     * @param newFragmentId id of fragment that is going to be shown
+     * @param newFragmentSettings id of fragment that is going to be shown
      */
-    private void switchFragment(FragmentId newFragmentId, boolean executePending) {
+    private void switchFragment(FragmentSettings newFragmentSettings, boolean executePending) {
+        if (newFragmentSettings == null) {
+            return;
+        }
         FragmentManager fragmentManager = getFragmentManager();
         Fragment oldFragment = fragmentManager.findFragmentById(R.id.fragment_content);
-        String fragmentTag = getTagById(newFragmentId);
+        String fragmentTag = getTagById(newFragmentSettings);
         Debug.log("MenuFragment: Try switch to fragment with tag " + fragmentTag + " (old fragment " + mSelectedFragment + ")");
         BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(fragmentTag);
 
         //Если не нашли в FragmentManager уже существующего инстанса, то создаем новый
         if (newFragment == null) {
-            newFragment = getFragmentNewInstanceById(newFragmentId);
+            newFragment = getFragmentNewInstanceById(newFragmentSettings);
             Debug.log("MenuFragment: newFragment is null, create new instance");
         }
 
-        if (oldFragment == null || newFragmentId != mSelectedFragment) {
+        if (oldFragment == null || newFragmentSettings.getFragmentId() != mSelectedFragment.getFragmentId() || newFragmentSettings.getPos() != mSelectedFragment.getPos()) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             //Меняем фрагменты анимировано, но только на новых устройствах c HW ускорением
             if (mHardwareAccelerated) {
@@ -450,12 +466,12 @@ public class MenuFragment extends Fragment {
             String transactionResult = executePending ?
                     Boolean.toString(fragmentManager.executePendingTransactions()) :
                     "no executePending";
-            mSelectedFragment = newFragmentId;
+            mSelectedFragment = newFragmentSettings;
             Debug.log("MenuFragment: commit " + transactionResult);
         } else {
             Debug.error("MenuFragment: new fragment already added");
         }
-        mSelectedFragment = newFragmentId;
+        mSelectedFragment = newFragmentSettings;
 
         if (mFragmentSwitchListener != null) {
             mFragmentSwitchListener.onFragmentSwitch(mSelectedFragment);
@@ -471,17 +487,17 @@ public class MenuFragment extends Fragment {
         }, 250);
     }
 
-    private String getTagById(FragmentId id) {
-        return "fragment_switch_controller_" + id;
+    private String getTagById(FragmentSettings id) {
+        return "fragment_switch_controller_" + id.getFragmentId() + "_" + id.getPos();
     }
 
-    public FragmentId getCurrentFragmentId() {
-        return mSelectedFragment == UNDEFINED ? App.from(getActivity()).getOptions().startPageFragmentId : mSelectedFragment;
+    public FragmentSettings getCurrentFragmentId() {
+        return mSelectedFragment.equals(FragmentId.UNDEFINED.getFragmentSettings()) ? App.get().getOptions().startPageFragmentSettings : mSelectedFragment;
     }
 
-    private BaseFragment getFragmentNewInstanceById(FragmentId id) {
+    private BaseFragment getFragmentNewInstanceById(FragmentSettings id) {
         BaseFragment fragment;
-        switch (id) {
+        switch (id.getFragmentId()) {
             case VIP_PROFILE:
             case PROFILE:
                 fragment = OwnProfileFragment.newInstance();
@@ -494,6 +510,9 @@ public class MenuFragment extends Fragment {
                 break;
             case BONUS:
                 fragment = BonusFragment.newInstance(true);
+                break;
+            case INTEGRATION_PAGE:
+                fragment = getIntegrationFragment(id.getPos());
                 break;
             case TABBED_VISITORS:
                 fragment = new TabbedVisitorsFragment();
@@ -523,12 +542,30 @@ public class MenuFragment extends Fragment {
         return fragment;
     }
 
-    public void onMenuSelected(FragmentId id) {
+    public BaseFragment getIntegrationFragment(int pos) {
+        Options.LeftMenuIntegrationItems item = getServerLeftMenuItemById(pos);
+        if (item != null) {
+            return IntegrationWebViewFragment.newInstance(item.title, convertIntegrationUrl(item.url));
+        } else {
+            return null;
+        }
+    }
+
+    private String convertIntegrationUrl(String url) {
+        return url.replace(USER_ID, AuthToken.getInstance().getUserSocialId()).replace(SECRET_KEY, Ssid.get());
+    }
+
+    public static Options.LeftMenuIntegrationItems getServerLeftMenuItemById(int pos) {
+        ArrayList<Options.LeftMenuIntegrationItems> array = App.get().getOptions().leftMenuItems;
+        return array != null && array.size() > pos ? array.get(pos) : null;
+    }
+
+    public void onMenuSelected(FragmentSettings id) {
         if (mListView.isClickable()) {
             Options options = App.from(getActivity()).getOptions();
             //Тут сложная работа счетчика, которая отличается от стандартной логики. Мы контроллируем
             //его локально, а не серверно, как это происходит с остальными счетчиками.
-            if (id == BONUS) {
+            if (id.getFragmentId() == BONUS) {
                 if (CacheProfile.needShowBonusCounter) {
                     UserConfig config = App.getUserConfig();
                     config.setBonusCounterLastShowTime(options.bonus.timestamp);
@@ -538,7 +575,7 @@ public class MenuFragment extends Fragment {
                 if (!TextUtils.isEmpty(options.bonus.integrationUrl) ||
                         options.offerwalls.hasOffers()
                         ) {
-                    selectMenu(BONUS);
+                    selectMenu(FragmentId.BONUS.getFragmentSettings());
                 } else {
                     OfferwallsManager.startOfferwall(getActivity(), options);
                 }
@@ -557,6 +594,6 @@ public class MenuFragment extends Fragment {
     }
 
     public interface OnFragmentSelectedListener {
-        void onFragmentSelected(FragmentId fragmentId);
+        void onFragmentSelected(FragmentSettings fragmentSettings);
     }
 }

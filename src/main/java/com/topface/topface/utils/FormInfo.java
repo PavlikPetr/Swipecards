@@ -6,7 +6,6 @@ import android.text.InputType;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.QuestionaryRequest;
@@ -61,7 +60,7 @@ public class FormInfo {
             }
         } catch (Exception e) {
             Debug.error(e);
-            title = Static.EMPTY;
+            title = Utils.EMPTY;
         } finally {
             formItem.title = title;
             formItem.value = data;
@@ -88,33 +87,33 @@ public class FormInfo {
     public String[] getEntriesByTitleId(int titleId) {
         switch (titleId) {
             case R.array.form_main_status:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_status_female : R.array.profile_form_status_male);
+                return mResources.getStringArray(mSex == Profile.GIRL ? R.array.profile_form_status_female : R.array.profile_form_status_male);
             case R.array.form_main_character:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_character_female : R.array.profile_form_character_male);
+                return mResources.getStringArray(mSex == Profile.GIRL ? R.array.profile_form_character_female : R.array.profile_form_character_male);
             case R.array.form_main_communication:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_communication_female : R.array.profile_form_communication_male);
+                return mResources.getStringArray(mSex == Profile.GIRL ? R.array.profile_form_communication_female : R.array.profile_form_communication_male);
             case R.array.form_habits_alcohol:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_alcohol_female : R.array.profile_form_alcohol_male);
+                return mResources.getStringArray(mSex == Profile.GIRL ? R.array.profile_form_alcohol_female : R.array.profile_form_alcohol_male);
             case R.array.form_habits_smoking:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_smoking_female : R.array.profile_form_smoking_male);
+                return mResources.getStringArray(mSex == Profile.GIRL ? R.array.profile_form_smoking_female : R.array.profile_form_smoking_male);
             case R.array.form_physique_eyes:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_eyes_female : R.array.profile_form_eyes_male);
+                return mResources.getStringArray(mSex == Profile.GIRL ? R.array.profile_form_eyes_female : R.array.profile_form_eyes_male);
             case R.array.form_physique_fitness:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_fitness_female : R.array.profile_form_fitness_male);
+                return mResources.getStringArray(mSex == Profile.GIRL ? R.array.profile_form_fitness_female : R.array.profile_form_fitness_male);
             case R.array.form_physique_hairs:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_hair_female : R.array.profile_form_hair_male);
+                return mResources.getStringArray(mSex == Profile.GIRL ? R.array.profile_form_hair_female : R.array.profile_form_hair_male);
             case R.array.form_physique_breast:
                 return mResources.getStringArray(R.array.profile_form_breast_female);
             case R.array.form_social_car:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_car_female : R.array.profile_form_car_male);
+                return mResources.getStringArray(mSex == Profile.GIRL ? R.array.profile_form_car_female : R.array.profile_form_car_male);
             case R.array.form_social_education:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_education_female : R.array.profile_form_education_male);
+                return mResources.getStringArray(mSex == Profile.GIRL ? R.array.profile_form_education_female : R.array.profile_form_education_male);
             case R.array.form_social_finances:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_finances_female : R.array.profile_form_finances_male);
+                return mResources.getStringArray(mSex == Profile.GIRL ? R.array.profile_form_finances_female : R.array.profile_form_finances_male);
             case R.array.form_social_marriage:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_marriage_female : R.array.profile_form_marriage_male);
+                return mResources.getStringArray(mSex == Profile.GIRL ? R.array.profile_form_marriage_female : R.array.profile_form_marriage_male);
             case R.array.form_social_residence:
-                return mResources.getStringArray(mSex == Static.GIRL ? R.array.profile_form_residence_female : R.array.profile_form_residence_male);
+                return mResources.getStringArray(mSex == Profile.GIRL ? R.array.profile_form_residence_female : R.array.profile_form_residence_male);
             default:
                 return null;
         }
@@ -225,7 +224,7 @@ public class FormInfo {
                 } catch (Exception e) {
                     result.height = 0;
                 }
-                item.value = result.height == 0 ? Static.EMPTY : String.valueOf(result.height);
+                item.value = result.height == 0 ? Utils.EMPTY : String.valueOf(result.height);
                 break;
             case R.array.form_main_weight:
                 try {
@@ -233,7 +232,7 @@ public class FormInfo {
                 } catch (Exception e) {
                     result.weight = 0;
                 }
-                item.value = result.weight == 0 ? Static.EMPTY : String.valueOf(result.weight);
+                item.value = result.weight == 0 ? Utils.EMPTY : String.valueOf(result.weight);
                 break;
             case R.array.form_habits_restaurants:
                 result.restaurants = selectedValue;
@@ -255,7 +254,7 @@ public class FormInfo {
 
     // =============================== Form Titles ===============================
     public String getFormTitle(int arrayResourceId) {
-        String result = Static.EMPTY;
+        String result = Utils.EMPTY;
         String[] variants = null;
         try {
             variants = mResources.getStringArray(arrayResourceId);
@@ -273,25 +272,25 @@ public class FormInfo {
 
         if (mProfileType == Profile.TYPE_USER_PROFILE) {
             switch (mSex) {
-                case Static.BOY:
+                case Profile.BOY:
                     result = variants[0];
                     break;
-                case Static.GIRL:
+                case Profile.GIRL:
                     result = variants[1];
                     break;
             }
         } else {
             switch (mSex) {
-                case Static.BOY:
+                case Profile.BOY:
                     result = variants[2];
                     break;
-                case Static.GIRL:
+                case Profile.GIRL:
                     result = variants[3];
                     break;
             }
         }
 
-        if (result == null) result = Static.EMPTY;
+        if (result == null) result = Utils.EMPTY;
         return result;
     }
 
@@ -304,7 +303,7 @@ public class FormInfo {
             case FormItem.STATUS:
                 return getFormTitle(formItem.titleId);
             default:
-                return Static.EMPTY;
+                return Utils.EMPTY;
         }
     }
 }

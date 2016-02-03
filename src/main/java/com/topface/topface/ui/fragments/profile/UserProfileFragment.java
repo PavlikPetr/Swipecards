@@ -293,11 +293,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
         }
     }
 
-    @Override
-    protected boolean isOwnersProfileFragment() {
-        return false;
-    }
-
     private void onSuccess(User user, IApiResponse response) {
         if (user != null) {
             saveResponseForEditor((ApiResponse) response);
@@ -545,5 +540,10 @@ public class UserProfileFragment extends AbstractProfileFragment {
     @Override
     protected boolean isAnimationRequire() {
         return true;
+    }
+
+    @Override
+    protected boolean isOwnersProfileFragment() {
+        return false;
     }
 }

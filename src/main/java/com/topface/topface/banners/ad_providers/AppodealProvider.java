@@ -8,9 +8,9 @@ import com.appodeal.ads.BannerView;
 import com.appodeal.ads.UserSettings;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
-import com.topface.topface.Static;
 import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.data.Profile;
+import com.topface.topface.utils.social.AuthToken;
 
 public class AppodealProvider extends AbstractAdsProvider {
 
@@ -28,10 +28,18 @@ public class AppodealProvider extends AbstractAdsProvider {
         }
         Appodeal.getUserSettings(activity)
                 .setGender(
-                        profile.sex == Static.BOY ?
+                        profile.sex == Profile.BOY ?
                                 UserSettings.Gender.MALE :
                                 UserSettings.Gender.FEMALE)
                 .setAge(profile.age);
+        switch (AuthToken.getInstance().getSocialNet()) {
+            case AuthToken.SN_VKONTAKTE:
+                Appodeal.getUserSettings(activity).setVkId(AuthToken.getInstance().getUserSocialId());
+                break;
+            case AuthToken.SN_FACEBOOK:
+                Appodeal.getUserSettings(activity).setFacebookId(AuthToken.getInstance().getUserSocialId());
+                break;
+        }
         Appodeal.setBannerCallbacks(new BannerCallbacks() {
 
             @Override
@@ -55,5 +63,4 @@ public class AppodealProvider extends AbstractAdsProvider {
         });
         return true;
     }
-
 }

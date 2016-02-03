@@ -24,7 +24,6 @@ import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
-import com.topface.topface.Static;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendFeedbackRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -46,6 +45,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
 
     public static final String INTENT_FEEDBACK_TYPE = "feedback_message_type";
     private static final String GOOGLE_WALLET_URL = "https://wallet.google.com";
+    public static final String PLATFORM = "Android";
     @Bind(R.id.edText)
     EditText mEditText;
     @Bind(R.id.edEmail)
@@ -57,7 +57,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
     @Bind(R.id.tvLocale)
     TextView mIncorrectLocaleTv;
     private FeedbackType mFeedbackType;
-    private String mFeedback = Static.EMPTY;
+    private String mFeedback = Utils.EMPTY;
     private Report mReport = new Report();
 
     public static void fillVersion(Context context, Report report) {
@@ -222,10 +222,10 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
                 @Override
                 public void success(IApiResponse response) {
                     if (isAdded()) {
-                        mReport.body = Static.EMPTY;
+                        mReport.body = Utils.EMPTY;
                         finishRequestSend();
 
-                        mEditText.setText(Static.EMPTY);
+                        mEditText.setText(Utils.EMPTY);
                         Utils.showToastNotification(R.string.settings_feedback_success_msg, Toast.LENGTH_SHORT);
                         getActivity().finish();
                     }
@@ -304,7 +304,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         String email;
         List<String> userDeviceAccounts;
         String subject;
-        String body = Static.EMPTY;
+        String body = Utils.EMPTY;
         String topface_version = "unknown";
         int topface_versionCode = 0;
         String android_SDK = "API " + android.os.Build.VERSION.SDK_INT;
@@ -324,7 +324,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         }
 
         public String getSubject() {
-            return "[" + Static.PLATFORM + "]" + subject + " {" + authToken.getSocialNet() + "_id=" + authToken.getUserSocialId() + "}";
+            return "[" + PLATFORM + "]" + subject + " {" + authToken.getSocialNet() + "_id=" + authToken.getUserSocialId() + "}";
         }
 
         public void setSubject(String subject) {

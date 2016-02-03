@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.google.gson.reflect.TypeToken;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.data.Visitor;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteVisitorsRequest;
@@ -81,7 +82,7 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
             @Override
             public void onClick(View v) {
                 if (App.get().getProfile().premium) {
-                    MenuFragment.selectFragment(FragmentId.DATING);
+                    MenuFragment.selectFragment(FragmentId.DATING.getFragmentSettings());
                 } else {
                     Intent intent = PurchasesActivity.createVipBuyIntent(null, "Visitors");
                     startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
