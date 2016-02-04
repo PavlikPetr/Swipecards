@@ -217,7 +217,7 @@ public class FullscreenController {
 
     private void requestAdToAppFullscreen() {
         AdToApp.setLogging(true);
-        AdToApp.initializeSDK(mActivity, AdToAppProvider.ADTOAPP_APP_KEY, AdToApp.MASK_INTERSTITIAL);
+        AdToApp.initializeSDK(mActivity, AdToAppController.ADTOAPP_APP_KEY, AdToApp.MASK_INTERSTITIAL);
         if (AdToApp.isAvailableAd(AdToApp.INTERSTITIAL)) {
             AdToApp.showInterstitialAd();
         }

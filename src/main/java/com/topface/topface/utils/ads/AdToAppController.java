@@ -14,6 +14,8 @@ import java.util.HashMap;
  */
 public class AdToAppController {
 
+    public static final String ADTOAPP_APP_KEY = "361e95a8-3cf4-494d-89de-1a0f57f25ab3:b8942ef1-6fe1-4c7b-ab3d-2814072cedf3";
+
     private HashMap<String, IAdToAppListener> mAdToAppListeners = new HashMap<>();
     private HashMap<AdsMasks, AdsAvailableListener> mAdsAvailableMap = new HashMap<>();
     private static AdToAppController mInstance;
@@ -97,7 +99,7 @@ public class AdToAppController {
 
     private void initSdk() {
         if (!AdToApp.isSDKInitialized()) {
-            AdToApp.initializeSDK(mActivity, AdToAppProvider.ADTOAPP_APP_KEY, getAdsMask());
+            AdToApp.initializeSDK(mActivity, ADTOAPP_APP_KEY, getAdsMask());
             AdToApp.setInterstitialListener(mInterstitialListener);
         }
     }
