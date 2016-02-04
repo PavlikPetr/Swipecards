@@ -29,6 +29,8 @@ import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ReadLikeRequest;
 import com.topface.topface.requests.SendLikeRequest;
+import com.topface.topface.requests.UnlockFunctionalityRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.TopfaceAppState;
@@ -43,7 +45,9 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.ads.AdToAppController;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
+import com.topface.topface.utils.ads.SimpleAdToAppListener;
 import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -60,6 +64,10 @@ import rx.functions.Action1;
 public class LikesFragment extends FeedFragment<FeedLike> {
 
     public static final String PREFERENCES_PAID_LIKES_COUNT = "paid_likes_count";
+    public static final String UNLOCK_FUCTIONALITY_TYPE = "likes";
+    public static final int FIRST_CHILD = 0;
+    public static final int SECOND_CHILD = 1;
+    public static final int THIRD_CHILD = 2;
 
     @Inject
     TopfaceAppState mAppState;
@@ -180,14 +188,31 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         ViewFlipper viewFlipper = (ViewFlipper) inflated.findViewById(R.id.vfEmptyViews);
         switch (errorCode) {
             case ErrorCodes.PREMIUM_ACCESS_ONLY:
+                setUnlockButtonView(getUnlockButtonView(inflated, SECOND_CHILD));
                 initEmptyScreenOnLikesNeedVip(viewFlipper);
                 break;
             case ErrorCodes.BLOCKED_SYMPATHIES:
+                setUnlockButtonView(getUnlockButtonView(inflated, THIRD_CHILD));
                 initEmptyScreenOnBlockedLikes(inflated, viewFlipper);
                 break;
             default:
+                setUnlockButtonView(getUnlockButtonView(inflated, FIRST_CHILD));
                 initEmptyScreenWithoutLikes(viewFlipper);
         }
+    }
+
+    private Button getUnlockButtonView(View view, int child) {
+        return (Button) ((ViewFlipper) view.findViewById(R.id.vfEmptyViews)).getChildAt(child).findViewWithTag("btnUnlock");
+    }
+
+    @Override
+    protected String getUnlockFunctionalityType() {
+        return UNLOCK_FUCTIONALITY_TYPE;
+    }
+
+    @Override
+    protected Options.UnlockByVideo.UnlockScreenCondition getUnlockCondition() {
+        return CacheProfile.getOptions().unlockByViewedAdVideo.getUnlockLikesCondition();
     }
 
     private void updateTitleWithCounter(CountersData countersData) {

@@ -159,6 +159,10 @@ public class App extends ApplicationBase {
                 .exec();
     }
 
+    public static void updateUserOptions() {
+        getUserOptionsRequest().exec();
+    }
+
     private static ApiRequest getUserOptionsRequest() {
         return new UserGetAppOptionsRequest(App.getContext())
                 .callback(new DataApiHandler<Options>() {

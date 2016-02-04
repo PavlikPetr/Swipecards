@@ -33,7 +33,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.appintop.interstitialads.DefaultInterstitialListener;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -86,7 +85,6 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.ads.AdToAppVideoAdsController;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
@@ -225,30 +223,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     protected int getStatusBarColor() {
         return mCurrentStatusBarColor;
     }
-
-    private AdToAppVideoAdsController mAdToAppVideoAdsController;
-
-    private AdToAppVideoAdsController.OnVideoAdsListener mOnVideoAdsListener = new AdToAppVideoAdsController.OnVideoAdsListener() {
-        @Override
-        public void onVideoWatched() {
-
-        }
-
-        @Override
-        public void onVideoStart() {
-
-        }
-
-        @Override
-        public void onClicked() {
-
-        }
-
-        @Override
-        public void onRewardedCompleted(String adProvider, String currencyName, String currencyValue) {
-
-        }
-    };
 
     private BroadcastReceiver mOptionsReceiver = new BroadcastReceiver() {
         @Override
@@ -730,13 +704,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         setHighRatePrice();
     }
 
-    private AdToAppVideoAdsController getAdToAppVideoAdsController() {
-        if (mAdToAppVideoAdsController == null) {
-            mAdToAppVideoAdsController = new AdToAppVideoAdsController(getActivity(), mOnVideoAdsListener);
-        }
-        return mAdToAppVideoAdsController;
-    }
-
     private void initInstantMessageController(KeyboardListenerLayout root) {
         mDatingInstantMessageController = new DatingInstantMessageController(getActivity(), root,
                 this, this, CacheProfile.getOptions().instantMessageFromSearch.getText(),
@@ -827,11 +794,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.skip_btn:
             case R.id.btnDatingSkip: {
-//                skipUser(mCurrentUser);
-//                showNextUser();
-                //TODO только для тестирования
-                Debug.error("AdToAppVideoAdsController btnClick");
-                getAdToAppVideoAdsController().showAd();
+                skipUser(mCurrentUser);
+                showNextUser();
             }
             break;
             case R.id.btnDatingProfile: {

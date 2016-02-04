@@ -10,9 +10,9 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@+id/tvText"
-        android:scaleType="centerInside"
-        android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:scaleType="centerInside"
         android:src="@drawable/ic_guitar" />
 
     <TextView
@@ -30,7 +30,14 @@
     <Button
         android:id="@+id/btnBuy"
         style="@style/BigStretchedBlueButton"
+        android:layout_width="240dp"
         android:layout_below="@+id/tvText"
         android:layout_centerHorizontal="true"
         android:text="@string/buying_vip_status" />
+
+    <Button
+        android:id="@+id/btnUnlock"
+        style="@style/UlockButtonStyle"
+        android:layout_width="240dp"
+        android:layout_below="@+id/btnBuy" />
 </RelativeLayout>

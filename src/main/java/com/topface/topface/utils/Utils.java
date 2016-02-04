@@ -36,11 +36,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appintop.init.AdToApp;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.banners.ad_providers.AdToAppProvider;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.config.AppConfig;
@@ -91,7 +93,7 @@ public class Utils {
         return mPluralResources.getQuantityString(id, quantity, formatArgs);
     }
 
-    public static Locale getRussianLocale(){
+    public static Locale getRussianLocale() {
         return new Locale(RU_LOCALE);
     }
 
@@ -459,4 +461,9 @@ public class Utils {
         };
     }
 
+    public static String getUnlockButtonText(int sec) {
+        int minutes = (int) Math.ceil((float) sec / (float) DateUtils.MINUTE_IN_SECONDS);
+        return String.format(App.getContext().getString(R.string.unlock_by_viewed_ad_video_button_text),
+                Utils.getQuantityString(R.plurals.free_minutes, minutes, minutes));
+    }
 }

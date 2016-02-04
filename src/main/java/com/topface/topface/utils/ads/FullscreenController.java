@@ -241,6 +241,11 @@ public class FullscreenController {
             public void onInterstitialClosed(String s, String s1) {
                 mFullScreenBannerListener.onClose();
             }
+
+            @Override
+            public boolean onInterstitialFailedToShow(String s) {
+                return false;
+            }
         });
     }
 

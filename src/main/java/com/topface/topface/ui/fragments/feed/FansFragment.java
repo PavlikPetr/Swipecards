@@ -5,11 +5,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.Options;
+import com.topface.topface.data.Options.UnlockByVideo.UnlockScreenCondition;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.UnlockFunctionalityRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.ads.AdToAppController;
+import com.topface.topface.utils.ads.SimpleAdToAppListener;
 import com.topface.topface.utils.config.FeedsCache;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +29,7 @@ import java.util.List;
 public class FansFragment extends BookmarksFragment {
 
     public static final String FANS = "Fans";
+    public static final String UNLOCK_FUCTIONALITY_TYPE = "fans";
 
     @Override
     protected String getTitle() {
@@ -35,6 +45,7 @@ public class FansFragment extends BookmarksFragment {
     protected void initEmptyFeedView(View inflated, int errorCode) {
         Button buttonBuy = (Button) inflated.findViewById(R.id.btnBuy);
         TextView message = ((TextView) inflated.findViewById(R.id.tvText));
+        setUnlockButtonView((Button) inflated.findViewById(R.id.btnUnlock));
         if (CacheProfile.premium) {
             message.setText(R.string.buy_more_sympathies);
             buttonBuy.setText(R.string.buy_sympathies);
@@ -55,6 +66,16 @@ public class FansFragment extends BookmarksFragment {
                 }
             });
         }
+    }
+
+    @Override
+    protected String getUnlockFunctionalityType() {
+        return UNLOCK_FUCTIONALITY_TYPE;
+    }
+
+    @Override
+    protected Options.UnlockByVideo.UnlockScreenCondition getUnlockCondition() {
+        return CacheProfile.getOptions().unlockByViewedAdVideo.getUnlockFansCondition();
     }
 
     @Override

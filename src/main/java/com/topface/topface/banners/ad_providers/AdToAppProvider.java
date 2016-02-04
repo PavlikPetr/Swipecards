@@ -50,4 +50,8 @@ public class AdToAppProvider extends AbstractAdsProvider {
     public String getBannerName() {
         return AdProvidersFactory.BANNER_ADTOAPP;
     }
+
+    public static void initializeAdToApp(Activity activity) {
+        AdToApp.initializeSDK(activity, AdToAppProvider.ADTOAPP_APP_KEY, AdToApp.MASK_VIDEO | AdToApp.MASK_INTERSTITIAL | AdToApp.MASK_BANNER);
+    }
 }

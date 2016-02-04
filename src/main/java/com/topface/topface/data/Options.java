@@ -114,6 +114,11 @@ public class Options extends AbstractData {
     public boolean isHideAdmirations = false;
 
     /**
+     * Настройки разблокировки функционала за просмотр видео
+     */
+    public UnlockByVideo unlockByViewedAdVideo = new UnlockByVideo();
+
+    /**
      * title и url для экрана "О программе"
      * по умолчанию отобразим "topface.com" с переходом на "http://topface.com", если сервер не пришлет другое значение
      */
@@ -219,6 +224,7 @@ public class Options extends AbstractData {
             priceAdmiration = response.optInt("admirationPrice");
             isAutoreplyAllow = response.optBoolean("allowAutoreply", true);
             trialVipExperiment = JsonUtils.optFromJson(response.optString("experimentTrialVip"), TrialVipExperiment.class, new TrialVipExperiment());
+            unlockByViewedAdVideo = JsonUtils.optFromJson(response.optString("unlockByViewedAdVideo"), UnlockByVideo.class, new UnlockByVideo());
             forceSmsInviteRedirect = JsonUtils.optFromJson(response.optString("forceSmsInviteRedirect"), ForceSmsInviteRedirect.class, new ForceSmsInviteRedirect());
             // по умолчанию превью в диалогах всегда отображаем
             hidePreviewDialog = response.optBoolean("hidePreviewDialog", false);
@@ -818,14 +824,23 @@ public class Options extends AbstractData {
     }
 
     public static class UnlockByVideo {
-        private UnlockScreenCondition likes;
-        private UnlockScreenCondition admirations;
-        private UnlockScreenCondition visitors;
-        private UnlockScreenCondition fans;
+        private UnlockScreenCondition likes = getDefaultValue();
+        private UnlockScreenCondition admirations = getDefaultValue();
+        private UnlockScreenCondition visitors = getDefaultValue();
+        private UnlockScreenCondition fans = getDefaultValue();
+
+        private UnlockScreenCondition getDefaultValue() {
+            return new UnlockScreenCondition(false, 0);
+        }
 
         public static class UnlockScreenCondition {
             private boolean enabled;
             private int seconds;
+
+            public UnlockScreenCondition(boolean isEnabled, int duration) {
+                enabled = isEnabled;
+                seconds = duration;
+            }
 
             public boolean isEnabled() {
                 return enabled;
@@ -833,6 +848,10 @@ public class Options extends AbstractData {
 
             public int getUnlockDuration() {
                 return seconds;
+            }
+
+            public void setEnable(boolean isEnable) {
+                enabled = isEnable;
             }
         }
 
