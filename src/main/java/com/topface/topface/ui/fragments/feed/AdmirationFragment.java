@@ -10,8 +10,8 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.topface.topface.R;
-import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteAdmirationsRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -90,8 +90,8 @@ public class AdmirationFragment extends LikesFragment {
     }
 
     @Override
-    protected Options.UnlockByVideo.UnlockScreenCondition getUnlockCondition() {
-        return CacheProfile.getOptions().unlockByViewedAdVideo.getUnlockAdmirationCondition();
+    protected UnlockFunctionalityOption.UnlockScreenCondition getUnlockScreenCondition(UnlockFunctionalityOption data) {
+        return data.getUnlockAdmirationCondition();
     }
 
     private Button getUnlockButtonView(View view, int child) {

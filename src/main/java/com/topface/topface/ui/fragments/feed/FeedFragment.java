@@ -41,8 +41,8 @@ import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedUser;
-import com.topface.topface.data.Options;
-import com.topface.topface.data.Options.UnlockByVideo.UnlockScreenCondition;
+import com.topface.topface.data.UnlockFunctionalityOption;
+import com.topface.topface.data.UnlockFunctionalityOption.UnlockScreenCondition;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
@@ -51,6 +51,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.UnlockFunctionalityOptionsRequest;
 import com.topface.topface.requests.UnlockFunctionalityRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
@@ -1333,28 +1334,47 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         return true;
     }
 
-    protected UnlockScreenCondition getUnlockCondition() {
+    protected String getUnlockFunctionalityType() {
         return null;
     }
 
-    protected String getUnlockFunctionalityType() {
+    protected UnlockScreenCondition getUnlockScreenCondition(UnlockFunctionalityOption data) {
         return null;
     }
 
     protected void setUnlockButtonView(final Button view) {
         final String unlockType = getUnlockFunctionalityType();
-        final UnlockScreenCondition unlockCondition = getUnlockCondition();
-        if (view == null || unlockCondition == null || unlockType == null) {
+        if (view == null || unlockType == null) {
             return;
         }
         final AdToAppController adToAppController = AdToAppController.getInstance(getActivity());
         adToAppController.isAdsAvailable(AdToAppController.AdsMasks.VIDEO, new AdToAppController.AdsAvailableListener() {
             @Override
-            public void isAvailable(boolean available) {
-                view.setVisibility(available && unlockCondition.isEnabled() ? View.VISIBLE : View.GONE);
+            public void isAvailable(final boolean available) {
+                if (available) {
+                    new UnlockFunctionalityOptionsRequest(getActivity()).callback(new DataApiHandler<UnlockFunctionalityOption>() {
+                        @Override
+                        public void fail(int codeError, IApiResponse response) {
+
+                        }
+
+                        @Override
+                        protected void success(UnlockFunctionalityOption data, IApiResponse response) {
+                            UnlockScreenCondition unlockScreenCondition = getUnlockScreenCondition(data);
+                            if (unlockScreenCondition != null) {
+                                view.setText(Utils.getUnlockButtonText(unlockScreenCondition.getUnlockDuration()));
+                                view.setVisibility(unlockScreenCondition.isEnabled() ? View.VISIBLE : View.GONE);
+                            }
+                        }
+
+                        @Override
+                        protected UnlockFunctionalityOption parseResponse(ApiResponse response) {
+                            return UnlockFunctionalityOption.fillData(response);
+                        }
+                    }).exec();
+                }
             }
         });
-        view.setText(Utils.getUnlockButtonText(unlockCondition.getUnlockDuration()));
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1366,11 +1386,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                     @Override
                     public void onVideoWatched() {
                         super.onVideoWatched();
-                        unlockCondition.setEnable(false);
                         new UnlockFunctionalityRequest(unlockType, getContext()).callback(new ApiHandler() {
                             @Override
                             public void success(IApiResponse response) {
-                                App.updateUserOptions();
                                 updateData(false, false);
                             }
 

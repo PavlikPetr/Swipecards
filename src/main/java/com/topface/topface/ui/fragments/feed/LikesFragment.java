@@ -22,6 +22,7 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.requests.BuyLikesAccessRequest;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
@@ -29,8 +30,6 @@ import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ReadLikeRequest;
 import com.topface.topface.requests.SendLikeRequest;
-import com.topface.topface.requests.UnlockFunctionalityRequest;
-import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.TopfaceAppState;
@@ -45,9 +44,7 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.ads.AdToAppController;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
-import com.topface.topface.utils.ads.SimpleAdToAppListener;
 import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -211,8 +208,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
-    protected Options.UnlockByVideo.UnlockScreenCondition getUnlockCondition() {
-        return CacheProfile.getOptions().unlockByViewedAdVideo.getUnlockLikesCondition();
+    protected UnlockFunctionalityOption.UnlockScreenCondition getUnlockScreenCondition(UnlockFunctionalityOption data) {
+        return data.getUnlockLikesCondition();
     }
 
     private void updateTitleWithCounter(CountersData countersData) {

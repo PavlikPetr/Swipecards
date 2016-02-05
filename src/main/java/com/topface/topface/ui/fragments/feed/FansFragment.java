@@ -5,20 +5,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.Options;
-import com.topface.topface.data.Options.UnlockByVideo.UnlockScreenCondition;
+import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.UnlockFunctionalityRequest;
-import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.ads.AdToAppController;
-import com.topface.topface.utils.ads.SimpleAdToAppListener;
 import com.topface.topface.utils.config.FeedsCache;
 
 import org.jetbrains.annotations.NotNull;
@@ -74,8 +66,8 @@ public class FansFragment extends BookmarksFragment {
     }
 
     @Override
-    protected Options.UnlockByVideo.UnlockScreenCondition getUnlockCondition() {
-        return CacheProfile.getOptions().unlockByViewedAdVideo.getUnlockFansCondition();
+    protected UnlockFunctionalityOption.UnlockScreenCondition getUnlockScreenCondition(UnlockFunctionalityOption data) {
+        return data.getUnlockFansCondition();
     }
 
     @Override

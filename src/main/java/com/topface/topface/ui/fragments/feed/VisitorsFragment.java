@@ -6,17 +6,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.Options;
-import com.topface.topface.data.Options.UnlockByVideo.UnlockScreenCondition;
+import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.data.Visitor;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteVisitorsRequest;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.UnlockFunctionalityRequest;
-import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
@@ -24,9 +19,6 @@ import com.topface.topface.ui.adapters.VisitorsListAdapter;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.ads.AdToAppController;
-import com.topface.topface.utils.ads.SimpleAdToAppListener;
 import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -109,8 +101,8 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
-    protected Options.UnlockByVideo.UnlockScreenCondition getUnlockCondition() {
-        return CacheProfile.getOptions().unlockByViewedAdVideo.getUnlockVisitorsCondition();
+    protected UnlockFunctionalityOption.UnlockScreenCondition getUnlockScreenCondition(UnlockFunctionalityOption data) {
+        return data.getUnlockVisitorsCondition();
     }
 
     @Override
