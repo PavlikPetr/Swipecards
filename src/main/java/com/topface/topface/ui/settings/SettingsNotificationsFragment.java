@@ -122,7 +122,7 @@ public class SettingsNotificationsFragment extends BaseFragment {
         setTitle(R.string.settings_mutual, mLoMutual);
         setTitle(R.string.settings_messages, mLoChat);
         setTitle(R.string.settings_guests, mLoGuests);
-        Profile profile = App.from(getActivity()).getProfile();
+        Profile profile = App.from(getContext()).getProfile();
         if (profile.notifications != null) {
             setText(profile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES), mLoLikes);
             setText(profile.notifications.get(CacheProfile.NOTIFICATIONS_SYMPATHY), mLoMutual);
@@ -198,7 +198,7 @@ public class SettingsNotificationsFragment extends BaseFragment {
 
     private void setNotificationState() {
         boolean isMarketApiAvailable = mMarketApiManager.isMarketApiAvailable();
-        if (!App.from(getActivity()).getProfile().email && !isMarketApiAvailable) {
+        if (!App.get().getProfile().email && !isMarketApiAvailable) {
             mMelodyName.setVisibility(View.GONE);
             setNotificationVisibility(View.GONE);
         } else {
@@ -258,7 +258,7 @@ public class SettingsNotificationsFragment extends BaseFragment {
                 break;
         }
         NotificationEditDialog.newInstance(App.getContext().getResources().getString(textId),
-                App.from(getActivity()).getProfile().notifications.get(notificationTypeId),
+                App.get().getProfile().notifications.get(notificationTypeId),
                 mEditingFinishedListener).show(getFragmentManager(), NotificationEditDialog.class.getName());
     }
 
@@ -278,7 +278,7 @@ public class SettingsNotificationsFragment extends BaseFragment {
             view.setEnabled(false);
             setText(mSavingText, view);
         }
-        final Profile profile = App.from(getActivity()).getProfile();
+        final Profile profile = App.get().getProfile();
         getMailNotificationRequest(notification, App.getContext()).callback(new DataApiHandler<SendMailNotificationResponse>() {
             @Override
             public void fail(int codeError, IApiResponse response) {
@@ -330,8 +330,9 @@ public class SettingsNotificationsFragment extends BaseFragment {
     }
 
     private boolean hasChanges(Profile.TopfaceNotifications notification) {
-        if (App.from(getActivity()).getProfile().notifications != null) {
-            Profile.TopfaceNotifications cachedNotification = App.from(getActivity()).getProfile().notifications.get(notification.type);
+        Profile profile = App.get().getProfile();
+        if (profile.notifications != null) {
+            Profile.TopfaceNotifications cachedNotification = profile.notifications.get(notification.type);
             return cachedNotification.mail != notification.mail || cachedNotification.apns != notification.apns;
         }
         return false;
@@ -383,7 +384,7 @@ public class SettingsNotificationsFragment extends BaseFragment {
      */
     public SendMailNotificationsRequest getMailNotificationRequest(Context context) {
         SendMailNotificationsRequest request = new SendMailNotificationsRequest(context);
-        Profile profile = App.from(getActivity()).getProfile();
+        Profile profile = App.from(context).getProfile();
         if (profile.notifications != null) {
             try {
                 request.mailSympathy = profile.notifications.get(CacheProfile.NOTIFICATIONS_LIKES).mail;
