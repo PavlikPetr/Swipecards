@@ -72,11 +72,15 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
             protected void success(Banner topfaceBanner, IApiResponse response) {
                 if (adView != null) {
                     try {
-                        callbacks.onAdLoadSuccess(adView);
+                        if (callbacks != null) {
+                            callbacks.onAdLoadSuccess(adView);
+                        }
                         displayBanner(adView, page, topfaceBanner);
                         adView.setOnClickListener(new ActionsOnClickListener(topfaceBanner, page, callbacks));
                         sendStat(topfaceBanner, VIEW);
-                        callbacks.onAdShow();
+                        if (callbacks != null) {
+                            callbacks.onAdShow();
+                        }
                     } catch (Exception e) {
                         Debug.error(e);
                     }
@@ -190,7 +194,9 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
                     break;
             }
             sendStat(mBanner, CLICK);
-            mCallbacks.onAdClick();
+            if (mCallbacks != null) {
+                mCallbacks.onAdClick();
+            }
             if (intent != null) {
                 mPage.getActivity().startActivity(intent);
             }

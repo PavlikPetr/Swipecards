@@ -134,5 +134,4 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     protected String getGcmUpdateAction() {
         return GCMUtils.GCM_GUESTS_UPDATE;
     }
-
 }

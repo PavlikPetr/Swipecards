@@ -1335,7 +1335,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     protected String getUnlockFunctionalityType() {
-        return null;
+        return Utils.EMPTY;
     }
 
     protected UnlockScreenCondition getUnlockScreenCondition(UnlockFunctionalityOption data) {
@@ -1344,7 +1344,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     protected void setUnlockButtonView(final Button view) {
         final String unlockType = getUnlockFunctionalityType();
-        if (view == null || unlockType == null) {
+        if (view == null || unlockType.isEmpty()) {
             return;
         }
         final AdToAppController adToAppController = AdToAppController.getInstance(getActivity());

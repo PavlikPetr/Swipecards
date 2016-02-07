@@ -3,7 +3,7 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.JsonObject;
+import com.google.gson.annotations.SerializedName;
 import com.topface.framework.JsonUtils;
 import com.topface.topface.requests.ApiResponse;
 
@@ -13,16 +13,20 @@ import org.json.JSONException;
  * Ulock condition by video ads
  */
 public class UnlockFunctionalityOption implements Parcelable {
-    private UnlockScreenCondition likes;
-    private UnlockScreenCondition admirations;
-    private UnlockScreenCondition visitors;
-    private UnlockScreenCondition fans;
+    @SerializedName("likes")
+    private UnlockScreenCondition mLikes;
+    @SerializedName("admirations")
+    private UnlockScreenCondition mAdmirations;
+    @SerializedName("visitors")
+    private UnlockScreenCondition mVisitors;
+    @SerializedName("fans")
+    private UnlockScreenCondition mFans;
 
     public UnlockFunctionalityOption() {
-        likes = getDefaultValue();
-        admirations = getDefaultValue();
-        visitors = getDefaultValue();
-        fans = getDefaultValue();
+        mLikes = getDefaultValue();
+        mAdmirations = getDefaultValue();
+        mVisitors = getDefaultValue();
+        mFans = getDefaultValue();
     }
 
     public static UnlockFunctionalityOption fillData(ApiResponse data) {
@@ -37,10 +41,10 @@ public class UnlockFunctionalityOption implements Parcelable {
     }
 
     protected UnlockFunctionalityOption(Parcel in) {
-        likes = in.readParcelable(UnlockScreenCondition.class.getClassLoader());
-        admirations = in.readParcelable(UnlockScreenCondition.class.getClassLoader());
-        visitors = in.readParcelable(UnlockScreenCondition.class.getClassLoader());
-        fans = in.readParcelable(UnlockScreenCondition.class.getClassLoader());
+        mLikes = in.readParcelable(UnlockScreenCondition.class.getClassLoader());
+        mAdmirations = in.readParcelable(UnlockScreenCondition.class.getClassLoader());
+        mVisitors = in.readParcelable(UnlockScreenCondition.class.getClassLoader());
+        mFans = in.readParcelable(UnlockScreenCondition.class.getClassLoader());
     }
 
     public static final Creator<UnlockFunctionalityOption> CREATOR = new Creator<UnlockFunctionalityOption>() {
@@ -66,24 +70,26 @@ public class UnlockFunctionalityOption implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(likes, flags);
-        dest.writeParcelable(admirations, flags);
-        dest.writeParcelable(visitors, flags);
-        dest.writeParcelable(fans, flags);
+        dest.writeParcelable(mLikes, flags);
+        dest.writeParcelable(mAdmirations, flags);
+        dest.writeParcelable(mVisitors, flags);
+        dest.writeParcelable(mFans, flags);
     }
 
     public static class UnlockScreenCondition implements Parcelable {
-        private boolean enabled;
-        private int seconds;
+        @SerializedName("enabled")
+        private boolean mIsEnabled;
+        @SerializedName("seconds")
+        private int mDuration;
 
         public UnlockScreenCondition(boolean isEnabled, int duration) {
-            enabled = isEnabled;
-            seconds = duration;
+            mIsEnabled = isEnabled;
+            mDuration = duration;
         }
 
         protected UnlockScreenCondition(Parcel in) {
-            enabled = in.readByte() != 0;
-            seconds = in.readInt();
+            mIsEnabled = in.readByte() != 0;
+            mDuration = in.readInt();
         }
 
         public static final Creator<UnlockScreenCondition> CREATOR = new Creator<UnlockScreenCondition>() {
@@ -99,15 +105,15 @@ public class UnlockFunctionalityOption implements Parcelable {
         };
 
         public boolean isEnabled() {
-            return enabled;
+            return mIsEnabled;
         }
 
         public int getUnlockDuration() {
-            return seconds;
+            return mDuration;
         }
 
         public void setEnable(boolean isEnable) {
-            enabled = isEnable;
+            mIsEnabled = isEnable;
         }
 
         @Override
@@ -117,24 +123,24 @@ public class UnlockFunctionalityOption implements Parcelable {
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
-            dest.writeInt(enabled ? 1 : 0);
-            dest.writeInt(seconds);
+            dest.writeInt(mIsEnabled ? 1 : 0);
+            dest.writeInt(mDuration);
         }
     }
 
     public UnlockScreenCondition getUnlockLikesCondition() {
-        return likes;
+        return mLikes;
     }
 
     public UnlockScreenCondition getUnlockAdmirationCondition() {
-        return admirations;
+        return mAdmirations;
     }
 
     public UnlockScreenCondition getUnlockVisitorsCondition() {
-        return visitors;
+        return mVisitors;
     }
 
     public UnlockScreenCondition getUnlockFansCondition() {
-        return fans;
+        return mFans;
     }
 }

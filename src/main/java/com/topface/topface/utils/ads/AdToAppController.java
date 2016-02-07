@@ -4,7 +4,6 @@ import android.app.Activity;
 
 import com.appintop.init.AdToApp;
 import com.appintop.interstitialads.DefaultInterstitialListener;
-import com.topface.topface.banners.ad_providers.AdToAppProvider;
 
 import java.util.HashMap;
 
@@ -20,7 +19,7 @@ public class AdToAppController {
     private HashMap<AdsMasks, AdsAvailableListener> mAdsAvailableMap = new HashMap<>();
     private static AdToAppController mInstance;
     private static Activity mActivity;
-    private boolean isVideoStart;
+    private boolean mIsVideoStart;
     private DefaultInterstitialListener mInterstitialListener = new DefaultInterstitialListener() {
         @Override
         public void onFirstInterstitialLoad(String s, String s1) {
@@ -30,7 +29,7 @@ public class AdToAppController {
         @Override
         public void onInterstitialStarted(String s, String s1) {
             if (s.equals(AdsMasks.VIDEO.getType())) {
-                isVideoStart = true;
+                mIsVideoStart = true;
             }
             for (IAdToAppListener listener : mAdToAppListeners.values()) {
                 if (listener != null) {
@@ -53,7 +52,7 @@ public class AdToAppController {
             for (IAdToAppListener listener : mAdToAppListeners.values()) {
                 if (listener != null) {
                     listener.onClosed();
-                    if (isVideoStart && s.equals(AdsMasks.VIDEO.getType())) {
+                    if (mIsVideoStart && s.equals(AdsMasks.VIDEO.getType())) {
                         listener.onVideoWatched();
                     }
                 }

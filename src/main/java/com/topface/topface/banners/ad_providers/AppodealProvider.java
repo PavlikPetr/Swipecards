@@ -45,22 +45,30 @@ public class AppodealProvider extends AbstractAdsProvider {
             @Override
             public void onBannerLoaded() {
                 Appodeal.show(page.getActivity(), Appodeal.BANNER_VIEW);
-                callbacks.onAdLoadSuccess(adView);
+                if (callbacks != null) {
+                    callbacks.onAdLoadSuccess(adView);
+                }
             }
 
             @Override
             public void onBannerFailedToLoad() {
-                callbacks.onFailedToLoadAd();
+                if (callbacks != null) {
+                    callbacks.onFailedToLoadAd();
+                }
             }
 
             @Override
             public void onBannerShown() {
-                callbacks.onAdShow();
+                if (callbacks != null) {
+                    callbacks.onAdShow();
+                }
             }
 
             @Override
             public void onBannerClicked() {
-                callbacks.onAdClick();
+                if (callbacks != null) {
+                    callbacks.onAdClick();
+                }
             }
         });
         return true;
