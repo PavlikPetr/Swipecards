@@ -21,6 +21,7 @@ public class SettingsRequest extends ApiRequest {
     public int background = -1;
     public Boolean invisible;
     public int xstatus = -1; //цель знакомства
+    public Boolean isAutoReplyAllowed = null; // настройка автоотправки сообщений
 
     public SettingsRequest(Context context) {
         super(context);
@@ -58,6 +59,9 @@ public class SettingsRequest extends ApiRequest {
         }
         if (xstatus != -1) {
             data.put("xstatus", xstatus);
+        }
+        if (isAutoReplyAllowed != null) {
+            data.put("allowAutoreply", isAutoReplyAllowed);
         }
 
         return data;

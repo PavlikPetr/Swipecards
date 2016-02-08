@@ -1,11 +1,8 @@
 package com.topface.topface.ui.adapters;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
-import android.util.SparseArray;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -13,51 +10,63 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.data.Photo;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.ResourcesUtils;
+
+import java.util.ArrayList;
 
 public class LeftMenuAdapter extends BaseAdapter {
     public static final int TYPE_MENU_BUTTON = 0;
     public static final int TYPE_MENU_BUTTON_WITH_BADGE = 1;
     public static final int TYPE_MENU_BUTTON_WITH_PHOTO = 2;
     private static final int TYPE_COUNT = 3;
-    private final SparseArray<ILeftMenuItem> mItems;
-    private Context mContext;
+    private ArrayList<ILeftMenuItem> mItems;
     private CountersData mCountersData;
 
-    public LeftMenuAdapter(SparseArray<ILeftMenuItem> items, Context context) {
+    public LeftMenuAdapter(ArrayList<ILeftMenuItem> items) {
         mItems = items;
-        mContext = context;
+    }
+
+    public void replaceMenuItems(ArrayList<ILeftMenuItem> items) {
+        mItems = items;
     }
 
     public static ILeftMenuItem newLeftMenuItem(BaseFragment.FragmentId menuId, int menuType,
                                                 int menuIcon) {
-        return newLeftMenuItem(menuId, menuType, menuIcon, null);
+        return newLeftMenuItem(menuId, menuType, menuIcon, null, null);
+    }
+
+    public static ILeftMenuItem newLeftMenuItem(BaseFragment.FragmentId menuId, int menuType,
+                                                int menuIcon, String menuIconUrl) {
+        return newLeftMenuItem(menuId, menuType, menuIcon, null, menuIconUrl);
     }
 
     public static ILeftMenuItem newLeftMenuItem(BaseFragment.FragmentId menuId, int menuType,
                                                 Photo menuIcon) {
-        return newLeftMenuItem(menuId, menuType, -1, menuIcon);
+        return newLeftMenuItem(menuId, menuType, -1, menuIcon, null);
     }
 
     public static ILeftMenuItem newLeftMenuItem(final BaseFragment.FragmentId menuId, final int menuType,
-                                                final int menuIconResId, final Photo menuIconPhoto) {
+                                                final int menuIconResId, final Photo menuIconPhoto, final String menuIconUrl) {
+        return newLeftMenuItem(menuId.getFragmentSettings(), menuType, menuIconResId, menuIconPhoto, menuIconUrl);
+    }
+
+    public static ILeftMenuItem newLeftMenuItem(final FragmentSettings menuId, final int menuType,
+                                                final int menuIconResId, final Photo menuIconPhoto, final String menuIconUrl) {
         return new ILeftMenuItem() {
 
             private Photo menuPhoto = menuIconPhoto;
             private int menuExtraIconId = -1;
 
             @Override
-            public BaseFragment.FragmentId getMenuId() {
+            public FragmentSettings getMenuId() {
                 return menuId;
             }
 
@@ -79,6 +88,11 @@ public class LeftMenuAdapter extends BaseAdapter {
             @Override
             public Photo getMenuIconPhoto() {
                 return menuPhoto;
+            }
+
+            @Override
+            public String getMenuIconUrl() {
+                return menuIconUrl;
             }
 
             @Override
@@ -105,20 +119,12 @@ public class LeftMenuAdapter extends BaseAdapter {
 
     @Override
     public ILeftMenuItem getItem(int position) {
-        return mItems.valueAt(position);
+        return mItems.get(position);
     }
 
     @Override
     public long getItemId(int position) {
         return position;
-    }
-
-    public void addItem(ILeftMenuItem item) {
-        mItems.put(item.getMenuId().getId(), item);
-    }
-
-    public boolean hasFragment(BaseFragment.FragmentId id) {
-        return mItems.size() > id.getId();
     }
 
     @NonNull
@@ -139,7 +145,7 @@ public class LeftMenuAdapter extends BaseAdapter {
                             : R.layout.item_left_menu_button_with_badge,
                     null
             );
-            holder.icon = (ImageView) convertView.findViewById(R.id.image_icon);
+            holder.icon = (ImageViewRemote) convertView.findViewById(R.id.image_icon);
             holder.extraIcon = (ImageView) convertView.findViewById(R.id.image_badge);
             holder.btnMenu = (TextView) convertView.findViewById(R.id.btnMenu);
             holder.counterBadge = (TextView) convertView.findViewById(R.id.tvCounterBadge);
@@ -150,34 +156,23 @@ public class LeftMenuAdapter extends BaseAdapter {
             holder.item = item;
         }
         // initiate views' state in holder
-        Options options = App.from(mContext).getOptions();
+        Options options = App.get().getOptions();
         switch (type) {
             case TYPE_MENU_BUTTON:
                 holder.btnMenu.setText(item.getMenuText());
                 holder.counterBadge.setVisibility(View.GONE);
-                holder.icon.setBackgroundResource(item.getMenuIconResId());
+                holder.icon.setResourceSrc(item.getMenuIconResId());
                 break;
             case TYPE_MENU_BUTTON_WITH_BADGE:
-                if (item.getMenuId() == BaseFragment.FragmentId.BONUS) {
-                    holder.btnMenu.setText(options.bonus.buttonText);
-                } else {
-                    holder.btnMenu.setText(item.getMenuText());
-                }
-                holder.icon.setBackgroundResource(item.getMenuIconResId());
+                holder.btnMenu.setText(item.getMenuText());
+                holder.icon.setResourceSrc(item.getMenuIconResId());
                 if (mCountersData != null) {
                     updateCountersBadge(holder.counterBadge, mCountersData.getCounterByFragmentId(item.getMenuId()));
                 }
                 break;
             case TYPE_MENU_BUTTON_WITH_PHOTO:
                 holder.btnMenu.setText(item.getMenuText());
-                Photo photo = App.from(mContext).getProfile().photo;
-                if (photo == null || photo.isEmpty()) {
-                    holder.icon.setImageResource(App.from(mContext).getProfile().sex == Static.GIRL ?
-                            R.drawable.rounded_avatar_female :
-                            R.drawable.rounded_avatar_male);
-                } else if (holder.icon instanceof ImageViewRemote) {
-                    ((ImageViewRemote) holder.icon).setPhoto(photo);
-                }
+                holder.icon.setPhoto(App.get().getProfile().photo);
                 if (holder.extraIcon != null) {
                     int extraIconDrawable = item.getExtraIconDrawable();
                     if (extraIconDrawable > 0) {
@@ -191,17 +186,8 @@ public class LeftMenuAdapter extends BaseAdapter {
                 break;
         }
         holder.item = item;
-        // init button state
-        if (item.getMenuId() == BaseFragment.FragmentId.BONUS) {
-            if (options.bonus.buttonPicture != null) {
-                // set custom button ico from server
-                DefaultImageLoader.getInstance(App.getContext()).preloadImage(options.bonus.buttonPicture, new SimpleImageLoadingListener() {
-                    @Override
-                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                        holder.icon.setImageDrawable(new BitmapDrawable(App.getContext().getResources(), loadedImage));
-                    }
-                });
-            }
+        if (!TextUtils.isEmpty(item.getMenuIconUrl())) {
+            holder.icon.setRemoteSrc(item.getMenuIconUrl());
         }
         return convertView;
     }
@@ -213,7 +199,7 @@ public class LeftMenuAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        return mItems.valueAt(position).getMenuType();
+        return mItems.get(position).getMenuType();
     }
 
     @Override
@@ -228,7 +214,7 @@ public class LeftMenuAdapter extends BaseAdapter {
         }
     }
 
-    public View getViewForActivate(ListView listView, BaseFragment.FragmentId fragmentId) {
+    public View getViewForActivate(ListView listView, FragmentSettings fragmentSettings) {
         View view = null;
         for (int j = 0; j <= getCount(); j++) {
             View wantedView = listView.getChildAt(j);
@@ -239,8 +225,8 @@ public class LeftMenuAdapter extends BaseAdapter {
             if (viewHolder == null || !(viewHolder instanceof LeftMenuAdapter.ViewHolder)) {
                 continue;
             }
-            BaseFragment.FragmentId item = ((LeftMenuAdapter.ViewHolder) viewHolder).item.getMenuId();
-            if (fragmentId == item) {
+            FragmentSettings item = ((LeftMenuAdapter.ViewHolder) viewHolder).item.getMenuId();
+            if (fragmentSettings == item) {
                 wantedView.setActivated(true);
                 view = wantedView;
             } else {
@@ -254,12 +240,12 @@ public class LeftMenuAdapter extends BaseAdapter {
         TextView btnMenu;
         TextView counterBadge;
         ILeftMenuItem item;
-        ImageView icon;
+        ImageViewRemote icon;
         ImageView extraIcon;
     }
 
     public interface ILeftMenuItem {
-        BaseFragment.FragmentId getMenuId();
+        FragmentSettings getMenuId();
 
         int getMenuType();
 
@@ -268,6 +254,8 @@ public class LeftMenuAdapter extends BaseAdapter {
         int getMenuIconResId();
 
         Photo getMenuIconPhoto();
+
+        String getMenuIconUrl();
 
         void setMenuIconPhoto(Photo photo);
 

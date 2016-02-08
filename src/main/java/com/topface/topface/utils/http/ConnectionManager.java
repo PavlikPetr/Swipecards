@@ -43,6 +43,8 @@ public class ConnectionManager {
      * Количество одновременно выполняемых запросов
      */
     public static final int THREAD_PULL_SIZE = 3;
+    public static final String API_URL = "https://api.core.tf/";
+    public static final String API_500_ERROR_URL = "http://httpstat.us/500";
 
     private static ConnectionManager mInstance;
     private ExecutorService mWorker;

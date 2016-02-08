@@ -20,10 +20,8 @@
     <string name="buying_store_purchase">Sooritan ostu iTunes Store\'is</string>
     <string name="buying_tf_ack_sending">Saadan info Topface\'ist ostu kohta</string>
     <string name="leaders_select_photo">Vali efektse foto</string>
-    <string name="general_bookmarks_is_deleted">Kasutaja on väljavalitute hulgast ära kustutatud
-    </string>
-    <string name="general_blacklist_is_deleted">Kasutaja on mustast nimekirjast ära kustutatud
-    </string>
+    <string name="general_bookmarks_is_deleted">Kasutaja on väljavalitute hulgast ära kustutatud</string>
+    <string name="general_blacklist_is_deleted">Kasutaja on mustast nimekirjast ära kustutatud</string>
     <string name="invite_friends_title_short">Kutsuda kõik sõbrad Topface\'i</string>
     <string name="general_bookmarks_add_short">Väljavalitute hulka</string>
     <string name="general_complaint">Edasi kaevata</string>
@@ -37,15 +35,11 @@
     <string name="vip_invisible_mode">Nähtamatu rezhiim</string>
     <string name="buying_profile_coins">Sinu kontol/ Sinu arvel</string>
     <string name="vip_info_title">VIP-eelised</string>
-    <string name="profile_gifts_empty">Sellele kasutajale pole/ ei ole veel keegi kingitusi
-        kinkinud.
-    </string>
+    <string name="profile_gifts_empty">Sellele kasutajale pole/ ei ole veel keegi kingitusi kinkinud.</string>
     <string name="profile_mygifts_empty">Sulle pole veel keegi kingitusi kinkinud.</string>
     <string name="dating_people_unnoticed">Kümme inimest on ilma sinu tähelepanuta jäänud!</string>
     <string name="dating_continue">Tutvumisega jätkata</string>
-    <string name="dating_better_look">Vaata tähelepanelikumalt! Võib-olla jääd sa oma saatusest
-        ilma!
-    </string>
+    <string name="dating_better_look">Vaata tähelepanelikumalt! Võib-olla jääd sa oma saatusest ilma!</string>
     <string name="edit_my_photos">Minu fotod</string>
     <string name="general_search_empty_title">Kahjuks, ei ole midagi leitud.</string>
     <string name="map_title">Kaart</string>
@@ -118,8 +112,7 @@
     <string name="chat_sexuality_out">Sa oled seksuaalsuse hinnanud.</string>
     <string name="chat_wink_in">Sind müksati.</string>
     <string name="chat_wink_out">Sa müksasid.
-        Sa oled müksanud.
-    </string>
+Sa oled müksanud.</string>
     <string name="filter_filter">Filter</string>
     <string name="filter_age_string">alates %1$d kuni %2$d</string>
     <string name="filter_only_beautiful">Ainult/vaid ilusad</string>
@@ -207,9 +200,7 @@
     <string name="general_sex">Sugu</string>
     <string name="general_girl">Nais-, naiste</string>
     <string name="general_boy">Mees-/ meeste</string>
-    <string name="filter_city_fail">Ei ole ühtegi linna leitud, mille nimetus oleks «%s» tähega
-        alganud.
-    </string>
+    <string name="filter_city_fail">Ei ole ühtegi linna leitud, mille nimetus oleks «%s» tähega alganud.</string>
     <string name="age_filter_man">Sind huvitavad noormehed</string>
     <string name="age_filter_girl">Sind huvitavad neiud</string>
     <string name="settings_melody">Teatamisviis/Teatamise meloodia</string>
@@ -227,9 +218,7 @@
     <string name="black_list_delete">Mustast nimekirjast eemaldada</string>
     <string name="vip_buy_vip">VIP\'i ost/ostmine</string>
     <string name="vip_state_off">Sinu VIP-staatust ei ole aktiveeritud.</string>
-    <string name="vip_info_guest">Saa teada, kes on sinu vastu huvi tundnud - vaata omad külalised
-        ära!
-    </string>
+    <string name="vip_info_guest">Saa teada, kes on sinu vastu huvi tundnud - vaata omad külalised ära!</string>
     <string name="vip_info_blackList">Saa tüütudest isikutest lahti \"musta nimekirja\" abil
     </string>
     <string name="buying_vip_status">VIP-staatust osta</string>
@@ -270,8 +259,7 @@
     <string name="incorrect_login">Kasutajanimi on vale/ Vale kasutajanimi</string>
     <string name="incorrect_password">Salasõna on vale/ Vale salasõna</string>
     <string name="empty_fields">Mitte kõik väljad on ära täidetud.</string>
-    <string name="email_already_registered">Selle e-posti aadressiga kasutaja on juba olemas
-    </string>
+    <string name="email_already_registered">Selle e-posti aadressiga kasutaja on juba olemas</string>
     <string name="default_photo_upload">Foto ülesselaadimine</string>
     <string name="default_photo_upload_error">Laadimise viga</string>
     <string name="default_photo_upload_complete">Ülesselaadimine on lõpetatud!</string>
@@ -311,9 +299,7 @@
     <string name="general_bookmarks">Väljavalitud</string>
     <string name="general_fans">Kummardajad</string>
     <string name="settings_edit_profile">Profiili toimetada</string>
-    <string name="general_bookmarks_delete">Väljavalitutest/Väljavalitute hulgast
-        eemaldada/kustutada
-    </string>
+    <string name="general_bookmarks_delete">Väljavalitutest/Väljavalitute hulgast eemaldada/kustutada</string>
     <string name="general_bookmarks_add">Lisada/lisama \"Väljavalitute\" hulka</string>
     <string name="buy_resources">Varu ära täiendada</string>
     <string name="user_is_banned">Kasutaja on ära keelatud</string>

@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RestorePwdRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -108,7 +107,7 @@ public class RecoverPwdFragment extends BaseFragment {
         }
         mEdEmail.setSelection(mEdEmail.getText().length());
         mEdEmail.addTextChangedListener(new TextWatcher() {
-            String before = Static.EMPTY;
+            String before = Utils.EMPTY;
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -163,7 +162,7 @@ public class RecoverPwdFragment extends BaseFragment {
                         });
                     }
                 }
-            }, Static.RED_ALERT_APPEARANCE_TIME);
+            }, RegistrationFragment.RED_ALERT_APPEARANCE_TIME);
         }
     }
 

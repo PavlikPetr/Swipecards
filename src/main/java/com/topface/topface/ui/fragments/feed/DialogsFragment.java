@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
+import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.data.History;
 import com.topface.topface.promo.dialogs.PromoDialog;
 import com.topface.topface.promo.dialogs.PromoExpressMessages;
@@ -110,6 +111,17 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
             updateData(true, false);
             mIsNeedRefresh = false;
         }
+        if (getListAdapter() != null) {
+            boolean isVip = App.get().getProfile().premium;
+            for (FeedDialog feed : getListAdapter().getData()) {
+                if (feed.type == FeedDialog.MESSAGE_AUTO_REPLY && isVip) {
+                    getListAdapter().getData().clear();
+                    updateData(false, false);
+                    break;
+                }
+            }
+
+        }
         if (isPromoExpressMessagesDialogAttached()) {
             showExpressMessagesPopupIfNeeded();
         }
@@ -162,7 +174,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MenuFragment.selectFragment(FragmentId.DATING);
+                MenuFragment.selectFragment(FragmentId.DATING.getFragmentSettings());
             }
         });
     }

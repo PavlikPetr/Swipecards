@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -40,7 +40,7 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
             Fragment fragment = null;
             Intent intent = getIntent();
             mConfirmCode = getIntent().getStringExtra(CONFIRMATION_CODE);
-            switch (intent.getIntExtra(Static.INTENT_REQUEST_KEY, 0)) {
+            switch (intent.getIntExtra(App.INTENT_REQUEST_KEY, 0)) {
                 case INTENT_ACCOUNT:
                     AuthToken token = AuthToken.getInstance();
                     if (token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {

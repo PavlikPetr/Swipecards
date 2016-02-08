@@ -3,7 +3,6 @@ package com.topface.topface.ui;
 import android.content.Intent;
 
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.ui.fragments.EditorBannersFragment;
 
 public class EditorBannersActivity extends CheckAuthActivity<EditorBannersFragment> {
@@ -13,7 +12,7 @@ public class EditorBannersActivity extends CheckAuthActivity<EditorBannersFragme
 
     public static Intent getEditorBannersIntent() {
         Intent intent = new Intent(App.getContext(), EditorBannersActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_EDITOR_BANNERS);
+        intent.putExtra(App.INTENT_REQUEST_KEY, INTENT_EDITOR_BANNERS);
         return intent;
     }
 

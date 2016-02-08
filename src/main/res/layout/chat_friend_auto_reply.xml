@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:gravity="left">
+
+    <include
+        android:id="@+id/loDateDivider"
+        layout="@layout/chat_date_divider" />
+
+    <!-- message -->
+    <LinearLayout
+        android:id="@+id/chat_buble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/loDateDivider"
+        android:background="@drawable/rose_bubble"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="@string/chat_auto_reply_title"
+            android:textColor="#dd000000"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/chat_message"
+            style="@style/ChatMessage"
+            android:layout_marginTop="0dp"
+            android:background="@null"
+            android:text="@string/chat_auto_reply_message"
+            android:textColor="#8e000000"
+            android:textSize="13sp" />
+
+        <Button
+            android:id="@+id/chat_auto_reoly_buy_vip"
+            style="@style/Widget.Topface.Button.Big.Blue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/chat_auto_reply_button"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- date -->
+    <TextView
+        android:id="@+id/chat_date"
+        style="@style/ChatDate"
+        android:layout_alignBottom="@id/chat_buble"
+        android:layout_toRightOf="@id/chat_buble" />
+
+</RelativeLayout>

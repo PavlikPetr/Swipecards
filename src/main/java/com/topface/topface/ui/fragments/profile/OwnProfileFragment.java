@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.profile;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,15 +22,16 @@ import com.topface.topface.R;
 import com.topface.topface.data.IUniversalUser;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.UniversalUserFactory;
-import com.topface.topface.ui.dialogs.TakePhotoDialog;
+import com.topface.topface.statistics.TakePhotoStatistics;
+import com.topface.topface.ui.TakePhotoActivity;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
+import com.topface.topface.ui.fragments.VkProfileFragment;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.BuyVipFragmentManager;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.IPhotoTakerWithDialog;
-import com.topface.topface.utils.PhotoTaker;
 import com.topface.topface.utils.actionbar.OverflowMenu;
+import com.topface.topface.utils.social.AuthToken;
 
 /**
  * Created by kirussell on 18.03.14.
@@ -41,7 +41,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     private AddPhotoHelper mAddPhotoHelper;
     private BroadcastReceiver mAddPhotoReceiver;
     private BroadcastReceiver mUpdateProfileReceiver;
-    private IPhotoTakerWithDialog mPhotoTaker;
+    private boolean mIsPhotoAsked;
     private MenuItem mBarAvatar;
     private Handler mHandler = new Handler() {
         @Override
@@ -58,7 +58,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
         initAddPhotoHelper();
-        mPhotoTaker = new PhotoTaker(mAddPhotoHelper, getActivity());
+        mIsPhotoAsked = false;
         return root;
     }
 
@@ -71,16 +71,19 @@ public class OwnProfileFragment extends OwnAvatarFragment {
                 onProfileUpdated();
             }
         };
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
-        showTakePhotoDialog();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateProfileReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+        showTakePhotoDialog(TakePhotoStatistics.PLC_OWN_PROFILE_ON_RESUME);
     }
 
-    private void showTakePhotoDialog() {
-        TakePhotoDialog takePhotoDialog = (TakePhotoDialog) mPhotoTaker.getActivityFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
-        if (App.from(getActivity()).getProfile().photo == null && mAddPhotoHelper != null && takePhotoDialog == null
-                && !App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().uid > 0) {
-            mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null);
+    private void showTakePhotoDialog(String plc) {
+        showTakePhotoDialog(plc, false);
+    }
+
+    private void showTakePhotoDialog(String plc, boolean forceShow) {
+        if (!CacheProfile.isEmpty(getContext()) && mAddPhotoHelper != null
+                && (!mIsPhotoAsked || forceShow) && (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null)) {
+            startActivityForResult(TakePhotoActivity.createIntent(getContext(), plc), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
+            mIsPhotoAsked = true;
         }
     }
 
@@ -111,6 +114,9 @@ public class OwnProfileFragment extends OwnAvatarFragment {
         addBodyPage(ProfileFormFragment.class.getName(), getResources().getString(R.string.profile_form));
         addBodyPage(BuyVipFragmentManager.getClassName(), getResources().getString(R.string.vip_status));
         addBodyPage(SettingsFragment.class.getName(), getResources().getString(R.string.settings_header_title));
+        if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
+            addBodyPage(VkProfileFragment.class.getName(), getResources().getString(R.string.general_vk_profile));
+        }
     }
 
     @Override
@@ -144,21 +150,8 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            switch (requestCode) {
-                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY:
-                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA:
-                    if (mAddPhotoHelper != null) {
-                        mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
-                    }
-                    break;
-                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:
-                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG:
-                    if (mAddPhotoHelper != null) {
-                        mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, mAddPhotoHelper.processActivityResult(requestCode, resultCode, data, false));
-                    }
-                    break;
-            }
+        if (mAddPhotoHelper != null) {
+            mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -170,7 +163,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
             public void onReceive(Context context, Intent intent) {
                 FragmentActivity activity = getActivity();
                 if (activity != null && mAddPhotoHelper != null) {
-                    int id = intent.getIntExtra("btn_id", 0);
+                    int id = intent.getIntExtra(AddPhotoHelper.EXTRA_BUTTON_ID, 0);
                     View view = new View(activity);
                     view.setId(id);
                     mAddPhotoHelper.getAddPhotoClickListener().onClick(view);
@@ -204,7 +197,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
                             profile.uid, profile.photosCount,
                             profile.photos));
         } else {
-            showTakePhotoDialog();
+            showTakePhotoDialog(TakePhotoStatistics.PLC_OWN_PROFILE_AVATAR_CLICK, true);
         }
     }
 }

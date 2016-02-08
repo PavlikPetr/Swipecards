@@ -34,7 +34,18 @@
 
     <style name="Widget.Topface.Button.Big.Red">
         <item name="android:background">@drawable/btn_red_selector</item>
-        <item name="android:textColor">@drawable/btn_red_text_color_selector</item>
+        <item name="android:textColor">@color/btn_red_text_color_selector</item>
+        <item name="android:layout_marginLeft">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginRight">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginTop">@dimen/buttons_elevation_value</item>
+        <item name="android:layout_marginBottom">@dimen/buttons_elevation_value</item>
+        <item name="android:elevation">@dimen/buttons_elevation_value</item>
+    </style>
+
+    <style name="Widget.Topface.Button.Big.InviteVkFriends">
+        <item name="android:background">@drawable/btn_blue_invite_vk_friends_selector</item>
+        <item name="android:textColor">@drawable/btn_blue_invite_vk_friends_text_color_selector
+        </item>
         <item name="android:layout_marginLeft">@dimen/buttons_elevation_value</item>
         <item name="android:layout_marginRight">@dimen/buttons_elevation_value</item>
         <item name="android:layout_marginTop">@dimen/buttons_elevation_value</item>

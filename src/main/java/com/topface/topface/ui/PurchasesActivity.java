@@ -2,6 +2,7 @@ package com.topface.topface.ui;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -16,15 +17,17 @@ import com.topface.offerwall.publisher.TFOfferwallActivity;
 import com.topface.offerwall.publisher.TFOfferwallSDK;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
+import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
@@ -148,7 +151,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
     public static Intent createVipBuyIntent(String extraText, String from) {
         Intent intent = new Intent(App.getContext(), PurchasesActivity.class);
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY_VIP);
+        intent.putExtra(App.INTENT_REQUEST_KEY, INTENT_BUY_VIP);
         intent.putExtra(PurchasesFragment.ARG_TAG_EXRA_TEXT, extraText);
         intent.putExtra(PurchasesConstants.ARG_TAG_SOURCE, from);
         intent.putExtra(PurchasesFragment.IS_VIP_PRODUCTS, true);
@@ -166,7 +169,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         } else {
             intent = new Intent(context, PurchasesActivity.class);
         }
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_BUY);
+        intent.putExtra(App.INTENT_REQUEST_KEY, INTENT_BUY);
         intent.putExtra(PurchasesConstants.ARG_TAG_SOURCE, from);
         if (itemType != -1) {
             intent.putExtra(PurchasesFragment.ARG_ITEM_TYPE, itemType);
@@ -285,10 +288,42 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         return showExtraScreen(getRandomPosByProbability(getListOfExtraScreens()));
     }
 
+    private boolean callTrialVipPopup(DialogInterface.OnDismissListener dismissListener) {
+        Profile profile = App.get().getProfile();
+        if (getIntent().getIntExtra(App.INTENT_REQUEST_KEY, -1) == INTENT_BUY_VIP && App.isNeedShowTrial
+                && !profile.premium && new GoogleMarketApiManager().isMarketApiAvailable()
+                && App.get().getOptions().trialVipExperiment.enabled && !profile.paid) {
+            TrialVipPopup trialVipPopup = TrialVipPopup.newInstance(true);
+            trialVipPopup.setOnDismissListener(dismissListener);
+            trialVipPopup.show(getSupportFragmentManager(), TrialVipPopup.TAG);
+            App.isNeedShowTrial = false;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onUpClick() {
+        boolean isCalled = callTrialVipPopup(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                PurchasesActivity.super.onUpClick();
+            }
+        });
+        if (!isCalled) {
+            super.onUpClick();
+        }
+    }
 
     @Override
     public void onBackPressed() {
-        if (!isScreenShow()) {
+        boolean isCalled = callTrialVipPopup(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                onBackPressed();
+            }
+        });
+        if (!isCalled && !isScreenShow()) {
             super.onBackPressed();
         }
     }

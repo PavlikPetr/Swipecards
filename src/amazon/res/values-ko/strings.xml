@@ -12,9 +12,7 @@
     <string name="chat_background_text">받은 메세지 없음</string>
     <string name="filter_only_online">온라인에서만</string>
     <string name="filter_select_city">도시 선택</string>
-    <string name="dashbrd_popup_rating">어플이 마음에 드시나요? 그렇다면 평가 부탁드립니다. 더 높은 평가를 할 수록 더 흥미 있는 사람들이
-        Topface에 참여하게 됩니다.
-    </string>
+    <string name="dashbrd_popup_rating">어플이 마음에 드시나요? 그렇다면 평가 부탁드립니다. 더 높은 평가를 할 수록 더 흥미 있는 사람들이 Topface에 참여하게 됩니다.</string>
     <string name="dashbrd_popup_title">순위</string>
     <string name="dashbrd_popup_cancel">더 이상 묻지 않기</string>
     <string name="dashbrd_popup_rate">평가하기.</string>
@@ -71,7 +69,7 @@
     <string name="settings_invalid_name">이름 항목에 기호가 옳지 않은 기호가 포함되어 있습니다.</string>
     <string name="filter_hint">이름을 입력하십시오.</string>
     <plurals name="vip_add_more_friends">
-        <item quantity="other">아직 %d의 친구들을 초대하여 보세요.</item>
+        <item quantity="other">아직  %d의 친구들을 초대하여 보세요.</item>
     </plurals>
     <plurals name="get_free_money">
         <item quantity="other">%d 코인은 무료입니다.</item>

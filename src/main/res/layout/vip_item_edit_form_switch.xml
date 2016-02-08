@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
     style="@style/WhiteListItem.Underline"
-                android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <TextView
-        android:tag="tvTitle"
         style="@style/GrayText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:gravity="center_vertical"
         android:layout_gravity="left"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
         android:paddingLeft="@dimen/item_side_padding"
         android:paddingRight="@dimen/item_side_padding"
-        android:ellipsize="end"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:tag="tvTitle" />
 
     <!-- Switch -->
 
-    <com.topface.topface.ui.views.Switcher
-        android:tag="cbSwitch"
+    <CheckBox
         android:id="@+id/cbSwitch"
+        style="@style/Switcher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="12dp"
         android:background="@drawable/edit_switch"
         android:button="@android:color/transparent"
-        android:layout_marginRight="12dp"
         android:clickable="false"
-        android:textSize="12sp"
-        android:minHeight="0dp"/>
+        android:minHeight="0dp"
+        android:tag="cbSwitch"
+        android:textSize="12sp" />
 
     <ProgressBar
-        android:tag="vsiLoadBar"
+        style="@style/TopFaceProgressBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="34dp"
-        style="@style/TopFaceProgressBar.Small"
-        android:visibility="visible"
-        />
+        android:tag="vsiLoadBar"
+        android:visibility="visible" />
 
 </RelativeLayout>
