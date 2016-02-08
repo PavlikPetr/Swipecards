@@ -1,8 +1,10 @@
 package com.topface.topface.utils.ads;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -12,6 +14,7 @@ import com.appintop.init.AdToApp;
 import com.appintop.interstitialads.DefaultInterstitialListener;
 import com.appodeal.ads.Appodeal;
 import com.appodeal.ads.InterstitialCallbacks;
+import com.google.android.gms.ads.AdActivity;
 import com.google.android.gms.ads.AdListener;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -32,6 +35,7 @@ import com.topface.topface.statistics.TopfaceAdStatistics;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
@@ -130,6 +134,18 @@ public class FullscreenController {
 
         }
     }
+
+    private boolean mIsRedirected;
+
+    Application.ActivityLifecycleCallbacks activityLifecycleCallbacks = new Utils.ActivityLifecycleCallbacksAdapter() {
+        @Override
+        public void onActivityResumed(Activity activity) {
+            if (activity instanceof AdActivity && isFullScreenBannerVisible() && mIsRedirected) {
+                mIsRedirected = false;
+                activity.finish();
+            }
+        }
+    };
 
     public FullscreenController(Activity activity, Options options) {
         mActivity = activity;
@@ -255,6 +271,9 @@ public class FullscreenController {
         if (BuildConfig.DEBUG) {
             Appodeal.setTesting(true);
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            App.from(mActivity).registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
+        }
         Appodeal.cache(mActivity, Appodeal.INTERSTITIAL);
         Appodeal.setInterstitialCallbacks(new InterstitialCallbacks() {
             public void onInterstitialLoaded(boolean isPrecache) {
@@ -270,6 +289,7 @@ public class FullscreenController {
             }
 
             public void onInterstitialClicked() {
+                mIsRedirected = true;
                 mFullScreenBannerListener.onClick();
             }
 
@@ -280,6 +300,9 @@ public class FullscreenController {
     }
 
     public void requestAdmobFullscreen(String id) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            App.from(mActivity).registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
+        }
         AdmobInterstitialUtils.requestAdmobFullscreen(mActivity, id, new AdListener() {
             @Override
             public void onAdClosed() {
@@ -293,7 +316,7 @@ public class FullscreenController {
 
             @Override
             public void onAdLeftApplication() {
-                super.onAdLeftApplication();
+                mIsRedirected = true;
                 mFullScreenBannerListener.onClick();
             }
 
@@ -400,6 +423,12 @@ public class FullscreenController {
             ((ViewGroup) mActivity.findViewById(android.R.id.content)).addView(fullscreenContainer);
         }
         return fullscreenContainer;
+    }
+
+    public void onResume() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            App.from(mActivity).unregisterActivityLifecycleCallbacks(activityLifecycleCallbacks);
+        }
     }
 
     public void onPause() {
