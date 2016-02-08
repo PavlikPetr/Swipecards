@@ -83,6 +83,7 @@ import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
@@ -1339,6 +1340,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         return Utils.EMPTY;
     }
 
+    @Nullable
     protected UnlockScreenCondition getUnlockScreenCondition(UnlockFunctionalityOption data) {
         return null;
     }
