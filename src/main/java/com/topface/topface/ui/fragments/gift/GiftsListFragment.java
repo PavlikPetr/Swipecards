@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.gift;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -10,27 +11,37 @@ import android.widget.GridView;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
+import com.topface.topface.ui.IGiftSendListener;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsListAdapter;
+import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 
 import java.util.ArrayList;
 
-public class GiftsListFragment extends PlainGiftsFragment implements GiftsListAdapter.OnGridClickLIstener {
+public class GiftsListFragment extends ProfileInnerFragment implements GiftsListAdapter.OnGridClickLIstener {
 
     private static final String DATA = "data";
-    private GridView mGridView;
     private GiftsListAdapter mGiftsListAdapter;
+    private IGiftSendListener mGiftSendListener;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof IGiftSendListener) {
+            mGiftSendListener = (IGiftSendListener) activity;
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_gifts_list, null);
-        mGridView = (GridView) root.findViewById(R.id.giftsGrid);
-        mGridView.setAnimationCacheEnabled(false);
-        mGridView.setScrollingCacheEnabled(true);
-        mGiftsListAdapter = new GiftsListAdapter(getActivity(), new FeedList<FeedGift>(), getUpdaterCallback());
+        GridView gridView = (GridView) root.findViewById(R.id.giftsGrid);
+        gridView.setAnimationCacheEnabled(false);
+        gridView.setScrollingCacheEnabled(true);
+        mGiftsListAdapter = new GiftsListAdapter(getActivity(), new FeedList<FeedGift>(), null);
         mGiftsListAdapter.setOnGridClickLIstener(this);
-        mGridView.setAdapter(mGiftsListAdapter);
-        mGridView.setOnScrollListener(mGiftsListAdapter);
+        gridView.setAdapter(mGiftsListAdapter);
+        gridView.setOnScrollListener(mGiftsListAdapter);
         return root;
     }
 
@@ -69,4 +80,9 @@ public class GiftsListFragment extends PlainGiftsFragment implements GiftsListAd
             mGiftsListAdapter.notifyDataSetChanged();
         }
     }
+
+    public IGiftSendListener getGiftSendListener() {
+        return mGiftSendListener;
+    }
+
 }

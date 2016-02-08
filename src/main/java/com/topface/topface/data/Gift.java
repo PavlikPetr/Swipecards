@@ -3,6 +3,7 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.ApiResponse;
 
@@ -18,10 +19,12 @@ public class Gift extends AbstractDataWithPhotos implements Parcelable {
     public static final int PROFILE_NEW = -2;
     public static final int SEND_BTN = -3;
 
+    @SerializedName("gift")
     public int id;
     public int type;
     public String link;
     public int price;
+    @SerializedName("id")
     public int feedId;
 
     public Gift(int id, int type, String link, int price) {
