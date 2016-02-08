@@ -175,3 +175,15 @@
   -dontwarn org.apache.**
   -dontwarn com.google.**
   -dontwarn android.**
+
+  -dontwarn com.facebook.ads.**
+  -dontwarn com.facebook.ssp.**
+
+  -dontwarn com.vungle.publisher.**
+
+  -dontwarn net.pubnative.library.**
+
+  -dontwarn com.avocarrot.androidsdk.**
+
+  -keep class com.yandex.mobile.ads.** {*;}
+  -dontwarn com.yandex.mobile.ads.**

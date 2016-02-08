@@ -40,6 +40,9 @@
     <uses-permission android:name="android.permission.BATTERY_STATS" />
 
     <uses-feature
+        android:name="android.hardware.location"
+        android:required="false" />
+    <uses-feature
         android:name="android.hardware.location.gps"
         android:required="false" />
     <uses-feature
@@ -526,6 +529,13 @@
         </receiver>
 
         <activity
+            android:name="com.facebook.ads.InterstitialActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="com.vungle.publisher.FullScreenAdActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
             android:name="com.appodeal.ads.InterstitialActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
@@ -540,6 +550,7 @@
 
         <activity
             android:name="com.chartboost.sdk.CBImpressionActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:excludeFromRecents="true"
             android:theme="@android:style/Theme.Translucent" />
         <activity
@@ -603,7 +614,8 @@
         <activity
             android:name="com.startapp.android.publish.OverlayActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@android:style/Theme.Translucent" /> <!--suppress AndroidDomInspection -->
+            android:theme="@android:style/Theme.Translucent" />
+        <!--suppress AndroidDomInspection -->
         <activity
             android:name="com.startapp.android.publish.FullScreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
