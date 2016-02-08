@@ -254,7 +254,6 @@ dependencies {
     amazonCompile name: 'ads_adman_2.2.7'
     compile name: 'appsflyer'
     compile name: 'comscore'
-    compile name: 'flurry_analytics_5.5.0'
     compile name: 'offerwalls_sponsorpay'
 
     //Topface sub libs
@@ -271,6 +270,7 @@ dependencies {
         //и на нее ругается gradle
         exclude group: 'org.json'
     }
+    compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.google.code.gson:gson:2.3'
     //Library for WebSocket and other network requests
     compile 'com.koushikdutta.async:androidasync:2.1.5'

@@ -694,7 +694,7 @@
   <string name="enter_text">mesajınızı girin</string>
   <string name="send_feedback">mesaj göndermek</string>
   <string name="get_vip_free">VIP bedava kazanın</string>
-  <string name="buy_more_sympathies">\&quot;Daha beğeneli kazanın, daha popüler olun\&quot;</string>
+  <string name="buy_more_sympathies">Daha beğeneli kazanın, daha popüler olun</string>
   <string name="transaction_code_help">Bize işlem kodunu göndermeniz halinde, bu talebinizi daha
         hızlı bir şekilde tamamlamanıza yardımcı olacaktır. Sipariş hakkındaki daha fazla bilgi %s
         içerisinde bulunabilir.</string>

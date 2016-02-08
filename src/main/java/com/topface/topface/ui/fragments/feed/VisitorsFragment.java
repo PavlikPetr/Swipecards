@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.topface.topface.R;
-import com.topface.topface.data.FragmentSettings;
+import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.data.Visitor;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteVisitorsRequest;
@@ -29,6 +29,8 @@ import java.util.List;
 
 
 public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
+
+    public static final String UNLOCK_FUCTIONALITY_TYPE = "visitors";
 
     @Override
     protected String getTitle() {
@@ -76,6 +78,7 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
             btnBuyVip.setVisibility(View.VISIBLE);
 
         } else {
+            setUnlockButtonView((Button) inflated.findViewById(R.id.btnUnlock));
             inflated.findViewById(R.id.tvText).setVisibility(View.VISIBLE);
             btnBuyVip.setVisibility(View.VISIBLE);
         }
@@ -90,6 +93,16 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
                 }
             }
         });
+    }
+
+    @Override
+    protected String getUnlockFunctionalityType() {
+        return UNLOCK_FUCTIONALITY_TYPE;
+    }
+
+    @Override
+    protected UnlockFunctionalityOption.UnlockScreenCondition getUnlockScreenCondition(UnlockFunctionalityOption data) {
+        return data.getUnlockVisitorsCondition();
     }
 
     @Override
@@ -121,5 +134,4 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     protected String getGcmUpdateAction() {
         return GCMUtils.GCM_GUESTS_UPDATE;
     }
-
 }

@@ -24,6 +24,7 @@
     </string>
     <string name="likes_background_text">Sem gostos</string>
     <string name="visitors_background_text">Sem visitantes</string>
+    <string name="need_set_avatar">Ninguém te pode conhecer! Adiciona uma foto de perfil.</string>
     <string name="chat_background_text">Não tens mensagens novas</string>
     <string name="entrance">Entrar</string>
     <string name="filter_only_online">Apenas online</string>
@@ -179,6 +180,7 @@
     <string name="general_visitors_tab_views">visualizações</string>
     <string name="general_profile">Perfil</string>
     <string name="general_settings">Definições</string>
+    <string name="general_vk_profile">VK</string>
     <string name="auth_btn_vk">Vkontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Tentar novamente</string>
@@ -771,7 +773,7 @@
     <string name="enter_text">Introduzir texto</string>
     <string name="send_feedback">Enviar mensagem</string>
     <string name="get_vip_free">Obtém estatuto VIP gratuito</string>
-    <string name="buy_more_sympathies">\"Obtém mais gostos, torna-te mais popular\"</string>
+    <string name="buy_more_sympathies">Obtém mais gostos, torna-te mais popular</string>
     <string name="transaction_code_help">Se nos enviares um código de transação, isto irá ajudar-nos
         a completar o teu pedido ao acelerar o tempo de processamento. Podes encontrar mais
         informação acerca de uma encomenda em %s.
@@ -836,5 +838,30 @@
     </string>
     <string name="novice_sympathies_bonus">Estás a receber %1$d gostos como presente! Isto significa
         que %2$d pessoas irão dar-lhe um gosto verdadeiramente sentido!
+    </string>
+    <string name="go_dating_message">Começa a namorar e vê quem viu o teu perfil aqui</string>
+    <string name="vk_profile_button_tf_group">Grupo Topface</string>
+    <string name="vk_profile_button_join_tf_group">Junta-te ao grupo Topface</string>
+    <string name="vk_profile_button_join_vkgames_group">Junta-te ao grupo \"Jogos VK\"</string>
+    <string name="vk_profile_button_invite_friends">Convidar amigos</string>
+    <string name="vk_profile_invite_friends_title">Convidar amigos</string>
+    <string name="invite_friend_button">Convidar</string>
+    <string name="invitation_sended_button">Enviado</string>
+    <string name="friends_empty_list_error">A tua lista de amigos está vazia</string>
+    <string name="vk_friends_success_invite">Foi enviado um convite</string>
+    <string name="join_group_success">Juntaste-te ao grupo</string>
+    <string name="settings_auto_greeting_title">Saudação Automática</string>
+    <string name="settings_auto_greeting_subtitle">Permitir ao Topface começar automaticamente uma
+        conversa com uma saudação sempre que alguém te envia um Gosto
+    </string>
+    <string name="chat_auto_reply_title">O texto da mensagem está oculto</string>
+    <string name="chat_auto_reply_message">Para poder abrir/responder a esta mensagem, torne-se
+        VIP
+    </string>
+    <string name="chat_auto_reply_button">Tornar-se VIP</string>
+    <string name="take_photo_text_1">Por favor, faz upload de uma foto tua para começares a falar.
+    </string>
+    <string name="take_photo_text_2">Apenas tu deves estar na foto; todas as fotos são revistas
+        pelos nossos moderadores para garantir que as regras são seguidas.
     </string>
 </resources>

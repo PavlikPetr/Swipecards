@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.topface.topface.R;
+import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.PurchasesActivity;
@@ -20,6 +21,7 @@ import java.util.List;
 public class FansFragment extends BookmarksFragment {
 
     public static final String FANS = "Fans";
+    public static final String UNLOCK_FUCTIONALITY_TYPE = "fans";
 
     @Override
     protected String getTitle() {
@@ -45,6 +47,7 @@ public class FansFragment extends BookmarksFragment {
                 }
             });
         } else {
+            setUnlockButtonView((Button) inflated.findViewById(R.id.btnUnlock));
             message.setText(R.string.likes_buy_vip);
             buttonBuy.setText(R.string.buying_vip_status);
             buttonBuy.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +58,16 @@ public class FansFragment extends BookmarksFragment {
                 }
             });
         }
+    }
+
+    @Override
+    protected String getUnlockFunctionalityType() {
+        return UNLOCK_FUCTIONALITY_TYPE;
+    }
+
+    @Override
+    protected UnlockFunctionalityOption.UnlockScreenCondition getUnlockScreenCondition(UnlockFunctionalityOption data) {
+        return data.getUnlockFansCondition();
     }
 
     @Override

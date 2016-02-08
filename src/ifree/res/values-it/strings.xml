@@ -774,7 +774,7 @@
     <string name="enter_text">Inserisci il testo</string>
     <string name="send_feedback">Invia il messaggio</string>
     <string name="get_vip_free">Ricevi VIP gratis</string>
-    <string name="buy_more_sympathies">“Ricevi più simpatie, diventa più popolare”</string>
+    <string name="buy_more_sympathies">Ricevi più simpatie, diventa più popolare</string>
     <string name="transaction_code_help">Inviandoci il codice di transazione ci aiuterai ad eseguire
         la tua richiesta e ad accelerare il trattamento.Ottieni ulteriori informazioni sull\'ordine
         attraverso %s.

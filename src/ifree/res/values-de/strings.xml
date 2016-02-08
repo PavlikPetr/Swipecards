@@ -740,7 +740,7 @@
     <string name="enter_text">Text eingeben</string>
     <string name="send_feedback">Nachricht verschicken</string>
     <string name="get_vip_free">Hole dir gratis VIP-Status</string>
-    <string name="buy_more_sympathies">\"Hole dir mehr Likes, werde beliebt\"</string>
+    <string name="buy_more_sympathies">Hole dir mehr Likes, werde beliebt</string>
     <string name="transaction_code_help">Wenn du uns einen Transaktionscode schickst, wird uns das helfen deine Anfrage zu bearbeiten indem die Überarbeitungszeit verkürzt wird. Mehr Informationen gibt es unter %s.</string>
     <string name="google_wallet">Google Geldbeutel</string>
     <string name="google_service_general_title">Erinnerungen sind nicht verfügbar</string>

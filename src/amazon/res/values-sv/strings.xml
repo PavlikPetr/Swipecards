@@ -755,7 +755,7 @@
     <string name="enter_text">Sätt in text</string>
     <string name="send_feedback">Skicka feedback</string>
     <string name="get_vip_free">Få VIP gratis</string>
-    <string name="buy_more_sympathies">\"Få mera sympatier, bli mera populär\"</string>
+    <string name="buy_more_sympathies">Få mera sympatier, bli mera populär</string>
     <string name="transaction_code_help">Om du skickar transaktionskoden till oss, så kommer detta
         att hjälpa till i utförandet av din förfrågan och även snabba på bearbetningen. Liknande
         information om beställningen kan man få via %s.

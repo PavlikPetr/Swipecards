@@ -782,7 +782,7 @@
     <string name="enter_text">Veuillez saisir le texte</string>
     <string name="send_feedback">Envoyer un message</string>
     <string name="get_vip_free">Obtenez gratuitement le statut VIP</string>
-    <string name="buy_more_sympathies">\"Obtenez plus de J\'aime, augmentez votre popularité\"</string>
+    <string name="buy_more_sympathies">Obtenez plus de J\'aime, augmentez votre popularité</string>
     <string name="transaction_code_help">En nous envoyant un code de transaction, vous nous aidez à
         satisfaire votre demande en accélérant le temps de traitement. Pour obtenir plus
         d\'informations sur une commande, rendez-vous sur %s.

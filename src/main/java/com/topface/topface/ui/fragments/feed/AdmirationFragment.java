@@ -5,11 +5,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteAdmirationsRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -24,6 +26,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class AdmirationFragment extends LikesFragment {
+
+    public static final String UNLOCK_FUCTIONALITY_TYPE = "admirations";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -47,16 +51,11 @@ public class AdmirationFragment extends LikesFragment {
     protected void initEmptyFeedView(View inflated, int errorCode) {
         if (mEmptyFeedView == null) mEmptyFeedView = inflated;
         if (CacheProfile.premium) {
-            ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
-            inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations"));
-                }
-            });
+            chooseFirstChild(inflated);
         } else {
             if (mCountersData.admirations > 0) {
-                ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(1);
+                setUnlockButtonView(getUnlockButtonView(inflated, SECOND_CHILD));
+                ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(SECOND_CHILD);
                 int curCounter = mCountersData.admirations;
                 if (curCounter == 0) {
                     curCounter = CacheProfile.getOptions().premiumAdmirations.getCount();
@@ -78,15 +77,34 @@ public class AdmirationFragment extends LikesFragment {
                 ((ImageViewRemote) inflated.findViewById(R.id.ivThree))
                         .setResourceSrc(CacheProfile.dating.sex == Profile.GIRL ? R.drawable.likes_male_three : R.drawable.likes_female_three);
             } else {
-                ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
-                inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations"));
-                    }
-                });
+                setUnlockButtonView(getUnlockButtonView(inflated, FIRST_CHILD));
+                chooseFirstChild(inflated);
             }
         }
+    }
+
+    @Override
+    protected String getUnlockFunctionalityType() {
+        return UNLOCK_FUCTIONALITY_TYPE;
+    }
+
+    @Override
+    protected UnlockFunctionalityOption.UnlockScreenCondition getUnlockScreenCondition(UnlockFunctionalityOption data) {
+        return data.getUnlockAdmirationCondition();
+    }
+
+    private Button getUnlockButtonView(View view, int child) {
+        return (Button) ((ViewFlipper) view.findViewById(R.id.vfEmptyViews)).getChildAt(child).findViewWithTag("btnUnlock");
+    }
+
+    private void chooseFirstChild(View view) {
+        ((ViewFlipper) view.findViewById(R.id.vfEmptyViews)).setDisplayedChild(FIRST_CHILD);
+        view.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations"));
+            }
+        });
     }
 
     @Override

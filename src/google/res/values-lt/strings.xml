@@ -785,7 +785,7 @@
     <string name="enter_text">Įveskite tekstą</string>
     <string name="send_feedback">Išsiųsti pranešimą</string>
     <string name="get_vip_free">Gauk VIP nemokamai</string>
-    <string name="buy_more_sympathies">\"Gauk daugiau simpatijų, populiarėk\"</string>
+    <string name="buy_more_sympathies">Gauk daugiau simpatijų, populiarėk</string>
     <string name="transaction_code_help">Jei jūs atsiųsite mums transakcijos kodą, tai gali
         pagelbėti vykdant jūsų užklausą, o taip pat pagreitins jos apdorojimą. Išsamią informaciją
         apie užsakymą galima gauti per %s.

@@ -22,6 +22,7 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.requests.BuyLikesAccessRequest;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
@@ -60,6 +61,10 @@ import rx.functions.Action1;
 public class LikesFragment extends FeedFragment<FeedLike> {
 
     public static final String PREFERENCES_PAID_LIKES_COUNT = "paid_likes_count";
+    public static final String UNLOCK_FUCTIONALITY_TYPE = "likes";
+    public static final int FIRST_CHILD = 0;
+    public static final int SECOND_CHILD = 1;
+    public static final int THIRD_CHILD = 2;
 
     @Inject
     TopfaceAppState mAppState;
@@ -180,14 +185,31 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         ViewFlipper viewFlipper = (ViewFlipper) inflated.findViewById(R.id.vfEmptyViews);
         switch (errorCode) {
             case ErrorCodes.PREMIUM_ACCESS_ONLY:
+                setUnlockButtonView(getUnlockButtonView(inflated, SECOND_CHILD));
                 initEmptyScreenOnLikesNeedVip(viewFlipper);
                 break;
             case ErrorCodes.BLOCKED_SYMPATHIES:
+                setUnlockButtonView(getUnlockButtonView(inflated, THIRD_CHILD));
                 initEmptyScreenOnBlockedLikes(inflated, viewFlipper);
                 break;
             default:
+                setUnlockButtonView(getUnlockButtonView(inflated, FIRST_CHILD));
                 initEmptyScreenWithoutLikes(viewFlipper);
         }
+    }
+
+    private Button getUnlockButtonView(View view, int child) {
+        return (Button) ((ViewFlipper) view.findViewById(R.id.vfEmptyViews)).getChildAt(child).findViewWithTag("btnUnlock");
+    }
+
+    @Override
+    protected String getUnlockFunctionalityType() {
+        return UNLOCK_FUCTIONALITY_TYPE;
+    }
+
+    @Override
+    protected UnlockFunctionalityOption.UnlockScreenCondition getUnlockScreenCondition(UnlockFunctionalityOption data) {
+        return data.getUnlockLikesCondition();
     }
 
     private void updateTitleWithCounter(CountersData countersData) {
