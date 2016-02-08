@@ -21,7 +21,6 @@ import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
-import com.topface.topface.banners.ad_providers.AdToAppProvider;
 import com.topface.topface.banners.ad_providers.AppodealProvider;
 import com.topface.topface.data.Banner;
 import com.topface.topface.data.Options;
@@ -232,7 +231,6 @@ public class FullscreenController {
     }
 
     private void requestAdToAppFullscreen() {
-        AdToApp.setLogging(true);
         AdToApp.initializeSDK(mActivity, AdToAppController.ADTOAPP_APP_KEY, AdToApp.MASK_INTERSTITIAL);
         if (AdToApp.isAvailableAd(AdToApp.INTERSTITIAL)) {
             AdToApp.showInterstitialAd();

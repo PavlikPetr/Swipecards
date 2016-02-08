@@ -30,6 +30,8 @@ import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.actionbar.OverflowMenu;
+import com.topface.topface.utils.ads.AdToAppController;
+import com.topface.topface.utils.ads.AdToAppHelper;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.geo.GeoLocationManager;
 
@@ -70,7 +72,8 @@ import dagger.Provides;
                 PromoKey71Dialog.class,
                 PromoKey81Dialog.class,
                 PaymentwallActivity.class,
-                CountersDataProvider.class
+                CountersDataProvider.class,
+                AdToAppHelper.class
         }
 )
 public class TopfaceModule {
@@ -107,4 +110,9 @@ public class TopfaceModule {
         });
     }
 
+    @Provides
+    @Singleton
+    AdToAppController providesAdToAppController() {
+        return new AdToAppController();
+    }
 }

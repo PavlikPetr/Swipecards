@@ -52,10 +52,11 @@
         <include layout="@layout/layout_empty_feed_controls" />
 
         <Button
-            style="@style/UlockButtonStyle"
+            style="@style/UnlockButtonStyle"
             android:layout_width="match_parent"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:tag="btnUnlock" />
+            android:tag="btnUnlock"
+            android:textSize="17sp" />
     </LinearLayout>
 </ScrollView>

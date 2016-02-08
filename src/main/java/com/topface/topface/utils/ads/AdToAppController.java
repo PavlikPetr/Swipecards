@@ -1,9 +1,13 @@
 package com.topface.topface.utils.ads;
 
 import android.app.Activity;
+import android.support.annotation.Nullable;
 
 import com.appintop.init.AdToApp;
 import com.appintop.interstitialads.DefaultInterstitialListener;
+import com.topface.framework.utils.Debug;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -17,18 +21,16 @@ public class AdToAppController {
 
     private HashMap<String, IAdToAppListener> mAdToAppListeners = new HashMap<>();
     private HashMap<AdsMasks, AdsAvailableListener> mAdsAvailableMap = new HashMap<>();
-    private static AdToAppController mInstance;
-    private static Activity mActivity;
     private boolean mIsVideoStart;
     private DefaultInterstitialListener mInterstitialListener = new DefaultInterstitialListener() {
         @Override
-        public void onFirstInterstitialLoad(String s, String s1) {
-            addAdsState(s, true);
+        public void onFirstInterstitialLoad(String adsType, String adsProvider) {
+            addAdsState(adsType, true);
         }
 
         @Override
-        public void onInterstitialStarted(String s, String s1) {
-            if (s.equals(AdsMasks.VIDEO.getType())) {
+        public void onInterstitialStarted(String adsType, String adsProvider) {
+            if (adsType.equals(AdsMasks.VIDEO.getType())) {
                 mIsVideoStart = true;
             }
             for (IAdToAppListener listener : mAdToAppListeners.values()) {
@@ -39,7 +41,7 @@ public class AdToAppController {
         }
 
         @Override
-        public void onInterstitialClicked(String s, String s1) {
+        public void onInterstitialClicked(String adsType, String adsProvider) {
             for (IAdToAppListener listener : mAdToAppListeners.values()) {
                 if (listener != null) {
                     listener.onClicked();
@@ -48,11 +50,11 @@ public class AdToAppController {
         }
 
         @Override
-        public void onInterstitialClosed(String s, String s1) {
+        public void onInterstitialClosed(String adsType, String adsProvider) {
             for (IAdToAppListener listener : mAdToAppListeners.values()) {
                 if (listener != null) {
                     listener.onClosed();
-                    if (mIsVideoStart && s.equals(AdsMasks.VIDEO.getType())) {
+                    if (mIsVideoStart && adsType.equals(AdsMasks.VIDEO.getType())) {
                         listener.onVideoWatched();
                     }
                 }
@@ -60,8 +62,8 @@ public class AdToAppController {
         }
 
         @Override
-        public boolean onInterstitialFailedToShow(String s) {
-            addAdsState(s, false);
+        public boolean onInterstitialFailedToShow(String adsType) {
+            addAdsState(adsType, false);
             for (IAdToAppListener listener : mAdToAppListeners.values()) {
                 if (listener != null) {
                     listener.onFailed();
@@ -81,25 +83,13 @@ public class AdToAppController {
         }
     };
 
-    public AdToAppController(Activity activity) {
-        mActivity = activity;
-    }
-
-    public static AdToAppController getInstance(Activity activity) {
-        if (mInstance == null) {
-            mInstance = new AdToAppController(activity);
-            mInstance.initSdk();
-        }
-        if (mActivity == null) {
-            mActivity = activity;
-        }
-        return mInstance;
-    }
-
-    private void initSdk() {
+    public void initSdk(@NotNull Activity activity) {
         if (!AdToApp.isSDKInitialized()) {
-            AdToApp.initializeSDK(mActivity, ADTOAPP_APP_KEY, getAdsMask());
+            AdToApp.initializeSDK(activity, ADTOAPP_APP_KEY, getAdsMask());
             AdToApp.setInterstitialListener(mInterstitialListener);
+            if (Debug.isDebugLogsEnabled()) {
+                AdToApp.setLogging(true);
+            }
         }
     }
 
@@ -149,6 +139,7 @@ public class AdToAppController {
         }
     }
 
+    @Nullable
     private AdsMasks getAdsMaskByType(String type) {
         for (AdsMasks item : AdsMasks.values()) {
             if (item.getType().equals(type)) {

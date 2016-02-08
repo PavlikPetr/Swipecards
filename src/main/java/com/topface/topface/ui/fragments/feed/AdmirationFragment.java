@@ -51,7 +51,6 @@ public class AdmirationFragment extends LikesFragment {
     protected void initEmptyFeedView(View inflated, int errorCode) {
         if (mEmptyFeedView == null) mEmptyFeedView = inflated;
         if (CacheProfile.premium) {
-            setUnlockButtonView(getUnlockButtonView(inflated, FIRST_CHILD));
             chooseFirstChild(inflated);
         } else {
             if (mCountersData.admirations > 0) {

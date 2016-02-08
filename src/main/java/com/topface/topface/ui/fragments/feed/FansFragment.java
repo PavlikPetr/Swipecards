@@ -37,7 +37,6 @@ public class FansFragment extends BookmarksFragment {
     protected void initEmptyFeedView(View inflated, int errorCode) {
         Button buttonBuy = (Button) inflated.findViewById(R.id.btnBuy);
         TextView message = ((TextView) inflated.findViewById(R.id.tvText));
-        setUnlockButtonView((Button) inflated.findViewById(R.id.btnUnlock));
         if (CacheProfile.premium) {
             message.setText(R.string.buy_more_sympathies);
             buttonBuy.setText(R.string.buy_sympathies);
@@ -48,6 +47,7 @@ public class FansFragment extends BookmarksFragment {
                 }
             });
         } else {
+            setUnlockButtonView((Button) inflated.findViewById(R.id.btnUnlock));
             message.setText(R.string.likes_buy_vip);
             buttonBuy.setText(R.string.buying_vip_status);
             buttonBuy.setOnClickListener(new View.OnClickListener() {

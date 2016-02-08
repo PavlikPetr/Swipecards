@@ -72,13 +72,13 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
         View btnBuyVip = inflated.findViewById(R.id.btnBuyVip);
-        setUnlockButtonView((Button) inflated.findViewById(R.id.btnUnlock));
         if (CacheProfile.premium) {
             ((TextView) inflated.findViewById(R.id.tvText)).setText(R.string.go_dating_message);
             ((Button) btnBuyVip).setText(R.string.general_get_dating);
             btnBuyVip.setVisibility(View.VISIBLE);
 
         } else {
+            setUnlockButtonView((Button) inflated.findViewById(R.id.btnUnlock));
             inflated.findViewById(R.id.tvText).setVisibility(View.VISIBLE);
             btnBuyVip.setVisibility(View.VISIBLE);
         }

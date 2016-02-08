@@ -37,7 +37,7 @@
                 android:text="@string/buy_resources" />
 
             <Button
-                style="@style/UlockButtonStyle"
+                style="@style/UnlockButtonStyle"
                 android:layout_width="match_parent"
                 android:tag="btnUnlock" />
         </LinearLayout>
@@ -113,7 +113,7 @@
             android:text="@string/buying_vip_status" />
 
         <Button
-            style="@style/UlockButtonStyle"
+            style="@style/UnlockButtonStyle"
             android:layout_width="210dp"
             android:tag="btnUnlock" />
     </LinearLayout>

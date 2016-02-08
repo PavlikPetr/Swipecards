@@ -77,6 +77,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.ad.NativeAd;
 import com.topface.topface.utils.ads.AdToAppController;
+import com.topface.topface.utils.ads.AdToAppHelper;
 import com.topface.topface.utils.ads.SimpleAdToAppListener;
 import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
@@ -1347,8 +1348,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (view == null || unlockType.isEmpty()) {
             return;
         }
-        final AdToAppController adToAppController = AdToAppController.getInstance(getActivity());
-        adToAppController.isAdsAvailable(AdToAppController.AdsMasks.VIDEO, new AdToAppController.AdsAvailableListener() {
+        final AdToAppController controller = new AdToAppHelper(getActivity()).getController();
+        controller.isAdsAvailable(AdToAppController.AdsMasks.VIDEO, new AdToAppController.AdsAvailableListener() {
             @Override
             public void isAvailable(final boolean available) {
                 if (available) {
@@ -1378,7 +1379,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adToAppController.addListener(new SimpleAdToAppListener() {
+                controller.addListener(new SimpleAdToAppListener() {
                     @Override
                     public void onClosed() {
                     }
@@ -1399,7 +1400,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                         }).exec();
                     }
                 }, getFeedListItemClass().getName());
-                adToAppController.showAds(AdToAppController.AdsMasks.VIDEO);
+                controller.showAds(AdToAppController.AdsMasks.VIDEO);
             }
         });
     }
