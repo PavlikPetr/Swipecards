@@ -22,6 +22,7 @@ public class AdToAppHelper {
         mController.initSdk(activity);
     }
 
+    @NotNull
     public AdToAppController getController() {
         return mController;
     }
