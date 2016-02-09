@@ -438,7 +438,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 options.premiumMessages.clearPopupShowTime();
                 break;
             case R.id.EditorSendGCMToken:
-                new GCMUtils(getActivity()).registerGCM("");
+                new GCMUtils(getActivity()).registerGcmToken("");
                 break;
             case R.id.EditorSendAuth:
                 new AuthRequest(AuthToken.getInstance().getTokenInfo(), getActivity()).callback(new ApiHandler() {

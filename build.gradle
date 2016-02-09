@@ -262,9 +262,9 @@ dependencies {
     compile rootProject.ANDROID_BUILD_DESIGN_SUPPORT_VERSION
     compile rootProject.ANDROID_BUILD_ANNOTATIONS_SUPPORT_VERSION
     //Google play services
-    compile "com.google.android.gms:play-services-base:7.3.0"
-    compile "com.google.android.gms:play-services-gcm:7.3.0"
-    compile "com.google.android.gms:play-services-ads:7.3.0"
+    compile "com.google.android.gms:play-services-base:7.8.0"
+    compile "com.google.android.gms:play-services-gcm:7.8.0"
+    compile "com.google.android.gms:play-services-ads:7.8.0"
     //Multi dex support
     compile 'com.android.support:multidex:1.0.1'
     //All jar libs
