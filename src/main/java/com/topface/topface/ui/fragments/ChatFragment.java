@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GestureDetectorCompat;
@@ -59,10 +60,12 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.TakePhotoActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
@@ -75,6 +78,7 @@ import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
@@ -146,6 +150,13 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private String mInitialMessage;
     private boolean wasFailed = false;
     private String mFrom;
+    private AddPhotoHelper mAddPhotoHelper;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            AddPhotoHelper.handlePhotoMessage(msg);
+        }
+    };
 
     TimerTask mUpdaterTask = new TimerTask() {
         @Override
@@ -212,6 +223,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        takePhotoIfNeed();
         mUserType = getArguments().getInt(ChatFragment.USER_TYPE);
         // do not recreate Adapter cause of setRetainInstance(true)
         if (mAdapter == null) {
@@ -914,6 +926,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 }
                 update(false, "initial");
                 break;
+            default:
+                if (mAddPhotoHelper != null) {
+                    mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+                }
+                break;
         }
     }
 
@@ -1148,4 +1165,15 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         return true;
     }
 
+    private boolean takePhotoIfNeed() {
+        if (mAddPhotoHelper == null) {
+            mAddPhotoHelper = new AddPhotoHelper(this, null);
+            mAddPhotoHelper.setOnResultHandler(mHandler);
+        }
+        if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && CacheProfile.photo == null) {
+            startActivityForResult(TakePhotoActivity.createIntent(getActivity(), TakePhotoStatistics.PLC_CHAT_OPEN), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
+            return true;
+        }
+        return false;
+    }
 }
