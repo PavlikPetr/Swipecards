@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -189,11 +190,14 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                 initEmptyScreenOnLikesNeedVip(viewFlipper);
                 break;
             case ErrorCodes.BLOCKED_SYMPATHIES:
-                setUnlockButtonView(getUnlockButtonView(inflated, THIRD_CHILD));
+                Button unlockButton = getUnlockButtonView(inflated, THIRD_CHILD);
+                if (!CacheProfile.getOptions().unlockAllForPremium) {
+                    unlockButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.unlock_likes_by_coins_button_text_size));
+                }
+                setUnlockButtonView(unlockButton);
                 initEmptyScreenOnBlockedLikes(inflated, viewFlipper);
                 break;
             default:
-                setUnlockButtonView(getUnlockButtonView(inflated, FIRST_CHILD));
                 initEmptyScreenWithoutLikes(viewFlipper);
         }
     }
@@ -224,8 +228,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     private void initEmptyScreenOnLikesNeedVip(ViewFlipper viewFlipper) {
-        viewFlipper.setDisplayedChild(1);
-        View currentView = viewFlipper.getChildAt(1);
+        viewFlipper.setDisplayedChild(SECOND_CHILD);
+        View currentView = viewFlipper.getChildAt(SECOND_CHILD);
         if (currentView != null) {
             mTitleWithCounter = (TextView) currentView.findViewById(R.id.tvTitle);
             updateTitleWithCounter(null);
@@ -241,8 +245,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     private void initEmptyScreenWithoutLikes(ViewFlipper viewFlipper) {
-        viewFlipper.setDisplayedChild(0);
-        View currentView = viewFlipper.getChildAt(0);
+        viewFlipper.setDisplayedChild(FIRST_CHILD);
+        View currentView = viewFlipper.getChildAt(FIRST_CHILD);
         if (currentView != null) {
             currentView.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -258,8 +262,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         // send stat to google analytics
         sendBlockSympathyStatistics(blockSympathyOptions);
         // set paid likes view
-        viewFlipper.setDisplayedChild(2);
-        View currentView = viewFlipper.getChildAt(2);
+        viewFlipper.setDisplayedChild(THIRD_CHILD);
+        View currentView = viewFlipper.getChildAt(THIRD_CHILD);
         initAvatarImagesToEmptyView(currentView, blockSympathyOptions.showPhotos);
         if (currentView != null) {
             ((TextView) currentView.findViewById(R.id.blocked_likes_text)).setText(blockSympathyOptions.text);
