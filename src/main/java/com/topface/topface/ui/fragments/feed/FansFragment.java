@@ -9,6 +9,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.config.FeedsCache;
@@ -47,7 +48,9 @@ public class FansFragment extends BookmarksFragment {
                 }
             });
         } else {
-            setUnlockButtonView((Button) inflated.findViewById(R.id.btnUnlock));
+            if (errorCode != ErrorCodes.RESULT_OK) {
+                setUnlockButtonView((Button) inflated.findViewById(R.id.btnUnlock));
+            }
             message.setText(R.string.likes_buy_vip);
             buttonBuy.setText(R.string.buying_vip_status);
             buttonBuy.setOnClickListener(new View.OnClickListener() {
