@@ -836,4 +836,9 @@
     <string name="chat_auto_reply_button">Become VIP</string>
     <string name="take_photo_text_1">Please upload a photo of yourself to start chatting.</string>
     <string name="take_photo_text_2">Only you should be in the photo; all photos are reviewed by moderators to ensure rules are followed.</string>
+    <string name="unlock_by_viewed_ad_video_button_text">Unlock for free at %s</string>
+    <plurals name="free_minutes">
+        <item quantity="other">%d minutes</item>
+        <item quantity="one">%d minute</item>
+    </plurals>
 </resources>

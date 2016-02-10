@@ -763,4 +763,9 @@
   <string name="chat_auto_reply_button">VIP üye ol</string>
   <string name="take_photo_text_1">Arkadaşlık kurmaya başlamak için lütfen fotoğrafınızı yükleyin.</string>
   <string name="take_photo_text_2">Fotoğraf size ait olmalı ve içerisinde siz olmalısınız. Modaratörlerimiz tüm fotoğrafları kontrol etmektedir.</string>
+  <string name="unlock_by_viewed_ad_video_button_text">%s ile ücretsiz aç</string>
+  <plurals name="free_minutes">
+    <item quantity="other">%d dakika</item>
+    <item quantity="one">%d dakika</item>
+  </plurals>
 </resources>
