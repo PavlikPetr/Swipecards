@@ -151,6 +151,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private boolean wasFailed = false;
     private String mFrom;
     private AddPhotoHelper mAddPhotoHelper;
+    private boolean mIsNeedShowAddPhoto = true;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -223,7 +224,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        takePhotoIfNeed();
         mUserType = getArguments().getInt(ChatFragment.USER_TYPE);
         // do not recreate Adapter cause of setRetainInstance(true)
         if (mAdapter == null) {
@@ -246,7 +246,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ_BY_UID);
         intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
-
     }
 
     @Override
@@ -704,8 +703,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                             if (!data.more && !data.items.isEmpty()) {
                                 onNewMessageAdded(data.items.get(0));
                             }
-                        } else if (scrollRefresh) {
-                            mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
                         } else {
                             mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
                         }
@@ -714,6 +711,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     }
                 }
                 setLockScreenVisibility(false);
+                takePhotoIfNeed();
             }
 
             @Override
@@ -1165,15 +1163,16 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         return true;
     }
 
-    private boolean takePhotoIfNeed() {
-        if (mAddPhotoHelper == null) {
-            mAddPhotoHelper = new AddPhotoHelper(this, null);
-            mAddPhotoHelper.setOnResultHandler(mHandler);
+    private void takePhotoIfNeed() {
+        if (mIsNeedShowAddPhoto) {
+            mIsNeedShowAddPhoto = false;
+            if (mAddPhotoHelper == null) {
+                mAddPhotoHelper = new AddPhotoHelper(ChatFragment.this, null);
+                mAddPhotoHelper.setOnResultHandler(mHandler);
+            }
+            if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && CacheProfile.photo == null) {
+                startActivityForResult(TakePhotoActivity.createIntent(getActivity(), TakePhotoStatistics.PLC_CHAT_OPEN), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
+            }
         }
-        if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && CacheProfile.photo == null) {
-            startActivityForResult(TakePhotoActivity.createIntent(getActivity(), TakePhotoStatistics.PLC_CHAT_OPEN), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
-            return true;
-        }
-        return false;
     }
 }
