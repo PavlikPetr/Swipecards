@@ -3,13 +3,14 @@ package com.topface.topface.ui;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -29,6 +30,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
 import com.topface.topface.data.CountersData;
+import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.promo.PromoPopupManager;
@@ -37,6 +39,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
@@ -49,7 +52,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CustomViewNotificationController;
 import com.topface.topface.utils.IActionbarNotifier;
 import com.topface.topface.utils.LocaleConfig;
-import com.topface.topface.utils.PhotoTaker;
 import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
@@ -107,9 +109,16 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     TopfaceAppState mAppState;
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     private AddPhotoHelper mAddPhotoHelper;
+    private boolean mIsPhotoAsked;
     private PopupManager mPopupManager;
     private Subscription mCountersSubscription;
     private BehaviorSubject<DRAWER_LAYOUT_STATE> mDrawerLayoutStateObservable;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            AddPhotoHelper.handlePhotoMessage(msg, NavigationActivity.this);
+        }
+    };
     private OnNextActionListener mSelectPhotoNextActionListener;
     private OnNextActionListener mChooseCityNextActionListener;
 
@@ -130,7 +139,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     public static void restartNavigationActivity(Activity activity, Options options) {
         Intent intent = new Intent(activity, NavigationActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(GCMUtils.NEXT_INTENT, options.startPageFragmentId);
+                .putExtra(GCMUtils.NEXT_INTENT, options.startPageFragmentSettings);
         if (App.getUserConfig().getDatingMessage().equals(options
                 .instantMessageFromSearch.getText())) {
             intent.putExtra(DatingInstantMessageController.DEFAULT_MESSAGE, true);
@@ -193,6 +202,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
             mPendingNextIntent = intent;
         }
+        mIsPhotoAsked = false;
     }
 
     @Override
@@ -229,7 +239,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 new DatingLockPopup.DatingLockPopupRedirectListener() {
                     @Override
                     public void onRedirect() {
-                        showFragment(FragmentId.TABBED_LIKES);
+                        showFragment(FragmentId.TABBED_LIKES.getFragmentSettings());
                     }
                 }, this));
         PromoPopupManager promoPopupManager = new PromoPopupManager(this);
@@ -237,7 +247,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 PromoExpressMessages.createPromoPopupStartAction(AC_PRIORITY_HIGH, new PromoExpressMessages.PopupRedirectListener() {
                     @Override
                     public void onRedirect() {
-                        showFragment(FragmentId.TABBED_DIALOGS);
+                        showFragment(FragmentId.TABBED_DIALOGS.getFragmentSettings());
                         mDrawerLayoutStateObservable.onNext(DRAWER_LAYOUT_STATE.CLOSED);
                     }
                 }),
@@ -266,7 +276,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
         mMenuFragment.setOnFragmentSelected(new MenuFragment.OnFragmentSelectedListener() {
             @Override
-            public void onFragmentSelected(FragmentId fragmentId) {
+            public void onFragmentSelected(FragmentSettings fragmentSettings) {
                 mDrawerLayout.closeDrawer(GravityCompat.START);
             }
         });
@@ -353,16 +363,16 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
     }
 
-    public void showFragment(FragmentId fragmentId) {
-        Debug.log(PAGE_SWITCH + "show fragment: " + fragmentId);
-        mMenuFragment.selectMenu(fragmentId);
+    public void showFragment(FragmentSettings fragmentSettings) {
+        Debug.log(PAGE_SWITCH + "show fragment: " + fragmentSettings);
+        mMenuFragment.selectMenu(fragmentSettings);
     }
 
     private void showFragment(Intent intent) {
         //Получаем id фрагмента, если он открыт
-        FragmentId currentFragment = (FragmentId) intent.getSerializableExtra(GCMUtils.NEXT_INTENT);
+        FragmentSettings currentFragment = (FragmentSettings) intent.getParcelableExtra(GCMUtils.NEXT_INTENT);
         Debug.log(PAGE_SWITCH + "show fragment from NEXT_INTENT: " + currentFragment);
-        showFragment(currentFragment == null ? App.from(this).getOptions().startPageFragmentId : currentFragment);
+        showFragment(currentFragment == null ? App.from(this).getOptions().startPageFragmentSettings : currentFragment);
     }
 
     @Override
@@ -561,11 +571,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     @Override
-    public void startActivityForResult(Intent intent, int requestCode) {
-        super.startActivityForResult(intent, requestCode);
-    }
-
-    @Override
     protected void onDestroy() {
         //Для запроса фото при следующем создании NavigationActivity
         if (mFullscreenController != null) {
@@ -626,11 +631,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                         }
                     }
                     break;
-                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:
-                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG:
-                    AddPhotoHelper helper = getAddPhotoHelper();
-                    helper.showTakePhotoDialog(new PhotoTaker(helper, this), helper.processActivityResult(requestCode, resultCode, data, false));
-                    break;
                 default:
                     super.onActivityResult(requestCode, resultCode, data);
                     break;
@@ -638,6 +638,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+        AddPhotoHelper helper = getAddPhotoHelper();
+        helper.processActivityResult(requestCode, resultCode, data);
     }
 
     private void toggleDrawerLayout() {
@@ -667,20 +669,16 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private AddPhotoHelper getAddPhotoHelper() {
         if (mAddPhotoHelper == null) {
             mAddPhotoHelper = new AddPhotoHelper(this);
+            mAddPhotoHelper.setOnResultHandler(mHandler);
         }
         return mAddPhotoHelper;
     }
 
     private void takePhoto() {
-        getAddPhotoHelper().showTakePhotoDialog(new PhotoTaker(getAddPhotoHelper(), this), null);
-        getAddPhotoHelper().setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                if (mSelectPhotoNextActionListener != null) {
-                    mSelectPhotoNextActionListener.onNextAction();
-                }
-            }
-        });
+        if (!mIsPhotoAsked) {
+            mIsPhotoAsked = true;
+            startActivityForResult(TakePhotoActivity.createIntent(this, TakePhotoStatistics.PLC_AFTER_REGISTRATION_ACTION), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
+        }
     }
 
     private void switchContentTopMargin(boolean actionbarOverlay) {
@@ -693,8 +691,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     @Override
-    public void onFragmentSwitch(FragmentId fragmentId) {
-        if (fragmentId.isOverlayed()) {
+    public void onFragmentSwitch(FragmentSettings fragmentSettings) {
+        if (fragmentSettings.isOverlayed()) {
             switchContentTopMargin(true);
         } else if (mActionBarOverlayed) {
             switchContentTopMargin(false);

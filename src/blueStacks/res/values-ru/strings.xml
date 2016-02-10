@@ -193,6 +193,7 @@
   <string name="general_visitors_tab_views">просмотры</string>
   <string name="general_profile">Профиль</string>
   <string name="general_settings">Настройки</string>
+  <string name="general_vk_profile">ВК</string>
   <string name="auth_btn_vk">ВКонтакте</string>
   <string name="auth_btn_fb">Facebook</string>
   <string name="auth_retry">Повторить</string>
@@ -883,9 +884,20 @@
   <string name="novice_sympathy">Отправляйте симпатии тем, кто вам\nдействительно нравится,\nчтобы
     начать приятное знакомство
   </string>
-  <string name="novice_sympathies_bonus">Вы получаете %1$d симпатии в\nподарок! Это означает, что
-    вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию
-  </string>
+  <plurals name="novice_sympathies_bonus">
+    <item quantity="one">Вы получаете %1$d симпатию в\nподарок! Это означает, что
+      вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию
+    </item>
+    <item quantity="many">Вы получаете %1$d симпатий в\nподарок! Это означает, что
+      вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию
+    </item>
+    <item quantity="few">Вы получаете %1$d симпатии в\nподарок! Это означает, что
+      вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию
+    </item>
+    <item quantity="other">Вы получаете %1$d симпатий в\nподарок! Это означает, что
+      вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию
+    </item>
+  </plurals>
   <string name="go_dating_message">Начните знакомиться, и здесь вы увидите пользователей,
     посетивших ваш профиль
   </string>
@@ -894,6 +906,16 @@
   </string>
   <string name="sidebar_vk_profile">Профиль ВКонтакте</string>
   <string name="title_vk_profile">Профиль ВК</string>
+  <string name="vk_profile_invite_friends_error">Пользователь запретил отправлять ему приглашения
+  </string>
+  <string name="foreign_profile_empty_gifts_title">Отправьте подарок и вы будете в центре внимания
+  </string>
+  <string name="chat_auto_reply_title">Текст сообщения скрыт</string>
+  <string name="chat_auto_reply_message">Чтобы открыть и ответить на него, станьте
+    VIP-пользователем
+  </string>
+  <string name="chat_auto_reply_button">Стать VIP</string>
+  <string name="photo_list_load_info">Поделитесь фотографиями и вас увидят миллионы</string>
   <string name="vk_profile_button_tf_group">Группа Spark</string>
   <string name="vk_profile_button_join_tf_group">Вступить в группу Spark</string>
   <string name="vk_profile_button_join_vkgames_group">Вступить в группу &quot;Игры ВК&quot;</string>
@@ -902,20 +924,15 @@
   <string name="invite_friend_button">Пригласить</string>
   <string name="invitation_sended_button">Отправлено</string>
   <string name="friends_empty_list_error">Список ваших друзей пуст</string>
-  <string name="join_group_success">Вы вступили в группу</string>
-  <string name="vk_profile_invite_friends_error">Пользователь запретил отправлять ему приглашения
-  </string>
-  <string name="foreign_profile_empty_gifts_title">Отправьте подарок и вы будете в центре внимания
-  </string>
   <string name="vk_friends_success_invite">Приглашение отправлено</string>
+  <string name="join_group_success">Вы вступили в группу</string>
   <string name="settings_auto_greeting_title">Автоприветствие</string>
   <string name="settings_auto_greeting_subtitle">Позволяет автоматически начинать диалог
     приветствием при получении симпатии
   </string>
-  <string name="chat_auto_reply_title">Текст сообщения скрыт</string>
-  <string name="chat_auto_reply_message">Чтобы открыть и ответить на него, станьте
-    VIP-пользователем
+  <string name="take_photo_text_1">Пожалуйста, загрузите свою фотографию, чтобы начать
+    знакомиться.
   </string>
-  <string name="chat_auto_reply_button">Стать VIP</string>
-  <string name="photo_list_load_info">Поделитесь фотографиями и вас увидят миллионы</string>
+  <string name="take_photo_text_2">На фото должны быть именно вы. Все фотографии модерируются.
+  </string>
 </resources>

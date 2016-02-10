@@ -27,13 +27,11 @@
     <string name="profile_form_communication_male_0">Πολύ κοινωνικός</string>
     <string name="profile_form_communication_male_1">Ανοιχτος για ενδιαφέροντες ανθρώπους</string>
     <string name="profile_form_communication_male_2">Γράψτε - θα δούμε</string>
-    <string name="profile_form_communication_male_3">Έχω την επικοινωνία μόνο με την εκλεγμένα
-    </string>
+    <string name="profile_form_communication_male_3">Έχω την επικοινωνία μόνο με την εκλεγμένα</string>
     <string name="profile_form_communication_female_0">Πολύ κοινωνική</string>
     <string name="profile_form_communication_female_1">Ανοιχτή για ενδιαφέροντες ανθρώπους</string>
     <string name="profile_form_communication_female_2">Γράψτε - θα δούμε</string>
-    <string name="profile_form_communication_female_3">Έχω την επικοινωνία μόνο με την εκλεγμένα
-    </string>
+    <string name="profile_form_communication_female_3">Έχω την επικοινωνία μόνο με την εκλεγμένα</string>
     <string name="profile_form_character_male_0">Εύκολος</string>
     <string name="profile_form_character_male_1">Βαρύς</string>
     <string name="profile_form_character_male_2">Αυστηρός</string>
@@ -225,8 +223,7 @@
     <string name="form_habits_restaurants_3">Τα αγαπημένα σας εστιατόρια</string>
     <string name="form_detail_about_dating_0">Σε ένα πρώτο ραντεβού με μια κοπέλα</string>
     <string name="form_detail_about_dating_1">Σχετικά με το τέλειο πρώτο ραντεβού</string>
-    <string name="form_detail_about_dating_2">Τι θα είναι το πρώτο σας ραντεβού με ένα κοπέλα?
-    </string>
+    <string name="form_detail_about_dating_2">Τι θα είναι το πρώτο σας ραντεβού με ένα κοπέλα?</string>
     <string name="form_detail_about_dating_3">Περιγράψτε τον τέλεια ραντεβού</string>
     <string name="form_detail_archievements_0">Τα καλύτερα επιτεύγματά στη ζωή</string>
     <string name="form_detail_archievements_1">Τα καλύτερα επιτεύγματά στη ζωή</string>

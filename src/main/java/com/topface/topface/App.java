@@ -68,7 +68,14 @@ import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.HockeySender;
+import com.topface.topface.utils.gcmutils.GcmListenerService;
 import com.topface.topface.utils.geo.GeoLocationManager;
+import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.utils.social.AuthorizationManager;
+import com.topface.topface.utils.social.VkAuthorizer;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKAccessTokenTracker;
+import com.vk.sdk.VKSdk;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
@@ -85,6 +92,10 @@ public class App extends ApplicationBase implements IStateDataUpdater {
 
     public static final String TAG = "Topface";
     public static final String CONNECTIVITY_CHANGE_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
+    public static final String COMSCORE_C2 = "19015876";
+    public static final String COMSCORE_SECRET_KEY = "b83e932c608c2e08273eeddf01c2a70e";
+    public static final String PREFERENCES_TAG_SHARED = "preferences_general";
+    public static final String INTENT_REQUEST_KEY = "requestCode";
     private static final long PROFILE_UPDATE_TIMEOUT = 1000 * 120;
 
     private ObjectGraph mGraph;
@@ -108,6 +119,8 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     private Profile mProfile;
     private Options mOptions;
     private OptionsAndProfileProvider mProvider;
+
+    public static boolean isNeedShowTrial = true;
 
     /**
      * Множественный запрос Options и профиля
@@ -300,6 +313,22 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         MultiDex.install(this);
     }
 
+    private void initVkSdk() {
+        VKSdk.customInitialize(App.getContext(), VkAuthorizer.getVkId(), null);
+        VKAccessTokenTracker vkTokenTracker = new VKAccessTokenTracker() {
+            @Override
+            public void onVKAccessTokenChanged(VKAccessToken oldToken, VKAccessToken newToken) {
+                if (newToken == null && AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
+                    new AuthorizationManager().logout();
+                }
+            }
+        };
+        vkTokenTracker.startTracking();
+        if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_VKONTAKTE) && VKAccessToken.currentToken() == null) {
+            new AuthorizationManager().logout();
+        }
+    }
+
     @Override
     public void onCreate() {
         /**
@@ -314,6 +343,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         super.onCreate();
         LeakCanary.install(this);
         mContext = getApplicationContext();
+        initVkSdk();
         initObjectGraphForInjections();
         mProvider = new OptionsAndProfileProvider(this);
         //Включаем отладку, если это дебаг версия
@@ -392,7 +422,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         Ssid.load();
         //Оповещаем о том, что профиль загрузился
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
-        if (!GcmIntentService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty(getContext())) {
+        if (!GcmListenerService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty(getContext())) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -495,8 +525,8 @@ public class App extends ApplicationBase implements IStateDataUpdater {
 
     private void initComScore() {
         comScore.setAppContext(mContext);
-        comScore.setCustomerC2(Static.COMSCORE_C2);
-        comScore.setPublisherSecret(Static.COMSCORE_SECRET_KEY);
+        comScore.setCustomerC2(COMSCORE_C2);
+        comScore.setPublisherSecret(COMSCORE_SECRET_KEY);
     }
 
     private void checkKeepAlive() {

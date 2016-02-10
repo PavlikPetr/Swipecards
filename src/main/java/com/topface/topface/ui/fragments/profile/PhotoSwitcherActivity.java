@@ -23,7 +23,6 @@ import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
@@ -41,9 +40,11 @@ import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.UserProfileActivity;
+import com.topface.topface.ui.adapters.BasePhotoRecyclerViewAdapter;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.ImageSwitcherLooped;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -57,6 +58,8 @@ import com.topface.topface.utils.loadcontollers.LoadController;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
@@ -76,6 +79,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     public static final String DELETED_PHOTOS = "DELETED_PHOTOS";
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 3;
     private static final int ANIMATION_TIME = 200;
+    @Inject
+    TopfaceAppState appState;
     ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
@@ -168,7 +173,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     private ImageButton mDeleteButton;
     private UserProfileLoader mUserProfileLoader;
 
-    public static Intent getPhotoSwitcherIntent(ArrayList<Gift> gifts, int position, int userId, int photosCount, PhotoGridAdapter adapter) {
+    public static Intent getPhotoSwitcherIntent(ArrayList<Gift> gifts, int position, int userId, int photosCount, BasePhotoRecyclerViewAdapter adapter) {
         return getPhotoSwitcherIntent(gifts, position, userId, photosCount, adapter.getPhotos());
     }
 
@@ -187,6 +192,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.from(getApplicationContext()).inject(this);
         overridePendingTransition(R.anim.fade_in, 0);
         // Extras
         Intent intent = getIntent();
@@ -483,6 +489,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             @Override
             public void success(IApiResponse response) {
                 mDeletedPhotos.clear();
+                //удалили фоточки обнивить профиль
+                appState.setData(profile);
             }
 
             @Override
@@ -503,7 +511,9 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                App.from(PhotoSwitcherActivity.this).getProfile().photo = currentPhoto;
+                Profile profile = App.from(PhotoSwitcherActivity.this).getProfile();
+                profile.photo = currentPhoto;
+                appState.setData(profile);
                 CacheProfile.sendUpdateProfileBroadcast();
                 refreshButtonsState();
                 Utils.showToastNotification(R.string.avatar_set_successfully, Toast.LENGTH_SHORT);
@@ -595,7 +605,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                     mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ico_selected, 0, 0, 0);
                 } else {
                     mSetAvatarButton.setText(R.string.on_avatar);
-                    mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(profile.sex == Static.BOY ? R.drawable.ico_avatar_man_selector : R.drawable.ico_avatar_woman_selector, 0, 0, 0);
+                    mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(profile.sex == Profile.BOY ? R.drawable.ico_avatar_man_selector : R.drawable.ico_avatar_woman_selector, 0, 0, 0);
                 }
             }
         }

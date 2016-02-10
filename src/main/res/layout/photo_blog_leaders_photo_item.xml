@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.topface.topface.ui.views.ImageViewRemote
-        android:id="@+id/ivLeadPhoto"
-        style="@style/UsersPhotoToLeaders"
-        android:layout_centerInParent="true" />
+    <data>
 
-    <ImageView
-        android:id="@+id/checkedPhoto"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_centerInParent="true"
-        android:background="@drawable/bg_checked"
-        android:visibility="visible" />
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
 
-    <ImageView
-        android:id="@+id/lpiCheckMark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:src="@drawable/ic_checked" />
-</RelativeLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:onClick="@{clickListener.onClick}">
+
+        <com.topface.topface.ui.views.ImageViewRemote
+            android:id="@+id/ivLeadPhoto"
+            style="@style/UsersPhotoToLeaders"/>
+
+    </FrameLayout>
+
+</layout>
+

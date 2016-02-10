@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import com.topface.framework.JsonUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.City;
 import com.topface.topface.data.Profile;
 import com.topface.topface.utils.CacheProfile;
@@ -63,7 +62,7 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
             nameItem.setCanBeEmpty(false);
             forms.add(nameItem);
 
-            String sex = App.getContext().getString(profile.sex == Static.BOY ? R.string.boy : R.string.girl);
+            String sex = App.getContext().getString(profile.sex == Profile.BOY ? R.string.boy : R.string.girl);
             forms.add(new FormItem(R.string.general_sex, sex, FormItem.SEX) {
                 @Override
                 public void copy(FormItem formItem) {
@@ -108,7 +107,7 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
 
             // real forms
             for (FormItem item : profile.forms) {
-                if (!(item.isOnlyForWomen() && profile.sex == Static.BOY)) {
+                if (!(item.isOnlyForWomen() && profile.sex == Profile.BOY)) {
                     formInfo.fillFormItem(item);
                     forms.add(item);
                 }

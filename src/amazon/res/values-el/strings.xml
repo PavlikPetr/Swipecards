@@ -25,18 +25,14 @@
     <string name="filter_city_age_parameters">Ηλικία και πόλη</string>
     <string name="filter_select_city">Επιλέξτε τη πόλη</string>
     <string name="edit_block_photo">Οι φωτογραφίες</string>
-    <string name="dashbrd_popup_rating">Άρεσε εφαρμογή μας? Ανασηκώστε το βαθμολογίας μας! Όσο
-        υψηλότερη είναι η βαθμολογίας, τόσο πιο πολλοί ενδιαφέροντες ανθρώπους μπορείς να
-        συναντήσεις στο Topface
-    </string>
+    <string name="dashbrd_popup_rating">Άρεσε εφαρμογή μας? Ανασηκώστε το βαθμολογίας μας!  Όσο υψηλότερη είναι η βαθμολογίας, τόσο πιο πολλοί ενδιαφέροντες ανθρώπους μπορείς να συναντήσεις στο Topface</string>
     <string name="dashbrd_popup_title">Βαθμολογίας</string>
     <string name="dashbrd_popup_cancel">Μην ρωτήσετε</string>
     <string name="dashbrd_popup_rate">Ρυθμίστε το βαθμολογίας</string>
     <string name="dashbrd_popup_later">Ρωτήστε αργότερα</string>
     <string name="buying_store_connect">Ζήτώ από το iTunes Store</string>
     <string name="buying_store_purchase">Κάνω καταχώρηση αγοράς από το iTunes Store</string>
-    <string name="buying_tf_ack_sending">Στέλνω πληροφορίες σχετικά με την αγορά στο Topface
-    </string>
+    <string name="buying_tf_ack_sending">Στέλνω πληροφορίες σχετικά με την αγορά στο Topface</string>
     <string name="ok_label">Odnoklassniki</string>
     <string name="autorefill">Αυτόματη αναπλήρωση</string>
     <string name="coins">Τα κέρματα</string>
@@ -49,8 +45,7 @@
     <string name="locking_screen_advice2">Απαλλαγή από όλους τους περιορισμούς</string>
     <string name="general_bookmarks_is_deleted">Ο χρήστης διαγράφεται από τα αγαπημένες</string>
     <string name="general_blacklist_is_deleted">Ο χρήστης διαγράφεται από τη μαύρη λίστα</string>
-    <string name="invite_friends_title_short">Προσκαλέστε όλους τους φίλους σας στο Topface!
-    </string>
+    <string name="invite_friends_title_short">Προσκαλέστε όλους τους φίλους σας στο Topface!</string>
     <string name="general_bookmarks_add_short">Στις αγαπημένες σας</string>
     <string name="general_complaint">Καταγγελία</string>
     <string name="general_type_complain">Θέμα καταγγελιών</string>
@@ -70,8 +65,7 @@
     <string name="profile_mygifts_empty">Δεν έχετε λάβει τα δώρα από κανέναν</string>
     <string name="dating_people_unnoticed">Δέκα ανθρώπους έμειναν χωρίς την προσοχή σας!</string>
     <string name="dating_continue">Συνεχίστε γνωριμία</string>
-    <string name="dating_better_look">Ρίξτε μια προσεκτική ματιά! Ίσως χάσετε το πεπρωμένο σας!
-    </string>
+    <string name="dating_better_look">Ρίξτε μια προσεκτική ματιά!   Ίσως χάσετε το πεπρωμένο σας!</string>
     <string name="edit_my_photos">Οι φωτογραφίες μου</string>
     <string name="general_search_empty_title">Μας συγχωρείτε,τίποτα δεν βρέθηκε.</string>
     <string name="general_search_empty_text">Μπορείτε να δοκιμάσετε την αναζήτηση ξανά, ή να
@@ -88,9 +82,7 @@
     <string name="black_list_info">Έχετε προσθέσει του συνομιλητής στη μαύρη λίστα. Μπορείτε να
         αλλάξετε αυτό στο προφίλ σας στις ρυθμίσεις τη VIP-κατάσταση.
     </string>
-    <string name="black_list_activation">Ενεργοποιήστε το VIP-κατάσταση, και χρησιμοποιήστε μια
-        μαύρη λίστα
-    </string>
+    <string name="black_list_activation">Ενεργοποιήστε το VIP-κατάσταση, και χρησιμοποιήστε μια μαύρη λίστα</string>
     <string name="buying_total">Στη συνολική</string>
     <string name="we_dont_detect_your_city">Καθόρισε τη πόλη σας για να ξέρετε πού βρίσκεστε.
         Ζητήστε από εκείνους που είναι κοντά σας.
@@ -124,15 +116,13 @@
     <string name="pincode_change_label">Αλλαγή του κωδικού PIN</string>
     <string name="pincode_delete_label">Διαγραφή κωδικού PIN</string>
     <string name="pincode_turning_on">Μπλοκάρισμα</string>
-    <string name="pincode_dont_match">Δεν ταιριάζουν τα PIN. Παρακαλώ δοκιμάστε ξανά.</string>
+    <string name="pincode_dont_match">Δεν ταιριάζουν τα PIN.  Παρακαλώ δοκιμάστε ξανά.</string>
     <string name="pincode_wrong">Λάθος κωδικό PIN</string>
     <string name="pincode_input">Καταχωρίστε τον κωδικό PIN</string>
     <string name="pincode_input_previous">Πληκτρολογήστε τον παλιό κωδικό PIN</string>
     <string name="pincode_repeat">Επανάληψη κωδικού PIN</string>
     <string name="pincode_forget">Ξεχάσατε τον κωδικό σας PIN?</string>
-    <string name="pincode_auth_input">Θα πρέπει να εισάγετε το όνομα χρήστη και τον κωδικό
-        πρόσβασης.
-    </string>
+    <string name="pincode_auth_input">Θα πρέπει να εισάγετε το όνομα χρήστη και τον κωδικό πρόσβασης.</string>
     <string name="pincode_will_be_reset">Εάν η άδεια είναι επιτυχής, όλες οι ρυθμίσεις της εφαρμογής
         θα επανέλθουν.
     </string>
@@ -232,8 +222,7 @@
     <string name="profile_form">Το ερωτηματολόγιο</string>
     <string name="profile_gifts">Δώρα</string>
     <string name="profile_actions">Δράσης</string>
-    <string name="profile_empty_form">Αυτός ο χρήστης δεν έχει συμπληρώσει το ερωτηματολόγιο
-    </string>
+    <string name="profile_empty_form">Αυτός ο χρήστης δεν έχει συμπληρώσει το ερωτηματολόγιο</string>
     <string name="profile_ask_form">Ζητήστε να συμπληρώσουν το ερωτηματολόγιο</string>
     <string name="edit_title">Επεξεργασία ενός</string>
     <string name="edit_bg_photo">Φωτογραφία για το παρασκήνιο</string>
@@ -280,8 +269,7 @@
     <string name="settings_ask_developer">Ερώτηση για τους προγραμματιστές</string>
     <string name="settings_payment_problems">Προβλήματα με την πληρωμή</string>
     <string name="settings_cooperation">Συνεργασία</string>
-    <string name="settings_feedback_success_msg">Σας ευχαριστούμε, το μήνυμα εστάλη επιτυχώς
-    </string>
+    <string name="settings_feedback_success_msg">Σας ευχαριστούμε, το μήνυμα εστάλη επιτυχώς</string>
     <string name="settings_switch_on">Συμπ.</string>
     <string name="settings_switch_off">εκτός.</string>
     <string name="leaders_go_date">Θέλω εδώ</string>
@@ -341,9 +329,7 @@
     <string name="black_list_delete">Αφαιρέστε από τη μαύρη λίστα</string>
     <string name="vip_buy_vip">Αγορά της VIP</string>
     <string name="vip_state_off">Η κατάστασή σας-VIP δεν είναι ενεργοποιημένη</string>
-    <string name="vip_info_guest">Μάθετε ποιος είναι ενδιαφέρεται για σας - δείτε τους καλεσμένους
-        σας!
-    </string>
+    <string name="vip_info_guest">Μάθετε ποιος είναι ενδιαφέρεται για σας - δείτε τους καλεσμένους σας!</string>
     <string name="vip_info_invisible">Μείνετε απαρατήρητα, όταν επισκέπτεστε τις σελίδες κάποιου
         άλλου, χάρη στην \"αόρατος\"
     </string>
@@ -385,9 +371,7 @@
     </string>
     <string name="default_price_format">Στη συνολική: %.2f USD</string>
     <string name="default_price_format_extended">Στη συνολική: %1$.2f %2$s</string>
-    <string name="leaders_pick_condition">Δεν μπορείτε να επιλέξετε μια φωτογραφία με βαθμολογία
-        κάτω από %d%%:
-    </string>
+    <string name="leaders_pick_condition">Δεν μπορείτε να επιλέξετε μια φωτογραφία με βαθμολογία κάτω από %d%%:</string>
     <string name="general_gift">Το δώρω</string>
     <string name="user_actions_chat">Συνομιλία</string>
     <string name="profile_edit_age_ranges">Ηλικία θα πρέπει να είναι μεταξύ 16 – 99 ετών. Παρακαλώ
@@ -464,8 +448,7 @@
     <string name="general_choose_city">Επιλέξτε τη πόλη</string>
     <string name="buy_mobile_payments">Άλλοι τρόποι πληρωμής</string>
     <string name="general_save_and_exit">Αποθήκευση και έξοδος</string>
-    <string name="general_set_password">Εισάγετε τον κωδικός σας πριν βγείτε από την εφαρμογή
-    </string>
+    <string name="general_set_password">Εισάγετε τον κωδικός σας πριν βγείτε από την εφαρμογή</string>
     <string name="user_is_deleted">Ο χρήστης έχει διαγραφεί</string>
     <string name="general_bookmarks">Οι αγαπημένες</string>
     <string name="general_fans">Οι λάτρης</string>
@@ -504,10 +487,8 @@
         <item quantity="one">Λάβετε κατάσταση VIP για %d μέρα</item>
     </plurals>
     <plurals name="invite_friends_plurals">
-        <item quantity="other">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρες
-        </item>
-        <item quantity="one">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρα
-        </item>
+        <item quantity="other">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρες</item>
+        <item quantity="one">Καλέστε %1$d φίλους για να πάρετε την κατάσταση VIP για %2$d μέρα</item>
     </plurals>
     <plurals name="get_vip_for_invites_plurals">
         <item quantity="other">Λάβετε VIP κατάσταση δωρεάν για %d προσκλήσεις</item>
@@ -580,9 +561,7 @@
     <string name="likes_can_help_you">Οι συμπάθειες θα βοηθήσουν στην εξοικείωση</string>
     <string name="general_get_dating">Εξοικειωθείτε</string>
     <string name="settings_select_language">Επιλέξτε γλώσσα για την εφαρμογη</string>
-    <string name="restart_to_change_locale">Για να αλλάξετε τη γλώσσα η εφαρμογή θα πρέπει να
-        επανεκκινηθεί
-    </string>
+    <string name="restart_to_change_locale">Για να αλλάξετε τη γλώσσα η εφαρμογή θα πρέπει να επανεκκινηθεί</string>
     <string name="locale_changing">Αλλαγή γλώσσας</string>
     <plurals name="you_were_liked">
         <item quantity="other">Αρέσετε σε %d ανθρώπους</item>
@@ -629,8 +608,7 @@
     <string name="settings_feedback_transaction_link">πού να βρείτε τον αριθμό παραγγελίας?</string>
     <string name="general_logout_error">Δυστυχώς, ο λογαριασμός σας δεν απενεργοποιήθηκε</string>
     <string name="other_auth">Συνδεθείτε σε άλλες υπηρεσίες</string>
-    <string name="settings_feedback_transaction_number_hint">Εισάγετε τον αριθμό παραγγελίας σας
-    </string>
+    <string name="settings_feedback_transaction_number_hint">Εισάγετε τον αριθμό παραγγελίας σας</string>
     <string name="delete_visitors">Αφαιρέστε τους επισκέπτες</string>
     <string name="delete_admirations">Αφαιρέστε τους θαυμασμους</string>
     <string name="general_admirations">Θαυμασμούς</string>
@@ -701,9 +679,5 @@
     <string name="add_leader_hint">Χαιρετισμό σας …</string>
     <string name="novice_sympathy">Στείλτε συμπάθεια για εκείνους που \nσας αρέσει πραγματικά\ nγια
         να ξεκινήσετε μια ευχάριστη γνωριμία
-    </string>
-    <string name="novice_sympathies_bonus">Παίρνετε %1$d συμπάθειες για\nδωρεάν! Αυτό σημαίνει ότι,
-        εσέις\n θα αρέσετε ακριβώς για %2$d τους ανθρώπους,\nοποίοι θα εκφράζουν την συμπάθεια για
-        σας
     </string>
 </resources>

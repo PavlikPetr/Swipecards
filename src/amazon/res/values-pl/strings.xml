@@ -12,9 +12,7 @@
     <string name="chat_background_text">Brak odebranych wiadomości</string>
     <string name="filter_only_online">Tylko online</string>
     <string name="filter_select_city">Wybór miasta</string>
-    <string name="dashbrd_popup_rating">Lubisz naszą aplikację? Podwyższ nam ranking! Im wyżej
-        ranking, tym więcej interesujących ludzi spotkasz w Topface
-    </string>
+    <string name="dashbrd_popup_rating">Lubisz naszą aplikację? Podwyższ nam ranking! Im wyżej ranking, tym więcej interesujących ludzi spotkasz w Topface</string>
     <string name="dashbrd_popup_title">Ranking</string>
     <string name="dashbrd_popup_cancel">Nie pytać więcej</string>
     <string name="dashbrd_popup_rate">Wystawić ranking</string>
@@ -224,9 +222,7 @@
     <string name="general_sex">Płeć</string>
     <string name="general_girl">Żeński</string>
     <string name="general_boy">Męski</string>
-    <string name="filter_city_fail">Nie znaleziono żadnego miasta, nazwa którego zaczyna się na
-        «%s»
-    </string>
+    <string name="filter_city_fail">Nie znaleziono żadnego miasta, nazwa którego zaczyna się na «%s»</string>
     <string name="age_filter_man">Interesują Cię mężczyźni</string>
     <string name="age_filter_girl">Interesują Cię kobiety</string>
     <string name="settings_melody">Melodia powiadomienia</string>
@@ -244,8 +240,7 @@
     <string name="black_list_delete">Usuń z czarnej listy</string>
     <string name="vip_buy_vip">Kupowanie VIP</string>
     <string name="vip_state_off">Twój VIP-status nie jest aktywowany</string>
-    <string name="vip_info_guest">Dowiedz się, kto interesuje się Tobą - sprawdź swoich gości!
-    </string>
+    <string name="vip_info_guest">Dowiedz się, kto interesuje się Tobą - sprawdź swoich gości!</string>
     <string name="vip_info_invisible">Bądź niewidoczny podczas przeglądu cudzych stron dzięki
         statusu \"niewidoczny\"
     </string>
@@ -279,8 +274,7 @@
         odnowienie aplikacji
     </string>
     <string name="default_price_format">Razem: %.2f USD</string>
-    <string name="leaders_pick_condition">Nie możesz wybrać zdjęcie o rankingu poniżej %d%%:
-    </string>
+    <string name="leaders_pick_condition">Nie możesz wybrać zdjęcie o rankingu poniżej %d%%:</string>
     <string name="general_gift">Prezent</string>
     <string name="user_actions_chat">Rozmowa</string>
     <string name="profile_edit_age_ranges">Wiek ma być od 16 do 99 lat. Prosimy o wpisanie poprawnej
@@ -422,8 +416,7 @@
     </string>
     <string name="on_avatar">Zapisz jako zdjęcie profilowe</string>
     <string name="your_avatar">Twoje zdjęcie profilowe</string>
-    <string name="avatar_set_successfully">Zdjęcie profilowe z powodzeniem zostało zainstalowane
-    </string>
+    <string name="avatar_set_successfully">Zdjęcie profilowe z powodzeniem zostało zainstalowane</string>
     <string name="incorrect_photo">Niewłaściwe zdjęcie. Spróbuj dodać inne</string>
     <string name="incorrect_photo_format">Niewłaściwy format zdjęcia. Spróbuj dodać w formacie jpg
         lub png
@@ -478,8 +471,5 @@
     <string name="or">lub</string>
     <string name="novice_sympathy">Wysyłaj sympatie tym, kto Ci\nrzeczywiście się podoba,\naby
         zacząć miłą znajomość
-    </string>
-    <string name="novice_sympathies_bonus">Otrzymasz %1$d sympatii\nprezencie! To oznacza, że\nna
-        pewno się spodobasz %2$d osobom,\nktóre wyrażą Ci swoją sympatię
     </string>
 </resources>

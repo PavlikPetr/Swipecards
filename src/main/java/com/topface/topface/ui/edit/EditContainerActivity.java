@@ -6,8 +6,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.ui.BaseFragmentActivity;
 
 public class EditContainerActivity extends BaseFragmentActivity {
@@ -25,7 +25,7 @@ public class EditContainerActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         Intent intent = getIntent();
-        switch (intent.getIntExtra(Static.INTENT_REQUEST_KEY, 0)) {
+        switch (intent.getIntExtra(App.INTENT_REQUEST_KEY, 0)) {
             case INTENT_EDIT_FILTER:
                 mFragment = new FilterFragment();
                 break;

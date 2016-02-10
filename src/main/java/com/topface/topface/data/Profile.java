@@ -12,7 +12,6 @@ import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.utils.FormInfo;
@@ -36,7 +35,11 @@ public class Profile extends AbstractDataWithPhotos {
 
     public final static int TYPE_OWN_PROFILE = 1;
     public final static int TYPE_USER_PROFILE = 2;
-    private static String[] EMPTY_STATUSES = {Static.EMPTY, "-", "."};
+    public static final int GIRL = 0;
+    public static final int BOY = 1;
+    public static final int MIN_AGE = 16;
+    public static final int MAX_AGE = 99;
+    private static String[] EMPTY_STATUSES = {Utils.EMPTY, "-", "."};
 
     @SerializedName("id")
     public int uid; // id пользователя в топфейсе
@@ -134,7 +137,6 @@ public class Profile extends AbstractDataWithPhotos {
                 profile.showAd = resp.optBoolean("showAd", true);
                 profile.canInvite = resp.optBoolean("canInvite");
                 profile.notificationToken = resp.optString("notificationToken");
-                new GCMUtils(App.getContext()).registerGCM(notificationToken);
             }
             profile.editor = resp.optBoolean("editor", false);
             profile.setEditor(editor);
@@ -409,12 +411,12 @@ public class Profile extends AbstractDataWithPhotos {
 
     public static String normilizeStatus(String status) {
         if (status == null) {
-            return Static.EMPTY;
+            return Utils.EMPTY;
         }
         String result = status.replaceAll("\n", " ").trim();
         for (String EMPTY_STATUS : EMPTY_STATUSES) {
             if (EMPTY_STATUS.equals(result)) {
-                return Static.EMPTY;
+                return Utils.EMPTY;
             }
         }
         return result;
@@ -422,7 +424,7 @@ public class Profile extends AbstractDataWithPhotos {
 
     public static String normalizeName(String name) {
         if (name == null) {
-            return Static.EMPTY;
+            return Utils.EMPTY;
         }
         return name.replaceAll("\n", " ").trim();
     }
@@ -504,10 +506,10 @@ public class Profile extends AbstractDataWithPhotos {
     public static class Gifts {
         public boolean more;
         public int count;
-        public ArrayList<Gift> gifts = new ArrayList<>();
+        public ArrayList<Gift> items = new ArrayList<>();
 
         public ArrayList<Gift> getGifts() {
-            return gifts;
+            return items;
         }
     }
 }

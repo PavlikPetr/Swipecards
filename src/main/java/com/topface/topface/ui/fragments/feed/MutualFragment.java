@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedMutual;
+import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteMutualsRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -56,7 +57,7 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
         inflated.findViewById(R.id.btnGetDating).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MenuFragment.selectFragment(FragmentId.DATING);
+                MenuFragment.selectFragment(FragmentId.DATING.getFragmentSettings());
             }
         });
 

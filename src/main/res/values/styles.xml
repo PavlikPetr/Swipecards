@@ -696,20 +696,20 @@
 
     <style name="GalleryItem">
         <item name="postProcessor">cropped</item>
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
     </style>
 
     <style name="UsersPhotoToLeaders">
-        <item name="android:scaleType">fitCenter</item>
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">fill_parent</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
     </style>
 
     <style name="GalleryAddItem">
         <item name="android:src">@drawable/profile_add_photo_selector</item>
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
     </style>
 
     <style name="TopItem">
@@ -789,7 +789,7 @@
 
     <style name="Widget.Topface.Button.Big.Red">
         <item name="android:background">@drawable/btn_red_selector</item>
-        <item name="android:textColor">@drawable/btn_red_text_color_selector</item>
+        <item name="android:textColor">@color/btn_red_text_color_selector</item>
     </style>
 
     <style name="BlueBonusButton" parent="Widget.Topface.Button.Big.Blue">
@@ -803,6 +803,12 @@
     <style name="Widget.Topface.Button.Big.Blue">
         <item name="android:background">@drawable/btn_blue_selector</item>
         <item name="android:textColor">@drawable/btn_blue_text_color_selector</item>
+    </style>
+
+    <style name="Widget.Topface.Button.Big.InviteVkFriends">
+        <item name="android:background">@drawable/btn_blue_invite_vk_friends_selector</item>
+        <item name="android:textColor">@drawable/btn_blue_invite_vk_friends_text_color_selector
+        </item>
     </style>
 
     <style name="Widget.Topface.Button.Blue">
@@ -1221,6 +1227,46 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minWidth">240dp</item>
+    </style>
+
+    <style name="VkProfileUserName">
+        <item name="android:gravity">center</item>
+        <item name="android:paddingBottom">36dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:textColor">#404040</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="VkProfileButtons" parent="Widget.Topface.Button.Big.Gray">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:visibility">gone</item>
+        <item name="android:layout_marginBottom">12dp</item>
+    </style>
+
+    <style name="InvisibleProgress">
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="Switcher">
+        <item name="android:button">@drawable/edit_switch</item>
+        <item name="android:drawableLeft">@null</item>
+        <item name="android:drawableRight">@null</item>
+    </style>
+
+    <!-- Take photo screen -->
+    <style name="TakePhotoText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:lineSpacingExtra">@dimen/take_photo_extra_spacing</item>
+        <item name="android:textColor">@color/take_photo_screen_text_dark</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TakePhotoText.Medium">
+        <item name="android:textColor">@color/take_photo_screen_text_medium</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="EmptyFeedsViewImageVisibility">

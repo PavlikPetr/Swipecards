@@ -1,7 +1,5 @@
 package com.topface.topface.data;
 
-import com.topface.topface.Static;
-
 import java.util.ArrayList;
 
 /**
@@ -42,7 +40,7 @@ public class UniversalProfileWrapper implements IUniversalUser {
 
     @Override
     public int getSex() {
-        return mProfile == null ? Static.BOY : mProfile.sex;
+        return mProfile == null ? Profile.BOY : mProfile.sex;
     }
 
     @Override

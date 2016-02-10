@@ -36,7 +36,7 @@ public class AppSocialAppsIds extends AbstractData {
 
     static {
         ALLOWED_OK_IDS.add("125879808");
-        OK_KEYS.put("secret125879808", "D54CFE092BA6F1FEA2C21BD3");
+        OK_KEYS.put("secret125879808", "E41CBA567EA1B5FDC5A57AC4");
         OK_KEYS.put("public125879808", "CBAHMBIIABABABABA");
         ALLOWED_OK_IDS.add("192696576");
         OK_KEYS.put("secret192696576", "A9872F0F0DA2EA47EB876D85");
@@ -46,7 +46,7 @@ public class AppSocialAppsIds extends AbstractData {
     /**
      * {String} vkId - идентификатор приложения в vk
      */
-    public String vkId = VkSocialAppsIdsHolder.VK_ID;
+    public int vkId = VkSocialAppsIdsHolder.VK_ID;
 
     public AppSocialAppsIds(JSONObject data) {
         if (data != null) {

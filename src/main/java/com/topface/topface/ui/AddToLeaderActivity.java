@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,14 +36,12 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.state.TopfaceAppState;
-import com.topface.topface.ui.adapters.LeadersPhotoGridAdapter;
+import com.topface.topface.ui.adapters.LeadersRecyclerViewAdapter;
+import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
-import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.AddPhotoHelper;
-import com.topface.topface.utils.IPhotoTakerWithDialog;
-import com.topface.topface.utils.PhotoTaker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
@@ -63,7 +63,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     @Inject
     TopfaceAppState mAppState;
     private static final String PHOTOS = "PHOTOS";
-    private static final String POSITION = "POSITION";
     private static final String SELECTED_POSITION = "SELECTED_POSITION";
     private static final String ALREADY_SHOWN = "ALREADY_SHOWN";
     private static final int MAX_SYMBOL_COUNT = 120;
@@ -75,15 +74,11 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         }
     };
     private Subscription mBalanceSubscription;
-    private int mPosition;
     private int mSelectedPosition;
     private boolean mIsPhotoDialogShown;
-    private View mGridFooterView;
-    private LeadersPhotoGridAdapter mUsePhotosAdapter;
+    private LeadersRecyclerViewAdapter mUsePhotosAdapter;
     private AddPhotoHelper mAddPhotoHelper;
-    private TakePhotoDialog takePhotoDialog;
     private EditText mEditText;
-    private IPhotoTakerWithDialog mPhotoTaker;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -93,7 +88,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     Photos mPhotos = null;
 
     @Bind(R.id.user_photos_grid)
-    GridViewWithHeaderAndFooter mGridView;
+    RecyclerView mRecyclerView;
     @Bind(R.id.llvLeaderSending)
     LockerView mLoadingLocker;
 
@@ -106,21 +101,16 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         ButterKnife.bind(this);
         App.from(this).inject(this);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
-        mGridFooterView = createGridViewFooter();
-        addFooterView();
         if (savedInstanceState != null) {
             mPhotos = JsonUtils.fromJson(savedInstanceState.getString(PHOTOS), Photos.class);
-            mPosition = savedInstanceState.getInt(POSITION, 0);
             mSelectedPosition = savedInstanceState.getInt(SELECTED_POSITION, 0);
             mIsPhotoDialogShown = savedInstanceState.getBoolean(ALREADY_SHOWN);
         }
-        mGridView.addHeaderView(getHeaderView());
         // add title to actionbar
         new ActionBarTitleSetterDelegate(getSupportActionBar()).setActionBarTitles(R.string.general_photoblog, null);
         // init grid view and create adapter
-        initPhotosGrid(mPosition, mSelectedPosition);
-        mPhotoTaker = new PhotoTaker(initAddPhotoHelper(), this);
-        takePhotoDialog = (TakePhotoDialog) getSupportFragmentManager().findFragmentByTag(TakePhotoDialog.TAG);
+        initPhotosGrid(mSelectedPosition);
+        initAddPhotoHelper();
     }
 
     @Override
@@ -139,13 +129,9 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     }
 
     private void showPhotoHelper(String message, boolean isNeedShow) {
-        if (takePhotoDialog != null) {
-            takePhotoDialog.setPhotoTaker(mPhotoTaker);
-        }
         if (isNeedShow) {
-            mAddPhotoHelper = initAddPhotoHelper();
-            if (App.from(this).getProfile().photo == null && takePhotoDialog == null) {
-                mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, null, message);
+            if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null) {
+                startActivityForResult(TakePhotoActivity.createIntent(this, TakePhotoStatistics.PLC_ADD_TO_LEADER), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
                 mIsPhotoDialogShown = true;
             }
         }
@@ -163,24 +149,16 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         super.onProfileUpdated();
         Profile profile = App.from(this).getProfile();
         mPhotos = profile.photos;
-        LeadersPhotoGridAdapter adapter = getAdapter();
+        LeadersRecyclerViewAdapter adapter = getAdapter();
         adapter.setData(mPhotos, false);
-        setSeletedPosition(0, profile.photos.isEmpty() ? 0 : profile.photos.get(0).getId());
+        setSelectedPosition(profile.photos.isEmpty() ? 0 : profile.photos.get(0).getId());
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            switch (requestCode) {
-                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:
-                case AddPhotoHelper.GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA_WITH_DIALOG:
-                    if (mAddPhotoHelper != null) {
-                        mAddPhotoHelper.showTakePhotoDialog(mPhotoTaker, mAddPhotoHelper.processActivityResult(requestCode, resultCode, data, false));
-                        mIsPhotoDialogShown = true;
-                    }
-                    break;
-            }
+        if (mAddPhotoHelper != null) {
+            mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -192,12 +170,12 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         } catch (JSONException e) {
             Debug.error(e);
         }
-        outState.putInt(POSITION, mPosition);
+        //outState.putInt(POSITION, mPosition);
         outState.putInt(SELECTED_POSITION, mSelectedPosition);
         outState.putBoolean(ALREADY_SHOWN, mIsPhotoDialogShown);
     }
 
-    private View getHeaderView() {
+    private View createHeaderView() {
         View headerView = getLayoutInflater().inflate(R.layout.add_leader_grid_view_header, null);
         mEditText = (EditText) headerView.findViewById(R.id.yourGreetingEditText);
         // set max symbol count for input status
@@ -229,7 +207,9 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
     @Override
     protected void onPause() {
-        mPosition = mGridView.getFirstVisiblePosition();
+        if (mEditText != null) {
+            Utils.hideSoftKeyboard(this, mEditText);
+        }
         mSelectedPosition = getAdapter().getSelectedPhotoId();
         mIsPhotoDialogShown = true;
         super.onPause();
@@ -238,10 +218,10 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private void pressedAddToLeader(int position) {
         final Options.LeaderButton buttonData = App.from(this).getOptions().buyLeaderButtons.get(position);
         int selectedPhotoId = getAdapter().getSelectedPhotoId();
-        if (getAdapter().getCount() > 0) {
+        if (getAdapter().getItemCount() > 0) {
             if (mCoins < buttonData.price) {
                 showPurchasesFragment(buttonData.price);
-            } else if (selectedPhotoId > LeadersPhotoGridAdapter.EMPTY_SELECTED_ID) {
+            } else if (selectedPhotoId > LeadersRecyclerViewAdapter.EMPTY_SELECTED_ID) {
                 mLoadingLocker.setVisibility(View.VISIBLE);
                 new AddPhotoFeedRequest(selectedPhotoId, AddToLeaderActivity.this, buttonData.photoCount, mEditText.getText().toString(), (long) buttonData.price)
                         .callback(new ApiHandler() {
@@ -277,29 +257,30 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     }
 
 
-    private LeadersPhotoGridAdapter getAdapter() {
+    private LeadersRecyclerViewAdapter getAdapter() {
         if (mUsePhotosAdapter == null) {
             mUsePhotosAdapter = createAdapter();
         }
         return mUsePhotosAdapter;
     }
 
-    private void initPhotosGrid(final int position, final int selectedPosition) {
-        mGridView.post(new Runnable() {
+    private void initPhotosGrid(final int selectedPosition) {
+        int spanCount = getResources().getInteger(R.integer.add_to_leader_column_count);
+        StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setAdapter(getAdapter());
+        mRecyclerView.post(new Runnable() {
             @Override
             public void run() {
-                LeadersPhotoGridAdapter adapter = getAdapter();
-                mGridView.setAdapter(adapter);
-                mGridView.setOnScrollListener(adapter);
-                setSeletedPosition(position, selectedPosition);
+                setSelectedPosition(selectedPosition);
             }
         });
     }
 
-    private void setSeletedPosition(int position, int selectedPosition) {
-        mGridView.setSelection(position);
-        LeadersPhotoGridAdapter adapter = getAdapter();
-        if (adapter != null && adapter.getPhotoLinks().size() > 0 && selectedPosition != 0) {
+
+    private void setSelectedPosition(int selectedPosition) {
+        LeadersRecyclerViewAdapter adapter = getAdapter();
+        if (adapter != null && !adapter.getAdapterData().isEmpty() && selectedPosition != 0) {
             adapter.setSelectedPhotoId(selectedPosition);
         }
     }
@@ -326,17 +307,18 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     }
 
 
-    private LeadersPhotoGridAdapter createAdapter() {
+    private LeadersRecyclerViewAdapter createAdapter() {
         Photos photos = getPhotoLinks();
-        return new LeadersPhotoGridAdapter(this.getApplicationContext(),
+        return (LeadersRecyclerViewAdapter) new LeadersRecyclerViewAdapter(
                 photos,
-                photos.size(),
-                mGridView.getGridViewColumnWidth(), new LoadingListAdapter.Updater() {
+                App.get().getProfile().photosCount, new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
                 sendAlbumRequest();
             }
-        });
+        })
+                .setHeader(createHeaderView(), false)
+                .setFooter(createFooterView(), false);
     }
 
     private void sendAlbumRequest() {
@@ -344,7 +326,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         if (photoLinks == null || photoLinks.size() < 2) {
             return;
         }
-        mGridFooterView.setVisibility(View.VISIBLE);
         Photo photo = getAdapter().getItem(photoLinks.size() - 2);
         int position = photo.getPosition();
         AlbumRequest request = new AlbumRequest(
@@ -374,24 +355,10 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                 Utils.showErrorMessage();
             }
 
-            @Override
-            public void always(IApiResponse response) {
-                super.always(response);
-                mGridFooterView.setVisibility(View.GONE);
-            }
         }).exec();
     }
 
-    private void addFooterView() {
-        if (mGridView != null) {
-            if (mGridView.getFooterViewCount() == 0) {
-                mGridView.addFooterView(mGridFooterView);
-            }
-            mGridFooterView.setVisibility(View.GONE);
-        }
-    }
-
-    private View createGridViewFooter() {
+    private View createFooterView() {
         return ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.gridview_footer_progress_bar, null, false);
     }
 

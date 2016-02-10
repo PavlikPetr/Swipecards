@@ -12,7 +12,7 @@ import android.widget.RatingBar;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.AppRateRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -155,7 +155,7 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
             @Override
             public void execute() {
                 final SharedPreferences.Editor editor = App.getContext().getSharedPreferences(
-                        Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE
+                        App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE
                 ).edit();
                 editor.putLong(RATING_POPUP, value);
                 editor.apply();
@@ -171,7 +171,7 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
     public static boolean isApplicable(long ratePopupTimeout, boolean ratePopupEnabled) {
         // need ProfileConfig
         final SharedPreferences preferences = App.getContext().getSharedPreferences(
-                Static.PREFERENCES_TAG_SHARED,
+                App.PREFERENCES_TAG_SHARED,
                 Context.MODE_PRIVATE
         );
         long date_start = preferences.getLong(RATING_POPUP, -1);

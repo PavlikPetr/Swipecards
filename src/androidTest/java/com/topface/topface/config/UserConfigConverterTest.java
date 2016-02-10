@@ -7,9 +7,9 @@ import android.test.InstrumentationTestCase;
 import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.config.UserConfigConverter;
 
@@ -79,7 +79,7 @@ public class UserConfigConverterTest extends InstrumentationTestCase {
             mPrefParts = new String[]{"st&test@gmail.com", "vk&5465658", "ok&458756888"};
             for (String prefPart : mPrefParts) {
                 // pincode value
-                addField(settingsMap, UserConfig.DATA_PIN_CODE, Static.EMPTY, prefPart);
+                addField(settingsMap, UserConfig.DATA_PIN_CODE, Utils.EMPTY, prefPart);
                 // admirations promo popup last date of show
                 addField(settingsMap, getPromoPopupKey(Options.PromoPopupEntity.AIR_ADMIRATIONS), System.currentTimeMillis(), prefPart);
                 // messages promo popup last date of show
@@ -93,13 +93,13 @@ public class UserConfigConverterTest extends InstrumentationTestCase {
                 // flag show if "send sympathy hint" is passed
                 addField(settingsMap, UserConfig.DATA_NOVICE_SYMPATHY, true, prefPart);
                 // список сообщений для сгруппированных нотификаций (сейчас группируются только сообщения)
-                addField(settingsMap, UserConfig.NOTIFICATIONS_MESSAGES_STACK, Static.EMPTY, prefPart);
+                addField(settingsMap, UserConfig.NOTIFICATIONS_MESSAGES_STACK, Utils.EMPTY, prefPart);
                 // количество нотификаций, которые пишем в поле "еще %d сообщений"
                 addField(settingsMap, UserConfig.NOTIFICATION_REST_MESSAGES, 0, prefPart);
                 // время последнего сброса счетчика вкладки бонусов
                 addField(settingsMap, UserConfig.DATA_BONUS_LAST_SHOW_TIME, System.currentTimeMillis(), prefPart);
                 // default text for instant message on dating screen
-                addField(settingsMap, UserConfig.DEFAULT_DATING_MESSAGE, Static.EMPTY, prefPart);
+                addField(settingsMap, UserConfig.DEFAULT_DATING_MESSAGE, Utils.EMPTY, prefPart);
                 // push notification melody
                 addField(settingsMap, UserConfig.SETTINGS_GCM_RINGTONE, UserConfig.DEFAULT_SOUND, prefPart);
                 // preload photo default type WiFi and 3G
@@ -132,7 +132,7 @@ public class UserConfigConverterTest extends InstrumentationTestCase {
         }
 
         protected String generateUniqueKey(String name, String part) {
-            return part + Static.AMPERSAND + name;
+            return part + Utils.AMPERSAND + name;
         }
 
         private String getPromoPopupKey(int popupType) {
@@ -148,7 +148,7 @@ public class UserConfigConverterTest extends InstrumentationTestCase {
             for (SharedPreferences preferences : configs) {
                 String s = mPrefParts[i].substring(mPrefParts[i].indexOf("&") + 1);
                 preferences = getContext().getSharedPreferences(
-                        UserConfig.PROFILE_CONFIG_SETTINGS + Static.AMPERSAND + s,
+                        UserConfig.PROFILE_CONFIG_SETTINGS + Utils.AMPERSAND + s,
                         Context.MODE_PRIVATE);
                 configs[i] = preferences;
                 i++;

@@ -18,9 +18,9 @@
 
     <!-- Switch -->
 
-    <view
+    <CheckBox
         android:id="@+id/cbSwitch"
-        class="com.topface.topface.ui.views.Switcher"
+        style="@style/Switcher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

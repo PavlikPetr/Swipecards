@@ -71,7 +71,7 @@ public class DeleteAccountDialog extends AbstractDialogFragment implements View.
                                     @Override
                                     public void success(IApiResponse response) {
                                         if (response.isCompleted()) {
-                                            new AuthorizationManager(getActivity()).logout(getActivity());
+                                            new AuthorizationManager().logout(getActivity());
                                         } else {
                                             fail(response.getResultCode(), response);
                                         }

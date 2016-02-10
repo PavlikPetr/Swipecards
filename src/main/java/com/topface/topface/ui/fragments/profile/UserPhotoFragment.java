@@ -4,24 +4,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.BasePendingInit;
+import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.User;
 import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.ui.GridViewWithHeaderAndFooter;
+import com.topface.topface.ui.adapters.BasePhotoRecyclerViewAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
+import com.topface.topface.ui.adapters.UserRecyclerViewAdapter;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
 import org.json.JSONException;
@@ -35,21 +38,20 @@ public class UserPhotoFragment extends ProfileInnerFragment {
 
     private int mUserId;
     private int mPhotosCount;
-    private UserPhotoGridAdapter mUserPhotoGridAdapter;
+    private UserRecyclerViewAdapter mUserRecyclerViewAdapter;
     private Photos mPhotoLinks;
     private LoadingListAdapter.Updater mUpdater;
-    private GridViewWithHeaderAndFooter mGridAlbum;
-    private View mGridFooterView;
+    private RecyclerView mGridAlbum;
     private BasePendingInit<User> mPendingUserInit = new BasePendingInit<>();
-    private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+    private BasePhotoRecyclerViewAdapter.OnRecyclerViewItemClickListener mClickListener = new BasePhotoRecyclerViewAdapter.OnRecyclerViewItemClickListener() {
         @Override
-        public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-            if (position < mPhotosCount) {
+        public void itemClick(View view, int itemPosition, Photo photo) {
+            if (itemPosition < mPhotosCount) {
                 Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(mPendingUserInit.getData().gifts.getGifts(),
-                        position,
+                        itemPosition,
                         mUserId,
                         mPhotosCount,
-                        mUserPhotoGridAdapter
+                        mUserRecyclerViewAdapter
                 );
                 Fragment parentFrag = getParentFragment();
                 if (parentFrag != null) {
@@ -72,27 +74,20 @@ public class UserPhotoFragment extends ProfileInnerFragment {
             @Override
             public void onUpdate() {
                 if (mGridAlbum != null) {
-                    mGridFooterView.setVisibility(View.VISIBLE);
-                    Photos data = mUserPhotoGridAdapter.getPhotos();
+                    Photos data = mUserRecyclerViewAdapter.getPhotos();
                     AlbumRequest request = new AlbumRequest(getActivity(), mUserId, data.get(data.size() - 1).getPosition() + 1, AlbumRequest.MODE_ALBUM, AlbumLoadController.FOR_GALLERY);
                     request.callback(new DataApiHandler<AlbumPhotos>() {
 
                         @Override
                         protected void success(AlbumPhotos data, IApiResponse response) {
                             if (mGridAlbum != null) {
-                                mUserPhotoGridAdapter.addPhotos(data, data.more, false);
+                                mUserRecyclerViewAdapter.addPhotos(data, data.more, false);
                             }
                         }
 
                         @Override
                         protected AlbumPhotos parseResponse(ApiResponse response) {
                             return new AlbumPhotos(response);
-                        }
-
-                        @Override
-                        public void always(IApiResponse response) {
-                            super.always(response);
-                            mGridFooterView.setVisibility(View.GONE);
                         }
 
                         @Override
@@ -109,12 +104,14 @@ public class UserPhotoFragment extends ProfileInnerFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_grid, container, false);
-        mGridFooterView = createGridViewFooter();
-        // album
-        mGridAlbum = (GridViewWithHeaderAndFooter) root.findViewById(R.id.usedGrid);
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.user_photo_layout, container, false);
+        mGridAlbum = (RecyclerView) root.findViewById(R.id.usedGrid);
         int position = 0;
         if (savedInstanceState != null) {
             mUserId = savedInstanceState.getInt(USER_ID, 0);
@@ -124,13 +121,11 @@ public class UserPhotoFragment extends ProfileInnerFragment {
             setPhotos(mPhotoLinks);
             position = savedInstanceState.getInt(POSITION, 0);
         }
-        addFooterView();
-        mGridAlbum.setAdapter(mUserPhotoGridAdapter);
-        mGridAlbum.setSelection(position);
-        mGridAlbum.setOnItemClickListener(mOnItemClickListener);
-        if (mUserPhotoGridAdapter != null) {
-            mGridAlbum.setOnScrollListener(mUserPhotoGridAdapter);
-        }
+        int spanCount = getResources().getInteger(R.integer.add_to_leader_column_count);
+        StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
+        mGridAlbum.setLayoutManager(manager);
+        mGridAlbum.setAdapter(mUserRecyclerViewAdapter);
+        mGridAlbum.scrollToPosition(position);
         return root;
     }
 
@@ -159,7 +154,9 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         } catch (JSONException e) {
             Debug.error(e);
         }
-        outState.putInt(POSITION, (mGridAlbum != null) ? mGridAlbum.getFirstVisiblePosition() : 0);
+        if (mUserRecyclerViewAdapter != null) {
+            outState.putInt(POSITION, (mGridAlbum != null) ? mUserRecyclerViewAdapter.getFirstVisibleItemPos() : 0);
+        }
     }
 
     public void setUserData(User user) {
@@ -173,30 +170,21 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         mUserId = user.uid;
         mPhotosCount = user.photosCount;
         mPhotoLinks = user.photos;
-        if (mGridAlbum != null && mGridAlbum.getGridViewAdapter() == null) {
+        if (mGridAlbum != null && mGridAlbum.getAdapter() == null) {
             setPhotos(mPhotoLinks);
-            addFooterView();
-            mGridAlbum.setAdapter(mUserPhotoGridAdapter);
-            mGridAlbum.setOnScrollListener(mUserPhotoGridAdapter);
-        }
-    }
-
-    private void addFooterView() {
-        if (mGridAlbum != null) {
-            if (mGridAlbum.getFooterViewCount() == 0) {
-                mGridAlbum.addFooterView(mGridFooterView);
-            }
-            mGridFooterView.setVisibility(View.GONE);
+            mGridAlbum.setAdapter(mUserRecyclerViewAdapter);
         }
     }
 
 
     private void setPhotos(Photos photos) {
-        if (mUserPhotoGridAdapter == null) {
-            mUserPhotoGridAdapter = new UserPhotoGridAdapter(getActivity().getApplicationContext(),
+        if (mUserRecyclerViewAdapter == null) {
+            mUserRecyclerViewAdapter = (UserRecyclerViewAdapter) new UserRecyclerViewAdapter(
                     photos,
                     mPhotosCount,
-                    mUpdater);
+                    mUpdater)
+                    .setFooter(createGridViewFooter(), false);
+            mUserRecyclerViewAdapter.setOnItemClickListener(mClickListener);
         }
     }
 
@@ -205,8 +193,8 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         if (mPhotoLinks != null) {
             mPhotoLinks.clear();
         }
-        if (mUserPhotoGridAdapter != null) {
-            mUserPhotoGridAdapter.notifyDataSetChanged();
+        if (mUserRecyclerViewAdapter != null) {
+            mUserRecyclerViewAdapter.notifyDataSetChanged();
         }
         mGridAlbum = null;
     }

@@ -8,11 +8,12 @@ import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.BuildConfig;
-import com.topface.topface.Static;
 import com.topface.topface.data.social.AppSocialAppsIds;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.http.ConnectionManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,7 +67,7 @@ public class AppConfig extends AbstractConfig {
     @Override
     protected void fillSettingsMap(SettingsMap settingsMap) {
         // api url: https://api.topface.com/
-        addField(settingsMap, DATA_API_URL, Static.API_URL);
+        addField(settingsMap, DATA_API_URL, ConnectionManager.API_URL);
         // api url: wss://scruffy.core.tf/
         addField(settingsMap, SCRUFFY_DATA_API_URL, ScruffyRequestManager.API_URL);
         // editor mode from Editor class
@@ -78,13 +79,13 @@ public class AppConfig extends AbstractConfig {
         // flag for test mode for network errors
         addField(settingsMap, DATA_TEST_NETWORK, false);
         // app options
-        addField(settingsMap, DATA_APP_OPTIONS, Static.EMPTY);
+        addField(settingsMap, DATA_APP_OPTIONS, Utils.EMPTY);
         // last fullscreen time
         addField(settingsMap, LAST_FULLSCREEN_TIME, 0L);
         // fullscreen urls
-        addField(settingsMap, FULLSCREEN_URLS_SET, Static.EMPTY);
+        addField(settingsMap, FULLSCREEN_URLS_SET, Utils.EMPTY);
         //stage login for admin
-        addField(settingsMap, STAGE_LOGIN, Static.EMPTY);
+        addField(settingsMap, STAGE_LOGIN, Utils.EMPTY);
         //state of checkbox of stagelogin
         addField(settingsMap, STAGE_CHECKED, false);
         //ad id from google play services
@@ -96,9 +97,9 @@ public class AppConfig extends AbstractConfig {
         //Last app version
         addField(settingsMap, LAST_APP_VERSION, 0);
         //GCM registration id
-        addField(settingsMap, GCM_REG_ID, Static.EMPTY);
+        addField(settingsMap, GCM_REG_ID, Utils.EMPTY);
         // список всех email, с котороми удачно прошла авторизация в стандартный акк
-        addField(settingsMap, SAVED_EMAIL_LIST, Static.EMPTY);
+        addField(settingsMap, SAVED_EMAIL_LIST, Utils.EMPTY);
         // social nets buttons settings. Stores value in form of JSON array. So default value is "[]"
         addField(settingsMap, SOCIAL_BUTTONS_SETTINGS, "[]");
         // преобразован старый конфиг в новый или нет

@@ -8,9 +8,9 @@ class VkSocialAppsIdsHolder {
     /**
      * {String} VK_ID - идентификатор приложения в vk
      */
-    static final String VK_ID = "5061001";
+    static final int VK_ID = 5061001;
 
-    public static String checkAllowedVkId(String serverId) {
+    public static int checkAllowedVkId(String serverId) {
         return VK_ID;
     }
 }

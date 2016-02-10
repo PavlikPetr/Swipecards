@@ -8,9 +8,9 @@ import android.widget.Toast;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.gcmutils.GCMUtils;
+import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
 public class TestNotificationsReceiver extends BroadcastReceiver {
@@ -28,12 +28,12 @@ public class TestNotificationsReceiver extends BroadcastReceiver {
         if (action == null) return;
         switch (action) {
             case ACTION_TEST_NETWORK_ERRORS_ON:
-                config.setApiUrl(Static.API_500_ERROR_URL);
+                config.setApiUrl(ConnectionManager.API_500_ERROR_URL);
                 config.saveConfig();
                 Toast.makeText(context, "Network errors: ON", Toast.LENGTH_LONG).show();
                 break;
             case ACTION_TEST_NETWORK_ERRORS_OFF:
-                config.setApiUrl(Static.API_URL);
+                config.setApiUrl(ConnectionManager.API_URL);
                 config.saveConfig();
                 Toast.makeText(context, "Network errors: OFF", Toast.LENGTH_LONG).show();
                 break;
@@ -42,13 +42,13 @@ public class TestNotificationsReceiver extends BroadcastReceiver {
                 UserNotificationManager.getInstance()
                         .cancelNotification(notificationId);
                 config.setTestNetwork(false);
-                config.setApiUrl(Static.API_URL);
+                config.setApiUrl(ConnectionManager.API_URL);
                 config.saveConfig();
                 Toast.makeText(context, "All requests will be OK. No more errors.", Toast.LENGTH_LONG).show();
                 break;
             case ACTION_NOTIFY:
                 Debug.log("TOPFACE_NOTIFICATION:" + intent.getStringExtra("text"));
-                GCMUtils.showNotificationIfNeed(intent, context, App.from(context).getOptions().updateUrl);
+                GCMUtils.showNotificationIfNeed(intent.getExtras(), context, App.from(context).getOptions().updateUrl);
                 break;
         }
     }

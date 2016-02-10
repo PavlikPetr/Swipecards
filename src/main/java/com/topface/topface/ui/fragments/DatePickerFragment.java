@@ -7,7 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.DatePicker;
 
-import com.topface.topface.Static;
+import com.topface.topface.data.Profile;
 import com.topface.topface.ui.analytics.TrackedDialogFragment;
 import com.topface.topface.utils.DateUtils;
 
@@ -43,12 +43,12 @@ public class DatePickerFragment extends TrackedDialogFragment implements DatePic
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Calendar c = Calendar.getInstance();
-        c.add(Calendar.YEAR, -Static.MIN_AGE);
+        c.add(Calendar.YEAR, -Profile.MIN_AGE);
         MAX_DATE = c.getTimeInMillis();
-        c.add(Calendar.YEAR, -(Static.MAX_AGE - Static.MIN_AGE));
+        c.add(Calendar.YEAR, -(Profile.MAX_AGE - Profile.MIN_AGE));
         MIN_DATE = c.getTimeInMillis();
 
-        c.add(Calendar.YEAR, -(START_SHIFT - Static.MAX_AGE));
+        c.add(Calendar.YEAR, -(START_SHIFT - Profile.MAX_AGE));
         final int year = getArguments().getInt(YEAR);
         final int month = getArguments().getInt(MONTH);
         final int day = getArguments().getInt(DAY);

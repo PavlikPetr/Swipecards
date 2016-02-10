@@ -12,9 +12,7 @@
     <string name="chat_background_text">Nincs bejövő üzenet</string>
     <string name="filter_only_online">Csak online</string>
     <string name="filter_select_city">Város kiválasztása</string>
-    <string name="dashbrd_popup_rating">Tetszett az alkalmazásunk? Növeld a népszerűségünket! Minél
-        magasabb a népszerűségünk, annál több érdekes emberrel találkozhatsz a Topface-n
-    </string>
+    <string name="dashbrd_popup_rating">Tetszett az alkalmazásunk? Növeld a népszerűségünket! Minél magasabb a népszerűségünk, annál több érdekes emberrel találkozhatsz a Topface-n</string>
     <string name="dashbrd_popup_title">Értékelés</string>
     <string name="dashbrd_popup_cancel">Ne kérdezd</string>
     <string name="dashbrd_popup_rate">Értékelés beállítása</string>
@@ -32,8 +30,7 @@
     <string name="vip_invisible_mode">Láthatatlan mód</string>
     <string name="buying_profile_coins">A számládon</string>
     <string name="vip_info_title">VIP-privilégiumok</string>
-    <string name="profile_gifts_empty">Ez a felhasználó nem kapott még ajándékot még senkitől.
-    </string>
+    <string name="profile_gifts_empty">Ez a felhasználó nem kapott még ajándékot még senkitől.</string>
     <string name="profile_mygifts_empty">Még senki sem ajándékozott meg</string>
     <string name="dating_people_unnoticed">10 ember maradt a figyelmed nélkül!</string>
     <string name="dating_better_look">Óvatosabban!\nTalán elszalasztod a sorsodat!</string>
@@ -256,8 +253,5 @@
     <string name="notifications">Értesítés</string>
     <string name="novice_sympathy">Küldj szimpátiát azoknak, akik \ntényleg tetszenek,\nígy el tudsz
         kezdeni egy élvezetes ismerkedést.
-    </string>
-    <string name="novice_sympathies_bonus">%1$d szimpátiát kaptál\najándékba! Ez azt jelenti,
-        hogy\nbiztosan tetszel az emberek %2$d-nak,\n akikben szimpátiát ébresztesz.
     </string>
 </resources>

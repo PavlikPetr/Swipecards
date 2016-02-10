@@ -2,7 +2,9 @@ package com.topface.topface.utils;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.data.FragmentSettings;
+import com.topface.topface.data.Options;
+import com.topface.topface.ui.fragments.MenuFragment;
 
 /**
  * Created by kirussell on 20.11.13.
@@ -10,13 +12,9 @@ import com.topface.topface.ui.fragments.BaseFragment;
  */
 public class ResourcesUtils {
 
-    public static String getFragmentNameResId(BaseFragment.FragmentId id) {
-        return getFragmentNameResId(id, null);
-    }
-
-    public static String getFragmentNameResId(BaseFragment.FragmentId id, String bonusText) {
+    public static String getFragmentNameResId(FragmentSettings id) {
         int titleId;
-        switch (id) {
+        switch (id.getFragmentId()) {
             case VIP_PROFILE:
             case PROFILE:
                 titleId = R.string.general_profile;
@@ -37,7 +35,7 @@ public class ResourcesUtils {
                 titleId = R.string.general_photoblog;
                 break;
             case BONUS:
-                return null;
+                return App.get().getOptions().bonus.buttonText;
             case GEO:
                 titleId = R.string.people_nearby;
                 break;
@@ -47,6 +45,9 @@ public class ResourcesUtils {
             case SETTINGS:
                 titleId = R.string.general_settings;
                 break;
+            case INTEGRATION_PAGE:
+                Options.LeftMenuIntegrationItems item = MenuFragment.getServerLeftMenuItemById(id.getPos());
+                return item != null ? item.title : Utils.EMPTY;
             case UNDEFINED:
             default:
                 throw new IllegalArgumentException("Illegal fragmentId: do not have resources for this fragment id");

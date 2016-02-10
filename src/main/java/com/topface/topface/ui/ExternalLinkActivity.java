@@ -3,9 +3,9 @@ package com.topface.topface.ui;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.topface.topface.App;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.ui.settings.SettingsChangeAuthDataFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.ExternalLinkExecuter;
@@ -13,6 +13,8 @@ import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 
 public class ExternalLinkActivity extends BaseFragmentActivity {
+
+    private boolean mIsNeedRestorePwd;
 
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
@@ -27,7 +29,7 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
             AuthToken token = AuthToken.getInstance();
             if (!token.isEmpty() && token.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
                 Intent intent = new Intent(ExternalLinkActivity.this, SettingsContainerActivity.class);
-                intent.putExtra(Static.INTENT_REQUEST_KEY, SettingsContainerActivity.INTENT_ACCOUNT);
+                intent.putExtra(App.INTENT_REQUEST_KEY, SettingsContainerActivity.INTENT_ACCOUNT);
                 intent.putExtra(SettingsContainerActivity.CONFIRMATION_CODE, code);
                 startActivity(intent);
                 getIntent().setData(null);
@@ -63,9 +65,7 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
             startActivity(new Intent(ExternalLinkActivity.this, NavigationActivity.class));
         }
     };
-
-    private boolean mIsNeedRestorePwd;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setHasContent(false);

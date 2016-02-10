@@ -16,9 +16,7 @@
     <string name="filter_city_age_parameters">Вік та місто</string>
     <string name="filter_select_city">Вибір міста</string>
     <string name="edit_block_photo">Фотографії</string>
-    <string name="dashbrd_popup_rating">Сподобався наш додаток? Підніми нам рейтинг! Чим вищий
-        рейтинг, тим більше цікавих людей ти зустрінеш у Topface
-    </string>
+    <string name="dashbrd_popup_rating">Сподобався наш додаток? Підніми нам рейтинг! Чим вищий рейтинг, тим більше цікавих людей ти зустрінеш у Topface</string>
     <string name="dashbrd_popup_title">Рейтинг</string>
     <string name="dashbrd_popup_cancel">Більше не питати</string>
     <string name="dashbrd_popup_rate">Виставити рейтинг</string>
@@ -69,8 +67,7 @@
     <string name="black_list_info">Ви додали співрозмовника в чорний список. Змінити це можна у
         своєму профілі, у налаштуваннях VIP-статусу.
     </string>
-    <string name="black_list_activation">Активуйте VIP-статус і використовуйте чорний список
-    </string>
+    <string name="black_list_activation">Активуйте VIP-статус і використовуйте чорний список</string>
     <string name="buying_total">Разом</string>
     <string name="we_dont_detect_your_city">Щоб знайти людей поблизу нам потрібно знати де ви
         знаходитеся. Будь ласка, вкажіть ваше місто.
@@ -218,8 +215,7 @@
     <string name="settings_ask_developer">Питання розробникам</string>
     <string name="settings_payment_problems">Проблеми з оплатою</string>
     <string name="settings_cooperation">Співпраця</string>
-    <string name="settings_feedback_success_msg">Спасибі, повідомлення було успішно відіслано
-    </string>
+    <string name="settings_feedback_success_msg">Спасибі, повідомлення було успішно відіслано</string>
     <string name="settings_switch_on">вкл.</string>
     <string name="settings_switch_off">вимк.</string>
     <string name="leaders_go_date">Хочу сюди</string>
@@ -529,8 +525,5 @@
     <string name="reply">Відповісти</string>
     <string name="novice_sympathy">Відправляйте симпатії тим, хто вам\nдійсно подобається,\nщоб
         почати приємне знайомство
-    </string>
-    <string name="novice_sympathies_bonus">- Ви отримуєте %1$d симпатій у\nподарунок! Це означає, що
-        ви\nточно сподобаєтеся %2$d людям, \nякі висловлять вам свою симпатію
     </string>
 </resources>

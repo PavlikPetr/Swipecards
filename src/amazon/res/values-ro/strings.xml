@@ -12,9 +12,7 @@
     <string name="chat_background_text">Mesaje noi nu aveti</string>
     <string name="filter_only_online">Numai onlain</string>
     <string name="filter_select_city">Alege orasul</string>
-    <string name="dashbrd_popup_rating">Va placut aplicatia noastra? Marestene ratingul! Cat mai
-        mare e ratingul, cu atat mai multi oameni interesanti vei intalni in Topface
-    </string>
+    <string name="dashbrd_popup_rating">Va placut aplicatia noastra? Marestene ratingul! Cat mai mare e ratingul, cu atat mai multi oameni interesanti vei intalni in Topface</string>
     <string name="dashbrd_popup_title">Rating</string>
     <string name="dashbrd_popup_cancel">Nu intreba mai mult</string>
     <string name="dashbrd_popup_rate">Instaleaza ratingul</string>
@@ -112,7 +110,7 @@
     <string name="general_settings">Setari</string>
     <string name="auth_retry">Mai incercati o data</string>
     <string name="dating_header_girls">Fete de la %1$d pana la %2$d</string>
-    <string name="dating_header_guys">Baieti de la %1$d pana la %2$d</string>
+    <string name="dating_header_guys">Baieti de la  %1$d pana la %2$d</string>
     <string name="dating_skip_button">Urmatoarea</string>
     <string name="chat_gift_in">Ati primit cadou.</string>
     <string name="chat_gift_out">Ati trimis cadou.</string>
@@ -276,8 +274,7 @@
         rugam sa actualizati aplicarea
     </string>
     <string name="default_price_format">Total: %.2f USD</string>
-    <string name="leaders_pick_condition">Dmv nu puteti alege fotografie cu rating mai jos de %d%%
-    </string>
+    <string name="leaders_pick_condition">Dmv nu puteti alege fotografie cu rating mai jos de %d%%</string>
     <string name="general_gift">Cadou</string>
     <string name="user_actions_chat">Discutie</string>
     <string name="profile_edit_age_ranges">Varsta trebuie sa fie in limitile de la 16 pana la 99 de
@@ -452,8 +449,7 @@
     <string name="likes_can_help_you">Simpatiile va vor ajuta sa faceti cunostinta</string>
     <string name="general_get_dating">A face cunostinta</string>
     <string name="settings_select_language">Alege limba aplicarii</string>
-    <string name="restart_to_change_locale">Pentru a schimba limba aplicarea va fi restartata
-    </string>
+    <string name="restart_to_change_locale">Pentru a schimba limba aplicarea va fi restartata</string>
     <string name="locale_changing">Schimba limba</string>
     <string name="or">sau</string>
     <string name="settings_delete_account">Sterge acaunt</string>
@@ -472,8 +468,5 @@
     <string name="admiration_sended">Admirare trimisa</string>
     <string name="novice_sympathy">Trimiteti simpatii la cei \n care va sunt dragi cu adevarat, \n
         pentru a incepe o cunostinta placuta
-    </string>
-    <string name="novice_sympathies_bonus">Dmv primiti %1$d simpatii \ncadou! Aceasta inseamna, ca
-        Dmv\nprecis placeti %2$d la oameni,\ncare va exprima simpatia lor
     </string>
 </resources>

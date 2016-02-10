@@ -6,7 +6,6 @@ import android.preference.PreferenceManager;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.Static;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -117,7 +116,7 @@ public class DatingFilter extends AbstractData implements Cloneable, Parcelable 
             else if (filter.marriage != marriage) return false;
             else if (filter.character != character) return false;
             else if (filter.alcohol != alcohol) return false;
-            else if (filter.breast != breast && filter.sex == Static.GIRL) return false;
+            else if (filter.breast != breast && filter.sex == Profile.GIRL) return false;
             else if (filter.finances != finances) return false;
             else if (filter.minHeight != minHeight) return false;
             else if (filter.maxHeight != maxHeight) return false;
