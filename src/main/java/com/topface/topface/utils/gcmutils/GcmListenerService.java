@@ -1,41 +1,33 @@
-package com.topface.topface;
+package com.topface.topface.utils.gcmutils;
 
-import android.app.IntentService;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.statistics.NotificationStatistics;
-import com.topface.topface.utils.gcmutils.GCMUtils;
-import com.topface.topface.utils.gcmutils.GcmBroadcastReceiver;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class GcmIntentService extends IntentService {
-    public static final String SENDER_ID = "932206034265";
+public class GcmListenerService extends com.google.android.gms.gcm.GcmListenerService {
+
     public static AtomicBoolean isOnMessageReceived = new AtomicBoolean(false);
 
-    public GcmIntentService() {
-        super(SENDER_ID);
-    }
-
-    protected void onMessage(final Context context, final Intent intent) {
-        Debug.log("GCM: onMessage");
+    @Override
+    public void onMessageReceived(String from, Bundle data) {
         isOnMessageReceived.set(true);
-        if (intent != null) {
-            Debug.log("GCM: Try show\n" + intent.getExtras());
+        if (data != null) {
+            Debug.log("GCM: Try show\n" + data.keySet());
             // send update broadcast in any case
             //Сообщаем о том что есть новое уведомление и нужно обновить список
             Intent broadcastNotificationIntent = new Intent(GCMUtils.GCM_NOTIFICATION);
-            String user = intent.getStringExtra("user");
-            int type = GCMUtils.getType(intent);
-            NotificationStatistics.sendReceived(type, GCMUtils.getLabel(intent));
+            String user = data.getString("user");
+            int type = GCMUtils.getType(data);
+            NotificationStatistics.sendReceived(type, GCMUtils.getLabel(data));
 
             if (user != null) {
                 String userId = getUserId(user);
@@ -45,9 +37,7 @@ public class GcmIntentService extends IntentService {
                 broadcastNotificationIntent.putExtra(GCMUtils.USER_ID_EXTRA, userId);
                 localBroadcastManager.sendBroadcast(broadcastNotificationIntent);
                 Intent updateIntent = null;
-
-                int itype = GCMUtils.getType(intent);
-                switch (itype) {
+                switch (type) {
                     case GCMUtils.GCM_TYPE_MESSAGE:
                     case GCMUtils.GCM_TYPE_DIALOGS:
                     case GCMUtils.GCM_TYPE_GIFT:
@@ -71,10 +61,9 @@ public class GcmIntentService extends IntentService {
                 }
             }
             // try to show notification
-            GCMUtils.showNotificationIfNeed(intent, context, App.from(context).getOptions().updateUrl);
+            GCMUtils.showNotificationIfNeed(data, App.getContext(), App.get().getOptions().updateUrl);
         }
     }
-
 
     private String getUserId(String user) {
         String id = "";
@@ -88,26 +77,4 @@ public class GcmIntentService extends IntentService {
         return id;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onHandleIntent(Intent intent) {
-        if (intent == null) {
-            return;
-        }
-        Bundle extras = intent.getExtras();
-        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
-
-        String messageType = gcm.getMessageType(intent);
-        if (!extras.isEmpty()) {
-            if (GoogleCloudMessaging.
-                    MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                onMessage(App.getContext(), intent);
-            }
-        }
-        GcmBroadcastReceiver.completeWakefulIntent(intent);
-    }
 }

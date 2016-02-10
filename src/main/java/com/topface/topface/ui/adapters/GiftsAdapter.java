@@ -16,7 +16,7 @@ import com.topface.topface.utils.loadcontollers.LoadController;
 public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsListView.OnScrollListener {
 
     public class ViewHolder {
-        ImageViewRemote giftImage;
+        public ImageViewRemote giftImage;
     }
 
     public GiftsAdapter(Context context, FeedList<FeedGift> data, Updater updateCallback) {

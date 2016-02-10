@@ -36,11 +36,6 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment {
     }
 
     @Override
-    protected void onGiftClick(AdapterView<?> parent, View view, int position, long id) {
-        updateIfRetrier(position);
-    }
-
-    @Override
     protected FeedAdapter.Updater getUpdaterCallback() {
         return new FeedAdapter.Updater() {
             @Override
@@ -119,17 +114,13 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment {
         request.uid = userId;
         final FeedList<FeedGift> data = mGridAdapter.getData();
         if (!data.isEmpty()) {
-            if (data.getLast().isLoader() || data.getLast().isRetrier()) {
-                request.from = data.get(data.size() - 2).gift.feedId;
-            } else {
-                request.from = data.get(data.size() - 1).gift.feedId;
-            }
+            int updateShift = data.getLast().isLoader() || data.getLast().isRetrier() ? data.size() - 2 : data.size() - 1;
+            request.from = data.get(updateShift).gift.feedId;
         }
         request.callback(new DataApiHandler<FeedListData<FeedGift>>() {
 
             @Override
             protected void success(FeedListData<FeedGift> gifts, IApiResponse response) {
-
                 removeLoaderItem();
                 if (request.from == 0) {
                     FeedList<FeedGift> noFeedIdGifts = new FeedList<>();
@@ -171,22 +162,10 @@ public class UpdatableGiftsFragment extends PlainGiftsFragment {
 
     private void removeLoaderItem() {
         if (mGridAdapter.getData().size() > 0) {
-            if (mGridAdapter.getData().getLast().isLoader() || mGridAdapter.getData().getLast().isRetrier()) {
+            FeedGift last = mGridAdapter.getData().getLast();
+            if (last.isLoader() || last.isRetrier()) {
                 mGridAdapter.getData().remove(mGridAdapter.getData().size() - 1);
             }
-        }
-    }
-
-    protected void updateIfRetrier(int position) {
-        if (mGridAdapter.getData().get(position).isRetrier()) {
-            updateUI(new Runnable() {
-                public void run() {
-                    removeLoaderItem();
-                    mGridAdapter.getData().add(new FeedGift(IListLoader.ItemType.LOADER));
-                    mGridAdapter.notifyDataSetChanged();
-                    onNewFeeds();
-                }
-            });
         }
     }
 }
