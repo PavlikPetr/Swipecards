@@ -192,6 +192,7 @@
     <string name="general_visitors_tab_views">Ansichten</string>
     <string name="general_profile">Profil</string>
     <string name="general_settings">Einstellungen</string>
+    <string name="general_vk_profile">VK</string>
     <string name="auth_btn_vk">Vkontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Nochmal versuchen</string>
@@ -802,7 +803,7 @@
     <string name="enter_text">Text eingeben</string>
     <string name="send_feedback">Nachricht verschicken</string>
     <string name="get_vip_free">Hole dir gratis VIP-Status</string>
-    <string name="buy_more_sympathies">\"Hole dir mehr Likes, werde beliebt\"</string>
+    <string name="buy_more_sympathies">Hole dir mehr Likes, werde beliebt</string>
     <string name="transaction_code_help">Wenn du uns einen Transaktionscode schickst, wird uns das
         helfen deine Anfrage zu bearbeiten indem die Überarbeitungszeit verkürzt wird. Mehr
         Informationen gibt es unter %s.
@@ -868,9 +869,6 @@
     <string name="novice_sympathy">Senden Sie Sympathien den Menschen, die Ihnen\nwirklich
         gefallen,\num eine angenehme Bekanntschaft anzufangen
     </string>
-    <string name="novice_sympathies_bonus">Sie bekommen %1$d Sympathien als\nGeschenk! Das heißt,
-        dass Sie\ngenau %2$d Menschen gefallen,\ndie Ihnen ihre Sympathie zeigen werden
-    </string>
     <string name="go_dating_message">Fange an, Leute kennenzulernen und die Namen derjenigen, die
         dein Profil besucht haben, werden hier erscheinen.
     </string>
@@ -879,6 +877,17 @@
     </string>
     <string name="sidebar_vk_profile">VK Profil</string>
     <string name="title_vk_profile">VK Profil</string>
+    <string name="vk_profile_invite_friends_error">Der User akzeptiert keine Einladungen mehr
+    </string>
+    <string name="foreign_profile_empty_gifts_title">Verschicke ein Geschenk um alle Aufmerksamkeit
+        auf dich zu ziehen
+    </string>
+    <string name="chat_auto_reply_title">Der Text der Nachricht ist verborgen</string>
+    <string name="chat_auto_reply_message">Um diese Nachricht zu öffnen oder um auf sie zu
+        antworten, musst du zum VIP werden.
+    </string>
+    <string name="chat_auto_reply_button">Werde zum VIP</string>
+    <string name="photo_list_load_info">Teile deine Fotos und werde von Millionen gesehen</string>
     <string name="vk_profile_button_tf_group">Topface-Gruppe</string>
     <string name="vk_profile_button_join_tf_group">Der Topface-Gruppe beitreten</string>
     <string name="vk_profile_button_join_vkgames_group">Der Gruppe \"VK Spiele\" beitreten</string>
@@ -887,6 +896,14 @@
     <string name="invite_friend_button">Einladen</string>
     <string name="invitation_sended_button">Verschickt</string>
     <string name="friends_empty_list_error">Deine Freundesliste ist leer</string>
-    <string name="join_group_success">Du bist der Gruppe beigetreten</string>
     <string name="vk_friends_success_invite">Die Einladung wurde verschickt</string>
+    <string name="join_group_success">Du bist der Gruppe beigetreten</string>
+    <string name="settings_auto_greeting_title">Automatische Grüße</string>
+    <string name="settings_auto_greeting_subtitle">Erlaube Topface, automatisch ein Gespräch zu
+        starten, wenn dir jemand ein Like schickt
+    </string>
+    <string name="take_photo_text_1">Bitte lade ein Foto von dir hoch, um zu chatten.</string>
+    <string name="take_photo_text_2">Nur du selbst solltest auf dem Foto abgebildet sein; alle Fotos
+        werden von Moderatoren überprüft um sicherzustellen, dass den Regeln gefolgt wird.
+    </string>
 </resources>

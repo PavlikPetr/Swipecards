@@ -788,7 +788,7 @@
   <string name="enter_text">Įveskite tekstą</string>
   <string name="send_feedback">Išsiųsti pranešimą</string>
   <string name="get_vip_free">Gauk VIP nemokamai</string>
-  <string name="buy_more_sympathies">\&quot;Gauk daugiau simpatijų, populiarėk\&quot;</string>
+  <string name="buy_more_sympathies">Gauk daugiau simpatijų, populiarėk</string>
   <string name="transaction_code_help">Jei jūs atsiųsite mums transakcijos kodą, tai gali
     pagelbėti vykdant jūsų užklausą, o taip pat pagreitins jos apdorojimą. Išsamią informaciją
     apie užsakymą galima gauti per %s.
@@ -844,8 +844,5 @@
   <string name="settings_check_vip_alert">Patikrinimo užklausa išsiųsta</string>
   <string name="novice_sympathy">Siųskite simpatijas tiems, kas jums\ntikrai patinka,\nkad
     pradėtumėte malonią pažintį
-  </string>
-  <string name="novice_sympathies_bonus">Jūs gaunate %1$d simpatijų\ndovanų! Tai reiškia, kad
-    jūs\ntikrai patinkate %2$d žmonių,\nkurie išreikš jums savo simpatiją
   </string>
 </resources>
