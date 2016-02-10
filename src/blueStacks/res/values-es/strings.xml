@@ -772,4 +772,9 @@
   <string name="chat_auto_reply_button">Hacerse VIP</string>
   <string name="take_photo_text_1">Por favor, carga tu fotografía para empezar a conocer gente.</string>
   <string name="take_photo_text_2">En la foto debes aparecer tú. Todas las fotografías están sujetas a moderación.</string>
+  <string name="unlock_by_viewed_ad_video_button_text">Bloquear gratis por %s</string>
+  <plurals name="free_minutes">
+    <item quantity="other">%d minutos</item>
+    <item quantity="one">%d minuto</item>
+  </plurals>
 </resources>
