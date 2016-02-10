@@ -15,6 +15,7 @@ import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteAdmirationsRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
@@ -54,7 +55,9 @@ public class AdmirationFragment extends LikesFragment {
             chooseFirstChild(inflated);
         } else {
             if (mCountersData.admirations > 0) {
-                setUnlockButtonView(getUnlockButtonView(inflated, SECOND_CHILD));
+                if (errorCode != ErrorCodes.RESULT_OK) {
+                    setUnlockButtonView(getUnlockButtonView(inflated, SECOND_CHILD));
+                }
                 ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(SECOND_CHILD);
                 int curCounter = mCountersData.admirations;
                 if (curCounter == 0) {
@@ -77,7 +80,9 @@ public class AdmirationFragment extends LikesFragment {
                 ((ImageViewRemote) inflated.findViewById(R.id.ivThree))
                         .setResourceSrc(CacheProfile.dating.sex == Profile.GIRL ? R.drawable.likes_male_three : R.drawable.likes_female_three);
             } else {
-                setUnlockButtonView(getUnlockButtonView(inflated, FIRST_CHILD));
+                if (errorCode != ErrorCodes.RESULT_OK) {
+                    setUnlockButtonView(getUnlockButtonView(inflated, FIRST_CHILD));
+                }
                 chooseFirstChild(inflated);
             }
         }

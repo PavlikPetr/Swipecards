@@ -12,6 +12,7 @@ import com.topface.topface.data.Visitor;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteVisitorsRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
@@ -78,7 +79,9 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
             btnBuyVip.setVisibility(View.VISIBLE);
 
         } else {
-            setUnlockButtonView((Button) inflated.findViewById(R.id.btnUnlock));
+            if (errorCode != ErrorCodes.RESULT_OK) {
+                setUnlockButtonView((Button) inflated.findViewById(R.id.btnUnlock));
+            }
             inflated.findViewById(R.id.tvText).setVisibility(View.VISIBLE);
             btnBuyVip.setVisibility(View.VISIBLE);
         }
