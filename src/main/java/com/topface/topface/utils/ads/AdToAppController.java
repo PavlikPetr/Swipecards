@@ -87,9 +87,7 @@ public class AdToAppController {
         if (!AdToApp.isSDKInitialized()) {
             AdToApp.initializeSDK(activity, ADTOAPP_APP_KEY, getAdsMask());
             AdToApp.setInterstitialListener(mInterstitialListener);
-            if (Debug.isDebugLogsEnabled()) {
-                AdToApp.setLogging(true);
-            }
+            AdToApp.setLogging(Debug.isDebugLogsEnabled());
         }
     }
 
