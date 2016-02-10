@@ -137,7 +137,6 @@ public class Profile extends AbstractDataWithPhotos {
                 profile.showAd = resp.optBoolean("showAd", true);
                 profile.canInvite = resp.optBoolean("canInvite");
                 profile.notificationToken = resp.optString("notificationToken");
-                new GCMUtils(App.getContext()).registerGCM(notificationToken);
             }
             profile.editor = resp.optBoolean("editor", false);
             profile.setEditor(editor);
