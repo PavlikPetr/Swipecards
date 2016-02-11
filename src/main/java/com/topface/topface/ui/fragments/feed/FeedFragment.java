@@ -759,7 +759,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             public void success(IApiResponse response) {
                 if (isAdded()) {
                     getListAdapter().removeItems(items);
-                    if (getListAdapter().getData().size() == 0) {
+                    if (getListAdapter().getData().isEmpty()) {
                         mListView.setVisibility(View.INVISIBLE);
                         onEmptyFeed();
                     }
@@ -1025,7 +1025,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             case ErrorCodes.BLOCKED_PEOPLE_NEARBY:
                 clearCache();
                 mListView.setVisibility(View.INVISIBLE);
-                onEmptyFeed(codeError);
+                ontLockedFeed(codeError);
                 return true;
             default:
                 if (getListAdapter() == null || getListAdapter().getDataForCache() == null || getListAdapter().getDataForCache().size() < 1) {
@@ -1069,27 +1069,37 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     protected void onEmptyFeed(int errorCode) {
-        ViewStub stub = getEmptyFeedViewStub();
-        if (mInflated == null && stub != null) {
-            mInflated = stub.inflate();
-            initEmptyFeedView(mInflated, errorCode);
-        }
+        initGagView();
         if (mInflated != null) {
-            mInflated.setVisibility(View.VISIBLE);
             initEmptyFeedView(mInflated, errorCode);
         }
         mBackgroundController.hide();
     }
+
+    protected void ontLockedFeed(int errorCode) {
+        initGagView();
+        if (mInflated != null) {
+            initLockedFeed(mInflated, errorCode);
+        }
+        mBackgroundController.hide();
+    }
+
+    private void initGagView() {
+        if (mInflated == null) {
+            ViewStub stub = getEmptyFeedViewStub();
+            if (stub != null) {
+                mInflated = stub.inflate();
+            }
+        }
+    }
+
+    protected abstract void initLockedFeed(View inflated, int errorCode);
 
     protected void onEmptyFeed() {
         onEmptyFeed(ErrorCodes.RESULT_OK);
     }
 
     protected abstract void initEmptyFeedView(View inflated, int errorCode);
-
-    protected void initEmptyFeedView(View inflated) {
-        initEmptyFeedView(inflated, ErrorCodes.RESULT_OK);
-    }
 
     protected abstract int getEmptyFeedLayout();
 
@@ -1389,7 +1399,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                     @Override
                     public void onVideoWatched() {
                         super.onVideoWatched();
-                        view.setVisibility(View.GONE);
                         new UnlockFunctionalityRequest(unlockType, getContext()).callback(new ApiHandler() {
                             @Override
                             public void success(IApiResponse response) {
@@ -1404,6 +1413,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                     }
                 }, getFeedListItemClass().getName());
                 controller.showAds(AdToAppController.AdsMasks.VIDEO);
+                view.setVisibility(View.GONE);
             }
         });
     }

@@ -29,6 +29,7 @@ import java.util.List;
 public class AdmirationFragment extends LikesFragment {
 
     public static final String UNLOCK_FUCTIONALITY_TYPE = "admirations";
+    public static final String SCREEN_TYPE = "Admirations";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
@@ -44,48 +45,51 @@ public class AdmirationFragment extends LikesFragment {
     public void onResume() {
         super.onResume();
         if (mEmptyFeedView != null) {
-            initEmptyFeedView(mEmptyFeedView);
+            initEmptyFeedView(mEmptyFeedView, ErrorCodes.RESULT_OK);
+        }
+    }
+
+    @Override
+    protected void initLockedFeed(View inflated, int errorCode) {
+        setEmptyFeedView(inflated);
+        if (mCountersData.admirations > 0) {
+            ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(SECOND_CHILD);
+            int curCounter = mCountersData.admirations;
+            if (curCounter == 0) {
+                curCounter = CacheProfile.getOptions().premiumAdmirations.getCount();
+            }
+
+            String title = Utils.getQuantityString(R.plurals.popup_vip_admirations, curCounter, curCounter);
+            ((TextView) inflated.findViewById(R.id.tvTitle)).setText(title);
+            inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = PurchasesActivity.createVipBuyIntent(null, SCREEN_TYPE);
+                    startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
+                }
+            });
+            ((ImageViewRemote) inflated.findViewById(R.id.ivOne))
+                    .setResourceSrc(CacheProfile.dating.sex == Profile.GIRL ? R.drawable.likes_male_one : R.drawable.likes_female_one);
+            ((ImageViewRemote) inflated.findViewById(R.id.ivTwo))
+                    .setResourceSrc(CacheProfile.dating.sex == Profile.GIRL ? R.drawable.likes_male_two : R.drawable.likes_female_two);
+            ((ImageViewRemote) inflated.findViewById(R.id.ivThree))
+                    .setResourceSrc(CacheProfile.dating.sex == Profile.GIRL ? R.drawable.likes_male_three : R.drawable.likes_female_three);
+            setUnlockButtonView((Button) inflated.findViewById(R.id.btnUnlock));
+        } else {
+            chooseFirstChild(inflated);
+        }
+    }
+
+    private void setEmptyFeedView(View inflated) {
+        if (mEmptyFeedView == null) {
+            mEmptyFeedView = inflated;
         }
     }
 
     @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
-        if (mEmptyFeedView == null) mEmptyFeedView = inflated;
-        if (CacheProfile.premium) {
-            chooseFirstChild(inflated);
-        } else {
-            if (mCountersData.admirations > 0) {
-                if (errorCode != ErrorCodes.RESULT_OK) {
-                    setUnlockButtonView(getUnlockButtonView(inflated, SECOND_CHILD));
-                }
-                ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(SECOND_CHILD);
-                int curCounter = mCountersData.admirations;
-                if (curCounter == 0) {
-                    curCounter = CacheProfile.getOptions().premiumAdmirations.getCount();
-                }
-
-                String title = Utils.getQuantityString(R.plurals.popup_vip_admirations, curCounter, curCounter);
-                ((TextView) inflated.findViewById(R.id.tvTitle)).setText(title);
-                inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = PurchasesActivity.createVipBuyIntent(null, "Admirations");
-                        startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
-                    }
-                });
-                ((ImageViewRemote) inflated.findViewById(R.id.ivOne))
-                        .setResourceSrc(CacheProfile.dating.sex == Profile.GIRL ? R.drawable.likes_male_one : R.drawable.likes_female_one);
-                ((ImageViewRemote) inflated.findViewById(R.id.ivTwo))
-                        .setResourceSrc(CacheProfile.dating.sex == Profile.GIRL ? R.drawable.likes_male_two : R.drawable.likes_female_two);
-                ((ImageViewRemote) inflated.findViewById(R.id.ivThree))
-                        .setResourceSrc(CacheProfile.dating.sex == Profile.GIRL ? R.drawable.likes_male_three : R.drawable.likes_female_three);
-            } else {
-                if (errorCode != ErrorCodes.RESULT_OK) {
-                    setUnlockButtonView(getUnlockButtonView(inflated, FIRST_CHILD));
-                }
-                chooseFirstChild(inflated);
-            }
-        }
+        setEmptyFeedView(inflated);
+        chooseFirstChild(inflated);
     }
 
     @Override
@@ -96,10 +100,6 @@ public class AdmirationFragment extends LikesFragment {
     @Override
     protected UnlockFunctionalityOption.UnlockScreenCondition getUnlockScreenCondition(UnlockFunctionalityOption data) {
         return data.getUnlockAdmirationCondition();
-    }
-
-    private Button getUnlockButtonView(View view, int child) {
-        return (Button) ((ViewFlipper) view.findViewById(R.id.vfEmptyViews)).getChildAt(child).findViewWithTag("btnUnlock");
     }
 
     private void chooseFirstChild(View view) {

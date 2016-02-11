@@ -20,7 +20,6 @@ import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.SendLikeRequest;
-import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.AddToLeaderActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.OwnProfileActivity;
@@ -41,7 +40,6 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
 
     private static final int UPDATE_DELAY = 20;
 
-    protected View mEmptyFeedView;
     private RateController mRateController;
     private MenuItem mBarActions;
     private CountDownTimer mTimerUpdate;
@@ -183,14 +181,13 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     }
 
     @Override
+    protected void initLockedFeed(View inflated, int errorCode) {
+    }
+
+    @Override
     protected void initEmptyFeedView(final View inflated, int errorCode) {
-        if (mEmptyFeedView == null) {
-            mEmptyFeedView = inflated;
-        }
-        if (errorCode != ErrorCodes.RESULT_OK) {
-            ViewFlipper viewFlipper = (ViewFlipper) inflated.findViewById(R.id.vfEmptyViews);
-            initEmptyScreenWithoutLikes(viewFlipper);
-        }
+        ViewFlipper viewFlipper = (ViewFlipper) inflated.findViewById(R.id.vfEmptyViews);
+        initEmptyScreenWithoutLikes(viewFlipper);
     }
 
     private void initEmptyScreenWithoutLikes(ViewFlipper viewFlipper) {

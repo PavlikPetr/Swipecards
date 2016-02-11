@@ -36,10 +36,6 @@
                 android:layout_width="match_parent"
                 android:text="@string/buy_resources" />
 
-            <Button
-                style="@style/UnlockButtonStyle"
-                android:layout_width="match_parent"
-                android:tag="btnUnlock" />
         </LinearLayout>
 
         <ImageView
