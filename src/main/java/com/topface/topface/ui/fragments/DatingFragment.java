@@ -120,13 +120,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private RateController mRateController;
     private ImageSwitcher mImageSwitcher;
     private CachableSearchList<SearchUser> mUserSearchList;
-    private AlphaAnimation mAlphaAnimation;
     private RelativeLayout mDatingLoveBtnLayout;
     private RetryViewCreator mRetryView;
     private ImageButton mRetryBtn;
     private PreloadManager<SearchUser> mPreloadManager;
 
-    private boolean mIsPhotoAsked;
     private AddPhotoHelper mAddPhotoHelper;
     private Handler mHandler = new Handler() {
         @Override
@@ -310,9 +308,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mCurrentUser = savedInstanceState.getParcelable(CURRENT_USER);
         }
         mPreloadManager = new PreloadManager<>();
-        // Animation
-        mAlphaAnimation = new AlphaAnimation(0.0F, 1.0F);
-        mAlphaAnimation.setDuration(400L);
         mController = new AlbumLoadController(AlbumLoadController.FOR_PREVIEW);
         initMutualDrawables();
         // Rate Controller
