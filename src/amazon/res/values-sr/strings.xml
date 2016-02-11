@@ -888,4 +888,32 @@
     <string name="take_photo_text_2">На фотографији можете бити сам Ви; све слике прегледавају наши
         модератори како би утврдили да се правила поштују.
     </string>
+    <string name="go_dating_message">Почните да упознајете људе и овде ће се појавити имена оних
+        корисника који су посетили Ваш профил
+    </string>
+    <string name="vk_profile_button_tf_group">ГрупаTopface</string>
+    <string name="vk_profile_button_join_tf_group">Придружити се групи Topface</string>
+    <string name="vk_profile_button_join_vkgames_group">Придружити се групи \"Игре ВК\"</string>
+    <string name="vk_profile_button_invite_friends">Позвати пријатеље</string>
+    <string name="vk_profile_invite_friends_title">Позвати пријатеље</string>
+    <string name="invite_friend_button">Позвати</string>
+    <string name="invitation_sended_button">Послато</string>
+    <string name="friends_empty_list_error">Ваша листа пријатеља је празна</string>
+    <string name="vk_friends_success_invite">Позив послат</string>
+    <string name="join_group_success">Придружили сте се групи</string>
+    <string name="settings_auto_greeting_title">Ауто-поздрав</string>
+    <string name="settings_auto_greeting_subtitle">Дозволите Topface-у да разговор аутоматски
+        започне поздравом кад год Вам неко пошаље Свиђање
+    </string>
+    <string name="chat_auto_reply_title">Текст поруке је сакривен</string>
+    <string name="chat_auto_reply_message">Да бисте отворили ову поруку или одговорили на исту,
+        постаните VIP-корисник
+    </string>
+    <string name="chat_auto_reply_button">Постати VIP</string>
+    <string name="take_photo_text_1">Молимо Вас са поставите своју фотографију како бидте започели
+        ћаскање.
+    </string>
+    <string name="take_photo_text_2">На фотографији можете бити сам Ви; све слике прегледавају наши
+        модератори како би утврдили да се правила поштују.
+    </string>
 </resources>

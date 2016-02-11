@@ -129,3 +129,109 @@
   -dontwarn com.ifree.monetize.core.**
   -keep class com.ifree.monetize.core.HandlerType
   -dontwarn com.ifree.monetize.core.HandlerType
+
+  #AdToApp proguard rules
+  -keepattributes Exceptions, InnerClasses, Signature, Deprecated,  SourceFile, LineNumberTable, *Annotation*, EnclosingMethod
+  -dontwarn android.webkit.**
+  #adtoapp
+  -keep class com.appintop.** {*;}
+  -dontwarn com.appintop.**
+  #adcolony
+  -keep class com.immersion.** {*;}
+  -dontwarn com.immersion.**
+  -dontnote com.immersion.**
+  -keep class com.jirbo.** {*;}
+  -dontwarn com.jirbo.**
+  -dontnote com.jirbo.**
+  #applovin
+  -keep class com.applovin.** {*;}
+  -dontwarn com.applovin.**
+  #startapp
+  -keep class com.startapp.** {*;}
+  -dontwarn com.startapp.**
+  #inmobi
+  -dontwarn com.inmobi.**
+  -keep class com.inmobi.** {*;}
+  #mytarget
+  -keep class ru.mail.android.mytarget.** {*;}
+  -dontwarn ru.mail.android.mytarget.**
+  #mopub
+  -keep class com.mopub.** {*;}
+  -dontwarn com.mopub.**
+  #smaato
+  -keep class com.smaato.soma.** {*;}
+  -dontwarn com.smaato.soma.**
+  #chartboost
+  -keep class com.chartboost.** {*;}
+  -dontwarn com.chartboost.**
+  #unity3d
+  -keep class com.applifier.** {*;}
+  -keep class com.unity3d.** {*;}
+  -dontwarn com.unity3d.**
+  #personagraph
+  -keep class com.personagraph.** {*;}
+  -dontwarn com.personagraph.**
+
+  -dontwarn org.apache.**
+  -dontwarn com.google.**
+  -dontwarn android.**
+
+  -keep class com.appodeal.** { *; }
+  -keep class com.amazon.** { *; }
+  -keep class com.mopub.** { *; }
+  -keep class com.facebook.** { *; }
+  -keep class org.nexage.** { *; }
+  -keep class com.applovin.** { *; }
+  -keep class com.chartboost.** { *; }
+  -keep class com.unity3d.ads.** { *; }
+  -keep class com.applifier.** { *; }
+  -keep class com.yandex.** { *; }
+  -keep class com.inmobi.** { *; }
+  -keep class com.yandex.** { *; }
+  -keep class ru.mail.android.mytarget.** { *; }
+  -keep class net.pubnative.** { *; }
+  -keep class org.droidparts.** { *; }
+  -keep class com.google.android.gms.ads.** { *; }
+  -keep class com.google.android.gms.common.GooglePlayServicesUtil { *; }
+
+  -keepattributes Signature
+
+  -keep class * extends java.util.ListResourceBundle {
+    protected Object[][] getContents();
+  }
+  -keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
+    public static final *** NULL;
+  }
+  -keepnames @com.google.android.gms.common.annotation.KeepName class *
+  -keepclassmembernames class * {
+    @com.google.android.gms.common.annotation.KeepName *;
+  }
+  -keepnames class * implements android.os.Parcelable {
+    public static final ** CREATOR;
+  }
+
+  -dontwarn com.facebook.**
+  -dontwarn com.jirbo.adcolony.**
+  -dontwarn com.vungle.**
+  -dontwarn com.startapp.**
+  -dontwarn com.yandex.**
+  -dontwarn com.inmobi.**
+  -dontwarn com.chartboost.**
+  -dontwarn com.avocarrot.**
+  -dontwarn com.flurry.**
+  -dontwarn net.pubnative.**
+  -dontwarn org.droidparts.**
+  -dontwarn com.appodeal.**
+
+  -keep class android.support.v4.app.Fragment { *; }
+  -keep class android.support.v4.app.FragmentActivity { *; }
+  -keep class android.support.v4.app.FragmentManager { *; }
+  -keep class android.support.v4.app.FragmentTransaction { *; }
+  -keep class android.support.v4.content.LocalBroadcastManager { *; }
+  -keep class android.support.v4.util.LruCache { *; }
+  -keep class android.support.v4.view.PagerAdapter { *; }
+  -keep class android.support.v4.view.ViewPager { *; }
+
+  -keep class android.support.v7.widget.RecyclerView { *; }
+  -keep class android.support.v7.widget.LinearLayoutManager { *; }
+

@@ -32,17 +32,14 @@ public class TopfaceAdStatistics {
         send(TF_MOBILE_BANNER_CLICK, banner.name);
     }
 
-    @SuppressWarnings("unused")
     public static void sendFullscreenShown(Banner banner) {
         send(TF_MOBILE_FULLSCREEN_SHOW, banner.name);
     }
 
-    @SuppressWarnings("unused")
     public static void sendFullscreenClicked(Banner banner) {
         send(TF_MOBILE_FULLSCREEN_CLICK, banner.name);
     }
 
-    @SuppressWarnings("unused")
     public static void sendFullscreenClosed(Banner banner) {
         send(TF_MOBILE_FULLSCREEN_CLOSED, banner.name);
     }
