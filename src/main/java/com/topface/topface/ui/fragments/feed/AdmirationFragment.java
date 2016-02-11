@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,13 +58,11 @@ public class AdmirationFragment extends LikesFragment {
                 curCounter = CacheProfile.getOptions().premiumAdmirations.getCount();
             }
 
-            String title = Utils.getQuantityString(R.plurals.popup_vip_admirations, curCounter, curCounter);
-            ((TextView) inflated.findViewById(R.id.tvTitle)).setText(title);
+            ((TextView) inflated.findViewById(R.id.tvTitle)).setText(Utils.getQuantityString(R.plurals.popup_vip_admirations, curCounter, curCounter));
             inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = PurchasesActivity.createVipBuyIntent(null, SCREEN_TYPE);
-                    startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
+                    startActivityForResult(PurchasesActivity.createVipBuyIntent(null, SCREEN_TYPE), PurchasesActivity.INTENT_BUY_VIP);
                 }
             });
             ((ImageViewRemote) inflated.findViewById(R.id.ivOne))
@@ -80,9 +77,9 @@ public class AdmirationFragment extends LikesFragment {
         }
     }
 
-    private void setEmptyFeedView(View inflated) {
+    private void setEmptyFeedView(View emptyFeedView) {
         if (mEmptyFeedView == null) {
-            mEmptyFeedView = inflated;
+            mEmptyFeedView = emptyFeedView;
         }
     }
 

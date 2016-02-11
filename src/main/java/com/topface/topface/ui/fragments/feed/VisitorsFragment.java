@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.Intent;
 import android.support.annotation.StringRes;
 import android.view.View;
 import android.widget.Button;
@@ -75,8 +74,7 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
         initGagView(inflated, R.string.with_vip_find_your_visitors, R.string.buying_vip_status, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = PurchasesActivity.createVipBuyIntent(null, SCREEN_TYPE);
-                startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
+                startActivityForResult(PurchasesActivity.createVipBuyIntent(null, SCREEN_TYPE), PurchasesActivity.INTENT_BUY_VIP);
             }
         });
         setUnlockButtonView((Button) inflated.findViewById(R.id.btnUnlock));

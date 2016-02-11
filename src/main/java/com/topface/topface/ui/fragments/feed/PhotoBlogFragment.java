@@ -186,8 +186,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
 
     @Override
     protected void initEmptyFeedView(final View inflated, int errorCode) {
-        ViewFlipper viewFlipper = (ViewFlipper) inflated.findViewById(R.id.vfEmptyViews);
-        initEmptyScreenWithoutLikes(viewFlipper);
+        initEmptyScreenWithoutLikes((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews));
     }
 
     private void initEmptyScreenWithoutLikes(ViewFlipper viewFlipper) {

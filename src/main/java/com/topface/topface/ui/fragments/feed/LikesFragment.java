@@ -178,9 +178,9 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         return FeedRequest.FeedService.LIKES;
     }
 
-    private void setEmptyFeedView(View inflated) {
+    private void setEmptyFeedView(View emptyFeedView) {
         if (mEmptyFeedView == null) {
-            mEmptyFeedView = inflated;
+            mEmptyFeedView = emptyFeedView;
         }
     }
 
@@ -207,8 +207,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected void initEmptyFeedView(final View inflated, int errorCode) {
         setEmptyFeedView(inflated);
-        ViewFlipper viewFlipper = (ViewFlipper) inflated.findViewById(R.id.vfEmptyViews);
-        initEmptyScreenWithoutLikes(viewFlipper);
+        initEmptyScreenWithoutLikes((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews));
     }
 
     private Button getUnlockButtonView(View view, int child) {
