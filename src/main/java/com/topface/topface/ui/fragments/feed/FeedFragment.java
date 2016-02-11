@@ -1389,6 +1389,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                     @Override
                     public void onVideoWatched() {
                         super.onVideoWatched();
+                        view.setVisibility(View.GONE);
                         new UnlockFunctionalityRequest(unlockType, getContext()).callback(new ApiHandler() {
                             @Override
                             public void success(IApiResponse response) {

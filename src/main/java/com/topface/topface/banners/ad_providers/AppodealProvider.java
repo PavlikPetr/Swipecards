@@ -6,7 +6,7 @@ import com.appodeal.ads.Appodeal;
 import com.appodeal.ads.BannerCallbacks;
 import com.appodeal.ads.BannerView;
 import com.appodeal.ads.UserSettings;
-import com.topface.topface.BuildConfig;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.data.Profile;
 import com.topface.topface.utils.CacheProfile;
@@ -19,12 +19,10 @@ public class AppodealProvider extends AbstractAdsProvider {
     @Override
     boolean injectBannerInner(final IPageWithAds page, final IAdProviderCallbacks callbacks) {
         Activity activity = page.getActivity();
+        Appodeal.setLogging(Debug.isDebugLogsEnabled());
         Appodeal.initialize(activity, APPODEAL_APP_KEY, Appodeal.BANNER_VIEW);
         final BannerView adView = Appodeal.getBannerView(page.getActivity());
         page.getContainerForAd().addView(adView);
-        if (BuildConfig.DEBUG) {
-            Appodeal.setTesting(true);
-        }
         Appodeal.getUserSettings(activity)
                 .setGender(
                         CacheProfile.getProfile().sex == Profile.BOY ?

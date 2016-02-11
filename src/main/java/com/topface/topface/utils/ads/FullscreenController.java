@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.appintop.init.AdToApp;
-import com.appintop.interstitialads.DefaultInterstitialListener;
 import com.appodeal.ads.Appodeal;
 import com.appodeal.ads.InterstitialCallbacks;
 import com.google.android.gms.ads.AdActivity;
@@ -42,7 +40,6 @@ import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_FULLSCREEN_START_APP;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_MEDIATION;
-import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADTOAPP_FULLSCREEN;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_APPODEAL_FULLSCREEN;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_NONE;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_TOPFACE;
@@ -219,48 +216,12 @@ public class FullscreenController {
                 case BANNER_TOPFACE:
                     requestTopfaceFullscreen();
                     break;
-                case BANNER_ADTOAPP_FULLSCREEN:
-                    requestAdToAppFullscreen();
-                    break;
                 default:
                     break;
             }
         } catch (Exception e) {
             Debug.error("Request fullscreen error", e);
         }
-    }
-
-    private void requestAdToAppFullscreen() {
-        AdToApp.initializeSDK(mActivity, AdToAppController.ADTOAPP_APP_KEY, AdToApp.MASK_INTERSTITIAL);
-        if (AdToApp.isAvailableAd(AdToApp.INTERSTITIAL)) {
-            AdToApp.showInterstitialAd();
-        }
-        AdToApp.setInterstitialListener(new DefaultInterstitialListener() {
-            @Override
-            public void onFirstInterstitialLoad(String s, String s1) {
-                AdToApp.showInterstitialAd();
-            }
-
-            @Override
-            public void onInterstitialStarted(String s, String s1) {
-                mFullScreenBannerListener.onLoaded();
-            }
-
-            @Override
-            public void onInterstitialClicked(String s, String s1) {
-                mFullScreenBannerListener.onClick();
-            }
-
-            @Override
-            public void onInterstitialClosed(String s, String s1) {
-                mFullScreenBannerListener.onClose();
-            }
-
-            @Override
-            public boolean onInterstitialFailedToShow(String s) {
-                return false;
-            }
-        });
     }
 
     private void requestAppodealFullscreen() {
