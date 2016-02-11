@@ -74,4 +74,7 @@
     <dimen name="left_menu_icon_height">24dp</dimen>
 
     <dimen name="other_services_button_img_padding">7dp</dimen>
+
+    <dimen name="user_gifts_padding">10dp</dimen>
+
 </resources>
