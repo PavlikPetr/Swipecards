@@ -16,8 +16,8 @@ import com.topface.topface.data.Options;
 import com.topface.topface.requests.AppRateRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.statistics.RatePopupStatistics;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 
 import static com.topface.topface.ui.settings.FeedbackMessageFragment.FeedbackType.LOW_RATE_MESSAGE;
@@ -40,7 +40,7 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
         super.onCreate(savedInstanceState);
         //Закрыть диалог можно
         setCancelable(true);
-        EasyTracker.sendEvent("RatePopup", "FeaturePopup", "Show", 1L);
+        RatePopupStatistics.sendRatePopupShow();
     }
 
     @Override
@@ -74,7 +74,7 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
         // Send statistics onBackPressed or on tap outside the dialog
-        EasyTracker.sendEvent("RatePopup", "FeaturePopup", "ManualCancel", 1L);
+        RatePopupStatistics.sendRatePopupClose();
     }
 
     @Override
@@ -84,13 +84,13 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
                 rate();
                 break;
             case R.id.btnAskLater:
-                EasyTracker.sendEvent("RatePopup", "FeaturePopup", "Later", 1L);
+                RatePopupStatistics.sendRatePopupClickButtonLater();
                 saveRatingPopupStatus(System.currentTimeMillis());
                 dismiss();
                 break;
             case R.id.btnNoThanx:
                 // Используем label: Cancel, как в iOS
-                EasyTracker.sendEvent("RatePopup", "FeaturePopup", "Cancel", 1L);
+                RatePopupStatistics.sendRatePopupClickButtonClose();
                 saveRatingPopupStatus(0);
                 sendRateRequest(AppRateRequest.NO_RATE);
                 dismiss();
@@ -108,7 +108,7 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
 
     private void rate() {
         long rating = (long) mRatingBar.getRating();
-        EasyTracker.sendEvent("RatePopup", "FeaturePopup", "Rate", rating);
+        RatePopupStatistics.sendRatePopupClickButtonRate(rating);
         if (rating <= 0) {
             new AlertDialog.Builder(getActivity())
                     .setMessage(R.string.rate_popup_error)
