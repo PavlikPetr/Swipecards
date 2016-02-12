@@ -49,7 +49,7 @@ public class FansFragment extends BookmarksFragment {
         initGagView(inflated, R.string.buy_more_sympathies, R.string.buy_sympathies, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(PurchasesActivity.createBuyingIntent(SCREEN_TYPE));
+                startActivity(PurchasesActivity.createBuyingIntent(SCREEN_TYPE, App.get().getOptions().topfaceOfferwallRedirect));
             }
         });
     }

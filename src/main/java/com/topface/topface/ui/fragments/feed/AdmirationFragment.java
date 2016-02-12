@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.UnlockFunctionalityOption;
-import com.topface.topface.data.Options;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteAdmirationsRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -58,7 +56,7 @@ public class AdmirationFragment extends LikesFragment {
             setUnlockButtonView(getUnlockButtonView(inflated, SECOND_CHILD));
             int curCounter = mCountersData.admirations;
             if (curCounter == 0) {
-                curCounter = CacheProfile.getOptions().premiumAdmirations.getCount();
+                curCounter = App.get().getOptions().premiumAdmirations.getCount();
             }
 
             ((TextView) inflated.findViewById(R.id.tvTitle)).setText(Utils.getQuantityString(R.plurals.popup_vip_admirations, curCounter, curCounter));
@@ -68,12 +66,13 @@ public class AdmirationFragment extends LikesFragment {
                     startActivityForResult(PurchasesActivity.createVipBuyIntent(null, SCREEN_TYPE), PurchasesActivity.INTENT_BUY_VIP);
                 }
             });
+            Profile profile = App.get().getProfile();
             ((ImageViewRemote) inflated.findViewById(R.id.ivOne))
-                    .setResourceSrc(CacheProfile.dating.sex == Profile.GIRL ? R.drawable.likes_male_one : R.drawable.likes_female_one);
+                    .setResourceSrc(profile.dating.sex == Profile.GIRL ? R.drawable.likes_male_one : R.drawable.likes_female_one);
             ((ImageViewRemote) inflated.findViewById(R.id.ivTwo))
-                    .setResourceSrc(CacheProfile.dating.sex == Profile.GIRL ? R.drawable.likes_male_two : R.drawable.likes_female_two);
+                    .setResourceSrc(profile.dating.sex == Profile.GIRL ? R.drawable.likes_male_two : R.drawable.likes_female_two);
             ((ImageViewRemote) inflated.findViewById(R.id.ivThree))
-                    .setResourceSrc(CacheProfile.dating.sex == Profile.GIRL ? R.drawable.likes_male_three : R.drawable.likes_female_three);
+                    .setResourceSrc(profile.dating.sex == Profile.GIRL ? R.drawable.likes_male_three : R.drawable.likes_female_three);
         } else {
             setUnlockButtonView(getUnlockButtonView(inflated, FIRST_CHILD));
             chooseFirstChild(inflated);
@@ -111,7 +110,7 @@ public class AdmirationFragment extends LikesFragment {
         view.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations"));
+                startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations", App.get().getOptions().topfaceOfferwallRedirect));
             }
         });
     }

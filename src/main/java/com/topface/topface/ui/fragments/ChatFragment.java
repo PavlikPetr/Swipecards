@@ -82,7 +82,6 @@ import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AddPhotoHelper;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Device;
@@ -160,7 +159,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            AddPhotoHelper.handlePhotoMessage(msg);
+            AddPhotoHelper.handlePhotoMessage(msg, getActivity());
         }
     };
 
@@ -1210,7 +1209,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mAddPhotoHelper = new AddPhotoHelper(ChatFragment.this, null);
                 mAddPhotoHelper.setOnResultHandler(mHandler);
             }
-            if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && CacheProfile.photo == null) {
+            if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null) {
                 startActivityForResult(TakePhotoActivity.createIntent(getActivity(), TakePhotoStatistics.PLC_CHAT_OPEN), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
             }
         }

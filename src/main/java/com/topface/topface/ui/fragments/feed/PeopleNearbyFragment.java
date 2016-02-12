@@ -196,7 +196,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     @Override
     protected void initLockedFeed(View inflated, int errorCode) {
-        initEmptyScreenOnBlocked(inflated, CacheProfile.getOptions().blockPeople);
+        initEmptyScreenOnBlocked(inflated, App.get().getOptions().blockPeople);
     }
 
     @Override
