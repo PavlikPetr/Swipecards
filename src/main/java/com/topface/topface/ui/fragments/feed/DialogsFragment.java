@@ -9,7 +9,6 @@ import com.google.gson.reflect.TypeToken;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
-import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.data.History;
 import com.topface.topface.promo.dialogs.PromoDialog;
 import com.topface.topface.promo.dialogs.PromoExpressMessages;
@@ -160,6 +159,10 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     protected FeedRequest.FeedService getFeedService() {
         return FeedRequest.FeedService.DIALOGS;
+    }
+
+    @Override
+    protected void initLockedFeed(View inflated, int errorCode) {
     }
 
     @Override

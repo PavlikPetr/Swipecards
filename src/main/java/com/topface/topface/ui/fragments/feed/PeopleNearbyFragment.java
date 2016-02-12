@@ -50,7 +50,6 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     @Inject
     TopfaceAppState mAppState;
-    protected View mEmptyFeedView;
     private boolean mIsHistoryLoad = false;
     private boolean mIsMakeItemsRead = false;
     private GeoLocationManager mGeoLocationManager;
@@ -196,14 +195,13 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     }
 
     @Override
+    protected void initLockedFeed(View inflated, int errorCode) {
+        initEmptyScreenOnBlocked(inflated, App.get().getOptions().blockPeople);
+    }
+
+    @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
-        if (mEmptyFeedView == null) mEmptyFeedView = inflated;
-        Options.BlockPeopleNearby blockPeopleNearby = App.from(getActivity()).getOptions().blockPeople;
-        if (errorCode == ErrorCodes.BLOCKED_PEOPLE_NEARBY) {
-            initEmptyScreenOnBlocked(inflated, blockPeopleNearby);
-        } else {
-            initEmptyScreen(inflated, errorCode);
-        }
+        initEmptyScreen(inflated, errorCode);
     }
 
     private void initEmptyScreen(View emptyView, int errorCode) {

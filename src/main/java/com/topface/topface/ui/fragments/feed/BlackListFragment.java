@@ -5,7 +5,6 @@ import android.view.View;
 import com.google.gson.reflect.TypeToken;
 import com.topface.topface.R;
 import com.topface.topface.data.BlackListItem;
-import com.topface.topface.data.FeedListData;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteBlackListRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -13,8 +12,6 @@ import com.topface.topface.ui.adapters.BlackListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.utils.CountersManager;
-
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -67,6 +64,10 @@ public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> imple
 
     @Override
     public void onClick(View view) {
+    }
+
+    @Override
+    protected void initLockedFeed(View inflated, int errorCode) {
     }
 
     @Override

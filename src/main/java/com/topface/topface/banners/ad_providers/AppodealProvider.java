@@ -6,8 +6,8 @@ import com.appodeal.ads.Appodeal;
 import com.appodeal.ads.BannerCallbacks;
 import com.appodeal.ads.BannerView;
 import com.appodeal.ads.UserSettings;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.BuildConfig;
 import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.data.Profile;
 import com.topface.topface.utils.social.AuthToken;
@@ -19,19 +19,17 @@ public class AppodealProvider extends AbstractAdsProvider {
     @Override
     boolean injectBannerInner(final IPageWithAds page, final IAdProviderCallbacks callbacks) {
         Activity activity = page.getActivity();
-        Profile profile = App.from(page.getActivity()).getProfile();
+        Appodeal.setLogging(Debug.isDebugLogsEnabled());
         Appodeal.initialize(activity, APPODEAL_APP_KEY, Appodeal.BANNER_VIEW);
         final BannerView adView = Appodeal.getBannerView(page.getActivity());
         page.getContainerForAd().addView(adView);
-        if (BuildConfig.DEBUG) {
-            Appodeal.setTesting(true);
-        }
         Appodeal.getUserSettings(activity)
                 .setGender(
-                        profile.sex == Profile.BOY ?
+                        App.get().getProfile().sex == Profile.BOY ?
                                 UserSettings.Gender.MALE :
                                 UserSettings.Gender.FEMALE)
-                .setAge(profile.age);
+                .setAge(App.get().getProfile().age);
+        // добавляем в UserSettings id социальной сети, в зависимости от типа текущей авторизации
         switch (AuthToken.getInstance().getSocialNet()) {
             case AuthToken.SN_VKONTAKTE:
                 Appodeal.getUserSettings(activity).setVkId(AuthToken.getInstance().getUserSocialId());
@@ -45,22 +43,37 @@ public class AppodealProvider extends AbstractAdsProvider {
             @Override
             public void onBannerLoaded() {
                 Appodeal.show(page.getActivity(), Appodeal.BANNER_VIEW);
-                callbacks.onAdLoadSuccess(adView);
+                if (callbacks != null) {
+                    callbacks.onAdLoadSuccess(adView);
+                }
             }
 
             @Override
             public void onBannerFailedToLoad() {
-                callbacks.onFailedToLoadAd();
+                if (callbacks != null) {
+                    callbacks.onFailedToLoadAd();
+                }
             }
 
             @Override
             public void onBannerShown() {
+                if (callbacks != null) {
+                    callbacks.onAdShow();
+                }
             }
 
             @Override
             public void onBannerClicked() {
+                if (callbacks != null) {
+                    callbacks.onAdClick();
+                }
             }
         });
         return true;
+    }
+
+    @Override
+    public String getBannerName() {
+        return AdProvidersFactory.BANNER_APPODEAL;
     }
 }

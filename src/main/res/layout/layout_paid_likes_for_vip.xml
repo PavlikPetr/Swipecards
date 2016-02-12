@@ -5,7 +5,6 @@
     android:fillViewport="true">
 
     <LinearLayout
-        style="@style/EmptyFeedsViewGravity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -15,7 +14,6 @@
 
         <LinearLayout
             android:id="@+id/ivAvatars"
-            style="@style/EmptyFeedsViewImageVisibility"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -52,5 +50,12 @@
             android:gravity="center" />
 
         <include layout="@layout/layout_empty_feed_controls" />
+
+        <Button
+            style="@style/UnlockButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:tag="btnUnlock" />
     </LinearLayout>
 </ScrollView>
