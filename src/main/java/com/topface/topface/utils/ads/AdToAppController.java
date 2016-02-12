@@ -45,6 +45,9 @@ public class AdToAppController {
             for (IAdToAppListener listener : mAdToAppListeners.values()) {
                 if (listener != null) {
                     listener.onClicked();
+                    if (mIsVideoStart && adsType.equals(AdsMasks.VIDEO.getType())) {
+                        listener.onVideoWatched();
+                    }
                 }
             }
         }
