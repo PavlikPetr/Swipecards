@@ -30,7 +30,6 @@ public class BlackListAndBookmarkHandler extends VipApiHandler {
     public BlackListAndBookmarkHandler(Context context, ActionTypes actionType,
                                        int userId, boolean isAddition) {
         this(context, actionType, userId, isAddition, null);
-
     }
 
     public BlackListAndBookmarkHandler(Context context, ActionTypes actionType,
