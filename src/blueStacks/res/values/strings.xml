@@ -820,6 +820,17 @@
   <string name="novice_sympathy">Send Likes only to those\nwho really attract you.\nYou just might
     find someone special!
   </string>
+  <plurals name="novice_sympathies_bonus">
+    <item quantity="zero">You will receive %1$d Likes as a\ngift! This means that those \nwho send
+      you Likes \nreally like %2$d you
+    </item>
+    <item quantity="other">You will receive %1$d Likes as a\ngift! This means that those \nwho send
+      you Likes \nreally like %2$d you
+    </item>
+    <item quantity="one">You will receive %1$d Like as a\ngift! This means that those \nwho send you
+      Likes \nreally like %2$d you
+    </item>
+  </plurals>
   <string name="go_dating_message">Start getting to know people and here will appear the names of
     those users who visited your profile.
   </string>
@@ -855,4 +866,9 @@
   <string name="take_photo_text_2">Only you should be in the photo; all photos are reviewed by
     moderators to ensure rules are followed.
   </string>
+  <string name="unlock_by_viewed_ad_video_button_text">Unlock for free at %s</string>
+  <plurals name="free_minutes">
+    <item quantity="other">%d minutes</item>
+    <item quantity="one">%d minute</item>
+  </plurals>
 </resources>
