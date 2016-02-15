@@ -53,7 +53,9 @@ public class AdmirationFragment extends LikesFragment {
         setEmptyFeedView(inflated);
         if (mCountersData.admirations > 0) {
             ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(SECOND_CHILD);
-            setUnlockButtonView(getUnlockButtonView(inflated, SECOND_CHILD));
+            Button button = getUnlockButtonView(inflated, SECOND_CHILD);
+            button.setVisibility(View.VISIBLE);
+            setUnlockButtonView(button);
             int curCounter = mCountersData.admirations;
             if (curCounter == 0) {
                 curCounter = CacheProfile.getOptions().premiumAdmirations.getCount();
@@ -73,7 +75,9 @@ public class AdmirationFragment extends LikesFragment {
             ((ImageViewRemote) inflated.findViewById(R.id.ivThree))
                     .setResourceSrc(CacheProfile.dating.sex == Profile.GIRL ? R.drawable.likes_male_three : R.drawable.likes_female_three);
         } else {
-            setUnlockButtonView(getUnlockButtonView(inflated, FIRST_CHILD));
+            Button button = getUnlockButtonView(inflated, FIRST_CHILD);
+            button.setVisibility(View.VISIBLE);
+            setUnlockButtonView(button);
             chooseFirstChild(inflated);
         }
     }
@@ -91,6 +95,7 @@ public class AdmirationFragment extends LikesFragment {
     @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
         setEmptyFeedView(inflated);
+        getUnlockButtonView(inflated, FIRST_CHILD).setVisibility(View.GONE);
         chooseFirstChild(inflated);
     }
 

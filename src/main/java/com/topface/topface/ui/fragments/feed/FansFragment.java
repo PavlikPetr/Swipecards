@@ -40,7 +40,9 @@ public class FansFragment extends BookmarksFragment {
                 startActivityForResult(PurchasesActivity.createVipBuyIntent(null, SCREEN_TYPE), PurchasesActivity.INTENT_BUY_VIP);
             }
         });
-        setUnlockButtonView((Button) inflated.findViewById(R.id.btnUnlock));
+        Button button = getUnlockButtonView(inflated);
+        button.setVisibility(View.VISIBLE);
+        setUnlockButtonView(button);
     }
 
     @Override
@@ -51,6 +53,8 @@ public class FansFragment extends BookmarksFragment {
                 startActivity(PurchasesActivity.createBuyingIntent(SCREEN_TYPE));
             }
         });
+        Button button = getUnlockButtonView(inflated);
+        button.setVisibility(View.GONE);
     }
 
     private void initGagView(@NotNull View inflated, @StringRes int text, @StringRes int buttonText, View.OnClickListener listener) {
@@ -61,6 +65,10 @@ public class FansFragment extends BookmarksFragment {
         btnBuyVip.setVisibility(View.VISIBLE);
         textView.setVisibility(View.VISIBLE);
         btnBuyVip.setOnClickListener(listener);
+    }
+
+    private Button getUnlockButtonView(View view) {
+        return (Button) view.findViewById(R.id.btnUnlock);
     }
 
     @Override
