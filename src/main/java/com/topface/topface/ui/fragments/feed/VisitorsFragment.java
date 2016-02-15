@@ -77,9 +77,7 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
                 startActivityForResult(PurchasesActivity.createVipBuyIntent(null, SCREEN_TYPE), PurchasesActivity.INTENT_BUY_VIP);
             }
         });
-        Button button = getUnlockButtonView(inflated);
-        button.setVisibility(View.VISIBLE);
-        setUnlockButtonView(button);
+        setUnlockButtonView(getUnlockButtonView(inflated));
     }
 
     @Override
