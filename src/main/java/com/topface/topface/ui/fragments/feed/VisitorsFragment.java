@@ -90,8 +90,7 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
                 MenuFragment.selectFragment(FragmentId.DATING.getFragmentSettings());
             }
         });
-        Button button = getUnlockButtonView(inflated);
-        button.setVisibility(View.GONE);
+        getUnlockButtonView(inflated).setVisibility(View.GONE);
     }
 
     private Button getUnlockButtonView(View view) {

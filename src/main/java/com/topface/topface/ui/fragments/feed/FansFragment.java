@@ -53,8 +53,7 @@ public class FansFragment extends BookmarksFragment {
                 startActivity(PurchasesActivity.createBuyingIntent(SCREEN_TYPE));
             }
         });
-        Button button = getUnlockButtonView(inflated);
-        button.setVisibility(View.GONE);
+        getUnlockButtonView(inflated).setVisibility(View.GONE);
     }
 
     private void initGagView(@NotNull View inflated, @StringRes int text, @StringRes int buttonText, View.OnClickListener listener) {
