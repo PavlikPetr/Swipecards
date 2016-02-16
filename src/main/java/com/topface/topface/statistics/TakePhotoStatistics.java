@@ -18,6 +18,7 @@ public class TakePhotoStatistics {
     public static final String PLC_DATING_LIKE = "dating_like";
     public static final String PLC_DATING_ADMIRATION = "dating_admiration";
     public static final String PLC_DATING_SEND = "dating_send";
+    public static final String PLC_CHAT_OPEN = "chat_open";
     public static final String PLC_DATING_CHAT = "dating_chat";
     public static final String PLC_OWN_PROFILE_ON_RESUME = "own_profile_on_resume";
     public static final String PLC_OWN_PROFILE_AVATAR_CLICK = "own_profile_on_avatar_click";
@@ -36,7 +37,7 @@ public class TakePhotoStatistics {
         Options options = App.get().getOptions();
         if(options != null) {
             HashMap<String, Object> serverSlices = options.statisticsSlices;
-            if(serverSlices != null && serverSlices.size() > 0) {
+            if (serverSlices != null && serverSlices.size() > 0) {
                 for (String key : serverSlices.keySet()) {
                     slices.put(key, JsonUtils.toJson(serverSlices.get(key)));
                 }
@@ -53,6 +54,7 @@ public class TakePhotoStatistics {
                 1,
                 slices);
     }
+
     public static void sendGalleryAction(String plc) {
         Slices slices = getOriginalSlices();
         slices.put(SLICE_PLC, plc);
@@ -61,6 +63,7 @@ public class TakePhotoStatistics {
                 1,
                 slices);
     }
+
     public static void sendCancelAction(String plc) {
         Slices slices = getOriginalSlices();
         slices.put(SLICE_PLC, plc);

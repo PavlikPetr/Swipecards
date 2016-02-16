@@ -74,4 +74,7 @@
     <dimen name="left_menu_icon_height">24dp</dimen>
 
     <dimen name="other_services_button_img_padding">7dp</dimen>
+    <dimen name="unlock_button_margin_top">10dp</dimen>
+
+    <dimen name="unlock_likes_by_coins_button_text_size">15sp</dimen>
 </resources>

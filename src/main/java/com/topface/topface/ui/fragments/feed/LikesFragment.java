@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -21,6 +22,7 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.requests.BuyLikesAccessRequest;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
@@ -36,8 +38,6 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.LikesListAdapter;
 import com.topface.topface.ui.adapters.LikesListAdapter.OnMutualListener;
 import com.topface.topface.ui.fragments.PurchasesFragment;
-import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
-import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.EasyTracker;
@@ -60,6 +60,10 @@ import rx.functions.Action1;
 public class LikesFragment extends FeedFragment<FeedLike> {
 
     public static final String PREFERENCES_PAID_LIKES_COUNT = "paid_likes_count";
+    public static final String UNLOCK_FUCTIONALITY_TYPE = "likes";
+    public static final int FIRST_CHILD = 0;
+    public static final int SECOND_CHILD = 1;
+    public static final int THIRD_CHILD = 2;
 
     @Inject
     TopfaceAppState mAppState;
@@ -173,22 +177,50 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         return FeedRequest.FeedService.LIKES;
     }
 
-    @Override
-    protected void initEmptyFeedView(final View inflated, int errorCode) {
+    private void setEmptyFeedView(View emptyFeedView) {
         if (mEmptyFeedView == null) {
-            mEmptyFeedView = inflated;
+            mEmptyFeedView = emptyFeedView;
         }
+    }
+
+    @Override
+    protected void initLockedFeed(View inflated, int errorCode) {
+        setEmptyFeedView(inflated);
         ViewFlipper viewFlipper = (ViewFlipper) inflated.findViewById(R.id.vfEmptyViews);
         switch (errorCode) {
             case ErrorCodes.PREMIUM_ACCESS_ONLY:
+                setUnlockButtonView(getUnlockButtonView(inflated, SECOND_CHILD));
                 initEmptyScreenOnLikesNeedVip(viewFlipper);
                 break;
             case ErrorCodes.BLOCKED_SYMPATHIES:
+                Button unlockButton = getUnlockButtonView(inflated, THIRD_CHILD);
+                if (!App.get().getOptions().unlockAllForPremium) {
+                    unlockButton.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.unlock_likes_by_coins_button_text_size));
+                }
+                setUnlockButtonView(unlockButton);
                 initEmptyScreenOnBlockedLikes(inflated, viewFlipper);
                 break;
-            default:
-                initEmptyScreenWithoutLikes(viewFlipper);
         }
+    }
+
+    @Override
+    protected void initEmptyFeedView(final View inflated, int errorCode) {
+        setEmptyFeedView(inflated);
+        initEmptyScreenWithoutLikes((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews));
+    }
+
+    private Button getUnlockButtonView(View view, int child) {
+        return (Button) ((ViewFlipper) view.findViewById(R.id.vfEmptyViews)).getChildAt(child).findViewWithTag("btnUnlock");
+    }
+
+    @Override
+    protected String getUnlockFunctionalityType() {
+        return UNLOCK_FUCTIONALITY_TYPE;
+    }
+
+    @Override
+    protected UnlockFunctionalityOption.UnlockScreenCondition getUnlockScreenCondition(UnlockFunctionalityOption data) {
+        return data.getUnlockLikesCondition();
     }
 
     private void updateTitleWithCounter(CountersData countersData) {
@@ -203,8 +235,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     private void initEmptyScreenOnLikesNeedVip(ViewFlipper viewFlipper) {
-        viewFlipper.setDisplayedChild(1);
-        View currentView = viewFlipper.getChildAt(1);
+        viewFlipper.setDisplayedChild(SECOND_CHILD);
+        View currentView = viewFlipper.getChildAt(SECOND_CHILD);
         if (currentView != null) {
             mTitleWithCounter = (TextView) currentView.findViewById(R.id.tvTitle);
             updateTitleWithCounter(null);
@@ -220,8 +252,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     private void initEmptyScreenWithoutLikes(ViewFlipper viewFlipper) {
-        viewFlipper.setDisplayedChild(0);
-        View currentView = viewFlipper.getChildAt(0);
+        viewFlipper.setDisplayedChild(FIRST_CHILD);
+        View currentView = viewFlipper.getChildAt(FIRST_CHILD);
         if (currentView != null) {
             currentView.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -237,8 +269,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         // send stat to google analytics
         sendBlockSympathyStatistics(blockSympathyOptions);
         // set paid likes view
-        viewFlipper.setDisplayedChild(2);
-        View currentView = viewFlipper.getChildAt(2);
+        viewFlipper.setDisplayedChild(THIRD_CHILD);
+        View currentView = viewFlipper.getChildAt(THIRD_CHILD);
         initAvatarImagesToEmptyView(currentView, blockSympathyOptions.showPhotos);
         if (currentView != null) {
             ((TextView) currentView.findViewById(R.id.blocked_likes_text)).setText(blockSympathyOptions.text);

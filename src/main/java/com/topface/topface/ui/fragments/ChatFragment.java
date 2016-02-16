@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
@@ -62,10 +63,12 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.TakePhotoActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
@@ -78,6 +81,7 @@ import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Device;
@@ -150,6 +154,14 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private String mInitialMessage;
     private boolean wasFailed = false;
     private String mFrom;
+    private AddPhotoHelper mAddPhotoHelper;
+    private boolean mIsNeedShowAddPhoto = true;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            AddPhotoHelper.handlePhotoMessage(msg, getActivity());
+        }
+    };
 
     TimerTask mUpdaterTask = new TimerTask() {
         @Override
@@ -244,7 +256,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ_BY_UID);
         intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
-
     }
 
     @Override
@@ -731,8 +742,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                             if (!data.more && !data.items.isEmpty()) {
                                 onNewMessageAdded(data.items.get(0));
                             }
-                        } else if (scrollRefresh) {
-                            mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
                         } else {
                             mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
                         }
@@ -741,6 +750,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     }
                 }
                 setLockScreenVisibility(false);
+                takePhotoIfNeed();
             }
 
             @Override
@@ -951,6 +961,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     mAdapter.getData().clear();
                 }
                 update(false, "initial");
+                break;
+            default:
+                if (mAddPhotoHelper != null) {
+                    mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+                }
                 break;
         }
     }
@@ -1187,4 +1202,16 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         return true;
     }
 
+    private void takePhotoIfNeed() {
+        if (mIsNeedShowAddPhoto) {
+            mIsNeedShowAddPhoto = false;
+            if (mAddPhotoHelper == null) {
+                mAddPhotoHelper = new AddPhotoHelper(ChatFragment.this, null);
+                mAddPhotoHelper.setOnResultHandler(mHandler);
+            }
+            if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null) {
+                startActivityForResult(TakePhotoActivity.createIntent(getActivity(), TakePhotoStatistics.PLC_CHAT_OPEN), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
+            }
+        }
+    }
 }

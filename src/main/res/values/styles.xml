@@ -1223,6 +1223,12 @@
         <item name="android:minWidth">240dp</item>
     </style>
 
+    <style name="UnlockButtonStyle" parent="BigStretchedBlueButton">
+        <item name="android:layout_marginTop">@dimen/unlock_button_margin_top</item>
+        <item name="android:visibility">gone</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
     <style name="BigStretchedGrayButton" parent="Widget.Topface.Button.Big.Gray">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
