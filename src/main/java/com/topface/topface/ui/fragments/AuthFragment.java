@@ -132,29 +132,24 @@ public class AuthFragment extends BaseAuthFragment {
 
     private BroadcastReceiver mTokenReadyReceiver = new BroadcastReceiver() {
 
-        private int mLastStatusReceived = Integer.MIN_VALUE;
-
         @Override
         public void onReceive(Context context, Intent intent) {
             int tokenStatus = intent.getIntExtra(Authorizer.TOKEN_STATUS, Authorizer.TOKEN_NOT_READY);
 
-            if (tokenStatus != mLastStatusReceived) {
-                switch (tokenStatus) {
-                    case Authorizer.TOKEN_READY:
-                        auth(AuthToken.getInstance());
-                        break;
-                    case Authorizer.TOKEN_FAILED:
-                        Utils.showToastNotification(R.string.general_reconnect_social, Toast.LENGTH_SHORT);
-                    case Authorizer.TOKEN_NOT_READY:
-                        hideProgress();
-                        showButtons();
-                        break;
-                    case Authorizer.TOKEN_PREPARING:
-                        hideButtons();
-                        showProgress();
-                        break;
-                }
-                mLastStatusReceived = tokenStatus;
+            switch (tokenStatus) {
+                case Authorizer.TOKEN_READY:
+                    auth(AuthToken.getInstance());
+                    break;
+                case Authorizer.TOKEN_FAILED:
+                    Utils.showToastNotification(R.string.general_reconnect_social, Toast.LENGTH_SHORT);
+                case Authorizer.TOKEN_NOT_READY:
+                    hideProgress();
+                    showButtons();
+                    break;
+                case Authorizer.TOKEN_PREPARING:
+                    hideButtons();
+                    showProgress();
+                    break;
             }
         }
     };
