@@ -37,12 +37,13 @@ import com.topface.topface.ui.adapters.BasePhotoRecyclerViewAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
-import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
 import javax.inject.Inject;
+
+import rx.functions.Action1;
 
 
 public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackPressedListener {
@@ -57,7 +58,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
         @Override
         public void onReceive(Context context, Intent intent) {
             if (null != mOwnProfileRecyclerViewAdapter) {
-                mOwnProfileRecyclerViewAdapter.updateData(App.from(context).getProfile().photos, App.from(context).getProfile().photosCount);
+                mOwnProfileRecyclerViewAdapter.updateData(App.from(context).getProfile().photos, App.from(context).getProfile().photosCount, true);
             }
         }
     };
@@ -116,7 +117,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
             @Override
             protected void success(AlbumPhotos data, IApiResponse response) {
                 if (mOwnProfileRecyclerViewAdapter != null) {
-                    mOwnProfileRecyclerViewAdapter.addPhotos(data, data.more, false);
+                    mOwnProfileRecyclerViewAdapter.addPhotos(data, data.more, false, false);
                     profile.photos = mOwnProfileRecyclerViewAdapter.getPhotos();
                     appState.setData(profile);
                 }
@@ -175,6 +176,16 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                 mBinding.usedGrid.scrollToPosition(position);
             }
         });
+        appState.getObservable(Profile.class).subscribe(new Action1<Profile>() {
+            @Override
+            public void call(Profile profile) {
+                if (mOwnProfileRecyclerViewAdapter != null && profile.photos != null &&
+                        mOwnProfileRecyclerViewAdapter.getPhotos().size() != profile.photos.size()) {
+
+                    mOwnProfileRecyclerViewAdapter.setData(profile.photos, profile.photos.size() < profile.photosCount, true, true);
+                }
+            }
+        });
         return root;
     }
 
@@ -203,6 +214,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                             public void success(IApiResponse response) {
                                 super.success(response);
                                 profile.photo = photo;
+                                appState.setData(profile);
                                 CacheProfile.sendUpdateProfileBroadcast();
                             }
 
@@ -245,7 +257,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                                 //Декрементим общее количество фотографий
                                 profile.photosCount -= 1;
                                 profile.photos.remove(photo);
-                                mOwnProfileRecyclerViewAdapter.removePhoto(photo, position);
+                                appState.setData(profile);
                                 if (position < profile.photo.position) {
                                     CacheProfile.incrementPhotoPosition(getActivity(), -1);
                                 }
@@ -274,7 +286,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                 mPhotosReceiver,
                 new IntentFilter(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT)
         );
-        mOwnProfileRecyclerViewAdapter.updateData(App.from(getActivity()).getProfile().photos, App.from(getActivity()).getProfile().photosCount);
+        mOwnProfileRecyclerViewAdapter.updateData(App.from(getActivity()).getProfile().photos, App.from(getActivity()).getProfile().photosCount, true);
         super.onResume();
     }
 
@@ -299,6 +311,10 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
             mBinding.vfFlipper.setDisplayedChild(0);
             LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
                     new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", v.getId()));
+        }
+
+        public void cancelClick(View v) {
+            mBinding.vfFlipper.setDisplayedChild(0);
         }
 
     }

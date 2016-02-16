@@ -72,6 +72,7 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="26dp"
+                        android:onClick="@{handlers.cancelClick}"
                         android:text="@string/general_cancel" />
                 </LinearLayout>
             </ScrollView>

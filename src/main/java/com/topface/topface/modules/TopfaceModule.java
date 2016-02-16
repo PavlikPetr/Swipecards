@@ -29,6 +29,7 @@ import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
+import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.actionbar.OverflowMenu;
@@ -88,6 +89,9 @@ import dagger.Provides;
                 Options.class,
                 Profile.class,
                 User.class
+        },
+        staticInjections = {
+                AddPhotoHelper.class
         }
 )
 public class TopfaceModule {
@@ -108,7 +112,7 @@ public class TopfaceModule {
                     config.setUserGeoLocation((Location) data);
                     config.saveConfig();
                 } else if (data.getClass() == Options.class) {
-                    CacheProfile.setOptions(JsonUtils.optionsToJson((Options)data));
+                    CacheProfile.setOptions(JsonUtils.optionsToJson((Options) data));
                 } else if (data.getClass() == Profile.class) {
                     Profile profile = (Profile) data;
                     CacheProfile.setProfile(profile, JsonUtils.profileToJson(profile));
