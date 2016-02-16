@@ -59,8 +59,8 @@ public class AuthFragment extends BaseAuthFragment {
     private static final int ANIMATION_PATH = 36;
     private static final long ANIMATION_DURATION = 500;
     private AuthorizationManager mAuthorizationManager;
-    private boolean mIsSocNetBtnHidden = true;
-    private boolean mIsTfBtnHidden = false;
+    private boolean mIsSocNetBtnVisible = true;
+    private boolean mIsTfBtnVisible = false;
     private Animation mButtonAnimation;
     private FragmentAuthBinding mBinding;
     private LoginFragmentHandler mLoginFragmentHandler;
@@ -73,7 +73,7 @@ public class AuthFragment extends BaseAuthFragment {
     private void setAllSocNetBtnVisibility(boolean visibility, boolean isNeedChangeFlagState, boolean isNeedAnimate) {
         if (isAdded()) {
             if (isNeedChangeFlagState) {
-                mIsSocNetBtnHidden = visibility;
+                mIsSocNetBtnVisible = visibility;
             }
             // если на главном экране авторизации будет только одна кнопка соц. сервисов + авторизации через ТФ аккаунт (по умолчанию),
             // то отступ до кнопки ТФ уменьшаем, в противном случае отступ будет установлен в соответствии с плотностью экрана
@@ -94,9 +94,11 @@ public class AuthFragment extends BaseAuthFragment {
     private void setTfLoginBtnVisibility(boolean visibility, boolean isNeedChangeFlagState, boolean isNeedAnimate) {
         if (isAdded()) {
             if (isNeedChangeFlagState) {
-                mIsTfBtnHidden = visibility;
+                mIsTfBtnVisible = visibility;
             }
-            mBinding.btnOtherServices.setVisibility(View.GONE);
+            if (visibility) {
+                mBinding.btnOtherServices.setVisibility(View.GONE);
+            }
             mBinding.tfAuthBack.setVisibility(visibility ? View.VISIBLE : View.GONE);
             setVisibilityAndAnimateView(mBinding.btnEntrance, visibility, isNeedAnimate);
             setVisibilityAndAnimateView(mBinding.btnCreateAccount, visibility, isNeedAnimate);
@@ -193,7 +195,7 @@ public class AuthFragment extends BaseAuthFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(TF_BUTTONS, mIsTfBtnHidden);
+        outState.putBoolean(TF_BUTTONS, mIsTfBtnVisible);
     }
 
     @Override
@@ -242,8 +244,8 @@ public class AuthFragment extends BaseAuthFragment {
 
     @Override
     protected void showButtons() {
-        setAllSocNetBtnVisibility(mIsSocNetBtnHidden, false, false);
-        setTfLoginBtnVisibility(mIsTfBtnHidden, false, false);
+        setAllSocNetBtnVisibility(mIsSocNetBtnVisible, false, false);
+        setTfLoginBtnVisibility(mIsTfBtnVisible, false, false);
         mBinding.prsAuthLoading.setVisibility(View.GONE);
     }
 
