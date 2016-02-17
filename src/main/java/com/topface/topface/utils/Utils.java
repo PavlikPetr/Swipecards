@@ -47,6 +47,7 @@ import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.debug.HockeySender;
+import com.topface.topface.utils.exception.OurTestException;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.acra.sender.ReportSenderException;
@@ -453,7 +454,7 @@ public class Utils {
             public void execute() {
                 HockeySender hockeySender = new HockeySender();
                 try {
-                    hockeySender.send(context, hockeySender.createLocalReport(context, new Exception(message)));
+                    hockeySender.send(context, hockeySender.createLocalReport(context, new OurTestException(message)));
                 } catch (ReportSenderException e) {
                     e.printStackTrace();
                 }

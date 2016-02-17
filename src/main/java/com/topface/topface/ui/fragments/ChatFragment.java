@@ -497,7 +497,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         if (mPopularUserLockController.isChatLocked()) {
             mPopularUserLockController.blockChat();
             return true;
-        } else if (mPopularUserLockController.isDialogOpened()) {
+        }
+        if (mPopularUserLockController.isDialogOpened()) {
             mPopularUserLockController.showBlockDialog();
         }
         return false;
@@ -529,11 +530,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     @Override
     protected String getSubtitle() {
-        if (TextUtils.isEmpty(mUserCity)) {
-            return Utils.EMPTY;
-        } else {
-            return mUserCity;
-        }
+        return TextUtils.isEmpty(mUserCity) ? Utils.EMPTY : mUserCity;
     }
 
     @Override
@@ -573,7 +570,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         if (item != null && (item.id == null || item.isFake())) {
             Utils.showToastNotification(R.string.cant_delete_fake_item, Toast.LENGTH_LONG);
             return;
-        } else if (item == null) {
+        }
+        if (item == null) {
             return;
         }
         new DeleteMessagesRequest(item.id, getActivity()).callback(new ApiHandler() {
@@ -618,20 +616,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 !mAdapter.isEmpty() &&
                 (mPopularUserLockController.isChatLocked() || mPopularUserLockController.isResponseLocked()) &&
                 pullToRefresh;
-
-        HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId) {
-
+        HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId, mFrom, new HistoryRequest.IRequestExecuted() {
             @Override
-            public void exec() {
-                if (mUserId > 0) {
-                    mIsUpdating = true;
-                    super.exec();
-                } else {
-                    Utils.sendHockeyMessage(getContext(), "User id -1 from " + mFrom);
-                }
+            public void onExecuted() {
+                mIsUpdating = true;
             }
-        };
-
+        });
         registerRequest(historyRequest);
         historyRequest.debug = type;
         if (mAdapter != null) {
