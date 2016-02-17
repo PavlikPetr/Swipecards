@@ -420,7 +420,7 @@
 
     <style name="ListMessageText">
         <item name="android:singleLine">true</item>
-        <item name="android:lines">2</item>
+        <item name="android:lines">1</item>
         <item name="android:ellipsize">end</item>
         <item name="android:textColor">@color/list_text_gray</item>
         <item name="android:textSize">14sp</item>
