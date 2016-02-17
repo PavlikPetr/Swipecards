@@ -570,8 +570,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         if (item != null && (item.id == null || item.isFake())) {
             Utils.showToastNotification(R.string.cant_delete_fake_item, Toast.LENGTH_LONG);
             return;
-        }
-        if (item == null) {
+        } else if (item == null) {
             return;
         }
         new DeleteMessagesRequest(item.id, getActivity()).callback(new ApiHandler() {
