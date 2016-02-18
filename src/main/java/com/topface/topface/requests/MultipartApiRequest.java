@@ -24,7 +24,6 @@ import java.util.Map;
 abstract public class MultipartApiRequest extends ApiRequest {
 
     public static final int MAX_SUBREQUESTS_NUMBER = 10;
-    private String mFrom;
 
     protected LinkedHashMap<String, IApiRequest> mRequests = new LinkedHashMap<>();
     private volatile MultipartHttpApiTransport mDefaultTransport;
@@ -134,11 +133,6 @@ abstract public class MultipartApiRequest extends ApiRequest {
         }
     }
 
-    public MultipartApiRequest setFrom(String mFrom) {
-        this.mFrom = mFrom;
-        return this;
-    }
-
     private AuthRequest getAuthRequest() {
         for (Map.Entry<String, IApiRequest> entry : mRequests.entrySet()) {
             IApiRequest request = entry.getValue();
@@ -161,7 +155,7 @@ abstract public class MultipartApiRequest extends ApiRequest {
 
         AuthRequest request = getAuthRequest();
         if (request != null && !request.isValidRequest()) {
-            Utils.sendHockeyMessage(getContext(), getRequestsAsString());
+            Utils.sendHockeyMessage(getRequestsAsString());
             handleAllAbortedRequests();
             return;
         }
@@ -172,7 +166,7 @@ abstract public class MultipartApiRequest extends ApiRequest {
                     " subrequests. " + (MAX_SUBREQUESTS_NUMBER - 1) + " is maximum.");
         }
         if (mRequests.size() == 0) {
-            Utils.sendHockeyMessage(getContext(), "Empty multipart request sent from : " + mFrom);
+            Debug.log("empty_multi_part");
             return;
         }
         super.exec();

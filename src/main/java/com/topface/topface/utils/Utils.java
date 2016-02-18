@@ -27,6 +27,7 @@ import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.Options;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.config.AppConfig;
@@ -51,6 +53,7 @@ import com.topface.topface.utils.exception.OurTestException;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.acra.sender.ReportSenderException;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -108,11 +111,28 @@ public class Utils {
     public static void showToastNotification(int stringId, int duration) {
         Context context = App.getContext();
         if (context != null && (duration == 0 || duration == 1)) {
-            Toast.makeText(
-                    context,
-                    stringId,
-                    duration
-            ).show();
+            Toast toast;
+            try {
+                /*
+                краш при инфлейте тоста на соньках
+                https://rink.hockeyapp.net/manage/apps/26531/app_versions/343/crash_reasons/110273859?scope=devices&type=statistics
+                 */
+                toast = Toast.makeText(
+                        context,
+                        stringId,
+                        duration
+                );
+            } catch (InflateException e) {
+                e.printStackTrace();
+                return;
+            }
+            if (toast != null) {
+                /*
+                нет, я не сошел с ума. На некоторых девайсах Toast.makeText может возвращать null.
+                Такие дела
+                 */
+                toast.show();
+            }
         }
     }
 
@@ -230,7 +250,7 @@ public class Utils {
     }
 
     public static void goToMarket(Activity context, Integer requestCode) {
-        Intent marketIntent = getMarketIntent(context);
+        Intent marketIntent = getMarketIntent();
         if (isCallableIntent(marketIntent, context)) {
             if (requestCode == null) {
                 context.startActivity(marketIntent);
@@ -243,13 +263,21 @@ public class Utils {
     }
 
     public static boolean isCallableIntent(Intent intent, Context context) {
+        if (intent == null) {
+            return false;
+        }
         List<ResolveInfo> list = context.getPackageManager().queryIntentActivities(intent,
                 PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
     }
 
-    public static Intent getMarketIntent(Context context) {
-        return new Intent(Intent.ACTION_VIEW, Uri.parse(CacheProfile.getOptions().updateUrl));
+    @Nullable
+    public static Intent getMarketIntent() {
+        Options options = CacheProfile.getOptions();
+        if (options != null && options.updateUrl != null) {
+            return new Intent(Intent.ACTION_VIEW, Uri.parse(CacheProfile.getOptions().updateUrl));
+        }
+        return null;
     }
 
     public static String getClientDeviceName() {
@@ -448,7 +476,8 @@ public class Utils {
         return Html.fromHtml(text.replaceAll(DASH_SYMBOL, HYPHEN_SYMBOL)).toString();
     }
 
-    public static void sendHockeyMessage(final Context context, final String message) {
+    public static void sendHockeyMessage(final String message) {
+        final Context context = App.getContext();
         new BackgroundThread() {
             @Override
             public void execute() {

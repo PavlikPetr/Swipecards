@@ -14,7 +14,6 @@ import java.lang.ref.WeakReference;
 public class HistoryRequest extends LimitedApiRequest {
     // Data
     public static final String service = "dialog.get";
-    private String mFrom;
     public int userid; // идентификатор пользователя для получения истории сообщений с ним текущего пользвоателя
     //public int offset; // смещение истории сообщений
     public String to; // идентификатор сообщения до которого будет осуществляться выборка истории
@@ -27,9 +26,8 @@ public class HistoryRequest extends LimitedApiRequest {
         userid = userId;
     }
 
-    public HistoryRequest(Context context, int userId, String from, IRequestExecuted requestExecuted) {
+    public HistoryRequest(Context context, int userId, IRequestExecuted requestExecuted) {
         this(context, userId);
-        mFrom = from;
         mRequestExecutedWeakReference = new WeakReference<>(requestExecuted);
     }
 
@@ -65,8 +63,6 @@ public class HistoryRequest extends LimitedApiRequest {
                 mRequestExecutedWeakReference.get().onExecuted();
             }
             super.exec();
-        } else {
-            Utils.sendHockeyMessage(getContext(), "User id -1 inside request. From : " + mFrom);
         }
     }
 

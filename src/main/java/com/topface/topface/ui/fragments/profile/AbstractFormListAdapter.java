@@ -85,7 +85,10 @@ public abstract class AbstractFormListAdapter extends BaseAdapter {
                 item.type == FormItem.NAME || item.type == FormItem.STATUS) {
             holder.value.setText(item.value);
         } else if (item.type == FormItem.CITY) {
-            holder.value.setText(JsonUtils.fromJson(item.value, City.class).name);
+            City city = JsonUtils.fromJson(item.value, City.class);
+            if (city != null && holder.value != null) {
+                holder.value.setText(city.name);
+            }
         } else {
             holder.value.setText(item.value);
         }

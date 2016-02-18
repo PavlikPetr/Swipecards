@@ -90,10 +90,15 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
     }
 
     private void reAuthIfNeed() {
-        Intent intent = new Intent();
-        intent.setAction(REAUTH);
-        intent.putExtra(CONNECTION_TYPE, mConnectionType.getInt());
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+        try {
+            Intent intent = new Intent();
+            intent.setAction(REAUTH);
+            intent.putExtra(CONNECTION_TYPE, mConnectionType.getInt());
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+        } catch (NoClassDefFoundError error) {
+            error.printStackTrace();
+        }
+
     }
 
     private void sendToNavigation() {

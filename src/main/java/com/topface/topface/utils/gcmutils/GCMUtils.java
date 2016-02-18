@@ -429,7 +429,7 @@ public class GCMUtils {
                     // add the same request code like Chat intent
                     i.putExtra(App.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
                 } else {
-                    return ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city, null, null, true, GCMUtils.class.getSimpleName());
+                    return ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city, null, null, true);
                 }
                 return i;
             }
@@ -476,7 +476,7 @@ public class GCMUtils {
                 i.putExtra(NEXT_INTENT, GEO.getFragmentSettings());
                 break;
             case GCM_TYPE_UPDATE:
-                i = Utils.getMarketIntent(context);
+                i = Utils.getMarketIntent();
                 //Есть шанс что ссылка на маркет не будет поддерживаться
                 if (!Utils.isCallableIntent(i, context)) {
                     i = new Intent(context, NavigationActivity.class);
