@@ -67,7 +67,6 @@ public class TrialVipPopup extends AbstractDialogFragment implements View.OnClic
                 }
                 break;
             case R.id.iv_close:
-
                 dismiss();
                 break;
         }
@@ -96,11 +95,6 @@ public class TrialVipPopup extends AbstractDialogFragment implements View.OnClic
         void onSubscribeClick();
 
         void onFragmentFinish();
-    }
-
-    @Override
-    public void dismiss() {
-        super.dismiss();
     }
 
     @Override
