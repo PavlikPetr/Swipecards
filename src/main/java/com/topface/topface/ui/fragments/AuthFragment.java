@@ -229,7 +229,7 @@ public class AuthFragment extends BaseAuthFragment {
             hideButtons();
             if (!authToken.isEmpty()) {
                 auth(AuthToken.getInstance());
-            } else if (TextUtils.equals(data.getAction(), VKOpenAuthDialog.VK_RESULT_INTENT_NAME)) {
+            } else if (data != null && TextUtils.equals(data.getAction(), VKOpenAuthDialog.VK_RESULT_INTENT_NAME)) {
                 hideProgress();
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {

@@ -493,7 +493,7 @@ public class AddPhotoHelper {
         if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
             Photo photo = (Photo) msg.obj;
             // ставим фото на аватарку только если она едиснтвенная
-            if (CacheProfile.photos.size() == 0) {
+            if (CacheProfile.photos != null && CacheProfile.photos.size() == 0) {
                 CacheProfile.photo = photo;
             }
             // добавляется фото в начало списка

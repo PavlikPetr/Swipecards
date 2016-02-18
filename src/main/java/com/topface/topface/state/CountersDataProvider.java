@@ -24,7 +24,12 @@ public class CountersDataProvider implements Action1<CountersData> {
     public CountersDataProvider(Fragment fragment) {
         mFragment = fragment;
         App.from(fragment.getActivity()).inject(this);
-        mSubscription = mAppState.getObservable(CountersData.class).subscribe(this);
+        mSubscription = mAppState.getObservable(CountersData.class).doOnError(new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        }).subscribe(this);
     }
 
     @Override
@@ -32,7 +37,7 @@ public class CountersDataProvider implements Action1<CountersData> {
         if (mFragment.isAdded()) {
             Intent result = new Intent();
             result.putExtra(COUNTERS_DATA, countersData);
-            mFragment.onActivityResult(COUNTERS_DATA_UPDATED, Activity.RESULT_OK , result);
+            mFragment.onActivityResult(COUNTERS_DATA_UPDATED, Activity.RESULT_OK, result);
         }
     }
 

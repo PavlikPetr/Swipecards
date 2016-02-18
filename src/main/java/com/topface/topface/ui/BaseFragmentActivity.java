@@ -31,6 +31,7 @@ import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.gcmutils.GCMUtils;
@@ -408,7 +409,9 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         if (requestCode != -1) {
             intent.putExtra(App.INTENT_REQUEST_KEY, requestCode);
         }
-        super.startActivityForResult(intent, requestCode);
+        if (Utils.isIntentAvailable(this, intent)) {
+            super.startActivityForResult(intent, requestCode);
+        }
     }
 
     @Override
