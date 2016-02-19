@@ -1,6 +1,5 @@
 package com.topface.topface.promo.dialogs;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -68,7 +67,12 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCountersDataProvider = new CountersDataProvider(this);
+        mCountersDataProvider = new CountersDataProvider(new CountersDataProvider.ICountersUpdater() {
+            @Override
+            public void onUpdateCounters(CountersData countersData) {
+                mCountersData = countersData;
+            }
+        });
         //Закрыть диалог нельзя
         setCancelable(false);
         //Подписываемся на обновление профиля
@@ -92,16 +96,6 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
         FragmentActivity activity = getActivity();
         if (activity instanceof NavigationActivity) {
             ((NavigationActivity) activity).setPopupVisible(true);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK
-                && requestCode == CountersDataProvider.COUNTERS_DATA_UPDATED) {
-            if (data.hasExtra(CountersDataProvider.COUNTERS_DATA)) {
-                mCountersData = data.getParcelableExtra(CountersDataProvider.COUNTERS_DATA);
-            }
         }
     }
 

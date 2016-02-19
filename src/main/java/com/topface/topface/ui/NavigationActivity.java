@@ -395,6 +395,9 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     @Override
     protected void onResume() {
         super.onResume();
+        if (mFullscreenController != null) {
+            mFullscreenController.onResume();
+        }
         //restart -> open NavigationActivity
         if (App.getLocaleConfig().fetchToSystemLocale()) {
             LocaleConfig.changeLocale(this, App.getLocaleConfig().getApplicationLocale());

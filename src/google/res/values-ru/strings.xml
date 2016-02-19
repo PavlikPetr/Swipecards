@@ -931,7 +931,7 @@
     <string name="enter_text">Введите текст</string>
     <string name="send_feedback">Отправить сообщение</string>
     <string name="get_vip_free">Получи VIP бесплатно</string>
-    <string name="buy_more_sympathies">\"Получай больше симпатий, становись популярнее\"</string>
+    <string name="buy_more_sympathies">Получай больше симпатий, становись популярнее</string>
     <string name="transaction_code_help">Если вы отправите нам код транзакции, это может помочь в
         выполнение вашего запроса, а так же ускорит его обработку. Подробную информацию о заказе,
         можно получить через %s.
@@ -1006,7 +1006,7 @@
 
     <plurals name="novice_sympathies_bonus">
         <item quantity="zero">Вы получаете %1$d симпатий в\nподарок! Это означает, что
-            вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию</item>
+           вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию</item>
         <item quantity="one">Вы получаете %1$d симпатию в\nподарок! Это означает, что
         вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию</item>
         <item quantity="many">Вы получаете %1$d симпатий в\nподарок! Это означает, что
@@ -1050,4 +1050,11 @@
     </string>
     <string name="take_photo_text_1">Пожалуйста, загрузите свою фотографию, чтобы начать знакомиться.</string>
     <string name="take_photo_text_2">На фото должны быть именно вы. Все фотографии модерируются.</string>
+    <string name="unlock_by_viewed_ad_video_button_text">Разблокировать бесплатно на %s</string>
+    <plurals name="free_minutes">
+        <item quantity="one">%d минуту</item>
+        <item quantity="many">%d минут</item>
+        <item quantity="few">%d минуты</item>
+        <item quantity="other">%d минут</item>
+    </plurals>
 </resources>

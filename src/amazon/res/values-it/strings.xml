@@ -904,4 +904,10 @@
     <string name="take_photo_text_2">Nella foto devi comparire tu. Tute le foto sono controllate da
         moderatori.
     </string>
+    <string name="unlock_by_viewed_ad_video_button_text">Sblocca gratis a %s</string>
+    <plurals name="free_minutes">
+        <item quantity="zero">% minuto</item>
+        <item quantity="other">% minuti</item>
+        <item quantity="one">% minuti</item>
+    </plurals>
 </resources>

@@ -128,10 +128,6 @@ public class DatingInstantMessageController {
     }
 
     public boolean sendMessage(SearchUser user) {
-        if (!tryChat(user)) {
-            setSendEnabled(true);
-            return false;
-        }
         final Editable editText = mMessageText.getText();
         final String editString = editText == null ? "" : editText.toString();
         if (editText == null || TextUtils.isEmpty(editString.trim()) || user.id == 0) {
@@ -143,8 +139,7 @@ public class DatingInstantMessageController {
                     Toast.LENGTH_SHORT);
             return false;
         }
-
-        final MessageRequest messageRequest = new MessageRequest(user.id, editString, mActivity, true);
+        final MessageRequest messageRequest = new MessageRequest(user.id, editString, mActivity, true, true);
         mRequestClient.registerRequest(messageRequest);
         messageRequest.callback(new DataApiHandler<History>() {
             @Override
@@ -201,22 +196,6 @@ public class DatingInstantMessageController {
                 ),
                 PurchasesActivity.INTENT_BUY_VIP
         );
-    }
-
-    private boolean tryChat(SearchUser user) {
-        Options options = App.from(mActivity).getOptions();
-        if (options.instantMessagesForNewbies.isEnabled()) {
-            return true;
-        }
-
-        if (App.from(mActivity).getProfile().premium || user.isMutualPossible || !options.blockChatNotMutual) {
-            return true;
-        } else {
-            startPurchasesActivity(mActivity.getString(R.string.chat_block_not_mutual),
-                    "DatingInstantMessage");
-            DatingMessageStatistics.sendVipBuyScreenTransition();
-            return false;
-        }
     }
 
     public void openChat(FragmentActivity activity, SearchUser user) {
