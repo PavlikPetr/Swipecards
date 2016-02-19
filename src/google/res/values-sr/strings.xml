@@ -22,6 +22,7 @@
     <string name="waiting_a_products">Молимо сачекајте, учитавамо доступне производе.</string>
     <string name="likes_background_text">Нема свиђања</string>
     <string name="visitors_background_text">Нема гостију</string>
+    <string name="need_set_avatar">Ни са ким се не можете упознати! Поставите профилну слику.</string>
     <string name="chat_background_text">Нема долазних порука</string>
     <string name="entrance">Улаз</string>
     <string name="filter_only_online">Само на вези</string>
@@ -55,6 +56,7 @@
     <string name="address_book_access_error">Ова апликација нема приступ Вашим контактима. Можете
         дозволити приступ преко Подешавања приватности на свом уређају.
     </string>
+    <string name="camera_access_error">Апликација нема приступ камери. Можете дати приступ из Подешавања приватности на свом уређају.</string>
     <string name="profile_deleted_user">Корисник је уклоњен.</string>
     <string name="filter_main_parameters">Заинтересован сам за</string>
     <string name="dating_prev_button_ext">Претходни</string>
@@ -180,6 +182,7 @@
     <string name="general_visitors_tab_views">прегледи</string>
     <string name="general_profile">Профил</string>
     <string name="general_settings">Подешавања</string>
+    <string name="general_vk_profile">ВК</string>
     <string name="auth_btn_vk">ВКонтакте</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Покушај поново</string>
@@ -782,7 +785,7 @@
     <string name="enter_text">Унесите текст</string>
     <string name="send_feedback">Послати поруку</string>
     <string name="get_vip_free">Добиј бесплатан VIP-статус</string>
-    <string name="buy_more_sympathies">\"Сакупите више свиђања, постаните популарнији\"</string>
+    <string name="buy_more_sympathies">Сакупите више свиђања, постаните популарнији</string>
     <string name="transaction_code_help">Ако нам пошаљете код трансакције, то ће нам помоћи да
         комплетирамо Ваш захтев убрзавајући процес. Додатне информације о поруџбини се могу наћи
         кроз %s.
@@ -843,7 +846,30 @@
     <string name="novice_sympathy">Шаљите свиђања само онима који\nВас заиста привлаче.\nМожда ћете
         наћи неког посебног!
     </string>
-    <string name="novice_sympathies_bonus">Добијате %1$d свиђања на\nпоклон! То значи да ће Вам %2$d
-        људи,\nдати своје свиђање и то заиста мислити.
-    </string>
+    <string name="go_dating_message">Почните да упознајете људе и овде ће се појавити имена оних корисника 
+        који су посетили Ваш профил</string>
+    <string name="photo_not_from_main_album">Наши модератори су одлучили да ова фотографија не може да буде искоришћена као
+          профилна слика</string>
+    <string name="sidebar_vk_profile">ВК профил</string>
+    <string name="title_vk_profile">ВК профил</string>
+    <string name="vk_profile_invite_friends_error">Корисник више не прихвата позиве</string>
+    <string name="foreign_profile_empty_gifts_title">Пошаљите поклон и бићете у центру пажње</string>
+    <string name="chat_auto_reply_title">Текст поруке је сакривен</string>
+    <string name="chat_auto_reply_message">Да бисте отворили ову поруку или одговорили на исту, постаните VIP-корисник</string>
+    <string name="chat_auto_reply_button">Постати VIP</string>
+    <string name="photo_list_load_info">Поделите своју фотографију и видеће Вас милиони</string>
+    <string name="vk_profile_button_tf_group">ГрупаTopface</string>
+    <string name="vk_profile_button_join_tf_group">Придружити се групи Topface</string>
+    <string name="vk_profile_button_join_vkgames_group">Придружити се групи \"Игре ВК\"</string>
+    <string name="vk_profile_button_invite_friends">Позвати пријатеље</string>
+    <string name="vk_profile_invite_friends_title">Позвати пријатеље</string>
+    <string name="invite_friend_button">Позвати</string>
+    <string name="invitation_sended_button">Послато</string>
+    <string name="friends_empty_list_error">Ваша листа пријатеља је празна</string>
+    <string name="vk_friends_success_invite">Позив послат</string>
+    <string name="join_group_success">Придружили сте се групи</string>
+    <string name="settings_auto_greeting_title">Ауто-поздрав</string>
+    <string name="settings_auto_greeting_subtitle">Дозволите Topface-у да разговор аутоматски започне поздравом кад год Вам неко пошаље Свиђање</string>
+    <string name="take_photo_text_1">Молимо Вас са поставите своју фотографију како бидте започели ћаскање.</string>
+    <string name="take_photo_text_2">На фотографији можете бити сам Ви; све слике прегледавају наши модератори како би утврдили да се правила поштују.</string>
 </resources>

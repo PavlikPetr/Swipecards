@@ -48,7 +48,7 @@ public class TestNotificationsReceiver extends BroadcastReceiver {
                 break;
             case ACTION_NOTIFY:
                 Debug.log("TOPFACE_NOTIFICATION:" + intent.getStringExtra("text"));
-                GCMUtils.showNotificationIfNeed(intent, context, App.from(context).getOptions().updateUrl);
+                GCMUtils.showNotificationIfNeed(intent.getExtras(), context, App.from(context).getOptions().updateUrl);
                 break;
         }
     }

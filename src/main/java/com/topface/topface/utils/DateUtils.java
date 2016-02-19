@@ -13,6 +13,7 @@ public class DateUtils {
     public static final long DAY_IN_SECONDS = 86400; // 24 * 60 * 60;
     public static final long HOUR_IN_MILLISECONDS = 3600000; // 60 * 60 * 1000;
     public static final long MINUTE_IN_MILLISECONDS = 60000; // 60 * 1000;
+    public static final long MINUTE_IN_SECONDS = 60;
     private final static SimpleDateFormat mDateFormatDayYear = new SimpleDateFormat("d MMMM yyyy", App.getCurrentLocale());
     private final static SimpleDateFormat mDateFormatDay = new SimpleDateFormat("d MMMM", App.getCurrentLocale());
     private final static SimpleDateFormat mDateFormatDayOfWeek = new SimpleDateFormat("EEEE", App.getCurrentLocale());
@@ -97,4 +98,11 @@ public class DateUtils {
         return date.getTime() / 1000;
     }
 
+    public static boolean isDayBeforeToday(long lastTime) {
+        Calendar lastTimeCalendar = Calendar.getInstance();
+        lastTimeCalendar.setTimeInMillis(lastTime);
+        Calendar currentTimeCalendar = Calendar.getInstance();
+        return lastTimeCalendar.get(Calendar.YEAR) != currentTimeCalendar.get(Calendar.YEAR)
+                || lastTimeCalendar.get(Calendar.DAY_OF_YEAR) < currentTimeCalendar.get(Calendar.DAY_OF_YEAR);
+    }
 }

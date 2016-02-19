@@ -254,7 +254,4 @@
     <string name="novice_sympathy">Küldj szimpátiát azoknak, akik \ntényleg tetszenek,\nígy el tudsz
         kezdeni egy élvezetes ismerkedést.
     </string>
-    <string name="novice_sympathies_bonus">%1$d szimpátiát kaptál\najándékba! Ez azt jelenti,
-        hogy\nbiztosan tetszel az emberek %2$d-nak,\n akikben szimpátiát ébresztesz.
-    </string>
 </resources>

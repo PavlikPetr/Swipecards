@@ -4,12 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
@@ -19,7 +18,9 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.data.experiments.FeedScreensIntent;
+import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RegistrationTokenRequest;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.UserProfileActivity;
@@ -42,7 +43,6 @@ import com.topface.topface.utils.notifications.UserNotificationManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
@@ -55,10 +55,7 @@ import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_VI
 public class GCMUtils {
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
 
-    private static final String SENDER_ID = "932206034265";
     private Context mContext;
-    private GoogleCloudMessaging mGcmObject;
-    private String mRegId;
 
     public static final int GCM_TYPE_UNKNOWN = -1;
     public static final int GCM_TYPE_MESSAGE = 0;
@@ -74,18 +71,6 @@ public class GCMUtils {
     public static final int GCM_TYPE_FAN_UPDATE_PROFILE = 11;
     public static final int GCM_TYPE_FAN_ADD_PHOTO = 12;
     public static final int GCM_TYPE_FAN_ONLINE = 13;
-
-    /**
-     * параметры геометрической прогрессии для расчета задержки между запросами на регистрацию в GCM
-     * все значения в сек.
-     * <p/>
-     * при начальном значении = 2, знаменателе = 2 и последнем значении прогрессии = 128, суммарное
-     * время, в течении которого будем пытаться зарегистрироваться в GCM, составит 254 сек
-     */
-    public static final int TIME_GEOMETRIC_PROGRESSION_DENOMINATOR = 2;
-    public static final int TIME_GEOMETRIC_PROGRESSION_FIRST_VALUE = 2;
-    public static final int TIME_GEOMETRIC_PROGRESSION_LAST_VALUE = 128;
-
 
     public static final String NEXT_INTENT = "com.topface.topface_next";
 
@@ -119,100 +104,38 @@ public class GCMUtils {
         mContext = context;
     }
 
-    public boolean registerGCM(String serverToken) {
-        if (App.isGmsEnabled()) {
-            mGcmObject = GoogleCloudMessaging.getInstance(mContext);
-            mRegId = getRegistrationId();
-            if (mRegId.isEmpty()) {
-                register(serverToken, 0);
-                return true;
-            } else if (!mRegId.equals(serverToken)) {
-                sendRegistrationIdToBackend();
-            }
-        }
-        return false;
-    }
-
-    private void saveGcmToken(String regId, String serverToken) {
-        if (!TextUtils.isEmpty(regId)) {
-            mRegId = regId;
-            storeRegistrationId();
-            if (!regId.equals(serverToken)) {
-                sendRegistrationIdToBackend();
-            }
-        } else {
-            Debug.log("Registration id is empty");
+    public void registerGcmToken(String token) {
+        String oldToken = getGcmToken();
+        if (!token.equals(oldToken)) {
+            sendTokenToBackend(token);
         }
     }
 
-    private void register(final String serverToken, final int time) {
-        new Timer().schedule(new TimerTask() {
+    private void sendTokenToBackend(final String token) {
+        Debug.log("GCM: Try send token to server: ", token);
+        new RegistrationTokenRequest(token, mContext).callback(new ApiHandler() {
             @Override
-            public void run() {
-                String regId = null;
-                try {
-                    if (mGcmObject == null) {
-                        mGcmObject = GoogleCloudMessaging.getInstance(mContext);
-                    }
-                    regId = mGcmObject.register(SENDER_ID);
-                } catch (IOException ex) {
-                    Debug.error(ex);
-                    if (isDelayTimeCorrect(time)) {
-                        register(serverToken, getTimerDelay(time));
-                    } else {
-                        Debug.log("Unable to register in GCM, all attempts have been exhausted");
-                    }
-                } catch (SecurityException e) {
-                    Debug.log("Can't register in GCM. No com.google.android.c2dm.permission.RECEIVE permission.");
-                }
-                if (regId != null) {
-                    saveGcmToken(regId, serverToken);
-                }
+            public void success(IApiResponse response) {
+                storeToken(token);
             }
-        }, time * 1000);
-    }
 
-    private int getTimerDelay(int time) {
-        return time == 0 ? TIME_GEOMETRIC_PROGRESSION_FIRST_VALUE : time * TIME_GEOMETRIC_PROGRESSION_DENOMINATOR;
-    }
-
-    private boolean isDelayTimeCorrect(int time) {
-        return getTimerDelay(time) <= TIME_GEOMETRIC_PROGRESSION_LAST_VALUE;
-    }
-
-    @SuppressWarnings("unused")
-    public void unregister() {
-        new BackgroundThread() {
             @Override
-            public void execute() {
-                try {
-                    if (mGcmObject == null) {
-                        mGcmObject = GoogleCloudMessaging.getInstance(mContext);
-                    }
-                    mGcmObject.unregister();
-                } catch (IOException e) {
-                    Debug.error("Can't unregister gcm", e);
-                }
+            public void fail(int codeError, IApiResponse response) {
+                Debug.log("GCM: fail send token to server: ");
             }
-        };
-
+        }).exec();
     }
 
-    private void sendRegistrationIdToBackend() {
-        Debug.log("GCM: Try send regId to server: ", mRegId);
-        new RegistrationTokenRequest(mRegId, mContext).exec();
-    }
-
-    private void storeRegistrationId() {
+    private void storeToken(String token) {
         AppConfig config = App.getAppConfig();
-        config.setGcmRegId(mRegId);
+        config.setGcmRegId(token);
         config.saveLastAppVersion();
         config.saveConfig();
     }
 
-    private String getRegistrationId() {
-        String registrationId = App.getAppConfig().getGcmRegId();
-        if (registrationId.isEmpty()) {
+    private String getGcmToken() {
+        String token = App.getAppConfig().getGcmRegId();
+        if (token.isEmpty()) {
             Debug.log("No reg id");
             return "";
         }
@@ -221,11 +144,11 @@ public class GCMUtils {
             Debug.log("App version changed.");
             return "";
         }
-        return registrationId;
+        return token;
     }
 
-    private static void getEmailConfirmationState(Intent intent) {
-        if (intent != null) {
+    private static void getEmailConfirmationState(Bundle data) {
+        if (data != null) {
             Handler mHandler = new Handler(App.get().getMainLooper());
             mHandler.post(new Runnable() {
                 @Override
@@ -236,21 +159,21 @@ public class GCMUtils {
         }
     }
 
-    public static boolean showNotificationIfNeed(final Intent extra, Context context, String updateUrl) {
-        getEmailConfirmationState(extra);
+    public static boolean showNotificationIfNeed(final Bundle data, Context context, String updateUrl) {
+        getEmailConfirmationState(data);
         //Проверяем, не отключены ли уведомления
         if (!App.getUserConfig().isNotificationEnabled()) {
             Debug.log("GCM: notification is disabled");
             return false;
-        } else if (extra == null) {
+        } else if (data == null) {
             Debug.log("GCM: intent is null");
             return false;
-        } else if (getType(extra) == GCM_TYPE_UPDATE_COUNTERS_BALANCE) {
-            setCounters(extra, context);
+        } else if (getType(data) == GCM_TYPE_UPDATE_COUNTERS_BALANCE) {
+            setCounters(data, context);
             return false;
         }
         try {
-            return showNotification(extra, context, updateUrl);
+            return showNotification(data, context, updateUrl);
         } catch (Exception e) {
             Debug.error("GCM: Notifcation error", e);
         }
@@ -258,13 +181,13 @@ public class GCMUtils {
         return false;
     }
 
-    private static boolean showNotification(final Intent extra, Context context, final String updateUrl) {
+    private static boolean showNotification(final Bundle data, Context context, final String updateUrl) {
         if (!CacheProfile.isLoaded()) {
             Debug.log("GCM: wait for profile load to show notification");
             BroadcastReceiver profileLoadReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    showNotification(extra, context, updateUrl);
+                    showNotification(data, context, updateUrl);
                     LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
                 }
             };
@@ -274,7 +197,7 @@ public class GCMUtils {
         }
         Profile profile = App.from(context).getProfile();
         String uid = Integer.toString(profile.uid);
-        String targetUserId = extra.getStringExtra("receiver");
+        String targetUserId = data.getString("receiver");
         targetUserId = targetUserId != null ? targetUserId : uid;
 
         //Проверяем id адресата GCM, что бы не показывать уведомления, предназначенные
@@ -285,36 +208,36 @@ public class GCMUtils {
             return false;
         }
 
-        final String data = extra.getStringExtra("text");
-        if (data != null) {
+        final String text = data.getString("text");
+        if (text != null) {
             loadNotificationSettings(context);
-            setCounters(extra, context);
-            int type = getType(extra);
-            final User user = getUser(extra);
-            String title = getTitle(context, extra.getStringExtra("title"));
+            setCounters(data, context);
+            int type = getType(data);
+            final User user = getUser(data);
+            String title = getTitle(context, data.getString("title"));
             Intent intent = getIntentByType(context, type, user, updateUrl);
 
             if (intent != null) {
                 intent.putExtra(GCMUtils.NOTIFICATION_INTENT, true);
                 intent.putExtra(GCM_TYPE, type);
-                intent.putExtra(GCM_LABEL, getLabel(extra));
-                showNotificationByType(extra, data, type, user, title, intent);
+                intent.putExtra(GCM_LABEL, getLabel(data));
+                showNotificationByType(data, text, type, user, title, intent);
                 return true;
             }
         }
         return false;
     }
 
-    private static void showNotificationByType(Intent extra, String data, int type, User user, String title, Intent intent) {
+    private static void showNotificationByType(Bundle data, String text, int type, User user, String title, Intent intent) {
         final UserNotificationManager notificationManager = UserNotificationManager.getInstance();
         if (!Ssid.isLoaded()) {
             if (type == GCM_TYPE_UPDATE || type == GCM_TYPE_PROMO) {
                 notificationManager.showNotification(
                         type,
                         title,
-                        data,
+                        text,
                         true, null,
-                        getUnread(extra),
+                        getUnread(data),
                         intent,
                         false,
                         null);
@@ -323,11 +246,11 @@ public class GCMUtils {
             notificationManager.showNotificationAsync(
                     type,
                     title,
-                    data,
+                    text,
                     user,
                     true,
                     user.photoUrl,
-                    getUnread(extra),
+                    getUnread(data),
                     intent,
                     false
             );
@@ -335,20 +258,20 @@ public class GCMUtils {
             notificationManager.showNotification(
                     type,
                     title,
-                    data,
+                    text,
                     true, null,
-                    getUnread(extra),
+                    getUnread(data),
                     intent,
                     false,
                     user);
         }
     }
 
-    public static int getType(Intent extra) {
-        if (extra == null) {
+    public static int getType(Bundle bundle) {
+        if (bundle == null) {
             return GCM_TYPE_UNKNOWN;
         }
-        String typeString = extra.getStringExtra("type");
+        String typeString = bundle.getString("type");
         try {
             return typeString != null ? Integer.parseInt(typeString) : GCM_TYPE_UNKNOWN;
         } catch (NumberFormatException exc) {
@@ -357,17 +280,17 @@ public class GCMUtils {
         }
     }
 
-    private static void setCounters(Intent extra, Context context) {
+    private static void setCounters(Bundle data, Context context) {
         CountersManager counterManager = CountersManager.getInstance(context);
         counterManager.setLastRequestMethod(CountersManager.CHANGED_BY_GCM);
         try {
-            String countersStr = extra.getStringExtra("counters");
+            String countersStr = data.getString("counters");
             if (countersStr != null) {
                 JSONObject countersJson = new JSONObject(countersStr);
                 // on Api version 8 unread counter will have the same keys as common requests
                 counterManager.setEntitiesCounters(countersJson);
             }
-            String balanceStr = extra.getStringExtra("balance");
+            String balanceStr = data.getString("balance");
             if (balanceStr != null) {
                 JSONObject balanceJson = new JSONObject(balanceStr);
                 counterManager.setBalanceCounters(balanceJson);
@@ -377,9 +300,9 @@ public class GCMUtils {
         }
     }
 
-    private static User getUser(Intent extra) {
+    private static User getUser(Bundle data) {
         final User user = new User();
-        String userJson = extra.getStringExtra("user");
+        String userJson = data.getString("user");
         if (userJson != null) {
             user.json2User(userJson);
         }
@@ -405,8 +328,8 @@ public class GCMUtils {
         return title;
     }
 
-    private static int getUnread(Intent extra) {
-        String unreadExtra = extra.getStringExtra("unread");
+    private static int getUnread(Bundle data) {
+        String unreadExtra = data.getString("unread");
         int unread = 0;
         try {
             unread = unreadExtra != null ? Integer.parseInt(unreadExtra) : 0;
@@ -548,8 +471,8 @@ public class GCMUtils {
 
     }
 
-    public static String getLabel(Intent intent) {
-        return intent.getStringExtra("label");
+    public static String getLabel(Bundle bundle) {
+        return bundle.getString("label");
     }
 
 
@@ -585,13 +508,7 @@ public class GCMUtils {
         }
 
         public String getNameAndAge() {
-            String result;
-            if (name != null && name.length() > 0 && age > 0) {
-                result = name + ", " + age;
-            } else {
-                result = name;
-            }
-            return result;
+            return name != null && name.length() > 0 && age > 0 ? name + ", " + age : name;
         }
     }
 }

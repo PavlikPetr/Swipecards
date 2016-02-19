@@ -68,6 +68,7 @@ import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.HockeySender;
+import com.topface.topface.utils.gcmutils.GcmListenerService;
 import com.topface.topface.utils.geo.GeoLocationManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -421,7 +422,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         Ssid.load();
         //Оповещаем о том, что профиль загрузился
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
-        if (!GcmIntentService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty(getContext())) {
+        if (!GcmListenerService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty(getContext())) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {

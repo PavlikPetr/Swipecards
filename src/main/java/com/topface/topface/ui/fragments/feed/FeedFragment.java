@@ -41,6 +41,8 @@ import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedUser;
+import com.topface.topface.data.UnlockFunctionalityOption;
+import com.topface.topface.data.UnlockFunctionalityOption.UnlockScreenCondition;
 import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
@@ -50,6 +52,8 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.UnlockFunctionalityOptionsRequest;
+import com.topface.topface.requests.UnlockFunctionalityRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
@@ -73,10 +77,14 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.ad.NativeAd;
+import com.topface.topface.utils.ads.AdToAppController;
+import com.topface.topface.utils.ads.AdToAppHelper;
+import com.topface.topface.utils.ads.SimpleAdToAppListener;
 import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
@@ -323,13 +331,17 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mRefreshReceiver, new IntentFilter(REFRESH_DIALOGS));
         View root = inflater.inflate(getLayout(), null);
         ButterKnife.bind(this, root);
+        mCountersDataProvider = new CountersDataProvider(new CountersDataProvider.ICountersUpdater() {
+            @Override
+            public void onUpdateCounters(CountersData countersData) {
+                updateCounters(countersData);
+            }
+        });
         initNavigationBar();
         mLockView.setVisibility(View.GONE);
         init();
-
         initViews(root);
         createObservables();
-        mCountersDataProvider = new CountersDataProvider(this);
         restoreInstanceState(saved);
         mReadItemReceiver = new BroadcastReceiver() {
             @Override
@@ -516,7 +528,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
 
-    protected void onCountersUpdated(CountersData countersData) {
+    protected void updateCounters(CountersData countersData) {
         mCountersData = countersData;
         updateDataAfterReceivingCounters();
     }
@@ -751,7 +763,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             public void success(IApiResponse response) {
                 if (isAdded()) {
                     getListAdapter().removeItems(items);
-                    if (getListAdapter().getData().size() == 0) {
+                    if (getListAdapter().getData().isEmpty()) {
                         mListView.setVisibility(View.INVISIBLE);
                         onEmptyFeed();
                     }
@@ -1017,7 +1029,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             case ErrorCodes.BLOCKED_PEOPLE_NEARBY:
                 clearCache();
                 mListView.setVisibility(View.INVISIBLE);
-                onEmptyFeed(codeError);
+                ontLockedFeed(codeError);
                 return true;
             default:
                 if (getListAdapter() == null || getListAdapter().getDataForCache() == null || getListAdapter().getDataForCache().size() < 1) {
@@ -1061,27 +1073,37 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     protected void onEmptyFeed(int errorCode) {
-        ViewStub stub = getEmptyFeedViewStub();
-        if (mInflated == null && stub != null) {
-            mInflated = stub.inflate();
-            initEmptyFeedView(mInflated, errorCode);
-        }
+        initGagView();
         if (mInflated != null) {
-            mInflated.setVisibility(View.VISIBLE);
             initEmptyFeedView(mInflated, errorCode);
         }
         mBackgroundController.hide();
     }
+
+    protected void ontLockedFeed(int errorCode) {
+        initGagView();
+        if (mInflated != null) {
+            initLockedFeed(mInflated, errorCode);
+        }
+        mBackgroundController.hide();
+    }
+
+    private void initGagView() {
+        if (mInflated == null) {
+            ViewStub stub = getEmptyFeedViewStub();
+            if (stub != null) {
+                mInflated = stub.inflate();
+            }
+        }
+    }
+
+    protected abstract void initLockedFeed(View inflated, int errorCode);
 
     protected void onEmptyFeed() {
         onEmptyFeed(ErrorCodes.RESULT_OK);
     }
 
     protected abstract void initEmptyFeedView(View inflated, int errorCode);
-
-    protected void initEmptyFeedView(View inflated) {
-        initEmptyFeedView(inflated, ErrorCodes.RESULT_OK);
-    }
 
     protected abstract int getEmptyFeedLayout();
 
@@ -1219,12 +1241,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK
-                && requestCode == CountersDataProvider.COUNTERS_DATA_UPDATED) {
-            if (data.hasExtra(CountersDataProvider.COUNTERS_DATA)) {
-                onCountersUpdated((CountersData) data.getParcelableExtra(CountersDataProvider.COUNTERS_DATA));
-            }
-        }
         if (requestCode == ChatActivity.REQUEST_CHAT) {
             onChatActivityResult(resultCode, data);
         }
@@ -1326,5 +1342,77 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     protected boolean isSwipeRefreshEnable() {
         return true;
+    }
+
+    protected String getUnlockFunctionalityType() {
+        return Utils.EMPTY;
+    }
+
+    @Nullable
+    protected UnlockScreenCondition getUnlockScreenCondition(UnlockFunctionalityOption data) {
+        return null;
+    }
+
+    protected void setUnlockButtonView(final Button view) {
+        final String unlockType = getUnlockFunctionalityType();
+        if (view == null || unlockType.isEmpty()) {
+            return;
+        }
+        final AdToAppController controller = new AdToAppHelper(getActivity()).getController();
+        controller.isAdsAvailable(AdToAppController.AdsMasks.VIDEO, new AdToAppController.AdsAvailableListener() {
+            @Override
+            public void isAvailable(final boolean available) {
+                if (available) {
+                    new UnlockFunctionalityOptionsRequest(getActivity()).callback(new DataApiHandler<UnlockFunctionalityOption>() {
+                        @Override
+                        public void fail(int codeError, IApiResponse response) {
+
+                        }
+
+                        @Override
+                        protected void success(UnlockFunctionalityOption data, IApiResponse response) {
+                            UnlockScreenCondition unlockScreenCondition = getUnlockScreenCondition(data);
+                            if (unlockScreenCondition != null) {
+                                view.setText(Utils.getUnlockButtonText(unlockScreenCondition.getUnlockDuration()));
+                                view.setVisibility(unlockScreenCondition.isEnabled() ? View.VISIBLE : View.GONE);
+                            }
+                        }
+
+                        @Override
+                        protected UnlockFunctionalityOption parseResponse(ApiResponse response) {
+                            return UnlockFunctionalityOption.fillData(response);
+                        }
+                    }).exec();
+                }
+            }
+        });
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                controller.addListener(new SimpleAdToAppListener() {
+                    @Override
+                    public void onClosed() {
+                    }
+
+                    @Override
+                    public void onVideoWatched() {
+                        super.onVideoWatched();
+                        new UnlockFunctionalityRequest(unlockType, getContext()).callback(new ApiHandler() {
+                            @Override
+                            public void success(IApiResponse response) {
+                                updateData(false, false);
+                            }
+
+                            @Override
+                            public void fail(int codeError, IApiResponse response) {
+
+                            }
+                        }).exec();
+                    }
+                }, getFeedListItemClass().getName());
+                controller.showAds(AdToAppController.AdsMasks.VIDEO);
+                view.setVisibility(View.GONE);
+            }
+        });
     }
 }

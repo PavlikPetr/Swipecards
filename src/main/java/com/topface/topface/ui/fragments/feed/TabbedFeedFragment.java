@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -106,19 +105,29 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
 
     protected abstract void onBeforeCountersUpdate(CountersData countersData);
 
-    private void onCountersUpdated(CountersData countersData) {
+    private void updateCounters(CountersData countersData) {
+        mCountersData = countersData;
         onBeforeCountersUpdate(countersData);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_tabbed_feed, null);
+        final View root = inflater.inflate(R.layout.fragment_tabbed_feed, null);
         ButterKnife.bind(this, root);
         initPages(root);
-        mCountersDataProvider = new CountersDataProvider(this);
+        mCountersDataProvider = new CountersDataProvider(new CountersDataProvider.ICountersUpdater() {
+            @Override
+            public void onUpdateCounters(CountersData countersData) {
+                updateCounters(countersData);
+                if (mTabLayoutCreator != null) {
+                    mTabLayoutCreator.setTabTitle(getLastOpenedPage());
+                }
+            }
+        });
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mHasFeedAdReceiver, new IntentFilter(HAS_FEED_AD));
         return root;
     }
+
 
     private void initPages(View root) {
         addPages();
@@ -258,17 +267,6 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK
-                && requestCode == CountersDataProvider.COUNTERS_DATA_UPDATED) {
-            if (data.hasExtra(CountersDataProvider.COUNTERS_DATA)) {
-                mCountersData = data.getParcelableExtra(CountersDataProvider.COUNTERS_DATA);
-                onCountersUpdated(mCountersData);
-                if (mTabLayoutCreator != null) {
-                    mTabLayoutCreator.setTabTitle(getLastOpenedPage());
-                }
-            }
-            return;
-        }
         for (Fragment fr : getChildFragmentManager().getFragments()) {
             if (fr != null) {
                 fr.onActivityResult(requestCode, resultCode, data);

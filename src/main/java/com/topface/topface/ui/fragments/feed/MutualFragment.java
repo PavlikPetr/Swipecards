@@ -6,7 +6,6 @@ import com.google.gson.reflect.TypeToken;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedMutual;
-import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteMutualsRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -49,6 +48,10 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     @Override
     protected FeedRequest.FeedService getFeedService() {
         return FeedRequest.FeedService.MUTUAL;
+    }
+
+    @Override
+    protected void initLockedFeed(View inflated, int errorCode) {
     }
 
     @Override
