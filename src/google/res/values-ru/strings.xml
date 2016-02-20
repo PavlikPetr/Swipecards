@@ -1057,4 +1057,12 @@
         <item quantity="few">%d минуты</item>
         <item quantity="other">%d минут</item>
     </plurals>
+
+    <string name="thanks_for_your_rate_title">Спасибо за Вашу оценку</string>
+    <string name="thanks_for_your_rate_top_label">Мы дарим Вам пост Вашей фотографии в фотоленту!</string>
+    <string name="thanks_for_your_rate_bottom_label">Поделитесь своими впечатлениями в AppStore. Мы ценим каждый отзыв!</string>
+    <string name="thanks_for_your_rate_rate_app">Оставить отзыв в AppStore</string>
+    <string name="thanks_for_your_rate_close">Закрыть</string>
+
+
 </resources>
