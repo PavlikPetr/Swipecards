@@ -41,10 +41,9 @@ import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedUser;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.data.UnlockFunctionalityOption.UnlockScreenCondition;
-import com.topface.topface.data.Profile;
-import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.BlackListAddRequest;
@@ -275,7 +274,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                     onDeleteFeedItems(getSelectedFeedIds(adapter), adapter.getSelectedItems());
                     break;
                 case R.id.add_to_black_list:
-                    onAddToBlackList(adapter.getSelectedUsersIds());
+                    onAddToBlackList(adapter.getSelectedUsersIds(), adapter.getSelectedItems());
                     break;
                 default:
                     result = false;
@@ -718,47 +717,48 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         return R.menu.feed_context_menu;
     }
 
-    private void onAddToBlackList(List<Integer> ids) {
-        ApiRequest r = new BlackListAddRequest(ids, getActivity()).
+    private void onAddToBlackList(List<Integer> ids, final List<T> items) {
+        mLockView.setVisibility(View.VISIBLE);
+        new BlackListAddRequest(ids, getActivity()).
                 callback(new BlackListAndBookmarkHandler(getActivity(),
                         BlackListAndBookmarkHandler.ActionTypes.BLACK_LIST,
-                        ids,
-                        true));
-        r.handler.setOnCompleteAction(new ApiHandler.CompleteAction() {
-            @Override
-            public void onCompleteAction() {
-                if (mLockView != null) {
-                    mLockView.setVisibility(View.GONE);
-                }
-            }
-        });
-        mLockView.setVisibility(View.VISIBLE);
-        r.exec();
+                        ids, true, new ApiHandler() {
+                    @Override
+                    public void success(IApiResponse response) {
+                        if (isAdded()) {
+                            getListAdapter().removeItems(items);
+                            if (getListAdapter().getData().isEmpty()) {
+                                mListView.setVisibility(View.INVISIBLE);
+                                onEmptyFeed();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
+                    }
+
+                    @Override
+                    public void always(IApiResponse response) {
+                        super.always(response);
+                        if (mLockView != null) {
+                            mLockView.setVisibility(View.GONE);
+                        }
+                    }
+                })).exec();
     }
 
     private void onDeleteFeedItems(List<String> ids, final List<T> items) {
-        DeleteAbstractRequest dr = getDeleteRequest(ids);
+        DeleteAbstractRequest deleteFeedsRequest = getDeleteRequest(ids);
         //Если удаление не поддерживается данным потомком,
         //то у нас ошибка с показом меню (есть кнопка там, где удаление не поддерживается)
         //и нужно сообщить пользователю, что удалить не получится
-        if (dr == null) {
+        if (deleteFeedsRequest == null) {
             Utils.showErrorMessage();
             return;
         }
         mLockView.setVisibility(View.VISIBLE);
-        if (dr.handler != null) {
-            dr.handler.setOnCompleteAction(new ApiHandler.CompleteAction() {
-                @Override
-                public void onCompleteAction() {
-                    if (mLockView != null) {
-                        mLockView.setVisibility(View.GONE);
-                    }
-                }
-            });
-            dr.exec();
-            return;
-        }
-        dr.callback(new SimpleApiHandler() {
+        deleteFeedsRequest.callback(new SimpleApiHandler() {
             @Override
             public void success(IApiResponse response) {
                 if (isAdded()) {
@@ -803,7 +803,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         //Open chat activity
         if (!item.user.isEmpty()) {
             FeedUser user = item.user;
-            Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false, item.type, this.getClass().getSimpleName());
+            Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false, item.type);
             startActivityForResult(intent, ChatActivity.REQUEST_CHAT);
         }
     }
@@ -1076,6 +1076,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         initGagView();
         if (mInflated != null) {
             initEmptyFeedView(mInflated, errorCode);
+            mInflated.setVisibility(View.VISIBLE);
         }
         mBackgroundController.hide();
     }
@@ -1084,6 +1085,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         initGagView();
         if (mInflated != null) {
             initLockedFeed(mInflated, errorCode);
+            mInflated.setVisibility(View.VISIBLE);
         }
         mBackgroundController.hide();
     }

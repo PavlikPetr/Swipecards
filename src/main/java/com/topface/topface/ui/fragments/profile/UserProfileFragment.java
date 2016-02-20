@@ -266,7 +266,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
             });
             ApiRequest userAndGiftsRequest = new ParallelApiRequest(getActivity())
                     .addRequest(userRequest).addRequest(giftsRequest)
-                    .setFrom(getClass().getSimpleName())
                     .callback(new ApiHandler() {
                         @Override
                         public void success(IApiResponse response) {
@@ -354,7 +353,9 @@ public class UserProfileFragment extends AbstractProfileFragment {
     }
 
     private void showRetryBtn() {
-        showLockWithText(getString(R.string.general_profile_error), false);
+        if (isAdded()) {
+            showLockWithText(getString(R.string.general_profile_error), false);
+        }
     }
 
     @Override
@@ -424,7 +425,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
                         if (profile != null) {
                             return ChatActivity.createIntent(profile.uid, profile.getNameAndAge(),
                                     profile.city == null ? "" : profile.city.name,
-                                    null, profile.photo, false, UserProfileFragment.class.getSimpleName(), null);
+                                    null, profile.photo, false, null);
                         }
                         return null;
                     }

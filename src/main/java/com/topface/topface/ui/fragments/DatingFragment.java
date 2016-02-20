@@ -1108,14 +1108,18 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void showControls() {
         mAnimationHelper.animateIn();
-        mFragmentSwitcherListener.onShowActionBar();
+        if (mFragmentSwitcherListener != null) {
+            mFragmentSwitcherListener.onShowActionBar();
+        }
         mIsHide = false;
     }
 
     @Override
     public void hideControls() {
         mAnimationHelper.animateOut();
-        mFragmentSwitcherListener.onHideActionBar();
+        if (mFragmentSwitcherListener != null) {
+            mFragmentSwitcherListener.onHideActionBar();
+        }
         mIsHide = true;
     }
 

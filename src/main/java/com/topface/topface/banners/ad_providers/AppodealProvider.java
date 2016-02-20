@@ -38,14 +38,14 @@ public class AppodealProvider extends AbstractAdsProvider {
                 Appodeal.getUserSettings(activity).setFacebookId(AuthToken.getInstance().getUserSocialId());
                 break;
         }
+        if (Appodeal.isLoaded(Appodeal.BANNER_VIEW)) {
+            bannerLoaded(page, callbacks, adView);
+        }
         Appodeal.setBannerCallbacks(new BannerCallbacks() {
 
             @Override
             public void onBannerLoaded() {
-                Appodeal.show(page.getActivity(), Appodeal.BANNER_VIEW);
-                if (callbacks != null) {
-                    callbacks.onAdLoadSuccess(adView);
-                }
+                bannerLoaded(page, callbacks, adView);
             }
 
             @Override
@@ -75,5 +75,12 @@ public class AppodealProvider extends AbstractAdsProvider {
     @Override
     public String getBannerName() {
         return AdProvidersFactory.BANNER_APPODEAL;
+    }
+
+    private void bannerLoaded(IPageWithAds page, IAdProviderCallbacks callbacks, BannerView adView) {
+        Appodeal.show(page.getActivity(), Appodeal.BANNER_VIEW);
+        if (callbacks != null) {
+            callbacks.onAdLoadSuccess(adView);
+        }
     }
 }

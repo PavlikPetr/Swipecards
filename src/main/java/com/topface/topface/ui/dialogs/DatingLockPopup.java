@@ -63,7 +63,9 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
         switch (v.getId()) {
             case R.id.redirect_into_sympathy:
                 saveRedirectTime();
-                mDatingLockPopupRedirectListener.onRedirect();
+                if (mDatingLockPopupRedirectListener != null) {
+                    mDatingLockPopupRedirectListener.onRedirect();
+                }
                 mIsRedirectedToSympathies = true;
                 dismiss();
                 break;

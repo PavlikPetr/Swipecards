@@ -45,6 +45,9 @@ public class AdToAppController {
             for (IAdToAppListener listener : mAdToAppListeners.values()) {
                 if (listener != null) {
                     listener.onClicked();
+                    if (mIsVideoStart && adsType.equals(AdsMasks.VIDEO.getType())) {
+                        listener.onVideoWatched();
+                    }
                 }
             }
         }
@@ -106,7 +109,8 @@ public class AdToAppController {
     public enum AdsMasks {
         VIDEO(AdToApp.MASK_VIDEO, AdToApp.VIDEO),
         INTERSTITIAL(AdToApp.MASK_INTERSTITIAL, AdToApp.INTERSTITIAL),
-        BANNER(AdToApp.MASK_BANNER, AdToApp.BANNER);
+        BANNER(AdToApp.MASK_BANNER, AdToApp.BANNER),
+        NATIVE(AdToApp.MASK_NATIVE, AdToApp.NATIVE);
 
         private int mMask;
         private String mType;

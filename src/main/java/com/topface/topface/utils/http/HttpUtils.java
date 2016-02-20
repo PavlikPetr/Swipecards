@@ -115,7 +115,8 @@ public class HttpUtils {
      * @throws IOException
      */
     public static
-    @NonNull HttpURLConnection openConnection(
+    @NonNull
+    HttpURLConnection openConnection(
             HttpConnectionType type,
             String url,
             String contentType) throws IOException {
@@ -217,18 +218,23 @@ public class HttpUtils {
     public static String getUserAgent(String transport) {
         if (!mUserAgent.containsKey(transport)) {
             final Locale locale = Locale.getDefault();
-            mUserAgent.put(transport, String.format(
-                    Locale.ENGLISH,
-                    USER_AGENT_APP_NAME + "/%s%s v%d (%s; %s; %s-%s; %s)",
-                    BuildConfig.VERSION_NAME,
-                    TextUtils.equals(BuildConfig.BUILD_TYPE, "release") ? "" : "-" + BuildConfig.BUILD_TYPE,
-                    BuildConfig.VERSION_CODE,
-                    BuildConfig.MARKET_API_TYPE.getClientType(),
-                    Utils.getClientOsVersion(),
-                    locale.getLanguage(),
-                    locale.getCountry(),
-                    transport
-            ));
+            try {
+                mUserAgent.put(transport, String.format(
+                        Locale.ENGLISH,
+                        USER_AGENT_APP_NAME + "/%s%s v%d (%s; %s; %s-%s; %s)",
+                        BuildConfig.VERSION_NAME,
+                        TextUtils.equals(BuildConfig.BUILD_TYPE, "release") ? "" : "-" + BuildConfig.BUILD_TYPE,
+                        BuildConfig.VERSION_CODE,
+                        BuildConfig.MARKET_API_TYPE.getClientType(),
+                        Utils.getClientOsVersion(),
+                        locale.getLanguage(),
+                        locale.getCountry(),
+                        transport
+                ));
+            } catch (IndexOutOfBoundsException e) {
+                return mUserAgent.get(transport);
+            }
+
         }
         return mUserAgent.get(transport);
     }

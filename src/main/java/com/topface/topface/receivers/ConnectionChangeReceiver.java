@@ -3,7 +3,6 @@ package com.topface.topface.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.SparseArray;
 
 import com.topface.statistics.android.StatisticsTracker;
@@ -93,14 +92,14 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
         Intent intent = new Intent();
         intent.setAction(REAUTH);
         intent.putExtra(CONNECTION_TYPE, mConnectionType.getInt());
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+        mContext.sendBroadcast(intent);
     }
 
     private void sendToNavigation() {
         Intent intent = new Intent();
         intent.setAction(RetryRequestReceiver.RETRY_INTENT);
         intent.putExtra(CONNECTION_TYPE, mConnectionType.getInt());
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+        mContext.sendBroadcast(intent);
     }
 
     private void sendBroadCastToActiveActivity() {
