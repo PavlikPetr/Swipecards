@@ -81,7 +81,7 @@ public class UserPhotoFragment extends ProfileInnerFragment {
                         @Override
                         protected void success(AlbumPhotos data, IApiResponse response) {
                             if (mGridAlbum != null) {
-                                mUserRecyclerViewAdapter.addPhotos(data, data.more, false);
+                                mUserRecyclerViewAdapter.addPhotos(data, data.more, false, false);
                             }
                         }
 

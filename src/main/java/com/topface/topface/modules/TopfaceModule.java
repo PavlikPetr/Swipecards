@@ -29,12 +29,13 @@ import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
+import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.actionbar.OverflowMenu;
-import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.ads.AdToAppController;
 import com.topface.topface.utils.ads.AdToAppHelper;
+import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.geo.GeoLocationManager;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -91,6 +92,10 @@ import dagger.Provides;
                 Profile.class,
                 User.class,
                 AdToAppHelper.class
+
+        },
+        staticInjections = {
+                AddPhotoHelper.class
         }
 )
 public class TopfaceModule {
@@ -111,7 +116,7 @@ public class TopfaceModule {
                     config.setUserGeoLocation((Location) data);
                     config.saveConfig();
                 } else if (data.getClass() == Options.class) {
-                    CacheProfile.setOptions(JsonUtils.optionsToJson((Options)data));
+                    CacheProfile.setOptions(JsonUtils.optionsToJson((Options) data));
                 } else if (data.getClass() == Profile.class) {
                     Profile profile = (Profile) data;
                     CacheProfile.setProfile(profile, JsonUtils.profileToJson(profile));

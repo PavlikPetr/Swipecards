@@ -611,6 +611,15 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         }
     }
 
+    private boolean isContainsFakePhoto(Photos photos) {
+        for (Photo photo : photos) {
+            if (photo.isFake()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void sendAlbumRequest(int position) {
         AlbumRequest request = new AlbumRequest(this, mUid, position, AlbumRequest.MODE_ALBUM, AlbumLoadController.FOR_PREVIEW);
         request.callback(new DataApiHandler<AlbumPhotos>() {
@@ -620,8 +629,16 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 for (Photo photo : newPhotos) {
                     mPhotoLinks.set(photo.getPosition(), photo);
                 }
-                if (mUid == App.from(PhotoSwitcherActivity.this).getProfile().uid) {
-                    App.from(PhotoSwitcherActivity.this).getProfile().photos = mPhotoLinks;
+                /*
+                Записываем в кэш только в том случае если фоточки не имеют фейков, в противном случае
+                в провили будут пустые итем на месте фоточек, и перестанет работать автодагрузка так как фактически
+                из-за фейков нечего будет подгружать. По этому дабы не писать кучу оверхеда для такой исключительной ситуации
+                "теряем" объекты загруженные в этой активити
+                 */
+                if (mUid == App.from(PhotoSwitcherActivity.this).getProfile().uid && !isContainsFakePhoto(mPhotoLinks)) {
+                    Profile profile = App.from(PhotoSwitcherActivity.this).getProfile();
+                    profile.photos = mPhotoLinks;
+                    appState.setData(profile);
                 }
 
                 if (mImageSwitcher != null) {
