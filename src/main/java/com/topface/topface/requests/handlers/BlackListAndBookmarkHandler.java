@@ -25,21 +25,34 @@ public class BlackListAndBookmarkHandler extends VipApiHandler {
     private List<Integer> mUserIdList;
     private Integer mUserId;
     private boolean mIsAddition;
+    private ApiHandler mCallback;
 
     public BlackListAndBookmarkHandler(Context context, ActionTypes actionType,
                                        int userId, boolean isAddition) {
+        this(context, actionType, userId, isAddition, null);
+    }
+
+    public BlackListAndBookmarkHandler(Context context, ActionTypes actionType,
+                                       int userId, boolean isAddition, ApiHandler callback) {
         mContext = context;
         mActionType = actionType;
         mUserId = userId;
         mIsAddition = isAddition;
+        mCallback = callback;
     }
 
     public BlackListAndBookmarkHandler(Context context, ActionTypes actionType,
                                        List<Integer> userIds, boolean isAddition) {
+        this(context, actionType, userIds, isAddition, null);
+    }
+
+    public BlackListAndBookmarkHandler(Context context, ActionTypes actionType,
+                                       List<Integer> userIds, boolean isAddition, ApiHandler callback) {
         mContext = context;
         mActionType = actionType;
         mUserIdList = userIds;
         mIsAddition = isAddition;
+        mCallback = callback;
     }
 
     public static Intent getIntentForActionsUpdate(ActionTypes type, boolean value) {
@@ -79,6 +92,9 @@ public class BlackListAndBookmarkHandler extends VipApiHandler {
     @Override
     public void success(IApiResponse response) {
         super.success(response);
+        if (mCallback != null) {
+            mCallback.success(response);
+        }
         Intent intent = null;
         if (mUserId != null) {
             intent = getValuedActionsUpdateIntent(mActionType, mUserId, mIsAddition);
@@ -93,8 +109,19 @@ public class BlackListAndBookmarkHandler extends VipApiHandler {
     @Override
     public void fail(int codeError, IApiResponse response) {
         super.fail(codeError, response);
+        if (mCallback != null) {
+            mCallback.fail(codeError, response);
+        }
         Intent intent = getIntentForActionsUpdate(mActionType, false);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+    }
+
+    @Override
+    public void always(IApiResponse response) {
+        super.always(response);
+        if (mCallback != null) {
+            mCallback.always(response);
+        }
     }
 
     public enum ActionTypes {BLACK_LIST, BOOKMARK, SYMPATHY}

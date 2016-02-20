@@ -59,8 +59,8 @@ public class AuthFragment extends BaseAuthFragment {
     private static final int ANIMATION_PATH = 36;
     private static final long ANIMATION_DURATION = 500;
     private AuthorizationManager mAuthorizationManager;
-    private boolean mIsSocNetBtnHidden = true;
-    private boolean mIsTfBtnHidden = false;
+    private boolean mIsSocNetBtnVisible = true;
+    private boolean mIsTfBtnVisible = false;
     private Animation mButtonAnimation;
     private FragmentAuthBinding mBinding;
     private LoginFragmentHandler mLoginFragmentHandler;
@@ -73,7 +73,7 @@ public class AuthFragment extends BaseAuthFragment {
     private void setAllSocNetBtnVisibility(boolean visibility, boolean isNeedChangeFlagState, boolean isNeedAnimate) {
         if (isAdded()) {
             if (isNeedChangeFlagState) {
-                mIsSocNetBtnHidden = visibility;
+                mIsSocNetBtnVisible = visibility;
             }
             // если на главном экране авторизации будет только одна кнопка соц. сервисов + авторизации через ТФ аккаунт (по умолчанию),
             // то отступ до кнопки ТФ уменьшаем, в противном случае отступ будет установлен в соответствии с плотностью экрана
@@ -94,9 +94,11 @@ public class AuthFragment extends BaseAuthFragment {
     private void setTfLoginBtnVisibility(boolean visibility, boolean isNeedChangeFlagState, boolean isNeedAnimate) {
         if (isAdded()) {
             if (isNeedChangeFlagState) {
-                mIsTfBtnHidden = visibility;
+                mIsTfBtnVisible = visibility;
             }
-            mBinding.btnOtherServices.setVisibility(View.GONE);
+            if (visibility) {
+                mBinding.btnOtherServices.setVisibility(View.GONE);
+            }
             mBinding.tfAuthBack.setVisibility(visibility ? View.VISIBLE : View.GONE);
             setVisibilityAndAnimateView(mBinding.btnEntrance, visibility, isNeedAnimate);
             setVisibilityAndAnimateView(mBinding.btnCreateAccount, visibility, isNeedAnimate);
@@ -130,29 +132,24 @@ public class AuthFragment extends BaseAuthFragment {
 
     private BroadcastReceiver mTokenReadyReceiver = new BroadcastReceiver() {
 
-        private int mLastStatusReceived = Integer.MIN_VALUE;
-
         @Override
         public void onReceive(Context context, Intent intent) {
             int tokenStatus = intent.getIntExtra(Authorizer.TOKEN_STATUS, Authorizer.TOKEN_NOT_READY);
 
-            if (tokenStatus != mLastStatusReceived) {
-                switch (tokenStatus) {
-                    case Authorizer.TOKEN_READY:
-                        auth(AuthToken.getInstance());
-                        break;
-                    case Authorizer.TOKEN_FAILED:
-                        Utils.showToastNotification(R.string.general_reconnect_social, Toast.LENGTH_SHORT);
-                    case Authorizer.TOKEN_NOT_READY:
-                        hideProgress();
-                        showButtons();
-                        break;
-                    case Authorizer.TOKEN_PREPARING:
-                        hideButtons();
-                        showProgress();
-                        break;
-                }
-                mLastStatusReceived = tokenStatus;
+            switch (tokenStatus) {
+                case Authorizer.TOKEN_READY:
+                    auth(AuthToken.getInstance());
+                    break;
+                case Authorizer.TOKEN_FAILED:
+                    Utils.showToastNotification(R.string.general_reconnect_social, Toast.LENGTH_SHORT);
+                case Authorizer.TOKEN_NOT_READY:
+                    hideProgress();
+                    showButtons();
+                    break;
+                case Authorizer.TOKEN_PREPARING:
+                    hideButtons();
+                    showProgress();
+                    break;
             }
         }
     };
@@ -193,7 +190,7 @@ public class AuthFragment extends BaseAuthFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(TF_BUTTONS, mIsTfBtnHidden);
+        outState.putBoolean(TF_BUTTONS, mIsTfBtnVisible);
     }
 
     @Override
@@ -232,7 +229,7 @@ public class AuthFragment extends BaseAuthFragment {
             hideButtons();
             if (!authToken.isEmpty()) {
                 auth(AuthToken.getInstance());
-            } else if (TextUtils.equals(data.getAction(), VKOpenAuthDialog.VK_RESULT_INTENT_NAME)) {
+            } else if (data != null && TextUtils.equals(data.getAction(), VKOpenAuthDialog.VK_RESULT_INTENT_NAME)) {
                 hideProgress();
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -242,8 +239,8 @@ public class AuthFragment extends BaseAuthFragment {
 
     @Override
     protected void showButtons() {
-        setAllSocNetBtnVisibility(mIsSocNetBtnHidden, false, false);
-        setTfLoginBtnVisibility(mIsTfBtnHidden, false, false);
+        setAllSocNetBtnVisibility(mIsSocNetBtnVisible, false, false);
+        setTfLoginBtnVisibility(mIsTfBtnVisible, false, false);
         mBinding.prsAuthLoading.setVisibility(View.GONE);
     }
 

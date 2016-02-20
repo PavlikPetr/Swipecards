@@ -138,19 +138,22 @@ public class FullscreenController {
 
     private boolean mIsRedirected;
 
-    Application.ActivityLifecycleCallbacks activityLifecycleCallbacks = new Utils.ActivityLifecycleCallbacksAdapter() {
-        @Override
-        public void onActivityResumed(Activity activity) {
-            if (activity instanceof AdActivity && isFullScreenBannerVisible() && mIsRedirected) {
-                mIsRedirected = false;
-                activity.finish();
-            }
-        }
-    };
+    Application.ActivityLifecycleCallbacks activityLifecycleCallbacks;
 
     public FullscreenController(Activity activity, Options options) {
         mActivity = activity;
         mOptions = options;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            activityLifecycleCallbacks = new Utils.ActivityLifecycleCallbacksAdapter() {
+                @Override
+                public void onActivityResumed(Activity activity) {
+                    if (activity instanceof AdActivity && isFullScreenBannerVisible() && mIsRedirected) {
+                        mIsRedirected = false;
+                        activity.finish();
+                    }
+                }
+            };
+        }
     }
 
     private void requestFallbackFullscreen() {

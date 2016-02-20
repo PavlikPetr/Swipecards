@@ -59,7 +59,11 @@ public class PromoExpressMessages extends PromoDialog {
 
     @Override
     public String getMainTag() {
-        int popupVersion = getPremiumEntity().getPopupVersion();
+        Options.PromoPopupEntity promoPopupEntity = getPremiumEntity();
+        int popupVersion = 0;
+        if (promoPopupEntity != null) {
+            popupVersion = promoPopupEntity.getPopupVersion();
+        }
         return "promo.key31".concat(popupVersion > 0 ? ".v".concat(String.valueOf(popupVersion)) : "");
     }
 
