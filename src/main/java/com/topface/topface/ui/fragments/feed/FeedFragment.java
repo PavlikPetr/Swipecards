@@ -41,10 +41,9 @@ import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedUser;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.data.UnlockFunctionalityOption.UnlockScreenCondition;
-import com.topface.topface.data.Profile;
-import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.BlackListAddRequest;
@@ -804,7 +803,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         //Open chat activity
         if (!item.user.isEmpty()) {
             FeedUser user = item.user;
-            Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false);
+            Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false, item.type);
             startActivityForResult(intent, ChatActivity.REQUEST_CHAT);
         }
     }

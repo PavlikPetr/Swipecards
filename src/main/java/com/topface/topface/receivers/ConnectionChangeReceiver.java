@@ -89,9 +89,9 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
     }
 
     private void reAuthIfNeed() {
-            Intent intent = new Intent();
-            intent.setAction(REAUTH);
-            intent.putExtra(CONNECTION_TYPE, mConnectionType.getInt());
+        Intent intent = new Intent();
+        intent.setAction(REAUTH);
+        intent.putExtra(CONNECTION_TYPE, mConnectionType.getInt());
         mContext.sendBroadcast(intent);
     }
 

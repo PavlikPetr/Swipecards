@@ -6,9 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -355,7 +353,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
     }
 
     private void showRetryBtn() {
-        if(isAdded()){
+        if (isAdded()) {
             showLockWithText(getString(R.string.general_profile_error), false);
         }
     }
@@ -427,7 +425,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
                         if (profile != null) {
                             return ChatActivity.createIntent(profile.uid, profile.getNameAndAge(),
                                     profile.city == null ? "" : profile.city.name,
-                                    null, profile.photo, false);
+                                    null, profile.photo, false, null);
                         }
                         return null;
                     }
