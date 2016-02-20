@@ -34,6 +34,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoAddProfileRequest;
 import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.TakePhotoActivity;
@@ -48,6 +49,8 @@ import com.topface.topface.utils.notifications.UserNotificationManager;
 import java.io.File;
 import java.util.HashMap;
 import java.util.UUID;
+
+import javax.inject.Inject;
 
 /**
  * Хелпер для загрузки фотографий в любой активити
@@ -75,6 +78,8 @@ public class AddPhotoHelper {
     private UserNotificationManager mNotificationManager;
     private File outputFile;
     private DialogInterface.OnCancelListener mOnDialogCancelListener;
+    @Inject
+    static TopfaceAppState mState;
     private View.OnClickListener mOnAddPhotoClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -513,6 +518,7 @@ public class AddPhotoHelper {
             profile.photosCount += 1;
             // оповещаем всех об изменениях
             CacheProfile.sendUpdateProfileBroadcast();
+            mState.setData(profile);
             Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
         } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
             // если загрузка аватраки не завершилась успехом, то сбрасываем флаг

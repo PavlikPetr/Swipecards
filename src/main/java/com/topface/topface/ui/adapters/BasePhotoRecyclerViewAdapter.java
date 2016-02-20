@@ -54,7 +54,7 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
         mTotalPhotos = totalPhotos;
         mUpdater = callback;
         if (photoLinks != null) {
-            setData(photoLinks, totalPhotos > photoLinks.size());
+            setData(photoLinks, totalPhotos > photoLinks.size(), false);
         }
         mLoadController = new AlbumLoadController(AlbumLoadController.FOR_GALLERY);
     }
@@ -223,7 +223,7 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
                 return TYPE_HEADER;
             }
         }
-        if (position == getAdapterData().size() - 1 && mFooterView != null) {
+        if (position == getAdapterData().size() - 1 && getAdapterData().get(position).isFake() && mFooterView != null) {
             return getPhotos().size() != mTotalPhotos ? TYPE_FOOTER : TYPE_ITEM;
         }
         return TYPE_ITEM;
@@ -258,20 +258,20 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
         mRecyclerViewItemLongClickListener = itemLongClick;
     }
 
-    public void setData(Photos photoLinks, boolean needMore) {
-        setData(photoLinks, needMore, isAddPhotoButtonEnabled());
+    public void setData(Photos photoLinks, boolean needMore, boolean notifyAll) {
+        setData(photoLinks, needMore, isAddPhotoButtonEnabled(), notifyAll);
     }
 
-    public void setData(Photos photoLinks, boolean needMore, boolean isAddPhotoButtonEnabled) {
+    public void setData(Photos photoLinks, boolean needMore, boolean isAddPhotoButtonEnabled, boolean notifyAll) {
         getAdapterData().clear();
         if (isAddPhotoButtonEnabled && !(!photoLinks.isEmpty() && photoLinks.get(0).isFake())) {
             getAdapterData().add(0, Photo.createFakePhoto());
         }
-        addPhotos(photoLinks, needMore, false);
+        addPhotos(photoLinks, needMore, false, notifyAll);
     }
 
 
-    public void addPhotos(Photos photoLinks, boolean needMore, boolean isReversed) {
+    public void addPhotos(Photos photoLinks, boolean needMore, boolean isReversed, boolean notifyAll) {
         Photos photos = getAdapterData();
         int pos = photos.size();
         if (pos > 1 && photos.get(pos - 1).isFake()) {
@@ -288,7 +288,11 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
             photos.add(Photo.createFakePhoto());
         }
         mNeedLoadNewItems = needMore;
-        notifyItemRangeInserted(pos, photos.size());
+        if (notifyAll) {
+            notifyDataSetChanged();
+        } else {
+            notifyItemRangeInserted(pos, photos.size());
+        }
     }
 
     public void removePhoto(Photo photo, int position) {
@@ -322,9 +326,9 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
         notifyDataSetChanged();
     }
 
-    public void updateData(Photos photos, int photosCount) {
+    public void updateData(Photos photos, int photosCount, boolean notifyAll) {
         if (isNeedUpdate(photos) && photos != null) {
-            setData((Photos) photos.clone(), photos.size() != photosCount, true);
+            setData((Photos) photos.clone(), photos.size() != photosCount, true, notifyAll);
         }
     }
 

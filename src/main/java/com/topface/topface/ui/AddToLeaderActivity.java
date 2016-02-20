@@ -36,8 +36,8 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.state.TopfaceAppState;
-import com.topface.topface.ui.adapters.LeadersRecyclerViewAdapter;
 import com.topface.topface.statistics.TakePhotoStatistics;
+import com.topface.topface.ui.adapters.LeadersRecyclerViewAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.views.LockerView;
@@ -150,7 +150,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         Profile profile = App.from(this).getProfile();
         mPhotos = profile.photos;
         LeadersRecyclerViewAdapter adapter = getAdapter();
-        adapter.setData(mPhotos, false);
+        adapter.setData(mPhotos, false, false);
         setSelectedPosition(profile.photos.isEmpty() ? 0 : profile.photos.get(0).getId());
     }
 
@@ -341,7 +341,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
             @Override
             protected void success(AlbumPhotos data, IApiResponse response) {
                 if (getAdapter() != null) {
-                    getAdapter().addPhotos(data, data.more, false);
+                    getAdapter().addPhotos(data, data.more, false, false);
                 }
             }
 
