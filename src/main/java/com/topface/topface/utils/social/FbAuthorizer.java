@@ -115,8 +115,9 @@ public class FbAuthorizer extends Authorizer {
     }
 
     private void initFB() {
-        if (!FacebookSdk.isInitialized()) {
-            FacebookSdk.setApplicationId(getFbId());
+        String appId = getFbId();
+        if (!FacebookSdk.isInitialized() || !FacebookSdk.getApplicationId().equals(appId)) {
+            FacebookSdk.setApplicationId(appId);
             FacebookSdk.sdkInitialize(App.getContext());
         }
     }
