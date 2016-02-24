@@ -16,6 +16,8 @@ import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.lang.reflect.Field;
 import java.util.Locale;
 
@@ -106,7 +108,7 @@ public class VkAuthorizer extends Authorizer {
         return new Locale(App.getLocaleConfig().getApplicationLocale()).getLanguage().equals(Utils.getRussianLocale().getLanguage());
     }
 
-    public static void dropCurrentAppId() {
+    private static void dropCurrentAppId() {
         Field field = getCurrentAppIdField();
         if (field != null) {
             field.setAccessible(true);
@@ -118,7 +120,7 @@ public class VkAuthorizer extends Authorizer {
         }
     }
 
-    public static int getCurrentAppId() {
+    private static int getCurrentAppId() {
         Field field = getCurrentAppIdField();
         int currentAppId = 0;
         if (field != null) {
@@ -132,7 +134,8 @@ public class VkAuthorizer extends Authorizer {
         return currentAppId;
     }
 
-    public static Field getCurrentAppIdField() {
+    @Nullable
+    private static Field getCurrentAppIdField() {
         if (mVkSdk == null) {
             return null;
         }
