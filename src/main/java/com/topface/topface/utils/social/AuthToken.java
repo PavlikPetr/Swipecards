@@ -88,7 +88,7 @@ public class AuthToken {
     }
 
     public static void getVkName(final String user_id, final Handler handler) {
-        VKSdk.customInitialize(App.getContext(), VkAuthorizer.getVkId(), null);
+        VkAuthorizer.initVkSdk();
         new BackgroundThread() {
             @Override
             public void execute() {
