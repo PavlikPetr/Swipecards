@@ -815,4 +815,9 @@
         <item quantity="other">%d Minuten</item>
         <item quantity="one">%d Minute</item>
     </plurals>
+    <string name="thanks_for_your_rate_title">Vielen Dank für deine Bewertung.</string>
+    <string name="thanks_for_your_rate_top_label">Um unsere Dankbarkeit zu zeigen, werden wir dein Foto im Newsfeed anzeigen!</string>
+    <string name="thanks_for_your_rate_bottom_label">Teile deine Gedanken im App Store. Wie schätzen jede Bewertung!</string>
+    <string name="thanks_for_your_rate_rate_app">Schreibe eine Bewertung im App Store.</string>
+    <string name="thanks_for_your_rate_close">Schließen</string>
 </resources>
