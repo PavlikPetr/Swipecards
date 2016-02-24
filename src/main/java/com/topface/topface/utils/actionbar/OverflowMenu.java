@@ -547,12 +547,11 @@ public class OverflowMenu {
 
     private void setBlackListState(Boolean value) {
         OverflowMenuUser overflowMenuFieldsListener = getOverflowMenuFieldsListener();
-        if (overflowMenuFieldsListener == null) {
-            return;
-        }
-        overflowMenuFieldsListener.setBlackListValue(value);
-        if (overflowMenuFieldsListener.getBlackListValue()) {
-            overflowMenuFieldsListener.setBookmarkValue(false);
+        if (overflowMenuFieldsListener != null) {
+            overflowMenuFieldsListener.setBlackListValue(value);
+            if (overflowMenuFieldsListener.getBlackListValue()) {
+                overflowMenuFieldsListener.setBookmarkValue(false);
+            }
         }
     }
 

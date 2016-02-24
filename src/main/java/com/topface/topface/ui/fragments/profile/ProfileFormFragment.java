@@ -85,7 +85,6 @@ public class ProfileFormFragment extends AbstractFormFragment {
                             new ParallelApiRequest(getActivity())
                                     .addRequest(request)
                                     .addRequest(App.getProfileRequest())
-                                    .setFrom(getClass().getSimpleName())
                                     .exec();
                         } else {
                             request.exec();

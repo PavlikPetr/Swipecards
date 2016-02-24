@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.TopfaceAdStatistics;
@@ -95,14 +94,12 @@ public class PubnativeAd extends NativeAd {
         });
 
         if (!mIsShown) {
-            if (!BuildConfig.DEBUG) {
-                new BackgroundThread() {
-                    @Override
-                    public void execute() {
-                        sendImpressionBeacon();
-                    }
-                };
-            }
+            new BackgroundThread() {
+                @Override
+                public void execute() {
+                    sendImpressionBeacon();
+                }
+            };
 
             mIsShown = true;
         }

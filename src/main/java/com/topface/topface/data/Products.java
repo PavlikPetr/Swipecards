@@ -219,7 +219,7 @@ public class Products extends AbstractData {
             if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
 
-                if (detail != null) {
+                if (detail != null && detail.currency != null) {
                     double price = detail.price / ProductsDetails.MICRO_AMOUNT;
                     currency = Currency.getInstance(detail.currency);
                     currencyFormatter = detail.currency.equalsIgnoreCase(USD)

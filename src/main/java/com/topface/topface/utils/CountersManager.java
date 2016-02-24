@@ -14,6 +14,8 @@ import org.json.JSONObject;
 
 import javax.inject.Inject;
 
+import rx.functions.Action1;
+
 public class CountersManager {
     public static final String CHANGED_BY_GCM = "";
     @Inject
@@ -33,17 +35,24 @@ public class CountersManager {
     public final static int PEOPLE_NEARLY = 6;
     private static CountersManager mInstance;
     private String mLastRequestMeethod;
+    private BalanceData mCachedBalanceData;
 
     public static CountersManager getInstance(Context context) {
         if (mInstance == null) {
             mInstance = new CountersManager(context);
-            App.from(context).inject(mInstance);
         }
         return mInstance;
     }
 
     private CountersManager(Context context) {
         mContext = context;
+        App.from(context).inject(this);
+        mAppState.getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
+            @Override
+            public void call(BalanceData balanceData) {
+                mCachedBalanceData = balanceData;
+            }
+        });
     }
 
     public void setLastRequestMethod(String lastRequestMeethod) {
@@ -69,7 +78,7 @@ public class CountersManager {
             return;
         }
         BalanceData balanceData = JsonUtils.fromJson(balanceJson.toString(), BalanceData.class);
-        if (balanceData.premium != App.from(mContext).getProfile().premium) {
+        if (mCachedBalanceData != null && balanceData.premium != mCachedBalanceData.premium) {
             App.sendProfileAndOptionsRequests();
             Intent intent = new Intent(UPDATE_VIP_STATUS);
             intent.putExtra(VIP_STATUS_EXTRA, balanceData.premium);

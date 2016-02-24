@@ -140,14 +140,15 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     @Override
     public int getItemViewType(int position) {
         int superType = super.getItemViewType(position);
-        if (superType == T_OTHER) {
-            if (getItem(position).isAd()) {
+        T item = getItem(position);
+        if (superType == T_OTHER && item != null) {
+            if (item.isAd()) {
                 return T_NATIVE_AD;
-            } else if (getItem(position).unread && getItem(position).user.premium) {
+            } else if (item.unread && item.user.premium) {
                 return T_NEW_VIP;
-            } else if (getItem(position).unread && !getItem(position).user.premium) {
+            } else if (item.unread && !item.user.premium) {
                 return T_NEW;
-            } else if (!getItem(position).unread && getItem(position).user.premium) {
+            } else if (!item.unread && item.user.premium) {
                 return T_VIP;
             } else {
                 return T_OTHER;

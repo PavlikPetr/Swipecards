@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
+import rx.functions.Action1;
 import rx.subjects.BehaviorSubject;
 
 /**
@@ -53,6 +54,7 @@ public class AppState {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public <T> Observable<T> getObservable(Class<T> dataClass) {
         synchronized (getCachableData()) {
             if (!getCachableData().containsKey(dataClass)) {
@@ -62,7 +64,12 @@ public class AppState {
                 }
                 setData(data, false, false, dataClass);
             }
-            return getCachableData().get(dataClass).getBehaviorSubject();
+            return getCachableData().get(dataClass).getBehaviorSubject().doOnError(new Action1<Throwable>() {
+                @Override
+                public void call(Throwable throwable) {
+                    throwable.printStackTrace();
+                }
+            });
         }
     }
 

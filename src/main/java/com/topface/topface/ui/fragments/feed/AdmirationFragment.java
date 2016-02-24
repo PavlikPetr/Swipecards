@@ -92,6 +92,7 @@ public class AdmirationFragment extends LikesFragment {
     @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
         setEmptyFeedView(inflated);
+        getUnlockButtonView(inflated, FIRST_CHILD).setVisibility(View.GONE);
         chooseFirstChild(inflated);
     }
 

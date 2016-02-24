@@ -67,6 +67,11 @@ public class VkAuthorizer extends Authorizer {
             if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
                 @Override
                 public void onResult(VKAccessToken res) {
+                    if (res == null) {
+                        Debug.log("VkAuthorizer: received token == null");
+                        onError(new VKError(VKError.VK_API_ERROR));
+                        return;
+                    }
                     Debug.log("VkAuthorizer: receive new token");
                     String tokenKey = res.accessToken;
                     String userId = res.userId;

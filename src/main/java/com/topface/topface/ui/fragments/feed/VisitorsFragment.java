@@ -78,7 +78,7 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
                 startActivityForResult(PurchasesActivity.createVipBuyIntent(null, SCREEN_TYPE), PurchasesActivity.INTENT_BUY_VIP);
             }
         });
-        setUnlockButtonView((Button) inflated.findViewById(R.id.btnUnlock));
+        setUnlockButtonView(getUnlockButtonView(inflated));
     }
 
     @Override
@@ -89,6 +89,11 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
                 MenuFragment.selectFragment(FragmentId.DATING.getFragmentSettings());
             }
         });
+        getUnlockButtonView(inflated).setVisibility(View.GONE);
+    }
+
+    private Button getUnlockButtonView(View view) {
+        return (Button) view.findViewById(R.id.btnUnlock);
     }
 
     private void initGagView(@NotNull View inflated, @StringRes int text, @StringRes int buttonText, View.OnClickListener listener) {

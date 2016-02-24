@@ -2,11 +2,14 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.ChatLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.ref.WeakReference;
 
 public class HistoryRequest extends LimitedApiRequest {
     // Data
@@ -16,10 +19,16 @@ public class HistoryRequest extends LimitedApiRequest {
     public String to; // идентификатор сообщения до которого будет осуществляться выборка истории
     public String from; //идентификатор сообщения после которого будет осуществляться выборка истории
     public String debug;
+    private WeakReference<IRequestExecuted> mRequestExecutedWeakReference;
 
     public HistoryRequest(Context context, int userId) {
         super(context);
         userid = userId;
+    }
+
+    public HistoryRequest(Context context, int userId, IRequestExecuted requestExecuted) {
+        this(context, userId);
+        mRequestExecutedWeakReference = new WeakReference<>(requestExecuted);
     }
 
     @Override
@@ -45,6 +54,22 @@ public class HistoryRequest extends LimitedApiRequest {
     @Override
     public String getServiceName() {
         return service;
+    }
+
+    @Override
+    public void exec() {
+        if (userid > 0) {
+            if (mRequestExecutedWeakReference != null && mRequestExecutedWeakReference.get() != null) {
+                mRequestExecutedWeakReference.get().onExecuted();
+            }
+            super.exec();
+        }
+    }
+
+    public interface IRequestExecuted {
+
+        void onExecuted();
+
     }
 
 }

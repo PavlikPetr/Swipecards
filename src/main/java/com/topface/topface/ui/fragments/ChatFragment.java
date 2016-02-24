@@ -120,7 +120,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private static final String HISTORY_CHAT = "history_chat";
     private static final String SOFT_KEYBOARD_LOCK_STATE = "keyboard_state";
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
-    public static final String FROM = "from";
     private static final String AUTO_REPLY_MESSAGE_SOURCE = "AutoReplyMessage";
     private static final String SEND_MESSAGE_SOURCE = "SendMessage";
     public static final String GIFT_DATA = "gift_data";
@@ -153,7 +152,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private String mItemId;
     private String mInitialMessage;
     private boolean wasFailed = false;
-    private String mFrom;
     private AddPhotoHelper mAddPhotoHelper;
     private boolean mIsNeedShowAddPhoto = true;
     private Handler mHandler = new Handler() {
@@ -228,7 +226,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mMaxMessageSize = App.from(activity).getOptions().maxMessageSize;
         mUserType = getArguments().getInt(ChatFragment.USER_TYPE);
         // do not recreate Adapter cause of setRetainInstance(true)
         if (mAdapter == null) {
@@ -246,7 +243,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         mUserNameAndAge = args.getString(INTENT_USER_NAME_AND_AGE);
         mInitialMessage = args.getString(INITIAL_MESSAGE);
         mPhoto = args.getParcelable(INTENT_AVATAR);
-        mFrom = args.getString(FROM);
         mSendGiftAnswer = args.getParcelable(GIFT_DATA);
         if (mSendGiftAnswer != null) {
             mSendGiftAnswer.setLoaderType(IListLoader.ItemType.TEMP_MESSAGE);
@@ -536,7 +532,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         if (mPopularUserLockController.isChatLocked()) {
             mPopularUserLockController.blockChat();
             return true;
-        } else if (mPopularUserLockController.isDialogOpened()) {
+        }
+        if (mPopularUserLockController.isDialogOpened()) {
             mPopularUserLockController.showBlockDialog();
         }
         return false;
@@ -568,11 +565,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     @Override
     protected String getSubtitle() {
-        if (TextUtils.isEmpty(mUserCity)) {
-            return Utils.EMPTY;
-        } else {
-            return mUserCity;
-        }
+        return TextUtils.isEmpty(mUserCity) ? Utils.EMPTY : mUserCity;
     }
 
     @Override
@@ -657,20 +650,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 !mAdapter.isEmpty() &&
                 (mPopularUserLockController.isChatLocked() || mPopularUserLockController.isResponseLocked()) &&
                 pullToRefresh;
-
-        HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId) {
-
+        HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId, new HistoryRequest.IRequestExecuted() {
             @Override
-            public void exec() {
-                if (mUserId > 0) {
-                    mIsUpdating = true;
-                    super.exec();
-                } else {
-                    Utils.sendHockeyMessage(getContext(), "User id -1 from " + mFrom);
-                }
+            public void onExecuted() {
+                mIsUpdating = true;
             }
-        };
-
+        });
         registerRequest(historyRequest);
         historyRequest.debug = type;
         if (mAdapter != null) {

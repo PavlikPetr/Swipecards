@@ -27,6 +27,7 @@ import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,8 +55,11 @@ import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.ui.IEmailConfirmationListener;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.debug.HockeySender;
+import com.topface.topface.utils.exception.OurTestException;
 import com.topface.topface.utils.social.AuthToken;
 
+import org.acra.sender.ReportSenderException;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -114,11 +118,28 @@ public class Utils {
     public static void showToastNotification(int stringId, int duration) {
         Context context = App.getContext();
         if (context != null && (duration == 0 || duration == 1)) {
-            Toast.makeText(
-                    context,
-                    stringId,
-                    duration
-            ).show();
+            Toast toast;
+            try {
+                /*
+                краш при инфлейте тоста на соньках
+                https://rink.hockeyapp.net/manage/apps/26531/app_versions/343/crash_reasons/110273859?scope=devices&type=statistics
+                 */
+                toast = Toast.makeText(
+                        context,
+                        stringId,
+                        duration
+                );
+            } catch (InflateException e) {
+                e.printStackTrace();
+                return;
+            }
+            if (toast != null) {
+                /*
+                нет, я не сошел с ума. На некоторых девайсах Toast.makeText может возвращать null.
+                Такие дела
+                 */
+                toast.show();
+            }
         }
     }
 
@@ -265,6 +286,9 @@ public class Utils {
     }
 
     public static boolean isCallableIntent(Intent intent, Context context) {
+        if (intent == null) {
+            return false;
+        }
         List<ResolveInfo> list = context.getPackageManager().queryIntentActivities(intent,
                 PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
@@ -470,15 +494,16 @@ public class Utils {
         return Html.fromHtml(text.replaceAll(DASH_SYMBOL, HYPHEN_SYMBOL)).toString();
     }
 
-    public static void sendHockeyMessage(final Context context, final String message) {
+    public static void sendHockeyMessage(final String message) {
+        final Context context = App.getContext();
         new BackgroundThread() {
             @Override
             public void execute() {
                 HockeySender hockeySender = new HockeySender();
                 try {
-                    hockeySender.sendDebug(hockeySender.createLocalReport(context, new Exception(message)));
-                } catch (Exception e) {
-                    Debug.error(e.toString());
+                    hockeySender.send(context, hockeySender.createLocalReport(context, new OurTestException(message)));
+                } catch (ReportSenderException e) {
+                    e.printStackTrace();
                 }
             }
         };
