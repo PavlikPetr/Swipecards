@@ -850,4 +850,9 @@
     <string name="thanks_for_your_rate_bottom_label">Share your thoughts in the App Store. We value every review!</string>
     <string name="thanks_for_your_rate_rate_app">Leave a review in the App Store</string>
     <string name="thanks_for_your_rate_close">Close</string>
+    <plurals name="novice_sympathies_bonuses">
+        <item quantity="zero">You will receive %1$d Likes as a\ngift! This means that those \nwho send you Likes \nreally like %2$d you</item>
+        <item quantity="other">You will receive %1$d Likes as a\ngift! This means that those \nwho send you Likes \nreally like %2$d you</item>
+        <item quantity="one">You will receive %1$d Like as a\ngift! This means that those \nwho send you Likes \nreally like %2$d you</item>
+    </plurals>
 </resources>
