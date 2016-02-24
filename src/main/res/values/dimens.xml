@@ -77,4 +77,11 @@
     <dimen name="unlock_button_margin_top">10dp</dimen>
 
     <dimen name="unlock_likes_by_coins_button_text_size">15sp</dimen>
+
+    <!--Buy products buttons-->
+    <dimen name="sticker_width">74dp</dimen>
+    <dimen name="button_height">52dp</dimen>
+    <dimen name="button_title_text_size">18sp</dimen>
+    <dimen name="button_sticker_text_size">13sp</dimen>
+    <dimen name="button_description_text_size">13sp</dimen>
 </resources>

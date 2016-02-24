@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BuyButtonVer1">
+        <attr name="buy_button_ver_1_type" format="integer">
+            <enum name="BUTTON_TYPE_BLUE" value="0" />
+            <enum name="BUTTON_TYPE_GREEN" value="1" />
+        </attr>
+        <attr name="buy_button_ver_1_title" format="string" />
+        <attr name="buy_button_ver_1_discount" format="string" />
+        <attr name="buy_button_ver_1_pricePerItem" format="string" />
+        <attr name="buy_button_ver_1_totalPrice" format="string" />
+        <attr name="buy_button_ver_1_sticker_type" format="integer">
+            <enum name="STICKER_TYPE_NONE" value="0" />
+            <enum name="STICKER_TYPE_POPULAR" value="1" />
+            <enum name="STICKER_TYPE_BEST_VALUE" value="2" />
+        </attr>
+    </declare-styleable>
+</resources>

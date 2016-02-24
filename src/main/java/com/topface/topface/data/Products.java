@@ -8,7 +8,6 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -21,6 +20,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.ui.views.BuyButtonVer1;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
@@ -272,11 +272,18 @@ public class Products extends AbstractData {
             String value, final BuyButtonClickListener listener
     ) {
         if (context == null || TextUtils.isEmpty(title)) return null;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.item_buying_btn, null);
-        initBuyButtonViews(
-                view, id, title, discount, value, listener, showType);
-        return view;
+
+        return new BuyButtonVer1.BuyButtonBuilder().title(title).type(BuyButtonVer1.BUTTON_TYPE_BLUE).stickerType(BuyButtonVer1.STICKER_TYPE_POPULAR).discount("20% for free").totalPrice("20 $").pricePerItem("$1/day").onClick(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onClick(id);
+            }
+        }).build(context);
+//        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View view = inflater.inflate(R.layout.item_buying_btn, null);
+//        initBuyButtonViews(
+//                view, id, title, discount, value, listener, showType);
+//        return view;
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

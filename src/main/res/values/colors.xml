@@ -159,4 +159,12 @@
     <color name="take_photo_screen_text_medium">#8F000000</color>
 
     <color name="auth_fragment_text_color">#03A9F4</color>
+
+    <!--Buy products buttons-->
+    <color name="button_title_text_color">#FFFFFF</color>
+    <color name="button_sticker_text_color">#FFFFFF</color>
+    <color name="button_discount_text_color">#33B5E5</color>
+    <color name="button_price_per_item_text_color">#333333</color>
+    <color name="button_total_price_text_color">#333333</color>
+    <color name="sticker_popular_bg_normal">#e1690d</color>
 </resources>
