@@ -1,28 +1,20 @@
 package com.topface.topface.data;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.content.res.XmlResourceParser;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.topface.billing.DeveloperPayload;
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.ui.views.BuyButtonVer1;
+import com.topface.topface.ui.views.BuyButtonVer0;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -273,86 +265,19 @@ public class Products extends AbstractData {
     ) {
         if (context == null || TextUtils.isEmpty(title)) return null;
 
-        return new BuyButtonVer1.BuyButtonBuilder().title(title).type(BuyButtonVer1.BUTTON_TYPE_BLUE).stickerType(BuyButtonVer1.STICKER_TYPE_POPULAR).discount("20% for free").totalPrice("20 $").pricePerItem("$1/day").onClick(new View.OnClickListener() {
+//        return new BuyButtonVer1.BuyButtonBuilder().title(title).type(BuyButtonVer1.BUTTON_TYPE_BLUE).stickerType(BuyButtonVer1.STICKER_TYPE_POPULAR).discount("20% for free").totalPrice("20 $").pricePerItem("$1/day").onClick(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                listener.onClick(id);
+//            }
+//        }).build(context);
+
+        return new BuyButtonVer0.BuyButtonBuilder().discount(discount).showType(showType).title(TextUtils.isEmpty(value) ? title : value).onClick(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listener.onClick(id);
             }
         }).build(context);
-//        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View view = inflater.inflate(R.layout.item_buying_btn, null);
-//        initBuyButtonViews(
-//                view, id, title, discount, value, listener, showType);
-//        return view;
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private static void setBuyButtonBackground(boolean discount, int showType, View view) {
-        int bgResource;
-        switch (showType) {
-            case 1:
-                bgResource = discount ? R.drawable.btn_sale_blue_selector : R.drawable.btn_blue_selector;
-                break;
-            case 2:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    bgResource = discount ? R.drawable.btn_sale_blue_disabled_only : R.drawable.btn_blue_disabled_only;
-                } else {
-                    bgResource = discount ? R.drawable.btn_sale_blue_disabled : R.drawable.btn_blue_shape_disabled;
-                }
-                break;
-            default:
-                bgResource = discount ? R.drawable.btn_sale_gray_selector : R.drawable.btn_gray_selector;
-                break;
-        }
-        view.setBackgroundResource(bgResource);
-    }
-
-    private static void setBuyButtonTextColor(int showType, TextView view) {
-        switch (showType) {
-            case 1:
-                setSelectorTextColor(R.drawable.btn_blue_text_color_selector, view);
-                break;
-            case 2:
-                view.setTextColor(App.getContext().getResources().getColor(R.color.button_blue_text_disable_color));
-                break;
-            default:
-                setSelectorTextColor(R.drawable.btn_gray_text_color_selector, view);
-                break;
-        }
-    }
-
-    private static void initBuyButtonViews(
-            View view, final String id, String title, boolean discount,
-            String value, final BuyButtonClickListener listener, int showType) {
-        RelativeLayout container = (RelativeLayout) view.findViewById(R.id.itContainer);
-        // button background
-        if (discount) {
-            int paddingFive = Utils.getPxFromDp(5);
-            container.setPadding(paddingFive, paddingFive, Utils.getPxFromDp(56), paddingFive);
-        }
-        setBuyButtonBackground(discount, showType, container);
-        container.requestLayout();
-        // click listener
-        container.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onClick(id);
-            }
-        });
-        // title text
-        TextView tvTitle = (TextView) view.findViewById(R.id.itText);
-        setBuyButtonTextColor(showType, tvTitle);
-        tvTitle.setText(TextUtils.isEmpty(value) ? title : value);
-    }
-
-    private static void setSelectorTextColor(int selector, TextView view) {
-        try {
-            XmlResourceParser xrp = App.getContext().getResources().getXml(selector);
-            ColorStateList csl = ColorStateList.createFromXml(App.getContext().getResources(), xrp);
-            view.setTextColor(csl);
-        } catch (Exception e) {
-            Debug.error(e.toString());
-        }
     }
 
     public static View setBuyButton(LinearLayout root, final BuyButtonData buyBtn,

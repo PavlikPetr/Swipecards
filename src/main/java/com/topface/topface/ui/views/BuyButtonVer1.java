@@ -15,9 +15,9 @@ import com.topface.topface.R;
 
 /**
  * Created by ppetr on 24.02.16.
- * Custom button for purchase screen
+ * Custom button for purchase screen version 1
  */
-public class BuyButtonVer1 extends LinearLayout {
+public class BuyButtonVer1 extends BuyButton {
 
     public static final int BUTTON_TYPE_BLUE = 0;
     public static final int BUTTON_TYPE_GREEN = 1;
@@ -37,7 +37,7 @@ public class BuyButtonVer1 extends LinearLayout {
     private enum Sticker {
         NONE(STICKER_TYPE_NONE),
         POPULAR(STICKER_TYPE_POPULAR, R.string.buy_button_sticker_popular, R.drawable.sticker_popular_selector),
-        BEST_VALUE(STICKER_TYPE_BEST_VALUE, R.string.buy_button_sticker_best_value, R.drawable.btn_blue_selector);
+        BEST_VALUE(STICKER_TYPE_BEST_VALUE, R.string.buy_button_sticker_best_value, R.drawable.sticker_best_value_selector);
 
         private boolean mIsVisible;
         private
@@ -86,10 +86,10 @@ public class BuyButtonVer1 extends LinearLayout {
     private int getButtonRes(@Type int type) {
         switch (type) {
             case BUTTON_TYPE_GREEN:
-                return R.drawable.btn_blue_selector;
+                return R.drawable.btn_purchase_green_selector;
             case BUTTON_TYPE_BLUE:
             default:
-                return R.drawable.btn_blue_selector;
+                return R.drawable.btn_purchase_blue_selector;
         }
     }
 
@@ -130,6 +130,16 @@ public class BuyButtonVer1 extends LinearLayout {
         super(context, attrs, defStyleAttr);
         init();
         getAttrs(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    public void startWaiting() {
+
+    }
+
+    @Override
+    public void stopWaiting() {
+
     }
 
     private void getAttrs(Context context, AttributeSet attrs, int defStyle) {

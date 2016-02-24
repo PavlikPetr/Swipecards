@@ -4,5 +4,5 @@
     <corners
         android:bottomRightRadius="@dimen/button_corners_radius"
         android:topRightRadius="@dimen/button_corners_radius" />
-    <solid android:color="@color/sticker_popular_bg_normal" />
+    <solid android:color="@color/sticker_best_value_bg_disable" />
 </shape>
