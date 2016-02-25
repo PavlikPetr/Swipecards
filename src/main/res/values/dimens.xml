@@ -84,4 +84,5 @@
     <dimen name="button_title_text_size">18sp</dimen>
     <dimen name="button_sticker_text_size">13sp</dimen>
     <dimen name="button_description_text_size">13sp</dimen>
+    <dimen name="description_margin_top">4dp</dimen>
 </resources>

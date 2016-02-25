@@ -155,11 +155,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         if (products == null) {
             return;
         }
-        if (products.premium.isEmpty()) {
-            root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.VISIBLE);
-        } else {
-            root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.GONE);
-        }
+        root.findViewById(R.id.fbpBuyingDisabled).setVisibility(products.premium.isEmpty() ? View.VISIBLE : View.GONE);
         for (final BuyButtonData curBtn : products.premium) {
             Products.setBuyButton(btnContainer, curBtn, getActivity(),
                     new Products.BuyButtonClickListener() {

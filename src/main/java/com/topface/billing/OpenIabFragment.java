@@ -128,22 +128,6 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         App.getOpenIabHelperManager().removeOpenIabEventListener(this);
     }
 
-    private void startWaiting() {
-        if (mDeferredPurchaseButton != null) {
-            mDeferredPurchaseButton.findViewById(R.id.itText).setVisibility(View.INVISIBLE);
-            mDeferredPurchaseButton.findViewById(R.id.marketWaiter).setVisibility(View.VISIBLE);
-            mDeferredPurchaseButton.findViewById(R.id.itContainer).setEnabled(false);
-        }
-    }
-
-    private void stopWaiting() {
-        if (mDeferredPurchaseButton != null) {
-            mDeferredPurchaseButton.findViewById(R.id.itText).setVisibility(View.VISIBLE);
-            mDeferredPurchaseButton.findViewById(R.id.marketWaiter).setVisibility(View.GONE);
-            mDeferredPurchaseButton.findViewById(R.id.itContainer).setEnabled(true);
-        }
-    }
-
     /**
      * Колбэк окончания "использования" (consume) продукта.
      */

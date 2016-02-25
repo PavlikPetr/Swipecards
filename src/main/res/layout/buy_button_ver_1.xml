@@ -32,12 +32,21 @@
             android:textColor="@color/button_sticker_text_color"
             android:textSize="@dimen/button_sticker_text_size"
             tools:text="Popular" />
+
+        <ProgressBar
+            android:id="@+id/marketWaiter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            tools:visibility="visible" />
     </FrameLayout>
 
     <LinearLayout
         android:id="@+id/buttonDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/description_margin_top"
         android:orientation="horizontal">
 
         <TextView

@@ -8,7 +8,6 @@ import android.content.res.XmlResourceParser;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,7 +23,7 @@ import com.topface.topface.utils.Utils;
  */
 public class BuyButtonVer0 extends BuyButton {
 
-    private RelativeLayout mCotainer;
+    private RelativeLayout mContainer;
     private TextView mText;
     private ProgressBar mProgress;
 
@@ -43,18 +42,18 @@ public class BuyButtonVer0 extends BuyButton {
     }
 
     public void setOnClickListener(OnClickListener listener) {
-        if (mCotainer != null) {
-            mCotainer.setOnClickListener(listener);
+        if (mContainer != null) {
+            mContainer.setOnClickListener(listener);
         }
     }
 
     public void setButtonCondition(boolean isDiscount, int showType) {
-        if (isDiscount && mCotainer != null) {
+        if (isDiscount && mContainer != null) {
             int paddingFive = Utils.getPxFromDp(5);
-            mCotainer.setPadding(paddingFive, paddingFive, Utils.getPxFromDp(56), paddingFive);
+            mContainer.setPadding(paddingFive, paddingFive, Utils.getPxFromDp(56), paddingFive);
         }
         setBuyButtonTextColor(showType, mText);
-        setBuyButtonBackground(isDiscount, showType, mCotainer);
+        setBuyButtonBackground(isDiscount, showType, mContainer);
     }
 
     private void setSelectorTextColor(int selector, TextView view) {
@@ -128,17 +127,25 @@ public class BuyButtonVer0 extends BuyButton {
 
     @Override
     public void startWaiting() {
-
+        setViewVisibility(mText, View.INVISIBLE);
+        setViewVisibility(mProgress, View.VISIBLE);
+        if (setViewVisibility(mContainer, View.VISIBLE)) {
+            mContainer.setEnabled(false);
+        }
     }
 
     @Override
     public void stopWaiting() {
-
+        setViewVisibility(mText, View.VISIBLE);
+        setViewVisibility(mProgress, View.GONE);
+        if (setViewVisibility(mContainer, View.VISIBLE)) {
+            mContainer.setEnabled(true);
+        }
     }
 
     private void init() {
         inflate(getContext(), R.layout.item_buying_btn, this);
-        mCotainer = (RelativeLayout) findViewById(R.id.itContainer);
+        mContainer = (RelativeLayout) findViewById(R.id.itContainer);
         mText = (TextView) findViewById(R.id.itText);
         mProgress = (ProgressBar) findViewById(R.id.marketWaiter);
     }

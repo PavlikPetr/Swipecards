@@ -161,21 +161,18 @@
     <color name="auth_fragment_text_color">#03A9F4</color>
 
     <!--Buy products buttons-->
-    <color name="button_title_text_color">#FFFFFF</color>
-    <color name="button_sticker_text_color">#FFFFFF</color>
+    <color name="button_title_text_color">@color/text_white</color>
+    <color name="button_sticker_text_color">@color/text_white</color>
     <color name="button_discount_text_color">#33B5E5</color>
-    <color name="button_price_per_item_text_color">#333333</color>
-    <color name="button_total_price_text_color">#333333</color>
-    <color name="sticker_popular_bg_normal">#e1690d</color>
-    <color name="sticker_popular_bg_pressed">#e6975b</color>
-    <color name="sticker_popular_bg_disable">#f1cdb1</color>
-    <color name="sticker_best_value_bg_normal">#06a122</color>
-    <color name="sticker_best_value_bg_pressed">#48a959</color>
-    <color name="sticker_best_value_bg_disable">#7bae85</color>
-    <color name="button_purchase_blue_bg_pressed_color">#62c4f5</color>
-    <color name="button_purchase_blue_bg_released_color">#03a9f4</color>
-    <color name="button_purchase_blue_bg_disable_color">#b3e5fb</color>
-    <color name="button_purchase_green_bg_pressed_color">#50ef7f</color>
-    <color name="button_purchase_green_bg_released_color">#0def50</color>
-    <color name="button_purchase_green_bg_disable_color">#9df2b6</color>
+    <color name="button_price_per_item_text_color">#b2b2b2</color>
+    <color name="button_total_price_text_color">#adadad</color>
+    <color name="sticker_popular_bg_normal">#fe9d31</color>
+    <color name="sticker_popular_bg_pressed">#fcb76a</color>
+    <color name="sticker_popular_bg_disable">#fbc992</color>
+    <color name="sticker_best_value_bg_normal">#01a51f</color>
+    <color name="sticker_best_value_bg_pressed">#02cf28</color>
+    <color name="sticker_best_value_bg_disable">#5af878</color>
+    <color name="button_purchase_green_bg_pressed_color">#16e170</color>
+    <color name="button_purchase_green_bg_released_color">#00c055</color>
+    <color name="button_purchase_green_bg_disable_color">#a7faba</color>
 </resources>

@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.topface.topface.R;
@@ -33,6 +34,7 @@ public class BuyButtonVer1 extends BuyButton {
     private TextView mDescriptionDicscount;
     private TextView mDescriptionPricePerItem;
     private TextView mDescriptionTotalPrice;
+    private ProgressBar mProgress;
 
     private enum Sticker {
         NONE(STICKER_TYPE_NONE),
@@ -134,12 +136,20 @@ public class BuyButtonVer1 extends BuyButton {
 
     @Override
     public void startWaiting() {
-
+        setViewVisibility(mProgress, View.VISIBLE);
+        setViewVisibility(mButtonTitle, View.INVISIBLE);
+        if (setViewVisibility(mButtonView, View.VISIBLE)) {
+            mButtonView.setEnabled(false);
+        }
     }
 
     @Override
     public void stopWaiting() {
-
+        setViewVisibility(mProgress, View.GONE);
+        setViewVisibility(mButtonTitle, View.VISIBLE);
+        if (setViewVisibility(mButtonView, View.VISIBLE)) {
+            mButtonView.setEnabled(true);
+        }
     }
 
     private void getAttrs(Context context, AttributeSet attrs, int defStyle) {
@@ -220,20 +230,6 @@ public class BuyButtonVer1 extends BuyButton {
         }
     }
 
-    private void setText(TextView textView, String text) {
-        if (setViewVisibility(textView, View.VISIBLE)) {
-            textView.setText(text);
-        }
-    }
-
-    private boolean setViewVisibility(View view, int visibility) {
-        if (view != null) {
-            view.setVisibility(visibility);
-            return true;
-        }
-        return false;
-    }
-
     @IntDef({BUTTON_TYPE_BLUE, BUTTON_TYPE_GREEN})
     public @interface Type {
     }
@@ -251,6 +247,7 @@ public class BuyButtonVer1 extends BuyButton {
         mDescriptionDicscount = (TextView) findViewById(R.id.discount);
         mDescriptionPricePerItem = (TextView) findViewById(R.id.pricePerItem);
         mDescriptionTotalPrice = (TextView) findViewById(R.id.totalPrice);
+        mProgress = (ProgressBar) findViewById(R.id.marketWaiter);
     }
 
     public static class BuyButtonBuilder {
