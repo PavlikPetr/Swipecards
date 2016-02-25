@@ -32,7 +32,7 @@ public class CountersDataProvider implements Action1<CountersData> {
         if (mFragment.isAdded()) {
             Intent result = new Intent();
             result.putExtra(COUNTERS_DATA, countersData);
-            mFragment.onActivityResult(COUNTERS_DATA_UPDATED, Activity.RESULT_OK , result);
+            mFragment.onActivityResult(COUNTERS_DATA_UPDATED, Activity.RESULT_OK, result);
         }
     }
 

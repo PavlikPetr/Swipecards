@@ -495,7 +495,7 @@ public class AddPhotoHelper {
         if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
             Photo photo = (Photo) msg.obj;
             // ставим фото на аватарку только если она едиснтвенная
-            if (CacheProfile.photos.size() == 0) {
+            if (CacheProfile.photos != null && CacheProfile.photos.size() == 0) {
                 CacheProfile.photo = photo;
             }
             // добавляется фото в начало списка
@@ -507,7 +507,7 @@ public class AddPhotoHelper {
             Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
         } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
             // если загрузка аватраки не завершилась успехом, то сбрасываем флаг
-            if (CacheProfile.photos.size() == 0) {
+            if (CacheProfile.photos != null && CacheProfile.photos.size() == 0) {
                 App.getConfig().getUserConfig().setUserAvatarAvailable(false);
                 App.getConfig().getUserConfig().saveConfig();
             }

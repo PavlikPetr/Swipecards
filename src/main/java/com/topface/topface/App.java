@@ -71,7 +71,6 @@ import com.topface.topface.utils.social.AuthorizationManager;
 import com.topface.topface.utils.social.VkAuthorizer;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
-import com.vk.sdk.VKSdk;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
@@ -123,7 +122,6 @@ public class App extends ApplicationBase {
                 .addRequest(getProductsRequest())
                 .addRequest(StoresManager.getPaymentwallProductsRequest())
                 .addRequest(getProfileRequest(ProfileRequest.P_ALL))
-                .setFrom(App.class.getSimpleName() + " profile and options requests")
                 .callback(handler)
                 .exec();
     }
@@ -155,7 +153,6 @@ public class App extends ApplicationBase {
                 .addRequest(getUserOptionsRequest())
                 .addRequest(StoresManager.getPaymentwallProductsRequest())
                 .addRequest(getProductsRequest())
-                .setFrom(App.class.getSimpleName() + " user options and purchases requests")
                 .exec();
     }
 
@@ -307,7 +304,7 @@ public class App extends ApplicationBase {
     }
 
     private void initVkSdk() {
-        VKSdk.customInitialize(App.getContext(), VkAuthorizer.getVkId(), null);
+        VkAuthorizer.initVkSdk();
         VKAccessTokenTracker vkTokenTracker = new VKAccessTokenTracker() {
             @Override
             public void onVKAccessTokenChanged(VKAccessToken oldToken, VKAccessToken newToken) {

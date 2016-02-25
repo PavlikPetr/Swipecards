@@ -28,7 +28,6 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        AppEventsLogger.activateApp(this, App.getAppSocialAppsIds().fbId);
         comScore.onEnterForeground();
     }
 

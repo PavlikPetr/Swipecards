@@ -801,4 +801,9 @@
     <string name="chat_auto_reply_button">Werde zum VIP</string>
     <string name="take_photo_text_1">Bitte lade ein Foto von dir hoch, um zu chatten.</string>
     <string name="take_photo_text_2">Nur du selbst solltest auf dem Foto abgebildet sein; alle Fotos werden von Moderatoren überprüft um sicherzustellen, dass den Regeln gefolgt wird.</string>
+    <string name="unlock_by_viewed_ad_video_button_text">Gratis entsperren bei %s</string>
+    <plurals name="free_minutes">
+        <item quantity="other">%d Minuten</item>
+        <item quantity="one">%d Minute</item>
+    </plurals>
 </resources>
