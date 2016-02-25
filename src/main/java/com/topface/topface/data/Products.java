@@ -14,6 +14,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.views.BuyButtonVer1;
+import com.topface.topface.ui.views.BuyButtonVer2;
 import com.topface.topface.utils.CacheProfile;
 
 import org.json.JSONArray;
@@ -29,6 +30,9 @@ import java.util.List;
 import java.util.Locale;
 
 public class Products extends AbstractData {
+
+    public static final String VIEW_V1 = "v1";
+    public static final String VIEW_V2 = "v2";
     public static final String PRICE = "{{price}}";
     public static final String PRICE_PER_ITEM = "{{price_per_item}}";
     public static String[] PRICE_TEMPLATES = {PRICE, PRICE_PER_ITEM};
@@ -264,24 +268,20 @@ public class Products extends AbstractData {
             String value, final BuyButtonClickListener listener
     ) {
         if (context == null || TextUtils.isEmpty(title)) return null;
-        return new BuyButtonVer1.BuyButtonBuilder().title(title).type(BuyButtonVer1.BUTTON_TYPE_GREEN).stickerType(BuyButtonVer1.STICKER_TYPE_BEST_VALUE).discount("20% for free").totalPrice("20 $").pricePerItem("$1/day").onClick(new View.OnClickListener() {
+        return new BuyButtonVer1.BuyButtonBuilder().discount(discount).showType(showType).title(TextUtils.isEmpty(value) ? title : value).onClick(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listener.onClick(id);
             }
         }).build(context);
-
-//        return new BuyButtonVer0.BuyButtonBuilder().discount(discount).showType(showType).title(TextUtils.isEmpty(value) ? title : value).onClick(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                listener.onClick(id);
-//            }
-//        }).build(context);
     }
 
     public static View setBuyButton(LinearLayout root, final BuyButtonData buyBtn,
                                     Context context, final BuyButtonClickListener listener) {
-        View view = createBuyButtonLayout(context, buyBtn, listener);
+        return setBuyButton(root, createBuyButtonLayout(context, buyBtn, listener), buyBtn);
+    }
+
+    public static View setBuyButton(LinearLayout root, View view, final BuyButtonData buyBtn) {
         if (view != null) {
             root.addView(view);
             view.setTag(buyBtn);

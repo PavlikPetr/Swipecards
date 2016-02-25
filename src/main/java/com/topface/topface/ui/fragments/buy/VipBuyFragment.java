@@ -26,10 +26,14 @@ import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.statistics.PushButtonVipUniqueStatistics;
 import com.topface.topface.ui.BlackListActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
+import com.topface.topface.ui.views.BuyButtonVer2;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 import static android.view.View.OnClickListener;
 
@@ -157,15 +161,96 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         }
         root.findViewById(R.id.fbpBuyingDisabled).setVisibility(products.premium.isEmpty() ? View.VISIBLE : View.GONE);
         for (final BuyButtonData curBtn : products.premium) {
-            Products.setBuyButton(btnContainer, curBtn, getActivity(),
-                    new Products.BuyButtonClickListener() {
-                        @Override
-                        public void onClick(String id) {
-                            buy(id, curBtn);
-                        }
-                    }
-            );
+            Products.setBuyButton(btnContainer, getButtonView(products, curBtn, getActivity(), new Products.BuyButtonClickListener() {
+                @Override
+                public void onClick(String id) {
+                    buy(id, curBtn);
+                }
+            }), curBtn);
+//            Products.setBuyButton(btnContainer, curBtn, getActivity(),
+//                    new Products.BuyButtonClickListener() {
+//                        @Override
+//                        public void onClick(String id) {
+//                            buy(id, curBtn);
+//                        }
+//                    }
+//            );
         }
+    }
+
+    private ArrayList<String> getViewsType(Products products) {
+        if (products != null && products.info != null && products.info.views != null && products.info.views.buyVip != null) {
+            return products.info.views.buyVip;
+        } else {
+            ArrayList<String> defaultTypes = new ArrayList<>();
+            defaultTypes.add(Products.VIEW_V1);
+            return defaultTypes;
+        }
+    }
+
+    private LinkedList<BuyButtonData> discardTrialProducts(Products products) {
+        LinkedList<BuyButtonData> noTrialList = new LinkedList<>();
+        for (BuyButtonData data : products.premium) {
+            if (data.trialPeriodInDays == 0) {
+                noTrialList.add(data);
+            }
+        }
+        return noTrialList;
+    }
+
+    private View getButtonView(Products products, BuyButtonData buyBtn,
+                               Context context, Products.BuyButtonClickListener listener) {
+        if (getViewsType(products).contains(Products.VIEW_V2)) {
+            return getViewV2(products, buyBtn, listener, context);
+        } else {
+            return getViewV1(buyBtn, context, listener);
+        }
+    }
+
+    private View getViewV1(BuyButtonData buyBtn,
+                           Context context, Products.BuyButtonClickListener listener) {
+        return Products.createBuyButtonLayout(context, buyBtn, listener);
+    }
+
+    private String getTotalPrice() {
+        return "Total: 5$";
+    }
+
+    private String getDiscount() {
+        return "20% for free";
+    }
+
+    private String getPricePerItem() {
+        return "$1/month";
+    }
+
+    private View getViewV2(Products products, final BuyButtonData buyBtn, final Products.BuyButtonClickListener listener, Context context) {
+        String discount = null;
+        String totalPrice = null;
+        String pricePerItem = null;
+        LinkedList<BuyButtonData> noTrialList = discardTrialProducts(products);
+        BuyButtonVer2.BuyButtonBuilder builder = new BuyButtonVer2.BuyButtonBuilder().title(buyBtn.title).type(BuyButtonVer2.BUTTON_TYPE_BLUE).stickerType(BuyButtonVer2.STICKER_TYPE_NONE).onClick(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onClick(buyBtn.id);
+            }
+        });
+        int pos = noTrialList.indexOf(buyBtn);
+        if (buyBtn.trialPeriodInDays > 0 && pos > 1) {
+            // catch the second not trial product
+            if (pos == 2) {
+                builder.stickerType(BuyButtonVer2.STICKER_TYPE_POPULAR);
+            }
+            // catch the last not trial product
+            if (pos == noTrialList.size() - 1) {
+                builder.stickerType(BuyButtonVer2.STICKER_TYPE_BEST_VALUE);
+                builder.type(BuyButtonVer2.BUTTON_TYPE_GREEN);
+            }
+            totalPrice = getTotalPrice();
+            discount = getDiscount();
+            pricePerItem = getPricePerItem();
+        }
+        return builder.discount(discount).totalPrice(totalPrice).pricePerItem(pricePerItem).build(context);
     }
 
     protected void buy(String id, BuyButtonData curBtn) {

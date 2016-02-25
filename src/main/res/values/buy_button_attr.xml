@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="BuyButtonVer1">
+    <declare-styleable name="BuyButtonVer2">
         <attr name="buy_button_ver_1_type" format="integer">
             <enum name="BUTTON_TYPE_BLUE" value="0" />
             <enum name="BUTTON_TYPE_GREEN" value="1" />

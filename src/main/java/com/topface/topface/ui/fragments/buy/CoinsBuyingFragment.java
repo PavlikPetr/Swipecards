@@ -24,11 +24,12 @@ import com.topface.topface.data.Products;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.utils.BuyVipFragmentManager;
+import com.topface.topface.ui.views.BuyButtonVer2;
 import com.topface.topface.utils.CacheProfile;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -129,6 +130,97 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
         initCoinsButtons(root, products);
     }
 
+    /////
+    //////
+    /////
+    private ArrayList<String> getViewsType(Products products) {
+        if (products != null && products.info != null && products.info.views != null && products.info.views.buyVip != null) {
+            return products.info.views.buyVip;
+        } else {
+            ArrayList<String> defaultTypes = new ArrayList<>();
+            defaultTypes.add(Products.VIEW_V2);
+            return defaultTypes;
+        }
+    }
+
+    private LinkedList<BuyButtonData> discardTrialProducts(List<BuyButtonData> products) {
+        LinkedList<BuyButtonData> noTrialList = new LinkedList<>();
+        for (BuyButtonData data : products) {
+            if (data.trialPeriodInDays == 0) {
+                noTrialList.add(data);
+            }
+        }
+        return noTrialList;
+    }
+
+    private View getButtonView(ArrayList<String> viewsType, List<BuyButtonData> products, BuyButtonData buyBtn,
+                               Context context, Products.BuyButtonClickListener listener) {
+        if (viewsType.contains(Products.VIEW_V2)) {
+            return getViewV2(products, buyBtn, listener, context);
+        } else {
+            return getViewV1(buyBtn, context, listener);
+        }
+    }
+
+    private View getViewV1(BuyButtonData buyBtn,
+                           Context context, Products.BuyButtonClickListener listener) {
+        return Products.createBuyButtonLayout(context, buyBtn, listener);
+    }
+
+    private String getTotalPrice() {
+        return "Total: 5$";
+    }
+
+    private String getDiscount() {
+        return "20% for free";
+    }
+
+    private String getPricePerItem() {
+        return "$1/month";
+    }
+
+    private int getIndex(LinkedList<BuyButtonData> products, BuyButtonData buyBtn) {
+        for (int i = 0; i < products.size(); i++) {
+            if (buyBtn.id.equals(products.get(i).id)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private View getViewV2(List<BuyButtonData> products, final BuyButtonData buyBtn, final Products.BuyButtonClickListener listener, Context context) {
+        String discount = null;
+        String totalPrice = null;
+        String pricePerItem = null;
+        LinkedList<BuyButtonData> noTrialList = discardTrialProducts(products);
+        BuyButtonVer2.BuyButtonBuilder builder = new BuyButtonVer2.BuyButtonBuilder().title(buyBtn.title).type(BuyButtonVer2.BUTTON_TYPE_BLUE).stickerType(BuyButtonVer2.STICKER_TYPE_NONE).onClick(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onClick(buyBtn.id);
+            }
+        });
+        int pos = getIndex(noTrialList, buyBtn);
+        if (buyBtn.trialPeriodInDays == 0 && pos > 0) {
+            // catch the second not trial product
+            if (pos == 1) {
+                builder.stickerType(BuyButtonVer2.STICKER_TYPE_POPULAR);
+            }
+            // catch the last not trial product
+            if (pos == noTrialList.size() - 1) {
+                builder.stickerType(BuyButtonVer2.STICKER_TYPE_BEST_VALUE);
+                builder.type(BuyButtonVer2.BUTTON_TYPE_GREEN);
+            }
+            totalPrice = getTotalPrice();
+            discount = getDiscount();
+            pricePerItem = getPricePerItem();
+        }
+        return builder.discount(discount).totalPrice(totalPrice).pricePerItem(pricePerItem).build(context);
+    }
+    ////
+    ///
+    ///
+
+
     private void initCoinsButtons(View root, Products products) {
         if (products == null) {
             return;
@@ -144,20 +236,26 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
         }
         // coins items buttons also coinsSubscriptionsMasked buttons
         for (final BuyButtonData curButton : coinsProducts) {
-            View btnView = Products.setBuyButton(coinsButtonsContainer, curButton, getActivity(),
-                    new Products.BuyButtonClickListener() {
-                        @Override
-                        public void onClick(String id) {
-                            buy(curButton);
-                            Activity activity = getActivity();
-                            if (activity instanceof PurchasesActivity) {
-                                ((PurchasesActivity) activity).skipBonus();
-                            }
-
-                            CacheProfile.getOptions().topfaceOfferwallRedirect.setComplited(true);
-                        }
-                    }
-            );
+//            View btnView = Products.setBuyButton(coinsButtonsContainer, curButton, getActivity(),
+//                    new Products.BuyButtonClickListener() {
+//                        @Override
+//                        public void onClick(String id) {
+//                            buy(curButton);
+//                            Activity activity = getActivity();
+//                            if (activity instanceof PurchasesActivity) {
+//                                ((PurchasesActivity) activity).skipBonus();
+//                            }
+//
+//                            CacheProfile.getOptions().topfaceOfferwallRedirect.setComplited(true);
+//                        }
+//                    }
+//            );
+            View btnView = Products.setBuyButton(coinsButtonsContainer, getButtonView(getViewsType(products), coinsProducts, curButton, getActivity(), new Products.BuyButtonClickListener() {
+                @Override
+                public void onClick(String id) {
+                    buy(curButton);
+                }
+            }), curButton);
             if (btnView != null) {
                 purchaseButtons.add(btnView);
                 btnView.setTag(curButton);
