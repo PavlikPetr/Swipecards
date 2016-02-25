@@ -20,6 +20,10 @@ public class BuyButtonBaseData {
     public int discount;
     public String paymentwallLink;
     public String totalTemplate;
+    public int periodInDays;
+    public int trialPeriodInDays;
+    public String discountTemplate;
+    public String pricePerItemTemplate;
 
     public BuyButtonBaseData(JSONObject json) {
         if (json != null) {
@@ -29,6 +33,10 @@ public class BuyButtonBaseData {
             totalTemplate = json.optString("totalTemplate");
             price = json.optInt("price");
             amount = json.optInt("amount");
+            periodInDays = json.optInt("periodInDays");
+            trialPeriodInDays = json.optInt("trialPeriodInDays");
+            discountTemplate = json.optString("discountTemplate");
+            pricePerItemTemplate = json.optString("pricePerItemTemplate");
             hint = json.optString("hint");
             showType = json.optInt("showType");
             type = Products.getProductTypeByName(json.optString("type"));

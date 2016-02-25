@@ -14,11 +14,13 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Created by ppetr on 24.02.16.
  * Custom button for purchase screen version 1
  */
-public class BuyButtonVer1 extends BuyButton {
+public class BuyButtonVer1 extends BuyButton<BuyButtonVer1.BuyButtonBuilder> {
 
     public static final int BUTTON_TYPE_BLUE = 0;
     public static final int BUTTON_TYPE_GREEN = 1;
@@ -35,6 +37,22 @@ public class BuyButtonVer1 extends BuyButton {
     private TextView mDescriptionPricePerItem;
     private TextView mDescriptionTotalPrice;
     private ProgressBar mProgress;
+
+    public BuyButtonVer1(Context context) {
+        this(context, (BuyButtonBuilder) null);
+    }
+
+    public BuyButtonVer1(Context context, BuyButtonBuilder builder) {
+        super(context, builder);
+    }
+
+    public BuyButtonVer1(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public BuyButtonVer1(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
 
     private enum Sticker {
         NONE(STICKER_TYPE_NONE),
@@ -88,10 +106,10 @@ public class BuyButtonVer1 extends BuyButton {
     private int getButtonRes(@Type int type) {
         switch (type) {
             case BUTTON_TYPE_GREEN:
-                return R.drawable.btn_purchase_green_selector;
+                return R.drawable.btn_green_selector;
             case BUTTON_TYPE_BLUE:
             default:
-                return R.drawable.btn_purchase_blue_selector;
+                return R.drawable.btn_blue_selector;
         }
     }
 
@@ -103,35 +121,6 @@ public class BuyButtonVer1 extends BuyButton {
             }
         }
         return sticker;
-    }
-
-
-    public BuyButtonVer1(Context context) {
-        this(context, (BuyButtonBuilder) null);
-    }
-
-    public BuyButtonVer1(Context context, BuyButtonBuilder builder) {
-        super(context);
-        init();
-        if (builder != null) {
-            setButtonTitle(builder.mTitle);
-            setType(builder.mButtonBgType);
-            setStickerType(builder.mStickerType);
-            setDescription(builder.mDiscount, builder.mPricePerItem, builder.mTotalPrice);
-            setOnClickListener(builder.mButtonClickListener);
-        }
-    }
-
-    public BuyButtonVer1(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-        getAttrs(context, attrs, 0);
-    }
-
-    public BuyButtonVer1(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init();
-        getAttrs(context, attrs, defStyleAttr);
     }
 
     @Override
@@ -152,7 +141,22 @@ public class BuyButtonVer1 extends BuyButton {
         }
     }
 
-    private void getAttrs(Context context, AttributeSet attrs, int defStyle) {
+    @Override
+    int getButtonLayout() {
+        return R.layout.buy_button_ver_1;
+    }
+
+    @Override
+    void build(@NotNull BuyButtonBuilder builder) {
+        setButtonTitle(builder.mTitle);
+        setType(builder.mButtonBgType);
+        setStickerType(builder.mStickerType);
+        setDescription(builder.mDiscount, builder.mPricePerItem, builder.mTotalPrice);
+        setOnClickListener(builder.mButtonClickListener);
+    }
+
+    @Override
+    void getAttrs(Context context, AttributeSet attrs, int defStyle) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BuyButtonVer1, defStyle, 0);
         setType(getTypeFromAttr(a.getInt(R.styleable.BuyButtonVer1_buy_button_ver_1_type, BUTTON_TYPE_BLUE)));
         setStickerType(getStickerTypeFromAttr(a.getInt(R.styleable.BuyButtonVer1_buy_button_ver_1_sticker_type, STICKER_TYPE_NONE)));
@@ -163,10 +167,22 @@ public class BuyButtonVer1 extends BuyButton {
         a.recycle();
     }
 
+    /**
+     * Set buy button title
+     *
+     * @param title buy button title value
+     */
     public void setButtonTitle(String title) {
         setText(mButtonTitle, title);
     }
 
+    /**
+     * Fill all descriptions view
+     *
+     * @param discount     products discount value
+     * @param pricePerItem products price per period value
+     * @param totalPrice   products price value
+     */
     public void setDescription(String discount, String pricePerItem, String totalPrice) {
         boolean isDescriptionEnable = discount != null && pricePerItem != null && totalPrice != null;
         if (setViewVisibility(mButtonDescription, isDescriptionEnable ? View.VISIBLE : View.INVISIBLE)) {
@@ -178,6 +194,11 @@ public class BuyButtonVer1 extends BuyButton {
         }
     }
 
+    /**
+     * Choose button background color
+     *
+     * @param type One of {@link #BUTTON_TYPE_BLUE} or {@link #BUTTON_TYPE_GREEN}.
+     */
     public void setType(@Type int type) {
         if (setViewVisibility(mButtonView, View.VISIBLE)) {
             mButtonView.setBackgroundResource(getButtonRes(type));
@@ -185,7 +206,9 @@ public class BuyButtonVer1 extends BuyButton {
     }
 
     public void setOnClickListener(OnClickListener listener) {
-        mButtonView.setOnClickListener(listener);
+        if (mButtonView != null) {
+            mButtonView.setOnClickListener(listener);
+        }
     }
 
     private
@@ -215,6 +238,11 @@ public class BuyButtonVer1 extends BuyButton {
         }
     }
 
+    /**
+     * Set sticker over the product button
+     *
+     * @param type One of {@link #STICKER_TYPE_NONE}, {@link #STICKER_TYPE_POPULAR} or {@link #STICKER_TYPE_BEST_VALUE}.
+     */
     public void setStickerType(@StickerType int type) {
         Sticker sticker = getStickerByType(type);
         int padding = 0;
@@ -238,8 +266,9 @@ public class BuyButtonVer1 extends BuyButton {
     public @interface StickerType {
     }
 
-    private void init() {
-        inflate(getContext(), R.layout.buy_button_ver_1, this);
+    @Override
+    protected void initViews() {
+        super.initViews();
         mButtonView = (FrameLayout) findViewById(R.id.button);
         mButtonTitle = (TextView) findViewById(R.id.buttonTitle);
         mButtonSticker = (TextView) findViewById(R.id.buttonSticker);

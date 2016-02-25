@@ -3,9 +3,9 @@ package com.topface.topface.ui.views;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.content.res.TypedArray;
 import android.content.res.XmlResourceParser;
 import android.os.Build;
+import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -15,13 +15,14 @@ import android.widget.TextView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.utils.Utils;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by ppetr on 24.02.16.
  * Custom button for purchase screen version 0 (base)
  */
-public class BuyButtonVer0 extends BuyButton {
+public class BuyButtonVer0 extends BuyButton<BuyButtonVer0.BuyButtonBuilder> {
 
     private RelativeLayout mContainer;
     private TextView mText;
@@ -32,13 +33,15 @@ public class BuyButtonVer0 extends BuyButton {
     }
 
     public BuyButtonVer0(Context context, BuyButtonBuilder builder) {
-        super(context);
-        init();
-        if (builder != null) {
-            setButtonCondition(builder.mHasDiscount, builder.mShowType);
-            setTitle(builder.mTitle);
-            setOnClickListener(builder.mButtonClickListener);
-        }
+        super(context, builder);
+    }
+
+    public BuyButtonVer0(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public BuyButtonVer0(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
     }
 
     public void setOnClickListener(OnClickListener listener) {
@@ -49,8 +52,8 @@ public class BuyButtonVer0 extends BuyButton {
 
     public void setButtonCondition(boolean isDiscount, int showType) {
         if (isDiscount && mContainer != null) {
-            int paddingFive = Utils.getPxFromDp(5);
-            mContainer.setPadding(paddingFive, paddingFive, Utils.getPxFromDp(56), paddingFive);
+            int paddingFive = (int) getContext().getResources().getDimension(R.dimen.default_purchase_button_container_padding);
+            mContainer.setPadding(paddingFive, paddingFive, (int) getContext().getResources().getDimension(R.dimen.default_purchase_button_container_padding_top), paddingFive);
         }
         setBuyButtonTextColor(showType, mText);
         setBuyButtonBackground(isDiscount, showType, mContainer);
@@ -113,18 +116,6 @@ public class BuyButtonVer0 extends BuyButton {
         view.setBackgroundResource(bgResource);
     }
 
-    public BuyButtonVer0(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-        getAttrs(context, attrs, 0);
-    }
-
-    public BuyButtonVer0(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init();
-        getAttrs(context, attrs, defStyleAttr);
-    }
-
     @Override
     public void startWaiting() {
         setViewVisibility(mText, View.INVISIBLE);
@@ -143,16 +134,29 @@ public class BuyButtonVer0 extends BuyButton {
         }
     }
 
-    private void init() {
-        inflate(getContext(), R.layout.item_buying_btn, this);
+    @Override
+    @LayoutRes
+    int getButtonLayout() {
+        return R.layout.item_buying_btn;
+    }
+
+    @Override
+    void getAttrs(Context context, AttributeSet attrs, int defStyle) {
+    }
+
+    @Override
+    void build(@NotNull BuyButtonBuilder builder) {
+        setButtonCondition(builder.mHasDiscount, builder.mShowType);
+        setTitle(builder.mTitle);
+        setOnClickListener(builder.mButtonClickListener);
+    }
+
+    @Override
+    protected void initViews() {
+        super.initViews();
         mContainer = (RelativeLayout) findViewById(R.id.itContainer);
         mText = (TextView) findViewById(R.id.itText);
         mProgress = (ProgressBar) findViewById(R.id.marketWaiter);
-    }
-
-    private void getAttrs(Context context, AttributeSet attrs, int defStyle) {
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BuyButtonVer1, defStyle, 0);
-        a.recycle();
     }
 
     public static class BuyButtonBuilder {
