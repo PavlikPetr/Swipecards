@@ -129,7 +129,7 @@ public class FilterConstitutionDialog extends DialogFragment {
         return new AlertDialog.Builder(getActivity())
                 .setTitle(mTitle)
                 .setView(view)
-                .setNegativeButton(getActivity().getString(R.string.general_ok), new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.general_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mFirstPicker.clearFocus();
@@ -145,7 +145,7 @@ public class FilterConstitutionDialog extends DialogFragment {
                         }
                     }
                 })
-                .setPositiveButton(getActivity().getString(R.string.general_any), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.general_any), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (mListener != null) {
@@ -160,6 +160,7 @@ public class FilterConstitutionDialog extends DialogFragment {
     @Override
     public void onDestroyView() {
         ButterKnife.unbind(this);
+        mListener = null;
         super.onDestroyView();
     }
 

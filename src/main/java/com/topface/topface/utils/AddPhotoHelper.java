@@ -45,6 +45,7 @@ import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -66,8 +67,8 @@ public class AddPhotoHelper {
     private static HashMap<String, File> fileNames = new HashMap<>();
     private String mFileName = "/tmp.jpg";
     private Context mContext;
-    private Activity mActivity;
-    private Fragment mFragment;
+    private WeakReference<Activity> mActivity;
+    private WeakReference<Fragment> mFragment;
     private Handler mHandler;
     private View mProgressView;
     private AppOptions.MinPhotoSize minPhotoSize;
@@ -91,13 +92,13 @@ public class AddPhotoHelper {
 
     public AddPhotoHelper(Fragment fragment, View progressView) {
         this(fragment.getActivity());
-        mFragment = fragment;
+        mFragment = new WeakReference<>(fragment);
         this.mProgressView = progressView;
     }
 
     public AddPhotoHelper(Activity activity) {
         minPhotoSize = App.getAppOptions().getMinPhotoSize();
-        mActivity = activity;
+        mActivity = new WeakReference<>(activity);
         mContext = activity.getApplicationContext();
         PATH_TO_FILE = StorageUtils.getCacheDirectory(mContext).getPath() + "/topface_profile/";
     }
@@ -159,7 +160,7 @@ public class AddPhotoHelper {
     }
 
     public Activity getActivity() {
-        return (mFragment == null) ? mActivity : mFragment.getActivity();
+        return (mFragment == null) ? mActivity.get() : mFragment.get().getActivity();
     }
 
     public void startChooseFromGallery() {
@@ -169,26 +170,27 @@ public class AddPhotoHelper {
     public void startChooseFromGallery(boolean withDialog) {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.album_add_photo_title));
-        boolean noSuitableActivity = intent.resolveActivity(mActivity.getPackageManager()) == null;
+        boolean noSuitableActivity = intent.resolveActivity(mActivity.get().getPackageManager()) == null;
         int requestCode = withDialog || noSuitableActivity ? GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG :
                 GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY;
         startAddPhotoActivity(intent, requestCode);
     }
 
     private void startAddPhotoActivity(Intent intent, int requestCode) {
-        if (mFragment != null) {
-            if (mFragment.isAdded()) {
-                if (mFragment instanceof ProfilePhotoFragment) {
-                    mFragment.getParentFragment().startActivityForResult(intent, requestCode);
+        Fragment fragment = mFragment.get();
+        if (fragment != null) {
+            if (fragment.isAdded()) {
+                if (fragment instanceof ProfilePhotoFragment) {
+                    fragment.getParentFragment().startActivityForResult(intent, requestCode);
                 } else {
-                    mFragment.startActivityForResult(intent, requestCode);
+                    fragment.startActivityForResult(intent, requestCode);
                 }
             } else {
-                mActivity.startActivityForResult(intent, requestCode);
+                mActivity.get().startActivityForResult(intent, requestCode);
             }
         } else {
-            if (mActivity != null) {
-                mActivity.startActivityForResult(intent, requestCode);
+            if (mActivity.get() != null) {
+                mActivity.get().startActivityForResult(intent, requestCode);
             }
 
         }
@@ -231,7 +233,7 @@ public class AddPhotoHelper {
     public Uri processActivityResult(int requestCode, int resultCode, Intent data, boolean sendPhotoRequest) {
         Uri photoUri = null;
         if (mFragment != null) {
-            if (mFragment.getActivity() != null && !mFragment.isAdded()) {
+            if (mFragment.get().getActivity() != null && !mFragment.get().isAdded()) {
                 Debug.log("APH::detached");
             }
         }
@@ -402,7 +404,7 @@ public class AddPhotoHelper {
     }
 
     private Intent getIntentForNotification() {
-        return new Intent(mActivity, NavigationActivity.class)
+        return new Intent(mActivity.get(), NavigationActivity.class)
                 .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.PROFILE.getFragmentSettings())
                 .putExtra(GCMUtils.NOTIFICATION_INTENT, true)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
