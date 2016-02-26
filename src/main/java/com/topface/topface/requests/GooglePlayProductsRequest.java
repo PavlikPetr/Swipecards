@@ -5,6 +5,7 @@ import android.content.Context;
 import com.topface.topface.App;
 import com.topface.topface.data.Products;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.fragments.buy.PurchaseButtonList;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +25,9 @@ public class GooglePlayProductsRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return null;
+        JSONObject result = new JSONObject();
+        result.put("acceptViews", PurchaseButtonList.getSupportedViews());
+        return result;
     }
 
     @Override

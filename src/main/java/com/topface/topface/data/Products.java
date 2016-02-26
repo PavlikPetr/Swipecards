@@ -1,44 +1,33 @@
 package com.topface.topface.data;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.LinearLayout;
 
 import com.topface.billing.DeveloperPayload;
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
-import com.topface.topface.App;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.ui.views.BuyButtonVer1;
-import com.topface.topface.ui.views.BuyButtonVer2;
 import com.topface.topface.utils.CacheProfile;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Currency;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 public class Products extends AbstractData {
-
-    public static final String VIEW_V1 = "v1";
-    public static final String VIEW_V2 = "v2";
+    public static final String DISCOUNT = "{{discount}}";
     public static final String PRICE = "{{price}}";
     public static final String PRICE_PER_ITEM = "{{price_per_item}}";
     public static String[] PRICE_TEMPLATES = {PRICE, PRICE_PER_ITEM};
-    private static final String EUR = "EUR";
-    private static final String RUB = "RUB";
-    private static final String USD = "USD";
+    public static final String EUR = "EUR";
+    public static final String RUB = "RUB";
+    public static final String USD = "USD";
 
     public enum ProductType {
         COINS("coins"),
@@ -191,107 +180,6 @@ public class Products extends AbstractData {
     }
 
     /**
-     * Creates view for buy actions. Button with hints
-     *
-     * @param context  current context
-     * @param buyBtn   google play product object with configuration data
-     * @param listener to process click
-     * @return created view
-     */
-    public static View createBuyButtonLayout(Context context, BuyButtonData buyBtn,
-                                             final BuyButtonClickListener listener) {
-        String value;
-        if (buyBtn.type == ProductType.COINS_SUBSCRIPTION && buyBtn.price == 0) {
-            value = buyBtn.hint;
-        } else {
-            ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
-            Currency currency;
-            NumberFormat currencyFormatter;
-            currency = Currency.getInstance(USD);
-            currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
-            currencyFormatter.setCurrency(currency);
-            value = formatPrice((double) buyBtn.price / 100, currencyFormatter, buyBtn);
-            if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
-                ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
-
-                if (detail != null && detail.currency != null) {
-                    double price = detail.price / ProductsDetails.MICRO_AMOUNT;
-                    currency = Currency.getInstance(detail.currency);
-                    currencyFormatter = detail.currency.equalsIgnoreCase(USD)
-                            ? NumberFormat.getCurrencyInstance(Locale.US) : NumberFormat.getCurrencyInstance(new Locale(App.getLocaleConfig().getApplicationLocale()));
-                    currencyFormatter.setCurrency(currency);
-                    value = formatPrice(price, currencyFormatter, buyBtn);
-                } else {
-                    value = formatPrice((double) buyBtn.price / 100, currencyFormatter, buyBtn);
-                }
-            }
-        }
-        return createBuyButtonLayout(
-                context, buyBtn.id, buyBtn.title, buyBtn.discount > 0,
-                buyBtn.showType, value, listener
-        );
-    }
-
-    public static String formatPrice(double price, NumberFormat currencyFormatter, BuyButtonData buyBtn) {
-        price = getPriceByTemplate(price, buyBtn);
-        currencyFormatter.setMaximumFractionDigits(price % 1 != 0 ? 2 : 0);
-        for (String replaceTemplate : PRICE_TEMPLATES) {
-            if (buyBtn.titleTemplate.contains(replaceTemplate)) {
-                return buyBtn.titleTemplate.replace(replaceTemplate, currencyFormatter.format(price));
-            }
-        }
-        return buyBtn.title;
-    }
-
-    private static double getPriceByTemplate(double price, BuyButtonData buyBtn) {
-        if (buyBtn.titleTemplate.contains((PRICE_PER_ITEM))) {
-            return price / buyBtn.amount;
-        } else {
-            return price;
-        }
-    }
-
-    /**
-     * Creates view for buy actions. Button with hints
-     *
-     * @param context  current context
-     * @param id       unique good's id from google play in-app billing system
-     * @param title    for button
-     * @param discount true if button background has to be with sale badge
-     * @param showType 0 - gray, 1 - blue button, 2 - disabled button
-     * @param value    hint under button
-     * @param listener to process click
-     * @return created view
-     */
-    public static View createBuyButtonLayout(
-            Context context, final String id, String title, boolean discount, int showType,
-            String value, final BuyButtonClickListener listener
-    ) {
-        if (context == null || TextUtils.isEmpty(title)) return null;
-        return new BuyButtonVer1.BuyButtonBuilder().discount(discount).showType(showType).title(TextUtils.isEmpty(value) ? title : value).onClick(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onClick(id);
-            }
-        }).build(context);
-    }
-
-    public static View setBuyButton(LinearLayout root, final BuyButtonData buyBtn,
-                                    Context context, final BuyButtonClickListener listener) {
-        return setBuyButton(root, createBuyButtonLayout(context, buyBtn, listener), buyBtn);
-    }
-
-    public static View setBuyButton(LinearLayout root, View view, final BuyButtonData buyBtn) {
-        if (view != null) {
-            root.addView(view);
-            view.setTag(buyBtn);
-            return view;
-        } else {
-            return null;
-        }
-    }
-
-    /**
      * Can check if this product id is in on of subscriptions list
      *
      * @param product product
@@ -353,7 +241,7 @@ public class Products extends AbstractData {
     }
 
     public class ViewsType {
-        public ArrayList<String> buyVip;
+        public String buyVip;
     }
 
     public class ProductsInfo {
@@ -364,7 +252,9 @@ public class Products extends AbstractData {
         public ProductsInfo(JSONObject infoJson) {
             coinsSubscription = new CoinsSubscriptionInfo(infoJson.optJSONObject(ProductType.COINS_SUBSCRIPTION.getName()));
             coinsSubscriptionMasked = new CoinsSubscriptionInfo(infoJson.optJSONObject(ProductType.COINS_SUBSCRIPTION_MASKED.getName()));
-            views = JsonUtils.fromJson(infoJson.toString(), ViewsType.class);
+            if (infoJson.has("views")) {
+                views = JsonUtils.fromJson(infoJson.optJSONObject("views").toString(), ViewsType.class);
+            }
             //Парсим список всех подписок
             JSONArray inventoryArray = infoJson.optJSONArray("inventory");
             if (inventoryArray != null) {

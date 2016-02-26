@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
 public class BuyButtonBaseData {
     public String id;
     public String title;
-    protected String titleTemplate;
+    public String titleTemplate;
     public int price;
     public int showType;
     public int amount;

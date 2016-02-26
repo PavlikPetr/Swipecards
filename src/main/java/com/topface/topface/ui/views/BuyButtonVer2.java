@@ -184,7 +184,7 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
      * @param totalPrice   products price value
      */
     public void setDescription(String discount, String pricePerItem, String totalPrice) {
-        boolean isDescriptionEnable = discount != null && pricePerItem != null && totalPrice != null;
+        boolean isDescriptionEnable = pricePerItem != null && totalPrice != null;
         if (setViewVisibility(mButtonDescription, isDescriptionEnable ? View.VISIBLE : View.INVISIBLE)) {
             if (isDescriptionEnable) {
                 setText(mDescriptionDicscount, discount);
