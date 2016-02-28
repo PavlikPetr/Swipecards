@@ -32,7 +32,8 @@ public class PurchaseButtonList {
     private ArrayList<ValidatedAndDeffProductPrice> mValidatedAndDeffProductPrices;
     private List<BuyButtonData> mAllButtonArray;
     private List<BuyButtonData> mNoProductsTrialList;
-    private Boolean mAllIsProductsValidated;
+    private Boolean mIsAllProductsValidated;
+    private Boolean mIsAllNotTrialProductsValidated;
 
     private enum ViewsVersions {
         V1("v1"),
@@ -52,6 +53,7 @@ public class PurchaseButtonList {
     public ArrayList<View> getButtonsListView(String version, LinearLayout root, List<BuyButtonData> buttons,
                                               Context context, BuyButtonClickListener listener) {
         mAllButtonArray = buttons;
+        getAllProductsPrices();
         ArrayList<View> allViews = new ArrayList<>();
         View tempView;
         for (BuyButtonData buyBtn : buttons) {
@@ -120,8 +122,8 @@ public class PurchaseButtonList {
         BuyButtonData firstNotTrialProduct = getNoTrialProductsList().get(0);
         ValidatedAndDeffProductPrice firstNtTrialProductPrices = getCurrentProductPrices(firstNotTrialProduct);
         ValidatedAndDeffProductPrice currentProductPrices = getCurrentProductPrices(buyBtn);
-        double firstNotTrialProductPrice = isAllProductsValidated() ? firstNtTrialProductPrices.getValidatedPrice().getPrice() : firstNtTrialProductPrices.getDeffPrice().getPrice();
-        double currentProductPrice = isAllProductsValidated() ? currentProductPrices.getValidatedPrice().getPrice() : currentProductPrices.getDeffPrice().getPrice();
+        double firstNotTrialProductPrice = isAllNotTrialProductsValidated() ? firstNtTrialProductPrices.getValidatedPrice().getPrice() : firstNtTrialProductPrices.getDeffPrice().getPrice();
+        double currentProductPrice = isAllNotTrialProductsValidated() ? currentProductPrices.getValidatedPrice().getPrice() : currentProductPrices.getDeffPrice().getPrice();
         firstNotTrialProductPrice /= firstNotTrialProduct.periodInDays;
         currentProductPrice /= buyBtn.periodInDays;
         double free = (firstNotTrialProductPrice - currentProductPrice) * 100 / firstNotTrialProductPrice;
@@ -133,14 +135,14 @@ public class PurchaseButtonList {
             return null;
         }
         ValidatedAndDeffProductPrice currentProductPrices = getCurrentProductPrices(buyBtn);
-        double pricePerItem = isAllProductsValidated() ? currentProductPrices.getValidatedPrice().getPrice() / buyBtn.amount : currentProductPrices.getDeffPrice().getPrice() / buyBtn.amount;
-        NumberFormat currentFormat = isAllProductsValidated() ? currentProductPrices.getValidatedPrice().getCurrencyFormat() : currentProductPrices.getDeffPrice().getCurrencyFormat();
+        double pricePerItem = isAllNotTrialProductsValidated() ? currentProductPrices.getValidatedPrice().getPrice() / buyBtn.amount : currentProductPrices.getDeffPrice().getPrice() / buyBtn.amount;
+        NumberFormat currentFormat = isAllNotTrialProductsValidated() ? currentProductPrices.getValidatedPrice().getCurrencyFormat() : currentProductPrices.getDeffPrice().getCurrencyFormat();
         return buyBtn.pricePerItemTemplate.replace(Products.PRICE_PER_ITEM, getFormatedPrice(pricePerItem, currentFormat));
     }
 
     private String getCurrentButtonFormatedPrice(BuyButtonData buyBtn) {
         ValidatedAndDeffProductPrice prices = getCurrentProductPrices(buyBtn);
-        return isAllProductsValidated() ? prices.getValidatedPrice().getFormatedPrice() : prices.getDeffPrice().getFormatedPrice();
+        return isAllNotTrialProductsValidated() ? prices.getValidatedPrice().getFormatedPrice() : prices.getDeffPrice().getFormatedPrice();
     }
 
     private LinkedList<BuyButtonData> discardTrialProducts(List<BuyButtonData> products) {
@@ -185,8 +187,8 @@ public class PurchaseButtonList {
         } else {
             ValidatedAndDeffProductPrice validatedAndDeffProductPrice = getCurrentProductPrices(buyBtn);
             value = isAllProductsValidated() ?
-                    formatPrice(validatedAndDeffProductPrice.getValidatedPrice().getPrice(), validatedAndDeffProductPrice.getValidatedPrice().getFormatedPrice(), buyBtn) :
-                    formatPrice(validatedAndDeffProductPrice.getDeffPrice().getPrice(), validatedAndDeffProductPrice.getDeffPrice().getFormatedPrice(), buyBtn);
+                    formatPrice(validatedAndDeffProductPrice.getValidatedPrice().getPrice(), validatedAndDeffProductPrice.getValidatedPrice().getCurrencyFormat(), buyBtn) :
+                    formatPrice(validatedAndDeffProductPrice.getDeffPrice().getPrice(), validatedAndDeffProductPrice.getDeffPrice().getCurrencyFormat(), buyBtn);
         }
         if (context == null) return null;
         return new BuyButtonVer1.BuyButtonBuilder().discount(buyBtn.discount > 0).showType(buyBtn.showType).title(TextUtils.isEmpty(value) ? buyBtn.title : value).onClick(new View.OnClickListener() {
@@ -197,11 +199,11 @@ public class PurchaseButtonList {
         }).build(context);
     }
 
-    private String formatPrice(double price, String formatedPrice, BuyButtonData buyBtn) {
+    private String formatPrice(double price, NumberFormat currencyFormatter, BuyButtonData buyBtn) {
         price = getPriceByTemplate(price, buyBtn);
         for (String replaceTemplate : Products.PRICE_TEMPLATES) {
             if (buyBtn.titleTemplate.contains(replaceTemplate)) {
-                return buyBtn.titleTemplate.replace(replaceTemplate, formatedPrice);
+                return buyBtn.titleTemplate.replace(replaceTemplate, currencyFormatter.format(price));
             }
         }
         return buyBtn.title;
@@ -298,13 +300,29 @@ public class PurchaseButtonList {
     }
 
     private boolean isAllProductsValidated() {
-        if (mAllIsProductsValidated == null) {
-            mAllIsProductsValidated = checkAllProducts();
+        if (mIsAllProductsValidated == null) {
+            mIsAllProductsValidated = checkAllProducts();
         }
-        return mAllIsProductsValidated;
+        return mIsAllProductsValidated;
+    }
+
+    private boolean isAllNotTrialProductsValidated() {
+        if (mIsAllNotTrialProductsValidated == null) {
+            mIsAllNotTrialProductsValidated = checkAllNotTrialProducts();
+        }
+        return mIsAllNotTrialProductsValidated;
     }
 
     private boolean checkAllProducts() {
+        for (ValidatedAndDeffProductPrice prices : getAllProductsPrices()) {
+            if (prices.getValidatedPrice() == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean checkAllNotTrialProducts() {
         for (ValidatedAndDeffProductPrice prices : getAllNotTrialProductsPrices()) {
             if (prices.getValidatedPrice() == null) {
                 return false;
