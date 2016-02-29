@@ -32,7 +32,6 @@ public class PurchaseButtonList {
     private ArrayList<ValidatedAndDeffProductPrice> mValidatedAndDeffProductPrices;
     private List<BuyButtonData> mAllButtonArray;
     private List<BuyButtonData> mNoProductsTrialList;
-    private Boolean mIsAllProductsValidated;
     private Boolean mIsAllNotTrialProductsValidated;
 
     private enum ViewsVersions {
@@ -186,7 +185,7 @@ public class PurchaseButtonList {
             value = buyBtn.hint;
         } else {
             ValidatedAndDeffProductPrice validatedAndDeffProductPrice = getCurrentProductPrices(buyBtn);
-            value = isAllProductsValidated() ?
+            value = validatedAndDeffProductPrice.getValidatedPrice() != null ?
                     formatPrice(validatedAndDeffProductPrice.getValidatedPrice().getPrice(), validatedAndDeffProductPrice.getValidatedPrice().getCurrencyFormat(), buyBtn) :
                     formatPrice(validatedAndDeffProductPrice.getDeffPrice().getPrice(), validatedAndDeffProductPrice.getDeffPrice().getCurrencyFormat(), buyBtn);
         }
@@ -299,27 +298,11 @@ public class PurchaseButtonList {
         return prices;
     }
 
-    private boolean isAllProductsValidated() {
-        if (mIsAllProductsValidated == null) {
-            mIsAllProductsValidated = checkAllProducts();
-        }
-        return mIsAllProductsValidated;
-    }
-
     private boolean isAllNotTrialProductsValidated() {
         if (mIsAllNotTrialProductsValidated == null) {
             mIsAllNotTrialProductsValidated = checkAllNotTrialProducts();
         }
         return mIsAllNotTrialProductsValidated;
-    }
-
-    private boolean checkAllProducts() {
-        for (ValidatedAndDeffProductPrice prices : getAllProductsPrices()) {
-            if (prices.getValidatedPrice() == null) {
-                return false;
-            }
-        }
-        return true;
     }
 
     private boolean checkAllNotTrialProducts() {
