@@ -877,4 +877,10 @@
     <string name="take_photo_text_2">На фотографији можете бити сам Ви; све слике прегледавају наши
         модератори како би утврдили да се правила поштују.
     </string>
+    <string name="unlock_by_viewed_ad_video_button_text">Откључати бесплатно на %s</string>
+    <plurals name="free_minutes">
+        <item quantity="few">%d минута</item>
+        <item quantity="other">%d минута</item>
+        <item quantity="one">%d минут</item>
+    </plurals>
 </resources>

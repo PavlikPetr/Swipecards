@@ -822,4 +822,6 @@
     <item quantity="few">%d минуты</item>
     <item quantity="other">%d минут</item>
   </plurals>
+  <string name="buy_button_sticker_popular">хит продаж</string>
+  <string name="buy_button_sticker_best_value">Лучшая цена</string>
 </resources>
