@@ -815,4 +815,9 @@
     <string name="thanks_for_your_rate_bottom_label">Teile deine Gedanken im App Store. Wie schätzen jede Bewertung!</string>
     <string name="thanks_for_your_rate_rate_app">Schreibe eine Bewertung im App Store.</string>
     <string name="thanks_for_your_rate_close">Schließen</string>
+    <plurals name="novice_sympathies_bonuses">
+        <item quantity="zero">Du bekommst %1$d Likes als \nGeschenk! Das bedeutet, dass diejenigen, \ndie dir Likes schicken, %2$d dich \nwirklich mögen.</item>
+        <item quantity="other">Du bekommst %1$d Likes als \nGeschenk! Das bedeutet, dass diejenigen, \ndie dir Likes schicken, %2$d dich \nwirklich mögen.</item>
+        <item quantity="one">Du bekommst %1$d Like als \nGeschenk! Das bedeutet, dass diejenigen, \ndie dir Likes schicken, %2$d dich \nwirklich mögen.</item>
+    </plurals>
 </resources>

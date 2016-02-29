@@ -870,4 +870,19 @@
     <string name="settings_auto_greeting_subtitle">Autoriser Topface à lancer automatiquement une conversation avec un message de salutation à chaque fois que quelqu\'un vous envoie un J\'aime</string>
     <string name="take_photo_text_1">Veuillez télécharger votre photo pour faire connaissance.</string>
     <string name="take_photo_text_2">Seul vous êtes autorisé à apparaître sur la photo. Toutes les photos sont modérées.</string>
+    <string name="unlock_by_viewed_ad_video_button_text">Déverrouiller gratuitement à %s</string>
+    <plurals name="free_minutes">
+        <item quantity="other">%d minutes</item>
+        <item quantity="one">%d minute</item>
+    </plurals>
+    <string name="thanks_for_your_rate_title">Merci pour votre avis</string>
+    <string name="thanks_for_your_rate_top_label">Pour vous remercier, nous afficherons votre photo dans le fil d\'actualité !</string>
+    <string name="thanks_for_your_rate_bottom_label">Partagez votre avis dans l\'App Store. Nous apprécions tous les commentaires !</string>
+    <string name="thanks_for_your_rate_rate_app">Laisser un commentaire sur l\'App Store</string>
+    <string name="thanks_for_your_rate_close">Fermé</string>
+    <plurals name="novice_sympathies_bonuses">
+        <item quantity="zero">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.</item>
+        <item quantity="other">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.</item>
+        <item quantity="one">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.</item>
+    </plurals>
 </resources>

@@ -877,4 +877,9 @@
     <string name="thanks_for_your_rate_bottom_label">Compartir tu experiencia en AppStore.¡Valoramos cada comentario!</string>
     <string name="thanks_for_your_rate_rate_app">Dejar comentario en AppStore</string>
     <string name="thanks_for_your_rate_close">Cerrar</string>
+    <plurals name="novice_sympathies_bonuses">
+        <item quantity="zero">¡Recibirás %1$d simpatías de\nregalo! Esto significa que tú\ncon seguridad gustas al %2$d de las personas,\nque te expresarán su simpatía.</item>
+        <item quantity="other">¡Recibirás %1$d simpatías de\nregalo! Esto significa que tú\ncon seguridad gustas al %2$d de las personas,\nque te expresarán su simpatía.</item>
+        <item quantity="one">¡Recibirás %1$d simpatías de\nregalo! Esto significa que tú\ncon seguridad gustas al %2$d de las personas,\nque te expresarán su simpatía.</item>
+    </plurals>
 </resources>

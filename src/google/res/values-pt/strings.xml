@@ -872,4 +872,9 @@
     <string name="thanks_for_your_rate_bottom_label">Partilha a tua opinião na App Store. Valorizamos todos os comentários!</string>
     <string name="thanks_for_your_rate_rate_app">Deixa a tua opinião na App Store</string>
     <string name="thanks_for_your_rate_close">Fechar</string>
+    <plurals name="novice_sympathies_bonuses">
+        <item quantity="zero">Irás receber %1$d Gostos como \npresente! Isto significa que aqueles a \nquem enviares Gostos \ngostam mesmo %2$d de ti</item>
+        <item quantity="other">Irás receber %1$d Gostos como \npresente! Isto significa que aqueles a \nquem enviares Gostos \ngostam mesmo %2$d de ti</item>
+        <item quantity="one">Irás receber %1$d Gosto como \npresente! Isto significa que aqueles a \nquem enviares Gostos \ngostam mesmo %2$d de ti</item>
+    </plurals>
 </resources>
