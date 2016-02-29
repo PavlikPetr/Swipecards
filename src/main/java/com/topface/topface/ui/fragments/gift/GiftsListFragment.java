@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
@@ -27,7 +28,7 @@ public class GiftsListFragment extends PlainGiftsFragment implements GiftsListAd
         mGridView = (GridView) root.findViewById(R.id.giftsGrid);
         mGridView.setAnimationCacheEnabled(false);
         mGridView.setScrollingCacheEnabled(true);
-        mGiftsListAdapter = new GiftsListAdapter(getActivity(), new FeedList<FeedGift>(), getUpdaterCallback());
+        mGiftsListAdapter = new GiftsListAdapter(App.getContext(), new FeedList<FeedGift>(), getUpdaterCallback());
         mGiftsListAdapter.setOnGridClickLIstener(this);
         mGridView.setAdapter(mGiftsListAdapter);
         mGridView.setOnScrollListener(mGiftsListAdapter);
@@ -68,5 +69,12 @@ public class GiftsListFragment extends PlainGiftsFragment implements GiftsListAd
             mGiftsListAdapter.setData(g, false);
             mGiftsListAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mGridView.setAdapter(null);
+        mGridView.setOnScrollListener(null);
     }
 }

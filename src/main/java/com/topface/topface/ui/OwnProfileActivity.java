@@ -1,8 +1,9 @@
 package com.topface.topface.ui;
 
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
+import com.topface.topface.utils.IActivityDelegate;
 
-public class OwnProfileActivity extends CheckAuthActivity<OwnProfileFragment> {
+public class OwnProfileActivity extends CheckAuthActivity<OwnProfileFragment> implements IActivityDelegate {
 
     @Override
     protected String getFragmentTag() {
