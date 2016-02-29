@@ -248,12 +248,6 @@ public class AddPhotoHelper {
 
     public Uri processActivityResult(int requestCode, int resultCode, Intent data, boolean sendPhotoRequest) {
         Uri photoUri = null;
-        if (mFragment != null) {
-            Fragment fragment = mFragment.get();
-            if (fragment.getActivity() != null && !fragment.isAdded()) {
-                Debug.log("APH::detached");
-            }
-        }
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA:
