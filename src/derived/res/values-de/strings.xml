@@ -931,4 +931,7 @@
             \ndie dir Likes schicken, %2$d dich \nwirklich mögen.
         </item>
     </plurals>
+    <string name="buy_vip_title_from_input">Du kannst ein Gespräch mit einem anderen User starten,
+        wenn du VIP-Status hast.
+    </string>
 </resources>

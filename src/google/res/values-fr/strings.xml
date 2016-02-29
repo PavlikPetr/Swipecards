@@ -885,4 +885,5 @@
         <item quantity="other">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.</item>
         <item quantity="one">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.</item>
     </plurals>
+    <string name="buy_vip_title_from_input">Vous pouvez commencer une conversation avec un utilisateur si vous avez le statut VIP</string>
 </resources>

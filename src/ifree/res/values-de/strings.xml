@@ -820,4 +820,5 @@
         <item quantity="other">Du bekommst %1$d Likes als \nGeschenk! Das bedeutet, dass diejenigen, \ndie dir Likes schicken, %2$d dich \nwirklich mögen.</item>
         <item quantity="one">Du bekommst %1$d Like als \nGeschenk! Das bedeutet, dass diejenigen, \ndie dir Likes schicken, %2$d dich \nwirklich mögen.</item>
     </plurals>
+    <string name="buy_vip_title_from_input">Du kannst ein Gespräch mit einem anderen User starten, wenn du VIP-Status hast.</string>
 </resources>

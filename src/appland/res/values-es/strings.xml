@@ -905,4 +905,7 @@
             seguridad gustas al %2$d de las personas,\nque te expresarán su simpatía.
         </item>
     </plurals>
+    <string name="buy_vip_title_from_input">Se puede comenzar la comunicación con el usuario si
+        tienes el estado VIP
+    </string>
 </resources>

@@ -903,4 +903,7 @@
             sicuramente%2$d agli utenti,\nche ti invieranno la loro simpatia
         </item>
     </plurals>
+    <string name="buy_vip_title_from_input">Per cominciare a chattare con questo utente devi essere
+        VIP
+    </string>
 </resources>

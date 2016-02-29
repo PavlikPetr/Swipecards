@@ -1081,4 +1081,7 @@
         </item>
     </plurals>
 
+    <string name="buy_vip_title_from_input">Начать общение с пользователем можно, если у вас есть
+        VIP-статус
+    </string>
 </resources>

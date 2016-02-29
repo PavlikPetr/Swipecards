@@ -885,4 +885,7 @@
             you Likes \nreally like %2$d you
         </item>
     </plurals>
+    <string name="buy_vip_title_from_input">You can begin a conversation with a user if you have
+        VIP-status
+    </string>
 </resources>
