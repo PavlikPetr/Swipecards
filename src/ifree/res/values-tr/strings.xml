@@ -814,10 +814,6 @@
     <string name="settings_check_vip_alert">VIP statüsünün kontrol edilmesi talebiniz iletildi.</string>
     <string name="novice_sympathy">Yakın bir arkadaşlığa başlamak için sadece hoşlandığınız \nkişilere beğeni gönderin. 
             Belki de \nsizin için gerçekten özel birini böylece bulabilirsiniz.</string>
-    <plurals name="novice_sympathies_bonus">
-        <item quantity="other">Hediye olarak %1$d beğeni \nalacaksınız. Bu demek oluyor ki \nsize beğeni gönderenler \n sizi gerçekten beğeniyor.</item>
-        <item quantity="one">Hediye olarak %1$d beğeni \nalacaksınız. Bu demek oluyor ki \nsize beğeni gönderenler \n sizi gerçekten beğeniyor.</item>
-    </plurals>
     <string name="go_dating_message">İnsanlarla tanışmaya başla ve profilini ziyaret edenlerin listesi burada gözükecek.</string>
     <string name="photo_not_from_main_album">Yönetim bu fotoğrafın profil resmi olarak kullanılmayacağına karar verdi.</string>
     <string name="sidebar_vk_profile">Vkontakte profili</string>
@@ -847,4 +843,12 @@
         <item quantity="other">%d dakika</item>
         <item quantity="one">%d dakika</item>
     </plurals>
+    <string name="thanks_for_your_rate_title">Bizi değerlendirdiğiniz için teşekkür ederiz</string>
+    <string name="thanks_for_your_rate_top_label">Minnettarlığımızı sunmak için fotoğrafınızı, fotoğraf akışında yayınlayacağız.</string>
+    <string name="thanks_for_your_rate_bottom_label">Düşüncelerinizi bizimle AppStore\'da paylaşın. Ne düşündüğünüze önem veriyoruz!</string>
+    <string name="thanks_for_your_rate_rate_app">AppStore\'da bizi değerlendirin</string>
+    <string name="thanks_for_your_rate_close">Kapat</string>
+    <plurals name="novice_sympathies_bonuses">
+    </plurals>
+    <string name="buy_vip_title_from_input">Eğer VIP üyeyseniz dilediğiniz bir kullanıcı ile sohbete hemen başlayabilirsiniz</string>
 </resources>

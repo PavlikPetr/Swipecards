@@ -861,4 +861,21 @@
     <string name="settings_auto_greeting_subtitle">Permitir ao Topface começar automaticamente uma conversa com uma saudação sempre que alguém te envia um Gosto</string>
     <string name="take_photo_text_1">Por favor, faz upload de uma foto tua para começares a falar.</string>
     <string name="take_photo_text_2">Apenas tu deves estar na foto; todas as fotos são revistas pelos nossos moderadores para garantir que as regras são seguidas.</string>
+    <string name="unlock_by_viewed_ad_video_button_text">Desbloquear gratuitamente a %s</string>
+    <plurals name="free_minutes">
+        <item quantity="zero">%d minuto</item>
+        <item quantity="other">%d minutos</item>
+        <item quantity="one">%d minuto</item>
+    </plurals>
+    <string name="thanks_for_your_rate_title">Obrigada pela tua opinião</string>
+    <string name="thanks_for_your_rate_top_label">Para mostrar a nossa gratidão, iremos postar uma foto tua no feed de notícias das fotos!</string>
+    <string name="thanks_for_your_rate_bottom_label">Partilha a tua opinião na App Store. Valorizamos todos os comentários!</string>
+    <string name="thanks_for_your_rate_rate_app">Deixa a tua opinião na App Store</string>
+    <string name="thanks_for_your_rate_close">Fechar</string>
+    <plurals name="novice_sympathies_bonuses">
+        <item quantity="zero">Irás receber %1$d Gostos como \npresente! Isto significa que aqueles a \nquem enviares Gostos \ngostam mesmo %2$d de ti</item>
+        <item quantity="other">Irás receber %1$d Gostos como \npresente! Isto significa que aqueles a \nquem enviares Gostos \ngostam mesmo %2$d de ti</item>
+        <item quantity="one">Irás receber %1$d Gosto como \npresente! Isto significa que aqueles a \nquem enviares Gostos \ngostam mesmo %2$d de ti</item>
+    </plurals>
+    <string name="buy_vip_title_from_input">Podes começar uma conversa com um utilizador se tiveres estatuto VIP</string>
 </resources>

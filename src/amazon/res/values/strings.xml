@@ -825,17 +825,6 @@
     <string name="novice_sympathy">Send Likes only to those\nwho really attract you.\nYou just might
         find someone special!
     </string>
-    <plurals name="novice_sympathies_bonus">
-        <item quantity="zero">You will receive %1$d Likes as a\ngift! This means that those \nwho
-            send you Likes \nreally like %2$d you
-        </item>
-        <item quantity="other">You will receive %1$d Likes as a\ngift! This means that those \nwho
-            send you Likes \nreally like %2$d you
-        </item>
-        <item quantity="one">You will receive %1$d Like as a\ngift! This means that those \nwho send
-            you Likes \nreally like %2$d you
-        </item>
-    </plurals>
     <string name="go_dating_message">Start getting to know people and here will appear the names of
         those users who visited your profile.
     </string>
@@ -875,5 +864,25 @@
     <plurals name="free_minutes">
         <item quantity="other">%d minutes</item>
         <item quantity="one">%d minute</item>
+    </plurals>
+    <string name="thanks_for_your_rate_title">Thank you for your review</string>
+    <string name="thanks_for_your_rate_top_label">To show our thanks, we\'ll post your picture in
+        the photo newsfeed!
+    </string>
+    <string name="thanks_for_your_rate_bottom_label">Share your thoughts in the App Store. We value
+        every review!
+    </string>
+    <string name="thanks_for_your_rate_rate_app">Leave a review in the App Store</string>
+    <string name="thanks_for_your_rate_close">Close</string>
+    <plurals name="novice_sympathies_bonuses">
+        <item quantity="zero">You will receive %1$d Likes as a\ngift! This means that those \nwho
+            send you Likes \nreally like %2$d you
+        </item>
+        <item quantity="other">You will receive %1$d Likes as a\ngift! This means that those \nwho
+            send you Likes \nreally like %2$d you
+        </item>
+        <item quantity="one">You will receive %1$d Like as a\ngift! This means that those \nwho send
+            you Likes \nreally like %2$d you
+        </item>
     </plurals>
 </resources>

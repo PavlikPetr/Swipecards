@@ -874,4 +874,10 @@
     <string name="thanks_for_your_rate_bottom_label">Condividi la tua esperienza nell\'App Store. Valutiamo ogni recensione!</string>
     <string name="thanks_for_your_rate_rate_app">Scrivi una recensione nell\'App Store</string>
     <string name="thanks_for_your_rate_close">Chiuso</string>
+    <plurals name="novice_sympathies_bonuses">
+        <item quantity="zero">Ricevi %1$d simpatie in\nregalo! Questo significa che tu\n piacerai sicuramente%2$d agli utenti,\nche ti invieranno la loro simpatia</item>
+        <item quantity="other">Ricevi %1$d simpatie in\nregalo! Questo significa che tu\n piacerai sicuramente%2$d agli utenti,\nche ti invieranno la loro simpatia</item>
+        <item quantity="one">Ricevi %1$d simpatia in\nregalo! Questo significa che tu\n piacerai sicuramente%2$d agli utenti,\nche ti invieranno la loro simpatia</item>
+    </plurals>
+    <string name="buy_vip_title_from_input">Per cominciare a chattare con questo utente devi essere VIP</string>
 </resources>

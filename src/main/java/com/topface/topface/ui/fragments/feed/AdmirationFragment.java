@@ -29,7 +29,7 @@ public class AdmirationFragment extends LikesFragment {
     public static final String SCREEN_TYPE = "Admirations";
     private ViewFlipper mStubFlipper;
     private final String FLIPPER_CHILD_POSITION = "flipper_child_position";
-    private int flipperPos = 1;
+    private int mFlipperPos = 1;
 
     @Override
     protected String getTitle() {
@@ -115,7 +115,7 @@ public class AdmirationFragment extends LikesFragment {
     protected void restoreInstanceState(Bundle saved) {
         super.restoreInstanceState(saved);
         if (saved != null) {
-            flipperPos = saved.getInt(FLIPPER_CHILD_POSITION);
+            mFlipperPos = saved.getInt(FLIPPER_CHILD_POSITION);
         }
     }
 
@@ -123,7 +123,7 @@ public class AdmirationFragment extends LikesFragment {
         if (mCountersData.admirations > 0 && mBalanceData.premium) {
             mStubFlipper.setVisibility(View.GONE);
         } else {
-            mStubFlipper.setDisplayedChild(flipperPos);
+            mStubFlipper.setDisplayedChild(mFlipperPos);
             view.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
