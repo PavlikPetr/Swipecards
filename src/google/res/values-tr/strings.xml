@@ -848,4 +848,7 @@
     <string name="thanks_for_your_rate_bottom_label">Düşüncelerinizi bizimle AppStore\'da paylaşın. Ne düşündüğünüze önem veriyoruz!</string>
     <string name="thanks_for_your_rate_rate_app">AppStore\'da bizi değerlendirin</string>
     <string name="thanks_for_your_rate_close">Kapat</string>
+    <plurals name="novice_sympathies_bonuses">
+    </plurals>
+    <string name="buy_vip_title_from_input">Eğer VIP üyeyseniz dilediğiniz bir kullanıcı ile sohbete hemen başlayabilirsiniz</string>
 </resources>
