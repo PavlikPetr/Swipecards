@@ -2,17 +2,17 @@ package com.topface.topface.ui.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.databinding.DataBindingUtil;
+import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IntDef;
 import android.support.annotation.StringRes;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.topface.topface.R;
+import com.topface.topface.databinding.BuyButtonVer2Binding;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -32,14 +32,9 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
     public static final int STICKER_TYPE_POPULAR = 1;
     public static final int STICKER_TYPE_BEST_VALUE = 2;
 
-    private FrameLayout mButtonView;
-    private TextView mButtonTitle;
-    private TextView mButtonSticker;
-    private LinearLayout mButtonDescription;
-    private TextView mDescriptionDicscount;
-    private TextView mDescriptionPricePerItem;
-    private TextView mDescriptionTotalPrice;
-    private ProgressBar mProgress;
+    private BuyButtonVer2Binding mBinding;
+    private BuyButtonVersion1Handler mBtnHandler;
+    private View.OnClickListener mButtonClickListener;
 
     public BuyButtonVer2(Context context) {
         this(context, (BuyButtonBuilder) null);
@@ -125,20 +120,18 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
 
     @Override
     public void startWaiting() {
-        setViewVisibility(mProgress, View.VISIBLE);
-        setViewVisibility(mButtonTitle, View.INVISIBLE);
-        if (setViewVisibility(mButtonView, View.VISIBLE)) {
-            mButtonView.setEnabled(false);
-        }
+        mBtnHandler.progressVisibility.set(View.VISIBLE);
+        mBtnHandler.buttonTextVisibility.set(View.INVISIBLE);
+        mBtnHandler.buttonVisibility.set(View.VISIBLE);
+        mBinding.button.setEnabled(false);
     }
 
     @Override
     public void stopWaiting() {
-        setViewVisibility(mProgress, View.GONE);
-        setViewVisibility(mButtonTitle, View.VISIBLE);
-        if (setViewVisibility(mButtonView, View.VISIBLE)) {
-            mButtonView.setEnabled(true);
-        }
+        mBtnHandler.progressVisibility.set(View.GONE);
+        mBtnHandler.buttonTextVisibility.set(View.VISIBLE);
+        mBtnHandler.buttonVisibility.set(View.VISIBLE);
+        mBinding.button.setEnabled(true);
     }
 
     @Override
@@ -173,7 +166,8 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
      * @param title buy button title value
      */
     public void setButtonTitle(String title) {
-        setText(mButtonTitle, title);
+        mBtnHandler.buttonTextVisibility.set(View.VISIBLE);
+        mBtnHandler.buttonText.set(title);
     }
 
     /**
@@ -185,12 +179,14 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
      */
     public void setDescription(String discount, String pricePerItem, String totalPrice) {
         boolean isDescriptionEnable = pricePerItem != null && totalPrice != null;
-        if (setViewVisibility(mButtonDescription, isDescriptionEnable ? View.VISIBLE : View.INVISIBLE)) {
-            if (isDescriptionEnable) {
-                setText(mDescriptionDicscount, discount);
-                setText(mDescriptionPricePerItem, pricePerItem);
-                setText(mDescriptionTotalPrice, totalPrice);
-            }
+        mBtnHandler.buttonDescriptionVisibility.set(isDescriptionEnable ? View.VISIBLE : View.INVISIBLE);
+        if (isDescriptionEnable) {
+            mBtnHandler.discountVisibility.set(View.VISIBLE);
+            mBtnHandler.discountText.set(discount);
+            mBtnHandler.pricePerItemVisibility.set(View.VISIBLE);
+            mBtnHandler.pricePerItemText.set(pricePerItem);
+            mBtnHandler.totalPriceVisibility.set(View.VISIBLE);
+            mBtnHandler.totalPriceText.set(totalPrice);
         }
     }
 
@@ -200,15 +196,12 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
      * @param type One of {@link #BUTTON_TYPE_BLUE} or {@link #BUTTON_TYPE_GREEN}.
      */
     public void setType(@Type int type) {
-        if (setViewVisibility(mButtonView, View.VISIBLE)) {
-            mButtonView.setBackgroundResource(getButtonRes(type));
-        }
+        mBtnHandler.buttonVisibility.set(View.VISIBLE);
+        mBtnHandler.buttonBackgroundRes.set(getButtonRes(type));
     }
 
     public void setOnClickListener(OnClickListener listener) {
-        if (mButtonView != null) {
-            mButtonView.setOnClickListener(listener);
-        }
+        mButtonClickListener = listener;
     }
 
     @Type
@@ -244,16 +237,14 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
     public void setStickerType(@StickerType int type) {
         Sticker sticker = getStickerByType(type);
         int padding = 0;
-        if (setViewVisibility(mButtonSticker, sticker.isVisible() ? View.VISIBLE : View.GONE)) {
-            if (sticker.isVisible()) {
-                padding = (int) getContext().getResources().getDimension(R.dimen.sticker_width);
-                mButtonSticker.setBackgroundResource(sticker.getBackground());
-                mButtonSticker.setText(getContext().getString(sticker.getTitle()).toUpperCase());
-            }
+        mBtnHandler.stickerTextVisibility.set(sticker.isVisible() ? View.VISIBLE : View.GONE);
+        if (sticker.isVisible()) {
+            padding = (int) getContext().getResources().getDimension(R.dimen.sticker_width);
+            mBtnHandler.stickerBackgroundRes.set(sticker.getBackground());
+            mBtnHandler.stickerText.set(getContext().getString(sticker.getTitle()).toUpperCase());
         }
-        if (mButtonTitle != null) {
-            mButtonTitle.setPadding(padding, 0, padding, 0);
-        }
+        mBtnHandler.buttonTextPaddingLeft.set(padding);
+        mBtnHandler.buttonTextPaddingRight.set(padding);
     }
 
     @Retention(value = RetentionPolicy.SOURCE)
@@ -267,14 +258,9 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
 
     @Override
     void initViews(View root) {
-        mButtonView = (FrameLayout) findViewById(R.id.button);
-        mButtonTitle = (TextView) findViewById(R.id.buttonTitle);
-        mButtonSticker = (TextView) findViewById(R.id.buttonSticker);
-        mButtonDescription = (LinearLayout) findViewById(R.id.buttonDetails);
-        mDescriptionDicscount = (TextView) findViewById(R.id.discount);
-        mDescriptionPricePerItem = (TextView) findViewById(R.id.pricePerItem);
-        mDescriptionTotalPrice = (TextView) findViewById(R.id.totalPrice);
-        mProgress = (ProgressBar) findViewById(R.id.marketWaiter);
+        mBinding = DataBindingUtil.bind(root);
+        mBtnHandler = new BuyButtonVersion1Handler();
+        mBinding.setHandler(mBtnHandler);
     }
 
     public static class BuyButtonBuilder {
@@ -324,5 +310,40 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
         public BuyButtonVer2 build(Context context) {
             return new BuyButtonVer2(context, this);
         }
+    }
+
+    public class BuyButtonVersion1Handler {
+
+        public final ObservableInt buttonVisibility = new ObservableInt(View.VISIBLE);
+        public final ObservableInt buttonBackgroundRes = new ObservableInt(R.drawable.btn_blue_selector);
+
+        public final ObservableInt buttonTextVisibility = new ObservableInt();
+        public final ObservableField<String> buttonText = new ObservableField<>();
+        public final ObservableInt buttonTextPaddingLeft = new ObservableInt(0);
+        public final ObservableInt buttonTextPaddingRight = new ObservableInt(0);
+
+        public final ObservableInt stickerTextVisibility = new ObservableInt(View.GONE);
+        public final ObservableInt stickerBackgroundRes = new ObservableInt(R.drawable.btn_blue_selector);
+        public final ObservableField<String> stickerText = new ObservableField<>();
+
+        public final ObservableInt buttonDescriptionVisibility = new ObservableInt(View.GONE);
+
+        public final ObservableInt discountVisibility = new ObservableInt(View.GONE);
+        public final ObservableField<String> discountText = new ObservableField<>();
+
+        public final ObservableInt pricePerItemVisibility = new ObservableInt(View.GONE);
+        public final ObservableField<String> pricePerItemText = new ObservableField<>();
+
+        public final ObservableInt totalPriceVisibility = new ObservableInt(View.GONE);
+        public final ObservableField<String> totalPriceText = new ObservableField<>();
+
+        @SuppressWarnings("unused")
+        public void onButtonClick(View view) {
+            if (mButtonClickListener != null) {
+                mButtonClickListener.onClick(view);
+            }
+        }
+
+        public final ObservableInt progressVisibility = new ObservableInt(View.GONE);
     }
 }

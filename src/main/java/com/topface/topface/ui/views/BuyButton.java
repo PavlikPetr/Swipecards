@@ -5,7 +5,6 @@ import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -42,22 +41,10 @@ public abstract class BuyButton<T> extends LinearLayout {
 
     public abstract void stopWaiting();
 
-    public boolean setViewVisibility(View view, int visibility) {
-        if (view != null) {
-            view.setVisibility(visibility);
-            return true;
-        }
-        return false;
-    }
-
-    public void setText(TextView textView, String text) {
-        if (setViewVisibility(textView, View.VISIBLE)) {
-            textView.setText(text);
-        }
-    }
-
     private View inflateRootView() {
-        return inflate(getContext(), getButtonLayout(), null);
+        View view = inflate(getContext(), getButtonLayout(), null);
+        this.addView(view);
+        return view;
     }
 
     abstract void initViews(View root);

@@ -1,19 +1,13 @@
 package com.topface.topface.ui.views;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.content.res.XmlResourceParser;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.os.Build;
 import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.TextView;
 
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.databinding.BuyButtonVer1Binding;
@@ -59,34 +53,20 @@ public class BuyButtonVer1 extends BuyButton<BuyButtonVer1.BuyButtonBuilder> {
             mBtnHandler.containerPaddingRight.set(PADDING_FIVE);
             mBtnHandler.containerPaddingBottom.set(PADDING_FIVE);
         }
-        setBuyButtonTextColor(showType, mBinding.itText);
+        setBuyButtonTextColor(showType);
         setBuyButtonBackground(isDiscount, showType);
     }
 
-    private void setSelectorTextColor(int selector, TextView view) {
-        try {
-            XmlResourceParser xrp = App.getContext().getResources().getXml(selector);
-            ColorStateList csl = ColorStateList.createFromXml(App.getContext().getResources(), xrp);
-            view.setTextColor(csl);
-        } catch (Exception e) {
-            Debug.error(e.toString());
-        }
-    }
-
-    private void setBuyButtonTextColor(int showType, TextView view) {
-        if (view == null) {
-            return;
-        }
+    private void setBuyButtonTextColor(int showType) {
         switch (showType) {
             case 1:
-                setSelectorTextColor(R.drawable.btn_blue_text_color_selector, view);
-                break;
+                mBtnHandler.titleTextColor.set(R.drawable.btn_blue_text_color_selector);
+                return;
             case 2:
-                view.setTextColor(App.getContext().getResources().getColor(R.color.button_blue_text_disable_color));
-                break;
+                mBtnHandler.titleTextColor.set(R.drawable.btn_blue_disable_text_color_selector);
+                return;
             default:
-                setSelectorTextColor(R.drawable.btn_gray_text_color_selector, view);
-                break;
+                mBtnHandler.titleTextColor.set(R.drawable.btn_gray_text_color_selector);
         }
     }
 
@@ -94,7 +74,6 @@ public class BuyButtonVer1 extends BuyButton<BuyButtonVer1.BuyButtonBuilder> {
         mBtnHandler.titleText.set(text);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setBuyButtonBackground(boolean discount, int showType) {
         switch (showType) {
             case 1:
@@ -182,12 +161,13 @@ public class BuyButtonVer1 extends BuyButton<BuyButtonVer1.BuyButtonBuilder> {
     public class BuyButtonVersion1Handler {
 
         public final ObservableInt containerVisibility = new ObservableInt(View.VISIBLE);
-        public final ObservableInt containerBackgroundRes = new ObservableInt();
+        public final ObservableInt containerBackgroundRes = new ObservableInt(R.drawable.btn_blue_selector);
         public final ObservableInt containerPaddingTop = new ObservableInt(PADDING_FIVE);
         public final ObservableInt containerPaddingBottom = new ObservableInt(PADDING_FIVE);
         public final ObservableInt containerPaddingLeft = new ObservableInt(PADDING_FIVE);
         public final ObservableInt containerPaddingRight = new ObservableInt(PADDING_FIVE);
 
+        @SuppressWarnings("unused")
         public void onButtonClick(View view) {
             if (mButtonClickListener != null) {
                 mButtonClickListener.onClick(view);
@@ -196,8 +176,8 @@ public class BuyButtonVer1 extends BuyButton<BuyButtonVer1.BuyButtonBuilder> {
 
         public final ObservableInt titleVisibility = new ObservableInt();
         public final ObservableField<String> titleText = new ObservableField<>();
+        public final ObservableInt titleTextColor = new ObservableInt(R.drawable.btn_blue_text_color_selector);
 
         public final ObservableInt progressVisibility = new ObservableInt(View.GONE);
-
     }
 }

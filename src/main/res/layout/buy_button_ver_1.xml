@@ -38,6 +38,7 @@
                 android:gravity="center"
                 android:paddingLeft="10dp"
                 android:text="@{handler.titleText}"
+                android:textColor="@{handler.titleTextColor}"
                 android:visibility="@{handler.titleVisibility}"
                 tools:text="@string/buy_mobile_payments" />
 

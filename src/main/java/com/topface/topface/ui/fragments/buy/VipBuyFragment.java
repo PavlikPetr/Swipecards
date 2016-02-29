@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.topface.billing.OpenIabFragment;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.Products;
@@ -160,7 +161,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         if (products.info != null && products.info.views != null) {
             version = products.info.views.buyVip;
         }
-        new PurchaseButtonList().getButtonsListView(version, btnContainer, products.premium, getActivity(), new PurchaseButtonList.BuyButtonClickListener() {
+        new PurchaseButtonList().getButtonsListView(version, btnContainer, products.premium, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
             @Override
             public void onClick(String id, BuyButtonData btnData) {
                 buy(id, btnData);
