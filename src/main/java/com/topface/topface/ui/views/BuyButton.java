@@ -20,19 +20,19 @@ public abstract class BuyButton<T> extends LinearLayout {
 
     public BuyButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initViews();
+        initViews(inflateRootView());
         getAttrs(context, attrs, 0);
     }
 
     public BuyButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initViews();
+        initViews(inflateRootView());
         getAttrs(context, attrs, defStyleAttr);
     }
 
     public BuyButton(Context context, T builder) {
         super(context);
-        initViews();
+        initViews(inflateRootView());
         if (builder != null) {
             build(builder);
         }
@@ -56,13 +56,14 @@ public abstract class BuyButton<T> extends LinearLayout {
         }
     }
 
-    protected void initViews() {
-        inflate(getContext(), getButtonLayout(), this);
+    private View inflateRootView() {
+        return inflate(getContext(), getButtonLayout(), null);
     }
 
-    abstract
+    abstract void initViews(View root);
+
     @LayoutRes
-    int getButtonLayout();
+    abstract int getButtonLayout();
 
     abstract void build(@NotNull T builder);
 

@@ -16,6 +16,9 @@ import com.topface.topface.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * Created by ppetr on 24.02.16.
  * Custom button for purchase screen version 1
@@ -60,15 +63,12 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
         BEST_VALUE(STICKER_TYPE_BEST_VALUE, R.string.buy_button_sticker_best_value, R.drawable.sticker_best_value_selector);
 
         private boolean mIsVisible;
-        private
         @DrawableRes
-        int mBackground;
-        private
+        private int mBackground;
         @StringRes
-        int mTitle;
-        private
+        private int mTitle;
         @StickerType
-        int mType;
+        private int mType;
 
         Sticker(@StickerType int type, @StringRes int title, @DrawableRes int background) {
             mType = type;
@@ -211,9 +211,8 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
         }
     }
 
-    private
     @Type
-    int getTypeFromAttr(int type) {
+    private int getTypeFromAttr(int type) {
         switch (type) {
             case BUTTON_TYPE_GREEN:
                 return BUTTON_TYPE_GREEN;
@@ -224,9 +223,8 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
         }
     }
 
-    private
     @StickerType
-    int getStickerTypeFromAttr(int type) {
+    private int getStickerTypeFromAttr(int type) {
         switch (type) {
             case STICKER_TYPE_POPULAR:
                 return STICKER_TYPE_POPULAR;
@@ -258,6 +256,7 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
         }
     }
 
+    @Retention(value = RetentionPolicy.SOURCE)
     @IntDef({BUTTON_TYPE_BLUE, BUTTON_TYPE_GREEN})
     public @interface Type {
     }
@@ -267,8 +266,7 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
     }
 
     @Override
-    protected void initViews() {
-        super.initViews();
+    void initViews(View root) {
         mButtonView = (FrameLayout) findViewById(R.id.button);
         mButtonTitle = (TextView) findViewById(R.id.buttonTitle);
         mButtonSticker = (TextView) findViewById(R.id.buttonSticker);
@@ -327,5 +325,4 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
             return new BuyButtonVer2(context, this);
         }
     }
-
 }

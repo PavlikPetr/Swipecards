@@ -288,7 +288,9 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         if (getView() != null) {
             mDeferredPurchaseButton = (BuyButton) getView().findViewWithTag(btn);
         }
-        mDeferredPurchaseButton.startWaiting();
+        if (mDeferredPurchaseButton != null) {
+            mDeferredPurchaseButton.startWaiting();
+        }
     }
 
     /**
@@ -549,8 +551,10 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 }
 
                 if (mHasDeferredPurchase) {
-                    mDeferredPurchaseButton.stopWaiting();
-                    buyNow((BuyButtonData) mDeferredPurchaseButton.getTag());
+                    if (mDeferredPurchaseButton != null) {
+                        mDeferredPurchaseButton.stopWaiting();
+                        buyNow((BuyButtonData) mDeferredPurchaseButton.getTag());
+                    }
                     mHasDeferredPurchase = false;
                     mDeferredPurchaseButton = null;
                 }

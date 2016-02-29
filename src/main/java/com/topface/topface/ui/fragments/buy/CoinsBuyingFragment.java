@@ -104,7 +104,7 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
             root.findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
         }
         // sympathies buttons
-        purchaseButtons.addAll(new PurchaseButtonList().getButtonsListView(null, likesButtons, products.likes, getActivity(), new PurchaseButtonList.BuyButtonClickListener() {
+        purchaseButtons.addAll(new PurchaseButtonList().getButtonsListView(null, likesButtons, products.likes, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
             @Override
             public void onClick(String id, BuyButtonData btnData) {
                 buy(btnData);
@@ -134,7 +134,7 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
             coinsButtonsContainer.removeAllViews();
         }
         // coins items buttons also coinsSubscriptionsMasked buttons
-        purchaseButtons.addAll(new PurchaseButtonList().getButtonsListView(null, coinsButtonsContainer, coinsProducts, getActivity(), new PurchaseButtonList.BuyButtonClickListener() {
+        purchaseButtons.addAll(new PurchaseButtonList().getButtonsListView(null, coinsButtonsContainer, coinsProducts, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
             @Override
             public void onClick(String id, BuyButtonData btnData) {
                 buy(btnData);

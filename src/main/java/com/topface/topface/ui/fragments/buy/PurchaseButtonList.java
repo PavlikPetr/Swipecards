@@ -14,7 +14,6 @@ import com.topface.topface.ui.views.BuyButtonVer2;
 import com.topface.topface.utils.CacheProfile;
 
 import org.jetbrains.annotations.Nullable;
-import org.json.JSONArray;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -106,6 +105,7 @@ public class PurchaseButtonList {
         return builder.discount(discount).totalPrice(totalPrice).pricePerItem(pricePerItem).build(context);
     }
 
+    @Nullable
     private String getTotalPrice(BuyButtonData buyBtn) {
         if (buyBtn.totalTemplate.isEmpty()) {
             return null;
@@ -114,6 +114,7 @@ public class PurchaseButtonList {
         return buyBtn.totalTemplate.replace(Products.PRICE, formatedPrice);
     }
 
+    @Nullable
     private String getDiscount(BuyButtonData buyBtn) {
         if (buyBtn.discountTemplate.isEmpty()) {
             return null;
@@ -129,6 +130,7 @@ public class PurchaseButtonList {
         return (int) free > 0 ? buyBtn.discountTemplate.replace(Products.DISCOUNT, String.valueOf((int) free)) : null;
     }
 
+    @Nullable
     private String getPricePerItem(BuyButtonData buyBtn) {
         if (buyBtn.pricePerItemTemplate.isEmpty()) {
             return null;
@@ -178,6 +180,7 @@ public class PurchaseButtonList {
         return -1;
     }
 
+    @Nullable
     private View getViewV1(final BuyButtonData buyBtn,
                            Context context, final BuyButtonClickListener listener) {
         String value;
@@ -189,11 +192,15 @@ public class PurchaseButtonList {
                     formatPrice(validatedAndDeffProductPrice.getValidatedPrice().getPrice(), validatedAndDeffProductPrice.getValidatedPrice().getCurrencyFormat(), buyBtn) :
                     formatPrice(validatedAndDeffProductPrice.getDeffPrice().getPrice(), validatedAndDeffProductPrice.getDeffPrice().getCurrencyFormat(), buyBtn);
         }
-        if (context == null) return null;
+        if (context == null) {
+            return null;
+        }
         return new BuyButtonVer1.BuyButtonBuilder().discount(buyBtn.discount > 0).showType(buyBtn.showType).title(TextUtils.isEmpty(value) ? buyBtn.title : value).onClick(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onClick(buyBtn.id, buyBtn);
+                if (listener != null) {
+                    listener.onClick(buyBtn.id, buyBtn);
+                }
             }
         }).build(context);
     }
@@ -225,10 +232,10 @@ public class PurchaseButtonList {
         return ViewsVersions.V1;
     }
 
-    public static JSONArray getSupportedViews() {
-        JSONArray array = new JSONArray();
+    public static ArrayList<String> getSupportedViews() {
+        ArrayList<String> array = new ArrayList<>();
         for (ViewsVersions version : ViewsVersions.values()) {
-            array.put(version.getVersionName());
+            array.add(version.getVersionName());
         }
         return array;
     }
@@ -245,7 +252,6 @@ public class PurchaseButtonList {
         ProductPriceData validatedPrice = null;
         if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
             ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
-
             if (detail != null && detail.currency != null) {
                 price = detail.price / ProductsDetails.MICRO_AMOUNT;
                 currency = Currency.getInstance(detail.currency);
