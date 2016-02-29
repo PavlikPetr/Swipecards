@@ -1,9 +1,7 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -29,11 +27,9 @@ public class AdmirationFragment extends LikesFragment {
 
     public static final String UNLOCK_FUCTIONALITY_TYPE = "admirations";
     public static final String SCREEN_TYPE = "Admirations";
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        return super.onCreateView(inflater, container, saved);
-    }
+    private ViewFlipper mStubFlipper;
+    private final String FLIPPER_CHILD_POSITION = "flipper_child_position";
+    private int flipperPos = 1;
 
     @Override
     protected String getTitle() {
@@ -52,8 +48,9 @@ public class AdmirationFragment extends LikesFragment {
     protected void initLockedFeed(View inflated, int errorCode) {
         setEmptyFeedView(inflated);
         if (mCountersData.admirations > 0) {
-            ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(SECOND_CHILD);
-            setUnlockButtonView(getUnlockButtonView(inflated, SECOND_CHILD));
+            mStubFlipper = ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews));
+            mStubFlipper.setDisplayedChild(SECOND_CHILD);
+            setUnlockButtonView(getUnlockButtonView(SECOND_CHILD));
             int curCounter = mCountersData.admirations;
             if (curCounter == 0) {
                 curCounter = App.get().getOptions().premiumAdmirations.getCount();
@@ -74,7 +71,7 @@ public class AdmirationFragment extends LikesFragment {
             ((ImageViewRemote) inflated.findViewById(R.id.ivThree))
                     .setResourceSrc(profile.dating.sex == Profile.GIRL ? R.drawable.likes_male_three : R.drawable.likes_female_three);
         } else {
-            setUnlockButtonView(getUnlockButtonView(inflated, FIRST_CHILD));
+            setUnlockButtonView(getUnlockButtonView(FIRST_CHILD));
             chooseFirstChild(inflated);
         }
     }
@@ -85,14 +82,14 @@ public class AdmirationFragment extends LikesFragment {
         }
     }
 
-    private Button getUnlockButtonView(View view, int child) {
-        return (Button) ((ViewFlipper) view.findViewById(R.id.vfEmptyViews)).getChildAt(child).findViewWithTag("btnUnlock");
+    private Button getUnlockButtonView(int child) {
+        return (Button) mStubFlipper.getChildAt(child).findViewWithTag("btnUnlock");
     }
 
     @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
         setEmptyFeedView(inflated);
-        getUnlockButtonView(inflated, FIRST_CHILD).setVisibility(View.GONE);
+        getUnlockButtonView(FIRST_CHILD).setVisibility(View.GONE);
         chooseFirstChild(inflated);
     }
 
@@ -106,14 +103,34 @@ public class AdmirationFragment extends LikesFragment {
         return data.getUnlockAdmirationCondition();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (outState != null) {
+            outState.putInt(FLIPPER_CHILD_POSITION, mStubFlipper.getDisplayedChild());
+        }
+    }
+
+    @Override
+    protected void restoreInstanceState(Bundle saved) {
+        super.restoreInstanceState(saved);
+        if (saved != null) {
+            flipperPos = saved.getInt(FLIPPER_CHILD_POSITION);
+        }
+    }
+
     private void chooseFirstChild(View view) {
-        ((ViewFlipper) view.findViewById(R.id.vfEmptyViews)).setDisplayedChild(FIRST_CHILD);
-        view.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations", App.get().getOptions().topfaceOfferwallRedirect));
-            }
-        });
+        if (mCountersData.admirations > 0 && mBalanceData.premium) {
+            mStubFlipper.setVisibility(View.GONE);
+        } else {
+            mStubFlipper.setDisplayedChild(flipperPos);
+            view.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations", App.get().getOptions().topfaceOfferwallRedirect));
+                }
+            });
+        }
     }
 
     @Override
