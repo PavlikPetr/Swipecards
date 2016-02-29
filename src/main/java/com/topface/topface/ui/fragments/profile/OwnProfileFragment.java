@@ -30,6 +30,7 @@ import com.topface.topface.ui.fragments.VkProfileFragment;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.BuyVipFragmentManager;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -178,7 +179,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
 
     @Override
     protected OverflowMenu createOverflowMenu(Menu barActions) {
-        return new OverflowMenu(getActivity(), barActions);
+        return new OverflowMenu((IActivityDelegate) getActivity(), barActions);
     }
 
     @Override

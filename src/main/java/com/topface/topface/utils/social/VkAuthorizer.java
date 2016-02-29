@@ -16,6 +16,9 @@ import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 
+import org.jetbrains.annotations.Nullable;
+
+import java.lang.reflect.Field;
 import java.util.Locale;
 
 /**
@@ -24,6 +27,8 @@ import java.util.Locale;
 public class VkAuthorizer extends Authorizer {
 
     public static final int STAGE_AUTH_VK_ID = 4854621;
+
+    private static VKSdk mVkSdk;
 
     private static final String[] VK_SCOPE = new String[]{
             VKScope.NOTIFY,
@@ -51,14 +56,14 @@ public class VkAuthorizer extends Authorizer {
 
     @Override
     public void logout() {
-        VKSdk.customInitialize(App.getContext(), VkAuthorizer.getVkId(), null);
+        VkAuthorizer.initVkSdk();
         VKSdk.logout();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        VKSdk.customInitialize(App.getContext(), VkAuthorizer.getVkId(), null);
+        VkAuthorizer.initVkSdk();
     }
 
     @Override
@@ -67,6 +72,11 @@ public class VkAuthorizer extends Authorizer {
             if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
                 @Override
                 public void onResult(VKAccessToken res) {
+                    if (res == null) {
+                        Debug.log("VkAuthorizer: received token == null");
+                        onError(new VKError(VKError.VK_API_ERROR));
+                        return;
+                    }
                     Debug.log("VkAuthorizer: receive new token");
                     String tokenKey = res.accessToken;
                     String userId = res.userId;
@@ -96,5 +106,56 @@ public class VkAuthorizer extends Authorizer {
 
     public static boolean isMainScreenLoginEnable() {
         return new Locale(App.getLocaleConfig().getApplicationLocale()).getLanguage().equals(Utils.getRussianLocale().getLanguage());
+    }
+
+    private static void dropCurrentAppId() {
+        Field field = getCurrentAppIdField();
+        if (field != null) {
+            field.setAccessible(true);
+            try {
+                field.setInt(mVkSdk, 0);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static int getCurrentAppId() {
+        Field field = getCurrentAppIdField();
+        int currentAppId = 0;
+        if (field != null) {
+            field.setAccessible(true);
+            try {
+                currentAppId = field.getInt(mVkSdk);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return currentAppId;
+    }
+
+    @Nullable
+    private static Field getCurrentAppIdField() {
+        if (mVkSdk == null) {
+            return null;
+        }
+        Field field = null;
+        try {
+            field = VKSdk.class.getDeclaredField("sCurrentAppId");
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+
+        return field;
+    }
+
+
+    public static void initVkSdk() {
+        int appId = getVkId();
+        int currentAppId = getCurrentAppId();
+        if (currentAppId != 0 && appId != currentAppId) {
+            dropCurrentAppId();
+        }
+        mVkSdk = VKSdk.customInitialize(App.getContext(), appId, null);
     }
 }

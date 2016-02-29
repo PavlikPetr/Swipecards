@@ -99,6 +99,9 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
      */
     public static boolean processRequestCode(FragmentManager manager, int requestCode, int resultCode, Intent data, Class<? extends Fragment> parentFragmentClass) {
         List<Fragment> fragments = manager.getFragments();
+        if (fragments == null) {
+            return false;
+        }
         for (Fragment fragment : fragments) {
             if (parentFragmentClass != null && parentFragmentClass.isInstance(fragment)) {
                 //Да, вам не показалось, это рекурсивный вызов, но с пустым последним парметром

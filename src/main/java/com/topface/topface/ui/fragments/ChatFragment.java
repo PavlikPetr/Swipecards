@@ -84,6 +84,7 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
@@ -94,7 +95,12 @@ import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 public class ChatFragment extends AnimatedFragment implements View.OnClickListener {
 
@@ -118,12 +124,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private static final String HISTORY_CHAT = "history_chat";
     private static final String SOFT_KEYBOARD_LOCK_STATE = "keyboard_state";
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
-    public static final String FROM = "from";
     private static final String AUTO_REPLY_MESSAGE_SOURCE = "AutoReplyMessage";
     private static final String SEND_MESSAGE_SOURCE = "SendMessage";
-
-
-    // Data
     private int mUserId;
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -139,7 +141,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     };
     private String mMessage;
     private ArrayList<History> mHistoryFeedList;
-    private Handler mUpdater;
     private boolean mIsUpdating;
     private boolean mKeyboardWasShown;
     private PullToRefreshListView mListView;
@@ -149,7 +150,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private String mItemId;
     private String mInitialMessage;
     private boolean wasFailed = false;
-    private String mFrom;
     private AddPhotoHelper mAddPhotoHelper;
     private boolean mIsNeedShowAddPhoto = true;
     private Handler mHandler = new Handler() {
@@ -158,23 +158,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             AddPhotoHelper.handlePhotoMessage(msg);
         }
     };
-
-    TimerTask mUpdaterTask = new TimerTask() {
-        @Override
-        public void run() {
-            updateUI(new Runnable() {
-                @Override
-                public void run() {
-                    if (mUpdater != null && !wasFailed && mUserId > 0) {
-                        update(true, "timer");
-                        mUpdater.postDelayed(this, DEFAULT_CHAT_UPDATE_PERIOD);
-                    }
-                }
-            });
-        }
-    };
     private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
-    // Managers
     private RelativeLayout mLockScreen;
     private PopularUserChatController mPopularUserLockController;
     private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
@@ -206,6 +190,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private ImageButton mSendButton;
     private ChatListAnimatedAdapter mAnimatedAdapter;
     private int mUserType;
+    private Subscription mUpdateUiSubscription;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -241,7 +226,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         mUserNameAndAge = args.getString(INTENT_USER_NAME_AND_AGE);
         mInitialMessage = args.getString(INITIAL_MESSAGE);
         mPhoto = args.getParcelable(INTENT_AVATAR);
-        mFrom = args.getString(FROM);
         // only DialogsFragment will hear this
         Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ_BY_UID);
         intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
@@ -497,7 +481,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         if (mPopularUserLockController.isChatLocked()) {
             mPopularUserLockController.blockChat();
             return true;
-        } else if (mPopularUserLockController.isDialogOpened()) {
+        }
+        if (mPopularUserLockController.isDialogOpened()) {
             mPopularUserLockController.showBlockDialog();
         }
         return false;
@@ -529,11 +514,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     @Override
     protected String getSubtitle() {
-        if (TextUtils.isEmpty(mUserCity)) {
-            return Utils.EMPTY;
-        } else {
-            return mUserCity;
-        }
+        return TextUtils.isEmpty(mUserCity) ? Utils.EMPTY : mUserCity;
     }
 
     @Override
@@ -619,19 +600,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 (mPopularUserLockController.isChatLocked() || mPopularUserLockController.isResponseLocked()) &&
                 pullToRefresh;
 
-        HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId) {
-
+        HistoryRequest historyRequest = new HistoryRequest(App.getContext(), mUserId, new HistoryRequest.IRequestExecuted() {
             @Override
-            public void exec() {
-                if (mUserId > 0) {
-                    mIsUpdating = true;
-                    super.exec();
-                } else {
-                    Utils.sendHockeyMessage(getContext(), "User id -1 from " + mFrom);
-                }
+            public void onExecuted() {
+                mIsUpdating = true;
             }
-        };
-
+        });
         registerRequest(historyRequest);
         historyRequest.debug = type;
         if (mAdapter != null) {
@@ -822,7 +796,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     @Override
     protected OverflowMenu createOverflowMenu(Menu barActions) {
-        return new OverflowMenu(getActivity(), barActions);
+        return new OverflowMenu((IActivityDelegate) getActivity(), barActions);
     }
 
     private void release() {
@@ -885,8 +859,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
         IntentFilter filter = new IntentFilter(GCMUtils.GCM_NOTIFICATION);
         LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(mNewMessageReceiver, filter);
-
-        mUpdater = new Handler();
         startTimer();
     }
 
@@ -1024,16 +996,21 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
 
     private void startTimer() {
-        if (mUpdater != null) {
-            mUpdater.removeCallbacks(mUpdaterTask);
-            mUpdater.postDelayed(mUpdaterTask, DEFAULT_CHAT_UPDATE_PERIOD);
-        }
+        mUpdateUiSubscription = Observable.interval(DEFAULT_CHAT_UPDATE_PERIOD, DEFAULT_CHAT_UPDATE_PERIOD
+                , TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(new Action1<Long>() {
+            @Override
+            public void call(Long aLong) {
+                if (isAdded() && !wasFailed && mUserId > 0) {
+                    Debug.log("fucking_timer tick");
+                    update(true, "timer");
+                }
+            }
+        });
     }
 
     private void stopTimer() {
-        if (mUpdater != null) {
-            mUpdater.removeCallbacks(mUpdaterTask);
-            mUpdater = null;
+        if (!mUpdateUiSubscription.isUnsubscribed()) {
+            mUpdateUiSubscription.unsubscribe();
         }
     }
 

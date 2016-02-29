@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.SendGiftAnswer;
@@ -99,7 +100,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
         transaction.commit();
 
         mLockScreen = (RelativeLayout) findViewById(R.id.lockScreen);
-        mRetryView = new RetryViewCreator.Builder(this, new View.OnClickListener() {
+        mRetryView = new RetryViewCreator.Builder(App.getContext(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadGifts();
@@ -119,7 +120,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     private void loadGifts() {
         if (mAllGifts.isEmpty()) {
             setSupportProgressBarIndeterminateVisibility(true);
-            GiftsRequest giftRequest = new GiftsRequest(this);
+            GiftsRequest giftRequest = new GiftsRequest(App.getContext());
             registerRequest(giftRequest);
             mRequestingGifts = true;
             giftRequest.callback(new DataApiHandler<LinkedList<Gift>>() {
@@ -198,7 +199,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     @Override
     public void onSendGift(final Gift item) {
         EasyTracker.sendEvent("Gifts", "Send", "GiftId=" + item.id, (long) item.price);
-        final SendGiftRequest sendGiftRequest = new SendGiftRequest(this);
+        final SendGiftRequest sendGiftRequest = new SendGiftRequest(App.getContext());
         sendGiftRequest.giftId = item.id;
         sendGiftRequest.userId = mUserIdToSendGift;
         registerRequest(sendGiftRequest);

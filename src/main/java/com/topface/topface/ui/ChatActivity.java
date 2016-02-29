@@ -8,8 +8,9 @@ import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.ui.fragments.ChatFragment;
+import com.topface.topface.utils.IActivityDelegate;
 
-public class ChatActivity extends CheckAuthActivity<ChatFragment> {
+public class ChatActivity extends CheckAuthActivity<ChatFragment> implements IActivityDelegate{
 
     public static final int REQUEST_CHAT = 3;
     public static final String LAST_MESSAGE = "com.topface.topface.ui.ChatActivity_last_message";
@@ -37,16 +38,15 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
     }
 
     //Если itemType соответствует популярному юзеру не показываем клаву в чате
-    public static Intent createIntent(int id, String nameAndAge, String city, String feedItemId, Photo photo, boolean fromGcm, int itemType, String from) {
-        return createIntent(id, nameAndAge, city, feedItemId, photo, fromGcm, from).putExtra(ChatFragment.USER_TYPE, itemType);
+    public static Intent createIntent(int id, String nameAndAge, String city, String feedItemId, Photo photo, boolean fromGcm, int itemType) {
+        return createIntent(id, nameAndAge, city, feedItemId, photo, fromGcm).putExtra(ChatFragment.USER_TYPE, itemType);
     }
 
-    public static Intent createIntent(int id, String nameAndAge, String city, String feedItemId, Photo photo, boolean fromGcm, String from) {
+    public static Intent createIntent(int id, String nameAndAge, String city, String feedItemId, Photo photo, boolean fromGcm) {
         Intent intent = new Intent(App.getContext(), ChatActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_ID, id);
         intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, nameAndAge);
         intent.putExtra(ChatFragment.INTENT_USER_CITY, city);
-        intent.putExtra(ChatFragment.FROM, from);
         if (!TextUtils.isEmpty(feedItemId)) {
             intent.putExtra(ChatFragment.INTENT_ITEM_ID, feedItemId);
         }

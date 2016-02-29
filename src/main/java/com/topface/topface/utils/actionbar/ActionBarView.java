@@ -14,6 +14,8 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.BaseFragmentActivity;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by onikitin on 26.01.15.
  * Класс для создания View для экшен бара
@@ -25,11 +27,11 @@ public class ActionBarView implements View.OnClickListener {
     private TextView mSubtitle;
     private ImageView mIcon;
     private View mActionBarView;
-    private Activity mActivity;
+    private WeakReference<Activity> mWeakReference;
 
     public ActionBarView(ActionBar actionBar, Activity activity) {
         mActionBar = actionBar;
-        mActivity = activity;
+        mWeakReference = new WeakReference<>(activity);
     }
 
     private void prepareView() {
@@ -41,7 +43,7 @@ public class ActionBarView implements View.OnClickListener {
         mActionBarView.findViewById(R.id.title_clickable).setOnClickListener(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             TypedValue tempVal = new TypedValue();
-            mActivity.getResources().getValue(R.dimen.actionbar_elevation, tempVal, true);
+            App.getContext().getResources().getValue(R.dimen.actionbar_elevation, tempVal, true);
             mActionBar.setElevation(tempVal.getFloat());
         }
     }
@@ -83,9 +85,10 @@ public class ActionBarView implements View.OnClickListener {
                 mActionBarView = customView.findViewById(R.id.title_clickable);
             }
         }
-        if (mActionBarView != null) {
-            if (mActivity instanceof BaseFragmentActivity) {
-                ((BaseFragmentActivity) mActivity).onUpClick();
+        if (mActionBarView != null && mWeakReference != null) {
+            Activity activity = mWeakReference.get();
+            if (activity != null && activity instanceof BaseFragmentActivity) {
+                ((BaseFragmentActivity) activity).onUpClick();
             }
         }
     }
