@@ -43,7 +43,7 @@ public class ActionBarView implements View.OnClickListener {
         mActionBarView.findViewById(R.id.title_clickable).setOnClickListener(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             TypedValue tempVal = new TypedValue();
-            mWeakReference.get().getResources().getValue(R.dimen.actionbar_elevation, tempVal, true);
+            App.getContext().getResources().getValue(R.dimen.actionbar_elevation, tempVal, true);
             mActionBar.setElevation(tempVal.getFloat());
         }
     }
@@ -85,9 +85,9 @@ public class ActionBarView implements View.OnClickListener {
                 mActionBarView = customView.findViewById(R.id.title_clickable);
             }
         }
-        if (mActionBarView != null) {
+        if (mActionBarView != null && mWeakReference != null) {
             Activity activity = mWeakReference.get();
-            if (activity instanceof BaseFragmentActivity) {
+            if (activity != null && activity instanceof BaseFragmentActivity) {
                 ((BaseFragmentActivity) activity).onUpClick();
             }
         }

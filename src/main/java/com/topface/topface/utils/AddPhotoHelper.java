@@ -44,6 +44,8 @@ import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -138,7 +140,7 @@ public class AddPhotoHelper {
                 File outputDirectory = new File(PATH_TO_FILE);
                 //noinspection ResultOfMethodCallIgnored
                 if (!outputDirectory.exists()) {
-                    if (!outputDirectory.mkdirs()) {
+                    if (!outputDirectory.mkdirs() && getActivity() != null) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -159,8 +161,15 @@ public class AddPhotoHelper {
         };
     }
 
+    @Nullable
     public Activity getActivity() {
-        return (mFragment == null) ? mActivity.get() : mFragment.get().getActivity();
+        if (mFragment != null && mFragment.get() != null) {
+            return mFragment.get().getActivity();
+        }
+        if (mActivity != null && mActivity.get() != null) {
+            return mActivity.get();
+        }
+        return null;
     }
 
     public void startChooseFromGallery() {
@@ -168,16 +177,23 @@ public class AddPhotoHelper {
     }
 
     public void startChooseFromGallery(boolean withDialog) {
+        if (getActivity() == null) {
+            return;
+        }
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent = Intent.createChooser(intent, mContext.getResources().getString(R.string.album_add_photo_title));
-        boolean noSuitableActivity = intent.resolveActivity(mActivity.get().getPackageManager()) == null;
+        boolean noSuitableActivity = intent.resolveActivity(getActivity().getPackageManager()) == null;
         int requestCode = withDialog || noSuitableActivity ? GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG :
                 GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY;
         startAddPhotoActivity(intent, requestCode);
     }
 
     private void startAddPhotoActivity(Intent intent, int requestCode) {
-        Fragment fragment = mFragment.get();
+        Fragment fragment = null;
+        if (mFragment != null) {
+            fragment = mFragment.get();
+        }
+        Activity activity = getActivity();
         if (fragment != null) {
             if (fragment.isAdded()) {
                 if (fragment instanceof ProfilePhotoFragment) {
@@ -185,12 +201,12 @@ public class AddPhotoHelper {
                 } else {
                     fragment.startActivityForResult(intent, requestCode);
                 }
-            } else {
-                mActivity.get().startActivityForResult(intent, requestCode);
+            } else if (activity != null) {
+                activity.startActivityForResult(intent, requestCode);
             }
         } else {
-            if (mActivity.get() != null) {
-                mActivity.get().startActivityForResult(intent, requestCode);
+            if (activity != null) {
+                activity.startActivityForResult(intent, requestCode);
             }
 
         }
@@ -233,7 +249,8 @@ public class AddPhotoHelper {
     public Uri processActivityResult(int requestCode, int resultCode, Intent data, boolean sendPhotoRequest) {
         Uri photoUri = null;
         if (mFragment != null) {
-            if (mFragment.get().getActivity() != null && !mFragment.get().isAdded()) {
+            Fragment fragment = mFragment.get();
+            if (fragment.getActivity() != null && !fragment.isAdded()) {
                 Debug.log("APH::detached");
             }
         }
@@ -404,7 +421,7 @@ public class AddPhotoHelper {
     }
 
     private Intent getIntentForNotification() {
-        return new Intent(mActivity.get(), NavigationActivity.class)
+        return new Intent(App.getContext(), NavigationActivity.class)
                 .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.PROFILE.getFragmentSettings())
                 .putExtra(GCMUtils.NOTIFICATION_INTENT, true)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
