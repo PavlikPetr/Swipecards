@@ -872,4 +872,9 @@
         <item quantity="other">%d minutos</item>
         <item quantity="one">%d minuto</item>
     </plurals>
+    <string name="thanks_for_your_rate_title">Gracias por tu valoración</string>
+    <string name="thanks_for_your_rate_top_label">¡Te regalamos un lugar para tu fotografía en la rueda de fotos!</string>
+    <string name="thanks_for_your_rate_bottom_label">Compartir tu experiencia en AppStore.¡Valoramos cada comentario!</string>
+    <string name="thanks_for_your_rate_rate_app">Dejar comentario en AppStore</string>
+    <string name="thanks_for_your_rate_close">Cerrar</string>
 </resources>
