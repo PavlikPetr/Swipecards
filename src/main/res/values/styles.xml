@@ -1217,6 +1217,11 @@
         </item>
     </style>
 
+    <style name="BigStretchedBlueButtonRestore" parent="BigStretchedBlueButton">
+        <item name="android:textSize">18sp</item>
+        <item name="android:minHeight">44dp</item>
+    </style>
+
     <style name="BigStretchedBlueButton" parent="Widget.Topface.Button.Big.Blue">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -1227,6 +1232,23 @@
         <item name="android:layout_marginTop">@dimen/unlock_button_margin_top</item>
         <item name="android:visibility">gone</item>
         <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <style name="BigStretchedGrayButtonRestore" parent="BigStretchedGrayButton">
+        <item name="android:textSize">18sp</item>
+        <item name="android:minHeight">44dp</item>
+    </style>
+
+    <style name="MessageRestore">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">@dimen/restore_message_left_right_padding</item>
+        <item name="android:paddingRight">@dimen/restore_message_left_right_padding</item>
+        <item name="android:paddingTop">@dimen/restore_message_top_padding</item>
+        <item name="android:paddingBottom">@dimen/restore_message_bottom_padding</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/list_text_black</item>
     </style>
 
     <style name="BigStretchedGrayButton" parent="Widget.Topface.Button.Big.Gray">
