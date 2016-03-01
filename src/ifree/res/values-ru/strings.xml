@@ -1060,4 +1060,6 @@
     </plurals>
 
     <string name="buy_vip_title_from_input">Начать общение с пользователем можно, если у вас есть VIP-статус</string>
+    <string name="mutual_like_popup_text">Ваша симпатия взаимна!</string>
+    <string name="mutual_like_popup_button">Сказать "Привет"</string>
 </resources>
