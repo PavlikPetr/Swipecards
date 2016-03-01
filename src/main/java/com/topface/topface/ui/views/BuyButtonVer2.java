@@ -343,18 +343,18 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
         public final ObservableField<String> stickerText = new ObservableField<>();
 
         // Observable field to control LinearLayout buttonDetails visibility
-        public final ObservableInt buttonDescriptionVisibility = new ObservableInt(View.GONE);
+        public final ObservableInt buttonDescriptionVisibility = new ObservableInt(View.INVISIBLE);
 
         // Observable fields to control TextView discount
-        public final ObservableInt discountVisibility = new ObservableInt(View.GONE);
+        public final ObservableInt discountVisibility = new ObservableInt(View.INVISIBLE);
         public final ObservableField<String> discountText = new ObservableField<>();
 
         // Observable fields to control TextView pricePerItem
-        public final ObservableInt pricePerItemVisibility = new ObservableInt(View.GONE);
+        public final ObservableInt pricePerItemVisibility = new ObservableInt(View.INVISIBLE);
         public final ObservableField<String> pricePerItemText = new ObservableField<>();
 
         // Observable fields to control TextView totalPrice
-        public final ObservableInt totalPriceVisibility = new ObservableInt(View.GONE);
+        public final ObservableInt totalPriceVisibility = new ObservableInt(View.INVISIBLE);
         public final ObservableField<String> totalPriceText = new ObservableField<>();
 
         // Observable field to control ProgressBar marketWaiter visibility
