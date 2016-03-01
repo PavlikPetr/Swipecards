@@ -5,7 +5,6 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 
 import com.topface.topface.App;
-import com.topface.topface.Static;
 
 public class FormItem implements Parcelable {
     // Data
@@ -33,8 +32,8 @@ public class FormItem implements Parcelable {
 
     public static final int NO_RESOURCE_ID = -1;
 
-    private TextLimitInterface mTextLimitInterface;
-    private ValueLimitInterface mValueLimitInterface;
+    transient private TextLimitInterface mTextLimitInterface;
+    transient private ValueLimitInterface mValueLimitInterface;
     private boolean mOnlyForWomen = false;
     private boolean mIsCanBeEmpty = true;
 
@@ -43,7 +42,7 @@ public class FormItem implements Parcelable {
     public FormItem(int titleId, int type) {
         this.titleId = titleId;
         this.type = type;
-        this.value = Static.EMPTY;
+        this.value = Utils.EMPTY;
         this.dataId = NO_RESOURCE_ID;
     }
 
@@ -51,7 +50,7 @@ public class FormItem implements Parcelable {
         this.titleId = titleId;
         this.dataId = dataId;
         this.type = type;
-        this.value = Static.EMPTY;
+        this.value = Utils.EMPTY;
     }
 
     public FormItem(int titleId, int dataId, int type, FormItem header) {
@@ -59,19 +58,19 @@ public class FormItem implements Parcelable {
         this.dataId = dataId;
         this.type = type;
         this.header = header;
-        this.value = Static.EMPTY;
+        this.value = Utils.EMPTY;
     }
 
     public FormItem(int titleId, String data, int type) {
         this.titleId = titleId;
-        this.value = data == null ? Static.EMPTY : data;
+        this.value = data == null ? Utils.EMPTY : data;
         this.dataId = NO_RESOURCE_ID;
         this.type = type;
     }
 
     public FormItem(int titleId, String data, int type, FormItem header) {
         this.titleId = titleId;
-        this.value = data == null ? Static.EMPTY : data;
+        this.value = data == null ? Utils.EMPTY : data;
         this.dataId = NO_RESOURCE_ID;
         this.type = type;
         this.header = header;
@@ -80,9 +79,9 @@ public class FormItem implements Parcelable {
     @SuppressWarnings("unused")
     private FormItem(int type) {
         this.type = type;
-        this.value = Static.EMPTY;
+        this.value = Utils.EMPTY;
         this.dataId = NO_RESOURCE_ID;
-        this.title = Static.EMPTY;
+        this.title = Utils.EMPTY;
         this.titleId = NO_RESOURCE_ID;
     }
 
@@ -194,6 +193,8 @@ public class FormItem implements Parcelable {
         int getMinValue();
 
         int getMaxValue();
+
+        boolean isEmptyValueAvailable();
     }
 
     public void setTextLimitInterface(TextLimitInterface TextLimitInterface) {
@@ -226,7 +227,7 @@ public class FormItem implements Parcelable {
             return false;
         } else if (mValueLimitInterface != null) {
             if (TextUtils.isEmpty(value)) {
-                return false;
+                return mValueLimitInterface.isEmptyValueAvailable();
             }
             if (TextUtils.isDigitsOnly(value)) {
                 int val = Integer.parseInt(value);
@@ -252,7 +253,7 @@ public class FormItem implements Parcelable {
 
         private final int mLimit;
 
-        public DefaultTextLimiter(){
+        public DefaultTextLimiter() {
             mLimit = App.getAppOptions().getUserStringSettingMaxLength();
         }
 

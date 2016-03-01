@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,36 +26,77 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-public class EditorProfileActionsFragment extends BaseFragment implements View.OnClickListener {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class EditorProfileActionsFragment extends BaseFragment {
     public static final String USERID = "USERID";
     public static final String PROFILE_RESPONSE = "PROFILE_RESPONSE";
+    private static final String FULL_INFO_VISIBLE = "full_info_visible";
+    private static final String SCROLL_VIEW_LIST = "scroll_view_list";
     private int mUserId;
     private String mResponse = null;
     private User mUser = null;
-    private View mFullInfo = null;
-    private View mLocker = null;
+    private boolean mIsFullInfoVisible;
 
-    public class BanAction {
-        public static final String SPAM_MSG = "TWO_MONTHS_SPAM";
+    public enum BAN_ACTION {
+        SPAM_MSG("TWO_MONTHS_SPAM", R.id.editor_ban_spam_msg),
+        SPAM_PHOTO("TWO_MONTHS_PHOTO_SPAM", R.id.editor_ban_spam_photo),
+        FAKE("ONE_WEEK_PHOTO_FAKE", R.id.editor_ban_fake),
+        CENSOR("TWO_DAYS_ABUSE", R.id.editor_ban_censor),
+        PORN("TWO_MONTHS_PHOTO_PORNO", R.id.editor_ban_porn),
+        PORN_ALBUM("TWO_MONTHS_PHOTO_PORNO_ALBUM", R.id.editor_ban_porn_album),
+        DEL_PHOTO("REMOVE_PHOTO", R.id.editor_ban_del_photo),
+        DEL_PHOTO_ALL("REMOVE_ALL_PHOTO", R.id.editor_ban_del_photo_all),
+        DEL_STATUS("REMOVE_SHORT", R.id.editor_ban_del_status),
+        DEL_ABOUT("REMOVE_ABOUT", R.id.editor_ban_del_about),
+        CHANGE_GENDER("SWITCH_SEX", R.id.editor_ban_change_gender);
 
-        public static final String SPAM_PHOTO = "TWO_MONTHS_PHOTO_SPAM";
-        public static final String FAKE = "ONE_WEEK_PHOTO_FAKE";
-        public static final String CENSOR = "TWO_DAYS_ABUSE";
-        public static final String PORN = "TWO_MONTHS_PHOTO_PORNO";
-        public static final String PORN_ALBUM = "TWO_MONTHS_PHOTO_PORNO_ALBUM";
-        public static final String DEL_PHOTO = "REMOVE_PHOTO";
-        public static final String DEL_PHOTO_ALL = "REMOVE_ALL_PHOTO";
-        public static final String DEL_STATUS = "REMOVE_SHORT";
-        public static final String DEL_ABOUT = "REMOVE_ABOUT";
-        public static final String CHANGE_GENDER = "SWITCH_SEX";
+        private String mText;
+        private int mViewId;
 
+        BAN_ACTION(String text, int viewId) {
+            this.mText = text;
+            this.mViewId = viewId;
+        }
+
+        public int getViewId() {
+            return mViewId;
+        }
+
+        public String getText() {
+            return mText;
+        }
+    }
+
+    @Bind(R.id.editor_profile_scroll)
+    ScrollView mScroll;
+    @Bind(R.id.editor_ban_locker)
+    View mLocker;
+    @Bind(R.id.editor_ban_profile_full_info)
+    View mFullInfo;
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.editor_ban_profile_full_info)
+    protected void fullInfoButtonClick() {
+        if (mFullInfo != null) {
+            mFullInfo.setVisibility(mFullInfo.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_editor_profile_actions, container, false);
+        ButterKnife.bind(this, root);
         Bundle args = getArguments();
+        mIsFullInfoVisible = false;
+        int scroll = 0;
+        if (savedInstanceState != null) {
+            mIsFullInfoVisible = savedInstanceState.getBoolean(FULL_INFO_VISIBLE);
+            scroll = savedInstanceState.getInt(SCROLL_VIEW_LIST);
+        }
 
         mUserId = args.getInt(USERID, -1);
 
@@ -67,26 +109,24 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
             } catch (JSONException e) {
                 Debug.error(e);
             }
-            mUser = new User(mUserId, jsonResponse);
+            mUser = new User(mUserId, jsonResponse, getActivity());
         }
         initViews(root);
 
         if (mUserId == -1) {
             getActivity().finish();
         }
+        mScroll.scrollTo(0, scroll);
         return root;
     }
 
     private void initViews(View root) {
-        mLocker = root.findViewById(R.id.editor_ban_locker);
         showView(mLocker, false);
         root.setVisibility(View.VISIBLE);
         if (mUser != null) {
             setInfoText(root, R.id.editor_ban_profile_name, mUser.firstName);
             setInfoText(root, R.id.editor_ban_profile_id, Integer.toString(mUserId));
             setInfoText(root, R.id.editor_ban_profile_banned, String.valueOf(mUser.banned));
-
-            initActionButtons(root);
 
             if (mUser.socialInfo != null) {
                 setInfoText(root, R.id.editor_ban_profile_social, mUser.socialInfo.link);
@@ -100,22 +140,6 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
             }
             initFullInfo(root);
         }
-    }
-
-    private void initActionButtons(View root) {
-        root.findViewById(R.id.editor_ban_spam_photo).setOnClickListener(this);
-        root.findViewById(R.id.editor_ban_spam_msg).setOnClickListener(this);
-        root.findViewById(R.id.editor_ban_porn_album).setOnClickListener(this);
-        root.findViewById(R.id.editor_ban_censor).setOnClickListener(this);
-        root.findViewById(R.id.editor_ban_change_gender).setOnClickListener(this);
-        root.findViewById(R.id.editor_ban_del_about).setOnClickListener(this);
-        root.findViewById(R.id.editor_ban_del_photo).setOnClickListener(this);
-        root.findViewById(R.id.editor_ban_del_photo_all).setOnClickListener(this);
-        root.findViewById(R.id.editor_ban_del_status).setOnClickListener(this);
-        root.findViewById(R.id.editor_ban_fake).setOnClickListener(this);
-        root.findViewById(R.id.editor_ban_porn).setOnClickListener(this);
-        root.findViewById(R.id.editor_ban_unban_user).setOnClickListener(this);
-
     }
 
     private void initFullInfo(View root) {
@@ -133,8 +157,7 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
         }
 
         if (ok) {
-            mFullInfo = root.findViewById(R.id.editor_ban_profile_full_info);
-            root.findViewById(R.id.editor_ban_profile_show_full_info).setOnClickListener(this);
+            mFullInfo.setVisibility(mIsFullInfoVisible ? View.VISIBLE : View.GONE);
         } else {
             showView(root, R.id.editor_ban_profile_show_full_info, false);
         }
@@ -158,56 +181,21 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
         return getResources().getString(R.string.editor_profile_title);
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.editor_ban_profile_show_full_info:
-                if (mFullInfo != null) {
-                    mFullInfo.setVisibility(mFullInfo.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-                }
-                break;
-            case R.id.editor_ban_censor:
-                banUser(BanAction.CENSOR);
-                break;
-            case R.id.editor_ban_change_gender:
-                banUser(BanAction.CHANGE_GENDER);
-                break;
-            case R.id.editor_ban_del_about:
-                banUser(BanAction.DEL_ABOUT);
-                break;
-            case R.id.editor_ban_del_photo:
-                banUser(BanAction.DEL_PHOTO);
-                break;
-            case R.id.editor_ban_del_photo_all:
-                banUser(BanAction.DEL_PHOTO_ALL);
-                break;
-            case R.id.editor_ban_del_status:
-                banUser(BanAction.DEL_STATUS);
-                break;
-            case R.id.editor_ban_fake:
-                banUser(BanAction.FAKE);
-                break;
-            case R.id.editor_ban_porn:
-                banUser(BanAction.PORN);
-                break;
-            case R.id.editor_ban_porn_album:
-                banUser(BanAction.PORN_ALBUM);
-                break;
-            case R.id.editor_ban_spam_msg:
-                banUser(BanAction.SPAM_MSG);
-                break;
-            case R.id.editor_ban_spam_photo:
-                banUser(BanAction.SPAM_PHOTO);
-                break;
-            case R.id.editor_ban_unban_user:
-                unBanUser();
-                break;
-        }
-    }
-
-    private void banUser(String banAction) {
+    @SuppressWarnings("unused")
+    @OnClick({R.id.editor_ban_censor,
+            R.id.editor_ban_change_gender,
+            R.id.editor_ban_del_about,
+            R.id.editor_ban_del_photo,
+            R.id.editor_ban_del_photo_all,
+            R.id.editor_ban_del_status,
+            R.id.editor_ban_fake,
+            R.id.editor_ban_porn,
+            R.id.editor_ban_porn_album,
+            R.id.editor_ban_spam_msg,
+            R.id.editor_ban_spam_photo})
+    protected void banUser(View v) {
         showView(mLocker, true);
-        ModerationPunish punish = new ModerationPunish(getActivity(), banAction, mUserId);
+        ModerationPunish punish = new ModerationPunish(getActivity(), getTextByViewId(v.getId()), mUserId);
         registerRequest(punish);
         punish.callback(new ApiHandler() {
             @Override
@@ -224,7 +212,9 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
         }).exec();
     }
 
-    private void unBanUser() {
+    @SuppressWarnings("unused")
+    @OnClick(R.id.editor_ban_unban_user)
+    protected void unBanUser(final View v) {
         ModerationUnban unban = new ModerationUnban(getActivity(), mUserId);
         registerRequest(unban);
         unban.callback(new DataApiHandler<ModerationResponse>() {
@@ -233,7 +223,7 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
                 if (data.completed) {
                     Toast.makeText(getActivity(), R.string.editor_ban_unban_user_result, Toast.LENGTH_SHORT).show();
                     showView(mLocker, false);
-                    showView(getView(), R.id.editor_ban_unban_user, false);
+                    showView(getView(), v.getId(), false);
                 }
             }
 
@@ -248,5 +238,25 @@ public class EditorProfileActionsFragment extends BaseFragment implements View.O
                 showView(mLocker, false);
             }
         }).exec();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mFullInfo != null) {
+            outState.putBoolean(FULL_INFO_VISIBLE, mFullInfo.getVisibility() == View.VISIBLE);
+        }
+        if (mScroll != null) {
+            outState.putInt(SCROLL_VIEW_LIST, mScroll.getScrollY());
+        }
+    }
+
+    private String getTextByViewId(int viewId) {
+        for (BAN_ACTION action : BAN_ACTION.values()) {
+            if (action.getViewId() == viewId) {
+                return action.getText();
+            }
+        }
+        return null;
     }
 }

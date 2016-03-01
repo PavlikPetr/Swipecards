@@ -1,5 +1,7 @@
 package com.topface.topface.data;
 
+import java.util.ArrayList;
+
 /**
  * Base class for universal user representation
  */
@@ -23,7 +25,7 @@ public interface IUniversalUser {
 
     int getId();
 
-    Profile.Gifts getGifts();
+    ArrayList<Gift> getGifts();
 
     Photos getPhotos();
 

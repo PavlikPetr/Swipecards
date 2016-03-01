@@ -1,66 +1,63 @@
 package com.topface.topface.ui.fragments.gift;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
-import com.topface.topface.ui.IGiftSendListener;
+import com.topface.topface.data.Profile;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsAdapter;
-import com.topface.topface.ui.adapters.GiftsAdapter.ViewHolder;
+import com.topface.topface.ui.adapters.UserGiftsRecyclerAdapter;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragment {
+public class PlainGiftsFragment extends ProfileInnerFragment {
 
     public static final String DATA = "data";
-    public static final String POSITION = "position";
 
     protected TextView mTitle;
     protected View mGroupInfo;
     protected TextView mTextInfo;
     protected Button mBtnInfo;
-    protected GiftsAdapter mGridAdapter;
-    private GridView mGridView;
-    private IGiftSendListener mGiftSendListener;
-    private T mGiftsFirstPortion;
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (activity instanceof IGiftSendListener) {
-            mGiftSendListener = (IGiftSendListener) activity;
-        }
-    }
+    protected UserGiftsRecyclerAdapter mGridAdapter;
+    private Profile.Gifts mGiftsFirstPortion;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mGridAdapter = new GiftsAdapter(getActivity(), new FeedList<FeedGift>(), getUpdaterCallback());
+        mGridAdapter = new UserGiftsRecyclerAdapter(getActivity(), getUpdaterCallback()) {
+            @Override
+            protected void handleOldViewHolder(GiftsAdapter.ViewHolder oldHolder, FeedGift feedGift) {
+                if (feedGift.gift == null) {
+                    return;
+                }
+                if (feedGift.gift.type == Gift.SEND_BTN) {
+                    oldHolder.giftImage.setImageBitmap(null);
+                    oldHolder.giftImage.setBackgroundResource(R.drawable.chat_gift_selector);
+                } else {
+                    oldHolder.giftImage.setRemoteSrc(feedGift.gift.link);
+                }
+            }
+        };
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_grid, null);
-        mGridView = (GridView) root.findViewById(R.id.usedGrid);
-        mGridView.setAnimationCacheEnabled(false);
-        mGridView.setScrollingCacheEnabled(true);
-        mGridView.setAdapter(mGridAdapter);
-        mGridView.setOnScrollListener(mGridAdapter);
+        RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.usedGiftsGrid);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), getResources().getInteger(R.integer.add_to_leader_column_count)));
+        recyclerView.setAdapter(mGridAdapter);
         mTitle = (TextView) root.findViewById(R.id.usedTitle);
         mGroupInfo = root.findViewById(R.id.loInfo);
         mTextInfo = (TextView) mGroupInfo.findViewById(R.id.tvInfo);
@@ -72,35 +69,11 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
         mGridAdapter.add(item);
     }
 
-    protected void onGiftClick(AdapterView<?> parent, View view, int position, long id) {
-        FragmentActivity activity = getActivity();
-        if (activity != null) {
-            FeedGift item = (FeedGift) parent.getItemAtPosition(position);
-            if (view.getTag() instanceof ViewHolder) {
-                if (item != null
-                        && item.gift.type != Gift.PROFILE
-                        && item.gift.type != Gift.SEND_BTN
-                        && mGiftSendListener != null) {
-                    mGiftSendListener.onSendGift(item.gift);
-                }
-            }
-        }
-    }
-
-    protected void initViews() {
-        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                onGiftClick(parent, view, position, id);
-            }
-        });
-    }
-
     protected int getMinItemsCount() {
         return 0;
     }
 
-    protected void postGiftsLoadInfoUpdate(T gifts) {
+    protected void postGiftsLoadInfoUpdate(Profile.Gifts gifts) {
         mGroupInfo.setVisibility(View.GONE);
         mTextInfo.setVisibility(View.GONE);
     }
@@ -120,7 +93,6 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(DATA, mGridAdapter.getData());
-        outState.putInt(POSITION, mGridView.getFirstVisiblePosition());
     }
 
     protected void restoreInstanceState(Bundle savedState) {
@@ -132,32 +104,24 @@ public class PlainGiftsFragment<T extends List<Gift>> extends ProfileInnerFragme
         mGridAdapter.setData(g, false);
         postGiftsLoadInfoUpdate(null);
         mGridAdapter.notifyDataSetChanged();
-        initViews();
-        mGridView.setSelection(savedState.getInt(POSITION, 0));
     }
 
-    public void setGifts(final T gifts) {
+    public void setGifts(final Profile.Gifts gifts) {
         if (isAdded() && getView() != null) { // getView() to check that view is created
             FeedList<FeedGift> data = mGridAdapter.getData();
             if (data != null && gifts != null) {
                 data.clear();
-                for (Gift gift : gifts) {
+                for (Gift gift : gifts.getGifts()) {
                     FeedGift item = new FeedGift();
                     item.gift = gift;
                     data.add(item);
                 }
             }
             postGiftsLoadInfoUpdate(gifts);
-
             mGridAdapter.notifyDataSetChanged();
-            initViews();
         } else {
             mGiftsFirstPortion = gifts;
         }
-    }
-
-    public IGiftSendListener getGiftSendListener() {
-        return mGiftSendListener;
     }
 
     protected FeedAdapter.Updater getUpdaterCallback() {

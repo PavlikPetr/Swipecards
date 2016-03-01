@@ -23,7 +23,6 @@ import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
@@ -41,9 +40,11 @@ import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.UserProfileActivity;
+import com.topface.topface.ui.adapters.BasePhotoRecyclerViewAdapter;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.ImageSwitcherLooped;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -55,9 +56,10 @@ import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
@@ -77,6 +79,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     public static final String DELETED_PHOTOS = "DELETED_PHOTOS";
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 3;
     private static final int ANIMATION_TIME = 200;
+    @Inject
+    TopfaceAppState appState;
     ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
@@ -169,11 +173,11 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     private ImageButton mDeleteButton;
     private UserProfileLoader mUserProfileLoader;
 
-    public static Intent getPhotoSwitcherIntent(Profile.Gifts gifts, int position, int userId, int photosCount, PhotoGridAdapter adapter) {
+    public static Intent getPhotoSwitcherIntent(ArrayList<Gift> gifts, int position, int userId, int photosCount, BasePhotoRecyclerViewAdapter adapter) {
         return getPhotoSwitcherIntent(gifts, position, userId, photosCount, adapter.getPhotos());
     }
 
-    public static Intent getPhotoSwitcherIntent(Profile.Gifts gifts, int position, int userId, int photosCount, Photos photos) {
+    public static Intent getPhotoSwitcherIntent(ArrayList<Gift> gifts, int position, int userId, int photosCount, Photos photos) {
         Intent intent = new Intent(App.getContext(), PhotoSwitcherActivity.class);
         intent.putExtra(INTENT_USER_ID, userId);
         // если позиция невалидная смещаем до последней в "колоде" хуяк-хуяк и в продакшн
@@ -188,6 +192,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.from(getApplicationContext()).inject(this);
         overridePendingTransition(R.anim.fade_in, 0);
         // Extras
         Intent intent = getIntent();
@@ -384,7 +389,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 );
             }
         });
-        if (mUid == CacheProfile.uid) {
+        if (mUid == App.from(this).getProfile().uid) {
             mGiftImage.setVisibility(View.GONE);
         } else {
             mGiftImage.setVisibility(View.VISIBLE);
@@ -416,14 +421,16 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     private void initControls() {
-        if (mUid == CacheProfile.uid) {
+        final Profile profile = App.from(this).getProfile();
+        if (mUid == profile.uid) {
             // - set avatar button
             mSetAvatarButton = (TextView) mPhotoAlbumControl.findViewById(R.id.btnSetAvatar);
             mSetAvatarButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
-                    if (CacheProfile.photo != null && currentPhoto != null && currentPhoto.getId() != CacheProfile.photo.getId()) {
+                    if (profile.photo == null || (currentPhoto != null
+                            && currentPhoto.getId() != profile.photo.getId())) {
                         if (!mDeletedPhotos.contains(currentPhoto)) {
                             setAsMainRequest(currentPhoto);
                         } else {
@@ -458,21 +465,23 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     public void deletePhotoRequest() {
+        final Profile profile = App.from(this).getProfile();
         if (mDeletedPhotos.isEmpty()) return;
-        final Photos photos = (Photos) CacheProfile.photos.clone();
-        final int totalPhotos = CacheProfile.totalPhotos;
+        final Photos photos = (Photos) profile.photos.clone();
+        final int totalPhotos = profile.photosCount;
         for (Photo currentPhoto : mDeletedPhotos) {
-            CacheProfile.photos.removeById(currentPhoto.getId());
+            profile.photos.removeById(currentPhoto.getId());
         }
-        CacheProfile.totalPhotos -= mDeletedPhotos.size();
+        profile.photosCount -= mDeletedPhotos.size();
         int decrementPositionBy = 0;
         for (Photo deleted : mDeletedPhotos) {
-            if (deleted.position < CacheProfile.photo.position && CacheProfile.photo.position > 0) {
+            if (profile.photo != null && deleted.position < profile.photo.position
+                    && profile.photo.position > 0) {
                 decrementPositionBy--;
             }
         }
         final int avatarPosition = decrementPositionBy * (-1);
-        CacheProfile.incrementPhotoPosition(decrementPositionBy, false);
+        CacheProfile.incrementPhotoPosition(this, decrementPositionBy, false);
 
         PhotoDeleteRequest request = new PhotoDeleteRequest(this);
         request.photos = mDeletedPhotos.getIdsArray();
@@ -480,14 +489,16 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             @Override
             public void success(IApiResponse response) {
                 mDeletedPhotos.clear();
+                //удалили фоточки обнивить профиль
+                appState.setData(profile);
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
                 Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
-                CacheProfile.photos = photos;
-                CacheProfile.totalPhotos = totalPhotos;
-                CacheProfile.incrementPhotoPosition(avatarPosition, false);
+                profile.photos = photos;
+                profile.photosCount = totalPhotos;
+                CacheProfile.incrementPhotoPosition(PhotoSwitcherActivity.this, avatarPosition, false);
                 LocalBroadcastManager.getInstance(PhotoSwitcherActivity.this).sendBroadcast(new Intent(DEFAULT_UPDATE_PHOTOS_INTENT));
             }
         }).exec();
@@ -500,7 +511,9 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                CacheProfile.photo = currentPhoto;
+                Profile profile = App.from(PhotoSwitcherActivity.this).getProfile();
+                profile.photo = currentPhoto;
+                appState.setData(profile);
                 CacheProfile.sendUpdateProfileBroadcast();
                 refreshButtonsState();
                 Utils.showToastNotification(R.string.avatar_set_successfully, Toast.LENGTH_SHORT);
@@ -572,7 +585,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     private void refreshButtonsState() {
-        if (mUid == CacheProfile.uid && mSetAvatarButton != null && mPhotoLinks != null && mPhotoLinks.size() > mCurrentPosition) {
+        Profile profile = App.from(this).getProfile();
+        if (mUid == profile.uid && mSetAvatarButton != null && mPhotoLinks != null && mPhotoLinks.size() > mCurrentPosition) {
             final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
             if (mDeletedPhotos.contains(currentPhoto)) {
                 mDeleteButton.setVisibility(View.VISIBLE);
@@ -580,21 +594,30 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 mSetAvatarButton.setText(R.string.edit_restore);
                 mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             } else {
-                if (CacheProfile.photo != null && CacheProfile.photo.getId() == currentPhoto.getId()) {
+                if (profile.photo != null && profile.photo.getId() == currentPhoto.getId()) {
                     mDeleteButton.setVisibility(View.GONE);
                 } else {
                     mDeleteButton.setVisibility(View.VISIBLE);
                     mDeleteButton.setImageResource(R.drawable.ico_delete_selector);
                 }
-                if (CacheProfile.photo != null && currentPhoto.getId() == CacheProfile.photo.getId()) {
+                if (profile.photo != null && currentPhoto.getId() == profile.photo.getId()) {
                     mSetAvatarButton.setText(R.string.your_avatar);
                     mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ico_selected, 0, 0, 0);
                 } else {
                     mSetAvatarButton.setText(R.string.on_avatar);
-                    mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(CacheProfile.sex == Static.BOY ? R.drawable.ico_avatar_man_selector : R.drawable.ico_avatar_woman_selector, 0, 0, 0);
+                    mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(profile.sex == Profile.BOY ? R.drawable.ico_avatar_man_selector : R.drawable.ico_avatar_woman_selector, 0, 0, 0);
                 }
             }
         }
+    }
+
+    private boolean isContainsFakePhoto(Photos photos) {
+        for (Photo photo : photos) {
+            if (photo.isFake()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void sendAlbumRequest(int position) {
@@ -606,8 +629,16 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 for (Photo photo : newPhotos) {
                     mPhotoLinks.set(photo.getPosition(), photo);
                 }
-                if (mUid == CacheProfile.uid) {
-                    CacheProfile.photos = mPhotoLinks;
+                /*
+                Записываем в кэш только в том случае если фоточки не имеют фейков, в противном случае
+                в провили будут пустые итем на месте фоточек, и перестанет работать автодагрузка так как фактически
+                из-за фейков нечего будет подгружать. По этому дабы не писать кучу оверхеда для такой исключительной ситуации
+                "теряем" объекты загруженные в этой активити
+                 */
+                if (mUid == App.from(PhotoSwitcherActivity.this).getProfile().uid && !isContainsFakePhoto(mPhotoLinks)) {
+                    Profile profile = App.from(PhotoSwitcherActivity.this).getProfile();
+                    profile.photos = mPhotoLinks;
+                    appState.setData(profile);
                 }
 
                 if (mImageSwitcher != null) {
@@ -829,7 +860,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
                 @Override
                 protected User parseResponse(ApiResponse response) {
-                    return new User(mProfileId, response);
+                    return new User(mProfileId, response, getContext());
                 }
 
                 @Override

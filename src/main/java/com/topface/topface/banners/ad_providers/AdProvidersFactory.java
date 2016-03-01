@@ -1,5 +1,7 @@
 package com.topface.topface.banners.ad_providers;
 
+import com.topface.topface.data.Options;
+
 /**
  * Created by kirussell on 12/01/15.
  * Factory through which you can obtain needed ad's provider
@@ -13,6 +15,7 @@ public class AdProvidersFactory {
     public static final String BANNER_ADMOB = "ADMOB";
     public static final String BANNER_ADMOB_MEDIATION = "ADMOB_MEDIATION";
     public static final String BANNER_ADMOB_FULLSCREEN_START_APP = "ADMOB_FULLSCREEN_EXP";
+    public static final String BANNER_APPODEAL_FULLSCREEN = "APPODEAL_FULLSCREEN";
     public static final String BANNER_GAG = "GAG";
     public static final String BANNER_NONE = "NONE";
     public static final String BANNER_APPODEAL = "APPODEAL";
@@ -28,15 +31,15 @@ public class AdProvidersFactory {
     /**
      * Creates provider for given banner name
      *
-     * @param banner name of banner system from server
+     * @param banner name of banner system from serverа
      * @return appropriate provider
      */
-    public IAdsProvider createProvider(String banner) {
+    public IAdsProvider createProvider(String banner, Options options) {
         switch (banner) {
             case BANNER_ADMOB:
                 return new AdMobProvider();
             case BANNER_TOPFACE:
-                return new TopfaceBannerProvider();
+                return new TopfaceBannerProvider(options);
             case BANNER_ADMOB_MEDIATION:
                 return new AdMobMediationProvider();
             case BANNER_APPODEAL:

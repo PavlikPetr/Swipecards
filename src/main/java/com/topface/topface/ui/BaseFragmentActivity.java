@@ -24,7 +24,7 @@ import android.widget.FrameLayout;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
@@ -32,6 +32,7 @@ import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.gcmutils.GCMUtils;
@@ -61,7 +62,14 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            startPopupActionsIfNeeded();
             onProfileUpdated();
+        }
+    };
+    private BroadcastReceiver mOptionsUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            startPopupActionsIfNeeded();
         }
     };
     private boolean mRunning;
@@ -123,9 +131,20 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         setWindowContentOverlayCompat();
+    }
+
+    private StartActionsController initStartActionController() {
         mStartActionsController = new StartActionsController(this);
         onRegisterMandatoryStartActions(mStartActionsController);
         onRegisterStartActions(mStartActionsController);
+        return mStartActionsController;
+    }
+
+    private StartActionsController getStartActionsController() {
+        if (mStartActionsController == null) {
+            initStartActionController();
+        }
+        return mStartActionsController;
     }
 
     @Override
@@ -144,6 +163,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         mRunning = false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setSupportProgressBarIndeterminateVisibility(boolean visible) {
         if (mIndeterminateSupported) {
@@ -218,7 +238,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     }
 
     protected boolean isLoggedIn() {
-        return !CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty();
+        return !CacheProfile.isEmpty(this) && !AuthToken.getInstance().isEmpty();
     }
 
     private void registerLoadProfileReceiver() {
@@ -227,7 +247,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     //Уведомлять о загрузке профиля следует только если мы авторизованы
-                    if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
+                    if (!CacheProfile.isEmpty(context) && !AuthToken.getInstance().isEmpty()) {
                         checkProfileLoad();
                     }
                 }
@@ -241,10 +261,8 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
 
     protected void onLoadProfile() {
         Debug.log("onLoadProfile in " + ((Object) this).getClass().getSimpleName());
-        if (CacheProfile.isEmpty() || AuthToken.getInstance().isEmpty()) {
+        if (CacheProfile.isEmpty(this) || AuthToken.getInstance().isEmpty()) {
             startAuth();
-        } else {
-            mStartActionsController.onProcessAction();
         }
     }
 
@@ -258,6 +276,8 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(mOptionsUpdateReceiver, new IntentFilter(Options.OPTIONS_RECEIVED_ACTION));
 
         /*
         Sending notification open event to statistics. Only done once when activity started from notification.
@@ -286,6 +306,8 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         mIsActivityRestoredState = true;
         checkProfileLoad();
         registerReauthReceiver();
+        getStartActionsController().dropDownProcessedActionsState();
+        startPopupActionsIfNeeded();
     }
 
     public boolean isActivityRestoredState() {
@@ -365,6 +387,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
             Debug.error(ex);
         }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mProfileUpdateReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mOptionsUpdateReceiver);
     }
 
     private void removeAllRequests() {
@@ -407,9 +430,11 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         if (requestCode != -1) {
-            intent.putExtra(Static.INTENT_REQUEST_KEY, requestCode);
+            intent.putExtra(App.INTENT_REQUEST_KEY, requestCode);
         }
-        super.startActivityForResult(intent, requestCode);
+        if (Utils.isIntentAvailable(this, intent)) {
+            super.startActivityForResult(intent, requestCode);
+        }
     }
 
     @Override
@@ -490,6 +515,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
      * Set the window content overlay on device's that don't respect the theme
      * attribute.
      */
+    @SuppressWarnings("deprecation")
     private void setWindowContentOverlayCompat() {
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN_MR2) {
             // Get the content view
@@ -546,5 +572,18 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
 
     protected void setHasContent(boolean value) {
         mHasContent = value;
+    }
+
+    /**
+     * start sequence when options and profile was loaded from server
+     */
+    private void startPopupActionsIfNeeded() {
+        if (!App.get().getProfile().isFromCache
+                && App.get().isUserOptionsObtainedFromServer()
+                && !getStartActionsController().isProcessedMandatoryActionForSession()
+                && !getStartActionsController().isProcessedActionForSession()
+                && !CacheProfile.isEmpty(this) && !AuthToken.getInstance().isEmpty()) {
+            getStartActionsController().onProcessAction();
+        }
     }
 }

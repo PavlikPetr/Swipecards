@@ -7,20 +7,22 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
+import com.topface.topface.data.Profile;
+import com.topface.topface.databinding.FragmentProfilePhotosBinding;
 import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -29,56 +31,63 @@ import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
-import com.topface.topface.ui.GridViewWithHeaderAndFooter;
+import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.ui.IBackPressedListener;
+import com.topface.topface.ui.adapters.BasePhotoRecyclerViewAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
+import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
-import org.json.JSONException;
+import javax.inject.Inject;
 
-public class ProfilePhotoFragment extends ProfileInnerFragment implements View.OnClickListener {
+import rx.functions.Action1;
+
+
+public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackPressedListener {
 
     private static final String POSITION = "POSITION";
     private static final String FLIPPER_VISIBLE_CHILD = "FLIPPER_VISIBLE_CHILD";
-
-    private OwnPhotoGridAdapter mProfilePhotoGridAdapter;
-
-    private ViewFlipper mViewFlipper;
-    private GridViewWithHeaderAndFooter mGridAlbum;
-    private View mLoadingLocker;
-    private View mGridFooterView;
-    private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (isAdded() && getView() != null && CacheProfile.photos != null && mProfilePhotoGridAdapter != null) {
-                initData();
-            }
-        }
-    };
+    @Inject
+    TopfaceAppState appState;
+    private OwnProfileRecyclerViewAdapter mOwnProfileRecyclerViewAdapter;
 
     private BroadcastReceiver mPhotosReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (null != mProfilePhotoGridAdapter) {
-                mProfilePhotoGridAdapter.updateData();
+            if (null != mOwnProfileRecyclerViewAdapter) {
+                mOwnProfileRecyclerViewAdapter.updateData(App.from(context).getProfile().photos, App.from(context).getProfile().photosCount, true);
             }
         }
     };
-    private AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
+
+    private FragmentProfilePhotosBinding mBinding;
+
+    private BasePhotoRecyclerViewAdapter.OnRecyclerViewItemClickListener mClickListener = new BasePhotoRecyclerViewAdapter.OnRecyclerViewItemClickListener() {
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (position == 0) {
-                mViewFlipper.setDisplayedChild(1);
-            } else if (position <= CacheProfile.totalPhotos) {
+        public void itemClick(View view, int itemPosition, Photo photo) {
+            Profile profile = App.from(getActivity()).getProfile();
+            if (itemPosition == 0) {
+                mBinding.vfFlipper.setDisplayedChild(1);
+            } else if (itemPosition <= profile.photosCount) {
                 startActivity(PhotoSwitcherActivity.getPhotoSwitcherIntent(
                         null,
-                        position - 1,
-                        CacheProfile.uid,
-                        CacheProfile.totalPhotos,
-                        CacheProfile.photos
+                        itemPosition - 1,
+                        profile.uid,
+                        profile.photosCount,
+                        profile.photos
                 ));
+            }
+        }
+    };
+
+    private BasePhotoRecyclerViewAdapter.OnRecyclerViewItemLongClickListener longClickListener = new BasePhotoRecyclerViewAdapter.OnRecyclerViewItemLongClickListener() {
+        @Override
+        public void itemLongClick(View view, int itemPosition, Photo photo) {
+            if (needDialog(photo)) {
+                startPhotoDialog(photo, itemPosition);
             }
         }
     };
@@ -88,16 +97,17 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
     }
 
     private void sendAlbumRequest() {
-        Photos photoLinks = mProfilePhotoGridAdapter.getAdapterData();
+        Photos photoLinks = mOwnProfileRecyclerViewAdapter.getAdapterData();
         if (photoLinks == null || photoLinks.size() < 2) {
             return;
         }
-        mGridFooterView.setVisibility(View.VISIBLE);
-        Photo photo = mProfilePhotoGridAdapter.getItem(photoLinks.size() - 1);
+        //откидываем еще фейк для футера
+        final Photo photo = mOwnProfileRecyclerViewAdapter.getItem(photoLinks.size() - 2);
         int position = photo.getPosition();
+        final Profile profile = App.get().getProfile();
         AlbumRequest request = new AlbumRequest(
                 getActivity(),
-                CacheProfile.uid,
+                profile.uid,
                 position + 1,
                 AlbumRequest.MODE_ALBUM,
                 AlbumLoadController.FOR_GALLERY
@@ -106,8 +116,10 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
 
             @Override
             protected void success(AlbumPhotos data, IApiResponse response) {
-                if (mProfilePhotoGridAdapter != null) {
-                    mProfilePhotoGridAdapter.addPhotos(data, data.more, false);
+                if (mOwnProfileRecyclerViewAdapter != null) {
+                    mOwnProfileRecyclerViewAdapter.addPhotos(data, data.more, false, false);
+                    profile.photos = mOwnProfileRecyclerViewAdapter.getPhotos();
+                    appState.setData(profile);
                 }
             }
 
@@ -117,109 +129,73 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
             }
 
             @Override
-            public void always(IApiResponse response) {
-                super.always(response);
-                mGridFooterView.setVisibility(View.GONE);
-            }
-
-            @Override
             public void fail(int codeError, IApiResponse response) {
                 Utils.showErrorMessage();
             }
         }).exec();
     }
 
-    private Photos getPhotoLinks() {
-        Photos photoLinks = new Photos();
-        if (CacheProfile.photos != null) {
-            photoLinks.addAll(CacheProfile.photos);
-        }
-        return photoLinks;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        App.from(getContext()).inject(this);
+        if (getActivity() instanceof TrackedFragmentActivity) {
+            ((TrackedFragmentActivity) getActivity()).setBackPressedListener(this);
+        }
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
-        mGridFooterView = createGridViewFooter();
-        //Navigation bar
-
+        mBinding = DataBindingUtil.bind(root);
+        mBinding.setHandlers(new Handlers());
         if (getActivity() instanceof EditContainerActivity) {
             getActivity().setResult(Activity.RESULT_OK);
             setActionBarTitles(getString(R.string.edit_title), getString(R.string.edit_album));
         }
-
-        mLoadingLocker = root.findViewById(R.id.fppLocker);
-
-        mViewFlipper = (ViewFlipper) root.findViewById(R.id.vfFlipper);
-
-        mGridAlbum = (GridViewWithHeaderAndFooter) root.findViewById(R.id.usedGrid);
-        mProfilePhotoGridAdapter = new OwnPhotoGridAdapter(getActivity().getApplicationContext(), getPhotoLinks(),
-                CacheProfile.totalPhotos, new LoadingListAdapter.Updater() {
+        mOwnProfileRecyclerViewAdapter = new OwnProfileRecyclerViewAdapter(null,
+                App.from(getActivity()).getProfile().photosCount, new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
                 sendAlbumRequest();
             }
         });
-
-        initData();
-        int position = 0;
+        mOwnProfileRecyclerViewAdapter.setOnItemClickListener(mClickListener);
+        mOwnProfileRecyclerViewAdapter.setOnItemLongClickListener(longClickListener);
+        mOwnProfileRecyclerViewAdapter.setFooter(createGridViewFooter(), false);
+        final int position;
         if (savedInstanceState != null) {
             position = savedInstanceState.getInt(POSITION, 0);
-            mViewFlipper.setDisplayedChild(savedInstanceState.getInt(FLIPPER_VISIBLE_CHILD, 0));
+            mBinding.vfFlipper.setDisplayedChild(savedInstanceState.getInt(FLIPPER_VISIBLE_CHILD, 0));
+        } else {
+            position = 0;
         }
-        addFooterView();
-        mGridAlbum.setSelection(position);
-        mGridAlbum.setOnItemClickListener(mOnItemClickListener);
-        mGridAlbum.setOnScrollListener(mProfilePhotoGridAdapter);
-        mGridAlbum.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position11, long id) {
-                Photo item = (Photo) parent.getItemAtPosition(position11);
-                if (needDialog(item)) {
-                    startPhotoDialog(item, position11 - 1);
-                    return true;
-                }
-                return false;
-            }
-        });
-        mGridAlbum.post(new Runnable() {
+        int spanCount = getResources().getInteger(R.integer.add_to_leader_column_count);
+        StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
+        mBinding.usedGrid.setLayoutManager(manager);
+        mBinding.usedGrid.post(new Runnable() {
             @Override
             public void run() {
-                mGridAlbum.setAdapter(mProfilePhotoGridAdapter);
+                mBinding.usedGrid.setAdapter(mOwnProfileRecyclerViewAdapter);
+                mBinding.usedGrid.scrollToPosition(position);
             }
         });
+        appState.getObservable(Profile.class).subscribe(new Action1<Profile>() {
+            @Override
+            public void call(Profile profile) {
+                if (mOwnProfileRecyclerViewAdapter != null && profile.photos != null &&
+                        mOwnProfileRecyclerViewAdapter.getPhotos().size() != profile.photos.size()) {
 
-        root.findViewById(R.id.btnAddPhotoAlbum).setOnClickListener(this);
-        root.findViewById(R.id.btnAddPhotoCamera).setOnClickListener(this);
-        root.findViewById(R.id.btnCancel).setOnClickListener(this);
-
-        return root;
-    }
-
-    private void addFooterView() {
-        if (mGridAlbum != null) {
-            if (mGridAlbum.getFooterViewCount() == 0) {
-                mGridAlbum.addFooterView(mGridFooterView);
+                    mOwnProfileRecyclerViewAdapter.setData(profile.photos, profile.photos.size() < profile.photosCount, true, true);
+                }
             }
-            mGridFooterView.setVisibility(View.GONE);
-        }
+        });
+        return root;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(POSITION, mGridAlbum.getFirstVisiblePosition());
-        outState.putInt(FLIPPER_VISIBLE_CHILD, mViewFlipper.getDisplayedChild());
-    }
-
-    @Override
-    protected void onLoadProfile() {
-        super.onLoadProfile();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
-                mProfileUpdateReceiver,
-                new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION)
-        );
+        if (mOwnProfileRecyclerViewAdapter != null) {
+            outState.putInt(POSITION, (mBinding.usedGrid != null) ? mOwnProfileRecyclerViewAdapter.getFirstVisibleItemPos() : 0);
+        }
+        outState.putInt(FLIPPER_VISIBLE_CHILD, mBinding.vfFlipper.getDisplayedChild());
     }
 
     public void startPhotoDialog(final Photo photo, final int position) {
@@ -227,7 +203,8 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
         builder.setItems(new String[]{getString(R.string.edit_set_as_main), getString(R.string.edit_delete)}, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mLoadingLocker.setVisibility(View.VISIBLE);
+                mBinding.fppLocker.setVisibility(View.VISIBLE);
+                final Profile profile = App.from(getActivity()).getProfile();
                 switch (which) {
                     case 0:
                         PhotoMainRequest request = new PhotoMainRequest(getActivity());
@@ -236,7 +213,8 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
                             @Override
                             public void success(IApiResponse response) {
                                 super.success(response);
-                                CacheProfile.photo = photo;
+                                profile.photo = photo;
+                                appState.setData(profile);
                                 CacheProfile.sendUpdateProfileBroadcast();
                             }
 
@@ -265,7 +243,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
                             @Override
                             public void always(IApiResponse response) {
                                 super.always(response);
-                                mLoadingLocker.setVisibility(View.GONE);
+                                mBinding.fppLocker.setVisibility(View.GONE);
                             }
                         }).exec();
                         break;
@@ -277,18 +255,18 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
                             public void success(IApiResponse response) {
                                 super.success(response);
                                 //Декрементим общее количество фотографий
-                                CacheProfile.totalPhotos -= 1;
-                                CacheProfile.photos.remove(photo);
-                                mProfilePhotoGridAdapter.removePhoto(photo);
-                                if (position < CacheProfile.photo.position) {
-                                    CacheProfile.incrementPhotoPosition(-1);
+                                profile.photosCount -= 1;
+                                profile.photos.remove(photo);
+                                appState.setData(profile);
+                                if (position < profile.photo.position) {
+                                    CacheProfile.incrementPhotoPosition(getActivity(), -1);
                                 }
                             }
 
                             @Override
                             public void always(IApiResponse response) {
                                 super.always(response);
-                                mLoadingLocker.setVisibility(View.GONE);
+                                mBinding.fppLocker.setVisibility(View.GONE);
                             }
                         }).exec();
                         break;
@@ -299,7 +277,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
     }
 
     private boolean needDialog(Photo photo) {
-        return CacheProfile.photo != null && photo != null && !photo.isFake() && CacheProfile.photo.getId() != photo.getId();
+        return App.from(getActivity()).getProfile().photo != null && photo != null && !photo.isFake() && App.from(getActivity()).getProfile().photo.getId() != photo.getId();
     }
 
     @Override
@@ -308,7 +286,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
                 mPhotosReceiver,
                 new IntentFilter(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT)
         );
-        mProfilePhotoGridAdapter.updateData();
+        mOwnProfileRecyclerViewAdapter.updateData(App.from(getActivity()).getProfile().photos, App.from(getActivity()).getProfile().photosCount, true);
         super.onResume();
     }
 
@@ -319,37 +297,26 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileUpdateReceiver);
-    }
-
-    private void initData() {
-        if (mProfilePhotoGridAdapter != null && CacheProfile.photos != null) {
-            mProfilePhotoGridAdapter.setData(
-                    CacheProfile.photos,
-                    CacheProfile.photos.size() < CacheProfile.totalPhotos
-            );
+    public boolean onBackPressed() {
+        if (mBinding.vfFlipper != null && mBinding.vfFlipper.getDisplayedChild() == 1) {
+            mBinding.vfFlipper.setDisplayedChild(0);
+            return true;
         }
+        return false;
     }
 
-    @Override
-    public void onClick(View v) {
-        if (null != v) {
-            int id = v.getId();
-            switch (id) {
-                case R.id.btnAddPhotoAlbum:
-                case R.id.btnAddPhotoCamera:
-                    mViewFlipper.setDisplayedChild(0);
-                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
-                            new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", id));
-                    break;
-                case R.id.btnCancel:
-                    mViewFlipper.setDisplayedChild(0);
-                    break;
+    public class Handlers {
 
-            }
+        public void addPhotoClick(View v) {
+            mBinding.vfFlipper.setDisplayedChild(0);
+            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
+                    new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", v.getId()));
+        }
+
+        public void cancelClick(View v) {
+            mBinding.vfFlipper.setDisplayedChild(0);
         }
 
     }
+
 }

@@ -1,4 +1,5 @@
 def versionProps = new Properties()
+
 def versionPropsFile = file('version.properties')
 if (!versionPropsFile.canRead()) {
     throw new GradleException("Could not read version.properties! Create file in project root")
@@ -8,9 +9,8 @@ incrementQaBuildVersion(versionProps, versionPropsFile);
 
 def getVersionCode(versionProps) {
     def versionCode = versionProps['VERSION_CODE'].toInteger()
-    if (project.gradle.startParameter.taskNames.contains("assembleGoogleQa")) {
-        versionCode = versionCode + getQaVersion(versionProps)
-    } else if (project.gradle.startParameter.taskNames.contains("assembleIfreeQa")) {
+    def taskNames = project.gradle.startParameter.taskNames
+    if (taskNames.contains("assembleGoogleQa") || taskNames.contains("assembleIfreeQa")) {
         versionCode = versionCode + getQaVersion(versionProps)
     }
     return versionCode;
@@ -27,7 +27,8 @@ def getQaVersion(versionProps) {
 }
 
 def incrementQaBuildVersion(versionProps, versionPropsFile) {
-    if (project.gradle.startParameter.taskNames.contains("assembleGoogleQa") && versionProps != null) {
+    def taskNames = project.gradle.startParameter.taskNames
+    if ((taskNames.contains("assembleGoogleQa") || taskNames.contains("assembleIfreeQa")) && versionProps != null) {
         def versionQaBuild = versionProps['VERSION_QA_BUILD'].toInteger() + 1
         versionProps['VERSION_QA_BUILD'] = versionQaBuild.toString()
         versionProps.store(versionPropsFile.newWriter(), null)
@@ -49,6 +50,7 @@ buildscript {
     dependencies {
         classpath rootProject.ANDROID_BUILD_GRADLE_PLUGIN_VERSION
         classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
+        classpath 'com.android.databinding:dataBinder:1.0-rc2'
     }
 }
 
@@ -66,6 +68,7 @@ allprojects {
 
 apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
+apply plugin: 'com.android.databinding'
 
 android {
     compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
@@ -88,12 +91,33 @@ android {
                     "com.topface.billing.MarketApiType.NOKIA_STORE";
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappandroidnokia\"";
         }*/
+        blueStacks {
+            applicationId "com.topface.spark.bst"
+            buildConfigField "String", "STATISTICS_APP", "\"topfacemobappbluestack\"";
+            buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.BLUE_STACKS";
+            buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
+                    "com.topface.billing.MarketApiType.BLUE_STACKS";
+        }
         ifree {
-            applicationId "com.topface.topface.ifree";
+            applicationId "com.topface.topface.ifree"
             buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.I_FREE";
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappifree\"";
             buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                     "com.topface.billing.MarketApiType.I_FREE";
+        }
+        derived {
+            applicationId "com.topface.topface.derived"
+            buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.DERIVED";
+            buildConfigField "String", "STATISTICS_APP", "\"topfacemobappderived\"";
+            buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
+                    "com.topface.billing.MarketApiType.DERIVED";
+        }
+        appland {
+            applicationId "com.topface.topface.appland"
+            buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.APPLAND";
+            buildConfigField "String", "STATISTICS_APP", "\"topfacemobappappland\"";
+            buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
+                    "com.topface.billing.MarketApiType.APPLAND";
         }
     }
 
@@ -103,7 +127,7 @@ android {
     }
 
     defaultConfig {
-        applicationId 'com.topface.topface'
+        applicationId "com.topface.topface"
         //noinspection GroovyAssignabilityCheck
         minSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MIN_SDK_VERSION)
         //noinspection GroovyAssignabilityCheck
@@ -122,19 +146,41 @@ android {
                 "com.topface.billing.MarketApiType.GOOGLE_PLAY";
 
         multiDexEnabled true
-
     }
 
     signingConfigs {
-        debug {
-            storeFile file("misc/keys/debug.keystore")
-        }
-
-        release {
+        google {
             storeFile file("misc/keys/topface.keystore")
             storePassword "Sonetica2012"
             keyAlias "topface"
             keyPassword "Sonetica2012"
+        }
+        ifree {
+            storeFile file("misc/keys/topfaceIFree.keystore")
+            storePassword "Sonetica2012"
+            keyAlias "topfaceifree"
+            keyPassword "Sonetica2012"
+        }
+        blueStacks {
+            storeFile file("misc/keys/topfaceBlueStacks.keystore")
+            storePassword "Sonetica2012"
+            keyAlias "topfacebluestacks"
+            keyPassword "Sonetica2012"
+        }
+        derived {
+            storeFile file("misc/keys/topfaceDerived.jks")
+            storePassword "Sonetica2012"
+            keyAlias "topfacederived"
+            keyPassword "Sonetica2012"
+        }
+        appland {
+            storeFile file("misc/keys/topfaceAppLand.keystore")
+            storePassword "Sonetica2012"
+            keyAlias "topfaceappland"
+            keyPassword "Sonetica2012"
+        }
+        debug {
+            storeFile file("misc/keys/debug.keystore")
         }
     }
 
@@ -148,7 +194,12 @@ android {
         }
         release {
             minifyEnabled true
-            signingConfig signingConfigs.release
+            productFlavors.google.signingConfig signingConfigs.google
+            productFlavors.ifree.signingConfig signingConfigs.ifree
+            productFlavors.blueStacks.signingConfig signingConfigs.blueStacks
+            productFlavors.derived.signingConfig signingConfigs.derived
+            productFlavors.appland.signingConfig signingConfigs.appland
+            productFlavors.amazon.signingConfig signingConfigs.google
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-config.txt'
@@ -211,9 +262,9 @@ dependencies {
     compile rootProject.ANDROID_BUILD_DESIGN_SUPPORT_VERSION
     compile rootProject.ANDROID_BUILD_ANNOTATIONS_SUPPORT_VERSION
     //Google play services
-    compile "com.google.android.gms:play-services-base:7.3.0"
-    compile "com.google.android.gms:play-services-gcm:7.3.0"
-    compile "com.google.android.gms:play-services-ads:7.3.0"
+    compile "com.google.android.gms:play-services-base:7.8.0"
+    compile "com.google.android.gms:play-services-gcm:7.8.0"
+    compile "com.google.android.gms:play-services-ads:7.8.0"
     //Multi dex support
     compile 'com.android.support:multidex:1.0.1'
     //All jar libs
@@ -228,7 +279,6 @@ dependencies {
     amazonCompile name: 'ads_adman_2.2.7'
     compile name: 'appsflyer'
     compile name: 'comscore'
-    compile name: 'flurry_analytics_5.5.0'
     compile name: 'offerwalls_sponsorpay'
 
     //Topface sub libs
@@ -245,6 +295,7 @@ dependencies {
         //и на нее ругается gradle
         exclude group: 'org.json'
     }
+    compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'com.google.code.gson:gson:2.3'
     //Library for WebSocket and other network requests
     compile 'com.koushikdutta.async:androidasync:2.1.5'
@@ -255,13 +306,13 @@ dependencies {
     //Для Амазона нужна библиотека для поддержки in-app покупок
     amazonCompile 'com.amazon:in-app-purchasing:2.0.1'
     //RxJava
-    compile 'io.reactivex:rxandroid:0.24.0'
+    compile 'io.reactivex:rxandroid:1.0.0'
     //Dagger
     compile 'com.squareup.dagger:dagger:1.2.2'
     provided 'com.squareup.dagger:dagger-compiler:1.2.2'
     //Social networks SDK
-    compile 'com.vk:androidsdk:1.3.6'
-    compile 'com.facebook.android:facebook-android-sdk:3.22.0'
+    compile 'com.vk:androidsdk:1.6.1'
+    compile 'com.facebook.android:facebook-android-sdk:4.5.0'
     //Animations: NineOldAndroids, ListViewAnimations
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.nhaarman.listviewanimations:lib-core:3.1.0@aar'
@@ -269,9 +320,7 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
     qaCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
-
-    // I-FREE dependency
-    ifreeCompile('com.ifree.monetize:monetization-library:2.2.3') {
+    ifreeCompile('com.ifree.monetize:monetization-library:2.2.5') {
         exclude group: "com.fasterxml.jackson.core"
         exclude module: "support-v4"
     }
@@ -329,3 +378,19 @@ subprojects {
         buildToolsVersion rootProject.ANDROID_BUILD_TOOLS_VERSION
     }
 }
+
+// простите за этот кусок унылого ..., но пока не удалось запустить внешнюю таску из build.gradle, поэтому
+// в данный момент придется довольствоваться этим вариантом синхронизации строк
+
+task runScript(type: Exec) {
+    def listFlavours = []
+    android.productFlavors.each { flavor ->
+        listFlavours << flavor.name
+    }
+    def listBuildTypes = []
+    android.buildTypes.each { buildType ->
+        listBuildTypes << buildType.name
+    }
+    commandLine 'groovy', projectDir.toString().concat('/src/main/groovy/MoveStrings.groovy'), listFlavours, listBuildTypes
+}
+defaultTasks 'runScript'

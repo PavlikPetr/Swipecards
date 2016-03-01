@@ -4,6 +4,7 @@ import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.DrawableRes;
 import android.support.v4.app.Fragment;
@@ -24,6 +26,9 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Display;
+import android.view.Gravity;
+import android.view.InflateException;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -31,6 +36,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.topface.framework.utils.BackgroundThread;
@@ -38,27 +44,40 @@ import com.topface.framework.utils.Debug;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
+import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.UserGetAppOptionsRequest;
+import com.topface.topface.ui.IEmailConfirmationListener;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.debug.HockeySender;
+import com.topface.topface.utils.exception.OurTestException;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.acra.sender.ReportSenderException;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class Utils {
     public static final long DAY = 86400000;
     public static final long WEEK_IN_SECONDS = 604800;
+    public static final String EMPTY = "";
+    public static final String AMPERSAND = "&";
+    public static final String SEMICOLON = ":";
     private static final String DASH_SYMBOL = "-";
     private static final String HYPHEN_SYMBOL = "&#8209;";
-    // from android.util.Patterns.EMAIL_ADDRESS
+    private static final String EMPTY_JSON = "{}";
+    public static String RU_LOCALE = "ru";
     private final static Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
             "[a-zA-Z0-9\\+\\._%\\-\\+]{1,256}@" +
                     "" +
@@ -85,6 +104,10 @@ public class Utils {
         return mPluralResources.getQuantityString(id, quantity, formatArgs);
     }
 
+    public static Locale getRussianLocale() {
+        return new Locale(RU_LOCALE);
+    }
+
     public static void showErrorMessage() {
         Context context = App.getContext();
         if (context != null) {
@@ -95,11 +118,28 @@ public class Utils {
     public static void showToastNotification(int stringId, int duration) {
         Context context = App.getContext();
         if (context != null && (duration == 0 || duration == 1)) {
-            Toast.makeText(
-                    context,
-                    stringId,
-                    duration
-            ).show();
+            Toast toast;
+            try {
+                /*
+                краш при инфлейте тоста на соньках
+                https://rink.hockeyapp.net/manage/apps/26531/app_versions/343/crash_reasons/110273859?scope=devices&type=statistics
+                 */
+                toast = Toast.makeText(
+                        context,
+                        stringId,
+                        duration
+                );
+            } catch (InflateException e) {
+                e.printStackTrace();
+                return;
+            }
+            if (toast != null) {
+                /*
+                нет, я не сошел с ума. На некоторых девайсах Toast.makeText может возвращать null.
+                Такие дела
+                 */
+                toast.show();
+            }
         }
     }
 
@@ -122,6 +162,10 @@ public class Utils {
         }
     }
 
+    public static boolean isEmptyJson(JSONObject object){
+        return object.toString().equals(EMPTY_JSON);
+    }
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     @SuppressWarnings("deprecation")
     public static Point getSrceenSize(Context context) {
@@ -137,15 +181,18 @@ public class Utils {
         return size;
     }
 
-    public static boolean isIntentAvailable(Context context, String action) {
+    public static boolean isIntentAvailable(Context context, Intent intent) {
         final PackageManager packageManager = context.getPackageManager();
-        final Intent intent = new Intent(action);
         if (packageManager != null) {
             List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
             return list.size() > 0;
         } else {
             return false;
         }
+    }
+
+    public static boolean isIntentAvailable(Context context, String action) {
+        return isIntentAvailable(context, new Intent(action));
     }
 
     public static Integer getGooglePlayServicesVersion() {
@@ -164,11 +211,41 @@ public class Utils {
     }
 
     public static void goToUrl(Context context, String url) {
-        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        Intent i = Utils.getIntentToOpenUrl(url);
+        if (i != null) {
+            context.startActivity(i);
+        }
+    }
+
+    public static Intent getIntentToOpenUrl(String url) {
+        if (!TextUtils.isEmpty(url)) {
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            return i;
+        }
+        return null;
     }
 
     public static void startOldVersionPopup(final Activity activity) {
         startOldVersionPopup(activity, true);
+    }
+
+    public static void showCustomToast(int text) {
+        Context context = App.getContext();
+        if (context != null) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View layout = inflater.inflate(R.layout.custom_toast, null, false);
+
+            ImageView image = (ImageView) layout.findViewById(R.id.image);
+            image.setImageResource(R.drawable.ic_not_enough_data);
+            ((TextView) layout.findViewById(R.id.text)).setText(text);
+
+            Toast toast = new Toast(context);
+            toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.setView(layout);
+            toast.show();
+        }
     }
 
     public static void startOldVersionPopup(final Activity activity, boolean cancelable) {
@@ -196,7 +273,7 @@ public class Utils {
     }
 
     public static void goToMarket(Activity context, Integer requestCode) {
-        Intent marketIntent = getMarketIntent(context);
+        Intent marketIntent = getMarketIntent();
         if (isCallableIntent(marketIntent, context)) {
             if (requestCode == null) {
                 context.startActivity(marketIntent);
@@ -209,13 +286,16 @@ public class Utils {
     }
 
     public static boolean isCallableIntent(Intent intent, Context context) {
+        if (intent == null) {
+            return false;
+        }
         List<ResolveInfo> list = context.getPackageManager().queryIntentActivities(intent,
                 PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
     }
 
-    public static Intent getMarketIntent(Context context) {
-        return new Intent(Intent.ACTION_VIEW, Uri.parse(CacheProfile.getOptions().updateUrl));
+    public static Intent getMarketIntent() {
+        return new Intent(Intent.ACTION_VIEW, Uri.parse(App.get().getOptions().updateUrl));
     }
 
     public static String getClientDeviceName() {
@@ -288,11 +368,11 @@ public class Utils {
 
     public static String getText(EditText editText) {
         if (editText == null) {
-            return Static.EMPTY;
+            return EMPTY;
         }
         Editable text = editText.getText();
         if (text == null) {
-            return Static.EMPTY;
+            return EMPTY;
         }
         return text.toString();
     }
@@ -414,13 +494,14 @@ public class Utils {
         return Html.fromHtml(text.replaceAll(DASH_SYMBOL, HYPHEN_SYMBOL)).toString();
     }
 
-    public static void sendHockeyMessage(final Context context, final String message) {
+    public static void sendHockeyMessage(final String message) {
+        final Context context = App.getContext();
         new BackgroundThread() {
             @Override
             public void execute() {
                 HockeySender hockeySender = new HockeySender();
                 try {
-                    hockeySender.send(context, hockeySender.createLocalReport(context, new Exception(message)));
+                    hockeySender.send(context, hockeySender.createLocalReport(context, new OurTestException(message)));
                 } catch (ReportSenderException e) {
                     e.printStackTrace();
                 }
@@ -428,4 +509,96 @@ public class Utils {
         };
     }
 
+    public static String getUnlockButtonText(int sec) {
+        int minutes = (int) Math.ceil((float) sec / (float) DateUtils.MINUTE_IN_SECONDS);
+        return String.format(App.getContext().getString(R.string.unlock_by_viewed_ad_video_button_text),
+                Utils.getQuantityString(R.plurals.free_minutes, minutes, minutes));
+    }
+
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    public static class ActivityLifecycleCallbacksAdapter implements Application.ActivityLifecycleCallbacks {
+
+        @Override
+        public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
+        }
+
+        @Override
+        public void onActivityStarted(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivityResumed(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivityPaused(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivityStopped(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+        }
+
+        @Override
+        public void onActivityDestroyed(Activity activity) {
+
+        }
+    }
+    public static void checkEmailConfirmation(final IEmailConfirmationListener emailConfirmationListener, final boolean isNeedShowToast) {
+        final boolean isEmailConfirmedCurrentValue = App.get().getProfile().emailConfirmed;
+        new ProfileRequest(App.getContext()).callback(new DataApiHandler<Profile>() {
+            @Override
+            protected void success(Profile data, IApiResponse response) {
+                if (data != null) {
+                    boolean isConfirmed = data.emailConfirmed;
+                    if (emailConfirmationListener != null) {
+                        emailConfirmationListener.onEmailConfirmed(isConfirmed);
+                    }
+                    if (isNeedShowToast) {
+                        Utils.showToastNotification(isConfirmed ? R.string.general_email_success_confirmed : R.string.general_email_not_confirmed, Toast.LENGTH_LONG);
+                    } else {
+                        if (isEmailConfirmedCurrentValue != isConfirmed && isConfirmed) {
+                            Utils.showToastNotification(R.string.general_email_success_confirmed, Toast.LENGTH_LONG);
+                        }
+                    }
+                    if (isConfirmed) {
+                        new UserGetAppOptionsRequest(App.getContext()).callback(new DataApiHandler<Options>() {
+
+                            @Override
+                            public void fail(int codeError, IApiResponse response) {
+                            }
+
+                            @Override
+                            protected void success(Options data, IApiResponse response) {
+                            }
+
+                            @Override
+                            protected Options parseResponse(ApiResponse response) {
+                                return new Options(response);
+                            }
+                        }).exec();
+                    }
+                }
+
+            }
+
+            @Override
+            protected Profile parseResponse(ApiResponse response) {
+                return new Profile(response);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+            }
+        }).exec();
+    }
 }

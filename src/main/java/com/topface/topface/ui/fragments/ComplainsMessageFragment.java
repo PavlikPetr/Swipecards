@@ -18,6 +18,9 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.Utils;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class ComplainsMessageFragment extends BaseFragment {
 
     public static final String CLASS_NAME = "class";
@@ -27,21 +30,19 @@ public class ComplainsMessageFragment extends BaseFragment {
     private ComplainRequest.ClassNames className;
     private ComplainRequest.TypesNames typeName;
     private int userId;
-    private EditText description;
-    private View mComplainLocker;
     private String feedId;
     private MenuItem mSendMenuItem;
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Utils.hideSoftKeyboard(getActivity(), description);
-    }
+    @Bind(R.id.complainLocker)
+    View mComplainLocker;
+    @Bind(R.id.etDescription)
+    EditText mDescription;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.complains_message_fragment, container, false);
+        ButterKnife.bind(this, root);
         // to prevent clicks through fragment
         root.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -53,24 +54,22 @@ public class ComplainsMessageFragment extends BaseFragment {
         Bundle arguments = getArguments();
         className = (ComplainRequest.ClassNames) arguments.getSerializable(CLASS_NAME);
         typeName = (ComplainRequest.TypesNames) arguments.getSerializable(TYPE_NAME);
-        mComplainLocker = root.findViewById(R.id.complainLocker);
         ComplainsFragment.ComplainItem item = ComplainsFragment.getItemIdByClassAndType(className, typeName);
         userId = arguments.getInt(USER_ID);
         feedId = arguments.getString(FEED_ID);
-        TextView title = (TextView) root.findViewById(R.id.tvReason);
-        title.setText(item.title);
-
-        description = (EditText) root.findViewById(R.id.etDescription);
+        if (item != null) {
+            ((TextView) root.findViewById(R.id.tvReason)).setText(item.title);
+        }
 
         return root;
     }
 
     private void sendComplainRequest() {
-        Utils.hideSoftKeyboard(getActivity(), description);
+        Utils.hideSoftKeyboard(getActivity(), mDescription);
         mSendMenuItem.setEnabled(false);
         ComplainRequest request = new ComplainRequest(getActivity(), userId, className, typeName);
-        if (!description.getText().toString().isEmpty()) {
-            request.setDescription(description.getText().toString());
+        if (!mDescription.getText().toString().isEmpty()) {
+            request.setDescription(mDescription.getText().toString());
         }
         if (feedId != null) {
             request.setFeedId(feedId);

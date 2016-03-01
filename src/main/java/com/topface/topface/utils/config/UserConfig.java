@@ -2,17 +2,20 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.text.TextUtils;
 
 import com.topface.framework.utils.config.AbstractConfig;
-import com.topface.topface.Static;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.social.AuthToken;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +33,10 @@ import java.util.Set;
  * use generateKey(String name) to create keys to put(key) and get(key) data
  */
 public class UserConfig extends AbstractConfig {
+    public static final double DEFAULT_USER_LATITUDE_LOCATION = Double.MAX_VALUE;
+    public static final double DEFAULT_USER_LONGITUDE_LOCATION = Double.MAX_VALUE;
+    private static final String LOCATION_PROVIDER = "dummyprovider";
+    public final static int DEFAULT_SHOW_COUNT = 0;
     public static final int TOPFACE_OFFERWALL_REDIRECTION_FREQUENCY = 2;
     private static final int DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
     public static final String LISTS_SEPARATOR = "&";
@@ -68,6 +75,11 @@ public class UserConfig extends AbstractConfig {
     private static final String INTERSTITIAL_IN_FEEDS_FIRST_SHOW_TIME = "interstitial_in_feed_first_show_time";
     private static final String TEST_PAYMENT_ENABLED = "test_payment_enabled";
     public static final String INVITED_CONTACTS_FOR_SMS = "invite_contacts_for_sms";
+    public static final String LAST_CATCHED_GEO_LATITUDE = "last_catched_geo_latitude";
+    public static final String LAST_CATCHED_GEO_LONGITUDE = "last_catched_geo_longitude";
+    public static final String LAST_CATCHED_GEO_PROVIDER = "last_catched_geo_provider";
+    public static final String TRIAL_LAST_TIME = "trial_last_time";
+    public static final String START_POSITION_OF_ACTIONS = "start_position_of_actions";
     private String mUnique;
 
     public UserConfig(String uniqueKey, Context context) {
@@ -102,7 +114,7 @@ public class UserConfig extends AbstractConfig {
     @Override
     protected void fillSettingsMap(SettingsMap settingsMap) {
         // pincode value
-        addField(settingsMap, DATA_PIN_CODE, Static.EMPTY);
+        addField(settingsMap, DATA_PIN_CODE, Utils.EMPTY);
         // admirations promo popup last date of show
         addField(settingsMap, getPromoPopupKey(Options.PromoPopupEntity.AIR_ADMIRATIONS), 0L);
         // messages promo popup last date of show
@@ -116,13 +128,13 @@ public class UserConfig extends AbstractConfig {
         // flag show if "send sympathy hint" is passed
         addField(settingsMap, DATA_NOVICE_SYMPATHY, true);
         // список сообщений для сгруппированных нотификаций (сейчас группируются только сообщения)
-        addField(settingsMap, NOTIFICATIONS_MESSAGES_STACK, Static.EMPTY);
+        addField(settingsMap, NOTIFICATIONS_MESSAGES_STACK, Utils.EMPTY);
         // количество нотификаций, которые пишем в поле "еще %d сообщений"
         addField(settingsMap, NOTIFICATION_REST_MESSAGES, 0);
         // время последнего сброса счетчика вкладки бонусов
         addField(settingsMap, DATA_BONUS_LAST_SHOW_TIME, 0L);
         // default text for instant message on dating screen
-        addField(settingsMap, DEFAULT_DATING_MESSAGE, Static.EMPTY);
+        addField(settingsMap, DEFAULT_DATING_MESSAGE, Utils.EMPTY);
         // push notification melody
         addField(settingsMap, SETTINGS_GCM_RINGTONE, DEFAULT_SOUND);
         // preload photo default type WiFi and 3G
@@ -161,7 +173,14 @@ public class UserConfig extends AbstractConfig {
         // отправленные контакты для отправки смс
         addField(settingsMap, INVITED_CONTACTS_FOR_SMS, "");
         // счетчик показа попапа триального VIP
-        addField(settingsMap, TRIAL_VIP_POPUP_COUNTER, 0);
+        addField(settingsMap, TRIAL_VIP_POPUP_COUNTER, DEFAULT_SHOW_COUNT);
+        // последнее сохраненное местоположение пользователя
+        addField(settingsMap, LAST_CATCHED_GEO_LATITUDE, DEFAULT_USER_LATITUDE_LOCATION);
+        // время последнего показа попапа триала
+        addField(settingsMap, TRIAL_LAST_TIME, 0L);
+        addField(settingsMap, LAST_CATCHED_GEO_LONGITUDE, DEFAULT_USER_LONGITUDE_LOCATION);
+        addField(settingsMap, LAST_CATCHED_GEO_PROVIDER, LOCATION_PROVIDER);
+        addField(settingsMap, START_POSITION_OF_ACTIONS, 0);
     }
 
     @Override
@@ -175,7 +194,7 @@ public class UserConfig extends AbstractConfig {
             mUnique = AuthToken.getInstance().getUserTokenUniqueId();
         }
         return getContext().getSharedPreferences(
-                PROFILE_CONFIG_SETTINGS + Static.AMPERSAND + mUnique,
+                PROFILE_CONFIG_SETTINGS + Utils.AMPERSAND + mUnique,
                 Context.MODE_PRIVATE
         );
     }
@@ -276,6 +295,14 @@ public class UserConfig extends AbstractConfig {
         return getLongField(getSettingsMap(), DATING_LOCK_POPUP_TIME);
     }
 
+    public void setTrialLastTime(long lastTime) {
+        setField(getSettingsMap(), TRIAL_LAST_TIME, lastTime);
+    }
+
+    public long getTrialLastTime() {
+        return getLongField(getSettingsMap(), TRIAL_LAST_TIME);
+    }
+
     // =======================PromoPopups=======================
 
     /**
@@ -316,65 +343,6 @@ public class UserConfig extends AbstractConfig {
 
     public PreloadPhotoSelectorTypes getPreloadPhotoType() {
         return PreloadPhotoSelectorTypes.values()[getIntegerField(getSettingsMap(), SETTINGS_PRELOAD_PHOTO)];
-    }
-
-    // =======================Novice=======================
-
-    /**
-     * "Send sympathy hint" for novice user
-     *
-     * @return true if hint needs to be shown
-     */
-    public boolean getNoviceSympathy() {
-        return getBooleanField(getSettingsMap(), DATA_NOVICE_SYMPATHY);
-    }
-
-    /**
-     * Sets "send sympathy hint" flag for novice user
-     *
-     * @param needShow true if hint needs to be shown
-     * @return true on success
-     */
-    public boolean setNoviceSympathy(boolean needShow) {
-        return setField(getSettingsMap(), DATA_NOVICE_SYMPATHY, needShow);
-    }
-
-    /**
-     * "Buy sympathy hint" flag for novice user
-     *
-     * @return true if hint need to be shown
-     */
-    public boolean getNoviceBuySympathy() {
-        return getBooleanField(getSettingsMap(), DATA_NOVICE_BUY_SYMPATHY);
-    }
-
-    /**
-     * Sets "buy sympathy hint" flag for novice user
-     *
-     * @param needShow true if hint need to be shown
-     * @return true on success
-     */
-    public boolean setNoviceBuySympathy(boolean needShow) {
-        return setField(getSettingsMap(), DATA_NOVICE_BUY_SYMPATHY, needShow);
-    }
-
-    /**
-     * First trial to show "Buy sympathy hint" for delay hint purposes
-     *
-     * @return time of first trial
-     */
-    public long getNoviceBuySympathyDate() {
-        return getLongField(getSettingsMap(), DATA_NOVICE_BUY_SYMPATHY_DATE);
-    }
-
-    /**
-     * Sets time of first trial to show "Buy sympathy hint" for delay hint purposes
-     *
-     * @param lastTime time of show
-     * @return true on success
-     */
-    public Boolean setNoviceBuySympathyDate(long lastTime) {
-        return setField(getSettingsMap(), DATA_NOVICE_BUY_SYMPATHY_DATE, lastTime);
     }
 
     /**
@@ -583,12 +551,12 @@ public class UserConfig extends AbstractConfig {
         return getIntegerField(getSettingsMap(), TOPFACE_OFFERWALL_REDIRECT_COUNTER);
     }
 
-    public int getRemainedPubnativeShows() {
+    public int getRemainedPubnativeShows(int dailyShows) {
         long lastDay = getLongField(getSettingsMap(), LAST_DAY_PUBNATIVE_SHOWN);
         long now = Calendar.getInstance().getTimeInMillis();
         if (now - lastDay > DAY_IN_MILLIS) {
             setField(getSettingsMap(), LAST_DAY_PUBNATIVE_SHOWN, now - now % (DAY_IN_MILLIS));
-            setField(getSettingsMap(), REMAINED_DAILY_PUBNATIVE_SHOWS, CacheProfile.getOptions().feedNativeAd.dailyShows);
+            setField(getSettingsMap(), REMAINED_DAILY_PUBNATIVE_SHOWS, dailyShows);
         }
         return getIntegerField(getSettingsMap(), REMAINED_DAILY_PUBNATIVE_SHOWS);
     }
@@ -639,11 +607,13 @@ public class UserConfig extends AbstractConfig {
     public int incrementInterstitialInFeedsCounter() {
         int counter = getIntegerField(getSettingsMap(), INTERSTITIAL_IN_FEEDS_COUNTER);
         setField(getSettingsMap(), INTERSTITIAL_IN_FEEDS_COUNTER, ++counter);
+        this.saveConfig();
         return counter;
     }
 
     public void resetInterstitialInFeedsCounter() {
         setField(getSettingsMap(), INTERSTITIAL_IN_FEEDS_COUNTER, 0);
+        this.saveConfig();
     }
 
     public int getInterstitialsInFeedCounter() {
@@ -652,11 +622,53 @@ public class UserConfig extends AbstractConfig {
 
     public void setInterstitialsInFeedFirstShow(long timestamp) {
         setField(getSettingsMap(), INTERSTITIAL_IN_FEEDS_FIRST_SHOW_TIME, timestamp);
+        this.saveConfig();
     }
 
     public long getInterstitialsInFeedFirstShow() {
         return getLongField(getSettingsMap(), INTERSTITIAL_IN_FEEDS_FIRST_SHOW_TIME);
     }
-
     // =====================================================
+
+    /**
+     * Save last catched user location
+     *
+     * @param location user geo position
+     */
+    public void setUserGeoLocation(@NotNull Location location) {
+        setField(getSettingsMap(), LAST_CATCHED_GEO_LATITUDE, location.getLatitude());
+        setField(getSettingsMap(), LAST_CATCHED_GEO_LONGITUDE, location.getLongitude());
+        setField(getSettingsMap(), LAST_CATCHED_GEO_PROVIDER, location.getProvider());
+        this.saveConfig();
+    }
+
+    /**
+     * Return last saved user location
+     *
+     * @return last location
+     */
+    public Location getUserGeoLocation() {
+        Location location = new Location(getStringField(getSettingsMap(), LAST_CATCHED_GEO_PROVIDER));
+        location.setLatitude(getDoubleField(getSettingsMap(), LAST_CATCHED_GEO_LATITUDE));
+        location.setLongitude(getDoubleField(getSettingsMap(), LAST_CATCHED_GEO_LONGITUDE));
+        return location;
+    }
+
+    /**
+     * save current position of popups sequenced
+     *
+     * @param count position
+     */
+    public void setStartPositionOfActions(int count) {
+        setField(getSettingsMap(), START_POSITION_OF_ACTIONS, count);
+    }
+
+    /**
+     * get current position of popups sequenced
+     *
+     * @return position
+     */
+    public int getStartPositionOfActions() {
+        return getIntegerField(getSettingsMap(), START_POSITION_OF_ACTIONS);
+    }
 }

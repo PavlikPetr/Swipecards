@@ -8,6 +8,7 @@ import android.text.util.Linkify;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,9 +16,9 @@ import android.widget.Toast;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
+import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -40,13 +41,16 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private static final int T_FRIEND_GIFT = 7;
     private static final int T_USER_POPULAR_1 = 8;
     private static final int T_USER_POPULAR_2 = 9;
-    private static final int T_COUNT = 10;
+    private static final int T_AUTO_REPLY = 10;
+    private static final int T_COUNT = 11;
     private HashMap<History, ApiRequest> mHashRequestByWaitingRetryItem = new HashMap<>();
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
+    private OnBuyVipButtonClick mBuyVipButtonClickListener;
 
-    public ChatListAdapter(Context context, FeedList<History> data, Updater updateCallback) {
+    public ChatListAdapter(Context context, FeedList<History> data, Updater updateCallback, OnBuyVipButtonClick listener) {
         super(context, data, updateCallback);
+        mBuyVipButtonClickListener = listener;
         if (!data.isEmpty()) {
             prepareDates();
         }
@@ -69,6 +73,8 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 return T_USER_POPULAR_1;
             case FeedDialog.MESSAGE_POPULAR_STAGE_2:
                 return T_USER_POPULAR_2;
+            case FeedDialog.MESSAGE_AUTO_REPLY:
+                return T_AUTO_REPLY;
             default:
                 return output ? T_USER : T_FRIEND;
         }
@@ -121,7 +127,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        setTypeDifferences(holder, type, item);
+        setTypeDifferences(holder, type, item, position);
         if (type != T_RETRY) {
             setViewInfo(holder, item);
         }
@@ -227,6 +233,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         notifyDataSetChanged();
     }
 
+    public void addGift(SendGiftAnswer giftAnswer) {
+        addSentMessage(giftAnswer.history);
+    }
+
     public void addSentMessage(History item, ListView parentView, ApiRequest request) {
         mHashRequestByWaitingRetryItem.put(item, request);
         this.addSentMessage(item);
@@ -291,11 +301,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         }
     }
 
-    private void setTypeDifferences(ViewHolder holder, int type, final History item) {
+    private void setTypeDifferences(ViewHolder holder, int type, final History item, int position) {
         boolean showDate = mShowDatesList.contains(item);
         switch (type) {
             case T_RETRY:
-                if (item.isRepeatItem()) {
+                if (item.isRepeatItem() && holder != null) {
                     holder.loader.setVisibility(View.GONE);
                     holder.retrier.setVisibility(View.VISIBLE);
                     holder.retrier.setOnClickListener(new View.OnClickListener() {
@@ -313,6 +323,22 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             case T_FRIEND_GIFT:
             case T_USER_GIFT:
                 holder.message.setVisibility(View.GONE);
+                break;
+            case T_AUTO_REPLY:
+                if (position == getCount() - 1) {
+                    holder.buyVip.setVisibility(View.VISIBLE);
+                    holder.buyVip.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (mBuyVipButtonClickListener != null) {
+                                mBuyVipButtonClickListener.onClick();
+                            }
+                        }
+                    });
+                } else {
+                    holder.buyVip.setVisibility(View.GONE);
+                    holder.buyVip.setOnClickListener(null);
+                }
                 break;
         }
         if (holder != null && holder.dateDivider != null) {
@@ -352,6 +378,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 convertView = mInflater.inflate(output ? R.layout.chat_user_gift : R.layout.chat_friend_gift, null, false);
                 holder.gift = (ImageViewRemote) convertView.findViewById(chatImageId);
                 break;
+            case T_AUTO_REPLY:
+                convertView = mInflater.inflate(R.layout.chat_friend_auto_reply, null, false);
+                holder.buyVip = (Button) convertView.findViewById(R.id.chat_auto_reoly_buy_vip);
+                break;
             case T_FRIEND:
             case T_USER:
             case T_USER_POPULAR_1:
@@ -380,6 +410,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 break;
             case FeedDialog.MESSAGE_WISH:
                 holder.message.setText(mContext.getString(output ? R.string.chat_wish_out : R.string.chat_wish_in));
+                break;
+            case FeedDialog.MESSAGE_AUTO_REPLY:
+                holder.message.setText(mContext.getString(R.string.chat_auto_reply_message));
                 break;
             case FeedDialog.MESSAGE_SEXUALITY:
                 holder.message.setText(mContext.getString(output ? R.string.chat_sexuality_out :
@@ -416,7 +449,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
 
     private boolean setMessageHtmlContent(ViewHolder holder, History item) {
         if (holder != null && holder.message != null) {
-            if (item.text != null && !item.text.equals(Static.EMPTY)) {
+            if (item.text != null && !item.text.equals(Utils.EMPTY)) {
                 holder.message.setText(Html.fromHtml(item.text));
 
                 // Проверяем наличие в textView WEB_URLS | EMAIL_ADDRESSES | PHONE_NUMBERS | MAP_ADDRESSES;
@@ -441,7 +474,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (clipboard != null) {
             clipboard.setText(text);
             Utils.showToastNotification(R.string.general_msg_copied, Toast.LENGTH_SHORT);
-        }        
+        }
     }
 
     public void removeItem(int position) {
@@ -545,5 +578,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         ImageViewRemote gift;
         View loader;
         View retrier;
+        Button buyVip;
+    }
+
+    public interface OnBuyVipButtonClick {
+        void onClick();
     }
 }

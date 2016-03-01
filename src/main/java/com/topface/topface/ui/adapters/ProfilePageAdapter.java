@@ -30,6 +30,7 @@ public class ProfilePageAdapter extends HackyFragmentStatePagerAdapter {
         mProfileUpdater = profileUpdater;
     }
 
+    @SuppressWarnings("unused")
     public int getFragmentIndexByClassName(String className) {
         for (int i = 0; i < mFragmentsClasses.size(); i++) {
             if (mFragmentsClasses.get(i).equals(className)) {
@@ -77,4 +78,9 @@ public class ProfilePageAdapter extends HackyFragmentStatePagerAdapter {
         }
         return fragment;
     }
+
+    public String getClassNameByPos(int pos) {
+        return mFragmentsClasses.get(pos);
+    }
+
 }

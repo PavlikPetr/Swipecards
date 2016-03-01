@@ -6,6 +6,7 @@
     android:layout_gravity="center">
 
     <LinearLayout
+        style="@style/EmptyFeedsViewGravity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -14,6 +15,7 @@
 
         <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/popularUserAvatar"
+            style="@style/EmptyFeedsViewImageVisibility"
             android:layout_width="152dp"
             android:layout_height="152dp"
             app:postProcessor="inscribedAvatar" />

@@ -109,9 +109,12 @@
     <color name="button_blue_bg_released_color">#03a9f4</color>
     <color name="button_blue_bg_disable_color">#b3e5fb</color>
 
+    <!-- Big blue invite vk friends buttons disable state color -->
+    <color name="button_blue_invite_vk_friends_bg_disable_color">#d4d4d4</color>
+
     <!-- Big red buttons states color -->
-    <color name="button_red_bg_pressed_color">#ef5350</color>
-    <color name="button_red_bg_released_color">#bf4240</color>
+    <color name="button_red_bg_pressed_color">#FF7466</color>
+    <color name="button_red_bg_released_color">#F9584C</color>
     <color name="button_red_bg_disable_color">#fab9b9</color>
 
     <!-- Big white buttons states color -->
@@ -129,6 +132,11 @@
     <color name="button_blue_text_released_color">#FFFFFF</color>
     <color name="button_blue_text_disable_color">#FFFFFF</color>
 
+    <!--Button blue invite vk friends text color in different states-->
+    <color name="button_blue_invite_vk_friends_text_pressed_color">#FFFFFF</color>
+    <color name="button_blue_invite_vk_friends_text_released_color">#FFFFFF</color>
+    <color name="button_blue_invite_vk_friends_text_disable_color">#868686</color>
+
     <!--Button red text color in different states-->
     <color name="button_red_text_pressed_color">#FFFFFF</color>
     <color name="button_red_text_released_color">#FFFFFF</color>
@@ -137,4 +145,18 @@
     <color name="auth_progressbar_color">#03A9F4</color>
     <color name="text_gray">#4B4B4B</color>
 
+    <color name="status_bar_color">#8c9698</color>
+    <color name="registration_hint_color">#808080</color>
+    <color name="eighty_seven_opacity_from_black">#222222</color>
+
+    <!--Delete messages text color in different states-->
+    <color name="delete_messages_red_text_pressed_color">#ff2400</color>
+    <color name="delete_messages_red_text_released_color">#ef5350</color>
+    <color name="delete_messages_red_text_disable_color">#96ef5350</color>
+
+    <!-- Take photo screen -->
+    <color name="take_photo_screen_text_dark">#DE000000</color>
+    <color name="take_photo_screen_text_medium">#8F000000</color>
+
+    <color name="auth_fragment_text_color">#03A9F4</color>
 </resources>

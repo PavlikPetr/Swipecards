@@ -8,11 +8,24 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.utils.config.UserConfig;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 
 public class TrialVipPopup extends AbstractDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "TrialVipPopup";
+    public static final String SKIP_SHOWING_CONDITION = "skip_showing_condition";
     private OnFragmentActionsListener mOnFragmentActionsListener;
+
+    @NotNull
+    public static TrialVipPopup newInstance(boolean skipShowingCondition) {
+        TrialVipPopup trialVipPopup = new TrialVipPopup();
+        Bundle arg = new Bundle();
+        arg.putBoolean(TrialVipPopup.SKIP_SHOWING_CONDITION, skipShowingCondition);
+        trialVipPopup.setArguments(arg);
+        return trialVipPopup;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +67,7 @@ public class TrialVipPopup extends AbstractDialogFragment implements View.OnClic
                 }
                 break;
             case R.id.iv_close:
-                dismiss();
+                getDialog().cancel();
                 break;
         }
     }
@@ -68,7 +81,10 @@ public class TrialVipPopup extends AbstractDialogFragment implements View.OnClic
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        incrPopupShowCounter();
+        Bundle args = getArguments();
+        if (args != null && !args.getBoolean(SKIP_SHOWING_CONDITION)) {
+            incrPopupShowCounter();
+        }
     }
 
     public void setOnSubscribe(OnFragmentActionsListener listener) {
@@ -82,10 +98,10 @@ public class TrialVipPopup extends AbstractDialogFragment implements View.OnClic
     }
 
     @Override
-    public void dismiss() {
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
         if (mOnFragmentActionsListener != null) {
             mOnFragmentActionsListener.onFragmentFinish();
         }
-        super.dismiss();
     }
 }

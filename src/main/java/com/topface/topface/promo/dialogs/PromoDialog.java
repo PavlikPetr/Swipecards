@@ -15,7 +15,9 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
-import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.state.CountersDataProvider;
+import com.topface.topface.statistics.PromoDialogStastics;
+import com.topface.topface.statistics.PromoDialogUniqueStatistics;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
@@ -23,18 +25,12 @@ import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 
-import javax.inject.Inject;
-
-import rx.Subscription;
-import rx.functions.Action1;
 
 public abstract class PromoDialog extends AbstractDialogFragment implements View.OnClickListener, IPromoPopup {
 
     private OnCloseListener mListener;
-    @Inject
-    TopfaceAppState mAppState;
     protected CountersData mCountersData;
-    private Subscription mSubscription;
+    private CountersDataProvider mCountersDataProvider;
 
     public abstract Options.PromoPopupEntity getPremiumEntity();
 
@@ -71,10 +67,9 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.from(getActivity()).inject(this);
-        mSubscription = mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
+        mCountersDataProvider = new CountersDataProvider(new CountersDataProvider.ICountersUpdater() {
             @Override
-            public void call(CountersData countersData) {
+            public void onUpdateCounters(CountersData countersData) {
                 mCountersData = countersData;
             }
         });
@@ -120,6 +115,8 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
         popupText.setText(getMessage());
 
         EasyTracker.sendEvent(getMainTag(), "Show", "", 0L);
+        PromoDialogStastics.promoDialogShowSend(getMainTag());
+        PromoDialogUniqueStatistics.send(getMainTag());
     }
 
     private BroadcastReceiver mVipPurchasedReceiver = new BroadcastReceiver() {
@@ -128,16 +125,18 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
             Debug.log("Promo: Close fragment after VIP buy");
             closeFragment();
             EasyTracker.sendEvent(getMainTag(), "VipClose", "CloseAfterBuyVip", 1L);
+            PromoDialogStastics.promoDialogCloseAfterBuyVipSend(getMainTag());
         }
     };
     private BroadcastReceiver mProfileReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             //Если мы узнаем что пользователь премиум после обновления профиля, то закрываем фрагмент
-            if (CacheProfile.premium) {
+            if (App.from(getActivity()).getProfile().premium) {
                 Debug.log("Promo: Close fragment after profile update");
                 closeFragment();
                 EasyTracker.sendEvent(getMainTag(), "VipClose", "CloseAfterUpdateProfile", 1L);
+                PromoDialogStastics.promoDialogCloseAfterUpdateProfileSend(getMainTag());
             }
         }
     };
@@ -151,10 +150,12 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
                         PurchasesActivity.INTENT_BUY_VIP
                 );
                 EasyTracker.sendEvent(getMainTag(), "ClickBuyVip", "", 0L);
+                PromoDialogStastics.promoDialogClickBuyVipSend(getMainTag());
                 break;
             case R.id.deleteMessages:
                 deleteMessages();
                 EasyTracker.sendEvent(getMainTag(), "Dismiss", "Delete", 0L);
+                PromoDialogStastics.promoDialogDismissSend(getMainTag());
                 closeFragment();
                 break;
             default:
@@ -165,7 +166,6 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscription.unsubscribe();
         if (getActivity() != null) {
             LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mVipPurchasedReceiver);
             LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileReceiver);
@@ -209,6 +209,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
      */
     @Override
     public void onDestroyView() {
+        mCountersDataProvider.unsubscribe();
         if (getDialog() != null && getRetainInstance()) {
             getDialog().setDismissMessage(null);
         }

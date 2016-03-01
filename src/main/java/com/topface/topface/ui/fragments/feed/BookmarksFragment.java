@@ -112,11 +112,15 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     }
 
     @Override
+    protected void initLockedFeed(View inflated, int errorCode) {
+    }
+
+    @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
         inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MenuFragment.selectFragment(FragmentId.DATING);
+                MenuFragment.selectFragment(FragmentId.DATING.getFragmentSettings());
             }
         });
     }

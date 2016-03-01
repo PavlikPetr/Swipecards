@@ -3,11 +3,15 @@ package com.topface.topface.utils.controllers.startactions;
 import android.support.v4.app.Fragment;
 
 import com.topface.topface.App;
+import com.topface.topface.data.Options;
+import com.topface.topface.data.Profile;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
+import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.GoogleMarketApiManager;
+import com.topface.topface.utils.config.UserConfig;
 
 import java.lang.ref.WeakReference;
 
@@ -18,6 +22,7 @@ public class TrialVipPopupAction implements IStartAction {
     private WeakReference<BaseFragmentActivity> mActivity;
     private TrialVipPopup mTrialVipPopup;
     private OnNextActionListener mOnNextActionListener;
+    private boolean mIsNeedNext = true;
 
     public TrialVipPopupAction(BaseFragmentActivity activity, int priority) {
         mActivity = new WeakReference<>(activity);
@@ -30,7 +35,7 @@ public class TrialVipPopupAction implements IStartAction {
 
     @Override
     public void callOnUi() {
-        mTrialVipPopup = new TrialVipPopup();
+        mTrialVipPopup = TrialVipPopup.newInstance(false);
         mTrialVipPopup.setOnSubscribe(new TrialVipPopup.OnFragmentActionsListener() {
             @Override
             public void onSubscribeClick() {
@@ -39,21 +44,31 @@ public class TrialVipPopupAction implements IStartAction {
 
             @Override
             public void onFragmentFinish() {
-                if (mOnNextActionListener != null) {
+                if (mOnNextActionListener != null && mIsNeedNext) {
                     mOnNextActionListener.onNextAction();
                 }
             }
         });
         if (mActivity != null && mActivity.get() != null) {
             mTrialVipPopup.show(mActivity.get().getSupportFragmentManager(), TrialVipPopup.TAG);
+            UserConfig userConfig = App.getUserConfig();
+            userConfig.setTrialLastTime(System.currentTimeMillis());
+            userConfig.saveConfig();
         }
     }
 
     @Override
     public boolean isApplicable() {
-        return !CacheProfile.paid &&
-                App.getUserConfig().getTrialVipCounter() < CacheProfile.getOptions().getMaxShowCountTrialVipPopup() &&
-                CacheProfile.getOptions().trialVipExperiment.enabled && new GoogleMarketApiManager().isMarketApiAvailable();
+        UserConfig userConfig = App.getUserConfig();
+        Profile profile = App.get().getProfile();
+        Options options = App.get().getOptions();
+        if (DateUtils.isDayBeforeToday(userConfig.getTrialLastTime())) {
+            userConfig.setTrialVipPopupCounter(UserConfig.DEFAULT_SHOW_COUNT);
+            userConfig.saveConfig();
+        }
+        return !profile.paid && !profile.premium &&
+                userConfig.getTrialVipCounter() < options.getMaxShowCountTrialVipPopup() &&
+                options.trialVipExperiment.enabled && new GoogleMarketApiManager().isMarketApiAvailable();
     }
 
     @Override
@@ -74,24 +89,26 @@ public class TrialVipPopupAction implements IStartAction {
     private void showSubscriptionPopup() {
         if (mActivity != null && mActivity.get() != null) {
             Fragment f = mActivity.get().getSupportFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
-            final TransparentMarketFragment fragment = f == null ?
-                    TransparentMarketFragment.newInstance(CacheProfile.getOptions().trialVipExperiment.subscriptionSku, true, "TrialVipPopup") :
-                    (TransparentMarketFragment) f;
-            fragment.setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
-                @Override
-                public void onPurchaseSuccess() {
-                    if (null != mTrialVipPopup) {
-                        mTrialVipPopup.dismiss();
+            final Fragment fragment = f == null ?
+                    TransparentMarketFragment.newInstance(App.from(mActivity.get()).getOptions().trialVipExperiment.subscriptionSku, true, "TrialVipPopup") : f;
+            if (fragment instanceof ITransparentMarketFragmentRunner) {
+                ((ITransparentMarketFragmentRunner) fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
+                    @Override
+                    public void onPurchaseSuccess() {
+                        mIsNeedNext = false;
+                        if (null != mTrialVipPopup) {
+                            mTrialVipPopup.dismiss();
+                        }
                     }
-                }
 
-                @Override
-                public void onPopupClosed() {
-                    if (fragment.isAdded()) {
-                        removeTransparentMarketFragment(fragment);
+                    @Override
+                    public void onPopupClosed() {
+                        if (fragment.isAdded()) {
+                            removeTransparentMarketFragment(fragment);
+                        }
                     }
-                }
-            });
+                });
+            }
             if (!fragment.isAdded()) {
                 addTransparentMarketFragment(fragment);
             } else {

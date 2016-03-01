@@ -15,7 +15,6 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 
 import org.json.JSONException;
@@ -107,6 +106,11 @@ public class IFreePurchases extends BaseFragment implements LibraryInitListener 
     }
 
     public LinkedList<BuyButtonData> validateProducts(LinkedList<BuyButtonData> products) {
+        // some gsm operators not supported by ifree monetization
+        if (mMonetization != null && !mMonetization.isPaymentsAvailable(getActivity())) {
+            products.clear();
+            return products;
+        }
         String price;
         for (Iterator<BuyButtonData> product = products.iterator(); product.hasNext(); ) {
             BuyButtonData entry = product.next();
@@ -134,7 +138,7 @@ public class IFreePurchases extends BaseFragment implements LibraryInitListener 
     private String getMetaInfo(String place) {
         JSONObject metaData = new JSONObject();
         try {
-            metaData.put("uid", CacheProfile.uid);
+            metaData.put("uid", App.from(getActivity()).getProfile().uid);
             metaData.put("place", place);
         } catch (JSONException e) {
             e.printStackTrace();

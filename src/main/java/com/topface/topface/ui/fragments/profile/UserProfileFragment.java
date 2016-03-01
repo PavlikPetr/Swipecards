@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.FeedListData;
@@ -42,7 +43,6 @@ import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
@@ -143,7 +143,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
     public void onResume() {
         super.onResume();
         getUserProfile(mProfileId);
-        if (CacheProfile.premium) {
+        if (App.from(getActivity()).getProfile().premium) {
             setIsChatAvailable(true);
         }
         mOutsideView.setVisibility(View.GONE);
@@ -224,7 +224,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
 
                 @Override
                 protected User parseResponse(ApiResponse response) {
-                    return new User(profileId, response);
+                    return new User(profileId, response, getContext());
                 }
 
                 @Override
@@ -266,14 +266,13 @@ public class UserProfileFragment extends AbstractProfileFragment {
             });
             ApiRequest userAndGiftsRequest = new ParallelApiRequest(getActivity())
                     .addRequest(userRequest).addRequest(giftsRequest)
-                    .setFrom(getClass().getSimpleName())
                     .callback(new ApiHandler() {
                         @Override
                         public void success(IApiResponse response) {
                             if (mRequestedGifts != null) {
-                                mRequestedUser.gifts.clear();
+                                mRequestedUser.gifts.getGifts().clear();
                                 for (FeedGift feedGift : mRequestedGifts.items) {
-                                    mRequestedUser.gifts.add(feedGift.gift);
+                                    mRequestedUser.gifts.getGifts().add(feedGift.gift);
                                 }
                             }
                             onSuccess(mRequestedUser, mUserResponse);
@@ -289,7 +288,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
             registerRequest(userAndGiftsRequest);
             userAndGiftsRequest.exec();
         } else {
-            onSuccess(new User(mProfileId, mSavedResponse), mSavedResponse);
+            onSuccess(new User(mProfileId, mSavedResponse, getActivity()), mSavedResponse);
         }
     }
 
@@ -301,7 +300,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
             showRetryBtn();
         } else if (user.banned) {
             showForBanned();
-            if (CacheProfile.isEditor()) {
+            if (App.from(getActivity()).getProfile().isEditor()) {
                 setProfile(user);
                 initOverflowMenuActions(getOverflowMenu());
             }
@@ -320,7 +319,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
     }
 
     private void saveResponseForEditor(ApiResponse response) {
-        if (CacheProfile.isEditor()) {
+        if (App.from(getActivity()).getProfile().isEditor()) {
             mSavedResponse = response;
             if (hasOverflowMenu()) {
                 getOverflowMenu().setSavedResponse(mSavedResponse);
@@ -354,7 +353,9 @@ public class UserProfileFragment extends AbstractProfileFragment {
     }
 
     private void showRetryBtn() {
-        showLockWithText(getString(R.string.general_profile_error), false);
+        if (isAdded()) {
+            showLockWithText(getString(R.string.general_profile_error), false);
+        }
     }
 
     @Override
@@ -424,7 +425,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
                         if (profile != null) {
                             return ChatActivity.createIntent(profile.uid, profile.getNameAndAge(),
                                     profile.city == null ? "" : profile.city.name,
-                                    null, profile.photo, false, UserProfileFragment.class.getSimpleName());
+                                    null, profile.photo, false, null);
                         }
                         return null;
                     }
@@ -511,7 +512,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
         if (data != null) {
             Profile profile = getProfile();
             if (profile != null) {
-                getProfile().gifts.add(0, data.gift);
+                profile.gifts.getGifts().add(0, data.gift);
             }
             if (mNewGifts == null) {
                 mNewGifts = new ArrayList<>();
@@ -540,5 +541,10 @@ public class UserProfileFragment extends AbstractProfileFragment {
     @Override
     protected boolean isAnimationRequire() {
         return true;
+    }
+
+    @Override
+    protected boolean isOwnersProfileFragment() {
+        return false;
     }
 }

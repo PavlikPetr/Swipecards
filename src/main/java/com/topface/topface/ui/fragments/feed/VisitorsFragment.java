@@ -1,11 +1,14 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.Intent;
+import android.support.annotation.StringRes;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
+import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.FeedListData;
+import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.data.Visitor;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteVisitorsRequest;
@@ -14,19 +17,21 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.VisitorsListAdapter;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
 
 public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
+
+    public static final String UNLOCK_FUCTIONALITY_TYPE = "visitors";
+    public static final String SCREEN_TYPE = "Visitors";
 
     @Override
     protected String getTitle() {
@@ -66,22 +71,49 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
+    protected void initLockedFeed(View inflated, int errorCode) {
+        initGagView(inflated, R.string.with_vip_find_your_visitors, R.string.buying_vip_status, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(PurchasesActivity.createVipBuyIntent(null, SCREEN_TYPE), PurchasesActivity.INTENT_BUY_VIP);
+            }
+        });
+        setUnlockButtonView(getUnlockButtonView(inflated));
+    }
+
+    @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
-        View btnBuyVip = inflated.findViewById(R.id.btnBuyVip);
-        if (CacheProfile.premium) {
-            inflated.findViewById(R.id.tvText).setVisibility(View.GONE);
-            btnBuyVip.setVisibility(View.GONE);
-        } else {
-            inflated.findViewById(R.id.tvText).setVisibility(View.VISIBLE);
-            btnBuyVip.setVisibility(View.VISIBLE);
-            btnBuyVip.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = PurchasesActivity.createVipBuyIntent(null, "Visitors");
-                    startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
-                }
-            });
-        }
+        initGagView(inflated, R.string.go_dating_message, R.string.general_get_dating, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MenuFragment.selectFragment(FragmentId.DATING.getFragmentSettings());
+            }
+        });
+        getUnlockButtonView(inflated).setVisibility(View.GONE);
+    }
+
+    private Button getUnlockButtonView(View view) {
+        return (Button) view.findViewById(R.id.btnUnlock);
+    }
+
+    private void initGagView(@NotNull View inflated, @StringRes int text, @StringRes int buttonText, View.OnClickListener listener) {
+        Button btnBuyVip = (Button) inflated.findViewById(R.id.btnBuyVip);
+        TextView textView = (TextView) inflated.findViewById(R.id.tvText);
+        textView.setText(text);
+        btnBuyVip.setText(buttonText);
+        btnBuyVip.setVisibility(View.VISIBLE);
+        textView.setVisibility(View.VISIBLE);
+        btnBuyVip.setOnClickListener(listener);
+    }
+
+    @Override
+    protected String getUnlockFunctionalityType() {
+        return UNLOCK_FUCTIONALITY_TYPE;
+    }
+
+    @Override
+    protected UnlockFunctionalityOption.UnlockScreenCondition getUnlockScreenCondition(UnlockFunctionalityOption data) {
+        return data.getUnlockVisitorsCondition();
     }
 
     @Override
@@ -113,5 +145,4 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     protected String getGcmUpdateAction() {
         return GCMUtils.GCM_GUESTS_UPDATE;
     }
-
 }

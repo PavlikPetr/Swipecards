@@ -11,12 +11,10 @@ import android.widget.TextView;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.TopfaceAdStatistics;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ad.NativeAd;
 import com.topface.topface.utils.config.UserConfig;
@@ -45,6 +43,7 @@ public class PubnativeAd extends NativeAd {
     private String click_url;
     private Beacon[] beacons;
     private boolean mIsShown;
+    private int mPosition;
 
     @SuppressWarnings("unused")
     public PubnativeAd() {
@@ -61,6 +60,7 @@ public class PubnativeAd extends NativeAd {
             beacons[i] = (Beacon) beaconsParcelable[i];
         }
         mIsShown = in.readByte() == 1;
+        mPosition = in.readInt();
     }
 
     @Override
@@ -94,14 +94,12 @@ public class PubnativeAd extends NativeAd {
         });
 
         if (!mIsShown) {
-            if (!BuildConfig.DEBUG) {
-                new BackgroundThread() {
-                    @Override
-                    public void execute() {
-                        sendImpressionBeacon();
-                    }
-                };
-            }
+            new BackgroundThread() {
+                @Override
+                public void execute() {
+                    sendImpressionBeacon();
+                }
+            };
 
             mIsShown = true;
         }
@@ -139,11 +137,16 @@ public class PubnativeAd extends NativeAd {
         dest.writeString(click_url);
         dest.writeParcelableArray(beacons, flags);
         dest.writeByte((byte) (mIsShown ? 1 : 0));
+        dest.writeInt(mPosition);
+    }
+
+    public void setPosition(int position) {
+        mPosition = position;
     }
 
     @Override
     public int getPosition() {
-        return CacheProfile.getOptions().feedNativeAd.getPosition();
+        return mPosition;
     }
 
     public boolean isValid() {

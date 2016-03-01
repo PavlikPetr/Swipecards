@@ -3,8 +3,8 @@ package com.topface.topface.ui.fragments.feed;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
+import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedMutual;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteMutualsRequest;
@@ -18,7 +18,6 @@ import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -52,19 +51,23 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     }
 
     @Override
+    protected void initLockedFeed(View inflated, int errorCode) {
+    }
+
+    @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
 
         inflated.findViewById(R.id.btnGetDating).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MenuFragment.selectFragment(FragmentId.DATING);
+                MenuFragment.selectFragment(FragmentId.DATING.getFragmentSettings());
             }
         });
 
         inflated.findViewById(R.id.btnRefill).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(PurchasesActivity.createBuyingIntent("EmptyMutual"));
+                startActivity(PurchasesActivity.createBuyingIntent("EmptyMutual", App.from(getActivity()).getOptions().topfaceOfferwallRedirect));
             }
         });
     }

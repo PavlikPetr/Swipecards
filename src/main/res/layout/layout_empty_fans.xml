@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:clickable="true">
 
     <ImageView
         android:id="@+id/ic_guitar"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_above="@+id/tvText"
-        android:scaleType="centerInside"
-        android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:scaleType="centerInside"
         android:src="@drawable/ic_guitar" />
 
     <TextView
@@ -29,8 +29,15 @@
 
     <Button
         android:id="@+id/btnBuy"
-        style="@style/FlatButton.Blue.Emptyfeed"
+        style="@style/BigStretchedBlueButton"
+        android:layout_width="240dp"
         android:layout_below="@+id/tvText"
         android:layout_centerHorizontal="true"
         android:text="@string/buying_vip_status" />
+
+    <Button
+        android:id="@+id/btnUnlock"
+        style="@style/UnlockButtonStyle"
+        android:layout_width="240dp"
+        android:layout_below="@+id/btnBuy" />
 </RelativeLayout>

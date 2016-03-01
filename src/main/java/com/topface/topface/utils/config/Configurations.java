@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.data.Options;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.social.AuthToken;
@@ -39,6 +40,11 @@ public class Configurations {
     public FeedsCache getFeedsCache() {
         if (mFeedsCache == null) {
             mFeedsCache = new FeedsCache(null, mContext);
+        } else {
+            if (!TextUtils.isEmpty(AuthToken.getInstance().getUserTokenUniqueId()) &&
+                    !AuthToken.getInstance().getUserTokenUniqueId().equals(mFeedsCache.getUnique())) {
+                mFeedsCache.updateConfig(AuthToken.getInstance().getUserTokenUniqueId());
+            }
         }
         return mFeedsCache;
     }
@@ -98,9 +104,9 @@ public class Configurations {
         return mSessionConfig;
     }
 
-    public BannersConfig getBannerConfig() {
+    public BannersConfig getBannerConfig(Options options) {
         if (mBannerConfig == null) {
-            mBannerConfig = new BannersConfig(mContext);
+            mBannerConfig = new BannersConfig(mContext, options);
         }
         return mBannerConfig;
     }

@@ -20,7 +20,6 @@ import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.SendLikeRequest;
-import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.AddToLeaderActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.OwnProfileActivity;
@@ -29,7 +28,6 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.PhotoBlogListAdapter;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
@@ -41,7 +39,6 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
 
     private static final int UPDATE_DELAY = 20;
 
-    protected View mEmptyFeedView;
     private RateController mRateController;
     private MenuItem mBarActions;
     private CountDownTimer mTimerUpdate;
@@ -122,7 +119,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
                                     Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                                 }
                             }
-                        }
+                        }, App.from(getActivity()).getOptions().blockUnconfirmed
                 );
             }
         });
@@ -150,7 +147,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
         if (isNotYourOwnId(item.user.id)) {
             if (!item.user.isEmpty()) {
                 FeedUser user = item.user;
-                Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false, this.getClass().getSimpleName());
+                Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false, null);
                 getActivity().startActivityForResult(intent, ChatActivity.REQUEST_CHAT);
             }
         } else {
@@ -159,7 +156,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     }
 
     private boolean isNotYourOwnId(int id) {
-        return CacheProfile.getProfile().uid != id;
+        return App.from(getActivity()).getProfile().uid != id;
     }
 
     private void openOwnProfile() {
@@ -183,14 +180,12 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     }
 
     @Override
+    protected void initLockedFeed(View inflated, int errorCode) {
+    }
+
+    @Override
     protected void initEmptyFeedView(final View inflated, int errorCode) {
-        if (mEmptyFeedView == null) {
-            mEmptyFeedView = inflated;
-        }
-        if (errorCode != ErrorCodes.RESULT_OK) {
-            ViewFlipper viewFlipper = (ViewFlipper) inflated.findViewById(R.id.vfEmptyViews);
-            initEmptyScreenWithoutLikes(viewFlipper);
-        }
+        initEmptyScreenWithoutLikes((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews));
     }
 
     private void initEmptyScreenWithoutLikes(ViewFlipper viewFlipper) {

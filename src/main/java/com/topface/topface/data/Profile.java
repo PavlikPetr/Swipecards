@@ -3,15 +3,17 @@ package com.topface.topface.data;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
+import android.util.SparseArray;
 
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
@@ -25,13 +27,21 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import javax.inject.Inject;
+
+
 /* Класс профиля владельца устройства */
 public class Profile extends AbstractDataWithPhotos {
 
     public final static int TYPE_OWN_PROFILE = 1;
     public final static int TYPE_USER_PROFILE = 2;
-    private static String[] EMPTY_STATUSES = {Static.EMPTY, "-", "."};
+    public static final int GIRL = 0;
+    public static final int BOY = 1;
+    public static final int MIN_AGE = 16;
+    public static final int MAX_AGE = 99;
+    private static String[] EMPTY_STATUSES = {Utils.EMPTY, "-", "."};
 
+    @SerializedName("id")
     public int uid; // id пользователя в топфейсе
     public String firstName; // имя пользователя
     public int age; // возраст пользователя
@@ -47,9 +57,10 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean premium;
     public boolean invisible;
     public boolean inBlackList;
+    @SerializedName("form")
     public LinkedList<FormItem> forms = new LinkedList<>();
     public Gifts gifts = new Gifts();
-    public SparseArrayCompat<TopfaceNotifications> notifications = new SparseArrayCompat<>();
+    public SparseArray<TopfaceNotifications> notifications = new SparseArray<>();
     public boolean email;
     public boolean emailGrabbed;
     public boolean emailConfirmed;
@@ -62,9 +73,15 @@ public class Profile extends AbstractDataWithPhotos {
     // Показывать рекламу или нет
     public boolean showAd;
     public boolean canInvite;
-    protected String status; // статус пользователя
+    public String status; // статус пользователя
     // Флаг того, является ли пользоветль редактором
-    private boolean mEditor;
+    public boolean editor;
+    @SerializedName("noviceLikes")
+    public boolean giveNoviceLikes;
+    protected Context mContext;
+    public String notificationToken;
+    @Inject
+    transient TopfaceAppState mAppState;
 
     public Profile() {
         super();
@@ -74,9 +91,19 @@ public class Profile extends AbstractDataWithPhotos {
         this(response.getJsonResult());
     }
 
+    public boolean isFromCache;
+
     public Profile(JSONObject jsonObject) {
-        fillData(jsonObject);
+        this(jsonObject, false);
     }
+
+    public Profile(JSONObject jsonObject, boolean isFromCache) {
+        this.isFromCache = isFromCache;
+        fillData(jsonObject);
+        App.from(App.getContext()).inject(this);
+        mAppState.setData(this);
+    }
+
 
     protected void fillData(final JSONObject resp) {
         if (resp == null) {
@@ -100,7 +127,7 @@ public class Profile extends AbstractDataWithPhotos {
             //поправим потом, с новой системой парсинга запросво
             //NOTE: Добавлять поля, нужные исключительно для профиля текущего юзера только в это условие!
             if (!(profile instanceof User)) {
-                CacheProfile.giveNoviceLikes = !resp.optBoolean("noviceLikes", true);
+                profile.giveNoviceLikes = !resp.optBoolean("noviceLikes", true);
                 profile.dating = new DatingFilter(resp.optJSONObject("dating"));
                 profile.email = resp.optBoolean("email");
                 profile.emailGrabbed = resp.optBoolean("emailGrabbed");
@@ -109,17 +136,58 @@ public class Profile extends AbstractDataWithPhotos {
                 profile.paid = resp.optBoolean("paid");
                 profile.showAd = resp.optBoolean("showAd", true);
                 profile.canInvite = resp.optBoolean("canInvite");
-
-                new GCMUtils(App.getContext()).registerGCM(resp.optString("notificationToken"));
+                profile.notificationToken = resp.optString("notificationToken");
             }
-
-            profile.setEditor(resp.optBoolean("editor", false));
-            parseGifts(profile, resp);
-            parseNotifications(profile, resp);
-            parseForm(profile, resp, App.getContext());
+            profile.editor = resp.optBoolean("editor", false);
+            profile.setEditor(editor);
             initPhotos(resp, profile);
+            parseGifts(profile, resp);
+            if (isFromCache) {
+                profile.forms = JsonUtils.fromJson(resp.getJSONArray("form").toString(), new TypeToken<LinkedList<FormItem>>() {
+                }.getType());
+                setFornItemListeners(profile.forms);
+            } else {
+                parseForm(profile, resp, App.getContext());
+            }
+            parseNotifications(profile, resp);
         } catch (Exception e) {
             Debug.error("Profile Wrong response parsing: ", e);
+        }
+    }
+
+    private void setFornItemListeners(LinkedList<FormItem> forms) {
+        if (!forms.isEmpty()) {
+            for (FormItem formItem : forms) {
+                switch (formItem.titleId) {
+                    case R.array.form_main_height:
+                    case R.array.form_main_weight:
+                        formItem.setValueLimitInterface(new FormItem.ValueLimitInterface() {
+                            @Override
+                            public int getMinValue() {
+                                return App.getAppOptions().getUserWeightMin();
+                            }
+
+                            @Override
+                            public int getMaxValue() {
+                                return App.getAppOptions().getUserWeightMax();
+                            }
+
+                            @Override
+                            public boolean isEmptyValueAvailable() {
+                                return true;
+                            }
+                        });
+                        break;
+                    case R.array.form_habits_restaurants:
+                    case R.array.form_detail_about_dating:
+                    case R.array.form_detail_archievements:
+                        formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter());
+                        break;
+                    case R.array.form_main_about_status:
+                        formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter(App.getAppOptions().getUserAboutMeMaxLength()));
+                        break;
+                }
+            }
         }
     }
 
@@ -194,6 +262,11 @@ public class Profile extends AbstractDataWithPhotos {
                 public int getMaxValue() {
                     return App.getAppOptions().getUserHeightMax();
                 }
+
+                @Override
+                public boolean isEmptyValueAvailable() {
+                    return true;
+                }
             });
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
@@ -211,6 +284,11 @@ public class Profile extends AbstractDataWithPhotos {
                 @Override
                 public int getMaxValue() {
                     return App.getAppOptions().getUserWeightMax();
+                }
+
+                @Override
+                public boolean isEmptyValueAvailable() {
+                    return true;
                 }
             });
             formInfo.fillFormItem(formItem);
@@ -312,9 +390,8 @@ public class Profile extends AbstractDataWithPhotos {
     }
 
     private static void parseNotifications(Profile profile, JSONObject resp) {
-        if (!resp.isNull("notifications")) {
-            JSONArray jsonNotifications = resp.optJSONArray("notifications");
-
+        JSONArray jsonNotifications = resp.optJSONArray("notifications");
+        if (jsonNotifications != null) {
             for (int i = 0; i < jsonNotifications.length(); i++) {
                 JSONObject notification = jsonNotifications.optJSONObject(i);
 
@@ -329,30 +406,17 @@ public class Profile extends AbstractDataWithPhotos {
 
     private static void parseGifts(Profile profile, JSONObject resp) throws JSONException {
         JSONObject jsonGifts = resp.optJSONObject("gifts");
-        JSONArray arrGifts = jsonGifts.optJSONArray("items");
-        profile.gifts.more = jsonGifts.optBoolean("more");
-        profile.gifts.count = jsonGifts.optInt("count", -1);
-        if (arrGifts == null) return;
-        for (int i = 0; i < arrGifts.length(); i++) {
-            JSONObject itemGift = arrGifts.getJSONObject(i);
-            Gift gift = new Gift(
-                    itemGift.optInt("gift"),
-                    itemGift.optInt("id"),
-                    Gift.PROFILE,
-                    itemGift.optString("link")
-            );
-            profile.gifts.add(gift);
-        }
+        profile.gifts = JsonUtils.fromJson(jsonGifts.toString(), Gifts.class);
     }
 
     public static String normilizeStatus(String status) {
         if (status == null) {
-            return Static.EMPTY;
+            return Utils.EMPTY;
         }
         String result = status.replaceAll("\n", " ").trim();
         for (String EMPTY_STATUS : EMPTY_STATUSES) {
             if (EMPTY_STATUS.equals(result)) {
-                return Static.EMPTY;
+                return Utils.EMPTY;
             }
         }
         return result;
@@ -360,7 +424,7 @@ public class Profile extends AbstractDataWithPhotos {
 
     public static String normalizeName(String name) {
         if (name == null) {
-            return Static.EMPTY;
+            return Utils.EMPTY;
         }
         return name.replaceAll("\n", " ").trim();
     }
@@ -386,11 +450,11 @@ public class Profile extends AbstractDataWithPhotos {
     }
 
     public boolean isEditor() {
-        return mEditor;
+        return editor;
     }
 
     public void setEditor(boolean editor) {
-        mEditor = editor;
+        this.editor = editor;
     }
 
     /**
@@ -439,12 +503,13 @@ public class Profile extends AbstractDataWithPhotos {
         }
     }
 
-    public static class Gifts extends ArrayList<Gift> {
+    public static class Gifts {
         public boolean more;
         public int count;
+        public ArrayList<Gift> items = new ArrayList<>();
 
-        public Gifts() {
-            more = false;
+        public ArrayList<Gift> getGifts() {
+            return items;
         }
     }
 }

@@ -69,7 +69,6 @@ public class RequestBuilder {
             if (mApiHandler != null) {
                 multipartRequest.callback(mApiHandler);
             }
-            multipartRequest.setFrom(getClass().getSimpleName());
             return multipartRequest;
         } else if (mRequests.size() == 1) {
             return mRequests.get(0);

@@ -8,19 +8,13 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.topface.framework.JsonUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.BooleanEmailConfirmed;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ChangeLoginRequest;
-import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.RemindRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.ui.IEmailConfirmationListener;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.social.AuthToken;
@@ -120,7 +114,7 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
 
             @Override
             public void always(IApiResponse response) {
-                onRequestEnd();                
+                onRequestEnd();
             }
         }).exec();
     }
@@ -142,7 +136,7 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
 
             @Override
             public void always(IApiResponse response) {
-                onRequestEnd();                
+                onRequestEnd();
             }
         }).exec();
     }
@@ -172,45 +166,14 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
     }
 
     private void requestEmailConfirmed() {
-        ProfileRequest profileRequest = new ProfileRequest(getActivity());
-        if (getActivity() instanceof BaseFragmentActivity) {
-            ((BaseFragmentActivity) getActivity()).registerRequest(profileRequest);
-        }
-        onRequestStart();
-        profileRequest.part = ProfileRequest.P_EMAIL_CONFIRMED;
-        profileRequest.callback(new DataApiHandler<Boolean>() {
+        Utils.checkEmailConfirmation(new IEmailConfirmationListener() {
             @Override
-            protected void success(Boolean isEmailConfirmed, IApiResponse response) {
-                CacheProfile.emailConfirmed = isEmailConfirmed;
-                CacheProfile.getOptions().isActivityAllowed = true;
-                onProfileUpdated();
+            public void onEmailConfirmed(boolean isConfirmed) {
+                if (isConfirmed) {
+                    closeDialog();
+                }
             }
-
-            @Override
-            protected Boolean parseResponse(ApiResponse response) {
-                return JsonUtils.fromJson(response.toString(), BooleanEmailConfirmed.class).isConfirmed;
-            }
-
-            @Override
-            public void fail(int codeError, IApiResponse response) {
-                Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
-            }
-
-            @Override
-            public void always(IApiResponse response) {
-                super.always(response);
-                onRequestEnd();
-            }
-        }).exec();
-    }
-
-    private void onProfileUpdated() {
-        if (CacheProfile.emailConfirmed) {
-            Utils.showToastNotification(R.string.general_email_success_confirmed, Toast.LENGTH_LONG);
-            closeDialog();
-        } else {
-            Utils.showToastNotification(R.string.general_email_not_confirmed, Toast.LENGTH_LONG);
-        }
+        }, true);
     }
 
     private void saveButtonSendConfirmationPressed() {

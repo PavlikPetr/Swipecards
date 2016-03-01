@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.data.Photo;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.ui.fragments.ChatFragment;
@@ -34,7 +33,7 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
         if (photo != null) {
             intent.putExtra(ChatFragment.INTENT_AVATAR, photo);
         }
-        intent.putExtra(Static.INTENT_REQUEST_KEY, INTENT_USER_PROFILE);
+        intent.putExtra(App.INTENT_REQUEST_KEY, INTENT_USER_PROFILE);
         return intent;
     }
 

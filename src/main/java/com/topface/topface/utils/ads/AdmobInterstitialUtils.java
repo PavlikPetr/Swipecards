@@ -7,9 +7,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.Static;
 import com.topface.topface.data.Options;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.data.Profile;
 import com.topface.topface.utils.config.UserConfig;
 
 import java.util.ArrayList;
@@ -30,9 +29,8 @@ public class AdmobInterstitialUtils {
     private static final AtomicInteger mPreloadingInterstitialsCount = new AtomicInteger(0);
     private static final List<InterstitialAd> loadedInterstitials = Collections.synchronizedList(new ArrayList<InterstitialAd>(PRELOAD_COUNT));
 
-    public static void preloadInterstitials(final Activity activity) {
+    public static void preloadInterstitials(final Activity activity, final Options.InterstitialInFeeds interstitialInFeed) {
         if (needPreload()) {
-            Options.InterstitialInFeeds interstitialInFeed = CacheProfile.getOptions().interstitial;
             if (interstitialInFeed.canShow()) {
                 AdListener listener = new SimpleAdListener() {
                     @Override
@@ -40,7 +38,7 @@ public class AdmobInterstitialUtils {
                         loadedInterstitials.add(interstitial);
                         mPreloadingInterstitialsCount.decrementAndGet();
                         if (needPreload()) {
-                            preloadInterstitials(activity);
+                            preloadInterstitials(activity, interstitialInFeed);
                         }
                     }
                 };
@@ -82,7 +80,7 @@ public class AdmobInterstitialUtils {
         // Создание запроса объявления.
         AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
         adRequestBuilder.setGender(
-                CacheProfile.getProfile().sex == Static.BOY ?
+                App.from(activity).getProfile().sex == Profile.BOY ?
                         AdRequest.GENDER_MALE :
                         AdRequest.GENDER_FEMALE
         );
@@ -140,13 +138,13 @@ public class AdmobInterstitialUtils {
         return requestAdmobFullscreen(activity, id, listener, true);
     }
 
-    public static void requestPreloadedInterstitial(Activity activity) {
+    public static void requestPreloadedInterstitial(Activity activity, Options.InterstitialInFeeds interstitialInFeed) {
         if (loadedInterstitials.isEmpty()) {
-            preloadInterstitials(activity);
+            preloadInterstitials(activity, interstitialInFeed);
         } else {
             InterstitialAd interstitial = loadedInterstitials.remove(0);
             interstitial.show();
-            notifyShow();
+            notifyShow(interstitialInFeed.count);
         }
     }
 
@@ -154,9 +152,8 @@ public class AdmobInterstitialUtils {
         return !loadedInterstitials.isEmpty();
     }
 
-    private static void notifyShow() {
-        Options.InterstitialInFeeds interstitialInFeeds = CacheProfile.getOptions().interstitial;
-        if (interstitialInFeeds.count > 0) {
+    private static void notifyShow(int count) {
+        if (count > 0) {
             UserConfig config = App.getUserConfig();
             int counter = config.incrementInterstitialInFeedsCounter();
             if (counter == 1) {

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -25,7 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.topface.topface.R;
-import com.topface.topface.Static;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.Register;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -53,17 +54,21 @@ public class RegistrationFragment extends BaseFragment {
     public static final String INTENT_LOGIN = "registration_login";
     public static final String INTENT_PASSWORD = "registration_password";
     public static final String INTENT_USER_ID = "registration_user_id";
+    public static final int SEX_SELECTED = 123;
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
     public static final String NAME = "name";
     public static final String SEX = "sex";
     public static final String BIRTHDAY = "birthday";
+    public static final String SEX_MESSAGE = "sex_message";
+    public static final int RED_ALERT_APPEARANCE_TIME = 3000;
 
-    private static final int START_SHIFT = 33;
+    private static final int START_SHIFT = 16;
 
     private Date mBirthday;
-    private int mSex = Static.BOY;
+    private int mSex = Profile.BOY;
     private Timer mTimer = new Timer();
+    private DateObject mDateObject = new DateObject();
 
     @Bind(R.id.ivShowPassword)
     ImageButton mShowPassword;
@@ -82,6 +87,7 @@ public class RegistrationFragment extends BaseFragment {
     @Bind(R.id.tvBirthday)
     TextView mBirthdayText;
 
+    @SuppressWarnings("unused")
     @OnEditorAction(R.id.etName)
     public boolean nameActionListener(int actionId) {
         boolean handled = false;
@@ -94,12 +100,14 @@ public class RegistrationFragment extends BaseFragment {
         return handled;
     }
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.tvSex)
     public void sexClick() {
         SexDialog sexDialog = new SexDialog();
         sexDialog.show(getChildFragmentManager(), SexDialog.class.getSimpleName());
     }
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.btnStartChat)
     public void startChatClick() {
         removeRedAlert();
@@ -109,26 +117,35 @@ public class RegistrationFragment extends BaseFragment {
         sendRegistrationRequest();
     }
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.tvBirthday)
     public void birthdayClick() {
         Calendar c = Calendar.getInstance();
         c.add(Calendar.YEAR, -START_SHIFT);
-        DatePickerFragment datePicker = DatePickerFragment.newInstance(c.get(Calendar.YEAR)
-                , c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        DatePickerFragment datePicker;
+        if (mDateObject.isEmpty()) {
+            datePicker = DatePickerFragment.newInstance(c.get(Calendar.YEAR)
+                    , c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        } else {
+            datePicker = DatePickerFragment.newInstance(mDateObject.year
+                    , mDateObject.monthOfYear, mDateObject.dayOfMonth);
+        }
         datePicker.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                mDateObject.setDate(year, monthOfYear, dayOfMonth);
                 final Calendar c = Calendar.getInstance();
-                c.add(Calendar.YEAR, -Static.MIN_AGE);
+                c.add(Calendar.YEAR, -Profile.MIN_AGE);
                 long maxDate = c.getTimeInMillis();
 
-                c.add(Calendar.YEAR, -(Static.MAX_AGE - Static.MIN_AGE));
+                c.add(Calendar.YEAR, -(Profile.MAX_AGE - Profile.MIN_AGE));
                 long minDate = c.getTimeInMillis();
 
                 if (DatePickerFragment.isValidDate(year, monthOfYear, dayOfMonth, minDate, maxDate)) {
                     Date date = DateUtils.getDate(year, monthOfYear, dayOfMonth);
                     String dateStr = DateFormat.getDateFormat(getActivity()).format(date);
                     mBirthdayText.setText(dateStr);
+                    mBirthdayText.setTextColor(getResources().getColor(R.color.list_text_black));
                     mBirthday = date;
                 }
             }
@@ -288,7 +305,7 @@ public class RegistrationFragment extends BaseFragment {
                     });
                 }
             }
-        }, Static.RED_ALERT_APPEARANCE_TIME);
+        }, RED_ALERT_APPEARANCE_TIME);
     }
 
     private void redAlert(int resId) {
@@ -301,7 +318,7 @@ public class RegistrationFragment extends BaseFragment {
                 mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
                         android.R.anim.fade_out));
             }
-            mRedAlertView.setVisibility(View.INVISIBLE);
+            mRedAlertView.setVisibility(View.GONE);
         }
     }
 
@@ -324,8 +341,16 @@ public class RegistrationFragment extends BaseFragment {
         mBirthdayText.setEnabled(enable);
     }
 
-    private class SexDialog extends DialogFragment {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SEX_SELECTED) {
+            mSex = (data.getIntExtra(SEX, 1));
+            mTvSex.setText(data.getIntExtra(SEX_MESSAGE, R.string.im_boy));
+        }
+    }
 
+    public static class SexDialog extends DialogFragment {
 
         private int[] mSexResIdArray = {R.string.im_boy, R.string.im_girl};
 
@@ -339,12 +364,33 @@ public class RegistrationFragment extends BaseFragment {
                     .setAdapter(adapter, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int pos) {
-                            mSex = (pos == 0 ? Static.BOY : Static.GIRL);
-                            mTvSex.setText(mSexResIdArray[pos]);
+                            Fragment fragment = getParentFragment();
+                            if (fragment != null && fragment instanceof RegistrationFragment) {
+                                Intent result = new Intent();
+                                result.putExtra(RegistrationFragment.SEX, pos == 0 ? Profile.BOY : Profile.GIRL);
+                                result.putExtra(RegistrationFragment.SEX_MESSAGE, mSexResIdArray[pos]);
+                                fragment.onActivityResult(SEX_SELECTED, Activity.RESULT_OK, result);
+                            }
                             dismiss();
                         }
                     })
                     .create();
+        }
+    }
+
+    private class DateObject {
+        public int year = 0;
+        public int monthOfYear = 0;
+        public int dayOfMonth = 0;
+
+        public void setDate(int year, int monthOfYear, int dayOfMonth) {
+            this.year = year;
+            this.monthOfYear = monthOfYear;
+            this.dayOfMonth = dayOfMonth;
+        }
+
+        public boolean isEmpty() {
+            return year == 0 || monthOfYear == 0 || dayOfMonth == 0;
         }
     }
 }

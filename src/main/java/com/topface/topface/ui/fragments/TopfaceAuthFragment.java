@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.PasswordRecoverActivity;
@@ -72,6 +71,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
     }
 
+    @SuppressWarnings("unused")
     @OnEditorAction(R.id.edPassword)
     public boolean passwordAction(int action) {
         boolean handled = false;
@@ -93,6 +93,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         }
     }
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.redAlertButton)
     public void createAccountClick() {
         EasyTracker.sendEvent("Registration", "StartActivity", "FromAuth", 1L);
@@ -101,6 +102,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         startActivityForResult(intent, RegistrationActivity.INTENT_REGISTRATION);
     }
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.btnRecoverPassword)
     public void recoverPasswordClick() {
         Intent intent = new Intent(getActivity(), PasswordRecoverActivity.class);
@@ -145,12 +147,6 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
         removeRedAlert();
         mPassword.setText("");
         mPassword.clearFocus();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Utils.hideSoftKeyboard(getActivity(), mLogin, mPassword);
     }
 
     @Override
@@ -275,7 +271,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
                             }
                         });
                     }
-                }, Static.RED_ALERT_APPEARANCE_TIME);
+                }, RegistrationFragment.RED_ALERT_APPEARANCE_TIME);
             }
         }
     }
@@ -335,6 +331,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
             this.mEye = imageButton;
             this.mPass = editText;
             mPasswordMethod = new PasswordTransformationMethod();
+            mPass.setTransformationMethod(mPasswordMethod);
         }
 
         @Override
@@ -348,7 +345,4 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
             }
         }
     }
-
-
-
 }

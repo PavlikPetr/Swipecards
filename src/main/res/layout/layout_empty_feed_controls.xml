@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/controls_layout"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center"
-              android:orientation="vertical">
+    android:id="@+id/controls_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <RelativeLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/buy_coins_button"
-            android:layout_width="fill_parent"
+            style="@style/Widget.Topface.Button.Big.Blue"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/FlatButton.Blue"
-            android:layout_marginTop="16dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            />
+            android:layout_marginTop="16dp"
+            android:textSize="@dimen/unlock_likes_by_coins_button_text_size" />
 
         <ProgressBar
             android:id="@+id/prsLoading"
@@ -26,25 +26,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </RelativeLayout>
 
     <TextView
         android:id="@+id/buy_vip_text"
+        style="@style/ListItemEmptyText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/ListItemEmptyText"
-        android:gravity="center"
         android:layout_marginTop="8dp"
-        android:text="@string/or"
-        />
+        android:gravity="center"
+        android:text="@string/or" />
 
     <Button
         android:id="@+id/buy_vip_button"
-        android:layout_width="fill_parent"
+        style="@style/Widget.Topface.Button.Big.Blue"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/FlatButton.Blue"
         android:layout_margin="8dp"
-        android:text="@string/buying_vip_status"
-        />
+        android:text="@string/buying_vip_status" />
 </LinearLayout>

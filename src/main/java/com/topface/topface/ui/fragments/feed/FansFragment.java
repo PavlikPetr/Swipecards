@@ -1,15 +1,16 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.Intent;
+import android.support.annotation.StringRes;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.config.FeedsCache;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +20,8 @@ import java.util.List;
 
 public class FansFragment extends BookmarksFragment {
 
-    public static final String FANS = "Fans";
+    public static final String SCREEN_TYPE = "Fans";
+    public static final String UNLOCK_FUCTIONALITY_TYPE = "fans";
 
     @Override
     protected String getTitle() {
@@ -32,29 +34,49 @@ public class FansFragment extends BookmarksFragment {
     }
 
     @Override
+    protected void initLockedFeed(View inflated, int errorCode) {
+        initGagView(inflated, R.string.likes_buy_vip, R.string.buying_vip_status, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(PurchasesActivity.createVipBuyIntent(null, SCREEN_TYPE), PurchasesActivity.INTENT_BUY_VIP);
+            }
+        });
+        setUnlockButtonView(getUnlockButtonView(inflated));
+    }
+
+    @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
-        Button buttonBuy = (Button) inflated.findViewById(R.id.btnBuy);
-        TextView message = ((TextView) inflated.findViewById(R.id.tvText));
-        if (CacheProfile.premium) {
-            message.setText(R.string.buy_more_sympathies);
-            buttonBuy.setText(R.string.buy_sympathies);
-            buttonBuy.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(PurchasesActivity.createBuyingIntent(FANS));
-                }
-            });
-        } else {
-            message.setText(R.string.likes_buy_vip);
-            buttonBuy.setText(R.string.buying_vip_status);
-            buttonBuy.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = PurchasesActivity.createVipBuyIntent(null, FANS);
-                    startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
-                }
-            });
-        }
+        initGagView(inflated, R.string.buy_more_sympathies, R.string.buy_sympathies, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(PurchasesActivity.createBuyingIntent(SCREEN_TYPE, App.get().getOptions().topfaceOfferwallRedirect));
+            }
+        });
+        getUnlockButtonView(inflated).setVisibility(View.GONE);
+    }
+
+    private void initGagView(@NotNull View inflated, @StringRes int text, @StringRes int buttonText, View.OnClickListener listener) {
+        Button btnBuyVip = (Button) inflated.findViewById(R.id.btnBuy);
+        TextView textView = (TextView) inflated.findViewById(R.id.tvText);
+        textView.setText(text);
+        btnBuyVip.setText(buttonText);
+        btnBuyVip.setVisibility(View.VISIBLE);
+        textView.setVisibility(View.VISIBLE);
+        btnBuyVip.setOnClickListener(listener);
+    }
+
+    private Button getUnlockButtonView(View view) {
+        return (Button) view.findViewById(R.id.btnUnlock);
+    }
+
+    @Override
+    protected String getUnlockFunctionalityType() {
+        return UNLOCK_FUCTIONALITY_TYPE;
+    }
+
+    @Override
+    protected UnlockFunctionalityOption.UnlockScreenCondition getUnlockScreenCondition(UnlockFunctionalityOption data) {
+        return data.getUnlockFansCondition();
     }
 
     @Override

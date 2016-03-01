@@ -1,21 +1,21 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
+import com.topface.topface.data.Profile;
+import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteAdmirationsRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.FeedsCache;
 
@@ -25,10 +25,11 @@ import java.util.List;
 
 public class AdmirationFragment extends LikesFragment {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
-        return super.onCreateView(inflater, container, saved);
-    }
+    public static final String UNLOCK_FUCTIONALITY_TYPE = "admirations";
+    public static final String SCREEN_TYPE = "Admirations";
+    private ViewFlipper mStubFlipper;
+    private final String FLIPPER_CHILD_POSITION = "flipper_child_position";
+    private int mFlipperPos = 1;
 
     @Override
     protected String getTitle() {
@@ -39,53 +40,96 @@ public class AdmirationFragment extends LikesFragment {
     public void onResume() {
         super.onResume();
         if (mEmptyFeedView != null) {
-            initEmptyFeedView(mEmptyFeedView);
+            initEmptyFeedView(mEmptyFeedView, ErrorCodes.RESULT_OK);
         }
     }
 
     @Override
-    protected void initEmptyFeedView(View inflated, int errorCode) {
-        if (mEmptyFeedView == null) mEmptyFeedView = inflated;
-        if (CacheProfile.premium) {
-            ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
-            inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
+    protected void initLockedFeed(View inflated, int errorCode) {
+        setEmptyFeedView(inflated);
+        if (mCountersData.admirations > 0) {
+            mStubFlipper = ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews));
+            mStubFlipper.setDisplayedChild(SECOND_CHILD);
+            setUnlockButtonView(getUnlockButtonView(SECOND_CHILD));
+            int curCounter = mCountersData.admirations;
+            if (curCounter == 0) {
+                curCounter = App.get().getOptions().premiumAdmirations.getCount();
+            }
+
+            ((TextView) inflated.findViewById(R.id.tvTitle)).setText(Utils.getQuantityString(R.plurals.popup_vip_admirations, curCounter, curCounter));
+            inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations"));
+                    startActivityForResult(PurchasesActivity.createVipBuyIntent(null, SCREEN_TYPE), PurchasesActivity.INTENT_BUY_VIP);
                 }
             });
+            Profile profile = App.get().getProfile();
+            ((ImageViewRemote) inflated.findViewById(R.id.ivOne))
+                    .setResourceSrc(profile.dating.sex == Profile.GIRL ? R.drawable.likes_male_one : R.drawable.likes_female_one);
+            ((ImageViewRemote) inflated.findViewById(R.id.ivTwo))
+                    .setResourceSrc(profile.dating.sex == Profile.GIRL ? R.drawable.likes_male_two : R.drawable.likes_female_two);
+            ((ImageViewRemote) inflated.findViewById(R.id.ivThree))
+                    .setResourceSrc(profile.dating.sex == Profile.GIRL ? R.drawable.likes_male_three : R.drawable.likes_female_three);
         } else {
-            if (mCountersData.admirations > 0) {
-                ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(1);
-                int curCounter = mCountersData.admirations;
-                if (curCounter == 0) {
-                    curCounter = CacheProfile.getOptions().premiumAdmirations.getCount();
-                }
+            setUnlockButtonView(getUnlockButtonView(FIRST_CHILD));
+            chooseFirstChild(inflated);
+        }
+    }
 
-                String title = Utils.getQuantityString(R.plurals.popup_vip_admirations, curCounter, curCounter);
-                ((TextView) inflated.findViewById(R.id.tvTitle)).setText(title);
-                inflated.findViewById(R.id.btnBuyVip).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = PurchasesActivity.createVipBuyIntent(null, "Admirations");
-                        startActivityForResult(intent, PurchasesActivity.INTENT_BUY_VIP);
-                    }
-                });
-                ((ImageViewRemote) inflated.findViewById(R.id.ivOne))
-                        .setResourceSrc(CacheProfile.dating.sex == Static.GIRL ? R.drawable.likes_male_one : R.drawable.likes_female_one);
-                ((ImageViewRemote) inflated.findViewById(R.id.ivTwo))
-                        .setResourceSrc(CacheProfile.dating.sex == Static.GIRL ? R.drawable.likes_male_two : R.drawable.likes_female_two);
-                ((ImageViewRemote) inflated.findViewById(R.id.ivThree))
-                        .setResourceSrc(CacheProfile.dating.sex == Static.GIRL ? R.drawable.likes_male_three : R.drawable.likes_female_three);
-            } else {
-                ((ViewFlipper) inflated.findViewById(R.id.vfEmptyViews)).setDisplayedChild(0);
-                inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations"));
-                    }
-                });
-            }
+    private void setEmptyFeedView(View emptyFeedView) {
+        if (mEmptyFeedView == null) {
+            mEmptyFeedView = emptyFeedView;
+        }
+    }
+
+    private Button getUnlockButtonView(int child) {
+        return (Button) mStubFlipper.getChildAt(child).findViewWithTag("btnUnlock");
+    }
+
+    @Override
+    protected void initEmptyFeedView(View inflated, int errorCode) {
+        setEmptyFeedView(inflated);
+        getUnlockButtonView(FIRST_CHILD).setVisibility(View.GONE);
+        chooseFirstChild(inflated);
+    }
+
+    @Override
+    protected String getUnlockFunctionalityType() {
+        return UNLOCK_FUCTIONALITY_TYPE;
+    }
+
+    @Override
+    protected UnlockFunctionalityOption.UnlockScreenCondition getUnlockScreenCondition(UnlockFunctionalityOption data) {
+        return data.getUnlockAdmirationCondition();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (outState != null) {
+            outState.putInt(FLIPPER_CHILD_POSITION, mStubFlipper.getDisplayedChild());
+        }
+    }
+
+    @Override
+    protected void restoreInstanceState(Bundle saved) {
+        super.restoreInstanceState(saved);
+        if (saved != null) {
+            mFlipperPos = saved.getInt(FLIPPER_CHILD_POSITION);
+        }
+    }
+
+    private void chooseFirstChild(View view) {
+        if (mCountersData.admirations > 0 && mBalanceData.premium) {
+            mStubFlipper.setVisibility(View.GONE);
+        } else {
+            mStubFlipper.setDisplayedChild(mFlipperPos);
+            view.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations", App.get().getOptions().topfaceOfferwallRedirect));
+                }
+            });
         }
     }
 

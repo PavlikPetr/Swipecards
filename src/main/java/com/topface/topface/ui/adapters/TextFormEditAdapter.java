@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
 import com.topface.topface.R;
@@ -47,6 +46,11 @@ public class TextFormEditAdapter extends AbstractEditAdapter<FormItem> {
     }
 
     @Override
+    public FormItem getCurrentData() {
+        return mFormItem;
+    }
+
+    @Override
     public int getCount() {
         return TEXT_FORMS_COUNT;
     }
@@ -72,7 +76,6 @@ public class TextFormEditAdapter extends AbstractEditAdapter<FormItem> {
             final Holder holder = new Holder();
             holder.text = (EditText) convertView.findViewById(R.id.edit_dialog_text);
             holder.text.setInputType(FormInfo.getInputType(mOriginalItem));
-            holder.text.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
             FormItem.TextLimitInterface textLimitInterface = mOriginalItem.getTextLimitInterface();
             FormItem.ValueLimitInterface valueLimitInterface = mOriginalItem.getValueLimitInterface();
@@ -120,15 +123,11 @@ public class TextFormEditAdapter extends AbstractEditAdapter<FormItem> {
             };
             convertView.setTag(holder);
         }
-
         Holder holder = (Holder) convertView.getTag();
-
         holder.text.removeTextChangedListener(holder.textWatcher);
-        holder.text.setText(value);
-
-        holder.text.setSelection(value != null ? value.length() : 0);
+        holder.text.getText().clear();
+        holder.text.append(value);
         holder.text.addTextChangedListener(holder.textWatcher);
-
         return convertView;
     }
 

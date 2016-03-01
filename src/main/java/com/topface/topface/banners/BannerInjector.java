@@ -1,11 +1,14 @@
 package com.topface.topface.banners;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.topface.topface.App;
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.banners.ad_providers.IAdsProvider;
 import com.topface.topface.data.Options;
+import com.topface.topface.statistics.AdStatistics;
 import com.topface.topface.utils.CacheProfile;
 
 import java.lang.ref.WeakReference;
@@ -26,9 +29,11 @@ class BannerInjector implements IBannerInjector {
 
     private final AdProvidersFactory mProvidersFactory;
     private final List<WeakReference<IPageWithAds>> mUsedPages = new ArrayList<>();
+    private Context mContext;
 
-    public BannerInjector(AdProvidersFactory providersFactory) {
+    public BannerInjector(AdProvidersFactory providersFactory, Context context) {
         mProvidersFactory = providersFactory;
+        mContext = context;
     }
 
     @Override
@@ -41,13 +46,12 @@ class BannerInjector implements IBannerInjector {
     }
 
     private boolean canInject(IPageWithAds page) {
-        if (!CacheProfile.show_ad || page == null) {
+        if (!App.from(mContext).getProfile().showAd || page == null) {
             return false;
         }
         PageInfo.PageName pageId = page.getPageName();
         String pageName = pageId.getName();
-        Options options = CacheProfile.getOptions();
-        Map<String, PageInfo> pagesInfo = options.getPagesInfo();
+        Map<String, PageInfo> pagesInfo = App.from(mContext).getOptions().getPagesInfo();
         if (pagesInfo.containsKey(pageName)) {
             String floatType = pagesInfo.get(pageName).floatType;
             if (floatType.equals(PageInfo.FLOAT_TYPE_BANNER)) {
@@ -63,6 +67,7 @@ class BannerInjector implements IBannerInjector {
 
     private void showAd(final IPageWithAds page, IAdsProvider provider, final boolean isFallbackAd) {
         if (provider != null) {
+            final String bannerName = provider.getBannerName();
             final boolean injectInitiated = provider.injectBanner(page,
                     new IAdsProvider.IAdProviderCallbacks() {
                         @Override
@@ -77,6 +82,16 @@ class BannerInjector implements IBannerInjector {
                                 injectGag(page);
                             }
                         }
+
+                        @Override
+                        public void onAdClick() {
+                            AdStatistics.sendBannerClicked(bannerName);
+                        }
+
+                        @Override
+                        public void onAdShow() {
+                            AdStatistics.sendBannerShown(bannerName);
+                        }
                     });
             if (!injectInitiated && !isFallbackAd) {
                 injectGag(page);
@@ -85,16 +100,15 @@ class BannerInjector implements IBannerInjector {
     }
 
     private void injectGag(IPageWithAds page) {
-        showAd(page, getProvider(CacheProfile.getOptions().fallbackTypeBanner), true);
+        showAd(page, getProvider(App.from(mContext).getOptions().fallbackTypeBanner), true);
     }
 
     private IAdsProvider getProvider(String banner) {
-        return mProvidersFactory != null ? mProvidersFactory.createProvider(banner) : null;
+        return mProvidersFactory != null ? mProvidersFactory.createProvider(banner, App.from(mContext).getOptions()) : null;
     }
 
     private String lookupBannerFor(IPageWithAds page) {
-        Options options = CacheProfile.getOptions();
-        Map<String, PageInfo> pagesInfo = options != null ? options.getPagesInfo() : null;
+        Map<String, PageInfo> pagesInfo = App.from(mContext).getOptions() != null ? App.from(mContext).getOptions().getPagesInfo() : null;
         String pageName = page.getPageName().getName();
         if (pagesInfo != null && pagesInfo.containsKey(pageName)) {
             PageInfo pageInfo = pagesInfo.get(pageName);

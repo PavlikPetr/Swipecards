@@ -3,9 +3,9 @@ package com.topface.topface.utils.cache;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import com.topface.topface.App;
 import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.data.search.UsersList;
-import com.topface.topface.utils.CacheProfile;
 
 import org.json.JSONException;
 
@@ -48,8 +48,8 @@ public class SearchCacheManager extends UsersListCacheManager {
 
     @Override
     protected boolean isCacheExpired(String cacheKey) {
-        return CacheProfile.dating == null || super.isCacheExpired(cacheKey) || //Проверяем соответсвие кэша текущему фильтру поиска
-                !TextUtils.equals(getSignatureFromCache(), CacheProfile.dating.getFilterSignature());
+        return App.from(App.getContext()).getProfile().dating == null || super.isCacheExpired(cacheKey) || //Проверяем соответсвие кэша текущему фильтру поиска
+                !TextUtils.equals(getSignatureFromCache(), App.from(App.getContext()).getProfile().dating.getFilterSignature());
     }
 
     protected String getSignatureFromCache() {

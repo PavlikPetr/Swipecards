@@ -5,25 +5,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 
 import com.google.gson.JsonSyntaxException;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.Static;
+import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.City;
 import com.topface.topface.data.CountersData;
-import com.topface.topface.data.DatingFilter;
-import com.topface.topface.data.Options;
 import com.topface.topface.data.PaymentWallProducts;
-import com.topface.topface.data.Photo;
-import com.topface.topface.data.Photos;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.data.Profile;
-import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.utils.config.SessionConfig;
@@ -31,12 +26,14 @@ import com.topface.topface.utils.config.SessionConfig;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /* Cache Profile */
 public class CacheProfile {
+
     public static final String ACTION_PROFILE_LOAD = "com.topface.topface.ACTION.PROFILE_LOAD";
+    public static final String PREFERENCES_NEED_CHANGE_PASSWORD = "need_change_password";
+    public static final String PREFERENCES_NEED_CITY_CONFIRM = "city_need_confirm";
     /**
      * Use sendProfileUpdateBroadcast() static method
      */
@@ -49,210 +46,44 @@ public class CacheProfile {
 
     // Data
     public static CountersData countersData;
-    public static int uid;                      // id пользователя в топфейсе
-    public static String first_name;            // имя пользователя
-    public static int age;                      // возраст пользователя
-    public static int sex;                      // пол пользователя
-    public static City city;                    // город пользователя
-    public static int money;                    // количество монет у пользователя
-    public static int likes;                    // количество симпатий пользователя
-    public static DatingFilter dating;          // Фильтр поиска
-    public static boolean paid;                 // признак платящего пользоателя
-    public static boolean show_ad = true;       // флаг показа рекламы
-    public static boolean premium;              // показывает есть ли у пользователя Vip статус
-    public static boolean invisible;            // показывает включен ли режим невидимки
-    public static LinkedList<FormItem> forms;   // анкета пользователя
-    public static int background_id;            // идентификатор фона в профиле
-    public static Photos photos;                // список первых 30 фото
-    public static Photo photo;                  // аватарка пользователя
-    public static int totalPhotos;              // общее количество фотографий пользователя
-    public static boolean email;                // присутсвует ли email
-    public static boolean emailGrabbed;         // был ли email введен пользователем
-    public static boolean emailConfirmed;       // подтвержден ли email
-    public static int xstatus;                  // код цели знакомства пользователя, возможные варианты
-    private static boolean editor;              // является ли пользователь редактором
-    private static String status;               // статус пользователя
-    public static boolean canInvite;            // может ли этот пользователь отправлять приглашения контактам
-    public static Profile.Gifts gifts = new Profile.Gifts(); // массив подарков пользователя
-    public static SparseArrayCompat<Profile.TopfaceNotifications> notifications;
-    public static boolean giveNoviceLikes = false;
+    public static BalanceData balanceData;
 
     // State
     public static long profileUpdateTime;               // время последнего вызова setProfile(...)
     public static boolean wasCityAsked = false;         // был ли показан экран выбора города новичку
     public static boolean needShowBonusCounter = false;
-    private static AtomicBoolean mIsLoaded = new AtomicBoolean(false);
+    public static AtomicBoolean isLoaded = new AtomicBoolean(false);
 
-    private static void setProfileCache(final JSONObject response) {
-        if (response != null) {
+    private static void setProfileCache(final String profile) {
+        if (profile != null) {
             SessionConfig config = App.getSessionConfig();
-            config.setProfileData(response.toString());
+            config.setProfileData(profile);
             config.saveConfig();
         }
     }
 
-    public static Profile getProfile() {
-        Profile profile = new Profile();
-        profile.uid = uid;
-        profile.firstName = first_name;
-        profile.age = age;
-        profile.sex = sex;
-
-        profile.notifications = notifications;
-        profile.email = email;
-        profile.emailConfirmed = emailConfirmed;
-        profile.emailGrabbed = emailGrabbed;
-
-        profile.premium = premium;
-        profile.invisible = invisible;
-
-        profile.city = city;
-
-        profile.dating = dating;
-        profile.forms = forms;
-        profile.setStatus(status);
-        profile.gifts = gifts;
-        profile.background = background_id;
-
-        profile.photos = photos;
-        profile.photo = photo;
-        profile.photosCount = totalPhotos;
-
-        profile.paid = paid;
-        profile.showAd = show_ad;
-        profile.xstatus = xstatus;
-        profile.setEditor(editor);
-
-        profile.canInvite = canInvite;
-        return profile;
-    }
-
-    public static void setProfile(Profile profile, JSONObject response) {
-        setProfile(profile, response, ProfileRequest.P_ALL);
-    }
-
-    public static void setProfile(Profile profile, JSONObject response, int part) {
-        switch (part) {
-            case ProfileRequest.P_NECESSARY_DATA:
-                gifts = profile.gifts;
-                invisible = profile.invisible;
-                premium = profile.premium;
-                show_ad = profile.showAd;
-                photo = profile.photo;
-                photos = profile.photos;
-                totalPhotos = profile.photosCount;
-                break;
-            case ProfileRequest.P_ALL:
-                Editor.init(profile);
-                uid = profile.uid;
-                first_name = profile.firstName;
-                age = profile.age;
-                sex = profile.sex;
-                city = profile.city;
-
-                notifications = profile.notifications;
-                email = profile.email;
-                emailConfirmed = profile.emailConfirmed;
-                emailGrabbed = profile.emailGrabbed;
-
-                premium = profile.premium;
-                invisible = profile.invisible;
-                dating = profile.dating;
-                forms = profile.forms;
-
-                photos = profile.photos;
-                photo = profile.photo;
-                status = profile.getStatus();
-                gifts = profile.gifts;
-                background_id = profile.background;
-
-                totalPhotos = profile.photosCount;
-
-                paid = profile.paid;
-                show_ad = profile.showAd;
-
-                xstatus = profile.xstatus;
-
-                canInvite = profile.canInvite;
-
-                editor = profile.isEditor();
-
-                setProfileCache(response);
-                break;
-        }
+    public static void setProfile(Profile profile, String profileStr) {
+        CacheProfile.isLoaded.set(true);
+        Editor.init(profile);
+        setProfileCache(profileStr);
         setProfileUpdateTime();
     }
 
-    public static String getStatus() {
-        return status;
+    public static String getStatus(Context context) {
+        return App.from(context).getProfile().status;
     }
 
-    public static void setStatus(String status) {
-        CacheProfile.status = Profile.normilizeStatus(status);
-    }
-
-    /**
-     * Загружает профиль из кэша
-     *
-     * @return profile loaded
-     */
-    public static boolean loadProfile() {
-        boolean result = false;
-        if (uid == 0) {
-            SessionConfig config = App.getSessionConfig();
-            String profileCache = config.getProfileData();
-            Profile profile;
-            if (!TextUtils.isEmpty(profileCache)) {
-                //Получаем опции из кэша
-                try {
-                    JSONObject profileJson = new JSONObject(profileCache);
-                    profile = new Profile(profileJson);
-                    setProfile(profile, profileJson);
-                    result = true;
-                } catch (JSONException e) {
-                    config.resetProfileData();
-                    Debug.error(e);
-                }
-            }
-        }
-        mIsLoaded.set(true);
-        return result;
+    public static void setStatus(Context context, String status) {
+        App.from(context).getProfile().status = Profile.normilizeStatus(status);
     }
 
     /**
      * Опции по умолчанию
      */
-    private static Options options;
     private static Products mMarketProducts;
     private static ProductsDetails mProductsDetails;
     private static PaymentWallProducts mPWProducts;
     private static PaymentWallProducts mPWMobileProducts;
-
-    /**
-     * Данные из сервиса options
-     */
-    public static Options getOptions() {
-        if (options == null) {
-            SessionConfig config = App.getSessionConfig();
-            String optionsCache = config.getOptionsData();
-            if (!TextUtils.isEmpty(optionsCache)) {
-                //Получаем опции из кэша, причем передаем флаг, что бы эти опции не кешировались повторно
-                try {
-                    options = new Options(new JSONObject(optionsCache), false);
-                } catch (JSONException e) {
-                    //Если произошла ошибка при парсинге кэша, то скидываем опции
-                    config.resetOptionsData();
-                    Debug.error(e);
-                }
-            }
-            if (options == null) {
-                //Если по каким то причинам кэша нет и опции нам в данный момент взять негде.
-                //то просто используем их по умолчанию
-                options = new Options(null, false);
-            }
-        }
-        return options;
-    }
 
     /**
      * Данные из сервиса googleplay.getProducts
@@ -314,21 +145,24 @@ public class CacheProfile {
         return products;
     }
 
-    public static boolean isDataFilled() {
-        return city != null && !city.isEmpty() && age != 0 && first_name != null && photo != null;
+    public static boolean isDataFilled(Context context) {
+        Profile profile = App.from(context).getProfile();
+        return profile.city != null && !profile.city.isEmpty() && profile.age != 0 && profile.firstName != null && profile.photo != null;
     }
 
     /**
      * Clears CacheProfile fields (does not affect cached data from ProfileConfig)
      */
-    public static void clearProfileAndOptions() {
-        clearOptions();
-        setProfile(new Profile(), null);
+    public static void clearProfileAndOptions(TopfaceAppState state) {
+        state.destroyObservable(Profile.class);
+        // try to write profile with default value
+        try {
+            JSONObject profileJson = new JSONObject(JsonUtils.profileToJson(new Profile()));
+            new Profile(profileJson, false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         wasCityAsked = false;
-    }
-
-    public static void clearOptions() {
-        options = null;
     }
 
     private static void setProfileUpdateTime() {
@@ -336,19 +170,18 @@ public class CacheProfile {
     }
 
     public static boolean isLoaded() {
-        return mIsLoaded.get();
+        return isLoaded.get();
     }
 
-    public static boolean isEmpty() {
-        return isLoaded() && uid == 0;
+    public static boolean isEmpty(Context context) {
+        return App.from(context).getProfile().uid == 0;
     }
 
-    public static void setOptions(Options newOptions, final JSONObject response) {
-        options = newOptions;
+    public static void setOptions(final String options) {
         //Каждый раз не забываем кешировать запрос опций, но делаем это в отдельном потоке
-        if (response != null) {
+        if (options != null) {
             SessionConfig config = App.getSessionConfig();
-            config.setOptionsData(response.toString());
+            config.setOptionsData(options.toString());
             config.saveConfig();
         }
     }
@@ -385,10 +218,9 @@ public class CacheProfile {
         }
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    public static String getUserNameAgeString() {
-        return CacheProfile.first_name +
-                (CacheProfile.isAgeOk(CacheProfile.age) ? ", " + CacheProfile.age : "");
+    public static String getUserNameAgeString(Profile profile) {
+        return profile.firstName +
+                (CacheProfile.isAgeOk(profile.age) ? ", " + profile.age : "");
     }
 
     private static boolean isAgeOk(int age) {
@@ -396,39 +228,35 @@ public class CacheProfile {
     }
 
     public static boolean needToChangePassword(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        return preferences != null && preferences.getBoolean(Static.PREFERENCES_NEED_CHANGE_PASSWORD, false);
+        SharedPreferences preferences = context.getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        return preferences != null && preferences.getBoolean(PREFERENCES_NEED_CHANGE_PASSWORD, false);
     }
 
     public static void onPasswordChanged(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(Static.PREFERENCES_NEED_CHANGE_PASSWORD, false);
+        editor.putBoolean(PREFERENCES_NEED_CHANGE_PASSWORD, false);
         editor.apply();
     }
 
     public static boolean needCityConfirmation(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-        return preferences != null && preferences.getBoolean(Static.PREFERENCES_NEED_CITY_CONFIRM, false);
+        SharedPreferences preferences = context.getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        return preferences != null && preferences.getBoolean(PREFERENCES_NEED_CITY_CONFIRM, false);
     }
 
     public static void onCityConfirmed(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(Static.PREFERENCES_NEED_CITY_CONFIRM, false);
+        editor.putBoolean(PREFERENCES_NEED_CITY_CONFIRM, false);
         editor.apply();
     }
 
     public static void onRegistration(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(Static.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(Static.PREFERENCES_NEED_CHANGE_PASSWORD, false);
-        editor.putBoolean(Static.PREFERENCES_NEED_CITY_CONFIRM, true);
+        editor.putBoolean(PREFERENCES_NEED_CHANGE_PASSWORD, false);
+        editor.putBoolean(PREFERENCES_NEED_CITY_CONFIRM, true);
         editor.apply();
-    }
-
-    public static boolean isEditor() {
-        return editor;
     }
 
     /**
@@ -447,20 +275,22 @@ public class CacheProfile {
     }
 
     public static boolean needToSelectCity(Context context) {
+        Profile profile = App.from(context).getProfile();
         return (
-                !CacheProfile.isEmpty() &&
+                !CacheProfile.isEmpty(context) &&
                         (
-                                CacheProfile.city == null ||
-                                        CacheProfile.city.isEmpty() ||
+                                profile.city == null ||
+                                        profile.city.isEmpty() ||
                                         CacheProfile.needCityConfirmation(context)
                         )
                         && !CacheProfile.wasCityAsked
         );
     }
 
-    public static void incrementPhotoPosition(int diff, boolean needBroadcast) {
-        if (CacheProfile.photo != null) {
-            CacheProfile.photo.position += diff;
+    public static void incrementPhotoPosition(Context context, int diff, boolean needBroadcast) {
+        Profile profile = App.from(context).getProfile();
+        if (profile.photo != null) {
+            profile.photo.position += diff;
             if (needBroadcast) {
                 Intent intent = new Intent(OwnAvatarFragment.UPDATE_AVATAR_POSITION);
                 LocalBroadcastManager.getInstance(App.getContext())
@@ -469,16 +299,13 @@ public class CacheProfile {
         }
     }
 
-    public static void incrementPhotoPosition(int diff) {
-        incrementPhotoPosition(diff, true);
+    public static void incrementPhotoPosition(Context context, int diff) {
+        incrementPhotoPosition(context, diff, true);
     }
 
-    public static boolean isSetSympathiesBonus() {
-        return giveNoviceLikes;
-    }
-
-    public static void completeSetNoviceSympathiesBonus() {
-        giveNoviceLikes = false;
+    public static void completeSetNoviceSympathiesBonus(Context context) {
+        Profile profile = App.from(context).getProfile();
+        profile.giveNoviceLikes = false;
     }
 
 }

@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.topface.topface.Static;
+import com.topface.topface.App;
 import com.topface.topface.ui.analytics.TrackedDialogFragment;
 
 /**
@@ -16,9 +16,9 @@ import com.topface.topface.ui.analytics.TrackedDialogFragment;
  */
 public abstract class BaseDialog extends TrackedDialogFragment {
 
-    private DialogInterface.OnDismissListener mDismissListener;
+    private DialogInterface.OnCancelListener mCancelListener;
+    private DialogInterface.OnDismissListener mDismisslListener;
 
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NO_FRAME, getDialogStyleResId());
@@ -40,20 +40,33 @@ public abstract class BaseDialog extends TrackedDialogFragment {
     @Override
     public final void startActivityForResult(Intent intent, int requestCode) {
         if (requestCode != -1) {
-            intent.putExtra(Static.INTENT_REQUEST_KEY, requestCode);
+            intent.putExtra(App.INTENT_REQUEST_KEY, requestCode);
         }
         super.startActivityForResult(intent, requestCode);
     }
 
     public void setOnDismissListener(DialogInterface.OnDismissListener listener) {
-        mDismissListener = listener;
+        mDismisslListener = listener;
+    }
+
+    public void setOnCancelListener(DialogInterface.OnCancelListener listener) {
+        mCancelListener = listener;
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        if (mCancelListener != null) {
+            mCancelListener.onCancel(dialog);
+        }
     }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        if (mDismissListener != null) {
-            mDismissListener.onDismiss(dialog);
+        if (mDismisslListener != null) {
+            mDismisslListener.onDismiss(dialog);
         }
     }
+
 }

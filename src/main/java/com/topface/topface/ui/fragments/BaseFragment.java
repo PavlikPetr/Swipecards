@@ -19,7 +19,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.topface.framework.utils.Debug;
-import com.topface.topface.Static;
+import com.topface.topface.App;
+import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
@@ -33,6 +34,7 @@ import java.util.LinkedList;
 
 import butterknife.ButterKnife;
 
+
 public abstract class BaseFragment extends TrackedFragment implements IRequestClient {
 
     private static final String STATE_NEED_TITLES = "STATE_NEED_TITLES";
@@ -45,7 +47,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        restoreState();
+        restoreState(savedInstanceState != null ? savedInstanceState : getArguments());
         setHasOptionsMenu(needOptionsMenu());
         super.onCreate(savedInstanceState);
         try {
@@ -82,7 +84,13 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        if (isButterKnifeAvailable()) {
+            ButterKnife.unbind(this);
+        }
+    }
+
+    protected boolean isButterKnifeAvailable(){
+        return true;
     }
 
     @Override
@@ -179,7 +187,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         if (requestCode != -1) {
-            intent.putExtra(Static.INTENT_REQUEST_KEY, requestCode);
+            intent.putExtra(App.INTENT_REQUEST_KEY, requestCode);
             super.startActivityForResult(intent, requestCode);
         }
     }
@@ -303,7 +311,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         return null;
     }
 
-    protected void restoreState() {
+    protected void restoreState(Bundle savedInstanceState) {
     }
 
     protected void setNeedTitles(boolean needTitles) {
@@ -313,7 +321,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public enum FragmentId {
         VIP_PROFILE(0),
         PROFILE(1),
-        DATING(2, true),
+        DATING(2),
         TABBED_DIALOGS(3),
         TABBED_VISITORS(4),
         TABBED_LIKES(5),
@@ -322,10 +330,10 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         BONUS(10),
         EDITOR(1000),
         SETTINGS(11),
+        INTEGRATION_PAGE(12),
         UNDEFINED(-1);
 
         private int mNumber;
-        private boolean mIsOverlayed;
 
         /**
          * Constructor for enum type of fragment ids
@@ -334,26 +342,15 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
          * @param number integer id
          */
         FragmentId(int number) {
-            this(number, false);
-        }
-
-        /**
-         * Constructor for enum type of fragment ids
-         *
-         * @param number      integer id
-         * @param isOverlayed true if fragment will be overlayed by actionbar
-         */
-        FragmentId(int number, boolean isOverlayed) {
             mNumber = number;
-            mIsOverlayed = isOverlayed;
         }
 
         public int getId() {
             return mNumber;
         }
 
-        public boolean isOverlayed() {
-            return mIsOverlayed;
+        public FragmentSettings getFragmentSettings() {
+            return FragmentSettings.getFragmentSettings(this);
         }
     }
 }

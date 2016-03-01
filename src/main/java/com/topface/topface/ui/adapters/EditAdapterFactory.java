@@ -16,18 +16,19 @@ public class EditAdapterFactory {
     /**
      * @param context Activity
      * @param data    Data you want to edit
+     * @param profile
      * @return adapter with available edit options for data
      */
     public AbstractEditAdapter createAdapterFor(Context context,
-                                                Object data) {
+                                                Object data, Profile profile) {
         if (data instanceof Profile.TopfaceNotifications) {
             return new NotificationEditAdapter(context, (Profile.TopfaceNotifications) data);
         } else if (data instanceof FormItem) {
             FormItem formItem = (FormItem) data;
             if (formItem.type == FormItem.SEX) {
-                return new SexEditAdapter(context, formItem);
+                return new SexEditAdapter(context, formItem, profile);
             } else if (formItem.dataId != FormItem.NO_RESOURCE_ID) {
-                return new FormItemEditAdapter(context, formItem);
+                return new FormItemEditAdapter(context, formItem, profile);
             } else {
                 return new TextFormEditAdapter(context, formItem);
             }
@@ -41,6 +42,11 @@ public class EditAdapterFactory {
                 @Override
                 public void saveData() {
 
+                }
+
+                @Override
+                public Object getCurrentData() {
+                    return getData();
                 }
 
                 @Override

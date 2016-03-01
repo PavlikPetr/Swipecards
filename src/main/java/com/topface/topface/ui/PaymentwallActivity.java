@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
@@ -17,7 +18,6 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.state.TopfaceAppState;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
 import java.io.UnsupportedEncodingException;
@@ -126,7 +126,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     private String getWidgetUrl() {
         String url = getIntent().getStringExtra(PW_URL);
         if (url == null) {
-            url = CacheProfile.getOptions().getPaymentwallLink();
+            url = App.from(this).getOptions().getPaymentwallLink();
         }
         return url;
     }
@@ -188,9 +188,22 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     }
 
     private void initBalanceCounters() {
-        findViewById(R.id.resources_layout).setVisibility(View.VISIBLE);
+        final LinearLayout containerView = (LinearLayout) findViewById(R.id.resources_layout);
+        containerView.setVisibility(View.VISIBLE);
+        containerView.post(new Runnable() {
+            @Override
+            public void run() {
+                int containerWidth = containerView.getMeasuredWidth();
+                if (mCurCoins != null && mCurLikes != null) {
+                    mCurCoins.setMaxWidth(containerWidth / 2);
+                    mCurLikes.setMaxWidth(containerWidth / 2);
+                }
+            }
+        });
         mCurCoins = (TextView) findViewById(R.id.coins_textview);
         mCurLikes = (TextView) findViewById(R.id.likes_textview);
+        mCurCoins.setSelected(true);
+        mCurLikes.setSelected(true);
         updateBalanceCounters();
     }
 

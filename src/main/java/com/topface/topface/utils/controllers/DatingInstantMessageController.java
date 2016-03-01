@@ -21,6 +21,8 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.History;
 import com.topface.topface.data.HistoryListData;
+import com.topface.topface.data.Options;
+import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.search.SearchUser;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -33,7 +35,6 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
@@ -44,10 +45,8 @@ import com.topface.topface.utils.http.IRequestClient;
  */
 public class DatingInstantMessageController {
     public static final String DEFAULT_MESSAGE = "default_message";
-
     private Activity mActivity;
     private IRequestClient mRequestClient;
-
     private ImageButton mMessageSend;
     private View mGiftSend;
     private ViewFlipper mFooterFlipper;
@@ -63,12 +62,11 @@ public class DatingInstantMessageController {
 
     public DatingInstantMessageController(Activity activity, KeyboardListenerLayout root,
                                           View.OnClickListener clickListener,
-                                          IRequestClient requestClient, String text,
+                                          IRequestClient requestClient,
                                           final View datingButtons, final View userInfoStatus,
                                           SendLikeAction sendLikeAction, TextView.OnEditorActionListener mEditorActionListener) {
         mActivity = activity;
         mSendLikeAction = sendLikeAction;
-
         root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
             @Override
             public void keyboardOpened() {
@@ -80,6 +78,11 @@ public class DatingInstantMessageController {
             public void keyboardClosed() {
                 datingButtons.setVisibility(View.VISIBLE);
                 userInfoStatus.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void keyboardChangeState() {
+
             }
         });
         mFooterFlipper = (ViewFlipper) root.findViewById(R.id.dating_footer);
@@ -111,11 +114,8 @@ public class DatingInstantMessageController {
         });
         UserConfig userConfig = App.getUserConfig();
         String defaultMessage = userConfig.getDatingMessage();
-        if (TextUtils.isEmpty(defaultMessage) && !TextUtils.isEmpty(text)) {
-            userConfig.setDatingMessage(text);
-            userConfig.saveConfig();
-        }
-        setInstantMessageText(defaultMessage.isEmpty() ? text : defaultMessage);
+        Options options = App.from(activity).getOptions();
+        setInstantMessageText(defaultMessage);
         mMessageText.setHint(activity.getString(R.string.dating_message));
         mMessageText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         mMessageSend.setOnClickListener(clickListener);
@@ -123,15 +123,11 @@ public class DatingInstantMessageController {
         root.findViewById(R.id.chat_btn).setOnClickListener(clickListener);
         root.findViewById(R.id.skip_btn).setOnClickListener(clickListener);
 
-        mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
+        mMaxMessageSize = options.maxMessageSize;
         mRequestClient = requestClient;
     }
 
     public boolean sendMessage(SearchUser user) {
-        if (!tryChat(user)) {
-            setSendEnabled(true);
-            return false;
-        }
         final Editable editText = mMessageText.getText();
         final String editString = editText == null ? "" : editText.toString();
         if (editText == null || TextUtils.isEmpty(editString.trim()) || user.id == 0) {
@@ -143,8 +139,7 @@ public class DatingInstantMessageController {
                     Toast.LENGTH_SHORT);
             return false;
         }
-
-        final MessageRequest messageRequest = new MessageRequest(user.id, editString, mActivity, true);
+        final MessageRequest messageRequest = new MessageRequest(user.id, editString, mActivity, true, true);
         mRequestClient.registerRequest(messageRequest);
         messageRequest.callback(new DataApiHandler<History>() {
             @Override
@@ -172,7 +167,7 @@ public class DatingInstantMessageController {
             @Override
             public void fail(int codeError, IApiResponse response) {
                 if (response.isCodeEqual(ErrorCodes.PREMIUM_ACCESS_ONLY)) {
-                    startPurchasesActivity(CacheProfile.getOptions().instantMessagesForNewbies.getText(), "InstantMessageLimitExceeded");
+                    startPurchasesActivity(App.from(mActivity).getOptions().instantMessagesForNewbies.getText(), "InstantMessageLimitExceeded");
                 } else {
                     Utils.showErrorMessage();
                 }
@@ -203,24 +198,13 @@ public class DatingInstantMessageController {
         );
     }
 
-    private boolean tryChat(SearchUser user) {
-        if (CacheProfile.getOptions().instantMessagesForNewbies.isEnabled()) {
-            return true;
-        }
-
-        if (CacheProfile.premium || user.isMutualPossible || !CacheProfile.getOptions().blockChatNotMutual) {
-            return true;
-        } else {
-            startPurchasesActivity(mActivity.getString(R.string.chat_block_not_mutual),
-                    "DatingInstantMessage");
-            DatingMessageStatistics.sendVipBuyScreenTransition();
-            return false;
-        }
+    public void openChat(FragmentActivity activity, SearchUser user) {
+        openChat(activity, user, null);
     }
 
-    public void openChat(FragmentActivity activity, SearchUser user) {
+    public void openChat(FragmentActivity activity, SearchUser user, SendGiftAnswer answer) {
         if (user != null) {
-            Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false, this.getClass().getSimpleName());
+            Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name, null, user.photo, false, answer);
             activity.startActivityForResult(intent, ChatActivity.REQUEST_CHAT);
             EasyTracker.sendEvent("Dating", "Additional", "Chat", 1L);
         }
@@ -240,7 +224,7 @@ public class DatingInstantMessageController {
      */
     public void updateMessageIfNeed() {
         String textCurrent = mMessageText.getText().toString();
-        String textNewFromConfig = CacheProfile.getOptions().instantMessageFromSearch.getText();
+        String textNewFromConfig = App.from(mActivity).getOptions().instantMessageFromSearch.getText();
 
         if (TextUtils.isEmpty(mLastMsgFromConfig)) {
             // такое бывает при первом запуске приложения после установки

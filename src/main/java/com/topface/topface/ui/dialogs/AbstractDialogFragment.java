@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
@@ -91,9 +92,8 @@ public abstract class AbstractDialogFragment extends BaseDialog {
     public void show(FragmentManager manager, String tag) {
         try {
             Fragment dialog = manager.findFragmentByTag(tag);
-            if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty() && !mShowingDialogs.contains(tag) &&
-                    ((dialog != null && !dialog.isAdded()) || dialog == null)
-                    ) {
+            if (!CacheProfile.isEmpty(App.getContext()) && !AuthToken.getInstance().isEmpty() && !mShowingDialogs.contains(tag) &&
+                    ((dialog != null && !dialog.isAdded()) || dialog == null)) {
                 mTag = tag;
                 mShowingDialogs.add(tag);
                 super.show(manager, tag);

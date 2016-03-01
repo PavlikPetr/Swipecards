@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.BasePendingInit;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.FeedListData;
@@ -29,6 +28,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.GiftsStripAdapter;
 import com.topface.topface.utils.FormItem;
+import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -113,10 +113,10 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
             int giftsCount = savedInstanceState.getInt(GIFTS_COUNT);
             if (parcelableArrayList != null && parcelableGifts != null) {
                 Profile.Gifts gifts = new Profile.Gifts();
-                gifts.addAll(parcelableGifts);
+                gifts.getGifts().addAll(parcelableGifts);
                 String status = savedInstanceState.getString(USER_STATUS);
                 setUserData(
-                        status != null ? status : Static.EMPTY,
+                        status != null ? status : Utils.EMPTY,
                         savedInstanceState.getInt(USER_ID, 0),
                         parcelableArrayList, gifts, giftsCount
                 );
@@ -168,7 +168,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         super.onSaveInstanceState(outState);
         outState.putInt(USER_ID, mUserId);
         outState.putParcelableArrayList(FORM_ITEMS, mFormAdapter.saveState());
-        outState.putParcelableArrayList(FORM_GIFTS, mGifts);
+        outState.putParcelableArrayList(FORM_GIFTS, mGifts.getGifts());
         outState.putInt(POSITION, mListQuestionnaire.getFirstVisiblePosition());
         outState.putInt(GIFTS_COUNT, mGiftsCount);
         outState.putString(USER_STATUS, mStatus);
@@ -194,8 +194,8 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
                 mGiftsHeader.setVisibility(View.GONE);
                 return;
             }
-
-            int giftsCount = mGiftsCount <= 0 ? mGiftAdapter.getCount() : mGiftsCount;
+            int adapterGiftCount = mGiftAdapter.getCount();
+            int giftsCount = mGiftsCount <= adapterGiftCount ? adapterGiftCount : mGiftsCount;
             int viewsNumber = mGiftsHeader.getChildCount();
             for (int i = (giftsCount < mVisibleGiftsNumber ? giftsCount : mVisibleGiftsNumber) - 1; i >= 0; i--) {
                 if (i < mGiftAdapter.getCount()) {
@@ -261,12 +261,13 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         mUserId = userId;
         mForms = forms;
         mGifts = gifts;
-        mGiftsCount = giftsCount < gifts.size() ? gifts.size() : giftsCount;
+        ArrayList<Gift> giftArrayList = gifts.getGifts();
+        mGiftsCount = giftsCount < giftArrayList.size() ? giftArrayList.size() : giftsCount;
 
         mFormAdapter.setUserData(mStatus, mForms);
         mFormAdapter.notifyDataSetChanged();
         mGiftAdapter.getData().clear();
-        for (Gift gift : gifts) {
+        for (Gift gift : giftArrayList) {
             FeedGift feedGift = new FeedGift();
             feedGift.gift = gift;
             mGiftAdapter.add(feedGift);

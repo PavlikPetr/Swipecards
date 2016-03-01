@@ -152,10 +152,16 @@ public class CitySearchView extends AutoCompleteTextView {
 
     // this is the same method like AutoCompleteTextView.setOnDismissListener but working in all API
     public void setOnDismissListener(PopupWindow.OnDismissListener dismissListener) {
+        Object autoCompleteTextViewPopup = getAutoCompleteTextViewPopup();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            setOnDismissListenerHigherThanApi14((ListPopupWindow) getAutoCompleteTextViewPopup(), dismissListener);
+            setOnDismissListenerHigherThanApi14((ListPopupWindow) autoCompleteTextViewPopup, dismissListener);
         } else {
-            setOnDismissListenerLowerThanApi14((PopupWindow) getAutoCompleteTextViewPopup(), dismissListener);
+            // fixing WTF? https://rink.hockeyapp.net/manage/apps/26531/app_versions/253/crash_reasons/41706130
+            if (autoCompleteTextViewPopup instanceof PopupWindow) {
+                setOnDismissListenerLowerThanApi14((PopupWindow) autoCompleteTextViewPopup, dismissListener);
+            } else if (autoCompleteTextViewPopup instanceof ListPopupWindow) {
+                setOnDismissListenerHigherThanApi14((ListPopupWindow) autoCompleteTextViewPopup, dismissListener);
+            }
         }
     }
 

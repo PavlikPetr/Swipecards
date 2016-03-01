@@ -4,6 +4,10 @@
         <attr name="frameSrc" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="SoftKeyBoardListenerView">
+        <attr name="estimatedLayoutHeight" format="integer" />
+    </declare-styleable>
+
     <declare-styleable name="ImageViewRemote">
         <!--attr name="stubImage" format="reference" />
         <attr name="imageForEmptyUri" format="reference" /-->

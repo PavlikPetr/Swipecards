@@ -17,9 +17,9 @@ import android.widget.TextView;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.data.Profile;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
 import com.topface.topface.ui.views.FeedItemViewConstructor.TypeAndFlag;
@@ -140,14 +140,15 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     @Override
     public int getItemViewType(int position) {
         int superType = super.getItemViewType(position);
-        if (superType == T_OTHER) {
-            if (getItem(position).isAd()) {
+        T item = getItem(position);
+        if (superType == T_OTHER && item != null) {
+            if (item.isAd()) {
                 return T_NATIVE_AD;
-            } else if (getItem(position).unread && getItem(position).user.premium) {
+            } else if (item.unread && item.user.premium) {
                 return T_NEW_VIP;
-            } else if (getItem(position).unread && !getItem(position).user.premium) {
+            } else if (item.unread && !item.user.premium) {
                 return T_NEW;
-            } else if (!getItem(position).unread && getItem(position).user.premium) {
+            } else if (!item.unread && item.user.premium) {
                 return T_VIP;
             } else {
                 return T_OTHER;
@@ -219,7 +220,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         if (item != null) {
             // установка аватарки пользователя
             // какую аватарку использовать по умолчанию для забаненных и во время загрузки нормальной
-            int defaultAvatarResId = (item.user.sex == Static.BOY ?
+            int defaultAvatarResId = (item.user.sex == Profile.BOY ?
                     R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
             holder.avatarImage.setStubResId(defaultAvatarResId);
 

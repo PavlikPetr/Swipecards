@@ -1,10 +1,14 @@
 package com.topface.topface.utils.controllers.startactions;
 
+import android.content.DialogInterface;
 import android.support.v4.app.FragmentManager;
 
 import com.topface.topface.App;
+import com.topface.topface.data.Options;
+import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
-import com.topface.topface.utils.CacheProfile;
+
+import java.lang.ref.WeakReference;
 
 
 public class DatingLockPopupAction extends DailyPopupAction {
@@ -12,12 +16,17 @@ public class DatingLockPopupAction extends DailyPopupAction {
     private int mPriority;
     private DatingLockPopup.DatingLockPopupRedirectListener mDatingLockPopupRedirect;
     private FragmentManager mFragmentManager;
+    private OnNextActionListener mStartActionCallback;
+    private WeakReference<BaseFragmentActivity> mActivity;
 
-    public DatingLockPopupAction(FragmentManager fragmentManager, int priority, DatingLockPopup.DatingLockPopupRedirectListener listener) {
+
+    public DatingLockPopupAction(FragmentManager fragmentManager, int priority
+            , DatingLockPopup.DatingLockPopupRedirectListener listener, BaseFragmentActivity activity) {
         super(App.getContext());
         mFragmentManager = fragmentManager;
         mDatingLockPopupRedirect = listener;
         mPriority = priority;
+        mActivity = new WeakReference<>(activity);
     }
 
     @Override
@@ -31,15 +40,32 @@ public class DatingLockPopupAction extends DailyPopupAction {
 
     @Override
     public void callOnUi() {
-        DatingLockPopup datingLockPopup = new DatingLockPopup();
-        datingLockPopup.setDatingLockPopupRedirectListener(mDatingLockPopupRedirect);
+        final DatingLockPopup datingLockPopup = new DatingLockPopup();
+        datingLockPopup.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                if (mStartActionCallback != null) {
+                    mStartActionCallback.onNextAction();
+                }
+            }
+        });
+        datingLockPopup.setDatingLockPopupRedirectListener(new DatingLockPopup.DatingLockPopupRedirectListener() {
+            @Override
+            public void onRedirect() {
+                datingLockPopup.setOnDismissListener(null);
+                if (mDatingLockPopupRedirect != null) {
+                    mDatingLockPopupRedirect.onRedirect();
+                }
+            }
+        });
         datingLockPopup.show(mFragmentManager, DatingLockPopup.TAG);
     }
 
     @Override
     public boolean isApplicable() {
-        return CacheProfile.getOptions().notShown.enabledDatingLockPopup
-                && isTimeoutEnded(CacheProfile.getOptions().notShown.datingLockPopupTimeout,
+        Options options = App.from(mActivity.get()).getOptions();
+        return options.notShown.enabledDatingLockPopup
+                && isTimeoutEnded(options.notShown.datingLockPopupTimeout,
                 getUserConfig().getDatingLockPopupRedirect());
     }
 
@@ -55,6 +81,6 @@ public class DatingLockPopupAction extends DailyPopupAction {
 
     @Override
     public void setStartActionCallback(OnNextActionListener startActionCallback) {
-
+        mStartActionCallback = startActionCallback;
     }
 }

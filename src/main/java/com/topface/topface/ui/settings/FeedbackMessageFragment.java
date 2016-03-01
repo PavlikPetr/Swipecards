@@ -2,23 +2,17 @@ package com.topface.topface.ui.settings;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.Html;
 import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -30,7 +24,6 @@ import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
-import com.topface.topface.Static;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendFeedbackRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -39,8 +32,6 @@ import com.topface.topface.ui.edit.AbstractEditFragment;
 import com.topface.topface.utils.ClientUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Locale;
@@ -54,6 +45,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
 
     public static final String INTENT_FEEDBACK_TYPE = "feedback_message_type";
     private static final String GOOGLE_WALLET_URL = "https://wallet.google.com";
+    public static final String PLATFORM = "Android";
     @Bind(R.id.edText)
     EditText mEditText;
     @Bind(R.id.edEmail)
@@ -65,7 +57,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
     @Bind(R.id.tvLocale)
     TextView mIncorrectLocaleTv;
     private FeedbackType mFeedbackType;
-    private String mFeedback = Static.EMPTY;
+    private String mFeedback = Utils.EMPTY;
     private Report mReport = new Report();
 
     public static void fillVersion(Context context, Report report) {
@@ -130,8 +122,8 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
     }
 
     @Override
-    protected void restoreState() {
-        super.restoreState();
+    protected void restoreState(Bundle state) {
+        super.restoreState(state);
         Bundle extras = getArguments();
         if (extras != null) {
             mFeedbackType = (FeedbackType) extras.getSerializable(INTENT_FEEDBACK_TYPE);
@@ -154,8 +146,6 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
                 return getString(R.string.settings_ask_developer);
             case PAYMENT_MESSAGE:
                 return getString(R.string.settings_payment_problems);
-            case COOPERATION_MESSAGE:
-                return getString(R.string.settings_cooperation);
             case BAN:
                 return getString(R.string.feedback_subject_ban);
             default:
@@ -173,7 +163,6 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
                 mTransactionIdInfo.setVisibility(View.VISIBLE);
                 break;
             case ERROR_MESSAGE:
-            case COOPERATION_MESSAGE:
             case UNKNOWN:
                 break;
         }
@@ -233,10 +222,10 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
                 @Override
                 public void success(IApiResponse response) {
                     if (isAdded()) {
-                        mReport.body = Static.EMPTY;
+                        mReport.body = Utils.EMPTY;
                         finishRequestSend();
 
-                        mEditText.setText(Static.EMPTY);
+                        mEditText.setText(Utils.EMPTY);
                         Utils.showToastNotification(R.string.settings_feedback_success_msg, Toast.LENGTH_SHORT);
                         getActivity().finish();
                     }
@@ -289,7 +278,6 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         ERROR_MESSAGE("mobile_error", R.string.settings_error_message_internal),
         DEVELOPERS_MESSAGE("mobile_question", R.string.settings_ask_developer_internal),
         PAYMENT_MESSAGE("mobile_payment_issue", R.string.settings_payment_problems_internal),
-        COOPERATION_MESSAGE("mobile_cooperation", R.string.settings_cooperation_internal),
         BAN("mobile_ban", R.string.feedback_subject_ban_internal),
         LOW_RATE_MESSAGE("mobile_low_rate", R.string.settings_low_rate_internal);
 
@@ -316,7 +304,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         String email;
         List<String> userDeviceAccounts;
         String subject;
-        String body = Static.EMPTY;
+        String body = Utils.EMPTY;
         String topface_version = "unknown";
         int topface_versionCode = 0;
         String android_SDK = "API " + android.os.Build.VERSION.SDK_INT;
@@ -336,7 +324,7 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         }
 
         public String getSubject() {
-            return "[" + Static.PLATFORM + "]" + subject + " {" + authToken.getSocialNet() + "_id=" + authToken.getUserSocialId() + "}";
+            return "[" + PLATFORM + "]" + subject + " {" + authToken.getSocialNet() + "_id=" + authToken.getUserSocialId() + "}";
         }
 
         public void setSubject(String subject) {

@@ -6,8 +6,8 @@ import android.text.TextUtils;
 
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
-import com.topface.topface.Static;
 import com.topface.topface.data.search.UsersList;
+import com.topface.topface.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,7 +67,7 @@ public class UsersListCacheManager extends PreferencesCacheManager {
     @Nullable
     public UsersList getCacheAndRemove() {
         UsersList result = parseCacheData(super.getCache(mCacheKey));
-        setCache(mCacheKey, Static.EMPTY, 0);
+        setCache(mCacheKey, Utils.EMPTY, 0);
         return result;
     }
 
@@ -96,7 +96,6 @@ public class UsersListCacheManager extends PreferencesCacheManager {
         getEditor()
                 .remove(getPositionCacheKey(mCacheKey))
                 .remove(getDataCacheKey(mCacheKey))
-                        //.remove(getExpireDateCacheKey(mCacheKey))
                 .commit();
     }
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center_horizontal"
-              android:orientation="vertical">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,28 +14,28 @@
         <TextView
             style="@style/BackgroundFormTitleText"
             android:layout_width="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/charactersCount"
-            style="@style/CharactersCount"/>
+            style="@style/CharactersCount" />
     </LinearLayout>
 
     <EditText
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:gravity="top|left"
-        android:imeOptions="actionNext"
+        android:imeOptions="actionNext|flagNoExtractUi"
         android:inputType="text"
         android:padding="10dp"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:scrollHorizontally="true"
         android:tag="edText"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
 </LinearLayout>

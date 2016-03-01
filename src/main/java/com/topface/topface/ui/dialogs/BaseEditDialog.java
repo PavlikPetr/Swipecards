@@ -10,6 +10,7 @@ import android.view.ViewStub;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.adapters.AbstractEditAdapter;
 import com.topface.topface.ui.adapters.EditAdapterFactory;
@@ -32,6 +33,7 @@ public class BaseEditDialog<T extends Parcelable> extends BaseDialog {
     private TextView mTitleText;
     private TextView mLimitText;
     private ViewStub mButtonsStub;
+    private T mData;
 
     @Override
     protected int getDialogStyleResId() {
@@ -46,12 +48,15 @@ public class BaseEditDialog<T extends Parcelable> extends BaseDialog {
         if (args != null) {
             mTitle = args.getString(DIALOG_TITLE);
             T data = args.getParcelable(DATA);
-            mAdapter = new EditAdapterFactory().createAdapterFor(activity, data);
+            mAdapter = new EditAdapterFactory().createAdapterFor(activity, data, App.from(getActivity()).getProfile());
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (savedInstanceState != null && savedInstanceState.containsKey(DATA)) {
+            mData = savedInstanceState.getParcelable(DATA);
+        }
         View view = inflater.inflate(getDialogLayoutRes(), container, false);
         initViews(view);
         return view;
@@ -95,5 +100,14 @@ public class BaseEditDialog<T extends Parcelable> extends BaseDialog {
 
     protected ViewStub getButtonsStub() {
         return mButtonsStub;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        AbstractEditAdapter<T> adapter = getAdapter();
+        if (adapter != null) {
+            outState.putParcelable(DATA, adapter.getCurrentData());
+        }
     }
 }

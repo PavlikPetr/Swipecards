@@ -7,11 +7,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.os.Parcelable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -39,11 +43,9 @@ import com.nhaarman.listviewanimations.appearance.ChatListAnimatedAdapter;
 import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
 import com.topface.framework.JsonUtils;
-import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Static;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.History;
@@ -61,10 +63,12 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MessageRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.TakePhotoActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.ChatListAdapter;
 import com.topface.topface.ui.adapters.EditButtonsAdapter;
@@ -77,7 +81,7 @@ import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Device;
@@ -86,12 +90,9 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
 import com.topface.topface.utils.controllers.PopularUserChatController;
-import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.social.AuthToken;
-
-import org.acra.sender.ReportSenderException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +120,10 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private static final String HISTORY_CHAT = "history_chat";
     private static final String SOFT_KEYBOARD_LOCK_STATE = "keyboard_state";
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
-    public static final String FROM = "from";
+    private static final String AUTO_REPLY_MESSAGE_SOURCE = "AutoReplyMessage";
+    private static final String SEND_MESSAGE_SOURCE = "SendMessage";
+    public static final String GIFT_DATA = "gift_data";
+
 
     // Data
     private int mUserId;
@@ -136,6 +140,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         }
     };
     private String mMessage;
+    private SendGiftAnswer mSendGiftAnswer;
     private ArrayList<History> mHistoryFeedList;
     private Handler mUpdater;
     private boolean mIsUpdating;
@@ -147,7 +152,14 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private String mItemId;
     private String mInitialMessage;
     private boolean wasFailed = false;
-    private String mFrom;
+    private AddPhotoHelper mAddPhotoHelper;
+    private boolean mIsNeedShowAddPhoto = true;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            AddPhotoHelper.handlePhotoMessage(msg, getActivity());
+        }
+    };
 
     TimerTask mUpdaterTask = new TimerTask() {
         @Override
@@ -163,7 +175,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             });
         }
     };
-    private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
     // Managers
     private RelativeLayout mLockScreen;
     private PopularUserChatController mPopularUserLockController;
@@ -217,7 +228,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         mUserType = getArguments().getInt(ChatFragment.USER_TYPE);
         // do not recreate Adapter cause of setRetainInstance(true)
         if (mAdapter == null) {
-            mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback());
+            mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback(), new ChatListAdapter.OnBuyVipButtonClick() {
+                @Override
+                public void onClick() {
+                    startBuyVipActivity(AUTO_REPLY_MESSAGE_SOURCE);
+                }
+            });
         }
         Bundle args = getArguments();
         mItemId = args.getString(INTENT_ITEM_ID);
@@ -226,12 +242,15 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         mUserNameAndAge = args.getString(INTENT_USER_NAME_AND_AGE);
         mInitialMessage = args.getString(INITIAL_MESSAGE);
         mPhoto = args.getParcelable(INTENT_AVATAR);
-        mFrom = args.getString(FROM);
+        mSendGiftAnswer = args.getParcelable(GIFT_DATA);
+        if (mSendGiftAnswer != null) {
+            mSendGiftAnswer.setLoaderType(IListLoader.ItemType.TEMP_MESSAGE);
+            mAdapter.addGift(mSendGiftAnswer);
+        }
         // only DialogsFragment will hear this
         Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ_BY_UID);
         intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
-
     }
 
     @Override
@@ -249,11 +268,26 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             @Override
             public void keyboardOpened() {
                 mKeyboardWasShown = true;
+                if (getSupportActionBar().isShowing()
+                        && getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
+                    setActionbarVisibility(false);
+                }
             }
 
             @Override
             public void keyboardClosed() {
                 mKeyboardWasShown = false;
+                if (!getSupportActionBar().isShowing()) {
+                    setActionbarVisibility(true);
+                }
+            }
+
+            @Override
+            public void keyboardChangeState() {
+                if (getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT
+                        && !getSupportActionBar().isShowing()) {
+                    setActionbarVisibility(true);
+                }
             }
         });
         Debug.log(this, "+onCreate");
@@ -298,6 +332,20 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
         }
         return root;
+    }
+
+    private void setActionbarVisibility(boolean visible) {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setShowHideAnimationEnabled(false);
+        if (visible) {
+            actionBar.show();
+        } else {
+            actionBar.hide();
+        }
+    }
+
+    private int getScreenOrientation() {
+        return getActivity().getResources().getConfiguration().orientation;
     }
 
     @Override
@@ -483,7 +531,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         if (mPopularUserLockController.isChatLocked()) {
             mPopularUserLockController.blockChat();
             return true;
-        } else if (mPopularUserLockController.isDialogOpened()) {
+        }
+        if (mPopularUserLockController.isDialogOpened()) {
             mPopularUserLockController.showBlockDialog();
         }
         return false;
@@ -515,11 +564,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     @Override
     protected String getSubtitle() {
-        if (TextUtils.isEmpty(mUserCity)) {
-            return Static.EMPTY;
-        } else {
-            return mUserCity;
-        }
+        return TextUtils.isEmpty(mUserCity) ? Utils.EMPTY : mUserCity;
     }
 
     @Override
@@ -604,20 +649,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 !mAdapter.isEmpty() &&
                 (mPopularUserLockController.isChatLocked() || mPopularUserLockController.isResponseLocked()) &&
                 pullToRefresh;
-
-        HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId) {
-
+        HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId, new HistoryRequest.IRequestExecuted() {
             @Override
-            public void exec() {
-                if (mUserId > 0) {
-                    mIsUpdating = true;
-                    super.exec();
-                } else {
-                    Utils.sendHockeyMessage(getContext(), "User id -1 from " + mFrom);
-                }
+            public void onExecuted() {
+                mIsUpdating = true;
             }
-        };
-
+        });
         registerRequest(historyRequest);
         historyRequest.debug = type;
         if (mAdapter != null) {
@@ -689,8 +726,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                             if (!data.more && !data.items.isEmpty()) {
                                 onNewMessageAdded(data.items.get(0));
                             }
-                        } else if (scrollRefresh) {
-                            mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
                         } else {
                             mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
                         }
@@ -699,6 +734,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     }
                 }
                 setLockScreenVisibility(false);
+                takePhotoIfNeed();
             }
 
             @Override
@@ -882,7 +918,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         super.onPause();
         LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(mNewMessageReceiver);
         stopTimer();
-        Utils.hideSoftKeyboard(getActivity(), mEditBox);
     }
 
     @Override
@@ -903,6 +938,17 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         LocalBroadcastManager.getInstance(getActivity())
                                 .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
                     }
+                }
+                break;
+            case PurchasesActivity.INTENT_BUY_VIP:
+                if (mAdapter != null) {
+                    mAdapter.getData().clear();
+                }
+                update(false, "initial");
+                break;
+            default:
+                if (mAddPhotoHelper != null) {
+                    mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
                 }
                 break;
         }
@@ -933,8 +979,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         if (editText == null || TextUtils.isEmpty(editString.trim()) || mUserId == 0) {
             return false;
         }
-        if (editText.length() > mMaxMessageSize) {
-            Utils.showToastNotification(String.format(getString(R.string.message_too_long), mMaxMessageSize), Toast.LENGTH_SHORT);
+        if (editText.length() > App.get().getOptions().maxMessageSize) {
+            Utils.showToastNotification(String.format(getString(R.string.message_too_long), App.get().getOptions().maxMessageSize), Toast.LENGTH_SHORT);
             return false;
         }
         // вынужденная мера, Editable.clear() некорректно обрабатывается клавиатурой Lg G3
@@ -944,11 +990,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     public boolean sendMessage(String text, final boolean cancelable) {
         final History messageItem = new History(text, IListLoader.ItemType.TEMP_MESSAGE);
-        final MessageRequest messageRequest = new MessageRequest(mUserId, text, getActivity());
+        Activity activity = getActivity();
+        final MessageRequest messageRequest = new MessageRequest(mUserId, text, activity, App.from(activity).getOptions().blockUnconfirmed);
         if (TextUtils.equals(AuthToken.getInstance().getSocialNet(), AuthToken.SN_TOPFACE)) {
-            if (!CacheProfile.emailConfirmed) {
+            if (!App.from(activity).getProfile().emailConfirmed) {
                 Toast.makeText(App.getContext(), R.string.confirm_email, Toast.LENGTH_SHORT).show();
-                ConfirmEmailDialog.newInstance().show(getActivity().getSupportFragmentManager(), CONFIRM_EMAIL_DIALOG_TAG);
+                ConfirmEmailDialog.newInstance().show(((FragmentActivity) activity).getSupportFragmentManager(), CONFIRM_EMAIL_DIALOG_TAG);
                 return false;
             }
         }
@@ -980,9 +1027,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 if (codeError == ErrorCodes.PREMIUM_ACCESS_ONLY) {
                     mMessage = mAdapter.getData().get(0).text;
                     mAdapter.removeLastItem();
-                    startActivityForResult(PurchasesActivity.createVipBuyIntent(getResources()
-                                    .getString(R.string.messaging_block_buy_vip), "SendMessage"),
-                            PurchasesActivity.INTENT_BUY_VIP);
+                    startBuyVipActivity(SEND_MESSAGE_SOURCE);
                     return;
                 }
                 if (mAdapter != null && cancelable) {
@@ -993,6 +1038,13 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         }).exec();
         return true;
     }
+
+    private void startBuyVipActivity(String from) {
+        startActivityForResult(PurchasesActivity.createVipBuyIntent(getResources()
+                        .getString(R.string.messaging_block_buy_vip), from),
+                PurchasesActivity.INTENT_BUY_VIP);
+    }
+
 
     private void startTimer() {
         if (mUpdater != null) {
@@ -1134,4 +1186,16 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         return true;
     }
 
+    private void takePhotoIfNeed() {
+        if (mIsNeedShowAddPhoto) {
+            mIsNeedShowAddPhoto = false;
+            if (mAddPhotoHelper == null) {
+                mAddPhotoHelper = new AddPhotoHelper(ChatFragment.this, null);
+                mAddPhotoHelper.setOnResultHandler(mHandler);
+            }
+            if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null) {
+                startActivityForResult(TakePhotoActivity.createIntent(getActivity(), TakePhotoStatistics.PLC_CHAT_OPEN), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
+            }
+        }
+    }
 }

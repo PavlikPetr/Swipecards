@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.topface.billing.OpenIabFragment;
@@ -168,6 +169,7 @@ public class PurchasesFragment extends BaseFragment {
 
     private void initViews(View root, Bundle savedInstanceState) {
         Bundle args = getArguments();
+        final Options options = App.from(getActivity()).getOptions();
         mIsVip = args.getBoolean(IS_VIP_PRODUCTS, false);
         args.putString(PurchasesConstants.ARG_RESOURCE_INFO_TEXT, mResourceInfoText == null ? getInfoText() : mResourceInfoText);
 
@@ -176,17 +178,17 @@ public class PurchasesFragment extends BaseFragment {
         Utils.enableLayoutChangingTransition((ViewGroup) root.findViewById(R.id.purchaseLayout));
         if (mIsVip) {
             tabs = new Options.TabsList();
-            tabs.list.addAll(CacheProfile.getOptions().premiumTabs.list);
+            tabs.list.addAll(options.premiumTabs.list);
         } else {
             tabs = new Options.TabsList();
-            tabs.list.addAll(CacheProfile.getOptions().otherTabs.list);
+            tabs.list.addAll(options.otherTabs.list);
         }
         removeExcessTabs(tabs.list); //Убираем табы в которых нет продуктов и бонусную вкладку, если фрагмент для покупки випа
         createTabList(tabs.list);
         mPagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs.list);
         mPager.setAdapter(mPagerAdapter);
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            private TopfaceOfferwallRedirect mTopfaceOfferwallRedirect = CacheProfile.getOptions().topfaceOfferwallRedirect;
+            private TopfaceOfferwallRedirect mTopfaceOfferwallRedirect = options.topfaceOfferwallRedirect;
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -258,9 +260,22 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     private void initBalanceCounters(View root) {
-        root.findViewById(R.id.resources_layout).setVisibility(View.VISIBLE);
+        final LinearLayout containerView = (LinearLayout) root.findViewById(R.id.resources_layout);
+        containerView.setVisibility(View.VISIBLE);
+        containerView.post(new Runnable() {
+            @Override
+            public void run() {
+                int containerWidth = containerView.getMeasuredWidth();
+                if (mCurCoins != null && mCurLikes != null) {
+                    mCurCoins.setMaxWidth(containerWidth / 2);
+                    mCurLikes.setMaxWidth(containerWidth / 2);
+                }
+            }
+        });
         mCurCoins = (TextView) root.findViewById(R.id.coins_textview);
         mCurLikes = (TextView) root.findViewById(R.id.likes_textview);
+        mCurCoins.setSelected(true);
+        mCurLikes.setSelected(true);
         updateBalanceCounters(mBalanceData);
     }
 

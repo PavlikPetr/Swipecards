@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.topface.topface.ui.views.KeyboardListenerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/bg_holo">
+    xmlns:key="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_holo"
+    key:estimatedLayoutHeight="70">
 
     <com.topface.topface.ui.views.ProgressBarWithAlpha
         android:id="@+id/chat_loader"
@@ -36,8 +38,8 @@
 
         <RelativeLayout
             android:id="@+id/llvLockScreen"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_above="@id/loChatFooterSend"
             android:visibility="gone">
 
@@ -53,7 +55,7 @@
         <include
             android:id="@id/loChatFooterSend"
             layout="@layout/chat_footer_send"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true" />
 

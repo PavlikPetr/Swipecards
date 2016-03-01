@@ -43,6 +43,18 @@ public class StartActionsController {
         processedMandatoryActionForSession = false;
     }
 
+    public boolean isProcessedMandatoryActionForSession() {
+        return processedMandatoryActionForSession;
+    }
+
+    public boolean isProcessedActionForSession() {
+        return processedActionForSession;
+    }
+
+    public void dropDownProcessedActionsState() {
+        onLogout();
+    }
+
     /**
      * Put this method in place where controller have to start pending actions
      * For example: onLoadProfile()

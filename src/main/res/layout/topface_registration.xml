@@ -28,23 +28,22 @@
                 style="@style/TopfaceAuthText"
                 android:layout_marginTop="28dp"
                 android:hint="@string/email"
-                android:imeOptions="actionNext"
+                android:imeOptions="actionNext|flagNoExtractUi"
                 android:inputType="textEmailAddress" />
 
             <RelativeLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp">
 
                 <EditText
                     android:id="@+id/edPassword"
                     style="@style/TopfaceAuthText"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:hint="@string/password"
-                    android:imeOptions="actionNext"
-                    android:inputType="textPassword"
+                    android:imeOptions="actionNext|flagNoExtractUi"
                     android:paddingRight="24dp" />
 
 
@@ -64,7 +63,7 @@
                 style="@style/TopfaceAuthText"
                 android:layout_marginTop="28dp"
                 android:hint="@string/edit_name"
-                android:imeOptions="actionNext"
+                android:imeOptions="actionNext|flagNoExtractUi"
                 android:inputType="text" />
 
             <LinearLayout
@@ -97,7 +96,7 @@
                     android:gravity="center"
                     android:paddingTop="10dp"
                     android:text="@string/birthday"
-                    android:textColor="#234144"
+                    android:textColor="@color/registration_hint_color"
                     android:textSize="16sp" />
             </LinearLayout>
 

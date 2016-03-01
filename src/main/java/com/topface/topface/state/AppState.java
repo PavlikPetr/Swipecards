@@ -6,7 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import rx.functions.Action0;
+import rx.functions.Action1;
 import rx.subjects.BehaviorSubject;
 
 /**
@@ -47,6 +48,13 @@ public class AppState {
         }
     }
 
+    public <T> void destroyObservable(Class<T> dataClass) {
+        if (getCachableData().contains(dataClass)) {
+            getCachableData().remove(dataClass);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
     public <T> Observable<T> getObservable(Class<T> dataClass) {
         synchronized (getCachableData()) {
             if (!getCachableData().containsKey(dataClass)) {
@@ -56,7 +64,12 @@ public class AppState {
                 }
                 setData(data, false, false, dataClass);
             }
-            return getCachableData().get(dataClass).getBehaviorSubject();
+            return getCachableData().get(dataClass).getBehaviorSubject().doOnError(new Action1<Throwable>() {
+                @Override
+                public void call(Throwable throwable) {
+                    throwable.printStackTrace();
+                }
+            });
         }
     }
 
@@ -83,7 +96,7 @@ public class AppState {
                         setData(res, false, true, dataClass);
                     }
                 }
-                return (T) res;
+                return res;
             }
         }
     }
@@ -119,10 +132,9 @@ public class AppState {
             this(data, createBehaviorSubject(data));
         }
 
-        public DataAndObservable(T data, BehaviorSubject<T> behaviorSubject) {
+        private DataAndObservable(T data, BehaviorSubject<T> behaviorSubject) {
             mObject = data;
             mBehaviorSubject = behaviorSubject;
-            mBehaviorSubject.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread());
         }
 
         public T getObject() {
@@ -137,9 +149,14 @@ public class AppState {
             return mBehaviorSubject;
         }
 
-        public void emmit(T data) {
+        public void emmit(final T data) {
             if (data != null) {
-                getBehaviorSubject().onNext(data);
+                AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
+                    @Override
+                    public void call() {
+                        getBehaviorSubject().onNext(data);
+                    }
+                });
             }
         }
     }

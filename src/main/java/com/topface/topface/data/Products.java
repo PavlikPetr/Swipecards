@@ -24,22 +24,26 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 public class Products extends AbstractData {
     public static final String PRICE = "{{price}}";
     public static final String PRICE_PER_ITEM = "{{price_per_item}}";
+    public static String[] PRICE_TEMPLATES = {PRICE, PRICE_PER_ITEM};
     private static final String EUR = "EUR";
     private static final String RUB = "RUB";
-    private static final String USD = "USD";
+    public static final String USD = "USD";
 
     public enum ProductType {
         COINS("coins"),
@@ -169,18 +173,6 @@ public class Products extends AbstractData {
         }
     }
 
-    private static String getPriceAndCurrencyAbbreviation(String price, String currency) {
-        switch (currency) {
-            case EUR:
-                return price + App.getContext().getString(R.string.eur);
-            case USD:
-                return App.getContext().getString(R.string.usd) + price;
-            case RUB:
-                return price + App.getContext().getString(R.string.rub);
-        }
-        return price + currency;
-    }
-
     public BuyButtonData createBuyButtonFromJSON(JSONObject purchaseItem) {
         BuyButtonData button = null;
         if (purchaseItem != null) {
@@ -214,30 +206,53 @@ public class Products extends AbstractData {
     public static View createBuyButtonLayout(Context context, BuyButtonData buyBtn,
                                              final BuyButtonClickListener listener) {
         String value;
-        String economy;
         if (buyBtn.type == ProductType.COINS_SUBSCRIPTION && buyBtn.price == 0) {
             value = buyBtn.hint;
-            economy = null;
         } else {
             ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
-            DecimalFormat decimalFormat = new DecimalFormat("#.##");
-            value = buyBtn.totalTemplate.replace(PRICE, decimalFormat.format((float) buyBtn.price / 100) +
-                    context.getString(R.string.usd));
+            Currency currency;
+            NumberFormat currencyFormatter;
+            currency = Currency.getInstance(USD);
+            currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
+            currencyFormatter.setCurrency(currency);
+            value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn.totalTemplate, PRICE, PRICE_PER_ITEM);
             if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
-                if (detail != null && !detail.currency.equals(USD)) {
+
+                if (detail != null && detail.currency != null) {
                     double price = detail.price / ProductsDetails.MICRO_AMOUNT;
-                    value = buyBtn.totalTemplate.replace(PRICE, getPriceAndCurrencyAbbreviation(decimalFormat.format(price), detail.currency));
+                    currency = Currency.getInstance(detail.currency);
+                    currencyFormatter = detail.currency.equalsIgnoreCase(USD)
+                            ? NumberFormat.getCurrencyInstance(Locale.US) : NumberFormat.getCurrencyInstance(new Locale(App.getLocaleConfig().getApplicationLocale()));
+                    currencyFormatter.setCurrency(currency);
+                    value = formatPrice(price, currencyFormatter, buyBtn.titleTemplate, PRICE, PRICE_PER_ITEM);
                 } else {
-                    value = buyBtn.totalTemplate.replace(PRICE, getPriceAndCurrencyAbbreviation(String.valueOf((float) buyBtn.price / 100), USD));
+                    value = formatPrice(buyBtn.price / 100, currencyFormatter, buyBtn.titleTemplate, PRICE, PRICE_PER_ITEM);
                 }
             }
-            economy = buyBtn.hint;
         }
         return createBuyButtonLayout(
                 context, buyBtn.id, buyBtn.title, buyBtn.discount > 0,
-                buyBtn.showType, economy, value, listener
+                buyBtn.showType, value, listener
         );
+    }
+
+    public static String formatPrice(double price, NumberFormat currencyFormatter, String template, @NotNull String... replaceTemplateArray) {
+        currencyFormatter.setMaximumFractionDigits(price % 1 != 0 ? 2 : 0);
+        for (String replaceTemplate : replaceTemplateArray) {
+            if (template.contains(replaceTemplate)) {
+                return template.replace(replaceTemplate, currencyFormatter.format(price));
+            }
+        }
+        return template.replace(replaceTemplateArray[0], currencyFormatter.format(price));
+    }
+
+    private static double getPriceByTemplate(double price, BuyButtonData buyBtn) {
+        if (buyBtn.titleTemplate.contains((PRICE_PER_ITEM))) {
+            return price / buyBtn.amount;
+        } else {
+            return price;
+        }
     }
 
     /**
@@ -248,14 +263,13 @@ public class Products extends AbstractData {
      * @param title    for button
      * @param discount true if button background has to be with sale badge
      * @param showType 0 - gray, 1 - blue button, 2 - disabled button
-     * @param economy  hint under button with highlighted background
      * @param value    hint under button
      * @param listener to process click
      * @return created view
      */
     public static View createBuyButtonLayout(
             Context context, final String id, String title, boolean discount, int showType,
-            String economy, String value, final BuyButtonClickListener listener
+            String value, final BuyButtonClickListener listener
     ) {
         if (context == null || TextUtils.isEmpty(title)) return null;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -321,7 +335,7 @@ public class Products extends AbstractData {
         // title text
         TextView tvTitle = (TextView) view.findViewById(R.id.itText);
         setBuyButtonTextColor(showType, tvTitle);
-        tvTitle.setText(title);
+        tvTitle.setText(TextUtils.isEmpty(value) ? title : value);
     }
 
     private static void setSelectorTextColor(int selector, TextView view) {

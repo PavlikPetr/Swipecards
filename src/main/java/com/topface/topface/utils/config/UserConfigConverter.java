@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.App;
-import com.topface.topface.Static;
+import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -141,7 +141,7 @@ public class UserConfigConverter {
     }
 
     private String generateOldKey(String configPart, String key) {
-        return configPart + Static.AMPERSAND + key;
+        return configPart + Utils.AMPERSAND + key;
     }
 
     /**
@@ -184,7 +184,7 @@ public class UserConfigConverter {
     private SharedPreferences getConfigPreferencesByLogin(String login) {
         return App.getContext().getSharedPreferences(
                 UserConfig.PROFILE_CONFIG_SETTINGS +
-                        Static.AMPERSAND + login,
+                        Utils.AMPERSAND + login,
                 Context.MODE_PRIVATE);
     }
 

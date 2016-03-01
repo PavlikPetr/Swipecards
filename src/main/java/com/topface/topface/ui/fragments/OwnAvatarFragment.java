@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.topface.topface.App;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
-import com.topface.topface.utils.CacheProfile;
 
 /**
  * Fragment with own photo updating photo data on adding/removing photos
@@ -35,7 +35,7 @@ public abstract class OwnAvatarFragment extends AbstractProfileFragment {
     }
 
     private void updateOwnProfile() {
-        setProfile(CacheProfile.getProfile());
+        setProfile(App.from(getActivity()).getProfile());
     }
 
     @Override

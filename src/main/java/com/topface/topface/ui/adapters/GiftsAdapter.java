@@ -16,7 +16,7 @@ import com.topface.topface.utils.loadcontollers.LoadController;
 public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsListView.OnScrollListener {
 
     public class ViewHolder {
-        ImageViewRemote giftImage;
+        public ImageViewRemote giftImage;
     }
 
     public GiftsAdapter(Context context, FeedList<FeedGift> data, Updater updateCallback) {
@@ -31,17 +31,14 @@ public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsLis
 
     @Override
     protected View getContentView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-
         FeedGift item = getItem(position);
 
-        if (convertView == null) {
+        ViewHolder holder = convertView != null ? (ViewHolder) convertView.getTag() : null;
+        if (holder == null) {
             convertView = mInflater.inflate(getGiftItemLayoutRes(), null, false);
             holder = new ViewHolder();
             holder.giftImage = (ImageViewRemote) convertView.findViewById(R.id.profileGiftImage);
             convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
         }
         if (item.gift.type == Gift.SEND_BTN) {
             holder.giftImage.setImageBitmap(null);

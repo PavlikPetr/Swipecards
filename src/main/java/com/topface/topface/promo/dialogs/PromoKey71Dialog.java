@@ -1,16 +1,28 @@
 package com.topface.topface.promo.dialogs;
 
+import android.os.Bundle;
 import android.view.View;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.VisitorsMarkReadedRequest;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.utils.Utils;
+
+import javax.inject.Inject;
 
 public class PromoKey71Dialog extends PromoDialog {
 
     private boolean counterUpdated;
+    @Inject
+    TopfaceAppState mAppState;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        App.from(getActivity()).inject(this);
+    }
 
     @Override
     public void initViews(View root) {
@@ -25,7 +37,7 @@ public class PromoKey71Dialog extends PromoDialog {
 
     @Override
     public Options.PromoPopupEntity getPremiumEntity() {
-        return CacheProfile.getOptions().premiumVisitors;
+        return App.from(App.getContext()).getOptions().premiumVisitors;
     }
 
     @Override

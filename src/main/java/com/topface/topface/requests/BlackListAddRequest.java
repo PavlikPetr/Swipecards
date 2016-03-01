@@ -37,7 +37,6 @@ public class BlackListAddRequest extends ApiRequest {
     public BlackListAddRequest(List<Integer> userIds, Context context) {
         super(context);
         mUserIds = userIds;
-
     }
 
     @Override

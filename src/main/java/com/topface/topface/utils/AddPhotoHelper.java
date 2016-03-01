@@ -13,7 +13,6 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.View;
@@ -28,16 +27,21 @@ import com.topface.topface.R;
 import com.topface.topface.data.AddedPhoto;
 import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoAddProfileRequest;
 import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.TakePhotoActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
+import com.topface.topface.ui.fragments.profile.TakePhotoFragment;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
@@ -45,6 +49,8 @@ import com.topface.topface.utils.notifications.UserNotificationManager;
 import java.io.File;
 import java.util.HashMap;
 import java.util.UUID;
+
+import javax.inject.Inject;
 
 /**
  * Хелпер для загрузки фотографий в любой активити
@@ -59,6 +65,7 @@ public class AddPhotoHelper {
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA = 1702;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG = 1701;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY = 1700;
+    public static final String EXTRA_BUTTON_ID = "btn_id";
     public static String PATH_TO_FILE;
     private static HashMap<String, File> fileNames = new HashMap<>();
     private String mFileName = "/tmp.jpg";
@@ -70,6 +77,9 @@ public class AddPhotoHelper {
     private AppOptions.MinPhotoSize minPhotoSize;
     private UserNotificationManager mNotificationManager;
     private File outputFile;
+    private DialogInterface.OnCancelListener mOnDialogCancelListener;
+    @Inject
+    static TopfaceAppState mState;
     private View.OnClickListener mOnAddPhotoClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -151,8 +161,6 @@ public class AddPhotoHelper {
                 if (Utils.isIntentAvailable(mContext, intent.getAction())) {
                     startAddPhotoActivity(intent, requestCode);
                 }
-
-
             }
         };
     }
@@ -187,11 +195,7 @@ public class AddPhotoHelper {
             }
         } else {
             if (mActivity != null) {
-                TakePhotoDialog takePhotoDialog = (TakePhotoDialog) ((FragmentActivity) mActivity).getSupportFragmentManager()
-                        .findFragmentByTag(TakePhotoDialog.TAG);
-                if (takePhotoDialog != null) {
-                    mActivity.startActivityForResult(intent, requestCode);
-                }
+                mActivity.startActivityForResult(intent, requestCode);
             }
 
         }
@@ -209,6 +213,25 @@ public class AddPhotoHelper {
     }
 
     public Uri processActivityResult(int requestCode, int resultCode, Intent data) {
+        //check for result from TakePhotoActivity
+        if (requestCode == TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO && data != null) {
+            String plc = data.getStringExtra(TakePhotoActivity.EXTRA_PLC);
+            if (resultCode == Activity.RESULT_OK) {
+                switch (data.getIntExtra(TakePhotoActivity.EXTRA_TAKE_PHOTO_USER_ACTION, 0)) {
+                    case TakePhotoFragment.ACTION_CAMERA_CHOOSEN:
+                        startCamera(false);
+                        TakePhotoStatistics.sendCameraAction(plc);
+                        break;
+                    case TakePhotoFragment.ACTION_GALLERY_CHOOSEN:
+                        startChooseFromGallery(false);
+                        TakePhotoStatistics.sendGalleryAction(plc);
+                        break;
+                }
+
+            } else {
+                TakePhotoStatistics.sendCancelAction(plc);
+            }
+        }
         return processActivityResult(requestCode, resultCode, data, true);
     }
 
@@ -277,7 +300,8 @@ public class AddPhotoHelper {
             return;
         }
         // если начинаем грузить аватарку, то выставляем флаг, чтобы resumeFragment не вызвал показ попапа
-        if (CacheProfile.photos != null && CacheProfile.photos.size() == 0) {
+        Profile profile = App.from(mContext).getProfile();
+        if (profile.photos != null && profile.photos.size() == 0) {
             App.getConfig().getUserConfig().setUserAvatarAvailable(true);
             App.getConfig().getUserConfig().saveConfig();
         }
@@ -329,7 +353,7 @@ public class AddPhotoHelper {
                         0,
                         mContext.getString(R.string.default_photo_upload_complete), "", false,
                         uri.toString(), 1, getIntentForNotification(), true, null, null);
-                CacheProfile.incrementPhotoPosition(1);
+                CacheProfile.incrementPhotoPosition(mContext, 1);
             }
 
             @Override
@@ -387,7 +411,7 @@ public class AddPhotoHelper {
 
     private Intent getIntentForNotification() {
         return new Intent(mActivity, NavigationActivity.class)
-                .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.PROFILE)
+                .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.PROFILE.getFragmentSettings())
                 .putExtra(GCMUtils.NOTIFICATION_INTENT, true)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
@@ -457,15 +481,18 @@ public class AddPhotoHelper {
             }
         });
         takePhotoDialog.setPhotoTaker(photoTaker);
-        takePhotoDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        takePhotoDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
+            public void onCancel(DialogInterface dialog) {
+                if (mOnDialogCancelListener != null) {
+                    mOnDialogCancelListener.onCancel(dialog);
+                }
                 setOnResultHandler(new Handler() {
                     @Override
                     public void handleMessage(Message msg) {
                         super.handleMessage(msg);
                         if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
-                            handlePhotoMessage(msg);
+                            handlePhotoMessage(msg, mContext);
                         }
                     }
                 });
@@ -473,23 +500,29 @@ public class AddPhotoHelper {
         });
     }
 
-    public static void handlePhotoMessage(Message msg) {
+    public void setOnCancelListener(DialogInterface.OnCancelListener listener) {
+        mOnDialogCancelListener = listener;
+    }
+
+    public static void handlePhotoMessage(Message msg, Context mContext) {
+        Profile profile = App.from(mContext).getProfile();
         if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
             Photo photo = (Photo) msg.obj;
             // ставим фото на аватарку только если она едиснтвенная
-            if (CacheProfile.photos.size() == 0) {
-                CacheProfile.photo = photo;
+            if (profile.photos != null && profile.photos.size() == 0) {
+                profile.photo = photo;
             }
             // добавляется фото в начало списка
-            CacheProfile.photos.addFirst(photo);
+            profile.photos.addFirst(photo);
             // Увеличиваем общее количество фотографий юзера
-            CacheProfile.totalPhotos += 1;
+            profile.photosCount += 1;
             // оповещаем всех об изменениях
             CacheProfile.sendUpdateProfileBroadcast();
+            mState.setData(profile);
             Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
         } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
             // если загрузка аватраки не завершилась успехом, то сбрасываем флаг
-            if (CacheProfile.photos.size() == 0) {
+            if (profile.photos.size() == 0) {
                 App.getConfig().getUserConfig().setUserAvatarAvailable(false);
                 App.getConfig().getUserConfig().saveConfig();
             }
@@ -535,15 +568,18 @@ public class AddPhotoHelper {
     }
 
     public String getPath(Uri uri) {
-        String picturePath;
+        String picturePath = null;
         Cursor cursor = mContext.getContentResolver().query(uri,
                 new String[]{MediaStore.Images.Media.DATA}, null, null, null);
         if (cursor != null) {
             // получаем путь к изображению из галлереи
             cursor.moveToFirst();
-            picturePath = cursor.getString(0);
+            if (cursor.getColumnCount() > 0) {
+                picturePath = cursor.getString(0);
+            }
             cursor.close();
-        } else {
+        }
+        if (picturePath == null) {
             // путь к файлу, полученному с камеры
             picturePath = uri.getEncodedPath();
         }

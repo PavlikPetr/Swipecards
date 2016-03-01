@@ -1,6 +1,6 @@
 package com.topface.topface.data;
 
-import com.topface.topface.Static;
+import java.util.ArrayList;
 
 /**
  * Universal user from FeedUser
@@ -40,7 +40,7 @@ public class UniversalFeedUserWrapper implements IUniversalUser {
 
     @Override
     public int getSex() {
-        return mFeedUser == null ? Static.BOY : mFeedUser.sex;
+        return mFeedUser == null ? Profile.BOY : mFeedUser.sex;
     }
 
     @Override
@@ -65,7 +65,7 @@ public class UniversalFeedUserWrapper implements IUniversalUser {
     }
 
     @Override
-    public Profile.Gifts getGifts() {
+    public ArrayList<Gift> getGifts() {
         return null;
     }
 

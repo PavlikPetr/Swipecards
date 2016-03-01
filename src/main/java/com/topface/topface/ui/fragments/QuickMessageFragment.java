@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.History;
 import com.topface.topface.requests.ApiResponse;
@@ -140,7 +141,8 @@ public class QuickMessageFragment extends AbstractDialogFragment implements View
         showLoader();
         editText.clear();
 
-        final MessageRequest messageRequest = new MessageRequest(mUserId, editString, getActivity());
+        final MessageRequest messageRequest = new MessageRequest(mUserId, editString, getActivity()
+                , App.from(getActivity()).getOptions().blockUnconfirmed);
         messageRequest.callback(new DataApiHandler<History>() {
             @Override
             protected void success(History data, IApiResponse response) {

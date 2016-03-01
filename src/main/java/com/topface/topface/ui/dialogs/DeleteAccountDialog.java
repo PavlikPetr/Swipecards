@@ -9,7 +9,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileDeleteRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -28,8 +30,9 @@ public class DeleteAccountDialog extends AbstractDialogFragment implements View.
         root.findViewById(R.id.btnCancel).setOnClickListener(this);
         mBtnOk = (Button) root.findViewById(R.id.btnOk);
         mBtnOk.setOnClickListener(this);
-        ((ImageViewRemote) root.findViewById(R.id.ivAvatar)).setPhoto(CacheProfile.photo);
-        ((TextView) root.findViewById(R.id.tvProfile)).setText(CacheProfile.getUserNameAgeString());
+        Profile profile = App.from(getActivity()).getProfile();
+        ((ImageViewRemote) root.findViewById(R.id.ivAvatar)).setPhoto(profile.photo);
+        ((TextView) root.findViewById(R.id.tvProfile)).setText(CacheProfile.getUserNameAgeString(profile));
         ((TextView) root.findViewById(R.id.tvWarningText)).setText(R.string.delete_account_warning);
     }
 
@@ -68,7 +71,7 @@ public class DeleteAccountDialog extends AbstractDialogFragment implements View.
                                     @Override
                                     public void success(IApiResponse response) {
                                         if (response.isCompleted()) {
-                                            new AuthorizationManager(getActivity()).logout(getActivity());
+                                            new AuthorizationManager().logout(getActivity());
                                         } else {
                                             fail(response.getResultCode(), response);
                                         }

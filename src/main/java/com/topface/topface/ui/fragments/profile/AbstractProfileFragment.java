@@ -10,14 +10,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
+import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.fragments.AnimatedFragment;
+import com.topface.topface.ui.fragments.SettingsFragment;
+import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.TabLayoutCreator;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
@@ -42,10 +48,14 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     private AbstractFormFragment mFormFragment;
     private Profile mProfile = null;
     private TabLayoutCreator mTabLayoutCreator;
+    private ProfilePageAdapter mBodyPagerAdapter;
     ProfileInnerUpdater mProfileUpdater = new ProfileInnerUpdater() {
         @Override
         public void update() {
-            setProfile(getProfile());
+            // load owners profile in OwnProfileFragment only
+            if (isOwnersProfileFragment()) {
+                setProfile(App.from(getActivity()).getProfile());
+            }
         }
 
         public void bindFragment(Fragment fragment) {
@@ -60,12 +70,15 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
             return mProfile;
         }
     };
-    // views
+
     private ViewPager mBodyPager;
     @Bind(R.id.profileTabs)
     TabLayout mTabLayout;
 
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
+
+        private boolean fromVip = false;
+
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -83,6 +96,21 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
                         // clean multiselection, when switching tabs
                         ((FeedFragment) fragment).finishMultiSelection();
                     }
+                }
+            }
+            String className = mBodyPagerAdapter.getClassNameByPos(position);
+            if (className.equals(VipBuyFragment.class.getName())) {
+                fromVip = true;
+                return;
+            }
+            if ((className.equals(ProfileFormFragment.class.getName())
+                    || className.equals(SettingsFragment.class.getName())) && fromVip) {
+                fromVip = false;
+                Profile profile = App.get().getProfile();
+                if (App.isNeedShowTrial && !profile.premium && new GoogleMarketApiManager().isMarketApiAvailable()
+                        && App.get().getOptions().trialVipExperiment.enabled && !profile.paid) {
+                    TrialVipPopup.newInstance(true).show(getActivity().getSupportFragmentManager(), TrialVipPopup.TAG);
+                    App.isNeedShowTrial = false;
                 }
             }
         }
@@ -165,7 +193,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
         mBodyPager = (ViewPager) root.findViewById(R.id.vpFragments);
         setAnimatedView(mBodyPager);
         mBodyPager.setSaveEnabled(false);
-        ProfilePageAdapter mBodyPagerAdapter = new ProfilePageAdapter(getChildFragmentManager(), BODY_PAGES_CLASS_NAMES,
+        mBodyPagerAdapter = new ProfilePageAdapter(getChildFragmentManager(), BODY_PAGES_CLASS_NAMES,
                 BODY_PAGES_TITLES, mProfileUpdater);
         mBodyPager.setAdapter(mBodyPagerAdapter);
         //Tabs for Body
@@ -231,5 +259,9 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     @Override
     protected boolean isAnimationRequire() {
         return false;
+    }
+
+    protected boolean isOwnersProfileFragment() {
+        return true;
     }
 }
