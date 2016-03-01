@@ -24,7 +24,6 @@ public class BuyButtonVer1 extends BuyButton<BuyButtonVer1.BuyButtonBuilder> {
 
     private BuyButtonVer1Binding mBinding;
     private BuyButtonVersion1Handler mBtnHandler;
-    private View.OnClickListener mButtonClickListener;
 
     public BuyButtonVer1(Context context) {
         this(context, (BuyButtonBuilder) null);
@@ -43,7 +42,7 @@ public class BuyButtonVer1 extends BuyButton<BuyButtonVer1.BuyButtonBuilder> {
     }
 
     public void setOnClickListener(OnClickListener listener) {
-        mButtonClickListener = listener;
+        mBtnHandler.setClickLisktener(listener);
     }
 
     public void setButtonCondition(boolean isDiscount, int showType) {
@@ -158,7 +157,13 @@ public class BuyButtonVer1 extends BuyButton<BuyButtonVer1.BuyButtonBuilder> {
         }
     }
 
-    public class BuyButtonVersion1Handler {
+    public static class BuyButtonVersion1Handler {
+
+        private View.OnClickListener mButtonClickListener;
+
+        public void setClickLisktener(View.OnClickListener listener) {
+            mButtonClickListener = listener;
+        }
 
         // Observable fields to control RelativeLayout itContainer
         public final ObservableInt containerVisibility = new ObservableInt(View.VISIBLE);

@@ -34,7 +34,6 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
 
     private BuyButtonVer2Binding mBinding;
     private BuyButtonVersion1Handler mBtnHandler;
-    private View.OnClickListener mButtonClickListener;
 
     public BuyButtonVer2(Context context) {
         this(context, (BuyButtonBuilder) null);
@@ -201,7 +200,7 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
     }
 
     public void setOnClickListener(OnClickListener listener) {
-        mButtonClickListener = listener;
+        mBtnHandler.setClickLisktener(listener);
     }
 
     @Type
@@ -312,7 +311,13 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
         }
     }
 
-    public class BuyButtonVersion1Handler {
+    public static class BuyButtonVersion1Handler {
+
+        private View.OnClickListener mButtonClickListener;
+
+        public void setClickLisktener(View.OnClickListener listener) {
+            mButtonClickListener = listener;
+        }
 
         // Observable fields to control FrameLayout button
         public final ObservableInt buttonVisibility = new ObservableInt(View.VISIBLE);
