@@ -10,7 +10,7 @@
             type="com.topface.topface.ui.views.BuyButtonVer1.BuyButtonVersion1Handler" />
     </data>
 
-    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -39,8 +39,7 @@
                 android:paddingLeft="10dp"
                 android:text="@{handler.titleText}"
                 android:textColor="@{handler.titleTextColor}"
-                android:visibility="@{handler.titleVisibility}"
-                tools:text="@string/buy_mobile_payments" />
+                android:visibility="@{handler.titleVisibility}" />
 
             <ProgressBar
                 android:id="@+id/marketWaiter"

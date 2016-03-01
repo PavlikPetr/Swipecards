@@ -14,6 +14,7 @@ import com.topface.topface.ui.views.BuyButtonVer2;
 import com.topface.topface.utils.CacheProfile;
 
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONArray;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -232,10 +233,10 @@ public class PurchaseButtonList {
         return ViewsVersions.V1;
     }
 
-    public static ArrayList<String> getSupportedViews() {
-        ArrayList<String> array = new ArrayList<>();
+    public static JSONArray getSupportedViews() {
+        JSONArray array = new JSONArray();
         for (ViewsVersions version : ViewsVersions.values()) {
-            array.add(version.getVersionName());
+            array.put(version.getVersionName());
         }
         return array;
     }

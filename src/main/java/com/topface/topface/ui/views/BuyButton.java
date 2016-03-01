@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +44,7 @@ public abstract class BuyButton<T> extends LinearLayout {
 
     private View inflateRootView() {
         View view = inflate(getContext(), getButtonLayout(), null);
+        view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         this.addView(view);
         return view;
     }
