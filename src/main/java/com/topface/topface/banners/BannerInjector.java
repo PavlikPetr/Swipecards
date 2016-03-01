@@ -73,7 +73,8 @@ class BannerInjector implements IBannerInjector {
                         }
 
                         @Override
-                        public void onFailedToLoadAd() {
+                        public void onFailedToLoadAd(Integer codeError) {
+                            AdStatistics.sendBannerFailedToLoad(bannerName, codeError);
                             cleanUp(page);
                             if (!isFallbackAd) {
                                 injectGag(page);

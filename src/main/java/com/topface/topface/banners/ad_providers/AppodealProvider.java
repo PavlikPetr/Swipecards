@@ -51,7 +51,7 @@ public class AppodealProvider extends AbstractAdsProvider {
             @Override
             public void onBannerFailedToLoad() {
                 if (callbacks != null) {
-                    callbacks.onFailedToLoadAd();
+                    callbacks.onFailedToLoadAd(null);
                 }
             }
 
