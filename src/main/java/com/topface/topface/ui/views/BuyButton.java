@@ -18,19 +18,19 @@ public abstract class BuyButton<T> extends LinearLayout {
     }
 
     public BuyButton(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        super(context.getApplicationContext(), attrs);
         initViews(inflateRootView());
-        getAttrs(context, attrs, 0);
+        getAttrs(context.getApplicationContext(), attrs, 0);
     }
 
     public BuyButton(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        super(context.getApplicationContext(), attrs, defStyleAttr);
         initViews(inflateRootView());
-        getAttrs(context, attrs, defStyleAttr);
+        getAttrs(context.getApplicationContext(), attrs, defStyleAttr);
     }
 
     public BuyButton(Context context, T builder) {
-        super(context);
+        super(context.getApplicationContext());
         initViews(inflateRootView());
         if (builder != null) {
             build(builder);

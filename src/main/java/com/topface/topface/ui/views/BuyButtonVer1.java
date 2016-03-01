@@ -160,6 +160,7 @@ public class BuyButtonVer1 extends BuyButton<BuyButtonVer1.BuyButtonBuilder> {
 
     public class BuyButtonVersion1Handler {
 
+        // Observable fields to control RelativeLayout itContainer
         public final ObservableInt containerVisibility = new ObservableInt(View.VISIBLE);
         public final ObservableInt containerBackgroundRes = new ObservableInt(R.drawable.btn_blue_selector);
         public final ObservableInt containerPaddingTop = new ObservableInt(PADDING_FIVE);
@@ -167,6 +168,7 @@ public class BuyButtonVer1 extends BuyButton<BuyButtonVer1.BuyButtonBuilder> {
         public final ObservableInt containerPaddingLeft = new ObservableInt(PADDING_FIVE);
         public final ObservableInt containerPaddingRight = new ObservableInt(PADDING_FIVE);
 
+        // Catch click on RelativeLayout itContainer
         @SuppressWarnings("unused")
         public void onButtonClick(View view) {
             if (mButtonClickListener != null) {
@@ -174,10 +176,12 @@ public class BuyButtonVer1 extends BuyButton<BuyButtonVer1.BuyButtonBuilder> {
             }
         }
 
+        // Observable fields to control TextView itText
         public final ObservableInt titleVisibility = new ObservableInt();
         public final ObservableField<String> titleText = new ObservableField<>();
         public final ObservableInt titleTextColor = new ObservableInt(R.drawable.btn_blue_text_color_selector);
 
+        // Observable field to control ProgressBar marketWaiter visibility
         public final ObservableInt progressVisibility = new ObservableInt(View.GONE);
     }
 }

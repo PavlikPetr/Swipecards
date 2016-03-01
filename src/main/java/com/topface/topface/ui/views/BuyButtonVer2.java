@@ -314,29 +314,11 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
 
     public class BuyButtonVersion1Handler {
 
+        // Observable fields to control FrameLayout button
         public final ObservableInt buttonVisibility = new ObservableInt(View.VISIBLE);
         public final ObservableInt buttonBackgroundRes = new ObservableInt(R.drawable.btn_blue_selector);
 
-        public final ObservableInt buttonTextVisibility = new ObservableInt();
-        public final ObservableField<String> buttonText = new ObservableField<>();
-        public final ObservableInt buttonTextPaddingLeft = new ObservableInt(0);
-        public final ObservableInt buttonTextPaddingRight = new ObservableInt(0);
-
-        public final ObservableInt stickerTextVisibility = new ObservableInt(View.GONE);
-        public final ObservableInt stickerBackgroundRes = new ObservableInt(R.drawable.btn_blue_selector);
-        public final ObservableField<String> stickerText = new ObservableField<>();
-
-        public final ObservableInt buttonDescriptionVisibility = new ObservableInt(View.GONE);
-
-        public final ObservableInt discountVisibility = new ObservableInt(View.GONE);
-        public final ObservableField<String> discountText = new ObservableField<>();
-
-        public final ObservableInt pricePerItemVisibility = new ObservableInt(View.GONE);
-        public final ObservableField<String> pricePerItemText = new ObservableField<>();
-
-        public final ObservableInt totalPriceVisibility = new ObservableInt(View.GONE);
-        public final ObservableField<String> totalPriceText = new ObservableField<>();
-
+        // Catch click on FrameLayout button
         @SuppressWarnings("unused")
         public void onButtonClick(View view) {
             if (mButtonClickListener != null) {
@@ -344,6 +326,33 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
             }
         }
 
+        // Observable fields to control TextView buttonTitle
+        public final ObservableInt buttonTextVisibility = new ObservableInt();
+        public final ObservableField<String> buttonText = new ObservableField<>();
+        public final ObservableInt buttonTextPaddingLeft = new ObservableInt(0);
+        public final ObservableInt buttonTextPaddingRight = new ObservableInt(0);
+
+        // Observable fields to control TextView buttonSticker
+        public final ObservableInt stickerTextVisibility = new ObservableInt(View.GONE);
+        public final ObservableInt stickerBackgroundRes = new ObservableInt(R.drawable.btn_blue_selector);
+        public final ObservableField<String> stickerText = new ObservableField<>();
+
+        // Observable field to control LinearLayout buttonDetails visibility
+        public final ObservableInt buttonDescriptionVisibility = new ObservableInt(View.GONE);
+
+        // Observable fields to control TextView discount
+        public final ObservableInt discountVisibility = new ObservableInt(View.GONE);
+        public final ObservableField<String> discountText = new ObservableField<>();
+
+        // Observable fields to control TextView pricePerItem
+        public final ObservableInt pricePerItemVisibility = new ObservableInt(View.GONE);
+        public final ObservableField<String> pricePerItemText = new ObservableField<>();
+
+        // Observable fields to control TextView totalPrice
+        public final ObservableInt totalPriceVisibility = new ObservableInt(View.GONE);
+        public final ObservableField<String> totalPriceText = new ObservableField<>();
+
+        // Observable field to control ProgressBar marketWaiter visibility
         public final ObservableInt progressVisibility = new ObservableInt(View.GONE);
     }
 }
