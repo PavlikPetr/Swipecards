@@ -1033,4 +1033,15 @@
 
     <string name="buy_button_sticker_popular">хит продаж</string>
     <string name="buy_button_sticker_best_value">Лучшая цена</string>
+
+    <string name="ban_liberty_title">Без рекламы!</string>
+    <string name="ban_liberty_description">Только знакомства, ничего лишнего</string>
+    <string name="guest_liberty_title">Гости</string>
+    <string name="guest_liberty_description">Узнайте кто заходил на Вашу страницу</string>
+    <string name="star_liberty_title">Популярные пользователи</string>
+    <string name="star_liberty_description">Самые популярные открыты к общению</string>
+    <string name="crown_liberty_title">Выделяйтесь</string>
+    <string name="crown_liberty_description">Сложно не заметить в поиске и сообщениях</string>
+    <string name="like_liberty_title">Симпатии</string>
+    <string name="like_liberty_description">Посмотрите кому вы нравитесь</string>
 </resources>

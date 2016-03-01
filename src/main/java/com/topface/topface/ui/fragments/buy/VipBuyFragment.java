@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -133,8 +134,16 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     private void initViews(View root) {
         initBuyVipViews(root);
+        initVipLiberty(root);
         initEditVipViews(root);
         switchLayouts();
+    }
+
+    private void initVipLiberty(View root) {
+        ViewStub view = (ViewStub) root.findViewById(R.id.libertyItemsStub);
+        if (view != null && PurchaseButtonList.ViewsVersions.V2.getVersionName().equals(getBuyVipViewVersion())) {
+            view.inflate();
+        }
     }
 
     private void switchLayouts() {
@@ -149,6 +158,18 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         }
     }
 
+    private String getBuyVipViewVersion(Products products) {
+        String version = null;
+        if (products != null && products.info != null && products.info.views != null) {
+            version = products.info.views.buyVip;
+        }
+        return version;
+    }
+
+    private String getBuyVipViewVersion() {
+        return getBuyVipViewVersion(getProducts());
+    }
+
     private void initBuyVipViews(View root) {
         mBuyVipViewsContainer = (LinearLayout) root.findViewById(R.id.fbpContainer);
         LinearLayout btnContainer = (LinearLayout) root.findViewById(R.id.fbpBtnContainer);
@@ -157,11 +178,8 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
             return;
         }
         root.findViewById(R.id.fbpBuyingDisabled).setVisibility(products.premium.isEmpty() ? View.VISIBLE : View.GONE);
-        String version = null;
-        if (products.info != null && products.info.views != null) {
-            version = products.info.views.buyVip;
-        }
-        new PurchaseButtonList().getButtonsListView(version, btnContainer, products.premium, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
+
+        new PurchaseButtonList().getButtonsListView(getBuyVipViewVersion(products), btnContainer, products.premium, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
             @Override
             public void onClick(String id, BuyButtonData btnData) {
                 buy(id, btnData);
