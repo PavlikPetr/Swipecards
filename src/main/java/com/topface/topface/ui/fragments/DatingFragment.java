@@ -85,7 +85,6 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
@@ -128,9 +127,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private RetryViewCreator mRetryView;
     private ImageButton mRetryBtn;
     private PreloadManager<SearchUser> mPreloadManager;
-    private FullscreenController mFullscreenController;
 
-    private boolean mIsPhotoAsked;
     private AddPhotoHelper mAddPhotoHelper;
     private Handler mHandler = new Handler() {
         @Override

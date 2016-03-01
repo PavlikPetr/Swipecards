@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.topface.billing.OpenIabFragment;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.Products;
@@ -155,21 +156,17 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         if (products == null) {
             return;
         }
-        if (products.premium.isEmpty()) {
-            root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.VISIBLE);
-        } else {
-            root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.GONE);
+        root.findViewById(R.id.fbpBuyingDisabled).setVisibility(products.premium.isEmpty() ? View.VISIBLE : View.GONE);
+        String version = null;
+        if (products.info != null && products.info.views != null) {
+            version = products.info.views.buyVip;
         }
-        for (final BuyButtonData curBtn : products.premium) {
-            Products.setBuyButton(btnContainer, curBtn, getActivity(),
-                    new Products.BuyButtonClickListener() {
-                        @Override
-                        public void onClick(String id) {
-                            buy(id, curBtn);
-                        }
-                    }
-            );
-        }
+        new PurchaseButtonList().getButtonsListView(version, btnContainer, products.premium, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
+            @Override
+            public void onClick(String id, BuyButtonData btnData) {
+                buy(id, btnData);
+            }
+        });
     }
 
     protected void buy(String id, BuyButtonData curBtn) {

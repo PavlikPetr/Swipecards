@@ -864,4 +864,12 @@
     <string name="take_photo_text_2">Apenas tu deves estar na foto; todas as fotos são revistas
         pelos nossos moderadores para garantir que as regras são seguidas.
     </string>
+    <string name="unlock_by_viewed_ad_video_button_text">Desbloquear gratuitamente a %s</string>
+    <plurals name="free_minutes">
+        <item quantity="zero">%d minuto</item>
+        <item quantity="other">%d minutos</item>
+        <item quantity="one">%d minuto</item>
+    </plurals>
+    <string name="buy_button_sticker_popular">Mais Vendido</string>
+    <string name="buy_button_sticker_best_value">Melhor preço</string>
 </resources>

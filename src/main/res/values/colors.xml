@@ -159,4 +159,20 @@
     <color name="take_photo_screen_text_medium">#8F000000</color>
 
     <color name="auth_fragment_text_color">#03A9F4</color>
+
+    <!--Buy products buttons-->
+    <color name="button_title_text_color">@color/text_white</color>
+    <color name="button_sticker_text_color">@color/text_white</color>
+    <color name="button_discount_text_color">#33B5E5</color>
+    <color name="button_price_per_item_text_color">#b2b2b2</color>
+    <color name="button_total_price_text_color">#adadad</color>
+    <color name="sticker_popular_bg_normal">#fe9d31</color>
+    <color name="sticker_popular_bg_pressed">#fcb76a</color>
+    <color name="sticker_popular_bg_disable">#fbc992</color>
+    <color name="sticker_best_value_bg_normal">#01a51f</color>
+    <color name="sticker_best_value_bg_pressed">#02cf28</color>
+    <color name="sticker_best_value_bg_disable">#5af878</color>
+    <color name="button_green_bg_pressed_color">#16e170</color>
+    <color name="button_green_bg_released_color">#00c055</color>
+    <color name="button_green_bg_disable_color">#a7faba</color>
 </resources>

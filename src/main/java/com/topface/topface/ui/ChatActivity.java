@@ -10,7 +10,7 @@ import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.utils.IActivityDelegate;
 
-public class ChatActivity extends CheckAuthActivity<ChatFragment> implements IActivityDelegate{
+public class ChatActivity extends CheckAuthActivity<ChatFragment> implements IActivityDelegate {
 
     public static final int REQUEST_CHAT = 3;
     public static final String LAST_MESSAGE = "com.topface.topface.ui.ChatActivity_last_message";

@@ -1,48 +1,33 @@
 package com.topface.topface.data;
 
-import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.res.ColorStateList;
-import android.content.res.XmlResourceParser;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.topface.billing.DeveloperPayload;
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
-import com.topface.topface.App;
-import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Currency;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 public class Products extends AbstractData {
+    public static final String DISCOUNT = "{{discount}}";
     public static final String PRICE = "{{price}}";
     public static final String PRICE_PER_ITEM = "{{price_per_item}}";
     public static String[] PRICE_TEMPLATES = {PRICE, PRICE_PER_ITEM};
-    private static final String EUR = "EUR";
-    private static final String RUB = "RUB";
-    private static final String USD = "USD";
+    public static final String EUR = "EUR";
+    public static final String RUB = "RUB";
+    public static final String USD = "USD";
 
     public enum ProductType {
         COINS("coins"),
@@ -195,172 +180,6 @@ public class Products extends AbstractData {
     }
 
     /**
-     * Creates view for buy actions. Button with hints
-     *
-     * @param context  current context
-     * @param buyBtn   google play product object with configuration data
-     * @param listener to process click
-     * @return created view
-     */
-    public static View createBuyButtonLayout(Context context, BuyButtonData buyBtn,
-                                             final BuyButtonClickListener listener) {
-        String value;
-        if (buyBtn.type == ProductType.COINS_SUBSCRIPTION && buyBtn.price == 0) {
-            value = buyBtn.hint;
-        } else {
-            ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
-            Currency currency;
-            NumberFormat currencyFormatter;
-            currency = Currency.getInstance(USD);
-            currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
-            currencyFormatter.setCurrency(currency);
-            value = formatPrice((double) buyBtn.price / 100, currencyFormatter, buyBtn);
-            if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
-                ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
-
-                if (detail != null && detail.currency != null) {
-                    double price = detail.price / ProductsDetails.MICRO_AMOUNT;
-                    currency = Currency.getInstance(detail.currency);
-                    currencyFormatter = detail.currency.equalsIgnoreCase(USD)
-                            ? NumberFormat.getCurrencyInstance(Locale.US) : NumberFormat.getCurrencyInstance(new Locale(App.getLocaleConfig().getApplicationLocale()));
-                    currencyFormatter.setCurrency(currency);
-                    value = formatPrice(price, currencyFormatter, buyBtn);
-                } else {
-                    value = formatPrice((double) buyBtn.price / 100, currencyFormatter, buyBtn);
-                }
-            }
-        }
-        return createBuyButtonLayout(
-                context, buyBtn.id, buyBtn.title, buyBtn.discount > 0,
-                buyBtn.showType, value, listener
-        );
-    }
-
-    public static String formatPrice(double price, NumberFormat currencyFormatter, BuyButtonData buyBtn) {
-        price = getPriceByTemplate(price, buyBtn);
-        currencyFormatter.setMaximumFractionDigits(price % 1 != 0 ? 2 : 0);
-        for (String replaceTemplate : PRICE_TEMPLATES) {
-            if (buyBtn.titleTemplate.contains(replaceTemplate)) {
-                return buyBtn.titleTemplate.replace(replaceTemplate, currencyFormatter.format(price));
-            }
-        }
-        return buyBtn.title;
-    }
-
-    private static double getPriceByTemplate(double price, BuyButtonData buyBtn) {
-        if (buyBtn.titleTemplate.contains((PRICE_PER_ITEM))) {
-            return price / buyBtn.amount;
-        } else {
-            return price;
-        }
-    }
-
-    /**
-     * Creates view for buy actions. Button with hints
-     *
-     * @param context  current context
-     * @param id       unique good's id from google play in-app billing system
-     * @param title    for button
-     * @param discount true if button background has to be with sale badge
-     * @param showType 0 - gray, 1 - blue button, 2 - disabled button
-     * @param value    hint under button
-     * @param listener to process click
-     * @return created view
-     */
-    public static View createBuyButtonLayout(
-            Context context, final String id, String title, boolean discount, int showType,
-            String value, final BuyButtonClickListener listener
-    ) {
-        if (context == null || TextUtils.isEmpty(title)) return null;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.item_buying_btn, null);
-        initBuyButtonViews(
-                view, id, title, discount, value, listener, showType);
-        return view;
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private static void setBuyButtonBackground(boolean discount, int showType, View view) {
-        int bgResource;
-        switch (showType) {
-            case 1:
-                bgResource = discount ? R.drawable.btn_sale_blue_selector : R.drawable.btn_blue_selector;
-                break;
-            case 2:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    bgResource = discount ? R.drawable.btn_sale_blue_disabled_only : R.drawable.btn_blue_disabled_only;
-                } else {
-                    bgResource = discount ? R.drawable.btn_sale_blue_disabled : R.drawable.btn_blue_shape_disabled;
-                }
-                break;
-            default:
-                bgResource = discount ? R.drawable.btn_sale_gray_selector : R.drawable.btn_gray_selector;
-                break;
-        }
-        view.setBackgroundResource(bgResource);
-    }
-
-    private static void setBuyButtonTextColor(int showType, TextView view) {
-        switch (showType) {
-            case 1:
-                setSelectorTextColor(R.drawable.btn_blue_text_color_selector, view);
-                break;
-            case 2:
-                view.setTextColor(App.getContext().getResources().getColor(R.color.button_blue_text_disable_color));
-                break;
-            default:
-                setSelectorTextColor(R.drawable.btn_gray_text_color_selector, view);
-                break;
-        }
-    }
-
-    private static void initBuyButtonViews(
-            View view, final String id, String title, boolean discount,
-            String value, final BuyButtonClickListener listener, int showType) {
-        RelativeLayout container = (RelativeLayout) view.findViewById(R.id.itContainer);
-        // button background
-        if (discount) {
-            int paddingFive = Utils.getPxFromDp(5);
-            container.setPadding(paddingFive, paddingFive, Utils.getPxFromDp(56), paddingFive);
-        }
-        setBuyButtonBackground(discount, showType, container);
-        container.requestLayout();
-        // click listener
-        container.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onClick(id);
-            }
-        });
-        // title text
-        TextView tvTitle = (TextView) view.findViewById(R.id.itText);
-        setBuyButtonTextColor(showType, tvTitle);
-        tvTitle.setText(TextUtils.isEmpty(value) ? title : value);
-    }
-
-    private static void setSelectorTextColor(int selector, TextView view) {
-        try {
-            XmlResourceParser xrp = App.getContext().getResources().getXml(selector);
-            ColorStateList csl = ColorStateList.createFromXml(App.getContext().getResources(), xrp);
-            view.setTextColor(csl);
-        } catch (Exception e) {
-            Debug.error(e.toString());
-        }
-    }
-
-    public static View setBuyButton(LinearLayout root, final BuyButtonData buyBtn,
-                                    Context context, final BuyButtonClickListener listener) {
-        View view = createBuyButtonLayout(context, buyBtn, listener);
-        if (view != null) {
-            root.addView(view);
-            view.setTag(buyBtn);
-            return view;
-        } else {
-            return null;
-        }
-    }
-
-    /**
      * Can check if this product id is in on of subscriptions list
      *
      * @param product product
@@ -421,13 +240,21 @@ public class Products extends AbstractData {
         }
     }
 
+    public class ViewsType {
+        public String buyVip;
+    }
+
     public class ProductsInfo {
         public CoinsSubscriptionInfo coinsSubscription;
         public CoinsSubscriptionInfo coinsSubscriptionMasked;
+        public ViewsType views;
 
         public ProductsInfo(JSONObject infoJson) {
             coinsSubscription = new CoinsSubscriptionInfo(infoJson.optJSONObject(ProductType.COINS_SUBSCRIPTION.getName()));
             coinsSubscriptionMasked = new CoinsSubscriptionInfo(infoJson.optJSONObject(ProductType.COINS_SUBSCRIPTION_MASKED.getName()));
+            if (infoJson.has("views")) {
+                views = JsonUtils.fromJson(infoJson.optJSONObject("views").toString(), ViewsType.class);
+            }
             //Парсим список всех подписок
             JSONArray inventoryArray = infoJson.optJSONArray("inventory");
             if (inventoryArray != null) {

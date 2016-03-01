@@ -45,6 +45,8 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         @Override
         public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
             if (position < mPhotosCount) {
+
+
                 Intent intent = PhotoSwitcherActivity.getPhotoSwitcherIntent(mPendingUserInit.getData().gifts,
                         position,
                         mUserId,

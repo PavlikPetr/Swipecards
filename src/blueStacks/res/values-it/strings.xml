@@ -773,4 +773,6 @@
     <item quantity="other">% minuti</item>
     <item quantity="one">% minuti</item>
   </plurals>
+  <string name="buy_button_sticker_popular">Il più venduto</string>
+  <string name="buy_button_sticker_best_value">Miglior prezzo</string>
 </resources>
