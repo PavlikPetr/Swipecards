@@ -33,6 +33,8 @@ import com.topface.topface.utils.EasyTracker;
 import org.jetbrains.annotations.Nullable;
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
+import java.util.List;
+
 import static android.view.View.OnClickListener;
 
 public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
@@ -191,9 +193,10 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         if (products == null) {
             return;
         }
-        root.findViewById(R.id.fbpBuyingDisabled).setVisibility(products.premium.isEmpty() ? View.VISIBLE : View.GONE);
+        List<BuyButtonData> availableButtons = getAvailableButtons(products.premium);
+        root.findViewById(R.id.fbpBuyingDisabled).setVisibility(availableButtons.isEmpty() ? View.VISIBLE : View.GONE);
 
-        new PurchaseButtonList().getButtonsListView(getBuyVipViewVersion(products), btnContainer, products.premium, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
+        new PurchaseButtonList().getButtonsListView(getBuyVipViewVersion(products), btnContainer, availableButtons, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
             @Override
             public void onClick(String id, BuyButtonData btnData) {
                 buy(id, btnData);

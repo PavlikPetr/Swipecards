@@ -18,6 +18,7 @@ public class BuyButtonBaseData {
     public String hint;
     public Products.ProductType type;
     public int discount;
+    public boolean displayOnBuyScreen;
     public String paymentwallLink;
     public String totalTemplate;
     public int periodInDays;
@@ -41,6 +42,7 @@ public class BuyButtonBaseData {
             showType = json.optInt("showType");
             type = Products.getProductTypeByName(json.optString("type"));
             discount = json.optInt("discount");
+            displayOnBuyScreen = json.optBoolean("displayOnBuyScreen", true);
             paymentwallLink = json.optString("url");
             ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
             if (type == Products.ProductType.PREMIUM) {
