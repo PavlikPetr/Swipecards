@@ -62,53 +62,34 @@
             android:id="@+id/buttonDetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="4dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="4dp"
-            android:layout_marginTop="@dimen/description_margin_top"
             android:orientation="horizontal"
             android:visibility="@{handler.buttonDescriptionVisibility}">
 
             <TextView
                 android:id="@+id/discount"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ellipsize="end"
+                style="@style/BuyButtonVer2DescriptionStyle"
                 android:gravity="left"
-                android:lines="1"
-                android:maxLines="1"
                 android:text="@{handler.discountText}"
                 android:textColor="@color/button_discount_text_color"
-                android:textSize="@dimen/button_description_text_size"
                 android:visibility="@{handler.discountVisibility}" />
 
             <TextView
                 android:id="@+id/pricePerItem"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ellipsize="end"
+                style="@style/BuyButtonVer2DescriptionStyle"
                 android:gravity="center_horizontal"
-                android:lines="1"
-                android:maxLines="1"
                 android:text="@{handler.pricePerItemText}"
                 android:textColor="@color/button_price_per_item_text_color"
-                android:textSize="@dimen/button_description_text_size"
                 android:visibility="@{handler.pricePerItemVisibility}" />
 
             <TextView
                 android:id="@+id/totalPrice"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ellipsize="end"
+                style="@style/BuyButtonVer2DescriptionStyle"
                 android:gravity="right"
-                android:lines="1"
-                android:maxLines="1"
                 android:text="@{handler.totalPriceText}"
                 android:textColor="@color/button_total_price_text_color"
-                android:textSize="@dimen/button_description_text_size"
                 android:visibility="@{handler.totalPriceVisibility}" />
         </LinearLayout>
     </LinearLayout>
