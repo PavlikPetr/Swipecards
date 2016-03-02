@@ -17,6 +17,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.BanActivity;
 import com.topface.topface.ui.RestoreAccountActivity;
 import com.topface.topface.ui.SslErrorActivity;
+import com.topface.topface.ui.TopfaceAuthActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.ui.fragments.BanFragment;
 import com.topface.topface.utils.social.AuthToken;
@@ -303,8 +304,11 @@ public class ConnectionManager {
 
     private void showRestoreAccountActivity(IApiRequest apiRequest) {
         Intent intent = new Intent(apiRequest.getContext(), RestoreAccountActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        apiRequest.getContext().startActivity(intent);
+        if (apiRequest.getContext() instanceof TopfaceAuthActivity) {
+            ((TopfaceAuthActivity) apiRequest.getContext()).startActivityForResult(intent, RestoreAccountActivity.RESTORE_RESULT);
+        } else {
+            apiRequest.getContext().startActivity(intent);
+        }
     }
 
     private void showFloodActivity(IApiRequest apiRequest, IApiResponse apiResponse) {

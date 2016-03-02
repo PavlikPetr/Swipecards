@@ -80,4 +80,11 @@
 
     <dimen name="user_gifts_padding">10dp</dimen>
 
+    <!-- Restore account screen -->
+    <dimen name="restore_top_padding">76dp</dimen>
+    <dimen name="restore_message_left_right_padding">30dp</dimen>
+    <dimen name="restore_message_bottom_padding">20dp</dimen>
+    <dimen name="restore_message_top_padding">44dp</dimen>
+    <dimen name="restore_buttons_padding">12dp</dimen>
+
 </resources>

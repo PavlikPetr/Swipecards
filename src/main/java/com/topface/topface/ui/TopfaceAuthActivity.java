@@ -1,5 +1,7 @@
 package com.topface.topface.ui;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.topface.topface.R;
@@ -37,5 +39,13 @@ public class TopfaceAuthActivity extends NoAuthActivity<TopfaceAuthFragment> {
     @Override
     protected TopfaceAuthFragment createFragment() {
         return new TopfaceAuthFragment();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK && requestCode == RestoreAccountActivity.RESTORE_RESULT) {
+            finish();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
