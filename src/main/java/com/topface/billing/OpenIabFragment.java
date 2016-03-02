@@ -42,6 +42,7 @@ import org.onepf.oms.appstore.googleUtils.IabResult;
 import org.onepf.oms.appstore.googleUtils.Inventory;
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -568,6 +569,16 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 }
             }
         }
+    }
+
+    public List<BuyButtonData> getAvailableButtons(List<BuyButtonData> buttons) {
+        List<BuyButtonData> availableButtons = new LinkedList<>();
+        for (BuyButtonData button : buttons) {
+            if (button != null && button.displayOnBuyScreen) {
+                availableButtons.add(button);
+            }
+        }
+        return availableButtons;
     }
 }
 
