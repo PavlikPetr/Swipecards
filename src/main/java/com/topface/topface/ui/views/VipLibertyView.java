@@ -55,7 +55,7 @@ public class VipLibertyView extends LinearLayout {
     private View inflateRootView() {
         View view = inflate(getContext(), R.layout.vip_liberty_view, null);
         view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        this.addView(view);
+        addView(view);
         return view;
     }
 
