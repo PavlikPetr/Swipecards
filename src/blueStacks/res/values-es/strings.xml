@@ -779,4 +779,15 @@
   </plurals>
   <string name="buy_button_sticker_popular">Los más vendidos</string>
   <string name="buy_button_sticker_best_value">El mejor precio</string>
+  <string name="ban_liberty_title">¡Sin publicidad!</string>
+  <string name="ban_liberty_description">Solo conocer gente, nada más</string>
+  <string name="guest_liberty_title">Invitados</string>
+  <string name="guest_liberty_description">Averigua, quién ha entrado a tu página</string>
+  <string name="star_liberty_title">Usuarios populares</string>
+  <string name="star_liberty_description">Las aperturas más populares para comunicarse</string>
+  <string name="crown_liberty_title">Destaca</string>
+  <string name="crown_liberty_description">Es difícil no destacar en la búsqueda y en los mensajes
+  </string>
+  <string name="like_liberty_title">Simpatías</string>
+  <string name="like_liberty_description">Mira a quién le gustas</string>
 </resources>
