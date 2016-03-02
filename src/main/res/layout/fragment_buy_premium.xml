@@ -29,7 +29,7 @@
                 <TextView
                     android:id="@+id/fbpBuyingDisabled"
                     style="@style/TitleGrayText"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:text="@string/general_buying_disabled"
@@ -43,28 +43,33 @@
 
                 <LinearLayout
                     android:id="@+id/fbpBtnContainer"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
 
+                <ViewStub
+                    android:id="@+id/libertyItemsStub"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout="@layout/vip_liberty_list" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/editPremiumContainer"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <include
                     android:id="@+id/fepInvis"
                     layout="@layout/vip_item_edit_form_switch"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/form_item_height" />
 
                 <include
                     android:id="@+id/fepBlackList"
                     layout="@layout/vip_item_edit_form_select"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/form_item_height" />
 
             </LinearLayout>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="handler"
+            type="com.topface.topface.ui.views.VipLibertyView.VipLibertyViewHandler" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="20dp">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="24dp"
+            android:background="@{handler.iconRes}" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:gravity="left"
+                android:textStyle="bold"
+                android:text="@{handler.titleText}"
+                android:textColor="@color/item_title_text_color"
+                android:textSize="13sp"
+                android:visibility="@{handler.titleVisibility}" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:gravity="left"
+                android:text="@{handler.descriptionText}"
+                android:textColor="@color/item_description_text_color"
+                android:textSize="13sp"
+                android:visibility="@{handler.descriptionVisibility}" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

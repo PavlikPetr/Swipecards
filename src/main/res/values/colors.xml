@@ -175,4 +175,9 @@
     <color name="button_green_bg_pressed_color">#16e170</color>
     <color name="button_green_bg_released_color">#00c055</color>
     <color name="button_green_bg_disable_color">#a7faba</color>
+
+    <!--Vip liberty info-->
+    <color name="main_title_text_color">#212121</color>
+    <color name="item_title_text_color">#333333</color>
+    <color name="item_description_text_color">#6B6B6B</color>
 </resources>

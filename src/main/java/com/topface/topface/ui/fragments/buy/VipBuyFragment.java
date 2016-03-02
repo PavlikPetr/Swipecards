@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 
+import org.jetbrains.annotations.Nullable;
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
 import static android.view.View.OnClickListener;
@@ -49,6 +51,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     };
     private LinearLayout mBuyVipViewsContainer;
     private LinearLayout mEditPremiumContainer;
+    private ViewStub mVipLibertyList;
     private TextView mResourceInfo;
     private String mResourceInfoText;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -133,20 +136,56 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     private void initViews(View root) {
         initBuyVipViews(root);
+        initVipLiberty(root);
         initEditVipViews(root);
         switchLayouts();
     }
 
-    private void switchLayouts() {
-        if (mBuyVipViewsContainer != null && mEditPremiumContainer != null) {
-            if (CacheProfile.premium) {
-                mEditPremiumContainer.setVisibility(View.VISIBLE);
-                mBuyVipViewsContainer.setVisibility(View.GONE);
-            } else {
-                mEditPremiumContainer.setVisibility(View.GONE);
-                mBuyVipViewsContainer.setVisibility(View.VISIBLE);
-            }
+    private void initVipLiberty(View root) {
+        mVipLibertyList = (ViewStub) root.findViewById(R.id.libertyItemsStub);
+        if (mVipLibertyList != null
+                && PurchaseButtonList.ViewsVersions.V2.getVersionName().equals(getBuyVipViewVersion())
+                && isVipLibertyBlockAvailable()) {
+            mVipLibertyList.inflate();
         }
+    }
+
+    protected boolean isVipLibertyBlockAvailable() {
+        return true;
+    }
+
+    private void switchLayouts() {
+        if (CacheProfile.premium) {
+            setViewVisibility(mEditPremiumContainer, true);
+            setViewVisibility(mBuyVipViewsContainer, false);
+            setViewVisibility(mVipLibertyList, false);
+        } else {
+            setViewVisibility(mEditPremiumContainer, false);
+            setViewVisibility(mBuyVipViewsContainer, true);
+            setViewVisibility(mVipLibertyList, isVipLibertyBlockAvailable());
+        }
+    }
+
+    private boolean setViewVisibility(View view, boolean isVisible) {
+        if (view != null) {
+            view.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+            return true;
+        }
+        return false;
+    }
+
+    @Nullable
+    private String getBuyVipViewVersion(@Nullable Products products) {
+        String version = null;
+        if (products != null && products.info != null && products.info.views != null) {
+            version = products.info.views.buyVip;
+        }
+        return version;
+    }
+
+    @Nullable
+    private String getBuyVipViewVersion() {
+        return getBuyVipViewVersion(getProducts());
     }
 
     private void initBuyVipViews(View root) {
@@ -157,11 +196,8 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
             return;
         }
         root.findViewById(R.id.fbpBuyingDisabled).setVisibility(products.premium.isEmpty() ? View.VISIBLE : View.GONE);
-        String version = null;
-        if (products.info != null && products.info.views != null) {
-            version = products.info.views.buyVip;
-        }
-        new PurchaseButtonList().getButtonsListView(version, btnContainer, products.premium, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
+
+        new PurchaseButtonList().getButtonsListView(getBuyVipViewVersion(products), btnContainer, products.premium, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
             @Override
             public void onClick(String id, BuyButtonData btnData) {
                 buy(id, btnData);

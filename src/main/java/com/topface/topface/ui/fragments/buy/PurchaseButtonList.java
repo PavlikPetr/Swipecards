@@ -34,7 +34,7 @@ public class PurchaseButtonList {
     private List<BuyButtonData> mNoProductsTrialList;
     private Boolean mIsAllNotTrialProductsValidated;
 
-    private enum ViewsVersions {
+    public enum ViewsVersions {
         V1("v1"),
         V2("v2");
 
