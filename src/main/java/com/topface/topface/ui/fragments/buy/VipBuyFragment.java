@@ -11,7 +11,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewStub;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -51,7 +50,6 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     };
     private LinearLayout mBuyVipViewsContainer;
     private LinearLayout mEditPremiumContainer;
-    private ViewStub mVipLibertyList;
     private TextView mResourceInfo;
     private String mResourceInfoText;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -124,6 +122,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         mResourceInfo = (TextView) view.findViewById(R.id.payReasonFragmentBuyPremium);
         setResourceInfoText();
         initViews(view);
+        initVipLiberty(inflater, (LinearLayout) view.findViewById(R.id.fbpBtnContainer));
         initActionBar();
         return view;
     }
@@ -136,17 +135,16 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     private void initViews(View root) {
         initBuyVipViews(root);
-        initVipLiberty(root);
         initEditVipViews(root);
         switchLayouts();
     }
 
-    private void initVipLiberty(View root) {
-        mVipLibertyList = (ViewStub) root.findViewById(R.id.libertyItemsStub);
-        if (mVipLibertyList != null
+    private void initVipLiberty(LayoutInflater inflater, LinearLayout root) {
+        if (root != null
                 && PurchaseButtonList.ViewsVersions.V2.getVersionName().equals(getBuyVipViewVersion())
                 && isVipLibertyBlockAvailable()) {
-            mVipLibertyList.inflate();
+            View libertyView = inflater.inflate(R.layout.vip_liberty_list, root, false);
+            root.addView(libertyView);
         }
     }
 
@@ -158,11 +156,9 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         if (CacheProfile.premium) {
             setViewVisibility(mEditPremiumContainer, true);
             setViewVisibility(mBuyVipViewsContainer, false);
-            setViewVisibility(mVipLibertyList, false);
         } else {
             setViewVisibility(mEditPremiumContainer, false);
             setViewVisibility(mBuyVipViewsContainer, true);
-            setViewVisibility(mVipLibertyList, isVipLibertyBlockAvailable());
         }
     }
 

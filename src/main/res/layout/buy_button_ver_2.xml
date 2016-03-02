@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="handler"
             type="com.topface.topface.ui.views.BuyButtonVer2.BuyButtonVersion1Handler" />
@@ -42,6 +43,8 @@
                 android:layout_gravity="right"
                 android:background="@{handler.stickerBackgroundRes}"
                 android:gravity="center"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
                 android:text="@{handler.stickerText}"
                 android:textColor="@color/button_sticker_text_color"
                 android:textSize="@dimen/button_sticker_text_size"
