@@ -145,8 +145,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         if (root != null
                 && PurchaseButtonList.ViewsVersions.V2.getVersionName().equals(getBuyVipViewVersion())
                 && isVipLibertyBlockAvailable()) {
-            View libertyView = inflater.inflate(R.layout.vip_liberty_list, root, false);
-            root.addView(libertyView);
+            root.addView(inflater.inflate(R.layout.vip_liberty_list, root, false));
         }
     }
 
