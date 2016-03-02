@@ -779,4 +779,6 @@
     <item quantity="other">%d minutes</item>
     <item quantity="one">%d minute</item>
   </plurals>
+  <string name="buy_button_sticker_popular">Populaire</string>
+  <string name="buy_button_sticker_best_value">Meilleure valeur</string>
 </resources>

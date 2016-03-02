@@ -768,4 +768,6 @@
     <item quantity="other">%d dakika</item>
     <item quantity="one">%d dakika</item>
   </plurals>
+  <string name="buy_button_sticker_popular">En çok satan</string>
+  <string name="buy_button_sticker_best_value">Süper fiyat</string>
 </resources>
