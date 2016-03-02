@@ -873,4 +873,14 @@
     </plurals>
     <string name="buy_button_sticker_popular">Populaire</string>
     <string name="buy_button_sticker_best_value">Meilleure valeur</string>
+    <string name="ban_liberty_title">Pas de pubs !</string>
+    <string name="ban_liberty_description">Juste faire connaissance, purement et simplement</string>
+    <string name="guest_liberty_title">Invités</string>
+    <string name="guest_liberty_description">Découvrez qui a visité votre page de profil</string>
+    <string name="star_liberty_title">Utilisateurs populaires</string>
+    <string name="star_liberty_description">Les brise-glaces les plus populaires pour démarrer une conversation</string>
+    <string name="crown_liberty_title">Démarquez-vous</string>
+    <string name="crown_liberty_description">Démarquez-vous facilement dans la Recherche et les Messages</string>
+    <string name="like_liberty_title">J\'aime</string>
+    <string name="like_liberty_description">Voir qui vous aime</string>
 </resources>
