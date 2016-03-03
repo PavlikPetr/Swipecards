@@ -798,4 +798,16 @@
     <item quantity="other">%d минута</item>
     <item quantity="one">%d минут</item>
   </plurals>
+  <string name="buy_button_sticker_popular">популарно</string>
+  <string name="buy_button_sticker_best_value">Најбоља цена</string>
+  <string name="ban_liberty_title">Без реклама!</string>
+  <string name="ban_liberty_description">Само упознавање, ништа више</string>
+  <string name="guest_liberty_title">Гости</string>
+  <string name="guest_liberty_description">Сазнајте ко је посетио Вашу профилну страницу</string>
+  <string name="star_liberty_title">Популарни корисници</string>
+  <string name="star_liberty_description">Најпопуларнији корисници отворени за разговор</string>
+  <string name="crown_liberty_title">Истакните се</string>
+  <string name="crown_liberty_description">Лако се истиче у Претрази и Порукама</string>
+  <string name="like_liberty_title">Свиђања</string>
+  <string name="like_liberty_description">Погледајте коме се свиђате</string>
 </resources>
