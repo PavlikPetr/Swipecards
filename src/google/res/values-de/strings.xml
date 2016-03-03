@@ -821,4 +821,6 @@
         <item quantity="one">Du bekommst %1$d Like als \nGeschenk! Das bedeutet, dass diejenigen, \ndie dir Likes schicken, %2$d dich \nwirklich mögen.</item>
     </plurals>
     <string name="buy_vip_title_from_input">Du kannst ein Gespräch mit einem anderen User starten, wenn du VIP-Status hast.</string>
+    <string name="mutual_like_popup_text">Das Gefühl beruht auf Gegenseitigkeit!</string>
+    <string name="mutual_like_popup_button">Sag \"Hallo\"</string>
 </resources>

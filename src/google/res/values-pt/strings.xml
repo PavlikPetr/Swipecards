@@ -878,4 +878,6 @@
         <item quantity="one">Irás receber %1$d Gosto como \npresente! Isto significa que aqueles a \nquem enviares Gostos \ngostam mesmo %2$d de ti</item>
     </plurals>
     <string name="buy_vip_title_from_input">Podes começar uma conversa com um utilizador se tiveres estatuto VIP</string>
+    <string name="mutual_like_popup_text">O sentimento é mútuo!</string>
+    <string name="mutual_like_popup_button">Diz \"Olá\"</string>
 </resources>
