@@ -770,4 +770,15 @@
   </plurals>
   <string name="buy_button_sticker_popular">En çok satan</string>
   <string name="buy_button_sticker_best_value">Süper fiyat</string>
+  <string name="ban_liberty_title">Reklamsız!</string>
+  <string name="ban_liberty_description">Sadece arkadaşlık, basit ve kolay</string>
+  <string name="guest_liberty_title">Ziyaretçiler</string>
+  <string name="guest_liberty_description">Profil sayfanı kimler ziyaret etmiş öğren!</string>
+  <string name="star_liberty_title">Popüler kullanıcılar</string>
+  <string name="star_liberty_description">Sohbete başlamak ve kaynaşmak için en iyi yöntemler
+  </string>
+  <string name="crown_liberty_title">Öne çık</string>
+  <string name="crown_liberty_description">Arama sonuçlarında ve mesajlar sayfasına öne çık</string>
+  <string name="like_liberty_title">Beğeni</string>
+  <string name="like_liberty_description">Seni kimler beğenmiş, öğren</string>
 </resources>

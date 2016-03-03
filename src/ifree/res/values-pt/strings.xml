@@ -865,4 +865,14 @@
     </plurals>
     <string name="buy_button_sticker_popular">Mais Vendido</string>
     <string name="buy_button_sticker_best_value">Melhor preço</string>
+    <string name="ban_liberty_title">Sem anúncios!</string>
+    <string name="ban_liberty_description">Apenas namorar, pura e simplesmente</string>
+    <string name="guest_liberty_title">Visitantes</string>
+    <string name="guest_liberty_description">Descobre quem visitou a tua página de perfil</string>
+    <string name="star_liberty_title">Utilizadores Populares</string>
+    <string name="star_liberty_description">As melhores frases para quebrar o gelo numa conversa</string>
+    <string name="crown_liberty_title">Destaca-te</string>
+    <string name="crown_liberty_description">Destaca-te facilmente na Pesquisa e nas Mensagens</string>
+    <string name="like_liberty_title">Gostos</string>
+    <string name="like_liberty_description">Vê quem gosta de ti</string>
 </resources>
