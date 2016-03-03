@@ -268,7 +268,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
             }
             return;
         }
-        if (!isAdded() && getChildFragmentManager().getFragments() == null) {
+        if (!isAdded() || getChildFragmentManager().getFragments() == null) {
             return;
         }
         for (Fragment fr : getChildFragmentManager().getFragments()) {
