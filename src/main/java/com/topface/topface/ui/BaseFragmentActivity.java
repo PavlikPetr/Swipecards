@@ -415,11 +415,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     }
 
     @Override
-    public void startActivity(Intent intent) {
-        super.startActivity(intent);
-    }
-
-    @Override
     public void finish() {
         super.finish();
         if (!mNeedAnimate) {
