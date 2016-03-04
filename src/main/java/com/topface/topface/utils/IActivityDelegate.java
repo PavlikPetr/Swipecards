@@ -11,6 +11,12 @@ public interface IActivityDelegate {
 
     void startActivityForResult(Intent intent, int requestCode);
 
+    void startActivity(Intent intent);
+
     Context getApplicationContext();
+
+    void runOnUiThread(Runnable runnable);
+
+    boolean isFinishing();
 
 }

@@ -2,6 +2,7 @@ package com.topface.topface.utils.controllers;
 
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
@@ -17,13 +18,13 @@ import java.util.List;
  */
 public class SequencedStartAction implements IStartAction {
 
-    private IUiRunner mUiRunner;
+    private IActivityDelegate mIActivityDelegate;
     private List<IStartAction> mActions = Collections.synchronizedList(new ArrayList<IStartAction>());
     private int mPriority = -1;
 
-    public SequencedStartAction(IUiRunner uiRunner, int priority) {
+    public SequencedStartAction(IActivityDelegate iActivityDelegate, int priority) {
         mPriority = priority;
-        mUiRunner = uiRunner;
+        mIActivityDelegate = iActivityDelegate;
     }
 
     @Override
@@ -110,14 +111,14 @@ public class SequencedStartAction implements IStartAction {
             @Override
             public void execute() {
                 action.callInBackground();
-                mUiRunner.runOnUiThread(new Runnable() {
+                mIActivityDelegate.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         boolean running = true;
-                        if (mUiRunner instanceof BaseFragmentActivity) {
-                            running = ((BaseFragmentActivity) mUiRunner).isRunning();
+                        if (mIActivityDelegate instanceof BaseFragmentActivity) {
+                            running = ((BaseFragmentActivity) mIActivityDelegate).isRunning();
                         }
-                        if (running && !mUiRunner.isFinishing()) {
+                        if (running && !mIActivityDelegate.isFinishing()) {
                             action.callOnUi();
                         }
                     }
@@ -137,11 +138,5 @@ public class SequencedStartAction implements IStartAction {
                     .append(Utils.SEMICOLON);
         }
         return stringBuilder.toString();
-    }
-
-    public interface IUiRunner {
-        void runOnUiThread(Runnable runnable);
-
-        boolean isFinishing();
     }
 }
