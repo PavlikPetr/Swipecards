@@ -19,6 +19,9 @@ public class AppodealProvider extends AbstractAdsProvider {
     boolean injectBannerInner(final IPageWithAds page, final IAdProviderCallbacks callbacks) {
         Activity activity = page.getActivity();
         Appodeal.setLogging(Debug.isDebugLogsEnabled());
+        Appodeal.setAutoCache(Appodeal.BANNER_VIEW, false);
+        Appodeal.setAutoCacheNativeIcons(false);
+        Appodeal.setAutoCacheNativeImages(false);
         Appodeal.initialize(activity, APPODEAL_APP_KEY, Appodeal.BANNER_VIEW);
         final BannerView adView = Appodeal.getBannerView(page.getActivity());
         page.getContainerForAd().addView(adView);
