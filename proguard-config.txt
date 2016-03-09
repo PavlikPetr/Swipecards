@@ -187,7 +187,6 @@
   -keep class com.applifier.** { *; }
   -keep class com.yandex.** { *; }
   -keep class com.inmobi.** { *; }
-  -keep class com.yandex.** { *; }
   -keep class ru.mail.android.mytarget.** { *; }
   -keep class net.pubnative.** { *; }
   -keep class org.droidparts.** { *; }
