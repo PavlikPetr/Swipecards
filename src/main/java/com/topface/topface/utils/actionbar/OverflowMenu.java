@@ -109,7 +109,7 @@ public class OverflowMenu {
         App.from(App.getContext()).inject(this);
         mBarActions = barActions;
         mOverflowMenuType = OverflowMenuType.CHAT_OVERFLOW_MENU;
-        mContext = iActivityDelegate.getApplicationContext();
+        mContext = iActivityDelegate.getApplicationContext().getApplicationContext();
         registerBroadcastReceiver();
         mActivityDelegate = iActivityDelegate;
     }
@@ -261,7 +261,9 @@ public class OverflowMenu {
                 item.getId() == ADD_TO_BOOKMARK_ACTION.getId()) {
             int order = findItem(item.getId()).getOrder();
             mBarActions.removeItem(item.getId());
-            mBarActions.add(Menu.NONE, item.getId(), order, resourceId != null ? mContext.getString(resourceId) : "").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            if (mContext != null) {
+                mBarActions.add(Menu.NONE, item.getId(), order, resourceId != null ? mContext.getString(resourceId) : "").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            }
         }
     }
 
@@ -288,12 +290,12 @@ public class OverflowMenu {
                     onClickSendGiftAction();
                     break;
                 case COMPLAIN_ACTION:
-                    if (profileId != null) {
+                    if (profileId != null && mActivityDelegate != null) {
                         mActivityDelegate.startActivity(ComplainsActivity.createIntent(profileId));
                     }
                     break;
                 case OPEN_PROFILE_FOR_EDITOR_STUB:
-                    if (mSavedResponse != null && profileId != null) {
+                    if (mSavedResponse != null && profileId != null && mActivityDelegate != null) {
                         mActivityDelegate.startActivity(EditorProfileActionsActivity.createIntent(profileId, mSavedResponse));
                     }
                     break;
@@ -336,18 +338,14 @@ public class OverflowMenu {
                     @Override
                     public void onRateCompleted(int mutualId) {
                         setSympathySentState(true, true);
-                        if (mContext != null) {
-                            Utils.showToastNotification(R.string.sympathy_sended, Toast.LENGTH_SHORT);
-                        }
+                        Utils.showToastNotification(R.string.sympathy_sended, Toast.LENGTH_SHORT);
                     }
 
                     @SuppressWarnings("ConstantConditions")
                     @Override
                     public void onRateFailed(int userId, int mutualId) {
                         setSympathySentState(false, true);
-                        if (mContext != null) {
-                            Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
-                        }
+                        Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                         initOverfowMenu();
                     }
                 }
@@ -370,9 +368,7 @@ public class OverflowMenu {
                     @Override
                     public void onRateCompleted(int mutualId) {
                         setSympathySentState(true, true);
-                        if (mContext != null) {
-                            Utils.showToastNotification(R.string.admiration_sended, Toast.LENGTH_SHORT);
-                        }
+                        Utils.showToastNotification(R.string.admiration_sended, Toast.LENGTH_SHORT);
                     }
 
                     @SuppressWarnings("ConstantConditions")
@@ -389,9 +385,11 @@ public class OverflowMenu {
     }
 
     private void showBuyVipActivity(int resourceId) {
-        mActivityDelegate.startActivityForResult(
-                PurchasesActivity.createVipBuyIntent(mContext.getString(resourceId), INTENT_BUY_VIP_FROM),
-                PurchasesActivity.INTENT_BUY_VIP);
+        if (mActivityDelegate != null) {
+            mActivityDelegate.startActivityForResult(
+                    PurchasesActivity.createVipBuyIntent(mContext != null ? mContext.getString(resourceId) : Utils.EMPTY, INTENT_BUY_VIP_FROM),
+                    PurchasesActivity.INTENT_BUY_VIP);
+        }
     }
 
     private void onClickOpenChatAction() {
@@ -416,7 +414,7 @@ public class OverflowMenu {
     private void onClickAddToBlackList() {
         Boolean isInBlackList = isInBlackList();
         final Integer userId = getUserId();
-        if (isInBlackList == null || userId == null) {
+        if (isInBlackList == null || userId == null || mContext == null) {
             return;
         }
         ApiRequest request;
@@ -472,7 +470,7 @@ public class OverflowMenu {
     private void addToFavorite() {
         Boolean isBookmarked = isBookmarked();
         Integer userId = getUserId();
-        if (isBookmarked == null || userId == null) {
+        if (isBookmarked == null || userId == null || mContext == null) {
             return;
         }
         (isBookmarked ? new DeleteBookmarksRequest(userId, mContext).
@@ -564,7 +562,7 @@ public class OverflowMenu {
 
     private void openChat() {
         Intent openChatIntent = getOpenChatIntent();
-        if (openChatIntent == null) {
+        if (openChatIntent == null || mActivityDelegate == null) {
             return;
         }
         mActivityDelegate.startActivityForResult(openChatIntent, ChatActivity.REQUEST_CHAT);
@@ -574,8 +572,8 @@ public class OverflowMenu {
         OverflowMenuUser overflowMenuFieldsListener = getOverflowMenuFieldsListener();
         if (overflowMenuFieldsListener != null) {
             overflowMenuFieldsListener.setSympathySentValue(state);
-            if (isNeedSentBroadcast) {
-                LocalBroadcastManager.getInstance(mContext.getApplicationContext()).
+            if (isNeedSentBroadcast && mContext != null) {
+                LocalBroadcastManager.getInstance(mContext).
                         sendBroadcast(BlackListAndBookmarkHandler.getIntentForSympathyUpdate(BlackListAndBookmarkHandler.ActionTypes.SYMPATHY, state));
             }
         }
@@ -645,15 +643,19 @@ public class OverflowMenu {
     }
 
     private void registerBroadcastReceiver() {
-        LocalBroadcastManager.getInstance(mContext.getApplicationContext()).registerReceiver(mUpdateActionsReceiver,
-                new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
+        if (mContext != null) {
+            LocalBroadcastManager.getInstance(mContext).registerReceiver(mUpdateActionsReceiver,
+                    new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
+        }
     }
 
     public void onReleaseOverflowMenu() {
         if (mBalanceSubscription != null) {
             mBalanceSubscription.unsubscribe();
         }
-        LocalBroadcastManager.getInstance(mContext.getApplicationContext()).unregisterReceiver(mUpdateActionsReceiver);
+        if (mContext != null) {
+            LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mUpdateActionsReceiver);
+        }
         mActivityDelegate = null;
         mOverflowMenuFields = null;
         mContext = null;

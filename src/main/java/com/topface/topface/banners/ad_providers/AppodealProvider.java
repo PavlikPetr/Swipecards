@@ -14,14 +14,13 @@ import com.topface.topface.utils.CacheProfile;
 public class AppodealProvider extends AbstractAdsProvider {
 
     public static final String APPODEAL_APP_KEY = "2f48418b677cf24a3fa37eacfc7a4e76d385db08b51bd328";
+    private static final String YANDEX_NETWORK = "yandex";
 
     @Override
     boolean injectBannerInner(final IPageWithAds page, final IAdProviderCallbacks callbacks) {
         Activity activity = page.getActivity();
         Appodeal.setLogging(Debug.isDebugLogsEnabled());
-        Appodeal.setAutoCache(Appodeal.BANNER_VIEW, false);
-        Appodeal.setAutoCacheNativeIcons(false);
-        Appodeal.setAutoCacheNativeImages(false);
+        Appodeal.disableNetwork(activity.getApplicationContext(), YANDEX_NETWORK);
         Appodeal.initialize(activity, APPODEAL_APP_KEY, Appodeal.BANNER_VIEW);
         final BannerView adView = Appodeal.getBannerView(page.getActivity());
         page.getContainerForAd().addView(adView);
