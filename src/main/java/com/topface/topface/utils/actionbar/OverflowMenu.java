@@ -193,12 +193,10 @@ public class OverflowMenu {
                         resourceId = item.getFirstResourceId();
                         break;
                 }
-                if (mContext != null) {
-                    if (isNeedToAddItem(item.getId())) {
-                        mBarActions.add(Menu.NONE, item.getId(), i, resourceId != null ? mContext.getString(resourceId) : "").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-                    } else {
-                        replaceItem(item, resourceId);
-                    }
+                if (isNeedToAddItem(item.getId())) {
+                    mBarActions.add(Menu.NONE, item.getId(), i, resourceId == null || mContext == null ? Utils.EMPTY : mContext.getString(resourceId)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                } else {
+                    replaceItem(item, resourceId);
                 }
             }
             if (overflowMenuItemArray.size() > 1) {
@@ -242,12 +240,10 @@ public class OverflowMenu {
                         resourceId = item.getFirstResourceId();
                         break;
                 }
-                if (mContext != null) {
-                    if (isNeedToAddItem(item.getId())) {
-                        mBarActions.add(Menu.NONE, item.getId(), i, resourceId != null ? mContext.getString(resourceId) : "").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-                    } else {
-                        replaceItem(item, resourceId);
-                    }
+                if (isNeedToAddItem(item.getId())) {
+                    mBarActions.add(Menu.NONE, item.getId(), i, resourceId == null || mContext == null ? Utils.EMPTY : mContext.getString(resourceId)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+                } else {
+                    replaceItem(item, resourceId);
                 }
             }
             if (isInBlackList != null) {
@@ -261,9 +257,7 @@ public class OverflowMenu {
                 item.getId() == ADD_TO_BOOKMARK_ACTION.getId()) {
             int order = findItem(item.getId()).getOrder();
             mBarActions.removeItem(item.getId());
-            if (mContext != null) {
-                mBarActions.add(Menu.NONE, item.getId(), order, resourceId != null ? mContext.getString(resourceId) : "").setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-            }
+            mBarActions.add(Menu.NONE, item.getId(), order, resourceId == null || mContext == null ? Utils.EMPTY : mContext.getString(resourceId)).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         }
     }
 
