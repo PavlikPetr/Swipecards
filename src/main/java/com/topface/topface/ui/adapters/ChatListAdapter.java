@@ -3,7 +3,6 @@ package com.topface.topface.ui.adapters;
 import android.content.Context;
 import android.text.ClipboardManager;
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +19,10 @@ import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.fragments.ChatFragment;
+import com.topface.topface.ui.views.CustomMovementMethod;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.ChatLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
@@ -46,9 +47,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
     private OnBuyVipButtonClick mBuyVipButtonClickListener;
+    private IActivityDelegate mIActivityDelegate;
 
-    public ChatListAdapter(Context context, FeedList<History> data, Updater updateCallback, OnBuyVipButtonClick listener) {
-        super(context, data, updateCallback);
+    public ChatListAdapter(IActivityDelegate iActivityDelegate, FeedList<History> data, Updater updateCallback, OnBuyVipButtonClick listener) {
+        super(iActivityDelegate.getApplicationContext(), data, updateCallback);
+        mIActivityDelegate = iActivityDelegate;
         mBuyVipButtonClickListener = listener;
         if (!data.isEmpty()) {
             prepareDates();
@@ -300,7 +303,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         boolean showDate = mShowDatesList.contains(item);
         switch (type) {
             case T_RETRY:
-                if (item.isRepeatItem() && holder!= null) {
+                if (item.isRepeatItem() && holder != null) {
                     holder.loader.setVisibility(View.GONE);
                     holder.retrier.setVisibility(View.VISIBLE);
                     holder.retrier.setOnClickListener(new View.OnClickListener() {
@@ -451,7 +454,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 // Если нашли, то добавим им кликабельность
                 // в остальных случаях holder.message будет кликаться на onItemClickListener
                 if (Linkify.addLinks(holder.message, Linkify.ALL)) {
-                    holder.message.setMovementMethod(LinkMovementMethod.getInstance());
+                    CustomMovementMethod customMovementMethod = CustomMovementMethod.getInstance();
+                    customMovementMethod.setIActivityDelegate(mIActivityDelegate);
+                    holder.message.setMovementMethod(customMovementMethod);
                     holder.message.setFocusable(false);
                 }
                 return true;

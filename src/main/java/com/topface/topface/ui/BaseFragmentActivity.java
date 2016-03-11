@@ -30,6 +30,7 @@ import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GoogleMarketApiManager;
+import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarView;
@@ -43,7 +44,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.Locale;
 
-public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient {
+public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient, IActivityDelegate {
 
     public static final String AUTH_TAG = "AUTH";
     public static final String GOOGLE_AUTH_STARTED = "google_auth_started";
@@ -73,6 +74,11 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // игнорируем нажатие аппаратной кнопки
         return keyCode == KeyEvent.KEYCODE_MENU || super.onKeyDown(keyCode, event);
+    }
+
+    @SuppressWarnings("unused")
+    public IActivityDelegate getActivityDelegate() {
+        return this;
     }
 
     @Override

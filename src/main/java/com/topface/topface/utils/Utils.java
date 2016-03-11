@@ -203,6 +203,10 @@ public class Utils {
         context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }
 
+    public static void goToUrl(IActivityDelegate iActivityDelegate, String url) {
+        iActivityDelegate.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+    }
+
     public static void startOldVersionPopup(final Activity activity) {
         startOldVersionPopup(activity, true);
     }

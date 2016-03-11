@@ -43,7 +43,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     private boolean mMore;
 
     public LoadingListAdapter(Context context, FeedList<T> data, Updater updateCallback) {
-        mContext = context.getApplicationContext();
+        mContext = context;
         mInflater = LayoutInflater.from(mContext);
         mLoadController = initLoadController();
         mData = new FeedList<>();

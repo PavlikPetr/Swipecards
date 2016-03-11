@@ -10,9 +10,8 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
-import com.topface.topface.utils.IActivityDelegate;
 
-public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> implements IActivityDelegate {
+public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> {
 
     public static final int INTENT_USER_PROFILE = 6;
 
