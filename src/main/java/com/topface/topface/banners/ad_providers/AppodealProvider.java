@@ -20,7 +20,7 @@ public class AppodealProvider extends AbstractAdsProvider {
     boolean injectBannerInner(final IPageWithAds page, final IAdProviderCallbacks callbacks) {
         Activity activity = page.getActivity();
         Appodeal.setLogging(Debug.isDebugLogsEnabled());
-        Appodeal.disableNetwork(activity.getApplicationContext(), YANDEX_NETWORK);
+        Appodeal.disableNetwork(activity.getApplicationContext(), YANDEX_NETWORK, Appodeal.BANNER_VIEW);
         Appodeal.initialize(activity, APPODEAL_APP_KEY, Appodeal.BANNER_VIEW);
         final BannerView adView = Appodeal.getBannerView(page.getActivity());
         page.getContainerForAd().addView(adView);
