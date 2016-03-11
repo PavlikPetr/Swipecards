@@ -1,6 +1,6 @@
 package com.topface.topface.ui.analytics;
 
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 
 import com.comscore.analytics.comScore;
@@ -12,7 +12,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.social.AuthToken;
 
-public class TrackedFragmentActivity extends AppCompatActivity {
+public class TrackedFragmentActivity extends ActionBarActivity {
 
     @Override
     public void onStart() {
