@@ -4,7 +4,6 @@ import android.text.Layout;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.view.MotionEvent;
 import android.widget.TextView;
@@ -46,13 +45,11 @@ public class CustomMovementMethod extends LinkMovementMethod {
             int line = layout.getLineForVertical(y);
             int off = layout.getOffsetForHorizontal(line, x);
 
-            ClickableSpan[] link = buffer.getSpans(off, off, ClickableSpan.class);
+            URLSpan[] link = buffer.getSpans(off, off, URLSpan.class);
 
             if (link.length != 0) {
                 if (action == MotionEvent.ACTION_UP) {
-                    if (mIActivityDelegate != null) {
-                        Utils.goToUrl(mIActivityDelegate, ((URLSpan) link[0]).getURL());
-                    }
+                    Utils.goToUrl(mIActivityDelegate, link[0].getURL());
                 } else if (action == MotionEvent.ACTION_DOWN) {
                     Selection.setSelection(buffer,
                             buffer.getSpanStart(link[0]),
