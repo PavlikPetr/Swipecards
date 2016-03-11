@@ -200,7 +200,15 @@ public class Utils {
     }
 
     public static void goToUrl(Context context, String url) {
-        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        if (context != null) {
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        }
+    }
+
+    public static void goToUrl(IActivityDelegate iActivityDelegate, String url) {
+        if (iActivityDelegate != null) {
+            iActivityDelegate.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+        }
     }
 
     public static void startOldVersionPopup(final Activity activity) {

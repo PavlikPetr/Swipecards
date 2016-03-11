@@ -109,7 +109,7 @@ public class OverflowMenu {
         App.from(App.getContext()).inject(this);
         mBarActions = barActions;
         mOverflowMenuType = OverflowMenuType.CHAT_OVERFLOW_MENU;
-        mContext = iActivityDelegate.getApplicationContext().getApplicationContext();
+        mContext = iActivityDelegate.getApplicationContext();
         registerBroadcastReceiver();
         mActivityDelegate = iActivityDelegate;
     }
