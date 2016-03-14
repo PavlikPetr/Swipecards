@@ -86,6 +86,11 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
         return ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.gridview_footer_progress_bar, null, false);
     }
 
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
     private void sendAlbumRequest() {
         Photos photoLinks = mProfilePhotoGridAdapter.getAdapterData();
         if (photoLinks == null || photoLinks.size() < 2) {

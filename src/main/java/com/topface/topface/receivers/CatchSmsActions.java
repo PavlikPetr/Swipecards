@@ -93,6 +93,7 @@ public class CatchSmsActions extends BroadcastReceiver {
                 }
 
                 @Override
+
                 protected SMSInvitationCounters parseResponse(ApiResponse response) {
                     return JsonUtils.fromJson(response.toString(), SMSInvitationCounters.class);
                 }

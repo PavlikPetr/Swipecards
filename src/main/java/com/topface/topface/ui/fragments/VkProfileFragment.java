@@ -136,6 +136,11 @@ public class VkProfileFragment extends ProfileInnerFragment {
     }
 
     @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(VK_USER_DATA, mVkUser);

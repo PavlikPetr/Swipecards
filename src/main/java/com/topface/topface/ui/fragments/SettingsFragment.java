@@ -24,7 +24,7 @@ import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.dialogs.AboutAppDialog;
+import com.topface.topface.ui.dialogs.AboutAppDialog2;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelector;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
@@ -90,6 +90,11 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         });
         setAutoReplySettings(CacheProfile.getOptions().isAutoreplyAllow);
         root.findViewById(R.id.autoReplyItem).setOnClickListener(this);
+    }
+
+    @Override
+    public boolean isTrackable() {
+        return false;
     }
 
     private void setAutoReplySettings(boolean isChecked) {
@@ -227,7 +232,7 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_FEEDBACK);
                 break;
             case R.id.loAbout:
-                new AboutAppDialog(getActivity(), App.getContext().getString(R.string.settings_about));
+                new AboutAppDialog2().show(getFragmentManager(), AboutAppDialog2.class.getName());
                 break;
             case R.id.loLanguage:
                 startLanguageSelection();

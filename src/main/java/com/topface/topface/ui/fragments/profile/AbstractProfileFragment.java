@@ -15,6 +15,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
+import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.fragments.AnimatedFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
@@ -88,6 +89,9 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
         public void onPageSelected(int position) {
             if (mTabLayoutCreator != null) {
                 mTabLayoutCreator.setTabTitle(position);
+            }
+            if (mBodyPagerAdapter != null) {
+                ((TrackedFragment) mBodyPagerAdapter.getItem(position)).onResumeFragment();
             }
             List<Fragment> fragments = getChildFragmentManager().getFragments();
             if (fragments != null) {

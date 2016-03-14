@@ -97,6 +97,11 @@ public class ProfileFormFragment extends AbstractFormFragment {
         }
     };
 
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
     ListView.OnItemClickListener mOnFillClickListener = new ListView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parentView, View view, int position, long id) {

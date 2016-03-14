@@ -49,6 +49,11 @@ public class AdmirationFragment extends LikesFragment {
     }
 
     @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
+    @Override
     protected void initLockedFeed(View inflated, int errorCode) {
         setEmptyFeedView(inflated);
         if (mCountersData.admirations > 0) {

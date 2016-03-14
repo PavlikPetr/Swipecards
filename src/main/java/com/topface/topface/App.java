@@ -50,6 +50,7 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.transport.HttpApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
+import com.topface.topface.statistics.AppStateStatistics;
 import com.topface.topface.ui.ApplicationBase;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
@@ -57,6 +58,7 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.RunningStateManager;
 import com.topface.topface.utils.ad.NativeAdManager;
 import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.config.AppConfig;
@@ -130,6 +132,14 @@ public class App extends ApplicationBase {
         mGraph = ObjectGraph.create(new TopfaceModule());
         mGraph.injectStatics();
         mGraph.inject(this);
+    }
+
+    public static void onActivityStarted(String activityName) {
+        RunningStateManager.getInstance().onActivityStarted(activityName);
+    }
+
+    public static void onActivityStoped(String activityName) {
+        RunningStateManager.getInstance().onActivityStoped(activityName);
     }
 
     public void inject(Object obj) {
@@ -331,6 +341,18 @@ public class App extends ApplicationBase {
         }
 
         super.onCreate();
+        // подписываемся на события о переходе приложения в состояние background/foreground
+        RunningStateManager.getInstance().registerAppChangeStateListener(new RunningStateManager.OnAppChangeStateListener() {
+            @Override
+            public void onAppForeground(long timeOnStart) {
+                AppStateStatistics.sendAppForegroundState();
+            }
+
+            @Override
+            public void onAppBackground(long timeOnStop, long timeOnStart) {
+                AppStateStatistics.sendAppBackgroundState();
+            }
+        });
         LeakCanary.install(this);
         mContext = getApplicationContext();
         initVkSdk();

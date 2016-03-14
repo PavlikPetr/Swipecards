@@ -6,7 +6,9 @@ import android.text.TextUtils;
 import com.comscore.analytics.comScore;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.topface.framework.utils.Debug;
 import com.topface.statistics.android.StatisticsTracker;
+import com.topface.topface.App;
 import com.topface.topface.data.ExperimentTags;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
@@ -17,12 +19,18 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     @Override
     public void onStart() {
         super.onStart();
+        App.onActivityStarted(this.getClass().getName());
         StatisticsTracker.getInstance().activityStart(this);
         if (isTrackable()) {
+            senActivitiesShownStatistics();
             Tracker tracker = EasyTracker.getTracker();
             tracker.setScreenName(getTrackName());
             tracker.send(setCustomMeticsAndDimensions().build());
         }
+    }
+
+    public void senActivitiesShownStatistics() {
+        Debug.error("TrackOnResume Activity " + getTrackName());
     }
 
     @Override
@@ -56,6 +64,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     @Override
     public void onStop() {
         super.onStop();
+        App.onActivityStoped(this.getClass().getName());
         EasyTracker.getTracker().send(new HitBuilders.AppViewBuilder().set(EasyTracker.SESSION_CONTROL, "end").build());
     }
 

@@ -21,8 +21,4 @@ public class ProfileInnerFragment extends BaseFragment {
         return false;
     }
 
-    @Override
-    public boolean isTrackable() {
-        return false;
-    }
 }
