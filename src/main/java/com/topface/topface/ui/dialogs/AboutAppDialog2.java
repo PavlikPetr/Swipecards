@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.UnderlineSpan;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
@@ -21,6 +24,16 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class AboutAppDialog2 extends BaseDialog {
+
+    public final static String TITLE = "title";
+
+    public static AboutAppDialog2 createDialog(String title) {
+        AboutAppDialog2 dialog = new AboutAppDialog2();
+        Bundle selectorArgs = new Bundle();
+        selectorArgs.putString(TITLE, title);
+        dialog.setArguments(selectorArgs);
+        return dialog;
+    }
 
     @Override
     protected void initViews(View root) {
@@ -65,13 +78,13 @@ public class AboutAppDialog2 extends BaseDialog {
                 getActivity().startActivity(i);
             }
         });
-//        new AlertDialog.Builder(getActivity())
-//                .setTitle(titleDialog).setView(root)
-//                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-//                    public void onClick(final DialogInterface dialog, int whichButton) {
-//                        dialog.dismiss();
-//                    }
-//                }).show();
+        root.findViewById(R.id.buttonSuccess).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+        ((TextView) root.findViewById(R.id.title)).setText(getArguments().getString(TITLE));
     }
 
     @Override
@@ -81,7 +94,7 @@ public class AboutAppDialog2 extends BaseDialog {
 
     @Override
     protected int getDialogStyleResId() {
-        return 0;
+        return R.style.AboutApp;
     }
 
     /**
@@ -111,7 +124,6 @@ public class AboutAppDialog2 extends BaseDialog {
         if (!TextUtils.isEmpty(BuildConfig.GIT_HEAD_SHA)) {
             versionNumber += "\nCommit: " + BuildConfig.GIT_HEAD_SHA;
         }
-
         return versionNumber;
     }
 

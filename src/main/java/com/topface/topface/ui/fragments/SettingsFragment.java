@@ -24,6 +24,7 @@ import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.dialogs.AboutAppDialog;
 import com.topface.topface.ui.dialogs.AboutAppDialog2;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelector;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
@@ -232,10 +233,12 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_FEEDBACK);
                 break;
             case R.id.loAbout:
-                new AboutAppDialog2().show(getFragmentManager(), AboutAppDialog2.class.getName());
+                AboutAppDialog2.createDialog(App.getContext().getString(R.string.settings_about)).show(getFragmentManager(), AboutAppDialog2.class.getName());
+//                new AboutAppDialog2().show(getFragmentManager(), AboutAppDialog2.class.getName());
                 break;
             case R.id.loLanguage:
-                startLanguageSelection();
+                new AboutAppDialog(getActivity(), App.getContext().getString(R.string.settings_about));
+//                startLanguageSelection();
                 break;
             case R.id.loPreloadPhoto:
                 PreloadPhotoSelector preloadPhotoSelector = new PreloadPhotoSelector(getActivity());
