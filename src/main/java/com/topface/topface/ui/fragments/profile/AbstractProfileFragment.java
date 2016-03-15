@@ -140,7 +140,9 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (savedInstanceState != null) {
-            mBodyPager.setCurrentItem(savedInstanceState.getInt(CURRENT_BODY_PAGE, 0));
+            int pos = savedInstanceState.getInt(CURRENT_BODY_PAGE, 0);
+            mBodyPager.setCurrentItem(pos);
+            mPageChangeListener.onPageSelected(pos);
         }
         Bundle arg = getArguments();
         if (arg != null) {
@@ -148,7 +150,10 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
             if (!TextUtils.isEmpty(sLastPage)) {
                 int lastPage = BODY_PAGES_CLASS_NAMES.indexOf(sLastPage);
                 mBodyPager.setCurrentItem(lastPage);
+                mPageChangeListener.onPageSelected(lastPage);
             }
+        } else {
+            mPageChangeListener.onPageSelected(0);
         }
 
     }

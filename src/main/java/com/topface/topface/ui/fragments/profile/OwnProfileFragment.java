@@ -132,6 +132,11 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     }
 
     @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
+    @Override
     protected boolean isNeedShowOverflowMenu() {
         return false;
     }

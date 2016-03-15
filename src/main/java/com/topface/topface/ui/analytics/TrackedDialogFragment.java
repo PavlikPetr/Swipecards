@@ -20,7 +20,7 @@ public class TrackedDialogFragment extends DialogFragment {
     }
 
     public void senPopupShownStatistics() {
-        ScreensShowStatistics.sendPopupShow(getTrackName());
+        ScreensShowStatistics.sendPopupShow(this.getClass().getSimpleName());
     }
 
     public boolean isTrackable() {

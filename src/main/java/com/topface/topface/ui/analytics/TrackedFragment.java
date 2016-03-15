@@ -21,7 +21,7 @@ public class TrackedFragment extends Fragment implements IFeedLifeCycle {
     }
 
     public void senFragmentShownStatistics() {
-        ScreensShowStatistics.sendFragmentShow(getTrackName());
+        ScreensShowStatistics.sendScreenShow(this.getClass().getSimpleName());
     }
 
     public boolean isTrackable() {

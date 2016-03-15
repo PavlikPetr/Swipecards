@@ -5,13 +5,13 @@ import android.text.TextUtils;
 
 import com.comscore.analytics.comScore;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
 import com.topface.topface.data.ExperimentTags;
 import com.topface.topface.statistics.ScreensShowStatistics;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 
 public class TrackedFragmentActivity extends ActionBarActivity {
@@ -23,14 +23,11 @@ public class TrackedFragmentActivity extends ActionBarActivity {
         StatisticsTracker.getInstance().activityStart(this);
         if (isTrackable()) {
             senActivitiesShownStatistics();
-            Tracker tracker = EasyTracker.getTracker();
-            tracker.setScreenName(getTrackName());
-            tracker.send(setCustomMeticsAndDimensions().build());
         }
     }
 
     public void senActivitiesShownStatistics() {
-        ScreensShowStatistics.sendActivityShow(getTrackName());
+        ScreensShowStatistics.sendScreenShow(this.getClass().getSimpleName());
     }
 
     @Override
@@ -73,7 +70,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     }
 
     protected String getTrackName() {
-        return ((Object) this).getClass().getSimpleName().replace("Activity", "");
+        return ((Object) this).getClass().getSimpleName().replace("Activity", Utils.EMPTY);
     }
 
     @Override

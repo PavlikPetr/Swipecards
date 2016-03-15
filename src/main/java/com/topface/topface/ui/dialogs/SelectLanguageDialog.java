@@ -18,7 +18,7 @@ import java.util.Locale;
 
 /**
  * Created by Петр on 15.03.2016.
- * * DilaogFragment for select app language
+ * DilaogFragment for select app language
  */
 public class SelectLanguageDialog extends TrackedDialogFragment {
     public static final String LOCALE = "confirm_selection_locale";

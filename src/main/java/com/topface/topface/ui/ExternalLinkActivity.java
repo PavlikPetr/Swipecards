@@ -70,4 +70,9 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
         super.onNewIntent(intent);
         new ExternalLinkExecuter(mListener).execute(this, getIntent());
     }
+
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
 }

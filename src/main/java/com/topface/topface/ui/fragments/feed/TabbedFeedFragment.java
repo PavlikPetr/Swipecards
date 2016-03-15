@@ -282,4 +282,9 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
             }
         }
     }
+
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
 }
