@@ -6,10 +6,10 @@ import android.text.TextUtils;
 import com.comscore.analytics.comScore;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.topface.framework.utils.Debug;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
 import com.topface.topface.data.ExperimentTags;
+import com.topface.topface.statistics.ScreensShowStatistics;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.social.AuthToken;
@@ -30,7 +30,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     }
 
     public void senActivitiesShownStatistics() {
-        Debug.error("TrackOnResume Activity " + getTrackName());
+        ScreensShowStatistics.sendActivityShow(getTrackName());
     }
 
     @Override

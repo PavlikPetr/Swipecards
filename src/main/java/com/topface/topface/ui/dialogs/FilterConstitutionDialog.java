@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.NumberPicker;
 
 import com.topface.topface.R;
+import com.topface.topface.ui.analytics.TrackedDialogFragment;
 import com.topface.topface.ui.edit.FilterFragment;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +23,7 @@ import butterknife.ButterKnife;
  * Диалог для выбора параметров роста/веса
  * Created by onikitin on 19.06.15.
  */
-public class FilterConstitutionDialog extends DialogFragment {
+public class FilterConstitutionDialog extends TrackedDialogFragment {
 
     public static final String TAG = "com.topface.topface.ui.dialogs.FilterConstitutionDialog_TAG";
 

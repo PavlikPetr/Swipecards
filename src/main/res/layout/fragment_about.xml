@@ -1,22 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
     android:layout_gravity="center"
-    android:layout_marginLeft="25dp"
-    android:layout_marginRight="25dp"
     android:gravity="center"
-    android:orientation="vertical"
-    android:padding="20dp">
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#1f1f1f"
-        android:textSize="20sp" />
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/ivLogo"
@@ -50,13 +40,4 @@
         android:layout_marginBottom="24dp"
         android:gravity="center"
         android:textColor="#2392d0" />
-
-    <Button
-        android:id="@+id/buttonSuccess"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:background="@drawable/ripple"
-        android:text="OK"
-        android:textColor="#009688" />
 </LinearLayout>
