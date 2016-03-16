@@ -3,11 +3,9 @@ package com.topface.topface.requests;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.topface.billing.DeveloperPayload;
 import com.topface.topface.App;
 import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.data.ProductsDetails;
-import com.topface.topface.utils.CacheProfile;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,16 +26,8 @@ public class GooglePlayPurchaseRequest extends PurchaseRequest {
 
         this.data = product.getOriginalJson();
         this.signature = product.getSignature();
-        DeveloperPayload developerPayload = getDeveloperPayload();
-        ProductsDetails.ProductDetail detail = null;
-        //Если SKU из DeveloperPayload не соответсвует тому, что мы купили, то это тестовая покупка
-        //и нам нужно добавить соответсвующий параметр, что бы сервер нам корректно начислил продукт
-        if (developerPayload != null && !TextUtils.equals(developerPayload.sku, product.getSku())) {
-            this.testProductId = developerPayload.sku;
-            detail = CacheProfile.getMarketProductsDetails().getProductDetail(testProductId);
-        } else {
-            detail = CacheProfile.getMarketProductsDetails().getProductDetail(product.getSku());
-        }
+        this.testProductId = PurchaseRequest.getTestProductId(product);
+        ProductsDetails.ProductDetail detail = PurchaseRequest.getProductDetail(product);
         if (detail != null) {
             currencyCode = detail.currency;
             cost = (float) (detail.price / ProductsDetails.MICRO_AMOUNT);

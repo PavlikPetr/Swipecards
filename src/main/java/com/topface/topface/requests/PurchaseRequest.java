@@ -7,7 +7,9 @@ import com.topface.billing.DeveloperPayload;
 import com.topface.framework.JsonUtils;
 import com.topface.topface.App;
 import com.topface.topface.data.AppsFlyerData;
+import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.utils.CacheProfile;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,20 +21,20 @@ import org.onepf.oms.appstore.googleUtils.Purchase;
  */
 abstract public class PurchaseRequest extends ApiRequest {
     transient private final Purchase mPurchase;
-    transient private DeveloperPayload payload;
+    transient private static DeveloperPayload payload;
 
     protected PurchaseRequest(Purchase purchase, Context context) {
         super(context);
         doNeedAlert(false);
         mPurchase = purchase;
-        this.payload = parseDeveloperPayload(purchase);
+        payload = parseDeveloperPayload(purchase);
     }
 
     private DeveloperPayload parseDeveloperPayload(Purchase product) {
         return JsonUtils.fromJson(product.getDeveloperPayload(), DeveloperPayload.class);
     }
 
-    public DeveloperPayload getDeveloperPayload() {
+    public static DeveloperPayload getDeveloperPayload() {
         return payload;
     }
 
@@ -45,6 +47,18 @@ abstract public class PurchaseRequest extends ApiRequest {
             default:
                 throw new RuntimeException("Unknown purchase app store");
         }
+    }
+
+    public static ProductsDetails.ProductDetail getProductDetail(Purchase product) {
+        DeveloperPayload developerPayload = getDeveloperPayload();
+        return developerPayload != null && !TextUtils.equals(developerPayload.sku, product.getSku()) ?
+                CacheProfile.getMarketProductsDetails().getProductDetail(getTestProductId(product)) :
+                CacheProfile.getMarketProductsDetails().getProductDetail(product.getSku());
+    }
+
+    public static String getTestProductId(Purchase product) {
+        DeveloperPayload developerPayload = getDeveloperPayload();
+        return developerPayload != null && !TextUtils.equals(developerPayload.sku, product.getSku()) ? developerPayload.sku : null;
     }
 
     @Override

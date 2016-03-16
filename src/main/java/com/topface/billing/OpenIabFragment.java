@@ -27,6 +27,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PurchaseRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.views.BuyButton;
@@ -35,6 +36,7 @@ import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.http.ConnectionManager;
+import com.topface.topface.utils.social.AuthToken;
 
 import org.onepf.oms.OpenIabHelper;
 import org.onepf.oms.appstore.googleUtils.IabHelper;
@@ -427,7 +429,10 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         validateRequest.callback(new DataApiHandler<Verify>() {
             @Override
             protected void success(Verify verify, IApiResponse response) {
-                //Послу удачной покупки (не подписки), которая была проверена сервером,
+                if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
+                    PurchasesActivity.sendPurchaseEvent(purchase);
+                }
+                //После удачной покупки (не подписки), которая была проверена сервером,
                 //нужно "потратить" элемент, что бы можно было купить следующий
                 if (TextUtils.equals(purchase.getItemType(), OpenIabHelper.ITEM_TYPE_INAPP)) {
                     App.getOpenIabHelperManager().consumeAsync(purchase, OpenIabFragment.this);

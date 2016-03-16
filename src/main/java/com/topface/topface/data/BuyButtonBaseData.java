@@ -7,6 +7,7 @@ import com.topface.topface.utils.CacheProfile;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.util.Currency;
 
 public class BuyButtonBaseData {
     public String id;
@@ -25,6 +26,7 @@ public class BuyButtonBaseData {
     public int trialPeriodInDays;
     public String discountTemplate;
     public String pricePerItemTemplate;
+    public Currency currency;
 
     public BuyButtonBaseData(JSONObject json) {
         if (json != null) {
@@ -45,6 +47,7 @@ public class BuyButtonBaseData {
             displayOnBuyScreen = json.optBoolean("displayOnBuyScreen", true);
             paymentwallLink = json.optString("url");
             ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
+            currency = Currency.getInstance(Products.USD);
             if (type == Products.ProductType.PREMIUM) {
                 DecimalFormat decimalFormat = new DecimalFormat("0.00");
                 double tempPrice = price / amount;
