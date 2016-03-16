@@ -42,6 +42,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     public static final String PW_PRODUCT_ID = "pw_product_id";
     public static final String PW_CURRENCY = "pw_currency";
     public static final String PW_PRICE = "pw_price";
+    public static final double CENTS_AMOUNT = 100;
     private static final int RESULT_ERROR = 1;
     private String mSuccessUrl;
     private View mProgressBar;
@@ -63,7 +64,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         intent.putExtra(PW_PRODUCTS_TYPE, btn.type.getName());
         intent.putExtra(PW_PRODUCT_ID, btn.id);
         intent.putExtra(PW_CURRENCY, btn.currency.getCurrencyCode());
-        intent.putExtra(PW_PRICE, (double) btn.price / 100);
+        intent.putExtra(PW_PRICE, (double) btn.price / CENTS_AMOUNT);
         return intent;
     }
 

@@ -21,20 +21,16 @@ import org.onepf.oms.appstore.googleUtils.Purchase;
  */
 abstract public class PurchaseRequest extends ApiRequest {
     transient private final Purchase mPurchase;
-    transient private static DeveloperPayload payload;
+    transient private DeveloperPayload payload;
 
     protected PurchaseRequest(Purchase purchase, Context context) {
         super(context);
         doNeedAlert(false);
         mPurchase = purchase;
-        payload = parseDeveloperPayload(purchase);
+        payload = getDeveloperPayload(purchase);
     }
 
-    private DeveloperPayload parseDeveloperPayload(Purchase product) {
-        return JsonUtils.fromJson(product.getDeveloperPayload(), DeveloperPayload.class);
-    }
-
-    public static DeveloperPayload getDeveloperPayload() {
+    public DeveloperPayload getDeveloperPayload() {
         return payload;
     }
 
@@ -49,15 +45,19 @@ abstract public class PurchaseRequest extends ApiRequest {
         }
     }
 
+    public static DeveloperPayload getDeveloperPayload(Purchase product) {
+        return JsonUtils.fromJson(product.getDeveloperPayload(), DeveloperPayload.class);
+    }
+
     public static ProductsDetails.ProductDetail getProductDetail(Purchase product) {
-        DeveloperPayload developerPayload = getDeveloperPayload();
+        DeveloperPayload developerPayload = getDeveloperPayload(product);
         return developerPayload != null && !TextUtils.equals(developerPayload.sku, product.getSku()) ?
                 CacheProfile.getMarketProductsDetails().getProductDetail(getTestProductId(product)) :
                 CacheProfile.getMarketProductsDetails().getProductDetail(product.getSku());
     }
 
     public static String getTestProductId(Purchase product) {
-        DeveloperPayload developerPayload = getDeveloperPayload();
+        DeveloperPayload developerPayload = getDeveloperPayload(product);
         return developerPayload != null && !TextUtils.equals(developerPayload.sku, product.getSku()) ? developerPayload.sku : null;
     }
 

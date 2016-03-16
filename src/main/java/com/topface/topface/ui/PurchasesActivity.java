@@ -12,9 +12,7 @@ import android.support.v7.app.ActionBar;
 
 import com.facebook.appevents.AppEventsConstants;
 import com.facebook.appevents.AppEventsLogger;
-import com.topface.billing.DeveloperPayload;
 import com.topface.billing.OpenIabFragment;
-import com.topface.framework.JsonUtils;
 import com.topface.offerwall.common.OfferwallPayload;
 import com.topface.offerwall.common.TFCredentials;
 import com.topface.offerwall.publisher.TFOfferwallActivity;
@@ -246,7 +244,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     }
 
     public static void sendPurchaseEvent(Purchase product) {
-        String originalSku = JsonUtils.fromJson(product.getDeveloperPayload(), DeveloperPayload.class).sku;
+        String originalSku = PurchaseRequest.getDeveloperPayload(product).sku;
         ProductsDetails.ProductDetail detail = PurchaseRequest.getProductDetail(product);
         if (detail != null) {
             PurchasesActivity.sendPurchaseEvent(1, getType(originalSku), originalSku, detail.currency, detail.price / ProductsDetails.MICRO_AMOUNT);
