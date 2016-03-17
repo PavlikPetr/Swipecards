@@ -1,6 +1,5 @@
 package com.topface.topface.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,14 +11,12 @@ import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
-import com.topface.topface.data.City;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.data.Profile;
 import com.topface.topface.state.TopfaceAppState;
-import com.topface.topface.ui.CitySearchActivity;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.utils.config.SessionConfig;
 
@@ -244,6 +241,7 @@ public class CacheProfile {
         return preferences != null && preferences.getBoolean(PREFERENCES_NEED_CITY_CONFIRM, false);
     }
 
+    @SuppressWarnings("unused")
     public static void onCityConfirmed(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -265,13 +263,6 @@ public class CacheProfile {
     public static void sendUpdateProfileBroadcast() {
         LocalBroadcastManager.getInstance(App.getContext())
                 .sendBroadcast(new Intent(PROFILE_UPDATE_ACTION));
-    }
-
-    public static void selectCity(Activity activity) {
-        CacheProfile.wasCityAsked = true;
-        CacheProfile.onCityConfirmed(activity);
-        activity.startActivityForResult(new Intent(activity, CitySearchActivity.class),
-                CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION);
     }
 
     public static boolean needToSelectCity(Context context) {

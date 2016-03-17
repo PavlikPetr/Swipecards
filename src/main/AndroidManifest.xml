@@ -209,11 +209,6 @@
             android:theme="@style/Theme.Topface.Gifts" />
         <activity android:name=".ui.TopfaceAuthActivity" />
         <activity
-            android:name=".ui.CitySearchActivity"
-            android:label="@string/edit_my_city"
-            android:theme="@style/Theme.Topface.Light"
-            android:windowSoftInputMode="stateVisible" />
-        <activity
             android:name=".ui.fragments.profile.PhotoSwitcherActivity"
             android:theme="@style/Topface.Theme.TransparentActionBarActivity" />
         <activity
@@ -227,15 +222,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
         </activity>
-        <activity
-            android:name=".ui.TakePhotoActivity"
-            android:parentActivityName=".ui.NavigationActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Topface">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.NavigationActivity" />
-        </activity>
+
         <activity
             android:name=".ui.BanActivity"
             android:theme="@style/Theme.Topface.Ban" />

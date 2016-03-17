@@ -3,6 +3,7 @@ package com.topface.topface.ui;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
@@ -38,12 +39,14 @@ import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.state.PopupHive;
 import com.topface.topface.state.TopfaceAppState;
-import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
+import com.topface.topface.ui.dialogs.CitySearchPopup;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
+import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
@@ -59,8 +62,6 @@ import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.ChosenStartAction;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
-import com.topface.topface.utils.controllers.SequencedStartAction;
-import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.InvitePopupAction;
@@ -70,6 +71,10 @@ import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -82,10 +87,8 @@ import rx.functions.Action1;
 import rx.subjects.BehaviorSubject;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
-import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_HIGH;
-import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_NORMAL;
 
-public class NavigationActivity extends ParentNavigationActivity implements INavigationFragmentsListener, SequencedStartAction.IUiRunner {
+public class NavigationActivity extends ParentNavigationActivity implements INavigationFragmentsListener {
     public static final String INTENT_EXIT = "EXIT";
     public static final String PAGE_SWITCH = "Page switch: ";
 
@@ -107,9 +110,11 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private IActionbarNotifier mNotificationController;
     @Inject
     TopfaceAppState mAppState;
+    @Inject
+    PopupHive mPopupHive;
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     private AddPhotoHelper mAddPhotoHelper;
-    private boolean mIsPhotoAsked;
+    public static boolean mIsPhotoAsked;
     private PopupManager mPopupManager;
     private Subscription mCountersSubscription;
     private BehaviorSubject<DRAWER_LAYOUT_STATE> mDrawerLayoutStateObservable;
@@ -130,6 +135,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             }
         }
     };
+    private Subscription mCitySubscription;
 
     /**
      * Перезапускает NavigationActivity, нужно например при смене языка
@@ -203,59 +209,85 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             mPendingNextIntent = intent;
         }
         mIsPhotoAsked = false;
+        mCitySubscription = mAppState.getObservable(City.class).subscribe(new Action1<City>() {
+            @Override
+            public void call(final City city) {
+                if (city != null) {
+                    SettingsRequest request = new SettingsRequest(App.getContext());
+                    request.cityid = city.id;
+                    request.callback(new ApiHandler() {
+                        @Override
+                        public void success(IApiResponse response) {
+                            App.from(NavigationActivity.this).getProfile().city = city;
+                            CacheProfile.sendUpdateProfileBroadcast();
+                        }
+
+                        @Override
+                        public void fail(int codeError, IApiResponse response) {
+                        }
+                    }).exec();
+                }
+            }
+        });
+        Debug.log("PopupHive onCreate");
+        startPopupRush(true, true);
     }
 
-    @Override
-    protected int getContentLayoutId() {
-        return R.layout.ac_navigation;
-    }
-
-    @Override
-    protected void onRegisterMandatoryStartActions(StartActionsController startActionsController) {
-        super.onRegisterMandatoryStartActions(startActionsController);
-        final SequencedStartAction sequencedStartAction = new SequencedStartAction(this, AC_PRIORITY_HIGH);
+    @NotNull
+    private List<IStartAction> getActionsList() {
+        List<IStartAction> startActions = new ArrayList<>();
         mPopupManager = new PopupManager(this);
-        sequencedStartAction.addAction(chooseCityStartAction(AC_PRIORITY_HIGH));
-        sequencedStartAction.addAction(selectPhotoStartAction(AC_PRIORITY_HIGH));
-        sequencedStartAction.addAction(new NotificationsDisablePopup(NavigationActivity.this, AC_PRIORITY_HIGH));
+        startActions.add(chooseCityStartAction(PopupHive.AC_PRIORITY_HIGH));
+        startActions.add(selectPhotoStartAction(PopupHive.AC_PRIORITY_HIGH));
+        startActions.add(new NotificationsDisablePopup(NavigationActivity.this, PopupHive.AC_PRIORITY_HIGH));
         IStartAction fourthStageActions = new ChosenStartAction().chooseFrom(
-                mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_HIGH),
-                mPopupManager.createRatePopupStartAction(AC_PRIORITY_NORMAL, App.from(this).getOptions().ratePopupTimeout, App.from(this).getOptions().ratePopupEnabled)
+                mPopupManager.createOldVersionPopupStartAction(PopupHive.AC_PRIORITY_HIGH),
+                mPopupManager.createRatePopupStartAction(PopupHive.AC_PRIORITY_NORMAL, App.get().getOptions().ratePopupTimeout, App.get().getOptions().ratePopupEnabled)
         );
-        sequencedStartAction.addAction(fourthStageActions);
-        IStartAction fifthStageActions;
-        if (mFullscreenController != null) {
-            fifthStageActions = new ChosenStartAction().chooseFrom(
-                    new TrialVipPopupAction(this, AC_PRIORITY_HIGH),
-                    mFullscreenController.createFullscreenStartAction(AC_PRIORITY_NORMAL, this)
-            );
-        } else {
-            fifthStageActions = new ChosenStartAction().chooseFrom(
-                    new TrialVipPopupAction(this, AC_PRIORITY_HIGH)
-            );
-        }
-        sequencedStartAction.addAction(fifthStageActions);
-        sequencedStartAction.addAction(new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH,
+        startActions.add(fourthStageActions);
+        IStartAction fifthStageActions = mFullscreenController != null ? new ChosenStartAction().chooseFrom(
+                new TrialVipPopupAction(this, PopupHive.AC_PRIORITY_HIGH),
+                mFullscreenController.createFullscreenStartAction(PopupHive.AC_PRIORITY_NORMAL, this)
+        ) : new TrialVipPopupAction(this, PopupHive.AC_PRIORITY_HIGH);
+        startActions.add(fifthStageActions);
+        startActions.add(new DatingLockPopupAction(getSupportFragmentManager(), PopupHive.AC_PRIORITY_HIGH,
                 new DatingLockPopup.DatingLockPopupRedirectListener() {
                     @Override
                     public void onRedirect() {
                         showFragment(FragmentId.TABBED_LIKES.getFragmentSettings());
                     }
                 }, this));
+        startActions.add(new InvitePopupAction(this, PopupHive.AC_PRIORITY_HIGH));
         PromoPopupManager promoPopupManager = new PromoPopupManager(this);
         IStartAction seventhStageActions = new ChosenStartAction().chooseFrom(
-                PromoExpressMessages.createPromoPopupStartAction(AC_PRIORITY_HIGH, new PromoExpressMessages.PopupRedirectListener() {
+                PromoExpressMessages.createPromoPopupStartAction(PopupHive.AC_PRIORITY_HIGH, new PromoExpressMessages.PopupRedirectListener() {
                     @Override
                     public void onRedirect() {
                         showFragment(FragmentId.TABBED_DIALOGS.getFragmentSettings());
                         mDrawerLayoutStateObservable.onNext(DRAWER_LAYOUT_STATE.CLOSED);
                     }
                 }),
-                promoPopupManager.createPromoPopupStartAction(AC_PRIORITY_NORMAL)
+                promoPopupManager.createPromoPopupStartAction(PopupHive.AC_PRIORITY_NORMAL)
         );
-        sequencedStartAction.addAction(seventhStageActions);
-        sequencedStartAction.addAction(new InvitePopupAction(this, AC_PRIORITY_HIGH));
-        startActionsController.registerMandatoryAction(sequencedStartAction);
+        startActions.add(seventhStageActions);
+        startActions.add(new InvitePopupAction(this, PopupHive.AC_PRIORITY_HIGH));
+        return startActions;
+    }
+
+    private void startPopupRush(boolean isNeedResetOldSequence, boolean stateChanged) {
+        if (!App.get().getProfile().isFromCache
+                && App.get().isUserOptionsObtainedFromServer()
+                && !CacheProfile.isEmpty(this) && !AuthToken.getInstance().isEmpty()) {
+            if (!mPopupHive.containSequence(NavigationActivity.class) || stateChanged) {
+                mPopupHive.registerPopupSequence(getActionsList(), NavigationActivity.class);
+            }
+            mPopupHive.execPopupRush(NavigationActivity.class, isNeedResetOldSequence);
+        }
+    }
+
+    @Override
+    protected int getContentLayoutId() {
+        return R.layout.ac_navigation;
     }
 
     private void initFullscreen() {
@@ -370,7 +402,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     private void showFragment(Intent intent) {
         //Получаем id фрагмента, если он открыт
-        FragmentSettings currentFragment = (FragmentSettings) intent.getParcelableExtra(GCMUtils.NEXT_INTENT);
+        FragmentSettings currentFragment = intent.getParcelableExtra(GCMUtils.NEXT_INTENT);
         Debug.log(PAGE_SWITCH + "show fragment from NEXT_INTENT: " + currentFragment);
         showFragment(currentFragment == null ? App.from(this).getOptions().startPageFragmentSettings : currentFragment);
     }
@@ -420,7 +452,13 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     @Override
+    protected void onOptionsUpdated() {
+        startPopupRush(false, false);
+    }
+
+    @Override
     protected void onProfileUpdated() {
+        startPopupRush(false, false);
         initBonusCounterConfig();
         // возможно что содержимое меню поменялось, надо обновить
         if (mMenuFragment != null) {
@@ -442,7 +480,15 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
             @Override
             public void callOnUi() {
-                CacheProfile.selectCity(NavigationActivity.this);
+                CitySearchPopup popup = new CitySearchPopup();
+                popup.setRetainInstance(true);
+                popup.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        mChooseCityNextActionListener.onNextAction();
+                    }
+                });
+                popup.show(getSupportFragmentManager(), CitySearchPopup.TAG);
             }
 
             @Override
@@ -481,7 +527,17 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
             @Override
             public void callOnUi() {
-                takePhoto();
+                if (!mIsPhotoAsked) {
+                    mIsPhotoAsked = true;
+                    TakePhotoPopup popup = TakePhotoPopup.newInstance("");
+                    popup.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            mSelectPhotoNextActionListener.onNextAction();
+                        }
+                    });
+                    popup.show(getSupportFragmentManager(), TakePhotoPopup.TAG);
+                }
             }
 
             @Override
@@ -581,6 +637,10 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
         mDrawerToggle = null;
         mCountersSubscription.unsubscribe();
+        if (mAddPhotoHelper != null) {
+            mAddPhotoHelper.releaseHelper();
+        }
+        mCitySubscription.unsubscribe();
         super.onDestroy();
         AdmobInterstitialUtils.releaseInterstitials();
     }
@@ -604,45 +664,12 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 data,
                 OwnProfileFragment.class
         );
-        // call next popup on CitySearchActivity close
-        if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION && !isBillingRequestProcessed && mChooseCityNextActionListener != null) {
-            mChooseCityNextActionListener.onNextAction();
-        }
         if (resultCode == Activity.RESULT_OK && !isBillingRequestProcessed) {
-            switch (requestCode) {
-                case CitySearchActivity.INTENT_CITY_SEARCH_AFTER_REGISTRATION:
-                case CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY:
-                    if (data != null) {
-                        Bundle extras = data.getExtras();
-                        if (extras != null) {
-                            final City city = extras.getParcelable(CitySearchActivity.INTENT_CITY);
-                            if (city != null) {
-                                SettingsRequest request = new SettingsRequest(this);
-                                request.cityid = city.id;
-                                request.callback(new ApiHandler() {
-                                    @Override
-                                    public void success(IApiResponse response) {
-                                        App.from(NavigationActivity.this).getProfile().city = city;
-                                        CacheProfile.sendUpdateProfileBroadcast();
-                                    }
-
-                                    @Override
-                                    public void fail(int codeError, IApiResponse response) {
-                                    }
-                                }).exec();
-                            }
-                        }
-                    }
-                    break;
-                default:
-                    super.onActivityResult(requestCode, resultCode, data);
-                    break;
-            }
-        } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
-        AddPhotoHelper helper = getAddPhotoHelper();
-        helper.processActivityResult(requestCode, resultCode, data);
+        if (mAddPhotoHelper != null) {
+            mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+        }
     }
 
     private void toggleDrawerLayout() {
@@ -675,13 +702,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             mAddPhotoHelper.setOnResultHandler(mHandler);
         }
         return mAddPhotoHelper;
-    }
-
-    private void takePhoto() {
-        if (!mIsPhotoAsked) {
-            mIsPhotoAsked = true;
-            startActivityForResult(TakePhotoActivity.createIntent(this, TakePhotoStatistics.PLC_AFTER_REGISTRATION_ACTION), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
-        }
     }
 
     private void switchContentTopMargin(boolean actionbarOverlay) {

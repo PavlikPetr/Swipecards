@@ -129,8 +129,8 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
         }).exec();
     }
 
-    public static boolean isApplicable(long timeout, Activity activity) {
-        if (App.from(activity).getProfile().canInvite) {
+    public static boolean isApplicable(long timeout) {
+        if (App.get().getProfile().canInvite) {
             final SharedPreferences preferences = App.getContext().getSharedPreferences(
                     App.PREFERENCES_TAG_SHARED,
                     Context.MODE_PRIVATE
@@ -152,7 +152,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
             case R.id.invitesTitle:
                 EasyTracker.sendEvent("InvitesPopup", "ClosePopup", "", 0L);
                 if (isAdded()) {
-                    ((BaseFragmentActivity) getActivity()).close(InvitesPopup.this);
+                    getDialog().cancel();
                 }
                 break;
             default:

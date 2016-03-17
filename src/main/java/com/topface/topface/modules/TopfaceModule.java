@@ -1,5 +1,6 @@
 package com.topface.topface.modules;
 
+import android.content.Context;
 import android.location.Location;
 import android.text.TextUtils;
 
@@ -16,11 +17,14 @@ import com.topface.topface.promo.dialogs.PromoKey81Dialog;
 import com.topface.topface.state.CacheDataInterface;
 import com.topface.topface.state.CountersDataProvider;
 import com.topface.topface.state.OptionsAndProfileProvider;
+import com.topface.topface.state.PopupHive;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.AddToLeaderActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.dialogs.CitySearchPopup;
+import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
@@ -28,7 +32,9 @@ import com.topface.topface.ui.fragments.feed.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
+import com.topface.topface.ui.fragments.profile.ProfileFormFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
+import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
@@ -77,6 +83,10 @@ import dagger.Provides;
                 PromoKey71Dialog.class,
                 PromoKey81Dialog.class,
                 ProfilePhotoFragment.class,
+                UserProfileFragment.class,
+                CitySearchPopup.class,
+                ProfileFormFragment.class,
+                TakePhotoPopup.class,
 
                 //Other
                 TopfaceAppState.class,
@@ -180,5 +190,11 @@ public class TopfaceModule {
     @Singleton
     AdToAppController providesAdToAppController() {
         return new AdToAppController();
+    }
+
+    @Provides
+    @Singleton
+    PopupHive providesPopupLair() {
+        return new PopupHive();
     }
 }

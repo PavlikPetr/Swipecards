@@ -17,6 +17,7 @@ import com.topface.topface.data.Auth;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
+import com.topface.topface.state.PopupHive;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
@@ -24,8 +25,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.controllers.SequencedStartAction;
-import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
 import java.util.HashMap;
@@ -50,6 +49,8 @@ public class AuthorizationManager {
     public static final String LOGOUT_INTENT = "com.topface.topface.intent.LOGOUT";
     @Inject
     TopfaceAppState mAppState;
+    @Inject
+    PopupHive mHive;
 
     private Map<Platform, Authorizer> mAuthorizers = new HashMap<>();
 
@@ -131,7 +132,6 @@ public class AuthorizationManager {
         UserConfig config = App.getUserConfig();
         config.setStartPositionOfActions(0);
         config.saveConfig();
-        SequencedStartAction.dropDownCurrentPosition();
         Ssid.remove();
         UserNotificationManager.getInstance().removeNotifications();
         TabbedDialogsFragment.setTabsDefaultPosition();
@@ -143,7 +143,8 @@ public class AuthorizationManager {
         mAppState.destroyObservable(Options.class);
         CacheProfile.clearProfileAndOptions(mAppState);
         App.getConfig().onLogout();
-        StartActionsController.onLogout();
+        NavigationActivity.mIsPhotoAsked = false;
+        mHive.clear();
         SharedPreferences preferences = App.getContext().getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         if (preferences != null) {
             preferences.edit().clear().apply();

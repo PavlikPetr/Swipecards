@@ -10,6 +10,4 @@ public interface OnNextActionListener {
 
     void onNextAction();
 
-    void saveNextActionPosition();
-
 }
