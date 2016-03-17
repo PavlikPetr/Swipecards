@@ -262,6 +262,7 @@ public class PurchaseButtonList {
                 validatedPrice = new ProductPriceData(currencyFormatter, price, getFormatedPrice(price, currencyFormatter));
             }
         }
+        buyBtn.currency = currency;
         return new ValidatedAndDeffProductPrice(buyBtn.id, deffPrice, validatedPrice);
     }
 

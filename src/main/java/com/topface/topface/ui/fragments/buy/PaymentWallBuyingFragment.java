@@ -11,7 +11,6 @@ import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.statistics.PushButtonVipUniqueStatistics;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.fragments.PurchasesFragment;
-import com.topface.topface.utils.BuyVipFragmentManager;
 import com.topface.topface.utils.CacheProfile;
 
 import java.util.List;
@@ -55,10 +54,7 @@ public class PaymentWallBuyingFragment extends CoinsBuyingFragment {
         FragmentActivity activity = getActivity();
         if (activity != null) {
             activity.startActivityForResult(
-                    PaymentwallActivity.getIntent(
-                            activity,
-                            btn.paymentwallLink
-                    ),
+                    PaymentwallActivity.getIntent(activity, btn),
                     PaymentwallActivity.ACTION_BUY
             );
         }

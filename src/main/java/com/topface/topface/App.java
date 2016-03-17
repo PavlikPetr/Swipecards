@@ -16,6 +16,8 @@ import android.text.TextUtils;
 
 import com.appsflyer.AppsFlyerLib;
 import com.comscore.analytics.comScore;
+import com.facebook.appevents.AppEventsConstants;
+import com.facebook.appevents.AppEventsLogger;
 import com.flurry.android.FlurryAgent;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.squareup.leakcanary.LeakCanary;
@@ -68,6 +70,7 @@ import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.geo.GeoLocationManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
+import com.topface.topface.utils.social.FbAuthorizer;
 import com.topface.topface.utils.social.VkAuthorizer;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
@@ -333,6 +336,11 @@ public class App extends ApplicationBase {
         super.onCreate();
         LeakCanary.install(this);
         mContext = getApplicationContext();
+        // Отправка ивента о запуске приложения, если пользователь авторизован в FB
+        if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
+            FbAuthorizer.initFB();
+            AppEventsLogger.newLogger(App.getContext()).logEvent(AppEventsConstants.EVENT_NAME_ACTIVATED_APP);
+        }
         initVkSdk();
         initObjectGraphForInjections();
         //Включаем отладку, если это дебаг версия
