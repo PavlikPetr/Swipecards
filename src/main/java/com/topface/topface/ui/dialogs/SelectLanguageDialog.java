@@ -80,7 +80,10 @@ public class SelectLanguageDialog extends TrackedDialogFragment {
         @NotNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            mLocale = getArguments().getString(LOCALE, null);
+            Bundle bundle = savedInstanceState != null ? savedInstanceState : getArguments() != null ? getArguments() : null;
+            if (bundle != null) {
+                mLocale = getArguments().getString(LOCALE);
+            }
             return new AlertDialog.Builder(getActivity())
                     .setTitle(R.string.settings_select_language)
                     .setMessage(R.string.restart_to_change_locale)

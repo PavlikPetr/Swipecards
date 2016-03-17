@@ -32,6 +32,10 @@ public class AboutAppDialog extends TrackedDialogFragment {
     private static final String ABOUT_TITLE = "about_title";
     private static final String ABOUT_URL = "about_url";
 
+    private String mTitle;
+    private String mAboutTitle;
+    private String mAboutUrl;
+
     public static AboutAppDialog newInstance(String title, String aboutTitle, String aboutUrl) {
         AboutAppDialog dialog = new AboutAppDialog();
         Bundle args = new Bundle();
@@ -42,12 +46,23 @@ public class AboutAppDialog extends TrackedDialogFragment {
         return dialog;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(DIALOG_TITLE, mTitle);
+        outState.putString(ABOUT_TITLE, mAboutTitle);
+        outState.putString(ABOUT_URL, mAboutUrl);
+    }
+
     @NotNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        String titleDialog = getArguments().getString(DIALOG_TITLE);
-        String aboutTitle = getArguments().getString(ABOUT_TITLE, "");
-        final String aboutUrl = getArguments().getString(ABOUT_URL, "");
+        Bundle bundle = savedInstanceState != null ? savedInstanceState : getArguments() != null ? getArguments() : null;
+        if (bundle != null) {
+            mTitle = bundle.getString(DIALOG_TITLE);
+            mAboutTitle = bundle.getString(ABOUT_TITLE, "");
+            mAboutUrl = bundle.getString(ABOUT_URL, "");
+        }
         View view = LayoutInflater.from(getActivity())
                 .inflate(R.layout.fragment_about, null);
         // Version
@@ -80,20 +95,20 @@ public class AboutAppDialog extends TrackedDialogFragment {
 
         // Extra
         TextView extra = (TextView) view.findViewById(R.id.tvExtra);
-        SpannableString title = new SpannableString(aboutTitle);
+        SpannableString title = new SpannableString(mAboutTitle);
         title.setSpan(new UnderlineSpan(), 0, title.length(), 0);
         extra.setText(title);
         extra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = Utils.getIntentToOpenUrl(aboutUrl);
+                Intent i = Utils.getIntentToOpenUrl(mAboutUrl);
                 if (i != null) {
                     getActivity().startActivity(i);
                 }
             }
         });
         return new AlertDialog.Builder(getContext())
-                .setTitle(titleDialog).setView(view)
+                .setTitle(mTitle).setView(view)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, int whichButton) {
                         dialog.dismiss();

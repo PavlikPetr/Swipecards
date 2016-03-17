@@ -16,7 +16,7 @@ public class TrackedDialogFragment extends DialogFragment {
     }
 
     protected String getTrackName() {
-        return getClass().getSimpleName().replace("Fragment", Utils.EMPTY).replace("Dialog", Utils.EMPTY).replace("Popup", Utils.EMPTY);
+        return Utils.getClassName(getClass().getSimpleName());
     }
 
     public void senPopupShownStatistics() {

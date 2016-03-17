@@ -32,7 +32,7 @@ public class OldVersionDialog extends TrackedDialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Bundle bundle = getArguments();
+        Bundle bundle = savedInstanceState != null ? savedInstanceState : getArguments() != null ? getArguments() : null;
         if (bundle != null) {
             mIsCancelable = bundle.getBoolean(IS_DIALOG_CANCELABLE);
         }

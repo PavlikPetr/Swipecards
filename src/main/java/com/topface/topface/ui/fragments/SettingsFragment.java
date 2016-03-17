@@ -228,11 +228,11 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                 break;
             case R.id.loAbout:
                 Options options = CacheProfile.getOptions();
-                AboutAppDialog.newInstance(getString(R.string.settings_about), options.aboutApp.title, options.aboutApp.url).show(getFragmentManager(),
+                AboutAppDialog.newInstance(getString(R.string.settings_about), options.aboutApp.title, options.aboutApp.url).show(getChildFragmentManager(),
                         AboutAppDialog.class.getName());
                 break;
             case R.id.loLanguage:
-                new SelectLanguageDialog().show(getFragmentManager(), SelectLanguageDialog.class.getName());
+                new SelectLanguageDialog().show(getChildFragmentManager(), SelectLanguageDialog.class.getName());
                 break;
             case R.id.loPreloadPhoto:
                 PreloadPhotoSelector preloadPhotoSelector = new PreloadPhotoSelector(getActivity());

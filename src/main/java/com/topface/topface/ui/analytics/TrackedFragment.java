@@ -17,7 +17,7 @@ public class TrackedFragment extends Fragment implements IFeedLifeCycle {
     }
 
     public String getTrackName() {
-        return getClass().getSimpleName().replace("Fragment", Utils.EMPTY);
+        return Utils.getClassName(getClass().getSimpleName());
     }
 
     public void senFragmentShownStatistics() {

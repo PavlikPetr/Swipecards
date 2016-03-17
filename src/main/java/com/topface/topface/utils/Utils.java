@@ -222,6 +222,18 @@ public class Utils {
         return null;
     }
 
+    public static String getClassName(String className) {
+        return removeModulesName(className, "Fragment", "Dialog", "Popup");
+    }
+
+    public static String removeModulesName(String className, String... modulesName) {
+        for (String module : modulesName) {
+            className = className.replace(module, EMPTY);
+        }
+        return className;
+    }
+
+
     public static void showCustomToast(int text) {
         Context context = App.getContext();
         if (context != null) {
