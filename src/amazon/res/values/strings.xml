@@ -29,9 +29,7 @@
     <string name="filter_city_age_parameters">Age and city</string>
     <string name="filter_select_city">Select city</string>
     <string name="edit_block_photo">Photos</string>
-    <string name="dashbrd_popup_rating">Like our app? Raise our rating! The higher the rating, the
-        more people you\'ll meet on Topface!
-    </string>
+    <string name="dashbrd_popup_rating">Like our app? Raise our rating! The higher the rating, the more people you\'ll meet on Topface!</string>
     <string name="dashbrd_popup_title">Rate me</string>
     <string name="dashbrd_popup_cancel">Don\'t ask me again</string>
     <string name="dashbrd_popup_rate">Rate</string>
@@ -58,9 +56,7 @@
     <string name="address_book_access_error">This app does not have access to your contacts. You can
         allow access via the Privacy Settings of your device.
     </string>
-    <string name="camera_access_error">Application does not have access to the camera. You can grant
-        access in your device\'s Privacy Settings.
-    </string>
+    <string name="camera_access_error">Application does not have access to the camera. You can grant access in your device\'s Privacy Settings.</string>
     <string name="profile_deleted_user">User has been deleted</string>
     <string name="filter_main_parameters">I am interested in</string>
     <string name="dating_prev_button_ext">Previous</string>
@@ -407,8 +403,7 @@
     </string>
     <string name="default_price_format">Total: %.2f USD</string>
     <string name="default_price_format_extended">Total: %1$.2f %2$s</string>
-    <string name="leaders_pick_condition">You cannot select a photo with a rating lower than %d%%:
-    </string>
+    <string name="leaders_pick_condition">You cannot select a photo with a rating lower than %d%%:</string>
     <string name="general_gift">Gift</string>
     <string name="user_actions_chat">Chat</string>
     <string name="profile_edit_age_ranges">Age has to be between 16 and 99 years. Please enter a
@@ -545,9 +540,7 @@
     <string name="buy_status_and_watch_your_fans">Get VIP-status and find out who added you to their
         favorites.
     </string>
-    <string name="add_bookmarks_to_be_connected">Add new contacts to this section and you will never
-        lose touch with them.
-    </string>
+    <string name="add_bookmarks_to_be_connected">Add new contacts to this section and you will never lose touch with them.</string>
     <string name="nobody_chat_with_you_sympathies_will_help">No one has written to you yet! Likes
         will help you find someone to chat with!
     </string>
@@ -585,8 +578,7 @@
         offensive language, links to social networks
     </string>
     <string name="complain_type_fake_data">Name, sex, age, or photo don\'t match</string>
-    <string name="complain_description">Tell us the details regarding the cause for complaint.
-    </string>
+    <string name="complain_description">Tell us the details regarding the cause for complaint.</string>
     <string name="general_complain_sended">Your complaint has been submitted, thank you for your
         help!
     </string>
@@ -605,8 +597,7 @@
         people on Topface!
     </string>
     <string name="send_confirm_link">Send a link for confirmation</string>
-    <string name="complain_type_swearing_msg">Offensive behavior, improper language, threats
-    </string>
+    <string name="complain_type_swearing_msg">Offensive behavior, improper language, threats</string>
     <string name="general_exit">Exit</string>
     <string name="likes_can_help_you">Likes help you meet people</string>
     <string name="general_get_dating">Meet</string>
@@ -825,32 +816,14 @@
     <string name="novice_sympathy">Send Likes only to those\nwho really attract you.\nYou just might
         find someone special!
     </string>
-    <plurals name="novice_sympathies_bonus">
-        <item quantity="zero">You will receive %1$d Likes as a\ngift! This means that those \nwho
-            send you Likes \nreally like %2$d you
-        </item>
-        <item quantity="other">You will receive %1$d Likes as a\ngift! This means that those \nwho
-            send you Likes \nreally like %2$d you
-        </item>
-        <item quantity="one">You will receive %1$d Like as a\ngift! This means that those \nwho send
-            you Likes \nreally like %2$d you
-        </item>
-    </plurals>
-    <string name="go_dating_message">Start getting to know people and here will appear the names of
-        those users who visited your profile.
-    </string>
-    <string name="photo_not_from_main_album">A moderator has decided that this photo may not be used
-        as a profile photo.
-    </string>
+    <string name="go_dating_message">Start getting to know people and here will appear the names of those users who visited your profile.</string>
+    <string name="photo_not_from_main_album">A moderator has decided that this photo may not be used as a profile photo.</string>
     <string name="sidebar_vk_profile">VK Profile</string>
     <string name="title_vk_profile">VK Profile</string>
     <string name="vk_profile_invite_friends_error">User is no longer accepting invitations</string>
-    <string name="foreign_profile_empty_gifts_title">Send a gift and you\'ll be the center of
-        attention
-    </string>
+    <string name="foreign_profile_empty_gifts_title">Send a gift and you\'ll be the center of attention</string>
     <string name="chat_auto_reply_title">Message\'s text is hidden</string>
-    <string name="chat_auto_reply_message">In order to open/reply to this message, become a VIP
-    </string>
+    <string name="chat_auto_reply_message">In order to open/reply to this message, become a VIP</string>
     <string name="chat_auto_reply_button">Become VIP</string>
     <string name="photo_list_load_info">Share your photos and be seen by millions</string>
     <string name="vk_profile_button_tf_group">Topface group</string>
@@ -864,16 +837,23 @@
     <string name="vk_friends_success_invite">Invitation has been sent</string>
     <string name="join_group_success">You have joined the group</string>
     <string name="settings_auto_greeting_title">Auto-Greetings</string>
-    <string name="settings_auto_greeting_subtitle">Allow Topface to automatically start a
-        conversation with a greeting whenever someone sends you a Like
-    </string>
+    <string name="settings_auto_greeting_subtitle">Allow Topface to automatically start a conversation with a greeting whenever someone sends you a Like</string>
     <string name="take_photo_text_1">Please upload a photo of yourself to start chatting.</string>
-    <string name="take_photo_text_2">Only you should be in the photo; all photos are reviewed by
-        moderators to ensure rules are followed.
-    </string>
+    <string name="take_photo_text_2">Only you should be in the photo; all photos are reviewed by moderators to ensure rules are followed.</string>
     <string name="unlock_by_viewed_ad_video_button_text">Unlock for free at %s</string>
     <plurals name="free_minutes">
         <item quantity="other">%d minutes</item>
         <item quantity="one">%d minute</item>
     </plurals>
+    <string name="thanks_for_your_rate_title">Thank you for your review</string>
+    <string name="thanks_for_your_rate_top_label">To show our thanks, we\'ll post your picture in the photo newsfeed!</string>
+    <string name="thanks_for_your_rate_bottom_label">Share your thoughts in the App Store. We value every review!</string>
+    <string name="thanks_for_your_rate_rate_app">Leave a review in the App Store</string>
+    <string name="thanks_for_your_rate_close">Close</string>
+    <plurals name="novice_sympathies_bonuses">
+        <item quantity="zero">You will receive %1$d Likes as a\ngift! This means that those \nwho send you Likes \nreally like %2$d you</item>
+        <item quantity="other">You will receive %1$d Likes as a\ngift! This means that those \nwho send you Likes \nreally like %2$d you</item>
+        <item quantity="one">You will receive %1$d Like as a\ngift! This means that those \nwho send you Likes \nreally like %2$d you</item>
+    </plurals>
+    <string name="buy_vip_title_from_input">You can begin a conversation with a user if you have VIP-status</string>
 </resources>

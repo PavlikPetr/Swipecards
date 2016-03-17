@@ -70,11 +70,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     protected View mEmptyFeedView;
     private RateController mRateController;
     private TextView mTitleWithCounter;
-    private int mCoins;
+    protected BalanceData mBalanceData;
     private Action1<BalanceData> mBalanceAction = new Action1<BalanceData>() {
         @Override
         public void call(BalanceData balanceData) {
-            mCoins = balanceData.money;
+            mBalanceData = balanceData;
         }
     };
     private Subscription mBalanceSubscription;
@@ -308,7 +308,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         initButtonForBlockedScreen(btnBuy, blockSympathyOptions.buttonText, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mCoins >= blockSympathyOptions.price) {
+                if (mBalanceData.money >= blockSympathyOptions.price) {
                     btnBuy.setVisibility(View.INVISIBLE);
                     progress.setVisibility(View.VISIBLE);
                     EasyTracker.sendEvent(

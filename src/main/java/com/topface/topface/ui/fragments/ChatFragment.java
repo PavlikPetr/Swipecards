@@ -175,7 +175,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             });
         }
     };
-    private int mMaxMessageSize;
     // Managers
     private RelativeLayout mLockScreen;
     private PopularUserChatController mPopularUserLockController;
@@ -980,8 +979,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         if (editText == null || TextUtils.isEmpty(editString.trim()) || mUserId == 0) {
             return false;
         }
-        if (editText.length() > mMaxMessageSize) {
-            Utils.showToastNotification(String.format(getString(R.string.message_too_long), mMaxMessageSize), Toast.LENGTH_SHORT);
+        if (editText.length() > App.get().getOptions().maxMessageSize) {
+            Utils.showToastNotification(String.format(getString(R.string.message_too_long), App.get().getOptions().maxMessageSize), Toast.LENGTH_SHORT);
             return false;
         }
         // вынужденная мера, Editable.clear() некорректно обрабатывается клавиатурой Lg G3

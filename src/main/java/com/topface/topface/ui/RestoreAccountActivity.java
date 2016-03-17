@@ -1,10 +1,13 @@
 package com.topface.topface.ui;
 
+import android.app.Activity;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.View;
-import android.widget.Button;
 
 import com.topface.topface.R;
+import com.topface.topface.databinding.RestoreAccountActivityBinding;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RestoreAccountRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
@@ -13,46 +16,52 @@ import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-public class RestoreAccountActivity extends TrackedFragmentActivity implements View.OnClickListener {
+import org.jetbrains.annotations.NotNull;
+
+public class RestoreAccountActivity extends TrackedFragmentActivity {
+
+    public static final int RESTORE_RESULT = 46452;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-        ActionBarView barView = new ActionBarView(getSupportActionBar(), this);
-        barView.setSimpleView();
-        getSupportActionBar().show();
-        setContentView(R.layout.restore_account_activity);
-        initView();
-    }
-
-    private void initView() {
-        Button restore = (Button) findViewById(R.id.restore_account);
-        restore.setOnClickListener(this);
-        Button cancel = (Button) findViewById(R.id.cancel_restore);
-        cancel.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.restore_account:
-                final AuthToken.TokenInfo tokenInfo = AuthToken.getInstance().getTokenInfo();
-                new RestoreAccountRequest(tokenInfo, this)
-                        .callback(new SimpleApiHandler() {
-                            @Override
-                            public void success(IApiResponse response) {
-                                super.success(response);
-                                AuthToken.getInstance().setTokeInfo(tokenInfo);
-                                AuthorizationManager.saveAuthInfo(response);
-                                finish();
-                            }
-                        }).exec();
-                break;
-            case R.id.cancel_restore:
-                new AuthorizationManager().logout(this);
-                break;
+        ((RestoreAccountActivityBinding) DataBindingUtil.setContentView(this, R.layout.restore_account_activity))
+                .setHandlers(new Handlers(this));
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowCustomEnabled(true);
+            new ActionBarView(actionBar, this).setSimpleView();
+            actionBar.show();
         }
+    }
+
+    public static class Handlers {
+
+        private final Activity mActivity;
+
+        public Handlers(@NotNull Activity activity) {
+            mActivity = activity;
+        }
+
+        public void onRestoreClick(View view) {
+            final AuthToken.TokenInfo tokenInfo = AuthToken.getInstance().getTokenInfo();
+            new RestoreAccountRequest(tokenInfo, mActivity.getApplicationContext())
+                    .callback(new SimpleApiHandler() {
+                        @Override
+                        public void success(IApiResponse response) {
+                            super.success(response);
+                            AuthToken.getInstance().setTokeInfo(tokenInfo);
+                            AuthorizationManager.saveAuthInfo(response);
+                            mActivity.setResult(RESULT_OK);
+                            mActivity.finish();
+                        }
+                    }).exec();
+        }
+
+        public void onCancelClick(View view) {
+            new AuthorizationManager().logout(mActivity);
+        }
+
     }
 
 }

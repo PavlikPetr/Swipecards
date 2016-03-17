@@ -888,4 +888,22 @@
     <string name="take_photo_text_2">На фотографији можете бити сам Ви; све слике прегледавају наши
         модератори како би утврдили да се правила поштују.
     </string>
+    <string name="unlock_by_viewed_ad_video_button_text">Откључати бесплатно на %s</string>
+    <plurals name="free_minutes">
+        <item quantity="few">%d минута</item>
+        <item quantity="other">%d минута</item>
+        <item quantity="one">%d минут</item>
+    </plurals>
+    <string name="thanks_for_your_rate_title">Хвала за Вашу критику</string>
+    <string name="thanks_for_your_rate_top_label">Као израз захвалности, поставићемо Вашу
+        фотографију у фото-фид!
+    </string>
+    <string name="thanks_for_your_rate_bottom_label">Поделите своје утиске у AppStore. Ценимо свако
+        мишљење!
+    </string>
+    <string name="thanks_for_your_rate_rate_app">Оставити мишљење у AppStore</string>
+    <string name="thanks_for_your_rate_close">Затворити</string>
+    <string name="buy_vip_title_from_input">Можете започети разговор са корисником ако имате
+        VIP-статус
+    </string>
 </resources>
