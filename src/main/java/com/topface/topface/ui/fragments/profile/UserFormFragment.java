@@ -47,6 +47,11 @@ public class UserFormFragment extends AbstractFormFragment implements OnClickLis
     }
 
     @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
+    @Override
     protected void onGiftsClick() {
         Activity activity = getActivity();
         Intent intent = GiftsActivity.getSendGiftIntent(activity, getUserId());

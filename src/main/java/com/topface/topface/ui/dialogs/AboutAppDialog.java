@@ -1,12 +1,12 @@
 package com.topface.topface.ui.dialogs;
 
-import android.app.AlertDialog;
-import android.content.Context;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
+import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.UnderlineSpan;
@@ -17,32 +17,61 @@ import android.widget.TextView;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.ui.analytics.TrackedDialogFragment;
+import com.topface.topface.utils.Utils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class AboutAppDialog {
+public class AboutAppDialog extends TrackedDialogFragment {
+    private static final String DIALOG_TITLE = "dialog_title";
+    private static final String ABOUT_TITLE = "about_title";
+    private static final String ABOUT_URL = "about_url";
 
-    private Context mContext;
+    private String mTitle;
+    private String mAboutTitle;
+    private String mAboutUrl;
 
-    public AboutAppDialog(Context context, String title) {
-        mContext = context;
-        showAboutAppDialog(title);
+    public static AboutAppDialog newInstance(String title, String aboutTitle, String aboutUrl) {
+        AboutAppDialog dialog = new AboutAppDialog();
+        Bundle args = new Bundle();
+        args.putString(DIALOG_TITLE, title);
+        args.putString(ABOUT_TITLE, aboutTitle);
+        args.putString(ABOUT_URL, aboutUrl);
+        dialog.setArguments(args);
+        return dialog;
     }
 
-    private void showAboutAppDialog(String titleDialog) {
-        View view = LayoutInflater.from(mContext)
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(DIALOG_TITLE, mTitle);
+        outState.putString(ABOUT_TITLE, mAboutTitle);
+        outState.putString(ABOUT_URL, mAboutUrl);
+    }
+
+    @NotNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Bundle bundle = savedInstanceState != null ? savedInstanceState : getArguments() != null ? getArguments() : null;
+        if (bundle != null) {
+            mTitle = bundle.getString(DIALOG_TITLE);
+            mAboutTitle = bundle.getString(ABOUT_TITLE, "");
+            mAboutUrl = bundle.getString(ABOUT_URL, "");
+        }
+        View view = LayoutInflater.from(getActivity())
                 .inflate(R.layout.fragment_about, null);
         // Version
         TextView version = (TextView) view.findViewById(R.id.tvVersion);
         String versionNumber;
 
         try {
-            PackageManager packageManager = mContext.getPackageManager();
-            String packageName = mContext.getPackageName();
+            PackageManager packageManager = getActivity().getPackageManager();
+            String packageName = getActivity().getPackageName();
             versionNumber = BuildConfig.VERSION_NAME;
 
             //Дополнительную информацию показываем только в дебаг режиме
@@ -55,35 +84,36 @@ public class AboutAppDialog {
             Debug.error(e);
         }
 
-        version.setText(mContext.getResources().getString(R.string.settings_version) + " " + versionNumber);
+        version.setText(getString(R.string.settings_version).concat(" ").concat(versionNumber));
 
         // Copyright
         TextView copyright = (TextView) view.findViewById(R.id.tvCopyright);
-        String copyrightText = mContext.getResources().getString(R.string.settings_copyright) +
+        String copyrightText = getString(R.string.settings_copyright) +
                 Calendar.getInstance().get(Calendar.YEAR) + " " +
-                mContext.getResources().getString(R.string.settings_rights_reserved);
+                getString(R.string.settings_rights_reserved);
         copyright.setText(copyrightText);
 
         // Extra
         TextView extra = (TextView) view.findViewById(R.id.tvExtra);
-        SpannableString title = new SpannableString(CacheProfile.getOptions().aboutApp.title);
+        SpannableString title = new SpannableString(mAboutTitle);
         title.setSpan(new UnderlineSpan(), 0, title.length(), 0);
         extra.setText(title);
         extra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(CacheProfile.getOptions().aboutApp.url));
-                mContext.startActivity(i);
+                Intent i = Utils.getIntentToOpenUrl(mAboutUrl);
+                if (i != null) {
+                    getActivity().startActivity(i);
+                }
             }
         });
-        new AlertDialog.Builder(mContext)
-                .setTitle(titleDialog).setView(view)
+        return new AlertDialog.Builder(getContext())
+                .setTitle(mTitle).setView(view)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, int whichButton) {
                         dialog.dismiss();
                     }
-                }).show();
+                }).create();
     }
 
     /**
@@ -129,6 +159,7 @@ public class AboutAppDialog {
             ZipFile zf = new ZipFile(ai.sourceDir);
             ZipEntry ze = zf.getEntry("classes.dex");
             time = ze.getTime();
+            zf.close();
         } catch (Exception e) {
             Debug.error("BUILD_TIME access error", e);
         }

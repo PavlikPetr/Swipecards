@@ -14,14 +14,16 @@ import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.InviteContactsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.statistics.InvitesStatistics;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
-import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
+
+import static com.topface.topface.statistics.InvitesStatistics.PLC_INVITE_POPUP;
 
 public class InvitesPopup extends AbstractDialogFragment implements View.OnClickListener {
     public static final java.lang.String TAG = "InvitePopup";
@@ -63,7 +65,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
         sendContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EasyTracker.sendEvent("InvitesPopup", "SendContactsBtnClick", "", 1L);
+                InvitesStatistics.sendInviteBtnClickAction(PLC_INVITE_POPUP);
                 sendInvitesRequest();
                 if (isAdded()) {
                     ((BaseFragmentActivity) getActivity()).close(InvitesPopup.this);
@@ -95,25 +97,22 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
             @Override
             public void success(IApiResponse response) {
                 boolean isPremium = response.getJsonResult().optBoolean("premium");
+                InvitesStatistics.sendSuccessInviteResponseAction(PLC_INVITE_POPUP, isPremium, contacts.size());
                 if (isPremium) {
-                    EasyTracker.sendEvent("InvitesPopup", "SuccessWithNotChecked",
-                            "premiumTrue", (long) contacts.size());
-                    EasyTracker.sendEvent("InvitesPopup", "PremiumReceived",
-                            "", (long) CacheProfile.getOptions().premium_period);
+                    InvitesStatistics.sendPremiumReceivedAction(PLC_INVITE_POPUP, CacheProfile.getOptions().premium_period);
                     Utils.showToastNotification(
                             Utils.getQuantityString(R.plurals.vip_status_period, CacheProfile.getOptions().premium_period, CacheProfile.getOptions().premium_period),
                             Toast.LENGTH_LONG
                     );
                     CacheProfile.canInvite = false;
                 } else {
-                    EasyTracker.sendEvent("InvitesPopup", "SuccessWithNotChecked", "premiumFalse", (long) contacts.size());
                     Utils.showToastNotification(getString(R.string.invalid_contacts), Toast.LENGTH_LONG);
                 }
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                EasyTracker.sendEvent("InvitesPopup", "RequestFail", Integer.toString(codeError), 0L);
+                InvitesStatistics.sendFailedInviteResponseAction(PLC_INVITE_POPUP, codeError);
             }
 
             @Override
@@ -147,7 +146,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
         switch (v.getId()) {
             case R.id.ivClose:
             case R.id.invitesTitle:
-                EasyTracker.sendEvent("InvitesPopup", "ClosePopup", "", 0L);
+                InvitesStatistics.sendCloseScreenAction(PLC_INVITE_POPUP);
                 if (isAdded()) {
                     ((BaseFragmentActivity) getActivity()).close(InvitesPopup.this);
                 }

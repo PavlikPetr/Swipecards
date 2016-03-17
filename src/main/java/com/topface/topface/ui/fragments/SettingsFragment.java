@@ -1,8 +1,6 @@
 package com.topface.topface.ui.fragments;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,23 +19,20 @@ import android.widget.TextView;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.AboutAppDialog;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelector;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
+import com.topface.topface.ui.dialogs.SelectLanguageDialog;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.MarketApiManager;
-import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
-
-import java.util.Locale;
 
 public class SettingsFragment extends ProfileInnerFragment implements OnClickListener {
 
@@ -90,6 +85,11 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
         });
         setAutoReplySettings(CacheProfile.getOptions().isAutoreplyAllow);
         root.findViewById(R.id.autoReplyItem).setOnClickListener(this);
+    }
+
+    @Override
+    public boolean isTrackable() {
+        return false;
     }
 
     private void setAutoReplySettings(boolean isChecked) {
@@ -227,10 +227,12 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
                 startActivityForResult(intent, SettingsContainerActivity.INTENT_FEEDBACK);
                 break;
             case R.id.loAbout:
-                new AboutAppDialog(getActivity(), App.getContext().getString(R.string.settings_about));
+                Options options = CacheProfile.getOptions();
+                AboutAppDialog.newInstance(getString(R.string.settings_about), options.aboutApp.title, options.aboutApp.url).show(getChildFragmentManager(),
+                        AboutAppDialog.class.getName());
                 break;
             case R.id.loLanguage:
-                startLanguageSelection();
+                new SelectLanguageDialog().show(getChildFragmentManager(), SelectLanguageDialog.class.getName());
                 break;
             case R.id.loPreloadPhoto:
                 PreloadPhotoSelector preloadPhotoSelector = new PreloadPhotoSelector(getActivity());
@@ -248,58 +250,6 @@ public class SettingsFragment extends ProfileInnerFragment implements OnClickLis
             default:
                 break;
         }
-    }
-
-    private void startLanguageSelection() {
-        final String[] locales = getResources().getStringArray(R.array.application_locales);
-        final String[] languages = new String[locales.length];
-        int selectedLocaleIndex = 0;
-        Locale appLocale = new Locale(App.getLocaleConfig().getApplicationLocale());
-        for (int i = 0; i < locales.length; i++) {
-            Locale locale = new Locale(locales[i]);
-            languages[i] = Utils.capitalize(locale.getDisplayName(locale));
-            if (locale.equals(appLocale)) {
-                selectedLocaleIndex = i;
-            }
-        }
-        final int selectedLocaleIndexFinal = selectedLocaleIndex;
-        new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.settings_select_language)
-                .setSingleChoiceItems(languages, selectedLocaleIndex, null)
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogLocales, int which) {
-                        dialogLocales.dismiss();
-                    }
-                })
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialogLocales, int whichButton) {
-                        final int selectedPosition = ((AlertDialog) dialogLocales).getListView().getCheckedItemPosition();
-                        if (selectedLocaleIndexFinal == selectedPosition) {
-                            dialogLocales.dismiss();
-                            return;
-                        }
-                        new AlertDialog.Builder(getActivity())
-                                .setTitle(R.string.settings_select_language)
-                                .setMessage(R.string.restart_to_change_locale)
-                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogConfirm, int which) {
-                                        String selectedLocale = locales[selectedPosition];
-                                        (new SearchCacheManager()).clearCache();
-
-                                        LocaleConfig.changeLocale(getActivity(), selectedLocale);
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogConfirm, int which) {
-                                        dialogLocales.dismiss();
-                                    }
-                                }).show();
-                    }
-                }).show();
-
     }
 
     @Override

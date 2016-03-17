@@ -14,8 +14,10 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.MarkSMSInviteRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.statistics.InvitesStatistics;
 import com.topface.topface.ui.fragments.SmsInviteFragment;
 
+import static com.topface.topface.statistics.InvitesStatistics.PLC_SMS_INVITE;
 import static com.topface.topface.ui.fragments.SmsInviteFragment.PHONES_STATUSES.CAN_SEND_CONFIRMATION;
 import static com.topface.topface.ui.fragments.SmsInviteFragment.PHONES_STATUSES.CONFIRMATION_WAS_SENT;
 import static com.topface.topface.ui.fragments.SmsInviteFragment.PHONES_STATUSES.USER_REGISTERED;
@@ -66,6 +68,7 @@ public class CatchSmsActions extends BroadcastReceiver {
 
                 @Override
                 public void fail(int codeError, IApiResponse response) {
+                    InvitesStatistics.sendFailedInviteResponseAction(PLC_SMS_INVITE, codeError);
                     int status;
                     switch (codeError) {
                         case ErrorCodes.CODE_SMS_INVITE_ALREADY_SENT:
@@ -83,6 +86,7 @@ public class CatchSmsActions extends BroadcastReceiver {
 
                 @Override
                 protected void success(SMSInvitationCounters data, IApiResponse response) {
+                    InvitesStatistics.sendSuccessInviteResponseAction(PLC_SMS_INVITE);
                     Integer invitationCount = null;
                     Integer registeredCount = null;
                     if (null != data) {
@@ -93,6 +97,7 @@ public class CatchSmsActions extends BroadcastReceiver {
                 }
 
                 @Override
+
                 protected SMSInvitationCounters parseResponse(ApiResponse response) {
                     return JsonUtils.fromJson(response.toString(), SMSInvitationCounters.class);
                 }

@@ -7,7 +7,9 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.IDialogListener;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
+import com.topface.topface.ui.dialogs.OldVersionDialog;
 import com.topface.topface.ui.dialogs.RateAppDialog;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
@@ -30,7 +32,23 @@ public class PopupManager {
 
             @Override
             public void callOnUi() {
-                Utils.startOldVersionPopup(mActivity);
+                final OldVersionDialog oldVersionDialog = OldVersionDialog.newInstance(true);
+                oldVersionDialog.setDialogInterface(new IDialogListener() {
+                    @Override
+                    public void onPositiveButtonClick() {
+                        Utils.goToMarket(mActivity);
+                    }
+
+                    @Override
+                    public void onNegativeButtonClick() {
+                        oldVersionDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onDismissListener() {
+                    }
+                });
+                oldVersionDialog.show(mActivity.getSupportFragmentManager(), OldVersionDialog.class.getName());
             }
 
             @Override

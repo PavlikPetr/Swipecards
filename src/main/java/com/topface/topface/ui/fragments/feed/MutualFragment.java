@@ -54,6 +54,11 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     }
 
     @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
+    @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
 
         inflated.findViewById(R.id.btnGetDating).setOnClickListener(new View.OnClickListener() {

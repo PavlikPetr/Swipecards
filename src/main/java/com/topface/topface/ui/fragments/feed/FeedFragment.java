@@ -303,28 +303,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         initButtonForBlockedScreen(null, null, button, buttonText, listener);
     }
 
-    protected static void initButtonForBlockedScreen(TextView textView, String text,
-                                                     Button button, String buttonText,
-                                                     View.OnClickListener listener) {
-        if (textView != null) {
-            if (TextUtils.isEmpty(text)) {
-                textView.setVisibility(View.GONE);
-            } else {
-                textView.setVisibility(View.VISIBLE);
-                textView.setText(text);
-            }
-        }
-
-        if (TextUtils.isEmpty(buttonText)) {
-            // Не показываем кнопку без текста
-            button.setVisibility(View.GONE);
-        } else {
-            button.setVisibility(View.VISIBLE);
-            button.setText(buttonText);
-            button.setOnClickListener(listener);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
@@ -361,6 +339,28 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
         allViewsInitialized();
         return root;
+    }
+
+    protected static void initButtonForBlockedScreen(TextView textView, String text,
+                                                     Button button, String buttonText,
+                                                     View.OnClickListener listener) {
+        if (textView != null) {
+            if (TextUtils.isEmpty(text)) {
+                textView.setVisibility(View.GONE);
+            } else {
+                textView.setVisibility(View.VISIBLE);
+                textView.setText(text);
+            }
+        }
+
+        if (TextUtils.isEmpty(buttonText)) {
+            // Не показываем кнопку без текста
+            button.setVisibility(View.GONE);
+        } else {
+            button.setVisibility(View.VISIBLE);
+            button.setText(buttonText);
+            button.setOnClickListener(listener);
+        }
     }
 
     private void removeBlackListUserFromFeed() {

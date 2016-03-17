@@ -26,6 +26,7 @@ import com.topface.topface.data.CountersData;
 import com.topface.topface.state.CountersDataProvider;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
+import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.utils.Utils;
@@ -75,6 +76,9 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         public void onPageSelected(int position) {
             if (mTabLayoutCreator != null) {
                 mTabLayoutCreator.setTabTitle(position);
+            }
+            if (mBodyPagerAdapter != null) {
+                ((TrackedFragment) mBodyPagerAdapter.getItem(position)).onResumeFragment();
             }
             List<Fragment> fragments = getChildFragmentManager().getFragments();
             if (fragments != null) {
@@ -146,6 +150,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
             }
         }
         mPager.setCurrentItem(lastPage);
+        mPageChangeListener.onPageSelected(lastPage);
         initFloatBlock();
     }
 
@@ -276,5 +281,10 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
                 fr.onActivityResult(requestCode, resultCode, data);
             }
         }
+    }
+
+    @Override
+    public boolean isTrackable() {
+        return false;
     }
 }

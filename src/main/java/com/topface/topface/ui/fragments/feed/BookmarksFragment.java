@@ -58,6 +58,11 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     }
 
     @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
+    @Override
     protected Class getFeedListItemClass() {
         return FeedBookmark.class;
     }

@@ -52,6 +52,7 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.transport.HttpApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
+import com.topface.topface.statistics.AppStateStatistics;
 import com.topface.topface.ui.ApplicationBase;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
@@ -59,6 +60,7 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.RunningStateManager;
 import com.topface.topface.utils.ad.NativeAdManager;
 import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.config.AppConfig;
@@ -83,6 +85,8 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import dagger.ObjectGraph;
 
 @ReportsCrashes(formUri = "817b00ae731c4a663272b4c4e53e4b61")
@@ -96,6 +100,8 @@ public class App extends ApplicationBase {
     public static final String INTENT_REQUEST_KEY = "requestCode";
     private static final long PROFILE_UPDATE_TIMEOUT = 1000 * 120;
 
+    @Inject
+    static RunningStateManager mStateManager;
     private ObjectGraph mGraph;
     private static Context mContext;
     private static Intent mConnectionIntent;
@@ -133,6 +139,14 @@ public class App extends ApplicationBase {
         mGraph = ObjectGraph.create(new TopfaceModule());
         mGraph.injectStatics();
         mGraph.inject(this);
+    }
+
+    public static void onActivityStarted(String activityName) {
+        mStateManager.onActivityStarted(activityName);
+    }
+
+    public static void onActivityStoped(String activityName) {
+        mStateManager.onActivityStoped(activityName);
     }
 
     public void inject(Object obj) {
@@ -343,6 +357,18 @@ public class App extends ApplicationBase {
         }
         initVkSdk();
         initObjectGraphForInjections();
+        // подписываемся на события о переходе приложения в состояние background/foreground
+        mStateManager.registerAppChangeStateListener(new RunningStateManager.OnAppChangeStateListener() {
+            @Override
+            public void onAppForeground(long timeOnStart) {
+                AppStateStatistics.sendAppForegroundState();
+            }
+
+            @Override
+            public void onAppBackground(long timeOnStop, long timeOnStart) {
+                AppStateStatistics.sendAppBackgroundState();
+            }
+        });
         //Включаем отладку, если это дебаг версия
         enableDebugLogs();
         //Включаем логирование ошибок

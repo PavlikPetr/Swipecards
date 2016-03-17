@@ -54,6 +54,11 @@ public class FansFragment extends BookmarksFragment {
         getUnlockButtonView(inflated).setVisibility(View.GONE);
     }
 
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
     private void initGagView(@NotNull View inflated, @StringRes int text, @StringRes int buttonText, View.OnClickListener listener) {
         Button btnBuyVip = (Button) inflated.findViewById(R.id.btnBuy);
         TextView textView = (TextView) inflated.findViewById(R.id.tvText);

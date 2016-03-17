@@ -136,21 +136,18 @@ android {
 
     signingConfigs {
         google {
-            logger.error("build release apk with default flavourType")
             storeFile file("misc/keys/topface.keystore")
             storePassword "Sonetica2012"
             keyAlias "topface"
             keyPassword "Sonetica2012"
         }
         ifree {
-            logger.error("build release apk with IFree flavourType")
             storeFile file("misc/keys/topfaceIFree.keystore")
             storePassword "Sonetica2012"
             keyAlias "topfaceifree"
             keyPassword "Sonetica2012"
         }
         blueStacks {
-            logger.error("build release apk with BlueStacks flavourType")
             storeFile file("misc/keys/topfaceBlueStacks.keystore")
             storePassword "Sonetica2012"
             keyAlias "topfacebluestacks"
