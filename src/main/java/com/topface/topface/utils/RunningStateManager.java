@@ -4,74 +4,86 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by ppetr on 14.03.16.
  * We need it to detect moment when app go background/foreground
  */
 public class RunningStateManager {
-    private HashMap<String, Long> mActivitiesState;
-    private ArrayList<OnAppChangeStateListener> mOnAppChangeStateListeners;
+    private ConcurrentHashMap<String, Long> mActivitiesState;
+    private List<OnAppChangeStateListener> mOnAppChangeStateListeners;
     private long mAppStartTime;
-    private static RunningStateManager mInstance;
-
-    public static RunningStateManager getInstance() {
-        if (mInstance == null) {
-            mInstance = new RunningStateManager();
-        }
-        return mInstance;
-    }
-
-    private RunningStateManager() {
-        mActivitiesState = new HashMap<>();
-        mOnAppChangeStateListeners = new ArrayList<>();
-    }
 
     public void onActivityStarted(String activityName) {
         long timeStart = getCurrentTime();
-        if (mActivitiesState.isEmpty()) {
-            mAppStartTime = timeStart;
-            callOnAppForeground();
+        synchronized (getActivitiesState()) {
+            if (getActivitiesState().isEmpty()) {
+                mAppStartTime = timeStart;
+                callOnAppForeground();
+            }
+            getActivitiesState().put(activityName, timeStart);
         }
-        mActivitiesState.put(activityName, timeStart);
     }
 
     public void onActivityStoped(String activityName) {
-        mActivitiesState.remove(activityName);
-        if (mActivitiesState.isEmpty()) {
-            callOnAppBackground();
+        synchronized (getActivitiesState()) {
+            getActivitiesState().remove(activityName);
+            if (getActivitiesState().isEmpty()) {
+                callOnAppBackground();
+            }
         }
     }
+
+    @NotNull
+    private ConcurrentHashMap<String, Long> getActivitiesState() {
+        if (mActivitiesState == null) {
+            mActivitiesState = new ConcurrentHashMap<>();
+        }
+        return mActivitiesState;
+    }
+
+    @NotNull
+    private List<OnAppChangeStateListener> getInterfacesList() {
+        if (mOnAppChangeStateListeners == null) {
+            mOnAppChangeStateListeners = Collections.synchronizedList(new ArrayList<OnAppChangeStateListener>());
+        }
+        return mOnAppChangeStateListeners;
+    }
+
 
     private long getCurrentTime() {
         return Calendar.getInstance().getTimeInMillis();
     }
 
-    public static boolean isAppForeground() {
-        return getInstance().mActivitiesState != null && !getInstance().mActivitiesState.isEmpty();
-    }
-
     private void callOnAppForeground() {
-        if (mOnAppChangeStateListeners != null) {
-            for (OnAppChangeStateListener listener : mOnAppChangeStateListeners) {
-                listener.onAppForeground(mAppStartTime);
+        synchronized (getInterfacesList()) {
+            for (OnAppChangeStateListener listener : getInterfacesList()) {
+                if (listener != null) {
+                    listener.onAppForeground(mAppStartTime);
+                }
             }
         }
     }
 
     private void callOnAppBackground() {
-        if (mOnAppChangeStateListeners != null) {
+        synchronized (getInterfacesList()) {
             long timeStop = getCurrentTime();
-            for (OnAppChangeStateListener listener : mOnAppChangeStateListeners) {
-                listener.onAppBackground(timeStop, mAppStartTime);
+            for (OnAppChangeStateListener listener : getInterfacesList()) {
+                if (listener != null) {
+                    listener.onAppBackground(timeStop, mAppStartTime);
+                }
             }
         }
     }
 
     public void registerAppChangeStateListener(@NotNull OnAppChangeStateListener listener) {
-        if (!mOnAppChangeStateListeners.contains(listener)) {
-            mOnAppChangeStateListeners.add(listener);
+        if (!getInterfacesList().contains(listener)) {
+            synchronized (getInterfacesList()) {
+                getInterfacesList().add(listener);
+            }
             if (mAppStartTime != 0) {
                 listener.onAppForeground(mAppStartTime);
             }
@@ -79,7 +91,9 @@ public class RunningStateManager {
     }
 
     public void unregisterAppChangeStateListener(OnAppChangeStateListener listener) {
-        mOnAppChangeStateListeners.remove(listener);
+        synchronized (getInterfacesList()) {
+            getInterfacesList().remove(listener);
+        }
     }
 
     public interface OnAppChangeStateListener {

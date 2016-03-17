@@ -69,13 +69,13 @@ public class AboutAppDialog extends TrackedDialogFragment {
             Debug.error(e);
         }
 
-        version.setText(getActivity().getResources().getString(R.string.settings_version) + " " + versionNumber);
+        version.setText(getString(R.string.settings_version).concat(" ").concat(versionNumber));
 
         // Copyright
         TextView copyright = (TextView) view.findViewById(R.id.tvCopyright);
-        String copyrightText = getActivity().getResources().getString(R.string.settings_copyright) +
+        String copyrightText = getString(R.string.settings_copyright) +
                 Calendar.getInstance().get(Calendar.YEAR) + " " +
-                getActivity().getResources().getString(R.string.settings_rights_reserved);
+                getString(R.string.settings_rights_reserved);
         copyright.setText(copyrightText);
 
         // Extra
@@ -92,7 +92,7 @@ public class AboutAppDialog extends TrackedDialogFragment {
                 }
             }
         });
-        return new AlertDialog.Builder(getActivity())
+        return new AlertDialog.Builder(getContext())
                 .setTitle(titleDialog).setView(view)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, int whichButton) {

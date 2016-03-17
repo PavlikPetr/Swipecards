@@ -17,11 +17,11 @@ public class TrackedFragment extends Fragment implements IFeedLifeCycle {
     }
 
     public String getTrackName() {
-        return ((Object) this).getClass().getSimpleName().replace("Fragment", Utils.EMPTY);
+        return getClass().getSimpleName().replace("Fragment", Utils.EMPTY);
     }
 
     public void senFragmentShownStatistics() {
-        ScreensShowStatistics.sendScreenShow(this.getClass().getSimpleName());
+        ScreensShowStatistics.sendScreenShow(getClass().getSimpleName());
     }
 
     public boolean isTrackable() {

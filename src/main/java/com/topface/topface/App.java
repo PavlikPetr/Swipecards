@@ -82,6 +82,8 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import dagger.ObjectGraph;
 
 @ReportsCrashes(formUri = "817b00ae731c4a663272b4c4e53e4b61")
@@ -95,6 +97,8 @@ public class App extends ApplicationBase {
     public static final String INTENT_REQUEST_KEY = "requestCode";
     private static final long PROFILE_UPDATE_TIMEOUT = 1000 * 120;
 
+    @Inject
+    static RunningStateManager mStateManager;
     private ObjectGraph mGraph;
     private static Context mContext;
     private static Intent mConnectionIntent;
@@ -135,11 +139,11 @@ public class App extends ApplicationBase {
     }
 
     public static void onActivityStarted(String activityName) {
-        RunningStateManager.getInstance().onActivityStarted(activityName);
+        mStateManager.onActivityStarted(activityName);
     }
 
     public static void onActivityStoped(String activityName) {
-        RunningStateManager.getInstance().onActivityStoped(activityName);
+        mStateManager.onActivityStoped(activityName);
     }
 
     public void inject(Object obj) {
@@ -341,8 +345,12 @@ public class App extends ApplicationBase {
         }
 
         super.onCreate();
+        LeakCanary.install(this);
+        mContext = getApplicationContext();
+        initVkSdk();
+        initObjectGraphForInjections();
         // подписываемся на события о переходе приложения в состояние background/foreground
-        RunningStateManager.getInstance().registerAppChangeStateListener(new RunningStateManager.OnAppChangeStateListener() {
+        mStateManager.registerAppChangeStateListener(new RunningStateManager.OnAppChangeStateListener() {
             @Override
             public void onAppForeground(long timeOnStart) {
                 AppStateStatistics.sendAppForegroundState();
@@ -353,10 +361,6 @@ public class App extends ApplicationBase {
                 AppStateStatistics.sendAppBackgroundState();
             }
         });
-        LeakCanary.install(this);
-        mContext = getApplicationContext();
-        initVkSdk();
-        initObjectGraphForInjections();
         //Включаем отладку, если это дебаг версия
         enableDebugLogs();
         //Включаем логирование ошибок

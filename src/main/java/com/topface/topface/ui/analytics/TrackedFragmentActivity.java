@@ -27,7 +27,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     }
 
     public void senActivitiesShownStatistics() {
-        ScreensShowStatistics.sendScreenShow(this.getClass().getSimpleName());
+        ScreensShowStatistics.sendScreenShow(getClass().getSimpleName());
     }
 
     @Override
@@ -70,7 +70,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     }
 
     protected String getTrackName() {
-        return ((Object) this).getClass().getSimpleName().replace("Activity", Utils.EMPTY);
+        return getClass().getSimpleName().replace("Activity", Utils.EMPTY);
     }
 
     @Override

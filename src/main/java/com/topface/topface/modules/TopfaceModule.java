@@ -29,6 +29,7 @@ import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.RunningStateManager;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.ads.AdToAppController;
 import com.topface.topface.utils.ads.AdToAppHelper;
@@ -74,7 +75,8 @@ import dagger.Provides;
                 PaymentwallActivity.class,
                 CountersDataProvider.class,
                 AdToAppHelper.class
-        }
+        },
+        staticInjections = App.class
 )
 public class TopfaceModule {
 
@@ -114,5 +116,11 @@ public class TopfaceModule {
     @Singleton
     AdToAppController providesAdToAppController() {
         return new AdToAppController();
+    }
+
+    @Provides
+    @Singleton
+    RunningStateManager providesRunningStateManager() {
+        return new RunningStateManager();
     }
 }

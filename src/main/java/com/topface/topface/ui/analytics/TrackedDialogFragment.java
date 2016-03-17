@@ -16,11 +16,11 @@ public class TrackedDialogFragment extends DialogFragment {
     }
 
     protected String getTrackName() {
-        return ((Object) this).getClass().getSimpleName().replace("Fragment", Utils.EMPTY).replace("Dialog", Utils.EMPTY).replace("Popup", Utils.EMPTY);
+        return getClass().getSimpleName().replace("Fragment", Utils.EMPTY).replace("Dialog", Utils.EMPTY).replace("Popup", Utils.EMPTY);
     }
 
     public void senPopupShownStatistics() {
-        ScreensShowStatistics.sendPopupShow(this.getClass().getSimpleName());
+        ScreensShowStatistics.sendPopupShow(getClass().getSimpleName());
     }
 
     public boolean isTrackable() {
