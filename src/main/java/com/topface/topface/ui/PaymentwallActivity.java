@@ -100,10 +100,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
             @Override
             public void onPageStarted(String url) {
                 if (TextUtils.equals(url, mSuccessUrl)) {
-                    Debug.log("PW: buy is completed " + url);
-                    setResult(RESULT_OK, getIntent());
-                    finish();
-
+                    fillResultAndClose("PW: buy is completed " + url);
                 } else {
                     mProgressBar.setVisibility(View.VISIBLE);
                 }
@@ -112,9 +109,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
             @Override
             public void onPageFinished(String url) {
                 if (TextUtils.equals(url, mSuccessUrl)) {
-                    Debug.log("PW: finish buy is completed " + url);
-                    setResult(RESULT_OK, getIntent());
-                    finish();
+                    fillResultAndClose("PW: finish buy is completed " + url);
                 }
                 mProgressBar.setVisibility(View.GONE);
             }
@@ -124,6 +119,12 @@ public class PaymentwallActivity extends BaseFragmentActivity {
                 onFatalError();
             }
         }));
+    }
+
+    private void fillResultAndClose(String log) {
+        Debug.log(log);
+        setResult(RESULT_OK, getIntent());
+        finish();
     }
 
     @Override

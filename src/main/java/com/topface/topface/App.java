@@ -339,8 +339,7 @@ public class App extends ApplicationBase {
         // Отправка ивента о запуске приложения, если пользователь авторизован в FB
         if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
             FbAuthorizer.initFB();
-            AppEventsLogger logger = AppEventsLogger.newLogger(App.getContext());
-            logger.logEvent(AppEventsConstants.EVENT_NAME_ACTIVATED_APP);
+            AppEventsLogger.newLogger(App.getContext()).logEvent(AppEventsConstants.EVENT_NAME_ACTIVATED_APP);
         }
         initVkSdk();
         initObjectGraphForInjections();
