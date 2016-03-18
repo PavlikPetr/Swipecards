@@ -526,7 +526,7 @@ public class App extends ApplicationBase {
         });
     }
 
-    private void sendLocation() {
+    public static void sendLocation() {
         new BackgroundThread(Thread.MIN_PRIORITY) {
             @Override
             public void execute() {
