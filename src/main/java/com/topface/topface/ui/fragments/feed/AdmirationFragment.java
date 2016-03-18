@@ -106,7 +106,7 @@ public class AdmirationFragment extends LikesFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (outState != null) {
+        if (outState != null && mStubFlipper != null) {
             outState.putInt(FLIPPER_CHILD_POSITION, mStubFlipper.getDisplayedChild());
         }
     }
