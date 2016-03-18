@@ -16,6 +16,7 @@ import com.topface.topface.utils.Utils;
 import javax.inject.Inject;
 
 /**
+ * Выбираем город
  * Created by tiberal on 14.03.16.
  */
 public class CitySearchPopup extends AbstractDialogFragment {
