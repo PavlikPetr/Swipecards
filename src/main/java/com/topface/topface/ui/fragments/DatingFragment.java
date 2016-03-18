@@ -388,10 +388,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mAppState.setData(App.get().getProfile().city);
         if (null != mDatingSubscriptions && !mDatingSubscriptions.isUnsubscribed()) {
             mDatingSubscriptions.unsubscribe();
         }
+        mAppState.setData(App.get().getProfile().city);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mRateReceiver);
     }
 
