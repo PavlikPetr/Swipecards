@@ -7,6 +7,7 @@ import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
+import com.topface.topface.data.City;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
@@ -120,6 +121,8 @@ public class TopfaceModule {
                 } else if (data.getClass() == Profile.class) {
                     Profile profile = (Profile) data;
                     CacheProfile.setProfile(profile, JsonUtils.profileToJson(profile));
+                } else if (data.getClass() == City.class) {
+                    App.getUserConfig().setUserCity(JsonUtils.toJson(data));
                 }
             }
 
@@ -133,6 +136,8 @@ public class TopfaceModule {
                     return (T) getOptions();
                 } else if (Profile.class.equals(classType)) {
                     return (T) getProfile();
+                } else if (City.class.equals(classType)) {
+                    return (T) JsonUtils.fromJson(App.getUserConfig().getUserCity(), City.class);
                 }
                 return null;
             }

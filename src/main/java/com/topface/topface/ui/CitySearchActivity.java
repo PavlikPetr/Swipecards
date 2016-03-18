@@ -60,6 +60,9 @@ public class CitySearchActivity extends BaseFragmentActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Utils.hideSoftKeyboard(this, getCurrentFocus().getWindowToken());
+        View focus = getCurrentFocus();
+        if(focus != null){
+            Utils.hideSoftKeyboard(this, focus.getWindowToken());
+        }
     }
 }
