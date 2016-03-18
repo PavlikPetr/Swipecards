@@ -149,6 +149,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 //После авторизации обязательно бросаем события, что бы профиль загрузился
                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
                 onOptionsAndProfileSuccess();
+                App.sendLocation();
             }
 
             @Override
