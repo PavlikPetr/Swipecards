@@ -635,6 +635,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (mFullscreenController != null) {
             mFullscreenController.onDestroy();
         }
+        mPopupHive.releaseHive();
         mDrawerToggle = null;
         mCountersSubscription.unsubscribe();
         if (mAddPhotoHelper != null) {

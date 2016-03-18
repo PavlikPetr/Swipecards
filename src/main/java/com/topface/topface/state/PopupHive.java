@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -27,12 +28,13 @@ public class PopupHive {
     public static final int AC_PRIORITY_LOW = 1;
 
     private ConcurrentHashMap<Class, PopupSequencedHolder> mSequenceHolderMap = new ConcurrentHashMap<>();
+    private Subscription mSequencedSubscription;
 
     public void execPopupRush(Class clazz, boolean isStateChanged) {
         final PopupSequencedHolder holder = mSequenceHolderMap.get(clazz);
         if (holder != null && (!holder.mIsExecuted || isStateChanged)) {
             Debug.log("PopupHive start rush");
-            holder.mActionObservable
+            mSequencedSubscription = holder.mActionObservable
                     .map(new Func1<IStartAction, IStartAction>() {
                         @Override
                         public IStartAction call(IStartAction iStartAction) {
@@ -58,6 +60,12 @@ public class PopupHive {
                             Debug.log("PopupHive OK ");
                         }
                     });
+        }
+    }
+
+    public void releaseHive() {
+        if (mSequencedSubscription != null && !mSequencedSubscription.isUnsubscribed()) {
+            mSequencedSubscription.unsubscribe();
         }
     }
 
