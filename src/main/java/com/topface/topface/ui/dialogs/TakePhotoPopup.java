@@ -60,20 +60,6 @@ public class TakePhotoPopup extends AbstractDialogFragment implements View.OnCli
         getDialog().cancel();
     }
 
-    private void enableButtons(boolean enable) {
-        View root = getView();
-        if (root != null) {
-            View button = root.findViewById(R.id.btn_take_photo);
-            if (button != null) {
-                button.setEnabled(enable);
-            }
-            button = root.findViewById(R.id.btn_choose_photo);
-            if (button != null) {
-                button.setEnabled(enable);
-            }
-        }
-    }
-
     @Override
     protected int getDialogLayoutRes() {
         return R.layout.take_photo_dialog;
