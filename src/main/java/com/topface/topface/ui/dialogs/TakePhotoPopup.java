@@ -24,7 +24,6 @@ public class TakePhotoPopup extends AbstractDialogFragment implements View.OnCli
     @Inject
     TopfaceAppState mAppState;
     private Bundle mArgs;
-    private TakePhotoDialogBinding mBinding;
 
     public enum TakePhotoPopupAction {ACTION_CAMERA_CHOSEN, ACTION_GALLERY_CHOSEN, ACTION_CANCEL}
 
@@ -48,11 +47,11 @@ public class TakePhotoPopup extends AbstractDialogFragment implements View.OnCli
 
     @Override
     protected void initViews(View root) {
-        mBinding = TakePhotoDialogBinding.bind(root);
-        mBinding.setHandlers(new Handlers(getDialog(), mArgs, mAppState));
-        mBinding.uploadPhotoPlaceholder.setBackgroundResource(App.get().getProfile().sex == Profile.GIRL ? R.drawable.upload_photo_female : R.drawable.upload_photo_male);
-        ((TextView) mBinding.getRoot().findViewById(R.id.title)).setText(R.string.take_photo);
-        mBinding.getRoot().findViewById(R.id.title_clickable).setOnClickListener(this);
+        TakePhotoDialogBinding binding = TakePhotoDialogBinding.bind(root);
+        binding.setHandlers(new Handlers(getDialog(), mArgs, mAppState));
+        binding.uploadPhotoPlaceholder.setBackgroundResource(App.get().getProfile().sex == Profile.GIRL ? R.drawable.upload_photo_female : R.drawable.upload_photo_male);
+        ((TextView) binding.getRoot().findViewById(R.id.title)).setText(R.string.take_photo);
+        binding.getRoot().findViewById(R.id.title_clickable).setOnClickListener(this);
     }
 
     @Override
