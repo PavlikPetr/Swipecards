@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -1126,7 +1127,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     @Override
     protected void onUpdateStart(boolean isPushUpdating) {
-        if (!getListAdapter().isEmpty()) {
+        BaseAdapter adapter = getListAdapter();
+        if (adapter != null && !adapter.isEmpty()) {
             onFilledFeed();
         }
         if (!isPushUpdating) {
