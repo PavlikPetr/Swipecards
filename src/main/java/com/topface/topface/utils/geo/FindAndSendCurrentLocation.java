@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -31,19 +32,23 @@ public class FindAndSendCurrentLocation {
         mGeoLocationManager.registerProvidersChangedActionReceiver();
         // пропускаем эмит из SharedPreff (BehaviorSubject), ждем WAIT_LOCATION_DELAY и отправляем
         // getLastKnownLocation если ранее не было получено значение от LocationManager
-        mSubscription.add(mAppState.getObservable(Location.class).skip(1).timeout(WAIT_LOCATION_DELAY, TimeUnit.SECONDS).doOnError(new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                unsubscribe();
-                App.sendLocation(GeoLocationManager.getCurrentLocation());
-            }
-        }).subscribe(new Action1<Location>() {
-            @Override
-            public void call(Location location) {
-                unsubscribe();
-                App.sendLocation(location);
-            }
-        }));
+        mSubscription.add(mAppState.getObservable(Location.class)
+                .subscribeOn(Schedulers.newThread())
+                .skip(1)
+                .timeout(WAIT_LOCATION_DELAY, TimeUnit.SECONDS)
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        unsubscribe();
+                        App.sendLocation(GeoLocationManager.getCurrentLocation());
+                    }
+                }).subscribe(new Action1<Location>() {
+                    @Override
+                    public void call(Location location) {
+                        unsubscribe();
+                        App.sendLocation(location);
+                    }
+                }));
     }
 
     private void unsubscribe() {
