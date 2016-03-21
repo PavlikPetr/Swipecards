@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Build;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 import android.support.v4.app.FragmentManager;
@@ -45,7 +44,6 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
@@ -69,7 +67,7 @@ import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.HockeySender;
-import com.topface.topface.utils.geo.GeoLocationManager;
+import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import com.topface.topface.utils.social.FbAuthorizer;
@@ -235,6 +233,10 @@ public class App extends ApplicationBase {
 
     public static Location getLastKnownLocation() {
         return mCurLocation;
+    }
+
+    public static void setLastKnownLocation(Location location) {
+        mCurLocation = location;
     }
 
     public static boolean isOnline() {
@@ -451,7 +453,7 @@ public class App extends ApplicationBase {
                 @Override
                 public void run() {
                     sendProfileAndOptionsRequests();
-                    sendLocation();
+                    new FindAndSendCurrentLocation();
                 }
             });
         }
@@ -524,22 +526,6 @@ public class App extends ApplicationBase {
                 }
             }
         });
-    }
-
-    public static void sendLocation() {
-        new BackgroundThread(Thread.MIN_PRIORITY) {
-            @Override
-            public void execute() {
-                mCurLocation = GeoLocationManager.getCurrentLocation();
-                if (mCurLocation != null) {
-                    Looper.prepare();
-                    SettingsRequest settingsRequest = new SettingsRequest(getContext());
-                    settingsRequest.location = mCurLocation;
-                    settingsRequest.exec();
-                    Looper.loop();
-                }
-            }
-        };
     }
 
     private void initAcra() {
