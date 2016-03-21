@@ -130,7 +130,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
         getData().add(item);
     }
 
-    public static interface Updater {
+    public interface Updater {
         void onUpdate();
     }
 
