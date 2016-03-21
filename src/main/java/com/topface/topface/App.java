@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Build;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 import android.support.v4.app.FragmentManager;
@@ -45,7 +44,6 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
@@ -235,6 +233,10 @@ public class App extends ApplicationBase {
 
     public static Location getLastKnownLocation() {
         return mCurLocation;
+    }
+
+    public static void setLastKnownLocation(Location location) {
+        mCurLocation = location;
     }
 
     public static boolean isOnline() {
@@ -524,22 +526,6 @@ public class App extends ApplicationBase {
                 }
             }
         });
-    }
-
-    public static void sendLocation(final Location location) {
-        new BackgroundThread(Thread.MIN_PRIORITY) {
-            @Override
-            public void execute() {
-                if (location != null) {
-                    mCurLocation = location;
-                    Looper.prepare();
-                    SettingsRequest settingsRequest = new SettingsRequest(getContext());
-                    settingsRequest.location = mCurLocation;
-                    settingsRequest.exec();
-                    Looper.loop();
-                }
-            }
-        };
     }
 
     private void initAcra() {

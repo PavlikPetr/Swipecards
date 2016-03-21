@@ -1,15 +1,18 @@
 package com.topface.topface.utils.geo;
 
 import android.location.Location;
+import android.os.Looper;
 
+import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
+import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.state.TopfaceAppState;
 
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import rx.functions.Action1;
+import rx.Subscriber;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -36,22 +39,26 @@ public class FindAndSendCurrentLocation {
                 .subscribeOn(Schedulers.newThread())
                 .skip(1)
                 .timeout(WAIT_LOCATION_DELAY, TimeUnit.SECONDS)
-                .doOnError(new Action1<Throwable>() {
+                .subscribe(new Subscriber<Location>() {
                     @Override
-                    public void call(Throwable throwable) {
-                        unsubscribe();
-                        App.sendLocation(GeoLocationManager.getCurrentLocation());
+                    public void onCompleted() {
                     }
-                }).subscribe(new Action1<Location>() {
+
                     @Override
-                    public void call(Location location) {
-                        unsubscribe();
-                        App.sendLocation(location);
+                    public void onError(Throwable e) {
+                        stop();
+                        sendLocation(GeoLocationManager.getCurrentLocation());
+                    }
+
+                    @Override
+                    public void onNext(Location location) {
+                        stop();
+                        sendLocation(location);
                     }
                 }));
     }
 
-    private void unsubscribe() {
+    private void stop() {
         if (mGeoLocationManager != null) {
             mGeoLocationManager.unregisterProvidersChangedActionReceiver();
             mGeoLocationManager.stopLocationListener();
@@ -61,4 +68,19 @@ public class FindAndSendCurrentLocation {
         }
     }
 
+    public void sendLocation(final Location location) {
+        if (location != null) {
+            new BackgroundThread(Thread.MIN_PRIORITY) {
+                @Override
+                public void execute() {
+                    App.setLastKnownLocation(location);
+                    Looper.prepare();
+                    SettingsRequest settingsRequest = new SettingsRequest(App.getContext());
+                    settingsRequest.location = location;
+                    settingsRequest.exec();
+                    Looper.loop();
+                }
+            };
+        }
+    }
 }
