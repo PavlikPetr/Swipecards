@@ -149,7 +149,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
             getActivity().setResult(Activity.RESULT_OK);
             setActionBarTitles(getString(R.string.edit_title), getString(R.string.edit_album));
         }
-        mOwnProfileRecyclerViewAdapter = new OwnProfileRecyclerViewAdapter(null,
+        mOwnProfileRecyclerViewAdapter = new OwnProfileRecyclerViewAdapter(new Photos(),
                 App.from(getActivity()).getProfile().photosCount, new LoadingListAdapter.Updater() {
             @Override
             public void onUpdate() {
