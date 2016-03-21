@@ -69,7 +69,7 @@ import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.HockeySender;
-import com.topface.topface.utils.geo.GeoLocationManager;
+import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import com.topface.topface.utils.social.FbAuthorizer;
@@ -451,7 +451,7 @@ public class App extends ApplicationBase {
                 @Override
                 public void run() {
                     sendProfileAndOptionsRequests();
-                    sendLocation();
+                    new FindAndSendCurrentLocation();
                 }
             });
         }
@@ -526,12 +526,12 @@ public class App extends ApplicationBase {
         });
     }
 
-    public static void sendLocation() {
+    public static void sendLocation(final Location location) {
         new BackgroundThread(Thread.MIN_PRIORITY) {
             @Override
             public void execute() {
-                mCurLocation = GeoLocationManager.getCurrentLocation();
-                if (mCurLocation != null) {
+                if (location != null) {
+                    mCurLocation = location;
                     Looper.prepare();
                     SettingsRequest settingsRequest = new SettingsRequest(getContext());
                     settingsRequest.location = mCurLocation;

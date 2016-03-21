@@ -34,6 +34,7 @@ import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.ads.AdToAppController;
 import com.topface.topface.utils.ads.AdToAppHelper;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.geo.GeoLocationManager;
 
 import javax.inject.Singleton;
@@ -74,7 +75,8 @@ import dagger.Provides;
                 PromoKey81Dialog.class,
                 PaymentwallActivity.class,
                 CountersDataProvider.class,
-                AdToAppHelper.class
+                AdToAppHelper.class,
+                FindAndSendCurrentLocation.class
         },
         staticInjections = App.class
 )
@@ -106,6 +108,8 @@ public class TopfaceModule {
                     return (T) new BalanceData(CacheProfile.premium, CacheProfile.likes, CacheProfile.money);
                 } else if (CountersData.class.equals(classType)) {
                     return (T) (CacheProfile.countersData != null ? new CountersData(CacheProfile.countersData) : new CountersData());
+                } else if (Location.class.equals(classType)) {
+                    return (T) App.getUserConfig().getUserGeoLocation();
                 }
                 return null;
             }
