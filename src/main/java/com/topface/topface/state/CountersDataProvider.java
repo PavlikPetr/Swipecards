@@ -18,7 +18,14 @@ public class CountersDataProvider implements Action1<CountersData> {
     public CountersDataProvider(ICountersUpdater updater) {
         mUpdater = updater;
         App.get().inject(this);
-        mSubscription = mAppState.getObservable(CountersData.class).subscribe(this);
+        mSubscription = mAppState.getObservable(CountersData.class)
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+                })
+                .subscribe(this);
     }
 
     @Override
