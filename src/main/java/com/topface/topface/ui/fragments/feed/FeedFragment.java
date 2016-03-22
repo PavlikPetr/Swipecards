@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -479,32 +480,32 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (type != FeedsCache.FEEDS_TYPE.UNKNOWN_TYPE) {
             final Type dataType = getFeedListDataType();
             String fromCacheString = App.getFeedsCache().getFeedFromCache(type);
-            Observable<FeedList<T>> mCacheObservable = Observable
+            mCacheSubscription = Observable
                     .just((FeedList<T>) JsonUtils.fromJson(fromCacheString, dataType))
-                    .filter(mFilterNotNull);
-            mCacheSubscription = mCacheObservable.subscribe(new Action1<FeedList<T>>() {
-                @Override
-                public void call(FeedList<T> ts) {
-                    Debug.log("OBSERVABLE mCacheSubscription " + type + " size " + ts.size());
-                    processSuccessUpdate(new FeedListData<>(ts, true, getFeedListItemClass()));
-                }
-
-            });
-
-            Observable<FeedList<T>> mResponseObservable = Observable.create(new Observable.OnSubscribe<FeedList<T>>() {
+                    .filter(mFilterNotNull)
+                    .subscribe(new Action1<FeedList<T>>() {
+                        @Override
+                        public void call(FeedList<T> ts) {
+                            Debug.log("OBSERVABLE mCacheSubscription " + type + " size " + ts.size());
+                            processSuccessUpdate(new FeedListData<>(ts, true, getFeedListItemClass()));
+                        }
+                    });
+            mResponseSubscription = Observable.create(new Observable.OnSubscribe<FeedList<T>>() {
                 @Override
                 public void call(Subscriber<? super FeedList<T>> subscriber) {
                     mResponseSubscriber = subscriber;
                 }
-            }).first().filter(mFilterNotNull);
-            mResponseSubscription = mResponseObservable.subscribe(new Action1<FeedList<T>>() {
-                @Override
-                public void call(FeedList<T> ts) {
-                    Debug.log("OBSERVABLE mResponseSubscription " + type + " size " + ts.size());
-                    unsubscribeAllObservable();
-                    processSuccessUpdate(new FeedListData<>(ts, true, getFeedListItemClass()));
-                }
-            });
+            })
+                    .first()
+                    .filter(mFilterNotNull)
+                    .subscribe(new Action1<FeedList<T>>() {
+                        @Override
+                        public void call(FeedList<T> ts) {
+                            Debug.log("OBSERVABLE mResponseSubscription " + type + " size " + ts.size());
+                            unsubscribeAllObservable();
+                            processSuccessUpdate(new FeedListData<>(ts, true, getFeedListItemClass()));
+                        }
+                    });
         }
     }
 
@@ -1126,7 +1127,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     @Override
     protected void onUpdateStart(boolean isPushUpdating) {
-        if (!getListAdapter().isEmpty()) {
+        BaseAdapter adapter = getListAdapter();
+        if (adapter != null && !adapter.isEmpty()) {
             onFilledFeed();
         }
         if (!isPushUpdating) {

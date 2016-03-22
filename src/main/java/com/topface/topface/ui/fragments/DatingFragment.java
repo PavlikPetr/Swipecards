@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -40,6 +39,7 @@ import com.topface.topface.RetryRequestReceiver;
 import com.topface.topface.Ssid;
 import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.BalanceData;
+import com.topface.topface.data.City;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.NoviceLikes;
 import com.topface.topface.data.Options;
@@ -85,7 +85,6 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
@@ -95,8 +94,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 
-import rx.Subscription;
 import rx.functions.Action1;
+import rx.subscriptions.CompositeSubscription;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
@@ -125,7 +124,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private RetryViewCreator mRetryView;
     private ImageButton mRetryBtn;
     private PreloadManager<SearchUser> mPreloadManager;
-    private FullscreenController mFullscreenController;
 
     private AddPhotoHelper mAddPhotoHelper;
     private Handler mHandler = new Handler() {
@@ -134,7 +132,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             AddPhotoHelper.handlePhotoMessage(msg, DatingFragment.this.getContext());
         }
     };
-
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -179,7 +176,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             updateResources(balanceData);
         }
     };
-    private Subscription mBalanceSubscription;
     /**
      * Флаг того, что запущено обновление поиска и запускать дополнительные обновления не нужно
      */
@@ -214,6 +210,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         public void onPageScrollStateChanged(int arg0) {
         }
     };
+    private CompositeSubscription mDatingSubscriptions = new CompositeSubscription();
 
     @Override
     protected int getStatusBarColor() {
@@ -306,6 +303,17 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.from(getActivity()).inject(this);
+        mDatingSubscriptions.add(mAppState.getObservable(City.class).subscribe(new Action1<City>() {
+            @Override
+            public void call(City city) {
+                if (!city.equals(App.get().getProfile().city)) {
+                    if (mUserSearchList == null) {
+                        mUserSearchList = new CachableSearchList<>(SearchUser.class);
+                    }
+                    mUserSearchList.clear();
+                }
+            }
+        }));
         if (savedInstanceState != null) {
             mCurrentUser = savedInstanceState.getParcelable(CURRENT_USER);
         }
@@ -332,7 +340,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         isHideAdmirations = App.from(getActivity()).getOptions().isHideAdmirations;
         mRoot = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_dating, null);
         initViews(mRoot);
-        mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
+        mDatingSubscriptions.add(mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction));
         initEmptySearchDialog(mRoot);
         initImageSwitcher(mRoot);
         if (mCurrentUser != null) {
@@ -344,7 +352,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
         mAddPhotoHelper = new AddPhotoHelper(this, null);
         mAddPhotoHelper.setOnResultHandler(mHandler);
-
         return mRoot;
     }
 
@@ -381,16 +388,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (null != mBalanceSubscription) {
-            mBalanceSubscription.unsubscribe();
+        if (null != mDatingSubscriptions && !mDatingSubscriptions.isUnsubscribed()) {
+            mDatingSubscriptions.unsubscribe();
         }
+        mAppState.setData(App.get().getProfile().city);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mRateReceiver);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
         if (mRetryView.isVisible()) {
             EasyTracker.sendEvent("EmptySearch", "DismissScreen", "", 0L);
         }
@@ -1244,10 +1251,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void updateResources(BalanceData balance) {
         if (null != mResourcesLikes) {
-            mResourcesLikes.setText(Integer.toString(balance.likes));
+            mResourcesLikes.setText(String.valueOf(balance.likes));
         }
         if (null != mResourcesMoney) {
-            mResourcesMoney.setText(Integer.toString(balance.money));
+            mResourcesMoney.setText(String.valueOf(balance.money));
         }
     }
 
