@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/bg_white"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
     <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="16dp"
@@ -21,10 +21,11 @@
 
             <TextView
                 android:id="@+id/tvLocale"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/incorrect_locale"
                 android:textColor="#8A8A8A"
+                android:layout_marginBottom="24dp"
                 android:textSize="14sp" />
 
             <EditText
@@ -37,7 +38,6 @@
                 android:inputType="textMultiLine"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:paddingTop="24dp"
                 android:singleLine="false" />
 
             <TextView
@@ -52,6 +52,7 @@
                 android:layout_height="34dp"
                 android:hint="@string/general_input_email"
                 android:inputType="textEmailAddress"
+                android:layout_marginTop="20dp"
                 android:singleLine="true"
                 android:visibility="visible" />
 
