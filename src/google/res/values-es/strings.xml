@@ -885,4 +885,8 @@
     <string name="buy_vip_title_from_input">Se puede comenzar la comunicación con el usuario si tienes el estado VIP</string>
     <string name="mutual_like_popup_text">¡Tu simpatía es mutua!</string>
     <string name="mutual_like_popup_button">Decir \"hola\"</string>
+    <string name="people_nearby_access_to_location_description">Para ver qué personas están cerca de ti, debes permitir acceso de localización.</string>
+    <string name="people_nearby_not_found_title">No hay usuarios todavía cerca de ti.</string>
+    <string name="people_nearby_not_found_description">Para intentarlo de nuevo, mantén el dedo en el centro de la pantalla.</string>
+    <string name="NSLocationWhenInUseUsageDescription">Para obtener acceso a la funcionalidad, necesitas obtener acceso previo.</string>
 </resources>
