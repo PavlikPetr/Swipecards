@@ -85,8 +85,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         int iter = 0;
         while (addedCount < count && iter < data.size()) {
             T currentItem = data.get(iter);
-            int itemType = currentItem.type;
-            if (!currentItem.isAd() && itemType != LoadingListAdapter.T_LOADER && itemType != LoadingListAdapter.T_RETRIER && currentItem.user != null) {
+            if (!currentItem.isAd() && !currentItem.isLoader()
+                    && !currentItem.isRetrier() && currentItem.user != null) {
                 result.add(currentItem);
                 addedCount++;
             }
