@@ -756,6 +756,4 @@
   <string name="settings_check_vip_alert">Patikrinimo užklausa išsiųsta</string>
   <string name="novice_sympathy">Siųskite simpatijas tiems, kas jums\ntikrai patinka,\nkad
         pradėtumėte malonią pažintį</string>
-  <string name="novice_sympathies_bonus">Jūs gaunate %1$d simpatijų\ndovanų! Tai reiškia, kad
-        jūs\ntikrai patinkate %2$d žmonių,\nkurie išreikš jums savo simpatiją</string>
 </resources>

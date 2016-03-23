@@ -209,7 +209,7 @@
     <string name="filter_age_end_prefix">%s kadar</string>
     <string name="filter_constitution_template">%1$d ile %2$d arası</string>
     <string name="filter_cities_all">Bütün şehirlerde</string>
-    <string name="purchase_header_title">Hesap bakiyeniz:</string>
+    <string name="purchase_header_title">Bakiye:</string>
     <string name="buying_header_title">Satın almalar</string>
     <plurals name="buying_gift_you_need_coins">
         <item quantity="other">Bir hediye yollamak için daha fazla %d para gerek</item>
@@ -813,8 +813,6 @@
     <string name="settings_check_vip_alert">VIP statüsünün kontrol edilmesi talebiniz iletildi.</string>
     <string name="novice_sympathy">Yakın bir arkadaşlığa başlamak için sadece hoşlandığınız \nkişilere beğeni gönderin. 
             Belki de \nsizin için gerçekten özel birini böylece bulabilirsiniz.</string>
-    <string name="novice_sympathies_bonus">Hediye olarak %1$d beğeni kazandınız – Bu demek oluyor ki %2$d kişi 
-      sizi kesinlikle beğecek ve bunu açıkça belli edecek.</string>
     <string name="go_dating_message">Yeni arkadaşlar bulmaya başla, bu sayfada profile bakanları görebilirsin.</string>
     <string name="vk_profile_button_tf_group">Topface grubu</string>
     <string name="vk_profile_button_join_tf_group">Topface grubuna katıl</string>

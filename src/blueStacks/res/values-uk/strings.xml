@@ -477,6 +477,4 @@
   <string name="reply">Відповісти</string>
   <string name="novice_sympathy">Відправляйте симпатії тим, хто вам\nдійсно подобається,\nщоб
         почати приємне знайомство</string>
-  <string name="novice_sympathies_bonus">- Ви отримуєте %1$d симпатій у\nподарунок! Це означає, що
-        ви\nточно сподобаєтеся %2$d людям, \nякі висловлять вам свою симпатію</string>
 </resources>

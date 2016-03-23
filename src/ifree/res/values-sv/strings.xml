@@ -816,7 +816,4 @@
     <string name="novice_sympathy">Skicka sympatier till dem\ndu verkligen gillar,\nför att inleda
         ett trevligt förhållande
     </string>
-    <string name="novice_sympathies_bonus">Du får %1$d sympatier i\npresent! Detta innebär,
-        att\n%2$d personer kommer att gilla dig\noch visa sin sympati för dig
-    </string>
 </resources>

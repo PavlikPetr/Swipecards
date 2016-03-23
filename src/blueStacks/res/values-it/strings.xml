@@ -746,8 +746,6 @@
   <string name="settings_check_vip_alert">Richiesta di verifica inviata</string>
   <string name="novice_sympathy">Invia le simpatie solo alle persone che ti\npiacciono
         veramente\nper iniziare una piacevole relazione</string>
-  <string name="novice_sympathies_bonus">Riceverai %1$d simpatie in\nregalo! Significa che\ndi
-        sicuro piacerai a %2$d persone\nche ti dimostreranno la loro simpatia</string>
   <string name="go_dating_message">Comincia a fare conoscenze e in questa sezione vedrai gli utenti che hanno visitato il tuo profilo</string>
   <string name="vk_profile_button_tf_group">Gruppo Spark</string>
   <string name="vk_profile_button_join_tf_group">Entra nel gruppo Spark</string>
