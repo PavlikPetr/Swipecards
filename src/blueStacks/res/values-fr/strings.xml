@@ -754,8 +754,6 @@
   <string name="settings_check_vip_alert">Votre demande de vérification du statut VIP a été envoyée.</string>
   <string name="novice_sympathy">Envoyez des J\'aime aux personnes qui vous\nplaisent
         vraiment.\nVous allez peut être rencontrer quelqu\'un d\'unique !</string>
-  <string name="novice_sympathies_bonus">Vous recevez %1$d J\'aime\nen cadeau ! Cela signifie
-        que\n%2$d personne va vous donner un J\'aime,\nà qui vous plaisez réellement.</string>
   <string name="go_dating_message">Commencez à faire connaissance et découvrez ici qui regarde votre profil</string>
   <string name="vk_profile_button_tf_group">Groupe Spark</string>
   <string name="vk_profile_button_join_tf_group">Rejoindre le groupe Spark</string>

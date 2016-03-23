@@ -736,8 +736,6 @@
   <string name="settings_check_vip_alert">Your request to check VIP-status has been sent.</string>
   <string name="novice_sympathy">Send Likes only to those\nwho really attract you.\nYou just might
         find someone special!</string>
-  <string name="novice_sympathies_bonus">You are getting %1$d Likes as a\ngift! It means that %2$d
-        people will give you a Like and genuinely mean it!</string>
   <string name="go_dating_message">Start dating and you will who view you page here</string>
   <string name="vk_profile_button_tf_group">Spark group</string>
   <string name="vk_profile_button_join_tf_group">Join the Spark group</string>

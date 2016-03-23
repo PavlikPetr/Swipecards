@@ -842,9 +842,6 @@
     <string name="novice_sympathy">Envía simpatías a aquellos\nquienes realmente te gustan
         para\nempezar una relación satisfactoria
     </string>
-    <string name="novice_sympathies_bonus">¡Recibes %1$d simpatías de\nregalo! Esto significa
-        que\nseguro les gustarás a las %2$d personas,\nque te mostrarán su simpatía
-    </string>
     <string name="go_dating_message">Comienzo a conocer esto y podrá ver a los usuarios que visitan su perfil</string>
     <string name="vk_profile_button_tf_group">Grupo Topface</string>
     <string name="vk_profile_button_join_tf_group">Entrar en el grupo Topface</string>

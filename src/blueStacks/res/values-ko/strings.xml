@@ -395,6 +395,4 @@
   <string name="restore">저장하기</string>
   <string name="admiration_sended">감탄사가 전송되었습니다.</string>
   <string name="novice_sympathy">당신이 \n 정말 호감이 있는 상대에게 \n 기분 좋은 만남을 이끌어내기 위해 호감도를 전달해보세요.</string>
-  <string name="novice_sympathies_bonus">%1$d호감도를 선물로 받습니다! 이 선물의 의미는 당신에게 \n자신의 호감을 표현하는 %2$d
-        사람들이 당신을 \n마음에 들어한다는 의미입니다.</string>
 </resources>
