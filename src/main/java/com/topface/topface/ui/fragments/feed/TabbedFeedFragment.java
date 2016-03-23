@@ -78,7 +78,10 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
                 mTabLayoutCreator.setTabTitle(position);
             }
             if (mBodyPagerAdapter != null) {
-                ((TrackedFragment) mBodyPagerAdapter.getItem(position)).onResumeFragment();
+                TrackedFragment fragment = (TrackedFragment) mBodyPagerAdapter.getItem(position);
+                if (fragment != null) {
+                    fragment.onResumeFragment();
+                }
             }
             List<Fragment> fragments = getChildFragmentManager().getFragments();
             if (fragments != null) {
