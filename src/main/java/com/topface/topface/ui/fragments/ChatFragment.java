@@ -207,6 +207,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private ImageButton mSendButton;
     private ChatListAnimatedAdapter mAnimatedAdapter;
     private int mUserType;
+    private KeyboardListenerLayout mRootLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -261,13 +262,13 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        KeyboardListenerLayout root = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
-        setAnimatedView(root.findViewById(R.id.lvChatList));
-        root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
-            @SuppressWarnings("ConstantConditions")
+        mRootLayout = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
+        setAnimatedView(mRootLayout.findViewById(R.id.lvChatList));
+        mRootLayout.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
             @Override
             public void keyboardOpened() {
                 mKeyboardWasShown = true;
+                Debug.log("ChatKeyboardListener keyboardOpened -> " + mKeyboardWasShown);
                 if (getSupportActionBar().isShowing()
                         && getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
                     setActionbarVisibility(false);
@@ -277,6 +278,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             @Override
             public void keyboardClosed() {
                 mKeyboardWasShown = false;
+                Debug.log("ChatKeyboardListener keyboardClosed -> " + mKeyboardWasShown);
                 if (!getSupportActionBar().isShowing()) {
                     setActionbarVisibility(true);
                 }
@@ -284,6 +286,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
             @Override
             public void keyboardChangeState() {
+                Debug.log("ChatKeyboardListener keyboardChangeState ->" + mKeyboardWasShown);
                 if (getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT
                         && !getSupportActionBar().isShowing()) {
                     setActionbarVisibility(true);
@@ -292,15 +295,15 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         });
         Debug.log(this, "+onCreate");
         // Swap Control
-        root.findViewById(R.id.send_gift_button).setOnClickListener(this);
+        mRootLayout.findViewById(R.id.send_gift_button).setOnClickListener(this);
         //Send Button
-        mSendButton = (ImageButton) root.findViewById(R.id.btnSend);
+        mSendButton = (ImageButton) mRootLayout.findViewById(R.id.btnSend);
         mSendButton.setOnClickListener(this);
         // Loader on background
-        mBackgroundController.setProgressBar((ProgressBar) root.findViewById(R.id.chat_loader));
+        mBackgroundController.setProgressBar((ProgressBar) mRootLayout.findViewById(R.id.chat_loader));
         mBackgroundController.startAnimation();
         // Edit Box
-        mEditBox = (EditText) root.findViewById(R.id.edChatBox);
+        mEditBox = (EditText) mRootLayout.findViewById(R.id.edChatBox);
         if (getArguments() != null &&
                 mUserType == FeedDialog.MESSAGE_POPULAR_STAGE_1) {
             mEditBox.clearFocus();
@@ -312,7 +315,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         mEditBox.setOnEditorActionListener(mEditorActionListener);
         mEditBox.addTextChangedListener(mTextWatcher);
         //LockScreen
-        initLockScreen(root);
+        initLockScreen(mRootLayout);
         if (savedInstanceState != null) {
             Parcelable popularLockState = savedInstanceState.getParcelable(POPULAR_LOCK_STATE);
             if (popularLockState != null) {
@@ -324,14 +327,14 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         //init data
         restoreData(savedInstanceState);
         // History ListView & ListAdapter
-        initChatHistory(root);
+        initChatHistory(mRootLayout);
         if (mUser != null && !mUser.isEmpty()) {
             onUserLoaded(mUser);
         }
         if (!AuthToken.getInstance().isEmpty()) {
             GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
         }
-        return root;
+        return mRootLayout;
     }
 
     private void setActionbarVisibility(boolean visible) {
@@ -363,6 +366,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     public void onDestroyView() {
         super.onDestroyView();
         if (isAdded()) {
+            mRootLayout.setKeyboardListener(null);
             if (mAdapter != null) {
                 int loadedItemsCount = 0;
                 // если в адаптере нет элементов списка, то возможно на экране отображается блокировка,
@@ -887,6 +891,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     public void onResume() {
         super.onResume();
+        Debug.log("onResume ");
         setSavedMessage(mMessage);
         //показать клавиатуру, если она была показаны до этого(перешли в другой фрагмент, и вернулись обратно)
         showKeyboardOnLargeScreen();
