@@ -47,7 +47,7 @@ public class GiftsListAdapter extends GiftsAdapter {
     }
 
     public interface OnGridClickLIstener {
-        public void onGridClick(FeedGift item);
+        void onGridClick(FeedGift item);
     }
 
     public class ViewHolder {

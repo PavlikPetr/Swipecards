@@ -108,6 +108,12 @@ public class City extends AbstractData implements SerializableToJson, Cloneable,
         return new City(id, name, full);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        City city = ((City) o);
+        return id == city.id && name.equals(city.getName()) && full.equals(city.getFullName());
+    }
+
     public boolean isEmpty() {
         return id == 0;
     }

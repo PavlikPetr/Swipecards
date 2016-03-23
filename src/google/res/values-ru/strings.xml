@@ -1063,9 +1063,11 @@
     <string name="mutual_like_popup_text">Ваша симпатия взаимна!</string>
     <string name="mutual_like_popup_button">Сказать \"Привет\"</string>
 
-    <string name="people_nearby_access_to_location_description">Красивые люди рядом с вами хотят познакомиться!\nПолучите доступ на 24 часа</string>
-    <string name="people_nearby_not_enought_money">Для доступа к функционалу \"Люди рядом\", вам не хватает монет</string>
-    <string name="people_nearby_not_found">Рядом с вами пока нет пользователей. Для того чтобы попробовать еще раз, удерживайте палец в центре экрана.</string>
+    <string name="people_nearby_access_to_location_description">Чтобы посмотреть, кто находится рядом с вами, разрешите доступ к геолокации.</string>
+    <string name="people_nearby_not_enought_money">Для доступа к функционалу \"Люди рядом\" вам не хватает монет</string>
+
+    <string name="people_nearby_not_found_title">Рядом с Вами пока нет пользователей</string>
+    <string name="people_nearby_not_found_description">Чтобы попробовать еще раз, удерживайте палец в центре экрана</string>
 
     <string name="NSLocationWhenInUseUsageDescription">Для получения доступа к функционалу вам необходимо разрешить доступ.</string>
 

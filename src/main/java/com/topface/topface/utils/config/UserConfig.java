@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.social.AuthToken;
@@ -80,6 +79,7 @@ public class UserConfig extends AbstractConfig {
     public static final String LAST_CATCHED_GEO_PROVIDER = "last_catched_geo_provider";
     public static final String TRIAL_LAST_TIME = "trial_last_time";
     public static final String START_POSITION_OF_ACTIONS = "start_position_of_actions";
+    private static final String USER_CITY = "user_city";
     private String mUnique;
 
     public UserConfig(String uniqueKey, Context context) {
@@ -181,6 +181,7 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, LAST_CATCHED_GEO_LONGITUDE, DEFAULT_USER_LONGITUDE_LOCATION);
         addField(settingsMap, LAST_CATCHED_GEO_PROVIDER, LOCATION_PROVIDER);
         addField(settingsMap, START_POSITION_OF_ACTIONS, 0);
+        addField(settingsMap, USER_CITY, Utils.EMPTY);
     }
 
     @Override
@@ -394,6 +395,15 @@ public class UserConfig extends AbstractConfig {
     public void setDatingMessage(String message) {
         SettingsMap settingsMap = getSettingsMap();
         setField(settingsMap, DEFAULT_DATING_MESSAGE, message);
+    }
+
+    public void setUserCity(String cityString) {
+        SettingsMap settingsMap = getSettingsMap();
+        setField(settingsMap, USER_CITY, cityString);
+    }
+
+    public String getUserCity() {
+        return getStringField(getSettingsMap(), USER_CITY);
     }
 
     /**

@@ -1,13 +1,11 @@
 package com.topface.topface.ui.adapters;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
 
 import java.util.ArrayList;
@@ -55,24 +53,6 @@ public abstract class UserGiftsRecyclerAdapter extends RecyclerView.Adapter<User
     @Override
     public void onAttachedToRecyclerView(final RecyclerView recyclerView) {
         final GridLayoutManager gridLayoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
-        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-
-            final int padding = (int) recyclerView.getContext().getResources().getDimension(R.dimen.user_gifts_padding);
-            final int spanCount = gridLayoutManager.getSpanCount();
-
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-                if (((gridLayoutManager.getPosition(view) + 1) % spanCount) == 0) {
-                    outRect.right = padding;
-                    outRect.left = padding;
-                    outRect.top = padding;
-                    return;
-                }
-                outRect.left = padding;
-                outRect.top = padding;
-            }
-        });
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {

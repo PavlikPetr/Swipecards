@@ -4,5 +4,5 @@
     style="@style/Gift"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="4dp"
-    android:paddingTop="4dp" />
+    android:paddingLeft="@dimen/user_gifts_padding"
+    android:paddingRight="@dimen/user_gifts_padding"/>
