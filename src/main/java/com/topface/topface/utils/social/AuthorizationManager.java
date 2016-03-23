@@ -143,7 +143,7 @@ public class AuthorizationManager {
         mAppState.destroyObservable(Options.class);
         CacheProfile.clearProfileAndOptions(mAppState);
         App.getConfig().onLogout();
-        NavigationActivity.mIsPhotoAsked = false;
+        NavigationActivity.isPhotoAsked = false;
         mHive.clear();
         SharedPreferences preferences = App.getContext().getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         if (preferences != null) {

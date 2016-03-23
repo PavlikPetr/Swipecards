@@ -32,8 +32,8 @@ public abstract class BaseDialog extends TrackedDialogFragment {
         View root = null;
         if (resLayoutId != 0) {
             root = inflater.inflate(resLayoutId, container, false);
+            initViews(root);
         }
-        initViews(root);
         return root;
     }
 

@@ -114,7 +114,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     PopupHive mPopupHive;
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     private AddPhotoHelper mAddPhotoHelper;
-    public static boolean mIsPhotoAsked;
+    public static boolean isPhotoAsked;
     private PopupManager mPopupManager;
     private Subscription mCountersSubscription;
     private BehaviorSubject<DRAWER_LAYOUT_STATE> mDrawerLayoutStateObservable;
@@ -208,7 +208,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
             mPendingNextIntent = intent;
         }
-        mIsPhotoAsked = false;
+        isPhotoAsked = false;
         mCitySubscription = mAppState.getObservable(City.class).subscribe(new Action1<City>() {
             @Override
             public void call(final City city) {
@@ -527,8 +527,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
             @Override
             public void callOnUi() {
-                if (!mIsPhotoAsked) {
-                    mIsPhotoAsked = true;
+                if (!isPhotoAsked) {
+                    isPhotoAsked = true;
                     TakePhotoPopup popup = TakePhotoPopup.newInstance("");
                     popup.setOnCancelListener(new DialogInterface.OnCancelListener() {
                         @Override

@@ -98,6 +98,7 @@ public abstract class AbstractDialogFragment extends BaseDialog {
 
     @Override
     public void onDestroyView() {
+        //https://code.google.com/p/android/issues/detail?id=17423
         if (getDialog() != null && getRetainInstance()) {
             getDialog().setDismissMessage(null);
         }
