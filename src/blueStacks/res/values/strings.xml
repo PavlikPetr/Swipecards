@@ -777,4 +777,19 @@
     <item quantity="one">You will receive %1$d Like as a\ngift! This means that those \nwho send you Likes \nreally like %2$d you</item>
   </plurals>
   <string name="buy_vip_title_from_input">You can begin a conversation with a user if you have VIP-status</string>
+  <string name="mutual_like_popup_text">The feeling is mutual!</string>
+  <string name="mutual_like_popup_button">Say \&quot;Hi\&quot;</string>
+  <string name="people_nearby_access_to_location_description">To see who is nearby, you need to
+    allow access to your geolocation.
+  </string>
+  <string name="people_nearby_not_enought_money">You do not have enough Coins to access the \&quot;People
+    Near Me\&quot; feature
+  </string>
+  <string name="people_nearby_not_found_title">There are no users near by you at this time</string>
+  <string name="people_nearby_not_found_description">To try again, press and hold a finger on the
+    center of the screen
+  </string>
+  <string name="NSLocationWhenInUseUsageDescription">To access this function you must give your
+    permission
+  </string>
 </resources>

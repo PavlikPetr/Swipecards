@@ -921,7 +921,23 @@
     </string>
     <string name="thanks_for_your_rate_rate_app">Оставити мишљење у AppStore</string>
     <string name="thanks_for_your_rate_close">Затворити</string>
+    <plurals name="novice_sympathies_bonuses"></plurals>
     <string name="buy_vip_title_from_input">Можете започети разговор са корисником ако имате
         VIP-статус
+    </string>
+    <string name="mutual_like_popup_text">Осећање је узајамно!</string>
+    <string name="mutual_like_popup_button">Кажите \"Поздрав\"</string>
+    <string name="people_nearby_access_to_location_description">Да бисте видели ко је у близини,
+        морате дозволити приступ својој гео-локацији.
+    </string>
+    <string name="people_nearby_not_enought_money">Недостају Вам новчићи да бисте приступили
+        функцији \"Људи у близини\"\
+    </string>
+    <string name="people_nearby_not_found_title">Тренутно нема корисника у Вашој близини</string>
+    <string name="people_nearby_not_found_description">Да бисте покушали поново, притисните и држите
+        прстом по средини екрана.
+    </string>
+    <string name="NSLocationWhenInUseUsageDescription">Неопходна Вам је дозвола да бисте приступили
+        овој функцији.
     </string>
 </resources>

@@ -855,6 +855,9 @@
     <string name="mutual_like_popup_text">Beğeniniz karşılıklı</string>
     <string name="mutual_like_popup_button">\"Merhaba\" de</string>
     <string name="people_nearby_access_to_location_description">Kimlerin yakınınızda olduğunu görebilmek için lokasyonunuza erşim izni vermeniz gerekiyor.</string>
+    <string name="people_nearby_not_enought_money">\"Yakınımdaki insanlar\" fonksiyonu için
+        yeterince krediniz yok
+    </string>
     <string name="people_nearby_not_found_title">Şu an size yakın kullanıcı bulunamdı</string>
     <string name="people_nearby_not_found_description">Tekrar denemek için, ekranın ortasına parmağınızla dokunup basılı tutunuz.</string>
     <string name="NSLocationWhenInUseUsageDescription">Bu fonksiyona erişebilmek için izin vermeniz gerekiyor.</string>

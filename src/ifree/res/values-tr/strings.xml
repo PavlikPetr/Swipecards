@@ -210,7 +210,7 @@
     <string name="filter_age_end_prefix">%s kadar</string>
     <string name="filter_constitution_template">%1$d ile %2$d arası</string>
     <string name="filter_cities_all">Bütün şehirlerde</string>
-    <string name="purchase_header_title">Hesap bakiyeniz:</string>
+    <string name="purchase_header_title">Bakiye:</string>
     <string name="buying_header_title">Satın almalar</string>
     <plurals name="buying_gift_you_need_coins">
         <item quantity="other">Bir hediye yollamak için daha fazla %d para gerek</item>
@@ -848,6 +848,15 @@
     <string name="thanks_for_your_rate_bottom_label">Düşüncelerinizi bizimle AppStore\'da paylaşın. Ne düşündüğünüze önem veriyoruz!</string>
     <string name="thanks_for_your_rate_rate_app">AppStore\'da bizi değerlendirin</string>
     <string name="thanks_for_your_rate_close">Kapat</string>
-    <plurals name="novice_sympathies_bonuses"></plurals>
+    <plurals name="novice_sympathies_bonuses">
+        <item quantity="zero">Hediye olarak %1$d beğeni \nalacaksınız. Bu demek oluyor ki \nsize beğeni gönderenler sizi \ngerçekten %2$d beğeniyor.</item>
+    </plurals>
     <string name="buy_vip_title_from_input">Eğer VIP üyeyseniz dilediğiniz bir kullanıcı ile sohbete hemen başlayabilirsiniz</string>
+    <string name="mutual_like_popup_text">Beğeniniz karşılıklı</string>
+    <string name="mutual_like_popup_button">\"Merhaba\" de</string>
+    <string name="people_nearby_access_to_location_description">Kimlerin yakınınızda olduğunu görebilmek için lokasyonunuza erşim izni vermeniz gerekiyor.</string>
+    <string name="people_nearby_not_enought_money">\"Yakınımdaki insanlar\" fonksiyonu için yeterince krediniz yok</string>
+    <string name="people_nearby_not_found_title">Şu an size yakın kullanıcı bulunamdı</string>
+    <string name="people_nearby_not_found_description">Tekrar denemek için, ekranın ortasına parmağınızla dokunup basılı tutunuz.</string>
+    <string name="NSLocationWhenInUseUsageDescription">Bu fonksiyona erişebilmek için izin vermeniz gerekiyor.</string>
 </resources>

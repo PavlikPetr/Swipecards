@@ -917,4 +917,21 @@
     <string name="buy_vip_title_from_input">Vous pouvez commencer une conversation avec un
         utilisateur si vous avez le statut VIP
     </string>
+    <string name="mutual_like_popup_text">Le sentiment est réciproque !</string>
+    <string name="mutual_like_popup_button">Dites « Salut »</string>
+    <string name="people_nearby_access_to_location_description">Pour voir qui est à proximité, vous
+        devez autoriser l\'accès à votre géolocalisation.
+    </string>
+    <string name="people_nearby_not_enought_money">Vous ne disposez pas de suffisamment de pièces
+        pour accéder à la fonctionnalité \« Personne à proximité\ »
+    </string>
+    <string name="people_nearby_not_found_title">Il n\'y a pas d\'utilisateurs à proximité de votre
+        localisation pour le moment
+    </string>
+    <string name="people_nearby_not_found_description">Pour réessayer, appuyez et maintenez un doigt
+        dans le centre de l\'écran.
+    </string>
+    <string name="NSLocationWhenInUseUsageDescription">Pour accéder à cette fonction, vous devez
+        donner votre autorisation
+    </string>
 </resources>

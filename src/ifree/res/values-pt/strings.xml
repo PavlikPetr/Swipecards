@@ -878,4 +878,11 @@
         <item quantity="one">Irás receber %1$d Gosto como \npresente! Isto significa que aqueles a \nquem enviares Gostos \ngostam mesmo %2$d de ti</item>
     </plurals>
     <string name="buy_vip_title_from_input">Podes começar uma conversa com um utilizador se tiveres estatuto VIP</string>
+    <string name="mutual_like_popup_text">O sentimento é mútuo!</string>
+    <string name="mutual_like_popup_button">Diz \"Olá\"</string>
+    <string name="people_nearby_access_to_location_description">Para veres quem está nas proximidades, tens de permitir o acesso à tua localização.</string>
+    <string name="people_nearby_not_enought_money">Não tens Moedas suficientes para aceder à funcionalidade \"Pessoas Perto de Mim\"\</string>
+    <string name="people_nearby_not_found_title">Não existem utilizadores perto de ti neste momento</string>
+    <string name="people_nearby_not_found_description">Para tentares novamente, prime e mantém o teu dedo no centro do ecrã</string>
+    <string name="NSLocationWhenInUseUsageDescription">Para teres acesso a esta funcionalidade, tens de dar a tua permissão</string>
 </resources>
