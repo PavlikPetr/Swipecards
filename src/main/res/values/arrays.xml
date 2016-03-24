@@ -10,7 +10,6 @@
         <item>@string/settings_error_message</item>
         <item>@string/settings_ask_developer</item>
         <item>@string/settings_payment_problems</item>
-        <item>@string/settings_cooperation</item>
     </string-array>
 
     <string-array name="fake_girl_avatars">

@@ -146,8 +146,6 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
                 return getString(R.string.settings_ask_developer);
             case PAYMENT_MESSAGE:
                 return getString(R.string.settings_payment_problems);
-            case COOPERATION_MESSAGE:
-                return getString(R.string.settings_cooperation);
             case BAN:
                 return getString(R.string.feedback_subject_ban);
             default:
@@ -165,7 +163,6 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
                 mTransactionIdInfo.setVisibility(View.VISIBLE);
                 break;
             case ERROR_MESSAGE:
-            case COOPERATION_MESSAGE:
             case UNKNOWN:
                 break;
         }
@@ -281,7 +278,6 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         ERROR_MESSAGE("mobile_error", R.string.settings_error_message_internal),
         DEVELOPERS_MESSAGE("mobile_question", R.string.settings_ask_developer_internal),
         PAYMENT_MESSAGE("mobile_payment_issue", R.string.settings_payment_problems_internal),
-        COOPERATION_MESSAGE("mobile_cooperation", R.string.settings_cooperation_internal),
         BAN("mobile_ban", R.string.feedback_subject_ban_internal),
         LOW_RATE_MESSAGE("mobile_low_rate", R.string.settings_low_rate_internal);
 
