@@ -69,8 +69,8 @@ import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.ui.TakePhotoActivity;
 import com.topface.topface.ui.UserProfileActivity;
+import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
 import com.topface.topface.ui.views.ILocker;
@@ -382,6 +382,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (mAddPhotoHelper != null) {
+            mAddPhotoHelper.releaseHelper();
+        }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mOptionsReceiver);
     }
 
@@ -844,7 +847,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private boolean takePhotoIfNeed(String plc) {
         if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null) {
             if (mAddPhotoHelper != null) {
-                startActivityForResult(TakePhotoActivity.createIntent(getActivity(), plc), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
+                TakePhotoPopup.newInstance(plc).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.TAG);
                 return true;
             }
         }

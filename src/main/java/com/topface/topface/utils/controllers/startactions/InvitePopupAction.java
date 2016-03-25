@@ -16,10 +16,11 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 
-public class InvitePopupAction extends LinkedStartAction {
+public class InvitePopupAction implements IStartAction {
 
     private WeakReference<BaseFragmentActivity> mActivity;
     private int mPriority;
+    private OnNextActionListener mOnNextActionListener;
 
     public InvitePopupAction(BaseFragmentActivity activity, int priority) {
         mActivity = new WeakReference<>(activity);
@@ -44,8 +45,8 @@ public class InvitePopupAction extends LinkedStartAction {
 
     @Override
     public boolean isApplicable() {
-        return InvitesPopup.isApplicable(App.from(mActivity.get()).getOptions().popup_timeout, mActivity.get())
-                && getContactsCount() >= App.from(mActivity.get()).getOptions().contacts_count;
+        return InvitesPopup.isApplicable(App.get().getOptions().popup_timeout)
+                && getContactsCount() >= App.get().getOptions().contacts_count;
     }
 
     @Override
@@ -56,6 +57,11 @@ public class InvitePopupAction extends LinkedStartAction {
     @Override
     public String getActionName() {
         return getClass().getSimpleName();
+    }
+
+    @Override
+    public void setStartActionCallback(OnNextActionListener startActionCallback) {
+        mOnNextActionListener = startActionCallback;
     }
 
     private int getContactsCount() {
@@ -70,9 +76,13 @@ public class InvitePopupAction extends LinkedStartAction {
 
 
     private void startInvitePopup() {
+        final BaseFragmentActivity activity = mActivity.get();
         ContactsProvider.GetContactsHandler handler = new ContactsProvider.GetContactsHandler() {
             @Override
             public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
+                if (activity == null) {
+                    return;
+                }
                 InvitesPopup popup = InvitesPopup.newInstance(contacts);
                 popup.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
@@ -82,13 +92,15 @@ public class InvitePopupAction extends LinkedStartAction {
                         }
                     }
                 });
-                popup.show(mActivity.get().getSupportFragmentManager(), InvitesPopup.TAG);
+                popup.show(activity.getSupportFragmentManager(), InvitesPopup.TAG);
                 EasyTracker.sendEvent("InvitesPopup", "Show", "", 0L);
 
             }
         };
-        ContactsProvider provider = new ContactsProvider(mActivity.get());
-        provider.getContacts(-1, 0, handler);
+        if (activity != null) {
+            ContactsProvider provider = new ContactsProvider(activity);
+            provider.getContacts(-1, 0, handler);
+        }
     }
 
 }

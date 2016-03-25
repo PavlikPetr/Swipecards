@@ -23,7 +23,7 @@ import com.topface.topface.data.IUniversalUser;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.UniversalUserFactory;
 import com.topface.topface.statistics.TakePhotoStatistics;
-import com.topface.topface.ui.TakePhotoActivity;
+import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.VkProfileFragment;
@@ -42,6 +42,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     private BroadcastReceiver mAddPhotoReceiver;
     private BroadcastReceiver mUpdateProfileReceiver;
     private boolean mIsPhotoAsked;
+    private static final String TAKE_PHOTO_DIALOG_SHOWN = "dialog_shown";
     private MenuItem mBarAvatar;
     private Handler mHandler = new Handler() {
         @Override
@@ -58,8 +59,16 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
         initAddPhotoHelper();
-        mIsPhotoAsked = false;
+        if(savedInstanceState != null){
+            mIsPhotoAsked = savedInstanceState.getBoolean(TAKE_PHOTO_DIALOG_SHOWN);
+        }
         return root;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(TAKE_PHOTO_DIALOG_SHOWN, mIsPhotoAsked);
     }
 
     @Override
@@ -82,7 +91,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     private void showTakePhotoDialog(String plc, boolean forceShow) {
         if (!CacheProfile.isEmpty(getContext()) && mAddPhotoHelper != null
                 && (!mIsPhotoAsked || forceShow) && (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null)) {
-            startActivityForResult(TakePhotoActivity.createIntent(getContext(), plc), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
+            TakePhotoPopup.newInstance(plc).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.TAG);
             mIsPhotoAsked = true;
         }
     }
@@ -96,6 +105,9 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (mAddPhotoHelper != null) {
+            mAddPhotoHelper.releaseHelper();
+        }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mAddPhotoReceiver);
     }
 

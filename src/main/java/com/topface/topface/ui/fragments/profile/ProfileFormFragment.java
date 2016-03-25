@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -25,8 +24,9 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.CitySearchActivity;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.OwnGiftsActivity;
+import com.topface.topface.ui.dialogs.CitySearchPopup;
 import com.topface.topface.ui.dialogs.EditFormItemsEditDialog;
 import com.topface.topface.ui.dialogs.EditTextFormDialog;
 import com.topface.topface.utils.CacheProfile;
@@ -37,6 +37,11 @@ import com.topface.topface.utils.Utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
 
 import static com.topface.topface.ui.dialogs.BaseEditDialog.EditingFinishedListener;
 
@@ -104,14 +109,8 @@ public class ProfileFormFragment extends AbstractFormFragment {
                 FormItem item = (FormItem) valueView.getTag();
 
                 if (item.type == FormItem.CITY) {
-                    Intent intent = new Intent(getActivity(), CitySearchActivity.class);
-                    intent.putExtra(App.INTENT_REQUEST_KEY, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
-                    Fragment parent = getParentFragment();
-                    if (parent != null) {
-                        parent.startActivityForResult(intent, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
-                    } else {
-                        startActivityForResult(intent, CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY);
-                    }
+                    CitySearchPopup popup = new CitySearchPopup();
+                    popup.show(getActivity().getSupportFragmentManager(), CitySearchPopup.TAG);
                 } else if (item.dataId == FormItem.NO_RESOURCE_ID && item.type != FormItem.SEX) {
                     if (mFragmentManager != null) {
                         EditTextFormDialog.newInstance(item.getTitle(), item, mFormEditedListener).
@@ -130,17 +129,30 @@ public class ProfileFormFragment extends AbstractFormFragment {
     private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (mProfileFormListAdapter != null) {
+            if (mProfileFormListAdapter != null && isAdded()) {
                 mProfileFormListAdapter.setUserData(CacheProfile.getStatus(getActivity()), App.from(getActivity()).getProfile().forms);
                 mProfileFormListAdapter.notifyDataSetChanged();
             }
         }
     };
 
+    private Subscription mCitySubscription;
+    @Inject
+    TopfaceAppState mAppState;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        App.get().inject(this);
+        mCitySubscription = mAppState.getObservable(City.class).subscribe(new Action1<City>() {
+            @Override
+            public void call(City city) {
+                if (city != null) {
+                    mFormEditedListener.onEditingFinished(
+                            new FormItem(R.string.general_city, JsonUtils.toJson(city), FormItem.CITY));
+                }
+            }
+        });
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         mFragmentManager = getChildFragmentManager();
     }
@@ -161,18 +173,8 @@ public class ProfileFormFragment extends AbstractFormFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mCitySubscription.unsubscribe();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CitySearchActivity.INTENT_CITY_SEARCH_ACTIVITY &&
-                resultCode == Activity.RESULT_OK) {
-            City city = data.getParcelableExtra(CitySearchActivity.INTENT_CITY);
-            mFormEditedListener.onEditingFinished(
-                    new FormItem(R.string.general_city, JsonUtils.toJson(city), FormItem.CITY));
-        }
     }
 
     private SettingsRequest getSettingsRequest(FormItem formItem) {

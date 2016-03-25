@@ -39,6 +39,7 @@ import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.adapters.LeadersRecyclerViewAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
+import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.AddPhotoHelper;
@@ -125,13 +126,13 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     }
 
     private void showPhotoHelper() {
-        showPhotoHelper(getString(R.string.no_photo_take_photo), !mIsPhotoDialogShown);
+        showPhotoHelper(!mIsPhotoDialogShown);
     }
 
-    private void showPhotoHelper(String message, boolean isNeedShow) {
+    private void showPhotoHelper(boolean isNeedShow) {
         if (isNeedShow) {
             if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null) {
-                startActivityForResult(TakePhotoActivity.createIntent(this, TakePhotoStatistics.PLC_ADD_TO_LEADER), TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO);
+                TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER).show(getSupportFragmentManager(),TakePhotoPopup.TAG);
                 mIsPhotoDialogShown = true;
             }
         }
@@ -141,6 +142,9 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     protected void onDestroy() {
         super.onDestroy();
         mBalanceSubscription.unsubscribe();
+        if (mAddPhotoHelper != null) {
+            mAddPhotoHelper.releaseHelper();
+        }
         ButterKnife.unbind(this);
     }
 
@@ -246,7 +250,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                 Toast.makeText(App.getContext(), R.string.leaders_need_photo, Toast.LENGTH_SHORT).show();
             }
         } else {
-            showPhotoHelper(getString(R.string.add_photo_before), true);
+            showPhotoHelper(true);
         }
     }
 

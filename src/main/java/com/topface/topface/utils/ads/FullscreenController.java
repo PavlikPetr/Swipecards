@@ -103,9 +103,6 @@ public class FullscreenController {
 
         @Override
         public void callOnUi() {
-            if (mOnNextActionListener != null) {
-                mOnNextActionListener.saveNextActionPosition();
-            }
             if (App.from(mActivity).getOptions().interstitial.enabled) {
                 FullscreenController.this.requestFullscreen(BANNER_ADMOB_FULLSCREEN_START_APP);
             } else if (startPageInfo != null) {
@@ -408,6 +405,7 @@ public class FullscreenController {
         return new FullscreenStartAction(priority, activity);
     }
 
+    @SuppressWarnings("unused")
     private void onFullScreenAdClosed() {
         isFullScreenBannerVisible = false;
         if (mOnNextActionListener != null) {
@@ -415,6 +413,7 @@ public class FullscreenController {
         }
     }
 
+    @SuppressWarnings("unused")
     private void onFullScreenAdOpened() {
         isFullScreenBannerVisible = true;
     }

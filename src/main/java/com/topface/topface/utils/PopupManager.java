@@ -43,7 +43,7 @@ public class PopupManager {
 
                     @Override
                     public void onNegativeButtonClick() {
-                        oldVersionDialog.dismiss();
+                        oldVersionDialog.getDialog().cancel();
                     }
 
                     @Override
