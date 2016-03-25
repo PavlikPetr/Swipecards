@@ -140,7 +140,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         }
     };
     private String mMessage;
-    private SendGiftAnswer mSendGiftAnswer;
     private ArrayList<History> mHistoryFeedList;
     private Handler mUpdater;
     private boolean mIsUpdating;
@@ -243,20 +242,15 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         mUserNameAndAge = args.getString(INTENT_USER_NAME_AND_AGE);
         mInitialMessage = args.getString(INITIAL_MESSAGE);
         mPhoto = args.getParcelable(INTENT_AVATAR);
-        mSendGiftAnswer = args.getParcelable(GIFT_DATA);
-        if (mSendGiftAnswer != null) {
-            mSendGiftAnswer.setLoaderType(IListLoader.ItemType.TEMP_MESSAGE);
-            mAdapter.addGift(mSendGiftAnswer);
+        SendGiftAnswer sendGiftAnswer = args.getParcelable(GIFT_DATA);
+        if (sendGiftAnswer != null) {
+            sendGiftAnswer.setLoaderType(IListLoader.ItemType.TEMP_MESSAGE);
+            mAdapter.addGift(sendGiftAnswer);
         }
         // only DialogsFragment will hear this
         Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ_BY_UID);
         intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
     @Override
@@ -268,7 +262,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             @Override
             public void keyboardOpened() {
                 mKeyboardWasShown = true;
-                Debug.log("ChatKeyboardListener keyboardOpened -> " + mKeyboardWasShown);
                 if (getSupportActionBar().isShowing()
                         && getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
                     setActionbarVisibility(false);
@@ -278,7 +271,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             @Override
             public void keyboardClosed() {
                 mKeyboardWasShown = false;
-                Debug.log("ChatKeyboardListener keyboardClosed -> " + mKeyboardWasShown);
                 if (!getSupportActionBar().isShowing()) {
                     setActionbarVisibility(true);
                 }
@@ -286,7 +278,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
             @Override
             public void keyboardChangeState() {
-                Debug.log("ChatKeyboardListener keyboardChangeState ->" + mKeyboardWasShown);
                 if (getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT
                         && !getSupportActionBar().isShowing()) {
                     setActionbarVisibility(true);
@@ -334,6 +325,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         if (!AuthToken.getInstance().isEmpty()) {
             GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
         }
+        showKeyboard();
         return mRootLayout;
     }
 
@@ -778,7 +770,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     private void showKeyboardOnLargeScreen() {
         if (isShowKeyboardInChat() && mKeyboardWasShown) {
-            Utils.showSoftKeyboard(getActivity(), null);
+            Utils.showSoftKeyboard(getActivity(), mEditBox);
         }
     }
 
@@ -788,7 +780,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             for (History item : mAdapter.getData()) {
                 for (History newItem : data.items) {
                     if (newItem.id.equals(item.id)) {
-
                         itemsToDelete.add(item);
                     }
                 }
@@ -887,6 +878,18 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         }
     }
 
+    private void showKeyboard() {
+        if (mEditBox != null) {
+            mEditBox.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //грязный хак, чтоб отработал InputMethodManager. иначе не клава не отрабатывает и не открвается.
+                    showKeyboardOnLargeScreen();
+                }
+            }, 200);
+        }
+    }
+
     @SuppressWarnings("ConstantConditions")
     @Override
     public void onResume() {
@@ -894,8 +897,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         Debug.log("onResume ");
         setSavedMessage(mMessage);
         //показать клавиатуру, если она была показаны до этого(перешли в другой фрагмент, и вернулись обратно)
-        showKeyboardOnLargeScreen();
-
+        showKeyboard();
         if (mUserId == 0) {
             getActivity().setResult(Activity.RESULT_CANCELED);
             getActivity().finish();
@@ -1174,7 +1176,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     private boolean isShowKeyboardInChat() {
         DisplayMetrics displayMetrics = Device.getDisplayMetrics(App.getContext());
-        float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
+        int height = getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT
+                ? displayMetrics.heightPixels : displayMetrics.widthPixels;
+        float dpHeight = height / displayMetrics.density;
         return dpHeight >= getActivity().getResources().
                 getInteger(R.integer.min_screen_height_chat_fragment);
     }

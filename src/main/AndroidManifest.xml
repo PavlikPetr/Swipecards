@@ -260,6 +260,7 @@
         <activity
             android:name=".ui.UserProfileActivity"
             android:parentActivityName=".ui.NavigationActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:theme="@style/NoWindowAnimation">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
