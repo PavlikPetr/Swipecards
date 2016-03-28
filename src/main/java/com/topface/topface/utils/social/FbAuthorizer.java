@@ -2,7 +2,9 @@ package com.topface.topface.utils.social;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.facebook.AccessToken;
@@ -12,6 +14,8 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
+import com.facebook.appevents.AppEventsConstants;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.topface.topface.App;
@@ -26,6 +30,9 @@ import java.util.Collection;
 public class FbAuthorizer extends Authorizer {
 
     public static final String STAGE_AUTH_FACEBOOK_ID = "297350380464581";
+
+    private static final String IS_FB_AUTHORIZED = "is_fb_authorized";
+    private static final String FACEBOOK_REGISTRATION_METHOD = "Facebook";
 
     private CallbackManager mCallbackManager;
     private ProfileTracker mProfileTracker;
@@ -51,6 +58,7 @@ public class FbAuthorizer extends Authorizer {
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                sendFaceBookEvent();
                 AccessToken accessToken = loginResult.getAccessToken();
                 if (AuthToken.getInstance().isEmpty()) {
                     AuthToken.getInstance().saveToken(
@@ -73,6 +81,21 @@ public class FbAuthorizer extends Authorizer {
             public void onError(FacebookException e) {
             }
         });
+    }
+
+    private void sendFaceBookEvent() {
+        AppEventsLogger logger = AppEventsLogger.newLogger(App.getContext());
+        // отправляем ивент, что приложение запущено
+        // да-да, на самом деле приложение было запущено раньше, но ивент шлем только при авторизации в FB
+        logger.logEvent(AppEventsConstants.EVENT_NAME_ACTIVATED_APP);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(App.getContext());
+        // проверяем флаг авторизации через FB, если авторизация производится в первый раз, то шлем ивент
+        if (!preferences.getBoolean(IS_FB_AUTHORIZED, false)) {
+            Bundle bundle = new Bundle();
+            bundle.putString(AppEventsConstants.EVENT_PARAM_REGISTRATION_METHOD, FACEBOOK_REGISTRATION_METHOD);
+            logger.logEvent(AppEventsConstants.EVENT_NAME_COMPLETED_REGISTRATION, bundle);
+        }
+        preferences.edit().putBoolean(IS_FB_AUTHORIZED, true).apply();
     }
 
     @Override
@@ -114,9 +137,10 @@ public class FbAuthorizer extends Authorizer {
         LoginManager.getInstance().logOut();
     }
 
-    private void initFB() {
-        if (!FacebookSdk.isInitialized()) {
-            FacebookSdk.setApplicationId(getFbId());
+    public static void initFB() {
+        String appId = getFbId();
+        if (!FacebookSdk.isInitialized() || !FacebookSdk.getApplicationId().equals(appId)) {
+            FacebookSdk.setApplicationId(appId);
             FacebookSdk.sdkInitialize(App.getContext());
         }
     }

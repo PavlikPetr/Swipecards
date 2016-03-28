@@ -1,28 +1,35 @@
 package com.topface.topface.ui.analytics;
 
-import android.app.Activity;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.statistics.ScreensShowStatistics;
+import com.topface.topface.ui.fragments.feed.IFeedLifeCycle;
+import com.topface.topface.utils.Utils;
 
-public class TrackedFragment extends Fragment {
+public class TrackedFragment extends Fragment implements IFeedLifeCycle {
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         if (isTrackable()) {
-            Tracker tracker = EasyTracker.getTracker();
-            tracker.setScreenName(getTrackName());
-            tracker.send(new HitBuilders.AppViewBuilder().build());
+            senFragmentShownStatistics();
         }
     }
 
     public String getTrackName() {
-        return ((Object) this).getClass().getSimpleName().replace("Fragment", "");
+        return Utils.getClassName(getClass().getSimpleName());
+    }
+
+    public void senFragmentShownStatistics() {
+        ScreensShowStatistics.sendScreenShow(getClass().getSimpleName());
     }
 
     public boolean isTrackable() {
         return true;
+    }
+
+    @Override
+    public void onResumeFragment() {
+        senFragmentShownStatistics();
     }
 }

@@ -55,10 +55,7 @@ public class PaymentWallBuyingFragment extends CoinsBuyingFragment {
         FragmentActivity activity = getActivity();
         if (activity != null) {
             activity.startActivityForResult(
-                    PaymentwallActivity.getIntent(
-                            activity,
-                            btn.paymentwallLink
-                    ),
+                    PaymentwallActivity.getIntent(activity, btn),
                     PaymentwallActivity.ACTION_BUY
             );
         }

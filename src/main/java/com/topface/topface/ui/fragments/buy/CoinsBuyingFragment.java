@@ -100,20 +100,20 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
         if (products == null) {
             return;
         }
-        if (products.likes.isEmpty() && products.coins.isEmpty()) {
+        List<BuyButtonData> availableLikesButtons = getAvailableButtons(products.likes);
+        List<BuyButtonData> availableCoinsButtons = getAvailableButtons(products.coins);
+        if (availableLikesButtons.isEmpty() && availableCoinsButtons.isEmpty()) {
             root.findViewById(R.id.fbBuyingDisabled).setVisibility(View.VISIBLE);
         }
         // sympathies buttons
-        for (final BuyButtonData curButton : products.likes) {
-            View btnView = Products.setBuyButton(likesButtons, curButton, getActivity(),
-                    new Products.BuyButtonClickListener() {
-                        @Override
-                        public void onClick(String id) {
-                            buy(curButton);
-                            Activity activity = getActivity();
-                            if (activity instanceof PurchasesActivity) {
-                                ((PurchasesActivity) activity).skipBonus();
-                            }
+        purchaseButtons.addAll(new PurchaseButtonList().getButtonsListView(null, likesButtons, availableLikesButtons, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
+            @Override
+            public void onClick(String id, BuyButtonData btnData) {
+                buy(btnData);
+                Activity activity = getActivity();
+                if (activity instanceof PurchasesActivity) {
+                    ((PurchasesActivity) activity).skipBonus();
+                }
 
                             App.from(getActivity()).getOptions().topfaceOfferwallRedirect.setComplited(true);
                         }
@@ -123,7 +123,7 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
                 purchaseButtons.add(btnView);
                 btnView.setTag(curButton);
             }
-        }
+        }));
         // coins buttons
         initCoinsButtons(root, products);
     }
@@ -143,16 +143,14 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
             coinsButtonsContainer.removeAllViews();
         }
         // coins items buttons also coinsSubscriptionsMasked buttons
-        for (final BuyButtonData curButton : coinsProducts) {
-            View btnView = Products.setBuyButton(coinsButtonsContainer, curButton, getActivity(),
-                    new Products.BuyButtonClickListener() {
-                        @Override
-                        public void onClick(String id) {
-                            buy(curButton);
-                            Activity activity = getActivity();
-                            if (activity instanceof PurchasesActivity) {
-                                ((PurchasesActivity) activity).skipBonus();
-                            }
+        purchaseButtons.addAll(new PurchaseButtonList().getButtonsListView(null, coinsButtonsContainer, coinsProducts, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
+            @Override
+            public void onClick(String id, BuyButtonData btnData) {
+                buy(btnData);
+                Activity activity = getActivity();
+                if (activity instanceof PurchasesActivity) {
+                    ((PurchasesActivity) activity).skipBonus();
+                }
 
                             options.topfaceOfferwallRedirect.setComplited(true);
                         }
@@ -162,7 +160,7 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
                 purchaseButtons.add(btnView);
                 btnView.setTag(curButton);
             }
-        }
+        }));
         coinsButtonsContainer.requestLayout();
     }
 

@@ -9,7 +9,6 @@ import com.topface.topface.R;
 import com.topface.topface.utils.config.UserConfig;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 
 public class TrialVipPopup extends AbstractDialogFragment implements View.OnClickListener {

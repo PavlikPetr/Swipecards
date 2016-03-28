@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.NumberPicker;
 
 import com.topface.topface.R;
+import com.topface.topface.ui.analytics.TrackedDialogFragment;
 import com.topface.topface.ui.edit.FilterFragment;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +23,7 @@ import butterknife.ButterKnife;
  * Диалог для выбора параметров роста/веса
  * Created by onikitin on 19.06.15.
  */
-public class FilterConstitutionDialog extends DialogFragment {
+public class FilterConstitutionDialog extends TrackedDialogFragment {
 
     public static final String TAG = "com.topface.topface.ui.dialogs.FilterConstitutionDialog_TAG";
 
@@ -129,7 +130,7 @@ public class FilterConstitutionDialog extends DialogFragment {
         return new AlertDialog.Builder(getActivity())
                 .setTitle(mTitle)
                 .setView(view)
-                .setNegativeButton(getActivity().getString(R.string.general_ok), new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.general_ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mFirstPicker.clearFocus();
@@ -145,7 +146,7 @@ public class FilterConstitutionDialog extends DialogFragment {
                         }
                     }
                 })
-                .setPositiveButton(getActivity().getString(R.string.reset_filter), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.general_any), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (mListener != null) {
@@ -160,6 +161,7 @@ public class FilterConstitutionDialog extends DialogFragment {
     @Override
     public void onDestroyView() {
         ButterKnife.unbind(this);
+        mListener = null;
         super.onDestroyView();
     }
 

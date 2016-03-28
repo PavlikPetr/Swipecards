@@ -66,7 +66,8 @@ public class FullscreenController {
         }
 
         @Override
-        public void onFailedToLoad() {
+        public void onFailedToLoad(Integer codeError) {
+            AdStatistics.sendFullscreenFailedToLoad(mCurrentBannerType, codeError);
             requestFallbackFullscreen();
         }
 
@@ -246,7 +247,7 @@ public class FullscreenController {
             }
 
             public void onInterstitialFailedToLoad() {
-                mFullScreenBannerListener.onFailedToLoad();
+                mFullScreenBannerListener.onFailedToLoad(null);
             }
 
             public void onInterstitialShown() {
@@ -272,7 +273,7 @@ public class FullscreenController {
 
             @Override
             public void onAdFailedToLoad(int errorCode) {
-                mFullScreenBannerListener.onFailedToLoad();
+                mFullScreenBannerListener.onFailedToLoad(errorCode);
             }
 
             @Override
@@ -340,6 +341,7 @@ public class FullscreenController {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
+                mFullScreenBannerListener.onFailedToLoad(codeError);
                 if (codeError == ErrorCodes.BANNER_NOT_FOUND) {
                     addLastFullscreenShowedTime();
                 }
@@ -421,7 +423,7 @@ public class FullscreenController {
     private interface FullScreenBannerListener {
         void onLoaded();
 
-        void onFailedToLoad();
+        void onFailedToLoad(Integer codeError);
 
         void onClose();
 

@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Build;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
@@ -17,6 +16,8 @@ import android.text.TextUtils;
 
 import com.appsflyer.AppsFlyerLib;
 import com.comscore.analytics.comScore;
+import com.facebook.appevents.AppEventsConstants;
+import com.facebook.appevents.AppEventsLogger;
 import com.flurry.android.FlurryAgent;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.squareup.leakcanary.LeakCanary;
@@ -44,7 +45,6 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
@@ -53,6 +53,7 @@ import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.state.IStateDataUpdater;
 import com.topface.topface.state.OptionsAndProfileProvider;
+import com.topface.topface.statistics.AppStateStatistics;
 import com.topface.topface.ui.ApplicationBase;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
@@ -60,6 +61,7 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.RunningStateManager;
 import com.topface.topface.utils.ad.NativeAdManager;
 import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.config.AppConfig;
@@ -68,14 +70,15 @@ import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.HockeySender;
+import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.gcmutils.GcmListenerService;
 import com.topface.topface.utils.geo.GeoLocationManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
+import com.topface.topface.utils.social.FbAuthorizer;
 import com.topface.topface.utils.social.VkAuthorizer;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
-import com.vk.sdk.VKSdk;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
@@ -84,6 +87,8 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import dagger.ObjectGraph;
 
@@ -98,6 +103,8 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     public static final String INTENT_REQUEST_KEY = "requestCode";
     private static final long PROFILE_UPDATE_TIMEOUT = 1000 * 120;
 
+    @Inject
+    static RunningStateManager mStateManager;
     private ObjectGraph mGraph;
     private static Context mContext;
     private static Intent mConnectionIntent;
@@ -139,6 +146,14 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         mGraph = ObjectGraph.create(new TopfaceModule());
         mGraph.injectStatics();
         mGraph.inject(this);
+    }
+
+    public static void onActivityStarted(String activityName) {
+        mStateManager.onActivityStarted(activityName);
+    }
+
+    public static void onActivityStoped(String activityName) {
+        mStateManager.onActivityStoped(activityName);
     }
 
     public void inject(Object obj) {
@@ -228,6 +243,10 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         return mCurLocation;
     }
 
+    public static void setLastKnownLocation(Location location) {
+        mCurLocation = location;
+    }
+
     public static boolean isOnline() {
         return mConnectionReceiver.isConnected();
     }
@@ -312,7 +331,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     }
 
     private void initVkSdk() {
-        VKSdk.customInitialize(App.getContext(), VkAuthorizer.getVkId(), null);
+        VkAuthorizer.initVkSdk();
         VKAccessTokenTracker vkTokenTracker = new VKAccessTokenTracker() {
             @Override
             public void onVKAccessTokenChanged(VKAccessToken oldToken, VKAccessToken newToken) {
@@ -341,9 +360,26 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         super.onCreate();
         LeakCanary.install(this);
         mContext = getApplicationContext();
+        // Отправка ивента о запуске приложения, если пользователь авторизован в FB
+        if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
+            FbAuthorizer.initFB();
+            AppEventsLogger.newLogger(App.getContext()).logEvent(AppEventsConstants.EVENT_NAME_ACTIVATED_APP);
+        }
         initVkSdk();
         initObjectGraphForInjections();
         mProvider = new OptionsAndProfileProvider(this);
+        // подписываемся на события о переходе приложения в состояние background/foreground
+        mStateManager.registerAppChangeStateListener(new RunningStateManager.OnAppChangeStateListener() {
+            @Override
+            public void onAppForeground(long timeOnStart) {
+                AppStateStatistics.sendAppForegroundState();
+            }
+
+            @Override
+            public void onAppBackground(long timeOnStop, long timeOnStart) {
+                AppStateStatistics.sendAppBackgroundState();
+            }
+        });
         //Включаем отладку, если это дебаг версия
         enableDebugLogs();
         //Включаем логирование ошибок
@@ -425,7 +461,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 @Override
                 public void run() {
                     sendProfileAndOptionsRequests();
-                    sendLocation();
+                    new FindAndSendCurrentLocation();
                 }
             });
         }
@@ -498,22 +534,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 }
             }
         });
-    }
-
-    private void sendLocation() {
-        new BackgroundThread(Thread.MIN_PRIORITY) {
-            @Override
-            public void execute() {
-                mCurLocation = GeoLocationManager.getCurrentLocation();
-                if (mCurLocation != null) {
-                    Looper.prepare();
-                    SettingsRequest settingsRequest = new SettingsRequest(getContext());
-                    settingsRequest.location = mCurLocation;
-                    settingsRequest.exec();
-                    Looper.loop();
-                }
-            }
-        };
     }
 
     private void initAcra() {

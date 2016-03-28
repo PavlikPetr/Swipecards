@@ -39,11 +39,13 @@ import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.RunningStateManager;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.ads.AdToAppController;
 import com.topface.topface.utils.ads.AdToAppHelper;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.geo.GeoLocationManager;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -102,8 +104,8 @@ import dagger.Provides;
                 Options.class,
                 Profile.class,
                 User.class,
-                AdToAppHelper.class
-
+                AdToAppHelper.class,
+                FindAndSendCurrentLocation.class
         },
         staticInjections = {
                 AddPhotoHelper.class
@@ -142,6 +144,8 @@ public class TopfaceModule {
                     return (T) (CacheProfile.balanceData != null ? new BalanceData(CacheProfile.balanceData) : new BalanceData());
                 } else if (CountersData.class.equals(classType)) {
                     return (T) (CacheProfile.countersData != null ? new CountersData(CacheProfile.countersData) : new CountersData());
+                } else if (Location.class.equals(classType)) {
+                    return (T) App.getUserConfig().getUserGeoLocation();
                 } else if (Options.class.equals(classType)) {
                     return (T) getOptions();
                 } else if (Profile.class.equals(classType)) {
@@ -201,5 +205,11 @@ public class TopfaceModule {
     @Singleton
     PopupHive providesPopupLair() {
         return new PopupHive();
+    }
+
+    @Provides
+    @Singleton
+    RunningStateManager providesRunningStateManager() {
+        return new RunningStateManager();
     }
 }

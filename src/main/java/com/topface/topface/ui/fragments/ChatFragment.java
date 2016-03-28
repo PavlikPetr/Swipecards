@@ -86,6 +86,7 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
@@ -96,7 +97,12 @@ import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 public class ChatFragment extends AnimatedFragment implements View.OnClickListener {
 
@@ -141,7 +147,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     };
     private String mMessage;
     private ArrayList<History> mHistoryFeedList;
-    private Handler mUpdater;
     private boolean mIsUpdating;
     private boolean mKeyboardWasShown;
     private PullToRefreshListView mListView;
@@ -206,6 +211,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private ImageButton mSendButton;
     private ChatListAnimatedAdapter mAnimatedAdapter;
     private int mUserType;
+    private Subscription mUpdateUiSubscription;
     private KeyboardListenerLayout mRootLayout;
 
     @Override
@@ -228,7 +234,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         mUserType = getArguments().getInt(ChatFragment.USER_TYPE);
         // do not recreate Adapter cause of setRetainInstance(true)
         if (mAdapter == null) {
-            mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback(), new ChatListAdapter.OnBuyVipButtonClick() {
+            mAdapter = new ChatListAdapter((IActivityDelegate) getActivity(), new FeedList<History>(), getUpdaterCallback(), new ChatListAdapter.OnBuyVipButtonClick() {
                 @Override
                 public void onClick() {
                     startBuyVipActivity(AUTO_REPLY_MESSAGE_SOURCE);
@@ -647,7 +653,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 !mAdapter.isEmpty() &&
                 (mPopularUserLockController.isChatLocked() || mPopularUserLockController.isResponseLocked()) &&
                 pullToRefresh;
-        HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId, new HistoryRequest.IRequestExecuted() {
+
+        HistoryRequest historyRequest = new HistoryRequest(App.getContext(), mUserId, new HistoryRequest.IRequestExecuted() {
             @Override
             public void onExecuted() {
                 mIsUpdating = true;
@@ -842,7 +849,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     @Override
     protected OverflowMenu createOverflowMenu(Menu barActions) {
-        return new OverflowMenu(getActivity(), barActions);
+        return new OverflowMenu((IActivityDelegate) getActivity(), barActions);
     }
 
     private void release() {
@@ -917,8 +924,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
         IntentFilter filter = new IntentFilter(GCMUtils.GCM_NOTIFICATION);
         LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(mNewMessageReceiver, filter);
-
-        mUpdater = new Handler();
         startTimer();
     }
 
@@ -1056,16 +1061,21 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
 
     private void startTimer() {
-        if (mUpdater != null) {
-            mUpdater.removeCallbacks(mUpdaterTask);
-            mUpdater.postDelayed(mUpdaterTask, DEFAULT_CHAT_UPDATE_PERIOD);
-        }
+        mUpdateUiSubscription = Observable.interval(DEFAULT_CHAT_UPDATE_PERIOD, DEFAULT_CHAT_UPDATE_PERIOD
+                , TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(new Action1<Long>() {
+            @Override
+            public void call(Long aLong) {
+                if (isAdded() && !wasFailed && mUserId > 0) {
+                    Debug.log("fucking_timer tick");
+                    update(true, "timer");
+                }
+            }
+        });
     }
 
     private void stopTimer() {
-        if (mUpdater != null) {
-            mUpdater.removeCallbacks(mUpdaterTask);
-            mUpdater = null;
+        if (!mUpdateUiSubscription.isUnsubscribed()) {
+            mUpdateUiSubscription.unsubscribe();
         }
     }
 

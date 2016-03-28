@@ -1,6 +1,8 @@
 package com.topface.topface.banners.ad_providers;
 
 import android.app.Activity;
+import android.content.res.Resources;
+import android.support.annotation.StringRes;
 
 import com.appodeal.ads.Appodeal;
 import com.appodeal.ads.BannerCallbacks;
@@ -8,36 +10,35 @@ import com.appodeal.ads.BannerView;
 import com.appodeal.ads.UserSettings;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.R;
+import com.topface.topface.banners.AppodealUserSettingsRules;
+import com.topface.topface.App;
 import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.data.Profile;
+import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.social.AuthToken;
 
 public class AppodealProvider extends AbstractAdsProvider {
 
     public static final String APPODEAL_APP_KEY = "2f48418b677cf24a3fa37eacfc7a4e76d385db08b51bd328";
+    private static final String YANDEX_NETWORK = "yandex";
 
     @Override
     boolean injectBannerInner(final IPageWithAds page, final IAdProviderCallbacks callbacks) {
         Activity activity = page.getActivity();
         Appodeal.setLogging(Debug.isDebugLogsEnabled());
+        Appodeal.disableNetwork(activity.getApplicationContext(), YANDEX_NETWORK, Appodeal.BANNER_VIEW);
         Appodeal.initialize(activity, APPODEAL_APP_KEY, Appodeal.BANNER_VIEW);
         final BannerView adView = Appodeal.getBannerView(page.getActivity());
         page.getContainerForAd().addView(adView);
-        Appodeal.getUserSettings(activity)
-                .setGender(
-                        App.get().getProfile().sex == Profile.BOY ?
-                                UserSettings.Gender.MALE :
-                                UserSettings.Gender.FEMALE)
-                .setAge(App.get().getProfile().age);
-        // добавляем в UserSettings id социальной сети, в зависимости от типа текущей авторизации
-        switch (AuthToken.getInstance().getSocialNet()) {
-            case AuthToken.SN_VKONTAKTE:
-                Appodeal.getUserSettings(activity).setVkId(AuthToken.getInstance().getUserSocialId());
-                break;
-            case AuthToken.SN_FACEBOOK:
-                Appodeal.getUserSettings(activity).setFacebookId(AuthToken.getInstance().getUserSocialId());
-                break;
-        }
+        UserSettings userSettings = Appodeal.getUserSettings(activity);
+        userSettings.setGender(
+                App.get().getProfile().sex == Profile.BOY ?
+                        UserSettings.Gender.MALE :
+                        UserSettings.Gender.FEMALE)
+                .setAge(  App.get().getProfile().age);
+        fillAdditionalUserSettings(userSettings);
         if (Appodeal.isLoaded(Appodeal.BANNER_VIEW)) {
             bannerLoaded(page, callbacks, adView);
         }
@@ -51,7 +52,7 @@ public class AppodealProvider extends AbstractAdsProvider {
             @Override
             public void onBannerFailedToLoad() {
                 if (callbacks != null) {
-                    callbacks.onFailedToLoadAd();
+                    callbacks.onFailedToLoadAd(null);
                 }
             }
 
@@ -82,5 +83,85 @@ public class AppodealProvider extends AbstractAdsProvider {
         if (callbacks != null) {
             callbacks.onAdLoadSuccess(adView);
         }
+    }
+
+    private void fillAdditionalUserSettings(UserSettings userSettings) {
+        setUserSettingsRelation(userSettings);
+        setUserSettingsSmoking(userSettings);
+        setUserSettingsAlcohol(userSettings);
+        setUserSettingsOcupation(userSettings);
+    }
+
+    private void setUserSettingsRelation(UserSettings userSettings) {
+        if (userSettings != null) {
+            FormItem formItem = CacheProfile.getProfile().getFormByType(FormItem.DATA_TYPE.MARRIAGE);
+            if (formItem != null) {
+                String currentValue = formItem.value;
+                UserSettings.Relation relation = UserSettings.Relation.OTHER;
+                for (AppodealUserSettingsRules.Relation item : AppodealUserSettingsRules.Relation.values()) {
+                    if (isContainedEquals(currentValue, item.getIdsArray())) {
+                        relation = item.getRelation();
+                    }
+                }
+                userSettings.setRelation(relation);
+            }
+        }
+    }
+
+    private void setUserSettingsAlcohol(UserSettings userSettings) {
+        if (userSettings != null) {
+            FormItem formItem = CacheProfile.getProfile().getFormByType(FormItem.DATA_TYPE.ALCOHOL);
+            if (formItem != null) {
+                String currentValue = formItem.value;
+                UserSettings.Alcohol alcohol = UserSettings.Alcohol.NEGATIVE;
+                for (AppodealUserSettingsRules.Alcohol item : AppodealUserSettingsRules.Alcohol.values()) {
+                    if (isContainedEquals(currentValue, item.getIdsArray())) {
+                        alcohol = item.getAlcohol();
+                    }
+                }
+                userSettings.setAlcohol(alcohol);
+            }
+        }
+    }
+
+    private void setUserSettingsSmoking(UserSettings userSettings) {
+        if (userSettings != null) {
+            FormItem formItem = CacheProfile.getProfile().getFormByType(FormItem.DATA_TYPE.SMOKING);
+            if (formItem != null) {
+                String currentValue = formItem.value;
+                UserSettings.Smoking smoking = UserSettings.Smoking.NEGATIVE;
+                for (AppodealUserSettingsRules.Smoking item : AppodealUserSettingsRules.Smoking.values()) {
+                    if (isContainedEquals(currentValue, item.getIdsArray())) {
+                        smoking = item.getSmoking();
+                    }
+                }
+                userSettings.setSmoking(smoking);
+            }
+        }
+    }
+
+    private void setUserSettingsOcupation(UserSettings userSettings) {
+        if (userSettings != null) {
+            FormItem formItem = CacheProfile.getProfile().getFormByType(FormItem.DATA_TYPE.EDUCATION);
+            if (formItem != null) {
+                String currentValue = formItem.value;
+                Resources res = App.getContext().getResources();
+                userSettings.setOccupation(
+                        res.getString(R.string.profile_form_education_female_1).equals(currentValue)
+                                || res.getString(R.string.profile_form_education_male_1).equals(currentValue)
+                                ? UserSettings.Occupation.UNIVERSITY
+                                : UserSettings.Occupation.OTHER);
+            }
+        }
+    }
+
+    private boolean isContainedEquals(String currentValue, @StringRes int... idsArray) {
+        Resources res = App.getContext().getResources();
+        for (int id : idsArray) {
+            if (res.getString(id).equals(currentValue)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

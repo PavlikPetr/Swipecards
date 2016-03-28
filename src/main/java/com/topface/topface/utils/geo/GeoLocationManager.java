@@ -1,6 +1,5 @@
 package com.topface.topface.utils.geo;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -32,7 +31,6 @@ public class GeoLocationManager {
     private static final float UPDATE_RANGE = 10f;
     private LocationManager mLocationManager;
     private Location mBestLocation;
-    private Activity mActivity;
     private ChangeLocationListener mNetworkLocationListener = new ChangeLocationListener() {
         @Override
         public void onLocationChanged(Location location) {
@@ -59,10 +57,9 @@ public class GeoLocationManager {
         }
     };
 
-    public GeoLocationManager(Activity activity) {
-        mActivity = activity;
-        App.from(activity.getApplicationContext()).inject(this);
-        mLocationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+    public GeoLocationManager() {
+        App.from(App.getContext()).inject(this);
+        mLocationManager = (LocationManager) App.getContext().getSystemService(Context.LOCATION_SERVICE);
         startLocationListener();
     }
 
@@ -164,16 +161,12 @@ public class GeoLocationManager {
     }
 
     public void registerProvidersChangedActionReceiver() {
-        if (mActivity != null) {
-            mActivity.registerReceiver(mGeoStateReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
-        }
+        App.getContext().registerReceiver(mGeoStateReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
     }
 
     public void unregisterProvidersChangedActionReceiver() {
-        if (mActivity != null) {
-            mActivity.unregisterReceiver(mGeoStateReceiver);
-        }
-        mActivity = null;
+        App.getContext().unregisterReceiver(mGeoStateReceiver);
     }
+
 
 }

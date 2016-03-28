@@ -69,6 +69,11 @@ public class UserPhotoFragment extends ProfileInnerFragment {
         setUpdater();
     }
 
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
     public void setUpdater() {
         mUpdater = new LoadingListAdapter.Updater() {
             @Override

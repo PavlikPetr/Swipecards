@@ -81,6 +81,11 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         return keyCode == KeyEvent.KEYCODE_MENU || super.onKeyDown(keyCode, event);
     }
 
+    @SuppressWarnings("unused")
+    public IActivityDelegate getActivityDelegate() {
+        return this;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

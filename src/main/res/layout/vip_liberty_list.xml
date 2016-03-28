@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:paddingTop="16dp"
+        android:text="@string/vip_info_title"
+        android:textColor="@color/main_title_text_color"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <com.topface.topface.ui.views.VipLibertyView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        view:descriptionText="@string/ban_liberty_description"
+        view:imageRes="@drawable/ic_ban_liberty"
+        view:titleText="@string/ban_liberty_title" />
+
+    <com.topface.topface.ui.views.VipLibertyView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        view:descriptionText="@string/guest_liberty_description"
+        view:imageRes="@drawable/ic_guests_liberty"
+        view:titleText="@string/guest_liberty_title" />
+
+    <com.topface.topface.ui.views.VipLibertyView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        view:descriptionText="@string/star_liberty_description"
+        view:imageRes="@drawable/ic_star_liberty"
+        view:titleText="@string/star_liberty_title" />
+
+    <com.topface.topface.ui.views.VipLibertyView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        view:descriptionText="@string/crown_liberty_description"
+        view:imageRes="@drawable/ic_crown_liberty"
+        view:titleText="@string/crown_liberty_title" />
+
+    <com.topface.topface.ui.views.VipLibertyView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        view:descriptionText="@string/like_liberty_description"
+        view:imageRes="@drawable/ic_like_liberty"
+        view:titleText="@string/like_liberty_title" />
+</LinearLayout>

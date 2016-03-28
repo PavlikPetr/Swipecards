@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="handler"
+            type="com.topface.topface.ui.views.BuyButtonVer1.BuyButtonVersion1Handler" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/itContainer"
+            style="@style/ViewWithElevation"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="12dp"
+            android:background="@{handler.containerBackgroundRes}"
+            android:onClick="@{handler.onButtonClick}"
+            android:paddingBottom="@{handler.containerPaddingBottom}"
+            android:paddingLeft="@{handler.containerPaddingLeft}"
+            android:paddingRight="@{handler.containerPaddingRight}"
+            android:paddingTop="@{handler.containerPaddingTop}"
+            android:visibility="@{handler.containerVisibility}">
+
+            <TextView
+                android:id="@+id/itText"
+                style="@style/WhiteText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:text="@{handler.titleText}"
+                android:textColor="@{handler.titleTextColor}"
+                android:visibility="@{handler.titleVisibility}" />
+
+            <ProgressBar
+                android:id="@+id/marketWaiter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="@{handler.progressVisibility}" />
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>
