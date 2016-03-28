@@ -162,7 +162,7 @@ public class Utils {
         }
     }
 
-    public static boolean isEmptyJson(JSONObject object){
+    public static boolean isEmptyJson(JSONObject object) {
         return object.toString().equals(EMPTY_JSON);
     }
 
@@ -327,9 +327,7 @@ public class Utils {
 
     public static void showSoftKeyboard(Context context, EditText editText) {
         InputMethodManager keyboard = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (editText == null) {
-            keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        } else {
+        if (editText != null) {
             editText.requestFocus();
             keyboard.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
         }
@@ -553,6 +551,7 @@ public class Utils {
 
         }
     }
+
     public static void checkEmailConfirmation(final IEmailConfirmationListener emailConfirmationListener, final boolean isNeedShowToast) {
         final boolean isEmailConfirmedCurrentValue = App.get().getProfile().emailConfirmed;
         new ProfileRequest(App.getContext()).callback(new DataApiHandler<Profile>() {
