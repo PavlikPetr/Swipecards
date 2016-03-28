@@ -486,7 +486,7 @@ public class OverflowMenu {
                         }
                     });
         } else {
-            request = new BookmarkAddRequest(userId, mActivity).
+        request = new BookmarkAddRequest(userId, mActivity).
                     callback(new BlackListAndBookmarkHandler(mActivity,
                             BlackListAndBookmarkHandler.ActionTypes.BOOKMARK,
                             userId,
@@ -499,13 +499,13 @@ public class OverflowMenu {
                                     sendBroadcast(new Intent(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
                         }
 
-                    @Override
-                    public void fail(int codeError, IApiResponse response) {
-                        super.fail(codeError, response);
-                        setBookmarkedState(null);
-                        initOverfowMenu();
-                    }
-                })).exec();
+                        @Override
+                        public void fail(int codeError, IApiResponse response) {
+                            super.fail(codeError, response);
+                            setBookmarkedState(null);
+                            initOverfowMenu();
+                        }
+                    })).exec();
         setBookmarkedState(null);
     }
 

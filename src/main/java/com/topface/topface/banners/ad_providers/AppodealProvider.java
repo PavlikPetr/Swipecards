@@ -37,7 +37,7 @@ public class AppodealProvider extends AbstractAdsProvider {
                 App.get().getProfile().sex == Profile.BOY ?
                         UserSettings.Gender.MALE :
                         UserSettings.Gender.FEMALE)
-                .setAge(  App.get().getProfile().age);
+                .setAge(App.get().getProfile().age);
         fillAdditionalUserSettings(userSettings);
         if (Appodeal.isLoaded(Appodeal.BANNER_VIEW)) {
             bannerLoaded(page, callbacks, adView);

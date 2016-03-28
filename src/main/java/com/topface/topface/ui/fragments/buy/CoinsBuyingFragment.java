@@ -107,13 +107,13 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
         }
         // sympathies buttons
         purchaseButtons.addAll(new PurchaseButtonList().getButtonsListView(null, likesButtons, availableLikesButtons, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
-            @Override
-            public void onClick(String id, BuyButtonData btnData) {
-                buy(btnData);
-                Activity activity = getActivity();
-                if (activity instanceof PurchasesActivity) {
-                    ((PurchasesActivity) activity).skipBonus();
-                }
+                    @Override
+                    public void onClick(String id, BuyButtonData btnData) {
+                        buy(btnData);
+                        Activity activity = getActivity();
+                        if (activity instanceof PurchasesActivity) {
+                            ((PurchasesActivity) activity).skipBonus();
+                        }
 
                             App.from(getActivity()).getOptions().topfaceOfferwallRedirect.setComplited(true);
                         }
@@ -123,7 +123,9 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
                 purchaseButtons.add(btnView);
                 btnView.setTag(curButton);
             }
-        }));
+    }
+
+    ));
         // coins buttons
         initCoinsButtons(root, products);
     }
@@ -144,13 +146,13 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
         }
         // coins items buttons also coinsSubscriptionsMasked buttons
         purchaseButtons.addAll(new PurchaseButtonList().getButtonsListView(null, coinsButtonsContainer, coinsProducts, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
-            @Override
-            public void onClick(String id, BuyButtonData btnData) {
-                buy(btnData);
-                Activity activity = getActivity();
-                if (activity instanceof PurchasesActivity) {
-                    ((PurchasesActivity) activity).skipBonus();
-                }
+                    @Override
+                    public void onClick(String id, BuyButtonData btnData) {
+                        buy(btnData);
+                        Activity activity = getActivity();
+                        if (activity instanceof PurchasesActivity) {
+                            ((PurchasesActivity) activity).skipBonus();
+                        }
 
                             options.topfaceOfferwallRedirect.setComplited(true);
                         }
@@ -160,7 +162,7 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
                 purchaseButtons.add(btnView);
                 btnView.setTag(curButton);
             }
-        }));
+    }));
         coinsButtonsContainer.requestLayout();
     }
 
