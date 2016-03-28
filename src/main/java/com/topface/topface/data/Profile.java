@@ -475,9 +475,11 @@ public class Profile extends AbstractDataWithPhotos {
 
     @Nullable
     public FormItem getFormByType(FormItem.DATA_TYPE dataType) {
-        for (FormItem item : forms) {
-            if (item.dataType == dataType) {
-                return item;
+        if (forms != null) {
+            for (FormItem item : forms) {
+                if (item.dataType == dataType) {
+                    return item;
+                }
             }
         }
         return null;
