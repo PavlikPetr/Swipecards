@@ -21,14 +21,20 @@ public abstract class BaseDialog extends TrackedDialogFragment {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(STYLE_NO_FRAME, getDialogStyleResId());
+        if (getDialogStyleResId() != 0) {
+            setStyle(STYLE_NO_FRAME, getDialogStyleResId());
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(getDialogLayoutRes(), container, false);
-        initViews(view);
-        return view;
+        int resLayoutId = getDialogLayoutRes();
+        View root = null;
+        if (resLayoutId != 0) {
+            root = inflater.inflate(resLayoutId, container, false);
+            initViews(root);
+        }
+        return root;
     }
 
     protected abstract void initViews(View root);
@@ -68,5 +74,4 @@ public abstract class BaseDialog extends TrackedDialogFragment {
             mDismisslListener.onDismiss(dialog);
         }
     }
-
 }

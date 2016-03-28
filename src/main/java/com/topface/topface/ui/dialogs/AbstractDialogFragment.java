@@ -34,6 +34,7 @@ public abstract class AbstractDialogFragment extends BaseDialog {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         final TypedArray styledAttributes = getActivity().getTheme().obtainStyledAttributes(
                 new int[]{R.attr.actionBarSize});
         mActionBarSize = (int) styledAttributes.getDimension(0, 0);
@@ -42,19 +43,11 @@ public abstract class AbstractDialogFragment extends BaseDialog {
 
     @StyleRes
     protected int getDialogStyleResId() {
-        if (isModalDialog()) {
-            return R.style.Topface_Theme_TranslucentDialog;
-        } else {
-            return R.style.Theme_Topface_NoActionBar;
-        }
+        return isModalDialog() ? R.style.Topface_Theme_TranslucentDialog : R.style.Theme_Topface_NoActionBar;
     }
 
     private int getDialogInnerLayoutRes() {
-        if (isModalDialog()) {
-            return R.layout.dialog_modal;
-        } else {
-            return R.layout.dialog_base;
-        }
+        return isModalDialog() ? R.layout.dialog_modal : R.layout.dialog_base;
     }
 
     @Override
@@ -101,6 +94,15 @@ public abstract class AbstractDialogFragment extends BaseDialog {
         } catch (Exception e) {
             Debug.error("AbstractDialogFragment " + tag + " show error: " + e.getMessage());
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        //https://code.google.com/p/android/issues/detail?id=17423
+        if (getDialog() != null && getRetainInstance()) {
+            getDialog().setDismissMessage(null);
+        }
+        super.onDestroyView();
     }
 
     @Override

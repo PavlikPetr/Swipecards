@@ -1,6 +1,5 @@
 package com.topface.topface.ui.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -273,12 +272,7 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
     }
 
     private void updateList() {
-        ((Activity) mContext).runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                notifyDataSetChanged();
-            }
-        });
+        notifyDataSetChanged();
     }
 
     private City getUserCity() {

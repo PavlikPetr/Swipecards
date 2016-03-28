@@ -6,11 +6,11 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.IDialogListener;
-import com.topface.topface.ui.analytics.TrackedDialogFragment;
 import com.topface.topface.utils.MarketApiManager;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
@@ -50,7 +50,7 @@ public class NotificationsDisablePopup implements IStartAction {
 
             @Override
             public void onNegativeButtonClick() {
-                notificationDisableDialog.dismiss();
+                notificationDisableDialog.getDialog().cancel();
                 mActivity = null;
             }
 
@@ -100,7 +100,7 @@ public class NotificationsDisablePopup implements IStartAction {
         return mMarketApiManager;
     }
 
-    public static class NotificationDisableDialog extends TrackedDialogFragment {
+    public static class NotificationDisableDialog extends BaseDialog {
 
         private static final String MARKET_TITLE_TEXT_ID = "market_title_text_id";
         private static final String MARKET_BUTTON_TEXT_ID = "market_button_text_id";
@@ -155,6 +155,21 @@ public class NotificationsDisablePopup implements IStartAction {
 
         public void setDialogInterface(IDialogListener dialogInterface) {
             mIDialogListener = dialogInterface;
+        }
+
+        @Override
+        protected void initViews(View root) {
+
+        }
+
+        @Override
+        protected int getDialogLayoutRes() {
+            return 0;
+        }
+
+        @Override
+        protected int getDialogStyleResId() {
+            return 0;
         }
 
         @Override

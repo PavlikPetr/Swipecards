@@ -31,10 +31,10 @@ import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GoogleMarketApiManager;
+import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarView;
-import com.topface.topface.utils.controllers.StartActionsController;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.social.AuthToken;
@@ -44,7 +44,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.Locale;
 
-public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient {
+public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient, IActivityDelegate {
 
     public static final String AUTH_TAG = "AUTH";
     public static final String GOOGLE_AUTH_STARTED = "google_auth_started";
@@ -57,19 +57,17 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     private boolean mNeedAnimate = true;
     private boolean mIsActivityRestoredState = false;
     private BroadcastReceiver mProfileLoadReceiver;
-    private StartActionsController mStartActionsController;
     private Toolbar mToolbar;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            startPopupActionsIfNeeded();
             onProfileUpdated();
         }
     };
     private BroadcastReceiver mOptionsUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            startPopupActionsIfNeeded();
+            onOptionsUpdated();
         }
     };
     private boolean mRunning;
@@ -131,20 +129,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         setWindowContentOverlayCompat();
-    }
-
-    private StartActionsController initStartActionController() {
-        mStartActionsController = new StartActionsController(this);
-        onRegisterMandatoryStartActions(mStartActionsController);
-        onRegisterStartActions(mStartActionsController);
-        return mStartActionsController;
-    }
-
-    private StartActionsController getStartActionsController() {
-        if (mStartActionsController == null) {
-            initStartActionController();
-        }
-        return mStartActionsController;
     }
 
     @Override
@@ -306,8 +290,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         mIsActivityRestoredState = true;
         checkProfileLoad();
         registerReauthReceiver();
-        getStartActionsController().dropDownProcessedActionsState();
-        startPopupActionsIfNeeded();
     }
 
     public boolean isActivityRestoredState() {
@@ -480,6 +462,9 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     protected void onProfileUpdated() {
     }
 
+    protected void onOptionsUpdated() {
+    }
+
     @SuppressWarnings("UnusedDeclaration")
     public boolean isPackageInstalled(String packagename, Context context) {
         PackageManager pm = context.getPackageManager();
@@ -493,22 +478,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
-    }
-
-    /**
-     * Method to override where you can register mandatory start actions
-     * User startActionController argument to register actions
-     * Note: actions can be placed here for global usage in all child activities
-     */
-    protected void onRegisterMandatoryStartActions(StartActionsController startActionsController) {
-    }
-
-    /**
-     * Method to override where you can register start actions
-     * User startActionController argument to register actions
-     * Note: actions can be placed here for global usage in all child activities
-     */
-    protected void onRegisterStartActions(StartActionsController startActionsController) {
     }
 
     /**
@@ -566,24 +535,12 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
     }
 
+    @SuppressWarnings("unused")
     public boolean isRunning() {
         return mRunning;
     }
 
     protected void setHasContent(boolean value) {
         mHasContent = value;
-    }
-
-    /**
-     * start sequence when options and profile was loaded from server
-     */
-    private void startPopupActionsIfNeeded() {
-        if (!App.get().getProfile().isFromCache
-                && App.get().isUserOptionsObtainedFromServer()
-                && !getStartActionsController().isProcessedMandatoryActionForSession()
-                && !getStartActionsController().isProcessedActionForSession()
-                && !CacheProfile.isEmpty(this) && !AuthToken.getInstance().isEmpty()) {
-            getStartActionsController().onProcessAction();
-        }
     }
 }

@@ -84,7 +84,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                         mIsNeedRefresh = true;
                     }
                 });
-                popup.show(getFragmentManager(), PromoExpressMessages.TAG);
+                popup.show(getActivity().getSupportFragmentManager(), PromoExpressMessages.TAG);
             }
         } else if (!isPopupAvailable) {
             PromoExpressMessages expressPopup = (PromoExpressMessages) getFragmentManager().findFragmentByTag(PromoExpressMessages.TAG);

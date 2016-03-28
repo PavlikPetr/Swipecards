@@ -12,12 +12,10 @@ import android.widget.RatingBar;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.Options;
 import com.topface.topface.requests.AppRateRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.statistics.RatePopupStatistics;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
 import static com.topface.topface.ui.settings.FeedbackMessageFragment.FeedbackType.LOW_RATE_MESSAGE;
@@ -86,14 +84,14 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
             case R.id.btnAskLater:
                 RatePopupStatistics.sendRatePopupClickButtonLater();
                 saveRatingPopupStatus(System.currentTimeMillis());
-                dismiss();
+                getDialog().cancel();
                 break;
             case R.id.btnNoThanx:
                 // Используем label: Cancel, как в iOS
                 RatePopupStatistics.sendRatePopupClickButtonClose();
                 saveRatingPopupStatus(0);
                 sendRateRequest(AppRateRequest.NO_RATE);
-                dismiss();
+                getDialog().cancel();
                 break;
         }
     }

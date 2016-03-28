@@ -37,11 +37,10 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.TakePhotoActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
+import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
-import com.topface.topface.ui.fragments.profile.TakePhotoFragment;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
@@ -51,6 +50,10 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
+import rx.functions.Func1;
 
 /**
  * Хелпер для загрузки фотографий в любой активити
@@ -96,10 +99,12 @@ public class AddPhotoHelper {
         }
     };
 
+    private Subscription mPhotoActionSubscription;
+
     public AddPhotoHelper(Fragment fragment, View progressView) {
         this(fragment.getActivity());
         mFragment = fragment;
-        this.mProgressView = progressView;
+        mProgressView = progressView;
     }
 
     public AddPhotoHelper(Activity activity) {
@@ -107,6 +112,45 @@ public class AddPhotoHelper {
         mActivity = activity;
         mContext = activity.getApplicationContext();
         PATH_TO_FILE = StorageUtils.getCacheDirectory(mContext).getPath() + "/topface_profile/";
+        initPhotoActionSubscription();
+    }
+
+    private void initPhotoActionSubscription() {
+        mPhotoActionSubscription = mState.getObservable(TakePhotoPopup.TakePhotoActionHolder.class)
+                .filter(new Func1<TakePhotoPopup.TakePhotoActionHolder, Boolean>() {
+                    @Override
+                    public Boolean call(TakePhotoPopup.TakePhotoActionHolder holder) {
+                        return holder.getAction() != null && holder.getPlc() != null;
+                    }
+                })
+                .subscribe(new Action1<TakePhotoPopup.TakePhotoActionHolder>() {
+                    @Override
+                    public void call(TakePhotoPopup.TakePhotoActionHolder holder) {
+                        if (holder != null) {
+                            switch (holder.getAction()) {
+                                case ACTION_CAMERA_CHOSEN:
+                                    startCamera(false);
+                                    System.out.println("PopupHive  ACTION_CAMERA_CHOSEN ");
+                                    TakePhotoStatistics.sendCameraAction(holder.getPlc());
+                                    break;
+                                case ACTION_GALLERY_CHOSEN:
+                                    startChooseFromGallery(false);
+                                    System.out.println("PopupHive  ACTION_GALLERY_CHOSEN ");
+                                    TakePhotoStatistics.sendGalleryAction(holder.getPlc());
+                                    break;
+                                case ACTION_CANCEL:
+                                    TakePhotoStatistics.sendCancelAction(holder.getPlc());
+                            }
+                            mState.setData(new TakePhotoPopup.TakePhotoActionHolder(null, null));
+                        }
+                    }
+                });
+    }
+
+    public void releaseHelper() {
+        if (!mPhotoActionSubscription.isUnsubscribed()) {
+            mPhotoActionSubscription.unsubscribe();
+        }
     }
 
     public void showProgressDialog() {
@@ -214,24 +258,6 @@ public class AddPhotoHelper {
 
     public Uri processActivityResult(int requestCode, int resultCode, Intent data) {
         //check for result from TakePhotoActivity
-        if (requestCode == TakePhotoActivity.REQUEST_CODE_TAKE_PHOTO && data != null) {
-            String plc = data.getStringExtra(TakePhotoActivity.EXTRA_PLC);
-            if (resultCode == Activity.RESULT_OK) {
-                switch (data.getIntExtra(TakePhotoActivity.EXTRA_TAKE_PHOTO_USER_ACTION, 0)) {
-                    case TakePhotoFragment.ACTION_CAMERA_CHOOSEN:
-                        startCamera(false);
-                        TakePhotoStatistics.sendCameraAction(plc);
-                        break;
-                    case TakePhotoFragment.ACTION_GALLERY_CHOOSEN:
-                        startChooseFromGallery(false);
-                        TakePhotoStatistics.sendGalleryAction(plc);
-                        break;
-                }
-
-            } else {
-                TakePhotoStatistics.sendCancelAction(plc);
-            }
-        }
         return processActivityResult(requestCode, resultCode, data, true);
     }
 
@@ -267,7 +293,9 @@ public class AddPhotoHelper {
                 case GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY:
                 case GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:
                     //Если она взята из галереи, то получаем URL из данных интента и преобразуем его в путь до файла
-                    photoUri = data.getData();
+                    if(data != null){
+                        photoUri = data.getData();
+                    }
                     break;
             }
 
@@ -276,7 +304,6 @@ public class AddPhotoHelper {
                 sendRequest(photoUri);
             }
         }
-
         return photoUri;
     }
 
@@ -440,6 +467,7 @@ public class AddPhotoHelper {
      * @param photoTaker object which implement "take photo's" methods
      * @param photoUri   if we already have photo to show pass it with Uri to show
      */
+    @SuppressWarnings("unused")
     public void showTakePhotoDialog(IPhotoTakerWithDialog photoTaker, Uri photoUri) {
         showTakePhotoDialog(photoTaker, photoUri, null);
     }
@@ -500,6 +528,7 @@ public class AddPhotoHelper {
         });
     }
 
+    @SuppressWarnings("unused")
     public void setOnCancelListener(DialogInterface.OnCancelListener listener) {
         mOnDialogCancelListener = listener;
     }
@@ -511,18 +540,18 @@ public class AddPhotoHelper {
             // ставим фото на аватарку только если она едиснтвенная
             if (profile.photos != null && profile.photos.size() == 0) {
                 profile.photo = photo;
+                // добавляется фото в начало списка
+                profile.photos.addFirst(photo);
+                // Увеличиваем общее количество фотографий юзера
+                profile.photosCount += 1;
             }
-            // добавляется фото в начало списка
-            profile.photos.addFirst(photo);
-            // Увеличиваем общее количество фотографий юзера
-            profile.photosCount += 1;
             // оповещаем всех об изменениях
             CacheProfile.sendUpdateProfileBroadcast();
             mState.setData(profile);
             Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
         } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
             // если загрузка аватраки не завершилась успехом, то сбрасываем флаг
-            if (profile.photos.size() == 0) {
+            if (profile.photos != null && profile.photos.size() == 0) {
                 App.getConfig().getUserConfig().setUserAvatarAvailable(false);
                 App.getConfig().getUserConfig().saveConfig();
             }
