@@ -1197,7 +1197,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mAddPhotoHelper.setOnResultHandler(mHandler);
             }
             if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null) {
-                TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_CHAT_OPEN).show(getChildFragmentManager(),TakePhotoPopup.TAG);
+                TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_CHAT_OPEN).show(getChildFragmentManager(), TakePhotoPopup.TAG);
             }
         }
     }

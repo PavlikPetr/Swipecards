@@ -171,7 +171,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         outState.putInt(POSITION, mListQuestionnaire.getFirstVisiblePosition());
         outState.putInt(GIFTS_COUNT, mGiftsCount);
         outState.putString(USER_STATUS, mStatus);
-        if(mGifts != null){
+        if (mGifts != null) {
             outState.putParcelableArrayList(FORM_GIFTS, mGifts.getGifts());
         }
     }

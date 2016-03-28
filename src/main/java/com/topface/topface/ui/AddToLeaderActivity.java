@@ -132,7 +132,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private void showPhotoHelper(boolean isNeedShow) {
         if (isNeedShow) {
             if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null) {
-                TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER).show(getSupportFragmentManager(),TakePhotoPopup.TAG);
+                TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER).show(getSupportFragmentManager(), TakePhotoPopup.TAG);
                 mIsPhotoDialogShown = true;
             }
         }

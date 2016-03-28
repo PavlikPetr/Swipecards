@@ -293,7 +293,7 @@ public class AddPhotoHelper {
                 case GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY:
                 case GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG:
                     //Если она взята из галереи, то получаем URL из данных интента и преобразуем его в путь до файла
-                    if(data != null){
+                    if (data != null) {
                         photoUri = data.getData();
                     }
                     break;

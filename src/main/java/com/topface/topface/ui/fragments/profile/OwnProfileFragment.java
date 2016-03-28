@@ -59,7 +59,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
         initAddPhotoHelper();
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             mIsPhotoAsked = savedInstanceState.getBoolean(TAKE_PHOTO_DIALOG_SHOWN);
         }
         return root;
