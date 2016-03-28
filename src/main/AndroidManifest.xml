@@ -207,7 +207,7 @@
         <activity
             android:name=".ui.GiftsActivity"
             android:theme="@style/Theme.Topface.Gifts"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".ui.TopfaceAuthActivity" />
         <activity
             android:name=".ui.fragments.profile.PhotoSwitcherActivity"
