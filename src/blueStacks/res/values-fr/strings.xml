@@ -8,34 +8,26 @@
   <string name="general_disallow">Interdire</string>
   <string name="general_allow">Autoriser</string>
   <string name="notification_denied_popup_title">Autoriser les notifications afin d\'être alerté
-    sur les nouveaux messages, J\'aime, et autres nouvelles.
-  </string>
+        sur les nouveaux messages, J\'aime, et autres nouvelles.</string>
   <string name="notification_popup_title">Autorisez-nous à vous envoyer des notifications, de
-    sorte que vous serez instantanément alerté sur vos nouveaux J\'aime, vos nouvelles
-    admirations et vos messages.
-  </string>
+        sorte que vous serez instantanément alerté sur vos nouveaux J\'aime, vos nouvelles
+        admirations et vos messages.</string>
   <string name="email_successfully_changed">Votre e-mail a été changé avec succès.</string>
   <string name="auth_vk_name">VK</string>
   <string name="dating_switch_button">Plus…</string>
   <string name="dating_prev_button">Précédent</string>
   <string name="dating_chat_button">Tchater</string>
-  <string name="waiting_a_products">Veuillez patienter. Nous chargeons les produits disponibles
-  </string>
+  <string name="waiting_a_products">Veuillez patienter. Nous chargeons les produits disponibles</string>
   <string name="likes_background_text">Aucun J\'aime</string>
   <string name="visitors_background_text">Aucun visiteurs</string>
-  <string name="need_set_avatar">Personne ne peut apprendre à vous connaître ! Ajoutez une photo de
-    profil.
-  </string>
+  <string name="need_set_avatar">Personne ne peut apprendre à vous connaître ! Ajoutez une photo de profil.</string>
   <string name="chat_background_text">Aucun message reçu</string>
   <string name="entrance">Entrer</string>
   <string name="filter_only_online">Seulement en ligne</string>
   <string name="filter_city_age_parameters">Âge et ville</string>
   <string name="filter_select_city">Sélectionner la ville</string>
   <string name="edit_block_photo">Photos</string>
-  <string name="dashbrd_popup_rating">Vous appréciez notre application ? Augmentez nôtre côte de
-    popularité ! Plus notre côte de popularité sera élevée, plus vous trouverez de personnes
-    intéressantes sur Spark !
-  </string>
+  <string name="dashbrd_popup_rating">Vous appréciez notre application ? Augmentez nôtre côte de popularité ! Plus notre côte de popularité sera élevée, plus vous trouverez de personnes intéressantes sur Spark !</string>
   <string name="dashbrd_popup_title">Évaluez-moi</string>
   <string name="dashbrd_popup_cancel">Ne plus me demander</string>
   <string name="dashbrd_popup_rate">Évaluer</string>
@@ -60,11 +52,8 @@
   <string name="general_complaint">Signaler</string>
   <string name="general_type_complain">Sujet de la plainte</string>
   <string name="address_book_access_error">Cette application n\'a pas accès à vos contacts. Vous
-    pouvez autoriser l\'accès dans les paramètres de confidentialité de votre appareil.
-  </string>
-  <string name="camera_access_error">L\'application n\'a pas accès à la caméra. Vous pouvez
-    autoriser l\'accès dans les paramètres de confidentialité de votre appareil.
-  </string>
+        pouvez autoriser l\'accès dans les paramètres de confidentialité de votre appareil.</string>
+  <string name="camera_access_error">L\'application n\'a pas accès à la caméra. Vous pouvez autoriser l\'accès dans les paramètres de confidentialité de votre appareil.</string>
   <string name="profile_deleted_user">L\'utilisateur est supprimé.</string>
   <string name="filter_main_parameters">Je suis intéressé par</string>
   <string name="dating_prev_button_ext">Précédent</string>
@@ -78,30 +67,24 @@
   <string name="profile_mygifts_empty">Personne ne vous a offert de cadeaux</string>
   <string name="dating_people_unnoticed">Vous avez manqué 10 personnes !</string>
   <string name="dating_continue">Continuer à faire connaissance</string>
-  <string name="dating_better_look">Regardez avec plus d\'attention !\nVous laissez peut-être
-    échapper votre destin !
-  </string>
+  <string name="dating_better_look">Regardez avec plus d\'attention !\nVous laissez peut-être échapper votre destin !</string>
   <string name="edit_my_photos">Mes photos</string>
   <string name="general_search_empty_title">Malheureusement, rien n\'a été trouvé.</string>
   <string name="general_search_empty_text">Vous pouvez essayer de lancer une nouvelle recherche,
-    ou changer les paramètres de filtre.
-  </string>
+        ou changer les paramètres de filtre.</string>
   <string name="map_title">Carte</string>
   <string name="general_buying">Acheter des J\'aime et des pièces</string>
   <string name="popup_version_title">Une nouvelle version de l\'application est disponible</string>
   <string name="popup_version_message">Il est temps de renouveler votre version !</string>
   <string name="leaders_select_photo_info">Sélectionnez la photo la plus surprenante ! Il est
-    impossible de sélectionner des photos avec une côte de popularité basse.
-  </string>
+        impossible de sélectionner des photos avec une côte de popularité basse.</string>
   <string name="map_popup_address">Adresse</string>
   <string name="black_list_info">Vous avez ajouté quelqu\'un à votre liste noire. Vous pouvez
-    annuler cette action dans votre profil ou dans les paramètres du statut VIP.
-  </string>
+        annuler cette action dans votre profil ou dans les paramètres du statut VIP.</string>
   <string name="black_list_activation">Activez votre statut VIP et utilisez la liste noire</string>
   <string name="buying_total">Total</string>
   <string name="we_dont_detect_your_city">Pour trouver les personnes à proximité, nous devons
-    connaitre votre localisation. Veuillez indiquer votre ville.
-  </string>
+        connaitre votre localisation. Veuillez indiquer votre ville.</string>
   <string name="confirm_email">Veuilllez confirmer l\'e-mail</string>
   <string name="password_sent">Le nouveau mot de passe vous a été envoyé par e-mail</string>
   <string name="buy_vip_month_one">%1$d mois pour %2$.2f %3$@ par mois</string>
@@ -137,11 +120,9 @@
   <string name="pincode_input_previous">Saisir l\'ancien code PIN</string>
   <string name="pincode_repeat">Répétez le code PIN</string>
   <string name="pincode_forget">Vous avez oublié votre code PIN ?</string>
-  <string name="pincode_auth_input">Vous devez entrer votre identifiant et votre mot de passe.
-  </string>
+  <string name="pincode_auth_input">Vous devez entrer votre identifiant et votre mot de passe.</string>
   <string name="pincode_will_be_reset">Si l\'autorisation est réussie, tous les paramètres de
-    l\'application seront réinitialisés.
-  </string>
+        l\'application seront réinitialisés.</string>
   <plurals name="pincode_interval">
     <item quantity="zero">tout de suite</item>
     <item quantity="other">%d min.</item>
@@ -160,8 +141,7 @@
   <string name="general_back">Retour</string>
   <string name="general_server_error">Erreur. Essayez plus tard</string>
   <string name="general_non_exist_photo_error">Impossible de procéder car la photo a été
-    supprimée
-  </string>
+        supprimée</string>
   <string name="general_data_error">Erreur. Veuillez réessayer.</string>
   <string name="general_internet_off">Aucune connexion internet. Veuillez réessayer.</string>
   <string name="general_msg_copied">Message copié</string>
@@ -198,8 +178,7 @@
   <string name="dating_header_guys">Garçons de %1$d à %2$d</string>
   <string name="dating_skip_button">Suivant</string>
   <string name="message_too_long">Le message que vous avez saisi est trop long. Le nombre de
-    symboles ne peut pas dépasser %d.
-  </string>
+        symboles ne peut pas dépasser %d.</string>
   <string name="chat_gift_in">Vous avez reçu un cadeau.</string>
   <string name="chat_gift_out">Vous avez envoyé un cadeau.</string>
   <string name="chat_like_in">Quelqu\'un s\'intéresse à vous !</string>
@@ -233,15 +212,11 @@
     <item quantity="one">Pour envoyer une admiration, procurez-vous %d pièce en plus.</item>
   </plurals>
   <plurals name="buying_unlock_likes_you_need_coins">
-    <item quantity="other">Pour pouvoir voir qui s\'intéresse à vous, procurez-vous %d pièces en
-      plus
-    </item>
-    <item quantity="one">Pour pouvoir voir qui s\'intéresse à vous, procurez-vous %d pièce en plus
-    </item>
+    <item quantity="other">Pour pouvoir voir qui s\'intéresse à vous, procurez-vous %d pièces en plus</item>
+    <item quantity="one">Pour pouvoir voir qui s\'intéresse à vous, procurez-vous %d pièce en plus</item>
   </plurals>
   <plurals name="buying_leaders_you_need_coins">
-    <item quantity="other">Pour être vu par plus de personnes, procurez-vous %d pièces en plus
-    </item>
+    <item quantity="other">Pour être vu par plus de personnes, procurez-vous %d pièces en plus</item>
     <item quantity="one">Pour être vu par plus de personnes, procurez-vous %d pièce en plus</item>
   </plurals>
   <plurals name="buying_you_need_coins">
@@ -249,8 +224,7 @@
     <item quantity="one">Vous êtes à court de %d pièce</item>
   </plurals>
   <string name="buying_default_message">Vous pouvez envoyer des cadeaux et des amirations grâce à
-    vos pièces
-  </string>
+        vos pièces</string>
   <string name="buying_money">Acheter des pièces</string>
   <string name="gifts_title">Choisir un cadeau</string>
   <string name="profile_header_title">Mon profil</string>
@@ -272,8 +246,7 @@
   <string name="edit_name">Nom</string>
   <string name="edit_age">Âge</string>
   <string name="edit_age_error">Pour utiliser l\'application, vous devez être âgé entre %1$d et
-    %2$d ans.
-  </string>
+        %2$d ans.</string>
   <string name="edit_status">Statut</string>
   <string name="edit_set_as_main">Définir comme principale</string>
   <string name="edit_delete">Supprimer</string>
@@ -299,8 +272,7 @@
   <string name="settings_help">Aide</string>
   <string name="settings_faq">Questions et réponses</string>
   <string name="settings_faq_title">Peut-être que votre problème a déjà été résolu, veuillez vous
-    reporter à la FAQ.
-  </string>
+        reporter à la FAQ.</string>
   <string name="settings_account">Compte</string>
   <string name="settings_feedback">Laisser un commentaire</string>
   <string name="settings_about">À propos</string>
@@ -312,8 +284,7 @@
   <string name="settings_code_confirmation">Envoyer le code de confirmation</string>
   <string name="settings_email_was_confirmed">Déjà confirmé</string>
   <string name="settings_email_was_confirmed_textview_text">Si vous avez déjà confirmé votre
-    e-mail via le web
-  </string>
+        e-mail via le web</string>
   <string name="settings_code_confirmation_hint">Code de confirmation</string>
   <string name="settings_logout_msg">Voulez-vous vraiment vous déconnecter ?</string>
   <string name="settings_error_message">Message sur l\'erreur</string>
@@ -338,11 +309,9 @@
     <item quantity="one">%d photo</item>
   </plurals>
   <string name="general_edit_profile_message">Veuillez remplir les champs nécessaires dans votre
-    profil.
-  </string>
+        profil.</string>
   <string name="general_search_null_response_error">Rien n\'a été trouvé. Essayez de changer les
-    filtres de recherche.
-  </string>
+        filtres de recherche.</string>
   <string name="change_filters">Changer les filtres</string>
   <string name="reset_filter">Réinitialiser</string>
   <string name="general_sex">Sexe</string>
@@ -356,11 +325,9 @@
   <string name="rate_popup_later">Demander plus tard</string>
   <string name="rate_popup_cancel">Non, merci</string>
   <string name="rate_popup_error">Veuillez nous indiquer combien d\'étoiles mérite notre
-    application !
-  </string>
+        application !</string>
   <string name="feedback_popup_title">Vous nous avez donné une mauvaise note. Dites-nous ce que
-    vous n\'avez pas aimé dans cette application. Aidez-nous à l\'améliorer. Merci !
-  </string>
+        vous n\'avez pas aimé dans cette application. Aidez-nous à l\'améliorer. Merci !</string>
   <string name="settings_melody">Sonnerie de notification</string>
   <string name="settings_loading_photo">Précharge de photos</string>
   <string name="edit_refresh_status">Mettre à jour le statut</string>
@@ -382,59 +349,45 @@
   <string name="black_list_delete">Supprimer de la liste noire</string>
   <string name="vip_buy_vip">Acheter le staut VIP</string>
   <string name="vip_state_off">Votre statut VIP n\'est pas activé</string>
-  <string name="vip_info_guest">Découvrez qui s\'est intéressé à vous, observez vos visiteurs !
-  </string>
+  <string name="vip_info_guest">Découvrez qui s\'est intéressé à vous, observez vos visiteurs !</string>
   <string name="vip_info_invisible">Visitez les autres pages en toute discrétion grâce au mode
-    \&quot;invisible\&quot;.
-  </string>
+        \&quot;invisible\&quot;.</string>
   <string name="vip_info_message">Obtenez un avantage - vos messages se démarquerons des autres
-    !
-  </string>
+        !</string>
   <string name="vip_info_blackList">Débarrassez-vous des personnes gênantes à l\'aide de \&quot;la
-    liste noire\&quot;</string>
+        liste noire\&quot;</string>
   <string name="vip_info_vip">Soyez vu par d\'avantage d\'utilisateurs dans la recherche et dans
-    votre profil grâce à votre statut VIP !
-  </string>
+        votre profil grâce à votre statut VIP !</string>
   <string name="buying_vip_status">Obtenez le statut VIP</string>
   <string name="edit_my_city">Ma ville</string>
-  <string name="settings_feedback_email">Saisissez votre e-mail pour que nous puissions vous
-    recontacter.
-  </string>
+  <string name="settings_feedback_email">Saisissez votre e-mail pour que nous puissions vous recontacter.</string>
   <string name="settings_invalid_email">Email incorrect</string>
   <string name="chat_write_message">Rédiger un message</string>
   <string name="dating_message">Message…</string>
   <string name="buying_sympathies">Achat de J\'aime</string>
   <string name="general_reconnect_social">Impossible de se connecter au réseau social. Veuillez
-    réessayer plus tard.
-  </string>
+        réessayer plus tard.</string>
   <string name="general_block">Bloquer</string>
   <string name="general_buying_disabled">L\'achat est impossible pour le moment</string>
   <string name="ban_flood_detected">Vous envoyez trop de demandes au serveur. Pour continuer à
-    utiliser l\'application, veuillez patienter.
-  </string>
+        utiliser l\'application, veuillez patienter.</string>
   <string name="general_maintenance">Le serveur subit actuellement les travaux de maintenance.
-    Votre demande ne peut pas être traitée. Veuillez réessayer plus tard.
-  </string>
+        Votre demande ne peut pas être traitée. Veuillez réessayer plus tard.</string>
   <string name="virus_chat_btn">Recevoir des J\'aime</string>
   <string name="profile_ask_sent">La demande est envoyée.</string>
   <string name="virus_error">Un ami ne peut envoyer qu\'un seul J\'aime en 24 heures ! Réessayez
-    demain !
-  </string>
+        demain !</string>
   <string name="popup_version_update">Actualiser</string>
   <string name="popup_version_cancel">Me le rappeler plus tard</string>
   <string name="general_version_not_supported">Votre version de l\'application est obsolète et ne
-    sera plus prise en charge. Veuillez la mettre à jour.
-  </string>
+        sera plus prise en charge. Veuillez la mettre à jour.</string>
   <string name="default_price_format">Total : %.2f USD</string>
   <string name="default_price_format_extended">Total : %1$.2f %2$s</string>
-  <string name="leaders_pick_condition">Vous ne pouvez pas sélectionner une photo avec une côte de
-    popularité en dessous de %d%% :
-  </string>
+  <string name="leaders_pick_condition">Vous ne pouvez pas sélectionner une photo avec une côte de popularité en dessous de %d%% :</string>
   <string name="general_gift">Cadeau</string>
   <string name="user_actions_chat">Tchater</string>
   <string name="profile_edit_age_ranges">L\'âge doit être compris entre 16 et 99 ans. Veuillez
-    saisir le nombre correct et réessayer.
-  </string>
+        saisir le nombre correct et réessayer.</string>
   <string name="wrong_password_format">Format de mot de passe incorrect</string>
   <string name="edit_value_error">La valeur doit être comprise entre %1$d et %2$d</string>
   <string name="sign_in">Se connecter</string>
@@ -450,8 +403,7 @@
   <string name="start_communication">Commencer une conversation</string>
   <string name="birthdate">Anniversaire</string>
   <string name="birthdate_confirm">Vous devez indiquer votre âge, pour pouvoir faire
-    connaissance
-  </string>
+        connaissance</string>
   <string name="set_birthdate">Indiquer l\'âge</string>
   <string name="welcome_to_topface">Bienvenue sur Spark !</string>
   <string name="im_boy">Je suis un garçon</string>
@@ -461,25 +413,20 @@
   <string name="incorrect_login">Nom d\'utilisateur incorrect</string>
   <string name="incorrect_password">Mot de passe incorrect</string>
   <string name="empty_fields">Veuillez remplir tous les champs.</string>
-  <string name="email_already_registered">Désolé, cet e-mail est déjà enregistré dans le système.
-  </string>
+  <string name="email_already_registered">Désolé, cet e-mail est déjà enregistré dans le système.</string>
   <string name="enter_email_from_registration">Saisissez l\'e-mail que vous aviez indiqué lors de
-    l\'enregistrement.
-  </string>
+        l\'enregistrement.</string>
   <string name="default_photo_upload">Téléchargement photos</string>
   <string name="default_photo_upload_error">Erreur de téléchargement</string>
   <string name="default_photo_upload_complete">Téléchargement terminé !</string>
   <string name="general_error_try_again_later">Impossible de se connecter à Spark. Veuillez
-    réessayer plus tard.
-  </string>
+        réessayer plus tard.</string>
   <string name="search_city_by_name">Rechercher par nom de ville</string>
   <string name="gallery">Galerie de photos</string>
   <string name="no_photo_take_photo">Personne ne peut faire connaissance avec vous ! Prenez une
-    photo ou choisissez une photo de votre galerie de photos.
-  </string>
+        photo ou choisissez une photo de votre galerie de photos.</string>
   <string name="photo_for_avatar">Votre photo est prête à être envoyée sur votre profil ! C\'est
-    votre première photo et elle sera utilisée comme photo de profil.
-  </string>
+        votre première photo et elle sera utilisée comme photo de profil.</string>
   <string name="add_photo_before">Vous devez d\'abord ajouter une photo</string>
   <string name="change_email">Changer l\'e-mail</string>
   <string name="send_confirmation_email">Envoyer un e-mail de confirmation</string>
@@ -487,8 +434,7 @@
   <string name="password_changing">Changer le mot de passe</string>
   <string name="save">Enregistrer</string>
   <string name="saving_in_progress">Enregistrement…</string>
-  <string name="confirmation_successfully_sent">Un e-mail de confirmation vous a été envoyé.
-  </string>
+  <string name="confirmation_successfully_sent">Un e-mail de confirmation vous a été envoyé.</string>
   <string name="email_successfully_confirmed">Votre e-mail a été confirmé avec succès.</string>
   <string name="email_not_confirmed">L\'e-mail n\'est pas confirmé.</string>
   <string name="email_already_confirmed">Déjà confirmé</string>
@@ -506,16 +452,13 @@
   <string name="we_detect_your_city">Nous avons déterminé votre ville :</string>
   <string name="reselect_city">Sélectionner une autre ville :</string>
   <string name="choose_cool_photo">Choisissez votre meilleure photo et un statut qui décrit votre
-    humeur !
-  </string>
+        humeur !</string>
   <string name="email_confirmed">L\'e-mail est confirmé.</string>
   <string name="sympathy_sended">Vous avez envoyé un J\'aime.</string>
-  <string name="general_photo_deleted">Votre photo ne respecte pas les règles et a été éliminée.
-  </string>
+  <string name="general_photo_deleted">Votre photo ne respecte pas les règles et a été éliminée.</string>
   <string name="general_change">Changer</string>
   <string name="user_does_not_have_gifts">Cet utilisateur n\'a pas encore de cadeaux, soyez le
-    premier et attirez ainsi son attention !
-  </string>
+        premier et attirez ainsi son attention !</string>
   <string name="status_is_empty">Vous n\'avez pas de statut</string>
   <string name="you_dont_have_gifts_yet">Vous n\'avez pas encore de cadeaux.</string>
   <string name="buy_sympathies">Acheter des J\'aime</string>
@@ -524,8 +467,7 @@
   <string name="general_choose_city">Sélectionnez votre ville</string>
   <string name="buy_mobile_payments">Autres moyens de paiement</string>
   <string name="general_save_and_exit">Enregistrer et se déconnecter</string>
-  <string name="general_set_password">Définissez votre mot de passe avant de vous déconnecter.
-  </string>
+  <string name="general_set_password">Définissez votre mot de passe avant de vous déconnecter.</string>
   <string name="user_is_deleted">L\'utilisateur est supprimé.</string>
   <string name="general_bookmarks">Favoris</string>
   <string name="general_fans">Admirateurs</string>
@@ -536,25 +478,20 @@
   <string name="user_is_banned">L\'utilisateur est bloqué.</string>
   <string name="profile_empty_name">Le champs \&quot;nom\&quot; ne peut pas être vide</string>
   <string name="general_wrong_photo_upload">Votre photo ne correspond pas aux règles du site.
-    Essayez d\'en prendre une autre.
-  </string>
+        Essayez d\'en prendre une autre.</string>
   <string name="general_input_email">Saisissez votre e-mail</string>
   <string name="cant_delete_fake_item">Ce message n\'a pas encore été envoyé, vous ne pouvez pas
-    le supprimer. Réessayez plus tard.
-  </string>
+        le supprimer. Réessayez plus tard.</string>
   <string name="vip_stop_ads">Seulement tchater, rien de plus ! Les utilisateurs VIP ne reçoivent
-    pas de publicités.
-  </string>
+        pas de publicités.</string>
   <string name="friend_email_hint">Saisissez l\'e-mail ou le numéro de téléphone d\'un ami</string>
   <string name="general_add">Ajouter</string>
   <string name="general_invite_friends">Inviter des amis</string>
   <string name="general_rest_contacts">Il vous reste %d contacts.</string>
   <string name="invite_friends_title">Inviter tous mes amis de mon répertoire téléphonique sur
-    Spark
-  </string>
+        Spark</string>
   <string name="invalid_contacts">Certains contacts étaient incorrects. Veuillez envoyer des
-    contacts corrects.
-  </string>
+        contacts corrects.</string>
   <plurals name="vip_status_period">
     <item quantity="other">Vous avez reçu le statut VIP pour %d jours</item>
     <item quantity="one">Vous avez reçu le statut VIP pour %d jour</item>
@@ -572,32 +509,25 @@
     <item quantity="one">Obtenez gratuitement le statut VIP avec %d invitation</item>
   </plurals>
   <string name="buy_status_and_watch_your_fans">Obtenez le statut VIP et découvrez ceux qui vous
-    ont ajouté à leurs favoris.
-  </string>
+        ont ajouté à leurs favoris.</string>
   <string name="add_bookmarks_to_be_connected">Ajoutez de nouveaux amis dans cette liste afin de
-    toujours rester en contact avec eux.
-  </string>
+        toujours rester en contact avec eux.</string>
   <string name="nobody_chat_with_you_sympathies_will_help">Personne ne vous a encore écrit. Les
-    J\'aime vous aideront à trouver quelqu\'un avec qui tchater.
-  </string>
+        J\'aime vous aideront à trouver quelqu\'un avec qui tchater.</string>
   <string name="rate_and_have_mutual_or_buy_and_chat">Envoyez des J\'aime et recevez-en, et
-    commencez à tchater dès maintenant.
-  </string>
+        commencez à tchater dès maintenant.</string>
   <string name="with_vip_find_your_visitors">Avec le statut VIP, vous pouvez découvrir qui a
-    visité votre page.
-  </string>
+        visité votre page.</string>
   <string name="on_avatar">Définir comme photo de profil</string>
   <string name="your_avatar">Photo de profil</string>
   <string name="avatar_set_successfully">Votre photo de profil a été définie avec succès</string>
   <string name="incorrect_photo">Photo incorrecte. Veuillez en télécharger une autre.</string>
   <string name="incorrect_photo_format">Format de la photo incorrect. Veuillez télécharger un
-    fichier .jpg ou .png.
-  </string>
+        fichier .jpg ou .png.</string>
   <string name="incorrect_photo_size">Format de la photo incorrect.</string>
   <string name="input_contact_name">Saisissez le nom du contact</string>
   <string name="incorrect_locale">Si vous voulez que nous puissions lire votre avis, veuillez le
-    rédiger en russe ou en anglais
-  </string>
+        rédiger en russe ou en anglais</string>
   <string name="complain_photo_header">Photo incorrecte</string>
   <string name="complain_msg_header">Message incorrect</string>
   <string name="complain_info_header">Information incorrecte</string>
@@ -606,77 +536,57 @@
   <string name="complain_type_picture">Dessin</string>
   <string name="complain_type_fake_user">Une personne connue</string>
   <string name="complain_type_spam_msg">Offres commerciales, spam, publicités, liens vers des
-    sites, numéros de téléphones
-  </string>
-  <string name="complain_type_spam_profile">Les champs \&quot;statut\&quot;, \&quot;à propos de moi\&quot;
-    contiennent
-    une offre commerciale
-  </string>
-  <string name="complain_type_swearing_profile">Les champs \&quot;statut\&quot;, \&quot;à propos de
-    moi\&quot;
-    contiennent des insultes, des liens vers les réseaux sociaux
-  </string>
+        sites, numéros de téléphones</string>
+  <string name="complain_type_spam_profile">Les champs \&quot;statut\&quot;, \&quot;à propos de moi\&quot; contiennent
+        une offre commerciale</string>
+  <string name="complain_type_swearing_profile">Les champs \&quot;statut\&quot;, \&quot;à propos de moi\&quot;
+        contiennent des insultes, des liens vers les réseaux sociaux</string>
   <string name="complain_type_fake_data">Le nom, le sexe, l\'âge ou la photo de cette personne ne
-    correspond pas
-  </string>
+        correspond pas</string>
   <string name="complain_description">Donnez plus de détails sur la plainte</string>
   <string name="general_complain_sended">Votre plainte a été envoyée, merci beaucoup pour votre
-    aide.
-  </string>
+        aide.</string>
   <string name="general_complain">Plainte</string>
   <string name="general_msg">Message</string>
   <string name="notifications">Notifications</string>
   <string name="general_no_notifications">Malheureusement, les notifications ne sont pas
-    disponibles sur votre appareil
-  </string>
+        disponibles sur votre appareil</string>
   <string name="black_list_add_short">À la liste noire</string>
   <string name="confirm_email_for_dating">Nous sommes contre le spam. Veuillez confirmer votre
-    adresse e-mail pour pouvoir faire connaissance sur Spark !
-  </string>
+        adresse e-mail pour pouvoir faire connaissance sur Spark !</string>
   <string name="confirm_email_for_dating_title">Nous sommes contre le spam.</string>
   <string name="confirm_email_for_dating_desc">Confirmez votre adresse e-mail pour pouvoir
-    rencontrer des personnes sur Spark !
-  </string>
+        rencontrer des personnes sur Spark !</string>
   <string name="send_confirm_link">Envoyer un lien de confirmation</string>
-  <string name="complain_type_swearing_msg">Comportement indécent, language innaproprié, menaces
-  </string>
+  <string name="complain_type_swearing_msg">Comportement indécent, language innaproprié, menaces</string>
   <string name="general_exit">Quitter</string>
   <string name="likes_can_help_you">Les J\'aime vous aident à faire connaissance</string>
   <string name="general_get_dating">Faire connaissance</string>
   <string name="settings_select_language">Sélectionner la langue de l\'application</string>
   <string name="settings_select_preload_photo_type">Choisissez lorsque le préchargement des photos
-    est connecté
-  </string>
-  <string name="restart_to_change_locale">L\'application doit être relancée pour changer la
-    langue.
-  </string>
+        est connecté</string>
+  <string name="restart_to_change_locale">L\'application doit être relancée pour changer la langue.</string>
   <string name="locale_changing">Changer la langue</string>
   <plurals name="you_were_liked">
     <item quantity="other">Vous avez plu à %d personnes</item>
     <item quantity="one">Vous avez plu à %d personne</item>
   </plurals>
   <string name="likes_buy_vip">Pour découvrir dès maintenant à qui vous plaisez, activez le statut
-    VIP
-  </string>
+        VIP</string>
   <string name="or">ou</string>
   <string name="settings_delete_account">Supprimer votre compte</string>
   <string name="chat_block_not_mutual">Vous pouvez commencer à tchater avec l\'utilisateur
-    seulement s\'il vous envoie un J\'aime, ou si vous avez le statut VIP
-  </string>
+        seulement s\'il vous envoie un J\'aime, ou si vous avez le statut VIP</string>
   <string name="add_to_favorite_block_not_vip">Seuls les utilisateurs VIP peuvent ajouter des
-    favoris à partir de l\'écran de rencontre
-  </string>
+        favoris à partir de l\'écran de rencontre</string>
   <string name="delete_account_are_you_sure">Êtes-vous vraiment sûr ?</string>
   <string name="delete">Supprimer</string>
   <string name="delete_account_warning">Attention ! Vous allez supprimer votre profil sur
-    Spark.
-  </string>
+        Spark.</string>
   <string name="delete_account_error">Malheureusement, nous n\'avons pas réussi à supprimer votre
-    compte. Vous pouvez essayer à nouveau.
-  </string>
+        compte. Vous pouvez essayer à nouveau.</string>
   <string name="delete_account_will_be_restored_are_you_sure">Vous essayez de vous connecter à
-    votre compte supprimé. Le compte sera rétabli après vous être connecté.
-  </string>
+        votre compte supprimé. Le compte sera rétabli après vous être connecté.</string>
   <string name="restore">Rétablir</string>
   <string name="admiration_sended">Vous avez envoyé une admiration.</string>
   <string name="skip">Passer</string>
@@ -698,17 +608,13 @@
   <string name="general_delete_messages">Supprimer des messages</string>
   <string name="skip_all">Tout passer</string>
   <string name="settings_feedback_transaction_number">Numéro de la commande</string>
-  <string name="settings_feedback_transaction_link">Où puis-je trouver le numéro de la commande ?
-  </string>
-  <string name="general_logout_error">Malheureusement, il est impossible de vous déconnecter de
-    votre compte.
-  </string>
+  <string name="settings_feedback_transaction_link">Où puis-je trouver le numéro de la commande ?</string>
+  <string name="general_logout_error">Malheureusement, il est impossible de vous déconnecter de votre compte.</string>
   <string name="auth_btn_ok">Odnoklassniki</string>
   <string name="auth_btn_tf">Compte Spark</string>
   <string name="birthday">Anniversaire</string>
   <string name="other_auth">Se connecter via d\'autres services</string>
-  <string name="settings_feedback_transaction_number_hint">Saisissez le numéro de la commande
-  </string>
+  <string name="settings_feedback_transaction_number_hint">Saisissez le numéro de la commande</string>
   <string name="delete_visitors">Supprimer les visiteurs</string>
   <string name="delete_admirations">Supprimer les admirations</string>
   <string name="general_admirations">Admirations</string>
@@ -727,9 +633,8 @@
   <string name="user_deleted_or_banned">L\'utilisateur est banni ou supprimé.</string>
   <string name="locking_popup_button_answer">Répondre aux J\'aime</string>
   <string name="locking_menu_message">Attention ! L\'accès à certaines pages de l\'application est
-    limité. Pour y avoir accès, veuillez répondre à tous les J\'aime entrants ou procurez-vous
-    le statut VIP.
-  </string>
+        limité. Pour y avoir accès, veuillez répondre à tous les J\'aime entrants ou procurez-vous
+        le statut VIP.</string>
   <string name="current_city">Ville actuelle</string>
   <string name="general_bonus">Bonus</string>
   <plurals name="notification_many_messages">
@@ -742,64 +647,51 @@
     <item quantity="one">et %d</item>
   </plurals>
   <string name="subscriptions_can_be_changed">Vous êtes maintenant inscrit. Vous pouvez changer
-    vos paramètres d\'inscription sur Google Play.
-  </string>
+        vos paramètres d\'inscription sur Google Play.</string>
   <string name="people_nearby">Personnes à proximité</string>
   <string name="nobody_nearby">Personne par ici !</string>
   <string name="general_distance_km">%.02f km</string>
   <string name="general_distance_m">%d m</string>
   <string name="cannot_get_geo">Impossible de déterminer la localisation</string>
   <string name="press_back_more_to_close_app">Pour quitter Spark, appuyez sur la touche retour
-    une nouvelle fois.
-  </string>
+        une nouvelle fois.</string>
   <string name="waiting_for_load">En attente de chargement…</string>
   <string name="loading_photo_percent">Téléchargement des photos %d%%</string>
   <string name="profile_update_error">Erreur de mise à jour de données</string>
   <string name="retry_cancel_editing">Une erreur de connexion de réseau est survenue lors de
-    l\'envoi des données au serveur. Quitter sans enregistrer, ou réessayer ?
-  </string>
+        l\'envoi des données au serveur. Quitter sans enregistrer, ou réessayer ?</string>
   <string name="retry_cancel_editing_bad_value">Vous avez saisi des données invalides. Réessayer
-    ou se déconnecter sans enregistrer ?
-  </string>
+        ou se déconnecter sans enregistrer ?</string>
   <string name="user_does_not_exist">L\'utilisateur n\'a pas été trouvé.</string>
   <string name="feedback_subject_ban">Signaler un blocage injustifié</string>
   <string name="settings_led">Voyant de notification</string>
   <string name="open_market_error">Impossible d\'ouvrir la page de l\'application</string>
   <string name="billing_item_already_owned">Votre précédent achat est maintenant en cours de
-    traitement, veuillez patienter.
-  </string>
+        traitement, veuillez patienter.</string>
   <string name="dialog">Conversations</string>
   <string name="reply">Répondre</string>
   <string name="measurement_unit_weight">kg</string>
   <string name="measurement_unit_height">cm</string>
-  <string name="maximum_number_of_users">Vous avez choisi le nombre maximum d\'utilisateurs.
-  </string>
+  <string name="maximum_number_of_users">Vous avez choisi le nombre maximum d\'utilisateurs.</string>
   <string name="logout_if_email_already_registred">Il existe déjà un utilisateur avec cet e-mail.
-    Si ceci est votre e-mail, vous devez vous déconnecter de ce compte et vous connecter sur le
-    compte %s.
-  </string>
+        Si ceci est votre e-mail, vous devez vous déconnecter de ce compte et vous connecter sur le
+        compte %s.</string>
   <string name="recover_password_instructions">Un e-mail vous a été envoyé avec l\'instruction de
-    récupération du mot de passe.
-  </string>
+        récupération du mot de passe.</string>
   <string name="email_changing">Changement d\'e-mail</string>
   <string name="hint_faces_filter">Changez les options de recherche et rencontrez de nouvelles
-    personnes intéressantes.
-  </string>
+        personnes intéressantes.</string>
   <string name="hint_faces_buy_like">Plus vous avez de J\'aime, plus vous serez visible.
-    N\'oubliez pas de remplir votre balance de J\'aime.
-  </string>
+        N\'oubliez pas de remplir votre balance de J\'aime.</string>
   <string name="hint_myprofile_buy_vip">Obtenez le statut VIP et profitez d\'une communication
-    illimitée
-  </string>
+        illimitée</string>
   <string name="pull_to_refresh_pull_label">Retirer pour actualiser…</string>
   <string name="pull_to_refresh_release_label">Laisser pour actualiser…</string>
   <string name="messaging_block_buy_vip">Pour continuer la conversation, vous devez avoir le
-    statut VIP\u2011
-  </string>
+        statut VIP\u2011</string>
   <string name="pull_to_refresh_refreshing_label">Chargement…</string>
   <string name="user_added_to_black_list">L\'utilisateur a été ajouté à la liste noire.</string>
-  <string name="user_deleted_from_black_list">L\'utilisateur a été retiré de la liste noire.
-  </string>
+  <string name="user_deleted_from_black_list">L\'utilisateur a été retiré de la liste noire.</string>
   <string name="user_added_to_bookmark">L\'utilisateur a été ajouté aux favoris.</string>
   <string name="user_deleted_from_bookmark">L\'utilisateur a été retiré des favoris.</string>
   <string name="preload_photo_type_wifi_3g">WiFi et 3G</string>
@@ -807,64 +699,49 @@
   <string name="preload_photo_type_always_on">Toujours connecté</string>
   <string name="preload_photo_type_preload_off">Déconnecté</string>
   <string name="wrong_time_popup_text">Impossible d\'établir une connexion sécurisée.\nIl est
-    possible que les réglages de l\'heure et de la date aient été mal définis.
-  </string>
+        possible que les réglages de l\'heure et de la date aient été mal définis.</string>
   <string name="wrong_time_popup_button">Afficher les paramètres</string>
   <string name="enter_text">Veuillez saisir le texte</string>
   <string name="send_feedback">Envoyer un message</string>
   <string name="get_vip_free">Obtenez gratuitement le statut VIP</string>
   <string name="buy_more_sympathies">Obtenez plus de J\'aime, augmentez votre popularité</string>
   <string name="transaction_code_help">En nous envoyant un code de transaction, vous nous aidez à
-    satisfaire votre demande en accélérant le temps de traitement. Pour obtenir plus
-    d\'informations sur une commande, rendez-vous sur %s.
-  </string>
+        satisfaire votre demande en accélérant le temps de traitement. Pour obtenir plus
+        d\'informations sur une commande, rendez-vous sur %s.</string>
   <string name="google_wallet">Google Wallet</string>
   <string name="google_service_general_title">Les rappels ne sont pas disponibles</string>
   <string name="google_service_disabled_title">Vous avez désactivé Google Play. Vous devez
-    l\'activer pour recevoir des rappels.
-  </string>
+        l\'activer pour recevoir des rappels.</string>
   <string name="google_service_disabled_button">Activer</string>
   <string name="google_service_missing_title">Google Play n\'est pas installé. Vous devez
-    l\'installer pour recevoir des rappels.
-  </string>
+        l\'installer pour recevoir des rappels.</string>
   <string name="google_service_missing_button">Installer</string>
   <string name="google_service_version_update_required_title">Votre version de Google Play est
-    obsolète. Veuillez l\'actualiser pour que les rappels puissent fonctionner correctement.
-  </string>
+        obsolète. Veuillez l\'actualiser pour que les rappels puissent fonctionner correctement.</string>
   <string name="google_service_version_update_required_button">Actualiser</string>
   <string name="google_invalid_account_title">Vérifiez les informations de votre compte Google ou
-    contactez le support technique Google.
-  </string>
+        contactez le support technique Google.</string>
   <string name="google_sign_in_account_title">Votre compte Google n\'a pas été ajouté. Vous devez
-    vous connecter si vous voulez recevoir des rappels.
-  </string>
+        vous connecter si vous voulez recevoir des rappels.</string>
   <string name="google_sign_in_account_button">Se connecter</string>
   <string name="google_unavailable_services_title">Malheureusement, les rappels ne sont pas
-    disponibles sur votre appareil.
-  </string>
-  <string name="receive_message_notification">Recevoir une notification à chaque\nnouveau message
-  </string>
+        disponibles sur votre appareil.</string>
+  <string name="receive_message_notification">Recevoir une notification à chaque\nnouveau message</string>
   <string name="receive_mutual_notification">Recevoir une notification à chaque\nnouvelle
-    attraction mutuelle
-  </string>
-  <string name="receive_sympathy_notification">Recevoir une notification à chaque\nnouveau J\'aime
-  </string>
+        attraction mutuelle</string>
+  <string name="receive_sympathy_notification">Recevoir une notification à chaque\nnouveau J\'aime</string>
   <string name="receive_rate_notification">Supprimer</string>
-  <string name="receive_guest_notification">Recevoir une notification à chaque\nnouveau visiteur
-  </string>
+  <string name="receive_guest_notification">Recevoir une notification à chaque\nnouveau visiteur</string>
   <string name="on_phone">Vers mobile</string>
   <string name="on_mail">Vers e-mail</string>
   <string name="add_leader_hint">Votre message d\'accueil…</string>
   <string name="more">plus</string>
   <string name="premium_for_invitations">Pour obtenir un statut VIP pendant 1 jour, vous devez
-    obtenir 5 inscriptions
-  </string>
+        obtenir 5 inscriptions</string>
   <string name="premium_for_invitations_current_status">Vous avez déjà atteint :\nInvitations :
-    %1$d\nInscriptions : %2$d
-  </string>
+        %1$d\nInscriptions : %2$d</string>
   <string name="no_contacts_available">L\'appareil ne dispose pas de contacts qui peuvent être
-    affichés
-  </string>
+        affichés</string>
   <string name="sms_invite_title">Obtenez le statut VIP pour une journée !</string>
   <string name="status_can_send_confirmation">Inviter</string>
   <string name="status_invilid_phone_number">Le nombre est incorrect</string>
@@ -875,35 +752,22 @@
   <string name="trial_vip_button_text">Recevez le statut VIP</string>
   <string name="settings_check_vip_title">Vérifier si le statut VIP est activé.</string>
   <string name="settings_check_vip_cell">Vérification du statut VIP</string>
-  <string name="settings_check_vip_alert">Votre demande de vérification du statut VIP a été
-    envoyée.
-  </string>
+  <string name="settings_check_vip_alert">Votre demande de vérification du statut VIP a été envoyée.</string>
   <string name="novice_sympathy">Envoyez des J\'aime aux personnes qui vous\nplaisent
-    vraiment.\nVous allez peut être rencontrer quelqu\'un d\'unique !
-  </string>
-  <string name="go_dating_message">Apprenez à mieux connaître les gens et les noms des utilisateurs
-    ayant visité votre profil apparaîtront ici !
-  </string>
-  <string name="photo_not_from_main_album">Un modérateur a décidé que cette photo ne peut pas être
-    utilisée comme photo de profil.
-  </string>
+        vraiment.\nVous allez peut être rencontrer quelqu\'un d\'unique !</string>
+  <string name="go_dating_message">Apprenez à mieux connaître les gens et les noms des utilisateurs ayant visité votre profil apparaîtront ici !</string>
+  <string name="photo_not_from_main_album">Un modérateur a décidé que cette photo ne peut pas être utilisée comme photo de profil.</string>
   <string name="sidebar_vk_profile">Profil VK</string>
   <string name="title_vk_profile">Profil VK</string>
-  <string name="vk_profile_invite_friends_error">L\'utilisateur n\'accepte plus les invitations
-  </string>
-  <string name="foreign_profile_empty_gifts_title">Envoyez un cadeau et attirez l\'attention !
-  </string>
+  <string name="vk_profile_invite_friends_error">L\'utilisateur n\'accepte plus les invitations</string>
+  <string name="foreign_profile_empty_gifts_title">Envoyez un cadeau et attirez l\'attention !</string>
   <string name="chat_auto_reply_title">Le texte du message est caché</string>
-  <string name="chat_auto_reply_message">Pour ouvrir / répondre à ce message, devenez un VIP
-  </string>
+  <string name="chat_auto_reply_message">Pour ouvrir / répondre à ce message, devenez un VIP</string>
   <string name="chat_auto_reply_button">Devenir VIP</string>
-  <string name="photo_list_load_info">Partagez vos photos pour être vu par des millions de personnes
-    !
-  </string>
+  <string name="photo_list_load_info">Partagez vos photos pour être vu par des millions de personnes !</string>
   <string name="vk_profile_button_tf_group">Groupe Spark</string>
   <string name="vk_profile_button_join_tf_group">Rejoindre le groupe Spark</string>
-  <string name="vk_profile_button_join_vkgames_group">Rejoindre le groupe \&quot;jeux
-    VK\&quot;</string>
+  <string name="vk_profile_button_join_vkgames_group">Rejoindre le groupe \&quot;jeux VK\&quot;</string>
   <string name="vk_profile_button_invite_friends">Inviter des amis</string>
   <string name="vk_profile_invite_friends_title">Inviter des amis</string>
   <string name="invite_friend_button">Inviter</string>
@@ -912,57 +776,30 @@
   <string name="vk_friends_success_invite">L\'invitation a été envoyée</string>
   <string name="join_group_success">Vous avez rejoint le groupe</string>
   <string name="settings_auto_greeting_title">Auto-salutations</string>
-  <string name="settings_auto_greeting_subtitle">Autoriser Spark à lancer automatiquement une
-    conversation avec un message de salutation à chaque fois que quelqu\'un vous envoie un J\'aime
-  </string>
-  <string name="take_photo_text_1">Veuillez télécharger votre photo pour faire connaissance.
-  </string>
-  <string name="take_photo_text_2">Seul vous êtes autorisé à apparaître sur la photo. Toutes les
-    photos sont modérées.
-  </string>
+  <string name="settings_auto_greeting_subtitle">Autoriser Spark à lancer automatiquement une conversation avec un message de salutation à chaque fois que quelqu\'un vous envoie un J\'aime</string>
+  <string name="take_photo_text_1">Veuillez télécharger votre photo pour faire connaissance.</string>
+  <string name="take_photo_text_2">Seul vous êtes autorisé à apparaître sur la photo. Toutes les photos sont modérées.</string>
   <string name="unlock_by_viewed_ad_video_button_text">Déverrouiller gratuitement à %s</string>
   <plurals name="free_minutes">
     <item quantity="other">%d minutes</item>
     <item quantity="one">%d minute</item>
   </plurals>
   <string name="thanks_for_your_rate_title">Merci pour votre avis</string>
-  <string name="thanks_for_your_rate_top_label">Pour vous remercier, nous afficherons votre photo
-    dans le fil d\'actualité !
-  </string>
-  <string name="thanks_for_your_rate_bottom_label">Partagez votre avis dans l\'App Store. Nous
-    apprécions tous les commentaires !
-  </string>
+  <string name="thanks_for_your_rate_top_label">Pour vous remercier, nous afficherons votre photo dans le fil d\'actualité !</string>
+  <string name="thanks_for_your_rate_bottom_label">Partagez votre avis dans l\'App Store. Nous apprécions tous les commentaires !</string>
   <string name="thanks_for_your_rate_rate_app">Laisser un commentaire sur l\'App Store</string>
   <string name="thanks_for_your_rate_close">Fermé</string>
   <plurals name="novice_sympathies_bonuses">
-    <item quantity="zero">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles
-      personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.
-    </item>
-    <item quantity="other">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles
-      personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.
-    </item>
-    <item quantity="one">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles
-      personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.
-    </item>
+    <item quantity="zero">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.</item>
+    <item quantity="other">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.</item>
+    <item quantity="one">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.</item>
   </plurals>
-  <string name="buy_vip_title_from_input">Vous pouvez commencer une conversation avec un utilisateur
-    si vous avez le statut VIP
-  </string>
+  <string name="buy_vip_title_from_input">Vous pouvez commencer une conversation avec un utilisateur si vous avez le statut VIP</string>
   <string name="mutual_like_popup_text">Le sentiment est réciproque !</string>
   <string name="mutual_like_popup_button">Dites « Salut »</string>
-  <string name="people_nearby_access_to_location_description">Pour voir qui est à proximité, vous
-    devez autoriser l\'accès à votre géolocalisation.
-  </string>
-  <string name="people_nearby_not_enought_money">Vous ne disposez pas de suffisamment de pièces pour
-    accéder à la fonctionnalité \« Personne à proximité\ »
-  </string>
-  <string name="people_nearby_not_found_title">Il n\'y a pas d\'utilisateurs à proximité de votre
-    localisation pour le moment
-  </string>
-  <string name="people_nearby_not_found_description">Pour réessayer, appuyez et maintenez un doigt
-    dans le centre de l\'écran.
-  </string>
-  <string name="NSLocationWhenInUseUsageDescription">Pour accéder à cette fonction, vous devez
-    donner votre autorisation
-  </string>
+  <string name="people_nearby_access_to_location_description">Pour voir qui est à proximité, vous devez autoriser l\'accès à votre géolocalisation.</string>
+  <string name="people_nearby_not_enought_money">Vous ne disposez pas de suffisamment de pièces pour accéder à la fonctionnalité \« Personne à proximité\ »</string>
+  <string name="people_nearby_not_found_title">Il n\'y a pas d\'utilisateurs à proximité de votre localisation pour le moment</string>
+  <string name="people_nearby_not_found_description">Pour réessayer, appuyez et maintenez un doigt dans le centre de l\'écran.</string>
+  <string name="NSLocationWhenInUseUsageDescription">Pour accéder à cette fonction, vous devez donner votre autorisation</string>
 </resources>

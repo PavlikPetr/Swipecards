@@ -24,19 +24,14 @@
     </string>
     <string name="likes_background_text">Aucun J\'aime</string>
     <string name="visitors_background_text">Aucun visiteurs</string>
-    <string name="need_set_avatar">Personne ne peut apprendre à vous connaître ! Ajoutez une photo
-        de profil.
-    </string>
+    <string name="need_set_avatar">Personne ne peut apprendre à vous connaître ! Ajoutez une photo de profil.</string>
     <string name="chat_background_text">Aucun message reçu</string>
     <string name="entrance">Entrer</string>
     <string name="filter_only_online">Seulement en ligne</string>
     <string name="filter_city_age_parameters">Âge et ville</string>
     <string name="filter_select_city">Sélectionner la ville</string>
     <string name="edit_block_photo">Photos</string>
-    <string name="dashbrd_popup_rating">Vous appréciez notre application ? Augmentez nôtre côte de
-        popularité ! Plus notre côte de popularité sera élevée, plus vous trouverez de personnes
-        intéressantes sur Topface !
-    </string>
+    <string name="dashbrd_popup_rating">Vous appréciez notre application ? Augmentez nôtre côte de popularité ! Plus notre côte de popularité sera élevée, plus vous trouverez de personnes intéressantes sur Topface !</string>
     <string name="dashbrd_popup_title">Évaluez-moi</string>
     <string name="dashbrd_popup_cancel">Ne plus me demander</string>
     <string name="dashbrd_popup_rate">Évaluer</string>
@@ -55,8 +50,7 @@
     <string name="locking_screen_advice">Répondre à tous les J\'aime entrants</string>
     <string name="locking_screen_advice2">Débarrassez-vous de toutes les limites</string>
     <string name="general_bookmarks_is_deleted">Utilisateur supprimé des favoris</string>
-    <string name="general_blacklist_is_deleted">L\'utilisateur est supprimé de la liste noire
-    </string>
+    <string name="general_blacklist_is_deleted">L\'utilisateur est supprimé de la liste noire</string>
     <string name="invite_friends_title_short">Inviter tous mes amis sur Topface</string>
     <string name="general_bookmarks_add_short">Aux favoris</string>
     <string name="general_complaint">Signaler</string>
@@ -64,9 +58,7 @@
     <string name="address_book_access_error">Cette application n\'a pas accès à vos contacts. Vous
         pouvez autoriser l\'accès dans les paramètres de confidentialité de votre appareil.
     </string>
-    <string name="camera_access_error">L\'application n\'a pas accès à la caméra. Vous pouvez
-        autoriser l\'accès dans les paramètres de confidentialité de votre appareil.
-    </string>
+    <string name="camera_access_error">L\'application n\'a pas accès à la caméra. Vous pouvez autoriser l\'accès dans les paramètres de confidentialité de votre appareil.</string>
     <string name="profile_deleted_user">L\'utilisateur est supprimé.</string>
     <string name="filter_main_parameters">Je suis intéressé par</string>
     <string name="dating_prev_button_ext">Précédent</string>
@@ -80,9 +72,7 @@
     <string name="profile_mygifts_empty">Personne ne vous a offert de cadeaux</string>
     <string name="dating_people_unnoticed">Vous avez manqué 10 personnes !</string>
     <string name="dating_continue">Continuer à faire connaissance</string>
-    <string name="dating_better_look">Regardez avec plus d\'attention !\nVous laissez peut-être
-        échapper votre destin !
-    </string>
+    <string name="dating_better_look">Regardez avec plus d\'attention !\nVous laissez peut-être échapper votre destin !</string>
     <string name="edit_my_photos">Mes photos</string>
     <string name="general_search_empty_title">Malheureusement, rien n\'a été trouvé.</string>
     <string name="general_search_empty_text">Vous pouvez essayer de lancer une nouvelle recherche,
@@ -90,8 +80,7 @@
     </string>
     <string name="map_title">Carte</string>
     <string name="general_buying">Acheter des J\'aime et des pièces</string>
-    <string name="popup_version_title">Une nouvelle version de l\'application est disponible
-    </string>
+    <string name="popup_version_title">Une nouvelle version de l\'application est disponible</string>
     <string name="popup_version_message">Il est temps de renouveler votre version !</string>
     <string name="leaders_select_photo_info">Sélectionnez la photo la plus surprenante ! Il est
         impossible de sélectionner des photos avec une côte de popularité basse.
@@ -100,8 +89,7 @@
     <string name="black_list_info">Vous avez ajouté quelqu\'un à votre liste noire. Vous pouvez
         annuler cette action dans votre profil ou dans les paramètres du statut VIP.
     </string>
-    <string name="black_list_activation">Activez votre statut VIP et utilisez la liste noire
-    </string>
+    <string name="black_list_activation">Activez votre statut VIP et utilisez la liste noire</string>
     <string name="buying_total">Total</string>
     <string name="we_dont_detect_your_city">Pour trouver les personnes à proximité, nous devons
         connaitre votre localisation. Veuillez indiquer votre ville.
@@ -135,15 +123,13 @@
     <string name="pincode_change_label">Changement du code PIN</string>
     <string name="pincode_delete_label">Suppression du code PIN</string>
     <string name="pincode_turning_on">Allumer</string>
-    <string name="pincode_dont_match">Les codes PIN ne correspondent pas. Veuillez réessayer.
-    </string>
+    <string name="pincode_dont_match">Les codes PIN ne correspondent pas. Veuillez réessayer.</string>
     <string name="pincode_wrong">Code PIN erroné</string>
     <string name="pincode_input">Saisir le code PIN</string>
     <string name="pincode_input_previous">Saisir l\'ancien code PIN</string>
     <string name="pincode_repeat">Répétez le code PIN</string>
     <string name="pincode_forget">Vous avez oublié votre code PIN ?</string>
-    <string name="pincode_auth_input">Vous devez entrer votre identifiant et votre mot de passe.
-    </string>
+    <string name="pincode_auth_input">Vous devez entrer votre identifiant et votre mot de passe.</string>
     <string name="pincode_will_be_reset">Si l\'autorisation est réussie, tous les paramètres de
         l\'application seront réinitialisés.
     </string>
@@ -230,8 +216,7 @@
     <string name="purchase_header_title">Solde :</string>
     <string name="buying_header_title">Achats</string>
     <plurals name="buying_gift_you_need_coins">
-        <item quantity="other">Pour pouvoir envoyer un cadeau, procurez-vous %d pièces en plus.
-        </item>
+        <item quantity="other">Pour pouvoir envoyer un cadeau, procurez-vous %d pièces en plus.</item>
         <item quantity="one">Pour pouvoir envoyer un cadeau, procurez-vous %d pièce en plus.</item>
     </plurals>
     <plurals name="buying_admiration_you_need_coins">
@@ -239,18 +224,12 @@
         <item quantity="one">Pour envoyer une admiration, procurez-vous %d pièce en plus.</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
-        <item quantity="other">Pour pouvoir voir qui s\'intéresse à vous, procurez-vous %d pièces en
-            plus
-        </item>
-        <item quantity="one">Pour pouvoir voir qui s\'intéresse à vous, procurez-vous %d pièce en
-            plus
-        </item>
+        <item quantity="other">Pour pouvoir voir qui s\'intéresse à vous, procurez-vous %d pièces en plus</item>
+        <item quantity="one">Pour pouvoir voir qui s\'intéresse à vous, procurez-vous %d pièce en plus</item>
     </plurals>
     <plurals name="buying_leaders_you_need_coins">
-        <item quantity="other">Pour être vu par plus de personnes, procurez-vous %d pièces en plus
-        </item>
-        <item quantity="one">Pour être vu par plus de personnes, procurez-vous %d pièce en plus
-        </item>
+        <item quantity="other">Pour être vu par plus de personnes, procurez-vous %d pièces en plus</item>
+        <item quantity="one">Pour être vu par plus de personnes, procurez-vous %d pièce en plus</item>
     </plurals>
     <plurals name="buying_you_need_coins">
         <item quantity="other">Vous êtes à court de %d pièces</item>
@@ -390,8 +369,7 @@
     <string name="black_list_delete">Supprimer de la liste noire</string>
     <string name="vip_buy_vip">Acheter le staut VIP</string>
     <string name="vip_state_off">Votre statut VIP n\'est pas activé</string>
-    <string name="vip_info_guest">Découvrez qui s\'est intéressé à vous, observez vos visiteurs !
-    </string>
+    <string name="vip_info_guest">Découvrez qui s\'est intéressé à vous, observez vos visiteurs !</string>
     <string name="vip_info_invisible">Visitez les autres pages en toute discrétion grâce au mode
         \"invisible\".
     </string>
@@ -406,9 +384,7 @@
     </string>
     <string name="buying_vip_status">Obtenez le statut VIP</string>
     <string name="edit_my_city">Ma ville</string>
-    <string name="settings_feedback_email">Saisissez votre e-mail pour que nous puissions vous
-        recontacter.
-    </string>
+    <string name="settings_feedback_email">Saisissez votre e-mail pour que nous puissions vous recontacter.</string>
     <string name="settings_invalid_email">Email incorrect</string>
     <string name="chat_write_message">Rédiger un message</string>
     <string name="dating_message">Message…</string>
@@ -436,9 +412,7 @@
     </string>
     <string name="default_price_format">Total : %.2f USD</string>
     <string name="default_price_format_extended">Total : %1$.2f %2$s</string>
-    <string name="leaders_pick_condition">Vous ne pouvez pas sélectionner une photo avec une côte de
-        popularité en dessous de %d%% :
-    </string>
+    <string name="leaders_pick_condition">Vous ne pouvez pas sélectionner une photo avec une côte de popularité en dessous de %d%% :</string>
     <string name="general_gift">Cadeau</string>
     <string name="user_actions_chat">Tchater</string>
     <string name="profile_edit_age_ranges">L\'âge doit être compris entre 16 et 99 ans. Veuillez
@@ -470,9 +444,7 @@
     <string name="incorrect_login">Nom d\'utilisateur incorrect</string>
     <string name="incorrect_password">Mot de passe incorrect</string>
     <string name="empty_fields">Veuillez remplir tous les champs.</string>
-    <string name="email_already_registered">Désolé, cet e-mail est déjà enregistré dans le
-        système.
-    </string>
+    <string name="email_already_registered">Désolé, cet e-mail est déjà enregistré dans le système.</string>
     <string name="enter_email_from_registration">Saisissez l\'e-mail que vous aviez indiqué lors de
         l\'enregistrement.
     </string>
@@ -509,8 +481,7 @@
     <string name="enter_password_confirmation">Veuillez confirmer votre mot de passe</string>
     <string name="passwords_mismatched">Les mots de passes sont différents</string>
     <string name="old_password_mismatched">Mot de passe précédent erroné</string>
-    <string name="passwords_matched">Le nouveau mot de passe ne correspond pas au précédent.
-    </string>
+    <string name="passwords_matched">Le nouveau mot de passe ne correspond pas au précédent.</string>
     <string name="passwords_changed">Le mot de passe est changé</string>
     <string name="take_photo">Prendre une photo</string>
     <string name="take_another_photo">Une autre photo</string>
@@ -535,8 +506,7 @@
     <string name="general_choose_city">Sélectionnez votre ville</string>
     <string name="buy_mobile_payments">Autres moyens de paiement</string>
     <string name="general_save_and_exit">Enregistrer et se déconnecter</string>
-    <string name="general_set_password">Définissez votre mot de passe avant de vous déconnecter.
-    </string>
+    <string name="general_set_password">Définissez votre mot de passe avant de vous déconnecter.</string>
     <string name="user_is_deleted">L\'utilisateur est supprimé.</string>
     <string name="general_bookmarks">Favoris</string>
     <string name="general_fans">Admirateurs</string>
@@ -556,8 +526,7 @@
     <string name="vip_stop_ads">Seulement tchater, rien de plus ! Les utilisateurs VIP ne reçoivent
         pas de publicités.
     </string>
-    <string name="friend_email_hint">Saisissez l\'e-mail ou le numéro de téléphone d\'un ami
-    </string>
+    <string name="friend_email_hint">Saisissez l\'e-mail ou le numéro de téléphone d\'un ami</string>
     <string name="general_add">Ajouter</string>
     <string name="general_invite_friends">Inviter des amis</string>
     <string name="general_rest_contacts">Il vous reste %d contacts.</string>
@@ -648,8 +617,7 @@
         rencontrer des personnes sur Topface !
     </string>
     <string name="send_confirm_link">Envoyer un lien de confirmation</string>
-    <string name="complain_type_swearing_msg">Comportement indécent, language innaproprié, menaces
-    </string>
+    <string name="complain_type_swearing_msg">Comportement indécent, language innaproprié, menaces</string>
     <string name="general_exit">Quitter</string>
     <string name="likes_can_help_you">Les J\'aime vous aident à faire connaissance</string>
     <string name="general_get_dating">Faire connaissance</string>
@@ -657,9 +625,7 @@
     <string name="settings_select_preload_photo_type">Choisissez lorsque le préchargement des photos
         est connecté
     </string>
-    <string name="restart_to_change_locale">L\'application doit être relancée pour changer la
-        langue.
-    </string>
+    <string name="restart_to_change_locale">L\'application doit être relancée pour changer la langue.</string>
     <string name="locale_changing">Changer la langue</string>
     <plurals name="you_were_liked">
         <item quantity="other">Vous avez plu à %d personnes</item>
@@ -708,18 +674,13 @@
     <string name="general_delete_messages">Supprimer des messages</string>
     <string name="skip_all">Tout passer</string>
     <string name="settings_feedback_transaction_number">Numéro de la commande</string>
-    <string name="settings_feedback_transaction_link">Où puis-je trouver le numéro de la commande
-        ?
-    </string>
-    <string name="general_logout_error">Malheureusement, il est impossible de vous déconnecter de
-        votre compte.
-    </string>
+    <string name="settings_feedback_transaction_link">Où puis-je trouver le numéro de la commande ?</string>
+    <string name="general_logout_error">Malheureusement, il est impossible de vous déconnecter de votre compte.</string>
     <string name="auth_btn_ok">Odnoklassniki</string>
     <string name="auth_btn_tf">Compte Topface</string>
     <string name="birthday">Anniversaire</string>
     <string name="other_auth">Se connecter via d\'autres services</string>
-    <string name="settings_feedback_transaction_number_hint">Saisissez le numéro de la commande
-    </string>
+    <string name="settings_feedback_transaction_number_hint">Saisissez le numéro de la commande</string>
     <string name="delete_visitors">Supprimer les visiteurs</string>
     <string name="delete_admirations">Supprimer les admirations</string>
     <string name="general_admirations">Admirations</string>
@@ -783,8 +744,7 @@
     <string name="reply">Répondre</string>
     <string name="measurement_unit_weight">kg</string>
     <string name="measurement_unit_height">cm</string>
-    <string name="maximum_number_of_users">Vous avez choisi le nombre maximum d\'utilisateurs.
-    </string>
+    <string name="maximum_number_of_users">Vous avez choisi le nombre maximum d\'utilisateurs.</string>
     <string name="logout_if_email_already_registred">Il existe déjà un utilisateur avec cet e-mail.
         Si ceci est votre e-mail, vous devez vous déconnecter de ce compte et vous connecter sur le
         compte %s.
@@ -809,8 +769,7 @@
     </string>
     <string name="pull_to_refresh_refreshing_label">Chargement…</string>
     <string name="user_added_to_black_list">L\'utilisateur a été ajouté à la liste noire.</string>
-    <string name="user_deleted_from_black_list">L\'utilisateur a été retiré de la liste noire.
-    </string>
+    <string name="user_deleted_from_black_list">L\'utilisateur a été retiré de la liste noire.</string>
     <string name="user_added_to_bookmark">L\'utilisateur a été ajouté aux favoris.</string>
     <string name="user_deleted_from_bookmark">L\'utilisateur a été retiré des favoris.</string>
     <string name="preload_photo_type_wifi_3g">WiFi et 3G</string>
@@ -853,18 +812,13 @@
     <string name="google_unavailable_services_title">Malheureusement, les rappels ne sont pas
         disponibles sur votre appareil.
     </string>
-    <string name="receive_message_notification">Recevoir une notification à chaque\nnouveau
-        message
-    </string>
+    <string name="receive_message_notification">Recevoir une notification à chaque\nnouveau message</string>
     <string name="receive_mutual_notification">Recevoir une notification à chaque\nnouvelle
         attraction mutuelle
     </string>
-    <string name="receive_sympathy_notification">Recevoir une notification à chaque\nnouveau
-        J\'aime
-    </string>
+    <string name="receive_sympathy_notification">Recevoir une notification à chaque\nnouveau J\'aime</string>
     <string name="receive_rate_notification">Supprimer</string>
-    <string name="receive_guest_notification">Recevoir une notification à chaque\nnouveau visiteur
-    </string>
+    <string name="receive_guest_notification">Recevoir une notification à chaque\nnouveau visiteur</string>
     <string name="on_phone">Vers mobile</string>
     <string name="on_mail">Vers e-mail</string>
     <string name="add_leader_hint">Votre message d\'accueil…</string>
@@ -888,31 +842,20 @@
     <string name="trial_vip_button_text">Recevez le statut VIP</string>
     <string name="settings_check_vip_title">Vérifier si le statut VIP est activé.</string>
     <string name="settings_check_vip_cell">Vérification du statut VIP</string>
-    <string name="settings_check_vip_alert">Votre demande de vérification du statut VIP a été
-        envoyée.
-    </string>
+    <string name="settings_check_vip_alert">Votre demande de vérification du statut VIP a été envoyée.</string>
     <string name="novice_sympathy">Envoyez des J\'aime aux personnes qui vous\nplaisent
         vraiment.\nVous allez peut être rencontrer quelqu\'un d\'unique !
     </string>
-    <string name="go_dating_message">Apprenez à mieux connaître les gens et les noms des
-        utilisateurs ayant visité votre profil apparaîtront ici !
-    </string>
-    <string name="photo_not_from_main_album">Un modérateur a décidé que cette photo ne peut pas être
-        utilisée comme photo de profil.
-    </string>
+    <string name="go_dating_message">Apprenez à mieux connaître les gens et les noms des utilisateurs ayant visité votre profil apparaîtront ici !</string>
+    <string name="photo_not_from_main_album">Un modérateur a décidé que cette photo ne peut pas être utilisée comme photo de profil.</string>
     <string name="sidebar_vk_profile">Profil VK</string>
     <string name="title_vk_profile">Profil VK</string>
-    <string name="vk_profile_invite_friends_error">L\'utilisateur n\'accepte plus les invitations
-    </string>
-    <string name="foreign_profile_empty_gifts_title">Envoyez un cadeau et attirez l\'attention !
-    </string>
+    <string name="vk_profile_invite_friends_error">L\'utilisateur n\'accepte plus les invitations</string>
+    <string name="foreign_profile_empty_gifts_title">Envoyez un cadeau et attirez l\'attention !</string>
     <string name="chat_auto_reply_title">Le texte du message est caché</string>
-    <string name="chat_auto_reply_message">Pour ouvrir / répondre à ce message, devenez un VIP
-    </string>
+    <string name="chat_auto_reply_message">Pour ouvrir / répondre à ce message, devenez un VIP</string>
     <string name="chat_auto_reply_button">Devenir VIP</string>
-    <string name="photo_list_load_info">Partagez vos photos pour être vu par des millions de
-        personnes !
-    </string>
+    <string name="photo_list_load_info">Partagez vos photos pour être vu par des millions de personnes !</string>
     <string name="vk_profile_button_tf_group">Groupe Topface</string>
     <string name="vk_profile_button_join_tf_group">Rejoindre le groupe Topface</string>
     <string name="vk_profile_button_join_vkgames_group">Rejoindre le groupe \"jeux VK\"</string>
@@ -924,58 +867,30 @@
     <string name="vk_friends_success_invite">L\'invitation a été envoyée</string>
     <string name="join_group_success">Vous avez rejoint le groupe</string>
     <string name="settings_auto_greeting_title">Auto-salutations</string>
-    <string name="settings_auto_greeting_subtitle">Autoriser Topface à lancer automatiquement une
-        conversation avec un message de salutation à chaque fois que quelqu\'un vous envoie un
-        J\'aime
-    </string>
-    <string name="take_photo_text_1">Veuillez télécharger votre photo pour faire connaissance.
-    </string>
-    <string name="take_photo_text_2">Seul vous êtes autorisé à apparaître sur la photo. Toutes les
-        photos sont modérées.
-    </string>
+    <string name="settings_auto_greeting_subtitle">Autoriser Topface à lancer automatiquement une conversation avec un message de salutation à chaque fois que quelqu\'un vous envoie un J\'aime</string>
+    <string name="take_photo_text_1">Veuillez télécharger votre photo pour faire connaissance.</string>
+    <string name="take_photo_text_2">Seul vous êtes autorisé à apparaître sur la photo. Toutes les photos sont modérées.</string>
     <string name="unlock_by_viewed_ad_video_button_text">Déverrouiller gratuitement à %s</string>
     <plurals name="free_minutes">
         <item quantity="other">%d minutes</item>
         <item quantity="one">%d minute</item>
     </plurals>
     <string name="thanks_for_your_rate_title">Merci pour votre avis</string>
-    <string name="thanks_for_your_rate_top_label">Pour vous remercier, nous afficherons votre photo
-        dans le fil d\'actualité !
-    </string>
-    <string name="thanks_for_your_rate_bottom_label">Partagez votre avis dans l\'App Store. Nous
-        apprécions tous les commentaires !
-    </string>
+    <string name="thanks_for_your_rate_top_label">Pour vous remercier, nous afficherons votre photo dans le fil d\'actualité !</string>
+    <string name="thanks_for_your_rate_bottom_label">Partagez votre avis dans l\'App Store. Nous apprécions tous les commentaires !</string>
     <string name="thanks_for_your_rate_rate_app">Laisser un commentaire sur l\'App Store</string>
     <string name="thanks_for_your_rate_close">Fermé</string>
     <plurals name="novice_sympathies_bonuses">
-        <item quantity="zero">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles
-            personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.
-        </item>
-        <item quantity="other">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles
-            personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.
-        </item>
-        <item quantity="one">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles
-            personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.
-        </item>
+        <item quantity="zero">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.</item>
+        <item quantity="other">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.</item>
+        <item quantity="one">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.</item>
     </plurals>
-    <string name="buy_vip_title_from_input">Vous pouvez commencer une conversation avec un
-        utilisateur si vous avez le statut VIP
-    </string>
+    <string name="buy_vip_title_from_input">Vous pouvez commencer une conversation avec un utilisateur si vous avez le statut VIP</string>
     <string name="mutual_like_popup_text">Le sentiment est réciproque !</string>
     <string name="mutual_like_popup_button">Dites « Salut »</string>
-    <string name="people_nearby_access_to_location_description">Pour voir qui est à proximité, vous
-        devez autoriser l\'accès à votre géolocalisation.
-    </string>
-    <string name="people_nearby_not_enought_money">Vous ne disposez pas de suffisamment de pièces
-        pour accéder à la fonctionnalité \« Personne à proximité\ »
-    </string>
-    <string name="people_nearby_not_found_title">Il n\'y a pas d\'utilisateurs à proximité de votre
-        localisation pour le moment
-    </string>
-    <string name="people_nearby_not_found_description">Pour réessayer, appuyez et maintenez un doigt
-        dans le centre de l\'écran.
-    </string>
-    <string name="NSLocationWhenInUseUsageDescription">Pour accéder à cette fonction, vous devez
-        donner votre autorisation
-    </string>
+    <string name="people_nearby_access_to_location_description">Pour voir qui est à proximité, vous devez autoriser l\'accès à votre géolocalisation.</string>
+    <string name="people_nearby_not_enought_money">Vous ne disposez pas de suffisamment de pièces pour accéder à la fonctionnalité \« Personne à proximité\ »</string>
+    <string name="people_nearby_not_found_title">Il n\'y a pas d\'utilisateurs à proximité de votre localisation pour le moment</string>
+    <string name="people_nearby_not_found_description">Pour réessayer, appuyez et maintenez un doigt dans le centre de l\'écran.</string>
+    <string name="NSLocationWhenInUseUsageDescription">Pour accéder à cette fonction, vous devez donner votre autorisation</string>
 </resources>

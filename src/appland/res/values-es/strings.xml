@@ -58,9 +58,7 @@
     <string name="address_book_access_error">Esta aplicación no tiene acceso a tus contactos. Puedes
         permitir tal acceso desde los ajustes de privacidad de tu dispositivo
     </string>
-    <string name="camera_access_error">Esta aplicación no tiene activado el acceso a la cámara.
-        Puedes permitir el acceso en los ajuste de privacidad de tu dispositivo.
-    </string>
+    <string name="camera_access_error">Esta aplicación no tiene activado el acceso a la cámara. Puedes permitir el acceso en los ajuste de privacidad de tu dispositivo.</string>
     <string name="profile_deleted_user">Usuario eliminado</string>
     <string name="filter_main_parameters">Me interesan</string>
     <string name="dating_prev_button_ext">Anterior</string>
@@ -845,18 +843,12 @@
     <string name="novice_sympathy">Envía simpatías a aquellos\nquienes realmente te gustan
         para\nempezar una relación satisfactoria
     </string>
-    <string name="go_dating_message">Comienza a conocer y aquí verás a los usuarios que visitan tu
-        perfil.
-    </string>
-    <string name="photo_not_from_main_album">Por los resultados de la moderación, está prohibida
-        esta foto en el avatar
-    </string>
+    <string name="go_dating_message">Comienza  a conocer y aquí verás a los usuarios que visitan tu perfil.</string>
+    <string name="photo_not_from_main_album">Por los resultados de la moderación, está prohibida esta foto en el avatar</string>
     <string name="sidebar_vk_profile">Perfil VKontakt</string>
     <string name="title_vk_profile">Perfil VK</string>
-    <string name="vk_profile_invite_friends_error">El usuario ha prohibido que le envíen mensajes
-    </string>
-    <string name="foreign_profile_empty_gifts_title">Envía un regalo y serás el centro de atención
-    </string>
+    <string name="vk_profile_invite_friends_error">El usuario ha prohibido que le envíen mensajes</string>
+    <string name="foreign_profile_empty_gifts_title">Envía un regalo y serás el centro de atención</string>
     <string name="chat_auto_reply_title">El texto del mensaje está oculto</string>
     <string name="chat_auto_reply_message">Para abrir y responder a esto, hazte usuario VIP</string>
     <string name="chat_auto_reply_button">Hacerse VIP</string>
@@ -872,55 +864,30 @@
     <string name="vk_friends_success_invite">Invitación enviado</string>
     <string name="join_group_success">Has entrado en el grupo</string>
     <string name="settings_auto_greeting_title">Saludo automático</string>
-    <string name="settings_auto_greeting_subtitle">Permite comenzar automáticamente la conversación
-        con un saludo al obtener simpatías
-    </string>
-    <string name="take_photo_text_1">Por favor, carga tu fotografía para empezar a conocer gente.
-    </string>
-    <string name="take_photo_text_2">En la foto debes aparecer tú. Todas las fotografías están
-        sujetas a moderación.
-    </string>
+    <string name="settings_auto_greeting_subtitle">Permite comenzar automáticamente la conversación con un saludo al obtener simpatías</string>
+    <string name="take_photo_text_1">Por favor, carga tu fotografía para empezar a conocer gente.</string>
+    <string name="take_photo_text_2">En la foto debes aparecer tú. Todas las fotografías están sujetas a moderación.</string>
     <string name="unlock_by_viewed_ad_video_button_text">Bloquear gratis por %s</string>
     <plurals name="free_minutes">
         <item quantity="other">%d minutos</item>
         <item quantity="one">%d minuto</item>
     </plurals>
     <string name="thanks_for_your_rate_title">Gracias por tu valoración</string>
-    <string name="thanks_for_your_rate_top_label">¡Te regalamos un lugar para tu fotografía en la
-        rueda de fotos!
-    </string>
-    <string name="thanks_for_your_rate_bottom_label">Compartir tu experiencia en AppStore.¡Valoramos
-        cada comentario!
-    </string>
+    <string name="thanks_for_your_rate_top_label">¡Te regalamos un lugar para tu fotografía en la rueda de fotos!</string>
+    <string name="thanks_for_your_rate_bottom_label">Compartir tu experiencia en AppStore.¡Valoramos cada comentario!</string>
     <string name="thanks_for_your_rate_rate_app">Dejar comentario en AppStore</string>
     <string name="thanks_for_your_rate_close">Cerrar</string>
     <plurals name="novice_sympathies_bonuses">
-        <item quantity="zero">¡Recibirás %1$d simpatías de\nregalo! Esto significa que tú\ncon
-            seguridad gustas al %2$d de las personas,\nque te expresarán su simpatía.
-        </item>
-        <item quantity="other">¡Recibirás %1$d simpatías de\nregalo! Esto significa que tú\ncon
-            seguridad gustas al %2$d de las personas,\nque te expresarán su simpatía.
-        </item>
-        <item quantity="one">¡Recibirás %1$d simpatías de\nregalo! Esto significa que tú\ncon
-            seguridad gustas al %2$d de las personas,\nque te expresarán su simpatía.
-        </item>
+        <item quantity="zero">¡Recibirás %1$d simpatías de\nregalo! Esto significa que tú\ncon seguridad gustas al %2$d de las personas,\nque te expresarán su simpatía.</item>
+        <item quantity="other">¡Recibirás %1$d simpatías de\nregalo! Esto significa que tú\ncon seguridad gustas al %2$d de las personas,\nque te expresarán su simpatía.</item>
+        <item quantity="one">¡Recibirás %1$d simpatías de\nregalo! Esto significa que tú\ncon seguridad gustas al %2$d de las personas,\nque te expresarán su simpatía.</item>
     </plurals>
-    <string name="buy_vip_title_from_input">Se puede comenzar la comunicación con el usuario si
-        tienes el estado VIP
-    </string>
+    <string name="buy_vip_title_from_input">Se puede comenzar la comunicación con el usuario si tienes el estado VIP</string>
     <string name="mutual_like_popup_text">¡Tu simpatía es mutua!</string>
     <string name="mutual_like_popup_button">Decir \"hola\"</string>
-    <string name="people_nearby_access_to_location_description">Para ver qué personas están cerca de
-        ti, debes permitir acceso de localización.
-    </string>
-    <string name="people_nearby_not_enought_money">Para acceder a la funcionalidad \"Personas cerca
-        de ti\" no tienes suficientes monedas
-    </string>
+    <string name="people_nearby_access_to_location_description">Para ver qué personas están cerca de ti, debes permitir acceso de localización.</string>
+    <string name="people_nearby_not_enought_money">Para acceder a la funcionalidad \"Personas cerca de ti\" no tienes suficientes monedas</string>
     <string name="people_nearby_not_found_title">No hay usuarios todavía cerca de ti.</string>
-    <string name="people_nearby_not_found_description">Para intentarlo de nuevo, mantén el dedo en
-        el centro de la pantalla.
-    </string>
-    <string name="NSLocationWhenInUseUsageDescription">Para obtener acceso a la funcionalidad,
-        necesitas obtener acceso previo.
-    </string>
+    <string name="people_nearby_not_found_description">Para intentarlo de nuevo, mantén el dedo en el centro de la pantalla.</string>
+    <string name="NSLocationWhenInUseUsageDescription">Para obtener acceso a la funcionalidad, necesitas obtener acceso previo.</string>
 </resources>

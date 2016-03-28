@@ -14,8 +14,7 @@
     <string name="notification_popup_title">Permite enviarte notificaciones, para poder saber
         momentaneamente sobre una simpatía o admiración nueva o un mensaje no leído
     </string>
-    <string name="email_successfully_changed">Tu correo electrónico ha sido modificado con éxito
-    </string>
+    <string name="email_successfully_changed">Tu correo electrónico ha sido modificado con éxito</string>
     <string name="auth_vk_name">VK.com</string>
     <string name="dating_switch_button">Más…</string>
     <string name="dating_prev_button">Anterior</string>
@@ -32,9 +31,7 @@
     <string name="filter_city_age_parameters">Edad y ciudad</string>
     <string name="filter_select_city">Seleccionar la ciudad</string>
     <string name="edit_block_photo">Fotografías</string>
-    <string name="dashbrd_popup_rating">¡Aumenta nuestra valoración! Cuanto más alta sea nuestra
-        valoración, más gente interesante conocerás en Topface
-    </string>
+    <string name="dashbrd_popup_rating">¡Aumenta nuestra valoración! Cuanto más alta sea nuestra valoración, más gente interesante conocerás en Topface</string>
     <string name="dashbrd_popup_title">Valoración</string>
     <string name="dashbrd_popup_cancel">No preguntar más</string>
     <string name="dashbrd_popup_rate">Valorar</string>
@@ -61,9 +58,7 @@
     <string name="address_book_access_error">Esta aplicación no tiene acceso a tus contactos. Puedes
         permitir tal acceso desde los ajustes de privacidad de tu dispositivo
     </string>
-    <string name="camera_access_error">Esta aplicación no tiene activado el acceso a la cámara.
-        Puedes permitir el acceso en los ajuste de privacidad de tu dispositivo.
-    </string>
+    <string name="camera_access_error">Esta aplicación no tiene activado el acceso a la cámara. Puedes permitir el acceso en los ajuste de privacidad de tu dispositivo.</string>
     <string name="profile_deleted_user">Usuario eliminado</string>
     <string name="filter_main_parameters">Me interesan</string>
     <string name="dating_prev_button_ext">Anterior</string>
@@ -77,9 +72,7 @@
     <string name="profile_mygifts_empty">Nadie te ha hecho regalos todavía</string>
     <string name="dating_people_unnoticed">¡Has dejado de atender a diez personas!</string>
     <string name="dating_continue">Continuar una amistad</string>
-    <string name="dating_better_look">¡Estate atento!\n¡Posiblemente estás dejando escapar a tu
-        media naranja!
-    </string>
+    <string name="dating_better_look">¡Estate atento!\n¡Posiblemente estás dejando escapar a tu media naranja!</string>
     <string name="edit_my_photos">Mis fotografías</string>
     <string name="general_search_empty_title">Lamentablemente, no se ha encontrado nada</string>
     <string name="general_search_empty_text">Puedes intentar repetir la busqueda o cambiar las
@@ -102,8 +95,7 @@
         estás. Por favor, indica tu ciudad.
     </string>
     <string name="confirm_email">Por favor, confirma tu correo electrónico.</string>
-    <string name="password_sent">Contraseña nueva enviada a tu dirección de correo electrónico
-    </string>
+    <string name="password_sent">Contraseña nueva enviada a tu dirección  de correo electrónico</string>
     <string name="buy_vip_month_one">%1$d mes por %2$.2f %3$@</string>
     <string name="buy_vip_month_few">%1$d meses por %2$.2f %3$@</string>
     <string name="buy_vip_month_other">%1$d meses por %2$.2f %3$@</string>
@@ -137,8 +129,7 @@
     <string name="pincode_input_previous">Introduce el código PIN antiguo</string>
     <string name="pincode_repeat">Repite el código PIN</string>
     <string name="pincode_forget">¿Olvidaste el código PIN?</string>
-    <string name="pincode_auth_input">Tienes que introducir el nombre de usuario y la contraseña.
-    </string>
+    <string name="pincode_auth_input">Tienes que introducir el nombre de usuario y la contraseña.</string>
     <string name="pincode_will_be_reset">Al efectuar una autorización exitosa todos los ajustes de
         la aplicación van a ser reiniciados.
     </string>
@@ -172,9 +163,7 @@
     <string name="general_dbl_all">Todos</string>
     <string name="general_dbl_unread">No leídos</string>
     <string name="general_empty_code_confirmation">Introduce el código de confirmación</string>
-    <string name="general_email_success_confirmed">El correo electrónico ha sido confirmado con
-        éxito
-    </string>
+    <string name="general_email_success_confirmed">El correo electrónico ha sido confirmado con éxito</string>
     <string name="general_email_not_confirmed">El correo electrónico no ha sido confirmado</string>
     <string name="time_yesterday">Ayer</string>
     <string name="time_today">Hoy</string>
@@ -319,8 +308,7 @@
     <string name="settings_ask_developer">Preguntar a los programadores</string>
     <string name="settings_payment_problems">Problemas con el pago</string>
     <string name="settings_cooperation">Colaboración</string>
-    <string name="settings_feedback_success_msg">Gracias, el mensaje ha sido enviado con éxito
-    </string>
+    <string name="settings_feedback_success_msg">Gracias, el mensaje ha sido enviado con éxito</string>
     <string name="settings_switch_on">On</string>
     <string name="settings_switch_off">Off</string>
     <string name="leaders_go_date">Ponme aquí</string>
@@ -365,8 +353,7 @@
     <string name="settings_loading_photo">Precarga de fotografías</string>
     <string name="edit_refresh_status">Renovar estado</string>
     <string name="ban_title">¡Enhorabuena! Te hemos prohibido el acceso</string>
-    <string name="ban_title_forever">¡Enhorabuena! ! Te hemos prohibido el acceso para siempre
-    </string>
+    <string name="ban_title_forever">¡Enhorabuena! ! Te hemos prohibido el acceso para siempre</string>
     <string name="ban_title_until">¡Enhorabuena! ! Te hemos prohibido el acceso hasta %s</string>
     <string name="ban_complain">Quejarse sobre la restricción de acceso</string>
     <string name="general_ready">Listo</string>
@@ -383,9 +370,7 @@
     <string name="black_list_delete">Eliminar de la lista negra</string>
     <string name="vip_buy_vip">Comprar VIP</string>
     <string name="vip_state_off">Tu estatus VIP no ha sido activado</string>
-    <string name="vip_info_guest">Descubre quién se ha interesado por ti, ¡revisa a tus
-        visitantes!
-    </string>
+    <string name="vip_info_guest">Descubre quién se ha interesado por ti, ¡revisa a tus visitantes!</string>
     <string name="vip_info_invisible">Pasa sin dejar rastro visitando las páginas de otros, gracias
         al modo \"invisible\"
     </string>
@@ -430,16 +415,14 @@
     </string>
     <string name="default_price_format">Total: %.2f USD</string>
     <string name="default_price_format_extended">Total: %1$.2f %2$s</string>
-    <string name="leaders_pick_condition">No puedes seleccionar una foto con una puntuación más baja
-        de %d%%:
-    </string>
+    <string name="leaders_pick_condition">No puedes seleccionar una foto con una puntuación más baja de %d%%:</string>
     <string name="general_gift">Regalo</string>
     <string name="user_actions_chat">Conversación</string>
     <string name="profile_edit_age_ranges">La edad ha de estar comprendida entre 16 y 99 años. Por
         favor, introduce el número correcto y prueba de nuevo.
     </string>
     <string name="wrong_password_format">Formato de contraseña inaceptable</string>
-    <string name="edit_value_error">El valor debe estar comprendido entre %1$d y %2$d</string>
+    <string name="edit_value_error">El valor debe estar comprendido entre  %1$d y %2$d</string>
     <string name="sign_in">Entrar</string>
     <string name="create_account">Crear cuenta</string>
     <string name="email">Correo electrónico</string>
@@ -464,9 +447,7 @@
     <string name="incorrect_login">Nombre de usuario incorrecto</string>
     <string name="incorrect_password">Contraseña incorrecta</string>
     <string name="empty_fields">Hay campos vacíos</string>
-    <string name="email_already_registered">Ya existe otro usuario con este mismo correo
-        electrónico
-    </string>
+    <string name="email_already_registered">Ya existe otro usuario con este mismo correo electrónico</string>
     <string name="enter_email_from_registration">Introduce e-mail que indicaste durante el
         registro
     </string>
@@ -494,8 +475,7 @@
     <string name="confirmation_successfully_sent">La confirmación fue enviada al e-mail que
         indicaste
     </string>
-    <string name="email_successfully_confirmed">Correo electrónico ha sido confirmado con éxito.
-    </string>
+    <string name="email_successfully_confirmed">Correo electrónico ha sido confirmado con éxito.</string>
     <string name="email_not_confirmed">Correo electrónico no confirmado</string>
     <string name="email_already_confirmed">Ya confirmado</string>
     <string name="password_confirmation_hint">Confirmar contraseña</string>
@@ -530,8 +510,7 @@
     <string name="general_choose_city">Selecciona la ciudad</string>
     <string name="buy_mobile_payments">Otras modalidades de pago</string>
     <string name="general_save_and_exit">Guardar y salir</string>
-    <string name="general_set_password">Establece la contraseña antes de salir de la aplicación
-    </string>
+    <string name="general_set_password">Establece la contraseña antes de salir de la aplicación</string>
     <string name="user_is_deleted">El usuario ha sido eliminado</string>
     <string name="general_bookmarks">Favoritos</string>
     <string name="general_fans">Admiradores</string>
@@ -551,9 +530,7 @@
     <string name="vip_stop_ads">Solo la comunicación y nada más. Los VIP usuarios no tienen que
         visualizar propaganda
     </string>
-    <string name="friend_email_hint">Introduce el correo electrónico o número de teléfono de tu
-        amigo
-    </string>
+    <string name="friend_email_hint">Introduce el correo electrónico o número de teléfono de tu amigo</string>
     <string name="general_add">Agregar</string>
     <string name="general_invite_friends">Invita a tus amigos</string>
     <string name="general_rest_contacts">Te quedan %d contactos</string>
@@ -572,11 +549,8 @@
         <item quantity="one">Recibir el estatus VIP por %d día</item>
     </plurals>
     <plurals name="invite_friends_plurals">
-        <item quantity="other">Invita %1$d amigos, para recibir el estatus de VIP durante %2$d
-            días
-        </item>
-        <item quantity="one">Invita %1$d amigos, para recibir el estatus de VIP durante %2$d día
-        </item>
+        <item quantity="other">Invita %1$d amigos, para recibir el estatus de VIP durante %2$d días</item>
+        <item quantity="one">Invita %1$d amigos, para recibir el estatus de VIP durante %2$d día</item>
     </plurals>
     <plurals name="get_vip_for_invites_plurals">
         <item quantity="other">Recibe el estatus VIP gratis por %d invitaciones</item>
@@ -654,8 +628,7 @@
     <string name="settings_select_preload_photo_type">Elige cuándo estará conectada la precarga de
         fotos
     </string>
-    <string name="restart_to_change_locale">Para cambiar el idioma, la aplicación debe reiniciarse
-    </string>
+    <string name="restart_to_change_locale">Para cambiar el idioma, la aplicación debe reiniciarse</string>
     <string name="locale_changing">Cambiar idioma</string>
     <plurals name="you_were_liked">
         <item quantity="other">Les has gustado a %d personas</item>
@@ -704,8 +677,7 @@
     <string name="general_delete_messages">Eliminar mensajes</string>
     <string name="skip_all">Omitir todas</string>
     <string name="settings_feedback_transaction_number">Número del pedido</string>
-    <string name="settings_feedback_transaction_link">¿dónde puedo encontrar el número del pedido?
-    </string>
+    <string name="settings_feedback_transaction_link">¿dónde puedo encontrar el número del pedido?</string>
     <string name="general_logout_error">Lamentablemente, no se ha podido salir de la cuenta</string>
     <string name="auth_btn_ok">Odnoklassniki</string>
     <string name="auth_btn_tf">Cuenta Topface</string>
@@ -727,9 +699,7 @@
     </plurals>
     <string name="photo_is_uploading">Cargando foto</string>
     <string name="default_ringtone">Por definición</string>
-    <string name="user_deleted_or_banned">El usuario ha sido eliminado o se le ha prohibido el
-        acceso
-    </string>
+    <string name="user_deleted_or_banned">El usuario ha sido eliminado  o se le ha prohibido el acceso</string>
     <string name="locking_popup_button_answer">Responder a las simpatías</string>
     <string name="locking_menu_message">El acceso a algunas páginas de la aplicación está limitado.
         Para quitar las limitaciones responde a todas las simpatías entrantes u obtenga VIP.
@@ -776,8 +746,7 @@
     <string name="reply">Responder</string>
     <string name="measurement_unit_weight">kg</string>
     <string name="measurement_unit_height">cm</string>
-    <string name="maximum_number_of_users">Se ha seleccionado la máxima cantidad de usuarios
-    </string>
+    <string name="maximum_number_of_users">Se ha seleccionado la máxima cantidad de usuarios</string>
     <string name="logout_if_email_already_registred">Usuario con este e-mail ya existe. Si es tu
         e-mail, tienes que salir de esta cuenta y entrar en la %s
     </string>
@@ -799,8 +768,7 @@
     <string name="messaging_block_buy_vip">Para continuar hace falta el estado VIP\u2011</string>
     <string name="pull_to_refresh_refreshing_label">Cargando…</string>
     <string name="user_added_to_black_list">Usuario agregado a la lista negra</string>
-    <string name="user_deleted_from_black_list">Se ha eliminado al usuario de la lista negra
-    </string>
+    <string name="user_deleted_from_black_list">Se ha eliminado al usuario de la lista negra</string>
     <string name="user_added_to_bookmark">Usuario agregado a los favoritos</string>
     <string name="user_deleted_from_bookmark">Se ha eliminado al usuario de favoritos</string>
     <string name="preload_photo_type_wifi_3g">WiFi y 3G</string>
@@ -844,15 +812,12 @@
     <string name="google_unavailable_services_title">Lamentablemente, los avisos no se soportan en
         tu dispositivo.
     </string>
-    <string name="receive_message_notification">Recibir notificación\nsobre un mensaje nuevo
-    </string>
+    <string name="receive_message_notification">Recibir notificación\nsobre un mensaje nuevo</string>
     <string name="receive_mutual_notification">Recibir notificación\nsobre simpatía mutua nueva
     </string>
-    <string name="receive_sympathy_notification">Recibir notificación\nsobre una simpatía nueva
-    </string>
+    <string name="receive_sympathy_notification">Recibir notificación\nsobre una simpatía nueva</string>
     <string name="receive_rate_notification">key: receive_rate_notification</string>
-    <string name="receive_guest_notification">Recibir notificación\nsobre un visitante nuevo
-    </string>
+    <string name="receive_guest_notification">Recibir notificación\nsobre un visitante nuevo</string>
     <string name="on_phone">Al teléfono</string>
     <string name="on_mail">Al correo electrónico</string>
     <string name="add_leader_hint">Tu saludo…</string>
@@ -878,18 +843,12 @@
     <string name="novice_sympathy">Envía simpatías a aquellos\nquienes realmente te gustan
         para\nempezar una relación satisfactoria
     </string>
-    <string name="go_dating_message">Comienza a conocer y aquí verás a los usuarios que visitan tu
-        perfil.
-    </string>
-    <string name="photo_not_from_main_album">Por los resultados de la moderación, está prohibida
-        esta foto en el avatar
-    </string>
+    <string name="go_dating_message">Comienza  a conocer y aquí verás a los usuarios que visitan tu perfil.</string>
+    <string name="photo_not_from_main_album">Por los resultados de la moderación, está prohibida esta foto en el avatar</string>
     <string name="sidebar_vk_profile">Perfil VKontakt</string>
     <string name="title_vk_profile">Perfil VK</string>
-    <string name="vk_profile_invite_friends_error">El usuario ha prohibido que le envíen mensajes
-    </string>
-    <string name="foreign_profile_empty_gifts_title">Envía un regalo y serás el centro de atención
-    </string>
+    <string name="vk_profile_invite_friends_error">El usuario ha prohibido que le envíen mensajes</string>
+    <string name="foreign_profile_empty_gifts_title">Envía un regalo y serás el centro de atención</string>
     <string name="chat_auto_reply_title">El texto del mensaje está oculto</string>
     <string name="chat_auto_reply_message">Para abrir y responder a esto, hazte usuario VIP</string>
     <string name="chat_auto_reply_button">Hacerse VIP</string>
@@ -905,55 +864,30 @@
     <string name="vk_friends_success_invite">Invitación enviado</string>
     <string name="join_group_success">Has entrado en el grupo</string>
     <string name="settings_auto_greeting_title">Saludo automático</string>
-    <string name="settings_auto_greeting_subtitle">Permite comenzar automáticamente la conversación
-        con un saludo al obtener simpatías
-    </string>
-    <string name="take_photo_text_1">Por favor, carga tu fotografía para empezar a conocer gente.
-    </string>
-    <string name="take_photo_text_2">En la foto debes aparecer tú. Todas las fotografías están
-        sujetas a moderación.
-    </string>
+    <string name="settings_auto_greeting_subtitle">Permite comenzar automáticamente la conversación con un saludo al obtener simpatías</string>
+    <string name="take_photo_text_1">Por favor, carga tu fotografía para empezar a conocer gente.</string>
+    <string name="take_photo_text_2">En la foto debes aparecer tú. Todas las fotografías están sujetas a moderación.</string>
     <string name="unlock_by_viewed_ad_video_button_text">Bloquear gratis por %s</string>
     <plurals name="free_minutes">
         <item quantity="other">%d minutos</item>
         <item quantity="one">%d minuto</item>
     </plurals>
     <string name="thanks_for_your_rate_title">Gracias por tu valoración</string>
-    <string name="thanks_for_your_rate_top_label">¡Te regalamos un lugar para tu fotografía en la
-        rueda de fotos!
-    </string>
-    <string name="thanks_for_your_rate_bottom_label">Compartir tu experiencia en AppStore.¡Valoramos
-        cada comentario!
-    </string>
+    <string name="thanks_for_your_rate_top_label">¡Te regalamos un lugar para tu fotografía en la rueda de fotos!</string>
+    <string name="thanks_for_your_rate_bottom_label">Compartir tu experiencia en AppStore.¡Valoramos cada comentario!</string>
     <string name="thanks_for_your_rate_rate_app">Dejar comentario en AppStore</string>
     <string name="thanks_for_your_rate_close">Cerrar</string>
     <plurals name="novice_sympathies_bonuses">
-        <item quantity="zero">¡Recibirás %1$d simpatías de\nregalo! Esto significa que tú\ncon
-            seguridad gustas al %2$d de las personas,\nque te expresarán su simpatía.
-        </item>
-        <item quantity="other">¡Recibirás %1$d simpatías de\nregalo! Esto significa que tú\ncon
-            seguridad gustas al %2$d de las personas,\nque te expresarán su simpatía.
-        </item>
-        <item quantity="one">¡Recibirás %1$d simpatías de\nregalo! Esto significa que tú\ncon
-            seguridad gustas al %2$d de las personas,\nque te expresarán su simpatía.
-        </item>
+        <item quantity="zero">¡Recibirás %1$d simpatías de\nregalo! Esto significa que tú\ncon seguridad gustas al %2$d de las personas,\nque te expresarán su simpatía.</item>
+        <item quantity="other">¡Recibirás %1$d simpatías de\nregalo! Esto significa que tú\ncon seguridad gustas al %2$d de las personas,\nque te expresarán su simpatía.</item>
+        <item quantity="one">¡Recibirás %1$d simpatías de\nregalo! Esto significa que tú\ncon seguridad gustas al %2$d de las personas,\nque te expresarán su simpatía.</item>
     </plurals>
-    <string name="buy_vip_title_from_input">Se puede comenzar la comunicación con el usuario si
-        tienes el estado VIP
-    </string>
+    <string name="buy_vip_title_from_input">Se puede comenzar la comunicación con el usuario si tienes el estado VIP</string>
     <string name="mutual_like_popup_text">¡Tu simpatía es mutua!</string>
     <string name="mutual_like_popup_button">Decir \"hola\"</string>
-    <string name="people_nearby_access_to_location_description">Para ver qué personas están cerca de
-        ti, debes permitir acceso de localización.
-    </string>
-    <string name="people_nearby_not_enought_money">Para acceder a la funcionalidad \"Personas cerca
-        de ti\" no tienes suficientes monedas
-    </string>
+    <string name="people_nearby_access_to_location_description">Para ver qué personas están cerca de ti, debes permitir acceso de localización.</string>
+    <string name="people_nearby_not_enought_money">Para acceder a la funcionalidad \"Personas cerca de ti\" no tienes suficientes monedas</string>
     <string name="people_nearby_not_found_title">No hay usuarios todavía cerca de ti.</string>
-    <string name="people_nearby_not_found_description">Para intentarlo de nuevo, mantén el dedo en
-        el centro de la pantalla.
-    </string>
-    <string name="NSLocationWhenInUseUsageDescription">Para obtener acceso a la funcionalidad,
-        necesitas obtener acceso previo.
-    </string>
+    <string name="people_nearby_not_found_description">Para intentarlo de nuevo, mantén el dedo en el centro de la pantalla.</string>
+    <string name="NSLocationWhenInUseUsageDescription">Para obtener acceso a la funcionalidad, necesitas obtener acceso previo.</string>
 </resources>

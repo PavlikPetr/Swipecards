@@ -24,9 +24,7 @@
     </string>
     <string name="likes_background_text">Aucun J\'aime</string>
     <string name="visitors_background_text">Aucun visiteurs</string>
-    <string name="need_set_avatar">Personne ne peut apprendre à vous connaître ! Ajoutez une photo
-        de profil.
-    </string>
+    <string name="need_set_avatar">Personne ne peut apprendre à vous connaître ! Ajoutez une photo de profil.</string>
     <string name="chat_background_text">Aucun message reçu</string>
     <string name="entrance">Entrer</string>
     <string name="filter_only_online">Seulement en ligne</string>
@@ -60,9 +58,7 @@
     <string name="address_book_access_error">Cette application n\'a pas accès à vos contacts. Vous
         pouvez autoriser l\'accès dans les paramètres de confidentialité de votre appareil.
     </string>
-    <string name="camera_access_error">L\'application n\'a pas accès à la caméra. Vous pouvez
-        autoriser l\'accès dans les paramètres de confidentialité de votre appareil.
-    </string>
+    <string name="camera_access_error">L\'application n\'a pas accès à la caméra. Vous pouvez autoriser l\'accès dans les paramètres de confidentialité de votre appareil.</string>
     <string name="profile_deleted_user">L\'utilisateur est supprimé.</string>
     <string name="filter_main_parameters">Je suis intéressé par</string>
     <string name="dating_prev_button_ext">Précédent</string>
@@ -850,25 +846,16 @@
     <string name="novice_sympathy">Envoyez des J\'aime aux personnes qui vous\nplaisent
         vraiment.\nVous allez peut être rencontrer quelqu\'un d\'unique !
     </string>
-    <string name="go_dating_message">Apprenez à mieux connaître les gens et les noms des
-        utilisateurs ayant visité votre profil apparaîtront ici !
-    </string>
-    <string name="photo_not_from_main_album">Un modérateur a décidé que cette photo ne peut pas être
-        utilisée comme photo de profil.
-    </string>
+    <string name="go_dating_message">Apprenez à mieux connaître les gens et les noms des utilisateurs ayant visité votre profil apparaîtront ici !</string>
+    <string name="photo_not_from_main_album">Un modérateur a décidé que cette photo ne peut pas être utilisée comme photo de profil.</string>
     <string name="sidebar_vk_profile">Profil VK</string>
     <string name="title_vk_profile">Profil VK</string>
-    <string name="vk_profile_invite_friends_error">L\'utilisateur n\'accepte plus les invitations
-    </string>
-    <string name="foreign_profile_empty_gifts_title">Envoyez un cadeau et attirez l\'attention !
-    </string>
+    <string name="vk_profile_invite_friends_error">L\'utilisateur n\'accepte plus les invitations</string>
+    <string name="foreign_profile_empty_gifts_title">Envoyez un cadeau et attirez l\'attention !</string>
     <string name="chat_auto_reply_title">Le texte du message est caché</string>
-    <string name="chat_auto_reply_message">Pour ouvrir / répondre à ce message, devenez un VIP
-    </string>
+    <string name="chat_auto_reply_message">Pour ouvrir / répondre à ce message, devenez un VIP</string>
     <string name="chat_auto_reply_button">Devenir VIP</string>
-    <string name="photo_list_load_info">Partagez vos photos pour être vu par des millions de
-        personnes !
-    </string>
+    <string name="photo_list_load_info">Partagez vos photos pour être vu par des millions de personnes !</string>
     <string name="vk_profile_button_tf_group">Groupe Topface</string>
     <string name="vk_profile_button_join_tf_group">Rejoindre le groupe Topface</string>
     <string name="vk_profile_button_join_vkgames_group">Rejoindre le groupe \"jeux VK\"</string>
@@ -880,58 +867,30 @@
     <string name="vk_friends_success_invite">L\'invitation a été envoyée</string>
     <string name="join_group_success">Vous avez rejoint le groupe</string>
     <string name="settings_auto_greeting_title">Auto-salutations</string>
-    <string name="settings_auto_greeting_subtitle">Autoriser Topface à lancer automatiquement une
-        conversation avec un message de salutation à chaque fois que quelqu\'un vous envoie un
-        J\'aime
-    </string>
-    <string name="take_photo_text_1">Veuillez télécharger votre photo pour faire connaissance.
-    </string>
-    <string name="take_photo_text_2">Seul vous êtes autorisé à apparaître sur la photo. Toutes les
-        photos sont modérées.
-    </string>
+    <string name="settings_auto_greeting_subtitle">Autoriser Topface à lancer automatiquement une conversation avec un message de salutation à chaque fois que quelqu\'un vous envoie un J\'aime</string>
+    <string name="take_photo_text_1">Veuillez télécharger votre photo pour faire connaissance.</string>
+    <string name="take_photo_text_2">Seul vous êtes autorisé à apparaître sur la photo. Toutes les photos sont modérées.</string>
     <string name="unlock_by_viewed_ad_video_button_text">Déverrouiller gratuitement à %s</string>
     <plurals name="free_minutes">
         <item quantity="other">%d minutes</item>
         <item quantity="one">%d minute</item>
     </plurals>
     <string name="thanks_for_your_rate_title">Merci pour votre avis</string>
-    <string name="thanks_for_your_rate_top_label">Pour vous remercier, nous afficherons votre photo
-        dans le fil d\'actualité !
-    </string>
-    <string name="thanks_for_your_rate_bottom_label">Partagez votre avis dans l\'App Store. Nous
-        apprécions tous les commentaires !
-    </string>
+    <string name="thanks_for_your_rate_top_label">Pour vous remercier, nous afficherons votre photo dans le fil d\'actualité !</string>
+    <string name="thanks_for_your_rate_bottom_label">Partagez votre avis dans l\'App Store. Nous apprécions tous les commentaires !</string>
     <string name="thanks_for_your_rate_rate_app">Laisser un commentaire sur l\'App Store</string>
     <string name="thanks_for_your_rate_close">Fermé</string>
     <plurals name="novice_sympathies_bonuses">
-        <item quantity="zero">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles
-            personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.
-        </item>
-        <item quantity="other">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles
-            personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.
-        </item>
-        <item quantity="one">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles
-            personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.
-        </item>
+        <item quantity="zero">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.</item>
+        <item quantity="other">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.</item>
+        <item quantity="one">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.</item>
     </plurals>
-    <string name="buy_vip_title_from_input">Vous pouvez commencer une conversation avec un
-        utilisateur si vous avez le statut VIP
-    </string>
+    <string name="buy_vip_title_from_input">Vous pouvez commencer une conversation avec un utilisateur si vous avez le statut VIP</string>
     <string name="mutual_like_popup_text">Le sentiment est réciproque !</string>
     <string name="mutual_like_popup_button">Dites « Salut »</string>
-    <string name="people_nearby_access_to_location_description">Pour voir qui est à proximité, vous
-        devez autoriser l\'accès à votre géolocalisation.
-    </string>
-    <string name="people_nearby_not_enought_money">Vous ne disposez pas de suffisamment de pièces
-        pour accéder à la fonctionnalité \« Personne à proximité\ »
-    </string>
-    <string name="people_nearby_not_found_title">Il n\'y a pas d\'utilisateurs à proximité de votre
-        localisation pour le moment
-    </string>
-    <string name="people_nearby_not_found_description">Pour réessayer, appuyez et maintenez un doigt
-        dans le centre de l\'écran.
-    </string>
-    <string name="NSLocationWhenInUseUsageDescription">Pour accéder à cette fonction, vous devez
-        donner votre autorisation
-    </string>
+    <string name="people_nearby_access_to_location_description">Pour voir qui est à proximité, vous devez autoriser l\'accès à votre géolocalisation.</string>
+    <string name="people_nearby_not_enought_money">Vous ne disposez pas de suffisamment de pièces pour accéder à la fonctionnalité \« Personne à proximité\ »</string>
+    <string name="people_nearby_not_found_title">Il n\'y a pas d\'utilisateurs à proximité de votre localisation pour le moment</string>
+    <string name="people_nearby_not_found_description">Pour réessayer, appuyez et maintenez un doigt dans le centre de l\'écran.</string>
+    <string name="NSLocationWhenInUseUsageDescription">Pour accéder à cette fonction, vous devez donner votre autorisation</string>
 </resources>

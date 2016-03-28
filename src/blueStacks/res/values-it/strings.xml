@@ -8,11 +8,9 @@
   <string name="general_disallow">Non abilitare</string>
   <string name="general_allow">Abilitare</string>
   <string name="notification_denied_popup_title">Abilitare l’invio di avviso per sapere subito che
-    hai un nuovo messaggio, simpatia e altre notifiche
-  </string>
+        hai un nuovo messaggio, simpatia e altre notifiche</string>
   <string name="notification_popup_title">Abilitare l’invio di avviso per sapere subito che hai
-    una nuova simpatia, un’ammirazione o un messaggio non letto
-  </string>
+        una nuova simpatia, un’ammirazione o un messaggio non letto</string>
   <string name="email_successfully_changed">La tua e-mail è stata modificata con successo</string>
   <string name="auth_vk_name">Social network</string>
   <string name="dating_switch_button">Ancora…</string>
@@ -28,9 +26,7 @@
   <string name="filter_city_age_parameters">Età e città</string>
   <string name="filter_select_city">Scelta della città</string>
   <string name="edit_block_photo">Foto</string>
-  <string name="dashbrd_popup_rating">Ti piace la nostra applicazione? Dacci il tuo voto! Più
-    saliamo noi, più persone interessanti incontrerai su Spark
-  </string>
+  <string name="dashbrd_popup_rating">Ti piace la nostra applicazione? Dacci il tuo voto! Più saliamo noi, più persone interessanti incontrerai su Spark</string>
   <string name="dashbrd_popup_title">Valutazione</string>
   <string name="dashbrd_popup_cancel">Non chiedermelo più</string>
   <string name="dashbrd_popup_rate">Voglio votarvi</string>
@@ -55,11 +51,8 @@
   <string name="general_complaint">Fare un reclamo</string>
   <string name="general_type_complain">Oggetto del reclamo</string>
   <string name="address_book_access_error">Questa applicazione non ha accesso ai tuoi contatti.
-    Puoi cambiare le impostazioni di accesso nelle impostazioni di privacy del tuo dispositivo
-  </string>
-  <string name="camera_access_error">Questa applicazione non dispone di accesso alla camera. Puoi
-    rendere possibile l\'accesso nelle impostazioni della privacy del tuo dispositivo
-  </string>
+        Puoi cambiare le impostazioni di accesso nelle impostazioni di privacy del tuo dispositivo</string>
+  <string name="camera_access_error">Questa applicazione non dispone di accesso alla camera. Puoi rendere possibile l\'accesso nelle impostazioni della privacy del tuo dispositivo</string>
   <string name="profile_deleted_user">L’utente è stato eliminato</string>
   <string name="filter_main_parameters">Mi interessano</string>
   <string name="dating_prev_button_ext">Precedente</string>
@@ -71,33 +64,26 @@
   <string name="vip_info_title">Privilegi di essere VIP</string>
   <string name="profile_gifts_empty">Questo utente non ha ancora ricevuto regali da nessuno</string>
   <string name="profile_mygifts_empty">Non hai ancora ricevuto regali da nessuno</string>
-  <string name="dating_people_unnoticed">Hai lasciato sfuggire alla tua vista dieci persone!
-  </string>
+  <string name="dating_people_unnoticed">Hai lasciato sfuggire alla tua vista dieci persone!</string>
   <string name="dating_continue">Continua la relazione</string>
-  <string name="dating_better_look">Guarda meglio!\nPuò darsi che ti stai lasciando sfuggire il tuo
-    destino!
-  </string>
+  <string name="dating_better_look">Guarda meglio!\nPuò darsi che ti stai lasciando sfuggire il tuo destino!</string>
   <string name="edit_my_photos">Mie foto</string>
   <string name="general_search_empty_title">Purtroppo, la ricerca non ha prodotto risultati</string>
   <string name="general_search_empty_text">Puoi rifare la ricerca oppure cambiare le impostazioni
-    dei parametri di ricerca
-  </string>
+        dei parametri di ricerca</string>
   <string name="map_title">Mappa</string>
   <string name="general_buying">Compra simpatie e monete</string>
   <string name="popup_version_title">La nuova versione dell’applicazione è disponibile</string>
   <string name="popup_version_message">È ora di aggiornare la versione!</string>
   <string name="leaders_select_photo_info">Scegli la tua foto migliore! Non puoi scegliere le foto
-    con un voto basso
-  </string>
+        con un voto basso</string>
   <string name="map_popup_address">Indirizzo</string>
   <string name="black_list_info">Hai aggiunto una persona alla black list. Per modificarlo vedi le
-    impostazioni dello stato VIP del tuo profilo.
-  </string>
+        impostazioni dello stato VIP del tuo profilo.</string>
   <string name="black_list_activation">Abbonati allo stato VIP e usa la black list</string>
   <string name="buying_total">Totale</string>
   <string name="we_dont_detect_your_city">Per trovare le persone vicine a te dobbiamo sapere dove
-    ti trovi. Per favore, indica la tua città.
-  </string>
+        ti trovi. Per favore, indica la tua città.</string>
   <string name="confirm_email">Per favore, conferma e-mail.</string>
   <string name="password_sent">La nuova password è stata inviata sulla tua e-mail</string>
   <string name="buy_vip_month_one">%1$d mese a %2$.2f %3$@</string>
@@ -135,8 +121,7 @@
   <string name="pincode_forget">Hai dimenticato il codice PIN?</string>
   <string name="pincode_auth_input">Bisogna inserire login e password.</string>
   <string name="pincode_will_be_reset">All\'autorizzazione avvenuta con successo tutte le
-    impostazioni dell’applicazione verranno azzerate.
-  </string>
+        impostazioni dell’applicazione verranno azzerate.</string>
   <plurals name="pincode_interval">
     <item quantity="zero">subito dopo la chiusura</item>
     <item quantity="other">%d minuti</item>
@@ -155,12 +140,10 @@
   <string name="general_back">Indietro</string>
   <string name="general_server_error">Errore. Riprova più tardi</string>
   <string name="general_non_exist_photo_error">Non è possibile effettuare questa azione perché la
-    foto è stata eliminata
-  </string>
+        foto è stata eliminata</string>
   <string name="general_data_error">Errore. Riprova più tardi</string>
   <string name="general_internet_off">Stiamo cercando di ripristinare il collegamento Internet.
-    Attendere, prego.
-  </string>
+        Attendere, prego.</string>
   <string name="general_msg_copied">Il testo è stato copiato</string>
   <string name="general_spinner_title">Scegli l’azione</string>
   <string name="general_profile_error">Errore durante il caricamento del profilo</string>
@@ -195,8 +178,7 @@
   <string name="dating_header_guys">Ragazzi da %1$d a %2$d</string>
   <string name="dating_skip_button">Successivo</string>
   <string name="message_too_long">Il messaggio composto è troppo lungo. Il messaggio non può
-    superare %d caratteri.
-  </string>
+        superare %d caratteri.</string>
   <string name="chat_gift_in">Hai ricevuto un regalo.</string>
   <string name="chat_gift_out">Hai inviato un regalo.</string>
   <string name="chat_like_in">Hai ricevuto una simpatia</string>
@@ -241,8 +223,7 @@
     <item quantity="other">Ti mancano %d monete</item>
     <item quantity="one">Ti mancano %d monete</item>
   </plurals>
-  <string name="buying_default_message">Puoi inviare regali e ammirazioni pagando con le monete
-  </string>
+  <string name="buying_default_message">Puoi inviare regali e ammirazioni pagando con le monete</string>
   <string name="buying_money">Acquisto monete</string>
   <string name="gifts_title">Scegli regalo</string>
   <string name="profile_header_title">Mio profilo</string>
@@ -264,8 +245,7 @@
   <string name="edit_name">Nome</string>
   <string name="edit_age">Età</string>
   <string name="edit_age_error">Per utilizzare l’applicazione devi avere un’età compresa tra i
-    %1$d e i %2$d anni
-  </string>
+        %1$d e i %2$d anni</string>
   <string name="edit_status">Stato</string>
   <string name="edit_set_as_main">Imposta come la foto principale</string>
   <string name="edit_delete">Elimina</string>
@@ -291,8 +271,7 @@
   <string name="settings_help">Aiuto</string>
   <string name="settings_faq">Domande e risposte</string>
   <string name="settings_faq_title">Probabilmente la risposta al tuo problema è già scritta nella
-    sezione “Domande e risposte”
-  </string>
+        sezione “Domande e risposte”</string>
   <string name="settings_account">Profilo</string>
   <string name="settings_feedback">Lasciare un giudizio</string>
   <string name="settings_about">Di programma</string>
@@ -304,16 +283,14 @@
   <string name="settings_code_confirmation">Invia il codice di conferma</string>
   <string name="settings_email_was_confirmed">Già confermata</string>
   <string name="settings_email_was_confirmed_textview_text">Se hai già confermato l’e-mail dal
-    pc
-  </string>
+        pc</string>
   <string name="settings_code_confirmation_hint">Codice di conferma</string>
   <string name="settings_logout_msg">Vuoi veramente uscire?</string>
   <string name="settings_error_message">Messaggio di errore</string>
   <string name="settings_ask_developer">Domanda agli sviluppatori</string>
   <string name="settings_payment_problems">Problemi con il pagamento</string>
   <string name="settings_cooperation">Lavora con noi</string>
-  <string name="settings_feedback_success_msg">Grazie, il messaggio è stato inviato con successo
-  </string>
+  <string name="settings_feedback_success_msg">Grazie, il messaggio è stato inviato con successo</string>
   <string name="settings_switch_on">on</string>
   <string name="settings_switch_off">off</string>
   <string name="leaders_go_date">Voglio stare qui</string>
@@ -331,11 +308,9 @@
     <item quantity="one">%d foto</item>
   </plurals>
   <string name="general_edit_profile_message">Per favore riempi i campi obbligatori del
-    questionario
-  </string>
+        questionario</string>
   <string name="general_search_null_response_error">La ricerca non ha prodotto risultati. Prova a
-    cambiare i filtri
-  </string>
+        cambiare i filtri</string>
   <string name="change_filters">Cambiare filtri</string>
   <string name="reset_filter">Azzerare</string>
   <string name="general_sex">Sesso</string>
@@ -350,8 +325,7 @@
   <string name="rate_popup_cancel">No, grazie</string>
   <string name="rate_popup_error">Devi indicare quante stelle dai alla nostra applicazione</string>
   <string name="feedback_popup_title">Hai dato un voto basso. Dicci cosa non ti piace di questa
-    applicazione. Aiutaci a migliorare. Grazie!
-  </string>
+        applicazione. Aiutaci a migliorare. Grazie!</string>
   <string name="settings_melody">Suoneria di avviso</string>
   <string name="settings_loading_photo">Anteprima delle foto</string>
   <string name="edit_refresh_status">Aggiornare lo stato</string>
@@ -373,18 +347,13 @@
   <string name="black_list_delete">Elimina dalla black list</string>
   <string name="vip_buy_vip">Acquisto VIP</string>
   <string name="vip_state_off">Il tuo stato VIP non è attivo</string>
-  <string name="vip_info_guest">Scopri chi si è interessato di te, guarda i tuoi visitatori!
-  </string>
+  <string name="vip_info_guest">Scopri chi si è interessato di te, guarda i tuoi visitatori!</string>
   <string name="vip_info_invisible">Rimani invisibile visitando le pagine degli altri grazie allo
-    stato di \”invisibilità\”
-  </string>
+        stato di \”invisibilità\”</string>
   <string name="vip_info_message">Sfrutta il privilegio di inviare i messaggi che si distinguono
-    sullo sfondo di tutti gli altri!
-  </string>
-  <string name="vip_info_blackList">Liberati dalle persone fastidiose grazie alla \”black list\”
-  </string>
-  <string name="vip_info_vip">Distinguiti nella ricerca e nel tuo profilo grazie allo stato VIP!
-  </string>
+        sullo sfondo di tutti gli altri!</string>
+  <string name="vip_info_blackList">Liberati dalle persone fastidiose grazie alla \”black list\”</string>
+  <string name="vip_info_vip">Distinguiti nella ricerca e nel tuo profilo grazie allo stato VIP!</string>
   <string name="buying_vip_status">Compra lo stato VIP</string>
   <string name="edit_my_city">Mia città</string>
   <string name="settings_feedback_email">E-mail</string>
@@ -393,36 +362,28 @@
   <string name="dating_message">Messaggio…</string>
   <string name="buying_sympathies">Acquisto simpatie</string>
   <string name="general_reconnect_social">Impossibile collegarsi alla rete sociale. Riprova più
-    tardi.
-  </string>
+        tardi.</string>
   <string name="general_block">Blocca</string>
   <string name="general_buying_disabled">Attualmente è impossibile effettuare l’acquisto</string>
   <string name="ban_flood_detected">Invii troppo spesso le richieste al server. Attendere prego
-    per continuare ad utilizzare l’applicazione.
-  </string>
+        per continuare ad utilizzare l’applicazione.</string>
   <string name="general_maintenance">Stiamo effettuando i lavori tecnici sul server e non possiamo
-    completare la tua richiesta. Riprova più tardi.
-  </string>
+        completare la tua richiesta. Riprova più tardi.</string>
   <string name="virus_chat_btn">Ricevere simpatie</string>
   <string name="profile_ask_sent">La richiesta è stata inviata</string>
   <string name="virus_error">Il tuo amico può regalare le simpatie solo 1 volta al giorno! Riprova
-    domani!
-  </string>
+        domani!</string>
   <string name="popup_version_update">Aggiorna</string>
   <string name="popup_version_cancel">Ricordamelo più tardi</string>
   <string name="general_version_not_supported">La versione che stai usando è obsoleta e non viene
-    più supportata. Per favore aggiorna la versione dell’applicazione
-  </string>
+        più supportata. Per favore aggiorna la versione dell’applicazione</string>
   <string name="default_price_format">Totale: %.2f USD</string>
   <string name="default_price_format_extended">Totale: %1$.2f %2$s</string>
-  <string name="leaders_pick_condition">Non puoi scegliere la foto con il voto medio inferiore al
-    %d%%:
-  </string>
+  <string name="leaders_pick_condition">Non puoi scegliere la foto con il voto medio inferiore al %d%%:</string>
   <string name="general_gift">Regalo</string>
   <string name="user_actions_chat">Chat</string>
   <string name="profile_edit_age_ranges">L’età deve entrare nel campo tra 16 e 99 anni. Per
-    favore, inserisci il numero valido e riprova.
-  </string>
+        favore, inserisci il numero valido e riprova.</string>
   <string name="wrong_password_format">Formato password inammissibile</string>
   <string name="edit_value_error">Il valore deve essere compreso tra %1$d e %2$d</string>
   <string name="sign_in">Accedi</string>
@@ -438,35 +399,30 @@
   <string name="start_communication">Inizia a chattare</string>
   <string name="birthdate">Compleanno</string>
   <string name="birthdate_confirm">Per favore indica la tua età altrimenti non potrai fare nuove
-    conoscenze
-  </string>
+        conoscenze</string>
   <string name="set_birthdate">Indicare l’età</string>
   <string name="welcome_to_topface">Benvenuti in Spark!</string>
   <string name="im_boy">Sono un ragazzo</string>
   <string name="im_girl">Sono una ragazza</string>
-  <string name="u_sex">Il vostro sesso</string>
+  <string name="u_sex">Il vostro  sesso</string>
   <string name="incorrect_email">E-mail errata</string>
   <string name="incorrect_login">Login errato</string>
   <string name="incorrect_password">Password errata</string>
   <string name="empty_fields">Alcuni campi sono vuoti</string>
   <string name="email_already_registered">Utente con questa e-mail è già esistente</string>
   <string name="enter_email_from_registration">Inserisci l’e-mail indicata durante la
-    registrazione
-  </string>
+        registrazione</string>
   <string name="default_photo_upload">Caricamento foto</string>
   <string name="default_photo_upload_error">Errore durante il caricamento</string>
   <string name="default_photo_upload_complete">Il caricamento è stato completato!</string>
   <string name="general_error_try_again_later">Impossibile collegarsi a Spark. Riprova più
-    tardi.
-  </string>
+        tardi.</string>
   <string name="search_city_by_name">Ricerca città per nome</string>
   <string name="gallery">Galleria</string>
   <string name="no_photo_take_photo">Nessuno può conoscerti! Scatta una foto o scegline una
-    dall’album
-  </string>
+        dall’album</string>
   <string name="photo_for_avatar">La foto è pronta per essere inviata! Questa è la tua prima foto
-    e sarà il tuo avatar.
-  </string>
+        e sarà il tuo avatar.</string>
   <string name="add_photo_before">Devi prima aggiungere foto</string>
   <string name="change_email">Cambiare l’e-mail</string>
   <string name="send_confirmation_email">Invia conferma all’indirizzo e-mail</string>
@@ -475,8 +431,7 @@
   <string name="save">Salvare</string>
   <string name="saving_in_progress">Salvataggio…</string>
   <string name="confirmation_successfully_sent">All’indirizzo e-mail da te indicato è stata
-    inviata la conferma
-  </string>
+        inviata la conferma</string>
   <string name="email_successfully_confirmed">Indirizzo e-mail confermato con successo.</string>
   <string name="email_not_confirmed">Indirizzo e-mail non confermato.</string>
   <string name="email_already_confirmed">Indirizzo e-mail confermato</string>
@@ -494,17 +449,14 @@
   <string name="we_detect_your_city">Abbiamo identificato la tua città:</string>
   <string name="reselect_city">Scegli un’altra città:</string>
   <string name="choose_cool_photo">Scegli la tua foto migliore e lo stato che rispecchia il tuo
-    umore!
-  </string>
+        umore!</string>
   <string name="email_confirmed">l’indirizzo e-mail è stato verificato!</string>
   <string name="sympathy_sended">Simpatia inviata</string>
   <string name="general_photo_deleted">La tua foto non rispetta il regolamento ed è stata
-    eliminata
-  </string>
+        eliminata</string>
   <string name="general_change">Cambia</string>
   <string name="user_does_not_have_gifts">Questo utente non ha ancora ricevuto regali, fagliene
-    uno e ti distinguerai
-  </string>
+        uno e ti distinguerai</string>
   <string name="status_is_empty">Non hai impostato il tuo stato</string>
   <string name="you_dont_have_gifts_yet">Non hai ancora ricevuto regali</string>
   <string name="buy_sympathies">Compra simpatie</string>
@@ -524,25 +476,20 @@
   <string name="user_is_banned">L’utente è stato bannato</string>
   <string name="profile_empty_name">Non si può lasciare il campo Nome vuoto</string>
   <string name="general_wrong_photo_upload">La tua foto non rispetta il regolamento. Prova a farne
-    un’altra
-  </string>
+        un’altra</string>
   <string name="general_input_email">Inserisci la tua e-mail</string>
   <string name="cant_delete_fake_item">Il messaggio non è stato ancora consegnato, non puoi
-    eliminarlo. Riprova più tardi.
-  </string>
+        eliminarlo. Riprova più tardi.</string>
   <string name="vip_stop_ads">Solo la conversazione, nient’altro. Gli utenti VIP non ricevono
-    pubblicità
-  </string>
+        pubblicità</string>
   <string name="friend_email_hint">Inserisci l’e-mail dell’amico</string>
   <string name="general_add">Aggiungi</string>
   <string name="general_invite_friends">Invita gli amici</string>
   <string name="general_rest_contacts">Ti sono rimasti %d contatti</string>
   <string name="invite_friends_title">Invita tutti gli amici su Spark dalla rubrica del
-    cellulare
-  </string>
+        cellulare</string>
   <string name="invalid_contacts">Alcuni dei contatti riportano errori. Per favore, inserisci i
-    contatti corretti
-  </string>
+        contatti corretti</string>
   <plurals name="vip_status_period">
     <item quantity="other">Hai ricevuto lo stato VIP per %d giorni</item>
     <item quantity="one">Hai ricevuto lo stato VIP per %d giorno</item>
@@ -560,33 +507,26 @@
     <item quantity="one">Ricevere VIP gratis per %d invito</item>
   </plurals>
   <string name="buy_status_and_watch_your_fans">Compra lo stato VIP e scopri chi ti ha aggiunto
-    nei preferiti
-  </string>
+        nei preferiti</string>
   <string name="add_bookmarks_to_be_connected">Aggiungi i tuoi nuovi amici qui e sarai sempre in
-    contatto con loro
-  </string>
+        contatto con loro</string>
   <string name="nobody_chat_with_you_sympathies_will_help">Non ti ha ancora scritto nessuno. Le
-    simpatie aiutano nella ricerca di un interlocutore
-  </string>
+        simpatie aiutano nella ricerca di un interlocutore</string>
   <string name="rate_and_have_mutual_or_buy_and_chat">Regala le simpatie alle persone che ti sono
-    piaciute e ricevile in risposta. Oppure compra le simpatie e inizia a parlare con le persone
-    alle quali piaci!
-  </string>
+        piaciute e ricevile in risposta. Oppure compra le simpatie e inizia a parlare con le persone
+        alle quali piaci!</string>
   <string name="with_vip_find_your_visitors">Lo stato VIP ti permette di scoprire chi ha visitato
-    la tua pagina
-  </string>
+        la tua pagina</string>
   <string name="on_avatar">Sull’avatar</string>
   <string name="your_avatar">Il tuo avatar</string>
   <string name="avatar_set_successfully">L’avatar è stato caricato con successo</string>
   <string name="incorrect_photo">Foto scorretta. Prova a caricarne un’altra</string>
   <string name="incorrect_photo_format">Il formato della foto è scorretto. Prova a caricarne una
-    con l’espansione .jpg o .png
-  </string>
+        con l’espansione .jpg o .png</string>
   <string name="incorrect_photo_size">La dimensione della foto è inammissibile</string>
   <string name="input_contact_name">Inserisci il nome del contatto</string>
   <string name="incorrect_locale">Se vuoi che il tuo commento venga letto scrivilo in russo o in
-    inglese
-  </string>
+        inglese</string>
   <string name="complain_photo_header">Foto scorretta</string>
   <string name="complain_msg_header">Messaggio scorretto</string>
   <string name="complain_info_header">Informazione scorretta</string>
@@ -595,34 +535,26 @@
   <string name="complain_type_picture">Disegno</string>
   <string name="complain_type_fake_user">Persona famosa</string>
   <string name="complain_type_spam_msg">Proposta commerciale, spam, pubblicità, link, numeri
-    telefonici
-  </string>
+        telefonici</string>
   <string name="complain_type_spam_profile">Campi “stato”, “di me” contengono una proposta
-    commerciale
-  </string>
+        commerciale</string>
   <string name="complain_type_swearing_profile">Campi “stato”, “di me” contengono cafonate,
-    parolacce, link ai social network
-  </string>
+        parolacce, link ai social network</string>
   <string name="complain_type_fake_data">Nome, sesso, età e foto della persona non corrispondono
-    tra di loro
-  </string>
+        tra di loro</string>
   <string name="complain_description">Descrivi il motivo del reclamo</string>
-  <string name="general_complain_sended">Il tuo reclamo è stato inviato, grazie per il tuo aiuto
-  </string>
+  <string name="general_complain_sended">Il tuo reclamo è stato inviato, grazie per il tuo aiuto</string>
   <string name="general_complain">Reclamo</string>
   <string name="general_msg">Massaggio</string>
   <string name="notifications">Notifiche</string>
   <string name="general_no_notifications">Purtroppo, per il tuo dispositivo gli avvisi non sono
-    disponibili
-  </string>
+        disponibili</string>
   <string name="black_list_add_short">Nella black list</string>
   <string name="confirm_email_for_dating">Siamo contrari allo spam. Conferma il tuo e-mail per
-    chattare su Spark!
-  </string>
+        chattare su Spark!</string>
   <string name="confirm_email_for_dating_title">Noi siamo contro lo spam</string>
   <string name="confirm_email_for_dating_desc">Conferma il tuo indirizzo di posta per fare nuove
-    conoscenze su Spark!
-  </string>
+        conoscenze su Spark!</string>
   <string name="send_confirm_link">Invia il link di conferma</string>
   <string name="complain_type_swearing_msg">Cafonate, minacce, parolacce</string>
   <string name="general_exit">Logout</string>
@@ -630,8 +562,7 @@
   <string name="general_get_dating">Presentarsi</string>
   <string name="settings_select_language">Scelta della lingua dell’applicazione</string>
   <string name="settings_select_preload_photo_type">Scegli quando l’anteprima delle foto è
-    accesa
-  </string>
+        accesa</string>
   <string name="restart_to_change_locale">L’applicazione sarà riavviata per cambiare lingua</string>
   <string name="locale_changing">Lingua</string>
   <plurals name="you_were_liked">
@@ -642,22 +573,17 @@
   <string name="or">o</string>
   <string name="settings_delete_account">Cancella l’account</string>
   <string name="chat_block_not_mutual">Puoi iniziare la conversazione con l’utente solo se ti ha
-    inviato una simpatia o se sei utente VIP
-  </string>
+        inviato una simpatia o se sei utente VIP</string>
   <string name="add_to_favorite_block_not_vip">Solo gli utenti VIP possono aggiungere ai preferiti
-    dalla schermata di incontri
-  </string>
+        dalla schermata di incontri</string>
   <string name="delete_account_are_you_sure">Sicuro al 100%?</string>
   <string name="delete">Cancella</string>
   <string name="delete_account_warning">Attenzione! Stai cercando di cancellare il tuo account in
-    Spark.
-  </string>
+        Spark.</string>
   <string name="delete_account_error">Purtroppo non siamo riusciti a cancellare il tuo account.
-    Riprova.
-  </string>
+        Riprova.</string>
   <string name="delete_account_will_be_restored_are_you_sure">Stai cercando di accedere
-    all\'account cancellato. Accedendovi verrà ripristinato.
-  </string>
+        all\'account cancellato. Accedendovi verrà ripristinato.</string>
   <string name="restore">Ripristinare</string>
   <string name="admiration_sended">L’ammirazione è stata inviata</string>
   <string name="skip">Salta</string>
@@ -704,8 +630,7 @@
   <string name="user_deleted_or_banned">L’utente è stato eliminato o ha ricevuto ban</string>
   <string name="locking_popup_button_answer">Rispondere alle simpatie</string>
   <string name="locking_menu_message">L’accesso ad alcune sezioni è limitato. Rispondi a tutte le
-    simpatie in entrata o ricevi VIP per togliere le restrizioni.
-  </string>
+        simpatie in entrata o ricevi VIP per togliere le restrizioni.</string>
   <string name="current_city">Città attuale</string>
   <string name="general_bonus">Bonus</string>
   <plurals name="notification_many_messages">
@@ -718,8 +643,7 @@
     <item quantity="one">e ancora %d</item>
   </plurals>
   <string name="subscriptions_can_be_changed">L’abbonamento è stato completato. Puoi cambiare le
-    condizioni dell’abbonamento su Google Play
-  </string>
+        condizioni dell’abbonamento su Google Play</string>
   <string name="people_nearby">Persone attorno a te</string>
   <string name="nobody_nearby">Non c’è un’anima viva!</string>
   <string name="general_distance_km">%.02f km</string>
@@ -728,42 +652,33 @@
   <string name="press_back_more_to_close_app">Ripremi il tasto Indietro per uscire da Spark</string>
   <string name="waiting_for_load">Attesa di caricamento…</string>
   <string name="loading_photo_percent">Caricamento della foto %d%%</string>
-  <string name="profile_update_error">Si è verificato un errore durante l’aggiornamento dati
-  </string>
+  <string name="profile_update_error">Si è verificato un errore durante l’aggiornamento dati</string>
   <string name="retry_cancel_editing">Si è verificato un errore sul server durante l’aggiornamento
-    dati. Uscire senza salvare o riprovare?
-  </string>
+        dati. Uscire senza salvare o riprovare?</string>
   <string name="retry_cancel_editing_bad_value">Hai inserito i dati sbagliati. Riprovare o uscire
-    senza salvare i dati?
-  </string>
+        senza salvare i dati?</string>
   <string name="user_does_not_exist">Utente non trovato</string>
   <string name="feedback_subject_ban">Reclamo di un ban ingiusto</string>
   <string name="settings_led">Notifica LED</string>
   <string name="open_market_error">La pagina momentaneamente non è disponibile</string>
   <string name="billing_item_already_owned">Il tuo ordine precedente è in elaborazione, si prega
-    di attendere
-  </string>
+        di attendere</string>
   <string name="dialog">Dialoghi</string>
   <string name="reply">Rispondere</string>
   <string name="measurement_unit_weight">kg</string>
   <string name="measurement_unit_height">cm</string>
   <string name="maximum_number_of_users">Hai scelto il numero massimo degli utenti</string>
   <string name="logout_if_email_already_registred">L’utente con questo e-mail esiste già. Se
-    questo indirizzo mail è tuo, devi uscire dall’account attuale e accedere all’account %s
-  </string>
+        questo indirizzo mail è tuo, devi uscire dall’account attuale e accedere all’account %s</string>
   <string name="recover_password_instructions">Al tuo indirizzo e-mail sono state inviate le
-    istruzioni su come ripristinare la password
-  </string>
+        istruzioni su come ripristinare la password</string>
   <string name="email_changing">Cambio e-mail</string>
   <string name="hint_faces_filter">Cambia i parametri della ricerca e conosci la gente
-    interessante
-  </string>
+        interessante</string>
   <string name="hint_faces_buy_like">Più simpatie hai, più spesso ricevi le valutazioni. Ricordati
-    di rifornire la quantità di simpatie.
-  </string>
+        di rifornire la quantità di simpatie.</string>
   <string name="hint_myprofile_buy_vip">Compra lo stato VIP e sfrutta la possibilità di contattare
-    chi vuoi tu
-  </string>
+        chi vuoi tu</string>
   <string name="pull_to_refresh_pull_label">Tira per aggiornare…</string>
   <string name="pull_to_refresh_release_label">Lascia per aggiornare…</string>
   <string name="messaging_block_buy_vip">Devi avere lo stato VIP per continuare il dialogo</string>
@@ -777,44 +692,35 @@
   <string name="preload_photo_type_always_on">Sempre accesa</string>
   <string name="preload_photo_type_preload_off">Spenta</string>
   <string name="wrong_time_popup_text">Non siamo riusciti a stabilire una connessione
-    sicura.\nProbabilmente il tuo dispositivo mostra una data o l’ora scorretta.
-  </string>
+        sicura.\nProbabilmente il tuo dispositivo mostra una data o l’ora scorretta.</string>
   <string name="wrong_time_popup_button">Aprire i parametri</string>
   <string name="enter_text">Inserisci il testo</string>
   <string name="send_feedback">Invia il messaggio</string>
   <string name="get_vip_free">Ricevi VIP gratis</string>
   <string name="buy_more_sympathies">Ricevi più simpatie, diventa più popolare</string>
   <string name="transaction_code_help">Inviandoci il codice di transazione ci aiuterai ad eseguire
-    la tua richiesta e ad accelerare il trattamento.Ottieni ulteriori informazioni sull\'ordine
-    attraverso %s.
-  </string>
+        la tua richiesta e ad accelerare il trattamento.Ottieni ulteriori informazioni sull\'ordine
+        attraverso %s.</string>
   <string name="google_wallet">Google- portafoglio</string>
   <string name="google_service_general_title">Notifiche non disponibili</string>
   <string name="google_service_disabled_title">Hai disabilitato i Servizi Google Play che servono
-    per il corretto funzionamento di notifiche.
-  </string>
+        per il corretto funzionamento di notifiche.</string>
   <string name="google_service_disabled_button">Abilita</string>
   <string name="google_service_missing_title">Non hai installato i Servizi Google Play che servono
-    per il corretto funzionamento di notifiche.
-  </string>
+        per il corretto funzionamento di notifiche.</string>
   <string name="google_service_missing_button">Installare</string>
   <string name="google_service_version_update_required_title">Hai una versione vecchia di Servizi
-    Google Play, per il corretto funzionamento di notifiche si prega di aggiornarla.
-  </string>
+        Google Play, per il corretto funzionamento di notifiche si prega di aggiornarla.</string>
   <string name="google_service_version_update_required_button">Aggiornare</string>
   <string name="google_invalid_account_title">Controlla i dati del tuo account Google oppure
-    scrivi al supporto tecnico di Google.
-  </string>
+        scrivi al supporto tecnico di Google.</string>
   <string name="google_sign_in_account_title">Non hai aggiunto l’account Google, devi accedervi
-    per ricevere le notifiche.
-  </string>
+        per ricevere le notifiche.</string>
   <string name="google_sign_in_account_button">Accedere</string>
   <string name="google_unavailable_services_title">Purtroppo il tuo dispositivo non supporta
-    l’invio di notifiche.
-  </string>
+        l’invio di notifiche.</string>
   <string name="receive_message_notification">Ricevere notifiche\ndei nuovi messaggi</string>
-  <string name="receive_mutual_notification">Ricevere notifiche\ndelle nuove simpatie reciproche
-  </string>
+  <string name="receive_mutual_notification">Ricevere notifiche\ndelle nuove simpatie reciproche</string>
   <string name="receive_sympathy_notification">Ricevere notifiche\ndelle nuove simpatie</string>
   <string name="receive_rate_notification">key: receive_rate_notification</string>
   <string name="receive_guest_notification">Ricevere notifiche\ndei nuovi visitatori</string>
@@ -823,14 +729,11 @@
   <string name="add_leader_hint">Il tuo saluto…</string>
   <string name="more">ancora</string>
   <string name="premium_for_invitations">Per ricevere lo stato VIP per un giorno accumula 5
-    registrazioni.
-  </string>
+        registrazioni.</string>
   <string name="premium_for_invitations_current_status">Hai già accumulato:\nInviti:
-    %1$d\nRegistrazioni: %2$d
-  </string>
+        %1$d\nRegistrazioni: %2$d</string>
   <string name="no_contacts_available">Sul tuo dispositivo non ci sono contatti che possono essere
-    visualizzati
-  </string>
+        visualizzati</string>
   <string name="sms_invite_title">Ricevi VIP per un giorno!</string>
   <string name="status_can_send_confirmation">Invitare</string>
   <string name="status_invilid_phone_number">Numero non valido</string>
@@ -843,28 +746,21 @@
   <string name="settings_check_vip_cell">Verifica Stato VIP</string>
   <string name="settings_check_vip_alert">Richiesta di verifica inviata</string>
   <string name="novice_sympathy">Invia le simpatie solo alle persone che ti\npiacciono
-    veramente\nper iniziare una piacevole relazione
-  </string>
+        veramente\nper iniziare una piacevole relazione</string>
   <string name="go_dating_message">Comincia a fare conoscenze ed in questa sezione vedrai gli utenti
-    che hanno visitato il tuo profilo
-  </string>
-  <string name="photo_not_from_main_album">Non puoi impostare questa foto come profilo perché non
-    conforme ai canoni della moderazione
-  </string>
+        che hanno visitato il tuo profilo</string>
+  <string name="photo_not_from_main_album">Non puoi impostare questa foto come profilo perché non conforme ai canoni della moderazione</string>
   <string name="sidebar_vk_profile">Profilo Vkontakte</string>
   <string name="title_vk_profile">Profilo VKontakte</string>
-  <string name="vk_profile_invite_friends_error">L\'utente ha disattivato la ricezione di inviti
-  </string>
-  <string name="foreign_profile_empty_gifts_title">Invia regali e stai al centro dell\'attenzione
-  </string>
+  <string name="vk_profile_invite_friends_error">L\'utente ha disattivato la ricezione di inviti</string>
+  <string name="foreign_profile_empty_gifts_title">Invia regali e stai al centro dell\'attenzione</string>
   <string name="chat_auto_reply_title">Il testo del messaggio è nascosto</string>
   <string name="chat_auto_reply_message">Per aprirlo e rispondere diventa utente- VIP</string>
   <string name="chat_auto_reply_button">Diventa VIP</string>
-  <string name="photo_list_load_info">Condividi le tue foto e ti vedranno milioni di persone
-  </string>
+  <string name="photo_list_load_info">Condividi le tue foto e ti vedranno milioni di persone</string>
   <string name="vk_profile_button_tf_group">Gruppo Spark</string>
   <string name="vk_profile_button_join_tf_group">Entra nel gruppo Spark</string>
-  <string name="vk_profile_button_join_vkgames_group">Entra nel gruppo \&quot; Giochi Vkontakte\&quot;</string>
+  <string name="vk_profile_button_join_vkgames_group">Entra nel gruppo \&quot; Giochi  Vkontakte\&quot;</string>
   <string name="vk_profile_button_invite_friends">Invita amici</string>
   <string name="vk_profile_invite_friends_title">Invita amici</string>
   <string name="invite_friend_button">Invita</string>
@@ -873,13 +769,10 @@
   <string name="vk_friends_success_invite">Invito inviato</string>
   <string name="join_group_success">Adesso fai parte del gruppo</string>
   <string name="settings_auto_greeting_title">Auto</string>
-  <string name="settings_auto_greeting_subtitle">Permette di cominciare automaticamente un dialogo
-    di conoscenza dopo la ricezione della simpatia
-  </string>
+  <string name="settings_auto_greeting_subtitle">Permette di cominciare automaticamente un dialogo 
+         di conoscenza dopo la ricezione della simpatia</string>
   <string name="take_photo_text_1">Carica la tua foto per cominciare a fare conoscenza.</string>
-  <string name="take_photo_text_2">Nella foto devi comparire tu. Tute le foto sono controllate da
-    moderatori.
-  </string>
+  <string name="take_photo_text_2">Nella foto devi comparire tu. Tute le foto sono controllate da moderatori.</string>
   <string name="unlock_by_viewed_ad_video_button_text">Sblocca gratis a %s</string>
   <plurals name="free_minutes">
     <item quantity="zero">% minuto</item>
@@ -887,41 +780,21 @@
     <item quantity="one">% minuti</item>
   </plurals>
   <string name="thanks_for_your_rate_title">Grazie per la tua recensione</string>
-  <string name="thanks_for_your_rate_top_label">Per dimostrarti la nostra gratitudine, posteremo la
-    tua immagine nelle newsfeed!
-  </string>
-  <string name="thanks_for_your_rate_bottom_label">Condividi la tua esperienza nell\'App Store.
-    Valutiamo ogni recensione!
-  </string>
+  <string name="thanks_for_your_rate_top_label">Per dimostrarti la nostra gratitudine, posteremo la tua immagine nelle newsfeed!</string>
+  <string name="thanks_for_your_rate_bottom_label">Condividi la tua esperienza nell\'App Store. Valutiamo ogni recensione!</string>
   <string name="thanks_for_your_rate_rate_app">Scrivi una recensione nell\'App Store</string>
   <string name="thanks_for_your_rate_close">Chiuso</string>
   <plurals name="novice_sympathies_bonuses">
-    <item quantity="zero">Ricevi %1$d simpatie in\nregalo! Questo significa che tu\n piacerai
-      sicuramente%2$d agli utenti,\nche ti invieranno la loro simpatia
-    </item>
-    <item quantity="other">Ricevi %1$d simpatie in\nregalo! Questo significa che tu\n piacerai
-      sicuramente%2$d agli utenti,\nche ti invieranno la loro simpatia
-    </item>
-    <item quantity="one">Ricevi %1$d simpatia in\nregalo! Questo significa che tu\n piacerai
-      sicuramente%2$d agli utenti,\nche ti invieranno la loro simpatia
-    </item>
+    <item quantity="zero">Ricevi %1$d simpatie in\nregalo! Questo significa che tu\n piacerai sicuramente%2$d agli utenti,\nche ti invieranno la loro simpatia</item>
+    <item quantity="other">Ricevi %1$d simpatie in\nregalo! Questo significa che tu\n piacerai sicuramente%2$d agli utenti,\nche ti invieranno la loro simpatia</item>
+    <item quantity="one">Ricevi %1$d simpatia in\nregalo! Questo significa che tu\n piacerai sicuramente%2$d agli utenti,\nche ti invieranno la loro simpatia</item>
   </plurals>
-  <string name="buy_vip_title_from_input">Per cominciare a chattare con questo utente devi essere
-    VIP
-  </string>
+  <string name="buy_vip_title_from_input">Per cominciare a chattare con questo utente devi essere VIP</string>
   <string name="mutual_like_popup_text">La simpatia è reciproca!</string>
   <string name="mutual_like_popup_button">Dici \&quot; Ciao\&quot;</string>
-  <string name="people_nearby_access_to_location_description">Per vedere chi ti è vicino, devi
-    fornire l\'accesso alla localizzazione.
-  </string>
-  <string name="people_nearby_not_enought_money">Non hai abbastanza Monete per accedere alla
-    funzione \&quot;Persone vicino a me\&quot;</string>
-  <string name="people_nearby_not_found_title">In questo momento non c\'è alcun utente vicino a te
-  </string>
-  <string name="people_nearby_not_found_description">Riprova, premi e tieni premuto il dito al
-    centro dello schermo
-  </string>
-  <string name="NSLocationWhenInUseUsageDescription">Per accedere a questa funzione devi fornire il
-    permesso
-  </string>
+  <string name="people_nearby_access_to_location_description">Per vedere chi ti è vicino, devi fornire l\'accesso alla localizzazione.</string>
+  <string name="people_nearby_not_enought_money">Non hai abbastanza Monete per accedere alla funzione \&quot;Persone vicino a me\&quot;</string>
+  <string name="people_nearby_not_found_title">In questo momento non c\'è alcun utente vicino a te</string>
+  <string name="people_nearby_not_found_description">Riprova, premi e tieni premuto il dito al centro dello schermo</string>
+  <string name="NSLocationWhenInUseUsageDescription">Per accedere a questa funzione devi fornire il permesso</string>
 </resources>

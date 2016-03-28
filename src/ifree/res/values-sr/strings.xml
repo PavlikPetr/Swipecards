@@ -883,7 +883,8 @@
     <string name="thanks_for_your_rate_bottom_label">Поделите своје утиске у AppStore. Ценимо свако мишљење!</string>
     <string name="thanks_for_your_rate_rate_app">Оставити мишљење у AppStore</string>
     <string name="thanks_for_your_rate_close">Затворити</string>
-    <plurals name="novice_sympathies_bonuses"></plurals>
+    <plurals name="novice_sympathies_bonuses">
+    </plurals>
     <string name="buy_vip_title_from_input">Можете започети разговор са корисником ако имате VIP-статус</string>
     <string name="mutual_like_popup_text">Осећање је узајамно!</string>
     <string name="mutual_like_popup_button">Кажите \"Поздрав\"</string>

@@ -1013,18 +1013,12 @@
 
     <string name="sidebar_vk_profile">Профиль ВКонтакте</string>
     <string name="title_vk_profile">Профиль ВК</string>
-    <string name="vk_profile_invite_friends_error">Пользователь запретил отправлять ему
-        приглашения
-    </string>
-    <string name="foreign_profile_empty_gifts_title">Отправьте подарок и вы будете в центре
-        внимания
-    </string>
+    <string name="vk_profile_invite_friends_error">Пользователь запретил отправлять ему приглашения</string>
+    <string name="foreign_profile_empty_gifts_title">Отправьте подарок и вы будете в центре внимания</string>
     <string name="chat_auto_reply_title">Текст сообщения скрыт</string>
-    <string name="chat_auto_reply_message">Чтобы открыть и ответить на него, станьте
-        VIP-пользователем
-    </string>
+    <string name="chat_auto_reply_message">Чтобы открыть и ответить на него, станьте VIP-пользователем</string>
     <string name="chat_auto_reply_button">Стать VIP</string>
-
+    
     <string name="photo_list_load_info">Поделитесь фотографиями и вас увидят миллионы</string>
 
     <string name="vk_profile_button_tf_group">Группа Topface</string>
@@ -1041,11 +1035,8 @@
     <string name="settings_auto_greeting_subtitle">Позволяет автоматически начинать диалог
         приветствием при получении симпатии
     </string>
-    <string name="take_photo_text_1">Пожалуйста, загрузите свою фотографию, чтобы начать
-        знакомиться.
-    </string>
-    <string name="take_photo_text_2">На фото должны быть именно вы. Все фотографии модерируются.
-    </string>
+    <string name="take_photo_text_1">Пожалуйста, загрузите свою фотографию, чтобы начать знакомиться.</string>
+    <string name="take_photo_text_2">На фото должны быть именно вы. Все фотографии модерируются.</string>
     <string name="unlock_by_viewed_ad_video_button_text">Разблокировать бесплатно на %s</string>
     <plurals name="free_minutes">
         <item quantity="one">%d минуту</item>
@@ -1055,52 +1046,29 @@
     </plurals>
 
     <string name="thanks_for_your_rate_title">Спасибо за Вашу оценку</string>
-    <string name="thanks_for_your_rate_top_label">Мы дарим Вам пост Вашей фотографии в фотоленту!
-    </string>
-    <string name="thanks_for_your_rate_bottom_label">Поделитесь своими впечатлениями в AppStore. Мы
-        ценим каждый отзыв!
-    </string>
+    <string name="thanks_for_your_rate_top_label">Мы дарим Вам пост Вашей фотографии в фотоленту!</string>
+    <string name="thanks_for_your_rate_bottom_label">Поделитесь своими впечатлениями в AppStore. Мы ценим каждый отзыв!</string>
     <string name="thanks_for_your_rate_rate_app">Оставить отзыв в AppStore</string>
     <string name="thanks_for_your_rate_close">Закрыть</string>
 
     <plurals name="novice_sympathies_bonuses">
-        <item quantity="zero">Вы получаете %1$d симпатий в\nподарок! Это означает, что вы\nточно
-            понравитесь %2$d людям,\nкоторые выразят вам свою симпатию
-        </item>
-        <item quantity="one">Вы получаете %1$d симпатию в\nподарок! Это означает, что вы\nточно
-            понравитесь %2$d людям,\nкоторые выразят вам свою симпатию
-        </item>
-        <item quantity="many">Вы получаете %1$d симпатий в\nподарок! Это означает, что вы\nточно
-            понравитесь %2$d людям,\nкоторые выразят вам свою симпатию
-        </item>
-        <item quantity="few">Вы получаете %1$d симпатии в\nподарок! Это означает, что вы\nточно
-            понравитесь %2$d людям,\nкоторые выразят вам свою симпатию
-        </item>
-        <item quantity="other">Вы получаете %1$d симпатий в\nподарок! Это означает, что вы\nточно
-            понравитесь %2$d людям,\nкоторые выразят вам свою симпатию
-        </item>
+        <item quantity="zero">Вы получаете %1$d симпатий в\nподарок! Это означает, что вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию</item>
+        <item quantity="one">Вы получаете %1$d симпатию в\nподарок! Это означает, что вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию</item>
+        <item quantity="many">Вы получаете %1$d симпатий в\nподарок! Это означает, что вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию</item>
+        <item quantity="few">Вы получаете %1$d симпатии в\nподарок! Это означает, что вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию</item>
+        <item quantity="other">Вы получаете %1$d симпатий в\nподарок! Это означает, что вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию</item>
     </plurals>
 
-    <string name="buy_vip_title_from_input">Начать общение с пользователем можно, если у вас есть
-        VIP-статус
-    </string>
+    <string name="buy_vip_title_from_input">Начать общение с пользователем можно, если у вас есть VIP-статус</string>
     <string name="mutual_like_popup_text">Ваша симпатия взаимна!</string>
     <string name="mutual_like_popup_button">Сказать \"Привет\"</string>
 
-    <string name="people_nearby_access_to_location_description">Чтобы посмотреть, кто находится
-        рядом с вами, разрешите доступ к геолокации.
-    </string>
-    <string name="people_nearby_not_enought_money">Для доступа к функционалу \"Люди рядом\" вам не
-        хватает монет
-    </string>
+    <string name="people_nearby_access_to_location_description">Чтобы посмотреть, кто находится рядом с вами, разрешите доступ к геолокации.</string>
+    <string name="people_nearby_not_enought_money">Для доступа к функционалу \"Люди рядом\" вам не хватает монет</string>
 
     <string name="people_nearby_not_found_title">Рядом с Вами пока нет пользователей</string>
-    <string name="people_nearby_not_found_description">Чтобы попробовать еще раз, удерживайте палец
-        в центре экрана
-    </string>
+    <string name="people_nearby_not_found_description">Чтобы попробовать еще раз, удерживайте палец в центре экрана</string>
 
-    <string name="NSLocationWhenInUseUsageDescription">Для получения доступа к функционалу вам
-        необходимо разрешить доступ.
-    </string>
+    <string name="NSLocationWhenInUseUsageDescription">Для получения доступа к функционалу вам необходимо разрешить доступ.</string>
 
 </resources>

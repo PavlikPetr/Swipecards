@@ -27,9 +27,7 @@
     <string name="filter_city_age_parameters">Věk a město</string>
     <string name="filter_select_city">Zvolit město</string>
     <string name="edit_block_photo">Fotografie</string>
-    <string name="dashbrd_popup_rating">Líbí se naše aplikace? Pomozte zvednout náš raiting! Čím
-        vyšší je rating, tím více zajímavých lidí potkáte v Topface
-    </string>
+    <string name="dashbrd_popup_rating">Líbí se naše aplikace? Pomozte zvednout náš raiting! Čím vyšší je rating, tím více zajímavých lidí potkáte v Topface</string>
     <string name="dashbrd_popup_title">Raiting</string>
     <string name="dashbrd_popup_cancel">Příště se neptat</string>
     <string name="dashbrd_popup_rate">Vystavit raiting</string>
@@ -308,7 +306,7 @@
     <string name="general_sex">Pohlaví</string>
     <string name="general_girl">Ženské</string>
     <string name="general_boy">Mužské</string>
-    <string name="filter_city_fail">Nenalezeno žádné město, které by začínalo na „%s“</string>
+    <string name="filter_city_fail">Nenalezeno žádné město, které by začínalo  na „%s“</string>
     <string name="age_filter_man">Máte zájem o muži</string>
     <string name="age_filter_girl">Máte zájem o ženy</string>
     <string name="rate_popup_title">Prosím ohodnoťte naši aplikaci</string>
@@ -339,8 +337,7 @@
     <string name="black_list_delete">Odstranit z černé listiny</string>
     <string name="vip_buy_vip">Koupě VIP</string>
     <string name="vip_state_off">Váš VIP-status neni aktivovan</string>
-    <string name="vip_info_guest">Zjistěte, kdo se o Vás zajímá - prohlédnete své návštěvníky!
-    </string>
+    <string name="vip_info_guest">Zjistěte, kdo se o Vás zajímá - prohlédnete své návštěvníky!</string>
     <string name="vip_info_invisible">Zůstaňte neodhalené při návštěvě cizích stránek díky režimu
         \"neviditelný\"
     </string>
@@ -378,8 +375,7 @@
     </string>
     <string name="default_price_format">Celkem: %.2f USD</string>
     <string name="default_price_format_extended">Celkem: %1$.2f %2$s</string>
-    <string name="leaders_pick_condition">Nemůžete zvolit fotku s hodnocením nižším než %d%%:
-    </string>
+    <string name="leaders_pick_condition">Nemůžete zvolit fotku s hodnocením nižším než %d%%:</string>
     <string name="general_gift">Dárek</string>
     <string name="user_actions_chat">Rozhovor</string>
     <string name="profile_edit_age_ranges">Věk má být mezi 16 až 99 let. Zadejte prosím platné číslo
@@ -532,7 +528,7 @@
     <string name="on_avatar">Na profilový obrázek</string>
     <string name="your_avatar">Váš profilový obrázek</string>
     <string name="avatar_set_successfully">Profilový obrázek je úspěšně nastaven</string>
-    <string name="incorrect_photo">Uvedená fotografie je chybná. Zkuste nahrát jinou.</string>
+    <string name="incorrect_photo">Uvedená fotografie je chybná. Zkuste nahrát  jinou.</string>
     <string name="incorrect_photo_format">Uvedená fotografie má chybný formát. Zkuste nahrát jpg
         nebo png
     </string>

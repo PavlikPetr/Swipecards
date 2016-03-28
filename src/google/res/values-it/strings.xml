@@ -883,9 +883,7 @@
     <string name="mutual_like_popup_text">La simpatia è reciproca!</string>
     <string name="mutual_like_popup_button">Dici \" Ciao\"</string>
     <string name="people_nearby_access_to_location_description">Per vedere chi ti è vicino, devi fornire l\'accesso alla localizzazione.</string>
-    <string name="people_nearby_not_enought_money">Non hai abbastanza Monete per accedere alla
-        funzione \"Persone vicino a me\"
-    </string>
+    <string name="people_nearby_not_enought_money">Non hai abbastanza Monete per accedere alla funzione \"Persone vicino a me\"</string>
     <string name="people_nearby_not_found_title">In questo momento non c\'è alcun utente vicino a te</string>
     <string name="people_nearby_not_found_description">Riprova, premi e tieni premuto il dito al centro dello schermo</string>
     <string name="NSLocationWhenInUseUsageDescription">Per accedere a questa funzione devi fornire il permesso</string>
