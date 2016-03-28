@@ -890,4 +890,14 @@
     <string name="people_nearby_not_found_title">No hay usuarios todavía cerca de ti.</string>
     <string name="people_nearby_not_found_description">Para intentarlo de nuevo, mantén el dedo en el centro de la pantalla.</string>
     <string name="NSLocationWhenInUseUsageDescription">Para obtener acceso a la funcionalidad, necesitas obtener acceso previo.</string>
+    <string name="ban_liberty_title">¡Sin publicidad!</string>
+    <string name="ban_liberty_description">Solo conocer gente, nada más</string>
+    <string name="guest_liberty_title">Invitados</string>
+    <string name="guest_liberty_description">Averigua, quién ha entrado a tu página</string>
+    <string name="star_liberty_title">Usuarios populares</string>
+    <string name="star_liberty_description">Las aperturas más populares para comunicarse</string>
+    <string name="crown_liberty_title">Destaca</string>
+    <string name="crown_liberty_description">Es difícil no destacar en la búsqueda y en los mensajes</string>
+    <string name="like_liberty_title">Simpatías</string>
+    <string name="like_liberty_description">Mira a quién le gustas</string>
 </resources>

@@ -863,4 +863,14 @@
     <string name="people_nearby_not_found_title">There are no users near by you at this time</string>
     <string name="people_nearby_not_found_description">To try again, press and hold a finger on the center of the screen</string>
     <string name="NSLocationWhenInUseUsageDescription">To access this function you must give your permission</string>
+    <string name="ban_liberty_title">No ads!</string>
+    <string name="ban_liberty_description">Just dating, pure and simple</string>
+    <string name="guest_liberty_title">Guests</string>
+    <string name="guest_liberty_description">Find out who visited your profile page</string>
+    <string name="star_liberty_title">Popular Users</string>
+    <string name="star_liberty_description">Most popular ice-breakers to start a conversation</string>
+    <string name="crown_liberty_title">Stand out</string>
+    <string name="crown_liberty_description">Easily stand out in Search and Messages</string>
+    <string name="like_liberty_title">Likes</string>
+    <string name="like_liberty_description">See who likes you</string>
 </resources>

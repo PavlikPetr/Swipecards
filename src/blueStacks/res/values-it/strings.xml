@@ -797,4 +797,15 @@
   <string name="people_nearby_not_found_title">In questo momento non c\'è alcun utente vicino a te</string>
   <string name="people_nearby_not_found_description">Riprova, premi e tieni premuto il dito al centro dello schermo</string>
   <string name="NSLocationWhenInUseUsageDescription">Per accedere a questa funzione devi fornire il permesso</string>
+  <string name="ban_liberty_title">Senza pubblicità!</string>
+  <string name="ban_liberty_description">Solo un appuntamento, puro e semplice</string>
+  <string name="guest_liberty_title">Ospiti</string>
+  <string name="guest_liberty_description">Scopri chi ha visitato il tuo profilo</string>
+  <string name="star_liberty_title">Utenti popolari</string>
+  <string name="star_liberty_description">Il più famoso rompighiaccio per iniziare a conversare
+  </string>
+  <string name="crown_liberty_title">Distinguiti</string>
+  <string name="crown_liberty_description">Spicca facilmente tra le Ricerche e i Messaggi</string>
+  <string name="like_liberty_title">Mi piace</string>
+  <string name="like_liberty_description">Scopri a chi piaci</string>
 </resources>
