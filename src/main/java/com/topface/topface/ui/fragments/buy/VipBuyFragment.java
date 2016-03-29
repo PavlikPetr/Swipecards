@@ -23,6 +23,7 @@ import com.topface.topface.data.Products;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.statistics.BuyScreenStatistics;
 import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.statistics.PushButtonVipUniqueStatistics;
 import com.topface.topface.ui.BlackListActivity;
@@ -143,7 +144,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     private void initVipLiberty(LayoutInflater inflater, LinearLayout root) {
         if (root != null
-                && PurchaseButtonList.ViewsVersions.V2.getVersionName().equals(getBuyVipViewVersion())
+                && PurchaseButtonList.ViewsVersions.V2.getVersionName().equals(getBuyVipViewVersion(null))
                 && isVipLibertyBlockAvailable()) {
             root.addView(inflater.inflate(R.layout.vip_liberty_list, root, false));
         }
@@ -172,8 +173,8 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     }
 
     @Nullable
-    private String getBuyVipViewVersion(@Nullable Products products) {
-        String version = null;
+    private String getBuyVipViewVersion(@Nullable Products products, String defaultValue) {
+        String version = defaultValue;
         if (products != null && products.info != null && products.info.views != null) {
             version = products.info.views.buyVip;
         }
@@ -181,8 +182,8 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     }
 
     @Nullable
-    private String getBuyVipViewVersion() {
-        return getBuyVipViewVersion(getProducts());
+    private String getBuyVipViewVersion(String defaultValue) {
+        return getBuyVipViewVersion(getProducts(), defaultValue);
     }
 
     private void initBuyVipViews(View root) {
@@ -195,12 +196,18 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         List<BuyButtonData> availableButtons = getAvailableButtons(products.premium);
         root.findViewById(R.id.fbpBuyingDisabled).setVisibility(availableButtons.isEmpty() ? View.VISIBLE : View.GONE);
 
-        new PurchaseButtonList().getButtonsListView(getBuyVipViewVersion(products), btnContainer, availableButtons, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
+        new PurchaseButtonList().getButtonsListView(getBuyVipViewVersion(products, null), btnContainer, availableButtons, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
             @Override
             public void onClick(String id, BuyButtonData btnData) {
                 buy(id, btnData);
             }
         });
+    }
+
+    @Override
+    public void onResumeFragment() {
+        super.onResumeFragment();
+        BuyScreenStatistics.buyScreenShowSendStatistics(getClass().getSimpleName(), getBuyVipViewVersion(PurchaseButtonList.ViewsVersions.V1.getVersionName()));
     }
 
     protected void buy(String id, BuyButtonData curBtn) {
