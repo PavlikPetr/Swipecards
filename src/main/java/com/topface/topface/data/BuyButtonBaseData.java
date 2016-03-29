@@ -1,14 +1,13 @@
 package com.topface.topface.data;
 
+import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
 
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.Currency;
-import java.text.NumberFormat;
-import java.util.Currency;
-import java.util.Locale;
 
 public class BuyButtonBaseData {
     public String id;

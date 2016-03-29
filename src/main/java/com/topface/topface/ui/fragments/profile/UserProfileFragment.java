@@ -43,6 +43,7 @@ import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;

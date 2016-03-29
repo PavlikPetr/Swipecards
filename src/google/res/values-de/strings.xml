@@ -838,4 +838,6 @@
     <string name="crown_liberty_description">Falle sowohl bei Suchergebnissen als auch in deinen Nachrichten auf</string>
     <string name="like_liberty_title">Likes</string>
     <string name="like_liberty_description">Erfahre, wer dich mag</string>
+    <string name="buy_button_sticker_popular">Beliebt</string>
+    <string name="buy_button_sticker_best_value">Bester Preis</string>
 </resources>

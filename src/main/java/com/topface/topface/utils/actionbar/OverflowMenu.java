@@ -33,6 +33,7 @@ import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.EditorProfileActionsActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
 
@@ -137,7 +138,7 @@ public class OverflowMenu {
         ArrayList<OverflowMenuItem> result = new ArrayList<>();
         if (!isBanned) {
             result.add(SEND_SYMPATHY_ACTION);
-            if (!App.from(mActivity).getOptions().isHideAdmirations) {
+            if (!App.from(mContext).getOptions().isHideAdmirations) {
                 result.add(SEND_ADMIRATION_ACTION);
             }
             result.add(OPEN_CHAT_ACTION);
@@ -172,7 +173,7 @@ public class OverflowMenu {
             Boolean isBookmarked = isBookmarked();
             Boolean isInBlackList = isInBlackList();
             Boolean isSympathySent = isSympathySent();
-            ArrayList<OverflowMenuItem> overflowMenuItemArray = getProfileOverflowMenu(App.from(mActivity).getProfile().isEditor(), isBanned());
+            ArrayList<OverflowMenuItem> overflowMenuItemArray = getProfileOverflowMenu(App.from(mContext).getProfile().isEditor(), isBanned());
             for (int i = 0; i < overflowMenuItemArray.size(); i++) {
                 OverflowMenuItem item = overflowMenuItemArray.get(i);
                 Integer resourceId = null;
@@ -340,7 +341,7 @@ public class OverflowMenu {
                         Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                         initOverfowMenu();
                     }
-                }, App.from(mActivity).getOptions().blockUnconfirmed
+                }, App.from(mContext).getOptions().blockUnconfirmed
         );
         setSympathySentState(true, true);
     }
@@ -369,7 +370,7 @@ public class OverflowMenu {
                         setSympathySentState(false, true);
                         initOverfowMenu();
                     }
-                }, App.from(mActivity).getOptions()
+                }, App.from(mContext).getOptions()
         );
         if (isSentAdmiration) {
             setSympathySentState(true, true);
@@ -478,34 +479,32 @@ public class OverflowMenu {
                                 sendBroadcast(new Intent(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
                     }
 
-                        @Override
-                        public void fail(int codeError, IApiResponse response) {
-                            super.fail(codeError, response);
-                            setBookmarkedState(null);
-                            initOverfowMenu();
-                        }
-                    });
-        } else {
-        request = new BookmarkAddRequest(userId, mActivity).
-                    callback(new BlackListAndBookmarkHandler(mActivity,
-                            BlackListAndBookmarkHandler.ActionTypes.BOOKMARK,
-                            userId,
-                            true) {
-                        @Override
-                        public void success(IApiResponse response) {
-                            super.success(response);
-                            showBookmarkToast(true);
-                            LocalBroadcastManager.getInstance(mActivity).
-                                    sendBroadcast(new Intent(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
-                        }
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
+                        super.fail(codeError, response);
+                        setBookmarkedState(null);
+                        initOverfowMenu();
+                    }
+                }) : new BookmarkAddRequest(userId, mContext, App.from(mContext).getOptions().blockUnconfirmed).
+                callback(new BlackListAndBookmarkHandler(mContext,
+                        BlackListAndBookmarkHandler.ActionTypes.BOOKMARK,
+                        userId,
+                        true) {
+                    @Override
+                    public void success(IApiResponse response) {
+                        super.success(response);
+                        showBookmarkToast(true);
+                        LocalBroadcastManager.getInstance(mContext).
+                                sendBroadcast(new Intent(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
+                    }
 
-                        @Override
-                        public void fail(int codeError, IApiResponse response) {
-                            super.fail(codeError, response);
-                            setBookmarkedState(null);
-                            initOverfowMenu();
-                        }
-                    })).exec();
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
+                        super.fail(codeError, response);
+                        setBookmarkedState(null);
+                        initOverfowMenu();
+                    }
+                })).exec();
         setBookmarkedState(null);
     }
 

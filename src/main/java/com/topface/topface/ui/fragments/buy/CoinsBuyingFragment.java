@@ -20,7 +20,6 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BuyButtonData;
-import com.topface.topface.data.Options;
 import com.topface.topface.data.Products;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
@@ -107,25 +106,17 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
         }
         // sympathies buttons
         purchaseButtons.addAll(new PurchaseButtonList().getButtonsListView(null, likesButtons, availableLikesButtons, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
-                    @Override
-                    public void onClick(String id, BuyButtonData btnData) {
-                        buy(btnData);
-                        Activity activity = getActivity();
-                        if (activity instanceof PurchasesActivity) {
-                            ((PurchasesActivity) activity).skipBonus();
-                        }
+            @Override
+            public void onClick(String id, BuyButtonData btnData) {
+                buy(btnData);
+                Activity activity = getActivity();
+                if (activity instanceof PurchasesActivity) {
+                    ((PurchasesActivity) activity).skipBonus();
+                }
 
-                            App.from(getActivity()).getOptions().topfaceOfferwallRedirect.setComplited(true);
-                        }
-                    }
-            );
-            if (btnView != null) {
-                purchaseButtons.add(btnView);
-                btnView.setTag(curButton);
+                App.from(getActivity()).getOptions().topfaceOfferwallRedirect.setComplited(true);
             }
-    }
-
-    ));
+        }));
         // coins buttons
         initCoinsButtons(root, products);
     }
@@ -134,9 +125,8 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
         if (products == null) {
             return;
         }
-        final Options options = App.from(getActivity()).getOptions();
-        boolean coinsMaskedExperiment = options.forceCoinsSubscriptions;
-        List<BuyButtonData> coinsProducts = getCoinsProducts(products, coinsMaskedExperiment);
+        boolean coinsMaskedExperiment = App.from(getActivity()).getOptions().forceCoinsSubscriptions;
+        List<BuyButtonData> coinsProducts = getAvailableButtons(getCoinsProducts(products, coinsMaskedExperiment));
         root.findViewById(R.id.coins_title).setVisibility(
                 coinsProducts.isEmpty() ? View.GONE : View.VISIBLE
         );
@@ -146,23 +136,17 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
         }
         // coins items buttons also coinsSubscriptionsMasked buttons
         purchaseButtons.addAll(new PurchaseButtonList().getButtonsListView(null, coinsButtonsContainer, coinsProducts, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
-                    @Override
-                    public void onClick(String id, BuyButtonData btnData) {
-                        buy(btnData);
-                        Activity activity = getActivity();
-                        if (activity instanceof PurchasesActivity) {
-                            ((PurchasesActivity) activity).skipBonus();
-                        }
+            @Override
+            public void onClick(String id, BuyButtonData btnData) {
+                buy(btnData);
+                Activity activity = getActivity();
+                if (activity instanceof PurchasesActivity) {
+                    ((PurchasesActivity) activity).skipBonus();
+                }
 
-                            options.topfaceOfferwallRedirect.setComplited(true);
-                        }
-                    }
-            );
-            if (btnView != null) {
-                purchaseButtons.add(btnView);
-                btnView.setTag(curButton);
+                App.from(getActivity()).getOptions().topfaceOfferwallRedirect.setComplited(true);
             }
-    }));
+        }));
         coinsButtonsContainer.requestLayout();
     }
 

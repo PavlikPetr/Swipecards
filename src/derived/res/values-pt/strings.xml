@@ -897,4 +897,6 @@
     </string>
     <string name="like_liberty_title">Gostos</string>
     <string name="like_liberty_description">Vê quem gosta de ti</string>
+    <string name="buy_button_sticker_popular">Mais Vendido</string>
+    <string name="buy_button_sticker_best_value">Melhor preço</string>
 </resources>

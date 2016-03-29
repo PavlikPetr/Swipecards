@@ -871,4 +871,6 @@
     </string>
     <string name="like_liberty_title">Beğeni</string>
     <string name="like_liberty_description">Seni kimler beğenmiş, öğren</string>
+    <string name="buy_button_sticker_popular">En çok satan</string>
+    <string name="buy_button_sticker_best_value">Süper fiyat</string>
 </resources>

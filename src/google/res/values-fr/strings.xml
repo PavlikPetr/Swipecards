@@ -903,4 +903,6 @@
     <string name="crown_liberty_description">Démarquez-vous facilement dans la Recherche et les Messages</string>
     <string name="like_liberty_title">J\'aime</string>
     <string name="like_liberty_description">Voir qui vous aime</string>
+    <string name="buy_button_sticker_popular">Populaire</string>
+    <string name="buy_button_sticker_best_value">Meilleure valeur</string>
 </resources>

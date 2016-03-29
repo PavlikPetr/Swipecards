@@ -794,4 +794,6 @@
   <string name="crown_liberty_description">Easily stand out in Search and Messages</string>
   <string name="like_liberty_title">Likes</string>
   <string name="like_liberty_description">See who likes you</string>
+  <string name="buy_button_sticker_popular">Popular</string>
+  <string name="buy_button_sticker_best_value">Best value</string>
 </resources>

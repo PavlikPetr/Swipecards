@@ -898,4 +898,6 @@
     <string name="crown_liberty_description">Spicca facilmente tra le Ricerche e i Messaggi</string>
     <string name="like_liberty_title">Mi piace</string>
     <string name="like_liberty_description">Scopri a chi piaci</string>
+    <string name="buy_button_sticker_popular">Il più venduto</string>
+    <string name="buy_button_sticker_best_value">Miglior prezzo</string>
 </resources>

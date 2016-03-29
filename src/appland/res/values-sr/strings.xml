@@ -903,4 +903,6 @@
     <string name="crown_liberty_description">Лако се истиче у Претрази и Порукама</string>
     <string name="like_liberty_title">Свиђања</string>
     <string name="like_liberty_description">Погледајте коме се свиђате</string>
+    <string name="buy_button_sticker_popular">популарно</string>
+    <string name="buy_button_sticker_best_value">Најбоља цена</string>
 </resources>

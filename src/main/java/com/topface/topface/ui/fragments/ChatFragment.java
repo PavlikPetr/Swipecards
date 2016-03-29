@@ -97,12 +97,9 @@ import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.TimerTask;
 
-import rx.Observable;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
 public class ChatFragment extends AnimatedFragment implements View.OnClickListener {
 
@@ -147,6 +144,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     };
     private String mMessage;
     private ArrayList<History> mHistoryFeedList;
+    private Handler mUpdater;
     private boolean mIsUpdating;
     private boolean mKeyboardWasShown;
     private PullToRefreshListView mListView;
@@ -924,6 +922,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
         IntentFilter filter = new IntentFilter(GCMUtils.GCM_NOTIFICATION);
         LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(mNewMessageReceiver, filter);
+
+        mUpdater = new Handler();
         startTimer();
     }
 
@@ -1061,21 +1061,16 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
 
     private void startTimer() {
-        mUpdateUiSubscription = Observable.interval(DEFAULT_CHAT_UPDATE_PERIOD, DEFAULT_CHAT_UPDATE_PERIOD
-                , TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(new Action1<Long>() {
-            @Override
-            public void call(Long aLong) {
-                if (isAdded() && !wasFailed && mUserId > 0) {
-                    Debug.log("fucking_timer tick");
-                    update(true, "timer");
-                }
-            }
-        });
+        if (mUpdater != null) {
+            mUpdater.removeCallbacks(mUpdaterTask);
+            mUpdater.postDelayed(mUpdaterTask, DEFAULT_CHAT_UPDATE_PERIOD);
+        }
     }
 
     private void stopTimer() {
-        if (!mUpdateUiSubscription.isUnsubscribed()) {
-            mUpdateUiSubscription.unsubscribe();
+        if (mUpdater != null) {
+            mUpdater.removeCallbacks(mUpdaterTask);
+            mUpdater = null;
         }
     }
 

@@ -102,7 +102,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
                 boolean isPremium = response.getJsonResult().optBoolean("premium");
                 InvitesStatistics.sendSuccessInviteResponseAction(PLC_INVITE_POPUP, isPremium, contacts.size());
                 if (isPremium) {
-                    InvitesStatistics.sendPremiumReceivedAction(PLC_INVITE_POPUP, CacheProfile.getOptions().premium_period);
+                    InvitesStatistics.sendPremiumReceivedAction(PLC_INVITE_POPUP, App.get().getOptions().premium_period);
                     Utils.showToastNotification(
                             Utils.getQuantityString(R.plurals.vip_status_period, options.premium_period, options.premium_period),
                             Toast.LENGTH_LONG

@@ -902,4 +902,6 @@
     </string>
     <string name="like_liberty_title">Simpatías</string>
     <string name="like_liberty_description">Mira a quién le gustas</string>
+    <string name="buy_button_sticker_popular">Los más vendidos</string>
+    <string name="buy_button_sticker_best_value">El mejor precio</string>
 </resources>

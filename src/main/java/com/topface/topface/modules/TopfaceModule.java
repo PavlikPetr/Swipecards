@@ -1,6 +1,5 @@
 package com.topface.topface.modules;
 
-import android.content.Context;
 import android.location.Location;
 import android.text.TextUtils;
 
@@ -108,7 +107,8 @@ import dagger.Provides;
                 FindAndSendCurrentLocation.class
         },
         staticInjections = {
-                AddPhotoHelper.class
+                AddPhotoHelper.class,
+                App.class
         }
 )
 public class TopfaceModule {

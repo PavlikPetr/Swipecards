@@ -12,12 +12,9 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.banners.AppodealUserSettingsRules;
-import com.topface.topface.App;
 import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.data.Profile;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormItem;
-import com.topface.topface.utils.social.AuthToken;
 
 public class AppodealProvider extends AbstractAdsProvider {
 
@@ -94,7 +91,7 @@ public class AppodealProvider extends AbstractAdsProvider {
 
     private void setUserSettingsRelation(UserSettings userSettings) {
         if (userSettings != null) {
-            FormItem formItem = CacheProfile.getProfile().getFormByType(FormItem.DATA_TYPE.MARRIAGE);
+            FormItem formItem = App.get().getProfile().getFormByType(FormItem.DATA_TYPE.MARRIAGE);
             if (formItem != null) {
                 String currentValue = formItem.value;
                 UserSettings.Relation relation = UserSettings.Relation.OTHER;
@@ -110,7 +107,7 @@ public class AppodealProvider extends AbstractAdsProvider {
 
     private void setUserSettingsAlcohol(UserSettings userSettings) {
         if (userSettings != null) {
-            FormItem formItem = CacheProfile.getProfile().getFormByType(FormItem.DATA_TYPE.ALCOHOL);
+            FormItem formItem = App.get().getProfile().getFormByType(FormItem.DATA_TYPE.ALCOHOL);
             if (formItem != null) {
                 String currentValue = formItem.value;
                 UserSettings.Alcohol alcohol = UserSettings.Alcohol.NEGATIVE;
@@ -126,7 +123,7 @@ public class AppodealProvider extends AbstractAdsProvider {
 
     private void setUserSettingsSmoking(UserSettings userSettings) {
         if (userSettings != null) {
-            FormItem formItem = CacheProfile.getProfile().getFormByType(FormItem.DATA_TYPE.SMOKING);
+            FormItem formItem = App.get().getProfile().getFormByType(FormItem.DATA_TYPE.SMOKING);
             if (formItem != null) {
                 String currentValue = formItem.value;
                 UserSettings.Smoking smoking = UserSettings.Smoking.NEGATIVE;
@@ -142,7 +139,7 @@ public class AppodealProvider extends AbstractAdsProvider {
 
     private void setUserSettingsOcupation(UserSettings userSettings) {
         if (userSettings != null) {
-            FormItem formItem = CacheProfile.getProfile().getFormByType(FormItem.DATA_TYPE.EDUCATION);
+            FormItem formItem = App.get().getProfile().getFormByType(FormItem.DATA_TYPE.EDUCATION);
             if (formItem != null) {
                 String currentValue = formItem.value;
                 Resources res = App.getContext().getResources();

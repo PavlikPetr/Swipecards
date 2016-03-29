@@ -1081,4 +1081,7 @@
     <string name="crown_liberty_description">Сложно не заметить в поиске и сообщениях</string>
     <string name="like_liberty_title">Симпатии</string>
     <string name="like_liberty_description">Посмотрите, кому вы нравитесь</string>
+
+    <string name="buy_button_sticker_popular">хит продаж</string>
+    <string name="buy_button_sticker_best_value">Лучшая цена</string>
 </resources>

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
@@ -80,5 +79,9 @@ public class GiftsListFragment extends ProfileInnerFragment implements GiftsList
             mGiftsListAdapter.setData(g, false);
             mGiftsListAdapter.notifyDataSetChanged();
         }
+    }
+
+    public IGiftSendListener getGiftSendListener() {
+        return mGiftSendListener;
     }
 }
