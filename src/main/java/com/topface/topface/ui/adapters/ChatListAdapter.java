@@ -308,7 +308,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         boolean showDate = mShowDatesList.contains(item);
         switch (type) {
             case T_RETRY:
-                if (item.isRepeatItem() && holder != null) {
+                if (item != null && item.isRepeatItem() && holder != null) {
                     holder.loader.setVisibility(View.GONE);
                     holder.retrier.setVisibility(View.VISIBLE);
                     holder.retrier.setOnClickListener(new View.OnClickListener() {
