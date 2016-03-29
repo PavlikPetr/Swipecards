@@ -101,7 +101,9 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                callbacks.onFailedToLoadAd();
+                if (callbacks != null) {
+                    callbacks.onFailedToLoadAd(codeError);
+                }
             }
         });
         return bannerRequest;

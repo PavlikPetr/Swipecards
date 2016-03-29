@@ -17,6 +17,7 @@ import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.statistics.InvitesStatistics;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.vk.sdk.api.VKApiConst;
@@ -35,6 +36,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static com.topface.topface.statistics.InvitesStatistics.PLC_VK_INVITES;
 
 public class InviteVkFriendsActivity extends BaseFragmentActivity {
     private final static int ITEMS_COUNT_BEFORE_END = 5;
@@ -107,6 +110,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         mAdapter.setInviteClickListener(new VKFriendsAdapter.InViteClickListener() {
             @Override
             public void onClick(int id) {
+                InvitesStatistics.sendInviteBtnClickAction(PLC_VK_INVITES);
                 VKRequest inviteRequest = new VKRequest("apps.sendRequest");
                 inviteRequest.addExtraParameter(USER_ID_VK_PARAM, id);
                 inviteRequest.addExtraParameter("type", "invite");
@@ -125,6 +129,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     private VKRequest.VKRequestListener mVkInviteListener = new VKRequest.VKRequestListener() {
         @Override
         public void onComplete(VKResponse response) {
+            InvitesStatistics.sendSuccessInviteResponseAction(PLC_VK_INVITES);
             if (mAdapter != null) {
                 mAdapter.setButtonState((Integer) response.request.getPreparedParameters().get(USER_ID_VK_PARAM), false);
             }
@@ -133,6 +138,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
 
         @Override
         public void onError(VKError error) {
+            InvitesStatistics.sendFailedInviteResponseAction(PLC_VK_INVITES, error != null ? error.errorCode : null);
             int userId = getUSerIDFromVkError(error);
             if (userId != 0) {
                 mAdapter.setButtonState(userId, true);

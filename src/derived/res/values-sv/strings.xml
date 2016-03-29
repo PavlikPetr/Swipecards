@@ -30,9 +30,7 @@
     <string name="filter_city_age_parameters">Ålder och stad</string>
     <string name="filter_select_city">Val av staden</string>
     <string name="edit_block_photo">Foton</string>
-    <string name="dashbrd_popup_rating">Gillar du vår applikation? Höj vår rating! Ju högre rating
-        vi har, desto fler intressanta människor kan du möta på Topface
-    </string>
+    <string name="dashbrd_popup_rating">Gillar du vår applikation? Höj vår rating! Ju högre rating vi har, desto fler intressanta människor kan du möta på Topface</string>
     <string name="dashbrd_popup_title">Rating</string>
     <string name="dashbrd_popup_cancel">Fråga inte mer</string>
     <string name="dashbrd_popup_rate">Visa rating</string>
@@ -435,7 +433,7 @@
     <string name="incorrect_login">Felaktig login</string>
     <string name="incorrect_password">Felaktigt lösenord</string>
     <string name="empty_fields">Inte alla fält är ifyllda</string>
-    <string name="email_already_registered">Användaren med denna epost-adress finns redan</string>
+    <string name="email_already_registered">Användaren med denna epost-adress  finns redan</string>
     <string name="enter_email_from_registration">Ange samma epost-adress som vid registreringen
     </string>
     <string name="default_photo_upload">Laddar upp fotot</string>
@@ -743,8 +741,7 @@
     </string>
     <string name="pull_to_refresh_refreshing_label">Laddar…</string>
     <string name="user_added_to_black_list">Användaren tillagd i svarta listan</string>
-    <string name="user_deleted_from_black_list">Användaren är borttagen ifrån den svarta listan
-    </string>
+    <string name="user_deleted_from_black_list">Användaren är borttagen ifrån den svarta listan</string>
     <string name="user_added_to_bookmark">Användaren tillagd bland favoriter</string>
     <string name="user_deleted_from_bookmark">Användaren är borttagen ur favoriter</string>
     <string name="preload_photo_type_wifi_3g">WiFi och 3G</string>

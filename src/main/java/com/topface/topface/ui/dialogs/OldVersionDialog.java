@@ -11,7 +11,7 @@ import com.topface.topface.ui.IDialogListener;
 import com.topface.topface.ui.analytics.TrackedDialogFragment;
 
 /**
- * Created by ppetr on 17.08.15.
+ * Created by Петр on 15.03.2016.
  * Show dialog about old version App
  */
 public class OldVersionDialog extends TrackedDialogFragment {
@@ -19,6 +19,7 @@ public class OldVersionDialog extends TrackedDialogFragment {
     private final static String IS_DIALOG_CANCELABLE = "is_dialog_cancelable";
 
     private IDialogListener mIDialogListener;
+    boolean mIsCancelable = false;
 
     public static OldVersionDialog newInstance(boolean cancelable) {
         OldVersionDialog oldVersionDialog = new OldVersionDialog();
@@ -31,12 +32,11 @@ public class OldVersionDialog extends TrackedDialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        boolean isCancelable = false;
-        Bundle bundle = getArguments();
+        Bundle bundle = savedInstanceState != null ? savedInstanceState : getArguments() != null ? getArguments() : null;
         if (bundle != null) {
-            isCancelable = bundle.getBoolean(IS_DIALOG_CANCELABLE);
+            mIsCancelable = bundle.getBoolean(IS_DIALOG_CANCELABLE);
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -45,7 +45,7 @@ public class OldVersionDialog extends TrackedDialogFragment {
                 }
             }
         });
-        if (isCancelable) {
+        if (mIsCancelable) {
             builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -56,8 +56,14 @@ public class OldVersionDialog extends TrackedDialogFragment {
             });
         }
         builder.setMessage(R.string.general_version_not_supported);
-        builder.setCancelable(isCancelable);
+        builder.setCancelable(mIsCancelable);
         return builder.create();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(IS_DIALOG_CANCELABLE, mIsCancelable);
     }
 
     public void setDialogInterface(IDialogListener dialogInterface) {

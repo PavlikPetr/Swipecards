@@ -11,9 +11,7 @@
   <string name="chat_background_text">Nemáte došlé správy</string>
   <string name="filter_only_online">Iba online</string>
   <string name="filter_select_city">Výber mesta</string>
-  <string name="dashbrd_popup_rating">Páči sa naša aplikácia? Pomôžte zdvihnúť náš rating! Čím vyšší
-    je rating, tým viac zaujímavých ľudí stretnete v Spark
-  </string>
+  <string name="dashbrd_popup_rating">Páči sa naša aplikácia? Pomôžte zdvihnúť náš rating! Čím vyšší je rating, tým viac zaujímavých ľudí stretnete v Spark</string>
   <string name="dashbrd_popup_title">Rating</string>
   <string name="dashbrd_popup_cancel">Viac sa nepýtať</string>
   <string name="dashbrd_popup_rate">Vystaviť rating</string>
@@ -45,24 +43,20 @@
   <string name="edit_my_photos">Moje fotografie</string>
   <string name="general_search_empty_title">Bohužiaľ, nič nebolo nájdené</string>
   <string name="general_search_empty_text">Môžete zadať nové vyhľadávanie alebo zmeniť nastavenia
-    filtra.
-  </string>
+        filtra.</string>
   <string name="map_title">Mapa</string>
   <string name="general_buying">Kúpiť sympatie a mince</string>
   <string name="popup_version_title">Je dostupná nová verzia aplikácie</string>
   <string name="popup_version_message">Je čas obnoviť svoju verziu!</string>
   <string name="leaders_select_photo_info">Vyberte najefektívnejšiu fotografiu! Fotografie z
-    nízkym ratingom nemožno vyberať
-  </string>
+        nízkym ratingom nemožno vyberať</string>
   <string name="map_popup_address">Adresa</string>
   <string name="black_list_info">Pridali ste osobu na čiarnu listiny. Môžete to zmeniť vo svojich
-    profilových nastaveniach v časti VIP status
-  </string>
+        profilových nastaveniach v časti VIP status</string>
   <string name="black_list_activation">Aktivujte si VIP status a využívajte čiernu listinu</string>
   <string name="buying_total">Celkovo</string>
   <string name="we_dont_detect_your_city">Aby ste mohli nájsť ľudí, ktorí sú blízko Vás, musíme
-    vedieť kde sa nachádzate. Zadajte prosím Vaše mesto
-  </string>
+        vedieť kde sa nachádzate. Zadajte prosím Vaše mesto</string>
   <string name="confirm_email">Prosím, podtvrďte e-mail.</string>
   <string name="password_sent">Nové heslo bolo poslané na Váš e-mail</string>
   <string name="buy_vip_month_one">%1$d mesiac za %2$.2f %3$@</string>
@@ -215,17 +209,14 @@
     <item quantity="other">%d fotografií</item>
     <item quantity="one">%d fotografií</item>
   </plurals>
-  <string name="general_edit_profile_message">Prosím, vyplňte všetky povinné polia dotazníka
-  </string>
+  <string name="general_edit_profile_message">Prosím, vyplňte všetky povinné polia dotazníka</string>
   <string name="general_search_null_response_error">Nič nenájdené. Skúste zmeniť nastavenia
-    filtrov.
-  </string>
+        filtrov.</string>
   <string name="change_filters">Zmeniť filtre</string>
   <string name="general_sex">Pohlavie</string>
   <string name="general_girl">Ženský</string>
   <string name="general_boy">Mužské</string>
-  <string name="filter_city_fail">Nenájdené žiadne mesto, ktoré by začínalo na
-    \&quot;%s\&quot;</string>
+  <string name="filter_city_fail">Nenájdené žiadne mesto, ktoré by začínalo na \&quot;%s\&quot;</string>
   <string name="age_filter_man">Máte záujem o mužov</string>
   <string name="age_filter_girl">Máte záujem o dievčatá</string>
   <string name="settings_melody">Melódia správy</string>
@@ -243,15 +234,12 @@
   <string name="black_list_delete">Vymazať z čiernej listiny</string>
   <string name="vip_buy_vip">Nákup VIP</string>
   <string name="vip_state_off">Váš VIP status nie je aktivovaný</string>
-  <string name="vip_info_guest">Zistite, kto sa o Vás zaujíma - prezrite si svojich návštevníkov!
-  </string>
+  <string name="vip_info_guest">Zistite, kto sa o Vás zaujíma - prezrite si svojich návštevníkov!</string>
   <string name="vip_info_invisible">Zostaňte neodhalený pri návšteve cudzích stránok vďaka režimu
-    \&quot;neviditeľný\&quot;</string>
+        \&quot;neviditeľný\&quot;</string>
   <string name="vip_info_message">Získajte výhodu - Vaše správy budú vyčnievať z davu!</string>
-  <string name="vip_info_blackList">Zbavte sa otravných osôb pomocou \&quot;čiernej
-    listiny\&quot;</string>
-  <string name="vip_info_vip">Vyniknite vďaka VIP statusu vo vyhľadávaní a vo svojom profile!
-  </string>
+  <string name="vip_info_blackList">Zbavte sa otravných osôb pomocou \&quot;čiernej listiny\&quot;</string>
+  <string name="vip_info_vip">Vyniknite vďaka VIP statusu vo vyhľadávaní a vo svojom profile!</string>
   <string name="buying_vip_status">Kúpiť VIP status</string>
   <string name="edit_my_city">Moje mesto</string>
   <string name="settings_feedback_email">E-mail pre kontakt</string>
@@ -259,35 +247,27 @@
   <string name="chat_write_message">Napísať správu</string>
   <string name="buying_sympathies">Nákup sympatií</string>
   <string name="general_reconnect_social">Pripojenie k sieti nie je možné. Pokus skúste zopakovať
-    neskôr.
-  </string>
+        neskôr.</string>
   <string name="general_block">Blokovať</string>
   <string name="general_buying_disabled">V tomto momente nákup nie je možný</string>
   <string name="ban_flood_detected">Príliš často zadávate otázky na server. Aby ste mohli ďalej
-    používať aplikáciu, musíte počkať.
-  </string>
+        používať aplikáciu, musíte počkať.</string>
   <string name="general_maintenance">Na serveri prebiehajú údržbárske práce a Vašu požiadavku nie
-    je možné splniť. Skúste to neskôr.
-  </string>
+        je možné splniť. Skúste to neskôr.</string>
   <string name="virus_chat_btn">Získať sympatie</string>
   <string name="profile_ask_sent">Žiadosť je odoslaná</string>
   <string name="virus_error">Za 24 hodín môže Váš priateľ darovať sympatiu iba 1 raz! Skúste
-    zajtra!
-  </string>
+        zajtra!</string>
   <string name="popup_version_update">Obnoviť</string>
   <string name="popup_version_cancel">Pripomenúť neskôr</string>
   <string name="general_version_not_supported">Vaša verzia aplikácie je stará a viac nie je
-    podporovaná. Prosím obnovte si verziu aplikácie
-  </string>
+        podporovaná. Prosím obnovte si verziu aplikácie</string>
   <string name="default_price_format">Celkovo: %.2f USD</string>
-  <string name="leaders_pick_condition">Nemôžete si vybrať fotografiu s hodnotením nižším ako
-    %d%%:
-  </string>
+  <string name="leaders_pick_condition">Nemôžete si vybrať fotografiu s hodnotením nižším ako %d%%:</string>
   <string name="general_gift">Darček</string>
   <string name="user_actions_chat">Rozhovor</string>
   <string name="profile_edit_age_ranges">Vek musí byť v rozmedzí od 16 do 99 rokov. Zadajte prosím
-    správne číslo a skúste pokus zopakovať.
-  </string>
+        správne číslo a skúste pokus zopakovať.</string>
   <string name="sign_in">Vojsť</string>
   <string name="create_account">Založiť účet</string>
   <string name="email">E-mail</string>
@@ -306,8 +286,7 @@
   <string name="incorrect_password">Nesprávne zadané heslo</string>
   <string name="empty_fields">Nie všetky polia sú zaplnené</string>
   <string name="email_already_registered">Užívateľ s takým e-mailom už existuje</string>
-  <string name="enter_email_from_registration">Zadajte e-mail, ktorý ste zadali pri registrácii
-  </string>
+  <string name="enter_email_from_registration">Zadajte e-mail, ktorý ste zadali pri registrácii</string>
   <string name="default_photo_upload">Nahrávanie fotografie</string>
   <string name="default_photo_upload_error">Chyba pri nahrávaní</string>
   <string name="default_photo_upload_complete">Nahrávanie je dokončené!</string>
@@ -315,11 +294,9 @@
   <string name="search_city_by_name">Vyhľadanie mesta podľa názvu</string>
   <string name="gallery">Galéria</string>
   <string name="no_photo_take_photo">Nikto sa s Vami nemôže zoznámiť! Vyfotografujte sa alebo
-    vyberte už existujpcu fotografiu z albumu
-  </string>
+        vyberte už existujpcu fotografiu z albumu</string>
   <string name="photo_for_avatar">Fotografia je pripravená na odoslanie do profilu! Je to Vaša
-    prvá fotografia, bude použítá ako profilový obrázok.
-  </string>
+        prvá fotografia, bude použítá ako profilový obrázok.</string>
   <string name="send_confirmation_email">Odoslať potvrdenie na e-mail</string>
   <string name="change_password">Zmeniť heslo</string>
   <string name="password_changing">zmena hesla</string>
@@ -336,15 +313,13 @@
   <string name="we_detect_your_city">Určili sme Vaše mesto</string>
   <string name="reselect_city">Vybrať iné mesto</string>
   <string name="choose_cool_photo">Vyberte svoju najlepšiu fotografiu a status, ktorý odráža Vašu
-    náladu.
-  </string>
+        náladu.</string>
   <string name="email_confirmed">e-mail je potvrdený</string>
   <string name="sympathy_sended">Sympatia je poslaná</string>
   <string name="general_photo_deleted">Vaša fotografia nespĺňa pravidlá a bola zmazaná</string>
   <string name="general_change">Zmeniť</string>
   <string name="user_does_not_have_gifts">Tento užívateľ zatiaľ nemá darčeky, budte prvý a zbadajú
-    Vás
-  </string>
+        Vás</string>
   <string name="status_is_empty">Nemáte status</string>
   <string name="you_dont_have_gifts_yet">Zatiaľ nemáte darčeky</string>
   <string name="buy_sympathies">Kúpiť sympatie</string>
@@ -358,18 +333,16 @@
   <string name="general_bookmarks">Vybrané</string>
   <string name="general_fans">Fanúšikovia</string>
   <string name="settings_edit_profile">Upraviť profil</string>
-  <string name="general_bookmarks_delete">Vymazať vybraných</string>
+  <string name="general_bookmarks_delete">Vymazať  vybraných</string>
   <string name="general_bookmarks_add">Pridať do vybraných</string>
   <string name="buy_resources">Doplňiť zásoby</string>
   <string name="user_is_banned">Užívateľ dostal BAN</string>
   <string name="profile_empty_name">Pole meno nemôže byť prázdne</string>
   <string name="general_wrong_photo_upload">Vaša fotografia nespĺňa pravidlá. Skúste si urobiť
-    inú.
-  </string>
+        inú.</string>
   <string name="general_input_email">Zadajte Váš e-mail</string>
   <string name="cant_delete_fake_item">Táto správa nie je dostupná, nemôžete ju zmazať. Skúste to
-    neskôr
-  </string>
+        neskôr</string>
   <string name="vip_stop_ads">Iba chat, nič navyše. VIP užívatelia nemajú reklamu</string>
   <string name="friend_email_hint">Zadajde e-mail priateľa</string>
   <string name="general_add">Pridať</string>
@@ -377,8 +350,7 @@
   <string name="general_rest_contacts">Zostalo Vám %d kontaktov</string>
   <string name="invite_friends_title">Pozvať všetkých priateľov na Spark</string>
   <string name="invalid_contacts">Niektoré z kontaktov neboli správne. Prosím, pošlite nám správne
-    kontakty
-  </string>
+        kontakty</string>
   <plurals name="vip_status_period">
     <item quantity="few">Získali ste VIP status na %d dni</item>
     <item quantity="other">Získali ste VIP status na %d dní</item>
@@ -390,9 +362,9 @@
     <item quantity="one">Získať VIP na %d deň</item>
   </plurals>
   <plurals name="invite_friends_plurals">
-    <item quantity="few">Pozvite %1$d priateľov, aby ste získali VIP status na %2$d dni</item>
-    <item quantity="other">Pozvite %1$d priateľov, aby ste získali VIP status na %2$d dní</item>
-    <item quantity="one">Pozvite %1$d priateľov, aby ste získali VIP status na %2$d deň</item>
+    <item quantity="few">Pozvite %1$d priateľov, aby ste získali VIP status na  %2$d dni</item>
+    <item quantity="other">Pozvite %1$d priateľov, aby ste získali VIP status na  %2$d dní</item>
+    <item quantity="one">Pozvite %1$d priateľov, aby ste získali VIP status na  %2$d deň</item>
   </plurals>
   <plurals name="get_vip_for_invites_plurals">
     <item quantity="few">Získaj VIP zadarmo za %d pozvania</item>
@@ -400,32 +372,25 @@
     <item quantity="one">Získaj VIP zadarmo za %d pozvanie</item>
   </plurals>
   <string name="buy_status_and_watch_your_fans">Kúpte si VIP status a zistite, kto si vás pridal
-    do obľúbených
-  </string>
+        do obľúbených</string>
   <string name="add_bookmarks_to_be_connected">Pridajte si nových známych do tejto časti a
-    nestratíte s nimi kontakt.
-  </string>
+        nestratíte s nimi kontakt.</string>
   <string name="nobody_chat_with_you_sympathies_will_help">Ešte Vám nikto nepísal. Sympatie Vám
-    pomôžu vo vyhľadávaní partnera na chat
-  </string>
+        pomôžu vo vyhľadávaní partnera na chat</string>
   <string name="rate_and_have_mutual_or_buy_and_chat">Dajte sympatie tým ľuďom, ktorí sa Vám páčia
-    a získajte vzájomné. Alebo si kúpte sympatie a začnite komunikovať s tými, komu sa páčite!
-  </string>
+        a získajte vzájomné. Alebo si kúpte sympatie a začnite komunikovať s tými, komu sa páčite!</string>
   <string name="with_vip_find_your_visitors">S VIP statusom sa dozviete, kto bol na Vašej
-    stránke
-  </string>
+        stránke</string>
   <string name="on_avatar">Na profilovku</string>
   <string name="your_avatar">Vaša profilovka</string>
   <string name="avatar_set_successfully">Profilový obrázok je nastavený</string>
   <string name="incorrect_photo">Zlá fotografia. Skúste nahrať druhú.</string>
   <string name="incorrect_photo_format">Zlý formát fotografie. Skúste nahrať fotografiu vo formáte
-    jpg alebo png
-  </string>
+        jpg alebo png</string>
   <string name="incorrect_photo_size">Nepovolená veľkosť fotografie</string>
   <string name="input_contact_name">Zadajte meno kontaktu</string>
   <string name="incorrect_locale">Ak by ste chceli, aby sme boli schopní čítať recenzie, napíšte
-    ich v ruštine alebo angličtine.
-  </string>
+        ich v ruštine alebo angličtine.</string>
   <string name="complain_photo_header">Nevyhovujúca fotografia</string>
   <string name="complain_msg_header">Nesprávna správa</string>
   <string name="complain_info_header">Nesprávna informácia</string>
@@ -434,28 +399,22 @@
   <string name="complain_type_picture">Obrázok</string>
   <string name="complain_type_fake_user">Známy človek</string>
   <string name="complain_type_spam_msg">Obchodná ponuka, spam, reklama, odkazy na stránky,
-    telefóny
-  </string>
+        telefóny</string>
   <string name="complain_type_spam_profile">Polia Status, O sebe obsahujú obchodnú ponuku</string>
   <string name="complain_type_swearing_profile">Polia Status, O sebe obsahujú hrubosť, nadávky,
-    odkazy na sociálne siete
-  </string>
-  <string name="complain_type_fake_data">Meno, pohlavie, vek a fotografia človeka sa nezhodujú
-  </string>
+        odkazy na sociálne siete</string>
+  <string name="complain_type_fake_data">Meno, pohlavie, vek a fotografia človeka sa nezhodujú</string>
   <string name="complain_description">Povedzte nám viac podrobností o príčine sťažnosti</string>
   <string name="general_complain_sended">Vaša sťažnosť je odoslaná, ďakujeme veľmi pekne za
-    pomoc
-  </string>
+        pomoc</string>
   <string name="general_complain">Žaloba</string>
   <string name="general_msg">Správa</string>
   <string name="notifications">Oznámenia</string>
   <string name="general_no_notifications">Bohužiaľ, oznámenia na Vašom zariadení nie sú k
-    dispozícii
-  </string>
+        dispozícii</string>
   <string name="black_list_add_short">Na čiernu listinu</string>
   <string name="confirm_email_for_dating">Sme proti spamu. Potvrďte svoju e-mailovú adresu, aby
-    ste sa mohli zoznámiť v Spark!
-  </string>
+        ste sa mohli zoznámiť v Spark!</string>
   <string name="complain_type_swearing_msg">Hrubosť, hrozby, nadávky</string>
   <string name="general_exit">Odísť</string>
   <string name="likes_can_help_you">Sympatie Vám pomôžu zoznámiť sa</string>
@@ -470,17 +429,14 @@
   <string name="or">alebo</string>
   <string name="settings_delete_account">Vymazať účet</string>
   <string name="chat_block_not_mutual">Začať sa rozprávať s užívateľom je možné iba vtedy, ak Vám
-    poslal sympatiu alebo máte VIP status
-  </string>
+        poslal sympatiu alebo máte VIP status</string>
   <string name="delete_account_are_you_sure">Ste si istí?</string>
   <string name="delete">Vymazať</string>
   <string name="delete_account_warning">Pozor! Pokúšate sa zrušiť svoj profil na Spark.</string>
   <string name="delete_account_error">Váš účet sa bohužiaľ nepodarilo zrušiť. Môžete sa o to
-    pokúsiť ešte raz.
-  </string>
+        pokúsiť ešte raz.</string>
   <string name="restore">Obnoviť</string>
   <string name="admiration_sended">Údiv bol poslaný</string>
   <string name="novice_sympathy">Posielajte sympatie iba ľuďom, ktorý sa Vám\nnaozaj páčia\n - a
-    môžete začať príjemnú známosť
-  </string>
+        môžete začať príjemnú známosť</string>
 </resources>

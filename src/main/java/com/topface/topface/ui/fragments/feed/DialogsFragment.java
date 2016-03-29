@@ -63,6 +63,11 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         }
     }
 
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
     private boolean isPromoExpressMessagesDialogAttached() {
         Fragment promoFragment = getFragmentManager().findFragmentByTag(PromoExpressMessages.TAG);
         return promoFragment != null;

@@ -27,6 +27,7 @@ import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -149,6 +150,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 //После авторизации обязательно бросаем события, что бы профиль загрузился
                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
                 onOptionsAndProfileSuccess();
+                new FindAndSendCurrentLocation();
             }
 
             @Override

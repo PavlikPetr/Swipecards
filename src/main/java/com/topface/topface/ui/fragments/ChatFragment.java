@@ -86,6 +86,7 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
@@ -97,6 +98,8 @@ import com.topface.topface.utils.social.AuthToken;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
+
+import rx.Subscription;
 
 public class ChatFragment extends AnimatedFragment implements View.OnClickListener {
 
@@ -206,6 +209,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private ImageButton mSendButton;
     private ChatListAnimatedAdapter mAnimatedAdapter;
     private int mUserType;
+    private Subscription mUpdateUiSubscription;
     private KeyboardListenerLayout mRootLayout;
 
     @Override
@@ -228,7 +232,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         mUserType = getArguments().getInt(ChatFragment.USER_TYPE);
         // do not recreate Adapter cause of setRetainInstance(true)
         if (mAdapter == null) {
-            mAdapter = new ChatListAdapter(getActivity(), new FeedList<History>(), getUpdaterCallback(), new ChatListAdapter.OnBuyVipButtonClick() {
+            mAdapter = new ChatListAdapter((IActivityDelegate) getActivity(), new FeedList<History>(), getUpdaterCallback(), new ChatListAdapter.OnBuyVipButtonClick() {
                 @Override
                 public void onClick() {
                     startBuyVipActivity(AUTO_REPLY_MESSAGE_SOURCE);
@@ -647,7 +651,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 !mAdapter.isEmpty() &&
                 (mPopularUserLockController.isChatLocked() || mPopularUserLockController.isResponseLocked()) &&
                 pullToRefresh;
-        HistoryRequest historyRequest = new HistoryRequest(getActivity(), mUserId, new HistoryRequest.IRequestExecuted() {
+
+        HistoryRequest historyRequest = new HistoryRequest(App.getContext(), mUserId, new HistoryRequest.IRequestExecuted() {
             @Override
             public void onExecuted() {
                 mIsUpdating = true;
@@ -842,7 +847,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     @Override
     protected OverflowMenu createOverflowMenu(Menu barActions) {
-        return new OverflowMenu(getActivity(), barActions);
+        return new OverflowMenu((IActivityDelegate) getActivity(), barActions);
     }
 
     private void release() {
@@ -1205,7 +1210,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mAddPhotoHelper.setOnResultHandler(mHandler);
             }
             if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null) {
-                TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_CHAT_OPEN).show(getChildFragmentManager(),TakePhotoPopup.TAG);
+                TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_CHAT_OPEN).show(getChildFragmentManager(), TakePhotoPopup.TAG);
             }
         }
     }

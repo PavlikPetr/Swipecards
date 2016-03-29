@@ -856,4 +856,24 @@
         <item quantity="one">You will receive %1$d Like as a\ngift! This means that those \nwho send you Likes \nreally like %2$d you</item>
     </plurals>
     <string name="buy_vip_title_from_input">You can begin a conversation with a user if you have VIP-status</string>
+    <string name="mutual_like_popup_text">The feeling is mutual!</string>
+    <string name="mutual_like_popup_button">Say \"Hi\"</string>
+    <string name="people_nearby_access_to_location_description">To see who is nearby, you need to allow access to your geolocation.</string>
+    <string name="people_nearby_not_enought_money">You do not have enough Coins to access the \"People Near Me\" feature</string>
+    <string name="people_nearby_not_found_title">There are no users near by you at this time</string>
+    <string name="people_nearby_not_found_description">To try again, press and hold a finger on the center of the screen</string>
+    <string name="NSLocationWhenInUseUsageDescription">To access this function you must give your permission</string>
+    <string name="ban_liberty_title">No ads!</string>
+    <string name="ban_liberty_description">Just dating, pure and simple</string>
+    <string name="guest_liberty_title">Guests</string>
+    <string name="guest_liberty_description">Find out who visited your profile page</string>
+    <string name="star_liberty_title">Popular Users</string>
+    <string name="star_liberty_description">Most popular ice-breakers to start a conversation
+    </string>
+    <string name="crown_liberty_title">Stand out</string>
+    <string name="crown_liberty_description">Easily stand out in Search and Messages</string>
+    <string name="like_liberty_title">Likes</string>
+    <string name="like_liberty_description">See who likes you</string>
+    <string name="buy_button_sticker_popular">Popular</string>
+    <string name="buy_button_sticker_best_value">Best value</string>
 </resources>

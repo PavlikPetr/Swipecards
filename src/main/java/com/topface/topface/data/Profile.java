@@ -3,6 +3,8 @@ package com.topface.topface.data;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
+import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 import android.util.SparseArray;
 
@@ -27,9 +29,27 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import static com.topface.topface.utils.FormItem.DATA_TYPE.ABOUT_STATUS;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.ALCOHOL;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.ARCHIEVEMENTS;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.BREAST;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.CAR;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.CHARACTER;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.COMMUNICATION;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.DATING;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.EDUCATION;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.EYES;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.FINANCES;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.FITNESS;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.HAIRS;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.HEIGHT;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.MARRIAGE;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.RESIDENCE;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.RESTAURANTS;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.SMOKING;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.STATUS;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.WEIGHT;
 import javax.inject.Inject;
-
-
 /* Класс профиля владельца устройства */
 public class Profile extends AbstractDataWithPhotos {
 
@@ -206,19 +226,19 @@ public class Profile extends AbstractDataWithPhotos {
 
             // 1.2 xstatus position -1
             formItem = new FormItem(R.array.form_main_status, profile.xstatus,
-                    FormItem.DATA, headerItem);
+                    FormItem.DATA, headerItem, STATUS);
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
 
             // 2 character position 0
             formItem = new FormItem(R.array.form_main_character, form.optInt("characterId"),
-                    FormItem.DATA, headerItem);
+                    FormItem.DATA, headerItem, CHARACTER);
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
 
             // 3 communication position 1
             formItem = new FormItem(R.array.form_main_communication,
-                    form.optInt("communicationId"), FormItem.DATA, headerItem);
+                    form.optInt("communicationId"), FormItem.DATA, headerItem, COMMUNICATION);
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
 
@@ -228,14 +248,14 @@ public class Profile extends AbstractDataWithPhotos {
 
             // 11 breast position 7
             formItem = new FormItem(R.array.form_physique_breast, form.optInt("breastId"),
-                    FormItem.DATA, headerItem);
+                    FormItem.DATA, headerItem, BREAST);
             formItem.setOnlyForWomen(true);
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
 
             // 6 fitness position 2
             formItem = new FormItem(R.array.form_physique_fitness, form.optInt("fitnessId"),
-                    FormItem.DATA, headerItem);
+                    FormItem.DATA, headerItem, FITNESS);
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
 
@@ -243,7 +263,7 @@ public class Profile extends AbstractDataWithPhotos {
             String as = form.optString("status");
             String aboutStatus = TextUtils.isEmpty(as.trim()) ? null : as;
             formItem = new FormItem(R.array.form_main_about_status, aboutStatus,
-                    FormItem.DATA, headerItem);
+                    FormItem.DATA, headerItem, ABOUT_STATUS);
             formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter(App.getAppOptions().getUserAboutMeMaxLength()));
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
@@ -251,7 +271,7 @@ public class Profile extends AbstractDataWithPhotos {
             // 7 height position 3
             int h = form.optInt("height");
             String height = (h == 0) ? null : Integer.toString(form.optInt("height"));
-            formItem = new FormItem(R.array.form_main_height, height, FormItem.DATA, headerItem);
+            formItem = new FormItem(R.array.form_main_height, height, FormItem.DATA, headerItem, HEIGHT);
             formItem.setValueLimitInterface(new FormItem.ValueLimitInterface() {
                 @Override
                 public int getMinValue() {
@@ -274,7 +294,7 @@ public class Profile extends AbstractDataWithPhotos {
             // 8 weight position 4
             int w = form.optInt("weight");
             String weight = w == 0 ? null : Integer.toString(form.optInt("weight"));
-            formItem = new FormItem(R.array.form_main_weight, weight, FormItem.DATA, headerItem);
+            formItem = new FormItem(R.array.form_main_weight, weight, FormItem.DATA, headerItem, WEIGHT);
             formItem.setValueLimitInterface(new FormItem.ValueLimitInterface() {
                 @Override
                 public int getMinValue() {
@@ -296,13 +316,13 @@ public class Profile extends AbstractDataWithPhotos {
 
             // 9 hair position 5
             formItem = new FormItem(R.array.form_physique_hairs, form.optInt("hairId"),
-                    FormItem.DATA, headerItem);
+                    FormItem.DATA, headerItem, HAIRS);
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
 
             // 10 eye position 6
             formItem = new FormItem(R.array.form_physique_eyes, form.optInt("eyeId"),
-                    FormItem.DATA, headerItem);
+                    FormItem.DATA, headerItem, EYES);
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
 
@@ -312,31 +332,31 @@ public class Profile extends AbstractDataWithPhotos {
 
             // 13 marriage position 7
             formItem = new FormItem(R.array.form_social_marriage, form.optInt("marriageId"),
-                    FormItem.DATA, headerItem);
+                    FormItem.DATA, headerItem, MARRIAGE);
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
 
             // 14 education position 8
             formItem = new FormItem(R.array.form_social_education, form.optInt("educationId"),
-                    FormItem.DATA, headerItem);
+                    FormItem.DATA, headerItem, EDUCATION);
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
 
             // 15 finances position 9
             formItem = new FormItem(R.array.form_social_finances, form.optInt("financesId"),
-                    FormItem.DATA, headerItem);
+                    FormItem.DATA, headerItem, FINANCES);
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
 
             // 16 residence position 10
             formItem = new FormItem(R.array.form_social_residence, form.optInt("residenceId"),
-                    FormItem.DATA, headerItem);
+                    FormItem.DATA, headerItem, RESIDENCE);
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
 
             // 17 car vs car_id position 11
             formItem = new FormItem(R.array.form_social_car, form.optInt("carId"),
-                    FormItem.DATA, headerItem);
+                    FormItem.DATA, headerItem, CAR);
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
 
@@ -346,13 +366,13 @@ public class Profile extends AbstractDataWithPhotos {
 
             // 20 smoking position 12
             formItem = new FormItem(R.array.form_habits_smoking, form.optInt("smokingId"),
-                    FormItem.DATA, headerItem);
+                    FormItem.DATA, headerItem, SMOKING);
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
 
             // 21 alcohol position 13
             formItem = new FormItem(R.array.form_habits_alcohol, form.optInt("alcoholId"),
-                    FormItem.DATA, headerItem);
+                    FormItem.DATA, headerItem, ALCOHOL);
             formInfo.fillFormItem(formItem);
             profile.forms.add(formItem);
 
@@ -360,7 +380,7 @@ public class Profile extends AbstractDataWithPhotos {
             String rest = form.optString("restaurants").trim();
             String restraunts = TextUtils.isEmpty(rest) ? null : rest;
             formItem = new FormItem(R.array.form_habits_restaurants, restraunts, FormItem.DATA,
-                    headerItem);
+                    headerItem, RESTAURANTS);
             formInfo.fillFormItem(formItem);
             formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter());
             profile.forms.add(formItem);
@@ -373,7 +393,7 @@ public class Profile extends AbstractDataWithPhotos {
             String dd = form.optString("firstDating").trim();
             String datingDetails = TextUtils.isEmpty(dd) ? null : dd;
             formItem = new FormItem(R.array.form_detail_about_dating, datingDetails,
-                    FormItem.DATA, headerItem);
+                    FormItem.DATA, headerItem, DATING);
             formInfo.fillFormItem(formItem);
             formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter());
             profile.forms.add(formItem);
@@ -382,7 +402,7 @@ public class Profile extends AbstractDataWithPhotos {
             String ach = form.optString("achievements").trim();
             String achievments = TextUtils.isEmpty(ach) ? null : ach;
             formItem = new FormItem(R.array.form_detail_archievements, achievments,
-                    FormItem.DATA, headerItem);
+                    FormItem.DATA, headerItem, ARCHIEVEMENTS);
             formInfo.fillFormItem(formItem);
             formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter());
             profile.forms.add(formItem);
@@ -511,5 +531,17 @@ public class Profile extends AbstractDataWithPhotos {
         public ArrayList<Gift> getGifts() {
             return items;
         }
+    }
+
+    @Nullable
+    public FormItem getFormByType(FormItem.DATA_TYPE dataType) {
+        if (forms != null) {
+            for (FormItem item : forms) {
+                if (item.dataType == dataType) {
+                    return item;
+                }
+            }
+        }
+        return null;
     }
 }

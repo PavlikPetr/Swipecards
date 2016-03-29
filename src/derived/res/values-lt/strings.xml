@@ -28,9 +28,7 @@
     <string name="filter_city_age_parameters">Amžius ir miestas</string>
     <string name="filter_select_city">Miesto pasirinkimas</string>
     <string name="edit_block_photo">fotografijos</string>
-    <string name="dashbrd_popup_rating">Patiko mūsų priedas? Pakelk mūsų reitingą! Kuo aukštesnis
-        reitingas, tuo daugiau įdomių žmonių tu sutiksi Topface
-    </string>
+    <string name="dashbrd_popup_rating">Patiko mūsų priedas? Pakelk mūsų reitingą! Kuo aukštesnis reitingas, tuo daugiau įdomių žmonių tu sutiksi Topface</string>
     <string name="dashbrd_popup_title">Reitingas</string>
     <string name="dashbrd_popup_cancel">Daugiau neklausti</string>
     <string name="dashbrd_popup_rate">Duoti reitingą</string>
@@ -87,8 +85,7 @@
     <string name="black_list_info">Jūs pridėjote pašnekovą į juodąjį sąrašą. Pakeisti tai galima
         savo profilyje, VIP statuso nustatymuose.
     </string>
-    <string name="black_list_activation">Aktyvuokite VIP statusą ir naudokite juodąjį sąrašą
-    </string>
+    <string name="black_list_activation">Aktyvuokite VIP statusą ir naudokite juodąjį sąrašą</string>
     <string name="buying_total">Viso</string>
     <string name="we_dont_detect_your_city">Tam, kad rastumėte žmonės šalia jūsų, mums reikia
         žinoti, kur jūs esate. Prašome nurodyti savo miestą.
@@ -163,8 +160,7 @@
     <string name="general_dbl_all">Visi</string>
     <string name="general_dbl_unread">Neperskaityti</string>
     <string name="general_empty_code_confirmation">Įveskite patvirtinimo kodą</string>
-    <string name="general_email_success_confirmed">El. pašto adresas sėkmingai patvirtintas.
-    </string>
+    <string name="general_email_success_confirmed">El. pašto adresas sėkmingai patvirtintas.</string>
     <string name="general_email_not_confirmed">El. pašto adresas nebuvo patvirtintas.</string>
     <string name="time_yesterday">Vakar</string>
     <string name="time_today">Šiandien</string>
@@ -375,8 +371,7 @@
     <string name="black_list_delete">Pašalinti iš juodojo sąrašo</string>
     <string name="vip_buy_vip">VIP pirkimas</string>
     <string name="vip_state_off">Jūsų VIP-statusas neaktyvuotas</string>
-    <string name="vip_info_guest">Sužinokite, kas jumis domėjosi - peržiūrėkite savo svečius!
-    </string>
+    <string name="vip_info_guest">Sužinokite, kas jumis domėjosi - peržiūrėkite savo svečius!</string>
     <string name="vip_info_invisible">Likite nepastebėti, kai lankotės svetimuose puslapiuose
         \"nematomo\" režimo dėka
     </string>
@@ -418,9 +413,7 @@
     </string>
     <string name="default_price_format">Viso: %.2f USD</string>
     <string name="default_price_format_extended">Viso: %1$.2f %2$s</string>
-    <string name="leaders_pick_condition">Jūs negalite pasirinkti fotografijos su reitingu, mažesniu
-        nei %d%%:
-    </string>
+    <string name="leaders_pick_condition">Jūs negalite pasirinkti fotografijos su reitingu, mažesniu nei %d%%:</string>
     <string name="general_gift">Dovana</string>
     <string name="user_actions_chat">Pokalbis</string>
     <string name="profile_edit_age_ranges">Amžius turi būti nuo 16 iki 99 metų. Prašome įvesti

@@ -7,32 +7,26 @@
   <string name="general_settings_abbr">Ayarlar</string>
   <string name="general_disallow">İzin verme</string>
   <string name="general_allow">İzin ver</string>
-  <string name="notification_denied_popup_title">Gelen mesajları, beğenileri ve diğer tüm haberleri
-    kaçırmamak için bildirimlere izin verin.
-  </string>
-  <string name="notification_popup_title">Yeni beğeniler, hayranlar veya okunmamış mesajlar
-    için size bildirim göndermemize izin verin.
-  </string>
+  <string name="notification_denied_popup_title">Gelen mesajları, beğenileri ve diğer tüm haberleri 
+        kaçırmamak için bildirimlere izin verin.</string>
+  <string name="notification_popup_title">Yeni beğeniler, hayranlar veya okunmamış mesajlar 
+       için size bildirim göndermemize izin verin.</string>
   <string name="email_successfully_changed">E-mailiniz başarılıyla değiştirildi</string>
   <string name="auth_vk_name">VKontakte</string>
   <string name="dating_switch_button">Daha…</string>
   <string name="dating_prev_button">Önceki</string>
   <string name="dating_chat_button">Sohbet etmek</string>
-  <string name="waiting_a_products">Satın almak için mevcut mal indiriyoruz. Lütfen bekleyin.
-  </string>
+  <string name="waiting_a_products">Satın almak için mevcut mal indiriyoruz. Lütfen bekleyin.</string>
   <string name="likes_background_text">Beğeni yok</string>
   <string name="visitors_background_text">Misafirler yok</string>
-  <string name="need_set_avatar">Bu şekilde seni kimse tanıyamaz! Hemen bir profil resmi yükle.
-  </string>
+  <string name="need_set_avatar">Bu şekilde seni kimse tanıyamaz! Hemen bir profil resmi yükle.</string>
   <string name="chat_background_text">Gelen mesaj yok</string>
   <string name="entrance">Gir</string>
   <string name="filter_only_online">Sadece çevrim içi</string>
   <string name="filter_city_age_parameters">Yaş ve şehir</string>
   <string name="filter_select_city">Şehir seçeneği</string>
   <string name="edit_block_photo">Fotoğraflar</string>
-  <string name="dashbrd_popup_rating">Ekimizi mi beğendin? Reytingimizi yükselt! Reyting ne kadar
-    yüksekse o kadar çok ilginç insanlarla Spark’de karşılaşırsın
-  </string>
+  <string name="dashbrd_popup_rating">Ekimizi mi beğendin? Reytingimizi yükselt! Reyting ne kadar yüksekse o kadar çok ilginç insanlarla Spark’de karşılaşırsın</string>
   <string name="dashbrd_popup_title">Reyting</string>
   <string name="dashbrd_popup_cancel">Bir daha sorma</string>
   <string name="dashbrd_popup_rate">Reyting göstermek</string>
@@ -57,11 +51,8 @@
   <string name="general_complaint">Şikâyet etmek</string>
   <string name="general_type_complain">Şikâyet konusu</string>
   <string name="address_book_access_error">Bu uygulama iletişim bilgilerine ulaşılmaz. Cihazınızın
-    özel ayarlarında etkinleştirebilirsiniz.
-  </string>
-  <string name="camera_access_error">Uygulama kameranıza erişemedi, cihazınızın gizlilik
-    ayarlarından erişim izni verebilirsiniz.
-  </string>
+        özel ayarlarında etkinleştirebilirsiniz.</string>
+  <string name="camera_access_error">Uygulama kameranıza erişemedi, cihazınızın gizlilik ayarlarından erişim izni verebilirsiniz.</string>
   <string name="profile_deleted_user">Kullanıcı silinmiştir</string>
   <string name="filter_main_parameters">İlgi alanlarım</string>
   <string name="dating_prev_button_ext">Önceki</string>
@@ -79,24 +70,20 @@
   <string name="edit_my_photos">Fotoğraflarım</string>
   <string name="general_search_empty_title">Maalesef bir şey bulunamadı</string>
   <string name="general_search_empty_text">Tekrar aramayı denebilirsiniz veya filtre ayarlarını
-    değiştirebilirsiniz
-  </string>
+        değiştirebilirsiniz</string>
   <string name="map_title">Harita</string>
   <string name="general_buying">Beğeni ve paraları satın almak</string>
   <string name="popup_version_title">Uygulamanın yeni versiyonu mevcuttur</string>
   <string name="popup_version_message">Versiyonu yenilemek için tam zamanı!</string>
   <string name="leaders_select_photo_info">En etkileyici foto seçiniz! Düşük reytingle
-    fotoğrafları seçilenmez
-  </string>
+        fotoğrafları seçilenmez</string>
   <string name="map_popup_address">Adres</string>
   <string name="black_list_info">Muhabbet ettiğiniz kişiyi kara listeye eklediniz. Bu durumu
-    profilinizde, VIP-durumu ayarlarınızda değiştirebilirsiniz.
-  </string>
+        profilinizde, VIP-durumu ayarlarınızda değiştirebilirsiniz.</string>
   <string name="black_list_activation">VIP-durumunu güncelleyin ve kara listeyi kullanın.</string>
   <string name="buying_total">Toplam</string>
   <string name="we_dont_detect_your_city">Size yakın insanları bulmamız için nerede bulunduğunuzu
-    bilmeliyiz. Lütfen, şehrinizi belirtiniz
-  </string>
+        bilmeliyiz. Lütfen, şehrinizi belirtiniz</string>
   <string name="confirm_email">Lütfen, e-mailinizi onaylayın.</string>
   <string name="password_sent">Yeni parola E-mailinize gönderildi</string>
   <string name="buy_vip_month_one">%1$d aylık %2$.2f %3$@</string>
@@ -136,8 +123,7 @@
   <string name="pincode_forget">PIN-kod mu unuttunuz?</string>
   <string name="pincode_auth_input">Login ve parolaya girmelisiniz</string>
   <string name="pincode_will_be_reset">Başarılı üye girişinden sonra uygulamanın tüm ayarları
-    sıfırlanacak.
-  </string>
+        sıfırlanacak.</string>
   <plurals name="pincode_interval">
     <item quantity="zero">%d min.</item>
     <item quantity="other">%d min.</item>
@@ -156,8 +142,7 @@
   <string name="general_back">Geri</string>
   <string name="general_server_error">Hata. Daha sonra yeniden deneyin</string>
   <string name="general_non_exist_photo_error">O zamandan beri, bir eylemi gerçekleştirmek için
-    olmadı fotoğraf kaldırıldı
-  </string>
+        olmadı fotoğraf kaldırıldı</string>
   <string name="general_data_error">Hata. Bir daha deneyin</string>
   <string name="general_internet_off">İnternete bağlı değil</string>
   <string name="general_msg_copied">Metin kopyalandı</string>
@@ -216,7 +201,7 @@
   <string name="filter_age_end_prefix">%s kadar</string>
   <string name="filter_constitution_template">%1$d ile %2$d arası</string>
   <string name="filter_cities_all">Bütün şehirlerde</string>
-  <string name="purchase_header_title">Hesap bakiyeniz:</string>
+  <string name="purchase_header_title">Bakiye:</string>
   <string name="buying_header_title">Satın almalar</string>
   <plurals name="buying_gift_you_need_coins">
     <item quantity="other">Bir hediye yollamak için daha fazla %d para gerek</item>
@@ -228,9 +213,9 @@
     <item quantity="one">Bir mesaj atmak için %d para alın</item>
   </plurals>
   <plurals name="buying_unlock_likes_you_need_coins">
-    <item quantity="zero">Birinin sizi beğendiğini görmek için daha fazla %d para satın alın</item>
-    <item quantity="other">Birinin sizi beğendiğini görmek için daha fazla %d para satın alın</item>
-    <item quantity="one">Birinin sizi beğendiğini görmek için daha fazla %d para satın alın</item>
+    <item quantity="zero">Birinin sizi beğendiğini görmek için daha fazla  %d para satın alın</item>
+    <item quantity="other">Birinin sizi beğendiğini görmek için daha fazla  %d para satın alın</item>
+    <item quantity="one">Birinin sizi beğendiğini görmek için daha fazla  %d para satın alın</item>
   </plurals>
   <plurals name="buying_leaders_you_need_coins">
     <item quantity="zero">Görünmek için daha fazla %d para gerekli</item>
@@ -242,9 +227,7 @@
     <item quantity="other">%d para gerekir</item>
     <item quantity="one">%d para gerekir</item>
   </plurals>
-  <string name="buying_default_message">Kredi ile diğerlerine beğeni ve hayranlık
-    gönderebilirsiniz.
-  </string>
+  <string name="buying_default_message">Kredi ile diğerlerine beğeni ve hayranlık gönderebilirsiniz.</string>
   <string name="buying_money">Kredi satın al</string>
   <string name="gifts_title">Hediye seçin</string>
   <string name="profile_header_title">Profilim</string>
@@ -291,8 +274,7 @@
   <string name="settings_help">Yardım</string>
   <string name="settings_faq">Sorular ve cevaplar</string>
   <string name="settings_faq_title">Muhtemelen, sorununuz daha önce açıklandı.\&quot;Sorular ve
-    cevaplar\&quot; kısmına bakın.
-  </string>
+        cevaplar\&quot; kısmına bakın.</string>
   <string name="settings_account">Hesap</string>
   <string name="settings_feedback">Yorum bırakmak</string>
   <string name="settings_about">Program hakkında</string>
@@ -304,16 +286,14 @@
   <string name="settings_code_confirmation">Doğrulama kodunu gönderin</string>
   <string name="settings_email_was_confirmed">zaten doğruladı</string>
   <string name="settings_email_was_confirmed_textview_text">Eğer e-postanızı bilgisayarda
-    onayladısanız
-  </string>
+        onayladısanız</string>
   <string name="settings_code_confirmation_hint">onay kodu</string>
   <string name="settings_logout_msg">Gerçekten çıkmak istiyor musunuz?</string>
   <string name="settings_error_message">Hata mesajı</string>
   <string name="settings_ask_developer">Geliştiricilere soru</string>
   <string name="settings_payment_problems">Ödeme sorunları</string>
   <string name="settings_cooperation">Ortaklık</string>
-  <string name="settings_feedback_success_msg">Teşekkürler, mesaj başarılıyla gönderilmiştir
-  </string>
+  <string name="settings_feedback_success_msg">Teşekkürler, mesaj başarılıyla gönderilmiştir</string>
   <string name="settings_switch_on">aç</string>
   <string name="settings_switch_off">kapat</string>
   <string name="leaders_go_date">Buraya istiyorum</string>
@@ -333,8 +313,7 @@
   </plurals>
   <string name="general_edit_profile_message">Lütfen, anketin gerekli boşlukları doldurun</string>
   <string name="general_search_null_response_error">Hiçbir şey bulunamadı. Filtreleri değiştirmeyi
-    deneyin
-  </string>
+        deneyin</string>
   <string name="change_filters">Filtreleri değiştirmek</string>
   <string name="reset_filter">Sıfırlamak</string>
   <string name="general_sex">Cinsiyet</string>
@@ -349,14 +328,13 @@
   <string name="rate_popup_cancel">Hayır, teşekkürler</string>
   <string name="rate_popup_error">Uygulamamıza kaç tane yıldız verdiğini belirtmelisiniz</string>
   <string name="feedback_popup_title">Siz düşük fiyat koymuşsunuz. Uygulamada neyi beğenip
-    beğenmediğinizi anlatın. Bize daha iyi olmak için yardımcı olun. Teşekkürler!
-  </string>
+        beğenmediğinizi anlatın. Bize daha iyi olmak için yardımcı olun. Teşekkürler!</string>
   <string name="settings_melody">Bildirim sesi</string>
   <string name="settings_loading_photo">Resim yükleme</string>
   <string name="edit_refresh_status">Durumu yenilemek</string>
   <string name="ban_title">Tebrikler! Siz ban edildiniz</string>
   <string name="ban_title_forever">Tebrikler! Hayat boyu engellendiniz!</string>
-  <string name="ban_title_until">Tebrikler! %s kadar engellendiniz.</string>
+  <string name="ban_title_until">Tebrikler!  %s kadar engellendiniz.</string>
   <string name="ban_complain">Engellemeyi şikayet etmek</string>
   <string name="general_ready">Hazır</string>
   <string name="buying_store_ok">Alış başarılıyla tamamlanmıştır</string>
@@ -373,15 +351,10 @@
   <string name="vip_buy_vip">VIP üyelik satın al</string>
   <string name="vip_state_off">VIP-üyelik aktif değil</string>
   <string name="vip_info_guest">Sizi merak edenleri öğrenin misafirlerinize göz atın!</string>
-  <string name="vip_info_invisible">\&quot;Görünmez\&quot; durumu sayesinde diğer sayfaları ziyaret
-    ederken
-    gizli kalın.
-  </string>
-  <string name="vip_info_message">Avantaj kazanın – mesajlarınız arka plandan öne çıkarılır.
-  </string>
-  <string name="vip_info_blackList">Bıktığınız kişilerden \&quot;kara liste\&quot; yardımıyla
-    kurtulun
-  </string>
+  <string name="vip_info_invisible">\&quot;Görünmez\&quot; durumu sayesinde diğer sayfaları ziyaret ederken
+        gizli kalın.</string>
+  <string name="vip_info_message">Avantaj kazanın – mesajlarınız arka plandan öne çıkarılır.</string>
+  <string name="vip_info_blackList">Bıktığınız kişilerden \&quot;kara liste\&quot; yardımıyla kurtulun</string>
   <string name="vip_info_vip">Arama motorunda ve profilinizde VIP-durumunuzla dikkat çekin!</string>
   <string name="buying_vip_status">VIP durumu satın almak</string>
   <string name="edit_my_city">Şehrim</string>
@@ -390,34 +363,28 @@
   <string name="chat_write_message">Mesaj yazmak</string>
   <string name="dating_message">Mesaj…</string>
   <string name="buying_sympathies">Beğeni satın al</string>
-  <string name="general_reconnect_social">Sosyal ağa bağlanamıyor. Daha sonra tekrar deneyin.
-  </string>
+  <string name="general_reconnect_social">Sosyal ağa bağlanamıyor. Daha sonra tekrar deneyin.</string>
   <string name="general_block">Engellemek</string>
   <string name="general_buying_disabled">Şu anda alışveriş mümkün değildir</string>
   <string name="ban_flood_detected">Sonucuya çok sık istek gönderiyorsunuz. Ugulamayı kullanmaya
-    devam etmek için bekleyin.
-  </string>
+        devam etmek için bekleyin.</string>
   <string name="general_maintenance">Sunucuda teknik çalışmalar yapmaktadır. Daha sonra yeniden
-    deneyin.
-  </string>
+        deneyin.</string>
   <string name="virus_chat_btn">Beğeni kazan</string>
   <string name="profile_ask_sent">İstek gönderildi</string>
   <string name="virus_error">Yirmi dört saat içinde arkadaşınız sadece 1 defa beğeni hediye
-    edebilir! Yarın deneyin!
-  </string>
+        edebilir! Yarın deneyin!</string>
   <string name="popup_version_update">Yenilemek</string>
   <string name="popup_version_cancel">Daha sonra hatırlat</string>
   <string name="general_version_not_supported">Uygulamanızın versiyonu eskimiş ve artık
-    desteklenmiyor. Lütfen, uygulamayı güncelleyin
-  </string>
+        desteklenmiyor. Lütfen, uygulamayı güncelleyin</string>
   <string name="default_price_format">Toplam: %.2f USD</string>
   <string name="default_price_format_extended">Toplam: %1$.2f %2$s</string>
   <string name="leaders_pick_condition">%d%% reytinginden daha aşağı foto seçemezsiniz:</string>
   <string name="general_gift">Hediye</string>
   <string name="user_actions_chat">Sohbet</string>
   <string name="profile_edit_age_ranges">Yaş 16 ile 99 arasında olmalıdır. Lütfen doğru rakam
-    yazın ve tekrar deneyin.
-  </string>
+        yazın ve tekrar deneyin.</string>
   <string name="wrong_password_format">Yanlış parola formatı</string>
   <string name="edit_value_error">Değer, %1$d ile %2$d arasında olmalıdır</string>
   <string name="sign_in">Giriş</string>
@@ -433,8 +400,7 @@
   <string name="start_communication">Sohbete başlamak</string>
   <string name="birthdate">DT</string>
   <string name="birthdate_confirm">Aksi takdirde karşılamak mümkün olmayacaktır, yaşınızı
-    doldurunuz, lütfen
-  </string>
+        doldurunuz, lütfen</string>
   <string name="set_birthdate">Yaşınıza doldurun</string>
   <string name="welcome_to_topface">Spark’ye hoş geldiniz!</string>
   <string name="im_boy">Erkeğim</string>
@@ -450,16 +416,13 @@
   <string name="default_photo_upload_error">Yükleme hatası</string>
   <string name="default_photo_upload_complete">Yükleme tamamlanmıştır!</string>
   <string name="general_error_try_again_later">Spark’ye bağlanamıyor. Daha sonra tekrar
-    deneyin.
-  </string>
+        deneyin.</string>
   <string name="search_city_by_name">İsmine göre şehir araması</string>
   <string name="gallery">Galeri</string>
   <string name="no_photo_take_photo">Sizinle kimse tanışamıyor! Fotoğraf çekin veya mevcut
-    albümden seçin
-  </string>
+        albümden seçin</string>
   <string name="photo_for_avatar">Fotoğraf profilinize yüklenmek için hazırdır! Bu sizin ilk
-    fotoğrafınız ve o profil resmi olarak kullanılacaktır.
-  </string>
+        fotoğrafınız ve o profil resmi olarak kullanılacaktır.</string>
   <string name="add_photo_before">İlk olarak bir fotoğraf eklemeniz gerekiyor</string>
   <string name="change_email">e-mail adresi değiştermek</string>
   <string name="send_confirmation_email">E-maile onay göndermek</string>
@@ -484,15 +447,13 @@
   <string name="take_another_photo">Diğer foto</string>
   <string name="we_detect_your_city">Biz şehrinizi belirledik:</string>
   <string name="reselect_city">Diğer şehir seçmek:</string>
-  <string name="choose_cool_photo">En iyi fotoğrafınızı ve moralinizi gösteren durumunuzu seçin!
-  </string>
+  <string name="choose_cool_photo">En iyi fotoğrafınızı ve moralinizi gösteren durumunuzu seçin!</string>
   <string name="email_confirmed">e-mail onaylanmıştır!</string>
   <string name="sympathy_sended">Beğeni gönderildi</string>
   <string name="general_photo_deleted">Fotoğrafınız kurallara aykırı olduğu için kaldırıldı</string>
   <string name="general_change">Değiştirmek</string>
   <string name="user_does_not_have_gifts">Bu kullanıcının hediyeleri henüz yok, birinci olun ve
-    sizi fark edecekler
-  </string>
+        sizi fark edecekler</string>
   <string name="status_is_empty">Sizin ifade mesajınız boştur</string>
   <string name="you_dont_have_gifts_yet">Henüz hediyeniz yoktur</string>
   <string name="buy_sympathies">Beğeni satın al</string>
@@ -512,22 +473,18 @@
   <string name="user_is_banned">Kullanıcı engellenmiştir</string>
   <string name="profile_empty_name">İsim boş kalamaz</string>
   <string name="general_wrong_photo_upload">Fotoğrafınız kurallara uymuyor. Diğerini çekmeyi
-    deneyin
-  </string>
+        deneyin</string>
   <string name="general_input_email">E-mailinize girin</string>
   <string name="cant_delete_fake_item">Bu mesaj ulaşmamış, onu silemezsiniz. Daha sonra tekrar
-    deneyin.
-  </string>
+        deneyin.</string>
   <string name="vip_stop_ads">Sadece sohbet, fazlalıksız. VIP-kullanıcılarda reklam yok</string>
   <string name="friend_email_hint">Arkadaşınızın e-mailini veya telefonunu yazın</string>
   <string name="general_add">Eklemek</string>
   <string name="general_invite_friends">Arkadaşlarınızı davet edin</string>
   <string name="general_rest_contacts">Sizin %d kişiniz kaldı</string>
-  <string name="invite_friends_title">Telefon defterinden tüm arkadaşları Spark’ye davet etmek
-  </string>
+  <string name="invite_friends_title">Telefon defterinden tüm arkadaşları Spark’ye davet etmek</string>
   <string name="invalid_contacts">Bazı iletişim bilgileriniz uygunsuz biçimindeydi. Lütfen,
-    iletişim bilgilerinizi uygun biçimde gönderin
-  </string>
+        iletişim bilgilerinizi uygun biçimde gönderin</string>
   <plurals name="vip_status_period">
     <item quantity="zero">Siz %d günlük VIP-durumu aldınız</item>
     <item quantity="other">Siz %d günlük VIP-durumu aldınız</item>
@@ -549,31 +506,24 @@
     <item quantity="one">%d davet için bedava VIP kazan</item>
   </plurals>
   <string name="buy_status_and_watch_your_fans">VIP-durumu satın alın ve sizi kimin seçilmişlere
-    eklediğini öğrenin
-  </string>
+        eklediğini öğrenin</string>
   <string name="add_bookmarks_to_be_connected">Yeni tanıştığınız insanları bu bölüme ekleyin ve
-    onlarla bağlantınızı kaybetmezsiniz
-  </string>
+        onlarla bağlantınızı kaybetmezsiniz</string>
   <string name="nobody_chat_with_you_sympathies_will_help">Size henüz kimse yazmadı. Sohbet edecek
-    kişi bulmanızda beğeniler yardımcı olur
-  </string>
+        kişi bulmanızda beğeniler yardımcı olur</string>
   <string name="rate_and_have_mutual_or_buy_and_chat">Hoşlandığınız kişilere beğeni verin ve
-    karşılıklı alın. Veya beğeni satın alın ve sizden hoşlanan kişilerle sohbete başlayın!
-  </string>
+        karşılıklı alın. Veya beğeni satın alın ve sizden hoşlanan kişilerle sohbete başlayın!</string>
   <string name="with_vip_find_your_visitors">VIP-durumuyla sayfanızı kimin ziyaret ettiğini
-    öğrenirsiniz
-  </string>
+        öğrenirsiniz</string>
   <string name="on_avatar">Profil resmine</string>
   <string name="your_avatar">Profil resminiz</string>
   <string name="avatar_set_successfully">Profil resmi başarıyla yüklendi</string>
   <string name="incorrect_photo">Uygunsuz foto. Başka birini yüklemeyi deneyin</string>
-  <string name="incorrect_photo_format">Fotonun uygunsuz biçimi. jpg veya png yüklemeyi deneyin
-  </string>
+  <string name="incorrect_photo_format">Fotonun uygunsuz biçimi. jpg veya png yüklemeyi deneyin</string>
   <string name="incorrect_photo_size">Fotoğrafın uygunsun boyutu</string>
   <string name="input_contact_name">Kişinin ismi yazın</string>
   <string name="incorrect_locale">Yorumunuzu okuyabilmemizi istiyorsanız onu Rusça veya İngilizce
-    yazın
-  </string>
+        yazın</string>
   <string name="complain_photo_header">Uygunsuz fotoğraf</string>
   <string name="complain_msg_header">Uygunsuz mesaj</string>
   <string name="complain_info_header">Uygunsuz bilgi</string>
@@ -582,40 +532,32 @@
   <string name="complain_type_picture">Resim</string>
   <string name="complain_type_fake_user">Ünlü kişi</string>
   <string name="complain_type_spam_msg">İş teklifi, spam, reklam, sitelere linkler, telefon
-    numaraları
-  </string>
+        numaraları</string>
   <string name="complain_type_spam_profile">‘’Durum’’, ‘’Kendisi hakkında’’ boşluklarda iş teklifi
-    mevcuttur
-  </string>
+        mevcuttur</string>
   <string name="complain_type_swearing_profile">‘’Durum’’, ‘’Kendisi hakkında’’ boşluklarda
-    kabalık, küfür, sosyal ağlara linklere mevcuttur
-  </string>
+        kabalık, küfür, sosyal ağlara linklere mevcuttur</string>
   <string name="complain_type_fake_data">Kişinin ismi, cinsiyeti, yaşı ve fotoğrafı birbirine
-    uymuyor
-  </string>
+        uymuyor</string>
   <string name="complain_description">Şikâyet sebebinizi saha detaylı anlatın</string>
-  <string name="general_complain_sended">Şikâyetiniz gönderildi, yardımınız için teşekkürler
-  </string>
+  <string name="general_complain_sended">Şikâyetiniz gönderildi, yardımınız için teşekkürler</string>
   <string name="general_complain">Şikâyet</string>
   <string name="general_msg">Mesaj</string>
   <string name="notifications">Bildirimler</string>
   <string name="general_no_notifications">Maalesef, cihazınızda bildirimler uygulanmıyor</string>
   <string name="black_list_add_short">Kara listeye</string>
   <string name="confirm_email_for_dating">Biz spama karşıyız. Spark’de tanışmak için posta
-    adresinizi onaylayın!
-  </string>
+        adresinizi onaylayın!</string>
   <string name="confirm_email_for_dating_title">Biz Spam\'lere karşıyız</string>
   <string name="confirm_email_for_dating_desc">Spark\'de yeni insanlarla tanışabilmek için
-    e-posta adresinizi onaylayın!
-  </string>
+        e-posta adresinizi onaylayın!</string>
   <string name="send_confirm_link">Onaylama için link göndermek</string>
   <string name="complain_type_swearing_msg">Kabalık, tehdit, küfür</string>
   <string name="general_exit">Çıkış</string>
   <string name="likes_can_help_you">Beğeniler tanışabilir</string>
   <string name="general_get_dating">Tanışmak</string>
   <string name="settings_select_language">Uygulamanın dil seçimi</string>
-  <string name="settings_select_preload_photo_type">Önyükleme fotoğrafları dahil olduğunda seçin
-  </string>
+  <string name="settings_select_preload_photo_type">Önyükleme fotoğrafları dahil olduğunda seçin</string>
   <string name="restart_to_change_locale">Dil değişimi için uygulama yeniden yüklenilecek</string>
   <string name="locale_changing">Dil değişimi</string>
   <plurals name="you_were_liked">
@@ -627,20 +569,15 @@
   <string name="or">veya</string>
   <string name="settings_delete_account">Hesap silmek</string>
   <string name="chat_block_not_mutual">Kullanıcı size beğeni gönderdiyse veya VİP-durumunuz varsa
-    o zaman onunla sohbete başlayabilirsiniz
-  </string>
+        o zaman onunla sohbete başlayabilirsiniz</string>
   <string name="add_to_favorite_block_not_vip">Sadece VIP kullancılar ekrandan özele
-    ekleyebilirler
-  </string>
+        ekleyebilirler</string>
   <string name="delete_account_are_you_sure">Kesinlikle emin misiniz?</string>
   <string name="delete">Silmek</string>
-  <string name="delete_account_warning">Dikkat! Spark’deki profilinizi silmeye çalışıyorsunuz.
-  </string>
-  <string name="delete_account_error">Maalesef, hesabınız silinemedi. Bir daha deneyebilirsiniz.
-  </string>
+  <string name="delete_account_warning">Dikkat! Spark’deki profilinizi silmeye çalışıyorsunuz.</string>
+  <string name="delete_account_error">Maalesef, hesabınız silinemedi. Bir daha deneyebilirsiniz.</string>
   <string name="delete_account_will_be_restored_are_you_sure">Uzak hesap girmeye çalışıyorsunuz.
-    Girdiğiniz zaman bir hesap geri yüklenir.
-  </string>
+        Girdiğiniz zaman bir hesap geri yüklenir.</string>
   <string name="restore">Kurtarmak</string>
   <string name="admiration_sended">Hayranlık gönderilmiştir</string>
   <string name="skip">Geç</string>
@@ -691,8 +628,7 @@
   <string name="user_deleted_or_banned">Kullanıcı silinmiş veya engellenmiştir</string>
   <string name="locking_popup_button_answer">Beğenilere cevap ver</string>
   <string name="locking_menu_message">Uygulamanın bazı sayfalarına erişim sınırlıdır. Tüm
-    sınırları kaldırmak için tüm gelen beğenilere cevap verin veya VIP alın.
-  </string>
+        sınırları kaldırmak için tüm gelen beğenilere cevap verin veya VIP alın.</string>
   <string name="current_city">Geçerli şehir</string>
   <string name="general_bonus">Bonus</string>
   <plurals name="notification_many_messages">
@@ -713,41 +649,33 @@
   <string name="general_distance_m">%d м</string>
   <string name="cannot_get_geo">Yeriniz Tespit edilemedi</string>
   <string name="press_back_more_to_close_app">Spark\'den çıkmak için bir daha geri düğmesine
-    tıklayın
-  </string>
+        tıklayın</string>
   <string name="waiting_for_load">Bekleyin, yükleme yapılıyor…</string>
   <string name="loading_photo_percent">%d%% resim yüklemesi</string>
   <string name="profile_update_error">Bilgi yenileme hatası</string>
   <string name="retry_cancel_editing">Bilgi gönderme sırasında bağlantı hatası oluşmuştur. Yeniden
-    denemek yoksa kaydetmeden çıkış yapmak mı istiyorsunuz?
-  </string>
+        denemek yoksa kaydetmeden çıkış yapmak mı istiyorsunuz?</string>
   <string name="retry_cancel_editing_bad_value">Yanlış bilgi girdiniz.tekrar deneyin ya da kayıt
-    etmeden çıkın?
-  </string>
+        etmeden çıkın?</string>
   <string name="user_does_not_exist">Kullanıcı bulunamamıştır.</string>
   <string name="feedback_subject_ban">İftira engellemeye karşı şikayet</string>
   <string name="settings_led">LED bildirim</string>
   <string name="open_market_error">Uygulama sayfası açılamıyor</string>
-  <string name="billing_item_already_owned">Önceki satım alınınız uygulanıyor lütfen bekleyiniz
-  </string>
+  <string name="billing_item_already_owned">Önceki satım alınınız uygulanıyor lütfen bekleyiniz</string>
   <string name="dialog">Sohbet</string>
   <string name="reply">Cevap vermek</string>
   <string name="measurement_unit_weight">kl</string>
   <string name="measurement_unit_height">sm</string>
   <string name="maximum_number_of_users">Maksimum kullanıcı sayısını seçildi</string>
   <string name="logout_if_email_already_registred">Böyle bir e-posta adresi kullanılıyor.Eğer
-    sizin e-postanız ise şu anki hesabınızdan çıkıp %s hesaba bağlanın.
-  </string>
+        sizin e-postanız ise şu anki hesabınızdan çıkıp %s hesaba bağlanın.</string>
   <string name="recover_password_instructions">Şifrenizi kurtarmak ile alakalı talimatları içeren
-    bir mesajı e-postanıza yolladık
-  </string>
+        bir mesajı e-postanıza yolladık</string>
   <string name="email_changing">E-posta değiştermek için</string>
   <string name="hint_faces_filter">Arama yöntemlerinizi değiştirin ve ilginç insanlar ile arkadaş
-    olun.
-  </string>
+        olun.</string>
   <string name="hint_faces_buy_like">Sahip olduğunuz beğeni kadar miktarda insanlar size minnettar
-    olur.Beğenileri satın almayı unutmayın.
-  </string>
+        olur.Beğenileri satın almayı unutmayın.</string>
   <string name="hint_myprofile_buy_vip">VIP-üyelik alın ve sınırsız sohbet etmeyi eğlenin</string>
   <string name="pull_to_refresh_pull_label">Yenilemek için çekin…</string>
   <string name="pull_to_refresh_release_label">Yenilemek için yayın…</string>
@@ -762,44 +690,35 @@
   <string name="preload_photo_type_always_on">Her zaman açık</string>
   <string name="preload_photo_type_preload_off">Kapalı</string>
   <string name="wrong_time_popup_text">Sunucunuza güveli bir bağlantı kurulamadı/nMuhtemelen tarih
-    ve saat bilgisayarınızda ayarlanmadı.
-  </string>
+        ve saat bilgisayarınızda ayarlanmadı.</string>
   <string name="wrong_time_popup_button">Ayarları açın</string>
   <string name="enter_text">mesajınızı girin</string>
   <string name="send_feedback">mesaj göndermek</string>
   <string name="get_vip_free">VIP bedava kazanın</string>
   <string name="buy_more_sympathies">Daha beğeneli kazanın, daha popüler olun</string>
   <string name="transaction_code_help">Bize işlem kodunu göndermeniz halinde, bu talebinizi daha
-    hızlı bir şekilde tamamlamanıza yardımcı olacaktır. Sipariş hakkındaki daha fazla bilgi %s
-    içerisinde bulunabilir.
-  </string>
+        hızlı bir şekilde tamamlamanıza yardımcı olacaktır. Sipariş hakkındaki daha fazla bilgi %s
+        içerisinde bulunabilir.</string>
   <string name="google_wallet">Google Cüzdan</string>
   <string name="google_service_general_title">İkaz mevcut değildir</string>
   <string name="google_service_disabled_title">Google Play servisleri bildirimleri kapamak için
-    gereklidir.
-  </string>
+        gereklidir.</string>
   <string name="google_service_disabled_button">Açmak</string>
   <string name="google_service_missing_title">Google Play servisleri bildirimlerin kurulmaması
-    için gereklidir.
-  </string>
+        için gereklidir.</string>
   <string name="google_service_missing_button">Yüklemek</string>
   <string name="google_service_version_update_required_title">Google servisinin eski bir
-    versiyonunu kurdunuz, doğru dildirim almak için, lütfen güncelleyin.
-  </string>
+        versiyonunu kurdunuz, doğru dildirim almak için, lütfen güncelleyin.</string>
   <string name="google_service_version_update_required_button">Güncelleştirmek</string>
   <string name="google_invalid_account_title">Google hesabınızda ayrıntılarını kontrol edin, ya da
-    Google için teknik desteğe başvurun.
-  </string>
+        Google için teknik desteğe başvurun.</string>
   <string name="google_sign_in_account_title">Google hesabı eklemediniz. eğer bildirim almak
-    istiyorsanız, lütfen bağlanın
-  </string>
+        istiyorsanız, lütfen bağlanın</string>
   <string name="google_sign_in_account_button">Oturum açın</string>
-  <string name="google_unavailable_services_title">Maalesef,bildirimler telefonunuzda çalışmaz.
-  </string>
+  <string name="google_unavailable_services_title">Maalesef,bildirimler telefonunuzda çalışmaz.</string>
   <string name="receive_message_notification">Yeni mesajı hakkında bildirimleri alın\nо</string>
   <string name="receive_mutual_notification">Yeni karşılıklı beğeni hakkında bildirimleri
-    alın\nо
-  </string>
+        alın\nо</string>
   <string name="receive_sympathy_notification">Yeni beğeni hakkında bildirimleri alın\nо</string>
   <string name="receive_rate_notification">sil</string>
   <string name="receive_guest_notification">Yeni misafiri hakkında bildirimleri alın\nо</string>
@@ -808,11 +727,9 @@
   <string name="add_leader_hint">Tebriksiniz …</string>
   <string name="more">daha</string>
   <string name="premium_for_invitations">1 günlük bir VIP statüsü elde etmek için kayıt yaptıracak
-    5 kişi bulmanız gerekecek
-  </string>
+        5 kişi bulmanız gerekecek</string>
   <string name="premium_for_invitations_current_status">Gerçekleştirmiş olduğunuz: :\nDavetiye:
-    %1$d\nKayıt: %2$d
-  </string>
+        %1$d\nKayıt: %2$d</string>
   <string name="no_contacts_available">Cihazda, görüntülenebilecek hiçbir kişi bulunmuyor</string>
   <string name="sms_invite_title">Bir günlük bir VIP statüsü alın!</string>
   <string name="status_can_send_confirmation">Davet Et</string>
@@ -824,35 +741,22 @@
   <string name="trial_vip_button_text">VIP üye ol</string>
   <string name="settings_check_vip_title">VIP statüsünün aktif olup olmadığını kontrol et</string>
   <string name="settings_check_vip_cell">VIP statüsünü kontrol et</string>
-  <string name="settings_check_vip_alert">VIP statüsünün kontrol edilmesi talebiniz iletildi.
-  </string>
-  <string name="novice_sympathy">Yakın bir arkadaşlığa başlamak için sadece hoşlandığınız \nkişilere
-    beğeni gönderin.
-    Belki de \nsizin için gerçekten özel birini böylece bulabilirsiniz.
-  </string>
-  <string name="go_dating_message">İnsanlarla tanışmaya başla ve profilini ziyaret edenlerin listesi
-    burada gözükecek.
-  </string>
-  <string name="photo_not_from_main_album">Yönetim bu fotoğrafın profil resmi olarak
-    kullanılmayacağına karar verdi.
-  </string>
+  <string name="settings_check_vip_alert">VIP statüsünün kontrol edilmesi talebiniz iletildi.</string>
+  <string name="novice_sympathy">Yakın bir arkadaşlığa başlamak için sadece hoşlandığınız \nkişilere beğeni gönderin. 
+            Belki de \nsizin için gerçekten özel birini böylece bulabilirsiniz.</string>
+  <string name="go_dating_message">İnsanlarla tanışmaya başla ve profilini ziyaret edenlerin listesi burada gözükecek.</string>
+  <string name="photo_not_from_main_album">Yönetim bu fotoğrafın profil resmi olarak kullanılmayacağına karar verdi.</string>
   <string name="sidebar_vk_profile">Vkontakte profili</string>
   <string name="title_vk_profile">VK profili</string>
   <string name="vk_profile_invite_friends_error">Bu kullanıcı artık davetiye kabul etmiyor</string>
-  <string name="foreign_profile_empty_gifts_title">Bir hediye göndererek ilginin merkezi
-    olabilirsin
-  </string>
+  <string name="foreign_profile_empty_gifts_title">Bir hediye göndererek ilginin merkezi olabilirsin</string>
   <string name="chat_auto_reply_title">Mesaj yazısı gizlenmiş.</string>
-  <string name="chat_auto_reply_message">Bu mesajı açmak ve okumak için VIP üye olman gerekiyor.
-  </string>
+  <string name="chat_auto_reply_message">Bu mesajı açmak ve okumak için VIP üye olman gerekiyor.</string>
   <string name="chat_auto_reply_button">VIP üye ol</string>
-  <string name="photo_list_load_info">Fotoğraflarını paylaş ve milyonlarca kişi tarafından
-    görüntülen
-  </string>
+  <string name="photo_list_load_info">Fotoğraflarını paylaş ve milyonlarca kişi tarafından görüntülen</string>
   <string name="vk_profile_button_tf_group">Spark grubu</string>
   <string name="vk_profile_button_join_tf_group">Spark grubuna katıl</string>
-  <string name="vk_profile_button_join_vkgames_group">\&quot;VK oyunları\&quot; grubuna katıl
-  </string>
+  <string name="vk_profile_button_join_vkgames_group">\&quot;VK oyunları\&quot; grubuna katıl</string>
   <string name="vk_profile_button_invite_friends">Arkadaşlarını davet et</string>
   <string name="vk_profile_invite_friends_title">Arkadaşlarını davet et</string>
   <string name="invite_friend_button">Davet et</string>
@@ -861,30 +765,41 @@
   <string name="vk_friends_success_invite">Davet gönderildi</string>
   <string name="join_group_success">Gruba üye oldunuz</string>
   <string name="settings_auto_greeting_title">Otomatik-selam</string>
-  <string name="settings_auto_greeting_subtitle">Birisi size beğeni gönderdiğinde otomatik olarak
-    selam gönderilmesi ve sohbet başlatılması için Spark\'e izin verin.
-  </string>
-  <string name="take_photo_text_1">Arkadaşlık kurmaya başlamak için lütfen fotoğrafınızı yükleyin.
-  </string>
-  <string name="take_photo_text_2">Fotoğraf size ait olmalı ve içerisinde siz olmalısınız.
-    Modaratörlerimiz tüm fotoğrafları kontrol etmektedir.
-  </string>
+  <string name="settings_auto_greeting_subtitle">Birisi size beğeni gönderdiğinde otomatik olarak selam gönderilmesi ve sohbet başlatılması için Spark\'e izin verin.</string>
+  <string name="take_photo_text_1">Arkadaşlık kurmaya başlamak için lütfen fotoğrafınızı yükleyin.</string>
+  <string name="take_photo_text_2">Fotoğraf size ait olmalı ve içerisinde siz olmalısınız. Modaratörlerimiz tüm fotoğrafları kontrol etmektedir.</string>
   <string name="unlock_by_viewed_ad_video_button_text">%s ile ücretsiz aç</string>
   <plurals name="free_minutes">
     <item quantity="other">%d dakika</item>
     <item quantity="one">%d dakika</item>
   </plurals>
   <string name="thanks_for_your_rate_title">Bizi değerlendirdiğiniz için teşekkür ederiz</string>
-  <string name="thanks_for_your_rate_top_label">Minnettarlığımızı sunmak için fotoğrafınızı,
-    fotoğraf akışında yayınlayacağız.
-  </string>
-  <string name="thanks_for_your_rate_bottom_label">Düşüncelerinizi bizimle AppStore\'da paylaşın. Ne
-    düşündüğünüze önem veriyoruz!
-  </string>
+  <string name="thanks_for_your_rate_top_label">Minnettarlığımızı sunmak için fotoğrafınızı, fotoğraf akışında yayınlayacağız.</string>
+  <string name="thanks_for_your_rate_bottom_label">Düşüncelerinizi bizimle AppStore\'da paylaşın. Ne düşündüğünüze önem veriyoruz!</string>
   <string name="thanks_for_your_rate_rate_app">AppStore\'da bizi değerlendirin</string>
   <string name="thanks_for_your_rate_close">Kapat</string>
-  <plurals name="novice_sympathies_bonuses" />
-  <string name="buy_vip_title_from_input">Eğer VIP üyeyseniz dilediğiniz bir kullanıcı ile sohbete
-    hemen başlayabilirsiniz
+  <plurals name="novice_sympathies_bonuses">
+    <item quantity="zero">Hediye olarak %1$d beğeni \nalacaksınız. Bu demek oluyor ki \nsize beğeni gönderenler sizi \ngerçekten %2$d beğeniyor.</item>
+  </plurals>
+  <string name="buy_vip_title_from_input">Eğer VIP üyeyseniz dilediğiniz bir kullanıcı ile sohbete hemen başlayabilirsiniz</string>
+  <string name="mutual_like_popup_text">Beğeniniz karşılıklı</string>
+  <string name="mutual_like_popup_button">\&quot;Merhaba\&quot; de</string>
+  <string name="people_nearby_access_to_location_description">Kimlerin yakınınızda olduğunu görebilmek için lokasyonunuza erşim izni vermeniz gerekiyor.</string>
+  <string name="people_nearby_not_enought_money">\&quot;Yakınımdaki insanlar\&quot; fonksiyonu için yeterince krediniz yok</string>
+  <string name="people_nearby_not_found_title">Şu an size yakın kullanıcı bulunamdı</string>
+  <string name="people_nearby_not_found_description">Tekrar denemek için, ekranın ortasına parmağınızla dokunup basılı tutunuz.</string>
+  <string name="NSLocationWhenInUseUsageDescription">Bu fonksiyona erişebilmek için izin vermeniz gerekiyor.</string>
+  <string name="ban_liberty_title">Reklamsız!</string>
+  <string name="ban_liberty_description">Sadece arkadaşlık, basit ve kolay</string>
+  <string name="guest_liberty_title">Ziyaretçiler</string>
+  <string name="guest_liberty_description">Profil sayfanı kimler ziyaret etmiş öğren!</string>
+  <string name="star_liberty_title">Popüler kullanıcılar</string>
+  <string name="star_liberty_description">Sohbete başlamak ve kaynaşmak için en iyi yöntemler
   </string>
+  <string name="crown_liberty_title">Öne çık</string>
+  <string name="crown_liberty_description">Arama sonuçlarında ve mesajlar sayfasına öne çık</string>
+  <string name="like_liberty_title">Beğeni</string>
+  <string name="like_liberty_description">Seni kimler beğenmiş, öğren</string>
+  <string name="buy_button_sticker_popular">En çok satan</string>
+  <string name="buy_button_sticker_best_value">Süper fiyat</string>
 </resources>

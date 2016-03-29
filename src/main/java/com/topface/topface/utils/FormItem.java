@@ -12,6 +12,7 @@ public class FormItem implements Parcelable {
     public String title;
     public String value;
     public FormItem header;
+    public DATA_TYPE dataType = DATA_TYPE.UNDEFINED;
 
     public int titleId = NO_RESOURCE_ID;
     public int dataId = NO_RESOURCE_ID;
@@ -30,12 +31,18 @@ public class FormItem implements Parcelable {
     public static final int AGE = 8;
     public static final int CITY = 9;
 
+    public enum DATA_TYPE {
+        STATUS, CHARACTER, COMMUNICATION, BREAST, FITNESS, ABOUT_STATUS, HEIGHT, WEIGHT, HAIRS, EYES,
+        MARRIAGE, EDUCATION, FINANCES, RESIDENCE, CAR, SMOKING, ALCOHOL, RESTAURANTS, DATING, ARCHIEVEMENTS, UNDEFINED
+    }
+
     public static final int NO_RESOURCE_ID = -1;
 
     transient private TextLimitInterface mTextLimitInterface;
     transient private ValueLimitInterface mValueLimitInterface;
     private boolean mOnlyForWomen = false;
     private boolean mIsCanBeEmpty = true;
+
 
     //private static final long serialVersionUID = 1883262786634798671L;    
 
@@ -53,12 +60,13 @@ public class FormItem implements Parcelable {
         this.value = Utils.EMPTY;
     }
 
-    public FormItem(int titleId, int dataId, int type, FormItem header) {
+    public FormItem(int titleId, int dataId, int type, FormItem header, DATA_TYPE dataType) {
         this.titleId = titleId;
         this.dataId = dataId;
         this.type = type;
         this.header = header;
         this.value = Utils.EMPTY;
+        this.dataType = dataType;
     }
 
     public FormItem(int titleId, String data, int type) {
@@ -68,12 +76,13 @@ public class FormItem implements Parcelable {
         this.type = type;
     }
 
-    public FormItem(int titleId, String data, int type, FormItem header) {
+    public FormItem(int titleId, String data, int type, FormItem header, DATA_TYPE dataType) {
         this.titleId = titleId;
         this.value = data == null ? Utils.EMPTY : data;
         this.dataId = NO_RESOURCE_ID;
         this.type = type;
         this.header = header;
+        this.dataType = dataType;
     }
 
     @SuppressWarnings("unused")

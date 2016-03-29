@@ -22,8 +22,7 @@
     <string name="waiting_a_products">Молимо сачекајте, учитавамо доступне производе.</string>
     <string name="likes_background_text">Нема свиђања</string>
     <string name="visitors_background_text">Нема гостију</string>
-    <string name="need_set_avatar">Ни са ким се не можете упознати! Поставите профилну слику.
-    </string>
+    <string name="need_set_avatar">Ни са ким се не можете упознати! Поставите профилну слику.</string>
     <string name="chat_background_text">Нема долазних порука</string>
     <string name="entrance">Улаз</string>
     <string name="filter_only_online">Само на вези</string>
@@ -57,9 +56,7 @@
     <string name="address_book_access_error">Ова апликација нема приступ Вашим контактима. Можете
         дозволити приступ преко Подешавања приватности на свом уређају.
     </string>
-    <string name="camera_access_error">Апликација нема приступ камери. Можете дати приступ из
-        Подешавања приватности на свом уређају.
-    </string>
+    <string name="camera_access_error">Апликација нема приступ камери. Можете дати приступ из Подешавања приватности на свом уређају.</string>
     <string name="profile_deleted_user">Корисник је уклоњен.</string>
     <string name="filter_main_parameters">Заинтересован сам за</string>
     <string name="dating_prev_button_ext">Претходни</string>
@@ -849,23 +846,16 @@
     <string name="novice_sympathy">Шаљите свиђања само онима који\nВас заиста привлаче.\nМожда ћете
         наћи неког посебног!
     </string>
-    <string name="go_dating_message">Почните да упознајете људе и овде ће се појавити имена оних
-        корисника
-        који су посетили Ваш профил
-    </string>
-    <string name="photo_not_from_main_album">Наши модератори су одлучили да ова фотографија не може
-        да буде искоришћена као
-        профилна слика
-    </string>
+    <string name="go_dating_message">Почните да упознајете људе и овде ће се појавити имена оних корисника 
+        који су посетили Ваш профил</string>
+    <string name="photo_not_from_main_album">Наши модератори су одлучили да ова фотографија не може да буде искоришћена као
+          профилна слика</string>
     <string name="sidebar_vk_profile">ВК профил</string>
     <string name="title_vk_profile">ВК профил</string>
     <string name="vk_profile_invite_friends_error">Корисник више не прихвата позиве</string>
-    <string name="foreign_profile_empty_gifts_title">Пошаљите поклон и бићете у центру пажње
-    </string>
+    <string name="foreign_profile_empty_gifts_title">Пошаљите поклон и бићете у центру пажње</string>
     <string name="chat_auto_reply_title">Текст поруке је сакривен</string>
-    <string name="chat_auto_reply_message">Да бисте отворили ову поруку или одговорили на исту,
-        постаните VIP-корисник
-    </string>
+    <string name="chat_auto_reply_message">Да бисте отворили ову поруку или одговорили на исту, постаните VIP-корисник</string>
     <string name="chat_auto_reply_button">Постати VIP</string>
     <string name="photo_list_load_info">Поделите своју фотографију и видеће Вас милиони</string>
     <string name="vk_profile_button_tf_group">ГрупаTopface</string>
@@ -879,15 +869,9 @@
     <string name="vk_friends_success_invite">Позив послат</string>
     <string name="join_group_success">Придружили сте се групи</string>
     <string name="settings_auto_greeting_title">Ауто-поздрав</string>
-    <string name="settings_auto_greeting_subtitle">Дозволите Topface-у да разговор аутоматски
-        започне поздравом кад год Вам неко пошаље Свиђање
-    </string>
-    <string name="take_photo_text_1">Молимо Вас са поставите своју фотографију како бидте започели
-        ћаскање.
-    </string>
-    <string name="take_photo_text_2">На фотографији можете бити сам Ви; све слике прегледавају наши
-        модератори како би утврдили да се правила поштују.
-    </string>
+    <string name="settings_auto_greeting_subtitle">Дозволите Topface-у да разговор аутоматски започне поздравом кад год Вам неко пошаље Свиђање</string>
+    <string name="take_photo_text_1">Молимо Вас са поставите своју фотографију како бидте започели ћаскање.</string>
+    <string name="take_photo_text_2">На фотографији можете бити сам Ви; све слике прегледавају наши модератори како би утврдили да се правила поштују.</string>
     <string name="unlock_by_viewed_ad_video_button_text">Откључати бесплатно на %s</string>
     <plurals name="free_minutes">
         <item quantity="few">%d минута</item>
@@ -895,15 +879,30 @@
         <item quantity="one">%d минут</item>
     </plurals>
     <string name="thanks_for_your_rate_title">Хвала за Вашу критику</string>
-    <string name="thanks_for_your_rate_top_label">Као израз захвалности, поставићемо Вашу
-        фотографију у фото-фид!
-    </string>
-    <string name="thanks_for_your_rate_bottom_label">Поделите своје утиске у AppStore. Ценимо свако
-        мишљење!
-    </string>
+    <string name="thanks_for_your_rate_top_label">Као израз захвалности, поставићемо Вашу фотографију у фото-фид!</string>
+    <string name="thanks_for_your_rate_bottom_label">Поделите своје утиске у AppStore. Ценимо свако мишљење!</string>
     <string name="thanks_for_your_rate_rate_app">Оставити мишљење у AppStore</string>
     <string name="thanks_for_your_rate_close">Затворити</string>
-    <string name="buy_vip_title_from_input">Можете започети разговор са корисником ако имате
-        VIP-статус
-    </string>
+    <plurals name="novice_sympathies_bonuses">
+    </plurals>
+    <string name="buy_vip_title_from_input">Можете започети разговор са корисником ако имате VIP-статус</string>
+    <string name="mutual_like_popup_text">Осећање је узајамно!</string>
+    <string name="mutual_like_popup_button">Кажите \"Поздрав\"</string>
+    <string name="people_nearby_access_to_location_description">Да бисте видели ко је у близини, морате дозволити приступ својој гео-локацији.</string>
+    <string name="people_nearby_not_enought_money">Недостају Вам новчићи да бисте приступили функцији \"Људи у близини\"\</string>
+    <string name="people_nearby_not_found_title">Тренутно нема корисника у Вашој близини</string>
+    <string name="people_nearby_not_found_description">Да бисте покушали поново, притисните и држите прстом по средини екрана.</string>
+    <string name="NSLocationWhenInUseUsageDescription">Неопходна Вам је дозвола да бисте приступили овој функцији.</string>
+    <string name="ban_liberty_title">Без реклама!</string>
+    <string name="ban_liberty_description">Само упознавање, ништа више</string>
+    <string name="guest_liberty_title">Гости</string>
+    <string name="guest_liberty_description">Сазнајте ко је посетио Вашу профилну страницу</string>
+    <string name="star_liberty_title">Популарни корисници</string>
+    <string name="star_liberty_description">Најпопуларнији корисници отворени за разговор</string>
+    <string name="crown_liberty_title">Истакните се</string>
+    <string name="crown_liberty_description">Лако се истиче у Претрази и Порукама</string>
+    <string name="like_liberty_title">Свиђања</string>
+    <string name="like_liberty_description">Погледајте коме се свиђате</string>
+    <string name="buy_button_sticker_popular">популарно</string>
+    <string name="buy_button_sticker_best_value">Најбоља цена</string>
 </resources>

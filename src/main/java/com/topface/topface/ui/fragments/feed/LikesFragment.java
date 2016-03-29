@@ -92,6 +92,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
+    @Override
     protected void updateCounters(CountersData countersData) {
         super.updateCounters(countersData);
         updateTitleWithCounter(countersData);

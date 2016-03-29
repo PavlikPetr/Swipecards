@@ -821,4 +821,23 @@
         <item quantity="one">Du bekommst %1$d Like als \nGeschenk! Das bedeutet, dass diejenigen, \ndie dir Likes schicken, %2$d dich \nwirklich mögen.</item>
     </plurals>
     <string name="buy_vip_title_from_input">Du kannst ein Gespräch mit einem anderen User starten, wenn du VIP-Status hast.</string>
+    <string name="mutual_like_popup_text">Das Gefühl beruht auf Gegenseitigkeit!</string>
+    <string name="mutual_like_popup_button">Sag \"Hallo\"</string>
+    <string name="people_nearby_access_to_location_description">Um zu sehen wer in deiner Nähe ist, musst du Zugang zu deiner Standpunktortung erlauben.</string>
+    <string name="people_nearby_not_enought_money">Du hast nicht genug Coins für Zugang zur \"Leute in meiner Nähe\" Funktion.</string>
+    <string name="people_nearby_not_found_title">Es gibt momentan keine User in deiner Nähe</string>
+    <string name="people_nearby_not_found_description">Um es nochmal zu versuchen, presse und halte einen Finger in der Mitte vom Bildschirm</string>
+    <string name="NSLocationWhenInUseUsageDescription">Um Zugang zu dieser Funktion erhalten, musst du dein Einverständnis gegen.</string>
+    <string name="ban_liberty_title">Keine Werbung!</string>
+    <string name="ban_liberty_description">Einfach nur Dating, leicht und unkompliziert</string>
+    <string name="guest_liberty_title">Gäste</string>
+    <string name="guest_liberty_description">Erfahre, wer dein Profil besucht hat</string>
+    <string name="star_liberty_title">Beliebte Nutzer</string>
+    <string name="star_liberty_description">Die beliebtesten Eisbrecher für Gespräche</string>
+    <string name="crown_liberty_title">Auffallen.</string>
+    <string name="crown_liberty_description">Falle sowohl bei Suchergebnissen als auch in deinen Nachrichten auf</string>
+    <string name="like_liberty_title">Likes</string>
+    <string name="like_liberty_description">Erfahre, wer dich mag</string>
+    <string name="buy_button_sticker_popular">Beliebt</string>
+    <string name="buy_button_sticker_best_value">Bester Preis</string>
 </resources>

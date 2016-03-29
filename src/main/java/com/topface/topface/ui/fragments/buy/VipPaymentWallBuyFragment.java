@@ -38,16 +38,18 @@ public class VipPaymentWallBuyFragment extends VipBuyFragment {
     }
 
     @Override
+    protected boolean isVipLibertyBlockAvailable() {
+        return false;
+    }
+
+    @Override
     protected void buy(String id, BuyButtonData btn) {
         PushButtonVipUniqueStatistics.sendPushButtonVip(id, ((Object) this).getClass().getSimpleName(), getFrom(), App.from(getActivity()).getProfile());
         PushButtonVipStatistics.send(id, ((Object) this).getClass().getSimpleName(), getFrom());
         FragmentActivity activity = getActivity();
         if (activity != null) {
             activity.startActivityForResult(
-                    PaymentwallActivity.getIntent(
-                            activity,
-                            btn.paymentwallLink
-                    ),
+                    PaymentwallActivity.getIntent(activity, btn),
                     PaymentwallActivity.ACTION_BUY
             );
         }

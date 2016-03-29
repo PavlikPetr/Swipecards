@@ -10,6 +10,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 
+import com.facebook.appevents.AppEventsConstants;
+import com.facebook.appevents.AppEventsLogger;
 import com.topface.billing.OpenIabFragment;
 import com.topface.offerwall.common.OfferwallPayload;
 import com.topface.offerwall.common.TFCredentials;
@@ -17,25 +19,42 @@ import com.topface.offerwall.publisher.TFOfferwallActivity;
 import com.topface.offerwall.publisher.TFOfferwallSDK;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.Products;
+import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.PurchaseRequest;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GoogleMarketApiManager;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
+import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.utils.social.FbAuthorizer;
+
+import org.onepf.oms.appstore.googleUtils.Purchase;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
 import javax.inject.Inject;
+
+import static com.topface.topface.ui.PaymentwallActivity.PW_CURRENCY;
+import static com.topface.topface.ui.PaymentwallActivity.PW_PRICE;
+import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCTS_COUNT;
+import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCTS_TYPE;
+import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCT_ID;
 
 public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
@@ -197,6 +216,14 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == PaymentwallActivity.ACTION_BUY) {
+            if (data != null && AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
+                sendPurchaseEvent(
+                        data.getIntExtra(PW_PRODUCTS_COUNT, 0),
+                        data.getStringExtra(PW_PRODUCTS_TYPE),
+                        data.getStringExtra(PW_PRODUCT_ID),
+                        data.getStringExtra(PW_CURRENCY),
+                        data.getDoubleExtra(PW_PRICE, 0));
+            }
             // для обновления счетчиков монет и лайков при покупке через paymentWall
             new ProfileRequest(this).exec();
         }
@@ -210,6 +237,42 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         )) {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    public static void sendPurchaseEvent(Purchase product) {
+        String originalSku = PurchaseRequest.getDeveloperPayload(product).sku;
+        ProductsDetails.ProductDetail detail = PurchaseRequest.getProductDetail(product);
+        if (detail != null) {
+            PurchasesActivity.sendPurchaseEvent(1, getType(originalSku), originalSku, detail.currency, detail.price / ProductsDetails.MICRO_AMOUNT);
+        }
+    }
+
+    private static String getType(String sku) {
+        Products products = CacheProfile.getMarketProducts();
+        LinkedList<BuyButtonData> arrayButtons = new LinkedList<>();
+        arrayButtons.addAll(products.likes);
+        arrayButtons.addAll(products.coins);
+        arrayButtons.addAll(products.premium);
+        arrayButtons.addAll(products.others);
+        arrayButtons.addAll(products.coinsSubscriptions);
+        arrayButtons.addAll(products.coinsSubscriptionsMasked);
+        for (BuyButtonData data : arrayButtons) {
+            if (data.id.equals(sku)) {
+                return data.type.getName();
+            }
+        }
+        return Utils.EMPTY;
+    }
+
+    public static void sendPurchaseEvent(int productsCount, String productType, String productId, String currencyCode, double price) {
+        FbAuthorizer.initFB();
+        AppEventsLogger logger = AppEventsLogger.newLogger(App.getContext());
+        Bundle bundle = new Bundle();
+        bundle.putString(AppEventsConstants.EVENT_PARAM_NUM_ITEMS, String.valueOf(productsCount));
+        bundle.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, productType);
+        bundle.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, productId);
+        bundle.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, currencyCode);
+        logger.logEvent(AppEventsConstants.EVENT_NAME_PURCHASED, price, bundle);
     }
 
     @Override

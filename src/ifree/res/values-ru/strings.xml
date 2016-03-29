@@ -1061,5 +1061,27 @@
 
     <string name="buy_vip_title_from_input">Начать общение с пользователем можно, если у вас есть VIP-статус</string>
     <string name="mutual_like_popup_text">Ваша симпатия взаимна!</string>
-    <string name="mutual_like_popup_button">Сказать "Привет"</string>
+    <string name="mutual_like_popup_button">Сказать \"Привет\"</string>
+
+    <string name="people_nearby_access_to_location_description">Чтобы посмотреть, кто находится рядом с вами, разрешите доступ к геолокации.</string>
+    <string name="people_nearby_not_enought_money">Для доступа к функционалу \"Люди рядом\" вам не хватает монет</string>
+
+    <string name="people_nearby_not_found_title">Рядом с Вами пока нет пользователей</string>
+    <string name="people_nearby_not_found_description">Чтобы попробовать еще раз, удерживайте палец в центре экрана</string>
+
+    <string name="NSLocationWhenInUseUsageDescription">Для получения доступа к функционалу вам необходимо разрешить доступ.</string>
+
+    <string name="ban_liberty_title">Без рекламы!</string>
+    <string name="ban_liberty_description">Только знакомства, ничего лишнего</string>
+    <string name="guest_liberty_title">Гости</string>
+    <string name="guest_liberty_description">Узнайте, кто заходил на Вашу страницу</string>
+    <string name="star_liberty_title">Популярные пользователи</string>
+    <string name="star_liberty_description">Самые популярные открыты к общению</string>
+    <string name="crown_liberty_title">Выделяйтесь</string>
+    <string name="crown_liberty_description">Сложно не заметить в поиске и сообщениях</string>
+    <string name="like_liberty_title">Симпатии</string>
+    <string name="like_liberty_description">Посмотрите, кому вы нравитесь</string>
+
+    <string name="buy_button_sticker_popular">хит продаж</string>
+    <string name="buy_button_sticker_best_value">Лучшая цена</string>
 </resources>

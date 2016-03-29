@@ -6,12 +6,10 @@
   <string name="general_disallow">Απαγορεύστε</string>
   <string name="general_allow">Επιτρέψτε</string>
   <string name="notification_denied_popup_title">Επιτρέψτε την παραλαβή τις ειδοποιήσεις για να
-    ενημερώνεστε για τα εισερχόμενα μηνύματα, συμπάθειες και άλλες ειδήσεις.
-  </string>
+        ενημερώνεστε για τα εισερχόμενα μηνύματα, συμπάθειες και άλλες ειδήσεις.</string>
   <string name="notification_popup_title">Επιτρέψτε μας να σας στείλουμε μια ειδοποίηση, έτσι ώστε
-    να μπορείτε αμέσως να μάθετε για τις νέες συμπάθειες, το θαυμασμό ή τα μη αναγνωσμένα
-    μηνύματα
-  </string>
+        να μπορείτε αμέσως να μάθετε για τις νέες συμπάθειες, το θαυμασμό ή τα μη αναγνωσμένα
+        μηνύματα</string>
   <string name="email_successfully_changed">Το e-mail σας έχει αλλάξει επιτυχώς</string>
   <string name="auth_vk_name">Vkontakte</string>
   <string name="dating_switch_button">Ακόμα ..</string>
@@ -24,10 +22,7 @@
   <string name="filter_city_age_parameters">Ηλικία και πόλη</string>
   <string name="filter_select_city">Επιλέξτε τη πόλη</string>
   <string name="edit_block_photo">Οι φωτογραφίες</string>
-  <string name="dashbrd_popup_rating">Άρεσε εφαρμογή μας? Ανασηκώστε το βαθμολογίας μας! Όσο
-    υψηλότερη είναι η βαθμολογίας, τόσο πιο πολλοί ενδιαφέροντες ανθρώπους μπορείς να συναντήσεις
-    στο Spark
-  </string>
+  <string name="dashbrd_popup_rating">Άρεσε εφαρμογή μας? Ανασηκώστε το βαθμολογίας μας!  Όσο υψηλότερη είναι η βαθμολογίας, τόσο πιο πολλοί ενδιαφέροντες ανθρώπους μπορείς να συναντήσεις στο Spark</string>
   <string name="dashbrd_popup_title">Βαθμολογίας</string>
   <string name="dashbrd_popup_cancel">Μην ρωτήσετε</string>
   <string name="dashbrd_popup_rate">Ρυθμίστε το βαθμολογίας</string>
@@ -52,8 +47,7 @@
   <string name="general_complaint">Καταγγελία</string>
   <string name="general_type_complain">Θέμα καταγγελιών</string>
   <string name="address_book_access_error">Αυτή η εφαρμογή δεν έχει πρόσβαση στις επαφές σας.
-    Μπορείτε να επιτρέψετε την πρόσβαση στις ρυθμίσεις απορρήτου της συσκευής σας
-  </string>
+        Μπορείτε να επιτρέψετε την πρόσβαση στις ρυθμίσεις απορρήτου της συσκευής σας</string>
   <string name="profile_deleted_user">Ο χρήστης έχει διαγραφεί</string>
   <string name="filter_main_parameters">Έχω ένα ενδιαφέρον</string>
   <string name="dating_prev_button_ext">Προηγούμενος</string>
@@ -67,31 +61,24 @@
   <string name="profile_mygifts_empty">Δεν έχετε λάβει τα δώρα από κανέναν</string>
   <string name="dating_people_unnoticed">Δέκα ανθρώπους έμειναν χωρίς την προσοχή σας!</string>
   <string name="dating_continue">Συνεχίστε γνωριμία</string>
-  <string name="dating_better_look">Ρίξτε μια προσεκτική ματιά! Ίσως χάσετε το πεπρωμένο σας!
-  </string>
+  <string name="dating_better_look">Ρίξτε μια προσεκτική ματιά!   Ίσως χάσετε το πεπρωμένο σας!</string>
   <string name="edit_my_photos">Οι φωτογραφίες μου</string>
   <string name="general_search_empty_title">Μας συγχωρείτε,τίποτα δεν βρέθηκε.</string>
   <string name="general_search_empty_text">Μπορείτε να δοκιμάσετε την αναζήτηση ξανά, ή να
-    αλλάξετε τις επιλογές του φίλτρου
-  </string>
+        αλλάξετε τις επιλογές του φίλτρου</string>
   <string name="map_title">Ο χάρτης</string>
   <string name="general_buying">Αγοράστε τις συμπάθειες και τα κέρματα</string>
   <string name="popup_version_title">Διαθέσιμα μια νέα έκδοση της εφαρμογής</string>
   <string name="popup_version_message">Η ώρα να ενημερώσετε την έκδοση σας!</string>
   <string name="leaders_select_photo_info">Επιλέξτε την πιο θεαματική φωτογραφία! Τις φωτογραφίες
-    με χαμηλή βαθμολογία δεν μπορείτε να επιλέξετε
-  </string>
+        με χαμηλή βαθμολογία δεν μπορείτε να επιλέξετε</string>
   <string name="map_popup_address">Η διεύθυνση</string>
   <string name="black_list_info">Έχετε προσθέσει του συνομιλητής στη μαύρη λίστα. Μπορείτε να
-    αλλάξετε αυτό στο προφίλ σας στις ρυθμίσεις τη VIP-κατάσταση.
-  </string>
-  <string name="black_list_activation">Ενεργοποιήστε το VIP-κατάσταση, και χρησιμοποιήστε μια μαύρη
-    λίστα
-  </string>
+        αλλάξετε αυτό στο προφίλ σας στις ρυθμίσεις τη VIP-κατάσταση.</string>
+  <string name="black_list_activation">Ενεργοποιήστε το VIP-κατάσταση, και χρησιμοποιήστε μια μαύρη λίστα</string>
   <string name="buying_total">Στη συνολική</string>
   <string name="we_dont_detect_your_city">Καθόρισε τη πόλη σας για να ξέρετε πού βρίσκεστε.
-    Ζητήστε από εκείνους που είναι κοντά σας.
-  </string>
+        Ζητήστε από εκείνους που είναι κοντά σας.</string>
   <string name="confirm_email">Παρακαλώ, επιβεβαιώστε e-mail</string>
   <string name="password_sent">Το νέο κωδικό έχει σταλεί στο E-mail σας</string>
   <string name="buy_vip_month_one">μήνα για</string>
@@ -121,18 +108,15 @@
   <string name="pincode_change_label">Αλλαγή του κωδικού PIN</string>
   <string name="pincode_delete_label">Διαγραφή κωδικού PIN</string>
   <string name="pincode_turning_on">Μπλοκάρισμα</string>
-  <string name="pincode_dont_match">Δεν ταιριάζουν τα PIN. Παρακαλώ δοκιμάστε ξανά.</string>
+  <string name="pincode_dont_match">Δεν ταιριάζουν τα PIN.  Παρακαλώ δοκιμάστε ξανά.</string>
   <string name="pincode_wrong">Λάθος κωδικό PIN</string>
   <string name="pincode_input">Καταχωρίστε τον κωδικό PIN</string>
   <string name="pincode_input_previous">Πληκτρολογήστε τον παλιό κωδικό PIN</string>
   <string name="pincode_repeat">Επανάληψη κωδικού PIN</string>
   <string name="pincode_forget">Ξεχάσατε τον κωδικό σας PIN?</string>
-  <string name="pincode_auth_input">Θα πρέπει να εισάγετε το όνομα χρήστη και τον κωδικό
-    πρόσβασης.
-  </string>
+  <string name="pincode_auth_input">Θα πρέπει να εισάγετε το όνομα χρήστη και τον κωδικό πρόσβασης.</string>
   <string name="pincode_will_be_reset">Εάν η άδεια είναι επιτυχής, όλες οι ρυθμίσεις της εφαρμογής
-    θα επανέλθουν.
-  </string>
+        θα επανέλθουν.</string>
   <string name="general_error">ΣΦΆΛΜΑ</string>
   <string name="general_yes">Ναί</string>
   <string name="general_no">\'Οχι</string>
@@ -147,8 +131,7 @@
   <string name="general_server_error">Σφάλμα. Προσπαθήστε αργότερα</string>
   <string name="general_data_error">Σφάλμα. Προσπαθήστε ξανά</string>
   <string name="general_internet_off">Δεν υπάρχει σύνδεση με το Internet. Παρακαλώ να
-    περιμένετε.
-  </string>
+        περιμένετε.</string>
   <string name="general_msg_copied">Αντιγραφεί</string>
   <string name="general_spinner_title">Επιλέξτε μια δράση</string>
   <string name="general_profile_error">Λάθους τη φόρτωση του προφίλ</string>
@@ -177,8 +160,7 @@
   <string name="dating_header_guys">Οι άντρες από %1$d έως %2$d</string>
   <string name="dating_skip_button">Επόμενη</string>
   <string name="message_too_long">Το μήνυμά σας είναι πολύ μεγάλο. Ο αριθμός των χαρακτήρων δεν
-    μπορεί να υπερβαίνει %d.
-  </string>
+        μπορεί να υπερβαίνει %d.</string>
   <string name="chat_gift_in">Πήρατε ένα δώρο.</string>
   <string name="chat_gift_out">Έχετε στείλει ένα δώρο.</string>
   <string name="chat_like_in">Σας έχουν στείλει μια συμπάθεια</string>
@@ -217,8 +199,7 @@
     <item quantity="one">Δεν έχετε αρκετά %d κέρμα</item>
   </plurals>
   <string name="buying_default_message">Μπορείτε να στείλετε τα δώρα και το θαυμασμό για τα
-    κέρματα
-  </string>
+        κέρματα</string>
   <string name="buying_money">Αγορά κερμάτων</string>
   <string name="gifts_title">Επιλέξτε ένα δώρο</string>
   <string name="profile_header_title">Το προφίλ μου</string>
@@ -294,11 +275,9 @@
     <item quantity="one">%d φωτογραφία</item>
   </plurals>
   <string name="general_edit_profile_message">Παρακαλούμε συμπληρώστε τα απαιτούμενα πεδία του
-    ερωτηματολόγιο
-  </string>
+        ερωτηματολόγιο</string>
   <string name="general_search_null_response_error">Τίποτα δεν βρέθηκε. Προσπαθήστε να αλλάξετε τα
-    φίλτρα
-  </string>
+        φίλτρα</string>
   <string name="change_filters">Αλλάξτε τα φίλτρα</string>
   <string name="reset_filter">Επαναφορά</string>
   <string name="general_sex">Φύλο</string>
@@ -312,11 +291,9 @@
   <string name="rate_popup_later">Ζητήστε αργότερα</string>
   <string name="rate_popup_cancel">\'Οχι, eυχαριστώ</string>
   <string name="rate_popup_error">Θα πρέπει να καθορίσετε πόσα αστέρια έχετε βάλει γαι την
-    εφαρμογή μας
-  </string>
+        εφαρμογή μας</string>
   <string name="feedback_popup_title">Έχετε βάλει μια χαμηλή βαθμολογία. Πείτε μας τι δεν σας
-    αρέσει στην εφαρμογή μας. Βοηθήστε μας να γίνουμε καλύτεροι. Σας ευχαριστώ!
-  </string>
+        αρέσει στην εφαρμογή μας. Βοηθήστε μας να γίνουμε καλύτεροι. Σας ευχαριστώ!</string>
   <string name="settings_melody">Κοινοποίηση τον ήχο κλήσης</string>
   <string name="edit_refresh_status">Κάντε ενημέρωση της κατάστασης</string>
   <string name="ban_title">Συγχαρητήρια! Είστε αποκλεισμένος</string>
@@ -336,19 +313,14 @@
   <string name="black_list_delete">Αφαιρέστε από τη μαύρη λίστα</string>
   <string name="vip_buy_vip">Αγορά της VIP</string>
   <string name="vip_state_off">Η κατάστασή σας-VIP δεν είναι ενεργοποιημένη</string>
-  <string name="vip_info_guest">Μάθετε ποιος είναι ενδιαφέρεται για σας - δείτε τους καλεσμένους
-    σας!
-  </string>
+  <string name="vip_info_guest">Μάθετε ποιος είναι ενδιαφέρεται για σας - δείτε τους καλεσμένους σας!</string>
   <string name="vip_info_invisible">Μείνετε απαρατήρητα, όταν επισκέπτεστε τις σελίδες κάποιου
-    άλλου, χάρη στην \&quot;αόρατος\&quot;</string>
+        άλλου, χάρη στην \&quot;αόρατος\&quot;</string>
   <string name="vip_info_message">Αποκτήστε το πλεονέκτημα - τα μηνύματα σας θα ξεχωρίσουν από το
-    πλήθος!
-  </string>
-  <string name="vip_info_blackList">Απαλλαγείτε από τα ενοχλητικά άτομα με \&quot;μαύρη
-    λίστα\&quot;</string>
+        πλήθος!</string>
+  <string name="vip_info_blackList">Απαλλαγείτε από τα ενοχλητικά άτομα με \&quot;μαύρη λίστα\&quot;</string>
   <string name="vip_info_vip">Ξεχωρίστε με VIP-κατάστασή σας στην αναζήτηση και με το προφίλ
-    σας!
-  </string>
+        σας!</string>
   <string name="buying_vip_status">Αγοράστε VIP κατάσταση</string>
   <string name="edit_my_city">Η πόλη μου</string>
   <string name="settings_feedback_email">Email για να επικοινωνήσετε</string>
@@ -357,36 +329,28 @@
   <string name="dating_message">Μήνυμα…</string>
   <string name="buying_sympathies">Αγορά τις συμπάθειες</string>
   <string name="general_reconnect_social">Δεν είναι δυνατή η σύνδεση με κοινωνικά δίκτυα. Παρακαλώ
-    δοκιμάστε ξανά αργότερα.
-  </string>
+        δοκιμάστε ξανά αργότερα.</string>
   <string name="general_block">Αποκλεισμός</string>
   <string name="general_buying_disabled">Αγορά αυτή τη στιγμή δεν μπορεί να γίνει</string>
   <string name="ban_flood_detected">Εσείς πολύ συχνά κάνετε αιτήματα στο διακομιστή. Για την
-    περαιτέρω χρήση της εφαρμογής, να περιμένετε.
-  </string>
+        περαιτέρω χρήση της εφαρμογής, να περιμένετε.</string>
   <string name="general_maintenance">Στο διακομιστή διεξάγονται τεχνικές εργασίες, και το αίτημά
-    σας δεν μπορεί να εκτελεστεί. Παρακαλώ δοκιμάστε ξανά αργότερα.
-  </string>
+        σας δεν μπορεί να εκτελεστεί. Παρακαλώ δοκιμάστε ξανά αργότερα.</string>
   <string name="virus_chat_btn">Αποκτήστε τις συμπάθειες</string>
   <string name="profile_ask_sent">Αίτηση έχει σταλεί.</string>
   <string name="virus_error">Κατά τη διάρκεια της ημέρας, ο φίλος σας μπορεί να δώσει για δώρο τις
-    συμπάθειες μόνο 1 φορά! Δοκιμάστε το αύριο!
-  </string>
+        συμπάθειες μόνο 1 φορά! Δοκιμάστε το αύριο!</string>
   <string name="popup_version_update">Ενημερώσω</string>
   <string name="popup_version_cancel">Υπενθύμιση αργότερα</string>
   <string name="general_version_not_supported">Δική σας έκδοση της εφαρμογής είναι ξεπερασμένη και
-    δεν υποστηρίζεται πλέον. Σας παρακαλούμε να ενημερώστε την εφαρμογή
-  </string>
+        δεν υποστηρίζεται πλέον. Σας παρακαλούμε να ενημερώστε την εφαρμογή</string>
   <string name="default_price_format">Στη συνολική: %.2f USD</string>
   <string name="default_price_format_extended">Στη συνολική: %1$.2f %2$s</string>
-  <string name="leaders_pick_condition">Δεν μπορείτε να επιλέξετε μια φωτογραφία με βαθμολογία κάτω
-    από %d%%:
-  </string>
+  <string name="leaders_pick_condition">Δεν μπορείτε να επιλέξετε μια φωτογραφία με βαθμολογία κάτω από %d%%:</string>
   <string name="general_gift">Το δώρω</string>
   <string name="user_actions_chat">Συνομιλία</string>
   <string name="profile_edit_age_ranges">Ηλικία θα πρέπει να είναι μεταξύ 16 – 99 ετών. Παρακαλώ
-    εισάγετε έναν έγκυρο αριθμό και προσπαθήστε ξανά.
-  </string>
+        εισάγετε έναν έγκυρο αριθμό και προσπαθήστε ξανά.</string>
   <string name="wrong_password_format">Απαράδεκτη μορφή κωδικού πρόσβασης</string>
   <string name="sign_in">Είσοδος</string>
   <string name="create_account">Δημιουργία λογαριασμού</string>
@@ -407,22 +371,18 @@
   <string name="empty_fields">Δεν είναι γεμάτες όλα τα πεδία</string>
   <string name="email_already_registered">Χρήστης με αυτό το e-mail υπάρχει ήδη</string>
   <string name="enter_email_from_registration">Εισάγετε το e-mail, το οποίο θα καθορίζεται κατά
-    την εγγραφή
-  </string>
+        την εγγραφή</string>
   <string name="default_photo_upload">Ανέβασμα φωτογραφίων</string>
   <string name="default_photo_upload_error">Σφάλμα κατά τη φόρτωση</string>
   <string name="default_photo_upload_complete">Ανέβασμα ολοκληρώθηκε!</string>
   <string name="general_error_try_again_later">Δεν είναι δυνατή η σύνδεση στο Spark. Παρακαλώ
-    δοκιμάστε ξανά αργότερα.
-  </string>
+        δοκιμάστε ξανά αργότερα.</string>
   <string name="search_city_by_name">Αναζήτηση πόλεων με το όνομα</string>
   <string name="gallery">Έκθεση</string>
   <string name="no_photo_take_photo">Με εσάς, δεν μπορεί κανείς να εξοικειωθεί! Τραβήξτε μια
-    φωτογραφία ή κατεβάστε διαθέσιμη από το άλμπουμ
-  </string>
+        φωτογραφία ή κατεβάστε διαθέσιμη από το άλμπουμ</string>
   <string name="photo_for_avatar">Η φωτογραφία είναι έτοιμη να σταλεί στο προφίλ σας! Αυτή είναι η
-    πρώτη φωτογραφία σας και θα χρησιμοποιηθεί ως avatar.
-  </string>
+        πρώτη φωτογραφία σας και θα χρησιμοποιηθεί ως avatar.</string>
   <string name="send_confirmation_email">Στείλτε ένα επιβεβαίωση στο e-mail</string>
   <string name="change_password">Αλλάξτε τον κωδικό</string>
   <string name="password_changing">Αλλαγή κωδικού</string>
@@ -439,17 +399,14 @@
   <string name="we_detect_your_city">Έχουμε καθορίσει τη πόλη σας:</string>
   <string name="reselect_city">Επιλέξτε άλλη μια πόλη:</string>
   <string name="choose_cool_photo">Επιλέξτε μια καλύτερη φωτογραφία σας και την κατάσταση που
-    αντικατοπτρίζει τη διάθεσή σας!
-  </string>
+        αντικατοπτρίζει τη διάθεσή σας!</string>
   <string name="email_confirmed">επιβεβαίωση e-mail!</string>
   <string name="sympathy_sended">Συμπάθεια έχει σταλεί.</string>
   <string name="general_photo_deleted">Η φωτογραφία σας δεν ικανοποιεί πλήρως τους κανόνες
-    εφαρμογής και διεγράφει τη διοίκηση.
-  </string>
+        εφαρμογής και διεγράφει τη διοίκηση.</string>
   <string name="general_change">Αλλάξτε</string>
   <string name="user_does_not_have_gifts">Αυτός ο χρήστης δεν έχει ακόμα δωρά, γίνετε ο πρώτος και
-    θα σας προσέξουν!
-  </string>
+        θα σας προσέξουν!</string>
   <string name="status_is_empty">Η κατάσταση σας δεω ορίστηκε</string>
   <string name="you_dont_have_gifts_yet">Δεν έχετε ακόμα δωρά</string>
   <string name="buy_sympathies">Αγοράστε τις συμπάθειες</string>
@@ -469,25 +426,20 @@
   <string name="user_is_banned">Ο χρήστης έχει απαγορευτεί</string>
   <string name="profile_empty_name">Το πεδίο -\&quot; \'Ονομα\&quot; είναι υποχρεωτικό</string>
   <string name="general_wrong_photo_upload">Η φωτογραφία σας δεν ταιριάζει πλήρως τους κανόνες
-    εφαρμογής. Προσπαθήστε να κάνετε μια άλλη
-  </string>
+        εφαρμογής. Προσπαθήστε να κάνετε μια άλλη</string>
   <string name="general_input_email">Εισάγετε το e-mail</string>
   <string name="cant_delete_fake_item">Αυτό το μήνυμα ακόμα δεν έχει παραδοθεί, δεν μπορείτε να το
-    διαγράψετε. Παρακαλώ δοκιμάστε ξανά αργότερα.
-  </string>
+        διαγράψετε. Παρακαλώ δοκιμάστε ξανά αργότερα.</string>
   <string name="vip_stop_ads">Μόνο επικοινωνία, τίποτα περισσότερο. Οι VIP χρήστες δεν έχουν τη
-    διαφήμιση
-  </string>
+        διαφήμιση</string>
   <string name="friend_email_hint">Εισάγετε το e-mail του φίλου σας</string>
   <string name="general_add">Προσθήκη</string>
   <string name="general_invite_friends">Προσκαλέστε τους φίλους σας</string>
   <string name="general_rest_contacts">Υπάρχουν μόνο %d επαφών</string>
   <string name="invite_friends_title">Προσκαλέστε όλους τους φίλους σας από τον τηλεφωνικό
-    κατάλογο στο Spark
-  </string>
+        κατάλογο στο Spark</string>
   <string name="invalid_contacts">Μερικές από τις επαφές ήταν λανθασμένες. Παρακαλώ, στείλτε τις
-    σωστές επαφές
-  </string>
+        σωστές επαφές</string>
   <plurals name="vip_status_period">
     <item quantity="other">Πήρατε κατάσταση VIP για %d μέρες</item>
     <item quantity="one">Πήρατε κατάσταση VIP για %d μέρα</item>
@@ -505,33 +457,26 @@
     <item quantity="one">Λάβετε VIP κατάσταση δωρεάν για %d προσκλήσεις</item>
   </plurals>
   <string name="buy_status_and_watch_your_fans">Αγοράστε την κατάστασή VIP και ανακαλύψτε, ποιος
-    σας έχει προσθέσει στις αγαπημένες του?
-  </string>
+        σας έχει προσθέσει στις αγαπημένες του?</string>
   <string name="add_bookmarks_to_be_connected">Προσθέστε νέους ανθρώπους σε αυτό το τμήμα, και
-    ποτέ δεν θα χάσετε την επαφή μαζί τους
-  </string>
+        ποτέ δεν θα χάσετε την επαφή μαζί τους</string>
   <string name="nobody_chat_with_you_sympathies_will_help">Κανείς δεν σας έγραψε ακόμα. Οι
-    συμπάθειες σας βοηθούν να βρείτε κάποιον για επικοινωνία
-  </string>
+        συμπάθειες σας βοηθούν να βρείτε κάποιον για επικοινωνία</string>
   <string name="rate_and_have_mutual_or_buy_and_chat">Βάλτε συμπάθειες σε εκείνους που σας αρέσουν
-    και πάρτε αμοιβαίες συμπάθειες. \'Η αγοράστε συμπάθειες και αρχίστε την επικοινωνία με
-    ανθρώπους που σας αρέσουν!
-  </string>
+        και πάρτε αμοιβαίες συμπάθειες. \'Η αγοράστε συμπάθειες και αρχίστε την επικοινωνία με
+        ανθρώπους που σας αρέσουν!</string>
   <string name="with_vip_find_your_visitors">Με την VIP-κατάσταση θα ξέρετε ποιος ήρθαν στη σελίδα
-    σας
-  </string>
+        σας</string>
   <string name="on_avatar">Στον Άβαταρ</string>
   <string name="your_avatar">Άβαταρ σας</string>
   <string name="avatar_set_successfully">Το Άβαταρ σας φορτώθηκε με επιτυχία!</string>
   <string name="incorrect_photo">Εσφαλμένη φωτογραφία. Φορτώστε μια άλλη!</string>
   <string name="incorrect_photo_format">Μη έγκυρη μορφή φωτογραφίων (ανεβάσετε τις φωτογραφίες σε
-    μορφή jpg ή png.
-  </string>
+        μορφή jpg ή png.</string>
   <string name="incorrect_photo_size">Το μέγεθος της φωτογραφίας δεν είναι σωστή</string>
   <string name="input_contact_name">Πληκτρολογήστε το όνομα της επαφής</string>
   <string name="incorrect_locale">Γράψτε το μήνυμά σας στα ρωσικά ή στα Αγγλικά, για να μπορούμε
-    να το διαβάσουμε
-  </string>
+        να το διαβάσουμε</string>
   <string name="complain_photo_header">Εσφαλμένη φωτογραφία</string>
   <string name="complain_msg_header">Εσφαλμένο μήνυμα</string>
   <string name="complain_info_header">Εσφαλμένες πληροφορίες</string>
@@ -540,64 +485,49 @@
   <string name="complain_type_picture">Εικόνα</string>
   <string name="complain_type_fake_user">Ψεύτικη φωτογραφία ή εικόνα</string>
   <string name="complain_type_spam_msg">Εμπορική προσφορά: spam, διαφήμιση των αγαθών και
-    υπηρεσιών, συνδέσμους προς ιστοσελίδες, τους αριθμούς τηλεφώνου
-  </string>
-  <string name="complain_type_spam_profile">Tα πεδία \&quot;κατάσταση\&quot;, \&quot;σχετικά με τον
-    εαυτό σας\&quot;
-    περιέχουν eμπορική προσφορά
-  </string>
-  <string name="complain_type_swearing_profile">Τα πεδία \&quot;κατάσταση\&quot;, \&quot;σχετικά με
-    τον εαυτό
-    σας\&quot; περιέχουν αγένεια ή hyperlinks
-  </string>
+        υπηρεσιών, συνδέσμους προς ιστοσελίδες, τους αριθμούς τηλεφώνου</string>
+  <string name="complain_type_spam_profile">Tα πεδία \&quot;κατάσταση\&quot;, \&quot;σχετικά με τον εαυτό σας\&quot;
+        περιέχουν eμπορική προσφορά</string>
+  <string name="complain_type_swearing_profile">Τα πεδία \&quot;κατάσταση\&quot;, \&quot;σχετικά με τον εαυτό
+        σας\&quot; περιέχουν αγένεια ή hyperlinks</string>
   <string name="complain_type_fake_data">Όνομα, το φύλο, η ηλικία, και η φωτογραφία δεν
-    ταιριάζουν
-  </string>
+        ταιριάζουν</string>
   <string name="complain_description">Πείτε μας για την αιτία της καταγγελίας</string>
   <string name="general_complain_sended">Σας ευχαριστούμε, το παράπονό σας θα εξεταστεί στο
-    προσεχές μέλλον
-  </string>
+        προσεχές μέλλον</string>
   <string name="general_complain">Η αναφορά</string>
   <string name="general_msg">Μήνυμα</string>
   <string name="notifications">Ειδοποιήσεις</string>
   <string name="general_no_notifications">Δυστυχώς, η κοινοποίησης στη συσκευή σας δεν είναι
-    διαθέσιμες
-  </string>
+        διαθέσιμες</string>
   <string name="black_list_add_short">Στη μαύρη λίστα</string>
   <string name="confirm_email_for_dating">Είμαστε αντίθετοι με την τοποθέτηση spam.Επιβεβαιώστε το
-    email για να εξοικείωσετε στο Spark!
-  </string>
+        email για να εξοικείωσετε στο Spark!</string>
   <string name="send_confirm_link">Στείλτε ένα σύνδεσμο για την επιβεβαίωση</string>
   <string name="complain_type_swearing_msg">Ευγένειας, απειλές, ύβρεις</string>
   <string name="general_exit">Έξοδος</string>
   <string name="likes_can_help_you">Οι συμπάθειες θα βοηθήσουν στην εξοικείωση</string>
   <string name="general_get_dating">Εξοικειωθείτε</string>
   <string name="settings_select_language">Επιλέξτε γλώσσα για την εφαρμογη</string>
-  <string name="restart_to_change_locale">Για να αλλάξετε τη γλώσσα η εφαρμογή θα πρέπει να
-    επανεκκινηθεί
-  </string>
+  <string name="restart_to_change_locale">Για να αλλάξετε τη γλώσσα η εφαρμογή θα πρέπει να επανεκκινηθεί</string>
   <string name="locale_changing">Αλλαγή γλώσσας</string>
   <plurals name="you_were_liked">
     <item quantity="other">Αρέσετε σε %d ανθρώπους</item>
     <item quantity="one">Αρέσετε σε %d άνθρωπο</item>
   </plurals>
   <string name="likes_buy_vip">Για να ανακαλύψετε τούς ανθρώπους, στους οποίους αρέσετε,
-    ενεργοποιήστε την κατάσταση VIP
-  </string>
+        ενεργοποιήστε την κατάσταση VIP</string>
   <string name="or">ή</string>
   <string name="settings_delete_account">Διαγραφή του λογαριασμού σας</string>
   <string name="chat_block_not_mutual">Για να ξεκινήσετε συνομιλία με τον χρήστη μπορείτε, αν
-    αυτός σας στείλει μια συμπάθεια ή αν έχετε VIP-κατάσταση
-  </string>
+        αυτός σας στείλει μια συμπάθεια ή αν έχετε VIP-κατάσταση</string>
   <string name="add_to_favorite_block_not_vip">Μόνο τα VIP χρήστες μπορούν να προσθέσουν νέες
-    επαφές από \&quot;Εξοικείωσεις\&quot; στα αγαπημένα τους
-  </string>
+        επαφές από \&quot;Εξοικείωσεις\&quot; στα αγαπημένα τους</string>
   <string name="delete_account_are_you_sure">Είστε σίγουροι?</string>
   <string name="delete">Αφαιρέστε</string>
   <string name="delete_account_warning">Προσοχή! θέλετε να διαγράψετε το προφίλ σας?</string>
   <string name="delete_account_error">Σφάλμα κατά τη διαγραφή του λογαριασμού. Προσπαθήστε να
-    επαναλάβετε τη δράση αργότερα.
-  </string>
+        επαναλάβετε τη δράση αργότερα.</string>
   <string name="restore">Αποκαταστήστε</string>
   <string name="admiration_sended">Θαυμασμός εστάλη.</string>
   <string name="skip">Παραλείψετε</string>
@@ -622,8 +552,7 @@
   <string name="settings_feedback_transaction_link">πού να βρείτε τον αριθμό παραγγελίας?</string>
   <string name="general_logout_error">Δυστυχώς, ο λογαριασμός σας δεν απενεργοποιήθηκε</string>
   <string name="other_auth">Συνδεθείτε σε άλλες υπηρεσίες</string>
-  <string name="settings_feedback_transaction_number_hint">Εισάγετε τον αριθμό παραγγελίας σας
-  </string>
+  <string name="settings_feedback_transaction_number_hint">Εισάγετε τον αριθμό παραγγελίας σας</string>
   <string name="delete_visitors">Αφαιρέστε τους επισκέπτες</string>
   <string name="delete_admirations">Αφαιρέστε τους θαυμασμους</string>
   <string name="general_admirations">Θαυμασμούς</string>
@@ -642,9 +571,8 @@
   <string name="user_deleted_or_banned">Ο χρήστης απαγορεύεται ή να διαγραφεί</string>
   <string name="locking_popup_button_answer">Απαντήστε σε νέες συμπάθειες</string>
   <string name="locking_menu_message">Η πρόσβαση σε ορισμένες σελίδες της εφαρμογής είναι
-    περιορισμένη. Για κατάργηση όλων των περιορισμών, απαντήστε σε όλες τις νέες συμπάθειες ή
-    αποκτήστε VIP.
-  </string>
+        περιορισμένη. Για κατάργηση όλων των περιορισμών, απαντήστε σε όλες τις νέες συμπάθειες ή
+        αποκτήστε VIP.</string>
   <string name="current_city">Τρέχουσα πόλη</string>
   <string name="general_bonus">Μπόνους</string>
   <plurals name="notification_many_messages">
@@ -657,29 +585,25 @@
     <item quantity="one">και ακόμα %d</item>
   </plurals>
   <string name="subscriptions_can_be_changed">Η Εγγραφή ολοκληρώθηκε. Αλλαγή των όρων εγγραφής στο
-    Google Play
-  </string>
+        Google Play</string>
   <string name="people_nearby">Οι ανθρώπους που βρίσκονται κοντά</string>
   <string name="nobody_nearby">Ούτε ψυχή γύρω!</string>
   <string name="general_distance_km">%.02f χιλ.</string>
   <string name="general_distance_m">%d μ</string>
   <string name="cannot_get_geo">Δεν μπορούμε να προσδιορίσουμε την τοποθεσία σας</string>
-  <string name="press_back_more_to_close_app">Πατήστε το κουμπί ξανά για να βγείτε από Spark
-  </string>
+  <string name="press_back_more_to_close_app">Πατήστε το κουμπί ξανά για να βγείτε από Spark</string>
   <string name="waiting_for_load">Αναμονή φόρτωσης</string>
   <string name="loading_photo_percent">Ανέβασμα εικόνας %d%%</string>
   <string name="profile_update_error">Απέτυχε η ενημέρωση της βάσης δεδομένων</string>
   <string name="retry_cancel_editing">Κατά τη διαρκέια της αποστολής, παρουσιάστηκε σφάλμα
-    σύνδεσης με τη βάση δεδομένων. Θέλετε να δοκιμάσετε ξανά, ή να βγείτε χωρίς να αποθηκεύσετε
-    τα δεδομένα?
-  </string>
+        σύνδεσης με τη βάση δεδομένων. Θέλετε να δοκιμάσετε ξανά, ή να βγείτε χωρίς να αποθηκεύσετε
+        τα δεδομένα?</string>
   <string name="user_does_not_exist">Ο χρήστης δεν βρέθηκε</string>
   <string name="feedback_subject_ban">Καταγγελία για την άδικη απαγόρευση</string>
   <string name="settings_led">LED κοινοποίηση</string>
   <string name="open_market_error">Δεν μπορείτε να ανοίξετε τη σελίδα εφαρμογής</string>
   <string name="billing_item_already_owned">Προηγούμενη αγορά σας είναι σε επεξεργασία, παρακαλώ
-    περιμένετε
-  </string>
+        περιμένετε</string>
   <string name="dialog">Μηνύματα</string>
   <string name="reply">Απαντήστε</string>
   <string name="measurement_unit_weight">kg</string>
@@ -689,10 +613,8 @@
   <string name="google_service_missing_button">Εγκαταστήστε</string>
   <string name="google_service_version_update_required_button">Ανανεώστε</string>
   <string name="google_sign_in_account_title">Δεν έχετε προσθέσει το λογαριασμό Google, θα πρέπει
-    να εγγραφείτεб αν θέλετε να ενημερώνεστε.
-  </string>
+        να εγγραφείτεб αν θέλετε να ενημερώνεστε.</string>
   <string name="add_leader_hint">Χαιρετισμό σας …</string>
   <string name="novice_sympathy">Στείλτε συμπάθεια για εκείνους που \nσας αρέσει πραγματικά\ nγια
-    να ξεκινήσετε μια ευχάριστη γνωριμία
-  </string>
+        να ξεκινήσετε μια ευχάριστη γνωριμία</string>
 </resources>

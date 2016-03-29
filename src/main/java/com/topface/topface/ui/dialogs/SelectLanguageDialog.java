@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -13,19 +12,21 @@ import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Locale;
 
 /**
- * Created by ppetr on 14.08.15.
+ * Created by Петр on 15.03.2016.
  * DilaogFragment for select app language
  */
 public class SelectLanguageDialog extends TrackedDialogFragment {
     public static final String LOCALE = "confirm_selection_locale";
 
-    @NonNull
+    @NotNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final String[] locales = getActivity().getResources().getStringArray(R.array.application_locales);
+        final String[] locales = getResources().getStringArray(R.array.application_locales);
         final String[] languages = new String[locales.length];
         int selectedLocaleIndex = 0;
         Locale appLocale = new Locale(App.getLocaleConfig().getApplicationLocale());
@@ -37,7 +38,7 @@ public class SelectLanguageDialog extends TrackedDialogFragment {
             }
         }
         final int selectedLocaleIndexFinal = selectedLocaleIndex;
-        return new AlertDialog.Builder(getActivity())
+        return new AlertDialog.Builder(getContext())
                 .setTitle(R.string.settings_select_language)
                 .setSingleChoiceItems(languages, selectedLocaleIndex, null)
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -60,6 +61,8 @@ public class SelectLanguageDialog extends TrackedDialogFragment {
 
     public static class ConfirmChangesDialog extends TrackedDialogFragment {
 
+        private String mLocale;
+
         public static ConfirmChangesDialog newInstance(String locale) {
             ConfirmChangesDialog dialog = new ConfirmChangesDialog();
             Bundle args = new Bundle();
@@ -68,10 +71,19 @@ public class SelectLanguageDialog extends TrackedDialogFragment {
             return dialog;
         }
 
-        @NonNull
+        @Override
+        public void onSaveInstanceState(Bundle outState) {
+            super.onSaveInstanceState(outState);
+            outState.putString(LOCALE, mLocale);
+        }
+
+        @NotNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final String locale = getArguments().getString(LOCALE, null);
+            Bundle bundle = savedInstanceState != null ? savedInstanceState : getArguments() != null ? getArguments() : null;
+            if (bundle != null) {
+                mLocale = getArguments().getString(LOCALE);
+            }
             return new AlertDialog.Builder(getActivity())
                     .setTitle(R.string.settings_select_language)
                     .setMessage(R.string.restart_to_change_locale)
@@ -79,7 +91,7 @@ public class SelectLanguageDialog extends TrackedDialogFragment {
                         @Override
                         public void onClick(DialogInterface dialogConfirm, int which) {
                             (new SearchCacheManager()).clearCache();
-                            LocaleConfig.changeLocale(getActivity(), locale);
+                            LocaleConfig.changeLocale(getActivity(), mLocale);
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
