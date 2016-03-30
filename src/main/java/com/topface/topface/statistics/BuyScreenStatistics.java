@@ -11,7 +11,7 @@ import com.topface.topface.utils.CacheProfile;
 public class BuyScreenStatistics {
 
     public static final String BUY_SCREEN_SHOW = "buy_screen_show";
-    public static final String BUY_SCREEN_SHOW_UNIQUE = "buy_screen_show";
+    public static final String BUY_SCREEN_SHOW_UNIQUE = "buy_screen_show_unique";
     public static final String TAG = "tag";
     public static final String PLC = "plc";
 
