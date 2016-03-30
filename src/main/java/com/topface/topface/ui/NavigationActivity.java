@@ -82,9 +82,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.Subscription;
 import rx.functions.Action1;
 import rx.subjects.BehaviorSubject;
+import rx.subscriptions.CompositeSubscription;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 
@@ -116,7 +116,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private AddPhotoHelper mAddPhotoHelper;
     public static boolean isPhotoAsked;
     private PopupManager mPopupManager;
-    private Subscription mCountersSubscription;
     private BehaviorSubject<DRAWER_LAYOUT_STATE> mDrawerLayoutStateObservable;
     private Handler mHandler = new Handler() {
         @Override
@@ -135,7 +134,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             }
         }
     };
-    private Subscription mCitySubscription;
+    private CompositeSubscription mNavigationsSubscriptions = new CompositeSubscription();
 
     /**
      * Перезапускает NavigationActivity, нужно например при смене языка
@@ -184,14 +183,14 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
-        mCountersSubscription = mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
+        mNavigationsSubscriptions.add(mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
             @Override
             public void call(CountersData countersData) {
                 if (mNotificationController != null) {
                     mNotificationController.refreshNotificator(countersData.dialogs, countersData.mutual);
                 }
             }
-        });
+        }));
         if (isNeedBroughtToFront(intent)) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -209,7 +208,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             mPendingNextIntent = intent;
         }
         isPhotoAsked = false;
-        mCitySubscription = mAppState.getObservable(City.class).subscribe(new Action1<City>() {
+        mNavigationsSubscriptions.add(mAppState.getObservable(City.class).subscribe(new Action1<City>() {
             @Override
             public void call(final City city) {
                 if (city != null) {
@@ -228,7 +227,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                     }).exec();
                 }
             }
-        });
+        }));
         Debug.log("PopupHive onCreate");
         startPopupRush(true, true);
     }
@@ -637,11 +636,12 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
         mPopupHive.releaseHive();
         mDrawerToggle = null;
-        mCountersSubscription.unsubscribe();
         if (mAddPhotoHelper != null) {
             mAddPhotoHelper.releaseHelper();
         }
-        mCitySubscription.unsubscribe();
+        if (mNavigationsSubscriptions != null && !mNavigationsSubscriptions.isUnsubscribed()) {
+            mNavigationsSubscriptions.unsubscribe();
+        }
         super.onDestroy();
         AdmobInterstitialUtils.releaseInterstitials();
     }
