@@ -52,6 +52,7 @@ import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.statistics.AppStateStatistics;
 import com.topface.topface.ui.ApplicationBase;
+import com.topface.topface.utils.AdjustManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
@@ -350,8 +351,9 @@ public class App extends ApplicationBase {
         }
 
         super.onCreate();
-        LeakCanary.install(this);
         mContext = getApplicationContext();
+        LeakCanary.install(this);
+        AdjustManager.initAdjust();
         // Отправка ивента о запуске приложения, если пользователь авторизован в FB
         if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
             FbAuthorizer.initFB();

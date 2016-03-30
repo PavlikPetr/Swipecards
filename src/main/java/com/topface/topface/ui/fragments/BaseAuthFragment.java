@@ -24,6 +24,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.dialogs.OldVersionDialog;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.utils.AdjustManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
@@ -119,6 +120,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 loadAllProfileData();
                 onSuccessAuthorization(token);
                 mHasAuthorized = true;
+                AdjustManager.sendRegistration(token.getSocialNet());
                 //Отправляем статистику в AppsFlyer
                 try {
                     AppsFlyerLib.sendTrackingWithEvent(App.getContext(), App.getContext()
