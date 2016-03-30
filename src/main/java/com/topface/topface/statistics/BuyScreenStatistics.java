@@ -3,7 +3,6 @@ package com.topface.topface.statistics;
 import com.topface.statistics.android.Slices;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
-import com.topface.topface.utils.CacheProfile;
 
 /**
  * Promo popup show unique statistics
@@ -18,7 +17,7 @@ public class BuyScreenStatistics {
         StatisticsTracker
                 .getInstance()
                 .setContext(App.getContext())
-                .sendUniqueEvent(BUY_SCREEN_SHOW, 1, slices, Integer.toString(CacheProfile.getProfile().uid) + "_" + screenName);
+                .sendUniqueEvent(BUY_SCREEN_SHOW, 1, slices, Integer.toString(App.get().getProfile().uid) + "_" + screenName);
     }
 
     private static void sendRegularStatistics(Slices slices) {
