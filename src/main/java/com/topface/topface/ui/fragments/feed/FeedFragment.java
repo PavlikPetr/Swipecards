@@ -870,6 +870,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             registerRequest(request);
 
             final FeedAdapter<T> adapter = getListAdapter();
+            if (adapter == null) {
+                return;
+            }
             FeedItem lastItem = adapter.getLastFeedItem();
             FeedItem firstItem = adapter.getFirstItem();
 
