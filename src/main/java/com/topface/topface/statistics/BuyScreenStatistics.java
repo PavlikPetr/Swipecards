@@ -11,6 +11,7 @@ import com.topface.topface.utils.CacheProfile;
 public class BuyScreenStatistics {
 
     public static final String BUY_SCREEN_SHOW = "buy_screen_show";
+    public static final String BUY_SCREEN_SHOW_UNIQUE = "buy_screen_show";
     public static final String TAG = "tag";
     public static final String PLC = "plc";
 
@@ -18,7 +19,7 @@ public class BuyScreenStatistics {
         StatisticsTracker
                 .getInstance()
                 .setContext(App.getContext())
-                .sendUniqueEvent(BUY_SCREEN_SHOW, 1, slices, Integer.toString(CacheProfile.getProfile().uid) + "_" + screenName);
+                .sendUniqueEvent(BUY_SCREEN_SHOW_UNIQUE, 1, slices, Integer.toString(CacheProfile.getProfile().uid) + "_" + screenName);
     }
 
     private static void sendRegularStatistics(Slices slices) {
