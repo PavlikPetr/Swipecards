@@ -235,7 +235,7 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
             return;
         }
         AuthToken token = AuthToken.getInstance();
-        token.saveToken(emailLogin, emailLogin, password);
+        token.saveToken(Utils.EMPTY, emailLogin, password);
         SessionConfig sessionConfig = App.getSessionConfig();
         sessionConfig.setSocialAccountEmail(emailLogin);
         sessionConfig.saveConfig();

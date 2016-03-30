@@ -10,7 +10,6 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.utils.Utils;
-import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
@@ -129,7 +128,8 @@ public class AuthToken {
     private boolean isToken() {
         boolean hasSocialToken = (mTokenInfo.mTokenKey != null && mTokenInfo.mTokenKey.length() > 0);
         boolean hasTopfaceToken = (mTokenInfo.mLogin != null && mTokenInfo.mLogin.length() > 0
-                && mTokenInfo.mPassword != null && mTokenInfo.mPassword.length() > 0);
+                && mTokenInfo.mPassword != null && mTokenInfo.mPassword.length() > 0
+                && mTokenInfo.mUserSocialId != null && mTokenInfo.mUserSocialId.length() > 0);
         return mTokenInfo.mSnType.equals(SN_TOPFACE) ? hasTopfaceToken : hasSocialToken;
     }
 

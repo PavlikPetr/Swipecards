@@ -306,7 +306,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mDatingSubscriptions.add(mAppState.getObservable(City.class).subscribe(new Action1<City>() {
             @Override
             public void call(City city) {
-                if (!city.equals(App.get().getProfile().city)) {
+                City profileCity = App.get().getProfile().city;
+                if (profileCity != null && !city.equals(profileCity)) {
                     if (mUserSearchList == null) {
                         mUserSearchList = new CachableSearchList<>(SearchUser.class);
                     }

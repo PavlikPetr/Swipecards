@@ -258,6 +258,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     @Override
     protected void onResume() {
         super.onResume();
+        registerReauthReceiver();
         if (GoogleMarketApiManager.isGoogleAccountExists() && mGoogleAuthStarted) {
             App.mOpenIabHelperManager.freeHelper();
             App.mOpenIabHelperManager.init(App.getContext());
@@ -294,7 +295,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         super.onResumeFragments();
         mIsActivityRestoredState = true;
         checkProfileLoad();
-        registerReauthReceiver();
     }
 
     public boolean isActivityRestoredState() {
