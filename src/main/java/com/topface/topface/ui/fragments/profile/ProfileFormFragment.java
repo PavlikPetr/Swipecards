@@ -152,7 +152,8 @@ public class ProfileFormFragment extends AbstractFormFragment {
         mCitySubscription = mAppState.getObservable(City.class).subscribe(new Action1<City>() {
             @Override
             public void call(City city) {
-                if (city != null) {
+                City profileCity = App.get().getProfile().city;
+                if (city != null && profileCity != null && !profileCity.equals(city)) {
                     mFormEditedListener.onEditingFinished(
                             new FormItem(R.string.general_city, JsonUtils.toJson(city), FormItem.CITY));
                 }
