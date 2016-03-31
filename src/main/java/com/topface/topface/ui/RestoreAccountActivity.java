@@ -1,11 +1,14 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.view.View;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.databinding.RestoreAccountActivityBinding;
 import com.topface.topface.requests.IApiResponse;
@@ -21,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 public class RestoreAccountActivity extends TrackedFragmentActivity {
 
     public static final int RESTORE_RESULT = 46452;
+    public static final String RESTORE_ACCOUNT_SHOWN = "restore_account_shown";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,13 @@ public class RestoreAccountActivity extends TrackedFragmentActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(RESTORE_ACCOUNT_SHOWN));
+    }
+
+    @SuppressWarnings("unused")
     public static class Handlers {
 
         private final Activity mActivity;
@@ -59,6 +70,7 @@ public class RestoreAccountActivity extends TrackedFragmentActivity {
         }
 
         public void onCancelClick(View view) {
+            LocalBroadcastManager.getInstance(mActivity).sendBroadcast(new Intent(RESTORE_ACCOUNT_SHOWN));
             new AuthorizationManager().logout(mActivity);
         }
 
