@@ -46,6 +46,7 @@ import java.util.Locale;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.functions.Action1;
 
 import static com.topface.topface.ui.BaseFragmentActivity.ActivityLifecycle.CREATED;
 import static com.topface.topface.ui.BaseFragmentActivity.ActivityLifecycle.DESTROYED;
@@ -84,6 +85,11 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         @Override
         public void call(Subscriber<? super ActivityLifecycle> subscriber) {
             mLifeCycleSubscriber = subscriber;
+        }
+    }).doOnError(new Action1<Throwable>() {
+        @Override
+        public void call(Throwable throwable) {
+            throwable.printStackTrace();
         }
     });
 

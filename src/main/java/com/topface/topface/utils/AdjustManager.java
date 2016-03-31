@@ -1,6 +1,7 @@
 package com.topface.topface.utils;
 
 import android.content.res.Resources;
+import android.util.Log;
 
 import com.adjust.sdk.Adjust;
 import com.adjust.sdk.AdjustAttribution;
@@ -8,11 +9,14 @@ import com.adjust.sdk.AdjustConfig;
 import com.adjust.sdk.AdjustEvent;
 import com.adjust.sdk.LogLevel;
 import com.adjust.sdk.OnAttributionChangedListener;
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.R;
 import com.topface.topface.data.Products;
+import com.topface.topface.state.AppState;
 import com.topface.topface.ui.BaseFragmentActivity;
+
+import javax.inject.Inject;
 
 import rx.functions.Action1;
 
@@ -23,14 +27,35 @@ import rx.functions.Action1;
 public class AdjustManager {
 
     private static final String ADJUST_TOKEN = "sewqil33vev4";
+    private static final String REGISTRATION_TOKEN = "h0g3lj";
+    private static final String PURCHASE_TOKEN = "trfawd";
+    private static final String FIRST_PAY_TOKEN = "h75za2";
 
-    public static void initAdjust() {
+    @Inject
+    AppState mAppState;
+    private static AdjustManager mInstance;
+    private boolean mIsInitialized;
+
+    public static AdjustManager getInstance() {
+        if (mInstance == null) {
+            mInstance = new AdjustManager();
+        }
+        return mInstance;
+    }
+
+    public AdjustManager() {
+        App.from(App.getContext()).inject(this);
+    }
+
+    public void initAdjust() {
         AdjustConfig config = new AdjustConfig(App.getContext(), ADJUST_TOKEN, Debug.isDebugLogsEnabled() ?
                 AdjustConfig.ENVIRONMENT_SANDBOX :
                 AdjustConfig.ENVIRONMENT_PRODUCTION);
         config.setOnAttributionChangedListener(new OnAttributionChangedListener() {
             @Override
             public void onAttributionChanged(AdjustAttribution attribution) {
+                mAppState.setData(attribution);
+                Log.e("AdjustManager", "onAttributionChanged attribution:" + JsonUtils.toJson(attribution));
             }
         });
         config.setLogLevel(Debug.isDebugLogsEnabled() ? LogLevel.VERBOSE : LogLevel.ASSERT);
@@ -48,17 +73,46 @@ public class AdjustManager {
                 }
             }
         });
+        mIsInitialized = true;
     }
 
-    public static void sendRevenue(String eventName, double revenue) {
-        AdjustEvent event = new AdjustEvent(eventName);
+    public boolean isInitialized() {
+        return mIsInitialized;
+    }
+
+    public void sendPurchaseEvent(double revenue) {
+        sendRevenue(PURCHASE_TOKEN, revenue);
+    }
+
+    public void sendFirstPayEvent(double revenue) {
+        sendRevenue(FIRST_PAY_TOKEN, revenue);
+    }
+
+    private void sendRevenue(String eventToken, double revenue) {
+        if (!checkSdkState()) {
+            return;
+        }
+        AdjustEvent event = new AdjustEvent(eventToken);
         event.setRevenue(revenue, Products.USD);
         Adjust.trackEvent(event);
     }
 
-    public static void sendRegistration(String socialName) {
+    public void sendRegistrationEvent(String socialName) {
+        if (!checkSdkState()) {
+            return;
+        }
         Resources res = App.getContext().getResources();
-        AdjustEvent event = new AdjustEvent(res.getString(R.string.appsflyer_registration));
-        event.addPartnerParameter(res.getString(R.string.adjust_registration_social), socialName);
+        AdjustEvent event = new AdjustEvent(REGISTRATION_TOKEN);
+        // временно убираю отправку данных о типе соц. сети в которой был авторизован пользователь
+        //event.addCallbackParameter(res.getString(R.string.adjust_registration_social), socialName);
+        Adjust.trackEvent(event);
+    }
+
+    private boolean checkSdkState() {
+        if (!isInitialized()) {
+            Debug.error("Call initAdjust() at first");
+            return false;
+        }
+        return true;
     }
 }

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.adjust.sdk.AdjustAttribution;
 import com.appsflyer.AppsFlyerLib;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -120,7 +121,12 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 loadAllProfileData();
                 onSuccessAuthorization(token);
                 mHasAuthorized = true;
-                AdjustManager.sendRegistration(token.getSocialNet());
+                AdjustAttribution adjustAttribution = App.getUserConfig().getAdjustAttribution();
+                if (adjustAttribution != null) {
+                    // send AdjustAttribution to server
+                    //TODO add request
+                }
+                AdjustManager.getInstance().sendRegistrationEvent(token.getSocialNet());
                 //Отправляем статистику в AppsFlyer
                 try {
                     AppsFlyerLib.sendTrackingWithEvent(App.getContext(), App.getContext()

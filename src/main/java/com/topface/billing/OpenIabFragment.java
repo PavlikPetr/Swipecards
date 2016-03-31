@@ -440,7 +440,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 }
                 UserConfig userConfig = App.getUserConfig();
                 if (!userConfig.getFirstPayFlag()) {
-                    AdjustManager.sendRevenue(App.getContext().getResources().getString(R.string.appsflyer_first_pay), verify.revenue);
+                    AdjustManager.getInstance().sendFirstPayEvent(verify.revenue);
                     try {
                         AppsFlyerLib.sendTrackingWithEvent(
                                 context,
@@ -457,7 +457,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 if (isNeedSendPurchasesStatistics()) {
                     //Статистика AppsFlyer
                     if (verify.revenue > 0) {
-                        AdjustManager.sendRevenue(App.getContext().getResources().getString(R.string.appsflyer_purchase), verify.revenue);
+                        AdjustManager.getInstance().sendPurchaseEvent(verify.revenue);
                         try {
                             AppsFlyerLib.sendTrackingWithEvent(
                                     context,

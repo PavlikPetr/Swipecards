@@ -7,6 +7,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.adjust.sdk.AdjustAttribution;
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
@@ -16,6 +18,7 @@ import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,6 +82,8 @@ public class UserConfig extends AbstractConfig {
     public static final String LAST_CATCHED_GEO_LONGITUDE = "last_catched_geo_longitude";
     public static final String LAST_CATCHED_GEO_PROVIDER = "last_catched_geo_provider";
     public static final String TRIAL_LAST_TIME = "trial_last_time";
+    private static final String ADJUST_ATTRIBUTION = "adjust_attribution";
+    private static final String IS_ADJUST_ATTRIBUTION_SENT = "is_adjust_attribution_sent";
     private String mUnique;
 
     public UserConfig(String uniqueKey, Context context) {
@@ -179,6 +184,10 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, TRIAL_LAST_TIME, 0L);
         addField(settingsMap, LAST_CATCHED_GEO_LONGITUDE, DEFAULT_USER_LONGITUDE_LOCATION);
         addField(settingsMap, LAST_CATCHED_GEO_PROVIDER, LOCATION_PROVIDER);
+        // данные referrer, полученные от Adjust
+        addField(settingsMap, ADJUST_ATTRIBUTION, "");
+        // информация о том была ли отправка на сервер данных referrer пользователя
+        addField(settingsMap, IS_ADJUST_ATTRIBUTION_SENT, false);
     }
 
     @Override
@@ -709,5 +718,43 @@ public class UserConfig extends AbstractConfig {
         location.setLatitude(getDoubleField(getSettingsMap(), LAST_CATCHED_GEO_LATITUDE));
         location.setLongitude(getDoubleField(getSettingsMap(), LAST_CATCHED_GEO_LONGITUDE));
         return location;
+    }
+
+    /**
+     * Save last catched user referrer
+     *
+     * @param adjustAttribution user referrer
+     */
+    public void setAdjustAttribution(@NotNull AdjustAttribution adjustAttribution) {
+        setField(getSettingsMap(), ADJUST_ATTRIBUTION, JsonUtils.toJson(adjustAttribution));
+        this.saveConfig();
+    }
+
+    /**
+     * Return last saved user referrer
+     *
+     * @return user referrer
+     */
+    @Nullable
+    public AdjustAttribution getAdjustAttribution() {
+        String adjustAttribution = getStringField(getSettingsMap(), ADJUST_ATTRIBUTION);
+        if (!TextUtils.isEmpty(adjustAttribution)) {
+            return JsonUtils.fromJson(adjustAttribution, AdjustAttribution.class);
+        }
+        return null;
+    }
+
+    /**
+     * @return true if user referrer was sent to server
+     */
+    public boolean isAdjustAttributionSent() {
+        return getBooleanField(getSettingsMap(), IS_ADJUST_ATTRIBUTION_SENT);
+    }
+
+    /**
+     * Set state of sending AdjustAttribution
+     */
+    public void setAdjustAttributionSent(boolean isSent) {
+        setField(getSettingsMap(), IS_ADJUST_ATTRIBUTION_SENT, isSent);
     }
 }

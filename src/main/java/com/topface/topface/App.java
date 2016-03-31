@@ -353,7 +353,6 @@ public class App extends ApplicationBase {
         super.onCreate();
         mContext = getApplicationContext();
         LeakCanary.install(this);
-        AdjustManager.initAdjust();
         // Отправка ивента о запуске приложения, если пользователь авторизован в FB
         if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
             FbAuthorizer.initFB();
@@ -361,6 +360,7 @@ public class App extends ApplicationBase {
         }
         initVkSdk();
         initObjectGraphForInjections();
+        AdjustManager.getInstance().initAdjust();
         // подписываемся на события о переходе приложения в состояние background/foreground
         mStateManager.registerAppChangeStateListener(new RunningStateManager.OnAppChangeStateListener() {
             @Override

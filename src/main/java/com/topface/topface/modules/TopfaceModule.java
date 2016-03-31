@@ -2,6 +2,7 @@ package com.topface.topface.modules;
 
 import android.location.Location;
 
+import com.adjust.sdk.AdjustAttribution;
 import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
@@ -27,6 +28,7 @@ import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.utils.AdjustManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RunningStateManager;
@@ -76,7 +78,8 @@ import dagger.Provides;
                 PaymentwallActivity.class,
                 CountersDataProvider.class,
                 AdToAppHelper.class,
-                FindAndSendCurrentLocation.class
+                FindAndSendCurrentLocation.class,
+                AdjustManager.class
         },
         staticInjections = App.class
 )
@@ -99,6 +102,10 @@ public class TopfaceModule {
                     UserConfig config = App.getUserConfig();
                     config.setUserGeoLocation((Location) data);
                     config.saveConfig();
+                } else if (data.getClass() == AdjustAttribution.class) {
+                    UserConfig config = App.getUserConfig();
+                    config.setAdjustAttribution((AdjustAttribution) data);
+                    config.saveConfig();
                 }
             }
 
@@ -110,6 +117,8 @@ public class TopfaceModule {
                     return (T) (CacheProfile.countersData != null ? new CountersData(CacheProfile.countersData) : new CountersData());
                 } else if (Location.class.equals(classType)) {
                     return (T) App.getUserConfig().getUserGeoLocation();
+                } else if (AdjustAttribution.class.equals(classType)) {
+                    return (T) App.getUserConfig().getAdjustAttribution();
                 }
                 return null;
             }
