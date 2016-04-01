@@ -78,7 +78,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
     private String mUserCity;
     private Photo mPhoto;
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
