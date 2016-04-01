@@ -80,8 +80,8 @@ public class UserProfileFragment extends AbstractProfileFragment {
 
     @SuppressWarnings("deprecation")
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         Bundle args = getArguments();
         mProfileId = args.getInt(AbstractProfileFragment.INTENT_UID, 0);
         mItemId = args.getString(AbstractProfileFragment.INTENT_ITEM_ID);
