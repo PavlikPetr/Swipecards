@@ -79,8 +79,8 @@ public class UserProfileFragment extends AbstractProfileFragment {
     private Photo mPhoto;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         Bundle args = getArguments();
         mProfileId = args.getInt(AbstractProfileFragment.INTENT_UID, 0);
         mItemId = args.getString(AbstractProfileFragment.INTENT_ITEM_ID);
@@ -496,11 +496,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
     }
 
     public ArrayList<FeedGift> getNewGifts() {
-        if (mNewGifts == null) {
-            return new ArrayList<>();
-        } else {
-            return mNewGifts;
-        }
+        return mNewGifts == null ? new ArrayList<FeedGift>() : mNewGifts;
     }
 
     public void clearNewFeedGift() {
