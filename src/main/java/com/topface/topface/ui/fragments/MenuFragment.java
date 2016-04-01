@@ -321,7 +321,7 @@ public class MenuFragment extends Fragment {
         boolean notify = false;
         if (profileMenuItem != null) {
             // update photo
-            Profile profile = App.from(getActivity()).getProfile();
+            Profile profile = App.get().getProfile();
             Photo photo = profileMenuItem.getMenuIconPhoto();
             if (photo != null) {
                 if (!photo.equals(profile.photo)) {
