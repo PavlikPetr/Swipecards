@@ -24,6 +24,8 @@ import java.util.LinkedList;
 
 public class UserFormFragment extends AbstractFormFragment implements OnClickListener {
 
+    private static final String PAGE_NAME = "user.form";
+
     private ViewGroup mEmptyFormLayout;
     private Button mAskToFillForm;
     private ProgressBar mPgb;
@@ -44,6 +46,11 @@ public class UserFormFragment extends AbstractFormFragment implements OnClickLis
     @Override
     protected AbstractFormListAdapter createFormAdapter(Context context) {
         return new UserFormListAdapter(context, false);
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override

@@ -19,6 +19,8 @@ public class PaymentWallBuyingFragment extends CoinsBuyingFragment {
 
     public static final String PAGE_TYPE = "page_type";
 
+    private static final String PAGE_NAME = "buy.coins.pw";
+
     public static CoinsBuyingFragment newInstance(String from, PaymentWallProducts.TYPE type, String text) {
         PaymentWallBuyingFragment buyingFragment = new PaymentWallBuyingFragment();
         Bundle args = new Bundle();
@@ -33,6 +35,11 @@ public class PaymentWallBuyingFragment extends CoinsBuyingFragment {
         }
         buyingFragment.setArguments(args);
         return buyingFragment;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     public static CoinsBuyingFragment newInstance(int type, int coins, String from) {

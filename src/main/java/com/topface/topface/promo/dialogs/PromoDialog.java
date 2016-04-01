@@ -24,6 +24,9 @@ import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.FlurryManager;
+
+import static com.topface.topface.utils.FlurryManager.PayWallAction.*;
 
 
 public abstract class PromoDialog extends AbstractDialogFragment implements View.OnClickListener, IPromoPopup {
@@ -42,6 +45,10 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
     @Override
     public boolean isUnderActionBar() {
         return true;
+    }
+
+    protected String getPopupName() {
+        return null;
     }
 
     /**
@@ -119,6 +126,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
         TextView popupText = (TextView) root.findViewById(R.id.airMessagesText);
         popupText.setText(getMessage());
 
+        FlurryManager.sendPayWallEvent(getPopupName(), SHOW);
         EasyTracker.sendEvent(getMainTag(), "Show", "", 0L);
         PromoDialogStastics.promoDialogShowSend(getMainTag());
         PromoDialogUniqueStatistics.send(getMainTag());
@@ -142,6 +150,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
                 closeFragment();
                 EasyTracker.sendEvent(getMainTag(), "VipClose", "CloseAfterUpdateProfile", 1L);
                 PromoDialogStastics.promoDialogCloseAfterUpdateProfileSend(getMainTag());
+                FlurryManager.sendPayWallEvent(getPopupName(), PRODUCT_BOUGHT);
             }
         }
     };
@@ -156,11 +165,13 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
                 );
                 EasyTracker.sendEvent(getMainTag(), "ClickBuyVip", "", 0L);
                 PromoDialogStastics.promoDialogClickBuyVipSend(getMainTag());
+                FlurryManager.sendPayWallEvent(getPopupName(), CLICK_BUY);
                 break;
             case R.id.deleteMessages:
                 deleteMessages();
                 EasyTracker.sendEvent(getMainTag(), "Dismiss", "Delete", 0L);
                 PromoDialogStastics.promoDialogDismissSend(getMainTag());
+                FlurryManager.sendPayWallEvent(getPopupName(), CLICK_DELETE);
                 closeFragment();
                 break;
             default:

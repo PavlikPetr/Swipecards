@@ -14,6 +14,8 @@ import com.topface.topface.utils.CacheProfile;
 
 public class VipPaymentWallBuyFragment extends VipBuyFragment {
 
+    private static final String PAGE_NAME = "buy.vip.pw";
+
     public static VipPaymentWallBuyFragment newInstance(boolean needActionBar, String from, PaymentWallProducts.TYPE type, String text) {
         VipPaymentWallBuyFragment fragment = new VipPaymentWallBuyFragment();
         Bundle args = new Bundle();
@@ -27,6 +29,11 @@ public class VipPaymentWallBuyFragment extends VipBuyFragment {
         }
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override

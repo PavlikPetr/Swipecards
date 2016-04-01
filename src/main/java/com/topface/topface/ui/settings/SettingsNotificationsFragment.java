@@ -47,6 +47,8 @@ import static com.topface.topface.ui.dialogs.BaseEditDialog.EditingFinishedListe
 public class SettingsNotificationsFragment extends BaseFragment implements View.OnClickListener {
     public static final int REQUEST_CODE_RINGTONE = 333;
 
+    private static final String PAGE_NAME = "profile.settings.notification";
+
     private MarketApiManager mMarketApiManager;
     private UserConfig mUserConfig = App.getUserConfig();
     private String mSavingText = App.getContext().getString(R.string.saving_in_progress);
@@ -74,6 +76,11 @@ public class SettingsNotificationsFragment extends BaseFragment implements View.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override

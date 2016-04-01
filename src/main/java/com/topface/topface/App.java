@@ -17,7 +17,6 @@ import com.appsflyer.AppsFlyerLib;
 import com.comscore.analytics.comScore;
 import com.facebook.appevents.AppEventsConstants;
 import com.facebook.appevents.AppEventsLogger;
-import com.flurry.android.FlurryAgent;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.squareup.leakcanary.LeakCanary;
 import com.topface.billing.OpenIabHelperManager;
@@ -56,6 +55,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.RunningStateManager;
@@ -338,6 +338,8 @@ public class App extends ApplicationBase {
         }
     }
 
+
+
     @Override
     public void onCreate() {
         /**
@@ -352,6 +354,8 @@ public class App extends ApplicationBase {
         super.onCreate();
         LeakCanary.install(this);
         mContext = getApplicationContext();
+        FlurryManager.init();
+        FlurryManager.sendAppStartEvent();
         // Отправка ивента о запуске приложения, если пользователь авторизован в FB
         if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
             FbAuthorizer.initFB();
@@ -364,11 +368,13 @@ public class App extends ApplicationBase {
             @Override
             public void onAppForeground(long timeOnStart) {
                 AppStateStatistics.sendAppForegroundState();
+                FlurryManager.sendAppInForegroundEvent();
             }
 
             @Override
             public void onAppBackground(long timeOnStop, long timeOnStart) {
                 AppStateStatistics.sendAppBackgroundState();
+                FlurryManager.sendAppInBackgroundEvent();
             }
         });
         //Включаем отладку, если это дебаг версия
@@ -423,8 +429,6 @@ public class App extends ApplicationBase {
         AppsFlyerLib.registerConversionListener(mContext, new AppsFlyerData.ConversionListener(mAppsFlyerConversionHolder));
 
         initComScore();
-        FlurryAgent.init(this, getString(R.string.flurry_key));
-
         final Handler handler = new Handler();
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
         new BackgroundThread() {

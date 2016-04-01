@@ -60,7 +60,6 @@ import java.util.ArrayList;
 public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
     public static final String ADD_NEW_GIFT = "add_new_gift";
-
     public static final String DEFAULT_UPDATE_PHOTOS_INTENT = "com.topface.topface.updatePhotos";
     public static final String INTENT_USER_ID = "user_id";
     public static final String INTENT_ALBUM_POS = "album_position";
@@ -74,6 +73,9 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     public static final String OWN_PHOTOS_CONTROL_VISIBILITY = "OWN_PHOTOS_CONTROL_VISIBILITY";
     public static final String DELETED_PHOTOS = "DELETED_PHOTOS";
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 3;
+
+    private static final String PAGE_NAME = "photoswitcher";
+
     private static final int ANIMATION_TIME = 200;
     ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -181,6 +183,11 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         intent.putParcelableArrayListExtra(INTENT_PHOTOS, photos);
         intent.putParcelableArrayListExtra(INTENT_GIFT, gifts);
         return intent;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override
@@ -429,7 +436,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                             refreshButtonsState();
                         }
                     }
-               }
+                }
             });
             // - delete button
             mDeleteButton = (ImageButton) mPhotoAlbumControl.findViewById(R.id.btnDelete);
@@ -465,7 +472,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         CacheProfile.totalPhotos -= mDeletedPhotos.size();
         int decrementPositionBy = 0;
         for (Photo deleted : mDeletedPhotos) {
-            if (CacheProfile.photo!=null && deleted.position < CacheProfile.photo.position && CacheProfile.photo.position > 0) {
+            if (CacheProfile.photo != null && deleted.position < CacheProfile.photo.position && CacheProfile.photo.position > 0) {
                 decrementPositionBy--;
             }
         }

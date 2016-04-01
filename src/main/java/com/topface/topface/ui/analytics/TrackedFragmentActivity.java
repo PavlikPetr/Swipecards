@@ -11,6 +11,7 @@ import com.topface.topface.data.ExperimentTags;
 import com.topface.topface.statistics.ScreensShowStatistics;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -28,6 +29,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
 
     public void senActivitiesShownStatistics() {
         ScreensShowStatistics.sendScreenShow(getClass().getSimpleName());
+        FlurryManager.sendPageOpenEvent(getScreenName());
     }
 
     @Override
@@ -78,5 +80,9 @@ public class TrackedFragmentActivity extends ActionBarActivity {
         super.onPause();
         comScore.onExitForeground();
         StatisticsTracker.getInstance().activityStop(this);
+    }
+
+    protected String getScreenName() {
+        return null;
     }
 }

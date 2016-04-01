@@ -126,6 +126,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
     private static final String AUTO_REPLY_MESSAGE_SOURCE = "AutoReplyMessage";
     private static final String SEND_MESSAGE_SOURCE = "SendMessage";
+    private static final String PAGE_NAME = "Chat";
     private int mUserId;
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -204,6 +205,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         if (text != null) {
             sendMessage(text, false);
         }
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override
