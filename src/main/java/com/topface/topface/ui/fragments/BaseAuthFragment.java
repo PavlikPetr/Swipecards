@@ -130,9 +130,6 @@ public abstract class BaseAuthFragment extends BaseFragment {
 
             @Override
             public void fail(final int codeError, IApiResponse response) {
-                if (codeError == ErrorCodes.USER_DELETED) {
-                    showButtons();
-                }
                 authorizationFailed(codeError, authRequest);
             }
 
@@ -170,11 +167,9 @@ public abstract class BaseAuthFragment extends BaseFragment {
         if (!isAdded()) {
             return;
         }
-
-        hideButtons();
         processAuthError(codeError, request);
-
         if (whetherToShowRetrier(codeError)) {
+            hideButtons();
             showRetrier();
             if (mPassword != null) {
                 mPassword.setTransformationMethod(new PasswordTransformationMethod());
