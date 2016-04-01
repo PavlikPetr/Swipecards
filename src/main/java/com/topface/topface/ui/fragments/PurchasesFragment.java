@@ -92,7 +92,7 @@ public class PurchasesFragment extends BaseFragment {
     private ArrayList<String> mPagesTitle = new ArrayList<>();
 
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
-        private TopfaceOfferwallRedirect mTopfaceOfferwallRedirect = App.from(getActivity()).getOptions().topfaceOfferwallRedirect;
+        private TopfaceOfferwallRedirect mTopfaceOfferwallRedirect = App.get().getOptions().topfaceOfferwallRedirect;
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
