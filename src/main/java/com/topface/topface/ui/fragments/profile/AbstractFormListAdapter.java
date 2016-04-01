@@ -31,11 +31,8 @@ public abstract class AbstractFormListAdapter extends BaseAdapter {
     }
 
     public void setUserData(String status, LinkedList<FormItem> forms) {
-        if (forms != null) {
-            mForms = prepareForm(status, new LinkedList<>(forms));
-        } else {
-            mForms = prepareForm(status, new LinkedList<FormItem>());
-        }
+        mForms = forms != null ? prepareForm(status, new LinkedList<>(forms))
+                : prepareForm(status, new LinkedList<FormItem>());
     }
 
     protected abstract LinkedList<FormItem> prepareForm(String status, LinkedList<FormItem> forms);

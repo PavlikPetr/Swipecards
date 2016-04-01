@@ -78,6 +78,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
     private String mUserCity;
     private Photo mPhoto;
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -496,11 +497,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
     }
 
     public ArrayList<FeedGift> getNewGifts() {
-        if (mNewGifts == null) {
-            return new ArrayList<>();
-        } else {
-            return mNewGifts;
-        }
+        return mNewGifts == null ? new ArrayList<FeedGift>() : mNewGifts;
     }
 
     public void clearNewFeedGift() {
