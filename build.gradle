@@ -336,8 +336,8 @@ project(':libs:odnoklassniki') {
     apply plugin: 'com.android.library'
     android.sourceSets.main {
         manifest.srcFile 'AndroidManifest.xml'
-        java.srcDirs = ['src']
-        res.srcDirs = ['res']
+        java.srcDirs = ['src/main/java']
+        res.srcDirs = ['src/main/res']
     }
 }
 

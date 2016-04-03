@@ -17,6 +17,7 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.feed.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.BookmarksFragment;
@@ -36,6 +37,8 @@ import com.topface.topface.utils.ads.AdToAppHelper;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.geo.GeoLocationManager;
+import com.topface.topface.utils.social.CurrentUser;
+import com.topface.topface.utils.social.OkUserData;
 
 import javax.inject.Singleton;
 
@@ -76,7 +79,9 @@ import dagger.Provides;
                 PaymentwallActivity.class,
                 CountersDataProvider.class,
                 AdToAppHelper.class,
-                FindAndSendCurrentLocation.class
+                FindAndSendCurrentLocation.class,
+                CurrentUser.class,
+                OkProfileFragment.class
         },
         staticInjections = App.class
 )
@@ -99,6 +104,10 @@ public class TopfaceModule {
                     UserConfig config = App.getUserConfig();
                     config.setUserGeoLocation((Location) data);
                     config.saveConfig();
+                } else if (data.getClass() == OkUserData.class) {
+                    UserConfig config = App.getUserConfig();
+                    config.setOkUserData((OkUserData) data);
+                    config.saveConfig();
                 }
             }
 
@@ -110,6 +119,8 @@ public class TopfaceModule {
                     return (T) (CacheProfile.countersData != null ? new CountersData(CacheProfile.countersData) : new CountersData());
                 } else if (Location.class.equals(classType)) {
                     return (T) App.getUserConfig().getUserGeoLocation();
+                } else if (OkUserData.class.equals(classType)) {
+                    return (T) App.getUserConfig().getOkUserData();
                 }
                 return null;
             }
