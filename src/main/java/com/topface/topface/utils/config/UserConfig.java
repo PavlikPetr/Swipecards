@@ -724,7 +724,7 @@ public class UserConfig extends AbstractConfig {
         if (!TextUtils.isEmpty(okUserDataString)) {
             return JsonUtils.fromJson(okUserDataString, OkUserData.class);
         }
-        return null;
+        return new OkUserData();
     }
 
     /**

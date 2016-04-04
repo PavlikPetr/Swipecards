@@ -16,7 +16,8 @@
         <ScrollView
             android:id="@+id/rootControlView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="@{handler.rootVisibility}">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -31,19 +32,24 @@
                     android:id="@+id/okProfileAvatar"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    app:postProcessor="inscribedAvatar" />
+                    android:visibility="@{handler.avatarVisibility}"
+                    app:postProcessor="inscribedAvatar"
+                    app:remoteSrc="@{handler.imageSrc}" />
 
                 <TextView
                     android:id="@+id/okProfileName"
                     style="@style/OkProfileUserName"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="@{handler.nameText}"
+                    android:visibility="@{handler.nameVisibility}" />
 
                 <Button
                     android:id="@+id/okProfileButtonTopfaceTeam"
                     style="@style/OkProfileButtons"
                     android:onClick="@{handler.onButtonShowGroupClick}"
-                    android:text="@string/vk_profile_button_tf_group" />
+                    android:text="@string/vk_profile_button_tf_group"
+                    android:visibility="@{handler.buttonVisibility}" />
 
             </LinearLayout>
         </ScrollView>
@@ -53,6 +59,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:visibility="gone" />
+            android:visibility="@{handler.progressVisibility}" />
     </RelativeLayout>
 </layout>

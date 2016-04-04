@@ -66,6 +66,7 @@ public class Utils {
     public static final String EMPTY = "";
     public static final String AMPERSAND = "&";
     public static final String SEMICOLON = ":";
+    public static final String LOCAL_RES = "drawable://%d";
     private static final String DASH_SYMBOL = "-";
     private static final String HYPHEN_SYMBOL = "&#8209;";
     public static String RU_LOCALE = "ru";

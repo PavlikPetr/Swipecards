@@ -1,13 +1,13 @@
 package com.topface.topface.utils.social;
 
 import android.os.AsyncTask;
-import android.text.TextUtils;
 
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.state.AppState;
 import com.topface.topface.state.TopfaceAppState;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -46,11 +46,6 @@ public class CurrentUser {
         }
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
         protected String doInBackground(Void... params) {
             try {
                 return odnoklassniki.request("users.getCurrentUser", null, "get");
@@ -63,7 +58,7 @@ public class CurrentUser {
         @Override
         protected void onPostExecute(String s) {
             Debug.log("Odnoklassniki users.getCurrentUser result: " + s);
-            OkUserData data = !TextUtils.isEmpty(s) ? JsonUtils.fromJson(s, OkUserData.class) : null;
+            OkUserData data = JsonUtils.fromJson(s, OkUserData.class);
             if (data != null) {
                 mAppState.setData(data);
             }
@@ -81,7 +76,7 @@ public class CurrentUser {
 
     public interface GetUserListener {
 
-        void onSuccess(OkUserData data);
+        void onSuccess(@Nullable OkUserData data);
 
     }
 }

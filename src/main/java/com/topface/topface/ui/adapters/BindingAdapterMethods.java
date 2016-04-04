@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.ui.views.ImageViewRemote;
 
 /**
  * Created by ppetr on 14.01.16.
@@ -36,5 +37,10 @@ public class BindingAdapterMethods {
         } catch (Exception e) {
             Debug.error(e.toString());
         }
+    }
+
+    @BindingAdapter("app:remoteSrc")
+    public static void setremoteSrc(ImageViewRemote view, String res) {
+        view.setRemoteSrc(res);
     }
 }

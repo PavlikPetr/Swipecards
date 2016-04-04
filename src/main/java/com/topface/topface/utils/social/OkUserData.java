@@ -3,6 +3,8 @@ package com.topface.topface.utils.social;
 import com.google.gson.annotations.SerializedName;
 import com.topface.topface.App;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -38,7 +40,7 @@ public class OkUserData {
         return MALE.equals(gender);
     }
 
-    @org.jetbrains.annotations.Nullable
+    @Nullable
     public Date getDayOfBirth() {
         Date date = null;
         SimpleDateFormat format = new SimpleDateFormat(DAY_OF_BIRTH_FORMAT, App.getCurrentLocale());
