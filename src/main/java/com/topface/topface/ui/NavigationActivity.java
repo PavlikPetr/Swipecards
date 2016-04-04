@@ -42,6 +42,7 @@ import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
+import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
@@ -74,9 +75,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.Subscription;
 import rx.functions.Action1;
 import rx.subjects.BehaviorSubject;
+import rx.subscriptions.CompositeSubscription;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_HIGH;
@@ -109,7 +110,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private AddPhotoHelper mAddPhotoHelper;
     private boolean mIsPhotoAsked;
     private PopupManager mPopupManager;
-    private Subscription mCountersSubscription;
+    private CompositeSubscription mSubscription = new CompositeSubscription();
     private BehaviorSubject<DRAWER_LAYOUT_STATE> mDrawerLayoutStateObservable;
     private Handler mHandler = new Handler() {
         @Override
@@ -169,14 +170,20 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
-        mCountersSubscription = mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
+        mSubscription.add(mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
             @Override
             public void call(CountersData countersData) {
                 if (mNotificationController != null) {
                     mNotificationController.refreshNotificator(countersData.dialogs, countersData.mutual);
                 }
             }
-        });
+        }));
+        mSubscription.add(mAppState.getObservable(AdjustAttributeData.class).subscribe(new Action1<AdjustAttributeData>() {
+            @Override
+            public void call(AdjustAttributeData adjustAttributionData) {
+                App.sendReferreRequest(adjustAttributionData);
+            }
+        }));
         if (isNeedBroughtToFront(intent)) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -542,7 +549,9 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             mFullscreenController.onDestroy();
         }
         mDrawerToggle = null;
-        mCountersSubscription.unsubscribe();
+        if (!mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
         super.onDestroy();
         AdmobInterstitialUtils.releaseInterstitials();
     }

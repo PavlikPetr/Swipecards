@@ -7,6 +7,7 @@ import com.flurry.android.FlurryAgent;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +31,7 @@ public class FlurryManager {
     private static final String PAY_WALL_EVENT = "Pay_Wall";
     private static final String SPEND_COINS_EVENT = "Spend_Coins";
     private static final String FULL_DIALOG_EVENT = "Full_Dialog";
+    private static final String REFERRER_INSTALL_EVENT = "Referrer_Install";
 
     private static final String INVITES_TYPE_PARAM = "invites_type";
     private static final String SOCIAL_TYPE_PARAM = "social_type";
@@ -42,6 +44,13 @@ public class FlurryManager {
     private static final String PAY_WALL_ACTION_PARAM = "pay_wall_action";
     private static final String PRODUCT_TYPE_PARAM = "product";
     private static final String PRICE_PARAM = "price";
+    private static final String TRACKER_TOKEN_REFERRER_PARAM = "tracker_token";
+    private static final String NETWORK_REFERRER_PARAM = "network";
+    private static final String CAMPAIGN_REFERRER_PARAM = "campaign";
+    private static final String ADGROUP_REFERRER_PARAM = "adgroup";
+    private static final String CREATIVE_REFERRER_PARAM = "creative";
+    private static final String CLICK_LABEL_REFERRER_PARAM = "click_label";
+    private static final String TRACKER_NAME_REFERRER_PARAM = "tracker_name";
 
     private static final String PAGE_NAME_TEMPLATE = "page.%s";
 
@@ -225,5 +234,29 @@ public class FlurryManager {
      */
     public static void sendFullDialogEvent() {
         FlurryAgent.logEvent(FULL_DIALOG_EVENT);
+    }
+
+    /**
+     * Send event - user come from referrer link
+     */
+    public static void sendReferrerEvent(AdjustAttributeData attribution) {
+        if (attribution != null) {
+            Map<String, String> ref = new HashMap<>();
+            ref = put(ref, ADGROUP_REFERRER_PARAM, attribution.adgroup);
+            ref = put(ref, CAMPAIGN_REFERRER_PARAM, attribution.campaign);
+            ref = put(ref, CLICK_LABEL_REFERRER_PARAM, attribution.clickLabel);
+            ref = put(ref, CREATIVE_REFERRER_PARAM, attribution.creative);
+            ref = put(ref, NETWORK_REFERRER_PARAM, attribution.network);
+            ref = put(ref, TRACKER_NAME_REFERRER_PARAM, attribution.trackerName);
+            ref = put(ref, TRACKER_TOKEN_REFERRER_PARAM, attribution.trackerToken);
+            FlurryAgent.logEvent(REFERRER_INSTALL_EVENT, ref);
+        }
+    }
+
+    private static Map<String, String> put(Map<String, String> ref, String key, String value) {
+        if (!TextUtils.isEmpty(value) && ref != null) {
+            ref.put(key, value);
+        }
+        return ref;
     }
 }

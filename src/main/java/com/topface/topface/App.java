@@ -43,6 +43,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.ReferrerRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
@@ -51,6 +52,8 @@ import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.statistics.AppStateStatistics;
 import com.topface.topface.ui.ApplicationBase;
+import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
+import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
@@ -100,6 +103,8 @@ public class App extends ApplicationBase {
 
     @Inject
     static RunningStateManager mStateManager;
+    @Inject
+    AdjustManager mAdjustManager;
     private ObjectGraph mGraph;
     private static Context mContext;
     private static Intent mConnectionIntent;
@@ -191,6 +196,27 @@ public class App extends ApplicationBase {
                         Debug.log("Options::fail");
                     }
                 });
+    }
+
+    public static void sendReferreRequest(final AdjustAttributeData attribution) {
+        Debug.log("Adjust:: check settings before send AdjustAttributeData to server");
+        final AppConfig config = getAppConfig();
+        if (!AuthToken.getInstance().isEmpty() && !attribution.isEmpty() && !config.isAdjustAttributeDataSent()) {
+            Debug.log("Adjust:: send AdjustAttributeData");
+            new ReferrerRequest(App.getContext(), attribution).callback(new ApiHandler() {
+                @Override
+                public void success(IApiResponse response) {
+                    Debug.log("Adjust:: attribution sent success");
+                    config.setAdjustAttributeDataSent(true);
+                    config.saveConfig();
+                }
+
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+                    Debug.log("Adjust:: fail while send AdjustAttributeData");
+                }
+            }).exec();
+        }
     }
 
     public static void sendProfileRequest() {
@@ -338,8 +364,6 @@ public class App extends ApplicationBase {
         }
     }
 
-
-
     @Override
     public void onCreate() {
         /**
@@ -352,8 +376,8 @@ public class App extends ApplicationBase {
         }
 
         super.onCreate();
-        LeakCanary.install(this);
         mContext = getApplicationContext();
+        LeakCanary.install(this);
         FlurryManager.init();
         FlurryManager.sendAppStartEvent();
         // Отправка ивента о запуске приложения, если пользователь авторизован в FB
@@ -363,6 +387,8 @@ public class App extends ApplicationBase {
         }
         initVkSdk();
         initObjectGraphForInjections();
+        inject(this);
+        mAdjustManager.initAdjust();
         // подписываемся на события о переходе приложения в состояние background/foreground
         mStateManager.registerAppChangeStateListener(new RunningStateManager.OnAppChangeStateListener() {
             @Override
@@ -437,6 +463,7 @@ public class App extends ApplicationBase {
                 onCreateAsync(handler);
             }
         };
+        App.sendReferreRequest(getAppConfig().getAdjustAttributeData());
     }
 
 
