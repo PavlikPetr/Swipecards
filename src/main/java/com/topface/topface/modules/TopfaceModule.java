@@ -35,6 +35,7 @@ import com.topface.topface.utils.RunningStateManager;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.ads.AdToAppController;
 import com.topface.topface.utils.ads.AdToAppHelper;
+import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.geo.GeoLocationManager;
@@ -103,7 +104,7 @@ public class TopfaceModule {
                     config.setUserGeoLocation((Location) data);
                     config.saveConfig();
                 } else if (data.getClass() == AdjustAttribution.class) {
-                    UserConfig config = App.getUserConfig();
+                    AppConfig config = App.getAppConfig();
                     config.setAdjustAttribution((AdjustAttribution) data);
                     config.saveConfig();
                 }
@@ -118,7 +119,7 @@ public class TopfaceModule {
                 } else if (Location.class.equals(classType)) {
                     return (T) App.getUserConfig().getUserGeoLocation();
                 } else if (AdjustAttribution.class.equals(classType)) {
-                    return (T) App.getUserConfig().getAdjustAttribution();
+                    return (T) App.getAppConfig().getAdjustAttribution();
                 }
                 return null;
             }

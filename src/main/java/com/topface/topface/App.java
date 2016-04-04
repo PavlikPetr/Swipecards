@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
+import com.adjust.sdk.AdjustAttribution;
 import com.appsflyer.AppsFlyerLib;
 import com.comscore.analytics.comScore;
 import com.facebook.appevents.AppEventsConstants;
@@ -44,6 +45,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.ReferrerRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
@@ -192,6 +194,27 @@ public class App extends ApplicationBase {
                         Debug.log("Options::fail");
                     }
                 });
+    }
+
+    public static void sendReferreRequest(AdjustAttribution attribution) {
+        Debug.log("Adjust:: check settings before send AdjustAttribution to server");
+        final AppConfig config = getAppConfig();
+        if (!AuthToken.getInstance().isEmpty() && attribution != null && !config.isAdjustAttributionSent()) {
+            Debug.log("Adjust:: send AdjustAttribution");
+            new ReferrerRequest(App.getContext(), attribution).callback(new ApiHandler() {
+                @Override
+                public void success(IApiResponse response) {
+                    Debug.log("Adjust:: attribution sent success");
+                    config.setAdjustAttributionSent(true);
+                    config.saveConfig();
+                }
+
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+                    Debug.log("Adjust:: fail while send AdjustAttribution");
+                }
+            }).exec();
+        }
     }
 
     public static void sendProfileRequest() {
@@ -435,6 +458,7 @@ public class App extends ApplicationBase {
                 onCreateAsync(handler);
             }
         };
+        App.sendReferreRequest(getAppConfig().getAdjustAttribution());
     }
 
 

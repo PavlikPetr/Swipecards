@@ -111,7 +111,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private AddPhotoHelper mAddPhotoHelper;
     private boolean mIsPhotoAsked;
     private PopupManager mPopupManager;
-    private CompositeSubscription mSubscription;
+    private CompositeSubscription mSubscription = new CompositeSubscription();
     private BehaviorSubject<DRAWER_LAYOUT_STATE> mDrawerLayoutStateObservable;
     private Handler mHandler = new Handler() {
         @Override
@@ -187,10 +187,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }).subscribe(new Action1<AdjustAttribution>() {
             @Override
             public void call(AdjustAttribution adjustAttribution) {
-                if (!AuthToken.getInstance().isEmpty()) {
-                    // send AdjustAttribution to server
-                    //TODO add request
-                }
+                App.sendReferreRequest(adjustAttribution);
             }
         }));
         if (isNeedBroughtToFront(intent)) {

@@ -12,8 +12,9 @@ import com.adjust.sdk.OnAttributionChangedListener;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.data.ActivityLifreCycleData;
 import com.topface.topface.data.Products;
-import com.topface.topface.state.AppState;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.BaseFragmentActivity;
 
 import javax.inject.Inject;
@@ -32,7 +33,7 @@ public class AdjustManager {
     private static final String FIRST_PAY_TOKEN = "h75za2";
 
     @Inject
-    AppState mAppState;
+    TopfaceAppState mAppState;
     private static AdjustManager mInstance;
     private boolean mIsInitialized;
 
@@ -60,10 +61,10 @@ public class AdjustManager {
         });
         config.setLogLevel(Debug.isDebugLogsEnabled() ? LogLevel.VERBOSE : LogLevel.ASSERT);
         Adjust.onCreate(config);
-        BaseFragmentActivity.getLifeCycleObservable().subscribe(new Action1<BaseFragmentActivity.ActivityLifecycle>() {
+        BaseFragmentActivity.getLifeCycleObservable().subscribe(new Action1<ActivityLifreCycleData>() {
             @Override
-            public void call(BaseFragmentActivity.ActivityLifecycle lifecycle) {
-                switch (lifecycle) {
+            public void call(ActivityLifreCycleData lifecycleData) {
+                switch (lifecycleData.state) {
                     case RESUMED:
                         Adjust.onResume();
                         break;

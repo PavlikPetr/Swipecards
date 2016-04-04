@@ -24,6 +24,7 @@ import android.widget.FrameLayout;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.ActivityLifreCycleData;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
@@ -48,13 +49,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action1;
 
-import static com.topface.topface.ui.BaseFragmentActivity.ActivityLifecycle.CREATED;
-import static com.topface.topface.ui.BaseFragmentActivity.ActivityLifecycle.DESTROYED;
-import static com.topface.topface.ui.BaseFragmentActivity.ActivityLifecycle.PAUSED;
-import static com.topface.topface.ui.BaseFragmentActivity.ActivityLifecycle.RESUMED;
-import static com.topface.topface.ui.BaseFragmentActivity.ActivityLifecycle.SAVE_INSTANCE_STATE;
-import static com.topface.topface.ui.BaseFragmentActivity.ActivityLifecycle.STARTED;
-import static com.topface.topface.ui.BaseFragmentActivity.ActivityLifecycle.STOPPED;
+import static com.topface.topface.data.ActivityLifreCycleData.ActivityLifecycle.*;
 
 public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient, IActivityDelegate {
 
@@ -80,10 +75,10 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     private boolean mRunning;
     private boolean mGoogleAuthStarted;
     private boolean mHasContent = true;
-    private static Subscriber<? super ActivityLifecycle> mLifeCycleSubscriber;
-    private static Observable<ActivityLifecycle> mActivityLifecycleObservable = Observable.create(new Observable.OnSubscribe<ActivityLifecycle>() {
+    private static Subscriber<? super ActivityLifreCycleData> mLifeCycleSubscriber;
+    private static Observable<ActivityLifreCycleData> mActivityLifecycleObservable = Observable.create(new Observable.OnSubscribe<ActivityLifreCycleData>() {
         @Override
-        public void call(Subscriber<? super ActivityLifecycle> subscriber) {
+        public void call(Subscriber<? super ActivityLifreCycleData> subscriber) {
             mLifeCycleSubscriber = subscriber;
         }
     }).doOnError(new Action1<Throwable>() {
@@ -93,12 +88,8 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
     });
 
-    public enum ActivityLifecycle {
-        RESUMED, PAUSED, STOPPED, SAVE_INSTANCE_STATE, DESTROYED, CREATED, STARTED
-    }
-
     @NotNull
-    public static Observable<ActivityLifecycle> getLifeCycleObservable() {
+    public static Observable<ActivityLifreCycleData> getLifeCycleObservable() {
         return mActivityLifecycleObservable;
     }
 
@@ -116,7 +107,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        emitLifeCycle(CREATED);
+        emitLifeCycle(ActivityLifreCycleData.ActivityLifecycle.CREATED);
         setWindowOptions();
         if (mHasContent) {
             setContentView(getContentLayout());
@@ -290,9 +281,9 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
     }
 
-    private void emitLifeCycle(ActivityLifecycle lifecycle) {
+    private void emitLifeCycle(ActivityLifreCycleData.ActivityLifecycle lifecycle) {
         if (mLifeCycleSubscriber != null && !mLifeCycleSubscriber.isUnsubscribed()) {
-            mLifeCycleSubscriber.onNext(lifecycle);
+            mLifeCycleSubscriber.onNext(new ActivityLifreCycleData(getLocalClassName(), lifecycle));
         }
     }
 
