@@ -23,7 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.adjust.sdk.AdjustAttribution;
 import com.appsflyer.AppsFlyerLib;
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
@@ -43,6 +42,7 @@ import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
+import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
@@ -76,7 +76,6 @@ import javax.inject.Inject;
 
 import rx.Observable;
 import rx.functions.Action1;
-import rx.functions.Func1;
 import rx.subjects.BehaviorSubject;
 import rx.subscriptions.CompositeSubscription;
 
@@ -179,15 +178,10 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 }
             }
         }));
-        mSubscription.add(mAppState.getObservable(AdjustAttribution.class).filter(new Func1<AdjustAttribution, Boolean>() {
+        mSubscription.add(mAppState.getObservable(AdjustAttributeData.class).subscribe(new Action1<AdjustAttributeData>() {
             @Override
-            public Boolean call(AdjustAttribution adjustAttribution) {
-                return adjustAttribution != null;
-            }
-        }).subscribe(new Action1<AdjustAttribution>() {
-            @Override
-            public void call(AdjustAttribution adjustAttribution) {
-                App.sendReferreRequest(adjustAttribution);
+            public void call(AdjustAttributeData adjustAttributionData) {
+                App.sendReferreRequest(adjustAttributionData);
             }
         }));
         if (isNeedBroughtToFront(intent)) {

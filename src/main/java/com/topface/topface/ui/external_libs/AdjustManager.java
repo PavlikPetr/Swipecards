@@ -1,7 +1,4 @@
-package com.topface.topface.utils;
-
-import android.content.res.Resources;
-import android.util.Log;
+package com.topface.topface.ui.external_libs;
 
 import com.adjust.sdk.Adjust;
 import com.adjust.sdk.AdjustAttribution;
@@ -15,7 +12,8 @@ import com.topface.topface.App;
 import com.topface.topface.data.ActivityLifreCycleData;
 import com.topface.topface.data.Products;
 import com.topface.topface.state.TopfaceAppState;
-import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
+import com.topface.topface.utils.FlurryManager;
 
 import javax.inject.Inject;
 
@@ -34,15 +32,7 @@ public class AdjustManager {
 
     @Inject
     TopfaceAppState mAppState;
-    private static AdjustManager mInstance;
     private boolean mIsInitialized;
-
-    public static AdjustManager getInstance() {
-        if (mInstance == null) {
-            mInstance = new AdjustManager();
-        }
-        return mInstance;
-    }
 
     public AdjustManager() {
         App.from(App.getContext()).inject(this);
@@ -55,13 +45,15 @@ public class AdjustManager {
         config.setOnAttributionChangedListener(new OnAttributionChangedListener() {
             @Override
             public void onAttributionChanged(AdjustAttribution attribution) {
-                mAppState.setData(attribution);
-                Log.e("AdjustManager", "onAttributionChanged attribution:" + JsonUtils.toJson(attribution));
+                AdjustAttributeData data = new AdjustAttributeData(attribution);
+                mAppState.setData(data);
+                Debug.log("AdjustManager", "onAttributionChanged attribution:" + JsonUtils.toJson(data));
+                FlurryManager.sendReferrerEvent(data);
             }
         });
         config.setLogLevel(Debug.isDebugLogsEnabled() ? LogLevel.VERBOSE : LogLevel.ASSERT);
         Adjust.onCreate(config);
-        BaseFragmentActivity.getLifeCycleObservable().subscribe(new Action1<ActivityLifreCycleData>() {
+        TracedLifeCycleActivity.getLifeCycleObservable().subscribe(new Action1<ActivityLifreCycleData>() {
             @Override
             public void call(ActivityLifreCycleData lifecycleData) {
                 switch (lifecycleData.state) {
@@ -102,10 +94,9 @@ public class AdjustManager {
         if (!checkSdkState()) {
             return;
         }
-        Resources res = App.getContext().getResources();
         AdjustEvent event = new AdjustEvent(REGISTRATION_TOKEN);
         // временно убираю отправку данных о типе соц. сети в которой был авторизован пользователь
-        //event.addCallbackParameter(res.getString(R.string.adjust_registration_social), socialName);
+        //event.addCallbackParameter(App.getContext().getResources().getString(R.string.adjust_registration_social), socialName);
         Adjust.trackEvent(event);
     }
 

@@ -11,6 +11,8 @@ public class IntegrationWebViewFragment extends WebViewFragment {
     public static final String INTEGRATION_FRAGMENT_TITLE = "integration_fragment_title";
     public static final String INTEGRATION_FRAGMENT_URL = "integration_fragment_url";
 
+    private static final String PAGE_NAME = "integrationwebview";
+
     public static IntegrationWebViewFragment newInstance(String title, String url) {
         IntegrationWebViewFragment fragment = new IntegrationWebViewFragment();
         Bundle arguments = new Bundle();
@@ -22,12 +24,17 @@ public class IntegrationWebViewFragment extends WebViewFragment {
 
     @Override
     String getIntegrationUrl() {
-        return  getArguments().getString(INTEGRATION_FRAGMENT_URL);
+        return getArguments().getString(INTEGRATION_FRAGMENT_URL);
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override
     protected String getTitle() {
-        return  getArguments().getString(INTEGRATION_FRAGMENT_TITLE);
+        return getArguments().getString(INTEGRATION_FRAGMENT_TITLE);
     }
 
     @Override

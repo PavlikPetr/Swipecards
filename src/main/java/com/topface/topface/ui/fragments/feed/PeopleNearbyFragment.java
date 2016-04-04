@@ -32,6 +32,7 @@ import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.geo.GeoLocationManager;
@@ -44,10 +45,13 @@ import javax.inject.Inject;
 import rx.Subscription;
 import rx.functions.Action1;
 
+import static com.topface.topface.utils.FlurryManager.ByCoinsProductType.PEOPLE_NEARBY_UNLOCK;
+
 
 public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     private final static int WAIT_LOCATION_DELAY = 10000;
+    private static final String PAGE_NAME = "PeopleNerby";
 
     @Inject
     TopfaceAppState mAppState;
@@ -82,6 +86,11 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         mSubscriptionLocation = mAppState.getObservable(Location.class).subscribe(mLocationAction);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override
@@ -260,6 +269,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                         @Override
                         public void success(IApiResponse response) {
                             super.success(response);
+                            FlurryManager.sendSpendCoinsEvent(blockPeopleNearby.price, PEOPLE_NEARBY_UNLOCK);
                             if (isAdded()) {
                                 emptyView.setVisibility(View.GONE);
                                 updateData(false, true);

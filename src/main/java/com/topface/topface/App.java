@@ -13,12 +13,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
-import com.adjust.sdk.AdjustAttribution;
 import com.appsflyer.AppsFlyerLib;
 import com.comscore.analytics.comScore;
 import com.facebook.appevents.AppEventsConstants;
 import com.facebook.appevents.AppEventsLogger;
-import com.flurry.android.FlurryAgent;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.squareup.leakcanary.LeakCanary;
 import com.topface.billing.OpenIabHelperManager;
@@ -54,11 +52,13 @@ import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.statistics.AppStateStatistics;
 import com.topface.topface.ui.ApplicationBase;
-import com.topface.topface.utils.AdjustManager;
+import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
+import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.RunningStateManager;
@@ -103,6 +103,8 @@ public class App extends ApplicationBase {
 
     @Inject
     static RunningStateManager mStateManager;
+    @Inject
+    AdjustManager mAdjustManager;
     private ObjectGraph mGraph;
     private static Context mContext;
     private static Intent mConnectionIntent;
@@ -196,22 +198,22 @@ public class App extends ApplicationBase {
                 });
     }
 
-    public static void sendReferreRequest(AdjustAttribution attribution) {
-        Debug.log("Adjust:: check settings before send AdjustAttribution to server");
+    public static void sendReferreRequest(final AdjustAttributeData attribution) {
+        Debug.log("Adjust:: check settings before send AdjustAttributeData to server");
         final AppConfig config = getAppConfig();
-        if (!AuthToken.getInstance().isEmpty() && attribution != null && !config.isAdjustAttributionSent()) {
-            Debug.log("Adjust:: send AdjustAttribution");
+        if (!AuthToken.getInstance().isEmpty() && !attribution.isEmpty() && !config.isAdjustAttributeDataSent()) {
+            Debug.log("Adjust:: send AdjustAttributeData");
             new ReferrerRequest(App.getContext(), attribution).callback(new ApiHandler() {
                 @Override
                 public void success(IApiResponse response) {
                     Debug.log("Adjust:: attribution sent success");
-                    config.setAdjustAttributionSent(true);
+                    config.setAdjustAttributeDataSent(true);
                     config.saveConfig();
                 }
 
                 @Override
                 public void fail(int codeError, IApiResponse response) {
-                    Debug.log("Adjust:: fail while send AdjustAttribution");
+                    Debug.log("Adjust:: fail while send AdjustAttributeData");
                 }
             }).exec();
         }
@@ -376,6 +378,8 @@ public class App extends ApplicationBase {
         super.onCreate();
         mContext = getApplicationContext();
         LeakCanary.install(this);
+        FlurryManager.init();
+        FlurryManager.sendAppStartEvent();
         // Отправка ивента о запуске приложения, если пользователь авторизован в FB
         if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
             FbAuthorizer.initFB();
@@ -383,17 +387,20 @@ public class App extends ApplicationBase {
         }
         initVkSdk();
         initObjectGraphForInjections();
-        AdjustManager.getInstance().initAdjust();
+        inject(this);
+        mAdjustManager.initAdjust();
         // подписываемся на события о переходе приложения в состояние background/foreground
         mStateManager.registerAppChangeStateListener(new RunningStateManager.OnAppChangeStateListener() {
             @Override
             public void onAppForeground(long timeOnStart) {
                 AppStateStatistics.sendAppForegroundState();
+                FlurryManager.sendAppInForegroundEvent();
             }
 
             @Override
             public void onAppBackground(long timeOnStop, long timeOnStart) {
                 AppStateStatistics.sendAppBackgroundState();
+                FlurryManager.sendAppInBackgroundEvent();
             }
         });
         //Включаем отладку, если это дебаг версия
@@ -448,8 +455,6 @@ public class App extends ApplicationBase {
         AppsFlyerLib.registerConversionListener(mContext, new AppsFlyerData.ConversionListener(mAppsFlyerConversionHolder));
 
         initComScore();
-        FlurryAgent.init(this, getString(R.string.flurry_key));
-
         final Handler handler = new Handler();
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
         new BackgroundThread() {
@@ -458,7 +463,7 @@ public class App extends ApplicationBase {
                 onCreateAsync(handler);
             }
         };
-        App.sendReferreRequest(getAppConfig().getAdjustAttribution());
+        App.sendReferreRequest(getAppConfig().getAdjustAttributeData());
     }
 
 

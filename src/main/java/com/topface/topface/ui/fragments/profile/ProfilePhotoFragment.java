@@ -41,6 +41,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
 
     private static final String POSITION = "POSITION";
     private static final String FLIPPER_VISIBLE_CHILD = "FLIPPER_VISIBLE_CHILD";
+    private static final String PAGE_NAME = "profile.photos";
 
     private OwnPhotoGridAdapter mProfilePhotoGridAdapter;
 
@@ -89,6 +90,11 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements View.O
     @Override
     public boolean isTrackable() {
         return false;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     private void sendAlbumRequest() {

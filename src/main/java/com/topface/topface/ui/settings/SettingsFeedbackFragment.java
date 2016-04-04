@@ -17,6 +17,8 @@ import com.topface.topface.ui.fragments.BaseFragment;
 
 public class SettingsFeedbackFragment extends BaseFragment implements AdapterView.OnItemClickListener {
 
+    private static final String PAGE_NAME = "profile.settings.feedback";
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,6 +33,11 @@ public class SettingsFeedbackFragment extends BaseFragment implements AdapterVie
     @Override
     protected String getTitle() {
         return getString(R.string.settings_feedback);
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override

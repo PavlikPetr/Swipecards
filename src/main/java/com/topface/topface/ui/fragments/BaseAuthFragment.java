@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -24,7 +25,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.dialogs.OldVersionDialog;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.utils.AdjustManager;
+import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
@@ -32,11 +33,15 @@ import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
+import javax.inject.Inject;
+
 /**
  * Base authorization logic
  */
 public abstract class BaseAuthFragment extends BaseFragment {
 
+    @Inject
+    AdjustManager mAdjustManager;
     private boolean mHasAuthorized = false;
     private RetryViewCreator mRetryView;
     private BroadcastReceiver mConnectionChangeListener;
@@ -56,6 +61,12 @@ public abstract class BaseAuthFragment extends BaseFragment {
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mConnectionChangeListener);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        App.from(getActivity()).inject(this);
     }
 
     protected void initViews(View root) {
@@ -120,8 +131,8 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 loadAllProfileData();
                 onSuccessAuthorization(token);
                 mHasAuthorized = true;
-                App.sendReferreRequest(App.getAppConfig().getAdjustAttribution());
-                AdjustManager.getInstance().sendRegistrationEvent(token.getSocialNet());
+                App.sendReferreRequest(App.getAppConfig().getAdjustAttributeData());
+                mAdjustManager.sendRegistrationEvent(token.getSocialNet());
                 //Отправляем статистику в AppsFlyer
                 try {
                     AppsFlyerLib.sendTrackingWithEvent(App.getContext(), App.getContext()

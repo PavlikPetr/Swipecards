@@ -41,6 +41,9 @@ import static android.view.View.OnClickListener;
 public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     public static final String VIP_PURCHASED_INTENT = "com.topface.topface.VIP_PURCHASED";
+
+    private static final String PAGE_NAME = "buy.vip.gp";
+
     EditSwitcher mInvisSwitcher;
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -92,6 +95,11 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         }
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override

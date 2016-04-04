@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-import com.adjust.sdk.AdjustAttribution;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.AbstractConfig;
@@ -12,11 +11,11 @@ import com.topface.topface.BuildConfig;
 import com.topface.topface.data.social.AppSocialAppsIds;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
+import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.ConnectionManager;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -446,11 +445,11 @@ public class AppConfig extends AbstractConfig {
     /**
      * Save last catched user referrer
      *
-     * @param adjustAttribution user referrer
+     * @param adjustAttributeData user referrer
      * @return state of operation
      */
-    public boolean setAdjustAttribution(@NotNull AdjustAttribution adjustAttribution) {
-        return setField(getSettingsMap(), ADJUST_ATTRIBUTION, JsonUtils.toJson(adjustAttribution));
+    public boolean setAdjustAttributeData(AdjustAttributeData adjustAttributeData) {
+        return setField(getSettingsMap(), ADJUST_ATTRIBUTION, JsonUtils.toJson(adjustAttributeData));
     }
 
     /**
@@ -459,25 +458,25 @@ public class AppConfig extends AbstractConfig {
      * @return user referrer
      */
     @Nullable
-    public AdjustAttribution getAdjustAttribution() {
-        String adjustAttribution = getStringField(getSettingsMap(), ADJUST_ATTRIBUTION);
-        if (!TextUtils.isEmpty(adjustAttribution)) {
-            return JsonUtils.fromJson(adjustAttribution, AdjustAttribution.class);
+    public AdjustAttributeData getAdjustAttributeData() {
+        String adjustAttributionData = getStringField(getSettingsMap(), ADJUST_ATTRIBUTION);
+        if (!TextUtils.isEmpty(adjustAttributionData)) {
+            return JsonUtils.fromJson(adjustAttributionData, AdjustAttributeData.class);
         }
-        return null;
+        return new AdjustAttributeData(null);
     }
 
     /**
      * @return true if user referrer was sent to server
      */
-    public boolean isAdjustAttributionSent() {
+    public boolean isAdjustAttributeDataSent() {
         return getBooleanField(getSettingsMap(), IS_ADJUST_ATTRIBUTION_SENT);
     }
 
     /**
-     * Set state of sending AdjustAttribution
+     * Set state of sending AdjustAttributeData
      */
-    public void setAdjustAttributionSent(boolean isSent) {
+    public void setAdjustAttributeDataSent(boolean isSent) {
         setField(getSettingsMap(), IS_ADJUST_ATTRIBUTION_SENT, isSent);
     }
 }

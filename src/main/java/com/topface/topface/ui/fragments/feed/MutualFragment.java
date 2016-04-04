@@ -23,6 +23,8 @@ import java.util.List;
 
 public class MutualFragment extends FeedFragment<FeedMutual> {
 
+    private static final String PAGE_NAME = "Mutual";
+
     @Override
     protected String getTitle() {
         return getString(R.string.general_sympathies);
@@ -31,6 +33,11 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     @Override
     protected MutualListAdapter createNewAdapter() {
         return new MutualListAdapter(getActivity(), getUpdaterCallback());
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override

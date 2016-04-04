@@ -43,6 +43,7 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
@@ -59,6 +60,8 @@ import javax.inject.Inject;
 import rx.Subscription;
 import rx.functions.Action1;
 
+import static com.topface.topface.utils.FlurryManager.ByCoinsProductType.LIKES_UNLOCK;
+
 public class LikesFragment extends FeedFragment<FeedLike> {
 
     public static final String PREFERENCES_PAID_LIKES_COUNT = "paid_likes_count";
@@ -66,6 +69,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     public static final int FIRST_CHILD = 0;
     public static final int SECOND_CHILD = 1;
     public static final int THIRD_CHILD = 2;
+
+    private static final String PAGE_NAME = "Likes";
 
     @Inject
     TopfaceAppState mAppState;
@@ -84,6 +89,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected boolean isReadFeedItems() {
         return true;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override
@@ -326,6 +336,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                         @Override
                         public void success(IApiResponse response) {
                             super.success(response);
+                            FlurryManager.sendSpendCoinsEvent(blockSympathyOptions.price, LIKES_UNLOCK);
                             inflated.setVisibility(View.GONE);
                             updateData(false, true);
                         }

@@ -19,6 +19,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.statistics.InvitesStatistics;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
@@ -49,6 +50,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     private final static String VK_FRIENDS_LIST_SCROLL_POSITION = "vk_friends_list_scroll_position";
     private final static String VK_FRIENDS_AVAILABLE_COUNT = "vk_friends_available_count";
     private final static String VK_FRIENDS_CURRENT_COUNT = "vk_friends_current_count";
+    private static final String PAGE_NAME = "vkinvites";
 
     private final static String USER_ID_VK_PARAM = "user_id";
 
@@ -120,6 +122,11 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         });
     }
 
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
+    }
+
     private void loadNewPackData() {
         showProgress(true);
         mFriendsRequest = getVkFriendsRequest(mAdapter.getFriendsCount());
@@ -130,6 +137,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         @Override
         public void onComplete(VKResponse response) {
             InvitesStatistics.sendSuccessInviteResponseAction(PLC_VK_INVITES);
+            FlurryManager.sendInviteEvent(FlurryManager.InvitesType.VK_INVITES, 1);
             if (mAdapter != null) {
                 mAdapter.setButtonState((Integer) response.request.getPreparedParameters().get(USER_ID_VK_PARAM), false);
             }

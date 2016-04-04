@@ -67,7 +67,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     }
 
     public static int getItemType(History item) {
-        boolean output = (item.target == FeedDialog.OUTPUT_USER_MESSAGE);
+        boolean output = isOutboxMessage(item);
         switch (item.type) {
             case FeedDialog.GIFT:
                 return output ? T_USER_GIFT : T_FRIEND_GIFT;
@@ -358,7 +358,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     }
 
     private View inflateConvertView(ViewHolder holder, int type, History item) {
-        boolean output = (item.target == FeedDialog.OUTPUT_USER_MESSAGE);
+        boolean output = isOutboxMessage(item);
         View convertView;
         int prsLoaderId = R.id.prsLoader;
         int chatImageId = R.id.chat_image;
@@ -397,8 +397,12 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         return convertView;
     }
 
+    private static boolean isOutboxMessage(History item) {
+        return item.target == FeedDialog.OUTPUT_USER_MESSAGE;
+    }
+
     private void setViewInfo(ViewHolder holder, History item) {
-        boolean output = (item.target == FeedDialog.OUTPUT_USER_MESSAGE);
+        boolean output = isOutboxMessage(item);
         switch (item.type) {
             case FeedDialog.GIFT:
                 holder.gift.setRemoteSrc(item.link);
@@ -555,6 +559,27 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 return result;
             }
         };
+    }
+
+    public int getOutboxMessageCount() {
+        return getMessageCount(true);
+    }
+
+    public int getInboxMessageCount() {
+        return getMessageCount(false);
+    }
+
+    private int getMessageCount(boolean isOutbox) {
+        int outboxCount = 0;
+        int inboxCount = 0;
+        for (History history : getData()) {
+            if (isOutboxMessage(history)) {
+                outboxCount++;
+            } else {
+                inboxCount++;
+            }
+        }
+        return isOutbox ? outboxCount : inboxCount;
     }
 
     @Override

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 public class GiftsListFragment extends PlainGiftsFragment implements GiftsListAdapter.OnGridClickLIstener {
 
+    private static final String PAGE_NAME = "gifts";
     private static final String DATA = "data";
     private GridView mGridView;
     private GiftsListAdapter mGiftsListAdapter;
@@ -33,6 +34,11 @@ public class GiftsListFragment extends PlainGiftsFragment implements GiftsListAd
         mGridView.setAdapter(mGiftsListAdapter);
         mGridView.setOnScrollListener(mGiftsListAdapter);
         return root;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     public void setGifts(ArrayList<Gift> gifts) {

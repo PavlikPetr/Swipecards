@@ -44,6 +44,7 @@ import com.topface.topface.utils.social.AuthorizationManager;
 public class SettingsTopfaceAccountFragment extends BaseFragment implements OnClickListener {
 
     public static final String NEED_EXIT = "NEED_EXIT";
+    private static final String PAGE_NAME = "profile.settings.account";
     private View mLockerView;
     private EditText mEditText;
     private TextView mText;
@@ -108,6 +109,11 @@ public class SettingsTopfaceAccountFragment extends BaseFragment implements OnCl
         initTextViews(root);
         initButtons(root);
         return root;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override

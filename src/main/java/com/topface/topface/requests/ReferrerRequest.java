@@ -3,8 +3,8 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
-import com.adjust.sdk.AdjustAttribution;
 import com.topface.framework.JsonUtils;
+import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,9 +12,9 @@ import org.json.JSONObject;
 public class ReferrerRequest extends ApiRequest {
     public static final String SERVICE_NAME = "referral.track";
 
-    private AdjustAttribution mAttribution;
+    private AdjustAttributeData mAttribution;
 
-    public ReferrerRequest(Context context, AdjustAttribution attribution) {
+    public ReferrerRequest(Context context, AdjustAttributeData attribution) {
         super(context);
         mAttribution = attribution;
     }
