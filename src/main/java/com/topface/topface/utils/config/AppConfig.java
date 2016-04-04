@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import com.adjust.sdk.AdjustAttribution;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.AbstractConfig;
@@ -15,6 +16,8 @@ import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.ConnectionManager;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -58,7 +61,8 @@ public class AppConfig extends AbstractConfig {
     public static final String CONVERT_CONFIG = "convert_config";
     public static final String POPUP_NOTIFICATION_DISABLE_TIME = "popup_notification_disable_time";
     private static final String DATA_APP_SOCIAL_IDS = "data_app_social_ids";
-
+    private static final String ADJUST_ATTRIBUTION = "adjust_attribution";
+    private static final String IS_ADJUST_ATTRIBUTION_SENT = "is_adjust_attribution_sent";
 
     public AppConfig(Context context) {
         super(context);
@@ -108,6 +112,10 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, POPUP_NOTIFICATION_DISABLE_TIME, 0L);
         // social ids for social platforms obtained from server
         addField(settingsMap, DATA_APP_SOCIAL_IDS, "");
+        // данные referrer, полученные от Adjust
+        addField(settingsMap, ADJUST_ATTRIBUTION, "");
+        // информация о том была ли отправка на сервер данных referrer пользователя
+        addField(settingsMap, IS_ADJUST_ATTRIBUTION_SENT, false);
     }
 
     protected SharedPreferences getPreferences() {
@@ -433,5 +441,43 @@ public class AppConfig extends AbstractConfig {
 
     public void saveAppSocialAppsIds(AppSocialAppsIds appSocialAppsIds) {
         setField(getSettingsMap(), DATA_APP_SOCIAL_IDS, JsonUtils.toJson(appSocialAppsIds));
+    }
+
+    /**
+     * Save last catched user referrer
+     *
+     * @param adjustAttribution user referrer
+     * @return state of operation
+     */
+    public boolean setAdjustAttribution(@NotNull AdjustAttribution adjustAttribution) {
+        return setField(getSettingsMap(), ADJUST_ATTRIBUTION, JsonUtils.toJson(adjustAttribution));
+    }
+
+    /**
+     * Return last saved user referrer
+     *
+     * @return user referrer
+     */
+    @Nullable
+    public AdjustAttribution getAdjustAttribution() {
+        String adjustAttribution = getStringField(getSettingsMap(), ADJUST_ATTRIBUTION);
+        if (!TextUtils.isEmpty(adjustAttribution)) {
+            return JsonUtils.fromJson(adjustAttribution, AdjustAttribution.class);
+        }
+        return null;
+    }
+
+    /**
+     * @return true if user referrer was sent to server
+     */
+    public boolean isAdjustAttributionSent() {
+        return getBooleanField(getSettingsMap(), IS_ADJUST_ATTRIBUTION_SENT);
+    }
+
+    /**
+     * Set state of sending AdjustAttribution
+     */
+    public void setAdjustAttributionSent(boolean isSent) {
+        setField(getSettingsMap(), IS_ADJUST_ATTRIBUTION_SENT, isSent);
     }
 }

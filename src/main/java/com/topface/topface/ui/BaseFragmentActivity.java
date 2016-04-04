@@ -24,6 +24,7 @@ import android.widget.FrameLayout;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.ActivityLifreCycleData;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
@@ -43,6 +44,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.Locale;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Action1;
+
+import static com.topface.topface.data.ActivityLifreCycleData.ActivityLifecycle.*;
 
 public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient, IActivityDelegate {
 
@@ -68,7 +75,23 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     private boolean mRunning;
     private boolean mGoogleAuthStarted;
     private boolean mHasContent = true;
+    private static Subscriber<? super ActivityLifreCycleData> mLifeCycleSubscriber;
+    private static Observable<ActivityLifreCycleData> mActivityLifecycleObservable = Observable.create(new Observable.OnSubscribe<ActivityLifreCycleData>() {
+        @Override
+        public void call(Subscriber<? super ActivityLifreCycleData> subscriber) {
+            mLifeCycleSubscriber = subscriber;
+        }
+    }).doOnError(new Action1<Throwable>() {
+        @Override
+        public void call(Throwable throwable) {
+            throwable.printStackTrace();
+        }
+    });
 
+    @NotNull
+    public static Observable<ActivityLifreCycleData> getLifeCycleObservable() {
+        return mActivityLifecycleObservable;
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -84,6 +107,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        emitLifeCycle(ActivityLifreCycleData.ActivityLifecycle.CREATED);
         setWindowOptions();
         if (mHasContent) {
             setContentView(getContentLayout());
@@ -119,6 +143,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        emitLifeCycle(SAVE_INSTANCE_STATE);
         if (mGoogleAuthStarted) {
             outState.putBoolean(GOOGLE_AUTH_STARTED, true);
         }
@@ -137,6 +162,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     @Override
     public void onStart() {
         super.onStart();
+        emitLifeCycle(STARTED);
         mRunning = true;
         //Странный глюк на некоторых устройствах (воспроизводится например на HTC One V),
         // из-за которого показывается лоадер в ActionBar
@@ -147,6 +173,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     @Override
     public void onStop() {
         super.onStop();
+        emitLifeCycle(STOPPED);
         mRunning = false;
     }
 
@@ -254,9 +281,22 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
     }
 
+    private void emitLifeCycle(ActivityLifreCycleData.ActivityLifecycle lifecycle) {
+        if (mLifeCycleSubscriber != null && !mLifeCycleSubscriber.isUnsubscribed()) {
+            mLifeCycleSubscriber.onNext(new ActivityLifreCycleData(getLocalClassName(), lifecycle));
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        emitLifeCycle(DESTROYED);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
+        emitLifeCycle(RESUMED);
         if (GoogleMarketApiManager.isGoogleAccountExists() && mGoogleAuthStarted) {
             App.mOpenIabHelperManager.freeHelper();
             App.mOpenIabHelperManager.init(App.getContext());
@@ -360,6 +400,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     @Override
     protected void onPause() {
         super.onPause();
+        emitLifeCycle(PAUSED);
         removeAllRequests();
         try {
             unregisterReceiver(mReauthReceiver);

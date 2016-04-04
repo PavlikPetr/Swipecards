@@ -31,6 +31,7 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.views.BuyButton;
+import com.topface.topface.utils.AdjustManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
@@ -439,6 +440,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 }
                 UserConfig userConfig = App.getUserConfig();
                 if (!userConfig.getFirstPayFlag()) {
+                    AdjustManager.getInstance().sendFirstPayEvent(verify.revenue);
                     try {
                         AppsFlyerLib.sendTrackingWithEvent(
                                 context,
@@ -455,6 +457,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 if (isNeedSendPurchasesStatistics()) {
                     //Статистика AppsFlyer
                     if (verify.revenue > 0) {
+                        AdjustManager.getInstance().sendPurchaseEvent(verify.revenue);
                         try {
                             AppsFlyerLib.sendTrackingWithEvent(
                                     context,

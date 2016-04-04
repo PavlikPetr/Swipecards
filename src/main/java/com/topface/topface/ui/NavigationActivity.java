@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.adjust.sdk.AdjustAttribution;
 import com.appsflyer.AppsFlyerLib;
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
@@ -74,9 +75,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.Subscription;
 import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.subjects.BehaviorSubject;
+import rx.subscriptions.CompositeSubscription;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.utils.controllers.StartActionsController.AC_PRIORITY_HIGH;
@@ -109,7 +111,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private AddPhotoHelper mAddPhotoHelper;
     private boolean mIsPhotoAsked;
     private PopupManager mPopupManager;
-    private Subscription mCountersSubscription;
+    private CompositeSubscription mSubscription = new CompositeSubscription();
     private BehaviorSubject<DRAWER_LAYOUT_STATE> mDrawerLayoutStateObservable;
     private Handler mHandler = new Handler() {
         @Override
@@ -169,14 +171,25 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
-        mCountersSubscription = mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
+        mSubscription.add(mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
             @Override
             public void call(CountersData countersData) {
                 if (mNotificationController != null) {
                     mNotificationController.refreshNotificator(countersData.dialogs, countersData.mutual);
                 }
             }
-        });
+        }));
+        mSubscription.add(mAppState.getObservable(AdjustAttribution.class).filter(new Func1<AdjustAttribution, Boolean>() {
+            @Override
+            public Boolean call(AdjustAttribution adjustAttribution) {
+                return adjustAttribution != null;
+            }
+        }).subscribe(new Action1<AdjustAttribution>() {
+            @Override
+            public void call(AdjustAttribution adjustAttribution) {
+                App.sendReferreRequest(adjustAttribution);
+            }
+        }));
         if (isNeedBroughtToFront(intent)) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -542,7 +555,9 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             mFullscreenController.onDestroy();
         }
         mDrawerToggle = null;
-        mCountersSubscription.unsubscribe();
+        if (!mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
         super.onDestroy();
         AdmobInterstitialUtils.releaseInterstitials();
     }
