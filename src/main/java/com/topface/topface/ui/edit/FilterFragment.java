@@ -45,6 +45,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     public static Profile mTargetUser = new User();
     public static final String INTENT_DATING_FILTER = "Topface_Dating_Filter";
     public static String TAG = "filter_fragment_tag";
+    private static final String PAGE_NAME = "Filter";
 
     private FormInfo mFormInfo;
     private DatingFilter mInitFilter;
@@ -142,6 +143,11 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     public FilterConstitutionDialog.OnConstitutionDialogListener getConstitutionDialogListener() {
         return mConstitutionDialogListener;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override

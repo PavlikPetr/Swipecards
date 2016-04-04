@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -193,10 +192,7 @@ public class VkProfileFragment extends ProfileInnerFragment {
     }
 
     private void openCommunity(VKApiCommunity community) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://vk.com/" + community.screen_name));
-        if (Utils.isIntentAvailable(getActivity(), intent)) {
-            startActivity(intent);
-        }
+        Utils.goToUrl(getActivity(), "https://vk.com/" + community.screen_name);
     }
 
     private VKRequest getVkUserRequest() {

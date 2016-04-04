@@ -19,6 +19,7 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ContactsProvider;
+import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
@@ -92,12 +93,14 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
 
     private void sendInvitesRequest() {
         InviteContactsRequest request = new InviteContactsRequest(getActivity(), contacts);
+        final int contactsCount = contacts.size();
+        FlurryManager.sendInviteEvent(FlurryManager.InvitesType.PHONE_BOOK_INVITES, contactsCount);
         mLocker.setVisibility(View.VISIBLE);
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
                 boolean isPremium = response.getJsonResult().optBoolean("premium");
-                InvitesStatistics.sendSuccessInviteResponseAction(PLC_INVITE_POPUP, isPremium, contacts.size());
+                InvitesStatistics.sendSuccessInviteResponseAction(PLC_INVITE_POPUP, isPremium, contactsCount);
                 if (isPremium) {
                     InvitesStatistics.sendPremiumReceivedAction(PLC_INVITE_POPUP, CacheProfile.getOptions().premium_period);
                     Utils.showToastNotification(

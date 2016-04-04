@@ -25,6 +25,9 @@ public class BonusFragment extends WebViewFragment {
     public static final String NEED_SHOW_TITLE = "need_show_title";
     public static final String OFFERWALL_OPENED = "com.topface.topface.offerwall.opened";
     public static final String OFFERWALL_NAME = "offerwall_name";
+
+    private static final String PAGE_NAME = "bonus";
+
     private Button tfOfferwallButton;
 
     public static BonusFragment newInstance(boolean needShowTitle) {
@@ -38,6 +41,11 @@ public class BonusFragment extends WebViewFragment {
     @Override
     String getIntegrationUrl() {
         return CacheProfile.getOptions().bonus.integrationUrl;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override

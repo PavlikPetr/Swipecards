@@ -8,6 +8,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.FbAuthorizer;
 import com.topface.topface.utils.social.OkAuthorizer;
@@ -141,6 +142,7 @@ public class AuthRequest extends PrimalAuthRequest {
                 return;
             }
         }
+        FlurryManager.sendAuthEvent(mPlatform);
         super.exec();
     }
 }

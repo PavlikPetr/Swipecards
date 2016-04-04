@@ -25,6 +25,8 @@ public class PromoExpressMessages extends PromoDialog {
 
     public final static String TAG = "promo_express_messages";
 
+    private final static String POPUP_NAME = "promo.express.messages";
+
     private static final int AVATARS_ID_ARRAY_LENGTH = 3;
 
     private int mCurrentPosition = Integer.MAX_VALUE;
@@ -34,6 +36,11 @@ public class PromoExpressMessages extends PromoDialog {
     @Override
     public Options.PromoPopupEntity getPremiumEntity() {
         return CacheProfile.getOptions().premiumMessages;
+    }
+
+    @Override
+    protected String getPopupName() {
+        return POPUP_NAME;
     }
 
     @Override

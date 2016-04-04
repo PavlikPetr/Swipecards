@@ -1,6 +1,5 @@
 package com.topface.topface.ui.analytics;
 
-import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 
 import com.comscore.analytics.comScore;
@@ -9,12 +8,16 @@ import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
 import com.topface.topface.data.ExperimentTags;
 import com.topface.topface.statistics.ScreensShowStatistics;
+import com.topface.topface.ui.external_libs.TracedLifeCycleActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 
-public class TrackedFragmentActivity extends ActionBarActivity {
+import org.jetbrains.annotations.Nullable;
+
+public class TrackedFragmentActivity extends TracedLifeCycleActivity {
 
     @Override
     public void onStart() {
@@ -28,6 +31,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
 
     public void senActivitiesShownStatistics() {
         ScreensShowStatistics.sendScreenShow(getClass().getSimpleName());
+        FlurryManager.sendPageOpenEvent(getScreenName());
     }
 
     @Override
@@ -78,5 +82,10 @@ public class TrackedFragmentActivity extends ActionBarActivity {
         super.onPause();
         comScore.onExitForeground();
         StatisticsTracker.getInstance().activityStop(this);
+    }
+
+    @Nullable
+    protected String getScreenName() {
+        return null;
     }
 }

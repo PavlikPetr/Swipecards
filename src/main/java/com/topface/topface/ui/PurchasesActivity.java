@@ -32,6 +32,7 @@ import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarView;
@@ -269,6 +270,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     }
 
     public static void sendPurchaseEvent(int productsCount, String productType, String productId, String currencyCode, double price) {
+        FlurryManager.sendPurchaseEvent(productId, price, currencyCode);
         FbAuthorizer.initFB();
         AppEventsLogger logger = AppEventsLogger.newLogger(App.getContext());
         Bundle bundle = new Bundle();

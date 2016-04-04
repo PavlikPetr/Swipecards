@@ -19,6 +19,7 @@ import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.controllers.StartActionsController;
@@ -148,6 +149,7 @@ public class AuthorizationManager {
             activity.finish();
         }
         AdmobInterstitialUtils.onLogout();
+        FlurryManager.sendLogoutEvent();
     }
 
     public static void showRetryLogoutDialog(Activity activity, final LogoutRequest logoutRequest) {

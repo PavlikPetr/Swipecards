@@ -1,9 +1,7 @@
 package com.topface.topface.ui.settings;
 
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.SpannableString;
@@ -19,6 +17,7 @@ import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -75,9 +74,7 @@ public class SettingsAboutFragment extends BaseFragment {
         extra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(CacheProfile.getOptions().aboutApp.url));
-                startActivity(i);
+                Utils.goToUrl(getActivity(), CacheProfile.getOptions().aboutApp.url);
             }
         });
         return root;

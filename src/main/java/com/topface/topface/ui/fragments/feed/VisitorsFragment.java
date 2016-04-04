@@ -44,6 +44,11 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
+    protected String getScreenName() {
+        return SCREEN_TYPE;
+    }
+
+    @Override
     protected Class getFeedListItemClass() {
         return Visitor.class;
     }
