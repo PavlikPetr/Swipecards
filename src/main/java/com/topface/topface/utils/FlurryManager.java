@@ -29,6 +29,7 @@ public class FlurryManager {
     private static final String PURCHASE_EVENT = "Purchase";
     private static final String PAY_WALL_EVENT = "Pay_Wall";
     private static final String SPEND_COINS_EVENT = "Spend_Coins";
+    private static final String FULL_DIALOG_EVENT = "Full_Dialog";
 
     private static final String INVITES_TYPE_PARAM = "invites_type";
     private static final String SOCIAL_TYPE_PARAM = "social_type";
@@ -217,5 +218,12 @@ public class FlurryManager {
         payWall.put(PRODUCT_TYPE_PARAM, product.getProductType());
         payWall.put(PRICE_PARAM, String.valueOf(coinsCount));
         FlurryAgent.logEvent(SPEND_COINS_EVENT, payWall);
+    }
+
+    /**
+     * Send event - get new full dialog (2 input message and 2 output)
+     */
+    public static void sendFullDialogEvent() {
+        FlurryAgent.logEvent(FULL_DIALOG_EVENT);
     }
 }
