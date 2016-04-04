@@ -11,6 +11,8 @@ import com.topface.topface.R;
 import com.topface.topface.databinding.OkProfileFragmentBinding;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
+import com.topface.topface.utils.IActivityDelegate;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.CurrentUser;
 import com.topface.topface.utils.social.OkAuthorizer;
 import com.topface.topface.utils.social.OkUserData;
@@ -50,7 +52,7 @@ public class OkProfileFragment extends ProfileInnerFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.ok_profile_fragment, null);
         mBinding = DataBindingUtil.bind(root);
-        mHandler = new OkProfileHandler();
+        mHandler = new OkProfileHandler((IActivityDelegate) getActivity());
         mBinding.setHandler(mHandler);
         mSubscription = mAppState.getObservable(OkUserData.class).subscribe(new Action1<OkUserData>() {
             @Override
@@ -78,6 +80,18 @@ public class OkProfileFragment extends ProfileInnerFragment {
     }
 
     public static class OkProfileHandler {
+        private static final String GROUP_URL = "https://apiok.ru/wiki/pages/viewpage.action?pageId=89982206";
+
+        private IActivityDelegate mActivityDelegate;
+
+        public OkProfileHandler(IActivityDelegate activityDelegate) {
+            mActivityDelegate = activityDelegate;
+        }
+
+        @SuppressWarnings("unused")
+        public void onButtonShowGroupClick(View view) {
+            Utils.goToUrl(mActivityDelegate, GROUP_URL);
+        }
 
     }
 }

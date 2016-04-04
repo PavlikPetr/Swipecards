@@ -42,6 +42,7 @@
                 <Button
                     android:id="@+id/okProfileButtonTopfaceTeam"
                     style="@style/OkProfileButtons"
+                    android:onClick="@{handler.onButtonShowGroupClick}"
                     android:text="@string/vk_profile_button_tf_group" />
 
             </LinearLayout>
