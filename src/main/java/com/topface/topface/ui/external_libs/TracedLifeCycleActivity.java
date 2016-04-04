@@ -17,7 +17,7 @@ import static com.topface.topface.data.ActivityLifreCycleData.ActivityLifecycle.
  * Created by ppavlik on 04.04.16.
  * Observe activity lifecycle
  */
-public class ObserveActivity extends ActionBarActivity {
+public class TracedLifeCycleActivity extends ActionBarActivity {
 
     private static Subscriber<? super ActivityLifreCycleData> mLifeCycleSubscriber;
     private static Observable<ActivityLifreCycleData> mActivityLifecycleObservable = Observable.create(new Observable.OnSubscribe<ActivityLifreCycleData>() {
@@ -83,5 +83,11 @@ public class ObserveActivity extends ActionBarActivity {
     protected void onPause() {
         super.onPause();
         emitLifeCycle(PAUSED);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        emitLifeCycle(RESTARTED);
     }
 }

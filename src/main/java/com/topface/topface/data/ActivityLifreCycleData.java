@@ -6,7 +6,7 @@ package com.topface.topface.data;
  */
 public class ActivityLifreCycleData {
     public enum ActivityLifecycle {
-        RESUMED, PAUSED, STOPPED, SAVE_INSTANCE_STATE, DESTROYED, CREATED, STARTED
+        RESUMED, PAUSED, STOPPED, SAVE_INSTANCE_STATE, DESTROYED, CREATED, STARTED, RESTARTED
     }
 
     public String activityName;

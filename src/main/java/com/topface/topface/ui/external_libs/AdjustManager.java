@@ -1,7 +1,5 @@
 package com.topface.topface.ui.external_libs;
 
-import android.util.Log;
-
 import com.adjust.sdk.Adjust;
 import com.adjust.sdk.AdjustAttribution;
 import com.adjust.sdk.AdjustConfig;
@@ -49,13 +47,13 @@ public class AdjustManager {
             public void onAttributionChanged(AdjustAttribution attribution) {
                 AdjustAttributeData data = new AdjustAttributeData(attribution);
                 mAppState.setData(data);
-                Log.e("AdjustManager", "onAttributionChanged attribution:" + JsonUtils.toJson(data));
+                Debug.log("AdjustManager", "onAttributionChanged attribution:" + JsonUtils.toJson(data));
                 FlurryManager.sendReferrerEvent(data);
             }
         });
         config.setLogLevel(Debug.isDebugLogsEnabled() ? LogLevel.VERBOSE : LogLevel.ASSERT);
         Adjust.onCreate(config);
-        ObserveActivity.getLifeCycleObservable().subscribe(new Action1<ActivityLifreCycleData>() {
+        TracedLifeCycleActivity.getLifeCycleObservable().subscribe(new Action1<ActivityLifreCycleData>() {
             @Override
             public void call(ActivityLifreCycleData lifecycleData) {
                 switch (lifecycleData.state) {

@@ -26,6 +26,8 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.FlurryManager;
 
+import org.jetbrains.annotations.Nullable;
+
 import static com.topface.topface.utils.FlurryManager.PayWallAction.*;
 
 
@@ -47,6 +49,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
         return true;
     }
 
+    @Nullable
     protected String getPopupName() {
         return null;
     }

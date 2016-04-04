@@ -13,13 +13,13 @@ import com.topface.topface.utils.Utils;
 public class AdjustAttributeData extends AdjustAttribution {
 
     public AdjustAttributeData(AdjustAttribution attribution) {
-        this.trackerToken = attribution != null && attribution.trackerToken != null ? attribution.trackerToken : Utils.EMPTY;
-        this.trackerName = attribution != null && attribution.trackerName != null ? attribution.trackerName : Utils.EMPTY;
-        this.network = attribution != null && attribution.network != null ? attribution.network : Utils.EMPTY;
-        this.adgroup = attribution != null && attribution.adgroup != null ? attribution.adgroup : Utils.EMPTY;
-        this.campaign = attribution != null && attribution.campaign != null ? attribution.campaign : Utils.EMPTY;
-        this.clickLabel = attribution != null && attribution.clickLabel != null ? attribution.clickLabel : Utils.EMPTY;
-        this.creative = attribution != null && attribution.creative != null ? attribution.creative : Utils.EMPTY;
+        trackerToken = attribution != null && attribution.trackerToken != null ? attribution.trackerToken : Utils.EMPTY;
+        trackerName = attribution != null && attribution.trackerName != null ? attribution.trackerName : Utils.EMPTY;
+        network = attribution != null && attribution.network != null ? attribution.network : Utils.EMPTY;
+        adgroup = attribution != null && attribution.adgroup != null ? attribution.adgroup : Utils.EMPTY;
+        campaign = attribution != null && attribution.campaign != null ? attribution.campaign : Utils.EMPTY;
+        clickLabel = attribution != null && attribution.clickLabel != null ? attribution.clickLabel : Utils.EMPTY;
+        creative = attribution != null && attribution.creative != null ? attribution.creative : Utils.EMPTY;
     }
 
     public boolean isEmpty() {
