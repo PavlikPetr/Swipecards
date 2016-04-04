@@ -110,4 +110,24 @@ public class Gift extends AbstractDataWithPhotos implements Parcelable {
             return new Gift[size];
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Gift)) return false;
+        Gift gift = (Gift) o;
+        if (id != gift.id) return false;
+        if (type != gift.type) return false;
+        if (price != gift.price) return false;
+        return !(link != null ? !link.equals(gift.link) : gift.link != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + type;
+        result = 31 * result + (link != null ? link.hashCode() : 0);
+        result = 31 * result + price;
+        return result;
+    }
 }

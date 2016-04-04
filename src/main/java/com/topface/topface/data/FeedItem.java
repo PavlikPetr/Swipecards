@@ -149,4 +149,33 @@ abstract public class FeedItem extends LoaderData implements Parcelable {
         dest.writeParcelable(mNativeAd, flags);
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof FeedItem)) return false;
+        if (!super.equals(o)) return false;
+        FeedItem feedItem = (FeedItem) o;
+        if (type != feedItem.type) return false;
+        if (target != feedItem.target) return false;
+        if (unread != feedItem.unread) return false;
+        if (unreadCounter != feedItem.unreadCounter) return false;
+        if (createdRelative != null ? !createdRelative.equals(feedItem.createdRelative) : feedItem.createdRelative != null)
+            return false;
+        return !(user != null ? !user.equals(feedItem.user) : feedItem.user != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + type;
+        result = 31 * result + (createdRelative != null ? createdRelative.hashCode() : 0);
+        result = 31 * result + target;
+        result = 31 * result + (unread ? 1 : 0);
+        result = 31 * result + unreadCounter;
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (mNativeAd != null ? mNativeAd.hashCode() : 0);
+        return result;
+    }
 }

@@ -50,4 +50,22 @@ public class FeedGeo extends FeedLike implements Parcelable {
         super.writeToParcel(dest, flags);
         dest.writeDouble(distance);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof FeedGeo)) return false;
+        if (!super.equals(o)) return false;
+        FeedGeo feedGeo = (FeedGeo) o;
+        return Double.compare(feedGeo.distance, distance) == 0;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        long temp;
+        temp = Double.doubleToLongBits(distance);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
 }
