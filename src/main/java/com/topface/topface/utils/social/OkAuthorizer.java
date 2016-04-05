@@ -36,6 +36,12 @@ public class OkAuthorizer extends Authorizer {
         return Odnoklassniki.getInstance();
     }
 
+    private void sendTokenIntent(int tokenStatus) {
+        Intent intent = new Intent(AUTH_TOKEN_READY_ACTION);
+        intent.putExtra(TOKEN_STATUS, tokenStatus);
+        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+    }
+
     @Override
     public void authorize(Activity activity) {
         final AppSocialAppsIds ids = App.getAppSocialAppsIds();
@@ -46,37 +52,29 @@ public class OkAuthorizer extends Authorizer {
                     final OkAccessData okAccessData = JsonUtils.fromJson(json.toString(), OkAccessData.class);
                     if (!okAccessData.isEmpty()) {
                         Debug.log("Odnoklassniki auth success with token " + okAccessData.getToken());
-                        CurrentUser currentUser = new CurrentUser();
-                        currentUser.setUserListener(new CurrentUser.GetUserListener() {
+                        new CurrentUser(getOkAuthObj(ids)).setUserListener(new CurrentUser.OkRequestListener() {
                             @Override
                             public void onSuccess(OkUserData data) {
-                                Intent intent = new Intent(AUTH_TOKEN_READY_ACTION);
-                                if (data != null) {
-                                    AuthToken authToken = AuthToken.getInstance();
+                                AuthToken authToken = AuthToken.getInstance();
 
-                                    authToken.saveToken(
-                                            AuthToken.SN_ODNOKLASSNIKI,
-                                            data.uid,
-                                            okAccessData.getToken(),
-                                            okAccessData.getSecretKey()
-                                    );
-                                    SessionConfig sessionConfig = App.getSessionConfig();
-                                    sessionConfig.setSocialAccountName(data.name);
-                                    sessionConfig.saveConfig();
-
-                                    intent.putExtra(TOKEN_STATUS, TOKEN_READY);
-                                } else {
-                                    Debug.error("Odnoklassniki auth error. users.getCurrentUser returns null");
-                                    intent.putExtra(TOKEN_STATUS, TOKEN_NOT_READY);
-                                }
-
-                                LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+                                authToken.saveToken(
+                                        AuthToken.SN_ODNOKLASSNIKI,
+                                        data.uid,
+                                        okAccessData.getToken(),
+                                        okAccessData.getSecretKey()
+                                );
+                                SessionConfig sessionConfig = App.getSessionConfig();
+                                sessionConfig.setSocialAccountName(data.name);
+                                sessionConfig.saveConfig();
+                                sendTokenIntent(TOKEN_READY);
                             }
-                        });
-                        currentUser.getUser(getOkAuthObj(ids));
-                        Intent intent = new Intent(AUTH_TOKEN_READY_ACTION);
-                        intent.putExtra(TOKEN_STATUS, TOKEN_PREPARING);
-                        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+
+                            @Override
+                            public void onFail() {
+                                sendTokenIntent(TOKEN_NOT_READY);
+                            }
+                        }).exec();
+                        sendTokenIntent(TOKEN_PREPARING);
                     } else {
                         Debug.log("Odnoklassniki auth data is empty");
                     }

@@ -61,7 +61,7 @@ public class OkProfileFragment extends ProfileInnerFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.from(getActivity()).inject(this);
-        new CurrentUser().getUser(new OkAuthorizer().getOkAuthObj(App.getAppSocialAppsIds()));
+        new CurrentUser(new OkAuthorizer().getOkAuthObj(App.getAppSocialAppsIds())).exec();
     }
 
     @Override

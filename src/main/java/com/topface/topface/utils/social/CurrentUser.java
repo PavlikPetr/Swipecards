@@ -1,15 +1,10 @@
 package com.topface.topface.utils.social;
 
-import android.os.AsyncTask;
-
-import com.topface.framework.JsonUtils;
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.state.TopfaceAppState;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -19,64 +14,26 @@ import ru.ok.android.sdk.Odnoklassniki;
  * Created by Петр on 03.04.2016.
  * Get user data in background
  */
-public class CurrentUser {
+public class CurrentUser extends OkRequest implements OkRequest.OkRequestListener {
+
+    private static final String SERVICE_NAME = "users.getCurrentUser";
 
     @Inject
     TopfaceAppState mAppState;
-    private GetUserListener mListener;
 
-    public CurrentUser() {
+    public CurrentUser(@NotNull Odnoklassniki ok) {
+        super(ok, SERVICE_NAME);
         App.from(App.getContext()).inject(this);
+        setUserListener(this);
     }
 
-    public void setUserListener(GetUserListener listener) {
-        mListener = listener;
+    @Override
+    public void onSuccess(@Nullable OkUserData data) {
+        mAppState.setData(data);
     }
 
-    public void getUser(Odnoklassniki ok) {
-        new GetCurrentUserTask(ok).execute();
-    }
-
-    private final class GetCurrentUserTask extends AsyncTask<Void, Void, String> {
-
-        private final Odnoklassniki odnoklassniki;
-
-        public GetCurrentUserTask(Odnoklassniki ok) {
-            odnoklassniki = ok;
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                return odnoklassniki.request("users.getCurrentUser", null, "get");
-            } catch (IOException e) {
-                Debug.error("Odnoklassniki doInBackground error", e);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            Debug.log("Odnoklassniki users.getCurrentUser result: " + s);
-            OkUserData data = JsonUtils.fromJson(s, OkUserData.class);
-            if (data != null) {
-                mAppState.setData(data);
-            }
-            if (mListener != null) {
-                mListener.onSuccess(data);
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-            Debug.error("Odnoklassniki auth cancelled");
-        }
-    }
-
-    public interface GetUserListener {
-
-        void onSuccess(@Nullable OkUserData data);
+    @Override
+    public void onFail() {
 
     }
 }
