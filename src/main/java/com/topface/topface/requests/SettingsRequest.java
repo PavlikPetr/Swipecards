@@ -46,8 +46,6 @@ public class SettingsRequest extends ApiRequest {
             data.put("lat", location.getLatitude());
             data.put("lng", location.getLongitude());
         }
-        //if (lat != -1) data.put("lat", lat);
-        //if (lng != -1) data.put("lng", lng);
         if (cityid != -1) {
             data.put("cityId", cityid);
         }
