@@ -6,7 +6,7 @@ package com.topface.topface.utils;
  */
 public class PurchasesEvents {
 
-    public static void purchaseSuccess(int productsCount, String productType, String productId, String currencyCode, double price) {
+    public static void purchaseSuccess(int productsCount, String productType, String productId, String currencyCode, double price, String transactionId) {
 
     }
 }
