@@ -12,6 +12,8 @@ public class MarketApiManagerUtils {
                 return new AmazonMarketApiManager();
             case NOKIA_STORE:
                 return new NokiaMarketApiManager();
+            case OK:
+                return new GoogleMarketApiManager();
         }
         return null;
     }
