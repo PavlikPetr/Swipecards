@@ -155,7 +155,7 @@ android {
             keyPassword "Sonetica2012"
         }
         ok {
-            storeFile file("misc/keys/topfaceOK.keystore")
+            storeFile file("misc/keys/topfaceOK.jks")
             storePassword "Sonetica2012"
             keyAlias "topfaceok"
             keyPassword "Sonetica2012"
