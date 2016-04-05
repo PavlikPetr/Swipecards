@@ -91,4 +91,25 @@ public class FeedDialog extends FeedLike implements Parcelable {
         dest.writeInt(gift);
         dest.writeString(link);
     }
+
+    @SuppressWarnings("SimplifiableIfStatement")
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof FeedDialog)) return false;
+        if (!super.equals(o)) return false;
+        FeedDialog that = (FeedDialog) o;
+        if (gift != that.gift) return false;
+        if (text != null ? !text.equals(that.text) : that.text != null) return false;
+        return !(link != null ? !link.equals(that.link) : that.link != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (text != null ? text.hashCode() : 0);
+        result = 31 * result + gift;
+        result = 31 * result + (link != null ? link.hashCode() : 0);
+        return result;
+    }
 }

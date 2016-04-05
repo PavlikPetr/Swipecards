@@ -53,4 +53,20 @@ public class FeedLike extends FeedItem implements Parcelable {
         mutualed = false;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof FeedLike)) return false;
+        if (!super.equals(o)) return false;
+        FeedLike feedLike = (FeedLike) o;
+        return highrate == feedLike.highrate && mutualed == feedLike.mutualed;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (highrate ? 1 : 0);
+        result = 31 * result + (mutualed ? 1 : 0);
+        return result;
+    }
 }
