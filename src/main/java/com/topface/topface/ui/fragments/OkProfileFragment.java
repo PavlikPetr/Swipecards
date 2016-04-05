@@ -71,20 +71,25 @@ public class OkProfileFragment extends ProfileInnerFragment {
         OkProfileFragmentBinding binding = DataBindingUtil.bind(root);
         mHandler = new OkProfileHandler((IActivityDelegate) getActivity());
         binding.setHandler(mHandler);
-        mSubscription = mAppState.getObservable(OkUserData.class).subscribe(mSubscriber);
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mSubscription = mAppState.getObservable(OkUserData.class).subscribe(mSubscriber);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mSubscription != null && mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
     }
 
     private String getEmptyPhotoRes(boolean isBoy) {
         return String.format(App.getCurrentLocale(), Utils.LOCAL_RES, isBoy ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (mSubscription != null && mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
     }
 
     private void showProgress(boolean isEnable) {
