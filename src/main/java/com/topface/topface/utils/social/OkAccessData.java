@@ -28,4 +28,18 @@ public class OkAccessData {
     public boolean isEmpty() {
         return mAccessToken == null && mSessionSecretKey == null;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof OkAccessData)) return false;
+        OkAccessData okAccessData = (OkAccessData) o;
+        return mAccessToken.equals(okAccessData.getToken()) && mSessionSecretKey.equals(okAccessData.getSecretKey());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = mAccessToken != null ? mAccessToken.hashCode() : 0;
+        result = 31 * result + (mSessionSecretKey != null ? mSessionSecretKey.hashCode() : 0);
+        return result;
+    }
 }
