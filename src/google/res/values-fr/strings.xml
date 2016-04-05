@@ -181,6 +181,7 @@
     <string name="general_profile">Profil</string>
     <string name="general_settings">Paramètres</string>
     <string name="general_vk_profile">VK</string>
+    <string name="general_ok_profile">OK</string>
     <string name="auth_btn_vk">Vkontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Réessayer</string>
