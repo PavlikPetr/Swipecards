@@ -63,8 +63,7 @@ public class FeedGeo extends FeedLike implements Parcelable {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        long temp;
-        temp = Double.doubleToLongBits(distance);
+        long temp = Double.doubleToLongBits(distance);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
