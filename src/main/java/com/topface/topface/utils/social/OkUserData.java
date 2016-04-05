@@ -40,6 +40,7 @@ public class OkUserData {
         return MALE.equals(gender);
     }
 
+    @SuppressWarnings("unused")
     @Nullable
     public Date getDayOfBirth() {
         Date date = null;
@@ -52,10 +53,73 @@ public class OkUserData {
         return date;
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof OkUserData)) return false;
+        OkUserData data = (OkUserData) o;
+        if (uid != null ? !uid.equals(data.uid) : data.uid != null) return false;
+        if (birthday != null ? !birthday.equals(data.birthday) : data.birthday != null)
+            return false;
+        if (age != data.age) return false;
+        if (name != null ? !name.equals(data.name) : data.name != null) return false;
+        if (locale != null ? !locale.equals(data.locale) : data.locale != null) return false;
+        if (gender != null ? !gender.equals(data.gender) : data.gender != null) return false;
+        if (location != null ? !location.equals(data.location) : data.location != null)
+            return false;
+        if (online != null ? !online.equals(data.online) : data.online != null) return false;
+        if (firstName != null ? !firstName.equals(data.firstName) : data.firstName != null)
+            return false;
+        if (lastName != null ? !lastName.equals(data.lastName) : data.lastName != null)
+            return false;
+        if (hasEmail != data.hasEmail) return false;
+        if (pic1 != null ? !pic1.equals(data.pic1) : data.pic1 != null) return false;
+        if (pic2 != null ? !pic2.equals(data.pic2) : data.pic2 != null) return false;
+        return pic3 != null ? !pic3.equals(data.pic3) : data.pic3 != null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = uid != null ? uid.hashCode() : 0;
+        result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
+        result = 31 * result + age;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (locale != null ? locale.hashCode() : 0);
+        result = 31 * result + (gender != null ? gender.hashCode() : 0);
+        result = 31 * result + (location != null ? location.hashCode() : 0);
+        result = 31 * result + (online != null ? online.hashCode() : 0);
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (hasEmail ? 1 : 0);
+        result = 31 * result + (pic1 != null ? pic1.hashCode() : 0);
+        result = 31 * result + (pic2 != null ? pic2.hashCode() : 0);
+        return 31 * result + (pic3 != null ? pic3.hashCode() : 0);
+    }
+
     public class OkUserLocation {
         public String city;
         public String country;
         public String countryCode;
         public String countryName;
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof OkUserLocation)) return false;
+            OkUserLocation okAccessData = (OkUserLocation) o;
+            return city.equals(okAccessData.city)
+                    && country.equals(okAccessData.country)
+                    && countryCode.equals(okAccessData.countryCode)
+                    && countryName.equals(okAccessData.countryName);
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = city != null ? city.hashCode() : 0;
+            result = 31 * result + (country != null ? country.hashCode() : 0);
+            result = 31 * result + (countryCode != null ? countryCode.hashCode() : 0);
+            result = 31 * result + (countryName != null ? countryName.hashCode() : 0);
+            return result;
+        }
     }
 }

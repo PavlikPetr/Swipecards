@@ -18,20 +18,20 @@ import java.util.Map;
  */
 public class FlurryManager {
 
-    private static final String AUTH_EVENT = "Authorize";
-    private static final String LOGOUT_EVENT = "Logout";
-    private static final String EXTERNAL_URL_EVENT = "Show_External_Url";
-    private static final String APP_START_EVENT = "App_Start";
-    private static final String APP_BACKGROUND_EVENT = "App_Background";
-    private static final String APP_FOREGROUND_EVENT = "App_Foreground";
-    private static final String INVITE_EVENT = "Invite";
-    private static final String EMPTY_SEARCH_EVENT = "Empty_Search";
-    private static final String FILTER_CHANGED_EVENT = "Filter_Changed";
-    private static final String PURCHASE_EVENT = "Purchase";
-    private static final String PAY_WALL_EVENT = "Pay_Wall";
-    private static final String SPEND_COINS_EVENT = "Spend_Coins";
-    private static final String FULL_DIALOG_EVENT = "Full_Dialog";
-    private static final String REFERRER_INSTALL_EVENT = "Referrer_Install";
+    private static final String AUTH_EVENT = "authorize";
+    private static final String LOGOUT_EVENT = "logout";
+    private static final String EXTERNAL_URL_EVENT = "show_external_url";
+    private static final String APP_START_EVENT = "app_start";
+    private static final String APP_BACKGROUND_EVENT = "app_background";
+    private static final String APP_FOREGROUND_EVENT = "app_foreground";
+    private static final String INVITE_EVENT = "invite";
+    private static final String EMPTY_SEARCH_EVENT = "empty_search";
+    private static final String FILTER_CHANGED_EVENT = "filter_changed";
+    private static final String PURCHASE_EVENT = "purchase";
+    private static final String PAY_WALL_EVENT = "pay_wall";
+    private static final String SPEND_COINS_EVENT = "spend_coins";
+    private static final String FULL_DIALOG_EVENT = "full_dialog";
+    private static final String REFERRER_INSTALL_EVENT = "referrer_install";
 
     private static final String INVITES_TYPE_PARAM = "invites_type";
     private static final String SOCIAL_TYPE_PARAM = "social_type";
