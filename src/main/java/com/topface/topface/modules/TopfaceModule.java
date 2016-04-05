@@ -134,7 +134,9 @@ public class TopfaceModule {
                     Profile profile = (Profile) data;
                     CacheProfile.setProfile(profile, JsonUtils.profileToJson(profile));
                 } else if (data.getClass() == City.class) {
-                    App.getUserConfig().setUserCity(JsonUtils.toJson(data));
+                    UserConfig config = App.getUserConfig();
+                    config.setUserCity(JsonUtils.toJson(data));
+                    config.saveConfig();
                 }
             }
 

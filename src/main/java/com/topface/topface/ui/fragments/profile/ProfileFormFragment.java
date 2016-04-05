@@ -70,8 +70,6 @@ public class ProfileFormFragment extends AbstractFormFragment {
                             @Override
                             public void success(IApiResponse response) {
                                 form.copy(data);
-                                Intent intent = new Intent(CacheProfile.PROFILE_UPDATE_ACTION);
-                                LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
                             }
 
                             @Override
@@ -152,7 +150,8 @@ public class ProfileFormFragment extends AbstractFormFragment {
         mCitySubscription = mAppState.getObservable(City.class).subscribe(new Action1<City>() {
             @Override
             public void call(City city) {
-                if (city != null) {
+                City profileCity = App.get().getProfile().city;
+                if (city != null && profileCity != null && !profileCity.equals(city)) {
                     mFormEditedListener.onEditingFinished(
                             new FormItem(R.string.general_city, JsonUtils.toJson(city), FormItem.CITY));
                 }

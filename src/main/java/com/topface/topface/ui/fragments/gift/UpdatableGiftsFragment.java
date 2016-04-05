@@ -2,7 +2,6 @@ package com.topface.topface.ui.fragments.gift;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 
 import com.topface.topface.data.BasePendingInit;
 import com.topface.topface.data.FeedGift;
