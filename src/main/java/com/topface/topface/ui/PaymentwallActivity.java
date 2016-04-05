@@ -125,9 +125,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
 
     private void fillResultAndClose(String log) {
         Debug.log(log);
-        Log.e("PaymentWall", "fillResultAndClose " + log);
         Intent intent = getIntent();
-        //TODO заменить пустую строку на номер транзакции (в процессе выяснения)
         intent.putExtra(PW_TRANSACTION_ID, "");
         setResult(RESULT_OK, intent);
         finish();

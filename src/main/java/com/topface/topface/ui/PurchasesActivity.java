@@ -230,7 +230,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
                         data.getStringExtra(PW_PRODUCT_ID),
                         data.getStringExtra(PW_CURRENCY),
                         data.getDoubleExtra(PW_PRICE, 0),
-                        data.getStringExtra(PW_TRANSACTION_ID));
+                        data.getStringExtra(PW_TRANSACTION_ID), false);
             }
             // для обновления счетчиков монет и лайков при покупке через paymentWall
             new ProfileRequest(this).exec();
@@ -251,7 +251,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         String originalSku = PurchaseRequest.getDeveloperPayload(product).sku;
         ProductsDetails.ProductDetail detail = PurchaseRequest.getProductDetail(product);
         if (detail != null) {
-            sendPurchaseEvent(1, getType(originalSku), originalSku, detail.currency, detail.price / ProductsDetails.MICRO_AMOUNT, product.getOrderId());
+            sendPurchaseEvent(1, getType(originalSku), originalSku, detail.currency, detail.price / ProductsDetails.MICRO_AMOUNT, product.getOrderId(), true);
         }
     }
 
@@ -272,9 +272,11 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         return Utils.EMPTY;
     }
 
-    public static void sendPurchaseEvent(int productsCount, String productType, String productId, String currencyCode, double price, String transactionId) {
+    public static void sendPurchaseEvent(int productsCount, String productType, String productId, String currencyCode, double price, String transactionId, boolean isGPMarket) {
         FlurryManager.sendPurchaseEvent(productId, price, currencyCode);
-        PurchasesEvents.purchaseSuccess(productsCount, productType, productId, currencyCode, price,transactionId);
+        if (isGPMarket) {
+            PurchasesEvents.purchaseSuccess(productsCount, productType, productId, currencyCode, price, transactionId);
+        }
         FbAuthorizer.initFB();
         AppEventsLogger logger = AppEventsLogger.newLogger(App.getContext());
         Bundle bundle = new Bundle();
