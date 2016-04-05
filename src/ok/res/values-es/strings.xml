@@ -183,6 +183,7 @@
     <string name="general_profile">Perfil</string>
     <string name="general_settings">Ajustes</string>
     <string name="general_vk_profile">VK</string>
+    <string name="general_ok_profile">OK</string>
     <string name="auth_btn_vk">VKontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Intentar de nuevo</string>

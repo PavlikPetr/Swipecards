@@ -182,6 +182,7 @@
     <string name="general_profile">Профил</string>
     <string name="general_settings">Подешавања</string>
     <string name="general_vk_profile">ВК</string>
+    <string name="general_ok_profile">OK</string>
     <string name="auth_btn_vk">ВКонтакте</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Покушај поново</string>
@@ -845,6 +846,8 @@
     <string name="novice_sympathy">Шаљите свиђања само онима који\nВас заиста привлаче.\nМожда ћете
         наћи неког посебног!
     </string>
+    <string name="novice_sympathies_bonus">Добијате %1$d свиђања на\nпоклон! То значи да ће
+         Вам %2$d људи,\nдати своје свиђање и то заиста мислити.</string>
     <string name="go_dating_message">Почните да упознајете људе и овде ће се појавити имена оних корисника који су посетили Ваш профил</string>
     <string name="vk_profile_button_tf_group">ГрупаTopface</string>
     <string name="vk_profile_button_join_tf_group">Придружити се групи Topface</string>
