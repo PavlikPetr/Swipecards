@@ -22,8 +22,7 @@
     <string name="waiting_a_products">Молимо сачекајте, учитавамо доступне производе.</string>
     <string name="likes_background_text">Нема свиђања</string>
     <string name="visitors_background_text">Нема гостију</string>
-    <string name="need_set_avatar">Ни са ким се не можете упознати! Поставите профилну слику.
-    </string>
+    <string name="need_set_avatar">Ни са ким се не можете упознати! Поставите профилну слику.</string>
     <string name="chat_background_text">Нема долазних порука</string>
     <string name="entrance">Улаз</string>
     <string name="filter_only_online">Само на вези</string>
@@ -846,9 +845,7 @@
     <string name="novice_sympathy">Шаљите свиђања само онима који\nВас заиста привлаче.\nМожда ћете
         наћи неког посебног!
     </string>
-    <string name="go_dating_message">Почните да упознајете људе и овде ће се појавити имена оних
-        корисника који су посетили Ваш профил
-    </string>
+    <string name="go_dating_message">Почните да упознајете људе и овде ће се појавити имена оних корисника који су посетили Ваш профил</string>
     <string name="vk_profile_button_tf_group">ГрупаTopface</string>
     <string name="vk_profile_button_join_tf_group">Придружити се групи Topface</string>
     <string name="vk_profile_button_join_vkgames_group">Придружити се групи \"Игре ВК\"</string>
@@ -860,20 +857,12 @@
     <string name="vk_friends_success_invite">Позив послат</string>
     <string name="join_group_success">Придружили сте се групи</string>
     <string name="settings_auto_greeting_title">Ауто-поздрав</string>
-    <string name="settings_auto_greeting_subtitle">Дозволите Topface-у да разговор аутоматски
-        започне поздравом кад год Вам неко пошаље Свиђање
-    </string>
+    <string name="settings_auto_greeting_subtitle">Дозволите Topface-у да разговор аутоматски започне поздравом кад год Вам неко пошаље Свиђање</string>
     <string name="chat_auto_reply_title">Текст поруке је сакривен</string>
-    <string name="chat_auto_reply_message">Да бисте отворили ову поруку или одговорили на исту,
-        постаните VIP-корисник
-    </string>
+    <string name="chat_auto_reply_message">Да бисте отворили ову поруку или одговорили на исту, постаните VIP-корисник</string>
     <string name="chat_auto_reply_button">Постати VIP</string>
-    <string name="take_photo_text_1">Молимо Вас са поставите своју фотографију како бидте започели
-        ћаскање.
-    </string>
-    <string name="take_photo_text_2">На фотографији можете бити сам Ви; све слике прегледавају наши
-        модератори како би утврдили да се правила поштују.
-    </string>
+    <string name="take_photo_text_1">Молимо Вас са поставите своју фотографију како бидте започели ћаскање.</string>
+    <string name="take_photo_text_2">На фотографији можете бити сам Ви; све слике прегледавају наши модератори како би утврдили да се правила поштују.</string>
     <string name="unlock_by_viewed_ad_video_button_text">Откључати бесплатно на %s</string>
     <plurals name="free_minutes">
         <item quantity="few">%d минута</item>

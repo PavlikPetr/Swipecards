@@ -848,19 +848,12 @@
     <string name="vk_friends_success_invite">Foi enviado um convite</string>
     <string name="join_group_success">Juntaste-te ao grupo</string>
     <string name="settings_auto_greeting_title">Saudação Automática</string>
-    <string name="settings_auto_greeting_subtitle">Permitir ao Topface começar automaticamente uma
-        conversa com uma saudação sempre que alguém te envia um Gosto
-    </string>
+    <string name="settings_auto_greeting_subtitle">Permitir ao Topface começar automaticamente uma conversa com uma saudação sempre que alguém te envia um Gosto</string>
     <string name="chat_auto_reply_title">O texto da mensagem está oculto</string>
-    <string name="chat_auto_reply_message">Para poder abrir/responder a esta mensagem, torne-se
-        VIP
-    </string>
+    <string name="chat_auto_reply_message">Para poder abrir/responder a esta mensagem, torne-se VIP</string>
     <string name="chat_auto_reply_button">Tornar-se VIP</string>
-    <string name="take_photo_text_1">Por favor, faz upload de uma foto tua para começares a falar.
-    </string>
-    <string name="take_photo_text_2">Apenas tu deves estar na foto; todas as fotos são revistas
-        pelos nossos moderadores para garantir que as regras são seguidas.
-    </string>
+    <string name="take_photo_text_1">Por favor, faz upload de uma foto tua para começares a falar.</string>
+    <string name="take_photo_text_2">Apenas tu deves estar na foto; todas as fotos são revistas pelos nossos moderadores para garantir que as regras são seguidas.</string>
     <string name="unlock_by_viewed_ad_video_button_text">Desbloquear gratuitamente a %s</string>
     <plurals name="free_minutes">
         <item quantity="zero">%d minuto</item>
@@ -874,11 +867,9 @@
     <string name="guest_liberty_title">Visitantes</string>
     <string name="guest_liberty_description">Descobre quem visitou a tua página de perfil</string>
     <string name="star_liberty_title">Utilizadores Populares</string>
-    <string name="star_liberty_description">As melhores frases para quebrar o gelo numa conversa
-    </string>
+    <string name="star_liberty_description">As melhores frases para quebrar o gelo numa conversa</string>
     <string name="crown_liberty_title">Destaca-te</string>
-    <string name="crown_liberty_description">Destaca-te facilmente na Pesquisa e nas Mensagens
-    </string>
+    <string name="crown_liberty_description">Destaca-te facilmente na Pesquisa e nas Mensagens</string>
     <string name="like_liberty_title">Gostos</string>
     <string name="like_liberty_description">Vê quem gosta de ti</string>
 </resources>

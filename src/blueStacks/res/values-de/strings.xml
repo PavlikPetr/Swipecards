@@ -752,9 +752,7 @@
   <string name="star_liberty_title">Beliebte Nutzer</string>
   <string name="star_liberty_description">Die beliebtesten Eisbrecher für Gespräche</string>
   <string name="crown_liberty_title">Auffallen.</string>
-  <string name="crown_liberty_description">Falle sowohl bei Suchergebnissen als auch in deinen
-    Nachrichten auf
-  </string>
+  <string name="crown_liberty_description">Falle sowohl bei Suchergebnissen als auch in deinen Nachrichten auf</string>
   <string name="like_liberty_title">Likes</string>
   <string name="like_liberty_description">Erfahre, wer dich mag</string>
 </resources>

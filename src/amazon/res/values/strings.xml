@@ -845,8 +845,7 @@
     <string name="guest_liberty_title">Guests</string>
     <string name="guest_liberty_description">Find out who visited your profile page</string>
     <string name="star_liberty_title">Popular Users</string>
-    <string name="star_liberty_description">Most popular ice-breakers to start a conversation
-    </string>
+    <string name="star_liberty_description">Most popular ice-breakers to start a conversation</string>
     <string name="crown_liberty_title">Stand out</string>
     <string name="crown_liberty_description">Easily stand out in Search and Messages</string>
     <string name="like_liberty_title">Likes</string>

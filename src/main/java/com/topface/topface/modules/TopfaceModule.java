@@ -1,7 +1,6 @@
 package com.topface.topface.modules;
 
 import android.location.Location;
-import android.util.Log;
 
 import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
@@ -94,7 +93,6 @@ public class TopfaceModule {
                     config.setUserGeoLocation((Location) data);
                     config.saveConfig();
                 } else if (data.getClass() == OkUserData.class) {
-                    Log.e("OK", "dave OK user data");
                     UserConfig config = App.getUserConfig();
                     config.setOkUserData((OkUserData) data);
                     config.saveConfig();
