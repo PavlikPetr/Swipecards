@@ -42,6 +42,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     public static final String PW_PRODUCT_ID = "pw_product_id";
     public static final String PW_CURRENCY = "pw_currency";
     public static final String PW_PRICE = "pw_price";
+    public static final String PW_TRANSACTION_ID = "pw_transaction_id";
     public static final double CENTS_AMOUNT = 100;
     private static final int RESULT_ERROR = 1;
     private String mSuccessUrl;
@@ -123,7 +124,10 @@ public class PaymentwallActivity extends BaseFragmentActivity {
 
     private void fillResultAndClose(String log) {
         Debug.log(log);
-        setResult(RESULT_OK, getIntent());
+        Intent intent = getIntent();
+        //TODO заменить пустую строку на номер транзакции (в процессе выяснения)
+        intent.putExtra(PW_TRANSACTION_ID, "");
+        setResult(RESULT_OK, intent);
         finish();
     }
 

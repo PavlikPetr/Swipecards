@@ -1,9 +1,7 @@
 package com.topface.topface.utils;
 
 import com.topface.topface.R;
-import com.topface.topface.utils.social.FbAuthorizer;
-import com.topface.topface.utils.social.OkAuthorizer;
-import com.topface.topface.utils.social.VkAuthorizer;
+import com.topface.topface.ui.auth.AuthButtonsSettings;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +21,11 @@ public class AuthServiceButtons {
     }
 
     public static AuthServiceButtons getAuthButtonSettingById(@NotNull SocServicesAuthButtons buttonId) {
-        return AUTH_BUTTONS.get(buttonId);
+        return OTHER_AUTH_BUTTONS.get(buttonId);
+    }
+
+    private static boolean isEnabled(@NotNull SocServicesAuthButtons buttonId) {
+        return AuthButtonsSettings.AUTH_BUTTONS_SETTINGS.get(buttonId);
     }
 
     public int getSmallButtonsIconRes() {
@@ -34,26 +36,30 @@ public class AuthServiceButtons {
         boolean isEnable();
     }
 
-    private static final HashMap<SocServicesAuthButtons, AuthServiceButtons> AUTH_BUTTONS;
+    public static HashMap<SocServicesAuthButtons, AuthServiceButtons> getOtherButtonsList() {
+        return OTHER_AUTH_BUTTONS;
+    }
+
+    private static final HashMap<SocServicesAuthButtons, AuthServiceButtons> OTHER_AUTH_BUTTONS;
 
     static {
-        AUTH_BUTTONS = new HashMap<>();
-        AUTH_BUTTONS.put(SocServicesAuthButtons.VK_BUTTON, new AuthServiceButtons(R.drawable.ic_vk, new AuthButtonMainScreenEnable() {
+        OTHER_AUTH_BUTTONS = new HashMap<>();
+        OTHER_AUTH_BUTTONS.put(SocServicesAuthButtons.VK_BUTTON, new AuthServiceButtons(R.drawable.ic_vk, new AuthButtonMainScreenEnable() {
             @Override
             public boolean isEnable() {
-                return VkAuthorizer.isMainScreenLoginEnable();
+                return AuthButtonsSettings.isVkButtonMainScreenLoginEnable();
             }
         }));
-        AUTH_BUTTONS.put(SocServicesAuthButtons.OK_BUTTON, new AuthServiceButtons(R.drawable.ic_ok, new AuthButtonMainScreenEnable() {
+        OTHER_AUTH_BUTTONS.put(SocServicesAuthButtons.OK_BUTTON, new AuthServiceButtons(R.drawable.ic_ok, new AuthButtonMainScreenEnable() {
             @Override
             public boolean isEnable() {
-                return OkAuthorizer.isMainScreenLoginEnable();
+                return AuthButtonsSettings.isOkButtonMainScreenLoginEnable();
             }
         }));
-        AUTH_BUTTONS.put(SocServicesAuthButtons.FB_BUTTON, new AuthServiceButtons(R.drawable.ic_fb, new AuthButtonMainScreenEnable() {
+        OTHER_AUTH_BUTTONS.put(SocServicesAuthButtons.FB_BUTTON, new AuthServiceButtons(R.drawable.ic_fb, new AuthButtonMainScreenEnable() {
             @Override
             public boolean isEnable() {
-                return FbAuthorizer.isMainScreenLoginEnable();
+                return AuthButtonsSettings.isFbButtonMainScreenLoginEnable();
             }
         }));
     }
@@ -61,7 +67,8 @@ public class AuthServiceButtons {
     public enum SocServicesAuthButtons {
         VK_BUTTON,
         OK_BUTTON,
-        FB_BUTTON;
+        FB_BUTTON,
+        TF_BUTTON;
 
         private AuthServiceButtons getAuthButtonSettings() {
             return AuthServiceButtons.getAuthButtonSettingById(this);
@@ -75,6 +82,10 @@ public class AuthServiceButtons {
         public boolean isMainScreenLoginEnable() {
             AuthServiceButtons settings = getAuthButtonSettings();
             return settings == null || settings.isMainScreenLoginEnable.isEnable();
+        }
+
+        public boolean isEnabled() {
+            return AuthServiceButtons.isEnabled(this);
         }
     }
 }

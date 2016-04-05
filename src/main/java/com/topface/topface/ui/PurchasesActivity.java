@@ -34,6 +34,7 @@ import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.GoogleMarketApiManager;
+import com.topface.topface.utils.PurchasesEvents;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
@@ -54,6 +55,7 @@ import static com.topface.topface.ui.PaymentwallActivity.PW_PRICE;
 import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCTS_COUNT;
 import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCTS_TYPE;
 import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCT_ID;
+import static com.topface.topface.ui.PaymentwallActivity.PW_TRANSACTION_ID;
 
 public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
@@ -227,7 +229,8 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
                         data.getStringExtra(PW_PRODUCTS_TYPE),
                         data.getStringExtra(PW_PRODUCT_ID),
                         data.getStringExtra(PW_CURRENCY),
-                        data.getDoubleExtra(PW_PRICE, 0));
+                        data.getDoubleExtra(PW_PRICE, 0),
+                        data.getStringExtra(PW_TRANSACTION_ID));
             }
             // для обновления счетчиков монет и лайков при покупке через paymentWall
             new ProfileRequest(this).exec();
@@ -248,7 +251,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         String originalSku = PurchaseRequest.getDeveloperPayload(product).sku;
         ProductsDetails.ProductDetail detail = PurchaseRequest.getProductDetail(product);
         if (detail != null) {
-            PurchasesActivity.sendPurchaseEvent(1, getType(originalSku), originalSku, detail.currency, detail.price / ProductsDetails.MICRO_AMOUNT);
+            sendPurchaseEvent(1, getType(originalSku), originalSku, detail.currency, detail.price / ProductsDetails.MICRO_AMOUNT, product.getOrderId());
         }
     }
 
@@ -269,8 +272,9 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         return Utils.EMPTY;
     }
 
-    public static void sendPurchaseEvent(int productsCount, String productType, String productId, String currencyCode, double price) {
+    public static void sendPurchaseEvent(int productsCount, String productType, String productId, String currencyCode, double price, String transactionId) {
         FlurryManager.sendPurchaseEvent(productId, price, currencyCode);
+        PurchasesEvents.purchaseSuccess(productsCount, productType, productId, currencyCode, price,transactionId);
         FbAuthorizer.initFB();
         AppEventsLogger logger = AppEventsLogger.newLogger(App.getContext());
         Bundle bundle = new Bundle();

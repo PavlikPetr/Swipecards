@@ -40,6 +40,7 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.PasswordRecoverActivity;
 import com.topface.topface.ui.RegistrationActivity;
 import com.topface.topface.ui.TopfaceAuthActivity;
+import com.topface.topface.utils.AuthServiceButtons;
 import com.topface.topface.utils.AuthServiceButtons.SocServicesAuthButtons;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
@@ -79,10 +80,17 @@ public class AuthFragment extends BaseAuthFragment {
             // то отступ до кнопки ТФ уменьшаем, в противном случае отступ будет установлен в соответствии с плотностью экрана
             mLoginFragmentHandler.mTFButtonPaddingTop.set(getMainScreenServicesAvailable() > 1 ? getResources().getDimension(R.dimen.tf_auth_btn_top) : getResources().getDimension(R.dimen.auth_buttons_padding));
             mBinding.btnOtherServices.setVisibility(visibility && isOtherServicesButtonAvailable() ? View.VISIBLE : View.GONE);
-            setVisibilityAndAnimateView(mBinding.btnAuthVK, visibility && SocServicesAuthButtons.VK_BUTTON.isMainScreenLoginEnable(), isNeedAnimate);
-            setVisibilityAndAnimateView(mBinding.btnAuthFB, visibility && SocServicesAuthButtons.FB_BUTTON.isMainScreenLoginEnable(), isNeedAnimate);
-            setVisibilityAndAnimateView(mBinding.btnAuthOk, visibility && SocServicesAuthButtons.OK_BUTTON.isMainScreenLoginEnable(), isNeedAnimate);
-            setVisibilityAndAnimateView(mBinding.btnTfAccount, visibility, isNeedAnimate);
+            setVisibilityAndAnimateView(mBinding.btnAuthVK, visibility
+                    && SocServicesAuthButtons.VK_BUTTON.isMainScreenLoginEnable()
+                    && SocServicesAuthButtons.VK_BUTTON.isEnabled(), isNeedAnimate);
+            setVisibilityAndAnimateView(mBinding.btnAuthFB, visibility
+                    && SocServicesAuthButtons.FB_BUTTON.isMainScreenLoginEnable()
+                    && SocServicesAuthButtons.FB_BUTTON.isEnabled(), isNeedAnimate);
+            setVisibilityAndAnimateView(mBinding.btnAuthOk, visibility
+                    && SocServicesAuthButtons.OK_BUTTON.isMainScreenLoginEnable()
+                    && SocServicesAuthButtons.OK_BUTTON.isEnabled(), isNeedAnimate);
+            setVisibilityAndAnimateView(mBinding.btnTfAccount, visibility
+                    && SocServicesAuthButtons.TF_BUTTON.isEnabled(), isNeedAnimate);
         }
     }
 
@@ -354,13 +362,21 @@ public class AuthFragment extends BaseAuthFragment {
     }
 
     private boolean isOtherServicesButtonAvailable() {
-        return getMainScreenServicesAvailable() < SocServicesAuthButtons.values().length;
+        return getMainScreenServicesAvailable() < getAllOtherServicesAvailableButtonsCount();
     }
 
     private int getMainScreenServicesAvailable() {
         int buttonsCount = 0;
-        for (SocServicesAuthButtons item : SocServicesAuthButtons.values()) {
-            buttonsCount = item.isMainScreenLoginEnable() ? buttonsCount + 1 : buttonsCount;
+        for (SocServicesAuthButtons keys : AuthServiceButtons.getOtherButtonsList().keySet()) {
+            buttonsCount = keys.isMainScreenLoginEnable() && keys.isEnabled() ? buttonsCount + 1 : buttonsCount;
+        }
+        return buttonsCount;
+    }
+
+    private int getAllOtherServicesAvailableButtonsCount() {
+        int buttonsCount = 0;
+        for (SocServicesAuthButtons button : AuthServiceButtons.getOtherButtonsList().keySet()) {
+            buttonsCount = button.isEnabled() ? buttonsCount + 1 : buttonsCount;
         }
         return buttonsCount;
     }
@@ -493,8 +509,8 @@ public class AuthFragment extends BaseAuthFragment {
                 return Utils.EMPTY;
             }
             String resString = getString(R.string.other_auth);
-            for (SocServicesAuthButtons item : SocServicesAuthButtons.values()) {
-                resString = (!item.isMainScreenLoginEnable() ? String.format(IMAGE_HTML_TEMPLATE, item.name()) : Utils.EMPTY).concat(resString);
+            for (SocServicesAuthButtons keys : AuthServiceButtons.getOtherButtonsList().keySet()) {
+                resString = (!keys.isMainScreenLoginEnable() && keys.isEnabled() ? String.format(IMAGE_HTML_TEMPLATE, keys.name()) : Utils.EMPTY).concat(resString);
             }
             return resString;
         }

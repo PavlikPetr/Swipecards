@@ -42,8 +42,6 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     public static final String CURRENT_BODY_PAGE = "CURRENT_BODY_PAGE";
     public static final int DEFAULT_PAGE = 0;
 
-    private static final String PAGE_NAME = "profile.vk";
-
     // state
     private ArrayList<String> BODY_PAGES_TITLES = new ArrayList<>();
     private ArrayList<String> BODY_PAGES_CLASS_NAMES = new ArrayList<>();
@@ -125,11 +123,6 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
 
         }
     };
-
-    @Override
-    protected String getScreenName() {
-        return PAGE_NAME;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

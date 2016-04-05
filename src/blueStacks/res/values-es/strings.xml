@@ -784,8 +784,7 @@
   <string name="star_liberty_title">Usuarios populares</string>
   <string name="star_liberty_description">Las aperturas más populares para comunicarse</string>
   <string name="crown_liberty_title">Destaca</string>
-  <string name="crown_liberty_description">Es difícil no destacar en la búsqueda y en los mensajes
-  </string>
+  <string name="crown_liberty_description">Es difícil no destacar en la búsqueda y en los mensajes</string>
   <string name="like_liberty_title">Simpatías</string>
   <string name="like_liberty_description">Mira a quién le gustas</string>
 </resources>
