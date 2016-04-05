@@ -70,8 +70,6 @@ public class ProfileFormFragment extends AbstractFormFragment {
                             @Override
                             public void success(IApiResponse response) {
                                 form.copy(data);
-                                Intent intent = new Intent(CacheProfile.PROFILE_UPDATE_ACTION);
-                                LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
                             }
 
                             @Override

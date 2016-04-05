@@ -72,7 +72,6 @@ import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.gcmutils.GcmListenerService;
-import com.topface.topface.utils.geo.GeoLocationManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import com.topface.topface.utils.social.FbAuthorizer;
