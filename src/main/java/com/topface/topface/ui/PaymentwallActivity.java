@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -124,6 +125,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
 
     private void fillResultAndClose(String log) {
         Debug.log(log);
+        Log.e("PaymentWall", "fillResultAndClose " + log);
         Intent intent = getIntent();
         //TODO заменить пустую строку на номер транзакции (в процессе выяснения)
         intent.putExtra(PW_TRANSACTION_ID, "");
