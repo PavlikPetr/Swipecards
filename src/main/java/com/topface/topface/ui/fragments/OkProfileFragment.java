@@ -100,7 +100,7 @@ public class OkProfileFragment extends ProfileInnerFragment {
     }
 
     public static class OkProfileHandler {
-        private static final String GROUP_URL = "https://apiok.ru/wiki/pages/viewpage.action?pageId=89982206";
+        private static final String GROUP_URL = "http://ok.ru/group/52746255532280";
 
         private IActivityDelegate mActivityDelegate;
 
