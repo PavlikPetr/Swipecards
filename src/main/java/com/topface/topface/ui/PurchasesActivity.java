@@ -224,15 +224,13 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == PaymentwallActivity.ACTION_BUY) {
-            if (data != null && AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-                sendPurchaseEvent(
-                        data.getIntExtra(PW_PRODUCTS_COUNT, 0),
-                        data.getStringExtra(PW_PRODUCTS_TYPE),
-                        data.getStringExtra(PW_PRODUCT_ID),
-                        data.getStringExtra(PW_CURRENCY),
-                        data.getDoubleExtra(PW_PRICE, 0),
-                        data.getStringExtra(PW_TRANSACTION_ID), false);
-            }
+            sendPurchaseEvent(
+                    data.getIntExtra(PW_PRODUCTS_COUNT, 0),
+                    data.getStringExtra(PW_PRODUCTS_TYPE),
+                    data.getStringExtra(PW_PRODUCT_ID),
+                    data.getStringExtra(PW_CURRENCY),
+                    data.getDoubleExtra(PW_PRICE, 0),
+                    data.getStringExtra(PW_TRANSACTION_ID), false, false);
             // для обновления счетчиков монет и лайков при покупке через paymentWall
             new ProfileRequest(this).exec();
         }
@@ -259,7 +257,8 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
                     detail.currency,
                     detail.price / ProductsDetails.MICRO_AMOUNT,
                     product.getOrderId(),
-                    button != null && button.trialPeriodInDays == 0);
+                    button != null && button.trialPeriodInDays > 0,
+                    !product.getSku().equals(OpenIabFragment.TEST_PURCHASED_PRODUCT_ID));
         }
     }
 
@@ -281,19 +280,21 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         return null;
     }
 
-    public static void sendPurchaseEvent(int productsCount, String productType, String productId, String currencyCode, double price, String transactionId, boolean isNeedCallPurchaseEvent) {
+    public static void sendPurchaseEvent(int productsCount, String productType, String productId, String currencyCode, double price, String transactionId, boolean isTrial, boolean isTestPurchase) {
         FlurryManager.sendPurchaseEvent(productId, price, currencyCode);
-        if (isNeedCallPurchaseEvent) {
+        if (!isTestPurchase && !isTrial) {
             PurchasesEvents.purchaseSuccess(productsCount, productType, productId, currencyCode, price, transactionId);
         }
-        FbAuthorizer.initFB();
-        AppEventsLogger logger = AppEventsLogger.newLogger(App.getContext());
-        Bundle bundle = new Bundle();
-        bundle.putString(AppEventsConstants.EVENT_PARAM_NUM_ITEMS, String.valueOf(productsCount));
-        bundle.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, productType);
-        bundle.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, productId);
-        bundle.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, currencyCode);
-        logger.logEvent(AppEventsConstants.EVENT_NAME_PURCHASED, price, bundle);
+        if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK) && !isTestPurchase && !isTrial) {
+            FbAuthorizer.initFB();
+            AppEventsLogger logger = AppEventsLogger.newLogger(App.getContext());
+            Bundle bundle = new Bundle();
+            bundle.putString(AppEventsConstants.EVENT_PARAM_NUM_ITEMS, String.valueOf(productsCount));
+            bundle.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, productType);
+            bundle.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, productId);
+            bundle.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, currencyCode);
+            logger.logEvent(AppEventsConstants.EVENT_NAME_PURCHASED, price, bundle);
+        }
     }
 
     @Override

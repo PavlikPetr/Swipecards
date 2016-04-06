@@ -46,8 +46,9 @@ public class OkProfileFragment extends ProfileInnerFragment {
                         ? CacheProfile.getProfile().sex == Profile.BOY
                         : okUserData.isMale()));
                 mHandler.avatarVisibility.set(View.VISIBLE);
-                mHandler.nameVisibility.set(TextUtils.isEmpty(okUserData.name) ? View.GONE : View.VISIBLE);
-                mHandler.nameText.set(okUserData.name);
+                String name = TextUtils.isEmpty(okUserData.name) ? CacheProfile.first_name : okUserData.name;
+                mHandler.nameVisibility.set(TextUtils.isEmpty(name) ? View.GONE : View.VISIBLE);
+                mHandler.nameText.set(name);
             }
         }
     };
@@ -61,7 +62,6 @@ public class OkProfileFragment extends ProfileInnerFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.from(getActivity()).inject(this);
-        new CurrentUser(new OkAuthorizer().getOkAuthObj(App.getAppSocialAppsIds())).exec();
     }
 
     @Override
@@ -77,6 +77,7 @@ public class OkProfileFragment extends ProfileInnerFragment {
     @Override
     public void onResume() {
         super.onResume();
+        new CurrentUser(new OkAuthorizer().getOkAuthObj(App.getAppSocialAppsIds())).exec();
         mSubscription = mAppState.getObservable(OkUserData.class).subscribe(mSubscriber);
     }
 

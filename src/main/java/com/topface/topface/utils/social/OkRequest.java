@@ -1,23 +1,18 @@
 package com.topface.topface.utils.social;
 
-import com.topface.framework.JsonUtils;
-import com.topface.framework.utils.Debug;
+import com.topface.topface.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Map;
 
 import ru.ok.android.sdk.Odnoklassniki;
-import ru.ok.android.sdk.OkRequestMode;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -28,23 +23,9 @@ public abstract class OkRequest {
 
     public List<OkRequestListener> mListeners;
     private Odnoklassniki mOdnoklassniki;
-    private String mRequestMethod;
-    private Map<String, String> mParams;
-    private EnumSet<OkRequestMode> mMode;
 
-    public OkRequest(@NotNull Odnoklassniki ok, @NotNull String requestMethod) {
-        this(ok, requestMethod, null, null);
-    }
-
-    public OkRequest(@NotNull Odnoklassniki ok, @NotNull String requestMethod, @Nullable Map<String, String> params) {
-        this(ok, requestMethod, params, null);
-    }
-
-    public OkRequest(@NotNull Odnoklassniki ok, @NotNull String requestMethod, @Nullable Map<String, String> params, @Nullable EnumSet<OkRequestMode> mode) {
+    public OkRequest(@NotNull Odnoklassniki ok) {
         mOdnoklassniki = ok;
-        mRequestMethod = requestMethod;
-        mParams = params;
-        mMode = mode;
     }
 
     @NotNull
@@ -60,45 +41,34 @@ public abstract class OkRequest {
         return this;
     }
 
-    public void exec() {
-        Observable.create(new Observable.OnSubscribe<String>() {
+    abstract protected String getRequest(Odnoklassniki ok) throws IOException;
+
+    abstract protected void getObservable(Observable<String> observable);
+
+    private Observable<String> prepareObservable() {
+        return Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
+                String res = Utils.EMPTY;
                 try {
-                    subscriber.onNext(mOdnoklassniki.request(mRequestMethod, mParams, mMode));
-                    subscriber.onCompleted();
+                    res = getRequest(mOdnoklassniki);
                 } catch (IOException e) {
-                    Debug.log("OkRequest " + mRequestMethod + " request catch exception " + e);
                     e.printStackTrace();
-                    subscriber.onError(new Throwable());
+                    subscriber.onError(e);
                 }
+                subscriber.onNext(res);
+                subscriber.onCompleted();
             }
-        })
-                .subscribeOn(Schedulers.newThread())
+        }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        Debug.log("OkRequest " + mRequestMethod + " request catch throwable " + throwable);
-                        onFail();
-                    }
-                })
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        Debug.log("Odnoklassniki " + mRequestMethod + " request success result: " + s);
-                        OkUserData data = JsonUtils.fromJson(s, OkUserData.class);
-                        if (data != null) {
-                            onSuccess(data);
-                        } else {
-                            onFail();
-                        }
-                    }
-                });
+                ;
     }
 
-    private void onFail() {
+    public void exec() {
+        getObservable(prepareObservable());
+    }
+
+    public void callFail() {
         for (OkRequestListener listener : getListeners()) {
             if (listener != null) {
                 listener.onFail();
@@ -107,7 +77,7 @@ public abstract class OkRequest {
         onDestroy();
     }
 
-    private void onSuccess(@Nullable OkUserData data) {
+    public void callSuccess(@Nullable OkUserData data) {
         for (OkRequestListener listener : getListeners()) {
             if (listener != null) {
                 listener.onSuccess(data);
