@@ -35,11 +35,6 @@ public class AdmirationFragment extends LikesFragment {
     }
 
     @Override
-    protected void updateCounters(CountersData countersData) {
-        super.updateCounters(countersData);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         if (mEmptyFeedView != null) {
