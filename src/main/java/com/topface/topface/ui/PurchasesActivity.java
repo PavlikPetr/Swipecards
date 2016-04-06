@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 
@@ -249,13 +250,21 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
 
     public static void sendPurchaseEvent(Purchase product) {
         String originalSku = PurchaseRequest.getDeveloperPayload(product).sku;
+        BuyButtonData button = getButtonBySku(originalSku);
         ProductsDetails.ProductDetail detail = PurchaseRequest.getProductDetail(product);
         if (detail != null) {
-            sendPurchaseEvent(1, getType(originalSku), originalSku, detail.currency, detail.price / ProductsDetails.MICRO_AMOUNT, product.getOrderId(), true);
+            sendPurchaseEvent(1,
+                    button != null ? button.type.getName() : Utils.EMPTY,
+                    originalSku,
+                    detail.currency,
+                    detail.price / ProductsDetails.MICRO_AMOUNT,
+                    product.getOrderId(),
+                    button != null && button.trialPeriodInDays == 0);
         }
     }
 
-    private static String getType(String sku) {
+    @Nullable
+    private static BuyButtonData getButtonBySku(String sku) {
         Products products = CacheProfile.getMarketProducts();
         LinkedList<BuyButtonData> arrayButtons = new LinkedList<>();
         arrayButtons.addAll(products.likes);
@@ -266,15 +275,15 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         arrayButtons.addAll(products.coinsSubscriptionsMasked);
         for (BuyButtonData data : arrayButtons) {
             if (data.id.equals(sku)) {
-                return data.type.getName();
+                return data;
             }
         }
-        return Utils.EMPTY;
+        return null;
     }
 
-    public static void sendPurchaseEvent(int productsCount, String productType, String productId, String currencyCode, double price, String transactionId, boolean isGPMarket) {
+    public static void sendPurchaseEvent(int productsCount, String productType, String productId, String currencyCode, double price, String transactionId, boolean isNeedCallPurchaseEvent) {
         FlurryManager.sendPurchaseEvent(productId, price, currencyCode);
-        if (isGPMarket) {
+        if (isNeedCallPurchaseEvent) {
             PurchasesEvents.purchaseSuccess(productsCount, productType, productId, currencyCode, price, transactionId);
         }
         FbAuthorizer.initFB();

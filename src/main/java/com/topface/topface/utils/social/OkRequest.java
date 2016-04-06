@@ -68,6 +68,7 @@ public abstract class OkRequest {
                     subscriber.onNext(mOdnoklassniki.request(mRequestMethod, mParams, mMode));
                     subscriber.onCompleted();
                 } catch (IOException e) {
+                    Debug.log("OkRequest " + mRequestMethod + " request catch exception " + e);
                     e.printStackTrace();
                     subscriber.onError(new Throwable());
                 }
@@ -79,13 +80,14 @@ public abstract class OkRequest {
                     @Override
                     public void call(Throwable throwable) {
                         throwable.printStackTrace();
+                        Debug.log("OkRequest " + mRequestMethod + " request catch throwable " + throwable);
                         onFail();
                     }
                 })
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
-                        Debug.log("Odnoklassniki " + mRequestMethod + " result: " + s);
+                        Debug.log("Odnoklassniki " + mRequestMethod + " request success result: " + s);
                         OkUserData data = JsonUtils.fromJson(s, OkUserData.class);
                         if (data != null) {
                             onSuccess(data);
