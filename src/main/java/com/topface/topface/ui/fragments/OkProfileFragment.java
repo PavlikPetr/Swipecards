@@ -40,8 +40,8 @@ public class OkProfileFragment extends ProfileInnerFragment {
         public void call(OkUserData okUserData) {
             if (mHandler != null && okUserData != null) {
                 showProgress(false);
-                mHandler.imageSrc.set(!TextUtils.isEmpty(okUserData.pic1)
-                        ? okUserData.pic1
+                mHandler.imageSrc.set(!TextUtils.isEmpty(okUserData.pic3)
+                        ? okUserData.pic3
                         : getEmptyPhotoRes(TextUtils.isEmpty(okUserData.gender)
                         ? CacheProfile.getProfile().sex == Profile.BOY
                         : okUserData.isMale()));
@@ -105,7 +105,6 @@ public class OkProfileFragment extends ProfileInnerFragment {
     }
 
     public static class OkProfileHandler {
-        private static final String GROUP_URL = "http://ok.ru/group/52746255532280";
 
         private IActivityDelegate mActivityDelegate;
 
@@ -123,7 +122,7 @@ public class OkProfileFragment extends ProfileInnerFragment {
 
         @SuppressWarnings("unused")
         public void onButtonShowGroupClick(View view) {
-            Utils.goToUrl(mActivityDelegate, GROUP_URL);
+            Utils.goToUrl(mActivityDelegate, CacheProfile.getOptions().aboutApp.url);
         }
 
     }
