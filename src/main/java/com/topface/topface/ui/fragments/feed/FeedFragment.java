@@ -1033,7 +1033,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             case ErrorCodes.BLOCKED_PEOPLE_NEARBY:
                 clearCache();
                 mListView.setVisibility(View.INVISIBLE);
-                ontLockedFeed(codeError);
+                onLockedFeed(codeError);
                 return true;
             default:
                 if (getListAdapter() == null || getListAdapter().getDataForCache() == null || getListAdapter().getDataForCache().size() < 1) {
@@ -1085,7 +1085,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         mBackgroundController.hide();
     }
 
-    protected void ontLockedFeed(int errorCode) {
+    protected void onLockedFeed(int errorCode) {
         initGagView();
         if (mInflated != null) {
             initLockedFeed(mInflated, errorCode);
