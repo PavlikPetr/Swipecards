@@ -97,9 +97,12 @@ import com.topface.topface.utils.social.AuthToken;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
+import rx.Observable;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 public class ChatFragment extends AnimatedFragment implements View.OnClickListener {
 
@@ -144,7 +147,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     };
     private String mMessage;
     private ArrayList<History> mHistoryFeedList;
-    private Handler mUpdater;
     private boolean mIsUpdating;
     private boolean mKeyboardWasShown;
     private PullToRefreshListView mListView;
@@ -162,22 +164,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             AddPhotoHelper.handlePhotoMessage(msg, getActivity());
         }
     };
-
-    TimerTask mUpdaterTask = new TimerTask() {
-        @Override
-        public void run() {
-            updateUI(new Runnable() {
-                @Override
-                public void run() {
-                    if (mUpdater != null && !wasFailed && mUserId > 0) {
-                        update(true, "timer");
-                        mUpdater.postDelayed(this, DEFAULT_CHAT_UPDATE_PERIOD);
-                    }
-                }
-            });
-        }
-    };
-    // Managers
     private RelativeLayout mLockScreen;
     private PopularUserChatController mPopularUserLockController;
     private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
@@ -227,8 +213,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         mUserType = getArguments().getInt(ChatFragment.USER_TYPE);
         // do not recreate Adapter cause of setRetainInstance(true)
         if (mAdapter == null) {
@@ -238,6 +224,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     startBuyVipActivity(AUTO_REPLY_MESSAGE_SOURCE);
                 }
             });
+        } else {
+            mAdapter.updateActivityDelegate((IActivityDelegate) getActivity());
         }
         Bundle args = getArguments();
         mItemId = args.getString(INTENT_ITEM_ID);
@@ -922,8 +910,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
         IntentFilter filter = new IntentFilter(GCMUtils.GCM_NOTIFICATION);
         LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(mNewMessageReceiver, filter);
-
-        mUpdater = new Handler();
         startTimer();
     }
 
@@ -1061,16 +1047,20 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
 
     private void startTimer() {
-        if (mUpdater != null) {
-            mUpdater.removeCallbacks(mUpdaterTask);
-            mUpdater.postDelayed(mUpdaterTask, DEFAULT_CHAT_UPDATE_PERIOD);
-        }
+        mUpdateUiSubscription = Observable.interval(DEFAULT_CHAT_UPDATE_PERIOD, DEFAULT_CHAT_UPDATE_PERIOD
+                , TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(new Action1<Long>() {
+            @Override
+            public void call(Long aLong) {
+                if (isAdded() && !wasFailed && mUserId > 0) {
+                    update(true, "timer");
+                }
+            }
+        });
     }
 
     private void stopTimer() {
-        if (mUpdater != null) {
-            mUpdater.removeCallbacks(mUpdaterTask);
-            mUpdater = null;
+        if (mUpdateUiSubscription != null && !mUpdateUiSubscription.isUnsubscribed()) {
+            mUpdateUiSubscription.unsubscribe();
         }
     }
 

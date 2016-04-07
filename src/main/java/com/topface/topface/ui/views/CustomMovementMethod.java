@@ -12,14 +12,11 @@ import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.Utils;
 
 public class CustomMovementMethod extends LinkMovementMethod {
-    private static CustomMovementMethod sInstance;
+
     private IActivityDelegate mIActivityDelegate;
-
-    public static CustomMovementMethod getInstance() {
-        if (sInstance == null)
-            sInstance = new CustomMovementMethod();
-
-        return sInstance;
+    
+    public CustomMovementMethod(IActivityDelegate mIActivityDelegate){
+        mIActivityDelegate = activityDelegate;
     }
 
     public void setIActivityDelegate(IActivityDelegate iActivityDelegate) {
