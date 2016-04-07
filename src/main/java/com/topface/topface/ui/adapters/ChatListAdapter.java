@@ -49,6 +49,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private ArrayList<History> mShowDatesList = new ArrayList<>();
     private OnBuyVipButtonClick mBuyVipButtonClickListener;
     private IActivityDelegate mIActivityDelegate;
+    private CustomMovementMethod mCustomMovementMethod;
 
     public ChatListAdapter(IActivityDelegate iActivityDelegate, FeedList<History> data, Updater updateCallback, OnBuyVipButtonClick listener) {
         super(iActivityDelegate.getApplicationContext(), data, updateCallback);
@@ -65,6 +66,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 mUnrealItems.add(item);
             }
         }
+        mCustomMovementMethod = new CustomMovementMethod();
     }
 
     public static int getItemType(History item) {
@@ -454,14 +456,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (holder != null && holder.message != null) {
             if (item.text != null && !item.text.equals(Utils.EMPTY)) {
                 holder.message.setText(Html.fromHtml(item.text));
-
                 // Проверяем наличие в textView WEB_URLS | EMAIL_ADDRESSES | PHONE_NUMBERS | MAP_ADDRESSES;
                 // Если нашли, то добавим им кликабельность
                 // в остальных случаях holder.message будет кликаться на onItemClickListener
                 if (Linkify.addLinks(holder.message, Linkify.ALL)) {
-                    CustomMovementMethod customMovementMethod = CustomMovementMethod.getInstance();
-                    customMovementMethod.setIActivityDelegate(mIActivityDelegate);
-                    holder.message.setMovementMethod(customMovementMethod);
+                    holder.message.setMovementMethod(mCustomMovementMethod);
                     holder.message.setFocusable(false);
                 }
                 return true;
@@ -572,6 +571,16 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (mUpdateCallback != null && !data.isEmpty() && firstVisibleItem <= mLoadController.getItemsOffsetByConnectionType()
                 && isNeedMore()) {
             mUpdateCallback.onUpdate();
+        }
+    }
+
+    /*
+        Костылик, чтоб не текло при перевороте девайса. Заменяем старый контекст на новый.
+    */
+    public void updateActivityDelegate(IActivityDelegate delegate) {
+        mIActivityDelegate = delegate;
+        if (mCustomMovementMethod != null) {
+            mCustomMovementMethod.setIActivityDelegate(delegate);
         }
     }
 
