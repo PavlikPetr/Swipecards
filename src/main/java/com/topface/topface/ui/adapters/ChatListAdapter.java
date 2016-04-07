@@ -66,7 +66,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 mUnrealItems.add(item);
             }
         }
-        mCustomMovementMethod = new CustomMovementMethod();
+        mCustomMovementMethod = new CustomMovementMethod(iActivityDelegate);
     }
 
     public static int getItemType(History item) {
