@@ -48,12 +48,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
     private OnBuyVipButtonClick mBuyVipButtonClickListener;
-    private IActivityDelegate mIActivityDelegate;
     private CustomMovementMethod mCustomMovementMethod;
 
     public ChatListAdapter(IActivityDelegate iActivityDelegate, FeedList<History> data, Updater updateCallback, OnBuyVipButtonClick listener) {
         super(iActivityDelegate.getApplicationContext(), data, updateCallback);
-        mIActivityDelegate = iActivityDelegate;
         mBuyVipButtonClickListener = listener;
         if (!data.isEmpty()) {
             prepareDates();
@@ -528,7 +526,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             if (!dataClone.isEmpty() && dataClone.get(dataClone.size() - 1).isLoaderOrRetrier()) {
                 dataClone.remove(dataClone.size() - 1);
             }
-//            removeUnrealItems(dataClone);
         } catch (OutOfMemoryError e) {
             Debug.error(e);
         }
@@ -578,7 +575,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         Костылик, чтоб не текло при перевороте девайса. Заменяем старый контекст на новый.
     */
     public void updateActivityDelegate(IActivityDelegate delegate) {
-        mIActivityDelegate = delegate;
         if (mCustomMovementMethod != null) {
             mCustomMovementMethod.setIActivityDelegate(delegate);
         }

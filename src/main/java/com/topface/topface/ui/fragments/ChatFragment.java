@@ -129,9 +129,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private static final String AUTO_REPLY_MESSAGE_SOURCE = "AutoReplyMessage";
     private static final String SEND_MESSAGE_SOURCE = "SendMessage";
     public static final String GIFT_DATA = "gift_data";
-
-
-    // Data
     private int mUserId;
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -404,7 +401,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mUser = JsonUtils.fromJson(savedInstanceState.getString(FRIEND_FEED_USER), FeedUser.class);
                 invalidateUniversalUser();
                 initOverflowMenuActions(getOverflowMenu());
-                setLockScreenVisibility(wasFailed);
+                if (mAdapter != null && mAdapter.isEmpty()) {
+                    setLockScreenVisibility(wasFailed);
+                }
                 mBackgroundController.hide();
             } catch (Exception | OutOfMemoryError e) {
                 Debug.error(e);
@@ -428,7 +427,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private void initChatHistory(View root) {
-
         // list view
         mListView = (PullToRefreshListView) root.findViewById(R.id.lvChatList);
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
@@ -437,10 +435,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 update(true, "pull to refresh");
             }
         });
-        mAnimatedAdapter = new ChatListAnimatedAdapter(new HackBaseAdapterDecorator(mAdapter));
-        mAnimatedAdapter.setAbsListView(mListView.getRefreshableView());
+        if (mAnimatedAdapter == null) {
+            mAnimatedAdapter = new ChatListAnimatedAdapter(new HackBaseAdapterDecorator(mAdapter));
+            mAnimatedAdapter.setAbsListView(mListView.getRefreshableView());
+        }
         mListView.setAdapter(mAnimatedAdapter);
-
         mListView.setOnScrollListener(mAdapter);
         final ListView mListViewFromPullToRefresh = mListView.getRefreshableView();
         mListViewFromPullToRefresh.setTranscriptMode(ListView.TRANSCRIPT_MODE_NORMAL);
