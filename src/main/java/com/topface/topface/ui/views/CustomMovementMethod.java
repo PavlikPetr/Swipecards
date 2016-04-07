@@ -15,7 +15,7 @@ public class CustomMovementMethod extends LinkMovementMethod {
 
     private IActivityDelegate mIActivityDelegate;
     
-    public CustomMovementMethod(IActivityDelegate mIActivityDelegate){
+    public CustomMovementMethod(IActivityDelegate activityDelegate){
         mIActivityDelegate = activityDelegate;
     }
 
