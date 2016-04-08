@@ -25,26 +25,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import static com.topface.topface.utils.FormItem.DATA_TYPE.ABOUT_STATUS;
-import static com.topface.topface.utils.FormItem.DATA_TYPE.ALCOHOL;
-import static com.topface.topface.utils.FormItem.DATA_TYPE.ARCHIEVEMENTS;
-import static com.topface.topface.utils.FormItem.DATA_TYPE.BREAST;
-import static com.topface.topface.utils.FormItem.DATA_TYPE.CAR;
-import static com.topface.topface.utils.FormItem.DATA_TYPE.CHARACTER;
-import static com.topface.topface.utils.FormItem.DATA_TYPE.COMMUNICATION;
-import static com.topface.topface.utils.FormItem.DATA_TYPE.DATING;
-import static com.topface.topface.utils.FormItem.DATA_TYPE.EDUCATION;
-import static com.topface.topface.utils.FormItem.DATA_TYPE.EYES;
-import static com.topface.topface.utils.FormItem.DATA_TYPE.FINANCES;
-import static com.topface.topface.utils.FormItem.DATA_TYPE.FITNESS;
-import static com.topface.topface.utils.FormItem.DATA_TYPE.HAIRS;
-import static com.topface.topface.utils.FormItem.DATA_TYPE.HEIGHT;
-import static com.topface.topface.utils.FormItem.DATA_TYPE.MARRIAGE;
-import static com.topface.topface.utils.FormItem.DATA_TYPE.RESIDENCE;
-import static com.topface.topface.utils.FormItem.DATA_TYPE.RESTAURANTS;
-import static com.topface.topface.utils.FormItem.DATA_TYPE.SMOKING;
-import static com.topface.topface.utils.FormItem.DATA_TYPE.STATUS;
-import static com.topface.topface.utils.FormItem.DATA_TYPE.WEIGHT;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.*;
 
 /* Класс профиля владельца устройства */
 public class Profile extends AbstractDataWithPhotos {
@@ -256,12 +237,6 @@ public class Profile extends AbstractDataWithPhotos {
             // 12 HEADER -= SOCIAL =-
             headerItem = new FormItem(R.string.form_social, FormItem.HEADER);
             formInfo.fillFormItem(headerItem);
-
-            // 13 marriage position 7
-            formItem = new FormItem(R.array.form_social_marriage, form.optInt("marriageId"),
-                    FormItem.DATA, headerItem, MARRIAGE);
-            formInfo.fillFormItem(formItem);
-            profile.forms.add(formItem);
 
             // 14 education position 8
             formItem = new FormItem(R.array.form_social_education, form.optInt("educationId"),

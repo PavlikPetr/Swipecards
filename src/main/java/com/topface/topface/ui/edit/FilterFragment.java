@@ -62,7 +62,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private ViewGroup mLoFilterHeight;
     private ViewGroup mLoFilterWeight;
     private ViewGroup mLoFilterDatingStatus;
-    private ViewGroup mLoFilterMarriage;
     private ViewGroup mLoFilterCharacter;
     private ViewGroup mLoFilterAlcohol;
     private ViewGroup mLoFilterFinance;
@@ -87,11 +86,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                     mFilter.xstatus = item;
                     setText(mFormInfo.getEntry(R.array.form_main_status, mFilter.xstatus),
                             mLoFilterDatingStatus);
-                    break;
-                case R.id.loFilterMarriage:
-                    mFilter.marriage = item;
-                    setText(mFormInfo.getEntry(R.array.form_social_marriage, mFilter.marriage),
-                            mLoFilterMarriage);
                     break;
                 case R.id.loFilterCharacter:
                     mFilter.character = item;
@@ -311,14 +305,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mLoFilterDatingStatus.setTag(R.array.form_main_status);
         mLoFilterDatingStatus.setOnClickListener(this);
 
-        // Marriage
-        mLoFilterMarriage = (ViewGroup) root.findViewById(R.id.loFilterMarriage);
-        setText(R.array.form_social_marriage,
-                mFormInfo.getEntry(R.array.form_social_marriage, mFilter.marriage),
-                mLoFilterMarriage);
-        mLoFilterMarriage.setTag(R.array.form_social_marriage);
-        mLoFilterMarriage.setOnClickListener(this);
-
         // Character
         mLoFilterCharacter = (ViewGroup) root.findViewById(R.id.loFilterCharacter);
         setText(R.array.form_main_character,
@@ -408,10 +394,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 break;
             case R.id.loFilterDatingStatus:
                 createAndShowDialog(R.array.form_main_status, mFilter.xstatus, v.getId(),
-                        mDialogOnItemClickListener);
-                break;
-            case R.id.loFilterMarriage:
-                createAndShowDialog(R.array.form_social_marriage, mFilter.marriage, v.getId(),
                         mDialogOnItemClickListener);
                 break;
             case R.id.loFilterCharacter:
@@ -558,7 +540,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         }
         /* понять и простить за эту х...ю, так уж FormInfo реализован */
         mFormInfo = new FormInfo(App.getContext(), mFilter.sex, Profile.TYPE_OWN_PROFILE);
-        setText(mFormInfo.getEntry(R.array.form_social_marriage, mFilter.marriage), mLoFilterMarriage);
     }
 
     // show dialog
@@ -578,7 +559,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mLoFilterOnline.setEnabled(false);
         mLoFilterBeautiful.setEnabled(false);
         mLoFilterDatingStatus.setEnabled(false);
-        mLoFilterMarriage.setEnabled(false);
         mLoFilterCharacter.setEnabled(false);
         mLoFilterAlcohol.setEnabled(false);
         mLoFilterFinance.setEnabled(false);
@@ -595,7 +575,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mLoFilterOnline.setEnabled(true);
         mLoFilterBeautiful.setEnabled(true);
         mLoFilterDatingStatus.setEnabled(true);
-        mLoFilterMarriage.setEnabled(true);
         mLoFilterCharacter.setEnabled(true);
         mLoFilterAlcohol.setEnabled(true);
         mLoFilterFinance.setEnabled(true);

@@ -11,36 +11,6 @@ import com.topface.topface.R;
  */
 public class AppodealUserSettingsRules {
 
-    // приводим соответствие данных о семейном положении в Appodeal тому, что есть у нас
-    public enum Relation {
-        SINGLE(UserSettings.Relation.SINGLE, R.string.profile_form_marriage_female_7, R.string.profile_form_marriage_male_7,
-                R.string.profile_form_marriage_female_0, R.string.profile_form_marriage_male_0,
-                R.string.profile_form_marriage_female_1, R.string.profile_form_marriage_male_1),
-        DATING(UserSettings.Relation.DATING, R.string.profile_form_marriage_female_2, R.string.profile_form_marriage_male_2),
-        MARRIED(UserSettings.Relation.MARRIED, R.string.profile_form_marriage_female_3, R.string.profile_form_marriage_male_3,
-                R.string.profile_form_marriage_female_4, R.string.profile_form_marriage_male_4,
-                R.string.profile_form_marriage_female_5, R.string.profile_form_marriage_male_5,
-                R.string.profile_form_marriage_female_6, R.string.profile_form_marriage_male_6);
-
-        private UserSettings.Relation mRelation;
-        @StringRes
-        private int[] mIdsArray;
-
-        Relation(UserSettings.Relation relation, @StringRes int... idsArray) {
-            mRelation = relation;
-            mIdsArray = idsArray;
-        }
-
-        public UserSettings.Relation getRelation() {
-            return mRelation;
-        }
-
-        @StringRes
-        public int[] getIdsArray() {
-            return mIdsArray;
-        }
-    }
-
     // приводим соответствие данных об алкоголе в Appodeal тому, что есть у нас
     public enum Alcohol {
         NEGATIVE(UserSettings.Alcohol.NEGATIVE, R.string.profile_form_alcohol_female_0, R.string.profile_form_alcohol_male_0,
