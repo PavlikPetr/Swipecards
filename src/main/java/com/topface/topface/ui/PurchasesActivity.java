@@ -281,7 +281,8 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     }
 
     public static void sendPurchaseEvent(int productsCount, String productType, String productId, String currencyCode, double price, String transactionId, boolean isTrial, boolean isTestPurchase) {
-        FlurryManager.sendPurchaseEvent(productId, price, currencyCode);
+        // если покупка триальная или тестовая, то во Flurry уйдет событие со стоимостью "0"
+        FlurryManager.sendPurchaseEvent(productId, isTrial || isTestPurchase ? 0 : price, currencyCode);
         if (!isTestPurchase && !isTrial) {
             PurchasesEvents.purchaseSuccess(productsCount, productType, productId, currencyCode, price, transactionId);
         }
