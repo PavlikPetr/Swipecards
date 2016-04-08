@@ -781,6 +781,7 @@
     <string name="novice_sympathy">Senden Sie Sympathien den Menschen, die Ihnen\nwirklich
         gefallen,\num eine angenehme Bekanntschaft anzufangen
     </string>
+    <string name="novice_sympathies_bonus">Du bekommst %1$d Likes geschenkt! Das bedeutet, dass %2$d Leute dir ein Like geben werden und es auch wirklich so meinen!</string>
     <string name="go_dating_message">Fange an zu daten, und du werdest sehen wer dein Profil angeschaut hat.</string>
     <string name="vk_profile_button_tf_group">Topface-Gruppe</string>
     <string name="vk_profile_button_join_tf_group">Der Topface-Gruppe beitreten</string>
@@ -805,7 +806,7 @@
         <item quantity="one">%d Minute</item>
     </plurals>
     <string name="buy_button_sticker_popular">Beliebt</string>
-    <string name="buy_button_sticker_best_value">Bester Preis</string>
+    <string name="buy_button_sticker_best_value">Bester\n Preis</string>
     <string name="ban_liberty_title">Keine Werbung!</string>
     <string name="ban_liberty_description">Einfach nur Dating, leicht und unkompliziert</string>
     <string name="guest_liberty_title">Gäste</string>

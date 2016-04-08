@@ -872,8 +872,8 @@
         <item quantity="other">%d минута</item>
         <item quantity="one">%d минут</item>
     </plurals>
-    <string name="buy_button_sticker_popular">популарно</string>
-    <string name="buy_button_sticker_best_value">Најбоља цена</string>
+    <string name="buy_button_sticker_popular">Популарно</string>
+    <string name="buy_button_sticker_best_value">Најбоља\n цена</string>
     <string name="ban_liberty_title">Без реклама!</string>
     <string name="ban_liberty_description">Само упознавање, ништа више</string>
     <string name="guest_liberty_title">Гости</string>

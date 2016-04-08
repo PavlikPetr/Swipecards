@@ -837,6 +837,7 @@
     <string name="novice_sympathy">Invia le simpatie solo alle persone che ti\npiacciono
         veramente\nper iniziare una piacevole relazione
     </string>
+    <string name="novice_sympathies_bonus">Stai ricevendo %1$d simpatie in\nregalo! Questo significa piaci davvero molto alle persone \nche ti inviano le simpatie!</string>
     <string name="go_dating_message">Comincia a fare conoscenze e in questa sezione vedrai gli utenti che hanno visitato il tuo profilo</string>
     <string name="vk_profile_button_tf_group">Gruppo Topface</string>
     <string name="vk_profile_button_join_tf_group">Entra nel gruppo Topface</string>
@@ -862,8 +863,8 @@
         <item quantity="other">% minuti</item>
         <item quantity="one">% minuti</item>
     </plurals>
-    <string name="buy_button_sticker_popular">Il più venduto</string>
-    <string name="buy_button_sticker_best_value">Miglior prezzo</string>
+    <string name="buy_button_sticker_popular">Il più\n venduto</string>
+    <string name="buy_button_sticker_best_value">Miglior\n prezzo</string>
     <string name="ban_liberty_title">Senza pubblicità!</string>
     <string name="ban_liberty_description">Solo un appuntamento, puro e semplice</string>
     <string name="guest_liberty_title">Ospiti</string>
