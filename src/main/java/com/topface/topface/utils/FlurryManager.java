@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.flurry.android.FlurryAgent;
+import com.flurry.android.FlurryAgentListener;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -101,6 +102,12 @@ public class FlurryManager {
         FlurryAgent.init(App.getContext(), App.getContext().getResources().getString(R.string.flurry_key));
         FlurryAgent.setLogEnabled(Debug.isDebugLogsEnabled());
         FlurryAgent.setLogLevel(Log.VERBOSE);
+        FlurryAgent.setFlurryAgentListener(new FlurryAgentListener() {
+            @Override
+            public void onSessionStarted() {
+                sendAppStartEvent();
+            }
+        });
     }
 
     /**
