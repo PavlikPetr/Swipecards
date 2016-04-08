@@ -841,7 +841,7 @@
         <item quantity="one">%d minute</item>
     </plurals>
     <string name="buy_button_sticker_popular">Popular</string>
-    <string name="buy_button_sticker_best_value">Best value</string>
+    <string name="buy_button_sticker_best_value">Best\n value</string>
     <string name="ban_liberty_title">No ads!</string>
     <string name="ban_liberty_description">Just dating, pure and simple</string>
     <string name="guest_liberty_title">Guests</string>

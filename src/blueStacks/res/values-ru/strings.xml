@@ -823,7 +823,7 @@
     <item quantity="few">%d минуты</item>
     <item quantity="other">%d минут</item>
   </plurals>
-  <string name="buy_button_sticker_popular">хит продаж</string>
+  <string name="buy_button_sticker_popular">Хит продаж</string>
   <string name="buy_button_sticker_best_value">Лучшая цена</string>
   <string name="ban_liberty_title">Без рекламы!</string>
   <string name="ban_liberty_description">Только знакомства, ничего лишнего</string>

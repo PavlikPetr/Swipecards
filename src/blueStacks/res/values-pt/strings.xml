@@ -774,8 +774,8 @@
     <item quantity="other">%d minutos</item>
     <item quantity="one">%d minuto</item>
   </plurals>
-  <string name="buy_button_sticker_popular">Mais Vendido</string>
-  <string name="buy_button_sticker_best_value">Melhor preço</string>
+  <string name="buy_button_sticker_popular">Mais\n Vendido</string>
+  <string name="buy_button_sticker_best_value">Melhor\n preço</string>
   <string name="ban_liberty_title">Sem anúncios!</string>
   <string name="ban_liberty_description">Apenas namorar, pura e simplesmente</string>
   <string name="guest_liberty_title">Visitantes</string>
