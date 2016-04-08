@@ -102,12 +102,6 @@
             android:layout_height="wrap_content" />
 
         <include
-            android:id="@+id/loFilterMarriage"
-            layout="@layout/filter_light_edit_form"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-        <include
             android:id="@+id/loFilterCharacter"
             layout="@layout/filter_light_edit_form"
             android:layout_width="fill_parent"

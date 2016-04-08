@@ -84,26 +84,9 @@ public class AppodealProvider extends AbstractAdsProvider {
     }
 
     private void fillAdditionalUserSettings(UserSettings userSettings) {
-        setUserSettingsRelation(userSettings);
         setUserSettingsSmoking(userSettings);
         setUserSettingsAlcohol(userSettings);
         setUserSettingsOcupation(userSettings);
-    }
-
-    private void setUserSettingsRelation(UserSettings userSettings) {
-        if (userSettings != null) {
-            FormItem formItem = CacheProfile.getProfile().getFormByType(FormItem.DATA_TYPE.MARRIAGE);
-            if (formItem != null) {
-                String currentValue = formItem.value;
-                UserSettings.Relation relation = UserSettings.Relation.OTHER;
-                for (AppodealUserSettingsRules.Relation item : AppodealUserSettingsRules.Relation.values()) {
-                    if (isContainedEquals(currentValue, item.getIdsArray())) {
-                        relation = item.getRelation();
-                    }
-                }
-                userSettings.setRelation(relation);
-            }
-        }
     }
 
     private void setUserSettingsAlcohol(UserSettings userSettings) {
