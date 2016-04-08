@@ -30,11 +30,11 @@ public class OkUserData {
     @SerializedName("has_email")
     public boolean hasEmail;
     @SerializedName("pic_1")
-    public String pic1;
+    public String smallSquareImage;
     @SerializedName("pic_2")
-    public String pic2;
+    public String mediumImage;
     @SerializedName("pic_3")
-    public String pic3;
+    public String bigSquareImage;
 
     public boolean isMale() {
         return MALE.equals(gender);
@@ -73,9 +73,11 @@ public class OkUserData {
         if (lastName != null ? !lastName.equals(data.lastName) : data.lastName != null)
             return false;
         if (hasEmail != data.hasEmail) return false;
-        if (pic1 != null ? !pic1.equals(data.pic1) : data.pic1 != null) return false;
-        if (pic2 != null ? !pic2.equals(data.pic2) : data.pic2 != null) return false;
-        return pic3 != null ? !pic3.equals(data.pic3) : data.pic3 != null;
+        if (smallSquareImage != null ? !smallSquareImage.equals(data.smallSquareImage) : data.smallSquareImage != null)
+            return false;
+        if (mediumImage != null ? !mediumImage.equals(data.mediumImage) : data.mediumImage != null)
+            return false;
+        return bigSquareImage != null ? !bigSquareImage.equals(data.bigSquareImage) : data.bigSquareImage != null;
     }
 
     @Override
@@ -91,9 +93,9 @@ public class OkUserData {
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (hasEmail ? 1 : 0);
-        result = 31 * result + (pic1 != null ? pic1.hashCode() : 0);
-        result = 31 * result + (pic2 != null ? pic2.hashCode() : 0);
-        return 31 * result + (pic3 != null ? pic3.hashCode() : 0);
+        result = 31 * result + (smallSquareImage != null ? smallSquareImage.hashCode() : 0);
+        result = 31 * result + (mediumImage != null ? mediumImage.hashCode() : 0);
+        return 31 * result + (bigSquareImage != null ? bigSquareImage.hashCode() : 0);
     }
 
     public class OkUserLocation {

@@ -1,25 +1,24 @@
 package com.topface.topface.utils;
 
+import com.google.gson.reflect.TypeToken;
 import com.topface.topface.App;
 import com.topface.topface.utils.social.OkRequest;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
 import ru.ok.android.sdk.Odnoklassniki;
 import ru.ok.android.sdk.OkRequestMode;
-import rx.Observable;
-import rx.functions.Action0;
-import rx.functions.Action1;
 
 /**
  * Created by Петр on 03.04.2016.
  * Get user data in background
  */
-public class ReportPayment extends OkRequest {
+public class ReportPaymentRequest extends OkRequest<String> {
 
     private static final String SERVICE_NAME = "users.getCurrentUser";
     private static final String TRANSACTION_ID_PARAM = "trx_id";
@@ -30,7 +29,7 @@ public class ReportPayment extends OkRequest {
     private double mPrice;
     private String mCurrency;
 
-    public ReportPayment(@NotNull Odnoklassniki ok, String trxId, double price, String currency) {
+    public ReportPaymentRequest(@NotNull Odnoklassniki ok, String trxId, double price, String currency) {
         super(ok);
         mTxId = trxId;
         mPrice = price;
@@ -53,22 +52,8 @@ public class ReportPayment extends OkRequest {
     }
 
     @Override
-    protected void getObservable(Observable<String> observable) {
-        observable.subscribe(new Action1<String>() {
-            @Override
-            public void call(String s) {
-
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                callFail();
-            }
-        }, new Action0() {
-            @Override
-            public void call() {
-
-            }
-        });
+    protected Type getDataType() {
+        return new TypeToken<String>() {
+        }.getType();
     }
 }

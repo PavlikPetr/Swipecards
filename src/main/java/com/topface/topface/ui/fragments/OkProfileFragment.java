@@ -18,13 +18,14 @@ import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.social.CurrentUser;
+import com.topface.topface.utils.social.CurrentUserRequest;
 import com.topface.topface.utils.social.OkAuthorizer;
 import com.topface.topface.utils.social.OkUserData;
 
 import javax.inject.Inject;
 
 import rx.Subscription;
+import rx.functions.Action0;
 import rx.functions.Action1;
 
 public class OkProfileFragment extends ProfileInnerFragment {
@@ -40,8 +41,8 @@ public class OkProfileFragment extends ProfileInnerFragment {
         public void call(OkUserData okUserData) {
             if (mHandler != null && okUserData != null) {
                 showProgress(false);
-                mHandler.imageSrc.set(!TextUtils.isEmpty(okUserData.pic3)
-                        ? okUserData.pic3
+                mHandler.imageSrc.set(!TextUtils.isEmpty(okUserData.bigSquareImage)
+                        ? okUserData.bigSquareImage
                         : getEmptyPhotoRes(TextUtils.isEmpty(okUserData.gender)
                         ? CacheProfile.getProfile().sex == Profile.BOY
                         : okUserData.isMale()));
@@ -77,7 +78,22 @@ public class OkProfileFragment extends ProfileInnerFragment {
     @Override
     public void onResume() {
         super.onResume();
-        new CurrentUser(new OkAuthorizer().getOkAuthObj(App.getAppSocialAppsIds())).exec();
+        new CurrentUserRequest(new OkAuthorizer().getOkAuthObj(App.getAppSocialAppsIds())).getObservable().subscribe(new Action1<OkUserData>() {
+            @Override
+            public void call(OkUserData okUserData) {
+                mAppState.setData(okUserData);
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+
+            }
+        }, new Action0() {
+            @Override
+            public void call() {
+
+            }
+        });
         mSubscription = mAppState.getObservable(OkUserData.class).subscribe(mSubscriber);
     }
 

@@ -8,6 +8,7 @@ import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.data.social.AppSocialAppsIds;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.SessionConfig;
 
@@ -15,15 +16,26 @@ import org.json.JSONObject;
 
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import ru.ok.android.sdk.Odnoklassniki;
 import ru.ok.android.sdk.OkListener;
 import ru.ok.android.sdk.util.OkAuthType;
 import ru.ok.android.sdk.util.OkScope;
+import rx.functions.Action0;
+import rx.functions.Action1;
 
 /**
  * Class that starts Odnoklassniki authorization
  */
 public class OkAuthorizer extends Authorizer {
+
+    @Inject
+    TopfaceAppState mAppState;
+
+    public OkAuthorizer() {
+        App.from(App.getContext()).inject(this);
+    }
 
     public static String getOkId() {
         return App.getAppSocialAppsIds().okId;
@@ -52,28 +64,33 @@ public class OkAuthorizer extends Authorizer {
                     final OkAccessData okAccessData = JsonUtils.fromJson(json.toString(), OkAccessData.class);
                     if (!okAccessData.isEmpty()) {
                         Debug.log("Odnoklassniki auth success with token " + okAccessData.getToken());
-                        new CurrentUser(getOkAuthObj(ids)).setUserListener(new CurrentUser.OkRequestListener() {
+                        new CurrentUserRequest(getOkAuthObj(ids)).getObservable().subscribe(new Action1<OkUserData>() {
                             @Override
-                            public void onSuccess(OkUserData data) {
+                            public void call(OkUserData okUserData) {
+                                mAppState.setData(okUserData);
                                 AuthToken authToken = AuthToken.getInstance();
-
                                 authToken.saveToken(
                                         AuthToken.SN_ODNOKLASSNIKI,
-                                        data.uid,
+                                        okUserData.uid,
                                         okAccessData.getToken(),
                                         okAccessData.getSecretKey()
                                 );
                                 SessionConfig sessionConfig = App.getSessionConfig();
-                                sessionConfig.setSocialAccountName(data.name);
+                                sessionConfig.setSocialAccountName(okUserData.name);
                                 sessionConfig.saveConfig();
                                 sendTokenIntent(TOKEN_READY);
                             }
-
+                        }, new Action1<Throwable>() {
                             @Override
-                            public void onFail() {
+                            public void call(Throwable throwable) {
                                 sendTokenIntent(TOKEN_NOT_READY);
                             }
-                        }).exec();
+                        }, new Action0() {
+                            @Override
+                            public void call() {
+
+                            }
+                        });
                         sendTokenIntent(TOKEN_PREPARING);
                     } else {
                         Debug.log("Odnoklassniki auth data is empty");
