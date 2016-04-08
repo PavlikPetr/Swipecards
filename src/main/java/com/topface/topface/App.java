@@ -379,7 +379,6 @@ public class App extends ApplicationBase {
         mContext = getApplicationContext();
         LeakCanary.install(this);
         FlurryManager.init();
-        FlurryManager.sendAppStartEvent();
         // Отправка ивента о запуске приложения, если пользователь авторизован в FB
         if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
             FbAuthorizer.initFB();
