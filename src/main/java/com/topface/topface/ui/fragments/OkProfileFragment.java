@@ -18,13 +18,14 @@ import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.social.CurrentUser;
+import com.topface.topface.utils.social.CurrentUserRequest;
 import com.topface.topface.utils.social.OkAuthorizer;
 import com.topface.topface.utils.social.OkUserData;
 
 import javax.inject.Inject;
 
 import rx.Subscription;
+import rx.functions.Action0;
 import rx.functions.Action1;
 
 public class OkProfileFragment extends ProfileInnerFragment {
@@ -40,14 +41,15 @@ public class OkProfileFragment extends ProfileInnerFragment {
         public void call(OkUserData okUserData) {
             if (mHandler != null && okUserData != null) {
                 showProgress(false);
-                mHandler.imageSrc.set(!TextUtils.isEmpty(okUserData.pic1)
-                        ? okUserData.pic1
+                mHandler.imageSrc.set(!TextUtils.isEmpty(okUserData.bigSquareImage)
+                        ? okUserData.bigSquareImage
                         : getEmptyPhotoRes(TextUtils.isEmpty(okUserData.gender)
                         ? CacheProfile.getProfile().sex == Profile.BOY
                         : okUserData.isMale()));
                 mHandler.avatarVisibility.set(View.VISIBLE);
-                mHandler.nameVisibility.set(TextUtils.isEmpty(okUserData.name) ? View.GONE : View.VISIBLE);
-                mHandler.nameText.set(okUserData.name);
+                String name = TextUtils.isEmpty(okUserData.name) ? CacheProfile.first_name : okUserData.name;
+                mHandler.nameVisibility.set(TextUtils.isEmpty(name) ? View.GONE : View.VISIBLE);
+                mHandler.nameText.set(name);
             }
         }
     };
@@ -61,7 +63,6 @@ public class OkProfileFragment extends ProfileInnerFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.from(getActivity()).inject(this);
-        new CurrentUser(new OkAuthorizer().getOkAuthObj(App.getAppSocialAppsIds())).exec();
     }
 
     @Override
@@ -77,6 +78,22 @@ public class OkProfileFragment extends ProfileInnerFragment {
     @Override
     public void onResume() {
         super.onResume();
+        new CurrentUserRequest(new OkAuthorizer().getOkAuthObj(App.getAppSocialAppsIds())).getObservable().subscribe(new Action1<OkUserData>() {
+            @Override
+            public void call(OkUserData okUserData) {
+                mAppState.setData(okUserData);
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+
+            }
+        }, new Action0() {
+            @Override
+            public void call() {
+
+            }
+        });
         mSubscription = mAppState.getObservable(OkUserData.class).subscribe(mSubscriber);
     }
 
@@ -105,7 +122,6 @@ public class OkProfileFragment extends ProfileInnerFragment {
     }
 
     public static class OkProfileHandler {
-        private static final String GROUP_URL = "http://ok.ru/group/52746255532280";
 
         private IActivityDelegate mActivityDelegate;
 
@@ -123,7 +139,7 @@ public class OkProfileFragment extends ProfileInnerFragment {
 
         @SuppressWarnings("unused")
         public void onButtonShowGroupClick(View view) {
-            Utils.goToUrl(mActivityDelegate, GROUP_URL);
+            Utils.goToUrl(mActivityDelegate, CacheProfile.getOptions().aboutApp.url);
         }
 
     }

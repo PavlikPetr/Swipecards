@@ -1,128 +1,86 @@
 package com.topface.topface.utils.social;
 
+import android.text.TextUtils;
+
+import com.google.gson.reflect.TypeToken;
 import com.topface.framework.JsonUtils;
-import com.topface.framework.utils.Debug;
+import com.topface.topface.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Type;
 
 import ru.ok.android.sdk.Odnoklassniki;
-import ru.ok.android.sdk.OkRequestMode;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
+import rx.functions.Action0;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+
+import static com.topface.topface.utils.social.OkThrowable.OkThrowableType.EMPTY_RESPONSE;
 
 /**
  * Created by ppavlik on 05.04.16.
  * parrent for all request to OK API
  */
-public abstract class OkRequest {
+public abstract class OkRequest<T> {
 
-    public List<OkRequestListener> mListeners;
     private Odnoklassniki mOdnoklassniki;
-    private String mRequestMethod;
-    private Map<String, String> mParams;
-    private EnumSet<OkRequestMode> mMode;
+    private Subscriber mSubscriber;
 
-    public OkRequest(@NotNull Odnoklassniki ok, @NotNull String requestMethod) {
-        this(ok, requestMethod, null, null);
-    }
-
-    public OkRequest(@NotNull Odnoklassniki ok, @NotNull String requestMethod, @Nullable Map<String, String> params) {
-        this(ok, requestMethod, params, null);
-    }
-
-    public OkRequest(@NotNull Odnoklassniki ok, @NotNull String requestMethod, @Nullable Map<String, String> params, @Nullable EnumSet<OkRequestMode> mode) {
+    public OkRequest(@NotNull Odnoklassniki ok) {
         mOdnoklassniki = ok;
-        mRequestMethod = requestMethod;
-        mParams = params;
-        mMode = mode;
     }
 
-    @NotNull
-    private List<OkRequestListener> getListeners() {
-        if (mListeners == null) {
-            mListeners = new ArrayList<>();
-        }
-        return mListeners;
+    abstract protected String getRequest(Odnoklassniki ok) throws IOException;
+
+    public Observable<T> getObservable() {
+        return prepareObservable();
     }
 
-    public OkRequest setUserListener(OkRequestListener listener) {
-        getListeners().add(listener);
-        return this;
-    }
-
-    public void exec() {
-        Observable.create(new Observable.OnSubscribe<String>() {
+    private Observable<T> prepareObservable() {
+        return Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
+                mSubscriber = subscriber;
+                String res = Utils.EMPTY;
                 try {
-                    subscriber.onNext(mOdnoklassniki.request(mRequestMethod, mParams, mMode));
-                    subscriber.onCompleted();
+                    res = getRequest(mOdnoklassniki);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    subscriber.onError(new Throwable());
+                    subscriber.onError(e);
                 }
+                subscriber.onNext(res);
+                subscriber.onCompleted();
             }
-        })
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(new Action1<Throwable>() {
+        }).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread()).filter(new Func1<String, Boolean>() {
                     @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        onFail();
-                    }
-                })
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        Debug.log("Odnoklassniki " + mRequestMethod + " result: " + s);
-                        OkUserData data = JsonUtils.fromJson(s, OkUserData.class);
-                        if (data != null) {
-                            onSuccess(data);
-                        } else {
-                            onFail();
+                    public Boolean call(String s) {
+                        if (TextUtils.isEmpty(s) && mSubscriber != null) {
+                            mSubscriber.onError(new OkThrowable(EMPTY_RESPONSE));
                         }
+                        return !TextUtils.isEmpty(s);
+                    }
+                }).doOnCompleted(new Action0() {
+                    @Override
+                    public void call() {
+                        if (mSubscriber != null && !mSubscriber.isUnsubscribed()) {
+                            mSubscriber.unsubscribe();
+                        }
+                    }
+                }).map(new Func1<String, T>() {
+                    @Override
+                    public T call(String s) {
+                        Type type = getDataType();
+                        // хак, чтобы вернуть строку (json) без парсинга
+                        return type == new TypeToken<String>() {
+                        }.getType() ? (T) s : (T) JsonUtils.fromJson(s, type);
                     }
                 });
     }
 
-    private void onFail() {
-        for (OkRequestListener listener : getListeners()) {
-            if (listener != null) {
-                listener.onFail();
-            }
-        }
-        onDestroy();
-    }
-
-    private void onSuccess(@Nullable OkUserData data) {
-        for (OkRequestListener listener : getListeners()) {
-            if (listener != null) {
-                listener.onSuccess(data);
-            }
-        }
-        onDestroy();
-    }
-
-    private void onDestroy() {
-        getListeners().clear();
-    }
-
-    public interface OkRequestListener {
-
-        void onSuccess(@Nullable OkUserData data);
-
-        void onFail();
-
-    }
+    protected abstract Type getDataType();
 }

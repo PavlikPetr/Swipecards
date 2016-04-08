@@ -33,7 +33,7 @@ import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.geo.GeoLocationManager;
-import com.topface.topface.utils.social.CurrentUser;
+import com.topface.topface.utils.social.OkAuthorizer;
 import com.topface.topface.utils.social.OkUserData;
 
 import javax.inject.Singleton;
@@ -68,7 +68,7 @@ import dagger.Provides;
                 CountersDataProvider.class,
                 FindAndSendCurrentLocation.class,
                 AdjustManager.class,
-                CurrentUser.class,
+                OkAuthorizer.class,
                 OkProfileFragment.class
         },
         staticInjections = App.class
