@@ -5,14 +5,17 @@ import android.content.res.TypedArray;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
+import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IntDef;
 import android.support.annotation.StringRes;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.databinding.BuyButtonVer2Binding;
+import com.topface.topface.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -166,6 +169,9 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
      */
     public void setButtonTitle(String title) {
         mBtnHandler.buttonTextVisibility.set(View.VISIBLE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            title = title != null ? title.toUpperCase(App.getCurrentLocale()) : Utils.EMPTY;
+        }
         mBtnHandler.buttonText.set(title);
     }
 
