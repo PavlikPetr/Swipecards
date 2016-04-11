@@ -272,14 +272,14 @@ public class FlurryManager {
     }
 
     private static boolean sendEvent(String eventName, Map<String, String> eventParams) {
-        if (FlurryAgent.isSessionActive()) {
-            if (eventParams == null) {
-                FlurryAgent.logEvent(eventName);
-            } else {
-                FlurryAgent.logEvent(eventName, eventParams);
-            }
-            return true;
-        }
+//        if (FlurryAgent.isSessionActive()) {
+//            if (eventParams == null) {
+//                FlurryAgent.logEvent(eventName);
+//            } else {
+//                FlurryAgent.logEvent(eventName, eventParams);
+//            }
+//            return true;
+//        }
         return false;
     }
 }

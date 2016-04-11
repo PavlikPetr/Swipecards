@@ -108,7 +108,7 @@ public class EditTextFormDialog extends BaseEditDialog<FormItem> {
     }
 
     private void hideKeyboard(Dialog dialog) {
-        if (dialog != null) {
+        if (dialog != null && dialog.getCurrentFocus() != null) {
             Utils.hideSoftKeyboard(dialog.getContext(), dialog.getCurrentFocus().getWindowToken());
         }
     }
