@@ -874,4 +874,5 @@
     <string name="crown_liberty_description">Destaca-te facilmente na Pesquisa e nas Mensagens</string>
     <string name="like_liberty_title">Gostos</string>
     <string name="like_liberty_description">Vê quem gosta de ti</string>
+    <string name="vk_profile_invite_friends_error">O utilizador já não está a aceitar convites</string>
 </resources>

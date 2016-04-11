@@ -3,7 +3,6 @@ package com.topface.topface.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.adjust.sdk.AdjustReferrerReceiver;
 import com.appsflyer.MultipleInstallBroadcastReceiver;
@@ -18,7 +17,6 @@ import com.yandex.metrica.MetricaEventHandler;
 public class InstallReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e("Adjust","intent:" + intent);
         // Adjust
         new AdjustReferrerReceiver().onReceive(context, intent);
 

@@ -1045,4 +1045,5 @@
     <string name="crown_liberty_description">Сложно не заметить в поиске и сообщениях</string>
     <string name="like_liberty_title">Симпатии</string>
     <string name="like_liberty_description">Посмотрите, кому вы нравитесь</string>
+    <string name="vk_profile_invite_friends_error">Пользователь запретил отправлять ему приглашения</string>
 </resources>

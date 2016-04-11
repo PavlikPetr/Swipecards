@@ -469,8 +469,56 @@
             </intent-filter>
         </receiver>
 
+       <!--Пробуем избавиться от краша в ГП, временное решение-->
+        <!--<receiver-->
+        <!--android:name="com.topface.topface.receivers.InstallReceiver"-->
+        <!--android:enabled="true"-->
+        <!--android:exported="true"-->
+        <!--tools:ignore="ExportedReceiver">-->
+        <!--<intent-filter>-->
+        <!--<action android:name="com.android.vending.INSTALL_REFERRER" />-->
+        <!--</intent-filter>-->
+        <!--</receiver>-->
+
+
         <receiver
-            android:name="com.topface.topface.receivers.InstallReceiver"
+            android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.adjust.sdk.AdjustReferrerReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.sponsorpay.advertiser.InstallReferrerReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.yandex.metrica.MetricaEventHandler"
             android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedReceiver">
