@@ -850,4 +850,5 @@
     <string name="crown_liberty_description">Arama sonuçlarında ve mesajlar sayfasına öne çık</string>
     <string name="like_liberty_title">Beğeni</string>
     <string name="like_liberty_description">Seni kimler beğenmiş, öğren</string>
+    <string name="vk_profile_invite_friends_error">Bu kullanıcı artık davetiye kabul etmiyor</string>
 </resources>

@@ -51,6 +51,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     private final static String VK_FRIENDS_AVAILABLE_COUNT = "vk_friends_available_count";
     private final static String VK_FRIENDS_CURRENT_COUNT = "vk_friends_current_count";
     private static final String PAGE_NAME = "vkinvites";
+    private static final int VK_ERROR_ACCESS_DENIED = 15;
 
     private final static String USER_ID_VK_PARAM = "user_id";
 
@@ -151,11 +152,11 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
             if (userId != 0) {
                 mAdapter.setButtonState(userId, true);
             }
-            if (error != null && error.errorCode == VKError.VK_API_ERROR && error.apiError.errorCode == 15 && mAdapter != null && userId != 0) {
+            if (error != null && error.errorCode == VKError.VK_API_ERROR && error.apiError.errorCode == VK_ERROR_ACCESS_DENIED && mAdapter != null && userId != 0) {
                 mAdapter.removeUserById(userId);
             }
             if (error != null && error.errorCode != VKError.VK_CANCELED) {
-                Toast.makeText(App.getContext(), R.string.general_data_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getContext(), error.apiError.errorCode != VK_ERROR_ACCESS_DENIED ? R.string.general_data_error : R.string.vk_profile_invite_friends_error, Toast.LENGTH_SHORT).show();
             }
         }
     };

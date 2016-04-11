@@ -757,4 +757,5 @@
   <string name="crown_liberty_description">Falle sowohl bei Suchergebnissen als auch in deinen Nachrichten auf</string>
   <string name="like_liberty_title">Likes</string>
   <string name="like_liberty_description">Erfahre, wer dich mag</string>
+  <string name="vk_profile_invite_friends_error">Der User akzeptiert keine Einladungen mehr</string>
 </resources>
