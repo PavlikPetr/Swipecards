@@ -213,9 +213,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!isShowKeyboardInChat()) {
-            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        }
+        // временное решение, клавиатуру не показываем при открытии чата
+//        if (!isShowKeyboardInChat()) {
+//            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+//        }
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         DateUtils.syncTime();
         setRetainInstance(true);
         String text = UserNotification.getRemoteInputMessageText(getActivity().getIntent());
@@ -707,10 +709,10 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         if (!data.more && !pullToRefresh) mAdapter.forceStopLoader();
                     }
                 }
-                if (mAdapter!=null && type==ChatUpdateType.UPDATE_COUNTERS){
+                if (mAdapter != null && type == ChatUpdateType.UPDATE_COUNTERS) {
                     //получили входящее сообщение, если их стало 2, а исходящий 2 и более,
                     // значит у нас сформировался полноценный диалог с пользователем
-                    if (mAdapter.getOutboxMessageCount()==2 && mAdapter.getInboxMessageCount()>=2){
+                    if (mAdapter.getOutboxMessageCount() == 2 && mAdapter.getInboxMessageCount() >= 2) {
                         FlurryManager.sendFullDialogEvent();
                     }
                 }
@@ -990,7 +992,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 if (mAdapter != null && cancelable) {
                     mAdapter.replaceMessage(messageItem, data, mListView.getRefreshableView());
                     // в момент успешной отправки сообщения, проверяем состоялся ли полноценный диалог
-                    if (mAdapter.getInboxMessageCount()==2 && mAdapter.getOutboxMessageCount()>=2){
+                    if (mAdapter.getInboxMessageCount() == 2 && mAdapter.getOutboxMessageCount() >= 2) {
                         FlurryManager.sendFullDialogEvent();
                     }
                     onNewMessageAdded(data);

@@ -118,14 +118,14 @@ public class FlurryManager {
     public static void sendAuthEvent(String socialName) {
         Map<String, String> socialType = new HashMap<>();
         socialType.put(SOCIAL_TYPE_PARAM, socialName);
-        FlurryAgent.logEvent(AUTH_EVENT, socialType);
+        sendEvent(AUTH_EVENT, socialType);
     }
 
     /**
      * Send logout event
      */
     public static void sendLogoutEvent() {
-        FlurryAgent.logEvent(LOGOUT_EVENT);
+        sendEvent(LOGOUT_EVENT);
     }
 
     /**
@@ -136,28 +136,28 @@ public class FlurryManager {
     public static void sendExternalUrlEvent(String url) {
         Map<String, String> externalUrl = new HashMap<>();
         externalUrl.put(EXTERNAL_URL_PARAM, url);
-        FlurryAgent.logEvent(EXTERNAL_URL_EVENT, externalUrl);
+        sendEvent(EXTERNAL_URL_EVENT, externalUrl);
     }
 
     /**
      * Send App start
      */
     public static void sendAppStartEvent() {
-        FlurryAgent.logEvent(APP_START_EVENT);
+        sendEvent(APP_START_EVENT);
     }
 
     /**
      * Send App go to background mode
      */
     public static void sendAppInBackgroundEvent() {
-        FlurryAgent.logEvent(APP_BACKGROUND_EVENT);
+        sendEvent(APP_BACKGROUND_EVENT);
     }
 
     /**
      * Send App go to foreground mode
      */
     public static void sendAppInForegroundEvent() {
-        FlurryAgent.logEvent(APP_FOREGROUND_EVENT);
+        sendEvent(APP_FOREGROUND_EVENT);
     }
 
     /**
@@ -169,21 +169,21 @@ public class FlurryManager {
         Map<String, String> invites = new HashMap<>();
         invites.put(INVITES_COUNT_PARAM, String.valueOf(count));
         invites.put(INVITES_TYPE_PARAM, type.getType());
-        FlurryAgent.logEvent(INVITE_EVENT, invites);
+        sendEvent(INVITE_EVENT, invites);
     }
 
     /**
      * Send event - Dating list is empty
      */
     public static void sendEmptyDatingListEvent() {
-        FlurryAgent.logEvent(EMPTY_SEARCH_EVENT);
+        sendEvent(EMPTY_SEARCH_EVENT);
     }
 
     /**
      * Send event - Filter changed
      */
     public static void sendFilterChangedEvent() {
-        FlurryAgent.logEvent(FILTER_CHANGED_EVENT);
+        sendEvent(FILTER_CHANGED_EVENT);
     }
 
     /**
@@ -191,7 +191,7 @@ public class FlurryManager {
      */
     public static void sendPageOpenEvent(String name) {
         if (!TextUtils.isEmpty(name)) {
-            FlurryAgent.logEvent(String.format(PAGE_NAME_TEMPLATE, name.toLowerCase()));
+            sendEvent(String.format(PAGE_NAME_TEMPLATE, name.toLowerCase()));
         }
     }
 
@@ -207,7 +207,7 @@ public class FlurryManager {
         purchase.put(PRODUCT_ID_PARAM, id);
         purchase.put(PRODUCT_PRICE_PARAM, String.valueOf(price));
         purchase.put(PRODUCT_CURRENCY_PARAM, currency);
-        FlurryAgent.logEvent(PURCHASE_EVENT, purchase);
+        sendEvent(PURCHASE_EVENT, purchase);
     }
 
     /**
@@ -220,7 +220,7 @@ public class FlurryManager {
         Map<String, String> payWall = new HashMap<>();
         payWall.put(PAY_WALL_NAME_PARAM, popupName);
         payWall.put(PAY_WALL_ACTION_PARAM, action.getAction());
-        FlurryAgent.logEvent(PAY_WALL_EVENT, payWall);
+        sendEvent(PAY_WALL_EVENT, payWall);
     }
 
     /**
@@ -233,14 +233,14 @@ public class FlurryManager {
         Map<String, String> payWall = new HashMap<>();
         payWall.put(PRODUCT_TYPE_PARAM, product.getProductType());
         payWall.put(PRICE_PARAM, String.valueOf(coinsCount));
-        FlurryAgent.logEvent(SPEND_COINS_EVENT, payWall);
+        sendEvent(SPEND_COINS_EVENT, payWall);
     }
 
     /**
      * Send event - get new full dialog (2 input message and 2 output)
      */
     public static void sendFullDialogEvent() {
-        FlurryAgent.logEvent(FULL_DIALOG_EVENT);
+        sendEvent(FULL_DIALOG_EVENT);
     }
 
     /**
@@ -256,7 +256,7 @@ public class FlurryManager {
             ref = put(ref, NETWORK_REFERRER_PARAM, attribution.network);
             ref = put(ref, TRACKER_NAME_REFERRER_PARAM, attribution.trackerName);
             ref = put(ref, TRACKER_TOKEN_REFERRER_PARAM, attribution.trackerToken);
-            FlurryAgent.logEvent(REFERRER_INSTALL_EVENT, ref);
+            sendEvent(REFERRER_INSTALL_EVENT, ref);
         }
     }
 
@@ -265,5 +265,21 @@ public class FlurryManager {
             ref.put(key, value);
         }
         return ref;
+    }
+
+    private static boolean sendEvent(String eventName) {
+        return sendEvent(eventName, null);
+    }
+
+    private static boolean sendEvent(String eventName, Map<String, String> eventParams) {
+        if (FlurryAgent.isSessionActive()) {
+            if (eventParams == null) {
+                FlurryAgent.logEvent(eventName);
+            } else {
+                FlurryAgent.logEvent(eventName, eventParams);
+            }
+            return true;
+        }
+        return false;
     }
 }
