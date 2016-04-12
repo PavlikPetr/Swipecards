@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
@@ -234,7 +236,7 @@ public class AuthToken {
                 Utils.AMPERSAND + getTokenKey();
     }
 
-    public static class TokenInfo implements Cloneable {
+    public static class TokenInfo implements Cloneable, Parcelable {
         private String mSnType;
         private String mUserSocialId;
         private String mTokenKey;
@@ -251,6 +253,27 @@ public class AuthToken {
             mLogin = Utils.EMPTY;
             mPassword = Utils.EMPTY;
         }
+
+        protected TokenInfo(Parcel in) {
+            mSnType = in.readString();
+            mUserSocialId = in.readString();
+            mTokenKey = in.readString();
+            mExpiresIn = in.readString();
+            mLogin = in.readString();
+            mPassword = in.readString();
+        }
+
+        public static final Creator<TokenInfo> CREATOR = new Creator<TokenInfo>() {
+            @Override
+            public TokenInfo createFromParcel(Parcel in) {
+                return new TokenInfo(in);
+            }
+
+            @Override
+            public TokenInfo[] newArray(int size) {
+                return new TokenInfo[size];
+            }
+        };
 
         public String getLogin() {
             return mLogin;
@@ -300,6 +323,21 @@ public class AuthToken {
 
         public String getUserTokenUniqueId() {
             return mSnType.equals(SN_TOPFACE) ? mLogin : mUserSocialId;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(mSnType);
+            dest.writeString(mUserSocialId);
+            dest.writeString(mTokenKey);
+            dest.writeString(mExpiresIn);
+            dest.writeString(mLogin);
+            dest.writeString(mPassword);
         }
     }
 }

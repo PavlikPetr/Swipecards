@@ -533,7 +533,7 @@ public class AddPhotoHelper {
                     public void handleMessage(Message msg) {
                         super.handleMessage(msg);
                         if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
-                            handlePhotoMessage(msg, mContext);
+                            handlePhotoMessage(msg);
                         }
                     }
                 });
@@ -546,8 +546,8 @@ public class AddPhotoHelper {
         mOnDialogCancelListener = listener;
     }
 
-    public static void handlePhotoMessage(Message msg, Context mContext) {
-        Profile profile = App.from(mContext).getProfile();
+    public static void handlePhotoMessage(Message msg) {
+        Profile profile = App.get().getProfile();
         if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
             Photo photo = (Photo) msg.obj;
             // ставим фото на аватарку только если она едиснтвенная

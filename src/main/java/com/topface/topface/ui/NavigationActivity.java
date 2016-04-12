@@ -120,7 +120,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            AddPhotoHelper.handlePhotoMessage(msg, NavigationActivity.this);
+            AddPhotoHelper.handlePhotoMessage(msg);
         }
     };
     private OnNextActionListener mSelectPhotoNextActionListener;

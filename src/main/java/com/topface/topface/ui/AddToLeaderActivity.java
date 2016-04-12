@@ -83,7 +83,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            AddPhotoHelper.handlePhotoMessage(msg, AddToLeaderActivity.this);
+            AddPhotoHelper.handlePhotoMessage(msg);
         }
     };
     Photos mPhotos = null;
