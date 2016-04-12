@@ -9,6 +9,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
+import com.topface.topface.utils.social.AuthToken;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +35,7 @@ public class FlurryManager {
     private static final String FULL_DIALOG_EVENT = "full_dialog";
     private static final String REFERRER_INSTALL_EVENT = "referrer_install";
 
+    private static final String USER_ID_PARAM = "user_id";
     private static final String INVITES_TYPE_PARAM = "invites_type";
     private static final String SOCIAL_TYPE_PARAM = "social_type";
     private static final String EXTERNAL_URL_PARAM = "external_url";
@@ -54,6 +56,27 @@ public class FlurryManager {
     private static final String TRACKER_NAME_REFERRER_PARAM = "tracker_name";
 
     private static final String PAGE_NAME_TEMPLATE = "page.%s";
+
+    private static final int EMPTY_USER_ID_HASH = 0;
+
+    private static int mUserIdHash = EMPTY_USER_ID_HASH;
+
+    public static int getUserIdHash() {
+        int uid = CacheProfile.uid;
+        if (AuthToken.getInstance().isEmpty() || uid == 0) {
+            dropUserIdHash();
+            return EMPTY_USER_ID_HASH;
+        } else {
+            if (mUserIdHash == EMPTY_USER_ID_HASH) {
+                mUserIdHash = String.valueOf(CacheProfile.uid).hashCode();
+            }
+            return mUserIdHash;
+        }
+    }
+
+    public static void dropUserIdHash() {
+        mUserIdHash = EMPTY_USER_ID_HASH;
+    }
 
     public enum InvitesType {
         PHONE_BOOK_INVITES("phone_book"), SMS_INVITES("send_sms"), VK_INVITES("vk");
@@ -273,7 +296,14 @@ public class FlurryManager {
 
     private static boolean sendEvent(String eventName, Map<String, String> eventParams) {
         if (FlurryAgent.isSessionActive()) {
+            int hash = getUserIdHash();
             if (eventParams == null) {
+                eventParams = new HashMap<>();
+            }
+            if (hash != EMPTY_USER_ID_HASH) {
+                eventParams.put(USER_ID_PARAM, String.valueOf(getUserIdHash()));
+            }
+            if (eventParams.isEmpty()) {
                 FlurryAgent.logEvent(eventName);
             } else {
                 FlurryAgent.logEvent(eventName, eventParams);
