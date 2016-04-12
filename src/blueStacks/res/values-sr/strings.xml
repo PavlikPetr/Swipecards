@@ -8,11 +8,9 @@
   <string name="general_disallow">Забранити</string>
   <string name="general_allow">Дозволити</string>
   <string name="notification_denied_popup_title">Дозволите обавештења како бисте сазнали о нови
-    порукама, свиђањима и осталим вестима.
-  </string>
+        порукама, свиђањима и осталим вестима.</string>
   <string name="notification_popup_title">Дозволите нам да Вам пошаљемо обавештења како бисте
-    одмах сазнали о свиђањима, дивљењима и порукама.
-  </string>
+        одмах сазнали о свиђањима, дивљењима и порукама.</string>
   <string name="email_successfully_changed">Ваша адреса е-поште је успешно промењена</string>
   <string name="auth_vk_name">ВКонтакте</string>
   <string name="dating_switch_button">Још…</string>
@@ -28,9 +26,7 @@
   <string name="filter_city_age_parameters">Године и град</string>
   <string name="filter_select_city">Изабери град</string>
   <string name="edit_block_photo">Фотографије</string>
-  <string name="dashbrd_popup_rating">Свиђа Вам се наша апликација? Подигните наш рејтинг! Што је
-    већи рејтинг, више људи ћеш срести у Spark!
-  </string>
+  <string name="dashbrd_popup_rating">Свиђа Вам се наша апликација? Подигните наш рејтинг! Што је већи рејтинг, више људи ћеш срести у Spark!</string>
   <string name="dashbrd_popup_title">Оцени ме</string>
   <string name="dashbrd_popup_cancel">Не питај више</string>
   <string name="dashbrd_popup_rate">Оцени</string>
@@ -55,11 +51,8 @@
   <string name="general_complaint">Жалите се</string>
   <string name="general_type_complain">Предмет жалбе</string>
   <string name="address_book_access_error">Ова апликација нема приступ Вашим контактима. Можете
-    дозволити приступ преко Подешавања приватности на свом уређају.
-  </string>
-  <string name="camera_access_error">Апликација нема приступ камери. Можете дати приступ из
-    Подешавања приватности на свом уређају.
-  </string>
+        дозволити приступ преко Подешавања приватности на свом уређају.</string>
+  <string name="camera_access_error">Апликација нема приступ камери. Можете дати приступ из Подешавања приватности на свом уређају.</string>
   <string name="profile_deleted_user">Корисник је уклоњен.</string>
   <string name="filter_main_parameters">Заинтересован сам за</string>
   <string name="dating_prev_button_ext">Претходни</string>
@@ -77,24 +70,20 @@
   <string name="edit_my_photos">Моје фотографије</string>
   <string name="general_search_empty_title">Жао нам је, ништа није пронађено. :-(</string>
   <string name="general_search_empty_text">Можете да претражите поново, или да промените
-    подешавања филтера.
-  </string>
+        подешавања филтера.</string>
   <string name="map_title">Мапа</string>
   <string name="general_buying">Купи новчиће и свиђања</string>
   <string name="popup_version_title">Доступна је нова верзија апликације</string>
   <string name="popup_version_message">Време је да ажурирате своју верзију апликације!</string>
   <string name="leaders_select_photo_info">Одаберите најупечатљивију фотографију! Не могу се
-    одабрати фотографије са ниским рејтингом.
-  </string>
+        одабрати фотографије са ниским рејтингом.</string>
   <string name="map_popup_address">Адреса</string>
   <string name="black_list_info">Додали сте саговорника на црну листу. То можете изменити у свом
-    профилу, или у подешаваниима VIP-статуса
-  </string>
+        профилу, или у подешаваниима VIP-статуса</string>
   <string name="black_list_activation">Активирајте VIP-статус и искористите црну листу.</string>
   <string name="buying_total">Укупно</string>
   <string name="we_dont_detect_your_city">Да бисмо нашли људе у близини, морамо знати где се
-    налазите. Молимо Вас да наведете свој град.
-  </string>
+        налазите. Молимо Вас да наведете свој град.</string>
   <string name="confirm_email">Молимо Вас да потврдите адресу е-поште.</string>
   <string name="password_sent">Нова лозинка је послата на адресу Ваше е-поште</string>
   <string name="buy_vip_month_one">%1$d месеци по %2$.2f %3$@ по месецу</string>
@@ -134,8 +123,7 @@
   <string name="pincode_forget">Заборавили сте свој PIN код?</string>
   <string name="pincode_auth_input">Треба да унесете корисничко име и лозинку.</string>
   <string name="pincode_will_be_reset">Ако ауторизација буде успешна, сва подешавања апликације ће
-    бити ресетована.
-  </string>
+        бити ресетована.</string>
   <plurals name="pincode_interval">
     <item quantity="few">%d мин.</item>
     <item quantity="zero">одмах после затварања</item>
@@ -155,8 +143,7 @@
   <string name="general_back">Назад</string>
   <string name="general_server_error">Грешка. Покушајте поново касније.</string>
   <string name="general_non_exist_photo_error">Нисмо могли да наставимо јер је фотографија
-    обрисана.
-  </string>
+        обрисана.</string>
   <string name="general_data_error">Грешка. Молимо, покушајте опет.</string>
   <string name="general_internet_off">Нема интерент конекције. Молимо, покушајте поново.</string>
   <string name="general_msg_copied">Текст је копиран</string>
@@ -193,8 +180,7 @@
   <string name="dating_header_guys">Момци од %1$d до %2$d</string>
   <string name="dating_skip_button">Следећа</string>
   <string name="message_too_long">Порука коју сте унели је превише дугачка. Број симбола не може
-    прећи %d.
-  </string>
+        прећи %d.</string>
   <string name="chat_gift_in">Добили сте поклон.</string>
   <string name="chat_gift_out">Поклон је послат.</string>
   <string name="chat_like_in">Некоме се свиђате!</string>
@@ -231,8 +217,7 @@
   </plurals>
   <plurals name="buying_unlock_likes_you_need_coins">
     <item quantity="few">Како бисте могли да видите коме се свиђате, набавите још %d новчића</item>
-    <item quantity="other">Како бисте могли да видите коме се свиђате, набавите још %d новчића
-    </item>
+    <item quantity="other">Како бисте могли да видите коме се свиђате, набавите још %d новчића</item>
     <item quantity="one">Како бисте могли да видите коме се свиђате, набавите још %d новчић</item>
   </plurals>
   <plurals name="buying_leaders_you_need_coins">
@@ -267,8 +252,7 @@
   <string name="edit_name">Име</string>
   <string name="edit_age">Године</string>
   <string name="edit_age_error">Да бисте користили апликацију, морате имати између %1$d и %2$d
-    година.
-  </string>
+        година.</string>
   <string name="edit_status">Статус</string>
   <string name="edit_set_as_main">Подеси као главну</string>
   <string name="edit_delete">Обрисати</string>
@@ -295,8 +279,7 @@
   <string name="settings_help">Помоћ</string>
   <string name="settings_faq">Питања и одговори</string>
   <string name="settings_faq_title">Можда је Ваш проблем већ решен. Молимо, погледајте «Питања и
-    одговоре»
-  </string>
+        одговоре»</string>
   <string name="settings_account">Налог</string>
   <string name="settings_feedback">Остави повратну информацију</string>
   <string name="settings_about">О програму</string>
@@ -308,8 +291,7 @@
   <string name="settings_code_confirmation">Пошаљи код за потврду</string>
   <string name="settings_email_was_confirmed">Већ потврђено</string>
   <string name="settings_email_was_confirmed_textview_text">Ако сте већ потврдили адресу своје
-    е-поште преко интернета
-  </string>
+        е-поште преко интернета</string>
   <string name="settings_code_confirmation_hint">Код за потврду</string>
   <string name="settings_logout_msg">Да ли заиста желите да се одјавите?</string>
   <string name="settings_error_message">Обавештење о грешци</string>
@@ -336,11 +318,9 @@
     <item quantity="one">%d фотографија</item>
   </plurals>
   <string name="general_edit_profile_message">Молимо Вас да попуните сва неопходна поља на
-    профилу
-  </string>
+        профилу</string>
   <string name="general_search_null_response_error">Ништа није пронађено. Покушајте да измените
-    филтер.
-  </string>
+        филтер.</string>
   <string name="change_filters">Промени филтере</string>
   <string name="reset_filter">Ресетуј</string>
   <string name="general_sex">Пол</string>
@@ -353,11 +333,9 @@
   <string name="rate_popup_set_rate">Оцени</string>
   <string name="rate_popup_later">Питајте поново касније</string>
   <string name="rate_popup_cancel">Не, хвала</string>
-  <string name="rate_popup_error">Молимо, реците нам колико звездица заслужује наша апликација!
-  </string>
+  <string name="rate_popup_error">Молимо, реците нам колико звездица заслужује наша апликација!</string>
   <string name="feedback_popup_title">Дали сте нам ниску оцену. Кажите нам шта Вам се није свиђало
-    у апликацији. Помозите нам да постанемо бољи. Хвала Вам!
-  </string>
+        у апликацији. Помозите нам да постанемо бољи. Хвала Вам!</string>
   <string name="settings_melody">Тон обавештења</string>
   <string name="settings_loading_photo">Фотографије су већ учитане</string>
   <string name="edit_refresh_status">Обнови статус</string>
@@ -379,58 +357,44 @@
   <string name="black_list_delete">Уклонити из црне листе</string>
   <string name="vip_buy_vip">Куповина VIP-статуса</string>
   <string name="vip_state_off">Ваш VIP-статус није активиран.</string>
-  <string name="vip_info_guest">Сазнајте ко је заинтересован за Вас - погледајте своје госте!
-  </string>
+  <string name="vip_info_guest">Сазнајте ко је заинтересован за Вас - погледајте своје госте!</string>
   <string name="vip_info_invisible">Останите непримећени док посећујете туђе странице користећи
-    режим \&quot;Невидљив\&quot;</string>
+        режим \&quot;Невидљив\&quot;</string>
   <string name="vip_info_message">Добијте више пажње - ваше поруке ће се издвајати на општој
-    позадини!
-  </string>
-  <string name="vip_info_blackList">Отарасите се непожељних уз помоћ \&quot;Црне
-    листе\&quot;</string>
+        позадини!</string>
+  <string name="vip_info_blackList">Отарасите се непожељних уз помоћ \&quot;Црне листе\&quot;</string>
   <string name="vip_info_vip">Уз VIP-статус ћете се истицати из гомиле у секцији \&quot;Познанства\&quot;
-    као и на свом профилу
-  </string>
+        као и на свом профилу</string>
   <string name="buying_vip_status">Купи VIP-статус</string>
   <string name="edit_my_city">Мој град</string>
-  <string name="settings_feedback_email">Оставите адресу своје е-поште да бисте добили одговор од
-    нас.
-  </string>
+  <string name="settings_feedback_email">Оставите адресу своје е-поште да бисте добили одговор од нас.</string>
   <string name="settings_invalid_email">Неважећа адреса е-поште</string>
   <string name="chat_write_message">Написати поруку</string>
   <string name="dating_message">Порука…</string>
   <string name="buying_sympathies">Купи свиђања</string>
   <string name="general_reconnect_social">Не можемо се повезати на друштвену мрежу. Молимо,
-    покушајте поново касније.
-  </string>
+        покушајте поново касније.</string>
   <string name="general_block">Закључати</string>
   <string name="general_buying_disabled">У овом тренутку куповина није могућа</string>
   <string name="ban_flood_detected">Веома често шаљете упите серверу. Сачекајте неколико тренутака
-    пре него што наставите.
-  </string>
+        пре него што наставите.</string>
   <string name="general_maintenance">На серверу се обављају технички радови и Ваш захтев не може
-    бити обрађен. Молимо, покушајте поново касније.
-  </string>
+        бити обрађен. Молимо, покушајте поново касније.</string>
   <string name="virus_chat_btn">Добиј Свиђања</string>
   <string name="profile_ask_sent">Захтев је послат.</string>
   <string name="virus_error">Током једног дана пријатељ Вам може дати само 1 Свиђање! Молимо,
-    покушајте сутра поново!
-  </string>
+        покушајте сутра поново!</string>
   <string name="popup_version_update">Ажурирај</string>
   <string name="popup_version_cancel">Подсети ме касније</string>
   <string name="general_version_not_supported">Ваша верзија апликације је застарела и више није
-    подржана. Молимо да је ажурирате.
-  </string>
+        подржана. Молимо да је ажурирате.</string>
   <string name="default_price_format">Укупно: %2f USD</string>
   <string name="default_price_format_extended">Укупно: %1$.2f %2$s</string>
-  <string name="leaders_pick_condition">Не можете одабрати фотографију чији је рејтинг нижи од
-    %d%%:
-  </string>
+  <string name="leaders_pick_condition">Не можете одабрати фотографију чији је рејтинг нижи од %d%%:</string>
   <string name="general_gift">Поклон</string>
   <string name="user_actions_chat">Ћаскање</string>
   <string name="profile_edit_age_ranges">Године морају бити у граници између 16 и 99. Молимо да
-    унесете тачан број и покушате поново.
-  </string>
+        унесете тачан број и покушате поново.</string>
   <string name="wrong_password_format">Неисправан формат лозинке</string>
   <string name="edit_value_error">Вредност море бити између %1$d и %2$d</string>
   <string name="sign_in">Пријави се</string>
@@ -446,8 +410,7 @@
   <string name="start_communication">Започни ћаскање</string>
   <string name="birthdate">ДР</string>
   <string name="birthdate_confirm">Морате да наведете своје године како бисте могли да упознате
-    људе.
-  </string>
+        људе.</string>
   <string name="set_birthdate">Наведи године</string>
   <string name="welcome_to_topface">Добродошли у Spark!</string>
   <string name="im_boy">Ја сам момак</string>
@@ -459,22 +422,18 @@
   <string name="empty_fields">Мисте попунили сва поља.</string>
   <string name="email_already_registered">Жао нам је, ове адреса е-поште већ постоји.</string>
   <string name="enter_email_from_registration">Унесите адресу е-поште коју сте навели приликом
-    регистрације.
-  </string>
+        регистрације.</string>
   <string name="default_photo_upload">Пренос фотографија</string>
   <string name="default_photo_upload_error">Грешка у преносу</string>
   <string name="default_photo_upload_complete">Пренос је завршен!</string>
   <string name="general_error_try_again_later">Не можемо се повезати на Spark. Молимо, покушајте
-    поново касније.
-  </string>
+        поново касније.</string>
   <string name="search_city_by_name">Тражи по имену града</string>
   <string name="gallery">Фото галерија</string>
   <string name="no_photo_take_photo">Са вама се нико не може упознати! Направите фотографију или
-    одаберите постојећу из фото албума
-  </string>
+        одаберите постојећу из фото албума</string>
   <string name="photo_for_avatar">Фотографија је спремна за слање у Ваш профил! Ово ја Ваша прва
-    фотографија и она ће бити искоришћена као ваша профилна слика.
-  </string>
+        фотографија и она ће бити искоришћена као ваша профилна слика.</string>
   <string name="add_photo_before">Прво морате да додате фотографију</string>
   <string name="change_email">Промени адресу е-поште</string>
   <string name="send_confirmation_email">Послати потврду на е-пошту</string>
@@ -500,16 +459,13 @@
   <string name="we_detect_your_city">Одредили смо ваш град као:</string>
   <string name="reselect_city">Одаберите други град:</string>
   <string name="choose_cool_photo">Одаберите своју најбољу фотографију и статус који одражава Ваше
-    расположење!
-  </string>
+        расположење!</string>
   <string name="email_confirmed">адреса е-поште је потврђена!</string>
   <string name="sympathy_sended">Свиђање је послато.</string>
-  <string name="general_photo_deleted">Ваша фотографија је уклоњена јер крши једно од правила.
-  </string>
+  <string name="general_photo_deleted">Ваша фотографија је уклоњена јер крши једно од правила.</string>
   <string name="general_change">Промени</string>
   <string name="user_does_not_have_gifts">Овај корисник још нема поклоне, дајте му први и
-    приметиће Вас!
-  </string>
+        приметиће Вас!</string>
   <string name="status_is_empty">Ваш статус је празан</string>
   <string name="you_dont_have_gifts_yet">Још увек немате поклоне.</string>
   <string name="buy_sympathies">Купи свиђања</string>
@@ -529,22 +485,18 @@
   <string name="user_is_banned">Корисник је банован.</string>
   <string name="profile_empty_name">Поље за име не може бити празно.</string>
   <string name="general_wrong_photo_upload">Ваша фотографија не одговара прописима. Покушајте да
-    направите још једну.
-  </string>
+        направите још једну.</string>
   <string name="general_input_email">Унесите адресу Ваше е-поште</string>
   <string name="cant_delete_fake_item">Ова порука још није послата, не можете је уклонити.
-    Покушајте поново касније.
-  </string>
+        Покушајте поново касније.</string>
   <string name="vip_stop_ads">Само ћаскање, ништа друго. VIP корисници неће видети огласе!</string>
   <string name="friend_email_hint">Унесите адресу е-поште или број телефона Вашег пријатеља</string>
   <string name="general_add">Додати</string>
   <string name="general_invite_friends">Позови пријатеље</string>
   <string name="general_rest_contacts">Остало Вам је %d контаката</string>
-  <string name="invite_friends_title">Позови све пријатеље из свог телефонског именика у Spark
-  </string>
+  <string name="invite_friends_title">Позови све пријатеље из свог телефонског именика у Spark</string>
   <string name="invalid_contacts">Неки контакти су били неисправни. Молимо, пошаљите исправне
-    контакте.
-  </string>
+        контакте.</string>
   <plurals name="vip_status_period">
     <item quantity="few">Добили сте VIP-статус на %d дана</item>
     <item quantity="other">Добили сте VIP-статус на %d дана</item>
@@ -566,32 +518,25 @@
     <item quantity="one">Добиј VIP бесплатно за %d позив</item>
   </plurals>
   <string name="buy_status_and_watch_your_fans">Купите VIP-статус и сазнајте ко Вас је додао у
-    омиљене.
-  </string>
+        омиљене.</string>
   <string name="add_bookmarks_to_be_connected">Додајте нове познанике овде и нећете изгубити везу
-    са њима.
-  </string>
+        са њима.</string>
   <string name="nobody_chat_with_you_sympathies_will_help">Још Вам нико није писао. Свиђања ће Вам
-    помоћи да нађете саговорника
-  </string>
+        помоћи да нађете саговорника</string>
   <string name="rate_and_have_mutual_or_buy_and_chat">Пошаљите свиђања и добијте их заузврат.
-    Започните ћаскање одмах!
-  </string>
+        Започните ћаскање одмах!</string>
   <string name="with_vip_find_your_visitors">Са VIP-статусом можете сазнати ко је посећивао на
-    Вашу страницу
-  </string>
+        Вашу страницу</string>
   <string name="on_avatar">Подесите као слику профила</string>
   <string name="your_avatar">Слика профила</string>
   <string name="avatar_set_successfully">Слика профила је успешно постављена</string>
   <string name="incorrect_photo">Неподесна фотографија. Покушајте да поставите другу.</string>
   <string name="incorrect_photo_format">Неподесан формат фотографије. Покушајте да поставите .jpg
-    или .png формат
-  </string>
+        или .png формат</string>
   <string name="incorrect_photo_size">Неодговарајућа величина фотографије</string>
   <string name="input_contact_name">Унеси име контакта</string>
   <string name="incorrect_locale">Ако желите да прочитамо Ваше критике, напишите је на руском или
-    енглеском језику.
-  </string>
+        енглеском језику.</string>
   <string name="complain_photo_header">Неодговарајућа фотографија</string>
   <string name="complain_msg_header">Неодговарајућа порука</string>
   <string name="complain_info_header">Неодговарајућа информација</string>
@@ -600,70 +545,53 @@
   <string name="complain_type_picture">Није слика</string>
   <string name="complain_type_fake_user">Позната особа</string>
   <string name="complain_type_spam_msg">Пословне понуде, непожељне поруке, огласи, везе,
-    телефони
-  </string>
-  <string name="complain_type_spam_profile">Поља \&quot;статус\&quot; и/или \&quot;о мени\&quot;
-    садрже пословну
-    понуду
-  </string>
-  <string name="complain_type_swearing_profile">Поља \&quot;статус\&quot;, \&quot;о мени\&quot;
-    садрже увредљиво
-    изражавање, везе ка друштвеним мрежама
-  </string>
+        телефони</string>
+  <string name="complain_type_spam_profile">Поља \&quot;статус\&quot; и/или \&quot;о мени\&quot; садрже пословну
+        понуду</string>
+  <string name="complain_type_swearing_profile">Поља \&quot;статус\&quot;, \&quot;о мени\&quot; садрже увредљиво
+        изражавање, везе ка друштвеним мрежама</string>
   <string name="complain_type_fake_data">Име, пол, године, или фотографија се не слажу</string>
   <string name="complain_description">Реците нам нешто више о разлогу жалбе.</string>
   <string name="general_complain_sended">Ваша жалба је послата, хвала Вам на помоћи!</string>
   <string name="general_complain">Жалба</string>
   <string name="general_msg">Порука</string>
   <string name="notifications">Обавештења</string>
-  <string name="general_no_notifications">На жалост, обавештења на вашем уређају нису доступна
-  </string>
+  <string name="general_no_notifications">На жалост, обавештења на вашем уређају нису доступна</string>
   <string name="black_list_add_short">На црну листу</string>
   <string name="confirm_email_for_dating">Ми смо против непожељних порука. Потврдите своју адресу
-    е-поште како бисте упознали људе у Spark!
-  </string>
+        е-поште како бисте упознали људе у Spark!</string>
   <string name="confirm_email_for_dating_title">Ми смо против непожељних порука</string>
   <string name="confirm_email_for_dating_desc">Потврдите своју адресу е-поште како бисте могли да
-    упознате људе на Spark!
-  </string>
+        упознате људе на Spark!</string>
   <string name="send_confirm_link">Пошаљи линк за потврду</string>
-  <string name="complain_type_swearing_msg">Увредљиво понашање, неправилно изражавање, претње
-  </string>
+  <string name="complain_type_swearing_msg">Увредљиво понашање, неправилно изражавање, претње</string>
   <string name="general_exit">Изаћи</string>
   <string name="likes_can_help_you">Свиђања Вам помажу да упознате људе</string>
   <string name="general_get_dating">Упознати</string>
   <string name="settings_select_language">Изабери језик апликације</string>
   <string name="settings_select_preload_photo_type">Изаберите када ће предучитавање фотографија
-    бити укључено
-  </string>
-  <string name="restart_to_change_locale">Да бисте променили језик, апликација мора бити поново
-    стартована
-  </string>
+        бити укључено</string>
+  <string name="restart_to_change_locale">Да бисте променили језик, апликација мора бити поново стартована</string>
   <string name="locale_changing">Промени језик</string>
   <plurals name="you_were_liked">
     <item quantity="few">Свидели сте се %d особама</item>
     <item quantity="other">Свидели сте се %d људи</item>
     <item quantity="one">Свидели сте се %d особи</item>
   </plurals>
-  <string name="likes_buy_vip">Да бисте сазнали коме се сада свиђате, активирајте VIP-статус
-  </string>
+  <string name="likes_buy_vip">Да бисте сазнали коме се сада свиђате, активирајте VIP-статус</string>
   <string name="or">или</string>
   <string name="settings_delete_account">Избриши свој налог</string>
   <string name="chat_block_not_mutual">Можете започети ћаскање само са корисником који Вам је
-    послао свиђање или ако имате VIP-статус
-  </string>
+        послао свиђање или ако имате VIP-статус</string>
   <string name="add_to_favorite_block_not_vip">Само VIP корисници могу да додају Омиљене са Екрана
-    за састанке
-  </string>
+        за састанке</string>
   <string name="delete_account_are_you_sure">Да ли сте сигурни?</string>
   <string name="delete">Обрисати</string>
   <string name="delete_account_warning">Упозорење! Покушавате да обришете свој Spark налог!</string>
   <string name="delete_account_error">На жалост, Ваш покушај уклањања налога није успео. Молимо,
-    покушајте поново.
-  </string>
+        покушајте поново.</string>
   <string name="delete_account_will_be_restored_are_you_sure">Покушавате да се пријавите на налог
-    који је обрисан. Налог ће бити обновљен.
-  </string>
+        који је обрисан. Налог ће бити обновљен.</string>
   <string name="restore">Вратити</string>
   <string name="admiration_sended">Дивљење је послато</string>
   <string name="skip">Прескочи</string>
@@ -689,9 +617,7 @@
   <string name="skip_all">Прескочи све</string>
   <string name="settings_feedback_transaction_number">Број поруџбине</string>
   <string name="settings_feedback_transaction_link">Где могу наћи број поруџбине?</string>
-  <string name="general_logout_error">Дошло је до грешке приликом одјављивања. Молимо, покушајте
-    поново.
-  </string>
+  <string name="general_logout_error">Дошло је до грешке приликом одјављивања. Молимо, покушајте поново.</string>
   <string name="auth_btn_ok">Одноклассники</string>
   <string name="auth_btn_tf">Spark налог</string>
   <string name="birthday">Датум рођења</string>
@@ -717,8 +643,7 @@
   <string name="user_deleted_or_banned">Корисник је банован или избрисан.</string>
   <string name="locking_popup_button_answer">Одговорите на Свиђања</string>
   <string name="locking_menu_message">Важно! Приступ неким страницама апликације је ограничен. Да
-    бисте добили пун приступ, одговорите на сва долазна Свиђања или набавите VIP-статус.
-  </string>
+        бисте добили пун приступ, одговорите на сва долазна Свиђања или набавите VIP-статус.</string>
   <string name="current_city">Тренутни град</string>
   <string name="general_bonus">Бонус</string>
   <plurals name="notification_many_messages">
@@ -733,25 +658,21 @@
     <item quantity="one">и %d</item>
   </plurals>
   <string name="subscriptions_can_be_changed">Сада сте се претплатили. Можете променити подешавања
-    претплате на Google Play.
-  </string>
+        претплате на Google Play.</string>
   <string name="people_nearby">Људи у близини</string>
   <string name="nobody_nearby">Ни живе душе у близини!</string>
   <string name="general_distance_km">%.02f км</string>
   <string name="general_distance_m">%d м</string>
   <string name="cannot_get_geo">Локација није могла бити одређена</string>
   <string name="press_back_more_to_close_app">Да бисте изашли из Spark, притисните дугме
-    \'\'назад\'\' још једном.
-  </string>
+        \'\'назад\'\' још једном.</string>
   <string name="waiting_for_load">Чекам на учитавање…</string>
   <string name="loading_photo_percent">Преношење фотографија %d%%</string>
   <string name="profile_update_error">Грешка у ажурирању датума</string>
   <string name="retry_cancel_editing">Дошло је до грешке на интернет вези у току слања података на
-    сервер. Изађите без чувања или покушајте поново?
-  </string>
+        сервер. Изађите без чувања или покушајте поново?</string>
   <string name="retry_cancel_editing_bad_value">Унели сте нетачне податке. Покушај поново или се
-    одјави без чувања?
-  </string>
+        одјави без чувања?</string>
   <string name="user_does_not_exist">Корисник није пронађен.</string>
   <string name="feedback_subject_ban">Жалба у вези неправедног бановања</string>
   <string name="settings_led">LED обавештења</string>
@@ -763,26 +684,20 @@
   <string name="measurement_unit_height">цм</string>
   <string name="maximum_number_of_users">Изабрали сте максималан број корисника.</string>
   <string name="logout_if_email_already_registred">Већ постоји корисник са овом адресом е-поште.
-    Ако је ово Ваш адреса, морате се одјавити са тренутног налога и пријавити се на %s налог.
-  </string>
+        Ако је ово Ваш адреса, морате се одјавити са тренутног налога и пријавити се на %s налог.</string>
   <string name="recover_password_instructions">На адресу Ваше е-поште је послата порука са
-    инструкцијама за опоравак лозинке.
-  </string>
+        инструкцијама за опоравак лозинке.</string>
   <string name="email_changing">Промена адресе е-поште</string>
   <string name="hint_faces_filter">Промените параметре претраге и упознајте нове, занимљиве
-    људе.
-  </string>
+        људе.</string>
   <string name="hint_faces_buy_like">Што више свиђања имате, чешће ћете бити оцењивани. Немојте да
-    заборавите да допуните Свиђања.
-  </string>
+        заборавите да допуните Свиђања.</string>
   <string name="hint_myprofile_buy_vip">Набавите VIP-статус и уживајте у неограниченој
-    комуникацији
-  </string>
+        комуникацији</string>
   <string name="pull_to_refresh_pull_label">Повуците да бисте освежили…</string>
   <string name="pull_to_refresh_release_label">Пустите да бисте освежили…</string>
   <string name="messaging_block_buy_vip">Да бисте наставили разговор, треба да имате
-    VIP\u2011статус
-  </string>
+        VIP\u2011статус</string>
   <string name="pull_to_refresh_refreshing_label">Учитавање…</string>
   <string name="user_added_to_black_list">Корисник је додат на Црну листу.</string>
   <string name="user_deleted_from_black_list">Корисник је уклоњен са Црне листе.</string>
@@ -793,44 +708,35 @@
   <string name="preload_photo_type_always_on">Увек уључено</string>
   <string name="preload_photo_type_preload_off">Искључено</string>
   <string name="wrong_time_popup_text">Није било могуће успоставити безбедну везу.\nМожда су
-    подешавања датума и времена на Вашем уређају неисправна?
-  </string>
+        подешавања датума и времена на Вашем уређају неисправна?</string>
   <string name="wrong_time_popup_button">Отвори подешавања</string>
   <string name="enter_text">Унесите текст</string>
   <string name="send_feedback">Послати поруку</string>
   <string name="get_vip_free">Добиј бесплатан VIP-статус</string>
   <string name="buy_more_sympathies">Сакупите више свиђања, постаните популарнији</string>
   <string name="transaction_code_help">Ако нам пошаљете код трансакције, то ће нам помоћи да
-    комплетирамо Ваш захтев убрзавајући процес. Додатне информације о поруџбини се могу наћи
-    кроз %s.
-  </string>
+        комплетирамо Ваш захтев убрзавајући процес. Додатне информације о поруџбини се могу наћи
+        кроз %s.</string>
   <string name="google_wallet">Google Wallet</string>
   <string name="google_service_general_title">Подсетници нису доступни</string>
   <string name="google_service_disabled_title">Сервис Google Play је онемогућен. Морате га
-    омогућити како бисте добијали обавештења.
-  </string>
+        омогућити како бисте добијали обавештења.</string>
   <string name="google_service_disabled_button">Омогућити</string>
   <string name="google_service_missing_title">Сервис Google Play није инсталиран. Морате га
-    инсталирати како бисте добијали обавештења.
-  </string>
+        инсталирати како бисте добијали обавештења.</string>
   <string name="google_service_missing_button">Инсталирати</string>
   <string name="google_service_version_update_required_title">Имате стару верзију сервиса Google
-    Play. Молимо, ажурирајте Google Play како би oбавештења радила исправно.
-  </string>
+        Play. Молимо, ажурирајте Google Play како би oбавештења радила исправно.</string>
   <string name="google_service_version_update_required_button">Ажурирати</string>
   <string name="google_invalid_account_title">Проверите свој Google налог или контактирајте Google
-    техничку подршку.
-  </string>
+        техничку подршку.</string>
   <string name="google_sign_in_account_title">Ваш Google налог није додат. Морате се пријавити
-    како бисте примали обавештења.
-  </string>
+        како бисте примали обавештења.</string>
   <string name="google_sign_in_account_button">Пријавити се</string>
   <string name="google_unavailable_services_title">На жалост, обавештења нису омогућена на Вашем
-    уређају.
-  </string>
+        уређају.</string>
   <string name="receive_message_notification">Добијте обавештење\nо новој поруци</string>
-  <string name="receive_mutual_notification">Добијте обавештење\nо новим узајамним свиђањима
-  </string>
+  <string name="receive_mutual_notification">Добијте обавештење\nо новим узајамним свиђањима</string>
   <string name="receive_sympathy_notification">Добијте обавештење\nо новом свиђању</string>
   <string name="receive_rate_notification">обриши</string>
   <string name="receive_guest_notification">Добијте обавештење\nо новом госту</string>
@@ -839,13 +745,10 @@
   <string name="add_leader_hint">Ваш поздрав…</string>
   <string name="more">још</string>
   <string name="premium_for_invitations">Да бисте добили VIP-статус на један дан, мораћете да
-    сакупите 5 регистрација.
-  </string>
+        сакупите 5 регистрација.</string>
   <string name="premium_for_invitations_current_status">Већ сте сакупили:\nInvitations:
-    %1$d\nRegistrations: %2$d
-  </string>
-  <string name="no_contacts_available">Уређај не садржи контакте који би могли бити приказани
-  </string>
+        %1$d\nRegistrations: %2$d</string>
+  <string name="no_contacts_available">Уређај не садржи контакте који би могли бити приказани</string>
   <string name="sms_invite_title">Добиј VIP на један дан!</string>
   <string name="status_can_send_confirmation">Позови</string>
   <string name="status_invilid_phone_number">Број је неважећи</string>
@@ -858,30 +761,22 @@
   <string name="settings_check_vip_cell">Провери VIP-статус</string>
   <string name="settings_check_vip_alert">Ваш захтев за проверу VIP-статуса је послат.</string>
   <string name="novice_sympathy">Шаљите свиђања само онима који\nВас заиста привлаче.\nМожда ћете
-    наћи неког посебног!
-  </string>
-  <string name="go_dating_message">Почните да упознајете људе и овде ће се појавити имена оних
-    корисника
-    који су посетили Ваш профил
-  </string>
-  <string name="photo_not_from_main_album">Наши модератори су одлучили да ова фотографија не може да
-    буде искоришћена као
-    профилна слика
-  </string>
+        наћи неког посебног!</string>
+  <string name="go_dating_message">Почните да упознајете људе и овде ће се појавити имена оних корисника 
+        који су посетили Ваш профил</string>
+  <string name="photo_not_from_main_album">Наши модератори су одлучили да ова фотографија не може да буде искоришћена као
+          профилна слика</string>
   <string name="sidebar_vk_profile">ВК профил</string>
   <string name="title_vk_profile">ВК профил</string>
   <string name="vk_profile_invite_friends_error">Корисник више не прихвата позиве</string>
   <string name="foreign_profile_empty_gifts_title">Пошаљите поклон и бићете у центру пажње</string>
   <string name="chat_auto_reply_title">Текст поруке је сакривен</string>
-  <string name="chat_auto_reply_message">Да бисте отворили ову поруку или одговорили на исту,
-    постаните VIP-корисник
-  </string>
+  <string name="chat_auto_reply_message">Да бисте отворили ову поруку или одговорили на исту, постаните VIP-корисник</string>
   <string name="chat_auto_reply_button">Постати VIP</string>
   <string name="photo_list_load_info">Поделите своју фотографију и видеће Вас милиони</string>
   <string name="vk_profile_button_tf_group">ГрупаSpark</string>
   <string name="vk_profile_button_join_tf_group">Придружити се групи Spark</string>
-  <string name="vk_profile_button_join_vkgames_group">Придружити се групи \&quot;Игре
-    ВК\&quot;</string>
+  <string name="vk_profile_button_join_vkgames_group">Придружити се групи \&quot;Игре ВК\&quot;</string>
   <string name="vk_profile_button_invite_friends">Позвати пријатеље</string>
   <string name="vk_profile_invite_friends_title">Позвати пријатеље</string>
   <string name="invite_friend_button">Позвати</string>
@@ -890,15 +785,9 @@
   <string name="vk_friends_success_invite">Позив послат</string>
   <string name="join_group_success">Придружили сте се групи</string>
   <string name="settings_auto_greeting_title">Ауто-поздрав</string>
-  <string name="settings_auto_greeting_subtitle">Дозволите Spark-у да разговор аутоматски започне
-    поздравом кад год Вам неко пошаље Свиђање
-  </string>
-  <string name="take_photo_text_1">Молимо Вас са поставите своју фотографију како бидте започели
-    ћаскање.
-  </string>
-  <string name="take_photo_text_2">На фотографији можете бити сам Ви; све слике прегледавају наши
-    модератори како би утврдили да се правила поштују.
-  </string>
+  <string name="settings_auto_greeting_subtitle">Дозволите Spark-у да разговор аутоматски започне поздравом кад год Вам неко пошаље Свиђање</string>
+  <string name="take_photo_text_1">Молимо Вас са поставите своју фотографију како бидте започели ћаскање.</string>
+  <string name="take_photo_text_2">На фотографији можете бити сам Ви; све слике прегледавају наши модератори како би утврдили да се правила поштују.</string>
   <string name="unlock_by_viewed_ad_video_button_text">Откључати бесплатно на %s</string>
   <plurals name="free_minutes">
     <item quantity="few">%d минута</item>
@@ -906,15 +795,29 @@
     <item quantity="one">%d минут</item>
   </plurals>
   <string name="thanks_for_your_rate_title">Хвала за Вашу критику</string>
-  <string name="thanks_for_your_rate_top_label">Као израз захвалности, поставићемо Вашу фотографију
-    у фото-фид!
-  </string>
-  <string name="thanks_for_your_rate_bottom_label">Поделите своје утиске у AppStore. Ценимо свако
-    мишљење!
-  </string>
+  <string name="thanks_for_your_rate_top_label">Као израз захвалности, поставићемо Вашу фотографију у фото-фид!</string>
+  <string name="thanks_for_your_rate_bottom_label">Поделите своје утиске у AppStore. Ценимо свако мишљење!</string>
   <string name="thanks_for_your_rate_rate_app">Оставити мишљење у AppStore</string>
   <string name="thanks_for_your_rate_close">Затворити</string>
-  <string name="buy_vip_title_from_input">Можете започети разговор са корисником ако имате
-    VIP-статус
-  </string>
+  <plurals name="novice_sympathies_bonuses"/>
+  <string name="buy_vip_title_from_input">Можете започети разговор са корисником ако имате VIP-статус</string>
+  <string name="mutual_like_popup_text">Осећање је узајамно!</string>
+  <string name="mutual_like_popup_button">Кажите \&quot;Поздрав\&quot;</string>
+  <string name="people_nearby_access_to_location_description">Да бисте видели ко је у близини, морате дозволити приступ својој гео-локацији.</string>
+  <string name="people_nearby_not_enought_money">Недостају Вам новчићи да бисте приступили функцији \&quot;Људи у близини\&quot;\</string>
+  <string name="people_nearby_not_found_title">Тренутно нема корисника у Вашој близини</string>
+  <string name="people_nearby_not_found_description">Да бисте покушали поново, притисните и држите прстом по средини екрана.</string>
+  <string name="NSLocationWhenInUseUsageDescription">Неопходна Вам је дозвола да бисте приступили овој функцији.</string>
+  <string name="ban_liberty_title">Без реклама!</string>
+  <string name="ban_liberty_description">Само упознавање, ништа више</string>
+  <string name="guest_liberty_title">Гости</string>
+  <string name="guest_liberty_description">Сазнајте ко је посетио Вашу профилну страницу</string>
+  <string name="star_liberty_title">Популарни корисници</string>
+  <string name="star_liberty_description">Најпопуларнији корисници отворени за разговор</string>
+  <string name="crown_liberty_title">Истакните се</string>
+  <string name="crown_liberty_description">Лако се истиче у Претрази и Порукама</string>
+  <string name="like_liberty_title">Свиђања</string>
+  <string name="like_liberty_description">Погледајте коме се свиђате</string>
+  <string name="buy_button_sticker_popular">популарно</string>
+  <string name="buy_button_sticker_best_value">Најбоља цена</string>
 </resources>

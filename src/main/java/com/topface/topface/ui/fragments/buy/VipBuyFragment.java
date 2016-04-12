@@ -24,6 +24,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.statistics.BuyScreenStatistics;
 import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.statistics.PushButtonVipUniqueStatistics;
 import com.topface.topface.ui.BlackListActivity;
@@ -31,7 +32,10 @@ import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 
+import org.jetbrains.annotations.Nullable;
 import org.onepf.oms.appstore.googleUtils.Purchase;
+
+import java.util.List;
 
 import static android.view.View.OnClickListener;
 
@@ -122,6 +126,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         mResourceInfo = (TextView) view.findViewById(R.id.payReasonFragmentBuyPremium);
         setResourceInfoText();
         initViews(view);
+        initVipLiberty(inflater, (LinearLayout) view.findViewById(R.id.fbpBtnContainer));
         initActionBar();
         return view;
     }
@@ -138,16 +143,48 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         switchLayouts();
     }
 
-    private void switchLayouts() {
-        if (mBuyVipViewsContainer != null && mEditPremiumContainer != null) {
-            if (App.get().getProfile().premium) {
-                mEditPremiumContainer.setVisibility(View.VISIBLE);
-                mBuyVipViewsContainer.setVisibility(View.GONE);
-            } else {
-                mEditPremiumContainer.setVisibility(View.GONE);
-                mBuyVipViewsContainer.setVisibility(View.VISIBLE);
-            }
+    private void initVipLiberty(LayoutInflater inflater, LinearLayout root) {
+        if (root != null
+                && PurchaseButtonList.ViewsVersions.V2.getVersionName().equals(getBuyVipViewVersion(null))
+                && isVipLibertyBlockAvailable()) {
+            root.addView(inflater.inflate(R.layout.vip_liberty_list, root, false));
         }
+    }
+
+    protected boolean isVipLibertyBlockAvailable() {
+        return true;
+    }
+
+    private void switchLayouts() {
+        if (App.get().getProfile().premium) {
+            setViewVisibility(mEditPremiumContainer, true);
+            setViewVisibility(mBuyVipViewsContainer, false);
+        } else {
+            setViewVisibility(mEditPremiumContainer, false);
+            setViewVisibility(mBuyVipViewsContainer, true);
+        }
+    }
+
+    private boolean setViewVisibility(View view, boolean isVisible) {
+        if (view != null) {
+            view.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+            return true;
+        }
+        return false;
+    }
+
+    @Nullable
+    private String getBuyVipViewVersion(@Nullable Products products, String defaultValue) {
+        String version = defaultValue;
+        if (products != null && products.info != null && products.info.views != null) {
+            version = products.info.views.buyVip;
+        }
+        return version;
+    }
+
+    @Nullable
+    private String getBuyVipViewVersion(String defaultValue) {
+        return getBuyVipViewVersion(getProducts(), defaultValue);
     }
 
     private void initBuyVipViews(View root) {
@@ -157,21 +194,21 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         if (products == null) {
             return;
         }
-        if (products.premium.isEmpty()) {
-            root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.VISIBLE);
-        } else {
-            root.findViewById(R.id.fbpBuyingDisabled).setVisibility(View.GONE);
-        }
-        for (final BuyButtonData curBtn : products.premium) {
-            Products.setBuyButton(btnContainer, curBtn, getActivity(),
-                    new Products.BuyButtonClickListener() {
-                        @Override
-                        public void onClick(String id) {
-                            buy(id, curBtn);
-                        }
-                    }
-            );
-        }
+        List<BuyButtonData> availableButtons = getAvailableButtons(products.premium);
+        root.findViewById(R.id.fbpBuyingDisabled).setVisibility(availableButtons.isEmpty() ? View.VISIBLE : View.GONE);
+
+        new PurchaseButtonList().getButtonsListView(getBuyVipViewVersion(products, null), btnContainer, availableButtons, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
+            @Override
+            public void onClick(String id, BuyButtonData btnData) {
+                buy(id, btnData);
+            }
+        });
+    }
+
+    @Override
+    public void onResumeFragment() {
+        super.onResumeFragment();
+        BuyScreenStatistics.buyScreenShowSendStatistics(getClass().getSimpleName(), getBuyVipViewVersion(PurchaseButtonList.ViewsVersions.V1.getVersionName()));
     }
 
     protected void buy(String id, BuyButtonData curBtn) {

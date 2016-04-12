@@ -100,7 +100,7 @@ class AdMobProvider extends AbstractAdsProvider {
             public void onAdFailedToLoad(int errorCode) {
                 super.onAdFailedToLoad(errorCode);
                 if (callbacks != null) {
-                    callbacks.onFailedToLoadAd();
+                    callbacks.onFailedToLoadAd(errorCode);
                 }
             }
         });

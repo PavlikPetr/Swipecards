@@ -1,25 +1,32 @@
 package com.topface.topface.data;
 
+import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
 
 import org.json.JSONObject;
 
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.util.Currency;
-import java.util.Locale;
 
 public class BuyButtonBaseData {
     public String id;
     public String title;
-    protected String titleTemplate;
+    public String titleTemplate;
     public int price;
     public int showType;
     public int amount;
     public String hint;
     public Products.ProductType type;
     public int discount;
+    public boolean displayOnBuyScreen;
     public String paymentwallLink;
     public String totalTemplate;
+    public int periodInDays;
+    public int trialPeriodInDays;
+    public String discountTemplate;
+    public String pricePerItemTemplate;
+    public Currency currency;
 
     public BuyButtonBaseData(JSONObject json) {
         if (json != null) {
@@ -29,19 +36,29 @@ public class BuyButtonBaseData {
             totalTemplate = json.optString("totalTemplate");
             price = json.optInt("price");
             amount = json.optInt("amount");
+            periodInDays = json.optInt("periodInDays");
+            trialPeriodInDays = json.optInt("trialPeriodInDays");
+            discountTemplate = json.optString("discountTemplate");
+            pricePerItemTemplate = json.optString("pricePerItemTemplate");
             hint = json.optString("hint");
             showType = json.optInt("showType");
             type = Products.getProductTypeByName(json.optString("type"));
             discount = json.optInt("discount");
+            displayOnBuyScreen = json.optBoolean("displayOnBuyScreen", true);
             paymentwallLink = json.optString("url");
             ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
+            currency = Currency.getInstance(Products.USD);
             if (type == Products.ProductType.PREMIUM) {
+                DecimalFormat decimalFormat = new DecimalFormat("0.00");
                 double tempPrice = price / amount;
                 double pricePerItem = tempPrice / 100;
-                Currency currency = Currency.getInstance(Products.USD);
-                NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
-                currencyFormatter.setCurrency(currency);
-                title = Products.formatPrice(pricePerItem, currencyFormatter, titleTemplate, Products.PRICE, Products.PRICE_PER_ITEM);
+                if (titleTemplate.contains(Products.PRICE)) {
+                    title = titleTemplate.replace(Products.PRICE, decimalFormat.format(pricePerItem) + App.getContext().getString(R.string.usd));
+
+                } else if (titleTemplate.contains(Products.PRICE_PER_ITEM)) {
+                    title = titleTemplate.replace(Products.PRICE_PER_ITEM, decimalFormat.format(pricePerItem) + App.getContext().getString(R.string.usd));
+
+                }
             }
             if (productsDetails != null) {
                 ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(id);

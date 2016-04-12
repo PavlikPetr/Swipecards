@@ -1,17 +1,22 @@
 package com.topface.topface.utils;
 
-import android.content.ContentResolver;
 import android.content.Context;
-import android.support.v4.app.FragmentManager;
+import android.content.Intent;
 
 /**
- * Created by tiberal on 10.03.16.
+ * Делегат для актиити. Можно дописывать лдругие методы активити
+ * Created by tiberal on 25.02.16.
  */
 public interface IActivityDelegate {
 
-    ContentResolver getContentResolver();
-
-    FragmentManager getSupportFragmentManager();
+    void startActivityForResult(Intent intent, int requestCode);
 
     Context getApplicationContext();
+
+    void startActivity(Intent intent);
+
+    void runOnUiThread(Runnable runnable);
+
+    boolean isFinishing();
+
 }

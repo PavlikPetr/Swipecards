@@ -61,6 +61,11 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     }
 
     @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
+    @Override
     protected FeedAdapter<Visitor> createNewAdapter() {
         return new VisitorsListAdapter(getActivity(), getUpdaterCallback());
     }

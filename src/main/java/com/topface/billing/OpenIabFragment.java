@@ -28,13 +28,16 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PurchaseRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
+import com.topface.topface.ui.views.BuyButton;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.http.ConnectionManager;
+import com.topface.topface.utils.social.AuthToken;
 
 import org.json.JSONObject;
 import org.onepf.oms.OpenIabHelper;
@@ -43,6 +46,7 @@ import org.onepf.oms.appstore.googleUtils.IabResult;
 import org.onepf.oms.appstore.googleUtils.Inventory;
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -75,7 +79,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     public static final int PURCHASE_ERROR_ITEM_ALREADY_OWNED = 7;
 
     private boolean mHasDeferredPurchase = false;
-    private View mDeferredPurchaseButton;
+    private BuyButton mDeferredPurchaseButton;
     private UserConfig mUserConfig;
 
     /**
@@ -127,22 +131,6 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     public void onDestroy() {
         super.onDestroy();
         App.getOpenIabHelperManager().removeOpenIabEventListener(this);
-    }
-
-    private void startWaiting() {
-        if (mDeferredPurchaseButton != null) {
-            mDeferredPurchaseButton.findViewById(R.id.itText).setVisibility(View.INVISIBLE);
-            mDeferredPurchaseButton.findViewById(R.id.marketWaiter).setVisibility(View.VISIBLE);
-            mDeferredPurchaseButton.findViewById(R.id.itContainer).setEnabled(false);
-        }
-    }
-
-    private void stopWaiting() {
-        if (mDeferredPurchaseButton != null) {
-            mDeferredPurchaseButton.findViewById(R.id.itText).setVisibility(View.VISIBLE);
-            mDeferredPurchaseButton.findViewById(R.id.marketWaiter).setVisibility(View.GONE);
-            mDeferredPurchaseButton.findViewById(R.id.itContainer).setEnabled(true);
-        }
     }
 
     /**
@@ -302,13 +290,15 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     @SuppressWarnings("ConstantConditions")
     private void buyDeferred(final BuyButtonData btn) {
         if (mDeferredPurchaseButton != null) {
-            stopWaiting();
+            mDeferredPurchaseButton.stopWaiting();
         }
         mHasDeferredPurchase = true;
         if (getView() != null) {
-            mDeferredPurchaseButton = getView().findViewWithTag(btn);
+            mDeferredPurchaseButton = (BuyButton) getView().findViewWithTag(btn);
         }
-        startWaiting();
+        if (mDeferredPurchaseButton != null) {
+            mDeferredPurchaseButton.startWaiting();
+        }
     }
 
     /**
@@ -444,7 +434,10 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         validateRequest.callback(new DataApiHandler<Verify>() {
             @Override
             protected void success(Verify verify, IApiResponse response) {
-                //Послу удачной покупки (не подписки), которая была проверена сервером,
+                if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
+                    PurchasesActivity.sendPurchaseEvent(purchase);
+                }
+                //После удачной покупки (не подписки), которая была проверена сервером,
                 //нужно "потратить" элемент, что бы можно было купить следующий
                 if (TextUtils.equals(purchase.getItemType(), OpenIabHelper.ITEM_TYPE_INAPP)) {
                     App.getOpenIabHelperManager().consumeAsync(purchase, OpenIabFragment.this);
@@ -575,8 +568,10 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 }
 
                 if (mHasDeferredPurchase) {
-                    stopWaiting();
-                    buyNow((BuyButtonData) mDeferredPurchaseButton.getTag());
+                    if (mDeferredPurchaseButton != null) {
+                        mDeferredPurchaseButton.stopWaiting();
+                        buyNow((BuyButtonData) mDeferredPurchaseButton.getTag());
+                    }
                     mHasDeferredPurchase = false;
                     mDeferredPurchaseButton = null;
                 }
@@ -590,6 +585,16 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                 }
             }
         }
+    }
+
+    public List<BuyButtonData> getAvailableButtons(List<BuyButtonData> buttons) {
+        List<BuyButtonData> availableButtons = new LinkedList<>();
+        for (BuyButtonData button : buttons) {
+            if (button != null && button.displayOnBuyScreen) {
+                availableButtons.add(button);
+            }
+        }
+        return availableButtons;
     }
 }
 

@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -138,6 +139,11 @@ public class SettingsFragment extends ProfileInnerFragment {
         setAutoReplySettings(App.get().getOptions().isAutoreplyAllow);
     }
 
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
     private void setAutoReplySettings(boolean isChecked) {
         if (mAutoReplySettings != null) {
             mAutoReplySettings.setChecked(isChecked);
@@ -257,7 +263,10 @@ public class SettingsFragment extends ProfileInnerFragment {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void getSocialAccountName(final TextView textView) {
+    private void getSocialAccountName(final TextView textView) {
+        if (textView == null) {
+            return;
+        }
         AuthToken authToken = AuthToken.getInstance();
         if (!authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
             String name = App.getSessionConfig().getSocialAccountName();
@@ -280,6 +289,8 @@ public class SettingsFragment extends ProfileInnerFragment {
             } else {
                 textView.setText(name);
             }
+        } else {
+            textView.setText(authToken.getLogin());
         }
     }
 
@@ -295,16 +306,24 @@ public class SettingsFragment extends ProfileInnerFragment {
     /**
      * Sets drawable with social network icon to textView
      */
-    public void getSocialAccountIcon(final TextView textView) {
-        AuthToken authToken = AuthToken.getInstance();
-        if (authToken.getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_fb, 0, 0, 0);
-        } else if (authToken.getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
-            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_vk, 0, 0, 0);
-        } else if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_tf_settings, 0, 0, 0);
-        } else if (authToken.getSocialNet().equals(AuthToken.SN_ODNOKLASSNIKI)) {
-            textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_ok, 0, 0, 0);
+    private void getSocialAccountIcon(final TextView textView) {
+        int iconId = 0;
+        switch (AuthToken.getInstance().getSocialNet()) {
+            case AuthToken.SN_FACEBOOK:
+                iconId = R.drawable.ic_fb;
+                break;
+            case AuthToken.SN_VKONTAKTE:
+                iconId = R.drawable.ic_vk;
+                break;
+            case AuthToken.SN_TOPFACE:
+                iconId = R.drawable.ic_tf_settings;
+                break;
+            case AuthToken.SN_ODNOKLASSNIKI:
+                iconId = R.drawable.ic_ok;
+                break;
+        }
+        if (textView != null) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(iconId, 0, 0, 0);
         }
     }
 
@@ -315,10 +334,8 @@ public class SettingsFragment extends ProfileInnerFragment {
             mMarketApiManager.onResume();
         }
         setNotificationsState();
-        AuthToken authToken = AuthToken.getInstance();
-        if (authToken.getSocialNet().equals(AuthToken.SN_TOPFACE)) {
-            mSocialNameText.setText(authToken.getLogin());
-        }
+        getSocialAccountName(mSocialNameText);
+        getSocialAccountIcon(mSocialNameText);
     }
 
 }

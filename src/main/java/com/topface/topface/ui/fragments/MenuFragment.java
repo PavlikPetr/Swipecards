@@ -29,7 +29,6 @@ import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.data.Options;
-import com.topface.topface.data.Options;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
 import com.topface.topface.state.TopfaceAppState;
@@ -124,11 +123,8 @@ public class MenuFragment extends Fragment {
                         After update user can have outdated fragment id in instance state. Here we check
                         if it is still presented in BaseFragment.FragmentId enum.
                          */
-                        if (Arrays.asList(FragmentId.values()).contains(menuItem)) {
-                            fragmentSettings = (FragmentSettings) menuItem;
-                        } else {
-                            fragmentSettings = App.get().getOptions().startPageFragmentSettings;
-                        }
+                        fragmentSettings = Arrays.asList(FragmentId.values()).contains(menuItem)
+                                ? (FragmentSettings) menuItem : App.get().getOptions().startPageFragmentSettings;
                     }
                     selectMenu(fragmentSettings);
                     View view = mAdapter.getViewForActivate(mListView, fragmentSettings);
@@ -325,7 +321,7 @@ public class MenuFragment extends Fragment {
         boolean notify = false;
         if (profileMenuItem != null) {
             // update photo
-            Profile profile = App.from(getActivity()).getProfile();
+            Profile profile = App.get().getProfile();
             Photo photo = profileMenuItem.getMenuIconPhoto();
             if (photo != null) {
                 if (!photo.equals(profile.photo)) {
@@ -544,11 +540,7 @@ public class MenuFragment extends Fragment {
 
     public BaseFragment getIntegrationFragment(int pos) {
         Options.LeftMenuIntegrationItems item = getServerLeftMenuItemById(pos);
-        if (item != null) {
-            return IntegrationWebViewFragment.newInstance(item.title, convertIntegrationUrl(item.url));
-        } else {
-            return null;
-        }
+        return item != null ? IntegrationWebViewFragment.newInstance(item.title, convertIntegrationUrl(item.url)) : null;
     }
 
     private String convertIntegrationUrl(String url) {

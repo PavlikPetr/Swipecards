@@ -7,11 +7,9 @@
   <string name="general_disallow">Zakázat</string>
   <string name="general_allow">Povolit</string>
   <string name="notification_denied_popup_title">Abyste se dovídali o příchozích zprávách,
-    sympatiích a jiných novinkách, musíte povolit oznámení.
-  </string>
+        sympatiích a jiných novinkách, musíte povolit oznámení.</string>
   <string name="notification_popup_title">Abyste se mohli ihned dozvědět o nové sympatii, obdivu
-    nebo nepřečtené zprávě, povolte zasílání oznámení
-  </string>
+        nebo nepřečtené zprávě, povolte zasílání oznámení</string>
   <string name="email_successfully_changed">Váš e-mail byl změněn úspěšně.</string>
   <string name="auth_vk_name">VKontakte</string>
   <string name="dating_switch_button">Ještě</string>
@@ -25,9 +23,7 @@
   <string name="filter_city_age_parameters">Věk a město</string>
   <string name="filter_select_city">Zvolit město</string>
   <string name="edit_block_photo">Fotografie</string>
-  <string name="dashbrd_popup_rating">Líbí se naše aplikace? Pomozte zvednout náš raiting! Čím vyšší
-    je rating, tím více zajímavých lidí potkáte v Spark
-  </string>
+  <string name="dashbrd_popup_rating">Líbí se naše aplikace? Pomozte zvednout náš raiting! Čím vyšší je rating, tím více zajímavých lidí potkáte v Spark</string>
   <string name="dashbrd_popup_title">Raiting</string>
   <string name="dashbrd_popup_cancel">Příště se neptat</string>
   <string name="dashbrd_popup_rate">Vystavit raiting</string>
@@ -52,8 +48,7 @@
   <string name="general_complaint">Stěžovat se</string>
   <string name="general_type_complain">Téma stížnosti</string>
   <string name="address_book_access_error">Tato aplikace nemá přístup k Vašim kontaktům. Přístup
-    můžete povolit v nastavení soukromí na Vašem přístroji
-  </string>
+        můžete povolit v nastavení soukromí na Vašem přístroji</string>
   <string name="profile_deleted_user">Uživatel byl odstraněn</string>
   <string name="filter_main_parameters">Zajímají mě</string>
   <string name="dating_prev_button_ext">Předchozí</string>
@@ -71,24 +66,20 @@
   <string name="edit_my_photos">Mojí fotky</string>
   <string name="general_search_empty_title">Bohužel, nic nebylo nalezeno</string>
   <string name="general_search_empty_text">Můžete zadat nové vyhledávání nebo změnit nastavení
-    filtru.
-  </string>
+        filtru.</string>
   <string name="map_title">Mapa</string>
   <string name="general_buying">Koupit si sympatie a mince</string>
   <string name="popup_version_title">Je k dispozici nová verze aplikace</string>
   <string name="popup_version_message">Je na čase aktualizovat svou verzi!</string>
   <string name="leaders_select_photo_info">Vyberte si tu nejzajimavejší fotku! Fotografie s nízkým
-    hodnocením vybrat nelze
-  </string>
+        hodnocením vybrat nelze</string>
   <string name="map_popup_address">Adresa</string>
   <string name="black_list_info">Přidali jste účastníka dialogu do své černé listiny. Toto můžete
-    změnit ve Vašem profilu, v nastaveních VIP-statusu.
-  </string>
+        změnit ve Vašem profilu, v nastaveních VIP-statusu.</string>
   <string name="black_list_activation">Aktivujte VIP-status a používejte černou listinu</string>
   <string name="buying_total">Celkem</string>
   <string name="we_dont_detect_your_city">Pokud chcete najít v blízkém okolí, potřebujeme vědět,
-    kde se nacházíte. Uveďte prosím své město.
-  </string>
+        kde se nacházíte. Uveďte prosím své město.</string>
   <string name="confirm_email">Prosím, potvrďte e-mail</string>
   <string name="password_sent">Nové heslo bylo odesláno na Vaš E-mail</string>
   <string name="buy_vip_month_one">%1$d měsíc za %2$.2f %3$@</string>
@@ -128,8 +119,7 @@
   <string name="pincode_forget">Zapomněli jste PIN kód?</string>
   <string name="pincode_auth_input">Je nutné zadat přihlašovací jméno a heslo.</string>
   <string name="pincode_will_be_reset">Po úspěšné autorizaci budou všechny nástroje aplikace
-    vráceny.
-  </string>
+        vráceny.</string>
   <string name="general_error">CHYBA</string>
   <string name="general_yes">Ano</string>
   <string name="general_no">Ne</string>
@@ -143,8 +133,7 @@
   <string name="general_back">Zpátky</string>
   <string name="general_server_error">Chyba, zkuste to později</string>
   <string name="general_non_exist_photo_error">Akce se nezdařila, protože fotografie byla
-    smazána.
-  </string>
+        smazána.</string>
   <string name="general_data_error">Chyba. Zkuste to ještě jednou</string>
   <string name="general_internet_off">Není připojení k internetu</string>
   <string name="general_msg_copied">Text byl zkopírován</string>
@@ -178,8 +167,7 @@
   <string name="dating_header_guys">Muží od %1$d do %2$d</string>
   <string name="dating_skip_button">Další</string>
   <string name="message_too_long">Zadali jste příliš dlouhou zprávu. Počet znaků nesmí převyšovat
-    %d.
-  </string>
+        %d.</string>
   <string name="chat_gift_in">Dostali jste dárek.</string>
   <string name="chat_gift_out">Odeslali jste dárek.</string>
   <string name="chat_like_in">Obdrželi jste sympatii</string>
@@ -256,7 +244,7 @@
   <string name="settings_help">Pomoc</string>
   <string name="settings_faq">Otázky a odpovědi</string>
   <string name="settings_faq_title">Váš dotaz byl už pravděpodobně zodpovězen, podívejte se do
-    sekce \&quot;Otázky a odpovědi\&quot;</string>
+        sekce \&quot;Otázky a odpovědi\&quot;</string>
   <string name="settings_account">Účet</string>
   <string name="settings_feedback">Zanechat komentář</string>
   <string name="settings_about">O programu</string>
@@ -268,8 +256,7 @@
   <string name="settings_code_confirmation">Odeslat potvrzující kód</string>
   <string name="settings_email_was_confirmed">Byl již potvrzen</string>
   <string name="settings_email_was_confirmed_textview_text">Pokud jste již potvrdili poštu přes
-    počítač
-  </string>
+        počítač</string>
   <string name="settings_code_confirmation_hint">Potvrzující kód</string>
   <string name="settings_logout_msg">Opravdu se chcete odhlásit?</string>
   <string name="settings_error_message">Zpráva o chybě</string>
@@ -297,14 +284,13 @@
   </plurals>
   <string name="general_edit_profile_message">Prosím vyplňte všechna povinná pole dotazníku</string>
   <string name="general_search_null_response_error">Nic nenalezeno. Zkuste změnit nastavení
-    filtrů.
-  </string>
+        filtrů.</string>
   <string name="change_filters">Změnit filtry</string>
   <string name="reset_filter">Zahodit</string>
   <string name="general_sex">Pohlaví</string>
   <string name="general_girl">Ženské</string>
   <string name="general_boy">Mužské</string>
-  <string name="filter_city_fail">Nenalezeno žádné město, které by začínalo na „%s“</string>
+  <string name="filter_city_fail">Nenalezeno žádné město, které by začínalo  na „%s“</string>
   <string name="age_filter_man">Máte zájem o muži</string>
   <string name="age_filter_girl">Máte zájem o ženy</string>
   <string name="rate_popup_title">Prosím ohodnoťte naši aplikaci</string>
@@ -313,8 +299,7 @@
   <string name="rate_popup_cancel">Ne, děkuji</string>
   <string name="rate_popup_error">Musíte uvést, kolik hvězdiček dáváte naší aplikaci</string>
   <string name="feedback_popup_title">Dali jste nízké hodnocení. Řekněte, co se vám v aplikaci
-    nelíbí. Pomozte nám stát se lepšími. Děkujeme!
-  </string>
+        nelíbí. Pomozte nám stát se lepšími. Děkujeme!</string>
   <string name="settings_melody">Tón oznámení</string>
   <string name="settings_loading_photo">Předběžné nahrání fotografie</string>
   <string name="edit_refresh_status">Obnovit status</string>
@@ -335,13 +320,11 @@
   <string name="black_list_delete">Odstranit z černé listiny</string>
   <string name="vip_buy_vip">Koupě VIP</string>
   <string name="vip_state_off">Váš VIP-status neni aktivovan</string>
-  <string name="vip_info_guest">Zjistěte, kdo se o Vás zajímá - prohlédnete své návštěvníky!
-  </string>
+  <string name="vip_info_guest">Zjistěte, kdo se o Vás zajímá - prohlédnete své návštěvníky!</string>
   <string name="vip_info_invisible">Zůstaňte neodhalené při návštěvě cizích stránek díky režimu
-    \&quot;neviditelný\&quot;</string>
+        \&quot;neviditelný\&quot;</string>
   <string name="vip_info_message">Získejte výhodu - Vaše zprávy budou vyčnívat z davu!</string>
-  <string name="vip_info_blackList">Zbavte se otravných osob pomocí \&quot;černé
-    listiny\&quot;</string>
+  <string name="vip_info_blackList">Zbavte se otravných osob pomocí \&quot;černé listiny\&quot;</string>
   <string name="vip_info_vip">Vynikněte díky VIP-statusu ve vyhledávaní a ve svém profilu!</string>
   <string name="buying_vip_status">Koupit VIP status</string>
   <string name="edit_my_city">Moje město</string>
@@ -351,34 +334,28 @@
   <string name="dating_message">Zpráva…</string>
   <string name="buying_sympathies">Nákup sympatií</string>
   <string name="general_reconnect_social">Nelze se připojit k sociálním sítím. Prosím, zkuste to
-    znovu později.
-  </string>
+        znovu později.</string>
   <string name="general_block">Blokovat</string>
   <string name="general_buying_disabled">V tuto chvíli není možné nakupovat</string>
   <string name="ban_flood_detected">Příliš často odesíláte požadavky na server. Pro další použití
-    aplikace musíte vyčkat.
-  </string>
+        aplikace musíte vyčkat.</string>
   <string name="general_maintenance">Momentálně je server z technických důvodu mimo provoz a Váš
-    požadavek nemůže být vyřízen. Zkuste to znovu později.
-  </string>
+        požadavek nemůže být vyřízen. Zkuste to znovu později.</string>
   <string name="virus_chat_btn">Získat sympatie</string>
   <string name="profile_ask_sent">Žádost byla odeslána</string>
   <string name="virus_error">Během 24 hodin může Váš přítel darovat sympatii pouze 1 krát! Zkuste
-    to zítra!
-  </string>
+        to zítra!</string>
   <string name="popup_version_update">Aktualizovat</string>
   <string name="popup_version_cancel">Připomenout později</string>
   <string name="general_version_not_supported">Vaše verze aplikace je zastaralá a již není
-    podporována. Prosím, aktualizujte aplikaci
-  </string>
+        podporována. Prosím, aktualizujte aplikaci</string>
   <string name="default_price_format">Celkem: %.2f USD</string>
   <string name="default_price_format_extended">Celkem: %1$.2f %2$s</string>
   <string name="leaders_pick_condition">Nemůžete zvolit fotku s hodnocením nižším než %d%%:</string>
   <string name="general_gift">Dárek</string>
   <string name="user_actions_chat">Rozhovor</string>
   <string name="profile_edit_age_ranges">Věk má být mezi 16 až 99 let. Zadejte prosím platné číslo
-    a zkuste to znovu.
-  </string>
+        a zkuste to znovu.</string>
   <string name="wrong_password_format">Nepřípustný formát hesla</string>
   <string name="sign_in">Přihlásit se</string>
   <string name="create_account">Vytvořit účet</string>
@@ -400,21 +377,17 @@
   <string name="incorrect_password">Chybně zadané heslo</string>
   <string name="empty_fields">Nejsou vyplněna všechna pole!</string>
   <string name="email_already_registered">Uživatel s tímto E-mail již existuje</string>
-  <string name="enter_email_from_registration">Uveďte e-mail, který jste zadali při registraci.
-  </string>
+  <string name="enter_email_from_registration">Uveďte e-mail, který jste zadali při registraci.</string>
   <string name="default_photo_upload">Nahrání fotky</string>
   <string name="default_photo_upload_error">Chyba při načítání</string>
   <string name="default_photo_upload_complete">Načítání je dokončeno</string>
-  <string name="general_error_try_again_later">Nelze se připojit k Spark. Zkuste to později.
-  </string>
+  <string name="general_error_try_again_later">Nelze se připojit k Spark. Zkuste to později.</string>
   <string name="search_city_by_name">Vyhledávání města dle názvu</string>
   <string name="gallery">Galerie</string>
   <string name="no_photo_take_photo">Nikdo se s Vámi nemůže seznámit! Vytvořte fotku nebo vyberte
-    některou fotku ze svých alb
-  </string>
+        některou fotku ze svých alb</string>
   <string name="photo_for_avatar">Fotka je připravena k odeslání do profilu! To je Vaše první
-    fotografie a bude použita jako Vaše profilová fotka.
-  </string>
+        fotografie a bude použita jako Vaše profilová fotka.</string>
   <string name="change_email">Změnit e-mail</string>
   <string name="send_confirmation_email">Odeslat potvrzení na e-mail</string>
   <string name="change_password">Změnit heslo</string>
@@ -422,8 +395,7 @@
   <string name="save">Uložit</string>
   <string name="saving_in_progress">Uložení…</string>
   <string name="confirmation_successfully_sent">Potvrzení bylo odesláno na uvedenou emailovou
-    adresu
-  </string>
+        adresu</string>
   <string name="email_successfully_confirmed">E-mail byl úspěšně potvrzen.</string>
   <string name="email_not_confirmed">E-mail není potvrzen.</string>
   <string name="email_already_confirmed">Již potvrzen</string>
@@ -441,15 +413,13 @@
   <string name="we_detect_your_city">Určili jsme Vaše město:</string>
   <string name="reselect_city">Zvolit jiné město</string>
   <string name="choose_cool_photo">Zvolte svou nejlepší fotku a status, který odráží vaši
-    náladu!
-  </string>
+        náladu!</string>
   <string name="email_confirmed">e-mailová adresa byla potvrzena!</string>
   <string name="sympathy_sended">Sympatie byla odeslána</string>
   <string name="general_photo_deleted">Vaše fotka neodpovídá pravidlům a bude odstraněna</string>
   <string name="general_change">Změnit</string>
   <string name="user_does_not_have_gifts">Tento uživatel zatím nemá žádné dárky, ať jste první a
-    Vás se hned všimnou
-  </string>
+        Vás se hned všimnou</string>
   <string name="status_is_empty">Nemáte nastaveny status</string>
   <string name="you_dont_have_gifts_yet">Zatím nemáte žádné dárky</string>
   <string name="buy_sympathies">Koupit si sympatie</string>
@@ -469,12 +439,10 @@
   <string name="user_is_banned">Uživatel je zabanován</string>
   <string name="profile_empty_name">Jméno: Toto pole nemůže být prázdné</string>
   <string name="general_wrong_photo_upload">Vaše fotka neodpovídá pravidlům. Zkuste sem dat jinou
-    fotku.
-  </string>
+        fotku.</string>
   <string name="general_input_email">Zadejte Vaš e-mail</string>
   <string name="cant_delete_fake_item">Tato zpráva doposud nebylа doručena a nemůžete ji
-    odstranit. Zkuste to později.
-  </string>
+        odstranit. Zkuste to později.</string>
   <string name="vip_stop_ads">Pouze komunikace, nic navíc. Pro VIP-uživatele žádná reklama</string>
   <string name="friend_email_hint">Zadejte e-mail přítele</string>
   <string name="general_add">Přidat</string>
@@ -482,8 +450,7 @@
   <string name="general_rest_contacts">Zbylo Vám %d kontaktů</string>
   <string name="invite_friends_title">Pozvat všechny přátele z telefonního seznamu na Spark</string>
   <string name="invalid_contacts">Některé z kontaktů byly chybné. Prosím, zadejte správné
-    kontakty
-  </string>
+        kontakty</string>
   <plurals name="vip_status_period">
     <item quantity="few">Získali jste VIP status na %d dni</item>
     <item quantity="other">Získali jste VIP status na %d dní</item>
@@ -505,33 +472,26 @@
     <item quantity="one">Získej VIP zdarma za %d pozvánku</item>
   </plurals>
   <string name="buy_status_and_watch_your_fans">Kupte si VIP-status a zjistěte kdo si Vás přidal
-    mezí oblíbené
-  </string>
+        mezí oblíbené</string>
   <string name="add_bookmarks_to_be_connected">Přidávejte sem nové známé a budete s nimi pořád v
-    kontaktu
-  </string>
+        kontaktu</string>
   <string name="nobody_chat_with_you_sympathies_will_help">Nikdo Vám doposud nenapsal. Sympatie
-    pomohou najít někoho, s kým můžete popovídat
-  </string>
+        pomohou najít někoho, s kým můžete popovídat</string>
   <string name="rate_and_have_mutual_or_buy_and_chat">Vyjadřujte své sympatie lidem, které se Vám
-    líbí a získávejte vzájemné. Nebo si kupte sympatie a začněte komunikovat s lidmi, kterým se
-    líbíte!
-  </string>
+        líbí a získávejte vzájemné. Nebo si kupte sympatie a začněte komunikovat s lidmi, kterým se
+        líbíte!</string>
   <string name="with_vip_find_your_visitors">Díky VIP-statusu zjistíte kdo prohlížel vaši
-    stránku
-  </string>
+        stránku</string>
   <string name="on_avatar">Na profilový obrázek</string>
   <string name="your_avatar">Váš profilový obrázek</string>
   <string name="avatar_set_successfully">Profilový obrázek je úspěšně nastaven</string>
-  <string name="incorrect_photo">Uvedená fotografie je chybná. Zkuste nahrát jinou.</string>
+  <string name="incorrect_photo">Uvedená fotografie je chybná. Zkuste nahrát  jinou.</string>
   <string name="incorrect_photo_format">Uvedená fotografie má chybný formát. Zkuste nahrát jpg
-    nebo png
-  </string>
+        nebo png</string>
   <string name="incorrect_photo_size">Nesprávná velikost fotky</string>
   <string name="input_contact_name">Zadejte jméno kontaktu</string>
   <string name="incorrect_locale">Pokud byste chtěli, abychom mohli přečíst Vaši recenzi, napište
-    ji v ruštině nebo angličtině
-  </string>
+        ji v ruštině nebo angličtině</string>
   <string name="complain_photo_header">Nekorektní fotka</string>
   <string name="complain_msg_header">Nekorektní zpráva</string>
   <string name="complain_info_header">Nekorektní informace</string>
@@ -540,31 +500,23 @@
   <string name="complain_type_picture">Obrázek</string>
   <string name="complain_type_fake_user">Známá osobnost</string>
   <string name="complain_type_spam_msg">Obchodní nabídka, spam, reklama, odkazy na webové stránky,
-    telefony
-  </string>
-  <string name="complain_type_spam_profile">Pole \&quot;status\&quot; a \&quot;o mě\&quot; obsahují
-    obchodní nabídku
-  </string>
-  <string name="complain_type_swearing_profile">Pole \&quot;status\&quot; a \&quot;o mě\&quot;
-    obsahují hulvátství,
-    sprostá slova, odkazy na soc. sítě
-  </string>
+        telefony</string>
+  <string name="complain_type_spam_profile">Pole \&quot;status\&quot; a \&quot;o mě\&quot; obsahují obchodní nabídku</string>
+  <string name="complain_type_swearing_profile">Pole \&quot;status\&quot; a \&quot;o mě\&quot; obsahují hulvátství,
+        sprostá slova, odkazy na soc. sítě</string>
   <string name="complain_type_fake_data">Jméno, pohlaví, věk a fotka člověka nesedí</string>
   <string name="complain_description">Vysvětlete podrobně důvody své stížnosti</string>
   <string name="general_complain_sended">Vaše stížnost je odeslána, moc děkujeme za pomoc</string>
   <string name="general_complain">Stížnost</string>
   <string name="general_msg">Zpráva</string>
   <string name="notifications">Oznámení</string>
-  <string name="general_no_notifications">Bohužel oznámení na Vašem zařízení nejsou k dispozici
-  </string>
+  <string name="general_no_notifications">Bohužel oznámení na Vašem zařízení nejsou k dispozici</string>
   <string name="black_list_add_short">Na černou listinu</string>
   <string name="confirm_email_for_dating">Jsme proti spamu. Potvrďte svou emailovou adresu pro
-    seznámení na Spark!
-  </string>
+        seznámení na Spark!</string>
   <string name="confirm_email_for_dating_title">Nesouhlasíme se spamy</string>
   <string name="confirm_email_for_dating_desc">Abyste se mohli seznamovat na Spark, potvrďte
-    svou e-mailovou adresu
-  </string>
+        svou e-mailovou adresu</string>
   <string name="send_confirm_link">Pro potvrzení odeslat odkaz</string>
   <string name="complain_type_swearing_msg">Neslušnost, vyhrožování, sprostá slova</string>
   <string name="general_exit">Odejít</string>
@@ -572,8 +524,7 @@
   <string name="general_get_dating">Seznámit se</string>
   <string name="settings_select_language">Výběr jazyka aplikace</string>
   <string name="settings_select_preload_photo_type">Zvolte si, kdy bude zapnuto předčasné načtení
-    fotografií
-  </string>
+        fotografií</string>
   <string name="restart_to_change_locale">Ke změně jazyka bude aplikace restartována</string>
   <string name="locale_changing">Změna jazyka</string>
   <plurals name="you_were_liked">
@@ -582,25 +533,20 @@
     <item quantity="one">Líbíte se %d člověku</item>
   </plurals>
   <string name="likes_buy_vip">Abyste právě teď mohli zjistit, komu se líbíte, musíte si aktivovat
-    status VIP
-  </string>
+        status VIP</string>
   <string name="or">nebo</string>
   <string name="settings_delete_account">Odstranit účet</string>
   <string name="chat_block_not_mutual">Zahájit konverzaci s uživatelem můžete v případě, pokud
-    jste od něj dostali sympatii nebo máte-VIP status
-  </string>
+        jste od něj dostali sympatii nebo máte-VIP status</string>
   <string name="add_to_favorite_block_not_vip">Pouze VIP uživatelé si mohou přidat do oblíbených z
-    obrazovky známých
-  </string>
+        obrazovky známých</string>
   <string name="delete_account_are_you_sure">Jste si jistí?</string>
   <string name="delete">Odstranit</string>
   <string name="delete_account_warning">Pozor! Pokoušíte se smazat svůj profil na Spark.</string>
   <string name="delete_account_error">Bohužel se odstranění Vašého účtu nezdařilo. Můžete opakovat
-    ještě jednou.
-  </string>
+        ještě jednou.</string>
   <string name="delete_account_will_be_restored_are_you_sure">Přihlašujete se na smazaný účet. Při
-    vstupu bude účet obnoven.
-  </string>
+        vstupu bude účet obnoven.</string>
   <string name="restore">Obnovit</string>
   <string name="admiration_sended">Obdiv je odeslán</string>
   <string name="skip">Přeskočit</string>
@@ -623,63 +569,51 @@
   <string name="user_deleted_or_banned">Uživatel byl smazán nebo zabanován</string>
   <string name="locking_popup_button_answer">Odpovědět na sympatie</string>
   <string name="locking_menu_message">Přístup na některé stránky aplikace je omezen. Abyste mohli
-    toto omezení zrušit, musíte odpovědět na všechny příchozí sympatie nebo získat status VIP.
-  </string>
+        toto omezení zrušit, musíte odpovědět na všechny příchozí sympatie nebo získat status VIP.</string>
   <string name="current_city">Současné bydliště</string>
   <string name="general_bonus">Bonus</string>
   <string name="coins_subscription">Předplatné mincí</string>
   <string name="subscriptions_can_be_changed">Předplatné je vyřízeno. Podmínky předplatného můžete
-    změnit v Google Play.
-  </string>
+        změnit v Google Play.</string>
   <string name="people_nearby">Lidé okolo</string>
   <string name="nobody_nearby">Nikdo se nenachází kolem!</string>
   <string name="general_distance_km">%.02f km</string>
   <string name="general_distance_m">%d m</string>
   <string name="cannot_get_geo">Nepodařilo se určit Vaši polohu</string>
   <string name="press_back_more_to_close_app">Abyste se mohli odhlásit z Spark, stiskněte
-    tlačítko zpět ještě jednou
-  </string>
+        tlačítko zpět ještě jednou</string>
   <string name="waiting_for_load">Čekání na načítání…</string>
   <string name="loading_photo_percent">Načítání fotografie %d%%</string>
   <string name="profile_update_error">Chyba aktualizace údajů.</string>
   <string name="retry_cancel_editing">Během odesílání údajů došlo k chybě spojení. Chcete akci
-    zopakovat nebo se odhlásit bez uložení údajů?
-  </string>
+        zopakovat nebo se odhlásit bez uložení údajů?</string>
   <string name="retry_cancel_editing_bad_value">Zadali jste nesprávné údaje. Chcete akci zopakovat
-    nebo se odhlásit bez uložení údajů?
-  </string>
+        nebo se odhlásit bez uložení údajů?</string>
   <string name="user_does_not_exist">Uživatele nelze nalézt</string>
   <string name="feedback_subject_ban">Stížnost na nespravedlivý ban</string>
   <string name="settings_led">LED oznámení</string>
   <string name="open_market_error">Stránku aplikace nelze otevřít</string>
   <string name="billing_item_already_owned">Váš předchozí nákup je ve zpracování, počkejte
-    prosím
-  </string>
+        prosím</string>
   <string name="dialog">Korespondence</string>
   <string name="reply">Odpovědět</string>
   <string name="measurement_unit_weight">kg</string>
   <string name="measurement_unit_height">viz</string>
   <string name="maximum_number_of_users">Byl vybrán maximální počet uživatelů.</string>
   <string name="logout_if_email_already_registred">Uživatel s touto elektronickou adresou již
-    existuje. Pokud je tohle váš e-mail, musíte se odhlásit zе stávajícího účtu a přihlásit se
-    na účet %s
-  </string>
+        existuje. Pokud je tohle váš e-mail, musíte se odhlásit zе stávajícího účtu a přihlásit se
+        na účet %s</string>
   <string name="recover_password_instructions">Na vaši e-mailovou adresu byla odeslána instrukce
-    pro obnovu hesla.
-  </string>
+        pro obnovu hesla.</string>
   <string name="email_changing">Změna e-mailové adresy</string>
-  <string name="hint_faces_filter">Měňte parametry hledání a seznamujte se se zajímavými lidmi
-  </string>
+  <string name="hint_faces_filter">Měňte parametry hledání a seznamujte se se zajímavými lidmi</string>
   <string name="hint_faces_buy_like">Čím více máte sympatií, tím častěji můžete být hodnoceni.
-    Nezapomínejte doplňovat sympatie.
-  </string>
-  <string name="hint_myprofile_buy_vip">Kupte si status VIP a užívejte si nekonečnou komunikaci
-  </string>
+        Nezapomínejte doplňovat sympatie.</string>
+  <string name="hint_myprofile_buy_vip">Kupte si status VIP a užívejte si nekonečnou komunikaci</string>
   <string name="pull_to_refresh_pull_label">Pro aktualizaci stáhněte…</string>
   <string name="pull_to_refresh_release_label">Povolit pro aktualizaci…</string>
   <string name="messaging_block_buy_vip">Abyste mohli pokračovat v rozhovoru, potřebujete mít
-    status VIP
-  </string>
+        status VIP</string>
   <string name="pull_to_refresh_refreshing_label">Načítání…</string>
   <string name="user_added_to_black_list">Uživatel byl přidán na černou listinu.</string>
   <string name="user_deleted_from_black_list">Uživatel byl smazán z černé listiny.</string>
@@ -690,8 +624,7 @@
   <string name="preload_photo_type_always_on">Vždy zapnuta</string>
   <string name="preload_photo_type_preload_off">Zapnuta</string>
   <string name="wrong_time_popup_text">Nepodařilo se navázat bezpečné spojení s serverem.
-    Pravděpodobně je na vašem zařízení špatně nastaven čas nebo datum.
-  </string>
+        Pravděpodobně je na vašem zařízení špatně nastaven čas nebo datum.</string>
   <string name="wrong_time_popup_button">Otevřít nástroje</string>
   <string name="enter_text">Zadejte text</string>
   <string name="send_feedback">Odeslat zprávu</string>
@@ -699,27 +632,21 @@
   <string name="buy_more_sympathies">Získej více sympatií, staň se více populárním</string>
   <string name="google_service_general_title">Upozornění nejsou dostupná</string>
   <string name="google_service_disabled_title">Máte vypnutou službu Google Play, která je nezbytná
-    pro činnost oznámení.
-  </string>
+        pro činnost oznámení.</string>
   <string name="google_service_disabled_button">Zapnout</string>
   <string name="google_service_missing_title">Nemáte nainstalovanou službu Google Play, která je
-    nutná pro činnost upozornění.
-  </string>
+        nutná pro činnost upozornění.</string>
   <string name="google_service_missing_button">Založit</string>
   <string name="google_service_version_update_required_title">Máte nainstalovanou starou verzi
-    služby Google Play. Pro správnou činnost upozornění si ji, prosím, aktualizujte.
-  </string>
+        služby Google Play. Pro správnou činnost upozornění si ji, prosím, aktualizujte.</string>
   <string name="google_service_version_update_required_button">Obnovit</string>
   <string name="google_invalid_account_title">Ověřte si údaje vašeho účtu na Googlu nebo se spojte
-    s technickou podporou Googlu.
-  </string>
+        s technickou podporou Googlu.</string>
   <string name="google_sign_in_account_title">Nemáte Google účet. Pokud chcete dostávat
-    upozornění, musíte se autorizovat.
-  </string>
+        upozornění, musíte se autorizovat.</string>
   <string name="google_sign_in_account_button">Autorizovat se</string>
   <string name="google_unavailable_services_title">Je nám líto, ale vaše zařízení nepodporuje
-    upozornění.
-  </string>
+        upozornění.</string>
   <string name="receive_message_notification">Dostávat upozornění o nové zprávě</string>
   <string name="receive_mutual_notification">Dostávat upozornění o nové vzájemné sympatii</string>
   <string name="receive_sympathy_notification">Dostávat upozornění o nové sympatii</string>
@@ -729,10 +656,8 @@
   <string name="add_leader_hint">Váš pozdrav…</string>
   <string name="more">ještě</string>
   <string name="premium_for_invitations">Abyste získali status VIP na 1 den, musíte nasbírat 5
-    registrací.
-  </string>
-  <string name="premium_for_invitations_current_status">Získali jste už přihlášení a registrací
-  </string>
+        registrací.</string>
+  <string name="premium_for_invitations_current_status">Získali jste už přihlášení a registrací</string>
   <string name="no_contacts_available">V přístroji nejsou kontakty, které je možno zobrazit</string>
   <string name="sms_invite_title">Získejte VIP na 24 hodin!</string>
   <string name="status_can_send_confirmation">Pozvat</string>
@@ -743,6 +668,5 @@
   <string name="trial_vip_text">Status VIP zdarma na 7 dní</string>
   <string name="trial_vip_button_text">Připojit VIP</string>
   <string name="novice_sympathy">Posílejte sympatie pouze lidem, které se Vám\nopravdu líbí\ - a
-    můžete začít příjemnou známost
-  </string>
+        můžete začít příjemnou známost</string>
 </resources>

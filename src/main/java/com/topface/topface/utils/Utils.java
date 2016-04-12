@@ -3,10 +3,8 @@ package com.topface.topface.utils;
 import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -162,7 +160,7 @@ public class Utils {
         }
     }
 
-    public static boolean isEmptyJson(JSONObject object){
+    public static boolean isEmptyJson(JSONObject object) {
         return object.toString().equals(EMPTY_JSON);
     }
 
@@ -217,6 +215,15 @@ public class Utils {
         }
     }
 
+    public static void goToUrl(IActivityDelegate iActivityDelegate, String url) {
+        if (iActivityDelegate != null) {
+            Intent i = Utils.getIntentToOpenUrl(url);
+            if (i != null) {
+                iActivityDelegate.startActivity(i);
+            }
+        }
+    }
+
     public static Intent getIntentToOpenUrl(String url) {
         if (!TextUtils.isEmpty(url)) {
             Intent i = new Intent(Intent.ACTION_VIEW);
@@ -226,9 +233,17 @@ public class Utils {
         return null;
     }
 
-    public static void startOldVersionPopup(final Activity activity) {
-        startOldVersionPopup(activity, true);
+    public static String getClassName(String className) {
+        return removeModulesName(className, "Fragment", "Dialog", "Popup");
     }
+
+    public static String removeModulesName(String className, String... modulesName) {
+        for (String module : modulesName) {
+            className = className.replace(module, EMPTY);
+        }
+        return className;
+    }
+
 
     public static void showCustomToast(int text) {
         Context context = App.getContext();
@@ -246,26 +261,6 @@ public class Utils {
             toast.setView(layout);
             toast.show();
         }
-    }
-
-    public static void startOldVersionPopup(final Activity activity, boolean cancelable) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setPositiveButton(R.string.popup_version_update, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Utils.goToMarket(activity);
-            }
-        });
-        if (cancelable) {
-            builder.setNegativeButton(R.string.popup_version_cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-        }
-        builder.setMessage(R.string.general_version_not_supported);
-        builder.setCancelable(cancelable);
-        builder.create().show();
     }
 
     public static void goToMarket(Activity context) {
@@ -327,9 +322,7 @@ public class Utils {
 
     public static void showSoftKeyboard(Context context, EditText editText) {
         InputMethodManager keyboard = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (editText == null) {
-            keyboard.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        } else {
+        if (editText != null) {
             editText.requestFocus();
             keyboard.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
         }
@@ -553,6 +546,7 @@ public class Utils {
 
         }
     }
+
     public static void checkEmailConfirmation(final IEmailConfirmationListener emailConfirmationListener, final boolean isNeedShowToast) {
         final boolean isEmailConfirmedCurrentValue = App.get().getProfile().emailConfirmed;
         new ProfileRequest(App.getContext()).callback(new DataApiHandler<Profile>() {

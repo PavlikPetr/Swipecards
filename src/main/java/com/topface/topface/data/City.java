@@ -110,8 +110,17 @@ public class City extends AbstractData implements SerializableToJson, Cloneable,
 
     @Override
     public boolean equals(Object o) {
+        if(!(o instanceof City)) return false;
         City city = ((City) o);
         return id == city.id && name.equals(city.getName()) && full.equals(city.getFullName());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (full != null ? full.hashCode() : 0);
+        return result;
     }
 
     public boolean isEmpty() {

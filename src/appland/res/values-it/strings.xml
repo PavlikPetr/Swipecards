@@ -56,9 +56,7 @@
     <string name="address_book_access_error">Questa applicazione non ha accesso ai tuoi contatti.
         Puoi cambiare le impostazioni di accesso nelle impostazioni di privacy del tuo dispositivo
     </string>
-    <string name="camera_access_error">Questa applicazione non dispone di accesso alla camera. Puoi
-        rendere possibile l\'accesso nelle impostazioni della privacy del tuo dispositivo
-    </string>
+    <string name="camera_access_error">Questa applicazione non dispone di accesso alla camera. Puoi rendere possibile l\'accesso nelle impostazioni della privacy del tuo dispositivo</string>
     <string name="profile_deleted_user">L’utente è stato eliminato</string>
     <string name="filter_main_parameters">Mi interessano</string>
     <string name="dating_prev_button_ext">Precedente</string>
@@ -839,29 +837,20 @@
     <string name="novice_sympathy">Invia le simpatie solo alle persone che ti\npiacciono
         veramente\nper iniziare una piacevole relazione
     </string>
-    <string name="go_dating_message">Comincia a fare conoscenze ed in questa sezione vedrai gli
-        utenti
-        che hanno visitato il tuo profilo
-    </string>
-    <string name="photo_not_from_main_album">Non puoi impostare questa foto come profilo perché non
-        conforme ai canoni della moderazione
-    </string>
+    <string name="go_dating_message">Comincia a fare conoscenze ed in questa sezione vedrai gli utenti
+        che hanno visitato il tuo profilo</string>
+    <string name="photo_not_from_main_album">Non puoi impostare questa foto come profilo perché non conforme ai canoni della moderazione</string>
     <string name="sidebar_vk_profile">Profilo Vkontakte</string>
     <string name="title_vk_profile">Profilo VKontakte</string>
-    <string name="vk_profile_invite_friends_error">L\'utente ha disattivato la ricezione di inviti
-    </string>
-    <string name="foreign_profile_empty_gifts_title">Invia regali e stai al centro
-        dell\'attenzione
-    </string>
+    <string name="vk_profile_invite_friends_error">L\'utente ha disattivato la ricezione di inviti</string>
+    <string name="foreign_profile_empty_gifts_title">Invia regali e stai al centro dell\'attenzione</string>
     <string name="chat_auto_reply_title">Il testo del messaggio è nascosto</string>
     <string name="chat_auto_reply_message">Per aprirlo e rispondere diventa utente- VIP</string>
     <string name="chat_auto_reply_button">Diventa VIP</string>
-    <string name="photo_list_load_info">Condividi le tue foto e ti vedranno milioni di persone
-    </string>
+    <string name="photo_list_load_info">Condividi le tue foto e ti vedranno milioni di persone</string>
     <string name="vk_profile_button_tf_group">Gruppo Topface</string>
     <string name="vk_profile_button_join_tf_group">Entra nel gruppo Topface</string>
-    <string name="vk_profile_button_join_vkgames_group">Entra nel gruppo \" Giochi Vkontakte\"
-    </string>
+    <string name="vk_profile_button_join_vkgames_group">Entra nel gruppo \" Giochi  Vkontakte\"</string>
     <string name="vk_profile_button_invite_friends">Invita amici</string>
     <string name="vk_profile_invite_friends_title">Invita amici</string>
     <string name="invite_friend_button">Invita</string>
@@ -870,13 +859,10 @@
     <string name="vk_friends_success_invite">Invito inviato</string>
     <string name="join_group_success">Adesso fai parte del gruppo</string>
     <string name="settings_auto_greeting_title">Auto</string>
-    <string name="settings_auto_greeting_subtitle">Permette di cominciare automaticamente un dialogo
-        di conoscenza dopo la ricezione della simpatia
-    </string>
+    <string name="settings_auto_greeting_subtitle">Permette di cominciare automaticamente un dialogo 
+         di conoscenza dopo la ricezione della simpatia</string>
     <string name="take_photo_text_1">Carica la tua foto per cominciare a fare conoscenza.</string>
-    <string name="take_photo_text_2">Nella foto devi comparire tu. Tute le foto sono controllate da
-        moderatori.
-    </string>
+    <string name="take_photo_text_2">Nella foto devi comparire tu. Tute le foto sono controllate da moderatori.</string>
     <string name="unlock_by_viewed_ad_video_button_text">Sblocca gratis a %s</string>
     <plurals name="free_minutes">
         <item quantity="zero">% minuto</item>
@@ -884,26 +870,34 @@
         <item quantity="one">% minuti</item>
     </plurals>
     <string name="thanks_for_your_rate_title">Grazie per la tua recensione</string>
-    <string name="thanks_for_your_rate_top_label">Per dimostrarti la nostra gratitudine, posteremo
-        la tua immagine nelle newsfeed!
-    </string>
-    <string name="thanks_for_your_rate_bottom_label">Condividi la tua esperienza nell\'App Store.
-        Valutiamo ogni recensione!
-    </string>
+    <string name="thanks_for_your_rate_top_label">Per dimostrarti la nostra gratitudine, posteremo la tua immagine nelle newsfeed!</string>
+    <string name="thanks_for_your_rate_bottom_label">Condividi la tua esperienza nell\'App Store. Valutiamo ogni recensione!</string>
     <string name="thanks_for_your_rate_rate_app">Scrivi una recensione nell\'App Store</string>
     <string name="thanks_for_your_rate_close">Chiuso</string>
     <plurals name="novice_sympathies_bonuses">
-        <item quantity="zero">Ricevi %1$d simpatie in\nregalo! Questo significa che tu\n piacerai
-            sicuramente%2$d agli utenti,\nche ti invieranno la loro simpatia
-        </item>
-        <item quantity="other">Ricevi %1$d simpatie in\nregalo! Questo significa che tu\n piacerai
-            sicuramente%2$d agli utenti,\nche ti invieranno la loro simpatia
-        </item>
-        <item quantity="one">Ricevi %1$d simpatia in\nregalo! Questo significa che tu\n piacerai
-            sicuramente%2$d agli utenti,\nche ti invieranno la loro simpatia
-        </item>
+        <item quantity="zero">Ricevi %1$d simpatie in\nregalo! Questo significa che tu\n piacerai sicuramente%2$d agli utenti,\nche ti invieranno la loro simpatia</item>
+        <item quantity="other">Ricevi %1$d simpatie in\nregalo! Questo significa che tu\n piacerai sicuramente%2$d agli utenti,\nche ti invieranno la loro simpatia</item>
+        <item quantity="one">Ricevi %1$d simpatia in\nregalo! Questo significa che tu\n piacerai sicuramente%2$d agli utenti,\nche ti invieranno la loro simpatia</item>
     </plurals>
-    <string name="buy_vip_title_from_input">Per cominciare a chattare con questo utente devi essere
-        VIP
+    <string name="buy_vip_title_from_input">Per cominciare a chattare con questo utente devi essere VIP</string>
+    <string name="mutual_like_popup_text">La simpatia è reciproca!</string>
+    <string name="mutual_like_popup_button">Dici \" Ciao\"</string>
+    <string name="people_nearby_access_to_location_description">Per vedere chi ti è vicino, devi fornire l\'accesso alla localizzazione.</string>
+    <string name="people_nearby_not_enought_money">Non hai abbastanza Monete per accedere alla funzione \"Persone vicino a me\"</string>
+    <string name="people_nearby_not_found_title">In questo momento non c\'è alcun utente vicino a te</string>
+    <string name="people_nearby_not_found_description">Riprova, premi e tieni premuto il dito al centro dello schermo</string>
+    <string name="NSLocationWhenInUseUsageDescription">Per accedere a questa funzione devi fornire il permesso</string>
+    <string name="ban_liberty_title">Senza pubblicità!</string>
+    <string name="ban_liberty_description">Solo un appuntamento, puro e semplice</string>
+    <string name="guest_liberty_title">Ospiti</string>
+    <string name="guest_liberty_description">Scopri chi ha visitato il tuo profilo</string>
+    <string name="star_liberty_title">Utenti popolari</string>
+    <string name="star_liberty_description">Il più famoso rompighiaccio per iniziare a conversare
     </string>
+    <string name="crown_liberty_title">Distinguiti</string>
+    <string name="crown_liberty_description">Spicca facilmente tra le Ricerche e i Messaggi</string>
+    <string name="like_liberty_title">Mi piace</string>
+    <string name="like_liberty_description">Scopri a chi piaci</string>
+    <string name="buy_button_sticker_popular">Il più venduto</string>
+    <string name="buy_button_sticker_best_value">Miglior prezzo</string>
 </resources>

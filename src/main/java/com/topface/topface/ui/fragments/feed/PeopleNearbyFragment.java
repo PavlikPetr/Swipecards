@@ -76,7 +76,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     public void onCreate(Bundle savedInstanceState) {
         App.from(getActivity()).inject(this);
         startWaitLocationTimer();
-        mGeoLocationManager = new GeoLocationManager(getActivity());
+        mGeoLocationManager = new GeoLocationManager();
         mGeoLocationManager.registerProvidersChangedActionReceiver();
         mSubscriptionLocation = mAppState.getObservable(Location.class).subscribe(mLocationAction);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);

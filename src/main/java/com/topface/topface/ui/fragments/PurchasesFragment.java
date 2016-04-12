@@ -28,6 +28,7 @@ import com.topface.topface.data.PurchasesTabData;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
+import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.utils.CacheProfile;
@@ -90,6 +91,38 @@ public class PurchasesFragment extends BaseFragment {
     private TabLayoutCreator mTabLayoutCreator;
     private ArrayList<String> mPagesTitle = new ArrayList<>();
 
+    private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
+        private TopfaceOfferwallRedirect mTopfaceOfferwallRedirect = App.get().getOptions().topfaceOfferwallRedirect;
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            if (mTabLayoutCreator != null) {
+                mTabLayoutCreator.setTabTitle(position);
+            }
+            if (mPagerAdapter != null) {
+                ((TrackedFragment) mPagerAdapter.getItem(position)).onResumeFragment();
+            }
+            setResourceInfoText();
+            if (position == mPagerAdapter.getTabIndex(PurchasesTabData.BONUS)) {
+                if (mTopfaceOfferwallRedirect != null && mTopfaceOfferwallRedirect.isEnabled()) {
+                    StatisticsTracker.getInstance().sendEvent("bonuses_opened",
+                            new Slices().putSlice("ref", mTopfaceOfferwallRedirect.getGroup()));
+                    mTopfaceOfferwallRedirect.setComplited(true);
+                }
+                mSkipBonus = true;
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,6 +163,11 @@ public class PurchasesFragment extends BaseFragment {
         super.onDestroyView();
         ButterKnife.unbind(this);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mVipPurchasedReceiver);
+    }
+
+    @Override
+    public boolean isTrackable() {
+        return false;
     }
 
     @Override
@@ -187,40 +225,16 @@ public class PurchasesFragment extends BaseFragment {
         createTabList(tabs.list);
         mPagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs.list);
         mPager.setAdapter(mPagerAdapter);
-        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            private TopfaceOfferwallRedirect mTopfaceOfferwallRedirect = options.topfaceOfferwallRedirect;
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if (mTabLayoutCreator != null) {
-                    mTabLayoutCreator.setTabTitle(position);
-                }
-                setResourceInfoText();
-                if (position == mPagerAdapter.getTabIndex(PurchasesTabData.BONUS)) {
-                    if (mTopfaceOfferwallRedirect != null && mTopfaceOfferwallRedirect.isEnabled()) {
-                        StatisticsTracker.getInstance().sendEvent("bonuses_opened",
-                                new Slices().putSlice("ref", mTopfaceOfferwallRedirect.getGroup()));
-                        mTopfaceOfferwallRedirect.setComplited(true);
-                    }
-                    mSkipBonus = true;
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+        mPager.addOnPageChangeListener(mPageChangeListener);
         initBalanceCounters(getSupportActionBar().getCustomView());
         setResourceInfoText();
         if (savedInstanceState != null) {
-            mPager.setCurrentItem(savedInstanceState.getInt(LAST_PAGE, 0));
+            int pos = savedInstanceState.getInt(LAST_PAGE, 0);
+            mPager.setCurrentItem(pos);
+            mPageChangeListener.onPageSelected(pos);
         } else {
             mPager.setCurrentItem(0);
+            mPageChangeListener.onPageSelected(0);
         }
     }
 

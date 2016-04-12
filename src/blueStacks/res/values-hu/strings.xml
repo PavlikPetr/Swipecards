@@ -11,9 +11,7 @@
   <string name="chat_background_text">Nincs bejövő üzenet</string>
   <string name="filter_only_online">Csak online</string>
   <string name="filter_select_city">Város kiválasztása</string>
-  <string name="dashbrd_popup_rating">Tetszett az alkalmazásunk? Növeld a népszerűségünket! Minél
-    magasabb a népszerűségünk, annál több érdekes emberrel találkozhatsz a Spark-n
-  </string>
+  <string name="dashbrd_popup_rating">Tetszett az alkalmazásunk? Növeld a népszerűségünket! Minél magasabb a népszerűségünk, annál több érdekes emberrel találkozhatsz a Spark-n</string>
   <string name="dashbrd_popup_title">Értékelés</string>
   <string name="dashbrd_popup_cancel">Ne kérdezd</string>
   <string name="dashbrd_popup_rate">Értékelés beállítása</string>
@@ -31,27 +29,23 @@
   <string name="vip_invisible_mode">Láthatatlan mód</string>
   <string name="buying_profile_coins">A számládon</string>
   <string name="vip_info_title">VIP-privilégiumok</string>
-  <string name="profile_gifts_empty">Ez a felhasználó nem kapott még ajándékot még senkitől.
-  </string>
+  <string name="profile_gifts_empty">Ez a felhasználó nem kapott még ajándékot még senkitől.</string>
   <string name="profile_mygifts_empty">Még senki sem ajándékozott meg</string>
   <string name="dating_people_unnoticed">10 ember maradt a figyelmed nélkül!</string>
   <string name="dating_better_look">Óvatosabban!\nTalán elszalasztod a sorsodat!</string>
   <string name="edit_my_photos">Fényképeim</string>
   <string name="general_search_empty_title">Sajnos, nincs találat</string>
   <string name="general_search_empty_text">Próbáld újra a keresést, vagy módosítsd a szűrő
-    beállításokat
-  </string>
+        beállításokat</string>
   <string name="map_title">Térkép</string>
   <string name="general_buying">Vegyél szimpátiát és érméket</string>
   <string name="popup_version_title">Új verzió elérhető</string>
   <string name="popup_version_message">Itt az ideje, hogy frissítsd a verziót!</string>
   <string name="leaders_select_photo_info">Válassz ki egy látványos képet! Nem tudsz képet
-    választani alacsony értékeléssel
-  </string>
+        választani alacsony értékeléssel</string>
   <string name="map_popup_address">Cím</string>
   <string name="black_list_info">Hozzáadtat ezt a személyt a fekete listához. A VIP-státusz
-    beállításaiban tudod megváltoztatni.
-  </string>
+        beállításaiban tudod megváltoztatni.</string>
   <string name="black_list_activation">VIP-státusz aktíválása és fekete lista használata</string>
   <string name="general_error">HIBA</string>
   <string name="general_yes">Igen</string>
@@ -184,8 +178,7 @@
   </plurals>
   <string name="general_edit_profile_message">Kérjük, töltse ki a profil szükséges mezőit</string>
   <string name="general_search_null_response_error">Semmit sem találtam. Próbáld meg módosítani a
-    szűrőket
-  </string>
+        szűrőket</string>
   <string name="change_filters">Szűrők változtatása</string>
   <string name="general_sex">Nem</string>
   <string name="general_girl">Nő</string>
@@ -210,16 +203,12 @@
   <string name="vip_state_off">VIP-státuszod nem aktív</string>
   <string name="vip_info_guest">Tudd meg, kit érdekeltél - ellenőrizd a vendégeidet!</string>
   <string name="vip_info_invisible">Maradj láthatatlan, mikor mások oldalát látogatod,
-    \&quot;láthatatlan\&quot; módnak köszönhetően
-  </string>
+        \&quot;láthatatlan\&quot; módnak köszönhetően</string>
   <string name="vip_info_message">Szerezz előnyt - az üzeneteid egyedülállóak lesznek az átlag
-    háttéren!
-  </string>
+        háttéren!</string>
   <string name="vip_info_blackList">Szabadulj meg a fárasztó emberektől a \&quot;feketelista\&quot;
-    segítségével
-  </string>
-  <string name="vip_info_vip">Legyél egyéniség a VIP-státuszoddal a keresésben és a profilodon!
-  </string>
+        segítségével</string>
+  <string name="vip_info_vip">Legyél egyéniség a VIP-státuszoddal a keresésben és a profilodon!</string>
   <string name="buying_vip_status">VIP státusz vásárlás</string>
   <string name="edit_my_city">Városom</string>
   <string name="settings_feedback_email">Kapcsolattartási email</string>
@@ -227,33 +216,26 @@
   <string name="chat_write_message">Üzenet írása</string>
   <string name="buying_sympathies">Szimpátia vásárlás</string>
   <string name="general_reconnect_social">A kapcsolódás a közösségi oldalhoz nem lehetséges.
-    Próbáld meg később.
-  </string>
+        Próbáld meg később.</string>
   <string name="general_block">Letiltás</string>
   <string name="general_buying_disabled">A vásárlás nem elérhető most.</string>
   <string name="ban_flood_detected">Túl gyakran küldesz felkéréseket a szerverre. Várj az
-    alkalmazás további használatával.
-  </string>
+        alkalmazás további használatával.</string>
   <string name="general_maintenance">Technikai munkák vannak folyamatban a szerveren, és a
-    felkérésedet nem tudjuk most teljesíteni. Próbáld meg később.
-  </string>
+        felkérésedet nem tudjuk most teljesíteni. Próbáld meg később.</string>
   <string name="virus_chat_btn">Szimpátia kapása</string>
   <string name="profile_ask_sent">Felkérés elküldve</string>
   <string name="virus_error">Barátod csak naponta egyszer tudj szimpátiákat ajándékozni! Próbáld
-    meg holnap!
-  </string>
+        meg holnap!</string>
   <string name="popup_version_update">Frissítés</string>
   <string name="popup_version_cancel">Emlékeztess később</string>
   <string name="general_version_not_supported">A használt alkalmazás verzió túl öreg és nem
-    támogatott már. Kérjük, frissítsd az alkalmazást!
-  </string>
+        támogatott már. Kérjük, frissítsd az alkalmazást!</string>
   <string name="default_price_format">Összesen: %.2f USD</string>
   <string name="general_gift">Ajándék</string>
   <string name="profile_edit_age_ranges">Az életkornak 16 és 99 év között kell lennie. Kérjük, add
-    meg a helyes értéket, és próbáld újra.
-  </string>
+        meg a helyes értéket, és próbáld újra.</string>
   <string name="notifications">Értesítés</string>
   <string name="novice_sympathy">Küldj szimpátiát azoknak, akik \ntényleg tetszenek,\nígy el tudsz
-    kezdeni egy élvezetes ismerkedést.
-  </string>
+        kezdeni egy élvezetes ismerkedést.</string>
 </resources>

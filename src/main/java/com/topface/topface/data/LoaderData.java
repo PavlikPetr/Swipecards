@@ -72,4 +72,19 @@ public class LoaderData extends AbstractData implements IListLoader, Parcelable 
         dest.writeInt(mIsListLoader ? 1 : 0);
         dest.writeInt(mIsListRetrier ? 1 : 0);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof LoaderData)) return false;
+        LoaderData that = (LoaderData) o;
+        return mIsListLoader == that.mIsListLoader && mIsListRetrier == that.mIsListRetrier;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (mIsListLoader ? 1 : 0);
+        result = 31 * result + (mIsListRetrier ? 1 : 0);
+        return result;
+    }
 }

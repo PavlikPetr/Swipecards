@@ -78,6 +78,14 @@
 
     <dimen name="unlock_likes_by_coins_button_text_size">15sp</dimen>
 
+    <!--Buy products buttons-->
+    <dimen name="sticker_width">80dp</dimen>
+    <dimen name="button_height">52dp</dimen>
+    <dimen name="button_title_text_size">18sp</dimen>
+    <dimen name="button_sticker_text_size">11sp</dimen>
+    <dimen name="button_description_text_size">13sp</dimen>
+    <dimen name="default_purchase_button_container_padding">5dp</dimen>
+    <dimen name="default_purchase_button_container_padding_top">56dp</dimen>
     <dimen name="user_gifts_padding">12dp</dimen>
 
     <!-- Restore account screen -->
@@ -86,5 +94,4 @@
     <dimen name="restore_message_bottom_padding">20dp</dimen>
     <dimen name="restore_message_top_padding">44dp</dimen>
     <dimen name="restore_buttons_padding">12dp</dimen>
-
 </resources>

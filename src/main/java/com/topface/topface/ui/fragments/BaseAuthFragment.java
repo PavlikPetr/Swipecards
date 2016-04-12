@@ -27,6 +27,7 @@ import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -129,9 +130,6 @@ public abstract class BaseAuthFragment extends BaseFragment {
 
             @Override
             public void fail(final int codeError, IApiResponse response) {
-                if (codeError == ErrorCodes.USER_DELETED) {
-                    showButtons();
-                }
                 authorizationFailed(codeError, authRequest);
             }
 
@@ -149,6 +147,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 //После авторизации обязательно бросаем события, что бы профиль загрузился
                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
                 onOptionsAndProfileSuccess();
+                new FindAndSendCurrentLocation();
             }
 
             @Override
@@ -168,11 +167,9 @@ public abstract class BaseAuthFragment extends BaseFragment {
         if (!isAdded()) {
             return;
         }
-
-        hideButtons();
         processAuthError(codeError, request);
-
         if (whetherToShowRetrier(codeError)) {
+            hideButtons();
             showRetrier();
             if (mPassword != null) {
                 mPassword.setTransformationMethod(new PasswordTransformationMethod());

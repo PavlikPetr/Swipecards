@@ -101,7 +101,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
         transaction.commit();
 
         mLockScreen = (RelativeLayout) findViewById(R.id.lockScreen);
-        mRetryView = new RetryViewCreator.Builder(this, new View.OnClickListener() {
+        mRetryView = new RetryViewCreator.Builder(App.getContext(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadGifts();
@@ -121,7 +121,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     private void loadGifts() {
         if (mAllGifts.isEmpty()) {
             setSupportProgressBarIndeterminateVisibility(true);
-            GiftsRequest giftRequest = new GiftsRequest(this);
+            GiftsRequest giftRequest = new GiftsRequest(App.getContext());
             registerRequest(giftRequest);
             mRequestingGifts = true;
             giftRequest.callback(new DataApiHandler<LinkedList<Gift>>() {

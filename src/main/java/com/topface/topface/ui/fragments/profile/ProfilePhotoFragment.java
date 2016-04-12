@@ -96,6 +96,11 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
         return ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.gridview_footer_progress_bar, null, false);
     }
 
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
     private void sendAlbumRequest() {
         Photos photoLinks = mOwnProfileRecyclerViewAdapter.getAdapterData();
         if (photoLinks == null || photoLinks.size() < 2) {

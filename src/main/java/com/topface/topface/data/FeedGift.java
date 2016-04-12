@@ -65,5 +65,20 @@ public class FeedGift extends FeedItem implements Parcelable {
         dest.writeParcelable(gift, flags);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof FeedGift)) return false;
+        if (!super.equals(o)) return false;
+        FeedGift feedGift = (FeedGift) o;
+        return !(gift != null ? !gift.equals(feedGift.gift) : feedGift.gift != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (gift != null ? gift.hashCode() : 0);
+        return result;
+    }
 }
 

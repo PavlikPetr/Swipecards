@@ -138,4 +138,34 @@ public class History extends FeedDialog implements Parcelable {
     protected String getRelativeCreatedDate(long date) {
         return DateUtils.getRelativeDate(date, false).toUpperCase(Locale.getDefault());
     }
+
+    @SuppressWarnings("SimplifiableIfStatement")
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof History)) return false;
+        if (!super.equals(o)) return false;
+        History history = (History) o;
+        if (mEmptyRepeatItem != history.mEmptyRepeatItem) return false;
+        if (mEmptyWaitingItem != history.mEmptyWaitingItem) return false;
+        if (blockText != null ? !blockText.equals(history.blockText) : history.blockText != null)
+            return false;
+        if (dialogTitle != null ? !dialogTitle.equals(history.dialogTitle) : history.dialogTitle != null)
+            return false;
+        if (mJsonForParse != null ? !mJsonForParse.equals(history.mJsonForParse) : history.mJsonForParse != null)
+            return false;
+        return !(createdFormatted != null ? !createdFormatted.equals(history.createdFormatted) : history.createdFormatted != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (mEmptyRepeatItem ? 1 : 0);
+        result = 31 * result + (mEmptyWaitingItem ? 1 : 0);
+        result = 31 * result + (blockText != null ? blockText.hashCode() : 0);
+        result = 31 * result + (dialogTitle != null ? dialogTitle.hashCode() : 0);
+        result = 31 * result + (mJsonForParse != null ? mJsonForParse.hashCode() : 0);
+        result = 31 * result + (createdFormatted != null ? createdFormatted.hashCode() : 0);
+        return result;
+    }
 }

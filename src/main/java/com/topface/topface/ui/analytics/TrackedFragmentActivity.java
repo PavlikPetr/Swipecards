@@ -7,14 +7,15 @@ import com.comscore.analytics.comScore;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
 import com.topface.topface.data.ExperimentTags;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.ui.IBackPressedListener;
+import com.topface.topface.statistics.ScreensShowStatistics;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 
 public class TrackedFragmentActivity extends ActionBarActivity {
@@ -23,12 +24,15 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     @Override
     public void onStart() {
         super.onStart();
+        App.onActivityStarted(this.getClass().getName());
         StatisticsTracker.getInstance().activityStart(this);
         if (isTrackable()) {
-            Tracker tracker = EasyTracker.getTracker();
-            tracker.setScreenName(getTrackName());
-            tracker.send(setCustomMeticsAndDimensions(App.from(this).getOptions(), App.from(this).getProfile()).build());
+            senActivitiesShownStatistics();
         }
+    }
+
+    public void senActivitiesShownStatistics() {
+        ScreensShowStatistics.sendScreenShow(getClass().getSimpleName());
     }
 
     @Override
@@ -65,6 +69,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     @Override
     public void onStop() {
         super.onStop();
+        App.onActivityStoped(this.getClass().getName());
         EasyTracker.getTracker().send(new HitBuilders.AppViewBuilder().set(EasyTracker.SESSION_CONTROL, "end").build());
     }
 
@@ -73,7 +78,7 @@ public class TrackedFragmentActivity extends ActionBarActivity {
     }
 
     protected String getTrackName() {
-        return ((Object) this).getClass().getSimpleName().replace("Activity", "");
+        return Utils.getClassName(getClass().getSimpleName());
     }
 
     @Override

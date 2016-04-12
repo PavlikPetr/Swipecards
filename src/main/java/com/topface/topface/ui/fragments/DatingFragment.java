@@ -39,7 +39,6 @@ import com.topface.topface.RetryRequestReceiver;
 import com.topface.topface.Ssid;
 import com.topface.topface.data.AlbumPhotos;
 import com.topface.topface.data.BalanceData;
-import com.topface.topface.data.City;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.NoviceLikes;
 import com.topface.topface.data.Options;
@@ -282,6 +281,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -299,21 +299,27 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    private boolean isValidUserCache() {
+        if (mUserSearchList == null) {
+            mUserSearchList = new CachableSearchList<>(SearchUser.class);
+        }
+        if (!mUserSearchList.isEmpty()) {
+            for (SearchUser searchUser : mUserSearchList) {
+                if (!searchUser.city.equals(App.get().getProfile().city)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.from(getActivity()).inject(this);
-        mDatingSubscriptions.add(mAppState.getObservable(City.class).subscribe(new Action1<City>() {
-            @Override
-            public void call(City city) {
-                if (!city.equals(App.get().getProfile().city)) {
-                    if (mUserSearchList == null) {
-                        mUserSearchList = new CachableSearchList<>(SearchUser.class);
-                    }
-                    mUserSearchList.clear();
-                }
-            }
-        }));
+        if (!isValidUserCache()) {
+            mUserSearchList.clear();
+        }
         if (savedInstanceState != null) {
             mCurrentUser = savedInstanceState.getParcelable(CURRENT_USER);
         }
@@ -394,7 +400,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (null != mDatingSubscriptions && !mDatingSubscriptions.isUnsubscribed()) {
             mDatingSubscriptions.unsubscribe();
         }
-        mAppState.setData(App.get().getProfile().city);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mRateReceiver);
     }
 
@@ -490,7 +495,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (null != mDatingLovePrice) {
             if (delightPrice > 0) {
                 mDatingLovePrice.setVisibility(View.VISIBLE);
-                mDatingLovePrice.setText(Integer.toString(delightPrice));
+                mDatingLovePrice.setText(String.valueOf(delightPrice));
             } else {
                 mDatingLovePrice.setVisibility(View.GONE);
             }
@@ -1034,7 +1039,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     public void setCounter(int position) {
         if (mCurrentUser != null) {
-            mDatingCounter.setText((position + 1) + "/" + mCurrentUser.photos.size());
+            mDatingCounter.setText(String.format("%d/%d", (position + 1), mCurrentUser.photos.size()));
             if (!mIsHide) mDatingCounter.setVisibility(View.VISIBLE);
         } else {
             mDatingCounter.setText("-/-");

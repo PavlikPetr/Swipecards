@@ -8,13 +8,10 @@
     <string name="general_settings_abbr">Ayarlar</string>
     <string name="general_disallow">İzin verme</string>
     <string name="general_allow">İzin ver</string>
-    <string name="notification_denied_popup_title">Gelen mesajları, beğenileri ve diğer tüm
-        haberleri
-        kaçırmamak için bildirimlere izin verin.
-    </string>
-    <string name="notification_popup_title">Yeni beğeniler, hayranlar veya okunmamış mesajlar
-        için size bildirim göndermemize izin verin.
-    </string>
+    <string name="notification_denied_popup_title">Gelen mesajları, beğenileri ve diğer tüm haberleri 
+        kaçırmamak için bildirimlere izin verin.</string>
+    <string name="notification_popup_title">Yeni beğeniler, hayranlar veya okunmamış mesajlar 
+       için size bildirim göndermemize izin verin.</string>
     <string name="email_successfully_changed">E-mailiniz başarılıyla değiştirildi</string>
     <string name="auth_vk_name">VKontakte</string>
     <string name="dating_switch_button">Daha…</string>
@@ -24,17 +21,14 @@
     </string>
     <string name="likes_background_text">Beğeni yok</string>
     <string name="visitors_background_text">Misafirler yok</string>
-    <string name="need_set_avatar">Bu şekilde seni kimse tanıyamaz! Hemen bir profil resmi yükle.
-    </string>
+    <string name="need_set_avatar">Bu şekilde seni kimse tanıyamaz! Hemen bir profil resmi yükle.</string>
     <string name="chat_background_text">Gelen mesaj yok</string>
     <string name="entrance">Gir</string>
     <string name="filter_only_online">Sadece çevrim içi</string>
     <string name="filter_city_age_parameters">Yaş ve şehir</string>
     <string name="filter_select_city">Şehir seçeneği</string>
     <string name="edit_block_photo">Fotoğraflar</string>
-    <string name="dashbrd_popup_rating">Ekimizi mi beğendin? Reytingimizi yükselt! Reyting ne kadar
-        yüksekse o kadar çok ilginç insanlarla Topface’de karşılaşırsın
-    </string>
+    <string name="dashbrd_popup_rating">Ekimizi mi beğendin? Reytingimizi yükselt! Reyting ne kadar yüksekse o kadar çok ilginç insanlarla Topface’de karşılaşırsın</string>
     <string name="dashbrd_popup_title">Reyting</string>
     <string name="dashbrd_popup_cancel">Bir daha sorma</string>
     <string name="dashbrd_popup_rate">Reyting göstermek</string>
@@ -61,9 +55,7 @@
     <string name="address_book_access_error">Bu uygulama iletişim bilgilerine ulaşılmaz. Cihazınızın
         özel ayarlarında etkinleştirebilirsiniz.
     </string>
-    <string name="camera_access_error">Uygulama kameranıza erişemedi, cihazınızın gizlilik
-        ayarlarından erişim izni verebilirsiniz.
-    </string>
+    <string name="camera_access_error">Uygulama kameranıza erişemedi, cihazınızın gizlilik ayarlarından erişim izni verebilirsiniz.</string>
     <string name="profile_deleted_user">Kullanıcı silinmiştir</string>
     <string name="filter_main_parameters">İlgi alanlarım</string>
     <string name="dating_prev_button_ext">Önceki</string>
@@ -218,7 +210,7 @@
     <string name="filter_age_end_prefix">%s kadar</string>
     <string name="filter_constitution_template">%1$d ile %2$d arası</string>
     <string name="filter_cities_all">Bütün şehirlerde</string>
-    <string name="purchase_header_title">Hesap bakiyeniz:</string>
+    <string name="purchase_header_title">Bakiye:</string>
     <string name="buying_header_title">Satın almalar</string>
     <plurals name="buying_gift_you_need_coins">
         <item quantity="other">Bir hediye yollamak için daha fazla %d para gerek</item>
@@ -230,12 +222,9 @@
         <item quantity="one">Bir mesaj atmak için %d para alın</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
-        <item quantity="zero">Birinin sizi beğendiğini görmek için daha fazla %d para satın alın
-        </item>
-        <item quantity="other">Birinin sizi beğendiğini görmek için daha fazla %d para satın alın
-        </item>
-        <item quantity="one">Birinin sizi beğendiğini görmek için daha fazla %d para satın alın
-        </item>
+        <item quantity="zero">Birinin sizi beğendiğini görmek için daha fazla  %d para satın alın</item>
+        <item quantity="other">Birinin sizi beğendiğini görmek için daha fazla  %d para satın alın</item>
+        <item quantity="one">Birinin sizi beğendiğini görmek için daha fazla  %d para satın alın</item>
     </plurals>
     <plurals name="buying_leaders_you_need_coins">
         <item quantity="zero">Görünmek için daha fazla %d para gerekli</item>
@@ -247,9 +236,7 @@
         <item quantity="other">%d para gerekir</item>
         <item quantity="one">%d para gerekir</item>
     </plurals>
-    <string name="buying_default_message">Kredi ile diğerlerine beğeni ve hayranlık
-        gönderebilirsiniz.
-    </string>
+    <string name="buying_default_message">Kredi ile diğerlerine beğeni ve hayranlık gönderebilirsiniz.</string>
     <string name="buying_money">Kredi satın al</string>
     <string name="gifts_title">Hediye seçin</string>
     <string name="profile_header_title">Profilim</string>
@@ -317,8 +304,7 @@
     <string name="settings_ask_developer">Geliştiricilere soru</string>
     <string name="settings_payment_problems">Ödeme sorunları</string>
     <string name="settings_cooperation">Ortaklık</string>
-    <string name="settings_feedback_success_msg">Teşekkürler, mesaj başarılıyla gönderilmiştir
-    </string>
+    <string name="settings_feedback_success_msg">Teşekkürler, mesaj başarılıyla gönderilmiştir</string>
     <string name="settings_switch_on">aç</string>
     <string name="settings_switch_off">kapat</string>
     <string name="leaders_go_date">Buraya istiyorum</string>
@@ -361,7 +347,7 @@
     <string name="edit_refresh_status">Durumu yenilemek</string>
     <string name="ban_title">Tebrikler! Siz ban edildiniz</string>
     <string name="ban_title_forever">Tebrikler! Hayat boyu engellendiniz!</string>
-    <string name="ban_title_until">Tebrikler! %s kadar engellendiniz.</string>
+    <string name="ban_title_until">Tebrikler!  %s kadar engellendiniz.</string>
     <string name="ban_complain">Engellemeyi şikayet etmek</string>
     <string name="general_ready">Hazır</string>
     <string name="buying_store_ok">Alış başarılıyla tamamlanmıştır</string>
@@ -407,8 +393,7 @@
     <string name="virus_chat_btn">Beğeni kazan</string>
     <string name="profile_ask_sent">İstek gönderildi</string>
     <string name="virus_error">Yirmi dört saat içinde arkadaşınız sadece 1 defa beğeni hediye
-        edebilir! Yarın deneyin!
-    </string>
+        edebilir! Yarın deneyin!</string>
     <string name="popup_version_update">Yenilemek</string>
     <string name="popup_version_cancel">Daha sonra hatırlat</string>
     <string name="general_version_not_supported">Uygulamanızın versiyonu eskimiş ve artık
@@ -560,11 +545,9 @@
         onlarla bağlantınızı kaybetmezsiniz
     </string>
     <string name="nobody_chat_with_you_sympathies_will_help">Size henüz kimse yazmadı. Sohbet edecek
-        kişi bulmanızda beğeniler yardımcı olur
-    </string>
+        kişi bulmanızda beğeniler yardımcı olur</string>
     <string name="rate_and_have_mutual_or_buy_and_chat">Hoşlandığınız kişilere beğeni verin ve
-        karşılıklı alın. Veya beğeni satın alın ve sizden hoşlanan kişilerle sohbete başlayın!
-    </string>
+        karşılıklı alın. Veya beğeni satın alın ve sizden hoşlanan kişilerle sohbete başlayın!</string>
     <string name="with_vip_find_your_visitors">VIP-durumuyla sayfanızı kimin ziyaret ettiğini
         öğrenirsiniz
     </string>
@@ -632,8 +615,7 @@
     <string name="or">veya</string>
     <string name="settings_delete_account">Hesap silmek</string>
     <string name="chat_block_not_mutual">Kullanıcı size beğeni gönderdiyse veya VİP-durumunuz varsa
-        o zaman onunla sohbete başlayabilirsiniz
-    </string>
+        o zaman onunla sohbete başlayabilirsiniz</string>
     <string name="add_to_favorite_block_not_vip">Sadece VIP kullancılar ekrandan özele
         ekleyebilirler
     </string>
@@ -696,8 +678,7 @@
     <string name="user_deleted_or_banned">Kullanıcı silinmiş veya engellenmiştir</string>
     <string name="locking_popup_button_answer">Beğenilere cevap ver</string>
     <string name="locking_menu_message">Uygulamanın bazı sayfalarına erişim sınırlıdır. Tüm
-        sınırları kaldırmak için tüm gelen beğenilere cevap verin veya VIP alın.
-    </string>
+        sınırları kaldırmak için tüm gelen beğenilere cevap verin veya VIP alın.</string>
     <string name="current_city">Geçerli şehir</string>
     <string name="general_bonus">Bonus</string>
     <plurals name="notification_many_messages">
@@ -830,32 +811,19 @@
     <string name="trial_vip_button_text">VIP üye ol</string>
     <string name="settings_check_vip_title">VIP statüsünün aktif olup olmadığını kontrol et</string>
     <string name="settings_check_vip_cell">VIP statüsünü kontrol et</string>
-    <string name="settings_check_vip_alert">VIP statüsünün kontrol edilmesi talebiniz iletildi.
-    </string>
-    <string name="novice_sympathy">Yakın bir arkadaşlığa başlamak için sadece hoşlandığınız
-        \nkişilere beğeni gönderin.
-        Belki de \nsizin için gerçekten özel birini böylece bulabilirsiniz.
-    </string>
-    <string name="go_dating_message">İnsanlarla tanışmaya başla ve profilini ziyaret edenlerin
-        listesi burada gözükecek.
-    </string>
-    <string name="photo_not_from_main_album">Yönetim bu fotoğrafın profil resmi olarak
-        kullanılmayacağına karar verdi.
-    </string>
+    <string name="settings_check_vip_alert">VIP statüsünün kontrol edilmesi talebiniz iletildi.</string>
+    <string name="novice_sympathy">Yakın bir arkadaşlığa başlamak için sadece hoşlandığınız \nkişilere beğeni gönderin. 
+            Belki de \nsizin için gerçekten özel birini böylece bulabilirsiniz.</string>
+    <string name="go_dating_message">İnsanlarla tanışmaya başla ve profilini ziyaret edenlerin listesi burada gözükecek.</string>
+    <string name="photo_not_from_main_album">Yönetim bu fotoğrafın profil resmi olarak kullanılmayacağına karar verdi.</string>
     <string name="sidebar_vk_profile">Vkontakte profili</string>
     <string name="title_vk_profile">VK profili</string>
-    <string name="vk_profile_invite_friends_error">Bu kullanıcı artık davetiye kabul etmiyor
-    </string>
-    <string name="foreign_profile_empty_gifts_title">Bir hediye göndererek ilginin merkezi
-        olabilirsin
-    </string>
+    <string name="vk_profile_invite_friends_error">Bu kullanıcı artık davetiye kabul etmiyor</string>
+    <string name="foreign_profile_empty_gifts_title">Bir hediye göndererek ilginin merkezi olabilirsin</string>
     <string name="chat_auto_reply_title">Mesaj yazısı gizlenmiş.</string>
-    <string name="chat_auto_reply_message">Bu mesajı açmak ve okumak için VIP üye olman gerekiyor.
-    </string>
+    <string name="chat_auto_reply_message">Bu mesajı açmak ve okumak için VIP üye olman gerekiyor.</string>
     <string name="chat_auto_reply_button">VIP üye ol</string>
-    <string name="photo_list_load_info">Fotoğraflarını paylaş ve milyonlarca kişi tarafından
-        görüntülen
-    </string>
+    <string name="photo_list_load_info">Fotoğraflarını paylaş ve milyonlarca kişi tarafından görüntülen</string>
     <string name="vk_profile_button_tf_group">Topface grubu</string>
     <string name="vk_profile_button_join_tf_group">Topface grubuna katıl</string>
     <string name="vk_profile_button_join_vkgames_group">\"VK oyunları\" grubuna katıl</string>
@@ -867,31 +835,42 @@
     <string name="vk_friends_success_invite">Davet gönderildi</string>
     <string name="join_group_success">Gruba üye oldunuz</string>
     <string name="settings_auto_greeting_title">Otomatik-selam</string>
-    <string name="settings_auto_greeting_subtitle">Birisi size beğeni gönderdiğinde otomatik olarak
-        selam gönderilmesi ve sohbet başlatılması için Topface\'e izin verin.
-    </string>
-    <string name="take_photo_text_1">Arkadaşlık kurmaya başlamak için lütfen fotoğrafınızı
-        yükleyin.
-    </string>
-    <string name="take_photo_text_2">Fotoğraf size ait olmalı ve içerisinde siz olmalısınız.
-        Modaratörlerimiz tüm fotoğrafları kontrol etmektedir.
-    </string>
+    <string name="settings_auto_greeting_subtitle">Birisi size beğeni gönderdiğinde otomatik olarak selam gönderilmesi ve sohbet başlatılması için Topface\'e izin verin.</string>
+    <string name="take_photo_text_1">Arkadaşlık kurmaya başlamak için lütfen fotoğrafınızı yükleyin.</string>
+    <string name="take_photo_text_2">Fotoğraf size ait olmalı ve içerisinde siz olmalısınız. Modaratörlerimiz tüm fotoğrafları kontrol etmektedir.</string>
     <string name="unlock_by_viewed_ad_video_button_text">%s ile ücretsiz aç</string>
     <plurals name="free_minutes">
         <item quantity="other">%d dakika</item>
         <item quantity="one">%d dakika</item>
     </plurals>
     <string name="thanks_for_your_rate_title">Bizi değerlendirdiğiniz için teşekkür ederiz</string>
-    <string name="thanks_for_your_rate_top_label">Minnettarlığımızı sunmak için fotoğrafınızı,
-        fotoğraf akışında yayınlayacağız.
-    </string>
-    <string name="thanks_for_your_rate_bottom_label">Düşüncelerinizi bizimle AppStore\'da paylaşın.
-        Ne düşündüğünüze önem veriyoruz!
-    </string>
+    <string name="thanks_for_your_rate_top_label">Minnettarlığımızı sunmak için fotoğrafınızı, fotoğraf akışında yayınlayacağız.</string>
+    <string name="thanks_for_your_rate_bottom_label">Düşüncelerinizi bizimle AppStore\'da paylaşın. Ne düşündüğünüze önem veriyoruz!</string>
     <string name="thanks_for_your_rate_rate_app">AppStore\'da bizi değerlendirin</string>
     <string name="thanks_for_your_rate_close">Kapat</string>
-    <plurals name="novice_sympathies_bonuses"></plurals>
-    <string name="buy_vip_title_from_input">Eğer VIP üyeyseniz dilediğiniz bir kullanıcı ile sohbete
-        hemen başlayabilirsiniz
+    <plurals name="novice_sympathies_bonuses">
+        <item quantity="zero">Hediye olarak %1$d beğeni \nalacaksınız. Bu demek oluyor ki \nsize beğeni gönderenler sizi \ngerçekten %2$d beğeniyor.</item>
+    </plurals>
+    <string name="buy_vip_title_from_input">Eğer VIP üyeyseniz dilediğiniz bir kullanıcı ile sohbete hemen başlayabilirsiniz</string>
+    <string name="mutual_like_popup_text">Beğeniniz karşılıklı</string>
+    <string name="mutual_like_popup_button">\"Merhaba\" de</string>
+    <string name="people_nearby_access_to_location_description">Kimlerin yakınınızda olduğunu görebilmek için lokasyonunuza erşim izni vermeniz gerekiyor.</string>
+    <string name="people_nearby_not_enought_money">\"Yakınımdaki insanlar\" fonksiyonu için yeterince krediniz yok</string>
+    <string name="people_nearby_not_found_title">Şu an size yakın kullanıcı bulunamdı</string>
+    <string name="people_nearby_not_found_description">Tekrar denemek için, ekranın ortasına parmağınızla dokunup basılı tutunuz.</string>
+    <string name="NSLocationWhenInUseUsageDescription">Bu fonksiyona erişebilmek için izin vermeniz gerekiyor.</string>
+    <string name="ban_liberty_title">Reklamsız!</string>
+    <string name="ban_liberty_description">Sadece arkadaşlık, basit ve kolay</string>
+    <string name="guest_liberty_title">Ziyaretçiler</string>
+    <string name="guest_liberty_description">Profil sayfanı kimler ziyaret etmiş öğren!</string>
+    <string name="star_liberty_title">Popüler kullanıcılar</string>
+    <string name="star_liberty_description">Sohbete başlamak ve kaynaşmak için en iyi yöntemler
     </string>
+    <string name="crown_liberty_title">Öne çık</string>
+    <string name="crown_liberty_description">Arama sonuçlarında ve mesajlar sayfasına öne çık
+    </string>
+    <string name="like_liberty_title">Beğeni</string>
+    <string name="like_liberty_description">Seni kimler beğenmiş, öğren</string>
+    <string name="buy_button_sticker_popular">En çok satan</string>
+    <string name="buy_button_sticker_best_value">Süper fiyat</string>
 </resources>

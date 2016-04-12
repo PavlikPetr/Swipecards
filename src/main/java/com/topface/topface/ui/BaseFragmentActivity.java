@@ -81,6 +81,11 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         return keyCode == KeyEvent.KEYCODE_MENU || super.onKeyDown(keyCode, event);
     }
 
+    @SuppressWarnings("unused")
+    public IActivityDelegate getActivityDelegate() {
+        return this;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -253,6 +258,10 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     @Override
     protected void onResume() {
         super.onResume();
+        registerReauthReceiver();
+        if (AuthToken.getInstance().isEmpty()) {
+            startAuth();
+        }
         if (GoogleMarketApiManager.isGoogleAccountExists() && mGoogleAuthStarted) {
             App.mOpenIabHelperManager.freeHelper();
             App.mOpenIabHelperManager.init(App.getContext());
@@ -289,7 +298,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         super.onResumeFragments();
         mIsActivityRestoredState = true;
         checkProfileLoad();
-        registerReauthReceiver();
     }
 
     public boolean isActivityRestoredState() {

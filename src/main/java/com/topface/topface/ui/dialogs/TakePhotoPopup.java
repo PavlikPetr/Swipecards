@@ -38,6 +38,7 @@ public class TakePhotoPopup extends AbstractDialogFragment implements View.OnCli
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.get().inject(this);
         mArgs = getArguments();
         mArgs = mArgs == null ? savedInstanceState : mArgs;
     }

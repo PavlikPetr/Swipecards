@@ -84,5 +84,4 @@ public class GiftsListFragment extends ProfileInnerFragment implements GiftsList
     public IGiftSendListener getGiftSendListener() {
         return mGiftSendListener;
     }
-
 }

@@ -25,7 +25,7 @@ public interface IAdsProvider {
     interface IAdProviderCallbacks {
         void onAdLoadSuccess(View adView);
 
-        void onFailedToLoadAd();
+        void onFailedToLoadAd(Integer codeError);
 
         void onAdClick();
 

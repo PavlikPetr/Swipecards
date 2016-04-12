@@ -17,7 +17,6 @@ import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 
 /**
@@ -27,23 +26,13 @@ public abstract class UserAvatarFragment extends BaseFragment
         implements View.OnClickListener, IUserOnlineListener {
 
     private MenuItem mBarAvatar;
-    private ActionBarTitleSetterDelegate mSetter;
     protected OverflowMenu mOverflowMenu;
     private IUniversalUser mUniversalUser;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mSetter = new ActionBarTitleSetterDelegate(((ActionBarActivity) getActivity()).getSupportActionBar());
-    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         setOnline(false);
-        if (mOverflowMenu != null) {
-            mOverflowMenu.onReleaseOverflowMenu();
-        }
     }
 
     @Override
@@ -62,6 +51,14 @@ public abstract class UserAvatarFragment extends BaseFragment
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mOverflowMenu != null) {
+            mOverflowMenu.onReleaseOverflowMenu();
+        }
+    }
+
     protected abstract boolean isNeedShowOverflowMenu();
 
     @Override
@@ -77,17 +74,17 @@ public abstract class UserAvatarFragment extends BaseFragment
 
     @Override
     public void setOnline(boolean online) {
-        if (mSetter != null) {
-            mSetter.setOnline(online);
+        if (mTitleSetter != null) {
+            mTitleSetter.setOnline(online);
         }
     }
 
     @Override
     public void refreshActionBarTitles() {
         super.refreshActionBarTitles();
-        if (mSetter != null) {
+        if (mTitleSetter != null) {
             IUniversalUser user = getUniversalUser();
-            mSetter.setOnline(user.isOnline());
+            mTitleSetter.setOnline(user.isOnline());
         }
     }
 

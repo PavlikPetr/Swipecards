@@ -101,16 +101,13 @@
   <string name="profile_form_smoking_male_1">Deixei de fumar</string>
   <string name="profile_form_smoking_male_2">Estou a tentar deixar</string>
   <string name="profile_form_smoking_male_3">Apenas quando bebo</string>
-  <string name="profile_form_smoking_male_4">Ainda mal estou a acabar um, já estou a acender outro
-  </string>
+  <string name="profile_form_smoking_male_4">Ainda mal estou a acabar um, já estou a acender outro</string>
   <string name="profile_form_smoking_male_5">Fumo, mas não cigarros</string>
   <string name="profile_form_smoking_female_0">Nunca experimentei</string>
   <string name="profile_form_smoking_female_1">Deixei de fumar</string>
   <string name="profile_form_smoking_female_2">Estou a tentar deixar</string>
   <string name="profile_form_smoking_female_3">Apenas quando bebo</string>
-  <string name="profile_form_smoking_female_4">Ainda mal estou a acabar um, já estou a acender
-    outro
-  </string>
+  <string name="profile_form_smoking_female_4">Ainda mal estou a acabar um, já estou a acender outro</string>
   <string name="profile_form_smoking_female_5">Fumo, mas não cigarros</string>
   <string name="profile_form_hair_male_0">Preto</string>
   <string name="profile_form_hair_male_1">Castanho</string>
@@ -223,13 +220,10 @@
   <string name="form_habits_restaurants_1">Restaurantes preferidos</string>
   <string name="form_habits_restaurants_2">Os teus restaurantes preferidos</string>
   <string name="form_habits_restaurants_3">Os teus restaurantes preferidos</string>
-  <string name="form_detail_about_dating_0">Acerca do teu primeiro encontro com uma rapariga
-  </string>
+  <string name="form_detail_about_dating_0">Acerca do teu primeiro encontro com uma rapariga</string>
   <string name="form_detail_about_dating_1">Acerca do teu primeiro encontro perfeito</string>
-  <string name="form_detail_about_dating_2">Como seria o teu primeiro encontro com uma rapariga?
-  </string>
-  <string name="form_detail_about_dating_3">Descreve o que seria um encontro perfeito para ti
-  </string>
+  <string name="form_detail_about_dating_2">Como seria o teu primeiro encontro com uma rapariga?</string>
+  <string name="form_detail_about_dating_3">Descreve o que seria um encontro perfeito para ti</string>
   <string name="form_detail_archievements_0">As maiores conquistas da tua vida</string>
   <string name="form_detail_archievements_1">As maiores conquistas da tua vida</string>
   <string name="form_detail_archievements_2">As tuas maiores conquistas na tua vida</string>

@@ -31,7 +31,6 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     private static final int TYPE_COUNT = 3;
 
     protected FeedList<T> mData;
-
     protected Context mContext;
     protected LayoutInflater mInflater;
     protected Updater mUpdateCallback;
@@ -45,7 +44,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
 
     public LoadingListAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         mContext = context;
-        mInflater = LayoutInflater.from(context);
+        mInflater = LayoutInflater.from(mContext);
         mLoadController = initLoadController();
         mData = new FeedList<>();
         if (data != null) {

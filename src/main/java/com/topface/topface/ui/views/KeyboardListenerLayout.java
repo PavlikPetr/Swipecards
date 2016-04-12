@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.utils.Utils;
 
@@ -17,21 +18,25 @@ import com.topface.topface.utils.Utils;
  */
 public class KeyboardListenerLayout extends RelativeLayout implements ViewTreeObserver.OnGlobalLayoutListener {
     private static final int DEFAULT_LAYOUT_SIZE_IN_PERCENT = 70;
-    private static final int KEYBOARD_SIZE_IN_PERCENT = 25;
+    private static final int KEYBOARD_SIZE_IN_PERCENT = 30;
 
     private KeyboardListener mKeyboardListener;
     private boolean mKeyboardOpened;
     private boolean mWasToggled;
     private int mLayoutSizeInPercent = DEFAULT_LAYOUT_SIZE_IN_PERCENT;
-    private int mMaxViewSize;
-
     private Context mContext;
-
+    private int mCurrentMax = -1;
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        if (mCurrentMax == -1) {
+            mCurrentMax = getHeight();
+        }
+        if (h >= mCurrentMax) {
+            Debug.log("ChatKeyboardListener -> skip height " + h);
+            return;
+        }
         if (w == oldw || oldw == 0) {
-            mMaxViewSize = mMaxViewSize < oldh ? oldh : mMaxViewSize;
             mWasToggled = true;
             mKeyboardOpened = isKeyboardOpenedOnStart(h);
         }
@@ -74,7 +79,6 @@ public class KeyboardListenerLayout extends RelativeLayout implements ViewTreeOb
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-
         removeGlobalLayoutListener();
     }
 
@@ -102,7 +106,6 @@ public class KeyboardListenerLayout extends RelativeLayout implements ViewTreeOb
         if (attrs == null) {
             return;
         }
-
         TypedArray a = null;
         try {
             a = getContext().obtainStyledAttributes(attrs, R.styleable.SoftKeyBoardListenerView);
@@ -145,7 +148,7 @@ public class KeyboardListenerLayout extends RelativeLayout implements ViewTreeOb
     }
 
     private boolean isKeyboardOpenedOnStart(int height) {
-        return (float) getScreenHeight() * mLayoutSizeInPercent / 100 * (1 - (float) KEYBOARD_SIZE_IN_PERCENT / 100) > height;
+        return getScreenHeight() * mLayoutSizeInPercent / 100 * (1 - (float) KEYBOARD_SIZE_IN_PERCENT / 100) > height;
     }
 
     @SuppressWarnings("unused")

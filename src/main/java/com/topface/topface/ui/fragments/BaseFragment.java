@@ -42,7 +42,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     private ActionBar mSupportActionBar;
     private BroadcastReceiver mProfileLoadReceiver;
-    private ActionBarTitleSetterDelegate mTitleSetter;
+    protected ActionBarTitleSetterDelegate mTitleSetter;
     private boolean mNeedTitles = true;
 
     @Override
@@ -249,7 +249,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         return null;
     }
 
-    @SuppressWarnings("deprecation")
     protected ActionBar getSupportActionBar() {
         if (mSupportActionBar == null) {
             Activity activity = getActivity();

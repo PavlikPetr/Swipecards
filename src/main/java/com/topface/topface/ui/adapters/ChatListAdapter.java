@@ -3,7 +3,6 @@ package com.topface.topface.ui.adapters;
 import android.content.Context;
 import android.text.ClipboardManager;
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +20,10 @@ import com.topface.topface.data.History;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.fragments.ChatFragment;
+import com.topface.topface.ui.views.CustomMovementMethod;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.DateUtils;
+import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.ChatLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
@@ -47,9 +48,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
     private OnBuyVipButtonClick mBuyVipButtonClickListener;
+    private CustomMovementMethod mCustomMovementMethod;
 
-    public ChatListAdapter(Context context, FeedList<History> data, Updater updateCallback, OnBuyVipButtonClick listener) {
-        super(context, data, updateCallback);
+    public ChatListAdapter(IActivityDelegate iActivityDelegate, FeedList<History> data, Updater updateCallback, OnBuyVipButtonClick listener) {
+        super(iActivityDelegate.getApplicationContext(), data, updateCallback);
         mBuyVipButtonClickListener = listener;
         if (!data.isEmpty()) {
             prepareDates();
@@ -62,6 +64,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                 mUnrealItems.add(item);
             }
         }
+        mCustomMovementMethod = new CustomMovementMethod(iActivityDelegate);
     }
 
     public static int getItemType(History item) {
@@ -305,7 +308,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         boolean showDate = mShowDatesList.contains(item);
         switch (type) {
             case T_RETRY:
-                if (item.isRepeatItem() && holder != null) {
+                if (item != null && item.isRepeatItem() && holder != null) {
                     holder.loader.setVisibility(View.GONE);
                     holder.retrier.setVisibility(View.VISIBLE);
                     holder.retrier.setOnClickListener(new View.OnClickListener() {
@@ -451,12 +454,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (holder != null && holder.message != null) {
             if (item.text != null && !item.text.equals(Utils.EMPTY)) {
                 holder.message.setText(Html.fromHtml(item.text));
-
                 // Проверяем наличие в textView WEB_URLS | EMAIL_ADDRESSES | PHONE_NUMBERS | MAP_ADDRESSES;
                 // Если нашли, то добавим им кликабельность
                 // в остальных случаях holder.message будет кликаться на onItemClickListener
                 if (Linkify.addLinks(holder.message, Linkify.ALL)) {
-                    holder.message.setMovementMethod(LinkMovementMethod.getInstance());
+                    holder.message.setMovementMethod(mCustomMovementMethod);
                     holder.message.setFocusable(false);
                 }
                 return true;
@@ -524,7 +526,6 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             if (!dataClone.isEmpty() && dataClone.get(dataClone.size() - 1).isLoaderOrRetrier()) {
                 dataClone.remove(dataClone.size() - 1);
             }
-//            removeUnrealItems(dataClone);
         } catch (OutOfMemoryError e) {
             Debug.error(e);
         }
@@ -567,6 +568,15 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
         if (mUpdateCallback != null && !data.isEmpty() && firstVisibleItem <= mLoadController.getItemsOffsetByConnectionType()
                 && isNeedMore()) {
             mUpdateCallback.onUpdate();
+        }
+    }
+
+    /*
+        Костылик, чтоб не текло при перевороте девайса. Заменяем старый контекст на новый.
+    */
+    public void updateActivityDelegate(IActivityDelegate delegate) {
+        if (mCustomMovementMethod != null) {
+            mCustomMovementMethod.setIActivityDelegate(delegate);
         }
     }
 

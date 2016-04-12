@@ -26,9 +26,12 @@ import com.topface.topface.requests.GenerateSMSInviteRequest;
 import com.topface.topface.requests.GetSMSInvitesStatusesRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.statistics.InvitesStatistics;
 import com.topface.topface.utils.ContactsProvider;
 
 import java.util.ArrayList;
+
+import static com.topface.topface.statistics.InvitesStatistics.PLC_SMS_INVITE;
 
 public class SmsInviteFragment extends ContentListFragment {
     public static final String SMS_PHONE_NUMBER = "sms_phone_number";
@@ -325,6 +328,7 @@ public class SmsInviteFragment extends ContentListFragment {
                     holder.invite.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            InvitesStatistics.sendInviteBtnClickAction(PLC_SMS_INVITE);
                             contact.setStatus(PHONES_STATUSES.USER_IN_PROGRESS.getPosition());
                             notifyDataSetChanged();
                             sendRequestToGetSMSText(contact.getPhone(), contact.getId());
