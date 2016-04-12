@@ -47,7 +47,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            AddPhotoHelper.handlePhotoMessage(msg, getActivity());
+            AddPhotoHelper.handlePhotoMessage(msg);
         }
     };
 

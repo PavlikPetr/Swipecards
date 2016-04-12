@@ -129,7 +129,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            AddPhotoHelper.handlePhotoMessage(msg, DatingFragment.this.getContext());
+            AddPhotoHelper.handlePhotoMessage(msg);
         }
     };
 

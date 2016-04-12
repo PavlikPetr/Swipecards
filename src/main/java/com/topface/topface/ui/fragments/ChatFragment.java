@@ -157,7 +157,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            AddPhotoHelper.handlePhotoMessage(msg, getActivity());
+            AddPhotoHelper.handlePhotoMessage(msg);
         }
     };
 
