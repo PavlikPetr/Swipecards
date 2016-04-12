@@ -46,10 +46,13 @@ def getTimestamp() {
 buildscript {
     repositories {
         jcenter()
+        //костыль. как тольок будет выложена новыя версия плагина это можно убрать
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
         classpath rootProject.ANDROID_BUILD_GRADLE_PLUGIN_VERSION
-        // classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
+        //продолжэение костыля. с новой версией заменить на нормальную зависимость
+        classpath 'com.github.JakeWharton:sdk-manager-plugin:220bf7a88a7072df3ed16dc8466fb144f2817070'
     }
 }
 
@@ -64,14 +67,8 @@ allprojects {
         }
     }
 }
-/*
 
-    <uses-sdk android:minSdkVersion="5" />
-
-
- */
-
-//apply plugin: 'android-sdk-manager'
+apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
 
 android {
@@ -89,10 +86,10 @@ android {
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappandroid\"";
         }
         //flavor для версии приложения для Amazon
-        /*amazon {
+        amazon {
             buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.AMAZON";
             buildConfigField "String", "STATISTICS_APP", "\"topfacemobappamazon\"";
-        }*/
+        }
         //flavor для версии приложения для Nokia X
         //Пока не используется, поэтому закоментирован
         /*nokia {
@@ -284,11 +281,6 @@ dependencies {
     testCompile('org.robolectric:robolectric:2.4') {
         exclude group: 'com.android.support'
     }
-    googleCompile name: 'ads_adman_2.2.7'
-    // amazonCompile name: 'ads_adman_2.2.7'
-    compile name: 'appsflyer'
-    compile name: 'comscore'
-    compile name: 'offerwalls_sponsorpay'
 
     //Topface sub libs
     compile project(':libs:IllustratedTextView')
@@ -313,7 +305,7 @@ dependencies {
     //View Bind
     compile 'com.jakewharton:butterknife:7.0.1'
     //Для Амазона нужна библиотека для поддержки in-app покупок
-    // amazonCompile 'com.amazon:in-app-purchasing:2.0.1'
+    amazonCompile 'com.amazon:in-app-purchasing:2.0.1'
     //RxJava
     compile 'io.reactivex:rxandroid:1.0.0'
     //Dagger
