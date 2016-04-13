@@ -180,9 +180,9 @@ public class Options extends AbstractData {
     public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
     public InterstitialInFeeds interstitial = new InterstitialInFeeds();
     /**
-     * {Number} fullscreenInterval — интервал отображения стартового фулскрин баннера в секундах
+     * (FullScreenCondition) all settings for show fullScrenn ads
      */
-    public long fullscreenInterval;
+    public FullScreenCondition fullScreenCondition = new FullScreenCondition();
 
     /**
      * Набор разнообразных параметров срезов по пользователю, для статистики
@@ -379,7 +379,7 @@ public class Options extends AbstractData {
             feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
             interstitial = JsonUtils.optFromJson(response.optString("interstitial"),
                     InterstitialInFeeds.class, interstitial);
-            fullscreenInterval = response.optLong("fullscreenInterval", DateUtils.DAY_IN_SECONDS);
+            fullScreenCondition = new FullScreenCondition(response);
             if (response.has("leftMenuItems")) {
                 leftMenuItems = JsonUtils.fromJson(response.getJSONArray("leftMenuItems").toString(), new TypeToken<ArrayList<LeftMenuIntegrationItems>>() {
                 });

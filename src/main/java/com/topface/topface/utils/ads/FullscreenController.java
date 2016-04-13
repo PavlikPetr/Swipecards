@@ -19,6 +19,7 @@ import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AppodealProvider;
 import com.topface.topface.data.Banner;
+import com.topface.topface.data.FullScreenCondition;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
@@ -29,9 +30,9 @@ import com.topface.topface.statistics.AdStatistics;
 import com.topface.topface.statistics.TopfaceAdStatistics;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
@@ -170,17 +171,20 @@ public class FullscreenController {
     }
 
     private boolean isTimePassed() {
+        UserConfig userConfig = App.getUserConfig();
+        long firstShow = userConfig.getFirstFullscreenTime();
+        long lastShow = userConfig.getLastFullscreenTime();
+        int shownCount = userConfig.getFullscreenShownCount();
         long currentTime = System.currentTimeMillis();
-        long lastCall = App.getAppConfig().getLastFullscreenTime();
-        if (lastCall == 0) {
-            addLastFullscreenShowedTime();
-            return false;
-        } else {
-            return Math.abs(currentTime - lastCall) >
-                    (mOptions != null
-                            ? 1000 * mOptions.fullscreenInterval
-                            : DateUtils.DAY_IN_MILLISECONDS);
+        FullScreenCondition fullScreenCondition = mOptions != null ? mOptions.fullScreenCondition : new FullScreenCondition();
+
+        if ((currentTime - firstShow) >= fullScreenCondition.getInterval() * 1000) {
+            userConfig.setFirstFullscreenTime(0);
+            userConfig.setFullscreenShownCount(0);
+            userConfig.saveConfig();
+            return true;
         }
+        return (currentTime - lastShow) >= fullScreenCondition.getPeriod() * 1000 && shownCount < fullScreenCondition.getShowCount();
     }
 
     private boolean passFullScreenByUrl(String url) {
@@ -188,9 +192,16 @@ public class FullscreenController {
     }
 
     private void addLastFullscreenShowedTime() {
-        AppConfig config = App.getAppConfig();
-        config.setLastFullscreenTime(System.currentTimeMillis());
-        config.saveConfig();
+        UserConfig userConfig = App.getUserConfig();
+        int shownCount = userConfig.getFullscreenShownCount();
+        long currentTime = System.currentTimeMillis();
+        if (shownCount == 0) {
+            userConfig.setFirstFullscreenTime(currentTime);
+        }
+        userConfig.setLastFullscreenTime(currentTime);
+        shownCount++;
+        userConfig.setFullscreenShownCount(shownCount);
+        userConfig.saveConfig();
     }
 
     private void requestGagFullscreen() {

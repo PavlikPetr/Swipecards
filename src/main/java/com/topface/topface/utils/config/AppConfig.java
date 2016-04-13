@@ -45,7 +45,6 @@ public class AppConfig extends AbstractConfig {
     private static final String DATA_APP_CONFIG_VERSION = "data_app_config_version";
     private static final String DATA_TEST_NETWORK = "data_test_network_mode";
     private static final String DATA_APP_OPTIONS = "data_app_options";
-    private static final String LAST_FULLSCREEN_TIME = "fullScreeenBanner_last_time";
     private static final String FULLSCREEN_URLS_SET = "fullscreen_urls_string";
     private static final String URL_SEPARATOR = "::";
     public static final String STAGE_LOGIN = "stage_login";
@@ -83,8 +82,6 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, DATA_TEST_NETWORK, false);
         // app options
         addField(settingsMap, DATA_APP_OPTIONS, Utils.EMPTY);
-        // last fullscreen time
-        addField(settingsMap, LAST_FULLSCREEN_TIME, 0L);
         // fullscreen urls
         addField(settingsMap, FULLSCREEN_URLS_SET, Utils.EMPTY);
         //stage login for admin
@@ -283,22 +280,6 @@ public class AppConfig extends AbstractConfig {
      */
     public void setAppOptions(String value) {
         setField(getSettingsMap(), DATA_APP_OPTIONS, value);
-    }
-
-    /**
-     * Last fullscreen ad show time
-     *
-     * @return last show time
-     */
-    public long getLastFullscreenTime() {
-        return getLongField(getSettingsMap(), LAST_FULLSCREEN_TIME);
-    }
-
-    /**
-     * Sets last fullscreen ad show time
-     */
-    public void setLastFullscreenTime(long time) {
-        setField(getSettingsMap(), LAST_FULLSCREEN_TIME, time);
     }
 
     /**
