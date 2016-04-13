@@ -23,7 +23,7 @@ public class TrackedFragment extends Fragment implements IFeedLifeCycle {
 
     public void senFragmentShownStatistics() {
         ScreensShowStatistics.sendScreenShow(getClass().getSimpleName());
-        FlurryManager.sendPageOpenEvent(getScreenName());
+        FlurryManager.getInstance().sendPageOpenEvent(getScreenName());
     }
 
     public boolean isTrackable() {

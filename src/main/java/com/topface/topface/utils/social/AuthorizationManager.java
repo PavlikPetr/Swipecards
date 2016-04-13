@@ -120,8 +120,8 @@ public class AuthorizationManager {
     }
 
     public void logout(Activity activity) {
-        FlurryManager.sendLogoutEvent();
-        FlurryManager.dropUserIdHash();
+        FlurryManager.getInstance().sendLogoutEvent();
+        FlurryManager.getInstance().dropUserIdHash();
         App.isNeedShowTrial = true;
         Ssid.remove();
         UserNotificationManager.getInstance().removeNotifications();

@@ -233,7 +233,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                         .callback(new ApiHandler() {
                             @Override
                             public void success(IApiResponse response) {
-                                FlurryManager.sendSpendCoinsEvent(buttonData.price, GET_LEAD);
+                                FlurryManager.getInstance().sendSpendCoinsEvent(buttonData.price, GET_LEAD);
                                 setResult(Activity.RESULT_OK, new Intent());
                                 finish();
                             }

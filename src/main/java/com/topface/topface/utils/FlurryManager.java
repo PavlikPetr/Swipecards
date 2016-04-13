@@ -84,12 +84,19 @@ public class FlurryManager {
     private static final String TRACKER_NAME_REFERRER_PARAM = "tracker_name";
 
     private static final String PAGE_NAME_TEMPLATE = "page.%s";
-
     private static final String EMPTY_USER_ID_HASH = Utils.EMPTY;
 
-    private static String mUserIdHash = EMPTY_USER_ID_HASH;
+    private String mUserIdHash = EMPTY_USER_ID_HASH;
+    private static FlurryManager mInstance;
 
-    public static String getUserIdHash() {
+    public synchronized static FlurryManager getInstance() {
+        if (mInstance == null) {
+            mInstance = new FlurryManager();
+        }
+        return mInstance;
+    }
+
+    private String getUserIdHash() {
         int uid = CacheProfile.uid;
         if (AuthToken.getInstance().isEmpty() || uid == 0) {
             dropUserIdHash();
@@ -102,11 +109,11 @@ public class FlurryManager {
         }
     }
 
-    public static void dropUserIdHash() {
+    public void dropUserIdHash() {
         mUserIdHash = EMPTY_USER_ID_HASH;
     }
 
-    public static void init() {
+    public void init() {
         FlurryAgent.init(App.getContext(), App.getContext().getResources().getString(R.string.flurry_key));
         FlurryAgent.setLogEnabled(Debug.isDebugLogsEnabled());
         FlurryAgent.setLogLevel(Log.VERBOSE);
@@ -123,7 +130,7 @@ public class FlurryManager {
      *
      * @param socialName set social net type - fb/vk/st/ok
      */
-    public static void sendAuthEvent(String socialName) {
+    public void sendAuthEvent(String socialName) {
         Map<String, String> socialType = new HashMap<>();
         socialType.put(SOCIAL_TYPE_PARAM, socialName);
         sendEvent(AUTH_EVENT, socialType);
@@ -132,7 +139,7 @@ public class FlurryManager {
     /**
      * Send logout event
      */
-    public static void sendLogoutEvent() {
+    public void sendLogoutEvent() {
         sendEvent(LOGOUT_EVENT);
     }
 
@@ -141,7 +148,7 @@ public class FlurryManager {
      *
      * @param url url which we try to show
      */
-    public static void sendExternalUrlEvent(String url) {
+    public void sendExternalUrlEvent(String url) {
         Map<String, String> externalUrl = new HashMap<>();
         externalUrl.put(EXTERNAL_URL_PARAM, url);
         sendEvent(EXTERNAL_URL_EVENT, externalUrl);
@@ -150,21 +157,21 @@ public class FlurryManager {
     /**
      * Send App start
      */
-    public static void sendAppStartEvent() {
+    public void sendAppStartEvent() {
         sendEvent(APP_START_EVENT);
     }
 
     /**
      * Send App go to background mode
      */
-    public static void sendAppInBackgroundEvent() {
+    public void sendAppInBackgroundEvent() {
         sendEvent(APP_BACKGROUND_EVENT);
     }
 
     /**
      * Send App go to foreground mode
      */
-    public static void sendAppInForegroundEvent() {
+    public void sendAppInForegroundEvent() {
         sendEvent(APP_FOREGROUND_EVENT);
     }
 
@@ -173,7 +180,7 @@ public class FlurryManager {
      *
      * @param count set count of friend, which can get invite
      */
-    public static void sendInviteEvent(@InvitesType String type, int count) {
+    public void sendInviteEvent(@InvitesType String type, int count) {
         Map<String, String> invites = new HashMap<>();
         invites.put(INVITES_COUNT_PARAM, String.valueOf(count));
         invites.put(INVITES_TYPE_PARAM, type);
@@ -183,21 +190,21 @@ public class FlurryManager {
     /**
      * Send event - Dating list is empty
      */
-    public static void sendEmptyDatingListEvent() {
+    public void sendEmptyDatingListEvent() {
         sendEvent(EMPTY_SEARCH_EVENT);
     }
 
     /**
      * Send event - Filter changed
      */
-    public static void sendFilterChangedEvent() {
+    public void sendFilterChangedEvent() {
         sendEvent(FILTER_CHANGED_EVENT);
     }
 
     /**
      * Send event - Page open
      */
-    public static void sendPageOpenEvent(String name) {
+    public void sendPageOpenEvent(String name) {
         if (!TextUtils.isEmpty(name)) {
             sendEvent(String.format(PAGE_NAME_TEMPLATE, name.toLowerCase()));
         }
@@ -210,7 +217,7 @@ public class FlurryManager {
      * @param price    price value
      * @param currency currency value ISO-4217
      */
-    public static void sendPurchaseEvent(String id, double price, String currency) {
+    public void sendPurchaseEvent(String id, double price, String currency) {
         Map<String, String> purchase = new HashMap<>();
         purchase.put(PRODUCT_ID_PARAM, id);
         purchase.put(PRODUCT_PRICE_PARAM, String.valueOf(price));
@@ -224,7 +231,7 @@ public class FlurryManager {
      * @param popupName dialog name
      * @param action    type of action
      */
-    public static void sendPayWallEvent(String popupName, @PayWallAction String action) {
+    public void sendPayWallEvent(String popupName, @PayWallAction String action) {
         Map<String, String> payWall = new HashMap<>();
         payWall.put(PAY_WALL_NAME_PARAM, popupName);
         payWall.put(PAY_WALL_ACTION_PARAM, action);
@@ -237,7 +244,7 @@ public class FlurryManager {
      * @param coinsCount product price in coins
      * @param product    type of product
      */
-    public static void sendSpendCoinsEvent(int coinsCount, @ByCoinsProductType String product) {
+    public void sendSpendCoinsEvent(int coinsCount, @ByCoinsProductType String product) {
         Map<String, String> payWall = new HashMap<>();
         payWall.put(PRODUCT_TYPE_PARAM, product);
         payWall.put(PRICE_PARAM, String.valueOf(coinsCount));
@@ -247,14 +254,14 @@ public class FlurryManager {
     /**
      * Send event - get new full dialog (2 input message and 2 output)
      */
-    public static void sendFullDialogEvent() {
+    public void sendFullDialogEvent() {
         sendEvent(FULL_DIALOG_EVENT);
     }
 
     /**
      * Send event - user come from referrer link
      */
-    public static void sendReferrerEvent(AdjustAttributeData attribution) {
+    public void sendReferrerEvent(AdjustAttributeData attribution) {
         if (attribution != null) {
             Map<String, String> ref = new HashMap<>();
             ref = put(ref, ADGROUP_REFERRER_PARAM, attribution.adgroup);
@@ -268,18 +275,18 @@ public class FlurryManager {
         }
     }
 
-    private static Map<String, String> put(Map<String, String> ref, String key, String value) {
+    private Map<String, String> put(Map<String, String> ref, String key, String value) {
         if (!TextUtils.isEmpty(value) && ref != null) {
             ref.put(key, value);
         }
         return ref;
     }
 
-    private static boolean sendEvent(String eventName) {
+    private boolean sendEvent(String eventName) {
         return sendEvent(eventName, null);
     }
 
-    private static boolean sendEvent(String eventName, Map<String, String> eventParams) {
+    private boolean sendEvent(String eventName, Map<String, String> eventParams) {
         if (FlurryAgent.isSessionActive()) {
             String encrypted = getUserIdHash();
             if (eventParams == null) {

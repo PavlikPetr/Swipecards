@@ -31,7 +31,7 @@ public class TrackedFragmentActivity extends TracedLifeCycleActivity {
 
     public void senActivitiesShownStatistics() {
         ScreensShowStatistics.sendScreenShow(getClass().getSimpleName());
-        FlurryManager.sendPageOpenEvent(getScreenName());
+        FlurryManager.getInstance().sendPageOpenEvent(getScreenName());
     }
 
     @Override

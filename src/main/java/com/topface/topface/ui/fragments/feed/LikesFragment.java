@@ -336,7 +336,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                         @Override
                         public void success(IApiResponse response) {
                             super.success(response);
-                            FlurryManager.sendSpendCoinsEvent(blockSympathyOptions.price, LIKES_UNLOCK);
+                            FlurryManager.getInstance().sendSpendCoinsEvent(blockSympathyOptions.price, LIKES_UNLOCK);
                             inflated.setVisibility(View.GONE);
                             updateData(false, true);
                         }

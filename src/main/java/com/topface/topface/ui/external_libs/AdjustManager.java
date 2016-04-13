@@ -48,7 +48,7 @@ public class AdjustManager {
                 AdjustAttributeData data = new AdjustAttributeData(attribution);
                 mAppState.setData(data);
                 Debug.log("AdjustManager", "onAttributionChanged attribution:" + JsonUtils.toJson(data));
-                FlurryManager.sendReferrerEvent(data);
+                FlurryManager.getInstance().sendReferrerEvent(data);
             }
         });
         config.setLogLevel(Debug.isDebugLogsEnabled() ? LogLevel.VERBOSE : LogLevel.ASSERT);

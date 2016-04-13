@@ -142,7 +142,7 @@ public class AuthRequest extends PrimalAuthRequest {
                 return;
             }
         }
-        FlurryManager.sendAuthEvent(mPlatform);
+        FlurryManager.getInstance().sendAuthEvent(mPlatform);
         super.exec();
     }
 }

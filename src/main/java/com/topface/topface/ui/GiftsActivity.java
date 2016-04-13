@@ -211,7 +211,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
 
             @Override
             protected void success(SendGiftAnswer answer, IApiResponse response) {
-                FlurryManager.sendSpendCoinsEvent(item.price, BUY_GIFT);
+                FlurryManager.getInstance().sendSpendCoinsEvent(item.price, BUY_GIFT);
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra(INTENT_SEND_GIFT_ANSWER, answer);
                 resultIntent.putExtra(INTENT_GIFT_PRICE, item.price);

@@ -378,7 +378,7 @@ public class App extends ApplicationBase {
         super.onCreate();
         mContext = getApplicationContext();
         LeakCanary.install(this);
-        FlurryManager.init();
+        FlurryManager.getInstance().init();
         // Отправка ивента о запуске приложения, если пользователь авторизован в FB
         if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
             FbAuthorizer.initFB();
@@ -393,13 +393,13 @@ public class App extends ApplicationBase {
             @Override
             public void onAppForeground(long timeOnStart) {
                 AppStateStatistics.sendAppForegroundState();
-                FlurryManager.sendAppInForegroundEvent();
+                FlurryManager.getInstance().sendAppInForegroundEvent();
             }
 
             @Override
             public void onAppBackground(long timeOnStop, long timeOnStart) {
                 AppStateStatistics.sendAppBackgroundState();
-                FlurryManager.sendAppInBackgroundEvent();
+                FlurryManager.getInstance().sendAppInBackgroundEvent();
             }
         });
         //Включаем отладку, если это дебаг версия

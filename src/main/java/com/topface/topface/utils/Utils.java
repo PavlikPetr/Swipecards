@@ -201,7 +201,7 @@ public class Utils {
     public static void goToUrl(Context context, String url) {
         Intent i = Utils.getIntentToOpenUrl(url);
         if (i != null) {
-            FlurryManager.sendExternalUrlEvent(url);
+            FlurryManager.getInstance().sendExternalUrlEvent(url);
             context.startActivity(i);
         }
     }
@@ -210,7 +210,7 @@ public class Utils {
         if (iActivityDelegate != null) {
             Intent i = Utils.getIntentToOpenUrl(url);
             if (i != null) {
-                FlurryManager.sendExternalUrlEvent(url);
+                FlurryManager.getInstance().sendExternalUrlEvent(url);
                 iActivityDelegate.startActivity(i);
             }
         }
