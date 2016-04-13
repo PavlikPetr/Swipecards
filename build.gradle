@@ -79,7 +79,6 @@ android {
         enabled = true
     }
 
-
     productFlavors {
         //Основной flavor, в нашем случае работает с Google Play
         google {
