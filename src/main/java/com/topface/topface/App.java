@@ -12,7 +12,6 @@ import android.support.multidex.MultiDex;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.appsflyer.AppsFlyerLib;
 import com.comscore.analytics.comScore;
@@ -63,7 +62,6 @@ import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.RunningStateManager;
-import com.topface.topface.utils.TestEncrypt;
 import com.topface.topface.utils.ad.NativeAdManager;
 import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.config.AppConfig;
@@ -378,7 +376,6 @@ public class App extends ApplicationBase {
         }
 
         super.onCreate();
-        Log.e("EncryptMethods", new TestEncrypt().testEncryptedDecryptedMethods());
         mContext = getApplicationContext();
         LeakCanary.install(this);
         FlurryManager.init();
