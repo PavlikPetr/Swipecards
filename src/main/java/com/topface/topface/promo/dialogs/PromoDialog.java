@@ -28,7 +28,7 @@ import com.topface.topface.utils.FlurryManager;
 
 import org.jetbrains.annotations.Nullable;
 
-import static com.topface.topface.utils.FlurryManager.PayWallAction.*;
+import static com.topface.topface.utils.FlurryManager.*;
 
 
 public abstract class PromoDialog extends AbstractDialogFragment implements View.OnClickListener, IPromoPopup {
@@ -129,7 +129,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
         TextView popupText = (TextView) root.findViewById(R.id.airMessagesText);
         popupText.setText(getMessage());
 
-        FlurryManager.sendPayWallEvent(getPopupName(), SHOW);
+        FlurryManager.getInstance().sendPayWallEvent(getPopupName(), SHOW);
         EasyTracker.sendEvent(getMainTag(), "Show", "", 0L);
         PromoDialogStastics.promoDialogShowSend(getMainTag());
         PromoDialogUniqueStatistics.send(getMainTag());
@@ -153,7 +153,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
                 closeFragment();
                 EasyTracker.sendEvent(getMainTag(), "VipClose", "CloseAfterUpdateProfile", 1L);
                 PromoDialogStastics.promoDialogCloseAfterUpdateProfileSend(getMainTag());
-                FlurryManager.sendPayWallEvent(getPopupName(), PRODUCT_BOUGHT);
+                FlurryManager.getInstance().sendPayWallEvent(getPopupName(), PRODUCT_BOUGHT);
             }
         }
     };
@@ -168,13 +168,13 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
                 );
                 EasyTracker.sendEvent(getMainTag(), "ClickBuyVip", "", 0L);
                 PromoDialogStastics.promoDialogClickBuyVipSend(getMainTag());
-                FlurryManager.sendPayWallEvent(getPopupName(), CLICK_BUY);
+                FlurryManager.getInstance().sendPayWallEvent(getPopupName(), CLICK_BUY);
                 break;
             case R.id.deleteMessages:
                 deleteMessages();
                 EasyTracker.sendEvent(getMainTag(), "Dismiss", "Delete", 0L);
                 PromoDialogStastics.promoDialogDismissSend(getMainTag());
-                FlurryManager.sendPayWallEvent(getPopupName(), CLICK_DELETE);
+                FlurryManager.getInstance().sendPayWallEvent(getPopupName(), CLICK_DELETE);
                 closeFragment();
                 break;
             default:

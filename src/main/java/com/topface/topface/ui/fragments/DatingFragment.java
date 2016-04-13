@@ -1191,7 +1191,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 registerRequest(filterRequest);
                 filterRequest.callback(new FilterHandler()).exec();
                 mNewFilter = true;
-                FlurryManager.sendFilterChangedEvent();
+                FlurryManager.getInstance().sendFilterChangedEvent();
             }
             // открываем чат с пользователем в случае успешной отправки подарка с экрана знакомств
         } else if (resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
@@ -1274,7 +1274,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void showEmptySearchDialog() {
         Debug.log("Search:: showEmptySearchDialog");
         EasyTracker.sendEvent("EmptySearch", "Show", "", 0L);
-        FlurryManager.sendEmptyDatingListEvent();
+        FlurryManager.getInstance().sendEmptyDatingListEvent();
         mProgressBar.setVisibility(View.GONE);
         mImageSwitcher.setVisibility(View.GONE);
         mRetryView.setVisibility(View.VISIBLE);

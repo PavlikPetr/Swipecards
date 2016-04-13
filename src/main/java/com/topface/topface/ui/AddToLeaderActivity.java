@@ -53,7 +53,7 @@ import javax.inject.Inject;
 import rx.Subscription;
 import rx.functions.Action1;
 
-import static com.topface.topface.utils.FlurryManager.ByCoinsProductType.GET_LEAD;
+import static com.topface.topface.utils.FlurryManager.GET_LEAD;
 
 public class AddToLeaderActivity extends BaseFragmentActivity implements View.OnClickListener {
 
@@ -233,7 +233,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                         .callback(new ApiHandler() {
                             @Override
                             public void success(IApiResponse response) {
-                                FlurryManager.sendSpendCoinsEvent(buttonData.price, GET_LEAD);
+                                FlurryManager.getInstance().sendSpendCoinsEvent(buttonData.price, GET_LEAD);
                                 setResult(Activity.RESULT_OK, new Intent());
                                 finish();
                             }

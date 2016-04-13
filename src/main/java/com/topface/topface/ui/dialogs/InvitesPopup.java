@@ -94,7 +94,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
     private void sendInvitesRequest() {
         InviteContactsRequest request = new InviteContactsRequest(getActivity(), contacts);
         final int contactsCount = contacts.size();
-        FlurryManager.sendInviteEvent(FlurryManager.InvitesType.PHONE_BOOK_INVITES, contactsCount);
+        FlurryManager.getInstance().sendInviteEvent(FlurryManager.PHONE_BOOK_INVITES, contactsCount);
         mLocker.setVisibility(View.VISIBLE);
         request.callback(new ApiHandler() {
             @Override

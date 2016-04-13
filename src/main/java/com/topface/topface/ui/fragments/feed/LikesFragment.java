@@ -60,7 +60,7 @@ import javax.inject.Inject;
 import rx.Subscription;
 import rx.functions.Action1;
 
-import static com.topface.topface.utils.FlurryManager.ByCoinsProductType.LIKES_UNLOCK;
+import static com.topface.topface.utils.FlurryManager.LIKES_UNLOCK;
 
 public class LikesFragment extends FeedFragment<FeedLike> {
 
@@ -336,7 +336,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                         @Override
                         public void success(IApiResponse response) {
                             super.success(response);
-                            FlurryManager.sendSpendCoinsEvent(blockSympathyOptions.price, LIKES_UNLOCK);
+                            FlurryManager.getInstance().sendSpendCoinsEvent(blockSympathyOptions.price, LIKES_UNLOCK);
                             inflated.setVisibility(View.GONE);
                             updateData(false, true);
                         }

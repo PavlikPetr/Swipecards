@@ -120,6 +120,8 @@ public class AuthorizationManager {
     }
 
     public void logout(Activity activity) {
+        FlurryManager.getInstance().sendLogoutEvent();
+        FlurryManager.getInstance().dropUserIdHash();
         App.isNeedShowTrial = true;
         Ssid.remove();
         UserNotificationManager.getInstance().removeNotifications();
@@ -149,7 +151,6 @@ public class AuthorizationManager {
             activity.finish();
         }
         AdmobInterstitialUtils.onLogout();
-        FlurryManager.sendLogoutEvent();
     }
 
     public static void showRetryLogoutDialog(Activity activity, final LogoutRequest logoutRequest) {

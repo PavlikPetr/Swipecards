@@ -45,7 +45,7 @@ import javax.inject.Inject;
 import rx.Subscription;
 import rx.functions.Action1;
 
-import static com.topface.topface.utils.FlurryManager.ByCoinsProductType.PEOPLE_NEARBY_UNLOCK;
+import static com.topface.topface.utils.FlurryManager.PEOPLE_NEARBY_UNLOCK;
 
 
 public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
@@ -269,7 +269,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                         @Override
                         public void success(IApiResponse response) {
                             super.success(response);
-                            FlurryManager.sendSpendCoinsEvent(blockPeopleNearby.price, PEOPLE_NEARBY_UNLOCK);
+                            FlurryManager.getInstance().sendSpendCoinsEvent(blockPeopleNearby.price, PEOPLE_NEARBY_UNLOCK);
                             if (isAdded()) {
                                 emptyView.setVisibility(View.GONE);
                                 updateData(false, true);

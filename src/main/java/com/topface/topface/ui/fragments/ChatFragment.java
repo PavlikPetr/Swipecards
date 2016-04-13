@@ -713,7 +713,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     //получили входящее сообщение, если их стало 2, а исходящий 2 и более,
                     // значит у нас сформировался полноценный диалог с пользователем
                     if (mAdapter.getOutboxMessageCount() == 2 && mAdapter.getInboxMessageCount() >= 2) {
-                        FlurryManager.sendFullDialogEvent();
+                        FlurryManager.getInstance().sendFullDialogEvent();
                     }
                 }
                 setLockScreenVisibility(false);
@@ -993,7 +993,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     mAdapter.replaceMessage(messageItem, data, mListView.getRefreshableView());
                     // в момент успешной отправки сообщения, проверяем состоялся ли полноценный диалог
                     if (mAdapter.getInboxMessageCount() == 2 && mAdapter.getOutboxMessageCount() >= 2) {
-                        FlurryManager.sendFullDialogEvent();
+                        FlurryManager.getInstance().sendFullDialogEvent();
                     }
                     onNewMessageAdded(data);
                 }

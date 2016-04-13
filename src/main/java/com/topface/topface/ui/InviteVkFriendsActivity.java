@@ -138,7 +138,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         @Override
         public void onComplete(VKResponse response) {
             InvitesStatistics.sendSuccessInviteResponseAction(PLC_VK_INVITES);
-            FlurryManager.sendInviteEvent(FlurryManager.InvitesType.VK_INVITES, 1);
+            FlurryManager.getInstance().sendInviteEvent(FlurryManager.VK_INVITES, 1);
             if (mAdapter != null) {
                 mAdapter.setButtonState((Integer) response.request.getPreparedParameters().get(USER_ID_VK_PARAM), false);
             }

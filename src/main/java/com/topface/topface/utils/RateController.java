@@ -17,7 +17,7 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.cache.SearchCacheManager;
 
-import static com.topface.topface.utils.FlurryManager.ByCoinsProductType.SEND_ADMIRATION;
+import static com.topface.topface.utils.FlurryManager.SEND_ADMIRATION;
 
 public class RateController {
 
@@ -58,7 +58,7 @@ public class RateController {
 
             @Override
             protected void success(Rate rate, IApiResponse response) {
-                FlurryManager.sendSpendCoinsEvent(CacheProfile.getOptions().priceAdmiration, SEND_ADMIRATION);
+                FlurryManager.getInstance().sendSpendCoinsEvent(CacheProfile.getOptions().priceAdmiration, SEND_ADMIRATION);
                 if (listener != null) {
                     listener.onRateCompleted(sendLike.getMutualid());
                 }
