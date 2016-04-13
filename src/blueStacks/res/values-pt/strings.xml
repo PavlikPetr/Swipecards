@@ -171,6 +171,7 @@
   <string name="general_profile">Perfil</string>
   <string name="general_settings">Definições</string>
   <string name="general_vk_profile">VK</string>
+  <string name="general_ok_profile">OK</string>
   <string name="auth_btn_vk">Vkontakte</string>
   <string name="auth_btn_fb">Facebook</string>
   <string name="auth_retry">Tentar novamente</string>
@@ -749,7 +750,7 @@
   <string name="settings_check_vip_alert">O teu pedido para verificar o teu estatuto VIP foi enviado.</string>
   <string name="novice_sympathy">Envia gostos apenas às pessoas\npor quem te sentes
         atraído(a).\nPodes encontrar alguém especial!</string>
-  <string name="go_dating_message">Começa a conhecer pessoas e aqui irão aparecer os nomes dos utilizadores que viram o teu perfil.</string>
+  <string name="go_dating_message">Começa a namorar e vê quem viu o teu perfil aqui</string>
   <string name="photo_not_from_main_album">Um moderador decidiu que esta foto não pode ser usada como foto de perfil.</string>
   <string name="sidebar_vk_profile">Perfil VK</string>
   <string name="title_vk_profile">Perfil VK</string>
@@ -784,11 +785,7 @@
   <string name="thanks_for_your_rate_bottom_label">Partilha a tua opinião na App Store. Valorizamos todos os comentários!</string>
   <string name="thanks_for_your_rate_rate_app">Deixa a tua opinião na App Store</string>
   <string name="thanks_for_your_rate_close">Fechar</string>
-  <plurals name="novice_sympathies_bonuses">
-    <item quantity="zero">Irás receber %1$d Gostos como \npresente! Isto significa que aqueles a \nquem enviares Gostos \ngostam mesmo %2$d de ti</item>
-    <item quantity="other">Irás receber %1$d Gostos como \npresente! Isto significa que aqueles a \nquem enviares Gostos \ngostam mesmo %2$d de ti</item>
-    <item quantity="one">Irás receber %1$d Gosto como \npresente! Isto significa que aqueles a \nquem enviares Gostos \ngostam mesmo %2$d de ti</item>
-  </plurals>
+  <string name="novice_sympathies_bonus">Vais receber %1$d Gostos como presente! Isto significa que %2$d pessoas te vão dar um Gosto genuinamente sentido!</string>
   <string name="buy_vip_title_from_input">Podes começar uma conversa com um utilizador se tiveres estatuto VIP</string>
   <string name="mutual_like_popup_text">O sentimento é mútuo!</string>
   <string name="mutual_like_popup_button">Diz \&quot;Olá\&quot;</string>
@@ -797,18 +794,16 @@
   <string name="people_nearby_not_found_title">Não existem utilizadores perto de ti neste momento</string>
   <string name="people_nearby_not_found_description">Para tentares novamente, prime e mantém o teu dedo no centro do ecrã</string>
   <string name="NSLocationWhenInUseUsageDescription">Para teres acesso a esta funcionalidade, tens de dar a tua permissão</string>
+  <string name="buy_button_sticker_popular">Mais\n Vendido</string>
+  <string name="buy_button_sticker_best_value">Melhor\n preço</string>
   <string name="ban_liberty_title">Sem anúncios!</string>
   <string name="ban_liberty_description">Apenas namorar, pura e simplesmente</string>
   <string name="guest_liberty_title">Visitantes</string>
   <string name="guest_liberty_description">Descobre quem visitou a tua página de perfil</string>
   <string name="star_liberty_title">Utilizadores Populares</string>
-  <string name="star_liberty_description">As melhores frases para quebrar o gelo numa conversa
-  </string>
+  <string name="star_liberty_description">As melhores frases para quebrar o gelo numa conversa</string>
   <string name="crown_liberty_title">Destaca-te</string>
-  <string name="crown_liberty_description">Destaca-te facilmente na Pesquisa e nas Mensagens
-  </string>
+  <string name="crown_liberty_description">Destaca-te facilmente na Pesquisa e nas Mensagens</string>
   <string name="like_liberty_title">Gostos</string>
   <string name="like_liberty_description">Vê quem gosta de ti</string>
-  <string name="buy_button_sticker_popular">Mais Vendido</string>
-  <string name="buy_button_sticker_best_value">Melhor preço</string>
 </resources>

@@ -179,6 +179,7 @@
     <string name="general_profile">Profil</string>
     <string name="general_settings">Einstellungen</string>
     <string name="general_vk_profile">VK</string>
+    <string name="general_ok_profile">OK</string>
     <string name="auth_btn_vk">Vkontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Nochmal versuchen</string>
@@ -781,7 +782,7 @@
     <string name="novice_sympathy">Senden Sie Sympathien den Menschen, die Ihnen\nwirklich
         gefallen,\num eine angenehme Bekanntschaft anzufangen
     </string>
-    <string name="go_dating_message">Fange an, Leute kennenzulernen und die Namen derjenigen, die dein Profil besucht haben, werden hier erscheinen.</string>
+    <string name="go_dating_message">Fange an zu daten, und du werdest sehen wer dein Profil angeschaut hat.</string>
     <string name="photo_not_from_main_album">Unsere Moderatoren haben entschieden, dass dieses Foto nicht als Profilfoto verwendet werden darf.</string>
     <string name="sidebar_vk_profile">VK Profil</string>
     <string name="title_vk_profile">VK Profil</string>
@@ -815,11 +816,7 @@
     <string name="thanks_for_your_rate_bottom_label">Teile deine Gedanken im App Store. Wie schätzen jede Bewertung!</string>
     <string name="thanks_for_your_rate_rate_app">Schreibe eine Bewertung im App Store.</string>
     <string name="thanks_for_your_rate_close">Schließen</string>
-    <plurals name="novice_sympathies_bonuses">
-        <item quantity="zero">Du bekommst %1$d Likes als \nGeschenk! Das bedeutet, dass diejenigen, \ndie dir Likes schicken, %2$d dich \nwirklich mögen.</item>
-        <item quantity="other">Du bekommst %1$d Likes als \nGeschenk! Das bedeutet, dass diejenigen, \ndie dir Likes schicken, %2$d dich \nwirklich mögen.</item>
-        <item quantity="one">Du bekommst %1$d Like als \nGeschenk! Das bedeutet, dass diejenigen, \ndie dir Likes schicken, %2$d dich \nwirklich mögen.</item>
-    </plurals>
+    <string name="novice_sympathies_bonus">Du bekommst %1$d Likes geschenkt! Das bedeutet, dass %2$d Leute dir ein Like geben werden und es auch wirklich so meinen!</string>
     <string name="buy_vip_title_from_input">Du kannst ein Gespräch mit einem anderen User starten, wenn du VIP-Status hast.</string>
     <string name="mutual_like_popup_text">Das Gefühl beruht auf Gegenseitigkeit!</string>
     <string name="mutual_like_popup_button">Sag \"Hallo\"</string>
@@ -828,6 +825,8 @@
     <string name="people_nearby_not_found_title">Es gibt momentan keine User in deiner Nähe</string>
     <string name="people_nearby_not_found_description">Um es nochmal zu versuchen, presse und halte einen Finger in der Mitte vom Bildschirm</string>
     <string name="NSLocationWhenInUseUsageDescription">Um Zugang zu dieser Funktion erhalten, musst du dein Einverständnis gegen.</string>
+    <string name="buy_button_sticker_popular">Beliebt</string>
+    <string name="buy_button_sticker_best_value">Bester\n Preis</string>
     <string name="ban_liberty_title">Keine Werbung!</string>
     <string name="ban_liberty_description">Einfach nur Dating, leicht und unkompliziert</string>
     <string name="guest_liberty_title">Gäste</string>
@@ -835,11 +834,7 @@
     <string name="star_liberty_title">Beliebte Nutzer</string>
     <string name="star_liberty_description">Die beliebtesten Eisbrecher für Gespräche</string>
     <string name="crown_liberty_title">Auffallen.</string>
-    <string name="crown_liberty_description">Falle sowohl bei Suchergebnissen als auch in deinen
-        Nachrichten auf
-    </string>
+    <string name="crown_liberty_description">Falle sowohl bei Suchergebnissen als auch in deinen Nachrichten auf</string>
     <string name="like_liberty_title">Likes</string>
     <string name="like_liberty_description">Erfahre, wer dich mag</string>
-    <string name="buy_button_sticker_popular">Beliebt</string>
-    <string name="buy_button_sticker_best_value">Bester Preis</string>
 </resources>

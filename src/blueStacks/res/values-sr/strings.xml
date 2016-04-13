@@ -173,6 +173,7 @@
   <string name="general_profile">Профил</string>
   <string name="general_settings">Подешавања</string>
   <string name="general_vk_profile">ВК</string>
+  <string name="general_ok_profile">OK</string>
   <string name="auth_btn_vk">ВКонтакте</string>
   <string name="auth_btn_fb">Facebook</string>
   <string name="auth_retry">Покушај поново</string>
@@ -762,8 +763,7 @@
   <string name="settings_check_vip_alert">Ваш захтев за проверу VIP-статуса је послат.</string>
   <string name="novice_sympathy">Шаљите свиђања само онима који\nВас заиста привлаче.\nМожда ћете
         наћи неког посебног!</string>
-  <string name="go_dating_message">Почните да упознајете људе и овде ће се појавити имена оних корисника 
-        који су посетили Ваш профил</string>
+  <string name="go_dating_message">Почните да упознајете људе и овде ће се појавити имена оних корисника који су посетили Ваш профил</string>
   <string name="photo_not_from_main_album">Наши модератори су одлучили да ова фотографија не може да буде искоришћена као
           профилна слика</string>
   <string name="sidebar_vk_profile">ВК профил</string>
@@ -799,7 +799,8 @@
   <string name="thanks_for_your_rate_bottom_label">Поделите своје утиске у AppStore. Ценимо свако мишљење!</string>
   <string name="thanks_for_your_rate_rate_app">Оставити мишљење у AppStore</string>
   <string name="thanks_for_your_rate_close">Затворити</string>
-  <plurals name="novice_sympathies_bonuses"/>
+  <string name="novice_sympathies_bonus">Добијате %1$d свиђања на\nпоклон! То значи да ће
+         Вам %2$d људи,\nдати своје свиђање и то заиста мислити.</string>
   <string name="buy_vip_title_from_input">Можете започети разговор са корисником ако имате VIP-статус</string>
   <string name="mutual_like_popup_text">Осећање је узајамно!</string>
   <string name="mutual_like_popup_button">Кажите \&quot;Поздрав\&quot;</string>
@@ -808,6 +809,8 @@
   <string name="people_nearby_not_found_title">Тренутно нема корисника у Вашој близини</string>
   <string name="people_nearby_not_found_description">Да бисте покушали поново, притисните и држите прстом по средини екрана.</string>
   <string name="NSLocationWhenInUseUsageDescription">Неопходна Вам је дозвола да бисте приступили овој функцији.</string>
+  <string name="buy_button_sticker_popular">Популарно</string>
+  <string name="buy_button_sticker_best_value">Најбоља\n цена</string>
   <string name="ban_liberty_title">Без реклама!</string>
   <string name="ban_liberty_description">Само упознавање, ништа више</string>
   <string name="guest_liberty_title">Гости</string>
@@ -818,6 +821,4 @@
   <string name="crown_liberty_description">Лако се истиче у Претрази и Порукама</string>
   <string name="like_liberty_title">Свиђања</string>
   <string name="like_liberty_description">Погледајте коме се свиђате</string>
-  <string name="buy_button_sticker_popular">популарно</string>
-  <string name="buy_button_sticker_best_value">Најбоља цена</string>
 </resources>

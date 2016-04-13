@@ -56,6 +56,7 @@
     <string name="address_book_access_error">Ова апликација нема приступ Вашим контактима. Можете
         дозволити приступ преко Подешавања приватности на свом уређају.
     </string>
+    <string name="camera_access_error">Апликација нема приступ камери. Можете дати приступ из Подешавања приватности на свом уређају.</string>
     <string name="profile_deleted_user">Корисник је уклоњен.</string>
     <string name="filter_main_parameters">Заинтересован сам за</string>
     <string name="dating_prev_button_ext">Претходни</string>
@@ -846,9 +847,17 @@
     <string name="novice_sympathy">Шаљите свиђања само онима који\nВас заиста привлаче.\nМожда ћете
         наћи неког посебног!
     </string>
-    <string name="novice_sympathies_bonus">Добијате %1$d свиђања на\nпоклон! То значи да ће
-         Вам %2$d људи,\nдати своје свиђање и то заиста мислити.</string>
     <string name="go_dating_message">Почните да упознајете људе и овде ће се појавити имена оних корисника који су посетили Ваш профил</string>
+    <string name="photo_not_from_main_album">Наши модератори су одлучили да ова фотографија не може да буде искоришћена као
+          профилна слика</string>
+    <string name="sidebar_vk_profile">ВК профил</string>
+    <string name="title_vk_profile">ВК профил</string>
+    <string name="vk_profile_invite_friends_error">Корисник више не прихвата позиве</string>
+    <string name="foreign_profile_empty_gifts_title">Пошаљите поклон и бићете у центру пажње</string>
+    <string name="chat_auto_reply_title">Текст поруке је сакривен</string>
+    <string name="chat_auto_reply_message">Да бисте отворили ову поруку или одговорили на исту, постаните VIP-корисник</string>
+    <string name="chat_auto_reply_button">Постати VIP</string>
+    <string name="photo_list_load_info">Поделите своју фотографију и видеће Вас милиони</string>
     <string name="vk_profile_button_tf_group">ГрупаTopface</string>
     <string name="vk_profile_button_join_tf_group">Придружити се групи Topface</string>
     <string name="vk_profile_button_join_vkgames_group">Придружити се групи \"Игре ВК\"</string>
@@ -861,9 +870,6 @@
     <string name="join_group_success">Придружили сте се групи</string>
     <string name="settings_auto_greeting_title">Ауто-поздрав</string>
     <string name="settings_auto_greeting_subtitle">Дозволите Topface-у да разговор аутоматски започне поздравом кад год Вам неко пошаље Свиђање</string>
-    <string name="chat_auto_reply_title">Текст поруке је сакривен</string>
-    <string name="chat_auto_reply_message">Да бисте отворили ову поруку или одговорили на исту, постаните VIP-корисник</string>
-    <string name="chat_auto_reply_button">Постати VIP</string>
     <string name="take_photo_text_1">Молимо Вас са поставите своју фотографију како бидте започели ћаскање.</string>
     <string name="take_photo_text_2">На фотографији можете бити сам Ви; све слике прегледавају наши модератори како би утврдили да се правила поштују.</string>
     <string name="unlock_by_viewed_ad_video_button_text">Откључати бесплатно на %s</string>
@@ -872,6 +878,21 @@
         <item quantity="other">%d минута</item>
         <item quantity="one">%d минут</item>
     </plurals>
+    <string name="thanks_for_your_rate_title">Хвала за Вашу критику</string>
+    <string name="thanks_for_your_rate_top_label">Као израз захвалности, поставићемо Вашу фотографију у фото-фид!</string>
+    <string name="thanks_for_your_rate_bottom_label">Поделите своје утиске у AppStore. Ценимо свако мишљење!</string>
+    <string name="thanks_for_your_rate_rate_app">Оставити мишљење у AppStore</string>
+    <string name="thanks_for_your_rate_close">Затворити</string>
+    <string name="novice_sympathies_bonus">Добијате %1$d свиђања на\nпоклон! То значи да ће
+         Вам %2$d људи,\nдати своје свиђање и то заиста мислити.</string>
+    <string name="buy_vip_title_from_input">Можете започети разговор са корисником ако имате VIP-статус</string>
+    <string name="mutual_like_popup_text">Осећање је узајамно!</string>
+    <string name="mutual_like_popup_button">Кажите \"Поздрав\"</string>
+    <string name="people_nearby_access_to_location_description">Да бисте видели ко је у близини, морате дозволити приступ својој гео-локацији.</string>
+    <string name="people_nearby_not_enought_money">Недостају Вам новчићи да бисте приступили функцији \"Људи у близини\"\</string>
+    <string name="people_nearby_not_found_title">Тренутно нема корисника у Вашој близини</string>
+    <string name="people_nearby_not_found_description">Да бисте покушали поново, притисните и држите прстом по средини екрана.</string>
+    <string name="NSLocationWhenInUseUsageDescription">Неопходна Вам је дозвола да бисте приступили овој функцији.</string>
     <string name="buy_button_sticker_popular">Популарно</string>
     <string name="buy_button_sticker_best_value">Најбоља\n цена</string>
     <string name="ban_liberty_title">Без реклама!</string>
@@ -884,5 +905,4 @@
     <string name="crown_liberty_description">Лако се истиче у Претрази и Порукама</string>
     <string name="like_liberty_title">Свиђања</string>
     <string name="like_liberty_description">Погледајте коме се свиђате</string>
-    <string name="vk_profile_invite_friends_error">Корисник више не прихвата позиве</string>
 </resources>

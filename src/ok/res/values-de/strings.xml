@@ -56,6 +56,7 @@
     <string name="address_book_access_error">Diese App hat keinen Zugang zu Ihren Kontakten. Sie
         können den Zugang in Datenschutzeinstellungen Ihres Geräts erlauben
     </string>
+    <string name="camera_access_error">App hat keinen Zugang zur Kamera. Du kannst den Zugang erlauben, indem du zu den Privatsphäre Einstellungen deines Gerätes gehst.</string>
     <string name="profile_deleted_user">Nutzer ist gelöscht</string>
     <string name="filter_main_parameters">Ich interessiere mich für</string>
     <string name="dating_prev_button_ext">Voriger</string>
@@ -781,8 +782,16 @@
     <string name="novice_sympathy">Senden Sie Sympathien den Menschen, die Ihnen\nwirklich
         gefallen,\num eine angenehme Bekanntschaft anzufangen
     </string>
-    <string name="novice_sympathies_bonus">Du bekommst %1$d Likes geschenkt! Das bedeutet, dass %2$d Leute dir ein Like geben werden und es auch wirklich so meinen!</string>
     <string name="go_dating_message">Fange an zu daten, und du werdest sehen wer dein Profil angeschaut hat.</string>
+    <string name="photo_not_from_main_album">Unsere Moderatoren haben entschieden, dass dieses Foto nicht als Profilfoto verwendet werden darf.</string>
+    <string name="sidebar_vk_profile">VK Profil</string>
+    <string name="title_vk_profile">VK Profil</string>
+    <string name="vk_profile_invite_friends_error">Der User akzeptiert keine Einladungen mehr</string>
+    <string name="foreign_profile_empty_gifts_title">Verschicke ein Geschenk um alle Aufmerksamkeit auf dich zu ziehen</string>
+    <string name="chat_auto_reply_title">Der Text der Nachricht ist verborgen</string>
+    <string name="chat_auto_reply_message">Um diese Nachricht zu öffnen oder um auf sie zu antworten, musst du zum VIP werden.</string>
+    <string name="chat_auto_reply_button">Werde zum VIP</string>
+    <string name="photo_list_load_info">Teile deine Fotos und werde von Millionen gesehen</string>
     <string name="vk_profile_button_tf_group">Topface-Gruppe</string>
     <string name="vk_profile_button_join_tf_group">Der Topface-Gruppe beitreten</string>
     <string name="vk_profile_button_join_vkgames_group">Der Gruppe \"VK Spiele\" beitreten</string>
@@ -795,9 +804,6 @@
     <string name="join_group_success">Du bist der Gruppe beigetreten</string>
     <string name="settings_auto_greeting_title">Automatische Grüße</string>
     <string name="settings_auto_greeting_subtitle">Erlaube Topface, automatisch ein Gespräch zu starten, wenn dir jemand ein Like schickt</string>
-    <string name="chat_auto_reply_title">Der Text der Nachricht ist verborgen</string>
-    <string name="chat_auto_reply_message">Um diese Nachricht zu öffnen oder um auf sie zu antworten, musst du zum VIP werden.</string>
-    <string name="chat_auto_reply_button">Werde zum VIP</string>
     <string name="take_photo_text_1">Bitte lade ein Foto von dir hoch, um zu chatten.</string>
     <string name="take_photo_text_2">Nur du selbst solltest auf dem Foto abgebildet sein; alle Fotos werden von Moderatoren überprüft um sicherzustellen, dass den Regeln gefolgt wird.</string>
     <string name="unlock_by_viewed_ad_video_button_text">Gratis entsperren bei %s</string>
@@ -805,6 +811,20 @@
         <item quantity="other">%d Minuten</item>
         <item quantity="one">%d Minute</item>
     </plurals>
+    <string name="thanks_for_your_rate_title">Vielen Dank für deine Bewertung.</string>
+    <string name="thanks_for_your_rate_top_label">Um unsere Dankbarkeit zu zeigen, werden wir dein Foto im Newsfeed anzeigen!</string>
+    <string name="thanks_for_your_rate_bottom_label">Teile deine Gedanken im App Store. Wie schätzen jede Bewertung!</string>
+    <string name="thanks_for_your_rate_rate_app">Schreibe eine Bewertung im App Store.</string>
+    <string name="thanks_for_your_rate_close">Schließen</string>
+    <string name="novice_sympathies_bonus">Du bekommst %1$d Likes geschenkt! Das bedeutet, dass %2$d Leute dir ein Like geben werden und es auch wirklich so meinen!</string>
+    <string name="buy_vip_title_from_input">Du kannst ein Gespräch mit einem anderen User starten, wenn du VIP-Status hast.</string>
+    <string name="mutual_like_popup_text">Das Gefühl beruht auf Gegenseitigkeit!</string>
+    <string name="mutual_like_popup_button">Sag \"Hallo\"</string>
+    <string name="people_nearby_access_to_location_description">Um zu sehen wer in deiner Nähe ist, musst du Zugang zu deiner Standpunktortung erlauben.</string>
+    <string name="people_nearby_not_enought_money">Du hast nicht genug Coins für Zugang zur \"Leute in meiner Nähe\" Funktion.</string>
+    <string name="people_nearby_not_found_title">Es gibt momentan keine User in deiner Nähe</string>
+    <string name="people_nearby_not_found_description">Um es nochmal zu versuchen, presse und halte einen Finger in der Mitte vom Bildschirm</string>
+    <string name="NSLocationWhenInUseUsageDescription">Um Zugang zu dieser Funktion erhalten, musst du dein Einverständnis gegen.</string>
     <string name="buy_button_sticker_popular">Beliebt</string>
     <string name="buy_button_sticker_best_value">Bester\n Preis</string>
     <string name="ban_liberty_title">Keine Werbung!</string>
@@ -817,5 +837,4 @@
     <string name="crown_liberty_description">Falle sowohl bei Suchergebnissen als auch in deinen Nachrichten auf</string>
     <string name="like_liberty_title">Likes</string>
     <string name="like_liberty_description">Erfahre, wer dich mag</string>
-    <string name="vk_profile_invite_friends_error">Der User akzeptiert keine Einladungen mehr</string>
 </resources>
