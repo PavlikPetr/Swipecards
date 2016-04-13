@@ -53,7 +53,7 @@ import javax.inject.Inject;
 import rx.Subscription;
 import rx.functions.Action1;
 
-import static com.topface.topface.utils.FlurryManager.ByCoinsProductType.GET_LEAD;
+import static com.topface.topface.utils.FlurryManager.GET_LEAD;
 
 public class AddToLeaderActivity extends BaseFragmentActivity implements View.OnClickListener {
 

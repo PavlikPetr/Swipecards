@@ -1,5 +1,6 @@
 package com.topface.topface.utils;
 
+import android.support.annotation.StringDef;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -19,6 +20,33 @@ import java.util.Map;
  * hold all flurry events and method initialization sdk
  */
 public class FlurryManager {
+
+    @StringDef({PHONE_BOOK_INVITES, SMS_INVITES, VK_INVITES})
+    public @interface InvitesType {
+    }
+
+    public static final String PHONE_BOOK_INVITES = "phone_book";
+    public static final String SMS_INVITES = "send_sms";
+    public static final String VK_INVITES = "vk";
+
+    @StringDef({SHOW, PRODUCT_BOUGHT, CLICK_BUY, CLICK_DELETE})
+    public @interface PayWallAction {
+    }
+
+    public static final String SHOW = "show";
+    public static final String PRODUCT_BOUGHT = "product_bought";
+    public static final String CLICK_BUY = "click_buy";
+    public static final String CLICK_DELETE = "click_delete";
+
+    @StringDef({PEOPLE_NEARBY_UNLOCK, LIKES_UNLOCK, BUY_GIFT, GET_LEAD, SEND_ADMIRATION})
+    public @interface ByCoinsProductType {
+    }
+
+    public static final String PEOPLE_NEARBY_UNLOCK = "people_nearby_unlock";
+    public static final String LIKES_UNLOCK = "likes_unlock";
+    public static final String BUY_GIFT = "buy_gift";
+    public static final String GET_LEAD = "get_lead";
+    public static final String SEND_ADMIRATION = "send_admiration";
 
     private static final String AUTH_EVENT = "authorize";
     private static final String LOGOUT_EVENT = "logout";
@@ -57,18 +85,18 @@ public class FlurryManager {
 
     private static final String PAGE_NAME_TEMPLATE = "page.%s";
 
-    private static final int EMPTY_USER_ID_HASH = 0;
+    private static final String EMPTY_USER_ID_HASH = Utils.EMPTY;
 
-    private static int mUserIdHash = EMPTY_USER_ID_HASH;
+    private static String mUserIdHash = EMPTY_USER_ID_HASH;
 
-    public static int getUserIdHash() {
+    public static String getUserIdHash() {
         int uid = CacheProfile.uid;
         if (AuthToken.getInstance().isEmpty() || uid == 0) {
             dropUserIdHash();
             return EMPTY_USER_ID_HASH;
         } else {
-            if (mUserIdHash == EMPTY_USER_ID_HASH) {
-                mUserIdHash = String.valueOf(CacheProfile.uid).hashCode();
+            if (mUserIdHash.equals(EMPTY_USER_ID_HASH)) {
+                mUserIdHash = new EncryptMethods().encryptUid(uid, EMPTY_USER_ID_HASH);
             }
             return mUserIdHash;
         }
@@ -76,49 +104,6 @@ public class FlurryManager {
 
     public static void dropUserIdHash() {
         mUserIdHash = EMPTY_USER_ID_HASH;
-    }
-
-    public enum InvitesType {
-        PHONE_BOOK_INVITES("phone_book"), SMS_INVITES("send_sms"), VK_INVITES("vk");
-
-        private String mType;
-
-        InvitesType(String type) {
-            mType = type;
-        }
-
-        public String getType() {
-            return mType;
-        }
-    }
-
-    public enum PayWallAction {
-        SHOW("show"), PRODUCT_BOUGHT("product_bought"), CLICK_BUY("click_buy"), CLICK_DELETE("click_delete");
-
-        private String mAction;
-
-        PayWallAction(String action) {
-            mAction = action;
-        }
-
-        public String getAction() {
-            return mAction;
-        }
-    }
-
-    public enum ByCoinsProductType {
-        PEOPLE_NEARBY_UNLOCK("people_nearby_unlock"), LIKES_UNLOCK("likes_unlock"), BUY_GIFT("buy_gift"),
-        GET_LEAD("get_lead"), SEND_ADMIRATION("send_admiration");
-
-        private String mProductType;
-
-        ByCoinsProductType(String productType) {
-            mProductType = productType;
-        }
-
-        public String getProductType() {
-            return mProductType;
-        }
     }
 
     public static void init() {
@@ -188,10 +173,10 @@ public class FlurryManager {
      *
      * @param count set count of friend, which can get invite
      */
-    public static void sendInviteEvent(InvitesType type, int count) {
+    public static void sendInviteEvent(@InvitesType String type, int count) {
         Map<String, String> invites = new HashMap<>();
         invites.put(INVITES_COUNT_PARAM, String.valueOf(count));
-        invites.put(INVITES_TYPE_PARAM, type.getType());
+        invites.put(INVITES_TYPE_PARAM, type);
         sendEvent(INVITE_EVENT, invites);
     }
 
@@ -239,10 +224,10 @@ public class FlurryManager {
      * @param popupName dialog name
      * @param action    type of action
      */
-    public static void sendPayWallEvent(String popupName, PayWallAction action) {
+    public static void sendPayWallEvent(String popupName, @PayWallAction String action) {
         Map<String, String> payWall = new HashMap<>();
         payWall.put(PAY_WALL_NAME_PARAM, popupName);
-        payWall.put(PAY_WALL_ACTION_PARAM, action.getAction());
+        payWall.put(PAY_WALL_ACTION_PARAM, action);
         sendEvent(PAY_WALL_EVENT, payWall);
     }
 
@@ -252,9 +237,9 @@ public class FlurryManager {
      * @param coinsCount product price in coins
      * @param product    type of product
      */
-    public static void sendSpendCoinsEvent(int coinsCount, ByCoinsProductType product) {
+    public static void sendSpendCoinsEvent(int coinsCount, @ByCoinsProductType String product) {
         Map<String, String> payWall = new HashMap<>();
-        payWall.put(PRODUCT_TYPE_PARAM, product.getProductType());
+        payWall.put(PRODUCT_TYPE_PARAM, product);
         payWall.put(PRICE_PARAM, String.valueOf(coinsCount));
         sendEvent(SPEND_COINS_EVENT, payWall);
     }
@@ -296,11 +281,11 @@ public class FlurryManager {
 
     private static boolean sendEvent(String eventName, Map<String, String> eventParams) {
         if (FlurryAgent.isSessionActive()) {
-            int hash = getUserIdHash();
+            String encrypted = getUserIdHash();
             if (eventParams == null) {
                 eventParams = new HashMap<>();
             }
-            if (hash != EMPTY_USER_ID_HASH) {
+            if (!encrypted.equals(EMPTY_USER_ID_HASH)) {
                 eventParams.put(USER_ID_PARAM, String.valueOf(getUserIdHash()));
             }
             if (eventParams.isEmpty()) {

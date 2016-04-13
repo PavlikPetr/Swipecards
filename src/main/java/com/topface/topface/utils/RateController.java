@@ -17,7 +17,7 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.cache.SearchCacheManager;
 
-import static com.topface.topface.utils.FlurryManager.ByCoinsProductType.SEND_ADMIRATION;
+import static com.topface.topface.utils.FlurryManager.SEND_ADMIRATION;
 
 public class RateController {
 

@@ -28,7 +28,7 @@ import com.topface.topface.utils.FlurryManager;
 
 import org.jetbrains.annotations.Nullable;
 
-import static com.topface.topface.utils.FlurryManager.PayWallAction.*;
+import static com.topface.topface.utils.FlurryManager.*;
 
 
 public abstract class PromoDialog extends AbstractDialogFragment implements View.OnClickListener, IPromoPopup {

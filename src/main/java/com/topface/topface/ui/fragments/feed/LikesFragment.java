@@ -60,7 +60,7 @@ import javax.inject.Inject;
 import rx.Subscription;
 import rx.functions.Action1;
 
-import static com.topface.topface.utils.FlurryManager.ByCoinsProductType.LIKES_UNLOCK;
+import static com.topface.topface.utils.FlurryManager.LIKES_UNLOCK;
 
 public class LikesFragment extends FeedFragment<FeedLike> {
 

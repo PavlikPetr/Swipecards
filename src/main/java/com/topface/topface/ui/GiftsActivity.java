@@ -31,7 +31,7 @@ import com.topface.topface.utils.Utils;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import static com.topface.topface.utils.FlurryManager.ByCoinsProductType.BUY_GIFT;
+import static com.topface.topface.utils.FlurryManager.BUY_GIFT;
 
 public class GiftsActivity extends BaseFragmentActivity implements IGiftSendListener {
 
