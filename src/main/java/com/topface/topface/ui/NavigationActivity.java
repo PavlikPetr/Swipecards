@@ -145,7 +145,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     public static void restartNavigationActivity(Activity activity, Options options) {
         Intent intent = new Intent(activity, NavigationActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(GCMUtils.NEXT_INTENT, options.startPageFragmentSettings);
+                .putExtra(GCMUtils.NEXT_INTENT, options.startPage);
         if (App.getUserConfig().getDatingMessage().equals(options
                 .instantMessageFromSearch.getText())) {
             intent.putExtra(DatingInstantMessageController.DEFAULT_MESSAGE, true);
@@ -410,7 +410,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         //Получаем id фрагмента, если он открыт
         FragmentSettings currentFragment = intent.getParcelableExtra(GCMUtils.NEXT_INTENT);
         Debug.log(PAGE_SWITCH + "show fragment from NEXT_INTENT: " + currentFragment);
-        showFragment(currentFragment == null ? App.from(this).getOptions().startPageFragmentSettings : currentFragment);
+        showFragment(currentFragment == null ? App.from(this).getOptions().startPage : currentFragment);
     }
 
     @Override

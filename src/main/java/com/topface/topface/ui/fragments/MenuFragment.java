@@ -124,7 +124,7 @@ public class MenuFragment extends Fragment {
                         if it is still presented in BaseFragment.FragmentId enum.
                          */
                         fragmentSettings = Arrays.asList(FragmentId.values()).contains(menuItem)
-                                ? (FragmentSettings) menuItem : App.get().getOptions().startPageFragmentSettings;
+                                ? (FragmentSettings) menuItem : App.get().getOptions().startPage;
                     }
                     selectMenu(fragmentSettings);
                     View view = mAdapter.getViewForActivate(mListView, fragmentSettings);
@@ -186,7 +186,7 @@ public class MenuFragment extends Fragment {
                 }
             }
             Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment to default from onCreate().");
-            switchFragment(App.get().getOptions().startPageFragmentSettings, false);
+            switchFragment(App.get().getOptions().startPage, false);
         }
     }
 
@@ -488,7 +488,7 @@ public class MenuFragment extends Fragment {
     }
 
     public FragmentSettings getCurrentFragmentId() {
-        return mSelectedFragment.equals(FragmentId.UNDEFINED.getFragmentSettings()) ? App.get().getOptions().startPageFragmentSettings : mSelectedFragment;
+        return mSelectedFragment.equals(FragmentId.UNDEFINED.getFragmentSettings()) ? App.get().getOptions().startPage : mSelectedFragment;
     }
 
     private BaseFragment getFragmentNewInstanceById(FragmentSettings id) {
