@@ -16,6 +16,7 @@ import com.topface.topface.requests.MarkSMSInviteRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.statistics.InvitesStatistics;
 import com.topface.topface.ui.fragments.SmsInviteFragment;
+import com.topface.topface.utils.FlurryManager;
 
 import static com.topface.topface.statistics.InvitesStatistics.PLC_SMS_INVITE;
 import static com.topface.topface.ui.fragments.SmsInviteFragment.PHONES_STATUSES.CAN_SEND_CONFIRMATION;
@@ -87,6 +88,7 @@ public class CatchSmsActions extends BroadcastReceiver {
                 @Override
                 protected void success(SMSInvitationCounters data, IApiResponse response) {
                     InvitesStatistics.sendSuccessInviteResponseAction(PLC_SMS_INVITE);
+                    FlurryManager.getInstance().sendInviteEvent(FlurryManager.SMS_INVITES, 1);
                     Integer invitationCount = null;
                     Integer registeredCount = null;
                     if (null != data) {

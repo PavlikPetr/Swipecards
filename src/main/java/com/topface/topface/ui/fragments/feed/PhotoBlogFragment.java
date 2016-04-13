@@ -37,6 +37,7 @@ import java.util.List;
 
 public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
 
+    private static final String PAGE_NAME = "PhotoFeed";
     private static final int UPDATE_DELAY = 20;
 
     private RateController mRateController;
@@ -48,6 +49,11 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     protected Type getFeedListDataType() {
         return new TypeToken<FeedList<FeedPhotoBlog>>() {
         }.getType();
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override

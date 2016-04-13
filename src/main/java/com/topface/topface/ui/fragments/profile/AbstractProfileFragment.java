@@ -124,7 +124,6 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
         }
     };
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -151,6 +150,8 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
                 int lastPage = BODY_PAGES_CLASS_NAMES.indexOf(sLastPage);
                 mBodyPager.setCurrentItem(lastPage);
                 mPageChangeListener.onPageSelected(lastPage);
+            } else {
+                mPageChangeListener.onPageSelected(0);
             }
         } else {
             mPageChangeListener.onPageSelected(0);

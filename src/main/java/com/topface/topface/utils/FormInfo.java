@@ -110,8 +110,6 @@ public class FormInfo {
                 return mResources.getStringArray(mSex == Profile.GIRL ? R.array.profile_form_education_female : R.array.profile_form_education_male);
             case R.array.form_social_finances:
                 return mResources.getStringArray(mSex == Profile.GIRL ? R.array.profile_form_finances_female : R.array.profile_form_finances_male);
-            case R.array.form_social_marriage:
-                return mResources.getStringArray(mSex == Profile.GIRL ? R.array.profile_form_marriage_female : R.array.profile_form_marriage_male);
             case R.array.form_social_residence:
                 return mResources.getStringArray(mSex == Profile.GIRL ? R.array.profile_form_residence_female : R.array.profile_form_residence_male);
             default:
@@ -157,8 +155,6 @@ public class FormInfo {
                 return mResources.getIntArray(R.array.profile_form_education_ids);
             case R.array.form_social_finances:
                 return mResources.getIntArray(R.array.profile_form_finances_ids);
-            case R.array.form_social_marriage:
-                return mResources.getIntArray(R.array.profile_form_marriage_ids);
             case R.array.form_social_residence:
                 return mResources.getIntArray(R.array.profile_form_residence_ids);
             default:
@@ -211,9 +207,6 @@ public class FormInfo {
                 break;
             case R.array.form_social_finances:
                 result.financesId = selectedValueId;
-                break;
-            case R.array.form_social_marriage:
-                result.marriageId = selectedValueId;
                 break;
             case R.array.form_social_residence:
                 result.residenceId = selectedValueId;

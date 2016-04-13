@@ -181,6 +181,7 @@
     <string name="general_profile">Profil</string>
     <string name="general_settings">Ayarlar</string>
     <string name="general_vk_profile">VK</string>
+    <string name="general_ok_profile">OK</string>
     <string name="auth_btn_vk">VKontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Tekrar deneyin</string>
@@ -814,7 +815,7 @@
     <string name="settings_check_vip_alert">VIP statüsünün kontrol edilmesi talebiniz iletildi.</string>
     <string name="novice_sympathy">Yakın bir arkadaşlığa başlamak için sadece hoşlandığınız \nkişilere beğeni gönderin. 
             Belki de \nsizin için gerçekten özel birini böylece bulabilirsiniz.</string>
-    <string name="go_dating_message">İnsanlarla tanışmaya başla ve profilini ziyaret edenlerin listesi burada gözükecek.</string>
+    <string name="go_dating_message">Yeni arkadaşlar bulmaya başla, bu sayfada profile bakanları görebilirsin.</string>
     <string name="photo_not_from_main_album">Yönetim bu fotoğrafın profil resmi olarak kullanılmayacağına karar verdi.</string>
     <string name="sidebar_vk_profile">Vkontakte profili</string>
     <string name="title_vk_profile">VK profili</string>
@@ -848,9 +849,7 @@
     <string name="thanks_for_your_rate_bottom_label">Düşüncelerinizi bizimle AppStore\'da paylaşın. Ne düşündüğünüze önem veriyoruz!</string>
     <string name="thanks_for_your_rate_rate_app">AppStore\'da bizi değerlendirin</string>
     <string name="thanks_for_your_rate_close">Kapat</string>
-    <plurals name="novice_sympathies_bonuses">
-        <item quantity="zero">Hediye olarak %1$d beğeni \nalacaksınız. Bu demek oluyor ki \nsize beğeni gönderenler sizi \ngerçekten %2$d beğeniyor.</item>
-    </plurals>
+    <string name="novice_sympathies_bonus">Hediye olarak %1$d beğeni \nkazancaksın! Bu demek oluyor ki, sana Beğeni gönderen \nkişiler senden \ngerçekten hoşlanıyor.</string>
     <string name="buy_vip_title_from_input">Eğer VIP üyeyseniz dilediğiniz bir kullanıcı ile sohbete hemen başlayabilirsiniz</string>
     <string name="mutual_like_popup_text">Beğeniniz karşılıklı</string>
     <string name="mutual_like_popup_button">\"Merhaba\" de</string>
@@ -859,6 +858,8 @@
     <string name="people_nearby_not_found_title">Şu an size yakın kullanıcı bulunamdı</string>
     <string name="people_nearby_not_found_description">Tekrar denemek için, ekranın ortasına parmağınızla dokunup basılı tutunuz.</string>
     <string name="NSLocationWhenInUseUsageDescription">Bu fonksiyona erişebilmek için izin vermeniz gerekiyor.</string>
+    <string name="buy_button_sticker_popular">En çok\n satan</string>
+    <string name="buy_button_sticker_best_value">Süper\n fiyat</string>
     <string name="ban_liberty_title">Reklamsız!</string>
     <string name="ban_liberty_description">Sadece arkadaşlık, basit ve kolay</string>
     <string name="guest_liberty_title">Ziyaretçiler</string>
@@ -869,6 +870,4 @@
     <string name="crown_liberty_description">Arama sonuçlarında ve mesajlar sayfasına öne çık</string>
     <string name="like_liberty_title">Beğeni</string>
     <string name="like_liberty_description">Seni kimler beğenmiş, öğren</string>
-    <string name="buy_button_sticker_popular">En çok satan</string>
-    <string name="buy_button_sticker_best_value">Süper fiyat</string>
 </resources>

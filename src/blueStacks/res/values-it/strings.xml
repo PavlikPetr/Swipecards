@@ -171,6 +171,7 @@
   <string name="general_profile">Profilo</string>
   <string name="general_settings">Impostazioni</string>
   <string name="general_vk_profile">VK</string>
+  <string name="general_ok_profile">OK</string>
   <string name="auth_btn_vk">Vkontakte</string>
   <string name="auth_btn_fb">Facebook</string>
   <string name="auth_retry">Riprovare</string>
@@ -747,8 +748,7 @@
   <string name="settings_check_vip_alert">Richiesta di verifica inviata</string>
   <string name="novice_sympathy">Invia le simpatie solo alle persone che ti\npiacciono
         veramente\nper iniziare una piacevole relazione</string>
-  <string name="go_dating_message">Comincia a fare conoscenze ed in questa sezione vedrai gli utenti
-        che hanno visitato il tuo profilo</string>
+  <string name="go_dating_message">Comincia a fare conoscenze e in questa sezione vedrai gli utenti che hanno visitato il tuo profilo</string>
   <string name="photo_not_from_main_album">Non puoi impostare questa foto come profilo perché non conforme ai canoni della moderazione</string>
   <string name="sidebar_vk_profile">Profilo Vkontakte</string>
   <string name="title_vk_profile">Profilo VKontakte</string>
@@ -784,11 +784,7 @@
   <string name="thanks_for_your_rate_bottom_label">Condividi la tua esperienza nell\'App Store. Valutiamo ogni recensione!</string>
   <string name="thanks_for_your_rate_rate_app">Scrivi una recensione nell\'App Store</string>
   <string name="thanks_for_your_rate_close">Chiuso</string>
-  <plurals name="novice_sympathies_bonuses">
-    <item quantity="zero">Ricevi %1$d simpatie in\nregalo! Questo significa che tu\n piacerai sicuramente%2$d agli utenti,\nche ti invieranno la loro simpatia</item>
-    <item quantity="other">Ricevi %1$d simpatie in\nregalo! Questo significa che tu\n piacerai sicuramente%2$d agli utenti,\nche ti invieranno la loro simpatia</item>
-    <item quantity="one">Ricevi %1$d simpatia in\nregalo! Questo significa che tu\n piacerai sicuramente%2$d agli utenti,\nche ti invieranno la loro simpatia</item>
-  </plurals>
+  <string name="novice_sympathies_bonus">Stai ricevendo %1$d simpatie in\nregalo! Questo significa piaci davvero molto alle persone \nche ti inviano le simpatie!</string>
   <string name="buy_vip_title_from_input">Per cominciare a chattare con questo utente devi essere VIP</string>
   <string name="mutual_like_popup_text">La simpatia è reciproca!</string>
   <string name="mutual_like_popup_button">Dici \&quot; Ciao\&quot;</string>
@@ -797,17 +793,16 @@
   <string name="people_nearby_not_found_title">In questo momento non c\'è alcun utente vicino a te</string>
   <string name="people_nearby_not_found_description">Riprova, premi e tieni premuto il dito al centro dello schermo</string>
   <string name="NSLocationWhenInUseUsageDescription">Per accedere a questa funzione devi fornire il permesso</string>
+  <string name="buy_button_sticker_popular">Il più\n venduto</string>
+  <string name="buy_button_sticker_best_value">Miglior\n prezzo</string>
   <string name="ban_liberty_title">Senza pubblicità!</string>
   <string name="ban_liberty_description">Solo un appuntamento, puro e semplice</string>
   <string name="guest_liberty_title">Ospiti</string>
   <string name="guest_liberty_description">Scopri chi ha visitato il tuo profilo</string>
   <string name="star_liberty_title">Utenti popolari</string>
-  <string name="star_liberty_description">Il più famoso rompighiaccio per iniziare a conversare
-  </string>
+  <string name="star_liberty_description">Il più famoso rompighiaccio per iniziare a conversare</string>
   <string name="crown_liberty_title">Distinguiti</string>
   <string name="crown_liberty_description">Spicca facilmente tra le Ricerche e i Messaggi</string>
   <string name="like_liberty_title">Mi piace</string>
   <string name="like_liberty_description">Scopri a chi piaci</string>
-  <string name="buy_button_sticker_popular">Il più venduto</string>
-  <string name="buy_button_sticker_best_value">Miglior prezzo</string>
 </resources>

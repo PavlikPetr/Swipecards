@@ -190,6 +190,11 @@ public class UserProfileFragment extends AbstractProfileFragment {
         return mUserNameAndAge;
     }
 
+    @Override
+    public boolean isTrackable() {
+        return false;
+    }
+
     private boolean isLoaded(int profileId) {
         return profileId == mLastLoadedProfileId;
     }

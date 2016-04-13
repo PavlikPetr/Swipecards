@@ -47,10 +47,17 @@ import static com.topface.topface.ui.dialogs.BaseEditDialog.EditingFinishedListe
 
 public class ProfileFormFragment extends AbstractFormFragment {
 
+    private static final String PAGE_NAME = "profile.form";
+
     private FragmentManager mFragmentManager;
 
     private List<Integer> mMainFormTypes = new ArrayList<>(Arrays.asList(
             new Integer[]{FormItem.AGE, FormItem.CITY, FormItem.NAME, FormItem.SEX, FormItem.STATUS}));
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
+    }
 
     private EditingFinishedListener<FormItem> mFormEditedListener = new EditingFinishedListener<FormItem>() {
         @Override

@@ -92,8 +92,8 @@ public class OpenIabHelperManager implements IabHelper.OnIabSetupFinishedListene
     }
 
     public boolean isReadyToBuyNow() {
-        return mHelper != null && mHelper.getSetupState() == OpenIabHelper.SETUP_RESULT_SUCCESSFUL ||
-                mHelper.getSetupState() == OpenIabHelper.SETUP_RESULT_FAILED;
+        return mHelper != null && (mHelper.getSetupState() == OpenIabHelper.SETUP_RESULT_SUCCESSFUL
+                || mHelper.getSetupState() == OpenIabHelper.SETUP_RESULT_FAILED);
     }
 
     public void consumeAsync(final Purchase purchase, IabHelper.OnConsumeFinishedListener listener) {

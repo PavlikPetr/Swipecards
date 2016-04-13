@@ -30,6 +30,11 @@ public class AdmirationFragment extends LikesFragment {
     private ViewFlipper mStubFlipper;
 
     @Override
+    protected String getScreenName() {
+        return SCREEN_TYPE;
+    }
+
+    @Override
     protected String getTitle() {
         return getString(R.string.general_sympathies);
     }

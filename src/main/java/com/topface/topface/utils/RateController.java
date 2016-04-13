@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Rate;
@@ -17,6 +18,8 @@ import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.cache.SearchCacheManager;
+
+import static com.topface.topface.utils.FlurryManager.SEND_ADMIRATION;
 
 public class RateController {
 
@@ -59,6 +62,7 @@ public class RateController {
 
             @Override
             protected void success(Rate rate, IApiResponse response) {
+                FlurryManager.getInstance().sendSpendCoinsEvent(App.get().getOptions().priceAdmiration, SEND_ADMIRATION);
                 if (listener != null) {
                     listener.onRateCompleted(sendLike.getMutualid());
                 }

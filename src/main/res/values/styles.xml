@@ -1272,6 +1272,12 @@
         <item name="android:layout_marginBottom">12dp</item>
     </style>
 
+    <style name="OkProfileButtons" parent="VkProfileButtons">
+        <item name="android:visibility">visible</item>
+    </style>
+
+    <style name="OkProfileUserName" parent="VkProfileUserName" />
+
     <style name="InvisibleProgress">
         <item name="android:visibility">gone</item>
     </style>

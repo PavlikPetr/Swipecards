@@ -184,6 +184,7 @@
     <string name="general_profile">Perfil</string>
     <string name="general_settings">Ajustes</string>
     <string name="general_vk_profile">VK</string>
+    <string name="general_ok_profile">OK</string>
     <string name="auth_btn_vk">VKontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Intentar de nuevo</string>
@@ -843,7 +844,7 @@
     <string name="novice_sympathy">Envía simpatías a aquellos\nquienes realmente te gustan
         para\nempezar una relación satisfactoria
     </string>
-    <string name="go_dating_message">Comienza  a conocer y aquí verás a los usuarios que visitan tu perfil.</string>
+    <string name="go_dating_message">Comienzo a conocer esto y podrá ver a los usuarios que visitan su perfil</string>
     <string name="photo_not_from_main_album">Por los resultados de la moderación, está prohibida esta foto en el avatar</string>
     <string name="sidebar_vk_profile">Perfil VKontakt</string>
     <string name="title_vk_profile">Perfil VK</string>
@@ -877,11 +878,8 @@
     <string name="thanks_for_your_rate_bottom_label">Compartir tu experiencia en AppStore.¡Valoramos cada comentario!</string>
     <string name="thanks_for_your_rate_rate_app">Dejar comentario en AppStore</string>
     <string name="thanks_for_your_rate_close">Cerrar</string>
-    <plurals name="novice_sympathies_bonuses">
-        <item quantity="zero">¡Recibirás %1$d simpatías de\nregalo! Esto significa que tú\ncon seguridad gustas al %2$d de las personas,\nque te expresarán su simpatía.</item>
-        <item quantity="other">¡Recibirás %1$d simpatías de\nregalo! Esto significa que tú\ncon seguridad gustas al %2$d de las personas,\nque te expresarán su simpatía.</item>
-        <item quantity="one">¡Recibirás %1$d simpatías de\nregalo! Esto significa que tú\ncon seguridad gustas al %2$d de las personas,\nque te expresarán su simpatía.</item>
-    </plurals>
+    <string name="novice_sympathies_bonus">¡Recibirás %1$d simpatías de\nregalo! Esto significa que
+        tú\nseguro que le gustas al %2$d de las personas,\nque te expresarán su simpatía.</string>
     <string name="buy_vip_title_from_input">Se puede comenzar la comunicación con el usuario si tienes el estado VIP</string>
     <string name="mutual_like_popup_text">¡Tu simpatía es mutua!</string>
     <string name="mutual_like_popup_button">Decir \"hola\"</string>
@@ -890,6 +888,8 @@
     <string name="people_nearby_not_found_title">No hay usuarios todavía cerca de ti.</string>
     <string name="people_nearby_not_found_description">Para intentarlo de nuevo, mantén el dedo en el centro de la pantalla.</string>
     <string name="NSLocationWhenInUseUsageDescription">Para obtener acceso a la funcionalidad, necesitas obtener acceso previo.</string>
+    <string name="buy_button_sticker_popular">Los más\n vendidos</string>
+    <string name="buy_button_sticker_best_value">El mejor\n precio</string>
     <string name="ban_liberty_title">¡Sin publicidad!</string>
     <string name="ban_liberty_description">Solo conocer gente, nada más</string>
     <string name="guest_liberty_title">Invitados</string>
@@ -900,6 +900,4 @@
     <string name="crown_liberty_description">Es difícil no destacar en la búsqueda y en los mensajes</string>
     <string name="like_liberty_title">Simpatías</string>
     <string name="like_liberty_description">Mira a quién le gustas</string>
-    <string name="buy_button_sticker_popular">Los más vendidos</string>
-    <string name="buy_button_sticker_best_value">El mejor precio</string>
 </resources>

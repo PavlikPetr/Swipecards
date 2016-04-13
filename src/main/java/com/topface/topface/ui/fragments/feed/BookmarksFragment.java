@@ -31,6 +31,8 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
 
     public static final int SELECTION_LIMIT = 10;
 
+    private static final String PAGE_NAME = "Bookmarks";
+
     private BroadcastReceiver mBookmarkedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -50,6 +52,11 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
             }
         }
     };
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
+    }
 
     @Override
     protected Type getFeedListDataType() {

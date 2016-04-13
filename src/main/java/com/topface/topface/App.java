@@ -18,7 +18,6 @@ import com.appsflyer.AppsFlyerLib;
 import com.comscore.analytics.comScore;
 import com.facebook.appevents.AppEventsConstants;
 import com.facebook.appevents.AppEventsLogger;
-import com.flurry.android.FlurryAgent;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.squareup.leakcanary.LeakCanary;
 import com.topface.billing.OpenIabHelperManager;
@@ -45,6 +44,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.requests.ReferrerRequest;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
@@ -55,10 +55,13 @@ import com.topface.topface.state.IStateDataUpdater;
 import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.statistics.AppStateStatistics;
 import com.topface.topface.ui.ApplicationBase;
+import com.topface.topface.ui.external_libs.AdjustManager;
+import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.RunningStateManager;
@@ -104,6 +107,8 @@ public class App extends ApplicationBase implements IStateDataUpdater {
 
     @Inject
     static RunningStateManager mStateManager;
+    @Inject
+    AdjustManager mAdjustManager;
     private ObjectGraph mGraph;
     private static Context mContext;
     private static Intent mConnectionIntent;
@@ -111,11 +116,12 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     private static long mLastProfileUpdate;
     private static Configurations mBaseConfig;
     private static AppOptions mAppOptions;
-    public static boolean isScruffyEnabled;
+
     private static Boolean mIsGmsSupported;
     private static String mStartLabel;
     private static Location mCurLocation;
     private static AppsFlyerData.ConversionHolder mAppsFlyerConversionHolder;
+    public static boolean isScruffyEnabled;
 
     public static OpenIabHelperManager mOpenIabHelperManager = new OpenIabHelperManager();
     private static boolean mAppOptionsObtainedFromServer = false;
@@ -199,6 +205,27 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                         Debug.log("Options::fail");
                     }
                 });
+    }
+
+    public static void sendReferreRequest(final AdjustAttributeData attribution) {
+        Debug.log("Adjust:: check settings before send AdjustAttributeData to server");
+        final AppConfig config = getAppConfig();
+        if (!AuthToken.getInstance().isEmpty() && !attribution.isEmpty() && !config.isAdjustAttributeDataSent()) {
+            Debug.log("Adjust:: send AdjustAttributeData");
+            new ReferrerRequest(App.getContext(), attribution).callback(new ApiHandler() {
+                @Override
+                public void success(IApiResponse response) {
+                    Debug.log("Adjust:: attribution sent success");
+                    config.setAdjustAttributeDataSent(true);
+                    config.saveConfig();
+                }
+
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+                    Debug.log("Adjust:: fail while send AdjustAttributeData");
+                }
+            }).exec();
+        }
     }
 
     public static void sendProfileRequest() {
@@ -357,8 +384,9 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         }
 
         super.onCreate();
-        LeakCanary.install(this);
         mContext = getApplicationContext();
+        LeakCanary.install(this);
+        FlurryManager.getInstance().init();
         // Отправка ивента о запуске приложения, если пользователь авторизован в FB
         if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
             FbAuthorizer.initFB();
@@ -366,17 +394,21 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         }
         initVkSdk();
         initObjectGraphForInjections();
+        inject(this);
+        mAdjustManager.initAdjust();
         mProvider = new OptionsAndProfileProvider(this);
         // подписываемся на события о переходе приложения в состояние background/foreground
         mStateManager.registerAppChangeStateListener(new RunningStateManager.OnAppChangeStateListener() {
             @Override
             public void onAppForeground(long timeOnStart) {
                 AppStateStatistics.sendAppForegroundState();
+                FlurryManager.getInstance().sendAppInForegroundEvent();
             }
 
             @Override
             public void onAppBackground(long timeOnStop, long timeOnStart) {
                 AppStateStatistics.sendAppBackgroundState();
+                FlurryManager.getInstance().sendAppInBackgroundEvent();
             }
         });
         //Включаем отладку, если это дебаг версия
@@ -431,8 +463,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         AppsFlyerLib.registerConversionListener(mContext, new AppsFlyerData.ConversionListener(mAppsFlyerConversionHolder));
 
         initComScore();
-        FlurryAgent.init(this, getString(R.string.flurry_key));
-
         final Handler handler = new Handler();
         //Выполнение всего, что можно сделать асинхронно, делаем в отдельном потоке
         new BackgroundThread() {
@@ -441,6 +471,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 onCreateAsync(handler);
             }
         };
+        App.sendReferreRequest(getAppConfig().getAdjustAttributeData());
     }
 
 

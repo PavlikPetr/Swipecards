@@ -35,6 +35,7 @@ public class UserPhotoFragment extends ProfileInnerFragment {
     private static final String PHOTOS_COUNT = "PHOTOS_COUNT";
     private static final String PHOTO_LINKS = "PHOTO_LINKS";
     private static final String POSITION = "POSITION";
+    private static final String PAGE_NAME = "user.photo";
 
     private int mUserId;
     private int mPhotosCount;
@@ -62,6 +63,11 @@ public class UserPhotoFragment extends ProfileInnerFragment {
             }
         }
     };
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
