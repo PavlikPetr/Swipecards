@@ -182,6 +182,7 @@
     <string name="general_profile">Profil</string>
     <string name="general_settings">Paramètres</string>
     <string name="general_vk_profile">VK</string>
+    <string name="general_ok_profile">OK</string>
     <string name="auth_btn_vk">Vkontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Réessayer</string>
@@ -846,7 +847,7 @@
     <string name="novice_sympathy">Envoyez des J\'aime aux personnes qui vous\nplaisent
         vraiment.\nVous allez peut être rencontrer quelqu\'un d\'unique !
     </string>
-    <string name="go_dating_message">Apprenez à mieux connaître les gens et les noms des utilisateurs ayant visité votre profil apparaîtront ici !</string>
+    <string name="go_dating_message">Commencez à faire connaissance et découvrez ici qui regarde votre profil</string>
     <string name="photo_not_from_main_album">Un modérateur a décidé que cette photo ne peut pas être utilisée comme photo de profil.</string>
     <string name="sidebar_vk_profile">Profil VK</string>
     <string name="title_vk_profile">Profil VK</string>
@@ -880,11 +881,7 @@
     <string name="thanks_for_your_rate_bottom_label">Partagez votre avis dans l\'App Store. Nous apprécions tous les commentaires !</string>
     <string name="thanks_for_your_rate_rate_app">Laisser un commentaire sur l\'App Store</string>
     <string name="thanks_for_your_rate_close">Fermé</string>
-    <plurals name="novice_sympathies_bonuses">
-        <item quantity="zero">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.</item>
-        <item quantity="other">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.</item>
-        <item quantity="one">Vous recevrez %1$d J\'aime comme\ncadeau ! Cela signifie que \nles personnes qui vous envoient des J\'aime \nvous aiment réellement %2$d.</item>
-    </plurals>
+    <string name="novice_sympathies_bonus">Vous recevez %1$d J\'aime en cadeau ! Cela signifie que %2$d personnes vont vous donner un J\'aime et qu\'elles le pensent réellement !</string>
     <string name="buy_vip_title_from_input">Vous pouvez commencer une conversation avec un utilisateur si vous avez le statut VIP</string>
     <string name="mutual_like_popup_text">Le sentiment est réciproque !</string>
     <string name="mutual_like_popup_button">Dites « Salut »</string>
@@ -893,20 +890,16 @@
     <string name="people_nearby_not_found_title">Il n\'y a pas d\'utilisateurs à proximité de votre localisation pour le moment</string>
     <string name="people_nearby_not_found_description">Pour réessayer, appuyez et maintenez un doigt dans le centre de l\'écran.</string>
     <string name="NSLocationWhenInUseUsageDescription">Pour accéder à cette fonction, vous devez donner votre autorisation</string>
+    <string name="buy_button_sticker_popular">Populaire</string>
+    <string name="buy_button_sticker_best_value">Meilleure\n valeur</string>
     <string name="ban_liberty_title">Pas de pubs !</string>
     <string name="ban_liberty_description">Juste faire connaissance, purement et simplement</string>
     <string name="guest_liberty_title">Invités</string>
     <string name="guest_liberty_description">Découvrez qui a visité votre page de profil</string>
     <string name="star_liberty_title">Utilisateurs populaires</string>
-    <string name="star_liberty_description">Les brise-glaces les plus populaires pour démarrer une
-        conversation
-    </string>
+    <string name="star_liberty_description">Les brise-glaces les plus populaires pour démarrer une conversation</string>
     <string name="crown_liberty_title">Démarquez-vous</string>
-    <string name="crown_liberty_description">Démarquez-vous facilement dans la Recherche et les
-        Messages
-    </string>
+    <string name="crown_liberty_description">Démarquez-vous facilement dans la Recherche et les Messages</string>
     <string name="like_liberty_title">J\'aime</string>
     <string name="like_liberty_description">Voir qui vous aime</string>
-    <string name="buy_button_sticker_popular">Populaire</string>
-    <string name="buy_button_sticker_best_value">Meilleure valeur</string>
 </resources>

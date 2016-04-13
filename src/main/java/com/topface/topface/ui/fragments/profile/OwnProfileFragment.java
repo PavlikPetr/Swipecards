@@ -24,6 +24,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.UniversalUserFactory;
 import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
+import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.VkProfileFragment;
@@ -129,6 +130,9 @@ public class OwnProfileFragment extends OwnAvatarFragment {
         addBodyPage(SettingsFragment.class.getName(), getResources().getString(R.string.settings_header_title));
         if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
             addBodyPage(VkProfileFragment.class.getName(), getResources().getString(R.string.general_vk_profile));
+        }
+        if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_ODNOKLASSNIKI)) {
+            addBodyPage(OkProfileFragment.class.getName(), getResources().getString(R.string.general_ok_profile));
         }
     }
 

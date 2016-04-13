@@ -2,7 +2,6 @@ package com.topface.topface.ui.dialogs;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -101,10 +100,7 @@ public class AboutAppDialog extends TrackedDialogFragment {
         extra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = Utils.getIntentToOpenUrl(mAboutUrl);
-                if (i != null) {
-                    getActivity().startActivity(i);
-                }
+                Utils.goToUrl(getActivity(),mAboutUrl);
             }
         });
         return new AlertDialog.Builder(getContext())

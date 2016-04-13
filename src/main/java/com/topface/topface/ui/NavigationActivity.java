@@ -47,6 +47,7 @@ import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
+import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
@@ -116,6 +117,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private AddPhotoHelper mAddPhotoHelper;
     public static boolean isPhotoAsked;
     private PopupManager mPopupManager;
+    private CompositeSubscription mSubscription = new CompositeSubscription();
     private BehaviorSubject<DRAWER_LAYOUT_STATE> mDrawerLayoutStateObservable;
     private Handler mHandler = new Handler() {
         @Override
@@ -134,7 +136,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             }
         }
     };
-    private CompositeSubscription mNavigationsSubscriptions = new CompositeSubscription();
 
     /**
      * Перезапускает NavigationActivity, нужно например при смене языка
@@ -183,12 +184,18 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
-        mNavigationsSubscriptions.add(mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
+        mSubscription.add(mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
             @Override
             public void call(CountersData countersData) {
                 if (mNotificationController != null) {
                     mNotificationController.refreshNotificator(countersData.dialogs, countersData.mutual);
                 }
+            }
+        }));
+        mSubscription.add(mAppState.getObservable(AdjustAttributeData.class).subscribe(new Action1<AdjustAttributeData>() {
+            @Override
+            public void call(AdjustAttributeData adjustAttributionData) {
+                App.sendReferreRequest(adjustAttributionData);
             }
         }));
         if (isNeedBroughtToFront(intent)) {
@@ -208,7 +215,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             mPendingNextIntent = intent;
         }
         isPhotoAsked = false;
-        mNavigationsSubscriptions.add(mAppState.getObservable(City.class).subscribe(new Action1<City>() {
+        mSubscription.add(mAppState.getObservable(City.class).subscribe(new Action1<City>() {
             @Override
             public void call(final City city) {
                 if (city != null) {
@@ -639,8 +646,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (mAddPhotoHelper != null) {
             mAddPhotoHelper.releaseHelper();
         }
-        if (mNavigationsSubscriptions != null && !mNavigationsSubscriptions.isUnsubscribed()) {
-            mNavigationsSubscriptions.unsubscribe();
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
         }
         super.onDestroy();
         AdmobInterstitialUtils.releaseInterstitials();

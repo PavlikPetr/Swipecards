@@ -14,6 +14,8 @@ import javax.inject.Inject;
 
 public class PromoKey81Dialog extends PromoDialog {
 
+    private final static String POPUP_NAME = "promo.express.admirations";
+
     private boolean counterUpdated;
     @Inject
     TopfaceAppState mAppState;
@@ -22,6 +24,11 @@ public class PromoKey81Dialog extends PromoDialog {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.from(getActivity()).inject(this);
+    }
+
+    @Override
+    protected String getPopupName() {
+        return POPUP_NAME;
     }
 
     @Override

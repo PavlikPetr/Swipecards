@@ -50,6 +50,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
 
     private static final String POSITION = "POSITION";
     private static final String FLIPPER_VISIBLE_CHILD = "FLIPPER_VISIBLE_CHILD";
+    private static final String PAGE_NAME = "profile.photos";
     @Inject
     TopfaceAppState appState;
     private OwnProfileRecyclerViewAdapter mOwnProfileRecyclerViewAdapter;
@@ -99,6 +100,11 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
     @Override
     public boolean isTrackable() {
         return false;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     private void sendAlbumRequest() {

@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -38,6 +37,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SettingsFragment extends ProfileInnerFragment {
+
+    private static final String PAGE_NAME = "profile.settings";
 
     private TextView mSocialNameText;
     private MarketApiManager mMarketApiManager;
@@ -121,6 +122,11 @@ public class SettingsFragment extends ProfileInnerFragment {
             initViews(view);
         }
         return view;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override

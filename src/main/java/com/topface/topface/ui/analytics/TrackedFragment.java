@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 
 import com.topface.topface.statistics.ScreensShowStatistics;
 import com.topface.topface.ui.fragments.feed.IFeedLifeCycle;
+import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.Utils;
 
 public class TrackedFragment extends Fragment implements IFeedLifeCycle {
@@ -22,6 +23,7 @@ public class TrackedFragment extends Fragment implements IFeedLifeCycle {
 
     public void senFragmentShownStatistics() {
         ScreensShowStatistics.sendScreenShow(getClass().getSimpleName());
+        FlurryManager.getInstance().sendPageOpenEvent(getScreenName());
     }
 
     public boolean isTrackable() {
@@ -31,5 +33,9 @@ public class TrackedFragment extends Fragment implements IFeedLifeCycle {
     @Override
     public void onResumeFragment() {
         senFragmentShownStatistics();
+    }
+
+    protected String getScreenName() {
+        return null;
     }
 }

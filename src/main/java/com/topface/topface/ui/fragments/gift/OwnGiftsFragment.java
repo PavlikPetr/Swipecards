@@ -13,10 +13,17 @@ import com.topface.topface.ui.PurchasesActivity;
  */
 public class OwnGiftsFragment extends UpdatableGiftsFragment {
 
+    private static final String PAGE_NAME = "profile.gifts";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setNeedTitles(true);
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override

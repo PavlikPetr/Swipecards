@@ -43,6 +43,7 @@ import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.AddPhotoHelper;
+import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
@@ -58,6 +59,8 @@ import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.functions.Action1;
 
+import static com.topface.topface.utils.FlurryManager.GET_LEAD;
+
 public class AddToLeaderActivity extends BaseFragmentActivity implements View.OnClickListener {
 
     public final static int ADD_TO_LEADER_ACTIVITY_ID = 1;
@@ -66,6 +69,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private static final String PHOTOS = "PHOTOS";
     private static final String SELECTED_POSITION = "SELECTED_POSITION";
     private static final String ALREADY_SHOWN = "ALREADY_SHOWN";
+    private static final String PAGE_NAME = "adtoleader";
     private static final int MAX_SYMBOL_COUNT = 120;
     private int mCoins;
     private Action1<BalanceData> mBalanceAction = new Action1<BalanceData>() {
@@ -117,6 +121,11 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     @Override
     protected int getContentLayout() {
         return R.layout.ac_photoblog;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override
@@ -174,7 +183,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         } catch (JSONException e) {
             Debug.error(e);
         }
-        //outState.putInt(POSITION, mPosition);
         outState.putInt(SELECTED_POSITION, mSelectedPosition);
         outState.putBoolean(ALREADY_SHOWN, mIsPhotoDialogShown);
     }
@@ -231,6 +239,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
                         .callback(new ApiHandler() {
                             @Override
                             public void success(IApiResponse response) {
+                                FlurryManager.getInstance().sendSpendCoinsEvent(buttonData.price, GET_LEAD);
                                 setResult(Activity.RESULT_OK, new Intent());
                                 finish();
                             }

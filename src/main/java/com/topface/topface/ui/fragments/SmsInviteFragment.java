@@ -44,6 +44,7 @@ public class SmsInviteFragment extends ContentListFragment {
     private static final String SCROLL_POSITION = "scroll_position";
     private static final String NO_CONTACTS_VISIBILITY = "no_contacts_visibility";
     private static final String HEADER_TEXT = "header_text";
+    private static final String PAGE_NAME = "smsinvite";
     private final static int ONE_REQUEST_CONTACTS_LIMIT = 50;
     private boolean isUpdatable = false;
     private boolean isInProgress;
@@ -89,6 +90,11 @@ public class SmsInviteFragment extends ContentListFragment {
         }
         setAdapter(new ContactsAdapter(contacts));
         getListView().setSelection(scrolledPosition);
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override

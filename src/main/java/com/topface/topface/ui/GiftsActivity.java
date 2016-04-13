@@ -26,10 +26,13 @@ import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.gift.GiftsListFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+
+import static com.topface.topface.utils.FlurryManager.BUY_GIFT;
 
 public class GiftsActivity extends BaseFragmentActivity implements IGiftSendListener {
 
@@ -210,6 +213,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
 
             @Override
             protected void success(SendGiftAnswer answer, IApiResponse response) {
+                FlurryManager.getInstance().sendSpendCoinsEvent(item.price, BUY_GIFT);
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra(INTENT_SEND_GIFT_ANSWER, answer);
                 resultIntent.putExtra(INTENT_GIFT_PRICE, item.price);

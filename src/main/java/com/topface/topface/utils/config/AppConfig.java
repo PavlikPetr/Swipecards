@@ -11,10 +11,12 @@ import com.topface.topface.BuildConfig;
 import com.topface.topface.data.social.AppSocialAppsIds;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
+import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.ConnectionManager;
 
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -58,7 +60,8 @@ public class AppConfig extends AbstractConfig {
     public static final String CONVERT_CONFIG = "convert_config";
     public static final String POPUP_NOTIFICATION_DISABLE_TIME = "popup_notification_disable_time";
     private static final String DATA_APP_SOCIAL_IDS = "data_app_social_ids";
-
+    private static final String ADJUST_ATTRIBUTION = "adjust_attribution";
+    private static final String IS_ADJUST_ATTRIBUTION_SENT = "is_adjust_attribution_sent";
 
     public AppConfig(Context context) {
         super(context);
@@ -108,6 +111,10 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, POPUP_NOTIFICATION_DISABLE_TIME, 0L);
         // social ids for social platforms obtained from server
         addField(settingsMap, DATA_APP_SOCIAL_IDS, "");
+        // данные referrer, полученные от Adjust
+        addField(settingsMap, ADJUST_ATTRIBUTION, "");
+        // информация о том была ли отправка на сервер данных referrer пользователя
+        addField(settingsMap, IS_ADJUST_ATTRIBUTION_SENT, false);
     }
 
     protected SharedPreferences getPreferences() {
@@ -433,5 +440,43 @@ public class AppConfig extends AbstractConfig {
 
     public void saveAppSocialAppsIds(AppSocialAppsIds appSocialAppsIds) {
         setField(getSettingsMap(), DATA_APP_SOCIAL_IDS, JsonUtils.toJson(appSocialAppsIds));
+    }
+
+    /**
+     * Save last catched user referrer
+     *
+     * @param adjustAttributeData user referrer
+     * @return state of operation
+     */
+    public boolean setAdjustAttributeData(AdjustAttributeData adjustAttributeData) {
+        return setField(getSettingsMap(), ADJUST_ATTRIBUTION, JsonUtils.toJson(adjustAttributeData));
+    }
+
+    /**
+     * Return last saved user referrer
+     *
+     * @return user referrer
+     */
+    @Nullable
+    public AdjustAttributeData getAdjustAttributeData() {
+        String adjustAttributionData = getStringField(getSettingsMap(), ADJUST_ATTRIBUTION);
+        if (!TextUtils.isEmpty(adjustAttributionData)) {
+            return JsonUtils.fromJson(adjustAttributionData, AdjustAttributeData.class);
+        }
+        return new AdjustAttributeData(null);
+    }
+
+    /**
+     * @return true if user referrer was sent to server
+     */
+    public boolean isAdjustAttributeDataSent() {
+        return getBooleanField(getSettingsMap(), IS_ADJUST_ATTRIBUTION_SENT);
+    }
+
+    /**
+     * Set state of sending AdjustAttributeData
+     */
+    public void setAdjustAttributeDataSent(boolean isSent) {
+        setField(getSettingsMap(), IS_ADJUST_ATTRIBUTION_SENT, isSent);
     }
 }

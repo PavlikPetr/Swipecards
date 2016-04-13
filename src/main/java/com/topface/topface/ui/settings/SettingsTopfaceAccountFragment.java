@@ -50,6 +50,7 @@ import butterknife.OnTextChanged;
 public class SettingsTopfaceAccountFragment extends BaseFragment {
 
     public static final String NEED_EXIT = "NEED_EXIT";
+    private static final String PAGE_NAME = "profile.settings.account";
 
     private final AuthToken mToken = AuthToken.getInstance();
 
@@ -131,6 +132,11 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
         initTextViews();
         mBtnChange.setVisibility(View.VISIBLE);
         return root;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override
