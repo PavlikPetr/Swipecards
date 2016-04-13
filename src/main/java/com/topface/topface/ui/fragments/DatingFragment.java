@@ -80,6 +80,7 @@ import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.AnimationHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
@@ -100,6 +101,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         RateController.OnRateControllerListener {
 
     private static final String CURRENT_USER = "current_user";
+    private static final String PAGE_NAME = "Dating";
+
     @Inject
     TopfaceAppState mAppState;
     AtomicBoolean isAdmirationFailed = new AtomicBoolean(false);
@@ -214,6 +217,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     protected int getStatusBarColor() {
         return mCurrentStatusBarColor;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     private BroadcastReceiver mOptionsReceiver = new BroadcastReceiver() {
@@ -1187,6 +1195,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 registerRequest(filterRequest);
                 filterRequest.callback(new FilterHandler()).exec();
                 mNewFilter = true;
+                FlurryManager.getInstance().sendFilterChangedEvent();
             }
             // открываем чат с пользователем в случае успешной отправки подарка с экрана знакомств
         } else if (resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
@@ -1269,6 +1278,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private void showEmptySearchDialog() {
         Debug.log("Search:: showEmptySearchDialog");
         EasyTracker.sendEvent("EmptySearch", "Show", "", 0L);
+        FlurryManager.getInstance().sendEmptyDatingListEvent();
         mImageSwitcher.setVisibility(View.GONE);
         mRetryView.setVisibility(View.VISIBLE);
         setActionBarTitles(getString(R.string.general_dating));

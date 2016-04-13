@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -32,9 +33,11 @@
                 android:paddingLeft="@{handler.buttonTextPaddingLeft}"
                 android:paddingRight="@{handler.buttonTextPaddingRight}"
                 android:text="@{handler.buttonText}"
+                android:textAllCaps="true"
                 android:textColor="@color/button_title_text_color"
                 android:textSize="@dimen/button_title_text_size"
-                android:visibility="@{handler.buttonTextVisibility}" />
+                android:visibility="@{handler.buttonTextVisibility}"
+                tools:targetApi="ice_cream_sandwich" />
 
             <TextView
                 android:id="@+id/buttonSticker"

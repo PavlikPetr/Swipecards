@@ -24,6 +24,7 @@ import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
 import com.topface.topface.ui.views.FeedItemViewConstructor.TypeAndFlag;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ad.NativeAd;
 import com.topface.topface.utils.ad.NativeAdManager;
 import com.topface.topface.utils.loadcontollers.FeedLoadController;
@@ -225,7 +226,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             holder.avatarImage.setStubResId(defaultAvatarResId);
 
             if (item.user.banned || item.user.deleted || item.user.photo == null || item.user.photo.isEmpty()) {
-                holder.avatarImage.setRemoteSrc("drawable://" + defaultAvatarResId);
+                holder.avatarImage.setRemoteSrc(String.format(App.getCurrentLocale(), Utils.LOCAL_RES, defaultAvatarResId));
                 if (item.user.banned || item.user.deleted) {
                     holder.avatar.setOnClickListener(null);
                 } else {

@@ -34,6 +34,11 @@ public class FansFragment extends BookmarksFragment {
     }
 
     @Override
+    protected String getScreenName() {
+        return SCREEN_TYPE;
+    }
+
+    @Override
     protected void initLockedFeed(View inflated, int errorCode) {
         initGagView(inflated, R.string.likes_buy_vip, R.string.buying_vip_status, new View.OnClickListener() {
             @Override

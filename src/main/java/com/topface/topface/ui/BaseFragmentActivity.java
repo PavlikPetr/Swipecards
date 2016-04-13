@@ -74,7 +74,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     private boolean mGoogleAuthStarted;
     private boolean mHasContent = true;
 
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // игнорируем нажатие аппаратной кнопки

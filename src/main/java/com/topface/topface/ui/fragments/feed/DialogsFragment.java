@@ -36,11 +36,19 @@ import rx.Subscription;
 import rx.functions.Action1;
 
 public class DialogsFragment extends FeedFragment<FeedDialog> {
+
+    private static final String PAGE_NAME = "Dialogs";
+
     private Subscription mDrawerLayoutSubscription;
     private boolean mIsNeedRefresh;
 
     public DialogsFragment() {
         super();
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override

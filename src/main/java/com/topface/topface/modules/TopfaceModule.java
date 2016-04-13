@@ -23,10 +23,14 @@ import com.topface.topface.ui.AddToLeaderActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.external_libs.AdjustManager;
+import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
+import com.topface.topface.ui.external_libs.modules.ExternalLibsInjectModule;
 import com.topface.topface.ui.dialogs.CitySearchPopup;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.feed.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
@@ -36,6 +40,7 @@ import com.topface.topface.ui.fragments.profile.ProfileFormFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.utils.AddPhotoHelper;
+import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RunningStateManager;
@@ -43,6 +48,7 @@ import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.ads.AdToAppController;
 import com.topface.topface.utils.ads.AdToAppHelper;
 import com.topface.topface.utils.config.SessionConfig;
+import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.geo.GeoLocationManager;
@@ -50,6 +56,8 @@ import com.topface.topface.utils.social.AuthorizationManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.topface.topface.utils.social.OkAuthorizer;
+import com.topface.topface.utils.social.OkUserData;
 
 import javax.inject.Singleton;
 
@@ -60,51 +68,42 @@ import dagger.Provides;
  * Created by ppetr on 16/06/15.
  * module injecting AppState
  */
-@Module(library = true,
-        overrides = false,
+@Module(includes = ExternalLibsInjectModule.class,
         injects = {
-
-                //Activites
-
-                PurchasesActivity.class,
-                AddToLeaderActivity.class,
-                NavigationActivity.class,
-                PaymentwallActivity.class,
-                PhotoSwitcherActivity.class,
-
-                //Fragments
-
-                AdmirationFragment.class,
                 PeopleNearbyFragment.class,
-                PurchasesFragment.class,
+                GeoLocationManager.class,
+                App.class,
                 DatingFragment.class,
+                CountersManager.class,
+                OverflowMenu.class,
+                PurchasesActivity.class,
+                PhotoSwitcherActivity.class,
+                PurchasesFragment.class,
+                AddToLeaderActivity.class,
                 LikesFragment.class,
                 MenuFragment.class,
                 AdmirationFragment.class,
+                NavigationActivity.class,
                 PeopleNearbyFragment.class,
+                PhotoBlogFragment.class,
                 PromoKey71Dialog.class,
                 PromoKey81Dialog.class,
+                PaymentwallActivity.class,
+                CountersDataProvider.class,
+                FindAndSendCurrentLocation.class,
+                AdjustManager.class,
+                OkAuthorizer.class,
+                OkProfileFragment.class,
                 ProfilePhotoFragment.class,
                 UserProfileFragment.class,
                 CitySearchPopup.class,
                 ProfileFormFragment.class,
                 TakePhotoPopup.class,
-
-                //Other
-                TopfaceAppState.class,
-                CountersDataProvider.class,
                 AuthorizationManager.class,
-                OptionsAndProfileProvider.class,
-                GeoLocationManager.class,
-                App.class,
-                CountersManager.class,
-                OverflowMenu.class,
                 Profile.class,
                 Options.class,
-                Profile.class,
                 User.class,
-                AdToAppHelper.class,
-                FindAndSendCurrentLocation.class
+                OptionsAndProfileProvider.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
@@ -128,7 +127,16 @@ public class TopfaceModule {
                     UserConfig config = App.getUserConfig();
                     config.setUserGeoLocation((Location) data);
                     config.saveConfig();
-                } else if (data.getClass() == Options.class) {
+                } else if (data.getClass() == OkUserData.class) {
+                    UserConfig config = App.getUserConfig();
+                    config.setOkUserData((OkUserData) data);
+                    config.saveConfig();
+                } else if (data.getClass() == AdjustAttributeData.class) {
+                    AppConfig config = App.getAppConfig();
+                    config.setAdjustAttributeData((AdjustAttributeData) data);
+                    config.saveConfig();
+                }
+                else if (data.getClass() == Options.class) {
                     CacheProfile.setOptions(JsonUtils.optionsToJson((Options) data));
                 } else if (data.getClass() == Profile.class) {
                     Profile profile = (Profile) data;
@@ -154,6 +162,10 @@ public class TopfaceModule {
                     return (T) getProfile();
                 } else if (City.class.equals(classType)) {
                     return (T) JsonUtils.fromJson(App.getUserConfig().getUserCity(), City.class);
+                } else if (OkUserData.class.equals(classType)) {
+                    return (T) App.getUserConfig().getOkUserData();
+                } else if (AdjustAttributeData.class.equals(classType)) {
+                    return (T) App.getAppConfig().getAdjustAttributeData();
                 }
                 return null;
             }
@@ -199,18 +211,11 @@ public class TopfaceModule {
 
     @Provides
     @Singleton
-    AdToAppController providesAdToAppController() {
-        return new AdToAppController();
-    }
-
-    @Provides
-    @Singleton
     PopupHive providesPopupLair() {
         return new PopupHive();
     }
 
     @Provides
-    @Singleton
     RunningStateManager providesRunningStateManager() {
         return new RunningStateManager();
     }

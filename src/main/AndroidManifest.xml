@@ -422,6 +422,18 @@
             </intent-filter>
         </receiver>
 
+       <!--Пробуем избавиться от краша в ГП, временное решение-->
+        <!--<receiver-->
+        <!--android:name="com.topface.topface.receivers.InstallReceiver"-->
+        <!--android:enabled="true"-->
+        <!--android:exported="true"-->
+        <!--tools:ignore="ExportedReceiver">-->
+        <!--<intent-filter>-->
+        <!--<action android:name="com.android.vending.INSTALL_REFERRER" />-->
+        <!--</intent-filter>-->
+        <!--</receiver>-->
+
+
         <receiver
             android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
             android:exported="true"
@@ -431,7 +443,14 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
+        <receiver
+            android:name="com.adjust.sdk.AdjustReferrerReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
 
         <receiver
             android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
@@ -450,6 +469,19 @@
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name="com.yandex.metrica.MetricaEventHandler"
+            android:enabled="true"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
+
         <receiver
             android:name=".receivers.NotificationClosedReceiver"
             tools:ignore="ExportedReceiver">
@@ -618,15 +650,7 @@
                 android:name="metrica:api:level"
                 android:value="39" />
         </service>
-        <receiver
-            android:name="com.yandex.metrica.MetricaEventHandler"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
-        <!--suppress AndroidDomInspection -->
+
         <activity
             android:name="com.yandex.mobile.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />

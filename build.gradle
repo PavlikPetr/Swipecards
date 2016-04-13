@@ -98,6 +98,13 @@ android {
             buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                     "com.topface.billing.MarketApiType.BLUE_STACKS";
         }
+        ok {
+            applicationId "com.topface.topface.ok"
+            buildConfigField "String", "STATISTICS_APP", "\"topfacemobappandroidok\"";
+            buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.OK";
+            buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
+                    "com.topface.billing.MarketApiType.OK";
+        }
         ifree {
             applicationId "com.topface.topface.ifree"
             buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.I_FREE";
@@ -161,6 +168,12 @@ android {
             keyAlias "topfaceifree"
             keyPassword "Sonetica2012"
         }
+        ok {
+            storeFile file("misc/keys/topfaceOK.jks")
+            storePassword "Sonetica2012"
+            keyAlias "topfaceok"
+            keyPassword "Sonetica2012"
+        }
         blueStacks {
             storeFile file("misc/keys/topfaceBlueStacks.keystore")
             storePassword "Sonetica2012"
@@ -196,6 +209,7 @@ android {
             minifyEnabled true
             productFlavors.google.signingConfig signingConfigs.google
             productFlavors.ifree.signingConfig signingConfigs.ifree
+            productFlavors.ok.signingConfig signingConfigs.ok
             productFlavors.blueStacks.signingConfig signingConfigs.blueStacks
             productFlavors.derived.signingConfig signingConfigs.derived
             productFlavors.appland.signingConfig signingConfigs.appland
@@ -280,6 +294,8 @@ dependencies {
     compile name: 'appsflyer'
     compile name: 'comscore'
     compile name: 'offerwalls_sponsorpay'
+    // flurry analytics
+    compile 'com.flurry.android:analytics:6.2.0'
 
     //Topface sub libs
     compile project(':libs:IllustratedTextView')
@@ -316,6 +332,8 @@ dependencies {
     //Animations: NineOldAndroids, ListViewAnimations
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.nhaarman.listviewanimations:lib-core:3.1.0@aar'
+    //Adjust sdk
+    compile 'com.adjust.sdk:adjust-android:4.6.0'
     //LeakCanary
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta1'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta1'
@@ -364,8 +382,8 @@ project(':libs:odnoklassniki') {
     apply plugin: 'com.android.library'
     android.sourceSets.main {
         manifest.srcFile 'AndroidManifest.xml'
-        java.srcDirs = ['src']
-        res.srcDirs = ['res']
+        java.srcDirs = ['src/main/java']
+        res.srcDirs = ['src/main/res']
     }
 }
 

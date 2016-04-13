@@ -7,12 +7,14 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.utils.social.OkUserData;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +30,7 @@ import java.util.Set;
  * Config for data related to User
  * Unique key for data based on AuthToken (social net user id),
  * so you need to call onAuthTokenReceived()
- * <p/>
+ * <p>
  * use generateKey(String name) to create keys to put(key) and get(key) data
  */
 public class UserConfig extends AbstractConfig {
@@ -78,6 +80,7 @@ public class UserConfig extends AbstractConfig {
     public static final String LAST_CATCHED_GEO_LONGITUDE = "last_catched_geo_longitude";
     public static final String LAST_CATCHED_GEO_PROVIDER = "last_catched_geo_provider";
     public static final String TRIAL_LAST_TIME = "trial_last_time";
+    public static final String OK_USER_DATA = "ok_user_data";
     public static final String START_POSITION_OF_ACTIONS = "start_position_of_actions";
     private static final String USER_CITY = "user_city";
     private String mUnique;
@@ -180,6 +183,8 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, TRIAL_LAST_TIME, 0L);
         addField(settingsMap, LAST_CATCHED_GEO_LONGITUDE, DEFAULT_USER_LONGITUDE_LOCATION);
         addField(settingsMap, LAST_CATCHED_GEO_PROVIDER, LOCATION_PROVIDER);
+        // save OK user data
+        addField(settingsMap, OK_USER_DATA, Utils.EMPTY);
         addField(settingsMap, START_POSITION_OF_ACTIONS, 0);
         addField(settingsMap, USER_CITY, Utils.EMPTY);
     }
@@ -662,6 +667,27 @@ public class UserConfig extends AbstractConfig {
         location.setLatitude(getDoubleField(getSettingsMap(), LAST_CATCHED_GEO_LATITUDE));
         location.setLongitude(getDoubleField(getSettingsMap(), LAST_CATCHED_GEO_LONGITUDE));
         return location;
+    }
+
+    /**
+     * @return OK user data
+     */
+    public OkUserData getOkUserData() {
+        String okUserDataString = getStringField(getSettingsMap(), OK_USER_DATA);
+        if (!TextUtils.isEmpty(okUserDataString)) {
+            return JsonUtils.fromJson(okUserDataString, OkUserData.class);
+        }
+        return new OkUserData();
+    }
+
+    /**
+     * Set user OK data
+     *
+     * @param data current user data from OK account
+     * @return state of setting data
+     */
+    public boolean setOkUserData(OkUserData data) {
+        return setField(getSettingsMap(), OK_USER_DATA, JsonUtils.toJson(data));
     }
 
     /**

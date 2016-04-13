@@ -1,6 +1,5 @@
 package com.topface.topface.ui.settings;
 
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -77,10 +76,7 @@ public class SettingsAboutFragment extends BaseFragment {
         extra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = Utils.getIntentToOpenUrl(options.aboutApp.url);
-                if (i != null) {
-                    startActivity(i);
-                }
+                Utils.goToUrl(getActivity(), CacheProfile.getOptions().aboutApp.url);
             }
         });
         return root;

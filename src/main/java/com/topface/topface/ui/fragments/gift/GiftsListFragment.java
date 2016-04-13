@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 public class GiftsListFragment extends ProfileInnerFragment implements GiftsListAdapter.OnGridClickLIstener {
 
+    private static final String PAGE_NAME = "gifts";
     private static final String DATA = "data";
     private GiftsListAdapter mGiftsListAdapter;
     private IGiftSendListener mGiftSendListener;
@@ -43,6 +44,11 @@ public class GiftsListFragment extends ProfileInnerFragment implements GiftsList
         gridView.setAdapter(mGiftsListAdapter);
         gridView.setOnScrollListener(mGiftsListAdapter);
         return root;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     public void setGifts(ArrayList<Gift> gifts) {

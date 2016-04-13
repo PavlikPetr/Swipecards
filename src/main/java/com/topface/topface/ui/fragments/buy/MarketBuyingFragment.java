@@ -19,6 +19,8 @@ import java.util.LinkedList;
 
 public class MarketBuyingFragment extends CoinsBuyingFragment {
 
+    private static final String PAGE_NAME = "buy.coins.gp";
+
     public static MarketBuyingFragment newInstance(String from, String text) {
         MarketBuyingFragment buyingFragment = new MarketBuyingFragment();
         Bundle args = new Bundle();
@@ -32,6 +34,10 @@ public class MarketBuyingFragment extends CoinsBuyingFragment {
         return buyingFragment;
     }
 
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
+    }
 
     public static MarketBuyingFragment newInstance(int type, int coins, String from) {
         MarketBuyingFragment fragment = new MarketBuyingFragment();

@@ -21,9 +21,16 @@ import java.util.List;
  */
 public class BlackListFragment extends NoFilterFeedFragment<BlackListItem> implements View.OnClickListener {
 
+    private static final String PAGE_NAME = "blacklist";
+
     @Override
     protected String getTitle() {
         return getString(R.string.black_list_title);
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override

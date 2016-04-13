@@ -22,6 +22,7 @@ import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.config.UserConfig;
@@ -128,6 +129,8 @@ public class AuthorizationManager {
     }
 
     public void logout(Activity activity) {
+        FlurryManager.getInstance().sendLogoutEvent();
+        FlurryManager.getInstance().dropUserIdHash();
         App.isNeedShowTrial = true;
         UserConfig config = App.getUserConfig();
         config.setStartPositionOfActions(0);

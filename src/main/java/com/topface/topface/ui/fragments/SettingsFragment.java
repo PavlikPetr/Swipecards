@@ -2,7 +2,6 @@ package com.topface.topface.ui.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,6 +29,7 @@ import com.topface.topface.ui.dialogs.SelectLanguageDialog;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.MarketApiManager;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -38,6 +38,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SettingsFragment extends ProfileInnerFragment {
+
+    private static final String PAGE_NAME = "profile.settings";
 
     private TextView mSocialNameText;
     private MarketApiManager mMarketApiManager;
@@ -121,6 +123,11 @@ public class SettingsFragment extends ProfileInnerFragment {
             initViews(view);
         }
         return view;
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
     }
 
     @Override

@@ -72,6 +72,7 @@ public class Utils {
     public static final String EMPTY = "";
     public static final String AMPERSAND = "&";
     public static final String SEMICOLON = ":";
+    public static final String LOCAL_RES = "drawable://%d";
     private static final String DASH_SYMBOL = "-";
     private static final String HYPHEN_SYMBOL = "&#8209;";
     private static final String EMPTY_JSON = "{}";
@@ -211,6 +212,7 @@ public class Utils {
     public static void goToUrl(Context context, String url) {
         Intent i = Utils.getIntentToOpenUrl(url);
         if (i != null) {
+            FlurryManager.getInstance().sendExternalUrlEvent(url);
             context.startActivity(i);
         }
     }
@@ -219,6 +221,7 @@ public class Utils {
         if (iActivityDelegate != null) {
             Intent i = Utils.getIntentToOpenUrl(url);
             if (i != null) {
+                FlurryManager.getInstance().sendExternalUrlEvent(url);
                 iActivityDelegate.startActivity(i);
             }
         }
