@@ -52,7 +52,7 @@ buildscript {
     dependencies {
         classpath rootProject.ANDROID_BUILD_GRADLE_PLUGIN_VERSION
         //продолжэение костыля. с новой версией заменить на нормальную зависимость
-        classpath 'com.github.JakeWharton:sdk-manager-plugin:220bf7a88a7072df3ed16dc8466fb144f2817070'
+//        classpath 'com.github.JakeWharton:sdk-manager-plugin:220bf7a88a7072df3ed16dc8466fb144f2817070'
     }
 }
 
@@ -68,7 +68,7 @@ allprojects {
     }
 }
 
-apply plugin: 'android-sdk-manager'
+//apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
 
 android {
