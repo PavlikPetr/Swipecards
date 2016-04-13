@@ -43,6 +43,7 @@ import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.AddPhotoHelper;
+import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;

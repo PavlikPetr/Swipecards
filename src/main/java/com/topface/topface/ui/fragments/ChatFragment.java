@@ -164,7 +164,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             AddPhotoHelper.handlePhotoMessage(msg, getActivity());
         }
     };
-    private int mMaxMessageSize = CacheProfile.getOptions().maxMessageSize;
+    private int mMaxMessageSize = App.get().getOptions().maxMessageSize;
     private RelativeLayout mLockScreen;
     private PopularUserChatController mPopularUserLockController;
     private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
@@ -939,8 +939,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
         IntentFilter filter = new IntentFilter(GCMUtils.GCM_NOTIFICATION);
         LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(mNewMessageReceiver, filter);
-
-        mUpdater = new Handler();
         startTimer();
     }
 
@@ -1095,9 +1093,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private void stopTimer() {
-        if (mUpdater != null) {
-            mUpdater.removeCallbacks(mUpdaterTask);
-            mUpdater = null;
+        if (!mUpdateUiSubscription.isUnsubscribed()) {
+            mUpdateUiSubscription.unsubscribe();
         }
     }
 

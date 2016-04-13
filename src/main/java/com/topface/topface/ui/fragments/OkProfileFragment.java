@@ -15,7 +15,6 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.databinding.OkProfileFragmentBinding;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.CurrentUserRequest;
@@ -44,10 +43,10 @@ public class OkProfileFragment extends ProfileInnerFragment {
                 mHandler.imageSrc.set(!TextUtils.isEmpty(okUserData.bigSquareImage)
                         ? okUserData.bigSquareImage
                         : getEmptyPhotoRes(TextUtils.isEmpty(okUserData.gender)
-                        ? CacheProfile.getProfile().sex == Profile.BOY
+                        ? App.get().getProfile().sex == Profile.BOY
                         : okUserData.isMale()));
                 mHandler.avatarVisibility.set(View.VISIBLE);
-                String name = TextUtils.isEmpty(okUserData.name) ? CacheProfile.first_name : okUserData.name;
+                String name = TextUtils.isEmpty(okUserData.name) ? App.get().getProfile().firstName : okUserData.name;
                 mHandler.nameVisibility.set(TextUtils.isEmpty(name) ? View.GONE : View.VISIBLE);
                 mHandler.nameText.set(name);
             }
@@ -139,7 +138,7 @@ public class OkProfileFragment extends ProfileInnerFragment {
 
         @SuppressWarnings("unused")
         public void onButtonShowGroupClick(View view) {
-            Utils.goToUrl(mActivityDelegate, CacheProfile.getOptions().aboutApp.url);
+            Utils.goToUrl(mActivityDelegate, App.get().getOptions().aboutApp.url);
         }
 
     }

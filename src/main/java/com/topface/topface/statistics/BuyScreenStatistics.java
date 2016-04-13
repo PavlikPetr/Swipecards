@@ -18,7 +18,7 @@ public class BuyScreenStatistics {
         StatisticsTracker
                 .getInstance()
                 .setContext(App.getContext())
-                .sendUniqueEvent(BUY_SCREEN_SHOW_UNIQUE, 1, slices, Integer.toString(CacheProfile.getProfile().uid) + "_" + screenName);
+                .sendUniqueEvent(BUY_SCREEN_SHOW_UNIQUE, 1, slices, Integer.toString(App.get().getProfile().uid) + "_" + screenName);
     }
 
     private static void sendRegularStatistics(Slices slices) {

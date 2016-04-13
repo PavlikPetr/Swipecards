@@ -97,7 +97,7 @@ public class FlurryManager {
     }
 
     private String getUserIdHash() {
-        int uid = CacheProfile.uid;
+        int uid = App.get().getProfile().uid;
         if (AuthToken.getInstance().isEmpty() || uid == 0) {
             dropUserIdHash();
             return EMPTY_USER_ID_HASH;

@@ -121,6 +121,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     private static String mStartLabel;
     private static Location mCurLocation;
     private static AppsFlyerData.ConversionHolder mAppsFlyerConversionHolder;
+    public static boolean isScruffyEnabled;
 
     public static OpenIabHelperManager mOpenIabHelperManager = new OpenIabHelperManager();
     private static boolean mAppOptionsObtainedFromServer = false;

@@ -76,7 +76,7 @@ public class SettingsAboutFragment extends BaseFragment {
         extra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.goToUrl(getActivity(), CacheProfile.getOptions().aboutApp.url);
+                Utils.goToUrl(getActivity(), App.get().getOptions().aboutApp.url);
             }
         });
         return root;
