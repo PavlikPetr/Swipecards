@@ -6,9 +6,9 @@ import org.json.JSONObject;
 
 public class FullScreenCondition {
     private static final String INTERVAL = "fullscreenInterval";
-    private static final String PERIOD = "interval ";
-    private static final String SHOW_COUNT = "dailyShows ";
-    private static final String CONDITION_OBJECT = "startFullScreen ";
+    private static final String PERIOD = "interval";
+    private static final String SHOW_COUNT = "dailyShows";
+    private static final String CONDITION_OBJECT = "startFullScreen";
 
     private long mFullScreenInterval;
     private long mFullScreenPeriod;
@@ -25,8 +25,8 @@ public class FullScreenCondition {
         if (response.has(CONDITION_OBJECT)) {
             JSONObject object = response.optJSONObject(CONDITION_OBJECT);
             if (object != null) {
-                mFullScreenPeriod = response.optLong(PERIOD, 0);
-                mFullscreenShowCount = response.optInt(SHOW_COUNT, 1);
+                mFullScreenPeriod = object.optLong(PERIOD, 0);
+                mFullscreenShowCount = object.optInt(SHOW_COUNT, 1);
             }
         }
     }
