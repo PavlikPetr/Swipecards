@@ -258,7 +258,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
                     detail.price / ProductsDetails.MICRO_AMOUNT,
                     product.getOrderId(),
                     button != null && button.trialPeriodInDays > 0,
-                    !product.getSku().equals(OpenIabFragment.TEST_PURCHASED_PRODUCT_ID));
+                    product.getSku().equals(OpenIabFragment.TEST_PURCHASED_PRODUCT_ID));
         }
     }
 
