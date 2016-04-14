@@ -11,15 +11,9 @@ public class FullScreenCondition {
     private static final String SHOW_COUNT = "dailyShows";
     private static final String CONDITION_OBJECT = "startFullScreen";
 
-    private long mFullScreenInterval;
-    private long mFullScreenPeriod;
-    private int mFullscreenShowCount;
-
-    public FullScreenCondition() {
-        mFullScreenInterval = DateUtils.DAY_IN_SECONDS;
-        mFullScreenPeriod = 0;
-        mFullscreenShowCount = 1;
-    }
+    private long mFullScreenInterval = DateUtils.DAY_IN_SECONDS;
+    private long mFullScreenPeriod = 0;
+    private int mFullscreenShowCount = 1;
 
     public FullScreenCondition(JSONObject response) {
         mFullScreenInterval = response.optLong(INTERVAL, DateUtils.DAY_IN_SECONDS);
