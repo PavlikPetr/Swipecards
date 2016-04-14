@@ -199,8 +199,7 @@ public class FullscreenController {
             userConfig.setFirstFullscreenTime(currentTime);
         }
         userConfig.setLastFullscreenTime(currentTime);
-        shownCount++;
-        userConfig.setFullscreenShownCount(shownCount);
+        userConfig.setFullscreenShownCount(++shownCount);
         userConfig.saveConfig();
     }
 

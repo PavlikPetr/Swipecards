@@ -5,6 +5,7 @@ import com.topface.topface.utils.DateUtils;
 import org.json.JSONObject;
 
 public class FullScreenCondition {
+    // TODO после мержа в develop проверить серилизацию
     private static final String INTERVAL = "fullscreenInterval";
     private static final String PERIOD = "interval";
     private static final String SHOW_COUNT = "dailyShows";
