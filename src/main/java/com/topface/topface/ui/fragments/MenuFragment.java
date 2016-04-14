@@ -44,14 +44,13 @@ import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.ResourcesUtils;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.inject.Inject;
 
@@ -61,6 +60,7 @@ import rx.functions.Func1;
 
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.BONUS;
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.INTEGRATION_PAGE;
 
 /**
  * Created by kirussell on 05.11.13.
@@ -94,6 +94,7 @@ public class MenuFragment extends Fragment {
     private Subscription mBalanceSubscription;
     private Subscription mCountersSubscription;
     private View mLastActivated;
+    private boolean mIsUrlNotEmpty;
     private BroadcastReceiver mOptionsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -117,13 +118,9 @@ public class MenuFragment extends Fragment {
                     Bundle extras = intent.getExtras();
                     FragmentSettings fragmentSettings = null;
                     if (extras != null) {
-                        Serializable menuItem = extras.getSerializable(SELECTED_FRAGMENT_ID);
-                        /*
-                        After update user can have outdated fragment id in instance state. Here we check
-                        if it is still presented in BaseFragment.FragmentId enum.
-                         */
-                        if (Arrays.asList(FragmentId.values()).contains(menuItem)) {
-                            fragmentSettings = (FragmentSettings) menuItem;
+                        FragmentSettings menuItem = extras.getParcelable(SELECTED_FRAGMENT_ID);
+                        if (menuItem != null) {
+                            fragmentSettings = menuItem;
                         } else {
                             fragmentSettings = CacheProfile.getOptions().startPageFragmentSettings;
                         }
@@ -189,6 +186,15 @@ public class MenuFragment extends Fragment {
             }
             Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment to default from onCreate().");
             switchFragment(CacheProfile.getOptions().startPageFragmentSettings, false);
+        }
+    }
+
+    private void restoreState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            FragmentSettings savedId = savedInstanceState.getParcelable(CURRENT_FRAGMENT_STATE);
+            if (savedId != null) {
+                selectFragment(savedId);
+            }
         }
     }
 
@@ -362,8 +368,11 @@ public class MenuFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putParcelable(
                 CURRENT_FRAGMENT_STATE,
-                getCurrentFragmentId()
-        );
+                getCurrentFragmentId());
+        if (mIsUrlNotEmpty) {
+            mIsUrlNotEmpty = false;
+            getActivity().getIntent().putExtras(outState);
+        }
     }
 
     @Override
@@ -377,6 +386,7 @@ public class MenuFragment extends Fragment {
                 new IntentFilter(Options.OPTIONS_RECEIVED_ACTION));
         initProfileMenuItem(mProfileMenuItem);
         updateBalance(mBalanceData);
+        restoreState(getActivity().getIntent().getExtras());
     }
 
     @Override
@@ -405,15 +415,25 @@ public class MenuFragment extends Fragment {
      * @param fragmentSettings id of fragment that is going to be shown
      */
     public void selectMenu(FragmentSettings fragmentSettings) {
-        if (fragmentSettings != mSelectedFragment) {
+        String url = getWebUrl(fragmentSettings);
+        mIsUrlNotEmpty = !TextUtils.isEmpty(url);
+        if (fragmentSettings != mSelectedFragment && !mIsUrlNotEmpty) {
             Debug.log("MenuFragment: Switch fragment in selectMenu().");
             switchFragment(fragmentSettings, true);
         } else if (mOnFragmentSelected != null) {
             mOnFragmentSelected.onFragmentSelected(fragmentSettings);
         }
+        if (mIsUrlNotEmpty) {
+            Utils.goToUrl(getActivity(), url);
+        }
         if (fragmentSettings == FragmentId.BONUS.getFragmentSettings() && CacheProfile.countersData != null) {
             mAppState.setData(CacheProfile.countersData);
         }
+    }
+
+    private String getWebUrl(FragmentSettings fragmentSettings) {
+        Options.LeftMenuIntegrationItems item = getServerLeftMenuItemById(fragmentSettings.getPos());
+        return fragmentSettings.getId() == INTEGRATION_PAGE.getId() && item != null && item.external ? item.url : Utils.EMPTY;
     }
 
     private void notifyDataSetChanged() {
