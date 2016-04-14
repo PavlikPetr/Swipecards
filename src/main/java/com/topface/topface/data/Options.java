@@ -809,11 +809,13 @@ public class Options extends AbstractData {
         public String iconUrl = Utils.EMPTY;
         public String title = Utils.EMPTY;
         public String url = Utils.EMPTY;
+        public boolean external = false;
 
-        public LeftMenuIntegrationItems(String icon, String title, String url) {
+        public LeftMenuIntegrationItems(String icon, String title, String url, boolean external) {
             iconUrl = icon;
             this.title = title;
             this.url = url;
+            this.external = external;
         }
     }
 }
