@@ -8,6 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.topface.topface.banners.PageInfo;
+import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.google.gson.reflect.TypeToken;
@@ -80,6 +81,11 @@ public class JsonUtils {
                 */
                 Collection<PageInfo> list = hashMap.values();
                 return context.serialize(list);
+            }
+        }).registerTypeAdapter(FragmentSettings.class, new JsonSerializer<FragmentSettings>() {
+            @Override
+            public JsonElement serialize(FragmentSettings fragmentSettings, Type typeOfSrc, JsonSerializationContext context) {
+                return context.serialize(fragmentSettings.getFragmentId().name());
             }
         }).create();
         return gson.toJson(options);

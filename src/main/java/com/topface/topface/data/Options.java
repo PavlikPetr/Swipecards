@@ -22,8 +22,6 @@ import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.state.TopfaceAppState;
-import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
@@ -40,9 +38,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
-
 import javax.inject.Inject;
+
+import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 
 /**
  * Опции приложения
@@ -105,7 +103,7 @@ public class Options extends AbstractData {
      * Id фрагмента, который будет отображаться при старте приложения
      * По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
      */
-    public FragmentSettings startPageFragmentSettings = FragmentId.DATING.getFragmentSettings();
+    public FragmentSettings startPage = FragmentId.DATING.getFragmentSettings();
 
     /**
      * Флаг отображения превью в диалогах
@@ -210,20 +208,16 @@ public class Options extends AbstractData {
 
     public Options(JSONObject data, boolean cacheToPreferences) {
         if (data != null) {
-            fillData(data, cacheToPreferences);
             App.from(App.getContext().getApplicationContext()).inject(this);
-            mAppState.setData(this);
+            fillData(data, cacheToPreferences);
         }
     }
 
     protected void fillData(JSONObject response, boolean cacheToPreferences) {
         try {
             JSONObject statisticsSlicesSource = response.optJSONObject("statisticsSlices");
-            if (statisticsSlicesSource != null) {
-                statisticsSlices = JsonUtils.fromJson(statisticsSlicesSource.toString(), HashMap.class);
-            } else {
-                statisticsSlices = new HashMap<>();
-            }
+            //noinspection unchecked
+            statisticsSlices = statisticsSlicesSource != null ? JsonUtils.fromJson(statisticsSlicesSource.toString(), HashMap.class) : new HashMap<>();
             priceAdmiration = response.optInt("admirationPrice");
             isAutoreplyAllow = response.optBoolean("allowAutoreply", true);
             trialVipExperiment = JsonUtils.optFromJson(response.optString("experimentTrialVip"), TrialVipExperiment.class, new TrialVipExperiment());
@@ -262,29 +256,17 @@ public class Options extends AbstractData {
                 popup_timeout = contactsInvite.optInt("showPopupTimeout") * 60 * 60 * 1000;
             }
 
-            if (response.has("premiumMessages")) {
-                premiumMessages = new PromoPopupEntity(
-                        response.optJSONObject("premiumMessages"), PromoPopupEntity.AIR_MESSAGES
-                );
-            } else {
-                premiumMessages = new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_MESSAGES, "", 0);
-            }
+            premiumMessages = response.has("premiumMessages")
+                    ? new PromoPopupEntity(response.optJSONObject("premiumMessages"), PromoPopupEntity.AIR_MESSAGES)
+                    : new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_MESSAGES, "", 0);
 
-            if (response.has("visitorsPopup")) {
-                premiumVisitors = new PromoPopupEntity(
-                        response.optJSONObject("visitorsPopup"), PromoPopupEntity.AIR_VISITORS
-                );
-            } else {
-                premiumVisitors = new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_VISITORS, "", 0);
-            }
+            premiumVisitors = response.has("visitorsPopup")
+                    ? new PromoPopupEntity(response.optJSONObject("visitorsPopup"), PromoPopupEntity.AIR_VISITORS)
+                    : new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_VISITORS, "", 0);
 
-            if (response.has("admirationPopup")) {
-                premiumAdmirations = new PromoPopupEntity(
-                        response.optJSONObject("admirationPopup"), PromoPopupEntity.AIR_ADMIRATIONS
-                );
-            } else {
-                premiumAdmirations = new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_ADMIRATIONS, "", 0);
-            }
+            premiumAdmirations = response.has("admirationPopup")
+                    ? new PromoPopupEntity(response.optJSONObject("admirationPopup"), PromoPopupEntity.AIR_ADMIRATIONS)
+                    : new PromoPopupEntity(false, 10, 1000, PromoPopupEntity.AIR_ADMIRATIONS, "", 0);
 
             if (response.has("links")) {
                 JSONObject links = response.optJSONObject("links");
@@ -379,7 +361,7 @@ public class Options extends AbstractData {
 
             instantMessagesForNewbies.init(response);
 
-            startPageFragmentSettings = getStartPageFragmentId(response);
+            startPage = getStartPageFragmentId(response);
 
             JSONObject jsonNotShown = response.optJSONObject("notShown");
             if (jsonNotShown != null) {
@@ -407,6 +389,9 @@ public class Options extends AbstractData {
                 }
             });
             Debug.error("Options parsing error", e);
+        }
+        if (cacheToPreferences) {
+            mAppState.setData(this);
         }
     }
 
@@ -755,7 +740,7 @@ public class Options extends AbstractData {
     }
 
     private FragmentSettings getStartPageFragmentId(JSONObject response) {
-        FragmentId fragmentId = startPageFragmentSettings.getFragmentId();
+        FragmentId fragmentId = startPage.getFragmentId();
         try {
             fragmentId = FragmentId.valueOf(response.optString("startPage"));
         } catch (IllegalArgumentException e) {
