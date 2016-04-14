@@ -15,6 +15,10 @@ public class FullScreenCondition {
     private long mFullScreenPeriod = 0;
     private int mFullscreenShowCount = 1;
 
+    public FullScreenCondition() {
+
+    }
+
     public FullScreenCondition(JSONObject response) {
         mFullScreenInterval = response.optLong(INTERVAL, DateUtils.DAY_IN_SECONDS);
         if (response.has(CONDITION_OBJECT)) {
