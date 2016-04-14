@@ -94,7 +94,6 @@ public class MenuFragment extends Fragment {
     private Subscription mBalanceSubscription;
     private Subscription mCountersSubscription;
     private View mLastActivated;
-    private boolean mIsUrlNotEmpty;
     private BroadcastReceiver mOptionsReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -119,11 +118,7 @@ public class MenuFragment extends Fragment {
                     FragmentSettings fragmentSettings = null;
                     if (extras != null) {
                         FragmentSettings menuItem = extras.getParcelable(SELECTED_FRAGMENT_ID);
-                        if (menuItem != null) {
-                            fragmentSettings = menuItem;
-                        } else {
-                            fragmentSettings = CacheProfile.getOptions().startPageFragmentSettings;
-                        }
+                        fragmentSettings = menuItem != null?menuItem:CacheProfile.getOptions().startPageFragmentSettings;
                     }
                     selectMenu(fragmentSettings);
                     View view = mAdapter.getViewForActivate(mListView, fragmentSettings);
@@ -170,8 +165,9 @@ public class MenuFragment extends Fragment {
             if (savedInstanceState != null) {
                 FragmentSettings savedId = savedInstanceState.getParcelable(CURRENT_FRAGMENT_STATE);
                 if (savedId != null) {
-                    Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment from saved instance state.");
-                    switchFragment(savedId, false);
+                    mSelectedFragment = savedId;
+//                    Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment from saved instance state.");
+//                    switchFragment(savedId, false);
                     return;
                 }
             }
@@ -186,15 +182,6 @@ public class MenuFragment extends Fragment {
             }
             Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment to default from onCreate().");
             switchFragment(CacheProfile.getOptions().startPageFragmentSettings, false);
-        }
-    }
-
-    private void restoreState(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            FragmentSettings savedId = savedInstanceState.getParcelable(CURRENT_FRAGMENT_STATE);
-            if (savedId != null) {
-                selectFragment(savedId);
-            }
         }
     }
 
@@ -369,10 +356,6 @@ public class MenuFragment extends Fragment {
         outState.putParcelable(
                 CURRENT_FRAGMENT_STATE,
                 getCurrentFragmentId());
-        if (mIsUrlNotEmpty) {
-            mIsUrlNotEmpty = false;
-            getActivity().getIntent().putExtras(outState);
-        }
     }
 
     @Override
@@ -386,7 +369,7 @@ public class MenuFragment extends Fragment {
                 new IntentFilter(Options.OPTIONS_RECEIVED_ACTION));
         initProfileMenuItem(mProfileMenuItem);
         updateBalance(mBalanceData);
-        restoreState(getActivity().getIntent().getExtras());
+        selectFragment(mSelectedFragment);
     }
 
     @Override
@@ -416,14 +399,14 @@ public class MenuFragment extends Fragment {
      */
     public void selectMenu(FragmentSettings fragmentSettings) {
         String url = getWebUrl(fragmentSettings);
-        mIsUrlNotEmpty = !TextUtils.isEmpty(url);
-        if (fragmentSettings != mSelectedFragment && !mIsUrlNotEmpty) {
+        boolean isUrlNotEmpty = !TextUtils.isEmpty(url);
+        if (fragmentSettings != mSelectedFragment && !isUrlNotEmpty) {
             Debug.log("MenuFragment: Switch fragment in selectMenu().");
             switchFragment(fragmentSettings, true);
         } else if (mOnFragmentSelected != null) {
             mOnFragmentSelected.onFragmentSelected(fragmentSettings);
         }
-        if (mIsUrlNotEmpty) {
+        if (isUrlNotEmpty) {
             Utils.goToUrl(getActivity(), url);
         }
         if (fragmentSettings == FragmentId.BONUS.getFragmentSettings() && CacheProfile.countersData != null) {
