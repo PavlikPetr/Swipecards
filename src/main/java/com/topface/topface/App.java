@@ -203,6 +203,7 @@ public class App extends ApplicationBase {
         Debug.log("Adjust:: check settings before send AdjustAttributeData to server");
         final AppConfig config = getAppConfig();
         if (!AuthToken.getInstance().isEmpty() && !attribution.isEmpty() && !config.isAdjustAttributeDataSent()) {
+            new AdWords().trackInstall();
             Debug.log("Adjust:: send AdjustAttributeData");
             new ReferrerRequest(App.getContext(), attribution).callback(new ApiHandler() {
                 @Override
@@ -464,7 +465,6 @@ public class App extends ApplicationBase {
             }
         };
         App.sendReferreRequest(getAppConfig().getAdjustAttributeData());
-        new AdWords().trackAppStart();
     }
 
 
