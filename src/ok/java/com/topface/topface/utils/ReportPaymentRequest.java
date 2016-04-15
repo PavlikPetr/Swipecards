@@ -1,7 +1,7 @@
 package com.topface.topface.utils;
 
 import com.google.gson.reflect.TypeToken;
-import com.topface.topface.App;
+import com.topface.topface.data.ReportPaymentData;
 import com.topface.topface.utils.social.OkRequest;
 
 import org.jetbrains.annotations.NotNull;
@@ -18,9 +18,9 @@ import ru.ok.android.sdk.OkRequestMode;
  * Created by Петр on 03.04.2016.
  * Get user data in background
  */
-public class ReportPaymentRequest extends OkRequest<String> {
+public class ReportPaymentRequest extends OkRequest<ReportPaymentData> {
 
-    private static final String SERVICE_NAME = "users.getCurrentUser";
+    private static final String SERVICE_NAME = "sdk.reportPayment";
     private static final String TRANSACTION_ID_PARAM = "trx_id";
     private static final String AMOUNT_PARAM = "amount";
     private static final String CURRENCY_PARAM = "currency";
@@ -34,7 +34,6 @@ public class ReportPaymentRequest extends OkRequest<String> {
         mTxId = trxId;
         mPrice = price;
         mCurrency = currency;
-        App.from(App.getContext()).inject(this);
     }
 
 
@@ -53,7 +52,7 @@ public class ReportPaymentRequest extends OkRequest<String> {
 
     @Override
     protected Type getDataType() {
-        return new TypeToken<String>() {
+        return new TypeToken<ReportPaymentData>() {
         }.getType();
     }
 }
