@@ -52,6 +52,7 @@ import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.statistics.AppStateStatistics;
 import com.topface.topface.ui.ApplicationBase;
+import com.topface.topface.ui.external_libs.AdWords;
 import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.utils.CacheProfile;
@@ -463,6 +464,7 @@ public class App extends ApplicationBase {
             }
         };
         App.sendReferreRequest(getAppConfig().getAdjustAttributeData());
+        new AdWords().trackAppStart();
     }
 
 
