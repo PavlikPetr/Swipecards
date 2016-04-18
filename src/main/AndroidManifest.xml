@@ -469,17 +469,15 @@
             </intent-filter>
         </receiver>
 
-       <!--Пробуем избавиться от краша в ГП, временное решение-->
-        <!--<receiver-->
-        <!--android:name="com.topface.topface.receivers.InstallReceiver"-->
-        <!--android:enabled="true"-->
-        <!--android:exported="true"-->
-        <!--tools:ignore="ExportedReceiver">-->
-        <!--<intent-filter>-->
-        <!--<action android:name="com.android.vending.INSTALL_REFERRER" />-->
-        <!--</intent-filter>-->
-        <!--</receiver>-->
-
+        <!--AdWords-->
+        <receiver
+            android:name="com.google.ads.conversiontracking.InstallReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
 
         <receiver
             android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
