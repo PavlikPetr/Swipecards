@@ -36,7 +36,7 @@ public class SendLikeRequest extends ConfirmedApiRequest {
     private int userid; // идентификатор пользователя для оценки
     private int mutualid; // идентификатор сообщения из ленты, на который отправляется взаимная симпатия
     @Place
-    private int place; //TODO место отправки лайка
+    private int place; // место отправки лайка
 
     public SendLikeRequest(Context context, int userId, int mutualId, @Place int place, boolean blockUnconfirmed) {
         super(context, blockUnconfirmed);
