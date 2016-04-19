@@ -81,6 +81,9 @@ public class UserConfig extends AbstractConfig {
     public static final String LAST_CATCHED_GEO_PROVIDER = "last_catched_geo_provider";
     public static final String TRIAL_LAST_TIME = "trial_last_time";
     public static final String OK_USER_DATA = "ok_user_data";
+    public static final String FULLSCREEN_IN_INTERVAL_FIRST_SHOW = "fullscreen_in_interval_first_show";
+    public static final String FULLSCREEN_IN_INTERVAL_SHOWN_COUNT = "fullscreen_in_interval_shown_count";
+    public static final String FULLSCREEN_IN_INTERVAL_LAST_SHOW = "fullscreen_in_interval_last_show";
     public static final String START_POSITION_OF_ACTIONS = "start_position_of_actions";
     private static final String USER_CITY = "user_city";
     private String mUnique;
@@ -185,6 +188,12 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, LAST_CATCHED_GEO_PROVIDER, LOCATION_PROVIDER);
         // save OK user data
         addField(settingsMap, OK_USER_DATA, Utils.EMPTY);
+        // first fullscreen show in current interval
+        addField(settingsMap, FULLSCREEN_IN_INTERVAL_FIRST_SHOW, 0L);
+        // last fullscreen show in current interval
+        addField(settingsMap, FULLSCREEN_IN_INTERVAL_LAST_SHOW, 0L);
+        // fullscreen shown count in current interval
+        addField(settingsMap,FULLSCREEN_IN_INTERVAL_SHOWN_COUNT,0);
         addField(settingsMap, START_POSITION_OF_ACTIONS, 0);
         addField(settingsMap, USER_CITY, Utils.EMPTY);
     }
@@ -688,6 +697,60 @@ public class UserConfig extends AbstractConfig {
      */
     public boolean setOkUserData(OkUserData data) {
         return setField(getSettingsMap(), OK_USER_DATA, JsonUtils.toJson(data));
+    }
+
+    /**
+     * Last fullscreen ad show time in current interval
+     *
+     * @return last show time
+     */
+    public long getLastFullscreenTime() {
+        return getLongField(getSettingsMap(), FULLSCREEN_IN_INTERVAL_LAST_SHOW);
+    }
+
+    /**
+     * Sets last fullscreen ad show time in current interval
+     *
+     * @param time show time
+     */
+    public void setLastFullscreenTime(long time) {
+        setField(getSettingsMap(), FULLSCREEN_IN_INTERVAL_LAST_SHOW, time);
+    }
+
+    /**
+     * First fullscreen ad show time in current interval
+     *
+     * @return first show time
+     */
+    public long getFirstFullscreenTime() {
+        return getLongField(getSettingsMap(), FULLSCREEN_IN_INTERVAL_FIRST_SHOW);
+    }
+
+    /**
+     * Sets first fullscreen ad show time in current interval
+     *
+     * @param time show time
+     */
+    public void setFirstFullscreenTime(long time) {
+        setField(getSettingsMap(), FULLSCREEN_IN_INTERVAL_FIRST_SHOW, time);
+    }
+
+    /**
+     * Fullscreen ad shown count current interval
+     *
+     * @return shown count
+     */
+    public int getFullscreenShownCount() {
+        return getIntegerField(getSettingsMap(), FULLSCREEN_IN_INTERVAL_SHOWN_COUNT);
+    }
+
+    /**
+     * Sets fullscreen ad shown count in current interval
+     *
+     * @param count shown count
+     */
+    public void setFullscreenShownCount(int count) {
+        setField(getSettingsMap(), FULLSCREEN_IN_INTERVAL_SHOWN_COUNT, count);
     }
 
     /**

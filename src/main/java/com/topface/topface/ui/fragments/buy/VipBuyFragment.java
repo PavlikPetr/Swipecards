@@ -340,6 +340,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     @Override
     public void onPurchased(Purchase product) {
+        super.onPurchased(product);
         switchLayouts();
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(VIP_PURCHASED_INTENT));
     }
