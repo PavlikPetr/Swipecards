@@ -90,7 +90,7 @@ public class DeleteAccountDialog extends AbstractDialogFragment implements View.
                                 }).exec();
                             }
                         })
-                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.general_cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
