@@ -335,7 +335,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mController = new AlbumLoadController(AlbumLoadController.FOR_PREVIEW);
         initMutualDrawables();
         // Rate Controller
-        mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_SEARCH);
+        mRateController = new RateController(getActivity(), SendLikeRequest.FROM_SEARCH);
         mRateController.setOnRateControllerUiListener(this);
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mRateReceiver, new IntentFilter(RateController.USER_RATED));

@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import com.nineoldandroids.view.ViewHelper;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
 import com.topface.topface.utils.ad.NativeAd;
@@ -22,7 +21,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
     private OnMutualListener mMutualListener;
 
     public interface OnMutualListener {
-        void onMutual(FeedItem item);
+        void onMutual(FeedList<FeedLike> items);
     }
 
     public LikesListAdapter(Context context, Updater updateCallback) {
@@ -51,7 +50,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
                 @Override
                 public void onClick(View v) {
                     if (mMutualListener != null) {
-                        mMutualListener.onMutual(like);
+                        mMutualListener.onMutual(getEquals(like));
                     }
                 }
             });
