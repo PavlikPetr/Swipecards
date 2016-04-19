@@ -103,7 +103,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
             intent.putExtra(ChatFragment.INTENT_ITEM_ID, mItemId);
             LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
         }
-        mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_PROFILE);
+        mRateController = new RateController(getActivity(), SendLikeRequest.FROM_PROFILE);
         mLoaderView = root.findViewById(R.id.viewPagerLoader);
         mOutsideView = root.findViewById(R.id.outsideView);
         mOutsideView.setOnClickListener(new View.OnClickListener() {

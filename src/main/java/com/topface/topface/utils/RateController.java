@@ -26,11 +26,12 @@ public class RateController {
     public static final String USER_RATED = "com.topface.topface.USER_RATED";
     public static final String USER_ID_EXTRA = "user_id";
 
-    private final SendLikeRequest.Place mPlace;
+    @SendLikeRequest.Place
+    private final int mPlace;
     private Context mContext;
     private OnRateControllerListener mOnRateControllerUiListener;
 
-    public RateController(final Context context, SendLikeRequest.Place place) {
+    public RateController(final Context context, @SendLikeRequest.Place int place) {
         mContext = context;
         mPlace = place;
     }
