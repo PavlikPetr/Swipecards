@@ -300,6 +300,7 @@ public class DatingInstantMessageController {
     public void reset() {
         String defaultMessage = App.getUserConfig().getDatingMessage();
         setInstantMessageText(defaultMessage);
+        displayMessageField();
     }
 
     public void instantSend(final SearchUser user) {
