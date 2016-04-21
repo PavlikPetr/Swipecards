@@ -405,9 +405,11 @@ public class VkProfileFragment extends ProfileInnerFragment {
     }
 
     private VKApiCommunity getCommunityById(String id) {
-        for (VKApiCommunity community : mVkCommunities) {
-            if (community.screen_name.equals(id)) {
-                return community;
+        if (mVkCommunities != null && mVkCommunities.size() > 0) {
+            for (VKApiCommunity community : mVkCommunities) {
+                if (community.screen_name.equals(id)) {
+                    return community;
+                }
             }
         }
         return null;
