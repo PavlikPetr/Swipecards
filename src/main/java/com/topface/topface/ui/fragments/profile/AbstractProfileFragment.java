@@ -54,15 +54,13 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
         @Override
         public void update() {
             // load owners profile in OwnProfileFragment only
-            if (isOwnersProfileFragment()) {
-                setProfile(getProfile());
-            }
+            setProfile(getProfile());
         }
 
         public void bindFragment(Fragment fragment) {
             if (fragment instanceof UserPhotoFragment) {
                 mUserPhotoFragment = (UserPhotoFragment) fragment;
-            } else if (fragment instanceof AbstractFormFragment) {
+            } else if (fragment instanceof AbstractFormFragment && mFormFragment == null) {
                 mFormFragment = (AbstractFormFragment) fragment;
             }
         }
