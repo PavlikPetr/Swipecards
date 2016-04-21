@@ -59,7 +59,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
         }
 
         public void bindFragment(Fragment fragment) {
-            if (fragment instanceof UserPhotoFragment && mUserPhotoFragment == null) {
+            if (fragment instanceof UserPhotoFragment) {
                 mUserPhotoFragment = (UserPhotoFragment) fragment;
             } else if (fragment instanceof AbstractFormFragment && mFormFragment == null) {
                 mFormFragment = (AbstractFormFragment) fragment;
