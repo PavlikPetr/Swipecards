@@ -166,22 +166,20 @@ public class MenuFragment extends Fragment {
                 FragmentSettings savedId = savedInstanceState.getParcelable(CURRENT_FRAGMENT_STATE);
                 if (savedId != null) {
                     mSelectedFragment = savedId;
-//                    Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment from saved instance state.");
-//                    switchFragment(savedId, false);
                     return;
                 }
             }
             if (getActivity() != null) {
                 Intent intent = getActivity().getIntent();
-                if (intent != null &&
-                        intent.getSerializableExtra(GCMUtils.NEXT_INTENT) != null) {
+                if (intent != null && intent.hasExtra(GCMUtils.NEXT_INTENT)) {
                     Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment from activity intent.");
                     switchFragment((FragmentSettings) intent.getParcelableExtra(GCMUtils.NEXT_INTENT), false);
                     return;
+                }else{
+                    switchFragment(CacheProfile.getOptions().startPageFragmentSettings, false);
                 }
             }
             Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment to default from onCreate().");
-            switchFragment(CacheProfile.getOptions().startPageFragmentSettings, false);
         }
     }
 
