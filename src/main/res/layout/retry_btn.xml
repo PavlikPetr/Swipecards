@@ -3,12 +3,12 @@
     style="@style/Widget.Topface.Button.Big.Gray"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:minWidth="200dp"
-    android:maxWidth="280dp"
     android:layout_margin="5dp"
+    android:gravity="center"
+    android:maxWidth="280dp"
+    android:minWidth="200dp"
+    android:paddingBottom="8dp"
     android:paddingLeft="13dp"
     android:paddingRight="13dp"
-    android:singleLine="false"
     android:paddingTop="8dp"
-    android:paddingBottom="8dp"
-    android:gravity="center" />
+    android:singleLine="false" />
