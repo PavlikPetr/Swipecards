@@ -118,7 +118,7 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
 
     @Override
     protected int getUnreadCounter() {
-        return mCountersData.mutual;
+        return mCountersData.getMutual();
     }
 
 }

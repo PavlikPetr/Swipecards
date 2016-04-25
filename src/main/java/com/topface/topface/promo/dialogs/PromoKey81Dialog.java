@@ -34,9 +34,9 @@ public class PromoKey81Dialog extends PromoDialog {
     @Override
     public void initViews(View root) {
         super.initViews(root);
-        int curVisitCounter = mCountersData.admirations;
+        int curVisitCounter = mCountersData.getAdmirations();
         if (curVisitCounter == 0) {
-            mCountersData.visitors = mCountersData.admirations + getPremiumEntity().getCount();
+            mCountersData.setVisitors(curVisitCounter + getPremiumEntity().getCount());
             mAppState.setData(mCountersData);
             counterUpdated = true;
         }
@@ -60,7 +60,7 @@ public class PromoKey81Dialog extends PromoDialog {
     @Override
     protected String getMessage() {
         int count = getPremiumEntity().getCount();
-        int admirations = mCountersData.admirations;
+        int admirations = mCountersData.getAdmirations();
         count = admirations > 0 ? admirations : count;
         return Utils.getQuantityString(getPluralForm(), count, count);
     }
@@ -74,7 +74,7 @@ public class PromoKey81Dialog extends PromoDialog {
     protected void deleteMessages() {
         AdmirationsReadedRequest request = new AdmirationsReadedRequest(getActivity());
         if (counterUpdated) {
-            mCountersData.visitors = mCountersData.admirations - getPremiumEntity().getCount();
+            mCountersData.setVisitors(mCountersData.getAdmirations() - getPremiumEntity().getCount());
             mAppState.setData(mCountersData);
         }
         request.exec();

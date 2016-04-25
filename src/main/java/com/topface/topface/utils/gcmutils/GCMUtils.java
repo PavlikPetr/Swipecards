@@ -116,6 +116,7 @@ public class GCMUtils {
         new RegistrationTokenRequest(token, mContext).callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
+                Debug.log("GCM: OK send token ");
                 storeToken(token);
             }
 
@@ -375,7 +376,7 @@ public class GCMUtils {
         return null;
     }
 
-    private static Intent getIntentByType(Context context, int type, User user, String updateUrl) {
+    private static Intent getIntentByType(Context context, int type, User user, String ё) {
         Intent i = null;
         switch (type) {
             case GCM_TYPE_MESSAGE:

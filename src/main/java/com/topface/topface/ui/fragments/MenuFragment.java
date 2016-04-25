@@ -252,7 +252,7 @@ public class MenuFragment extends Fragment {
                     .map(new Func1<CountersData, CountersData>() {
                         @Override
                         public CountersData call(CountersData countersData) {
-                            countersData.bonus = CacheProfile.needShowBonusCounter ? options.bonus.counter : 0;
+                            countersData.setBonus(CacheProfile.needShowBonusCounter ? options.bonus.counter : 0);
                             return countersData;
                         }
                     })

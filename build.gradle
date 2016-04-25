@@ -281,7 +281,6 @@ dependencies {
     compile rootProject.ANDROID_BUILD_DESIGN_SUPPORT_VERSION
     compile rootProject.ANDROID_BUILD_ANNOTATIONS_SUPPORT_VERSION
     //Google play services
-    compile "com.google.android.gms:play-services-base:7.8.0"
     compile "com.google.android.gms:play-services-gcm:7.8.0"
     compile "com.google.android.gms:play-services-ads:7.8.0"
     //Multi dex support
@@ -311,7 +310,7 @@ dependencies {
         exclude group: 'org.json'
     }
     compile 'com.android.support:recyclerview-v7:23.1.1'
-    compile 'com.google.code.gson:gson:2.3'
+    compile 'com.google.code.gson:gson:2.6.2'
     //Library for WebSocket and other network requests
     compile 'com.koushikdutta.async:androidasync:2.1.5'
     //OpenIAB
