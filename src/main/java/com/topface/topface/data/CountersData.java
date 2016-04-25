@@ -12,47 +12,22 @@ import com.google.gson.annotations.SerializedName;
 public class CountersData implements Parcelable {
 
     private int mBonus = 0;
-    private boolean mFromGcm = false;
-
-    /*
-     * Все это блистательное великолепие ниже, нужно из-за того, что сервер нам присылает один и
-     * тот же объект счетчиков в разных JSON контейнерах, для GCM и реквестов. Такие дела.
-     */
-
-    //В запросах
-    @SerializedName("likes")
+    @SerializedName(value = "likes", alternate = "unread_likes")
     private int mLikes = 0;
-    @SerializedName("mutual")
+    @SerializedName(value = "mutual", alternate = "unread_symphaties")
     private int mMutual = 0;
-    @SerializedName("dialogs")
+    @SerializedName(value = "dialogs", alternate = "unread_messages")
     private int mDialogs = 0;
-    @SerializedName("visitors")
+    @SerializedName(value = "visitors", alternate = "unread_visitors")
     private int mVisitors = 0;
-    @SerializedName("fans")
+    @SerializedName(value = "fans", alternate = "unread_fans")
     private int mFans = 0;
-    @SerializedName("admirations")
+    @SerializedName(value = "admirations", alternate = "unread_admirations")
     private int mAdmirations = 0;
-    @SerializedName("peopleNearby")
+    @SerializedName(value = "peopleNearby", alternate = "unread_people_nearby")
     private int mPeopleNearby = 0;
 
-    //В GCM
-    @SerializedName("unread_likes")
-    private int mLikesGcm = 0;
-    @SerializedName("unread_symphaties")
-    private int mMutualGcm = 0;
-    @SerializedName("unread_messages")
-    private int mDialogsGcm = 0;
-    @SerializedName("unread_visitors")
-    private int mVisitorsGcm = 0;
-    @SerializedName("unread_fans")
-    private int mFansGcm = 0;
-    @SerializedName("unread_admirations")
-    private int mAdmirationsGcm = 0;
-    @SerializedName("unread_people_nearby")
-    private int mPeopleNearbyGcm = 0;
-
     public CountersData(CountersData countersData) {
-        mFromGcm = countersData.isFromGcm();
         setLikes(countersData.getLikes());
         setMutual(countersData.getMutual());
         setDialogs(countersData.getDialogs());
@@ -63,10 +38,6 @@ public class CountersData implements Parcelable {
     }
 
     public CountersData() {
-    }
-
-    public CountersData(boolean fromGcm) {
-        mFromGcm = fromGcm;
     }
 
     protected CountersData(Parcel in) {
@@ -85,59 +56,31 @@ public class CountersData implements Parcelable {
     }
 
     public void setLikes(int likes) {
-        if (mFromGcm) {
-            mLikesGcm = likes;
-        } else {
-            mLikes = likes;
-        }
+        mLikes = likes;
     }
 
     public void setMutual(int mutual) {
-        if (mFromGcm) {
-            mMutualGcm = mutual;
-        } else {
-            mMutual = mutual;
-        }
+        mMutual = mutual;
     }
 
     public void setDialogs(int dialogs) {
-        if (mFromGcm) {
-            mDialogsGcm = dialogs;
-        } else {
-            mDialogs = dialogs;
-        }
+        mDialogs = dialogs;
     }
 
     public void setFans(int fans) {
-        if (mFromGcm) {
-            mFansGcm = fans;
-        } else {
-            mFans = fans;
-        }
+        mFans = fans;
     }
 
     public void setAdmirations(int admirations) {
-        if (mFromGcm) {
-            mAdmirationsGcm = admirations;
-        } else {
-            mAdmirations = admirations;
-        }
+        mAdmirations = admirations;
     }
 
     public void setPeopleNearby(int peopleNearby) {
-        if (mFromGcm) {
-            mPeopleNearbyGcm = peopleNearby;
-        } else {
-            mPeopleNearby = peopleNearby;
-        }
+        mPeopleNearby = peopleNearby;
     }
 
     public void setVisitors(int visitors) {
-        if (mFromGcm) {
-            mVisitorsGcm = visitors;
-        } else {
-            mVisitors = visitors;
-        }
+        mVisitors = visitors;
     }
 
     public int getBonus() {
@@ -145,35 +88,31 @@ public class CountersData implements Parcelable {
     }
 
     public int getLikes() {
-        return mFromGcm ? mLikesGcm : mLikes;
+        return mLikes;
     }
 
     public int getMutual() {
-        return mFromGcm ? mMutualGcm : mMutual;
+        return mMutual;
     }
 
     public int getDialogs() {
-        return mFromGcm ? mDialogsGcm : mDialogs;
+        return mDialogs;
     }
 
     public int getVisitors() {
-        return mFromGcm ? mVisitorsGcm : mVisitors;
+        return mVisitors;
     }
 
     public int getFans() {
-        return mFromGcm ? mFansGcm : mFans;
+        return mFans;
     }
 
     public int getAdmirations() {
-        return mFromGcm ? mAdmirationsGcm : mAdmirations;
+        return mAdmirations;
     }
 
     public int getPeopleNearby() {
-        return mFromGcm ? mPeopleNearbyGcm : mPeopleNearby;
-    }
-
-    public boolean isFromGcm() {
-        return mFromGcm;
+        return mPeopleNearby;
     }
 
     public static final Creator<CountersData> CREATOR = new Creator<CountersData>() {

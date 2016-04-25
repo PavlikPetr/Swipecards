@@ -63,11 +63,11 @@ public class CountersManager {
         return mLastRequestMeethod;
     }
 
-    public void setEntitiesCounters(JSONObject unread, boolean fromGcm) {
+    public void setEntitiesCounters(JSONObject unread) {
         if (unread == null) {
             return;
         }
-        CountersData countersData = JsonUtils.countersFromJson(unread.toString(), fromGcm);
+        CountersData countersData = JsonUtils.fromJson(unread.toString(), CountersData.class);
         if (countersData != null && !Utils.isEmptyJson(unread) && !mAppState.isEqualData(CountersData.class, countersData)) {
             mAppState.setData(countersData);
         }

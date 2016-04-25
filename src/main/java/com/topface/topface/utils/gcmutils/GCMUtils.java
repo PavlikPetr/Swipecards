@@ -289,7 +289,7 @@ public class GCMUtils {
             if (countersStr != null) {
                 JSONObject countersJson = new JSONObject(countersStr);
                 // on Api version 8 unread counter will have the same keys as common requests
-                counterManager.setEntitiesCounters(countersJson, true);
+                counterManager.setEntitiesCounters(countersJson);
             }
             String balanceStr = data.getString("balance");
             if (balanceStr != null) {

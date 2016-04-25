@@ -123,7 +123,7 @@ abstract public class ApiHandler extends Handler {
                     .getInstance(App.getContext());
             countersManager.setLastRequestMethod(method);
             if (unread != null) {
-                countersManager.setEntitiesCounters(unread, false);
+                countersManager.setEntitiesCounters(unread);
             }
             countersManager.setBalanceCounters(response.getBalance());
         } catch (Exception e) {

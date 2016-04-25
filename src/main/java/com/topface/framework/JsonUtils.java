@@ -55,15 +55,6 @@ public class JsonUtils {
         return obj == null ? defaultObj : obj;
     }
 
-    public static CountersData countersFromJson(String json, final boolean fromGcm) {
-        return new GsonBuilder().registerTypeAdapter(CountersData.class, new InstanceCreator<CountersData>() {
-            @Override
-            public CountersData createInstance(Type type) {
-                return new CountersData(fromGcm);
-            }
-        }).create().fromJson(json, CountersData.class);
-    }
-
     public static String profileToJson(Profile profile) {
         Gson gson = new GsonBuilder().registerTypeAdapter(SparseArray.class
                 , new JsonSerializer<SparseArray<Profile.TopfaceNotifications>>() {
