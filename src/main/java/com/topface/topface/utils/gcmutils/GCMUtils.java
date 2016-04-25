@@ -116,6 +116,7 @@ public class GCMUtils {
         new RegistrationTokenRequest(token, mContext).callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
+                Debug.log("GCM: OK send token ");
                 storeToken(token);
             }
 
@@ -288,7 +289,7 @@ public class GCMUtils {
             if (countersStr != null) {
                 JSONObject countersJson = new JSONObject(countersStr);
                 // on Api version 8 unread counter will have the same keys as common requests
-                counterManager.setEntitiesCounters(countersJson);
+                counterManager.setEntitiesCounters(countersJson, true);
             }
             String balanceStr = data.getString("balance");
             if (balanceStr != null) {
@@ -375,7 +376,7 @@ public class GCMUtils {
         return null;
     }
 
-    private static Intent getIntentByType(Context context, int type, User user, String updateUrl) {
+    private static Intent getIntentByType(Context context, int type, User user, String ё) {
         Intent i = null;
         switch (type) {
             case GCM_TYPE_MESSAGE:

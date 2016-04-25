@@ -252,8 +252,8 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         if (mTitleWithCounter != null) {
             String title = Utils.getQuantityString(
                     R.plurals.you_were_liked,
-                    countersData.likes,
-                    countersData.likes
+                    countersData.getLikes(),
+                    countersData.getLikes()
             );
             mTitleWithCounter.setText(title);
         }
@@ -338,7 +338,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                     progress.setVisibility(View.VISIBLE);
                     EasyTracker.sendEvent(
                             getTrackName(), "VipPaidSympathies." + blockSympathyOptions.group,
-                            "Buying", 1l
+                            "Buying", 1L
                     );
                     BuyLikesAccessRequest request = new BuyLikesAccessRequest(getActivity());
                     request.callback(new SimpleApiHandler() {
@@ -376,7 +376,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         String group = blockSympathyOptions.group;
         EasyTracker.sendEvent(
                 getTrackName(), "VipPaidSympathies." + group,
-                "OpenBuyingScreen", 1l
+                "OpenBuyingScreen", 1L
         );
         startActivity(
                 PurchasesActivity.createBuyingIntent(
@@ -394,11 +394,11 @@ public class LikesFragment extends FeedFragment<FeedLike> {
             public void execute() {
                 SharedPreferences prefs = getActivity()
                         .getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
-                final long showsCount = prefs.getLong(PREFERENCES_PAID_LIKES_COUNT, 1l);
-                if (showsCount > 1l) {
+                final long showsCount = prefs.getLong(PREFERENCES_PAID_LIKES_COUNT, 1L);
+                if (showsCount > 1L) {
                     EasyTracker.sendEvent(
                             getTrackName(), "VipPaidSympathies." + blockSympathyOptions.group,
-                            "ShownOnce", 1l
+                            "ShownOnce", 1L
                     );
                 } else {
                     EasyTracker.sendEvent(
@@ -406,7 +406,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                             "ShownMoreThanOnce", showsCount
                     );
                 }
-                prefs.edit().putLong(PREFERENCES_PAID_LIKES_COUNT, showsCount + 1l)
+                prefs.edit().putLong(PREFERENCES_PAID_LIKES_COUNT, showsCount + 1L)
                         .apply();
             }
         };
@@ -476,7 +476,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     @Override
     protected int getUnreadCounter() {
-        return mCountersData.likes;
+        return mCountersData.getLikes();
     }
 
     @Override

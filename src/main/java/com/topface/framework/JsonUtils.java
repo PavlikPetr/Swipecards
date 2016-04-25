@@ -4,10 +4,12 @@ import android.util.SparseArray;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.InstanceCreator;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.topface.topface.banners.PageInfo;
+import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
@@ -51,6 +53,15 @@ public class JsonUtils {
     public static <T> T optFromJson(String json, Class<T> classOfT, T defaultObj) {
         T obj = fromJson(json, classOfT);
         return obj == null ? defaultObj : obj;
+    }
+
+    public static CountersData countersFromJson(String json, final boolean fromGcm) {
+        return new GsonBuilder().registerTypeAdapter(CountersData.class, new InstanceCreator<CountersData>() {
+            @Override
+            public CountersData createInstance(Type type) {
+                return new CountersData(fromGcm);
+            }
+        }).create().fromJson(json, CountersData.class);
     }
 
     public static String profileToJson(Profile profile) {

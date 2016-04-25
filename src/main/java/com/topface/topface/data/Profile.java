@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 import android.util.SparseArray;
 
@@ -19,7 +18,6 @@ import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.ProfileBackgrounds;
 
 import org.json.JSONArray;
@@ -80,7 +78,6 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean editor;
     @SerializedName("noviceLikes")
     public boolean giveNoviceLikes;
-    protected Context mContext;
     public String notificationToken;
     @Inject
     transient TopfaceAppState mAppState;
@@ -105,7 +102,6 @@ public class Profile extends AbstractDataWithPhotos {
         App.from(App.getContext()).inject(this);
         mAppState.setData(this);
     }
-
 
     protected void fillData(final JSONObject resp) {
         if (resp == null) {

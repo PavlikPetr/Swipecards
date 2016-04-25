@@ -73,8 +73,9 @@ import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.HockeySender;
-import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.gcmutils.GcmListenerService;
+import com.topface.topface.utils.gcmutils.InstanceIDListenerService;
+import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import com.topface.topface.utils.social.FbAuthorizer;
@@ -242,6 +243,9 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                         if (data.photosCount == 0) {
                             App.getConfig().getUserConfig().setUserAvatarAvailable(false);
                             App.getConfig().getUserConfig().saveConfig();
+                        }
+                        if(!InstanceIDListenerService.isListenerStarted()){
+                            InstanceIDListenerService.getToken(getContext());
                         }
                         CacheProfile.sendUpdateProfileBroadcast();
                     }

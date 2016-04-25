@@ -15,10 +15,10 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
 
     @Override
     protected void onBeforeCountersUpdate(CountersData countersData) {
-        updatePageCounter(LikesFragment.class.getName(), countersData.likes);
-        updatePageCounter(MutualFragment.class.getName(), countersData.mutual);
+        updatePageCounter(LikesFragment.class.getName(), countersData.getLikes());
+        updatePageCounter(MutualFragment.class.getName(), countersData.getMutual());
         if (!App.from(getActivity()).getOptions().isHideAdmirations) {
-            updatePageCounter(AdmirationFragment.class.getName(), countersData.admirations);
+            updatePageCounter(AdmirationFragment.class.getName(), countersData.getAdmirations());
         }
     }
 
@@ -29,10 +29,10 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
 
     @Override
     protected void addPages() {
-        addBodyPage(LikesFragment.class.getName(), getString(R.string.general_likes), mCountersData.likes);
-        addBodyPage(MutualFragment.class.getName(), getString(R.string.general_mutual), mCountersData.mutual);
+        addBodyPage(LikesFragment.class.getName(), getString(R.string.general_likes), mCountersData.getLikes());
+        addBodyPage(MutualFragment.class.getName(), getString(R.string.general_mutual), mCountersData.getMutual());
         if (!App.from(getActivity()).getOptions().isHideAdmirations) {
-            addBodyPage(AdmirationFragment.class.getName(), getString(R.string.general_admirations), mCountersData.admirations);
+            addBodyPage(AdmirationFragment.class.getName(), getString(R.string.general_admirations), mCountersData.getAdmirations());
         }
     }
 

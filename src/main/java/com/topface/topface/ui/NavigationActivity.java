@@ -188,7 +188,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             @Override
             public void call(CountersData countersData) {
                 if (mNotificationController != null) {
-                    mNotificationController.refreshNotificator(countersData.dialogs, countersData.mutual);
+                    mNotificationController.refreshNotificator(countersData.getDialogs(), countersData.getMutual());
                 }
             }
         }));
@@ -440,9 +440,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (App.getLocaleConfig().fetchToSystemLocale()) {
             LocaleConfig.changeLocale(this, App.getLocaleConfig().getApplicationLocale());
             return;
-        } else {
-            LocaleConfig.localeChangeInitiated = false;
         }
+        LocaleConfig.localeChangeInitiated = false;
         App.checkProfileUpdate();
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
