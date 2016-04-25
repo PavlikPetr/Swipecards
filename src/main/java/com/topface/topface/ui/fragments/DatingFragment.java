@@ -178,6 +178,25 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             updateResources(balanceData);
         }
     };
+
+    private Action1<Options> mOptionsAction = new Action1<Options>() {
+        @Override
+        public void call(Options options) {
+            UserConfig userConfig = App.getUserConfig();
+            Options.InstantMessageFromSearch message = options.instantMessageFromSearch;
+            String instantMessage = userConfig.getDatingMessage();
+            // в приоритете данные из кэша, но если там пусто, то возьмем данные из опций
+            message.setText(!TextUtils.isEmpty(instantMessage) ? instantMessage : !TextUtils.isEmpty(message.getText()) ? message.getText() : Utils.EMPTY);
+            if (mDatingInstantMessageController != null) {
+                mDatingInstantMessageController.setInstantMessageText(message.getText());
+            }
+            // чтобы лишний раз не дергать перезапись shared preff проверяем на equals
+            if (!message.getText().equals(instantMessage)) {
+                userConfig.setDatingMessage(message.getText());
+                userConfig.saveConfig();
+            }
+        }
+    };
     /**
      * Флаг того, что запущено обновление поиска и запускать дополнительные обновления не нужно
      */
@@ -223,25 +242,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     protected String getScreenName() {
         return PAGE_NAME;
     }
-
-    private BroadcastReceiver mOptionsReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            UserConfig userConfig = App.getUserConfig();
-            /*
-            Если нет стандартного сообщения в конфиге, устанавливаем из опций
-             */
-            if (getActivity().getIntent().hasExtra(DatingInstantMessageController.DEFAULT_MESSAGE) ||
-                    mDatingInstantMessageController != null &&
-                            TextUtils.isEmpty(userConfig.getDatingMessage())
-                    ) {
-                Options.InstantMessageFromSearch message = App.from(context).getOptions().instantMessageFromSearch;
-                mDatingInstantMessageController.setInstantMessageText(message.getText());
-                userConfig.setDatingMessage(message.getText());
-                userConfig.saveConfig();
-            }
-        }
-    };
 
     private boolean mNewFilter;
     private OnUsersListEventsListener mSearchListener = new OnUsersListEventsListener() {
@@ -335,7 +335,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mController = new AlbumLoadController(AlbumLoadController.FOR_PREVIEW);
         initMutualDrawables();
         // Rate Controller
-        mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_SEARCH);
+        mRateController = new RateController(getActivity(), SendLikeRequest.FROM_SEARCH);
         mRateController.setOnRateControllerUiListener(this);
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mRateReceiver, new IntentFilter(RateController.USER_RATED));
@@ -355,6 +355,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mRoot = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_dating, null);
         initViews(mRoot);
         mDatingSubscriptions.add(mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction));
+        mDatingSubscriptions.add(mAppState.getObservable(Options.class).subscribe(mOptionsAction));
         initEmptySearchDialog(mRoot);
         initImageSwitcher(mRoot);
         if (mCurrentUser != null) {
@@ -367,13 +368,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mAddPhotoHelper = new AddPhotoHelper(this, null);
         mAddPhotoHelper.setOnResultHandler(mHandler);
         return mRoot;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mOptionsReceiver,
-                new IntentFilter(Options.OPTIONS_RECEIVED_ACTION));
     }
 
     @Override
@@ -399,7 +393,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mAddPhotoHelper != null) {
             mAddPhotoHelper.releaseHelper();
         }
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mOptionsReceiver);
     }
 
     @Override

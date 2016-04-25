@@ -12,6 +12,8 @@ import com.topface.topface.R;
 import com.topface.topface.data.LoaderData;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 /**
@@ -138,6 +140,17 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
             mData = new FeedList<>();
         }
         return mData;
+    }
+
+    @NotNull
+    public FeedList<T> getEquals(T item) {
+        FeedList<T> list = new FeedList<>();
+        for (T currentItem : getData()) {
+            if (currentItem.equals(item)) {
+                list.add(currentItem);
+            }
+        }
+        return list;
     }
 
     public void setData(ArrayList<T> data, boolean more) {

@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import android.support.annotation.IntDef;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,21 +11,12 @@ public class SendLikeRequest extends ConfirmedApiRequest {
 
     public static final int DEFAULT_MUTUAL = 1;
     public static final int DEFAULT_NO_MUTUAL = 0;
+    public static final int FROM_SEARCH = 0;
+    public static final int FROM_PROFILE = 1;
+    public static final int FROM_FEED = 2;
 
-    public enum Place {
-        FROM_SEARCH(0),
-        FROM_PROFILE(1),
-        FROM_FEED(2);
-
-        int placeId;
-
-        Place(int id) {
-            this.placeId = id;
-        }
-
-        public int id() {
-            return placeId;
-        }
+    @IntDef({FROM_SEARCH, FROM_PROFILE, FROM_FEED})
+    public @interface Place {
     }
 
     public int getUserid() {
@@ -35,22 +27,18 @@ public class SendLikeRequest extends ConfirmedApiRequest {
         return mutualid;
     }
 
-    public Place getPlace() {
+    @Place
+    public int getPlace() {
         return place;
     }
 
     // Data
     private int userid; // идентификатор пользователя для оценки
     private int mutualid; // идентификатор сообщения из ленты, на который отправляется взаимная симпатия
-    private Place place; //TODO место отправки лайка
+    @Place
+    private int place; // место отправки лайка
 
-    public SendLikeRequest(Context context, int userId, Place place, boolean blockUnconfirmed) {
-        super(context, blockUnconfirmed);
-        this.userid = userId;
-        this.place = place;
-    }
-
-    public SendLikeRequest(Context context, int userId, int mutualId, Place place, boolean blockUnconfirmed) {
+    public SendLikeRequest(Context context, int userId, int mutualId, @Place int place, boolean blockUnconfirmed) {
         super(context, blockUnconfirmed);
         this.mutualid = mutualId;
         this.userid = userId;
@@ -62,7 +50,7 @@ public class SendLikeRequest extends ConfirmedApiRequest {
         return new JSONObject()
                 .put("userId", userid)
                 .put("mutualId", mutualid)
-                .put("place", place.id());
+                .put("place", place);
     }
 
     @Override

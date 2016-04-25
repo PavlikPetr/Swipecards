@@ -141,7 +141,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
 
     @Override
     protected void init() {
-        mRateController = new RateController(getActivity(), SendLikeRequest.Place.FROM_FEED);
+        mRateController = new RateController(getActivity(), SendLikeRequest.FROM_FEED);
     }
 
     @Override
@@ -160,9 +160,13 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         adapter.setOnMutualListener(new OnMutualListener() {
 
             @Override
-            public void onMutual(FeedItem item) {
-                item.unread = false;
-                LikesFragment.this.onMutual(item);
+            public void onMutual(FeedList<FeedLike> items) {
+                if (items.size() > 0) {
+                    for (FeedItem feedItem : items) {
+                        feedItem.unread = false;
+                    }
+                    LikesFragment.this.onMutual(items);
+                }
             }
         });
         return adapter;
@@ -184,15 +188,18 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         return FeedsCache.FEEDS_TYPE.DATA_LIKES_FEEDS;
     }
 
-    private void onMutual(FeedItem item) {
-        if (!(item.user.deleted || item.user.banned)) {
-            if (item instanceof FeedLike) {
-                if (!((FeedLike) item).mutualed) {
-                    mRateController.onLike(item.user.id, 0, null, App.from(getActivity()).getOptions().blockUnconfirmed);
-                    ((FeedLike) item).mutualed = true;
-                    getListAdapter().notifyDataSetChanged();
-                    Utils.showToastNotification(R.string.general_mutual, Toast.LENGTH_SHORT);
+    private void onMutual(@NotNull FeedList<FeedLike> items) {
+        if (items.size() > 0) {
+            FeedLike item = items.getFirst();
+            if (!(item.user.deleted || item.user.banned)) {
+                for (FeedLike feedLike : items) {
+                    if (!feedLike.mutualed) {
+                        feedLike.mutualed = true;
+                        getListAdapter().notifyDataSetChanged();
+                    }
                 }
+                mRateController.onLike(item.user.id, 0, null, App.from(getActivity()).getOptions().blockUnconfirmed);
+                Utils.showToastNotification(R.string.general_mutual, Toast.LENGTH_SHORT);
             }
         }
     }

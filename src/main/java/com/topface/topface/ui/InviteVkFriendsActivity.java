@@ -351,6 +351,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
             for (int i = 0; i < mFriendsList.size(); i++) {
                 if (mFriendsList.get(i).getId() == id) {
                     mFriendsList.remove(i);
+                    --mCurrentFriendsCount;
                     break;
                 }
             }

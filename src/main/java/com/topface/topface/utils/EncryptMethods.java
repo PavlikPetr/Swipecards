@@ -7,6 +7,7 @@ public class EncryptMethods {
 
     private static final String ENCRYPT_METHOD_AES = "AES";
     private static final String ENCRYPT_KEY = "topface_user_id_"; // 16 bytes of key (we can use 128/192/256 bits key length only)
+    private static final String SEPARATOR = "_";
 
     /**
      * Encrypt user id with AES
@@ -37,11 +38,11 @@ public class EncryptMethods {
         if (bytes.length == 0) {
             return defaultValue;
         } else {
-            String res = defaultValue;
+            String res = Utils.EMPTY;
             for (byte symbol : bytes) {
-                res = res + symbol;
+                res = res + SEPARATOR + symbol;
             }
-            return res;
+            return res.replaceFirst(SEPARATOR, Utils.EMPTY);
         }
     }
 

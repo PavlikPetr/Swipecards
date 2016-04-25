@@ -184,9 +184,9 @@ public class Options extends AbstractData {
     @Inject
     transient TopfaceAppState mAppState;
     /**
-     * {Number} fullscreenInterval — интервал отображения стартового фулскрин баннера в секундах
+     * (FullScreenCondition) all settings for show fullScrenn ads
      */
-    public long fullscreenInterval = DateUtils.DAY_IN_SECONDS;
+    public FullScreenCondition fullScreenCondition = new FullScreenCondition();
 
     /**
      * Набор разнообразных параметров срезов по пользователю, для статистики
@@ -370,7 +370,7 @@ public class Options extends AbstractData {
             feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
             interstitial = JsonUtils.optFromJson(response.optString("interstitial"),
                     InterstitialInFeeds.class, interstitial);
-            fullscreenInterval = response.optLong("fullscreenInterval", DateUtils.DAY_IN_SECONDS);
+            fullScreenCondition = new FullScreenCondition(response);
             if (response.has("leftMenuItems")) {
                 leftMenuItems = JsonUtils.fromJson(response.getJSONArray("leftMenuItems").toString(), new TypeToken<ArrayList<LeftMenuIntegrationItems>>() {
                 });
@@ -796,11 +796,13 @@ public class Options extends AbstractData {
         public String iconUrl = Utils.EMPTY;
         public String title = Utils.EMPTY;
         public String url = Utils.EMPTY;
+        public boolean external = false;
 
-        public LeftMenuIntegrationItems(String icon, String title, String url) {
+        public LeftMenuIntegrationItems(String icon, String title, String url, boolean external) {
             iconUrl = icon;
             this.title = title;
             this.url = url;
+            this.external = external;
         }
     }
 }
