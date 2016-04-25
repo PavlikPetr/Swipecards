@@ -398,10 +398,11 @@ public class MenuFragment extends Fragment {
     public void selectMenu(FragmentSettings fragmentSettings) {
         String url = getWebUrl(fragmentSettings);
         boolean isUrlNotEmpty = !TextUtils.isEmpty(url);
-        if (fragmentSettings != mSelectedFragment && !isUrlNotEmpty) {
-            Debug.log("MenuFragment: Switch fragment in selectMenu().");
-            switchFragment(fragmentSettings, true);
-        } else if (mOnFragmentSelected != null) {
+        if (fragmentSettings != mSelectedFragment) {
+            if (!isUrlNotEmpty) {
+                Debug.log("MenuFragment: Switch fragment in selectMenu().");
+                switchFragment(fragmentSettings, true);
+            }
             mOnFragmentSelected.onFragmentSelected(fragmentSettings);
         }
         if (isUrlNotEmpty) {
