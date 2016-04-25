@@ -118,7 +118,7 @@ public class MenuFragment extends Fragment {
                     FragmentSettings fragmentSettings = null;
                     if (extras != null) {
                         FragmentSettings menuItem = extras.getParcelable(SELECTED_FRAGMENT_ID);
-                        fragmentSettings = menuItem != null?menuItem:CacheProfile.getOptions().startPageFragmentSettings;
+                        fragmentSettings = menuItem != null ? menuItem : CacheProfile.getOptions().startPageFragmentSettings;
                     }
                     selectMenu(fragmentSettings);
                     View view = mAdapter.getViewForActivate(mListView, fragmentSettings);
@@ -175,7 +175,7 @@ public class MenuFragment extends Fragment {
                     Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment from activity intent.");
                     switchFragment((FragmentSettings) intent.getParcelableExtra(GCMUtils.NEXT_INTENT), false);
                     return;
-                }else{
+                } else {
                     switchFragment(CacheProfile.getOptions().startPageFragmentSettings, false);
                 }
             }
@@ -429,10 +429,10 @@ public class MenuFragment extends Fragment {
      * @param newFragmentSettings id of fragment that is going to be shown
      */
     private void switchFragment(FragmentSettings newFragmentSettings, boolean executePending) {
-        if (newFragmentSettings == null) {
+        FragmentManager fragmentManager = getFragmentManager();
+        if (newFragmentSettings == null || fragmentManager == null) {
             return;
         }
-        FragmentManager fragmentManager = getFragmentManager();
         Fragment oldFragment = fragmentManager.findFragmentById(R.id.fragment_content);
         String fragmentTag = getTagById(newFragmentSettings);
         Debug.log("MenuFragment: Try switch to fragment with tag " + fragmentTag + " (old fragment " + mSelectedFragment + ")");
