@@ -52,6 +52,7 @@ import com.topface.topface.utils.CustomViewNotificationController;
 import com.topface.topface.utils.IActionbarNotifier;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.PopupManager;
+import com.topface.topface.utils.PurchasesEvents;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
@@ -125,6 +126,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             if (CacheProfile.age < App.getAppOptions().getUserAgeMin()) {
                 SetAgeDialog.newInstance().show(getSupportFragmentManager(), SetAgeDialog.TAG);
             }
+            new PurchasesEvents().checkRenewSubscription(NavigationActivity.this.getApplicationContext());
         }
     };
 
