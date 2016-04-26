@@ -1,8 +1,6 @@
 package com.topface.topface.ui.fragments;
 
-import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -176,10 +174,6 @@ public abstract class UserAvatarFragment extends BaseFragment
     @Override
     protected String getSubtitle() {
         IUniversalUser user = getUniversalUser();
-        if (user.isEmpty() || TextUtils.isEmpty(user.getCity())) {
-            return Utils.EMPTY;
-        } else {
-            return user.getCity();
-        }
+        return user.isEmpty() || TextUtils.isEmpty(user.getCity()) ? Utils.EMPTY : user.getCity();
     }
 }

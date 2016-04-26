@@ -368,7 +368,8 @@ public class GCMUtils {
                     // add the same request code like Chat intent
                     i.putExtra(App.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
                 } else {
-                    return ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city, null, null, true, null);
+                    return ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city,
+                            null, null, true, null, false);
                 }
                 return i;
             }
