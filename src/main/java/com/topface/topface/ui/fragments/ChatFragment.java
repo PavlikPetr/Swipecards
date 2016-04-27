@@ -131,6 +131,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private static final String SEND_MESSAGE_SOURCE = "SendMessage";
     private static final String PAGE_NAME = "Chat";
     public static final String GIFT_DATA = "gift_data";
+    public static final String BANNED_USER = "banned_user";
 
     private int mUserId;
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
@@ -164,13 +165,13 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             AddPhotoHelper.handlePhotoMessage(msg);
         }
     };
-    private int mMaxMessageSize = App.get().getOptions().maxMessageSize;
     private RelativeLayout mLockScreen;
     private PopularUserChatController mPopularUserLockController;
     private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
     private String mUserCity;
     private String mUserNameAndAge;
     private Photo mPhoto;
+    private boolean mIsBanned;
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -237,8 +238,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         mUserType = getArguments().getInt(ChatFragment.USER_TYPE);
         // do not recreate Adapter cause of setRetainInstance(true)
         if (mAdapter == null) {
@@ -256,6 +257,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         mUserNameAndAge = args.getString(INTENT_USER_NAME_AND_AGE);
         mInitialMessage = args.getString(INITIAL_MESSAGE);
         mPhoto = args.getParcelable(INTENT_AVATAR);
+        mIsBanned = args.getBoolean(BANNED_USER);
         SendGiftAnswer sendGiftAnswer = args.getParcelable(GIFT_DATA);
         if (sendGiftAnswer != null) {
             sendGiftAnswer.setLoaderType(IListLoader.ItemType.TEMP_MESSAGE);
@@ -359,7 +361,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        setThrownActionBarAvatar(mPhoto);
+        if (!mIsBanned) {
+            setThrownActionBarAvatar(mPhoto);
+        }
     }
 
     @Override
