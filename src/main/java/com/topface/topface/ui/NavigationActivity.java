@@ -148,7 +148,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         actionBarView.setLeftMenuView();
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         App.from(getApplicationContext()).inject(this);
