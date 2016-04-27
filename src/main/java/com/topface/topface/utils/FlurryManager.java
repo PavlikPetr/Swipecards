@@ -114,7 +114,6 @@ public class FlurryManager {
     }
 
     public void init() {
-        FlurryAgent.init(App.getContext(), App.getContext().getResources().getString(R.string.flurry_key));
         FlurryAgent.setLogEnabled(Debug.isDebugLogsEnabled());
         FlurryAgent.setLogLevel(Log.VERBOSE);
         FlurryAgent.setFlurryAgentListener(new FlurryAgentListener() {
@@ -123,6 +122,7 @@ public class FlurryManager {
                 sendAppStartEvent();
             }
         });
+        FlurryAgent.init(App.getContext(), App.getContext().getResources().getString(R.string.flurry_key));
     }
 
     /**
