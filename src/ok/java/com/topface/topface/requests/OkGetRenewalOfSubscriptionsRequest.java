@@ -2,12 +2,12 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
-import com.topface.topface.utils.EasyTracker;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * get list of renewed users subscription
+ */
 public class OkGetRenewalOfSubscriptionsRequest extends ApiRequest {
     public static final String SERVICE_NAME = "ok.getRenewalOfSubscriptions";
 

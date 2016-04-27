@@ -2,12 +2,13 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
-import com.topface.topface.requests.handlers.ErrorCodes;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * inform TF server that renewed subscription was marked on OK side
+ */
 public class OkMarkRenewalAsSentRequest extends ApiRequest {
     public static final String SERVICE_NAME = "ok.markRenewalAsSent";
 
