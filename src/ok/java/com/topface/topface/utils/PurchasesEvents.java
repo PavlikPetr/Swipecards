@@ -98,23 +98,22 @@ public class PurchasesEvents {
                                                     Debug.log("ReportPaymentRequest success " + reportPaymentData.isSuccess());
                                                     if (reportPaymentData.isSuccess()) {
                                                         ReportPaymentStatistics.sendSuccess();
+                                                        new OkMarkRenewalAsSentRequest(context, subscriptionData.getOrderId()).exec();
                                                     } else {
                                                         ReportPaymentStatistics.sendFail();
                                                     }
-                                                    new OkMarkRenewalAsSentRequest(context, subscriptionData.getOrderId()).exec();
                                                 }
                                             }, new Action1<Throwable>() {
                                                 @Override
                                                 public void call(Throwable throwable) {
-
+                                                    Debug.error("ReportPaymentRequest error " + throwable);
+                                                    ReportPaymentStatistics.sendFail();
                                                 }
                                             });
                                 }
                             }, new Action1<Throwable>() {
                                 @Override
                                 public void call(Throwable throwable) {
-                                    Debug.error("ReportPaymentRequest error " + throwable);
-                                    ReportPaymentStatistics.sendFail();
                                 }
                             }));
                 }

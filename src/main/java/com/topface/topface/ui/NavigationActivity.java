@@ -405,6 +405,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     @Override
     protected void onProfileUpdated() {
+        super.onProfileUpdated();
         if (CacheProfile.age < App.getAppOptions().getUserAgeMin()) {
             SetAgeDialog.newInstance().show(getSupportFragmentManager(), SetAgeDialog.TAG);
         }
