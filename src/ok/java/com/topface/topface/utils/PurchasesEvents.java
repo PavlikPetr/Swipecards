@@ -16,9 +16,11 @@ import com.topface.topface.statistics.ReportPaymentStatistics;
 import com.topface.topface.utils.social.OkAuthorizer;
 
 import rx.Observable;
+import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by ppavlik on 05.04.16.
@@ -26,7 +28,10 @@ import rx.schedulers.Schedulers;
  */
 public class PurchasesEvents {
 
-    public void purchaseSuccess(int productsCount, String productType, String productId, String currencyCode, double price, String transactionId) {
+    public void purchaseSuccess(@SuppressWarnings("UnusedParameters") int productsCount,
+                                @SuppressWarnings("UnusedParameters") String productType,
+                                @SuppressWarnings("UnusedParameters") String productId,
+                                String currencyCode, double price, String transactionId) {
         new ReportPaymentRequest(
                 new OkAuthorizer().getOkAuthObj(App.getAppSocialAppsIds()),
                 transactionId,
@@ -61,24 +66,31 @@ public class PurchasesEvents {
 
             @Override
             protected void success(RenewalOfSubscriptionData data, IApiResponse response) {
-                if (data != null && data.renewals != null && data.renewals.size() > 0) {
-                    Observable.from(data.renewals)
-                            .subscribeOn(Schedulers.newThread())
+                if (data != null && data.getRenewals() != null && data.getRenewals().size() > 0) {
+                    final CompositeSubscription subscription = new CompositeSubscription();
+                    subscription.add(Observable.from(data.getRenewals()).subscribeOn(Schedulers.newThread())
                             .observeOn(Schedulers.newThread())
                             .filter(new Func1<RenewalOfSubscriptionData.SubscriptionData, Boolean>() {
                                 @Override
                                 public Boolean call(RenewalOfSubscriptionData.SubscriptionData subscriptionData) {
                                     return subscriptionData != null;
                                 }
-                            })
-                            .subscribe(new Action1<RenewalOfSubscriptionData.SubscriptionData>() {
+                            }).doOnCompleted(new Action0() {
+                                @Override
+                                public void call() {
+                                    //noinspection ConstantConditions
+                                    if (subscription != null) {
+                                        subscription.unsubscribe();
+                                    }
+                                }
+                            }).subscribe(new Action1<RenewalOfSubscriptionData.SubscriptionData>() {
                                 @Override
                                 public void call(final RenewalOfSubscriptionData.SubscriptionData subscriptionData) {
                                     new ReportPaymentRequest(
                                             new OkAuthorizer().getOkAuthObj(App.getAppSocialAppsIds()),
-                                            subscriptionData.orderId,
-                                            subscriptionData.amount,
-                                            subscriptionData.currency)
+                                            subscriptionData.getOrderId(),
+                                            subscriptionData.getAmount(),
+                                            subscriptionData.getCurrency())
                                             .getObservable()
                                             .subscribe(new Action1<ReportPaymentData>() {
                                                 @Override
@@ -89,7 +101,7 @@ public class PurchasesEvents {
                                                     } else {
                                                         ReportPaymentStatistics.sendFail();
                                                     }
-                                                    new OkMarkRenewalAsSentRequest(context, subscriptionData.orderId).exec();
+                                                    new OkMarkRenewalAsSentRequest(context, subscriptionData.getOrderId()).exec();
                                                 }
                                             }, new Action1<Throwable>() {
                                                 @Override
@@ -104,7 +116,7 @@ public class PurchasesEvents {
                                     Debug.error("ReportPaymentRequest error " + throwable);
                                     ReportPaymentStatistics.sendFail();
                                 }
-                            });
+                            }));
                 }
             }
 

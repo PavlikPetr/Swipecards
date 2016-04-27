@@ -3,12 +3,28 @@ package com.topface.topface.data;
 import java.util.ArrayList;
 
 public class RenewalOfSubscriptionData {
-    public ArrayList<SubscriptionData> renewals;
+    private ArrayList<SubscriptionData> renewals;
+
+    public ArrayList<SubscriptionData> getRenewals() {
+        return renewals;
+    }
 
     public class SubscriptionData {
-        public String orderId;
-        public double amount;
-        public String currency;
+        private String orderId;
+        private double amount;
+        private String currency;
+
+        public String getOrderId() {
+            return orderId;
+        }
+
+        public double getAmount() {
+            return amount;
+        }
+
+        public String getCurrency() {
+            return currency;
+        }
 
         @Override
         public boolean equals(Object o) {

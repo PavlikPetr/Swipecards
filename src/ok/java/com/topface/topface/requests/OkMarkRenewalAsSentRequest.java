@@ -2,6 +2,8 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
+import com.topface.framework.utils.Debug;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,15 +16,17 @@ public class OkMarkRenewalAsSentRequest extends ApiRequest {
 
     private String[] mIds;
 
-    public OkMarkRenewalAsSentRequest(Context context, String id) {
+    public OkMarkRenewalAsSentRequest(Context context, String... id) {
         super(context);
-        mIds = new String[]{id};
+        mIds = id;
     }
 
     @Override
     public void exec() {
         if (mIds != null && mIds.length > 0) {
             super.exec();
+        } else {
+            Debug.error("Subscriptions array are empty, request canceled");
         }
     }
 
