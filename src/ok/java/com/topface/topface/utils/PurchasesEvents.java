@@ -56,7 +56,7 @@ public class PurchasesEvents {
         new OkGetRenewalOfSubscriptionsRequest(context).callback(new DataApiHandler<RenewalOfSubscriptionData>() {
             @Override
             public void fail(int codeError, IApiResponse response) {
-
+                Debug.log("OkGetRenewalOfSubscriptionsRequest return fail");
             }
 
             @Override

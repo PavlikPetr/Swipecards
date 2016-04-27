@@ -1,10 +1,7 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
@@ -13,7 +10,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -52,7 +48,6 @@ import com.topface.topface.utils.CustomViewNotificationController;
 import com.topface.topface.utils.IActionbarNotifier;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.PopupManager;
-import com.topface.topface.utils.PurchasesEvents;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
@@ -120,16 +115,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
     };
 
-    private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (CacheProfile.age < App.getAppOptions().getUserAgeMin()) {
-                SetAgeDialog.newInstance().show(getSupportFragmentManager(), SetAgeDialog.TAG);
-            }
-            new PurchasesEvents().checkRenewSubscription(NavigationActivity.this.getApplicationContext());
-        }
-    };
-
     /**
      * Перезапускает NavigationActivity, нужно например при смене языка
      *
@@ -162,6 +147,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     protected void setActionBarView() {
         actionBarView.setLeftMenuView();
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -383,7 +369,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (mFullscreenController != null) {
             mFullscreenController.onPause();
         }
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mProfileUpdateReceiver);
     }
 
     @Override
@@ -408,8 +393,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             LocaleConfig.localeChangeInitiated = false;
         }
         App.checkProfileUpdate();
-        LocalBroadcastManager.getInstance(this)
-                .registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
 
     @Override
@@ -423,6 +406,9 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     @Override
     protected void onProfileUpdated() {
+        if (CacheProfile.age < App.getAppOptions().getUserAgeMin()) {
+            SetAgeDialog.newInstance().show(getSupportFragmentManager(), SetAgeDialog.TAG);
+        }
         initBonusCounterConfig();
         // возможно что содержимое меню поменялось, надо обновить
         if (mMenuFragment != null) {
