@@ -93,7 +93,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         }
     };
     Photos mPhotos = null;
-    private String mGreetingText;
+    private String mGreetingText = Utils.EMPTY;
     private boolean mIsKeyBoardShown;
 
     @Bind(R.id.user_photos_grid)
@@ -107,7 +107,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         ButterKnife.bind(this);
         App.from(this).inject(this);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
-        mGreetingText = Utils.EMPTY;
         if (savedInstanceState != null) {
             mPhotos = JsonUtils.fromJson(savedInstanceState.getString(PHOTOS), Photos.class);
             mSelectedPosition = savedInstanceState.getInt(SELECTED_POSITION, 0);

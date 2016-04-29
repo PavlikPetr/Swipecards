@@ -361,8 +361,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
     }
 
     private TextView getGiftsCounterTextView() {
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-        return (TextView) (inflater.inflate(R.layout.remained_gifts_counter,
+        return (TextView) (LayoutInflater.from(getActivity()).inflate(R.layout.remained_gifts_counter,
                 mGiftsHeader, true)).findViewById(R.id.textGiftsCounter);
     }
 
