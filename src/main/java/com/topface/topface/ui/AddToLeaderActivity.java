@@ -11,7 +11,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -66,10 +65,13 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     public final static int ADD_TO_LEADER_ACTIVITY_ID = 1;
     @Inject
     TopfaceAppState mAppState;
-    private static final String PHOTOS = "PHOTOS";
-    private static final String SELECTED_POSITION = "SELECTED_POSITION";
-    private static final String ALREADY_SHOWN = "ALREADY_SHOWN";
+    private static final String PHOTOS = "photos";
+    private static final String SELECTED_POSITION = "selected_position";
+    private static final String ALREADY_SHOWN = "already_shown";
     private static final String PAGE_NAME = "adtoleader";
+    private static final String GREETING_TEXT = "greeting_text";
+    private static final String IS_KEY_BOARD_SHOW = "is_key_board_show";
+
     private static final int MAX_SYMBOL_COUNT = 120;
     private int mCoins;
     private Action1<BalanceData> mBalanceAction = new Action1<BalanceData>() {
@@ -91,6 +93,8 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         }
     };
     Photos mPhotos = null;
+    private String mGreetingText;
+    private boolean mIsKeyBoardShown;
 
     @Bind(R.id.user_photos_grid)
     RecyclerView mRecyclerView;
@@ -99,17 +103,17 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        }
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         App.from(this).inject(this);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
+        mGreetingText = Utils.EMPTY;
         if (savedInstanceState != null) {
             mPhotos = JsonUtils.fromJson(savedInstanceState.getString(PHOTOS), Photos.class);
             mSelectedPosition = savedInstanceState.getInt(SELECTED_POSITION, 0);
             mIsPhotoDialogShown = savedInstanceState.getBoolean(ALREADY_SHOWN);
+            mGreetingText = savedInstanceState.getString(GREETING_TEXT);
+            mIsKeyBoardShown = savedInstanceState.getBoolean(IS_KEY_BOARD_SHOW, false);
         }
         // add title to actionbar
         new ActionBarTitleSetterDelegate(getSupportActionBar()).setActionBarTitles(R.string.general_photoblog, null);
@@ -185,11 +189,23 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         }
         outState.putInt(SELECTED_POSITION, mSelectedPosition);
         outState.putBoolean(ALREADY_SHOWN, mIsPhotoDialogShown);
+        outState.putString(GREETING_TEXT, mEditText != null ? mEditText.getText().toString() : Utils.EMPTY);
+        outState.putBoolean(IS_KEY_BOARD_SHOW, mEditText != null && mEditText.hasFocus());
     }
 
     private View createHeaderView() {
         View headerView = getLayoutInflater().inflate(R.layout.add_leader_grid_view_header, null);
         mEditText = (EditText) headerView.findViewById(R.id.yourGreetingEditText);
+        mEditText.setText(mGreetingText);
+        if (mIsKeyBoardShown) {
+            mEditText.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Utils.showSoftKeyboard(AddToLeaderActivity.this.getApplicationContext(), mEditText);
+                    mEditText.setSelection(mGreetingText.length());
+                }
+            }, 200);
+        }
         // set max symbol count for input status
         mEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_SYMBOL_COUNT)});
         initButtons(headerView);
