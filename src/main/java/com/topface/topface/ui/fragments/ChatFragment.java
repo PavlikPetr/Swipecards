@@ -242,13 +242,16 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         super.onAttach(context);
         mUserType = getArguments().getInt(ChatFragment.USER_TYPE);
         // do not recreate Adapter cause of setRetainInstance(true)
-        if (mAdapter == null) {
+        if (mAdapter == null || mAnimatedAdapter == null) {
             mAdapter = new ChatListAdapter((IActivityDelegate) getActivity(), new FeedList<History>(), getUpdaterCallback(), new ChatListAdapter.OnBuyVipButtonClick() {
                 @Override
                 public void onClick() {
                     startBuyVipActivity(AUTO_REPLY_MESSAGE_SOURCE);
                 }
             });
+            mAnimatedAdapter = new ChatListAnimatedAdapter(new HackBaseAdapterDecorator(mAdapter));
+        } else {
+            mAdapter.updateActivityDelegate((IActivityDelegate) getActivity());
         }
         Bundle args = getArguments();
         mItemId = args.getString(INTENT_ITEM_ID);
@@ -415,7 +418,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mMessage = savedInstanceState.getString(MESSAGE);
                 setSavedMessage(mMessage);
                 mKeyboardWasShown = savedInstanceState.getBoolean(SOFT_KEYBOARD_LOCK_STATE);
-                boolean wasFailed = savedInstanceState.getBoolean(WAS_FAILED);
+                wasFailed = savedInstanceState.getBoolean(WAS_FAILED);
                 ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
                 mHistoryFeedList = savedInstanceState.getParcelableArrayList(HISTORY_CHAT);
                 FeedList<History> historyData = new FeedList<>();
@@ -430,7 +433,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mUser = JsonUtils.fromJson(savedInstanceState.getString(FRIEND_FEED_USER), FeedUser.class);
                 invalidateUniversalUser();
                 initOverflowMenuActions(getOverflowMenu());
-                setLockScreenVisibility(wasFailed);
                 mBackgroundController.hide();
             } catch (Exception | OutOfMemoryError e) {
                 Debug.error(e);
@@ -463,7 +465,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 update(true, ChatUpdateType.PULL_TO_REFRESH);
             }
         });
-        mAnimatedAdapter = new ChatListAnimatedAdapter(new HackBaseAdapterDecorator(mAdapter));
         mAnimatedAdapter.setAbsListView(mListView.getRefreshableView());
         mListView.setAdapter(mAnimatedAdapter);
 
@@ -1061,6 +1062,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
             @Override
             public void fail(int codeError, IApiResponse response) {
+                if (codeError == ErrorCodes.ERRORS_PROCESSED) {
+                    messageItem.setLoaderTypeFlags(IListLoader.ItemType.REPEAT);
+                }
                 if (codeError == ErrorCodes.PREMIUM_ACCESS_ONLY) {
                     mMessage = mAdapter.getData().get(0).text;
                     mAdapter.removeLastItem();
@@ -1088,8 +1092,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 , TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(new Action1<Long>() {
             @Override
             public void call(Long aLong) {
-                if (isAdded() && !wasFailed && mUserId > 0) {
-                    Debug.log("fucking_timer tick");
+                Debug.log("fucking_timer tick");
+                if (isAdded() && !wasFailed && mUserId > 0 && App.isOnline()) {
                     update(true, ChatUpdateType.TIMER);
                 }
             }

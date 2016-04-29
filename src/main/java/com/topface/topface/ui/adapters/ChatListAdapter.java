@@ -315,6 +315,9 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
                         @Override
                         public void onClick(View v) {
                             ApiRequest request = mHashRequestByWaitingRetryItem.get(item);
+                            if (request == null) {
+                                return;
+                            }
                             resendCanceledRequest(request);
                             mHashRequestByWaitingRetryItem.remove(item);
                             item.setLoaderTypeFlags(IListLoader.ItemType.WAITING);
