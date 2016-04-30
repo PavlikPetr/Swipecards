@@ -669,4 +669,3 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         return mUserOptionsObtainedFromServer;
     }
 }
-

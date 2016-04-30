@@ -63,7 +63,9 @@ public class RateController {
 
             @Override
             protected void success(Rate rate, IApiResponse response) {
-                FlurryManager.getInstance().sendSpendCoinsEvent(App.get().getOptions().priceAdmiration, SEND_ADMIRATION);
+                if (sendLike.getServiceName().equals(SendAdmirationRequest.service)) {
+                    FlurryManager.getInstance().sendSpendCoinsEvent(CacheProfile.getOptions().priceAdmiration, SEND_ADMIRATION);
+                }
                 if (listener != null) {
                     listener.onRateCompleted(sendLike.getMutualid());
                 }
