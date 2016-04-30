@@ -56,7 +56,7 @@ public class PurchasesUtils {
         // если покупка триальная или тестовая, то во Flurry уйдет событие со стоимостью "0"
         FlurryManager.getInstance().sendPurchaseEvent(productId, isTrial || isTestPurchase ? 0 : price, currencyCode);
         if (!isTestPurchase && !isTrial) {
-            PurchasesEvents.purchaseSuccess(productsCount, productType, productId, currencyCode, price, transactionId);
+            new PurchasesEvents().purchaseSuccess(productsCount, productType, productId, currencyCode, price, transactionId);
         }
         if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK) && !isTestPurchase && !isTrial) {
             FbAuthorizer.initFB();

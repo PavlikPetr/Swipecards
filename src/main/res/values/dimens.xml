@@ -84,6 +84,8 @@
     <dimen name="button_description_text_size">13sp</dimen>
     <dimen name="default_purchase_button_container_padding">5dp</dimen>
     <dimen name="default_purchase_button_container_padding_top">56dp</dimen>
+    <!--add margin between buttons on retry view-->
+    <dimen name="retry_view_button_margin_bottom">8dp</dimen>
     <dimen name="user_gifts_padding">12dp</dimen>
 
     <!-- Restore account screen -->
