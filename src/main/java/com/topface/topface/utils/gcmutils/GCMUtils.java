@@ -116,6 +116,7 @@ public class GCMUtils {
         new RegistrationTokenRequest(token, mContext).callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
+                Debug.log("GCM: OK send token ");
                 storeToken(token);
             }
 
@@ -367,7 +368,8 @@ public class GCMUtils {
                     // add the same request code like Chat intent
                     i.putExtra(App.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
                 } else {
-                    return ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city, null, null, true, null);
+                    return ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city,
+                            null, null, true, null, false);
                 }
                 return i;
             }
@@ -375,7 +377,7 @@ public class GCMUtils {
         return null;
     }
 
-    private static Intent getIntentByType(Context context, int type, User user, String updateUrl) {
+    private static Intent getIntentByType(Context context, int type, User user, String ё) {
         Intent i = null;
         switch (type) {
             case GCM_TYPE_MESSAGE:

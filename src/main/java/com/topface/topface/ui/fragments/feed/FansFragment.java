@@ -118,6 +118,6 @@ public class FansFragment extends BookmarksFragment {
 
     @Override
     protected int getUnreadCounter() {
-        return mCountersData.fans;
+        return mCountersData.getFans();
     }
 }

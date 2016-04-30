@@ -172,15 +172,15 @@ public class MenuFragment extends Fragment {
             }
             if (getActivity() != null) {
                 Intent intent = getActivity().getIntent();
-                if (intent != null &&
-                        intent.getSerializableExtra(GCMUtils.NEXT_INTENT) != null) {
+                if (intent != null && intent.hasExtra(GCMUtils.NEXT_INTENT)) {
                     Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment from activity intent.");
                     switchFragment((FragmentSettings) intent.getParcelableExtra(GCMUtils.NEXT_INTENT), false);
                     return;
+                } else {
+                    switchFragment(CacheProfile.getOptions().startPageFragmentSettings, false);
                 }
             }
             Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment to default from onCreate().");
-            switchFragment(App.get().getOptions().startPage, false);
         }
     }
 
@@ -252,7 +252,7 @@ public class MenuFragment extends Fragment {
                     .map(new Func1<CountersData, CountersData>() {
                         @Override
                         public CountersData call(CountersData countersData) {
-                            countersData.bonus = CacheProfile.needShowBonusCounter ? options.bonus.counter : 0;
+                            countersData.setBonus(CacheProfile.needShowBonusCounter ? options.bonus.counter : 0);
                             return countersData;
                         }
                     })
@@ -403,10 +403,11 @@ public class MenuFragment extends Fragment {
     public void selectMenu(FragmentSettings fragmentSettings) {
         String url = getWebUrl(fragmentSettings);
         boolean isUrlNotEmpty = !TextUtils.isEmpty(url);
-        if (fragmentSettings != mSelectedFragment && !isUrlNotEmpty) {
-            Debug.log("MenuFragment: Switch fragment in selectMenu().");
-            switchFragment(fragmentSettings, true);
-        } else if (mOnFragmentSelected != null) {
+        if (fragmentSettings != mSelectedFragment) {
+            if (!isUrlNotEmpty) {
+                Debug.log("MenuFragment: Switch fragment in selectMenu().");
+                switchFragment(fragmentSettings, true);
+            }
             mOnFragmentSelected.onFragmentSelected(fragmentSettings);
         }
         if (isUrlNotEmpty) {
@@ -434,10 +435,10 @@ public class MenuFragment extends Fragment {
      * @param newFragmentSettings id of fragment that is going to be shown
      */
     private void switchFragment(FragmentSettings newFragmentSettings, boolean executePending) {
-        if (newFragmentSettings == null) {
+        FragmentManager fragmentManager = getFragmentManager();
+        if (newFragmentSettings == null || fragmentManager == null) {
             return;
         }
-        FragmentManager fragmentManager = getFragmentManager();
         Fragment oldFragment = fragmentManager.findFragmentById(R.id.fragment_content);
         String fragmentTag = getTagById(newFragmentSettings);
         Debug.log("MenuFragment: Try switch to fragment with tag " + fragmentTag + " (old fragment " + mSelectedFragment + ")");

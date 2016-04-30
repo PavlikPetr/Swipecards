@@ -1,12 +1,26 @@
 package com.topface.topface.utils;
 
+import android.content.Context;
+
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.data.RenewalOfSubscriptionData;
 import com.topface.topface.data.ReportPaymentData;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.OkGetRenewalOfSubscriptionsRequest;
+import com.topface.topface.requests.OkMarkRenewalAsSentRequest;
 import com.topface.topface.statistics.ReportPaymentStatistics;
 import com.topface.topface.utils.social.OkAuthorizer;
 
+import rx.Observable;
+import rx.functions.Action0;
 import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by ppavlik on 05.04.16.
@@ -14,23 +28,101 @@ import rx.functions.Action1;
  */
 public class PurchasesEvents {
 
-    public static void purchaseSuccess(int productsCount, String productType, String productId, String currencyCode, double price, String transactionId) {
-        new ReportPaymentRequest(new OkAuthorizer().getOkAuthObj(App.getAppSocialAppsIds()), transactionId, price, currencyCode).getObservable().subscribe(new Action1<ReportPaymentData>() {
+    public void purchaseSuccess(@SuppressWarnings("UnusedParameters") int productsCount,
+                                @SuppressWarnings("UnusedParameters") String productType,
+                                @SuppressWarnings("UnusedParameters") String productId,
+                                String currencyCode, double price, String transactionId) {
+        new ReportPaymentRequest(
+                new OkAuthorizer().getOkAuthObj(App.getAppSocialAppsIds()),
+                transactionId,
+                price,
+                currencyCode)
+                .getObservable()
+                .subscribe(new Action1<ReportPaymentData>() {
+                    @Override
+                    public void call(ReportPaymentData result) {
+                        Debug.log("ReportPaymentRequest success " + result.isSuccess());
+                        if (result.isSuccess()) {
+                            ReportPaymentStatistics.sendSuccess();
+                        } else {
+                            ReportPaymentStatistics.sendFail();
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Debug.error("ReportPaymentRequest error " + throwable);
+                        ReportPaymentStatistics.sendFail();
+                    }
+                });
+    }
+
+    public void checkRenewSubscription(final Context context) {
+        new OkGetRenewalOfSubscriptionsRequest(context).callback(new DataApiHandler<RenewalOfSubscriptionData>() {
             @Override
-            public void call(ReportPaymentData result) {
-                Debug.log("ReportPaymentRequest success " + result.isSuccess());
-                if (result.isSuccess()) {
-                    ReportPaymentStatistics.sendSuccess();
-                } else {
-                    ReportPaymentStatistics.sendFail();
+            public void fail(int codeError, IApiResponse response) {
+                Debug.log("OkGetRenewalOfSubscriptionsRequest return fail");
+            }
+
+            @Override
+            protected void success(RenewalOfSubscriptionData data, IApiResponse response) {
+                if (data != null && data.getRenewals() != null && data.getRenewals().size() > 0) {
+                    final CompositeSubscription subscription = new CompositeSubscription();
+                    subscription.add(Observable.from(data.getRenewals()).subscribeOn(Schedulers.newThread())
+                            .observeOn(Schedulers.newThread())
+                            .filter(new Func1<RenewalOfSubscriptionData.SubscriptionData, Boolean>() {
+                                @Override
+                                public Boolean call(RenewalOfSubscriptionData.SubscriptionData subscriptionData) {
+                                    return subscriptionData != null;
+                                }
+                            }).doOnCompleted(new Action0() {
+                                @Override
+                                public void call() {
+                                    //noinspection ConstantConditions
+                                    if (subscription != null) {
+                                        subscription.unsubscribe();
+                                    }
+                                }
+                            }).subscribe(new Action1<RenewalOfSubscriptionData.SubscriptionData>() {
+                                @Override
+                                public void call(final RenewalOfSubscriptionData.SubscriptionData subscriptionData) {
+                                    new ReportPaymentRequest(
+                                            new OkAuthorizer().getOkAuthObj(App.getAppSocialAppsIds()),
+                                            subscriptionData.getOrderId(),
+                                            subscriptionData.getAmount(),
+                                            subscriptionData.getCurrency())
+                                            .getObservable()
+                                            .subscribe(new Action1<ReportPaymentData>() {
+                                                @Override
+                                                public void call(ReportPaymentData reportPaymentData) {
+                                                    Debug.log("ReportPaymentRequest success " + reportPaymentData.isSuccess());
+                                                    if (reportPaymentData.isSuccess()) {
+                                                        ReportPaymentStatistics.sendSuccess();
+                                                        new OkMarkRenewalAsSentRequest(context, subscriptionData.getOrderId()).exec();
+                                                    } else {
+                                                        ReportPaymentStatistics.sendFail();
+                                                    }
+                                                }
+                                            }, new Action1<Throwable>() {
+                                                @Override
+                                                public void call(Throwable throwable) {
+                                                    Debug.error("ReportPaymentRequest error " + throwable);
+                                                    ReportPaymentStatistics.sendFail();
+                                                }
+                                            });
+                                }
+                            }, new Action1<Throwable>() {
+                                @Override
+                                public void call(Throwable throwable) {
+                                }
+                            }));
                 }
             }
-        }, new Action1<Throwable>() {
+
             @Override
-            public void call(Throwable throwable) {
-                Debug.error("ReportPaymentRequest error " + throwable);
-                ReportPaymentStatistics.sendFail();
+            protected RenewalOfSubscriptionData parseResponse(ApiResponse response) {
+                return JsonUtils.fromJson(response.jsonResult.toString(), RenewalOfSubscriptionData.class);
             }
-        });
+        }).exec();
     }
 }

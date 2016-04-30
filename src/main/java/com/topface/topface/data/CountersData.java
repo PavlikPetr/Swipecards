@@ -3,43 +3,116 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Counters data
  * Created by onikitin on 24.06.15.
  */
 public class CountersData implements Parcelable {
 
-    public int likes = 0;
-    public int mutual = 0;
-    public int dialogs = 0;
-    public int visitors = 0;
-    public int fans = 0;
-    public int admirations = 0;
-    public int peopleNearby = 0;
-    public int bonus = 0;
+    private int mBonus = 0;
+    @SerializedName(value = "likes", alternate = "unread_likes")
+    private int mLikes = 0;
+    @SerializedName(value = "mutual", alternate = "unread_symphaties")
+    private int mMutual = 0;
+    @SerializedName(value = "dialogs", alternate = "unread_messages")
+    private int mDialogs = 0;
+    @SerializedName(value = "visitors", alternate = "unread_visitors")
+    private int mVisitors = 0;
+    @SerializedName(value = "fans", alternate = "unread_fans")
+    private int mFans = 0;
+    @SerializedName(value = "admirations", alternate = "unread_admirations")
+    private int mAdmirations = 0;
+    @SerializedName(value = "peopleNearby", alternate = "unread_people_nearby")
+    private int mPeopleNearby = 0;
 
     public CountersData(CountersData countersData) {
-        this.likes = countersData.likes;
-        this.mutual = countersData.mutual;
-        this.dialogs = countersData.dialogs;
-        this.visitors = countersData.visitors;
-        this.fans = countersData.fans;
-        this.admirations = countersData.admirations;
-        this.peopleNearby = countersData.peopleNearby;
+        setLikes(countersData.getLikes());
+        setMutual(countersData.getMutual());
+        setDialogs(countersData.getDialogs());
+        setVisitors(countersData.getVisitors());
+        setFans(countersData.getFans());
+        setAdmirations(countersData.getAdmirations());
+        setPeopleNearby(countersData.getPeopleNearby());
     }
 
     public CountersData() {
     }
 
     protected CountersData(Parcel in) {
-        likes = in.readInt();
-        mutual = in.readInt();
-        dialogs = in.readInt();
-        visitors = in.readInt();
-        fans = in.readInt();
-        admirations = in.readInt();
-        peopleNearby = in.readInt();
-        bonus = in.readInt();
+        setLikes(in.readInt());
+        setMutual(in.readInt());
+        setDialogs(in.readInt());
+        setVisitors(in.readInt());
+        setFans(in.readInt());
+        setAdmirations(in.readInt());
+        setPeopleNearby(in.readInt());
+        setBonus(in.readInt());
+    }
+
+    public void setBonus(int bonus) {
+        mBonus = bonus;
+    }
+
+    public void setLikes(int likes) {
+        mLikes = likes;
+    }
+
+    public void setMutual(int mutual) {
+        mMutual = mutual;
+    }
+
+    public void setDialogs(int dialogs) {
+        mDialogs = dialogs;
+    }
+
+    public void setFans(int fans) {
+        mFans = fans;
+    }
+
+    public void setAdmirations(int admirations) {
+        mAdmirations = admirations;
+    }
+
+    public void setPeopleNearby(int peopleNearby) {
+        mPeopleNearby = peopleNearby;
+    }
+
+    public void setVisitors(int visitors) {
+        mVisitors = visitors;
+    }
+
+    public int getBonus() {
+        return mBonus;
+    }
+
+    public int getLikes() {
+        return mLikes;
+    }
+
+    public int getMutual() {
+        return mMutual;
+    }
+
+    public int getDialogs() {
+        return mDialogs;
+    }
+
+    public int getVisitors() {
+        return mVisitors;
+    }
+
+    public int getFans() {
+        return mFans;
+    }
+
+    public int getAdmirations() {
+        return mAdmirations;
+    }
+
+    public int getPeopleNearby() {
+        return mPeopleNearby;
     }
 
     public static final Creator<CountersData> CREATOR = new Creator<CountersData>() {
@@ -61,36 +134,36 @@ public class CountersData implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(likes);
-        dest.writeInt(mutual);
-        dest.writeInt(dialogs);
-        dest.writeInt(visitors);
-        dest.writeInt(fans);
-        dest.writeInt(admirations);
-        dest.writeInt(peopleNearby);
-        dest.writeInt(bonus);
+        dest.writeInt(getLikes());
+        dest.writeInt(getMutual());
+        dest.writeInt(getDialogs());
+        dest.writeInt(getVisitors());
+        dest.writeInt(getFans());
+        dest.writeInt(getAdmirations());
+        dest.writeInt(getPeopleNearby());
+        dest.writeInt(getBonus());
     }
 
     public int getCounterByFragmentId(FragmentSettings id) {
         switch (id.getFragmentId()) {
             case TABBED_DIALOGS:
-                return dialogs;
+                return getDialogs();
             case TABBED_VISITORS:
-                return visitors + fans;
+                return getVisitors() + getFans();
             case TABBED_LIKES:
-                return likes + mutual + admirations;
+                return getLikes() + getMutual() + getAdmirations();
             case GEO:
-                return peopleNearby;
+                return getPeopleNearby();
             case BONUS:
-                return bonus;
+                return getBonus();
         }
         return -1;
     }
 
     @SuppressWarnings("unused")
     public boolean isNotEmpty() {
-        return likes != 0 || mutual != 0 || dialogs != 0 || visitors != 0
-                || fans != 0 || admirations != 0 || peopleNearby != 0;
+        return getLikes() != 0 || getMutual() != 0 || getDialogs() != 0 || getVisitors() != 0
+                || getFans() != 0 || getAdmirations() != 0 || getPeopleNearby() != 0;
     }
 
     @Override
@@ -98,26 +171,29 @@ public class CountersData implements Parcelable {
         if (obj == null) {
             return false;
         }
+        if (!(obj instanceof CountersData)) {
+            return false;
+        }
         CountersData data = (CountersData) obj;
-        return data.likes == likes &&
-                data.mutual == mutual &&
-                data.dialogs == dialogs &&
-                data.visitors == visitors &&
-                data.fans == fans &&
-                data.admirations == admirations &&
-                data.peopleNearby == peopleNearby;
+        return data.getLikes() == getLikes() &&
+                data.getMutual() == getMutual() &&
+                data.getDialogs() == getDialogs() &&
+                data.getVisitors() == getVisitors() &&
+                data.getFans() == getFans() &&
+                data.getAdmirations() == getAdmirations() &&
+                data.getPeopleNearby() == getPeopleNearby();
     }
 
     @Override
     public int hashCode() {
         int hash = 1;
-        hash = hash * 31 + likes;
-        hash = hash * 31 + mutual;
-        hash = hash * 31 + dialogs;
-        hash = hash * 31 + visitors;
-        hash = hash * 31 + fans;
-        hash = hash * 31 + admirations;
-        hash = hash * 31 + peopleNearby;
+        hash = hash * 31 + getLikes();
+        hash = hash * 31 + getMutual();
+        hash = hash * 31 + getDialogs();
+        hash = hash * 31 + getVisitors();
+        hash = hash * 31 + getFans();
+        hash = hash * 31 + getAdmirations();
+        hash = hash * 31 + getPeopleNearby();
         return hash;
     }
 }

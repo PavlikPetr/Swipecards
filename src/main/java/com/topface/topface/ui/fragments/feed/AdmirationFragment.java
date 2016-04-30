@@ -69,7 +69,7 @@ public class AdmirationFragment extends LikesFragment {
         @FlipperChild int pos = FIRST_CHILD;
         View.OnClickListener buttonClick;
         //Vip, есть восхищения - показываем восхищения
-        if (mCountersData.admirations > 0 && mBalanceData.premium) {
+        if (mCountersData.getAdmirations() > 0 && mBalanceData.premium) {
             mStubFlipper.setVisibility(View.GONE);
             return;
         }
@@ -104,8 +104,8 @@ public class AdmirationFragment extends LikesFragment {
             case SECOND_CHILD:
                 mStubFlipper.setDisplayedChild(SECOND_CHILD);
                 setUnlockButtonView(getUnlockButtonView(SECOND_CHILD));
-                int curCounter = mCountersData.admirations != 0 ? mCountersData.admirations
-                        : App.get().getOptions().premiumAdmirations.getCount();
+                int admirations = mCountersData.getAdmirations();
+                int curCounter = admirations != 0 ? admirations : App.get().getOptions().premiumAdmirations.getCount();
                 if (curCounter != 0) {
                     ((TextView) inflated.findViewById(R.id.tvTitle)).setText(Utils.getQuantityString(R.plurals.popup_vip_admirations, curCounter, curCounter));
                 }
@@ -166,7 +166,7 @@ public class AdmirationFragment extends LikesFragment {
 
     @Override
     protected int getUnreadCounter() {
-        return mCountersData.admirations;
+        return mCountersData.getAdmirations();
     }
 
     @Override

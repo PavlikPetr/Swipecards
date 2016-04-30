@@ -131,6 +131,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private static final String SEND_MESSAGE_SOURCE = "SendMessage";
     private static final String PAGE_NAME = "Chat";
     public static final String GIFT_DATA = "gift_data";
+    public static final String BANNED_USER = "banned_user";
 
     private int mUserId;
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
@@ -155,7 +156,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private EditText mEditBox;
     private String mItemId;
     private String mInitialMessage;
-    private boolean wasFailed = false;
+    private boolean mWasFailed = false;
     private AddPhotoHelper mAddPhotoHelper;
     private boolean mIsNeedShowAddPhoto = true;
     private Handler mHandler = new Handler() {
@@ -164,13 +165,13 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             AddPhotoHelper.handlePhotoMessage(msg);
         }
     };
-    private int mMaxMessageSize = App.get().getOptions().maxMessageSize;
     private RelativeLayout mLockScreen;
     private PopularUserChatController mPopularUserLockController;
     private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
     private String mUserCity;
     private String mUserNameAndAge;
     private Photo mPhoto;
+    private boolean mIsBanned;
     private TextView.OnEditorActionListener mEditorActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -237,8 +238,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         mUserType = getArguments().getInt(ChatFragment.USER_TYPE);
         // do not recreate Adapter cause of setRetainInstance(true)
         if (mAdapter == null) {
@@ -248,6 +249,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     startBuyVipActivity(AUTO_REPLY_MESSAGE_SOURCE);
                 }
             });
+            mAnimatedAdapter = new ChatListAnimatedAdapter(new HackBaseAdapterDecorator(mAdapter));
+        } else {
+            mAdapter.updateActivityDelegate((IActivityDelegate) getActivity());
         }
         Bundle args = getArguments();
         mItemId = args.getString(INTENT_ITEM_ID);
@@ -256,6 +260,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         mUserNameAndAge = args.getString(INTENT_USER_NAME_AND_AGE);
         mInitialMessage = args.getString(INITIAL_MESSAGE);
         mPhoto = args.getParcelable(INTENT_AVATAR);
+        mIsBanned = args.getBoolean(BANNED_USER);
         SendGiftAnswer sendGiftAnswer = args.getParcelable(GIFT_DATA);
         if (sendGiftAnswer != null) {
             sendGiftAnswer.setLoaderType(IListLoader.ItemType.TEMP_MESSAGE);
@@ -359,7 +364,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        setThrownActionBarAvatar(mPhoto);
+        if (!mIsBanned) {
+            setThrownActionBarAvatar(mPhoto);
+        }
     }
 
     @Override
@@ -411,7 +418,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mMessage = savedInstanceState.getString(MESSAGE);
                 setSavedMessage(mMessage);
                 mKeyboardWasShown = savedInstanceState.getBoolean(SOFT_KEYBOARD_LOCK_STATE);
-                boolean wasFailed = savedInstanceState.getBoolean(WAS_FAILED);
+                mWasFailed = savedInstanceState.getBoolean(WAS_FAILED);
                 ArrayList<History> list = savedInstanceState.getParcelableArrayList(ADAPTER_DATA);
                 mHistoryFeedList = savedInstanceState.getParcelableArrayList(HISTORY_CHAT);
                 FeedList<History> historyData = new FeedList<>();
@@ -426,7 +433,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mUser = JsonUtils.fromJson(savedInstanceState.getString(FRIEND_FEED_USER), FeedUser.class);
                 invalidateUniversalUser();
                 initOverflowMenuActions(getOverflowMenu());
-                setLockScreenVisibility(wasFailed);
                 mBackgroundController.hide();
             } catch (Exception | OutOfMemoryError e) {
                 Debug.error(e);
@@ -459,7 +465,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 update(true, ChatUpdateType.PULL_TO_REFRESH);
             }
         });
-        mAnimatedAdapter = new ChatListAnimatedAdapter(new HackBaseAdapterDecorator(mAdapter));
         mAnimatedAdapter.setAbsListView(mListView.getRefreshableView());
         mListView.setAdapter(mAnimatedAdapter);
 
@@ -585,7 +590,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         if (!TextUtils.isEmpty(mMessage)) {
             outState.putString(MESSAGE, mMessage);
         }
-        outState.putBoolean(WAS_FAILED, wasFailed);
+        outState.putBoolean(WAS_FAILED, mWasFailed);
         outState.putParcelableArrayList(HISTORY_CHAT, mHistoryFeedList);
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
         outState.putBoolean(SOFT_KEYBOARD_LOCK_STATE, mKeyboardWasShown);
@@ -695,7 +700,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         int blockStage = mPopularUserLockController.block(message);
                         if (blockStage == PopularUserChatController.FIRST_STAGE) {
                             mIsUpdating = false;
-                            wasFailed = false;
+                            mWasFailed = false;
                             mUser = data.user;
                             invalidateUniversalUser();
                             if (!mUser.isEmpty()) {
@@ -725,7 +730,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
                 refreshActionBarTitles();
                 getTitleSetter().setOnline(data.user.online);
-                wasFailed = false;
+                mWasFailed = false;
                 mUser = data.user;
                 invalidateUniversalUser();
                 if (!mUser.isEmpty()) {
@@ -768,7 +773,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 if (data == null || data.isEmpty()) {
                     setLockScreenVisibility(true);
                 }
-                wasFailed = true;
+                mWasFailed = true;
             }
 
             @Override
@@ -1057,6 +1062,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
             @Override
             public void fail(int codeError, IApiResponse response) {
+                if (codeError == ErrorCodes.ERRORS_PROCESSED) {
+                    messageItem.setLoaderTypeFlags(IListLoader.ItemType.REPEAT);
+                }
                 if (codeError == ErrorCodes.PREMIUM_ACCESS_ONLY) {
                     mMessage = mAdapter.getData().get(0).text;
                     mAdapter.removeLastItem();
@@ -1084,8 +1092,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 , TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(new Action1<Long>() {
             @Override
             public void call(Long aLong) {
-                if (isAdded() && !wasFailed && mUserId > 0) {
-                    Debug.log("fucking_timer tick");
+                Debug.log("fucking_timer tick");
+                if (isAdded() && !mWasFailed && mUserId > 0 && App.isOnline()) {
                     update(true, ChatUpdateType.TIMER);
                 }
             }

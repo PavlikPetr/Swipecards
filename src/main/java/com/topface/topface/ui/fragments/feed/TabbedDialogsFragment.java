@@ -8,7 +8,7 @@ public class TabbedDialogsFragment extends TabbedFeedFragment {
 
     @Override
     protected void onBeforeCountersUpdate(CountersData countersData) {
-        updatePageCounter(DialogsFragment.class.getName(), countersData.dialogs);
+        updatePageCounter(DialogsFragment.class.getName(), countersData.getDialogs());
     }
 
 
@@ -19,7 +19,7 @@ public class TabbedDialogsFragment extends TabbedFeedFragment {
 
     @Override
     protected void addPages() {
-        addBodyPage(DialogsFragment.class.getName(), getString(R.string.general_dbl_all), mCountersData.dialogs);
+        addBodyPage(DialogsFragment.class.getName(), getString(R.string.general_dbl_all), mCountersData.getDialogs());
         addBodyPage(BookmarksFragment.class.getName(), getString(R.string.general_bookmarks), 0);
     }
 

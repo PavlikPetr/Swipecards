@@ -45,6 +45,8 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
     private static final String GIFTS_COUNT = "GIFTS_COUNT";
     private static final String USER_STATUS = "USER_STATUS";
 
+    private static final String MAX_GIFTS_COUNT_TEXT = "99+";
+
     private AbstractFormListAdapter mFormAdapter;
     private LinearLayout mGiftsHeader;
     private TextView mGiftsCounter;
@@ -79,8 +81,8 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
         mGiftAdapter = new GiftsStripAdapter(activity, new FeedList<FeedGift>(), null);
         mFormAdapter = createFormAdapter(activity);
         mGiftSize = activity.getResources().getDimension(R.dimen.form_gift_size);
-        mGiftsCounterSize = activity.getResources().getDimension(R.dimen.form_gift_counter_size);
         mMetrics = getActivity().getResources().getDisplayMetrics();
+        mGiftsCounterSize = getCounterWidth();
     }
 
     @Override
@@ -216,19 +218,17 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
             }
 
             if (mGiftsCount == -1 && giftsCount >= mVisibleGiftsNumber) {
-                getGiftsCounterTextView().setText(R.string.more);
+                getGiftsCounterView().setText(R.string.more);
             } else if (giftsCount > mVisibleGiftsNumber) {
                 int counter = (giftsCount - mVisibleGiftsNumber);
-                getGiftsCounterTextView().setText(counter <= 99 ? "+" + counter : "99+");
+                getGiftsCounterView().setText(counter <= 99 ? "+" + counter : MAX_GIFTS_COUNT_TEXT);
             }
         }
     }
 
-    private TextView getGiftsCounterTextView() {
+    private TextView getGiftsCounterView() {
         if (mGiftsCounter == null) {
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            mGiftsCounter = (TextView) (inflater.inflate(R.layout.remained_gifts_counter,
-                    mGiftsHeader, true)).findViewById(R.id.textGiftsCounter);
+            mGiftsCounter = getGiftsCounterTextView();
         }
         return mGiftsCounter;
     }
@@ -348,4 +348,21 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
             setUserDataPending(mPendingUserInit.getData());
         }
     }
+
+    // measure max gifts counter width
+    private int getCounterWidth() {
+        TextView textView = getGiftsCounterTextView();
+        textView.setVisibility(View.INVISIBLE);
+        textView.setText(MAX_GIFTS_COUNT_TEXT);
+        int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(mMetrics.widthPixels, View.MeasureSpec.AT_MOST);
+        int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        textView.measure(widthMeasureSpec, heightMeasureSpec);
+        return textView.getMeasuredWidth();
+    }
+
+    private TextView getGiftsCounterTextView() {
+        return (TextView) (LayoutInflater.from(getActivity()).inflate(R.layout.remained_gifts_counter,
+                mGiftsHeader, true)).findViewById(R.id.textGiftsCounter);
+    }
+
 }

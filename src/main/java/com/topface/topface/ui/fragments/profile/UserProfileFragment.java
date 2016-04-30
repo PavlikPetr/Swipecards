@@ -95,6 +95,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
         setIsAddToFavoritsAvailable(args.getBoolean(AbstractProfileFragment.INTENT_IS_ADD_TO_FAVORITS_AVAILABLE));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
@@ -431,7 +432,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
                         if (profile != null) {
                             return ChatActivity.createIntent(profile.uid, profile.getNameAndAge(),
                                     profile.city == null ? "" : profile.city.name,
-                                    null, profile.photo, false, null);
+                                    null, profile.photo, false, null, getUser().banned);
                         }
                         return null;
                     }

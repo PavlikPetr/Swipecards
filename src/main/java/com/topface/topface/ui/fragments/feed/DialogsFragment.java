@@ -234,7 +234,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     protected int getUnreadCounter() {
         // dialogs are not auto-read
-        return mCountersData.dialogs;
+        return mCountersData.getDialogs();
     }
 
     @Override

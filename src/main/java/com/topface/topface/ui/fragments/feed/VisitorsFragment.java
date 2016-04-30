@@ -148,7 +148,7 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
 
     @Override
     protected int getUnreadCounter() {
-        return mCountersData.visitors;
+        return mCountersData.getVisitors();
     }
 
     @Override
