@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -149,7 +150,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private String mMessage;
     private ArrayList<History> mHistoryFeedList;
     private boolean mIsUpdating;
-    private boolean mKeyboardWasShown;
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
     private FeedUser mUser;
@@ -199,6 +199,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private int mUserType;
     private Subscription mUpdateUiSubscription;
     private KeyboardListenerLayout mRootLayout;
+    private boolean mKeyboardWasShown = true;
 
     private enum ChatUpdateType {
         UPDATE_COUNTERS("update counters"), PULL_TO_REFRESH("pull to refresh"), RETRY("retry"),
@@ -219,10 +220,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // временное решение, клавиатуру не показываем при открытии чата
-//        if (!isShowKeyboardInChat()) {
-//            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-//        }
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         DateUtils.syncTime();
         setRetainInstance(true);
@@ -797,12 +794,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         getActivity().setResult(Activity.RESULT_OK, intent);
     }
 
-    private void showKeyboardOnLargeScreen() {
-        if (isShowKeyboardInChat() && mKeyboardWasShown) {
-            Utils.showSoftKeyboard(getActivity(), mEditBox);
-        }
-    }
-
     private void removeOutdatedItems(HistoryListData data) {
         if (!mAdapter.isEmpty() && !data.items.isEmpty()) {
             ArrayList<History> itemsToDelete = new ArrayList<>();
@@ -908,7 +899,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private void showKeyboard() {
-        if (mEditBox != null) {
+        if (mEditBox != null && mKeyboardWasShown) {
             mEditBox.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -916,6 +907,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     showKeyboardOnLargeScreen();
                 }
             }, 200);
+        }
+    }
+
+    private void showKeyboardOnLargeScreen() {
+        if (isShowKeyboardInChat()) {
+            Utils.showSoftKeyboard(getActivity(), mEditBox);
         }
     }
 
@@ -947,6 +944,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         startTimer();
     }
 
+
+    @SuppressLint("SwitchIntDef")
     @Override
     public void onPause() {
         super.onPause();

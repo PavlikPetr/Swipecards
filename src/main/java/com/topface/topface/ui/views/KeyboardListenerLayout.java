@@ -29,10 +29,10 @@ public class KeyboardListenerLayout extends RelativeLayout implements ViewTreeOb
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        if (mCurrentMax == -1) {
+        if (mCurrentMax == -1 || mCurrentMax < getHeight()) {
             mCurrentMax = getHeight();
         }
-        if (h >= mCurrentMax) {
+        if (h >= mCurrentMax && !mKeyboardOpened) {
             Debug.log("ChatKeyboardListener -> skip height " + h);
             return;
         }

@@ -238,7 +238,7 @@
             android:name=".ui.ChatActivity"
             android:parentActivityName=".ui.NavigationActivity"
             android:theme="@style/Theme.Topface.Chat"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="stateAlwaysHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
