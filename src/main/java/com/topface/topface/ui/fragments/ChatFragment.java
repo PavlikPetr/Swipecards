@@ -944,8 +944,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         startTimer();
     }
 
-
-    @SuppressLint("SwitchIntDef")
     @Override
     public void onPause() {
         super.onPause();
