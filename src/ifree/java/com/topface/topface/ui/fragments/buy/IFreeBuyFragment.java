@@ -167,25 +167,18 @@ public class IFreeBuyFragment extends IFreePurchases {
             likesButtons.removeAllViews();
         }
         // sympathies buttons
-        for (final BuyButtonData curButton : likes) {
-            View btnView = Products.setBuyButton(likesButtons, curButton, getActivity(),
-                    new Products.BuyButtonClickListener() {
-                        @Override
-                        public void onClick(String id) {
-                            buyProduct(id, mFrom);
-                            Activity activity = getActivity();
-                            if (activity instanceof PurchasesActivity) {
-                                ((PurchasesActivity) activity).skipBonus();
-                            }
+        new PurchaseButtonList().getButtonsListView(null, likesButtons, likes, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
+            @Override
+            public void onClick(String id, BuyButtonData btnData) {
+                buyProduct(id, mFrom);
+                Activity activity = getActivity();
+                if (activity instanceof PurchasesActivity) {
+                    ((PurchasesActivity) activity).skipBonus();
+                }
 
-                            App.from(getActivity()).getOptions().topfaceOfferwallRedirect.setComplited(true);
-                        }
-                    }
-            );
-            if (btnView != null) {
-                btnView.setTag(curButton);
+                App.from(getActivity()).getOptions().topfaceOfferwallRedirect.setComplited(true);
             }
-        }
+        });
     }
 
     private void initCoinsButtons(View root, LinkedList<BuyButtonData> coins) {
@@ -198,25 +191,18 @@ public class IFreeBuyFragment extends IFreePurchases {
         if (coinsButtonsContainer.getChildCount() > 0) {
             coinsButtonsContainer.removeAllViews();
         }
-        for (final BuyButtonData curButton : coins) {
-            View btnView = Products.setBuyButton(coinsButtonsContainer, curButton, getActivity(),
-                    new Products.BuyButtonClickListener() {
-                        @Override
-                        public void onClick(String id) {
-                            buyProduct(id, mFrom);
-                            Activity activity = getActivity();
-                            if (activity instanceof PurchasesActivity) {
-                                ((PurchasesActivity) activity).skipBonus();
-                            }
+        new PurchaseButtonList().getButtonsListView(null, coinsButtonsContainer, coins, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
+            @Override
+            public void onClick(String id, BuyButtonData btnData) {
+                buyProduct(id, mFrom);
+                Activity activity = getActivity();
+                if (activity instanceof PurchasesActivity) {
+                    ((PurchasesActivity) activity).skipBonus();
+                }
 
-                            App.from(getActivity()).getOptions().topfaceOfferwallRedirect.setComplited(true);
-                        }
-                    }
-            );
-            if (btnView != null) {
-                btnView.setTag(curButton);
+                App.from(getActivity()).getOptions().topfaceOfferwallRedirect.setComplited(true);
             }
-        }
+        });
         coinsButtonsContainer.requestLayout();
     }
 

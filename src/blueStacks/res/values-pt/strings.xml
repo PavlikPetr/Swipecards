@@ -750,7 +750,7 @@
   <string name="settings_check_vip_alert">O teu pedido para verificar o teu estatuto VIP foi enviado.</string>
   <string name="novice_sympathy">Envia gostos apenas às pessoas\npor quem te sentes
         atraído(a).\nPodes encontrar alguém especial!</string>
-  <string name="go_dating_message">Começa a namorar e vê quem viu o teu perfil aqui</string>
+  <string name="go_dating_message">Começa a conhecer pessoas e aqui irão aparecer os nomes dos utilizadores que viram o teu perfil.</string>
   <string name="photo_not_from_main_album">Um moderador decidiu que esta foto não pode ser usada como foto de perfil.</string>
   <string name="sidebar_vk_profile">Perfil VK</string>
   <string name="title_vk_profile">Perfil VK</string>
@@ -806,4 +806,5 @@
   <string name="crown_liberty_description">Destaca-te facilmente na Pesquisa e nas Mensagens</string>
   <string name="like_liberty_title">Gostos</string>
   <string name="like_liberty_description">Vê quem gosta de ti</string>
+  <string name="refill_balance_view_title">A tua conta</string>
 </resources>

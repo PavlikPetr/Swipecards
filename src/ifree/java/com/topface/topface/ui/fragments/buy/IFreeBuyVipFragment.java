@@ -189,16 +189,12 @@ public class IFreeBuyVipFragment extends IFreePurchases implements OnClickListen
         if (btnContainer.getChildCount() > 0) {
             btnContainer.removeAllViews();
         }
-        for (final BuyButtonData curBtn : premium) {
-            Products.setBuyButton(btnContainer, curBtn, getActivity(),
-                    new Products.BuyButtonClickListener() {
-                        @Override
-                        public void onClick(String id) {
-                            buyProduct(id, getFrom());
-                        }
-                    }
-            );
-        }
+        new PurchaseButtonList().getButtonsListView(null, btnContainer, premium, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
+            @Override
+            public void onClick(String id, BuyButtonData btnData) {
+                buyProduct(id, getFrom());
+            }
+        });
     }
 
     protected Products getProducts() {

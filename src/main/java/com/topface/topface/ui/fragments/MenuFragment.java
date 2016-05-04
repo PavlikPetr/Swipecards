@@ -177,7 +177,7 @@ public class MenuFragment extends Fragment {
                     switchFragment((FragmentSettings) intent.getParcelableExtra(GCMUtils.NEXT_INTENT), false);
                     return;
                 } else {
-                    switchFragment(CacheProfile.getOptions().startPageFragmentSettings, false);
+                    switchFragment(App.get().getOptions().startPage, false);
                 }
             }
             Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment to default from onCreate().");
