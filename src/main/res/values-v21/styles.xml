@@ -145,6 +145,10 @@
         <item name="android:listSelector">@drawable/form_list_ripple</item>
     </style>
 
+    <style name="NewLeftMenuSelector">
+        <item name="android:listSelector">@drawable/form_list_ripple</item>
+    </style>
+
     <style name="WhiteListItem.Underline">
         <item name="android:background">@drawable/white_list_underline</item>
     </style>

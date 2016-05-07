@@ -45,6 +45,7 @@ import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.ui.fragments.NewMenuFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.utils.AddPhotoHelper;
@@ -96,7 +97,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private Intent mPendingNextIntent;
     private boolean mIsActionBarHidden;
     private View mContentFrame;
-    private MenuFragment mMenuFragment;
+        private NewMenuFragment mMenuFragment;
+//    private MenuFragment mMenuFragment;
     private HackyDrawerLayout mDrawerLayout;
     private FullscreenController mFullscreenController;
     private boolean isPopupVisible = false;
@@ -295,10 +297,19 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     @SuppressWarnings("deprecation")
     private void initDrawerLayout() {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        mMenuFragment = (MenuFragment) fragmentManager.findFragmentById(R.id.fragment_menu);
+          /**/
+        mMenuFragment = (NewMenuFragment) fragmentManager.findFragmentById(R.id.fragment_menu);
         if (mMenuFragment == null) {
-            mMenuFragment = new MenuFragment();
+            mMenuFragment = new NewMenuFragment();
         }
+          /**/
+
+        /**/
+//        mMenuFragment = (MenuFragment) fragmentManager.findFragmentById(R.id.fragment_menu);
+//        if (mMenuFragment == null) {
+//            mMenuFragment = new MenuFragment();
+//        }
+        /**/
         mMenuFragment.setOnFragmentSelected(new MenuFragment.OnFragmentSelectedListener() {
             @Override
             public void onFragmentSelected(FragmentSettings fragmentSettings) {

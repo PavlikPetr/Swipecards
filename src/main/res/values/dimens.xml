@@ -94,4 +94,19 @@
     <dimen name="restore_message_bottom_padding">20dp</dimen>
     <dimen name="restore_message_top_padding">44dp</dimen>
     <dimen name="restore_buttons_padding">12dp</dimen>
+
+    <!--left menu item-->
+    <dimen name="left_menu_item_height">48dp</dimen>
+    <dimen name="left_menu_item_padding_left">16dp</dimen>
+    <dimen name="left_menu_item_padding_right">16dp</dimen>
+    <dimen name="left_menu_item_drawable_padding">32dp</dimen>
+    <dimen name="left_menu_item_divider_thickness">2dp</dimen>
+    <dimen name="left_menu_badge_width">20dp</dimen>
+    <dimen name="left_menu_badge_height">20dp</dimen>
+    <dimen name="left_menu_title_text_size">14sp</dimen>
+    <dimen name="left_menu_bage_text_size">12dp</dimen>
+    <dimen name="left_menu_bage_corners_radius">4dp</dimen>
+    <dimen name="left_menu_bage_text_padding_left">3dp</dimen>
+    <dimen name="left_menu_bage_text_padding_right">3dp</dimen>
+    <dimen name="left_menu_title_margin_left">52dp</dimen>
 </resources>

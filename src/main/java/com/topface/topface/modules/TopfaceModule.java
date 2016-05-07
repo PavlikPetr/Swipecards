@@ -23,41 +23,40 @@ import com.topface.topface.ui.AddToLeaderActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.dialogs.CitySearchPopup;
+import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.external_libs.modules.ExternalLibsInjectModule;
-import com.topface.topface.ui.dialogs.CitySearchPopup;
-import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.ui.fragments.NewMenuFragment;
 import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.feed.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
+import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.fragments.profile.ProfileFormFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.utils.AddPhotoHelper;
-import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RunningStateManager;
 import com.topface.topface.utils.actionbar.OverflowMenu;
-import com.topface.topface.utils.ads.AdToAppController;
-import com.topface.topface.utils.ads.AdToAppHelper;
-import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.geo.GeoLocationManager;
 import com.topface.topface.utils.social.AuthorizationManager;
+import com.topface.topface.utils.social.OkAuthorizer;
+import com.topface.topface.utils.social.OkUserData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.topface.topface.utils.social.OkAuthorizer;
-import com.topface.topface.utils.social.OkUserData;
 
 import javax.inject.Singleton;
 
@@ -103,7 +102,8 @@ import dagger.Provides;
                 Profile.class,
                 Options.class,
                 User.class,
-                OptionsAndProfileProvider.class
+                OptionsAndProfileProvider.class,
+                NewMenuFragment.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
@@ -135,8 +135,7 @@ public class TopfaceModule {
                     AppConfig config = App.getAppConfig();
                     config.setAdjustAttributeData((AdjustAttributeData) data);
                     config.saveConfig();
-                }
-                else if (data.getClass() == Options.class) {
+                } else if (data.getClass() == Options.class) {
                     CacheProfile.setOptions(JsonUtils.optionsToJson((Options) data));
                 } else if (data.getClass() == Profile.class) {
                     Profile profile = (Profile) data;

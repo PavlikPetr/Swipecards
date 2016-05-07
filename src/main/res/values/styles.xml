@@ -1202,6 +1202,58 @@
         <item name="android:listSelector">@drawable/bg_left_menu_item_selector</item>
     </style>
 
+    <style name="NewLeftMenuSelector">
+        <item name="android:listSelector">@drawable/new_bg_left_menu_item_selector</item>
+    </style>
+
+    <style name="LeftMenuTitleBase">
+        <item name="android:lines">1</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/left_menu_title</item>
+        <item name="android:textSize">@dimen/left_menu_title_text_size</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="LeftMenuTitile" parent="LeftMenuTitleBase">
+        <item name="android:layout_marginLeft">@dimen/left_menu_title_margin_left</item>
+
+    </style>
+
+    <style name="LeftMenuDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/left_menu_item_divider_thickness</item>
+        <item name="android:background">@color/left_menu_divider</item>
+    </style>
+
+    <style name="LeftMenuBadgeBase">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:minWidth">@dimen/left_menu_badge_width</item>
+        <item name="android:layout_height">@dimen/left_menu_badge_height</item>
+        <item name="android:lines">1</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/left_menu_bage_text</item>
+        <item name="android:textSize">@dimen/left_menu_bage_text_size</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:background">@drawable/left_menu_bage_selector</item>
+    </style>
+
+    <style name="NewLeftMenuBadge" parent="LeftMenuBadgeBase">
+        <item name="android:layout_marginRight">@dimen/left_menu_item_padding_right</item>
+    </style>
+
+    <style name="LeftMenuIcon">
+        <item name="android:layout_width">20dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_height">20dp</item>
+    </style>
+
     <style name="ItemFeedStyle">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>

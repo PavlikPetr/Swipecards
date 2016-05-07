@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="LeftMenuTitile" parent="LeftMenuTitleBase">
+        <item name="android:layout_marginStart">@dimen/left_menu_title_margin_left</item>
+    </style>
+
+    <style name="NewLeftMenuBadge" parent="LeftMenuBadgeBase">
+        <item name="android:layout_marginEnd">@dimen/left_menu_item_padding_right</item>
+        <item name="android:layout_alignParentEnd">true</item>
+    </style>
+</resources>

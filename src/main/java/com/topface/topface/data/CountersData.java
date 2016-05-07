@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
+import com.topface.topface.data.leftMenu.FragmentIdData;
 
 /**
  * Counters data
@@ -155,6 +156,22 @@ public class CountersData implements Parcelable {
             case GEO:
                 return getPeopleNearby();
             case BONUS:
+                return getBonus();
+        }
+        return -1;
+    }
+
+    public int getCounterByFragmentId(@FragmentIdData.FragmentId int id) {
+        switch (id) {
+            case FragmentIdData.TABBED_DIALOGS:
+                return getDialogs();
+            case FragmentIdData.TABBED_VISITORS:
+                return getVisitors() + getFans();
+            case FragmentIdData.TABBED_LIKES:
+                return getLikes() + getMutual() + getAdmirations();
+            case FragmentIdData.GEO:
+                return getPeopleNearby();
+            case FragmentIdData.BONUS:
                 return getBonus();
         }
         return -1;
