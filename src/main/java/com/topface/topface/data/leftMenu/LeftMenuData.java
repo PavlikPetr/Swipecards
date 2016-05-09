@@ -17,6 +17,7 @@ public class LeftMenuData {
     private SpannableString mTitle;
     private int mBadgeCount;
     private boolean mIsDividerEnabled;
+    private boolean mIsSelected;
     private LeftMenuSettingsData mSettings;
 
     /**
@@ -73,6 +74,7 @@ public class LeftMenuData {
         mBadgeCount = badgeCount;
         mIsDividerEnabled = isDividerEnabled;
         mSettings = settings;
+        mIsSelected = false;
     }
 
     /**
@@ -132,17 +134,25 @@ public class LeftMenuData {
         return mSettings;
     }
 
+    public void setSelected(boolean isSelected){
+        mIsSelected = isSelected;
+    }
+
+    public boolean isSelected(){
+        return mIsSelected;
+    }
+
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof LeftMenuData)) return false;
         LeftMenuData data = (LeftMenuData) o;
         if (mIcon != null ? !mIcon.equals(data.getIcon()) : data.getIcon() != null) return false;
-        if (mTitle != null ? !mTitle.equals(data.getTitle()) : data.getTitle() != null)
+        if (mTitle != null ? !mTitle.toString().equals(data.getTitle().toString()) : data.getTitle() != null)
             return false;
         if (mBadgeCount != data.getBadgeCount()) return false;
         if (mIsDividerEnabled != data.isDividerEnabled()) return false;
-        return mSettings != null ? !mSettings.equals(data.getSettings()) : data.getSettings() != null;
+        return mSettings != null ? mSettings.equals(data.getSettings()) : data.getSettings() != null;
     }
 
     @Override

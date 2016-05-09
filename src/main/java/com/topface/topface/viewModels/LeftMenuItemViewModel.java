@@ -1,5 +1,6 @@
 package com.topface.topface.viewModels;
 
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.text.SpannableString;
@@ -18,18 +19,21 @@ public class LeftMenuItemViewModel {
     public ObservableField<String> badgeCount = new ObservableField<>(Utils.EMPTY);
     public ObservableField<SpannableString> title = new ObservableField<>(new SpannableString(Utils.EMPTY));
     public ObservableInt dividerVisibility = new ObservableInt(View.GONE);
-    public ObservableField<String> iconSrc = new ObservableField<>();
+    public ObservableField<String> iconSrc = new ObservableField<>(null);
+    public ObservableBoolean isSelected = new ObservableBoolean(false);
 
     private String mIcon;
     private int mBadgeCount;
     private SpannableString mTitle;
     private boolean mIsDividerEnabled;
+    private boolean mIsSelected;
 
     public LeftMenuItemViewModel(LeftMenuData data) {
         setBadgeCount(data.getBadgeCount());
         setTitle(data.getTitle());
         setDividerEnable(data.isDividerEnabled());
         setIcon(data.getIcon());
+        setSelected(data.isSelected());
     }
 
     public void setBadgeCount(int count) {
@@ -63,5 +67,12 @@ public class LeftMenuItemViewModel {
 
     public String getIcon() {
         return mIcon;
+    }
+
+    private void setSelected(boolean isSelected){
+        if(isSelected!=mIsSelected){
+            mIsSelected = isSelected;
+            this.isSelected.set(isSelected);
+        }
     }
 }

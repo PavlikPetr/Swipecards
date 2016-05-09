@@ -49,6 +49,10 @@ public class LeftMenuSettingsData {
         return mIsOverlayed;
     }
 
+    public int getUniqueKey(){
+        return mFragmentId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof LeftMenuSettingsData)) return false;

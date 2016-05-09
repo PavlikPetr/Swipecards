@@ -97,8 +97,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private Intent mPendingNextIntent;
     private boolean mIsActionBarHidden;
     private View mContentFrame;
-        private NewMenuFragment mMenuFragment;
-//    private MenuFragment mMenuFragment;
+    private NewMenuFragment mMenuFragment;
+    //    private MenuFragment mMenuFragment;
     private HackyDrawerLayout mDrawerLayout;
     private FullscreenController mFullscreenController;
     private boolean isPopupVisible = false;

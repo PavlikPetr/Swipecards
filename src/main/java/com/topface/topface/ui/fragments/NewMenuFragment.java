@@ -30,8 +30,9 @@ import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.state.SimpleStateDataUpdater;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.adapters.ItemEventListener;
-import com.topface.topface.ui.adapters.LeftMenyRecyclerViewAdapter;
+import com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -40,6 +41,8 @@ import javax.inject.Inject;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
+
+import static com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter.EMPTY_POS;
 
 /**
  * Created by kirussell on 05.11.13.
@@ -58,11 +61,12 @@ public class NewMenuFragment extends Fragment {
 
     @Inject
     TopfaceAppState mAppState;
-    private LeftMenyRecyclerViewAdapter mAdapter;
+    private LeftMenuRecyclerViewAdapter mAdapter;
     private NewFragmentMenuBinding mBinding;
     private CountersData mCountersData;
     private BalanceData mBalanceData;
     private CompositeSubscription mSubscription = new CompositeSubscription();
+    private int mSelectedPos = EMPTY_POS;
 
     private Func1<CountersData, CountersData> mCountersMap = new Func1<CountersData, CountersData>() {
         @Override
@@ -114,10 +118,11 @@ public class NewMenuFragment extends Fragment {
     private SimpleStateDataUpdater mStateDataUpdater = new SimpleStateDataUpdater() {
         @Override
         public void onOptionsUpdate(Options options) {
-            LeftMenyRecyclerViewAdapter adapter = getAdapter();
+            Debug.showChunkedLogError(TAG, "onOptionsUpdate");
+            LeftMenuRecyclerViewAdapter adapter = getAdapter();
             adapter.updateTitle(FragmentIdData.BONUS, options.bonus.buttonText);
             adapter.updateIcon(FragmentIdData.BONUS, options.bonus.buttonPicture);
-            adapter.addItemsAfterFragment(getIntegrationItems(options), FragmentIdData.GEO);
+            updateIntegrationPage(options);
         }
 
         @Override
@@ -125,6 +130,38 @@ public class NewMenuFragment extends Fragment {
 
         }
     };
+
+    private ItemEventListener.OnRecyclerViewItemClickListener<LeftMenuData> mItemClickListener = new ItemEventListener.OnRecyclerViewItemClickListener<LeftMenuData>() {
+        @Override
+        public void itemClick(View view, int itemPosition, LeftMenuData data) {
+            Debug.showChunkedLogError(TAG, "itemClick position " + itemPosition + " type " + data.getSettings().getFragmentId());
+            if (mSelectedPos != EMPTY_POS) {
+                getAdapter().updateSelected(mSelectedPos, false);
+            }
+            mSelectedPos = data.getSettings().getUniqueKey();
+            getAdapter().updateSelected(mSelectedPos, true);
+        }
+    };
+
+    private ArrayList<LeftMenuData> getAddedIntegrationItems(ArrayList<LeftMenuData> data) {
+        ArrayList<LeftMenuData> arrayList = new ArrayList<>();
+        for (LeftMenuData item : data) {
+            if (item.getSettings().getFragmentId() == FragmentIdData.INTEGRATION_PAGE) {
+                arrayList.add(item);
+            }
+        }
+        return arrayList;
+    }
+
+    private void updateIntegrationPage(Options options) {
+        ArrayList<LeftMenuData> data = getAdapter().getData();
+        ArrayList<LeftMenuData> integrationData = getIntegrationItems(options);
+        ArrayList<LeftMenuData> addedIntegrationData = getAddedIntegrationItems(data);
+        if (!Utils.isEqualsArrays(integrationData, addedIntegrationData)) {
+            data.removeAll(addedIntegrationData);
+            getAdapter().addItemsAfterFragment(integrationData, FragmentIdData.GEO);
+        }
+    }
 
     private ArrayList<LeftMenuData> getIntegrationItems(Options options) {
         ArrayList<LeftMenuData> arrayList = new ArrayList<>();
@@ -170,13 +207,8 @@ public class NewMenuFragment extends Fragment {
         return root;
     }
 
-    private LeftMenyRecyclerViewAdapter initAdapter() {
-        LeftMenyRecyclerViewAdapter adapter = new LeftMenyRecyclerViewAdapter(getLeftMenuItems(), new ItemEventListener.OnRecyclerViewItemClickListener<LeftMenuData>() {
-            @Override
-            public void itemClick(View view, int itemPosition, LeftMenuData data) {
-                Debug.showChunkedLogError(TAG, "itemClick position " + itemPosition + " type " + data.getSettings().getFragmentId());
-            }
-        });
+    private LeftMenuRecyclerViewAdapter initAdapter() {
+        LeftMenuRecyclerViewAdapter adapter = new LeftMenuRecyclerViewAdapter(getLeftMenuItems(), mItemClickListener);
         mSubscription.add(mAppState.getObservable(CountersData.class)
                 .map(mCountersMap).filter(mCounterFilter)
                 .subscribe(mCountersOnNext, mSubscriptionOnError));
@@ -216,7 +248,7 @@ public class NewMenuFragment extends Fragment {
         return arrayList;
     }
 
-    private LeftMenyRecyclerViewAdapter getAdapter() {
+    private LeftMenuRecyclerViewAdapter getAdapter() {
         if (mAdapter == null) {
             mAdapter = initAdapter();
         }

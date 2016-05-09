@@ -4,5 +4,6 @@
     <item android:state_pressed="true" android:drawable="@color/left_menu_item_selected_color" />
     <item android:state_focused="true" android:drawable="@color/left_menu_item_selected_color" />
     <item android:state_selected="true" android:drawable="@color/left_menu_item_selected_color" />
+    <item android:state_checked="true" android:drawable="@color/left_menu_item_selected_color" />
     <item android:drawable="@color/bg_left_menu_item" />
 </selector>

@@ -48,6 +48,11 @@ public class IntegrationSettingsData extends LeftMenuSettingsData {
         return mIsExternal;
     }
 
+    @Override
+    public int getUniqueKey() {
+        return super.getUniqueKey()+mPos*100;
+    }
+
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean equals(Object o) {
