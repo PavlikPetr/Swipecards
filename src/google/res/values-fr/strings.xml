@@ -847,7 +847,7 @@
     <string name="novice_sympathy">Envoyez des J\'aime aux personnes qui vous\nplaisent
         vraiment.\nVous allez peut être rencontrer quelqu\'un d\'unique !
     </string>
-    <string name="go_dating_message">Commencez à faire connaissance et découvrez ici qui regarde votre profil</string>
+    <string name="go_dating_message">Apprenez à mieux connaître les gens et les noms des utilisateurs ayant visité votre profil apparaîtront ici !</string>
     <string name="photo_not_from_main_album">Un modérateur a décidé que cette photo ne peut pas être utilisée comme photo de profil.</string>
     <string name="sidebar_vk_profile">Profil VK</string>
     <string name="title_vk_profile">Profil VK</string>
@@ -902,4 +902,11 @@
     <string name="crown_liberty_description">Démarquez-vous facilement dans la Recherche et les Messages</string>
     <string name="like_liberty_title">J\'aime</string>
     <string name="like_liberty_description">Voir qui vous aime</string>
+    <string name="refill_balance_view_title">Votre compte</string>
+    <string name="access_to_location_popup_title">La géolocalisation est indisponible</string>
+    <string name="access_to_location_popup_description">Malheureusement, la géolocalisation pour votre emplacement est indisponible. Pour continuer, vous devez autoriser l\'accès.</string>
+    <string name="access_to_location_popup_access_button">Autoriser l\'accès</string>
+    <string name="city_selector_set_your_city">Choisissez votre ville</string>
+    <string name="city_selector_detect_automatically">Réglage automatique</string>
+    <string name="city_selector_your_city">Votre ville</string>
 </resources>
