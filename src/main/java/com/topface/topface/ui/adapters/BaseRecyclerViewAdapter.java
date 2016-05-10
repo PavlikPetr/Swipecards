@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.BR;
+import com.topface.topface.data.FixedViewInfo;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -123,9 +124,9 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
         if (localPos != EMPTY_POS && itemType != TYPE_ITEM) {
             switch (getItemType(viewPos)) {
                 case TYPE_FOOTER:
-                    return new ItemViewHolder(mFooters.get(localPos).getView().getRoot(), mItemEventListener);
+                    return new ItemViewHolder(inflater.inflate(mFooters.get(localPos).getResId(), null, false), mItemEventListener);
                 case TYPE_HEADER:
-                    return new ItemViewHolder(mFooters.get(localPos).getView().getRoot(), mItemEventListener);
+                    return new ItemViewHolder(inflater.inflate(mHeaders.get(localPos).getResId(), null, false), mItemEventListener);
             }
         }
         return new ItemViewHolder(inflater.inflate(getItemLayout(), null, false), mItemEventListener);
@@ -142,10 +143,10 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
                 bindData(getItemBinding(holder), localPos);
                 break;
             case TYPE_HEADER:
-                bindHeader(mHeaders.get(localPos).getView(), localPos);
+                bindHeader(holder.getBinding(), localPos);
                 break;
             case TYPE_FOOTER:
-                bindFooter(mFooters.get(localPos).getView(), localPos);
+                bindFooter(holder.getBinding(), localPos);
                 break;
         }
     }
@@ -185,7 +186,7 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
 
     @Override
     public int getItemCount() {
-        return mAdapterData.size();
+        return mAdapterData.size() + mHeaders.size() + mFooters.size();
     }
 
     public void addData(ArrayList<D> data) {
@@ -201,7 +202,7 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
     @Nullable
     public Object getHeaderItem(int pos) {
         if (mHeaders != null && mHeaders.size() > pos) {
-            mHeaders.get(pos);
+            return mHeaders.get(pos).getData();
         }
         return null;
     }
@@ -209,7 +210,7 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
     @Nullable
     public Object getFooterItem(int pos) {
         if (mFooters != null && mFooters.size() > pos) {
-            mFooters.get(pos);
+            return mFooters.get(pos).getData();
         }
         return null;
     }
@@ -267,24 +268,6 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
         @Nullable
         public T getBinding() {
             return mBinding;
-        }
-    }
-
-    public class FixedViewInfo<K extends ViewDataBinding, L> {
-        private K mViewDataBinding;
-        private L mData;
-
-        public FixedViewInfo(K view, L data) {
-            mViewDataBinding = view;
-            mData = data;
-        }
-
-        public K getView() {
-            return mViewDataBinding;
-        }
-
-        public L getData() {
-            return mData;
         }
     }
 }

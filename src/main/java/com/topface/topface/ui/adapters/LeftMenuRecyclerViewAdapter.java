@@ -8,7 +8,10 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.leftMenu.LeftMenuData;
+import com.topface.topface.data.leftMenu.LeftMenuHeaderData;
+import com.topface.topface.databinding.LeftMenuHeaderBinding;
 import com.topface.topface.databinding.LeftMenuItemBinding;
+import com.topface.topface.viewModels.LeftMenuHeaderViewModel;
 import com.topface.topface.viewModels.LeftMenuItemViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +45,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseRecyclerViewAdapter<LeftMen
 
     @Override
     protected void bindHeader(ViewDataBinding binding, int position) {
-
+        ((LeftMenuHeaderBinding) binding).setViewModel(new LeftMenuHeaderViewModel((LeftMenuHeaderData) getHeaderItem(position)));
     }
 
     @Override

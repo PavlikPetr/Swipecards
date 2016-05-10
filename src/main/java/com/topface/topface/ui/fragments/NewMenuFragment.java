@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
+import com.topface.topface.data.FixedViewInfo;
 import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
@@ -218,9 +220,7 @@ public class NewMenuFragment extends Fragment {
         mSubscription.add(mAppState.getObservable(CountersData.class)
                 .map(mCountersMap).filter(mCounterFilter)
                 .subscribe(mCountersOnNext, mSubscriptionOnError));
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-        BaseRecyclerViewAdapter.FixedViewInfo header = new BaseRecyclerViewAdapter.FixedViewInfo(inflater.inflate(R.layout.left_menu_header, null, false));
-        adapter.setHeader(new BaseRecyclerViewAdapter.FixedViewInfo<LeftMenuHeaderBinding, LeftMenuHeaderData>(inflater.inflate(R.layout.left_menu_header, null, false), new LeftMenuHeaderData("test")));
+        adapter.setHeader(new FixedViewInfo<>(R.layout.left_menu_header, new LeftMenuHeaderData("test")));
         return adapter;
     }
 
