@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
@@ -24,11 +25,14 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.IntegrationSettingsData;
 import com.topface.topface.data.leftMenu.LeftMenuData;
+import com.topface.topface.data.leftMenu.LeftMenuHeaderData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
+import com.topface.topface.databinding.LeftMenuHeaderBinding;
 import com.topface.topface.databinding.NewFragmentMenuBinding;
 import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.state.SimpleStateDataUpdater;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter;
 import com.topface.topface.ui.adapters.ItemEventListener;
 import com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter;
 import com.topface.topface.utils.CacheProfile;
@@ -204,14 +208,19 @@ public class NewMenuFragment extends Fragment {
         mBinding = DataBindingUtil.bind(root);
         mBinding.rvMenu.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBinding.rvMenu.setAdapter(getAdapter());
+        ((SimpleItemAnimator) mBinding.rvMenu.getItemAnimator()).setSupportsChangeAnimations(false);
         return root;
     }
 
     private LeftMenuRecyclerViewAdapter initAdapter() {
-        LeftMenuRecyclerViewAdapter adapter = new LeftMenuRecyclerViewAdapter(getLeftMenuItems(), mItemClickListener);
+        LeftMenuRecyclerViewAdapter adapter = new LeftMenuRecyclerViewAdapter(getLeftMenuItems());
+        adapter.setOnItemClickListener(mItemClickListener);
         mSubscription.add(mAppState.getObservable(CountersData.class)
                 .map(mCountersMap).filter(mCounterFilter)
                 .subscribe(mCountersOnNext, mSubscriptionOnError));
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        BaseRecyclerViewAdapter.FixedViewInfo header = new BaseRecyclerViewAdapter.FixedViewInfo(inflater.inflate(R.layout.left_menu_header, null, false));
+        adapter.setHeader(new BaseRecyclerViewAdapter.FixedViewInfo<LeftMenuHeaderBinding, LeftMenuHeaderData>(inflater.inflate(R.layout.left_menu_header, null, false), new LeftMenuHeaderData("test")));
         return adapter;
     }
 

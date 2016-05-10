@@ -15,7 +15,6 @@
     </data>
 
     <FrameLayout
-        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/new_bg_left_menu_item_selector"

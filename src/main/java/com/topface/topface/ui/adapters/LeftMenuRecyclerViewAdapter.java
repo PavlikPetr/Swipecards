@@ -1,13 +1,12 @@
 package com.topface.topface.ui.adapters;
 
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.CountersData;
-import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuData;
 import com.topface.topface.databinding.LeftMenuItemBinding;
 import com.topface.topface.viewModels.LeftMenuItemViewModel;
@@ -21,20 +20,9 @@ import java.util.ArrayList;
  */
 public class LeftMenuRecyclerViewAdapter extends BaseRecyclerViewAdapter<LeftMenuItemBinding, LeftMenuData> {
 
-    public static final int EMPTY_POS = -1;
-
-    private ItemEventListener.OnRecyclerViewItemClickListener<LeftMenuData> mClickListener;
-
-    public LeftMenuRecyclerViewAdapter(ArrayList<LeftMenuData> data, ItemEventListener.OnRecyclerViewItemClickListener<LeftMenuData> listener) {
+    public LeftMenuRecyclerViewAdapter(ArrayList<LeftMenuData> data) {
         super();
         addData(data);
-        mClickListener = listener;
-    }
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        setOnItemClickListener(mClickListener);
     }
 
     @Override
@@ -50,6 +38,16 @@ public class LeftMenuRecyclerViewAdapter extends BaseRecyclerViewAdapter<LeftMen
     @Override
     protected void bindData(LeftMenuItemBinding binding, int position) {
         binding.setViewModel(new LeftMenuItemViewModel(getData().get(position)));
+    }
+
+    @Override
+    protected void bindHeader(ViewDataBinding binding, int position) {
+
+    }
+
+    @Override
+    protected void bindFooter(ViewDataBinding binding, int position) {
+
     }
 
     @NotNull
