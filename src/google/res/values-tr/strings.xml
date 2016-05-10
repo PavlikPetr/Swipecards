@@ -815,7 +815,7 @@
     <string name="settings_check_vip_alert">VIP statüsünün kontrol edilmesi talebiniz iletildi.</string>
     <string name="novice_sympathy">Yakın bir arkadaşlığa başlamak için sadece hoşlandığınız \nkişilere beğeni gönderin. 
             Belki de \nsizin için gerçekten özel birini böylece bulabilirsiniz.</string>
-    <string name="go_dating_message">Yeni arkadaşlar bulmaya başla, bu sayfada profile bakanları görebilirsin.</string>
+    <string name="go_dating_message">İnsanlarla tanışmaya başla ve profilini ziyaret edenlerin listesi burada gözükecek.</string>
     <string name="photo_not_from_main_album">Yönetim bu fotoğrafın profil resmi olarak kullanılmayacağına karar verdi.</string>
     <string name="sidebar_vk_profile">Vkontakte profili</string>
     <string name="title_vk_profile">VK profili</string>
@@ -870,4 +870,6 @@
     <string name="crown_liberty_description">Arama sonuçlarında ve mesajlar sayfasına öne çık</string>
     <string name="like_liberty_title">Beğeni</string>
     <string name="like_liberty_description">Seni kimler beğenmiş, öğren</string>
+    <string name="refill_balance_view_title">Hesabınız</string>
+    <string name="city_selector_set_your_city">Şehrinizi belirtiniz</string>
 </resources>
