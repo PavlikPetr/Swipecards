@@ -1074,4 +1074,12 @@
 
     <string name="refill_balance_view_title">На вашем счете</string>
 
+    <string name="access_to_location_popup_title">Геопозиция недоступна</string>
+    <string name="access_to_location_popup_description">К сожалению, ваша геопозиция недоступна, чтобы продолжить необходимо разрешить доступ</string>
+    <string name="access_to_location_popup_access_button">Включить</string>
+
+    <string name="city_selector_set_your_city">Укажите ваш город</string>
+    <string name="city_selector_detect_automatically">Определить автоматически</string>
+    <string name="city_selector_your_city">Ваш город</string>
+
 </resources>
