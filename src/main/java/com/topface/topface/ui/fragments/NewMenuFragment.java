@@ -40,6 +40,8 @@ import com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -133,7 +135,14 @@ public class NewMenuFragment extends Fragment {
 
         @Override
         public void onProfileUpdate(Profile profile) {
+            getAdapter().updateHeader(getHeaderData(profile));
+        }
+    };
 
+    private View.OnClickListener mOnHeaderClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Debug.showChunkedLogError("NewMenuFragment", "mOnHeaderClick");
         }
     };
 
@@ -220,8 +229,12 @@ public class NewMenuFragment extends Fragment {
         mSubscription.add(mAppState.getObservable(CountersData.class)
                 .map(mCountersMap).filter(mCounterFilter)
                 .subscribe(mCountersOnNext, mSubscriptionOnError));
-        adapter.setHeader(new FixedViewInfo<>(R.layout.left_menu_header, new LeftMenuHeaderData("test")));
+        adapter.setHeader(new FixedViewInfo<>(R.layout.left_menu_header, getHeaderData(App.get().getProfile())));
         return adapter;
+    }
+
+    private LeftMenuHeaderData getHeaderData(@NotNull Profile profile) {
+        return new LeftMenuHeaderData(profile.photo, profile.getNameAndAge(), profile.city != null ? profile.city.getName() : Utils.EMPTY, mOnHeaderClick);
     }
 
     @Override

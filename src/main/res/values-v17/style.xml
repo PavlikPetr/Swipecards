@@ -9,4 +9,8 @@
         <item name="android:layout_marginEnd">@dimen/left_menu_item_padding_right</item>
         <item name="android:layout_alignParentEnd">true</item>
     </style>
+
+    <style name="LeftMenuHeader" parent="LeftMenuHeaderBase">
+        <item name="android:paddingStart">@dimen/left_menu_header_pading_left</item>
+    </style>
 </resources>

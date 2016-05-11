@@ -109,4 +109,9 @@
     <dimen name="left_menu_bage_text_padding_left">3dp</dimen>
     <dimen name="left_menu_bage_text_padding_right">3dp</dimen>
     <dimen name="left_menu_title_margin_left">52dp</dimen>
+    <dimen name="left_menu_header_height">172dp</dimen>
+    <dimen name="left_menu_avatar_height">64dp</dimen>
+    <dimen name="left_menu_avatar_width">64dp</dimen>
+    <dimen name="left_menu_header_pading_left">16dp</dimen>
+    <dimen name="left_menu_header_pading_top">16dp</dimen>
 </resources>

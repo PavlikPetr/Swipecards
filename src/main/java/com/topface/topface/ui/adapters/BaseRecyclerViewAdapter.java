@@ -44,18 +44,9 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
     private Observable<Bundle> updateObservable;
     private Subscriber<? super Bundle> mUpdateSubscriber;
     @Nullable
-    private ItemEventListener<D> mItemEventListener;
+    protected ItemEventListener<D> mItemEventListener;
     private ItemEventListener.OnRecyclerViewItemClickListener<D> mItemClick;
     private ItemEventListener.OnRecyclerViewItemLongClickListener<D> mItemLongClick;
-    private ArrayList<FixedViewInfo> mHeaders = new ArrayList<>();
-    private ArrayList<FixedViewInfo> mFooters = new ArrayList<>();
-    //// TODO: 04.05.16
-    /*
-    @Nullable
-    private View mHeaderView;
-    @Nullable
-    private View mFooterView;
-    */
 
     public BaseRecyclerViewAdapter() {
         updateObservable = Observable.create(new Observable.OnSubscribe<Bundle>() {
@@ -65,14 +56,6 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
                 mUpdateSubscriber.onNext(new Bundle());
             }
         });
-    }
-
-    public void setHeader(FixedViewInfo data) {
-        mHeaders.add(data);
-    }
-
-    public void setFooter(FixedViewInfo data) {
-        mFooters.add(data);
     }
 
     @Override
@@ -116,77 +99,19 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
 
     @SuppressLint("SwitchIntDef")
     @Override
-    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewPos) {
+    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        int localPos = getLocalPosition(viewPos);
-        @ItemType
-        int itemType = getItemType(viewPos);
-        if (localPos != EMPTY_POS && itemType != TYPE_ITEM) {
-            switch (getItemType(viewPos)) {
-                case TYPE_FOOTER:
-                    return new ItemViewHolder(inflater.inflate(mFooters.get(localPos).getResId(), null, false), mItemEventListener);
-                case TYPE_HEADER:
-                    return new ItemViewHolder(inflater.inflate(mHeaders.get(localPos).getResId(), null, false), mItemEventListener);
-            }
-        }
-        return new ItemViewHolder(inflater.inflate(getItemLayout(), null, false), mItemEventListener);
+        return new ItemViewHolder(inflater.inflate(getItemLayout(), parent, false), mItemEventListener);
     }
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
-        int localPos = getLocalPosition(position);
-        if (localPos == EMPTY_POS) {
-            return;
-        }
-        switch (getItemType(position)) {
-            case TYPE_ITEM:
-                bindData(getItemBinding(holder), localPos);
-                break;
-            case TYPE_HEADER:
-                bindHeader(holder.getBinding(), localPos);
-                break;
-            case TYPE_FOOTER:
-                bindFooter(holder.getBinding(), localPos);
-                break;
-        }
-    }
-
-    private int getLocalPosition(int position) {
-        int localPos = EMPTY_POS;
-        switch (getItemType(position)) {
-            case TYPE_ITEM:
-                localPos = position - mHeaders.size();
-                break;
-            case TYPE_HEADER:
-                localPos = position;
-                break;
-            case TYPE_FOOTER:
-                localPos = position - mHeaders.size() - mAdapterData.size();
-                break;
-        }
-        return localPos;
-    }
-
-    @ItemType
-    private int getItemType(int pos) {
-        if (pos < mHeaders.size()) {
-            return TYPE_HEADER;
-        } else if (pos >= mHeaders.size() + mAdapterData.size()) {
-            return TYPE_FOOTER;
-        } else {
-            return TYPE_ITEM;
-        }
-    }
-
-    // хак, чтобы получить в onCreateViewHolder позицию
-    @Override
-    public int getItemViewType(int position) {
-        return position;
+        bindData(getItemBinding(holder), position);
     }
 
     @Override
     public int getItemCount() {
-        return mAdapterData.size() + mHeaders.size() + mFooters.size();
+        return mAdapterData.size();
     }
 
     public void addData(ArrayList<D> data) {
@@ -199,27 +124,11 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
         return mAdapterData;
     }
 
-    @Nullable
-    public Object getHeaderItem(int pos) {
-        if (mHeaders != null && mHeaders.size() > pos) {
-            return mHeaders.get(pos).getData();
-        }
-        return null;
-    }
-
-    @Nullable
-    public Object getFooterItem(int pos) {
-        if (mFooters != null && mFooters.size() > pos) {
-            return mFooters.get(pos).getData();
-        }
-        return null;
-    }
-
     public Observable<Bundle> getUpdaterObservable() {
         return updateObservable;
     }
 
-    private T getItemBinding(BaseRecyclerViewAdapter.ItemViewHolder holder) {
+    protected T getItemBinding(BaseRecyclerViewAdapter.ItemViewHolder holder) {
         return getItemBindingClass().cast(holder.getBinding());
     }
 
@@ -256,6 +165,11 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
     public static class ItemViewHolder<T extends ViewDataBinding> extends RecyclerView.ViewHolder {
         private T mBinding;
 
+        @Nullable
+        public T getBinding() {
+            return mBinding;
+        }
+
         public ItemViewHolder(View view, ItemEventListener listener) {
             super(view);
             mBinding = DataBindingUtil.bind(view);
@@ -263,11 +177,6 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
                 mBinding.setVariable(BR.clickListener, listener);
                 mBinding.setVariable(BR.longClickListener, listener);
             }
-        }
-
-        @Nullable
-        public T getBinding() {
-            return mBinding;
         }
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Widget"></style>
 
@@ -1202,10 +1202,6 @@
         <item name="android:listSelector">@drawable/bg_left_menu_item_selector</item>
     </style>
 
-    <style name="NewLeftMenuSelector">
-        <item name="android:listSelector">@drawable/new_bg_left_menu_item_selector</item>
-    </style>
-
     <style name="LeftMenuTitleBase">
         <item name="android:lines">1</item>
         <item name="android:maxLines">1</item>
@@ -1246,6 +1242,40 @@
 
     <style name="NewLeftMenuBadge" parent="LeftMenuBadgeBase">
         <item name="android:layout_marginRight">@dimen/left_menu_item_padding_right</item>
+    </style>
+
+    <style name="LeftMenuHeaderBase">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingTop">@dimen/left_menu_header_pading_top</item>
+    </style>
+
+    <style name="LeftMenuHeader" parent="LeftMenuHeaderBase">
+        <item name="android:paddingLeft">@dimen/left_menu_header_pading_left</item>
+    </style>
+
+    <style name="LeftMenuUserName">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">14dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/text_white</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="LeftMenuUserCity">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/left_mneu_users_city_color</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="LeftMenuHeaderBackground">
+        <item name="android:layout_width">@dimen/left_menu_width</item>
+        <item name="android:layout_height">@dimen/left_menu_header_height</item>
+        <item name="android:scaleType">centerCrop</item>
     </style>
 
     <style name="LeftMenuIcon">

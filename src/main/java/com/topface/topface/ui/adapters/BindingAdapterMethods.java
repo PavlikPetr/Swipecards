@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -53,5 +54,10 @@ public class BindingAdapterMethods {
     public static void setSelected(View view, boolean isSelected) {
         Debug.showChunkedLogError("NewMenuFragment", "isSelected " + isSelected);
         view.setSelected(isSelected);
+    }
+
+    @BindingAdapter("app:setPhoto")
+    public static void setPhoto(ImageViewRemote view, IPhoto photo) {
+        view.setPhoto(photo);
     }
 }

@@ -4,24 +4,27 @@ import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.text.SpannableString;
 
+import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.CountersData;
+import com.topface.topface.data.FixedViewInfo;
 import com.topface.topface.data.leftMenu.LeftMenuData;
 import com.topface.topface.data.leftMenu.LeftMenuHeaderData;
 import com.topface.topface.databinding.LeftMenuHeaderBinding;
 import com.topface.topface.databinding.LeftMenuItemBinding;
 import com.topface.topface.viewModels.LeftMenuHeaderViewModel;
 import com.topface.topface.viewModels.LeftMenuItemViewModel;
+import com.topface.topface.BR;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 /**
- * Created by ppavlik on 06.05.16.\
+ * Created by ppavlik on 06.05.16.
  */
-public class LeftMenuRecyclerViewAdapter extends BaseRecyclerViewAdapter<LeftMenuItemBinding, LeftMenuData> {
+public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAdapter<LeftMenuItemBinding, LeftMenuData> {
 
     public LeftMenuRecyclerViewAdapter(ArrayList<LeftMenuData> data) {
         super();
@@ -45,7 +48,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseRecyclerViewAdapter<LeftMen
 
     @Override
     protected void bindHeader(ViewDataBinding binding, int position) {
-        ((LeftMenuHeaderBinding) binding).setViewModel(new LeftMenuHeaderViewModel((LeftMenuHeaderData) getHeaderItem(position)));
+        binding.setVariable(BR.viewModel, new LeftMenuHeaderViewModel((LeftMenuHeaderData) getHeaderItem(position)));
     }
 
     @Override
@@ -67,7 +70,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseRecyclerViewAdapter<LeftMen
                 int count = countersData.getCounterByFragmentId(item.getSettings().getFragmentId());
                 if (count >= 0 && count != item.getBadgeCount()) {
                     item.setBadgeCount(count);
-                    notifyItemChanged(i);
+                    notifyItemChange(i);
                 }
             }
         }
@@ -81,7 +84,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseRecyclerViewAdapter<LeftMen
         int pos = getDataPositionByFragmentId(fragmentId);
         if (pos != EMPTY_POS) {
             getData().get(pos).setTitle(title);
-            notifyItemChanged(pos);
+            notifyItemChange(pos);
         }
     }
 
@@ -89,7 +92,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseRecyclerViewAdapter<LeftMen
         int pos = getDataPositionByFragmentId(fragmentId);
         if (pos != EMPTY_POS) {
             getData().get(pos).setIcon(icon);
-            notifyItemChanged(pos);
+            notifyItemChange(pos);
         }
     }
 
@@ -98,7 +101,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseRecyclerViewAdapter<LeftMen
         int pos = getDataPositionByFragmentId(fragmentId);
         if (pos != EMPTY_POS) {
             getData().get(pos).setSelected(isSelected);
-            notifyItemChanged(pos);
+            notifyItemChange(pos);
         }
     }
 
@@ -110,6 +113,14 @@ public class LeftMenuRecyclerViewAdapter extends BaseRecyclerViewAdapter<LeftMen
             }
         }
         return EMPTY_POS;
+    }
+
+    public void updateHeader(LeftMenuHeaderData data) {
+        ArrayList<FixedViewInfo> headers = getHeadersData();
+        if (headers.size() > 0) {
+            headers.get(0).setData(data);
+            notifyItemChanged(0);
+        }
     }
 
     private void addItemsAfterPosition(ArrayList<LeftMenuData> data, int position) {

@@ -10,11 +10,8 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvMenu"
-            style="@style/NewLeftMenuSelector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fadingEdgeLength="20dp"
-            android:requiresFadingEdge="vertical"
             tools:targetApi="ice_cream_sandwich" />
     </LinearLayout>
 </layout>

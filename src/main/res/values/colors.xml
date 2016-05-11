@@ -186,4 +186,5 @@
     <color name="left_menu_title">#232C35</color>
     <color name="left_menu_bage_text">@color/bg_white</color>
     <color name="left_menu_bage_background">#499AFF</color>
+    <color name="left_mneu_users_city_color">#80ffffff</color>
 </resources>
