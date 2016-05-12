@@ -1082,4 +1082,6 @@
     <string name="city_selector_detect_automatically">Определить автоматически</string>
     <string name="city_selector_your_city">Ваш город</string>
 
+    <string name="photo_gallery_photo_deleted">Фотография удалена</string>
+
 </resources>
