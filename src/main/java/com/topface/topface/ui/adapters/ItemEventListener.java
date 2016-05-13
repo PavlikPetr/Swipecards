@@ -1,6 +1,5 @@
 package com.topface.topface.ui.adapters;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import org.jetbrains.annotations.NotNull;
@@ -10,21 +9,16 @@ import org.jetbrains.annotations.Nullable;
  * Created by tiberal on 03.05.16.
  */
 public abstract class ItemEventListener<D> implements View.OnClickListener, View.OnLongClickListener {
-    private final RecyclerView mRecyclerView;
     private boolean mIsLongClick;
     @Nullable
     private OnRecyclerViewItemClickListener<D> mRecyclerViewItemClickListener;
     @Nullable
     private OnRecyclerViewItemLongClickListener<D> mRecyclerViewItemLongClickListener;
 
-    public ItemEventListener(@NotNull RecyclerView recyclerView) {
-        mRecyclerView = recyclerView;
-    }
-
     @Override
     public void onClick(View v) {
         if (mRecyclerViewItemClickListener != null && !mIsLongClick) {
-            int pos = mRecyclerView.getLayoutManager().getPosition(v);
+            int pos = getPosition(v);
             mRecyclerViewItemClickListener.itemClick(v, pos, getDataItem(pos));
         } else {
             mIsLongClick = false;
@@ -35,7 +29,7 @@ public abstract class ItemEventListener<D> implements View.OnClickListener, View
     public boolean onLongClick(View v) {
         mIsLongClick = true;
         if (mRecyclerViewItemLongClickListener != null) {
-            int pos = mRecyclerView.getLayoutManager().getPosition(v);
+            int pos = getPosition(v);
             mRecyclerViewItemLongClickListener.itemLongClick(v, pos, getDataItem(pos));
             return false;
         }
@@ -51,6 +45,8 @@ public abstract class ItemEventListener<D> implements View.OnClickListener, View
     }
 
     abstract public D getDataItem(int pos);
+
+    abstract public int getPosition(View v);
 
     /**
      * Листенер для оработки нажатий на элемент списка.

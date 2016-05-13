@@ -53,7 +53,7 @@ public class AdjustManager {
         });
         config.setLogLevel(Debug.isDebugLogsEnabled() ? LogLevel.VERBOSE : LogLevel.ASSERT);
         Adjust.onCreate(config);
-        TracedLifeCycleActivity.getLifeCycleObservable().subscribe(new Action1<ActivityLifreCycleData>() {
+        TrackedLifeCycleActivity.getLifeCycleObservable().subscribe(new Action1<ActivityLifreCycleData>() {
             @Override
             public void call(ActivityLifreCycleData lifecycleData) {
                 switch (lifecycleData.state) {

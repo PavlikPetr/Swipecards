@@ -1,14 +1,13 @@
 package com.topface.topface.ui.analytics;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
 
 import com.topface.topface.statistics.ScreensShowStatistics;
 import com.topface.topface.ui.fragments.feed.IFeedLifeCycle;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.Utils;
 
-public class TrackedFragment extends Fragment implements IFeedLifeCycle {
+public class TrackedFragment extends TrackedLifeCycleFragment implements IFeedLifeCycle {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

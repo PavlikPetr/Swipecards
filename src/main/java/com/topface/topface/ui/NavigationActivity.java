@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -30,6 +29,8 @@ import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
+import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.requests.IApiResponse;
@@ -44,8 +45,6 @@ import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
-import com.topface.topface.ui.fragments.MenuFragment;
-import com.topface.topface.ui.fragments.NewMenuFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.utils.AddPhotoHelper;
@@ -53,6 +52,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CustomViewNotificationController;
 import com.topface.topface.utils.IActionbarNotifier;
 import com.topface.topface.utils.LocaleConfig;
+import com.topface.topface.utils.NavigationManager;
 import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
@@ -97,8 +97,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private Intent mPendingNextIntent;
     private boolean mIsActionBarHidden;
     private View mContentFrame;
-    private NewMenuFragment mMenuFragment;
-    //    private MenuFragment mMenuFragment;
     private HackyDrawerLayout mDrawerLayout;
     private FullscreenController mFullscreenController;
     private boolean isPopupVisible = false;
@@ -111,6 +109,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     TopfaceAppState mAppState;
     @Inject
     PopupHive mPopupHive;
+    @Inject
+    NavigationState mNavigationState;
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     private AddPhotoHelper mAddPhotoHelper;
     public static boolean isPhotoAsked;
@@ -125,6 +125,14 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     };
     private OnNextActionListener mSelectPhotoNextActionListener;
     private OnNextActionListener mChooseCityNextActionListener;
+    private NavigationManager mNavigationManager;
+
+    private Action1<Throwable> mCatchOnError = new Action1<Throwable>() {
+        @Override
+        public void call(Throwable throwable) {
+
+        }
+    };
 
     /**
      * Перезапускает NavigationActivity, нужно например при смене языка
@@ -187,6 +195,28 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 App.sendReferreRequest(adjustAttributionData);
             }
         }));
+        mSubscription.add(mNavigationState.getSelectionObservable().subscribe(new Action1<LeftMenuSettingsData>() {
+            @Override
+            public void call(LeftMenuSettingsData leftMenuSettingsData) {
+                Debug.showChunkedLogError("NewMenuFragment", "mNavigationState " + (leftMenuSettingsData != null ? leftMenuSettingsData.getUniqueKey() : "null"));
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
+                    }
+                }, 250);
+            }
+        }, mCatchOnError));
+        mSubscription.add(mNavigationState.getSwitchObservable().subscribe(new Action1<LeftMenuSettingsData>() {
+            @Override
+            public void call(LeftMenuSettingsData leftMenuSettingsData) {
+                if (leftMenuSettingsData.isOverlayed()) {
+                    switchContentTopMargin(true);
+                } else if (mActionBarOverlayed) {
+                    switchContentTopMargin(false);
+                }
+            }
+        }, mCatchOnError));
         if (isNeedBroughtToFront(intent)) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -294,34 +324,16 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         CacheProfile.needShowBonusCounter = lastTime < App.from(this).getOptions().bonus.timestamp;
     }
 
+    private NavigationManager getNavigationManager() {
+        if (mNavigationManager == null) {
+            mNavigationManager = new NavigationManager(this);
+        }
+        return mNavigationManager;
+    }
+
     @SuppressWarnings("deprecation")
     private void initDrawerLayout() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-          /**/
-        mMenuFragment = (NewMenuFragment) fragmentManager.findFragmentById(R.id.fragment_menu);
-        if (mMenuFragment == null) {
-            mMenuFragment = new NewMenuFragment();
-        }
-          /**/
-
-        /**/
-//        mMenuFragment = (MenuFragment) fragmentManager.findFragmentById(R.id.fragment_menu);
-//        if (mMenuFragment == null) {
-//            mMenuFragment = new MenuFragment();
-//        }
-        /**/
-        mMenuFragment.setOnFragmentSelected(new MenuFragment.OnFragmentSelectedListener() {
-            @Override
-            public void onFragmentSelected(FragmentSettings fragmentSettings) {
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-            }
-        });
-        if (!mMenuFragment.isAdded()) {
-            fragmentManager
-                    .beginTransaction()
-                    .add(R.id.fragment_menu, mMenuFragment)
-                    .commit();
-        }
+        getNavigationManager().init(getSupportFragmentManager());
         mDrawerLayoutStateObservable = BehaviorSubject.create();
         mDrawerLayout = (HackyDrawerLayout) findViewById(R.id.loNavigationDrawer);
         mDrawerLayout.setScrimColor(Color.argb(217, 0, 0, 0));
@@ -401,7 +413,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     public void showFragment(FragmentSettings fragmentSettings) {
         Debug.log(PAGE_SWITCH + "show fragment: " + fragmentSettings);
-        mMenuFragment.selectMenu(fragmentSettings);
+        getNavigationManager().selectMenu(fragmentSettings);
     }
 
     private void showFragment(Intent intent) {
@@ -464,10 +476,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
         startPopupRush(false, false);
         initBonusCounterConfig();
-        // возможно что содержимое меню поменялось, надо обновить
-        if (mMenuFragment != null) {
-            mMenuFragment.updateAdapter();
-        }
     }
 
     /**
@@ -721,11 +729,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     @Override
     public void onFragmentSwitch(FragmentSettings fragmentSettings) {
-        if (fragmentSettings.isOverlayed()) {
-            switchContentTopMargin(true);
-        } else if (mActionBarOverlayed) {
-            switchContentTopMargin(false);
-        }
+
     }
 
     @Override

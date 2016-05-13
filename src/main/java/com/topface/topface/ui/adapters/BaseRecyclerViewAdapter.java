@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.BR;
-import com.topface.topface.data.FixedViewInfo;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,6 +46,7 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
     protected ItemEventListener<D> mItemEventListener;
     private ItemEventListener.OnRecyclerViewItemClickListener<D> mItemClick;
     private ItemEventListener.OnRecyclerViewItemLongClickListener<D> mItemLongClick;
+    private RecyclerView mRecyclerView;
 
     public BaseRecyclerViewAdapter() {
         updateObservable = Observable.create(new Observable.OnSubscribe<Bundle>() {
@@ -61,10 +61,16 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        mItemEventListener = new ItemEventListener<D>(recyclerView) {
+        mRecyclerView = recyclerView;
+        mItemEventListener = new ItemEventListener<D>() {
             @Override
             public D getDataItem(int pos) {
                 return mAdapterData.get(pos);
+            }
+
+            @Override
+            public int getPosition(View v) {
+                return getPositionByView(v);
             }
         };
         if (mItemClick != null) {
@@ -95,6 +101,10 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
         } else {
             Debug.debug(this, "Wrong layout manager");
         }
+    }
+
+    protected int getPositionByView(View v){
+        return mRecyclerView.getLayoutManager().getPosition(v);
     }
 
     @SuppressLint("SwitchIntDef")

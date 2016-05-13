@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.IntDef;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.topface.topface.data.FixedViewInfo;
@@ -19,8 +20,6 @@ import java.util.ArrayList;
  */
 public abstract class BaseHeaderFooterRecyclerViewAdapter<T extends ViewDataBinding, D> extends BaseRecyclerViewAdapter<T, D> {
 
-    public static final int EMPTY_POS = -1;
-
     private static final int TYPE_HEADER = 1;
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 2;
@@ -33,15 +32,6 @@ public abstract class BaseHeaderFooterRecyclerViewAdapter<T extends ViewDataBind
     private ArrayList<FixedViewInfo> mFooters = new ArrayList<>();
     private int mCurrentPosition;
 
-    public void setHeader(FixedViewInfo data) {
-        mHeaders.add(data);
-    }
-
-    public void setFooter(FixedViewInfo data) {
-        mFooters.add(data);
-    }
-
-
     @SuppressLint("SwitchIntDef")
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, @ItemType int viewType) {
@@ -50,12 +40,17 @@ public abstract class BaseHeaderFooterRecyclerViewAdapter<T extends ViewDataBind
         if (localPos != EMPTY_POS && viewType != TYPE_ITEM) {
             switch (viewType) {
                 case TYPE_FOOTER:
-                    return new ItemViewHolder(inflater.inflate(mFooters.get(localPos).getResId(), parent, false), mItemEventListener);
+                    return new ItemViewHolder(inflater.inflate(mFooters.get(localPos).getResId(), parent, false),null);
                 case TYPE_HEADER:
-                    return new ItemViewHolder(inflater.inflate(mHeaders.get(localPos).getResId(), parent, false), mItemEventListener);
+                    return new ItemViewHolder(inflater.inflate(mHeaders.get(localPos).getResId(), parent, false), null);
             }
         }
         return new ItemViewHolder(inflater.inflate(getItemLayout(), parent, false), mItemEventListener);
+    }
+
+    @Override
+    protected int getPositionByView(View v) {
+        return super.getPositionByView(v) - mHeaders.size();
     }
 
     @Override
@@ -137,6 +132,14 @@ public abstract class BaseHeaderFooterRecyclerViewAdapter<T extends ViewDataBind
 
     public ArrayList<FixedViewInfo> getFootersData() {
         return mFooters;
+    }
+
+    public void setHeader(FixedViewInfo data) {
+        mHeaders.add(data);
+    }
+
+    public void setFooter(FixedViewInfo data) {
+        mFooters.add(data);
     }
 
     public void notifyItemChange(int pos) {

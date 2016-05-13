@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments;
 
-import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -22,20 +21,22 @@ import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FixedViewInfo;
 import com.topface.topface.data.FragmentSettings;
+import com.topface.topface.data.HeaderFooterData.OnViewClickListener;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.IntegrationSettingsData;
 import com.topface.topface.data.leftMenu.LeftMenuData;
+import com.topface.topface.data.leftMenu.LeftMenuHeaderViewData;
 import com.topface.topface.data.leftMenu.LeftMenuHeaderData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
-import com.topface.topface.databinding.LeftMenuHeaderBinding;
+import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.databinding.NewFragmentMenuBinding;
 import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.state.SimpleStateDataUpdater;
 import com.topface.topface.state.TopfaceAppState;
-import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter;
-import com.topface.topface.ui.adapters.ItemEventListener;
+import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.adapters.ItemEventListener.OnRecyclerViewItemClickListener;
 import com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
@@ -46,6 +47,7 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
@@ -64,11 +66,14 @@ public class NewMenuFragment extends Fragment {
     private static final String LIKES_ICON = "likes_icon";
     private static final String COUNTERS_DATA = "counters_data";
     private static final String BALANCE_DATA = "balance_data";
+    private static final String SELECTED_POSITION = "selected_position";
 
     private static final String TAG = "NewMenuFragment";
 
     @Inject
     TopfaceAppState mAppState;
+    @Inject
+    NavigationState mNavigationState;
     private LeftMenuRecyclerViewAdapter mAdapter;
     private NewFragmentMenuBinding mBinding;
     private CountersData mCountersData;
@@ -139,22 +144,34 @@ public class NewMenuFragment extends Fragment {
         }
     };
 
-    private View.OnClickListener mOnHeaderClick = new View.OnClickListener() {
+    private Action1<NavigationActivity.DRAWER_LAYOUT_STATE> mDrawerOnNext = new Action1<NavigationActivity.DRAWER_LAYOUT_STATE>() {
         @Override
-        public void onClick(View v) {
-            Debug.showChunkedLogError("NewMenuFragment", "mOnHeaderClick");
+        public void call(NavigationActivity.DRAWER_LAYOUT_STATE drawer_layout_state) {
         }
     };
 
-    private ItemEventListener.OnRecyclerViewItemClickListener<LeftMenuData> mItemClickListener = new ItemEventListener.OnRecyclerViewItemClickListener<LeftMenuData>() {
+    private OnViewClickListener<LeftMenuHeaderViewData> mOnHeaderClick = new OnViewClickListener<LeftMenuHeaderViewData>() {
+        @Override
+        public void onClick(View v, LeftMenuHeaderViewData data) {
+            Debug.showChunkedLogError("NewMenuFragment", "mOnHeaderClick");
+            setSelected(new LeftMenuSettingsData(FragmentIdData.PROFILE));
+        }
+    };
+
+    public void setSelected(LeftMenuSettingsData fragmentSettings) {
+        if (mSelectedPos != EMPTY_POS) {
+            getAdapter().updateSelected(mSelectedPos, false);
+        }
+        mSelectedPos = fragmentSettings.getUniqueKey();
+        getAdapter().updateSelected(mSelectedPos, true);
+        mNavigationState.leftMenuItemSelected(fragmentSettings);
+    }
+
+    private OnRecyclerViewItemClickListener<LeftMenuData> mItemClickListener = new OnRecyclerViewItemClickListener<LeftMenuData>() {
         @Override
         public void itemClick(View view, int itemPosition, LeftMenuData data) {
             Debug.showChunkedLogError(TAG, "itemClick position " + itemPosition + " type " + data.getSettings().getFragmentId());
-            if (mSelectedPos != EMPTY_POS) {
-                getAdapter().updateSelected(mSelectedPos, false);
-            }
-            mSelectedPos = data.getSettings().getUniqueKey();
-            getAdapter().updateSelected(mSelectedPos, true);
+            setSelected(data.getSettings());
         }
     };
 
@@ -196,11 +213,22 @@ public class NewMenuFragment extends Fragment {
         if (savedInstanceState != null) {
             mCountersData = savedInstanceState.getParcelable(COUNTERS_DATA);
             mBalanceData = savedInstanceState.getParcelable(BALANCE_DATA);
+            mSelectedPos = savedInstanceState.getInt(SELECTED_POSITION, EMPTY_POS);
         }
         mCountersData = mCountersData == null ? new CountersData() : mCountersData;
         mBalanceData = mBalanceData == null ? new BalanceData() : mBalanceData;
         App.from(getActivity()).inject(this);
         mSubscription.add(mAppState.getObservable(BalanceData.class).filter(mBalanceFilter).subscribe(mBalanceOnNext));
+        Observable<NavigationActivity.DRAWER_LAYOUT_STATE> observable = ((NavigationActivity) getActivity()).getDrawerLayoutStateObservable();
+        if (observable != null) {
+            mSubscription.add(observable.subscribe(mDrawerOnNext, mSubscriptionOnError));
+        }
+        mSubscription.add(mNavigationState.getSwitchObservable().subscribe(new Action1<LeftMenuSettingsData>() {
+            @Override
+            public void call(LeftMenuSettingsData leftMenuSettingsData) {
+                setSelected(leftMenuSettingsData);
+            }
+        },mSubscriptionOnError));
         new OptionsAndProfileProvider(mStateDataUpdater);
     }
 
@@ -209,6 +237,7 @@ public class NewMenuFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putParcelable(COUNTERS_DATA, mCountersData);
         outState.putParcelable(BALANCE_DATA, mBalanceData);
+        outState.putInt(SELECTED_POSITION, mSelectedPos);
     }
 
     @Nullable

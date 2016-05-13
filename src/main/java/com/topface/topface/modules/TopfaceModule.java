@@ -12,6 +12,7 @@ import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
+import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.promo.dialogs.PromoKey71Dialog;
 import com.topface.topface.promo.dialogs.PromoKey81Dialog;
 import com.topface.topface.state.CacheDataInterface;
@@ -44,6 +45,7 @@ import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.NavigationManager;
 import com.topface.topface.utils.RunningStateManager;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.config.AppConfig;
@@ -103,7 +105,8 @@ import dagger.Provides;
                 Options.class,
                 User.class,
                 OptionsAndProfileProvider.class,
-                NewMenuFragment.class
+                NewMenuFragment.class,
+                NavigationManager.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
@@ -217,5 +220,11 @@ public class TopfaceModule {
     @Provides
     RunningStateManager providesRunningStateManager() {
         return new RunningStateManager();
+    }
+
+    @Provides
+    @Singleton
+    NavigationState providesNavigationState() {
+        return new NavigationState();
     }
 }

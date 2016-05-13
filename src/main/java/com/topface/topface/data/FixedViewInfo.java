@@ -1,18 +1,16 @@
 package com.topface.topface.data;
 
 import android.support.annotation.LayoutRes;
-import android.view.View;
 
 /**
  * Created by petrp on 10.05.2016.
  */
-public class FixedViewInfo<T> {
+public class FixedViewInfo<DataType> {
     @LayoutRes
     private int mResId;
-    private T mData;
-    private OnViewClick<T> mClickListener;
+    private DataType mData;
 
-    public FixedViewInfo(@LayoutRes int resId, T data) {
+    public FixedViewInfo(@LayoutRes int resId, DataType data) {
         mResId = resId;
         mData = data;
     }
@@ -22,17 +20,11 @@ public class FixedViewInfo<T> {
         return mResId;
     }
 
-    public T getData() {
+    public DataType getData() {
         return mData;
     }
 
-    public void setData(T data) {
+    public void setData(DataType data) {
         mData = data;
-    }
-
-    public interface OnViewClick<T> {
-
-        void onClick(View view, int itemPosition, T data);
-
     }
 }

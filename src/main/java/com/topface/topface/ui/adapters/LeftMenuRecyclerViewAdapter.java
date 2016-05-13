@@ -4,18 +4,16 @@ import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.text.SpannableString;
 
-import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.BR;
 import com.topface.topface.R;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FixedViewInfo;
 import com.topface.topface.data.leftMenu.LeftMenuData;
 import com.topface.topface.data.leftMenu.LeftMenuHeaderData;
-import com.topface.topface.databinding.LeftMenuHeaderBinding;
 import com.topface.topface.databinding.LeftMenuItemBinding;
 import com.topface.topface.viewModels.LeftMenuHeaderViewModel;
 import com.topface.topface.viewModels.LeftMenuItemViewModel;
-import com.topface.topface.BR;
 
 import org.jetbrains.annotations.NotNull;
 
