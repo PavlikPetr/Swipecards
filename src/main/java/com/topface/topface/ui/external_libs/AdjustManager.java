@@ -12,6 +12,7 @@ import com.topface.topface.App;
 import com.topface.topface.data.ActivityLifreCycleData;
 import com.topface.topface.data.Products;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.ui.fragments.TrackedLifeCycleActivity;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.utils.FlurryManager;
 
@@ -53,19 +54,19 @@ public class AdjustManager {
         });
         config.setLogLevel(Debug.isDebugLogsEnabled() ? LogLevel.VERBOSE : LogLevel.ASSERT);
         Adjust.onCreate(config);
-        TrackedLifeCycleActivity.getLifeCycleObservable().subscribe(new Action1<ActivityLifreCycleData>() {
-            @Override
-            public void call(ActivityLifreCycleData lifecycleData) {
-                switch (lifecycleData.state) {
-                    case RESUMED:
-                        Adjust.onResume();
-                        break;
-                    case PAUSED:
-                        Adjust.onPause();
-                        break;
-                }
-            }
-        });
+//        TrackedLifeCycleActivity.getLifeCycleObservable().subscribe(new Action1<ActivityLifreCycleData>() {
+//            @Override
+//            public void call(ActivityLifreCycleData lifecycleData) {
+//                switch (lifecycleData.state) {
+//                    case RESUMED:
+//                        Adjust.onResume();
+//                        break;
+//                    case PAUSED:
+//                        Adjust.onPause();
+//                        break;
+//                }
+//            }
+//        });
         mIsInitialized = true;
     }
 

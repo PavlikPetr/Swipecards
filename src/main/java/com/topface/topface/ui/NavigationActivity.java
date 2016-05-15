@@ -195,16 +195,11 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 App.sendReferreRequest(adjustAttributionData);
             }
         }));
-        mSubscription.add(mNavigationState.getSelectionObservable().subscribe(new Action1<LeftMenuSettingsData>() {
+        mSubscription.add(mNavigationState.getSwitchObservable().subscribe(new Action1<LeftMenuSettingsData>() {
             @Override
             public void call(LeftMenuSettingsData leftMenuSettingsData) {
-                Debug.showChunkedLogError("NewMenuFragment", "mNavigationState " + (leftMenuSettingsData != null ? leftMenuSettingsData.getUniqueKey() : "null"));
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mDrawerLayout.closeDrawer(GravityCompat.START);
-                    }
-                }, 250);
+                Debug.showChunkedLogError("TEST", "nav switched");
+                mDrawerLayout.closeDrawer(GravityCompat.START);
             }
         }, mCatchOnError));
         mSubscription.add(mNavigationState.getSwitchObservable().subscribe(new Action1<LeftMenuSettingsData>() {

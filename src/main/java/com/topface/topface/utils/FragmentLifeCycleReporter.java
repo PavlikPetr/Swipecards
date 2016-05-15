@@ -4,7 +4,6 @@ import com.topface.topface.data.FragmentLifreCycleData;
 
 import static com.topface.topface.data.FragmentLifreCycleData.*;
 
-
 /**
  * Created by ppavlik on 13.05.16.
  * LifeCycle reporter for activities/fragments

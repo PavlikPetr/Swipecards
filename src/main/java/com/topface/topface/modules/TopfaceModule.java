@@ -17,6 +17,7 @@ import com.topface.topface.promo.dialogs.PromoKey71Dialog;
 import com.topface.topface.promo.dialogs.PromoKey81Dialog;
 import com.topface.topface.state.CacheDataInterface;
 import com.topface.topface.state.CountersDataProvider;
+import com.topface.topface.state.LifeCycleState;
 import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.state.PopupHive;
 import com.topface.topface.state.TopfaceAppState;
@@ -42,9 +43,12 @@ import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.fragments.profile.ProfileFormFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
+import com.topface.topface.utils.ActivityLifeCycleReporter;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.FragmentLifeCycleReporter;
+import com.topface.topface.utils.LifeCycleReporter;
 import com.topface.topface.utils.NavigationManager;
 import com.topface.topface.utils.RunningStateManager;
 import com.topface.topface.utils.actionbar.OverflowMenu;
@@ -106,7 +110,10 @@ import dagger.Provides;
                 User.class,
                 OptionsAndProfileProvider.class,
                 NewMenuFragment.class,
-                NavigationManager.class
+                NavigationManager.class,
+                FragmentLifeCycleReporter.class,
+                ActivityLifeCycleReporter.class,
+                LifeCycleReporter.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
@@ -226,5 +233,11 @@ public class TopfaceModule {
     @Singleton
     NavigationState providesNavigationState() {
         return new NavigationState();
+    }
+
+    @Provides
+    @Singleton
+    LifeCycleState providesLifeCycleState(){
+        return new LifeCycleState();
     }
 }

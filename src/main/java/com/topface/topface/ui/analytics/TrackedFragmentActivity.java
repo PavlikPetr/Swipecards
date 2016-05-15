@@ -13,7 +13,7 @@ import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.ui.IBackPressedListener;
 import com.topface.topface.statistics.ScreensShowStatistics;
-import com.topface.topface.ui.external_libs.TrackedLifeCycleActivity;
+import com.topface.topface.ui.fragments.TrackedLifeCycleActivity;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.Utils;

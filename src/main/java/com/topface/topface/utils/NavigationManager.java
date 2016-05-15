@@ -8,12 +8,15 @@ import android.support.v4.app.FragmentTransaction;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.ActivityLifreCycleData;
+import com.topface.topface.data.FragmentLifreCycleData;
 import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.data.leftMenu.FragmentId;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.IntegrationSettingsData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
+import com.topface.topface.state.LifeCycleState;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.BonusFragment;
@@ -31,9 +34,14 @@ import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
+import rx.Subscription;
+import rx.functions.Action0;
 import rx.functions.Action1;
+import rx.functions.Func1;
 
 /**
  * Created by ppavlik on 12.05.16.
@@ -42,15 +50,18 @@ public class NavigationManager {
 
     @Inject
     NavigationState mNavigationState;
+    @Inject
+    LifeCycleState mLifeCycleState;
     private NewMenuFragment mLeftMenu;
     private Context mContex;
     private FragmentManager mFragmentManager;
     private LeftMenuSettingsData mFragmentSettings = new LeftMenuSettingsData(FragmentIdData.UNDEFINED);
+    private Subscription mSubscription;
 
     private Action1<Throwable> mCatchOnError = new Action1<Throwable>() {
         @Override
         public void call(Throwable throwable) {
-
+            Debug.showChunkedLogError("TEST", "on error " + throwable);
         }
     };
 
@@ -61,7 +72,13 @@ public class NavigationManager {
             @Override
             public void call(LeftMenuSettingsData leftMenuSettingsData) {
                 Debug.showChunkedLogError("NewMenuFragment", "mSelectionOnNext " + (leftMenuSettingsData != null ? leftMenuSettingsData.getUniqueKey() : "null"));
-                switchFragment(leftMenuSettingsData,false);
+                switchFragment(leftMenuSettingsData, false);
+            }
+        }, mCatchOnError);
+        mLifeCycleState.getObservable(FragmentLifreCycleData.class).subscribe(new Action1<FragmentLifreCycleData>() {
+            @Override
+            public void call(FragmentLifreCycleData fragmentLifreCycleData) {
+                Debug.showChunkedLogError("NewMenuFragment1", "fragment " + fragmentLifreCycleData.getClassName() + " state " + fragmentLifreCycleData.getState());
             }
         }, mCatchOnError);
     }
@@ -102,6 +119,7 @@ public class NavigationManager {
     }
 
     private void switchFragment(final LeftMenuSettingsData newFragmentSettings, boolean executePending) {
+        Debug.showChunkedLogError("TEST", "switchFragment");
         if (newFragmentSettings == null || mFragmentManager == null) {
             return;
         }
@@ -117,6 +135,8 @@ public class NavigationManager {
         }
 
         if (oldFragment == null || mFragmentSettings.getUniqueKey() != newFragmentSettings.getUniqueKey()) {
+            Debug.showChunkedLogError("TEST", "new fragment");
+            final String fragmnetName = newFragment.getClass().getName();
             FragmentTransaction transaction = mFragmentManager.beginTransaction();
             //Меняем фрагменты анимировано, но только на новых устройствах c HW ускорением
 //            if (mHardwareAccelerated) {
@@ -136,16 +156,39 @@ public class NavigationManager {
                     "no executePending";
             Debug.log("MenuFragment: commit " + transactionResult);
             mFragmentSettings = newFragmentSettings;
-            newFragment.getob
+            mSubscription = mLifeCycleState.getObservable(FragmentLifreCycleData.class).filter(new Func1<FragmentLifreCycleData, Boolean>() {
+                @Override
+                public Boolean call(FragmentLifreCycleData fragmentLifreCycleData) {
+                    Debug.showChunkedLogError("TEST", "fragment " + fragmentLifreCycleData.getClassName() + " state " + fragmentLifreCycleData.getState());
+                    return fragmentLifreCycleData.getState() == FragmentLifreCycleData.RESUME
+                            && fragmnetName.equals(fragmentLifreCycleData.getClassName());
+                }
+            })
+                    .subscribe(new Action1<FragmentLifreCycleData>() {
+                        @Override
+                        public void call(FragmentLifreCycleData fragmentLifreCycleData) {
+                            Debug.showChunkedLogError("TEST", "switched");
+                            mNavigationState.navigationFragmentSwitched(newFragmentSettings);
+                            if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+                                mSubscription.unsubscribe();
+                            }
+                        }
+                    }, mCatchOnError, new Action0() {
+                        @Override
+                        public void call() {
+                            Debug.showChunkedLogError("TEST", "on completed");
+                            mNavigationState.navigationFragmentSwitched(newFragmentSettings);
+                        }
+                    });
         } else {
             Debug.error("MenuFragment: new fragment already added");
+            Debug.showChunkedLogError("TEST", "old fragment");
+            mNavigationState.navigationFragmentSwitched(newFragmentSettings);
         }
-        mNavigationState.navigationFragmentSwitched(newFragmentSettings);
         //Закрываем меню только после создания фрагмента
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mNavigationState.navigationFragmentSwitched(newFragmentSettings);
             }
         }, 250);
     }

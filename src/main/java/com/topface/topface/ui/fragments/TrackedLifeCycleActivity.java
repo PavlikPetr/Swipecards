@@ -1,4 +1,4 @@
-package com.topface.topface.ui.external_libs;
+package com.topface.topface.ui.fragments;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -11,7 +11,7 @@ import com.topface.topface.utils.ActivityLifeCycleReporter;
  */
 public class TrackedLifeCycleActivity extends ActionBarActivity {
 
-    private ActivityLifeCycleReporter mLifeCycleReporter = new ActivityLifeCycleReporter(getLocalClassName());
+    private ActivityLifeCycleReporter mLifeCycleReporter = new ActivityLifeCycleReporter(getClass().getName());
 
     @Override
     protected void onDestroy() {

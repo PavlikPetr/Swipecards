@@ -162,9 +162,11 @@ public class NewMenuFragment extends Fragment {
         if (mSelectedPos != EMPTY_POS) {
             getAdapter().updateSelected(mSelectedPos, false);
         }
+        getAdapter().updateSelected(fragmentSettings.getUniqueKey(), true);
+        if (mSelectedPos != fragmentSettings.getUniqueKey()) {
+            mNavigationState.leftMenuItemSelected(fragmentSettings);
+        }
         mSelectedPos = fragmentSettings.getUniqueKey();
-        getAdapter().updateSelected(mSelectedPos, true);
-        mNavigationState.leftMenuItemSelected(fragmentSettings);
     }
 
     private OnRecyclerViewItemClickListener<LeftMenuData> mItemClickListener = new OnRecyclerViewItemClickListener<LeftMenuData>() {
@@ -226,9 +228,10 @@ public class NewMenuFragment extends Fragment {
         mSubscription.add(mNavigationState.getSwitchObservable().subscribe(new Action1<LeftMenuSettingsData>() {
             @Override
             public void call(LeftMenuSettingsData leftMenuSettingsData) {
+                Debug.showChunkedLogError("TEST", "catch switch");
                 setSelected(leftMenuSettingsData);
             }
-        },mSubscriptionOnError));
+        }, mSubscriptionOnError));
         new OptionsAndProfileProvider(mStateDataUpdater);
     }
 

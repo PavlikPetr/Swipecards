@@ -3,6 +3,7 @@ package com.topface.topface.ui.analytics;
 import android.content.Context;
 
 import com.topface.topface.statistics.ScreensShowStatistics;
+import com.topface.topface.ui.fragments.TrackedLifeCycleFragment;
 import com.topface.topface.ui.fragments.feed.IFeedLifeCycle;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.Utils;

@@ -1,8 +1,12 @@
 package com.topface.topface.utils;
 
+import com.topface.topface.App;
 import com.topface.topface.data.ViewLifreCycleData1;
+import com.topface.topface.state.LifeCycleState;
 
 import org.jetbrains.annotations.NotNull;
+
+import javax.inject.Inject;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -15,27 +19,15 @@ import rx.schedulers.Schedulers;
  * LifeCycle reporter for activities/fragments
  */
 public class LifeCycleReporter<T extends ViewLifreCycleData1> {
-    private Subscriber<? super T> mLifeCycleSubscriber;
-    private Observable<T> mActivityLifecycleObservable;
+
+    @Inject
+    LifeCycleState mLifeCycleState;
 
     public LifeCycleReporter() {
-        mActivityLifecycleObservable = Observable.create(new Observable.OnSubscribe<T>() {
-            @Override
-            public void call(Subscriber<? super T> subscriber) {
-                mLifeCycleSubscriber = subscriber;
-            }
-        }).subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread()).share();
-    }
-
-    @NotNull
-    public Observable<T> getLifeCycleObservable() {
-        return mActivityLifecycleObservable;
+        App.get().inject(this);
     }
 
     public void emitLifeCycle(T data) {
-        if (mLifeCycleSubscriber != null && !mLifeCycleSubscriber.isUnsubscribed()) {
-            mLifeCycleSubscriber.onNext(data);
-        }
-    }
+        mLifeCycleState.setData(data);
+    } 
 }

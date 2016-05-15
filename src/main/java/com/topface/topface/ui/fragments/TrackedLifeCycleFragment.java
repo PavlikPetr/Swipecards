@@ -1,4 +1,4 @@
-package com.topface.topface.ui.analytics;
+package com.topface.topface.ui.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
