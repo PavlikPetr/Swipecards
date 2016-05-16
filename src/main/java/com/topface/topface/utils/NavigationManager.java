@@ -1,21 +1,19 @@
 package com.topface.topface.utils;
 
 import android.content.Context;
-import android.os.Handler;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.ActivityLifreCycleData;
 import com.topface.topface.data.FragmentLifreCycleData;
-import com.topface.topface.data.FragmentSettings;
-import com.topface.topface.data.leftMenu.FragmentId;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.IntegrationSettingsData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
+import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.state.LifeCycleState;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -23,7 +21,7 @@ import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.EditorFragment;
 import com.topface.topface.ui.fragments.IntegrationWebViewFragment;
-import com.topface.topface.ui.fragments.NewMenuFragment;
+import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
@@ -33,8 +31,6 @@ import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -48,50 +44,60 @@ import rx.functions.Func1;
  */
 public class NavigationManager {
 
+    private static final String FRAGMENT_SETTINGS = "fragment_settings";
+
     @Inject
     NavigationState mNavigationState;
     @Inject
     LifeCycleState mLifeCycleState;
-    private NewMenuFragment mLeftMenu;
+    private MenuFragment mLeftMenu;
     private Context mContex;
     private FragmentManager mFragmentManager;
     private LeftMenuSettingsData mFragmentSettings = new LeftMenuSettingsData(FragmentIdData.UNDEFINED);
     private Subscription mSubscription;
+    private Bundle mSavedInstanceState;
 
     private Action1<Throwable> mCatchOnError = new Action1<Throwable>() {
         @Override
         public void call(Throwable throwable) {
-            Debug.showChunkedLogError("TEST", "on error " + throwable);
         }
     };
 
-    public NavigationManager(Context context) {
+    public NavigationManager(Context context, Bundle savedInstanceState) {
         App.get().inject(this);
+        mSavedInstanceState = savedInstanceState;
         mContex = context;
-        mNavigationState.getSelectionObservable().subscribe(new Action1<LeftMenuSettingsData>() {
+        mNavigationState.getSelectionObservable().subscribe(new Action1<WrappedNavigationData>() {
             @Override
-            public void call(LeftMenuSettingsData leftMenuSettingsData) {
-                Debug.showChunkedLogError("NewMenuFragment", "mSelectionOnNext " + (leftMenuSettingsData != null ? leftMenuSettingsData.getUniqueKey() : "null"));
-                switchFragment(leftMenuSettingsData, false);
+            public void call(WrappedNavigationData wrappedLeftMenuSettingsData) {
+                if (wrappedLeftMenuSettingsData != null && wrappedLeftMenuSettingsData.getSenderType() != WrappedNavigationData.SWITCHED_EXTERNALY) {
+                    selectFragment(wrappedLeftMenuSettingsData.getData(), wrappedLeftMenuSettingsData.getSenderType(), false);
+                }
             }
         }, mCatchOnError);
-        mLifeCycleState.getObservable(FragmentLifreCycleData.class).subscribe(new Action1<FragmentLifreCycleData>() {
-            @Override
-            public void call(FragmentLifreCycleData fragmentLifreCycleData) {
-                Debug.showChunkedLogError("NewMenuFragment1", "fragment " + fragmentLifreCycleData.getClassName() + " state " + fragmentLifreCycleData.getState());
-            }
-        }, mCatchOnError);
+    }
+
+    public LeftMenuSettingsData getFragmentData(@FragmentIdData.FragmentId int fragmentId) {
+        if (fragmentId == FragmentIdData.DATING) {
+            return new LeftMenuSettingsData(fragmentId, true);
+        }
+        return new LeftMenuSettingsData(fragmentId);
     }
 
     public void init(@NotNull FragmentManager fragmentManager) {
         mFragmentManager = fragmentManager;
         initLeftMenu();
+        LeftMenuSettingsData settings = getFragmentData(App.get().getOptions().startPage);
+        if (mSavedInstanceState != null && mSavedInstanceState.containsKey(FRAGMENT_SETTINGS)) {
+            settings = mSavedInstanceState.getParcelable(FRAGMENT_SETTINGS);
+        }
+        selectFragment(settings, WrappedNavigationData.SWITCHED_EXTERNALY, false);
     }
 
     private void initLeftMenu() {
-        mLeftMenu = (NewMenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
+        mLeftMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
         if (mLeftMenu == null) {
-            mLeftMenu = new NewMenuFragment();
+            mLeftMenu = new MenuFragment();
         }
         if (!mLeftMenu.isAdded()) {
             mFragmentManager
@@ -105,21 +111,9 @@ public class NavigationManager {
         return "fragment_switch_controller_" + settings.getUniqueKey();
     }
 
-    @FragmentIdData.FragmentId
-    private int getFragmentId(BaseFragment fragment) {
-        @FragmentIdData.FragmentId
-        int id = FragmentIdData.UNDEFINED;
-        if (fragment != null) {
-            Class cls = fragment.getClass();
-            if (cls.isAnnotationPresent(FragmentId.class)) {
-                id = ((FragmentId) cls.getAnnotation(FragmentId.class)).fragmentId();
-            }
-        }
-        return id;
-    }
-
-    private void switchFragment(final LeftMenuSettingsData newFragmentSettings, boolean executePending) {
-        Debug.showChunkedLogError("TEST", "switchFragment");
+    private void switchFragment(LeftMenuSettingsData newFragmentSettings,
+                                final @WrappedNavigationData.NavigationEventSenderType int senderType,
+                                boolean executePending) {
         if (newFragmentSettings == null || mFragmentManager == null) {
             return;
         }
@@ -135,7 +129,6 @@ public class NavigationManager {
         }
 
         if (oldFragment == null || mFragmentSettings.getUniqueKey() != newFragmentSettings.getUniqueKey()) {
-            Debug.showChunkedLogError("TEST", "new fragment");
             final String fragmnetName = newFragment.getClass().getName();
             FragmentTransaction transaction = mFragmentManager.beginTransaction();
             //Меняем фрагменты анимировано, но только на новых устройствах c HW ускорением
@@ -156,41 +149,36 @@ public class NavigationManager {
                     "no executePending";
             Debug.log("MenuFragment: commit " + transactionResult);
             mFragmentSettings = newFragmentSettings;
-            mSubscription = mLifeCycleState.getObservable(FragmentLifreCycleData.class).filter(new Func1<FragmentLifreCycleData, Boolean>() {
-                @Override
-                public Boolean call(FragmentLifreCycleData fragmentLifreCycleData) {
-                    Debug.showChunkedLogError("TEST", "fragment " + fragmentLifreCycleData.getClassName() + " state " + fragmentLifreCycleData.getState());
-                    return fragmentLifreCycleData.getState() == FragmentLifreCycleData.RESUME
-                            && fragmnetName.equals(fragmentLifreCycleData.getClassName());
-                }
-            })
+            mSubscription = mLifeCycleState.getObservable(FragmentLifreCycleData.class)
+                    .filter(new Func1<FragmentLifreCycleData, Boolean>() {
+                        @Override
+                        public Boolean call(FragmentLifreCycleData fragmentLifreCycleData) {
+                            return fragmentLifreCycleData.getState() == FragmentLifreCycleData.RESUME
+                                    && fragmnetName.equals(fragmentLifreCycleData.getClassName());
+                        }
+                    })
                     .subscribe(new Action1<FragmentLifreCycleData>() {
                         @Override
                         public void call(FragmentLifreCycleData fragmentLifreCycleData) {
-                            Debug.showChunkedLogError("TEST", "switched");
-                            mNavigationState.navigationFragmentSwitched(newFragmentSettings);
-                            if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-                                mSubscription.unsubscribe();
-                            }
+                            sendNavigationFragmentSwitched(senderType);
                         }
                     }, mCatchOnError, new Action0() {
                         @Override
                         public void call() {
-                            Debug.showChunkedLogError("TEST", "on completed");
-                            mNavigationState.navigationFragmentSwitched(newFragmentSettings);
+                            sendNavigationFragmentSwitched(senderType);
                         }
                     });
         } else {
             Debug.error("MenuFragment: new fragment already added");
-            Debug.showChunkedLogError("TEST", "old fragment");
-            mNavigationState.navigationFragmentSwitched(newFragmentSettings);
+            sendNavigationFragmentSwitched(senderType);
         }
-        //Закрываем меню только после создания фрагмента
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-            }
-        }, 250);
+    }
+
+    private void sendNavigationFragmentSwitched(@WrappedNavigationData.NavigationEventSenderType int senderType) {
+        mNavigationState.navigationFragmentSwitched(new WrappedNavigationData(mFragmentSettings, senderType));
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
     }
 
     private BaseFragment getFragmentNewInstanceById(LeftMenuSettingsData id) {
@@ -211,7 +199,7 @@ public class NavigationManager {
                 break;
             case FragmentIdData.INTEGRATION_PAGE:
                 IntegrationSettingsData fragmentSettings = (IntegrationSettingsData) id;
-                fragment = IntegrationWebViewFragment.newInstance("Test", fragmentSettings.getUrl());
+                fragment = IntegrationWebViewFragment.newInstance(fragmentSettings.getPageName(), fragmentSettings.getUrl());
                 break;
             case FragmentIdData.TABBED_VISITORS:
                 fragment = new TabbedVisitorsFragment();
@@ -241,11 +229,34 @@ public class NavigationManager {
         return fragment;
     }
 
-    public void selectMenu(FragmentSettings fragmentSettings) {
-
+    public void selectFragment(LeftMenuSettingsData fragmentSettings){
+        selectFragment(fragmentSettings,WrappedNavigationData.SWITCHED_EXTERNALY,false);
     }
 
-    public void showBalance() {
-        mContex.startActivity(PurchasesActivity.createBuyingIntent("Menu", App.get().getOptions().topfaceOfferwallRedirect));
+    private void selectFragment(LeftMenuSettingsData fragmentSettings, @WrappedNavigationData.NavigationEventSenderType int senderType, boolean executePending) {
+        switch (fragmentSettings.getFragmentId()) {
+            case FragmentIdData.BALLANCE:
+                mContex.startActivity(PurchasesActivity.createBuyingIntent("Menu", App.get().getOptions().topfaceOfferwallRedirect));
+                selectPreviousLeftMenuItem();
+                break;
+            case FragmentIdData.INTEGRATION_PAGE:
+                IntegrationSettingsData settingsData = (IntegrationSettingsData) fragmentSettings;
+                if (settingsData.isExternal()) {
+                    Utils.goToUrl(mContex, settingsData.getUrl());
+                    selectPreviousLeftMenuItem();
+                    break;
+                }
+            default:
+                switchFragment(fragmentSettings, senderType, executePending);
+        }
+    }
+
+    private void selectPreviousLeftMenuItem() {
+        mNavigationState.leftMenuItemSelected(new WrappedNavigationData(mFragmentSettings, WrappedNavigationData.SWITCHED_EXTERNALY));
+        sendNavigationFragmentSwitched(WrappedNavigationData.SWITCHED_EXTERNALY);
+    }
+
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(FRAGMENT_SETTINGS, mFragmentSettings);
     }
 }

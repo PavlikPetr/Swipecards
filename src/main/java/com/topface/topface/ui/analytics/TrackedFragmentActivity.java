@@ -27,7 +27,6 @@ public class TrackedFragmentActivity extends TrackedLifeCycleActivity {
     @Override
     public void onStart() {
         super.onStart();
-        App.onActivityStarted(this.getClass().getName());
         StatisticsTracker.getInstance().activityStart(this);
         if (isTrackable()) {
             senActivitiesShownStatistics();
@@ -73,7 +72,6 @@ public class TrackedFragmentActivity extends TrackedLifeCycleActivity {
     @Override
     public void onStop() {
         super.onStop();
-        App.onActivityStoped(this.getClass().getName());
         EasyTracker.getTracker().send(new HitBuilders.AppViewBuilder().set(EasyTracker.SESSION_CONTROL, "end").build());
     }
 

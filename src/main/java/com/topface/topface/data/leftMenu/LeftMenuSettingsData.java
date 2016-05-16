@@ -1,10 +1,13 @@
 package com.topface.topface.data.leftMenu;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by ppavlik on 06.05.16.
  * Main settings for left menu fragments
  */
-public class LeftMenuSettingsData {
+public class LeftMenuSettingsData implements Parcelable {
 
     @FragmentIdData.FragmentId
     private int mFragmentId;
@@ -49,7 +52,7 @@ public class LeftMenuSettingsData {
         return mIsOverlayed;
     }
 
-    public int getUniqueKey(){
+    public int getUniqueKey() {
         return mFragmentId;
     }
 
@@ -63,5 +66,33 @@ public class LeftMenuSettingsData {
     @Override
     public int hashCode() {
         return 31 * mFragmentId + (mIsOverlayed ? 1 : 0);
+    }
+
+    protected LeftMenuSettingsData(Parcel in) {
+        mFragmentId = FragmentIdData.getFragmentId(in.readInt());
+        mIsOverlayed = in.readInt() != 0;
+    }
+
+    public static final Parcelable.Creator<LeftMenuSettingsData> CREATOR = new Parcelable.Creator<LeftMenuSettingsData>() {
+        @Override
+        public LeftMenuSettingsData createFromParcel(Parcel in) {
+            return new LeftMenuSettingsData(in);
+        }
+
+        @Override
+        public LeftMenuSettingsData[] newArray(int size) {
+            return new LeftMenuSettingsData[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeInt(mFragmentId);
+        out.writeInt(mIsOverlayed ? 1 : 0);
     }
 }

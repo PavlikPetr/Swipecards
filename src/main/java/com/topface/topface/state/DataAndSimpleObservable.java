@@ -5,16 +5,15 @@ import org.jetbrains.annotations.NotNull;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
 /**
  * Created by petrp on 14.05.2016.
  */
-public class DataAndObserve<DataType> extends DataAndObservable<DataType, Observable<DataType>> {
+public class DataAndSimpleObservable<DataType> extends DataAndObservable<DataType, Observable<DataType>> {
     private Subscriber<? super DataType> mSubscriber;
 
-    public DataAndObserve(DataType data) {
+    public DataAndSimpleObservable(DataType data) {
         super(data);
     }
 
@@ -27,7 +26,7 @@ public class DataAndObserve<DataType> extends DataAndObservable<DataType, Observ
                 mSubscriber = subscriber;
             }
         }).subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread());
+                .observeOn(AndroidSchedulers.mainThread()).share();
     }
 
     @Override

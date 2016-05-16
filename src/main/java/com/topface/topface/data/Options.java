@@ -19,6 +19,7 @@ import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.InstantMessagesForNewbies;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
+import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.state.TopfaceAppState;
@@ -40,6 +41,7 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
+import static com.topface.topface.data.leftMenu.FragmentIdData.*;
 import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 
 /**
@@ -103,7 +105,8 @@ public class Options extends AbstractData {
      * Id фрагмента, который будет отображаться при старте приложения
      * По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
      */
-    public FragmentSettings startPage = FragmentId.DATING.getFragmentSettings();
+    @FragmentIdData.FragmentId
+    public int startPage = DATING;
 
     /**
      * Флаг отображения превью в диалогах
@@ -739,14 +742,9 @@ public class Options extends AbstractData {
         }
     }
 
-    private FragmentSettings getStartPageFragmentId(JSONObject response) {
-        FragmentId fragmentId = startPage.getFragmentId();
-        try {
-            fragmentId = FragmentId.valueOf(response.optString("startPage"));
-        } catch (IllegalArgumentException e) {
-            Debug.error("Illegal value of startPage", e);
-        }
-        return fragmentId.getFragmentSettings();
+    @FragmentIdData.FragmentId
+    private int getStartPageFragmentId(JSONObject response) {
+        return startPage;
     }
 
     public boolean isScruffyEnabled() {

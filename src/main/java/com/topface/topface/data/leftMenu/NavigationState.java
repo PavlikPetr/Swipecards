@@ -1,7 +1,5 @@
 package com.topface.topface.data.leftMenu;
 
-import com.topface.framework.utils.Debug;
-
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -14,23 +12,23 @@ import rx.schedulers.Schedulers;
  */
 public class NavigationState {
 
-    private static Subscriber<? super LeftMenuSettingsData> mLeftMenuSelectionSubscriber;
-    private static Observable<LeftMenuSettingsData> mLeftMenuSelectionObservable;
+    private static Subscriber<? super WrappedNavigationData> mLeftMenuSelectionSubscriber;
+    private static Observable<WrappedNavigationData> mLeftMenuSelectionObservable;
 
-    private static Subscriber<? super LeftMenuSettingsData> mNavigationSwitcherSubscriber;
-    private static Observable<LeftMenuSettingsData> mNavigationSwitcherObservable;
+    private static Subscriber<? super WrappedNavigationData> mNavigationSwitcherSubscriber;
+    private static Observable<WrappedNavigationData> mNavigationSwitcherObservable;
 
     public NavigationState() {
-        mLeftMenuSelectionObservable = Observable.create(new Observable.OnSubscribe<LeftMenuSettingsData>() {
+        mLeftMenuSelectionObservable = Observable.create(new Observable.OnSubscribe<WrappedNavigationData>() {
             @Override
-            public void call(Subscriber<? super LeftMenuSettingsData> subscriber) {
+            public void call(Subscriber<? super WrappedNavigationData> subscriber) {
                 mLeftMenuSelectionSubscriber = subscriber;
             }
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread()).share();
-        mNavigationSwitcherObservable = Observable.create(new Observable.OnSubscribe<LeftMenuSettingsData>() {
+        mNavigationSwitcherObservable = Observable.create(new Observable.OnSubscribe<WrappedNavigationData>() {
             @Override
-            public void call(Subscriber<? super LeftMenuSettingsData> subscriber) {
+            public void call(Subscriber<? super WrappedNavigationData> subscriber) {
                 mNavigationSwitcherSubscriber = subscriber;
             }
         }).subscribeOn(Schedulers.newThread())
@@ -42,8 +40,7 @@ public class NavigationState {
      *
      * @param data selection item info
      */
-    public void leftMenuItemSelected(LeftMenuSettingsData data) {
-        Debug.showChunkedLogError("NewMenuFragment", "leftMenuItemSelected " + (data != null ? data.getUniqueKey() : "null"));
+    public void leftMenuItemSelected(WrappedNavigationData data) {
         if (mLeftMenuSelectionSubscriber != null && !mLeftMenuSelectionSubscriber.isUnsubscribed()) {
             mLeftMenuSelectionSubscriber.onNext(data);
         }
@@ -54,7 +51,7 @@ public class NavigationState {
      *
      * @return observable
      */
-    public Observable<LeftMenuSettingsData> getSelectionObservable() {
+    public Observable<WrappedNavigationData> getSelectionObservable() {
         return mLeftMenuSelectionObservable;
     }
 
@@ -63,7 +60,7 @@ public class NavigationState {
      *
      * @param data switched fragment info
      */
-    public void navigationFragmentSwitched(LeftMenuSettingsData data) {
+    public void navigationFragmentSwitched(WrappedNavigationData data) {
         if (mNavigationSwitcherSubscriber != null && !mNavigationSwitcherSubscriber.isUnsubscribed()) {
             mNavigationSwitcherSubscriber.onNext(data);
         }
@@ -74,7 +71,7 @@ public class NavigationState {
      *
      * @return observable
      */
-    public Observable<LeftMenuSettingsData> getSwitchObservable() {
+    public Observable<WrappedNavigationData> getSwitchObservable() {
         return mNavigationSwitcherObservable;
     }
 }

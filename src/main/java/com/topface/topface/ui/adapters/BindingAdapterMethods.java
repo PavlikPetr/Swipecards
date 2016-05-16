@@ -52,7 +52,6 @@ public class BindingAdapterMethods {
 
     @BindingAdapter("app:selected")
     public static void setSelected(View view, boolean isSelected) {
-        Debug.showChunkedLogError("NewMenuFragment", "isSelected " + isSelected);
         view.setSelected(isSelected);
     }
 

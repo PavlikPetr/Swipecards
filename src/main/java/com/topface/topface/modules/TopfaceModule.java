@@ -32,7 +32,6 @@ import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.external_libs.modules.ExternalLibsInjectModule;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
-import com.topface.topface.ui.fragments.NewMenuFragment;
 import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.feed.AdmirationFragment;
@@ -109,11 +108,12 @@ import dagger.Provides;
                 Options.class,
                 User.class,
                 OptionsAndProfileProvider.class,
-                NewMenuFragment.class,
+                MenuFragment.class,
                 NavigationManager.class,
                 FragmentLifeCycleReporter.class,
                 ActivityLifeCycleReporter.class,
-                LifeCycleReporter.class
+                LifeCycleReporter.class,
+                RunningStateManager.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
@@ -237,7 +237,7 @@ public class TopfaceModule {
 
     @Provides
     @Singleton
-    LifeCycleState providesLifeCycleState(){
+    LifeCycleState providesLifeCycleState() {
         return new LifeCycleState();
     }
 }

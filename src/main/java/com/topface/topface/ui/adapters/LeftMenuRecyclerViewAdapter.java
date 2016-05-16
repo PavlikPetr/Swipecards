@@ -4,7 +4,6 @@ import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.text.SpannableString;
 
-import com.topface.framework.utils.Debug;
 import com.topface.topface.BR;
 import com.topface.topface.R;
 import com.topface.topface.data.CountersData;
@@ -95,7 +94,6 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
     }
 
     public void updateSelected(int fragmentId, boolean isSelected) {
-        Debug.showChunkedLogError("NewMenuFragment", "updateSelected id " + fragmentId + " isSelected " + isSelected);
         int pos = getDataPositionByFragmentId(fragmentId);
         if (pos != EMPTY_POS) {
             getData().get(pos).setSelected(isSelected);

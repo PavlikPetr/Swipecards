@@ -26,11 +26,12 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
 import com.topface.topface.data.CountersData;
-import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
+import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.requests.IApiResponse;
@@ -83,8 +84,6 @@ import rx.Observable;
 import rx.functions.Action1;
 import rx.subjects.BehaviorSubject;
 import rx.subscriptions.CompositeSubscription;
-
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
 
 public class NavigationActivity extends ParentNavigationActivity implements INavigationFragmentsListener {
     public static final String INTENT_EXIT = "EXIT";
@@ -195,21 +194,22 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 App.sendReferreRequest(adjustAttributionData);
             }
         }));
-        mSubscription.add(mNavigationState.getSwitchObservable().subscribe(new Action1<LeftMenuSettingsData>() {
+        mSubscription.add(mNavigationState.getSwitchObservable().subscribe(new Action1<WrappedNavigationData>() {
             @Override
-            public void call(LeftMenuSettingsData leftMenuSettingsData) {
-                Debug.showChunkedLogError("TEST", "nav switched");
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-            }
-        }, mCatchOnError));
-        mSubscription.add(mNavigationState.getSwitchObservable().subscribe(new Action1<LeftMenuSettingsData>() {
-            @Override
-            public void call(LeftMenuSettingsData leftMenuSettingsData) {
-                if (leftMenuSettingsData.isOverlayed()) {
-                    switchContentTopMargin(true);
-                } else if (mActionBarOverlayed) {
-                    switchContentTopMargin(false);
+            public void call(WrappedNavigationData wrappedLeftMenuSettingsData) {
+                if (wrappedLeftMenuSettingsData != null) {
+                    if (wrappedLeftMenuSettingsData.getData().isOverlayed()) {
+                        switchContentTopMargin(true);
+                    } else if (mActionBarOverlayed) {
+                        switchContentTopMargin(false);
+                    }
                 }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
+                    }
+                }, 50);
             }
         }, mCatchOnError));
         if (isNeedBroughtToFront(intent)) {
@@ -222,6 +222,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (params != null) {
             mInitialTopMargin = params.topMargin;
         }
+        initNavigationManager(savedInstanceState);
         initDrawerLayout();
         initFullscreen();
         initAppsFlyer();
@@ -274,7 +275,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 new DatingLockPopup.DatingLockPopupRedirectListener() {
                     @Override
                     public void onRedirect() {
-                        showFragment(FragmentId.TABBED_LIKES.getFragmentSettings());
+                        showFragment(new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS));
                     }
                 }, this));
         startActions.add(new InvitePopupAction(this, PopupHive.AC_PRIORITY_HIGH));
@@ -283,7 +284,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 PromoExpressMessages.createPromoPopupStartAction(PopupHive.AC_PRIORITY_HIGH, new PromoExpressMessages.PopupRedirectListener() {
                     @Override
                     public void onRedirect() {
-                        showFragment(FragmentId.TABBED_DIALOGS.getFragmentSettings());
+                        showFragment(new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS));
                         mDrawerLayoutStateObservable.onNext(DRAWER_LAYOUT_STATE.CLOSED);
                     }
                 }),
@@ -321,9 +322,19 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     private NavigationManager getNavigationManager() {
         if (mNavigationManager == null) {
-            mNavigationManager = new NavigationManager(this);
+            mNavigationManager = initNavigationManager(null);
         }
         return mNavigationManager;
+    }
+
+    private NavigationManager initNavigationManager(Bundle savedInstanceState) {
+        return mNavigationManager = new NavigationManager(this, savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getNavigationManager().onSaveInstanceState(outState);
     }
 
     @SuppressWarnings("deprecation")
@@ -406,16 +417,16 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
     }
 
-    public void showFragment(FragmentSettings fragmentSettings) {
+    public void showFragment(LeftMenuSettingsData fragmentSettings) {
         Debug.log(PAGE_SWITCH + "show fragment: " + fragmentSettings);
-        getNavigationManager().selectMenu(fragmentSettings);
+        getNavigationManager().selectFragment(fragmentSettings);
     }
 
     private void showFragment(Intent intent) {
         //Получаем id фрагмента, если он открыт
-        FragmentSettings currentFragment = intent.getParcelableExtra(GCMUtils.NEXT_INTENT);
+        LeftMenuSettingsData currentFragment = intent.getParcelableExtra(GCMUtils.NEXT_INTENT);
         Debug.log(PAGE_SWITCH + "show fragment from NEXT_INTENT: " + currentFragment);
-        showFragment(currentFragment == null ? App.from(this).getOptions().startPage : currentFragment);
+        showFragment(currentFragment == null ? getNavigationManager().getFragmentData(App.from(this).getOptions().startPage) : currentFragment);
     }
 
     @Override
@@ -723,7 +734,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     @Override
-    public void onFragmentSwitch(FragmentSettings fragmentSettings) {
+    public void onFragmentSwitch(LeftMenuSettingsData fragmentSettings) {
 
     }
 
