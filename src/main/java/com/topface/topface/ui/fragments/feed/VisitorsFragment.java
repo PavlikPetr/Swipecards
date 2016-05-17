@@ -6,7 +6,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.data.Visitor;
@@ -17,7 +16,6 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.VisitorsListAdapter;
-import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
@@ -96,7 +94,8 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
         initGagView(inflated, R.string.go_dating_message, R.string.general_get_dating, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MenuFragment.selectFragment(FragmentId.DATING.getFragmentSettings());
+                //TODO
+//                MenuFragment.selectFragment(FragmentId.DATING.getFragmentSettings());
             }
         });
         getUnlockButtonView(inflated).setVisibility(View.GONE);

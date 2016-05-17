@@ -14,25 +14,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FixedViewInfo;
-import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.data.HeaderFooterData.OnViewClickListener;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.IntegrationSettingsData;
 import com.topface.topface.data.leftMenu.LeftMenuData;
-import com.topface.topface.data.leftMenu.LeftMenuHeaderViewData;
 import com.topface.topface.data.leftMenu.LeftMenuHeaderData;
+import com.topface.topface.data.leftMenu.LeftMenuHeaderViewData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
-import com.topface.topface.databinding.NewFragmentMenuBinding;
+import com.topface.topface.databinding.FragmentMenuBinding;
 import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.state.SimpleStateDataUpdater;
 import com.topface.topface.state.TopfaceAppState;
@@ -76,7 +74,7 @@ public class MenuFragment extends Fragment {
     @Inject
     NavigationState mNavigationState;
     private LeftMenuRecyclerViewAdapter mAdapter;
-    private NewFragmentMenuBinding mBinding;
+    private FragmentMenuBinding mBinding;
     private CountersData mCountersData;
     private BalanceData mBalanceData;
     private CompositeSubscription mSubscription = new CompositeSubscription();
@@ -195,7 +193,7 @@ public class MenuFragment extends Fragment {
         if (options != null && options.leftMenuItems != null && options.leftMenuItems.size() > 0) {
             int pos = 0;
             for (Options.LeftMenuIntegrationItems leftMenuItem : options.leftMenuItems) {
-                arrayList.add(new LeftMenuData(leftMenuItem.iconUrl, new SpannableString(leftMenuItem.title), 0, false, new IntegrationSettingsData(FragmentIdData.INTEGRATION_PAGE, false, pos, leftMenuItem.url, leftMenuItem.external, leftMenuItem.title)));
+                arrayList.add(new LeftMenuData(leftMenuItem.iconUrl, new SpannableString(leftMenuItem.title), 0, false, new IntegrationSettingsData(FragmentIdData.INTEGRATION_PAGE, pos, leftMenuItem.url, leftMenuItem.external, leftMenuItem.title)));
                 pos++;
             }
         }
@@ -241,7 +239,7 @@ public class MenuFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View root = inflater.inflate(R.layout.new_fragment_menu, null);
+        View root = inflater.inflate(R.layout.fragment_menu, null);
         mBinding = DataBindingUtil.bind(root);
         mBinding.rvMenu.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBinding.rvMenu.setAdapter(getAdapter());
@@ -283,7 +281,7 @@ public class MenuFragment extends Fragment {
         Options options = App.from(getActivity()).getOptions();
         ArrayList<LeftMenuData> arrayList = new ArrayList<>();
         arrayList.add(new LeftMenuData(R.drawable.ic_photo_left_menu, R.string.general_photoblog, 0, false, new LeftMenuSettingsData(FragmentIdData.PHOTO_BLOG)));
-        arrayList.add(new LeftMenuData(R.drawable.ic_dating_left_menu, R.string.general_dating, 0, false, new LeftMenuSettingsData(FragmentIdData.DATING, true)));
+        arrayList.add(new LeftMenuData(R.drawable.ic_dating_left_menu, R.string.general_dating, 0, false, new LeftMenuSettingsData(FragmentIdData.DATING)));
         arrayList.add(new LeftMenuData(R.drawable.ic_like_left_menu, R.string.general_sympathies, mCountersData.getLikes(), false, new LeftMenuSettingsData(FragmentIdData.TABBED_LIKES)));
         arrayList.add(new LeftMenuData(R.drawable.ic_chat_left_menu, R.string.settings_messages, mCountersData.getDialogs(), false, new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS)));
         arrayList.add(new LeftMenuData(R.drawable.ic_guests_left_menu, R.string.general_visitors, mCountersData.getVisitors(), false, new LeftMenuSettingsData(FragmentIdData.TABBED_VISITORS)));

@@ -5,7 +5,7 @@
         <item name="android:layout_marginStart">@dimen/left_menu_title_margin_left</item>
     </style>
 
-    <style name="NewLeftMenuBadge" parent="LeftMenuBadgeBase">
+    <style name="LeftMenuBadge" parent="LeftMenuBadgeBase">
         <item name="android:layout_marginEnd">@dimen/left_menu_item_padding_right</item>
         <item name="android:layout_alignParentEnd">true</item>
     </style>

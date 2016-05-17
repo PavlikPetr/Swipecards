@@ -145,22 +145,6 @@ public class CountersData implements Parcelable {
         dest.writeInt(getBonus());
     }
 
-    public int getCounterByFragmentId(FragmentSettings id) {
-        switch (id.getFragmentId()) {
-            case TABBED_DIALOGS:
-                return getDialogs();
-            case TABBED_VISITORS:
-                return getVisitors() + getFans();
-            case TABBED_LIKES:
-                return getLikes() + getMutual() + getAdmirations();
-            case GEO:
-                return getPeopleNearby();
-            case BONUS:
-                return getBonus();
-        }
-        return -1;
-    }
-
     public int getCounterByFragmentId(@FragmentIdData.FragmentId int id) {
         switch (id) {
             case FragmentIdData.TABBED_DIALOGS:

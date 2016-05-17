@@ -77,17 +77,10 @@ public class NavigationManager {
         }, mCatchOnError);
     }
 
-    public LeftMenuSettingsData getFragmentData(@FragmentIdData.FragmentId int fragmentId) {
-        if (fragmentId == FragmentIdData.DATING) {
-            return new LeftMenuSettingsData(fragmentId, true);
-        }
-        return new LeftMenuSettingsData(fragmentId);
-    }
-
     public void init(@NotNull FragmentManager fragmentManager) {
         mFragmentManager = fragmentManager;
         initLeftMenu();
-        LeftMenuSettingsData settings = getFragmentData(App.get().getOptions().startPage);
+        LeftMenuSettingsData settings = new LeftMenuSettingsData(App.get().getOptions().startPage);
         if (mSavedInstanceState != null && mSavedInstanceState.containsKey(FRAGMENT_SETTINGS)) {
             settings = mSavedInstanceState.getParcelable(FRAGMENT_SETTINGS);
         }
@@ -229,8 +222,8 @@ public class NavigationManager {
         return fragment;
     }
 
-    public void selectFragment(LeftMenuSettingsData fragmentSettings){
-        selectFragment(fragmentSettings,WrappedNavigationData.SWITCHED_EXTERNALY,false);
+    public void selectFragment(LeftMenuSettingsData fragmentSettings) {
+        selectFragment(fragmentSettings, WrappedNavigationData.SWITCHED_EXTERNALY, false);
     }
 
     private void selectFragment(LeftMenuSettingsData fragmentSettings, @WrappedNavigationData.NavigationEventSenderType int senderType, boolean executePending) {

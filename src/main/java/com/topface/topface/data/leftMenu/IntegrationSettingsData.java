@@ -18,14 +18,13 @@ public class IntegrationSettingsData extends LeftMenuSettingsData implements Par
      * create new integration fragment settings
      *
      * @param fragmentId  unique fragment id
-     * @param isOverlayed overlay flag
      * @param pos         local integration position
      * @param url         integration url
      * @param isExternal  is need to show outside the app
      * @param pageName    current integration page name
      */
-    public IntegrationSettingsData(@FragmentIdData.FragmentId int fragmentId, boolean isOverlayed, int pos, String url, boolean isExternal, String pageName) {
-        super(fragmentId, isOverlayed);
+    public IntegrationSettingsData(@FragmentIdData.FragmentId int fragmentId, int pos, String url, boolean isExternal, String pageName) {
+        super(fragmentId);
         mPos = pos;
         mUrl = url;
         mIsExternal = isExternal;

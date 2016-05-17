@@ -89,10 +89,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     public static final String INTENT_EXIT = "EXIT";
     public static final String PAGE_SWITCH = "Page switch: ";
 
-    public enum DRAWER_LAYOUT_STATE {
-        STATE_CHANGED, SLIDE, OPENED, CLOSED
-    }
-
     private Intent mPendingNextIntent;
     private boolean mIsActionBarHidden;
     private View mContentFrame;
@@ -426,7 +422,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         //Получаем id фрагмента, если он открыт
         LeftMenuSettingsData currentFragment = intent.getParcelableExtra(GCMUtils.NEXT_INTENT);
         Debug.log(PAGE_SWITCH + "show fragment from NEXT_INTENT: " + currentFragment);
-        showFragment(currentFragment == null ? getNavigationManager().getFragmentData(App.from(this).getOptions().startPage) : currentFragment);
+        showFragment(currentFragment == null ? new LeftMenuSettingsData(App.from(this).getOptions().startPage) : currentFragment);
     }
 
     @Override

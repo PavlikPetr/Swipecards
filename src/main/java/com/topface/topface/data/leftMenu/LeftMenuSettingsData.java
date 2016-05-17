@@ -16,21 +16,11 @@ public class LeftMenuSettingsData implements Parcelable {
     /**
      * create new left menu fragment settings
      *
-     * @param fragmentId  unique fragment id
-     * @param isOverlayed overlay flag
-     */
-    public LeftMenuSettingsData(@FragmentIdData.FragmentId int fragmentId, boolean isOverlayed) {
-        mFragmentId = fragmentId;
-        mIsOverlayed = isOverlayed;
-    }
-
-    /**
-     * create new left menu fragment settings
-     *
      * @param fragmentId unique fragment id
      */
     public LeftMenuSettingsData(@FragmentIdData.FragmentId int fragmentId) {
-        this(fragmentId, false);
+        mFragmentId = fragmentId;
+        mIsOverlayed = isOverlayed(fragmentId);
     }
 
     /**
@@ -94,5 +84,14 @@ public class LeftMenuSettingsData implements Parcelable {
     public void writeToParcel(Parcel out, int flags) {
         out.writeInt(mFragmentId);
         out.writeInt(mIsOverlayed ? 1 : 0);
+    }
+
+    private boolean isOverlayed(@FragmentIdData.FragmentId int id) {
+        switch (id) {
+            case FragmentIdData.DATING:
+                return true;
+            default:
+                return false;
+        }
     }
 }

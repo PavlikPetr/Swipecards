@@ -31,7 +31,7 @@
 
             <TextView
                 android:id="@+id/leftMenuBadge"
-                style="@style/NewLeftMenuBadge"
+                style="@style/LeftMenuBadge"
                 android:text="@{viewModel.badgeCount}"
                 android:visibility="@{viewModel.badgeVisibility}" />
 

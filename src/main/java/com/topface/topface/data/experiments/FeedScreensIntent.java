@@ -33,7 +33,7 @@ public class FeedScreensIntent {
 
     public static void equipDatingIntent(Intent intent) {
         intent.putExtra(GCMUtils.NOTIFICATION_INTENT, true);
-        equipFeedIntent(intent, new LeftMenuSettingsData(FragmentIdData.DATING, true), DatingFragment.class.getName());
+        equipFeedIntent(intent, new LeftMenuSettingsData(FragmentIdData.DATING), DatingFragment.class.getName());
     }
 
 }

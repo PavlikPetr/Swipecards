@@ -12,7 +12,6 @@ import com.topface.topface.R;
 import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.banners.RefreshablePageWithAds;
 import com.topface.topface.data.Profile;
-import com.topface.topface.utils.CacheProfile;
 
 import java.util.Calendar;
 

@@ -559,21 +559,6 @@
         <item name="postProcessor">rounded</item>
     </style>
 
-    <style name="LeftMenuBadge">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginRight">15dp</item>
-        <item name="android:background">@drawable/badge_left_menu</item>
-        <item name="android:gravity">center</item>
-        <item name="android:paddingLeft">9dp</item>
-        <item name="android:paddingRight">9dp</item>
-        <item name="android:paddingTop">5dp</item>
-        <item name="android:paddingBottom">5dp</item>
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:textSize">11sp</item>
-        <item name="android:visibility">gone</item>
-    </style>
-
     <style name="ChatMessageLayout">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -1198,10 +1183,6 @@
         <item name="android:padding">16dp</item>
     </style>
 
-    <style name="LeftMenuSelector">
-        <item name="android:listSelector">@drawable/bg_left_menu_item_selector</item>
-    </style>
-
     <style name="LeftMenuTitleBase">
         <item name="android:lines">1</item>
         <item name="android:maxLines">1</item>
@@ -1240,7 +1221,7 @@
         <item name="android:background">@drawable/left_menu_bage_selector</item>
     </style>
 
-    <style name="NewLeftMenuBadge" parent="LeftMenuBadgeBase">
+    <style name="LeftMenuBadge" parent="LeftMenuBadgeBase">
         <item name="android:layout_marginRight">@dimen/left_menu_item_padding_right</item>
     </style>
 
