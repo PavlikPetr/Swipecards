@@ -35,7 +35,13 @@ public class TrialVipPopupAction implements IStartAction {
 
     @Override
     public void callOnUi() {
-        mTrialVipPopup = TrialVipPopup.newInstance(false);
+        if (mActivity == null || mActivity.get() == null) {
+            return;
+        }
+        mTrialVipPopup = (TrialVipPopup) mActivity.get().getSupportFragmentManager().findFragmentByTag(TrialVipPopup.TAG);
+        if (mTrialVipPopup == null) {
+            mTrialVipPopup = TrialVipPopup.newInstance(false);
+        }
         mTrialVipPopup.setOnSubscribe(new TrialVipPopup.OnFragmentActionsListener() {
             @Override
             public void onSubscribeClick() {
@@ -49,12 +55,10 @@ public class TrialVipPopupAction implements IStartAction {
                 }
             }
         });
-        if (mActivity != null && mActivity.get() != null) {
-            mTrialVipPopup.show(mActivity.get().getSupportFragmentManager(), TrialVipPopup.TAG);
-            UserConfig userConfig = App.getUserConfig();
-            userConfig.setTrialLastTime(System.currentTimeMillis());
-            userConfig.saveConfig();
-        }
+        mTrialVipPopup.show(mActivity.get().getSupportFragmentManager(), TrialVipPopup.TAG);
+        UserConfig userConfig = App.getUserConfig();
+        userConfig.setTrialLastTime(System.currentTimeMillis());
+        userConfig.saveConfig();
     }
 
     @Override
@@ -90,7 +94,8 @@ public class TrialVipPopupAction implements IStartAction {
         if (mActivity != null && mActivity.get() != null) {
             Fragment f = mActivity.get().getSupportFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
             final Fragment fragment = f == null ?
-                    TransparentMarketFragment.newInstance(App.from(mActivity.get()).getOptions().trialVipExperiment.subscriptionSku, true, "TrialVipPopup") : f;
+                    TransparentMarketFragment.newInstance(App.from(mActivity.get()).getOptions().trialVipExperiment.subscriptionSku, true) : f;
+            fragment.setRetainInstance(true);
             if (fragment instanceof ITransparentMarketFragmentRunner) {
                 ((ITransparentMarketFragmentRunner) fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
                     @Override
@@ -119,20 +124,20 @@ public class TrialVipPopupAction implements IStartAction {
     }
 
     private void addTransparentMarketFragment(Fragment fragment) {
-        if (isFragmentAplicable()) {
+        if (isFragmentApplicable()) {
             mActivity.get().getSupportFragmentManager().beginTransaction()
                     .add(fragment, TransparentMarketFragment.class.getSimpleName()).commit();
         }
     }
 
     private void removeTransparentMarketFragment(Fragment fragment) {
-        if (isFragmentAplicable()) {
+        if (isFragmentApplicable()) {
             mActivity.get().getSupportFragmentManager().
                     beginTransaction().remove(fragment).commit();
         }
     }
 
-    private boolean isFragmentAplicable() {
+    private boolean isFragmentApplicable() {
         return mActivity != null && mActivity.get() != null && mActivity.get().isActivityRestoredState();
     }
 }
