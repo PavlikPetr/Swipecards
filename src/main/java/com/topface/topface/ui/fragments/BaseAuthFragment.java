@@ -127,6 +127,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
         authRequest.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
+                AuthToken.getInstance().writeTokenInPreferences();
                 AuthorizationManager.saveAuthInfo(response);
                 loadAllProfileData();
                 onSuccessAuthorization(token);
