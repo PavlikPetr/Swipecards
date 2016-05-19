@@ -51,7 +51,7 @@ public class RunningStateManager {
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-
+                        throwable.printStackTrace();
                     }
                 });
     }

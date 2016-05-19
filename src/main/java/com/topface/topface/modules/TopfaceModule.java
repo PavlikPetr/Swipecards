@@ -17,6 +17,7 @@ import com.topface.topface.promo.dialogs.PromoKey71Dialog;
 import com.topface.topface.promo.dialogs.PromoKey81Dialog;
 import com.topface.topface.state.CacheDataInterface;
 import com.topface.topface.state.CountersDataProvider;
+import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.state.LifeCycleState;
 import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.state.PopupHive;
@@ -35,6 +36,7 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.feed.AdmirationFragment;
+import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
@@ -42,6 +44,7 @@ import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.fragments.profile.ProfileFormFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
+import com.topface.topface.ui.views.DrawerLayoutManager;
 import com.topface.topface.utils.ActivityLifeCycleReporter;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
@@ -113,7 +116,9 @@ import dagger.Provides;
                 FragmentLifeCycleReporter.class,
                 ActivityLifeCycleReporter.class,
                 LifeCycleReporter.class,
-                RunningStateManager.class
+                RunningStateManager.class,
+                DrawerLayoutManager.class,
+                DialogsFragment.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
@@ -239,5 +244,11 @@ public class TopfaceModule {
     @Singleton
     LifeCycleState providesLifeCycleState() {
         return new LifeCycleState();
+    }
+
+    @Provides
+    @Singleton
+    DrawerLayoutState providesDrawerLayoutState() {
+        return new DrawerLayoutState();
     }
 }

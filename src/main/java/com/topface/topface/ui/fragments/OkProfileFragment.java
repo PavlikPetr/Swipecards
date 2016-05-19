@@ -85,7 +85,7 @@ public class OkProfileFragment extends ProfileInnerFragment {
         }, new Action1<Throwable>() {
             @Override
             public void call(Throwable throwable) {
-
+                throwable.printStackTrace();
             }
         }, new Action0() {
             @Override

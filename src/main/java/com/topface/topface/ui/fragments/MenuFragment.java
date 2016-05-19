@@ -1,7 +1,9 @@
 package com.topface.topface.ui.fragments;
 
+import android.annotation.TargetApi;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,6 +24,7 @@ import com.topface.topface.data.FixedViewInfo;
 import com.topface.topface.data.HeaderFooterData.OnViewClickListener;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.IntegrationSettingsData;
 import com.topface.topface.data.leftMenu.LeftMenuData;
@@ -31,10 +34,10 @@ import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.databinding.FragmentMenuBinding;
+import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.state.SimpleStateDataUpdater;
 import com.topface.topface.state.TopfaceAppState;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.adapters.ItemEventListener.OnRecyclerViewItemClickListener;
 import com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter;
 import com.topface.topface.utils.CacheProfile;
@@ -46,7 +49,6 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
@@ -67,14 +69,14 @@ public class MenuFragment extends Fragment {
     private static final String BALANCE_DATA = "balance_data";
     private static final String SELECTED_POSITION = "selected_position";
 
-    private static final String TAG = "NewMenuFragment";
-
     @Inject
     TopfaceAppState mAppState;
     @Inject
     NavigationState mNavigationState;
+    @Inject
+    DrawerLayoutState mDrawerLayoutState;
     private LeftMenuRecyclerViewAdapter mAdapter;
-    private FragmentMenuBinding mBinding;
+    private boolean mHardwareAccelerated;
     private CountersData mCountersData;
     private BalanceData mBalanceData;
     private CompositeSubscription mSubscription = new CompositeSubscription();
@@ -106,6 +108,7 @@ public class MenuFragment extends Fragment {
     private Action1<Throwable> mSubscriptionOnError = new Action1<Throwable>() {
         @Override
         public void call(Throwable throwable) {
+            throwable.printStackTrace();
         }
     };
 
@@ -136,12 +139,6 @@ public class MenuFragment extends Fragment {
         @Override
         public void onProfileUpdate(Profile profile) {
             getAdapter().updateHeader(getHeaderData(profile));
-        }
-    };
-
-    private Action1<NavigationActivity.DRAWER_LAYOUT_STATE> mDrawerOnNext = new Action1<NavigationActivity.DRAWER_LAYOUT_STATE>() {
-        @Override
-        public void call(NavigationActivity.DRAWER_LAYOUT_STATE drawer_layout_state) {
         }
     };
 
@@ -212,10 +209,6 @@ public class MenuFragment extends Fragment {
         mBalanceData = mBalanceData == null ? new BalanceData() : mBalanceData;
         App.from(getActivity()).inject(this);
         mSubscription.add(mAppState.getObservable(BalanceData.class).filter(mBalanceFilter).subscribe(mBalanceOnNext));
-        Observable<NavigationActivity.DRAWER_LAYOUT_STATE> observable = ((NavigationActivity) getActivity()).getDrawerLayoutStateObservable();
-        if (observable != null) {
-            mSubscription.add(observable.subscribe(mDrawerOnNext, mSubscriptionOnError));
-        }
         mSubscription.add(mNavigationState.getSwitchObservable().subscribe(new Action1<WrappedNavigationData>() {
             @Override
             public void call(WrappedNavigationData wrappedLeftMenuSettingsData) {
@@ -224,7 +217,24 @@ public class MenuFragment extends Fragment {
                 }
             }
         }, mSubscriptionOnError));
+        mSubscription.add(mDrawerLayoutState.getObservable().subscribe(new Action1<DrawerLayoutStateData>() {
+            @Override
+            public void call(DrawerLayoutStateData drawerLayoutStateData) {
+
+            }
+        }, mSubscriptionOnError));
         new OptionsAndProfileProvider(mStateDataUpdater);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mHardwareAccelerated = isHardwareAccelerated(view);
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private boolean isHardwareAccelerated(View rootLayout) {
+        return Build.VERSION.SDK_INT >= 11 && rootLayout.isHardwareAccelerated();
     }
 
     @Override
@@ -240,10 +250,10 @@ public class MenuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_menu, null);
-        mBinding = DataBindingUtil.bind(root);
-        mBinding.rvMenu.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mBinding.rvMenu.setAdapter(getAdapter());
-        ((SimpleItemAnimator) mBinding.rvMenu.getItemAnimator()).setSupportsChangeAnimations(false);
+        FragmentMenuBinding binding = DataBindingUtil.bind(root);
+        binding.rvMenu.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.rvMenu.setAdapter(getAdapter());
+        ((SimpleItemAnimator) binding.rvMenu.getItemAnimator()).setSupportsChangeAnimations(false);
         return root;
     }
 
@@ -262,11 +272,12 @@ public class MenuFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDetach() {
+        super.onDetach();
         if (mSubscription != null && !mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
         }
+        mAdapter = null;
     }
 
     private void updateCounters() {
@@ -323,5 +334,9 @@ public class MenuFragment extends Fragment {
             titleSpan.setSpan(likesSpan, iconStartPos, iconStartPos + LIKES_ICON.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }
         return titleSpan;
+    }
+
+    public boolean isHrdwareAccelerated() {
+        return mHardwareAccelerated;
     }
 }

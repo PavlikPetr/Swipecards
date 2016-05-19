@@ -1,5 +1,6 @@
 package com.topface.topface.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -9,11 +10,13 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FragmentLifreCycleData;
+import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.IntegrationSettingsData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
+import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.state.LifeCycleState;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -32,36 +35,37 @@ import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import rx.Subscription;
-import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
 /**
  * Created by ppavlik on 12.05.16.
+ * Navigation fragments switcher
  */
 public class NavigationManager {
 
     private static final String FRAGMENT_SETTINGS = "fragment_settings";
+    private static final int CLOSE_LEFT_MENU_TIMEOUT = 250;
 
     @Inject
     NavigationState mNavigationState;
     @Inject
     LifeCycleState mLifeCycleState;
+    @Inject
+    DrawerLayoutState mDrawerLayoutState;
+    private ISimpleCallback iNeedCloseMenuCallback;
+    private Subscription mDrawerLayoutStateSubscription;
     private MenuFragment mLeftMenu;
     private Context mContex;
     private FragmentManager mFragmentManager;
     private LeftMenuSettingsData mFragmentSettings = new LeftMenuSettingsData(FragmentIdData.UNDEFINED);
     private Subscription mSubscription;
     private Bundle mSavedInstanceState;
-
-    private Action1<Throwable> mCatchOnError = new Action1<Throwable>() {
-        @Override
-        public void call(Throwable throwable) {
-        }
-    };
 
     public NavigationManager(Context context, Bundle savedInstanceState) {
         App.get().inject(this);
@@ -74,7 +78,12 @@ public class NavigationManager {
                     selectFragment(wrappedLeftMenuSettingsData.getData(), wrappedLeftMenuSettingsData.getSenderType(), false);
                 }
             }
-        }, mCatchOnError);
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        });
     }
 
     public void init(@NotNull FragmentManager fragmentManager) {
@@ -125,9 +134,9 @@ public class NavigationManager {
             final String fragmnetName = newFragment.getClass().getName();
             FragmentTransaction transaction = mFragmentManager.beginTransaction();
             //Меняем фрагменты анимировано, но только на новых устройствах c HW ускорением
-//            if (mHardwareAccelerated) {
-//                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-//            }
+            if (mLeftMenu != null && mLeftMenu.isHrdwareAccelerated()) {
+                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
             if (oldFragment != newFragment && newFragment.isAdded()) {
                 transaction.remove(newFragment);
                 Debug.error("MenuFragment: try detach already added new fragment " + fragmentTag);
@@ -142,7 +151,13 @@ public class NavigationManager {
                     "no executePending";
             Debug.log("MenuFragment: commit " + transactionResult);
             mFragmentSettings = newFragmentSettings;
+            /**
+             * подписываемся на жизненный цикл загруженного фрагмента
+             * ждем его загрузки не дольше CLOSE_LEFT_MENU_TIMEOUT мс
+             * потом отписываемся и шлем ивент о том, что фрагмент свичнулся
+             */
             mSubscription = mLifeCycleState.getObservable(FragmentLifreCycleData.class)
+                    .timeout(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS)
                     .filter(new Func1<FragmentLifreCycleData, Boolean>() {
                         @Override
                         public Boolean call(FragmentLifreCycleData fragmentLifreCycleData) {
@@ -155,9 +170,10 @@ public class NavigationManager {
                         public void call(FragmentLifreCycleData fragmentLifreCycleData) {
                             sendNavigationFragmentSwitched(senderType);
                         }
-                    }, mCatchOnError, new Action0() {
+                    }, new Action1<Throwable>() {
                         @Override
-                        public void call() {
+                        public void call(Throwable throwable) {
+                            throwable.printStackTrace();
                             sendNavigationFragmentSwitched(senderType);
                         }
                     });
@@ -174,6 +190,7 @@ public class NavigationManager {
         }
     }
 
+    @SuppressLint("SwitchIntDef")
     private BaseFragment getFragmentNewInstanceById(LeftMenuSettingsData id) {
         BaseFragment fragment;
         switch (id.getFragmentId()) {
@@ -226,21 +243,73 @@ public class NavigationManager {
         selectFragment(fragmentSettings, WrappedNavigationData.SWITCHED_EXTERNALY, false);
     }
 
+    @SuppressLint("SwitchIntDef")
     private void selectFragment(LeftMenuSettingsData fragmentSettings, @WrappedNavigationData.NavigationEventSenderType int senderType, boolean executePending) {
         switch (fragmentSettings.getFragmentId()) {
             case FragmentIdData.BALLANCE:
-                mContex.startActivity(PurchasesActivity.createBuyingIntent("Menu", App.get().getOptions().topfaceOfferwallRedirect));
-                selectPreviousLeftMenuItem();
+                closeMenuAndSwitchAfter(new ISimpleCallback() {
+                    @Override
+                    public void onCall() {
+                        mContex.startActivity(PurchasesActivity.createBuyingIntent("Menu", App.get().getOptions().topfaceOfferwallRedirect));
+                        selectPreviousLeftMenuItem();
+                    }
+                });
                 break;
             case FragmentIdData.INTEGRATION_PAGE:
-                IntegrationSettingsData settingsData = (IntegrationSettingsData) fragmentSettings;
+                final IntegrationSettingsData settingsData = (IntegrationSettingsData) fragmentSettings;
                 if (settingsData.isExternal()) {
-                    Utils.goToUrl(mContex, settingsData.getUrl());
-                    selectPreviousLeftMenuItem();
+                    closeMenuAndSwitchAfter(new ISimpleCallback() {
+                        @Override
+                        public void onCall() {
+                            Utils.goToUrl(mContex, settingsData.getUrl());
+                            selectPreviousLeftMenuItem();
+                        }
+                    });
                     break;
                 }
             default:
                 switchFragment(fragmentSettings, senderType, executePending);
+        }
+    }
+
+    public void setNeedCloseMenuListener(ISimpleCallback callback) {
+        iNeedCloseMenuCallback = callback;
+    }
+
+    private void closeMenuAndSwitchAfter(@NotNull final ISimpleCallback callback) {
+        if (iNeedCloseMenuCallback != null) {
+            iNeedCloseMenuCallback.onCall();
+        }
+        /**
+         * ждем когда будет закрыто левое меню, но не дольше CLOSE_LEFT_MENU_TIMEOUT мс
+         * после этого отписываемся и шлем ивент о смене подсвеченного итема в левом меню
+         */
+        mDrawerLayoutStateSubscription = mDrawerLayoutState.getObservable()
+                .timeout(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS)
+                .filter(new Func1<DrawerLayoutStateData, Boolean>() {
+                    @Override
+                    public Boolean call(DrawerLayoutStateData drawerLayoutStateData) {
+                        return drawerLayoutStateData.getState() == DrawerLayoutStateData.CLOSED;
+                    }
+                }).subscribe(new Action1<DrawerLayoutStateData>() {
+                    @Override
+                    public void call(DrawerLayoutStateData drawerLayoutStateData) {
+                        drawerLayoutStateUsubscribe();
+                        callback.onCall();
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+                        drawerLayoutStateUsubscribe();
+                        callback.onCall();
+                    }
+                });
+    }
+
+    private void drawerLayoutStateUsubscribe() {
+        if (mDrawerLayoutStateSubscription != null && !mDrawerLayoutStateSubscription.isUnsubscribed()) {
+            mDrawerLayoutStateSubscription.unsubscribe();
         }
     }
 
@@ -251,5 +320,19 @@ public class NavigationManager {
 
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(FRAGMENT_SETTINGS, mFragmentSettings);
+    }
+
+    public void onDestroy() {
+        mContex = null;
+        mLeftMenu = null;
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
+        if (mDrawerLayoutStateSubscription != null && !mDrawerLayoutStateSubscription.isUnsubscribed()) {
+            mDrawerLayoutStateSubscription.unsubscribe();
+        }
+        mSavedInstanceState = null;
+        mFragmentManager = null;
+        iNeedCloseMenuCallback = null;
     }
 }

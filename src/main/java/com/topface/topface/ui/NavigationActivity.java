@@ -3,13 +3,7 @@ package com.topface.topface.ui;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -28,6 +22,7 @@ import com.topface.topface.data.City;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
@@ -37,6 +32,7 @@ import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.state.PopupHive;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
@@ -47,11 +43,12 @@ import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
+import com.topface.topface.ui.views.DrawerLayoutManager;
 import com.topface.topface.ui.views.HackyDrawerLayout;
-import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CustomViewNotificationController;
 import com.topface.topface.utils.IActionbarNotifier;
+import com.topface.topface.utils.ISimpleCallback;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.NavigationManager;
 import com.topface.topface.utils.PopupManager;
@@ -80,9 +77,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 
-import rx.Observable;
 import rx.functions.Action1;
-import rx.subjects.BehaviorSubject;
 import rx.subscriptions.CompositeSubscription;
 
 public class NavigationActivity extends ParentNavigationActivity implements INavigationFragmentsListener {
@@ -92,13 +87,12 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private Intent mPendingNextIntent;
     private boolean mIsActionBarHidden;
     private View mContentFrame;
-    private HackyDrawerLayout mDrawerLayout;
+    private DrawerLayoutManager<HackyDrawerLayout> mDrawerLayout;
     private FullscreenController mFullscreenController;
     private boolean isPopupVisible = false;
     private boolean mActionBarOverlayed = false;
     private int mInitialTopMargin = 0;
     @SuppressWarnings("deprecation")
-    private ActionBarDrawerToggle mDrawerToggle;
     private IActionbarNotifier mNotificationController;
     @Inject
     TopfaceAppState mAppState;
@@ -106,28 +100,15 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     PopupHive mPopupHive;
     @Inject
     NavigationState mNavigationState;
+    @Inject
+    DrawerLayoutState mDrawerLayoutState;
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
-    private AddPhotoHelper mAddPhotoHelper;
     public static boolean isPhotoAsked;
     private PopupManager mPopupManager;
     private CompositeSubscription mSubscription = new CompositeSubscription();
-    private BehaviorSubject<DRAWER_LAYOUT_STATE> mDrawerLayoutStateObservable;
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            AddPhotoHelper.handlePhotoMessage(msg);
-        }
-    };
     private OnNextActionListener mSelectPhotoNextActionListener;
     private OnNextActionListener mChooseCityNextActionListener;
     private NavigationManager mNavigationManager;
-
-    private Action1<Throwable> mCatchOnError = new Action1<Throwable>() {
-        @Override
-        public void call(Throwable throwable) {
-
-        }
-    };
 
     /**
      * Перезапускает NavigationActivity, нужно например при смене языка
@@ -200,14 +181,26 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                         switchContentTopMargin(false);
                     }
                 }
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mDrawerLayout.closeDrawer(GravityCompat.START);
-                    }
-                }, 50);
+                mDrawerLayout.close();
             }
-        }, mCatchOnError));
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        }));
+        mSubscription.add(mDrawerLayoutState.getObservable().subscribe(new Action1<DrawerLayoutStateData>() {
+            @Override
+            public void call(DrawerLayoutStateData drawerLayoutStateData) {
+                switch (drawerLayoutStateData.getState()) {
+                    case DrawerLayoutStateData.STATE_CHANGED:
+                        if (mDrawerLayout != null && mDrawerLayout.getDrawer() != null) {
+                            Utils.hideSoftKeyboard(NavigationActivity.this, mDrawerLayout.getDrawer().getWindowToken());
+                        }
+                        break;
+                }
+            }
+        }));
         if (isNeedBroughtToFront(intent)) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -281,7 +274,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                     @Override
                     public void onRedirect() {
                         showFragment(new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS));
-                        mDrawerLayoutStateObservable.onNext(DRAWER_LAYOUT_STATE.CLOSED);
+                        mDrawerLayoutState.onClose();
                     }
                 }),
                 promoPopupManager.createPromoPopupStartAction(PopupHive.AC_PRIORITY_NORMAL)
@@ -324,7 +317,16 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     private NavigationManager initNavigationManager(Bundle savedInstanceState) {
-        return mNavigationManager = new NavigationManager(this, savedInstanceState);
+        mNavigationManager = new NavigationManager(this, savedInstanceState);
+        mNavigationManager.setNeedCloseMenuListener(new ISimpleCallback() {
+            @Override
+            public void onCall() {
+                if (mDrawerLayout != null) {
+                    mDrawerLayout.close();
+                }
+            }
+        });
+        return mNavigationManager;
     }
 
     @Override
@@ -336,46 +338,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     @SuppressWarnings("deprecation")
     private void initDrawerLayout() {
         getNavigationManager().init(getSupportFragmentManager());
-        mDrawerLayoutStateObservable = BehaviorSubject.create();
-        mDrawerLayout = (HackyDrawerLayout) findViewById(R.id.loNavigationDrawer);
-        mDrawerLayout.setScrimColor(Color.argb(217, 0, 0, 0));
-        mDrawerLayout.setDrawerShadow(R.drawable.shadow_left_menu_right, GravityCompat.START);
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this, /* host Activity */
-                mDrawerLayout, /* DrawerLayout object */
-                Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 ? android.R.color.transparent : R.drawable.empty_home_as_up,
-                /* nav drawer icon to replace 'Up' caret */
-                R.string.app_name, /* "open drawer" description */
-                R.string.app_name /* "close drawer" description */
-        ) {
-            @Override
-            public void onDrawerStateChanged(int newState) {
-                super.onDrawerStateChanged(newState);
-                Utils.hideSoftKeyboard(NavigationActivity.this, mDrawerLayout.getWindowToken());
-                mDrawerLayoutStateObservable.onNext(DRAWER_LAYOUT_STATE.STATE_CHANGED);
-            }
-
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                super.onDrawerSlide(drawerView, slideOffset);
-                mDrawerLayoutStateObservable.onNext(DRAWER_LAYOUT_STATE.SLIDE);
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                mDrawerLayoutStateObservable.onNext(DRAWER_LAYOUT_STATE.OPENED);
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                mDrawerLayoutStateObservable.onNext(DRAWER_LAYOUT_STATE.CLOSED);
-            }
-        };
-        mDrawerToggle.setDrawerIndicatorEnabled(false);
-        // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout = new DrawerLayoutManager<>((HackyDrawerLayout) findViewById(R.id.loNavigationDrawer));
+        mDrawerLayout.initLeftMneuDrawerLayout();
     }
 
     private void initAppsFlyer() {
@@ -388,28 +352,12 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        if (mDrawerToggle != null) mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (mDrawerToggle != null) mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerLayout.getDrawerLockMode(GravityCompat.START) == DrawerLayout.LOCK_MODE_UNLOCKED) {
-            return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
-        } else {
-            switch (item.getItemId()) {
-                case android.R.id.home:
-                    return true;
-                default:
-                    return super.onOptionsItemSelected(item);
-            }
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -614,9 +562,9 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
      * @param listener additional listener for drawerLayout backPress
      */
     public void setMenuLockMode(int lockMode, HackyDrawerLayout.IBackPressedListener listener) {
-        if (mDrawerLayout != null) {
-            mDrawerLayout.setDrawerLockMode(lockMode, GravityCompat.START);
-            mDrawerLayout.setBackPressedListener(listener);
+        if (mDrawerLayout != null && mDrawerLayout.getDrawer() != null) {
+            mDrawerLayout.getDrawer().setDrawerLockMode(lockMode, GravityCompat.START);
+            mDrawerLayout.getDrawer().setBackPressedListener(listener);
         }
     }
 
@@ -633,9 +581,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             }
             Debug.log("Current User ID:" + profile.uid);
         }
-        if (mDrawerToggle != null) {
-            mDrawerToggle.syncState();
-        }
         /*
         Initialize Topface offerwall here to be able to start it quickly instead of PurchasesActivity
          */
@@ -649,11 +594,10 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (mFullscreenController != null) {
             mFullscreenController.onDestroy();
         }
-        mPopupHive.releaseHive();
-        mDrawerToggle = null;
-        if (mAddPhotoHelper != null) {
-            mAddPhotoHelper.releaseHelper();
+        if (mNavigationManager != null) {
+            mNavigationManager.onDestroy();
         }
+        mPopupHive.releaseHive();
         if (mSubscription != null && !mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
         }
@@ -683,19 +627,17 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (resultCode == Activity.RESULT_OK && !isBillingRequestProcessed) {
             super.onActivityResult(requestCode, resultCode, data);
         }
-        if (mAddPhotoHelper != null) {
-            mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
-        }
     }
 
     private void toggleDrawerLayout() {
         if (!mIsActionBarHidden) {
-            if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-            } else {
-                mDrawerLayout.openDrawer(GravityCompat.START);
+            if (mDrawerLayout != null && mDrawerLayout.getDrawer() != null) {
+                if (mDrawerLayout.getDrawer().isDrawerOpen(GravityCompat.START)) {
+                    mDrawerLayout.getDrawer().closeDrawer(GravityCompat.START);
+                } else {
+                    mDrawerLayout.getDrawer().openDrawer(GravityCompat.START);
+                }
             }
-            mDrawerToggle.syncState();
         }
     }
 
@@ -703,21 +645,15 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     public boolean onKeyDown(int keycode, KeyEvent e) {
         switch (keycode) {
             case KeyEvent.KEYCODE_MENU:
-                if (mDrawerLayout.getDrawerLockMode(GravityCompat.START) ==
+                if (mDrawerLayout != null
+                        && mDrawerLayout.getDrawer() != null
+                        && mDrawerLayout.getDrawer().getDrawerLockMode(GravityCompat.START) ==
                         DrawerLayout.LOCK_MODE_UNLOCKED) {
                     toggleDrawerLayout();
                 }
                 return true;
         }
         return super.onKeyDown(keycode, e);
-    }
-
-    private AddPhotoHelper getAddPhotoHelper() {
-        if (mAddPhotoHelper == null) {
-            mAddPhotoHelper = new AddPhotoHelper(this);
-            mAddPhotoHelper.setOnResultHandler(mHandler);
-        }
-        return mAddPhotoHelper;
     }
 
     private void switchContentTopMargin(boolean actionbarOverlay) {
@@ -755,9 +691,5 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     @Override
     public void onUpClick() {
         toggleDrawerLayout();
-    }
-
-    public Observable<DRAWER_LAYOUT_STATE> getDrawerLayoutStateObservable() {
-        return mDrawerLayoutStateObservable;
     }
 }

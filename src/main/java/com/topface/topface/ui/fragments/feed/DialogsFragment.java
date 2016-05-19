@@ -10,13 +10,14 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
+import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
 import com.topface.topface.promo.dialogs.PromoDialog;
 import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteDialogsRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -30,14 +31,18 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import rx.Observable;
+import javax.inject.Inject;
+
 import rx.Subscription;
 import rx.functions.Action1;
+import rx.functions.Func1;
 
 public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     private static final String PAGE_NAME = "Dialogs";
 
+    @Inject
+    DrawerLayoutState mDrawerLayoutState;
     private Subscription mDrawerLayoutSubscription;
     private boolean mIsNeedRefresh;
 
@@ -53,21 +58,23 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getActivity() instanceof NavigationActivity) {
-            Observable<NavigationActivity.DRAWER_LAYOUT_STATE> observable = ((NavigationActivity) getActivity()).getDrawerLayoutStateObservable();
-            if (observable != null) {
-                mDrawerLayoutSubscription = observable.subscribe(new Action1<NavigationActivity.DRAWER_LAYOUT_STATE>() {
-                    @Override
-                    public void call(NavigationActivity.DRAWER_LAYOUT_STATE drawer_layout_state) {
-                        switch (drawer_layout_state) {
-                            case CLOSED:
-                                showExpressMessagesPopupIfNeeded();
-                                break;
-                        }
-                    }
-                });
+        App.get().inject(this);
+        mDrawerLayoutSubscription = mDrawerLayoutState.getObservable().filter(new Func1<DrawerLayoutStateData, Boolean>() {
+            @Override
+            public Boolean call(DrawerLayoutStateData drawerLayoutStateData) {
+                return drawerLayoutStateData.getState()==DrawerLayoutStateData.CLOSED;
             }
-        }
+        }).subscribe(new Action1<DrawerLayoutStateData>() {
+            @Override
+            public void call(DrawerLayoutStateData drawerLayoutStateData) {
+                showExpressMessagesPopupIfNeeded();
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        });
     }
 
     @Override
