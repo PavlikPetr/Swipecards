@@ -38,16 +38,17 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
     }
 
     //Если itemType соответствует популярному юзеру не показываем клаву в чате
-    public static Intent createIntent(int id, String nameAndAge, String city, String feedItemId, Photo photo, boolean fromGcm, int itemType, boolean isBanned) {
-        return createIntent(id, nameAndAge, city, feedItemId, photo, fromGcm, null, isBanned).putExtra(ChatFragment.USER_TYPE, itemType);
+    public static Intent createIntent(int id, int sex, String nameAndAge, String city, String feedItemId, Photo photo, boolean fromGcm, int itemType, boolean isBanned) {
+        return createIntent(id, sex, nameAndAge, city, feedItemId, photo, fromGcm, null, isBanned).putExtra(ChatFragment.USER_TYPE, itemType);
     }
 
-    public static Intent createIntent(int id, String nameAndAge, String city, String feedItemId, Photo photo, boolean fromGcm, SendGiftAnswer answer, boolean isBanned) {
+    public static Intent createIntent(int id, int sex, String nameAndAge, String city, String feedItemId, Photo photo, boolean fromGcm, SendGiftAnswer answer, boolean isBanned) {
         Intent intent = new Intent(App.getContext(), ChatActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_ID, id);
         intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, nameAndAge);
         intent.putExtra(ChatFragment.INTENT_USER_CITY, city);
         intent.putExtra(ChatFragment.GIFT_DATA, answer);
+        intent.putExtra(ChatFragment.SEX, sex);
         intent.putExtra(ChatFragment.BANNED_USER, isBanned);
         if (!TextUtils.isEmpty(feedItemId)) {
             intent.putExtra(ChatFragment.INTENT_ITEM_ID, feedItemId);

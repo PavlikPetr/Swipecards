@@ -98,16 +98,20 @@ public abstract class UserAvatarFragment extends BaseFragment
     protected void setActionBarAvatar(IUniversalUser user) {
         if (mBarAvatar == null) return;
         if (user.isEmpty() || user.isBanned() || user.isDeleted() || user.isPhotoEmpty()) {
-            ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar)
-                    .findViewById(R.id.ivBarAvatar))
-                    .setImageResource(user.getSex() == Profile.GIRL ?
-                            R.drawable.rounded_avatar_female :
-                            R.drawable.rounded_avatar_male);
+            showStubAvatar(user.getSex());
         } else {
             ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar)
                     .findViewById(R.id.ivBarAvatar))
                     .setPhoto(user.getPhoto());
         }
+    }
+
+    protected void showStubAvatar(int sex){
+        ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar)
+                .findViewById(R.id.ivBarAvatar))
+                .setImageResource(sex == Profile.GIRL ?
+                        R.drawable.rounded_avatar_female :
+                        R.drawable.rounded_avatar_male);
     }
 
     public final IUniversalUser getUniversalUser() {
