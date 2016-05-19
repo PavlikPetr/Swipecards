@@ -61,7 +61,7 @@ public class FbAuthorizer extends Authorizer {
                 sendFaceBookEvent();
                 AccessToken accessToken = loginResult.getAccessToken();
                 if (AuthToken.getInstance().isEmpty()) {
-                    AuthToken.getInstance().saveToken(
+                    AuthToken.getInstance().temporarilySaveToken(
                             AuthToken.SN_FACEBOOK,
                             accessToken.getUserId(),
                             accessToken.getToken(),

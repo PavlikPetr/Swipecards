@@ -69,7 +69,7 @@ public class OkAuthorizer extends Authorizer {
                             public void call(OkUserData okUserData) {
                                 mAppState.setData(okUserData);
                                 AuthToken authToken = AuthToken.getInstance();
-                                authToken.saveToken(
+                                authToken.temporarilySaveToken(
                                         AuthToken.SN_ODNOKLASSNIKI,
                                         okUserData.uid,
                                         okAccessData.getToken(),

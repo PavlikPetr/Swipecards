@@ -168,6 +168,34 @@ public class AuthToken {
         editor.apply();
     }
 
+    /**
+     * Сохраняем токен инфо в локальных переменных, чтоб все это умерло если мы свернем авторизацию
+     * не дождавшисьответа от сервера. Дабы не получить залогиненое приложение с непрвильным токеном
+     * fucking voodoo magic
+     */
+    public void temporarilySaveToken(String snType, String userSocialId, String tokenKey, String expiresIn){
+        mTokenInfo.mSnType = snType;
+        mTokenInfo.mUserSocialId = userSocialId;
+        mTokenInfo.mTokenKey = tokenKey;
+        mTokenInfo.mExpiresIn = expiresIn;
+        mTokenInfo.mLogin = Utils.EMPTY;
+        mTokenInfo.mPassword = Utils.EMPTY;
+    }
+
+    /**
+     * Сохранить тукущи  токен в кэше в префиренсах
+     */
+    public void writeTokenInPreferences(){
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putString(TOKEN_NETWORK, mTokenInfo.mSnType);
+        editor.putString(TOKEN_USER_SOCIAL_ID, mTokenInfo.mUserSocialId);
+        editor.putString(TOKEN_TOKEN_KEY, mTokenInfo.mTokenKey);
+        editor.putString(TOKEN_EXPIRES, mTokenInfo.mExpiresIn);
+        editor.putString(TOKEN_LOGIN, mTokenInfo.mLogin);
+        editor.putString(TOKEN_PASSWORD, mTokenInfo.mPassword);
+        editor.apply();
+    }
+
     public void removeToken() {
         saveToken(Utils.EMPTY, Utils.EMPTY, Utils.EMPTY, Utils.EMPTY);
     }
