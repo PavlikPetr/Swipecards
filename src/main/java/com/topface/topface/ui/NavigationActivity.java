@@ -335,7 +335,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         getNavigationManager().onSaveInstanceState(outState);
     }
 
-    @SuppressWarnings("deprecation")
     private void initDrawerLayout() {
         getNavigationManager().init(getSupportFragmentManager());
         mDrawerLayout = new DrawerLayoutManager<>((HackyDrawerLayout) findViewById(R.id.loNavigationDrawer));

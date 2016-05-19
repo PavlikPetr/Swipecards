@@ -1,7 +1,6 @@
 package com.topface.topface.utils;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -61,16 +60,16 @@ public class NavigationManager {
     private ISimpleCallback iNeedCloseMenuCallback;
     private Subscription mDrawerLayoutStateSubscription;
     private MenuFragment mLeftMenu;
-    private Context mContex;
+    private IActivityDelegate mActivityDelegat;
     private FragmentManager mFragmentManager;
     private LeftMenuSettingsData mFragmentSettings = new LeftMenuSettingsData(FragmentIdData.UNDEFINED);
     private Subscription mSubscription;
     private Bundle mSavedInstanceState;
 
-    public NavigationManager(Context context, Bundle savedInstanceState) {
+    public NavigationManager(IActivityDelegate activityDelegate, Bundle savedInstanceState) {
         App.get().inject(this);
         mSavedInstanceState = savedInstanceState;
-        mContex = context;
+        mActivityDelegat = activityDelegate;
         mNavigationState.getSelectionObservable().subscribe(new Action1<WrappedNavigationData>() {
             @Override
             public void call(WrappedNavigationData wrappedLeftMenuSettingsData) {
@@ -250,8 +249,10 @@ public class NavigationManager {
                 closeMenuAndSwitchAfter(new ISimpleCallback() {
                     @Override
                     public void onCall() {
-                        mContex.startActivity(PurchasesActivity.createBuyingIntent("Menu", App.get().getOptions().topfaceOfferwallRedirect));
-                        selectPreviousLeftMenuItem();
+                        if (mActivityDelegat != null) {
+                            mActivityDelegat.startActivity(PurchasesActivity.createBuyingIntent("Menu", App.get().getOptions().topfaceOfferwallRedirect));
+                            selectPreviousLeftMenuItem();
+                        }
                     }
                 });
                 break;
@@ -261,7 +262,7 @@ public class NavigationManager {
                     closeMenuAndSwitchAfter(new ISimpleCallback() {
                         @Override
                         public void onCall() {
-                            Utils.goToUrl(mContex, settingsData.getUrl());
+                            Utils.goToUrl(mActivityDelegat, settingsData.getUrl());
                             selectPreviousLeftMenuItem();
                         }
                     });
@@ -323,7 +324,6 @@ public class NavigationManager {
     }
 
     public void onDestroy() {
-        mContex = null;
         mLeftMenu = null;
         if (mSubscription != null && !mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();

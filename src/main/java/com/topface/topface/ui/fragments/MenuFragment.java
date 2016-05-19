@@ -81,49 +81,12 @@ public class MenuFragment extends Fragment {
     private BalanceData mBalanceData;
     private CompositeSubscription mSubscription = new CompositeSubscription();
     private int mSelectedPos = EMPTY_POS;
-
-    private Func1<CountersData, CountersData> mCountersMap = new Func1<CountersData, CountersData>() {
-        @Override
-        public CountersData call(CountersData countersData) {
-            countersData.setBonus(CacheProfile.needShowBonusCounter ? App.from(getActivity()).getOptions().bonus.counter : 0);
-            return countersData;
-        }
-    };
-
-    private Action1<CountersData> mCountersOnNext = new Action1<CountersData>() {
-        @Override
-        public void call(CountersData countersData) {
-            mCountersData = countersData;
-            updateCounters();
-        }
-    };
-
-    private Func1<CountersData, Boolean> mCounterFilter = new Func1<CountersData, Boolean>() {
-        @Override
-        public Boolean call(CountersData countersData) {
-            return !mCountersData.equals(countersData);
-        }
-    };
+    private OptionsAndProfileProvider mOptionsAndProfileProvider;
 
     private Action1<Throwable> mSubscriptionOnError = new Action1<Throwable>() {
         @Override
         public void call(Throwable throwable) {
             throwable.printStackTrace();
-        }
-    };
-
-    private Action1<BalanceData> mBalanceOnNext = new Action1<BalanceData>() {
-        @Override
-        public void call(BalanceData balanceData) {
-            mBalanceData = balanceData;
-            updateBallance();
-        }
-    };
-
-    private Func1<BalanceData, Boolean> mBalanceFilter = new Func1<BalanceData, Boolean>() {
-        @Override
-        public Boolean call(BalanceData balanceData) {
-            return mBalanceData.likes == balanceData.likes || mBalanceData.money == balanceData.money;
         }
     };
 
@@ -200,6 +163,7 @@ public class MenuFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.from(getActivity()).inject(this);
         if (savedInstanceState != null) {
             mCountersData = savedInstanceState.getParcelable(COUNTERS_DATA);
             mBalanceData = savedInstanceState.getParcelable(BALANCE_DATA);
@@ -207,23 +171,40 @@ public class MenuFragment extends Fragment {
         }
         mCountersData = mCountersData == null ? new CountersData() : mCountersData;
         mBalanceData = mBalanceData == null ? new BalanceData() : mBalanceData;
-        App.from(getActivity()).inject(this);
-        mSubscription.add(mAppState.getObservable(BalanceData.class).filter(mBalanceFilter).subscribe(mBalanceOnNext));
-        mSubscription.add(mNavigationState.getSwitchObservable().subscribe(new Action1<WrappedNavigationData>() {
-            @Override
-            public void call(WrappedNavigationData wrappedLeftMenuSettingsData) {
-                if (wrappedLeftMenuSettingsData != null && wrappedLeftMenuSettingsData.getSenderType() != WrappedNavigationData.SELECTED_BY_CLICK) {
-                    setSelected(wrappedLeftMenuSettingsData.getData(), wrappedLeftMenuSettingsData.getSenderType());
-                }
-            }
-        }, mSubscriptionOnError));
-        mSubscription.add(mDrawerLayoutState.getObservable().subscribe(new Action1<DrawerLayoutStateData>() {
-            @Override
-            public void call(DrawerLayoutStateData drawerLayoutStateData) {
+        mSubscription.add(mAppState
+                .getObservable(BalanceData.class)
+                .filter(new Func1<BalanceData, Boolean>() {
+                    @Override
+                    public Boolean call(BalanceData balanceData) {
+                        return mBalanceData.likes == balanceData.likes || mBalanceData.money == balanceData.money;
+                    }
+                })
+                .subscribe(new Action1<BalanceData>() {
+                    @Override
+                    public void call(BalanceData balanceData) {
+                        mBalanceData = balanceData;
+                        updateBallance();
+                    }
+                }));
+        mSubscription.add(mNavigationState
+                .getSwitchObservable()
+                .subscribe(new Action1<WrappedNavigationData>() {
+                    @Override
+                    public void call(WrappedNavigationData wrappedLeftMenuSettingsData) {
+                        if (wrappedLeftMenuSettingsData != null && wrappedLeftMenuSettingsData.getSenderType() != WrappedNavigationData.SELECTED_BY_CLICK) {
+                            setSelected(wrappedLeftMenuSettingsData.getData(), wrappedLeftMenuSettingsData.getSenderType());
+                        }
+                    }
+                }, mSubscriptionOnError));
+        mSubscription.add(mDrawerLayoutState
+                .getObservable()
+                .subscribe(new Action1<DrawerLayoutStateData>() {
+                    @Override
+                    public void call(DrawerLayoutStateData drawerLayoutStateData) {
 
-            }
-        }, mSubscriptionOnError));
-        new OptionsAndProfileProvider(mStateDataUpdater);
+                    }
+                }, mSubscriptionOnError));
+        mOptionsAndProfileProvider = new OptionsAndProfileProvider(mStateDataUpdater);
     }
 
     @Override
@@ -261,8 +242,26 @@ public class MenuFragment extends Fragment {
         LeftMenuRecyclerViewAdapter adapter = new LeftMenuRecyclerViewAdapter(getLeftMenuItems());
         adapter.setOnItemClickListener(mItemClickListener);
         mSubscription.add(mAppState.getObservable(CountersData.class)
-                .map(mCountersMap).filter(mCounterFilter)
-                .subscribe(mCountersOnNext, mSubscriptionOnError));
+                .map(new Func1<CountersData, CountersData>() {
+                    @Override
+                    public CountersData call(CountersData countersData) {
+                        countersData.setBonus(CacheProfile.needShowBonusCounter ? App.from(getActivity()).getOptions().bonus.counter : 0);
+                        return countersData;
+                    }
+                })
+                .filter(new Func1<CountersData, Boolean>() {
+                    @Override
+                    public Boolean call(CountersData countersData) {
+                        return !mCountersData.equals(countersData);
+                    }
+                })
+                .subscribe(new Action1<CountersData>() {
+                    @Override
+                    public void call(CountersData countersData) {
+                        mCountersData = countersData;
+                        updateCounters();
+                    }
+                }, mSubscriptionOnError));
         adapter.setHeader(new FixedViewInfo<>(R.layout.left_menu_header, getHeaderData(App.get().getProfile())));
         return adapter;
     }
@@ -272,12 +271,13 @@ public class MenuFragment extends Fragment {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onDestroy() {
+        super.onDestroy();
         if (mSubscription != null && !mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
         }
         mAdapter = null;
+        mOptionsAndProfileProvider.unsubscribe();
     }
 
     private void updateCounters() {
