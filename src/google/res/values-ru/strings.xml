@@ -1084,4 +1084,7 @@
 
     <string name="photo_gallery_photo_deleted">Фотография удалена</string>
 
+    <string name="photofeed_add_photo_to_feed_title">Подняться на первое место!</string>
+    <string name="photofeed_add_photo_to_feed_description">Разместите фото с приветствием и вас увидят тысячи людей. Привлеките внимание и познакомьтесь прямо сейчас.</string>
+
 </resources>
