@@ -430,7 +430,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
                     public Intent getOpenChatIntent() {
                         Profile profile = getProfile();
                         if (profile != null) {
-                            return ChatActivity.createIntent(profile.uid, profile.getNameAndAge(),
+                            return ChatActivity.createIntent(profile.uid, profile.sex, profile.getNameAndAge(),
                                     profile.city == null ? "" : profile.city.name,
                                     null, profile.photo, false, null, getUser().banned);
                         }

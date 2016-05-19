@@ -37,6 +37,7 @@ public class Profile extends AbstractDataWithPhotos {
     public final static int TYPE_USER_PROFILE = 2;
     public static final int GIRL = 0;
     public static final int BOY = 1;
+    public static final int TRAP = 2;
     public static final int MIN_AGE = 16;
     public static final int MAX_AGE = 99;
     private static String[] EMPTY_STATUSES = {Utils.EMPTY, "-", "."};

@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -53,6 +52,7 @@ import com.topface.topface.data.History;
 import com.topface.topface.data.HistoryListData;
 import com.topface.topface.data.IUniversalUser;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.UniversalUserFactory;
 import com.topface.topface.requests.ApiRequest;
@@ -133,6 +133,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private static final String PAGE_NAME = "Chat";
     public static final String GIFT_DATA = "gift_data";
     public static final String BANNED_USER = "banned_user";
+    public static final String SEX = "sex";
 
     private int mUserId;
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
@@ -200,6 +201,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private Subscription mUpdateUiSubscription;
     private KeyboardListenerLayout mRootLayout;
     private boolean mKeyboardWasShown = true;
+    private int mSex;
 
     private enum ChatUpdateType {
         UPDATE_COUNTERS("update counters"), PULL_TO_REFRESH("pull to refresh"), RETRY("retry"),
@@ -252,6 +254,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         }
         Bundle args = getArguments();
         mItemId = args.getString(INTENT_ITEM_ID);
+        mSex = args.getInt(SEX);
         mUserId = args.getInt(INTENT_USER_ID, -1);
         mUserCity = args.getString(INTENT_USER_CITY);
         mUserNameAndAge = args.getString(INTENT_USER_NAME_AND_AGE);
@@ -851,6 +854,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         if (getTitleSetter() != null) {
             getTitleSetter().setOnline(online);
         }
+    }
+
+    @Override
+    protected void showStubAvatar(int sex) {
+        super.showStubAvatar(sex == Profile.TRAP ? mSex : sex);
     }
 
     @Override
