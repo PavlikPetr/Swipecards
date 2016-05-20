@@ -1,5 +1,8 @@
 package com.topface.topface.ui.dialogs;
 
+import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -12,6 +15,7 @@ import com.topface.topface.data.City;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.views.CitySearchView;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.debug.FuckingVoodooMagic;
 
 import javax.inject.Inject;
 
@@ -34,8 +38,13 @@ public class CitySearchPopup extends AbstractDialogFragment {
     }
 
     @Override
+    @FuckingVoodooMagic(description = "если в портрете запрещаем переворот")
     protected void initViews(final View root) {
         Debug.log(this, "+onCreate");
+        final Context context = getActivity().getApplicationContext();
+        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
         mCitySearch = (CitySearchView) root.findViewById(R.id.city_search);
         mCitySearch.setOnCityClickListener(new CitySearchView.onCityClickListener() {
             @Override
@@ -59,7 +68,11 @@ public class CitySearchPopup extends AbstractDialogFragment {
         mCitySearch.post(new Runnable() {
             @Override
             public void run() {
-                Utils.showSoftKeyboard(getContext().getApplicationContext(), mCitySearch);
+                if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    Utils.hideSoftKeyboard(context, mCitySearch);
+                } else {
+                    Utils.showSoftKeyboard(context, mCitySearch);
+                }
             }
         });
         ((TextView) root.findViewById(R.id.title)).setText(R.string.edit_my_city);
@@ -87,8 +100,10 @@ public class CitySearchPopup extends AbstractDialogFragment {
     }
 
     @Override
+    @FuckingVoodooMagic(description = "отключаем принудительны портрет, чтоб дольше все ок работало")
     public void onDestroyView() {
         super.onDestroyView();
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         View focus = getActivity().getCurrentFocus();
         if (focus != null) {
             Utils.hideSoftKeyboard(getContext(), focus.getWindowToken());

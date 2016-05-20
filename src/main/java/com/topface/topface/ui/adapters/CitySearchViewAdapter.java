@@ -24,8 +24,12 @@ import com.topface.topface.ui.views.CitySearchView;
 import com.topface.topface.utils.Utils;
 
 import java.util.LinkedList;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
 
@@ -37,7 +41,6 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
     // delay before show loader
     private final static int MY_TIMER_VALUE = 500;
     private final Context mContext;
-    private Timer mTimer;
     private City mDefaultCity;
     private City mUserCity;
     private int mRequestKey;
@@ -47,6 +50,7 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
 
     private LinkedList<City> mTopCitiesList;
     private LinkedList<City> mDataList;
+    private Subscription mTimerSubscription;
 
     public CitySearchViewAdapter(Context context, int requestKey) {
         mContext = context;
@@ -338,18 +342,18 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
 
     private void initTimer() {
         stopTimer();
-        mTimer = new Timer();
-        mTimer.schedule(new TimerTask() {
-            public void run() {
-                // show default and users city with progressBar
+        mTimerSubscription = Observable.interval(MY_TIMER_VALUE, MY_TIMER_VALUE, TimeUnit.MILLISECONDS
+                , AndroidSchedulers.mainThread()).subscribe(new Action1<Long>() {
+            @Override
+            public void call(Long aLong) {
                 fillData(null);
             }
-        }, MY_TIMER_VALUE);
+        });
     }
 
     private void stopTimer() {
-        if (mTimer != null) {
-            mTimer.cancel();
+        if (mTimerSubscription != null && mTimerSubscription.isUnsubscribed()) {
+            mTimerSubscription.unsubscribe();
         }
     }
 
