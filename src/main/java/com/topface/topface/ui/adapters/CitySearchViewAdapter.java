@@ -352,7 +352,7 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
     }
 
     private void stopTimer() {
-        if (mTimerSubscription != null && mTimerSubscription.isUnsubscribed()) {
+        if (mTimerSubscription != null && !mTimerSubscription.isUnsubscribed()) {
             mTimerSubscription.unsubscribe();
         }
     }
