@@ -8,7 +8,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by petrp on 14.05.2016.
+ * Created by ppavlik on 14.05.2016.
+ * Object with data and Observable
  */
 public class DataAndSimpleObservable<DataType> extends DataAndObservable<DataType, Observable<DataType>> {
     private Subscriber<? super DataType> mSubscriber;
@@ -25,7 +26,7 @@ public class DataAndSimpleObservable<DataType> extends DataAndObservable<DataTyp
             public void call(Subscriber<? super DataType> subscriber) {
                 mSubscriber = subscriber;
             }
-        }).subscribeOn(Schedulers.newThread())
+        }).onBackpressureDrop().subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread()).share();
     }
 

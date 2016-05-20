@@ -7,7 +7,8 @@ import rx.functions.Action0;
 import rx.subjects.BehaviorSubject;
 
 /**
- * Created by petrp on 14.05.2016.
+ * Created by ppavlik on 14.05.2016.
+ * Object with data and BehaviorSubject
  */
 public class DataAndBehaviorSubject<DataType> extends DataAndObservable<DataType, BehaviorSubject<DataType>> {
 

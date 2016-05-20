@@ -16,7 +16,8 @@ public class TrackedLifeCycleActivity extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        mLifeCycleReporter.onDestroy();
+        //
+        mLifeCycleReporter.onDestroy();
     }
 
     @Override
@@ -40,7 +41,8 @@ public class TrackedLifeCycleActivity extends ActionBarActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-//        mLifeCycleReporter.onSaveInstanceState();
+        //
+        mLifeCycleReporter.onSaveInstanceState();
     }
 
     @Override
@@ -58,6 +60,7 @@ public class TrackedLifeCycleActivity extends ActionBarActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-//        mLifeCycleReporter.onRestart();
+        //
+        mLifeCycleReporter.onRestart();
     }
 }

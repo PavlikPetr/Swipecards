@@ -35,6 +35,7 @@ import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
@@ -120,13 +121,13 @@ public class NavigationManager {
         }
         BaseFragment oldFragment = (BaseFragment) mFragmentManager.findFragmentById(R.id.fragment_content);
         String fragmentTag = getTag(newFragmentSettings);
-        Debug.log("MenuFragment: Try switch to fragment with tag " + fragmentTag + " (old fragment " + getTag(mFragmentSettings) + ")");
+        Debug.log("NavigationManager: Try switch to fragment with tag " + fragmentTag + " (old fragment " + getTag(mFragmentSettings) + ")");
         BaseFragment newFragment = (BaseFragment) mFragmentManager.findFragmentByTag(fragmentTag);
 
         //Если не нашли в FragmentManager уже существующего инстанса, то создаем новый
         if (newFragment == null) {
             newFragment = getFragmentNewInstanceById(newFragmentSettings);
-            Debug.log("MenuFragment: newFragment is null, create new instance");
+            Debug.log("NavigationManager: newFragment is null, create new instance");
         }
 
         if (oldFragment == null || mFragmentSettings.getUniqueKey() != newFragmentSettings.getUniqueKey()) {
@@ -138,9 +139,9 @@ public class NavigationManager {
             }
             if (oldFragment != newFragment && newFragment.isAdded()) {
                 transaction.remove(newFragment);
-                Debug.error("MenuFragment: try detach already added new fragment " + fragmentTag);
+                Debug.error("NavigationManager: try detach already added new fragment " + fragmentTag);
             }
-            Debug.error("MenuFragment: try detach already added new fragment " + fragmentTag);
+            Debug.error("NavigationManager: try detach already added new fragment " + fragmentTag);
             transaction.replace(R.id.fragment_content, newFragment, fragmentTag);
             transaction.commitAllowingStateLoss();
             //Вызываем executePendingTransactions, если передан соответвующий флаг
@@ -148,7 +149,7 @@ public class NavigationManager {
             String transactionResult = executePending ?
                     Boolean.toString(mFragmentManager.executePendingTransactions()) :
                     "no executePending";
-            Debug.log("MenuFragment: commit " + transactionResult);
+            Debug.log("NavigationManager: commit " + transactionResult);
             mFragmentSettings = newFragmentSettings;
             /**
              * подписываемся на жизненный цикл загруженного фрагмента
@@ -156,14 +157,14 @@ public class NavigationManager {
              * потом отписываемся и шлем ивент о том, что фрагмент свичнулся
              */
             mSubscription = mLifeCycleState.getObservable(FragmentLifreCycleData.class)
-                    .timeout(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS)
                     .filter(new Func1<FragmentLifreCycleData, Boolean>() {
                         @Override
                         public Boolean call(FragmentLifreCycleData fragmentLifreCycleData) {
-                            return fragmentLifreCycleData.getState() == FragmentLifreCycleData.RESUME
+                            return fragmentLifreCycleData.getState() == FragmentLifreCycleData.CREATE_VIEW
                                     && fragmnetName.equals(fragmentLifreCycleData.getClassName());
                         }
                     })
+                    .timeout(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS)
                     .subscribe(new Action1<FragmentLifreCycleData>() {
                         @Override
                         public void call(FragmentLifreCycleData fragmentLifreCycleData) {
@@ -172,12 +173,14 @@ public class NavigationManager {
                     }, new Action1<Throwable>() {
                         @Override
                         public void call(Throwable throwable) {
-                            throwable.printStackTrace();
-                            sendNavigationFragmentSwitched(senderType);
+                            Debug.error("Fragment lifecycle observable error " + throwable);
+                            if (throwable.getClass().getName().equals(TimeoutException.class.getName())) {
+                                sendNavigationFragmentSwitched(senderType);
+                            }
                         }
                     });
         } else {
-            Debug.error("MenuFragment: new fragment already added");
+            Debug.error("NavigationManager: new fragment already added");
             sendNavigationFragmentSwitched(senderType);
         }
     }
@@ -286,13 +289,14 @@ public class NavigationManager {
          * после этого отписываемся и шлем ивент о смене подсвеченного итема в левом меню
          */
         mDrawerLayoutStateSubscription = mDrawerLayoutState.getObservable()
-                .timeout(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS)
                 .filter(new Func1<DrawerLayoutStateData, Boolean>() {
                     @Override
                     public Boolean call(DrawerLayoutStateData drawerLayoutStateData) {
                         return drawerLayoutStateData.getState() == DrawerLayoutStateData.CLOSED;
                     }
-                }).subscribe(new Action1<DrawerLayoutStateData>() {
+                })
+                .timeout(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS)
+                .subscribe(new Action1<DrawerLayoutStateData>() {
                     @Override
                     public void call(DrawerLayoutStateData drawerLayoutStateData) {
                         drawerLayoutStateUsubscribe();

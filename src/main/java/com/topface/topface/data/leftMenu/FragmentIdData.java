@@ -65,4 +65,39 @@ public class FragmentIdData {
                 return UNDEFINED;
         }
     }
+
+    @FragmentId
+    public static int getFragmentId(String field, @FragmentId int defaultValue) {
+        switch (field) {
+            case "VIP_PROFILE":
+                return VIP_PROFILE;
+            case "PROFILE":
+                return PROFILE;
+            case "DATING":
+                return DATING;
+            case "TABBED_DIALOGS":
+                return TABBED_DIALOGS;
+            case "TABBED_VISITORS":
+                return TABBED_VISITORS;
+            case "TABBED_LIKES":
+                return TABBED_LIKES;
+            case "PHOTO_BLOG":
+                return PHOTO_BLOG;
+            case "GEO":
+                return GEO;
+            case "BONUS":
+                return BONUS;
+            case "EDITOR":
+                return EDITOR;
+            case "SETTINGS":
+                return SETTINGS;
+            case "INTEGRATION_PAGE":
+                return INTEGRATION_PAGE;
+            case "BALLANCE":
+                return BALLANCE;
+            case "UNDEFINED":
+                return UNDEFINED;
+        }
+        return defaultValue;
+    }
 }

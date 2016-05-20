@@ -15,9 +15,9 @@ public class LeftMenuHeaderViewData {
     /**
      * Create new data object for left menu header
      *
-     * @param photo         interface for ImageLoader interaction with photos
-     * @param name          users name
-     * @param city          users city
+     * @param photo interface for ImageLoader interaction with photos
+     * @param name  users name
+     * @param city  users city
      */
     public LeftMenuHeaderViewData(IPhoto photo, String name, String city) {
         mPhoto = photo;
@@ -77,5 +77,22 @@ public class LeftMenuHeaderViewData {
      */
     public void setCity(String city) {
         mCity = city;
+    }
+
+    @SuppressWarnings("SimplifiableIfStatement")
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof LeftMenuHeaderViewData)) return false;
+        LeftMenuHeaderViewData data = (LeftMenuHeaderViewData) o;
+        if (mPhoto == null || mPhoto.equals(data.getPhoto())) return false;
+        if (mName == null || mName.equals(data.getName())) return false;
+        return mCity == null || mCity.equals(data.getCity());
+    }
+
+    @Override
+    public int hashCode() {
+        int res = mPhoto != null ? mPhoto.hashCode() : 0;
+        res = (res * 31) + (mName != null ? mName.hashCode() : 0);
+        return (res * 31) + (mCity != null ? mCity.hashCode() : 0);
     }
 }

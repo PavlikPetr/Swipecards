@@ -5,14 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.ConcurrentHashMap;
 
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.functions.Action1;
-import rx.subjects.BehaviorSubject;
 
 /**
  * Created by ppetr on 10.06.15.
- * hold application state here
+ * base data by class name observable
  */
 public abstract class MultiTypeDataObserver<ObserveDataType extends DataAndObservable> {
     private ConcurrentHashMap<Class, ObserveDataType> mStateData;

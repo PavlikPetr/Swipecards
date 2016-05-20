@@ -315,37 +315,4 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     protected void setNeedTitles(boolean needTitles) {
         mNeedTitles = needTitles;
     }
-
-    public enum FragmentId {
-        VIP_PROFILE(0),
-        PROFILE(1),
-        DATING(2),
-        TABBED_DIALOGS(3),
-        TABBED_VISITORS(4),
-        TABBED_LIKES(5),
-        PHOTO_BLOG(6),
-        GEO(9),
-        BONUS(10),
-        EDITOR(1000),
-        SETTINGS(11),
-        INTEGRATION_PAGE(12),
-        UNDEFINED(-1);
-
-        private int mNumber;
-
-        /**
-         * Constructor for enum type of fragment ids
-         * By default fragment is not overlayed by ActionBar
-         *
-         * @param number integer id
-         */
-        FragmentId(int number) {
-            mNumber = number;
-        }
-
-        public int getId() {
-            return mNumber;
-        }
-
-    }
 }

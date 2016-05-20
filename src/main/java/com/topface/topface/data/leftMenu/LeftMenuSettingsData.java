@@ -1,5 +1,6 @@
 package com.topface.topface.data.leftMenu;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -42,6 +43,11 @@ public class LeftMenuSettingsData implements Parcelable {
         return mIsOverlayed;
     }
 
+    /**
+     * get unique fragment id key
+     *
+     * @return unique key
+     */
     public int getUniqueKey() {
         return mFragmentId;
     }
@@ -86,6 +92,7 @@ public class LeftMenuSettingsData implements Parcelable {
         out.writeInt(mIsOverlayed ? 1 : 0);
     }
 
+    @SuppressLint("SwitchIntDef")
     private boolean isOverlayed(@FragmentIdData.FragmentId int id) {
         switch (id) {
             case FragmentIdData.DATING:

@@ -4,6 +4,7 @@ import android.support.annotation.LayoutRes;
 
 /**
  * Created by petrp on 10.05.2016.
+ * Base header/footer model for BaseHeaderFooterRecyclerViewAdapter
  */
 public class FixedViewInfo<DataType> {
     @LayoutRes
@@ -26,5 +27,20 @@ public class FixedViewInfo<DataType> {
 
     public void setData(DataType data) {
         mData = data;
+    }
+
+    @Override
+    public int hashCode() {
+        int res = mResId;
+        return mResId * 31 + (mData != null ? mData.hashCode() : 0);
+    }
+
+    @SuppressWarnings("SimplifiableIfStatement")
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof FixedViewInfo)) return false;
+        FixedViewInfo data = (FixedViewInfo) o;
+        if (mResId != data.getResId()) return false;
+        return mData != null && mData.equals(data.getData());
     }
 }

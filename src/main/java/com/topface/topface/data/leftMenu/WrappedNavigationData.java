@@ -4,6 +4,7 @@ import android.support.annotation.IntDef;
 
 /**
  * Created by ppavlik on 16.05.16.
+ * Wrap LeftMenuSettingsData with added sender type to object
  */
 public class WrappedNavigationData {
 
@@ -32,5 +33,18 @@ public class WrappedNavigationData {
     @NavigationEventSenderType
     public int getSenderType() {
         return mSenderType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof WrappedNavigationData)) return false;
+        WrappedNavigationData data = (WrappedNavigationData) o;
+        return mSettingsData != null && mSettingsData.equals(data.getData()) && mSenderType == data.getSenderType();
+    }
+
+    @Override
+    public int hashCode() {
+        int res = mSettingsData != null ? mSettingsData.hashCode() : 0;
+        return (res * 31) + mSenderType;
     }
 }

@@ -13,18 +13,28 @@ public class DrawerLayoutStateData {
     public static final int OPENED = 3;
     public static final int CLOSED = 4;
 
-    @IntDef({UNDEFINED,STATE_CHANGED,SLIDE,OPENED,CLOSED})
-    public @interface DrawerLayoutState1 {
+    @IntDef({UNDEFINED, STATE_CHANGED, SLIDE, OPENED, CLOSED})
+    public @interface DrawerLayoutState {
     }
 
-    @DrawerLayoutState1
+    @DrawerLayoutState
     private int mState;
 
-    public DrawerLayoutStateData(@DrawerLayoutState1 int state){
+    public DrawerLayoutStateData(@DrawerLayoutState int state) {
         mState = state;
     }
 
-    public int getState(){
-        return  mState;
+    public int getState() {
+        return mState;
+    }
+
+    @Override
+    public int hashCode() {
+        return mState;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof DrawerLayoutStateData && mState == ((DrawerLayoutStateData) o).getState();
     }
 }

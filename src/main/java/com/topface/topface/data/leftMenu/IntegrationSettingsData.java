@@ -9,6 +9,8 @@ import android.os.Parcelable;
  */
 public class IntegrationSettingsData extends LeftMenuSettingsData implements Parcelable {
 
+    private static final int UNIQUE_KEY_CAPACITY = 100;
+
     private int mPos;
     private String mUrl;
     private boolean mIsExternal;
@@ -17,11 +19,11 @@ public class IntegrationSettingsData extends LeftMenuSettingsData implements Par
     /**
      * create new integration fragment settings
      *
-     * @param fragmentId  unique fragment id
-     * @param pos         local integration position
-     * @param url         integration url
-     * @param isExternal  is need to show outside the app
-     * @param pageName    current integration page name
+     * @param fragmentId unique fragment id
+     * @param pos        local integration position
+     * @param url        integration url
+     * @param isExternal is need to show outside the app
+     * @param pageName   current integration page name
      */
     public IntegrationSettingsData(@FragmentIdData.FragmentId int fragmentId, int pos, String url, boolean isExternal, String pageName) {
         super(fragmentId);
@@ -40,6 +42,11 @@ public class IntegrationSettingsData extends LeftMenuSettingsData implements Par
         return mPos;
     }
 
+    /**
+     * get integration url
+     *
+     * @return integration url
+     */
     public String getUrl() {
         return mUrl;
     }
@@ -53,9 +60,14 @@ public class IntegrationSettingsData extends LeftMenuSettingsData implements Par
         return mIsExternal;
     }
 
+    /**
+     * get unique fragment id key
+     *
+     * @return unique key
+     */
     @Override
     public int getUniqueKey() {
-        return super.getUniqueKey() + mPos * 100;
+        return super.getUniqueKey() + mPos * UNIQUE_KEY_CAPACITY;
     }
 
     /**

@@ -21,13 +21,15 @@ public class TrackedLifeCycleFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-//        mLifeCycleReporter.onDestroyView();
+        //
+        mLifeCycleReporter.onDestroyView();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        mLifeCycleReporter.onAttach();
+        //
+        mLifeCycleReporter.onAttach();
     }
 
     @Override
@@ -39,14 +41,16 @@ public class TrackedLifeCycleFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        mLifeCycleReporter.onCreateView();
+        //
+        mLifeCycleReporter.onCreateView();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        mLifeCycleReporter.onViewCreated();
+        //
+        mLifeCycleReporter.onViewCreated();
     }
 
     @Override
@@ -64,7 +68,8 @@ public class TrackedLifeCycleFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-//        mLifeCycleReporter.onSaveInstanceState();
+        //
+        mLifeCycleReporter.onSaveInstanceState();
     }
 
     @Override
@@ -88,6 +93,7 @@ public class TrackedLifeCycleFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-//        mLifeCycleReporter.onDetach();
+        //
+        mLifeCycleReporter.onDetach();
     }
 }

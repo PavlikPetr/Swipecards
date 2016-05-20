@@ -6,7 +6,7 @@ import android.support.annotation.IntDef;
  * Created by ppavlik on 04.04.16.
  * hold state and name of current activity
  */
-public class FragmentLifreCycleData extends ViewLifreCycleData1 {
+public class FragmentLifreCycleData extends ViewLifreCycleData {
 
     public static final int DESTROY_VIEW = 1;
     public static final int ATTACH = 2;
@@ -43,5 +43,18 @@ public class FragmentLifreCycleData extends ViewLifreCycleData1 {
     @FragmentLifecycle
     public int getState() {
         return mState;
+    }
+
+
+    @Override
+    public int hashCode() {
+        return (super.hashCode() * 31) + mState;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof FragmentLifreCycleData) || !super.equals(o)) return false;
+        FragmentLifreCycleData data = (FragmentLifreCycleData) o;
+        return mState == data.getState();
     }
 }

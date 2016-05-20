@@ -105,7 +105,7 @@ public class OkProfileFragment extends ProfileInnerFragment {
     }
 
     private String getEmptyPhotoRes(boolean isBoy) {
-        return String.format(App.getCurrentLocale(), Utils.LOCAL_RES, isBoy ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
+        return Utils.getLocalResUrl(isBoy ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
     }
 
     private void showProgress(boolean isEnable) {

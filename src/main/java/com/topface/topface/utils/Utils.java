@@ -64,7 +64,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class Utils {
@@ -93,6 +92,10 @@ public class Utils {
 
     public static int unixtimeInSeconds() {
         return (int) (System.currentTimeMillis() / 1000L);
+    }
+
+    public static String getLocalResUrl(@DrawableRes int res) {
+        return String.format(App.getCurrentLocale(), Utils.LOCAL_RES, res);
     }
 
     public static String getQuantityString(int id, int quantity, Object... formatArgs) {

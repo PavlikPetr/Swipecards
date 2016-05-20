@@ -6,7 +6,7 @@ import android.support.annotation.IntDef;
  * Created by ppavlik on 04.04.16.
  * hold state and name of current activity
  */
-public class ActivityLifreCycleData extends ViewLifreCycleData1 {
+public class ActivityLifreCycleData extends ViewLifreCycleData {
 
     public static final int PAUSED = 1;
     public static final int STOPPED = 2;
@@ -20,7 +20,6 @@ public class ActivityLifreCycleData extends ViewLifreCycleData1 {
 
     @IntDef({RESUMED, PAUSED, STOPPED, SAVE_INSTANCE_STATE, DESTROYED, CREATED, STARTED, RESTARTED})
     @interface ActivityLifecycle {
-
     }
 
     @ActivityLifecycle
@@ -38,5 +37,17 @@ public class ActivityLifreCycleData extends ViewLifreCycleData1 {
     @ActivityLifecycle
     public int getState() {
         return mState;
+    }
+
+    @Override
+    public int hashCode() {
+        return (super.hashCode() * 31) + mState;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof ActivityLifreCycleData) || !super.equals(o)) return false;
+        ActivityLifreCycleData data = (ActivityLifreCycleData) o;
+        return mState == data.getState();
     }
 }

@@ -20,4 +20,14 @@ public class LeftMenuHeaderData extends HeaderFooterData<LeftMenuHeaderViewData>
     public LeftMenuHeaderData(IPhoto photo, String name, String city, OnViewClickListener<LeftMenuHeaderViewData> listener) {
         super(new LeftMenuHeaderViewData(photo, name, city), listener);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

@@ -1,23 +1,20 @@
 package com.topface.topface.state;
 
-import org.jetbrains.annotations.NotNull;
-
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 
 /**
- * Created by petrp on 14.05.2016.
+ * Created by ppavlik on 14.05.2016.
+ * Base object with data and Observable
  */
 public class DataAndObservable<DataType, ObservableType extends Observable<DataType>> {
     private ObservableType mObservable;
     private DataType mObject;
 
-    protected ObservableType createObservable(DataType data){
+    protected ObservableType createObservable(DataType data) {
         return null;
     }
 
-    protected void emmitData(DataType data){
+    protected void emmitData(DataType data) {
 
     }
 
@@ -28,12 +25,6 @@ public class DataAndObservable<DataType, ObservableType extends Observable<DataT
         this();
         setObject(data);
         setObservable(createObservable(data));
-    }
-
-    private DataAndObservable(DataType data, ObservableType observable) {
-        this();
-        setObject(data);
-        setObservable(observable);
     }
 
     public DataType getObject() {

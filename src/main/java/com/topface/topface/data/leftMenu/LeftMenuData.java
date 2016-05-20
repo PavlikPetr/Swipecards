@@ -30,7 +30,7 @@ public class LeftMenuData {
      * @param settings         item settings
      */
     public LeftMenuData(@DrawableRes int iconRes, String title, int badgeCount, boolean isDividerEnabled, LeftMenuSettingsData settings) {
-        this(String.format(App.getCurrentLocale(), Utils.LOCAL_RES, iconRes), new SpannableString(title), badgeCount, isDividerEnabled, settings);
+        this(Utils.getLocalResUrl(iconRes), new SpannableString(title), badgeCount, isDividerEnabled, settings);
     }
 
     /**
@@ -43,7 +43,7 @@ public class LeftMenuData {
      * @param settings         item settings
      */
     public LeftMenuData(@DrawableRes int iconRes, SpannableString title, int badgeCount, boolean isDividerEnabled, LeftMenuSettingsData settings) {
-        this(String.format(App.getCurrentLocale(), Utils.LOCAL_RES, iconRes), new SpannableString(title), badgeCount, isDividerEnabled, settings);
+        this(Utils.getLocalResUrl(iconRes), new SpannableString(title), badgeCount, isDividerEnabled, settings);
     }
 
     /**
@@ -56,7 +56,7 @@ public class LeftMenuData {
      * @param settings         item settings
      */
     public LeftMenuData(@DrawableRes int iconRes, @StringRes int title, int badgeCount, boolean isDividerEnabled, LeftMenuSettingsData settings) {
-        this(String.format(App.getCurrentLocale(), Utils.LOCAL_RES, iconRes), new SpannableString(App.getContext().getResources().getString(title)), badgeCount, isDividerEnabled, settings);
+        this(Utils.getLocalResUrl(iconRes), new SpannableString(App.getContext().getResources().getString(title)), badgeCount, isDividerEnabled, settings);
     }
 
     /**
@@ -86,6 +86,11 @@ public class LeftMenuData {
         return mIcon;
     }
 
+    /**
+     * set url or local path to icon
+     *
+     * @param icon url or local path to icons
+     */
     public void setIcon(String icon) {
         mIcon = icon;
     }
@@ -99,6 +104,11 @@ public class LeftMenuData {
         return mTitle;
     }
 
+    /**
+     * set visible item name
+     *
+     * @param title visible item name
+     */
     public void setTitle(SpannableString title) {
         mTitle = title;
     }
@@ -112,6 +122,11 @@ public class LeftMenuData {
         return mBadgeCount;
     }
 
+    /**
+     * set unreaded feeds count
+     *
+     * @param count unreaded feeds
+     */
     public void setBadgeCount(int count) {
         mBadgeCount = count;
     }
@@ -134,11 +149,21 @@ public class LeftMenuData {
         return mSettings;
     }
 
-    public void setSelected(boolean isSelected){
+    /**
+     * set item selected state
+     *
+     * @param isSelected item state
+     */
+    public void setSelected(boolean isSelected) {
         mIsSelected = isSelected;
     }
 
-    public boolean isSelected(){
+    /**
+     * get item selected state
+     *
+     * @return item state
+     */
+    public boolean isSelected() {
         return mIsSelected;
     }
 
