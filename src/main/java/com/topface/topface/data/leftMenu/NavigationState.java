@@ -1,9 +1,15 @@
 package com.topface.topface.data.leftMenu;
 
+import com.topface.framework.utils.Debug;
+
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by ppavlik on 13.05.16.
@@ -12,66 +18,67 @@ import rx.schedulers.Schedulers;
  */
 public class NavigationState {
 
-    private static Subscriber<? super WrappedNavigationData> mLeftMenuSelectionSubscriber;
-    private static Observable<WrappedNavigationData> mLeftMenuSelectionObservable;
-
-    private static Subscriber<? super WrappedNavigationData> mNavigationSwitcherSubscriber;
-    private static Observable<WrappedNavigationData> mNavigationSwitcherObservable;
+    private PublishSubject<WrappedNavigationData> mNavigationPublishSubject;
 
     public NavigationState() {
-        mLeftMenuSelectionObservable = Observable.create(new Observable.OnSubscribe<WrappedNavigationData>() {
-            @Override
-            public void call(Subscriber<? super WrappedNavigationData> subscriber) {
-                mLeftMenuSelectionSubscriber = subscriber;
-            }
-        }).subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread()).share();
-        mNavigationSwitcherObservable = Observable.create(new Observable.OnSubscribe<WrappedNavigationData>() {
-            @Override
-            public void call(Subscriber<? super WrappedNavigationData> subscriber) {
-                mNavigationSwitcherSubscriber = subscriber;
-            }
-        }).subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread()).share();
+        mNavigationPublishSubject = PublishSubject.create();
     }
 
     /**
-     * Report left menu item selected
+     * Send emmit when left menu item selected
      *
-     * @param data selection item info
+     * @param data       left menu settings data
+     * @param senderType sender type
      */
-    public void leftMenuItemSelected(WrappedNavigationData data) {
-        if (mLeftMenuSelectionSubscriber != null && !mLeftMenuSelectionSubscriber.isUnsubscribed()) {
-            mLeftMenuSelectionSubscriber.onNext(data);
-        }
+    public void emmitItemSelected(final LeftMenuSettingsData data, @WrappedNavigationData.NavigationEventSenderType final int senderType) {
+        AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
+            @Override
+            public void call() {
+                mNavigationPublishSubject.onNext(new WrappedNavigationData(data, senderType, WrappedNavigationData.SELECTED_ITEM));
+            }
+        });
     }
 
     /**
-     * Get left menu item selection observable
+     * Send emmit when navigation fragment switched
+     *
+     * @param data       left menu settings data
+     * @param senderType sender type
+     */
+    public void emmitFragmentSwitched(final LeftMenuSettingsData data, @WrappedNavigationData.NavigationEventSenderType final int senderType) {
+        AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
+            @Override
+            public void call() {
+                mNavigationPublishSubject.onNext(new WrappedNavigationData(data, senderType, WrappedNavigationData.SWITCHED_FRAGMENT));
+            }
+        });
+    }
+
+    /**
+     * Get observable of left menu item selected
      *
      * @return observable
      */
-    public Observable<WrappedNavigationData> getSelectionObservable() {
-        return mLeftMenuSelectionObservable;
+    public Observable<WrappedNavigationData> getSelectedItemObservable() {
+        return mNavigationPublishSubject.filter(new Func1<WrappedNavigationData, Boolean>() {
+            @Override
+            public Boolean call(WrappedNavigationData wrappedNavigationData) {
+                return wrappedNavigationData != null && wrappedNavigationData.getDataType() == WrappedNavigationData.SELECTED_ITEM;
+            }
+        }).share();
     }
 
     /**
-     * Report about navigation fragment switched
-     *
-     * @param data switched fragment info
-     */
-    public void navigationFragmentSwitched(WrappedNavigationData data) {
-        if (mNavigationSwitcherSubscriber != null && !mNavigationSwitcherSubscriber.isUnsubscribed()) {
-            mNavigationSwitcherSubscriber.onNext(data);
-        }
-    }
-
-    /**
-     * Get navigation fragments observable
+     * Get observable of navigation fragment switched
      *
      * @return observable
      */
-    public Observable<WrappedNavigationData> getSwitchObservable() {
-        return mNavigationSwitcherObservable;
+    public Observable<WrappedNavigationData> getSwitchedFragmentObservable() {
+        return mNavigationPublishSubject.filter(new Func1<WrappedNavigationData, Boolean>() {
+            @Override
+            public Boolean call(WrappedNavigationData wrappedNavigationData) {
+                return wrappedNavigationData != null && wrappedNavigationData.getDataType() == WrappedNavigationData.SWITCHED_FRAGMENT;
+            }
+        }).share();
     }
 }

@@ -118,7 +118,7 @@ public class MenuFragment extends Fragment {
         }
         mSelectedPos = fragmentSettings.getUniqueKey();
         getAdapter().updateSelected(mSelectedPos, true);
-        mNavigationState.leftMenuItemSelected(new WrappedNavigationData(fragmentSettings, senderType));
+        mNavigationState.emmitItemSelected(fragmentSettings, senderType);
     }
 
     private OnRecyclerViewItemClickListener<LeftMenuData> mItemClickListener = new OnRecyclerViewItemClickListener<LeftMenuData>() {
@@ -187,7 +187,7 @@ public class MenuFragment extends Fragment {
                     }
                 }));
         mSubscription.add(mNavigationState
-                .getSwitchObservable()
+                .getSwitchedFragmentObservable()
                 .subscribe(new Action1<WrappedNavigationData>() {
                     @Override
                     public void call(WrappedNavigationData wrappedLeftMenuSettingsData) {

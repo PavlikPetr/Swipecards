@@ -17,13 +17,28 @@ public class WrappedNavigationData {
     public @interface NavigationEventSenderType {
     }
 
+    public final static int SELECTED_ITEM = 1;
+    public final static int SWITCHED_FRAGMENT = 2;
+
+    @IntDef({SELECTED_ITEM, SWITCHED_FRAGMENT})
+    public @interface DataType {
+    }
+
     private LeftMenuSettingsData mSettingsData;
     @NavigationEventSenderType
     private int mSenderType;
+    @DataType
+    private int mDataType;
 
-    public WrappedNavigationData(LeftMenuSettingsData data, @NavigationEventSenderType int senderType) {
+    public WrappedNavigationData(LeftMenuSettingsData data, @NavigationEventSenderType int senderType, @DataType int dataType) {
         mSettingsData = data;
         mSenderType = senderType;
+        mDataType = dataType;
+    }
+
+    @DataType
+    public int getDataType() {
+        return mDataType;
     }
 
     public LeftMenuSettingsData getData() {
@@ -39,12 +54,15 @@ public class WrappedNavigationData {
     public boolean equals(Object o) {
         if (!(o instanceof WrappedNavigationData)) return false;
         WrappedNavigationData data = (WrappedNavigationData) o;
-        return mSettingsData != null && mSettingsData.equals(data.getData()) && mSenderType == data.getSenderType();
+        return mSettingsData != null && mSettingsData.equals(data.getData())
+                && mSenderType == data.getSenderType()
+                && mDataType == data.getDataType();
     }
 
     @Override
     public int hashCode() {
         int res = mSettingsData != null ? mSettingsData.hashCode() : 0;
-        return (res * 31) + mSenderType;
+        res = (res * 31) + mSenderType;
+        return (res * 31) + mDataType;
     }
 }

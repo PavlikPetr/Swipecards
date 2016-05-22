@@ -71,7 +71,7 @@ public class NavigationManager {
         App.get().inject(this);
         mSavedInstanceState = savedInstanceState;
         mActivityDelegat = activityDelegate;
-        mNavigationState.getSelectionObservable().subscribe(new Action1<WrappedNavigationData>() {
+        mNavigationState.getSelectedItemObservable().subscribe(new Action1<WrappedNavigationData>() {
             @Override
             public void call(WrappedNavigationData wrappedLeftMenuSettingsData) {
                 if (wrappedLeftMenuSettingsData != null && wrappedLeftMenuSettingsData.getSenderType() != WrappedNavigationData.SWITCHED_EXTERNALY) {
@@ -186,7 +186,7 @@ public class NavigationManager {
     }
 
     private void sendNavigationFragmentSwitched(@WrappedNavigationData.NavigationEventSenderType int senderType) {
-        mNavigationState.navigationFragmentSwitched(new WrappedNavigationData(mFragmentSettings, senderType));
+        mNavigationState.emmitFragmentSwitched(mFragmentSettings, senderType);
         if (mSubscription != null && !mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
         }
@@ -319,7 +319,7 @@ public class NavigationManager {
     }
 
     private void selectPreviousLeftMenuItem() {
-        mNavigationState.leftMenuItemSelected(new WrappedNavigationData(mFragmentSettings, WrappedNavigationData.SWITCHED_EXTERNALY));
+        mNavigationState.emmitItemSelected(mFragmentSettings, WrappedNavigationData.SWITCHED_EXTERNALY);
         sendNavigationFragmentSwitched(WrappedNavigationData.SWITCHED_EXTERNALY);
     }
 

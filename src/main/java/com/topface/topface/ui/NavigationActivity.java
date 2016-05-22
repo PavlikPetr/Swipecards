@@ -171,7 +171,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 App.sendReferreRequest(adjustAttributionData);
             }
         }));
-        mSubscription.add(mNavigationState.getSwitchObservable().subscribe(new Action1<WrappedNavigationData>() {
+        mSubscription.add(mNavigationState.getSwitchedFragmentObservable().subscribe(new Action1<WrappedNavigationData>() {
             @Override
             public void call(WrappedNavigationData wrappedLeftMenuSettingsData) {
                 if (wrappedLeftMenuSettingsData != null) {
