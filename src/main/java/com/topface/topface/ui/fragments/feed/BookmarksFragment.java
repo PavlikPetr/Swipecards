@@ -142,7 +142,7 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
         inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mNavigationState.emmitItemSelected(new LeftMenuSettingsData(FragmentIdData.DATING), WrappedNavigationData.SELECTED_EXTERNALY);
+                mNavigationState.emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.DATING), WrappedNavigationData.SELECT_EXTERNALY));
             }
         });
     }

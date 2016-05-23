@@ -1,9 +1,7 @@
 package com.topface.topface.ui.fragments;
 
-import android.annotation.TargetApi;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -45,7 +43,6 @@ import com.topface.topface.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -107,24 +104,26 @@ public class MenuFragment extends Fragment {
     private OnViewClickListener<LeftMenuHeaderViewData> mOnHeaderClick = new OnViewClickListener<LeftMenuHeaderViewData>() {
         @Override
         public void onClick(View v, LeftMenuHeaderViewData data) {
-            setSelected(new LeftMenuSettingsData(FragmentIdData.PROFILE), WrappedNavigationData.SELECTED_BY_CLICK);
+            setSelected(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.PROFILE),
+                    WrappedNavigationData.SELECT_BY_CLICK));
         }
     };
 
-    private void setSelected(LeftMenuSettingsData fragmentSettings, @WrappedNavigationData.NavigationEventSenderType int senderType) {
+    private void setSelected(WrappedNavigationData data) {
         if (mSelectedPos != EMPTY_POS) {
             getAdapter().updateSelected(mSelectedPos, false);
         }
-        mSelectedPos = fragmentSettings.getUniqueKey();
+        mSelectedPos = data.getData().getUniqueKey();
         getAdapter().updateSelected(mSelectedPos, true);
-        senderType = senderType == WrappedNavigationData.SELECTED_EXTERNALY ? WrappedNavigationData.SWITCHED_EXTERNALY : senderType;
-        mNavigationState.emmitItemSelected(fragmentSettings, senderType);
+        if (!data.getStatesStack().contains(WrappedNavigationData.SELECT_ONLY)) {
+            mNavigationState.emmitNavigationState(data.addStateToStack(WrappedNavigationData.ITEM_SELECTED));
+        }
     }
 
     private OnRecyclerViewItemClickListener<LeftMenuData> mItemClickListener = new OnRecyclerViewItemClickListener<LeftMenuData>() {
         @Override
         public void itemClick(View view, int itemPosition, LeftMenuData data) {
-            setSelected(data.getSettings(), WrappedNavigationData.SELECTED_BY_CLICK);
+            setSelected(new WrappedNavigationData(data.getSettings(), WrappedNavigationData.SELECT_BY_CLICK));
         }
     };
 
@@ -185,13 +184,17 @@ public class MenuFragment extends Fragment {
                     }
                 }));
         mSubscription.add(mNavigationState
-                .getSwitchedFragmentObservable()
+                .getNavigationObservable()
+                .filter(new Func1<WrappedNavigationData, Boolean>() {
+                    @Override
+                    public Boolean call(WrappedNavigationData data) {
+                        return data != null && !data.getStatesStack().contains(WrappedNavigationData.ITEM_SELECTED);
+                    }
+                })
                 .subscribe(new Action1<WrappedNavigationData>() {
                     @Override
                     public void call(WrappedNavigationData wrappedLeftMenuSettingsData) {
-                        if (wrappedLeftMenuSettingsData != null && wrappedLeftMenuSettingsData.getSenderType() != WrappedNavigationData.SELECTED_BY_CLICK) {
-                            setSelected(wrappedLeftMenuSettingsData.getData(), wrappedLeftMenuSettingsData.getSenderType());
-                        }
+                        setSelected(wrappedLeftMenuSettingsData);
                     }
                 }, mSubscriptionOnError));
         mSubscription.add(mDrawerLayoutState

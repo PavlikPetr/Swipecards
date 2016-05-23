@@ -69,12 +69,17 @@ public class NavigationManager {
         App.get().inject(this);
         mSavedInstanceState = savedInstanceState;
         mActivityDelegat = activityDelegate;
-        mNavigationState.getSelectedItemObservable().subscribe(new Action1<WrappedNavigationData>() {
+        mNavigationState.getNavigationObservable().filter(new Func1<WrappedNavigationData, Boolean>() {
+            @Override
+            public Boolean call(WrappedNavigationData data) {
+                return data != null
+                        && data.getStatesStack().contains(WrappedNavigationData.ITEM_SELECTED)
+                        && !data.getStatesStack().contains(WrappedNavigationData.FRAGMENT_SWITCHED);
+            }
+        }).subscribe(new Action1<WrappedNavigationData>() {
             @Override
             public void call(WrappedNavigationData wrappedLeftMenuSettingsData) {
-                if (wrappedLeftMenuSettingsData != null && wrappedLeftMenuSettingsData.getSenderType() != WrappedNavigationData.SWITCHED_EXTERNALY) {
-                    selectFragment(wrappedLeftMenuSettingsData.getData(), wrappedLeftMenuSettingsData.getSenderType(), false);
-                }
+                selectFragment(wrappedLeftMenuSettingsData, false);
             }
         }, new Action1<Throwable>() {
             @Override
@@ -90,31 +95,31 @@ public class NavigationManager {
         if (mSavedInstanceState != null && mSavedInstanceState.containsKey(FRAGMENT_SETTINGS)) {
             settings = mSavedInstanceState.getParcelable(FRAGMENT_SETTINGS);
         }
-        selectFragment(settings, WrappedNavigationData.SWITCHED_EXTERNALY, false);
+        selectFragment(new WrappedNavigationData(settings, WrappedNavigationData.SWITCH_EXTERNALLY), false);
     }
 
     private String getTag(LeftMenuSettingsData settings) {
         return "fragment_switch_controller_" + settings.getUniqueKey();
     }
 
-    private void switchFragment(LeftMenuSettingsData newFragmentSettings,
-                                final @WrappedNavigationData.NavigationEventSenderType int senderType,
+    private void switchFragment(final WrappedNavigationData data,
                                 boolean executePending) {
-        if (newFragmentSettings == null || mFragmentManager == null) {
+        if (data == null || data.getData() == null || mFragmentManager == null) {
             return;
         }
+        LeftMenuSettingsData leftMenuSettingsData = data.getData();
         BaseFragment oldFragment = (BaseFragment) mFragmentManager.findFragmentById(R.id.fragment_content);
-        String fragmentTag = getTag(newFragmentSettings);
+        String fragmentTag = getTag(leftMenuSettingsData);
         Debug.log("NavigationManager: Try switch to fragment with tag " + fragmentTag + " (old fragment " + getTag(mFragmentSettings) + ")");
         BaseFragment newFragment = (BaseFragment) mFragmentManager.findFragmentByTag(fragmentTag);
 
         //Если не нашли в FragmentManager уже существующего инстанса, то создаем новый
         if (newFragment == null) {
-            newFragment = getFragmentNewInstanceById(newFragmentSettings);
+            newFragment = getFragmentNewInstanceById(leftMenuSettingsData);
             Debug.log("NavigationManager: newFragment is null, create new instance");
         }
 
-        if (oldFragment == null || mFragmentSettings.getUniqueKey() != newFragmentSettings.getUniqueKey()) {
+        if (oldFragment == null || mFragmentSettings.getUniqueKey() != leftMenuSettingsData.getUniqueKey()) {
             final String fragmnetName = newFragment.getClass().getName();
             FragmentTransaction transaction = mFragmentManager.beginTransaction();
             //Меняем фрагменты анимировано, но только на новых устройствах c HW ускорением
@@ -134,7 +139,7 @@ public class NavigationManager {
                     Boolean.toString(mFragmentManager.executePendingTransactions()) :
                     "no executePending";
             Debug.log("NavigationManager: commit " + transactionResult);
-            mFragmentSettings = newFragmentSettings;
+            mFragmentSettings = leftMenuSettingsData;
             /**
              * подписываемся на жизненный цикл загруженного фрагмента
              * ждем его загрузки не дольше CLOSE_LEFT_MENU_TIMEOUT мс
@@ -152,25 +157,25 @@ public class NavigationManager {
                     .subscribe(new Action1<FragmentLifreCycleData>() {
                         @Override
                         public void call(FragmentLifreCycleData fragmentLifreCycleData) {
-                            sendNavigationFragmentSwitched(senderType);
+                            sendNavigationFragmentSwitched(data);
                         }
                     }, new Action1<Throwable>() {
                         @Override
                         public void call(Throwable throwable) {
                             Debug.error("Fragment lifecycle observable error " + throwable);
                             if (throwable.getClass().getName().equals(TimeoutException.class.getName())) {
-                                sendNavigationFragmentSwitched(senderType);
+                                sendNavigationFragmentSwitched(data);
                             }
                         }
                     });
         } else {
             Debug.error("NavigationManager: new fragment already added");
-            sendNavigationFragmentSwitched(senderType);
+            sendNavigationFragmentSwitched(data);
         }
     }
 
-    private void sendNavigationFragmentSwitched(@WrappedNavigationData.NavigationEventSenderType int senderType) {
-        mNavigationState.emmitFragmentSwitched(mFragmentSettings, senderType);
+    private void sendNavigationFragmentSwitched(WrappedNavigationData data) {
+        mNavigationState.emmitNavigationState(data.addStateToStack(WrappedNavigationData.FRAGMENT_SWITCHED));
         if (mSubscription != null && !mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
         }
@@ -226,12 +231,12 @@ public class NavigationManager {
     }
 
     public void selectFragment(LeftMenuSettingsData fragmentSettings) {
-        selectFragment(fragmentSettings, WrappedNavigationData.SWITCHED_EXTERNALY, false);
+        selectFragment(new WrappedNavigationData(fragmentSettings, WrappedNavigationData.SWITCH_EXTERNALLY), false);
     }
 
     @SuppressLint("SwitchIntDef")
-    private void selectFragment(LeftMenuSettingsData fragmentSettings, @WrappedNavigationData.NavigationEventSenderType int senderType, boolean executePending) {
-        switch (fragmentSettings.getFragmentId()) {
+    private void selectFragment(WrappedNavigationData data, boolean executePending) {
+        switch (data.getData().getFragmentId()) {
             case FragmentIdData.BALLANCE:
                 closeMenuAndSwitchAfter(new ISimpleCallback() {
                     @Override
@@ -244,7 +249,7 @@ public class NavigationManager {
                 });
                 break;
             case FragmentIdData.INTEGRATION_PAGE:
-                final IntegrationSettingsData settingsData = (IntegrationSettingsData) fragmentSettings;
+                final IntegrationSettingsData settingsData = (IntegrationSettingsData) data.getData();
                 if (settingsData.isExternal()) {
                     closeMenuAndSwitchAfter(new ISimpleCallback() {
                         @Override
@@ -256,7 +261,7 @@ public class NavigationManager {
                     break;
                 }
             default:
-                switchFragment(fragmentSettings, senderType, executePending);
+                switchFragment(data, executePending);
         }
     }
 
@@ -303,8 +308,9 @@ public class NavigationManager {
     }
 
     private void selectPreviousLeftMenuItem() {
-        mNavigationState.emmitItemSelected(mFragmentSettings, WrappedNavigationData.SWITCHED_EXTERNALY);
-        sendNavigationFragmentSwitched(WrappedNavigationData.SWITCHED_EXTERNALY);
+        WrappedNavigationData data = new WrappedNavigationData(mFragmentSettings, WrappedNavigationData.SELECT_ONLY);
+        mNavigationState.emmitNavigationState(data);
+        sendNavigationFragmentSwitched(data);
     }
 
     public void onSaveInstanceState(Bundle outState) {

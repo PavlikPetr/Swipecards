@@ -2,53 +2,44 @@ package com.topface.topface.data.leftMenu;
 
 import android.support.annotation.IntDef;
 
+import java.util.ArrayList;
+
 /**
  * Created by ppavlik on 16.05.16.
  * Wrap LeftMenuSettingsData with added sender type to object
  */
 public class WrappedNavigationData {
 
-    public final static int SELECTED_EXTERNALY = 1;
-    public final static int SELECTED_BY_CLICK = 2;
-    public final static int SELECTED_BY_SWITCHER = 3;
-    public final static int SWITCHED_BY_SELECTOR = 4;
-    public final static int SWITCHED_EXTERNALY = 5;
+    public final static int SELECT_EXTERNALY = 1;
+    public final static int SELECT_BY_CLICK = 2;
+    public final static int SELECT_ONLY = 3;
+    public final static int ITEM_SELECTED = 4;
+    public final static int SWITCH_EXTERNALLY = 5;
+    public final static int FRAGMENT_SWITCHED = 6;
 
-    @IntDef({SELECTED_EXTERNALY, SELECTED_BY_CLICK, SELECTED_BY_SWITCHER, SWITCHED_BY_SELECTOR, SWITCHED_EXTERNALY})
+    @IntDef({SELECT_EXTERNALY, SELECT_BY_CLICK, SELECT_ONLY, ITEM_SELECTED, SWITCH_EXTERNALLY, FRAGMENT_SWITCHED})
     public @interface NavigationEventSenderType {
     }
 
-    public final static int SELECTED_ITEM = 1;
-    public final static int SWITCHED_FRAGMENT = 2;
-
-    @IntDef({SELECTED_ITEM, SWITCHED_FRAGMENT})
-    public @interface ActionType {
-    }
-
     private LeftMenuSettingsData mSettingsData;
-    @NavigationEventSenderType
-    private int mSenderType;
-    @ActionType
-    private int mDataType;
+    private ArrayList<Integer> mStatesStack = new ArrayList<>();
 
-    public WrappedNavigationData(LeftMenuSettingsData data, @NavigationEventSenderType int senderType, @ActionType int dataType) {
+    public WrappedNavigationData(LeftMenuSettingsData data, @NavigationEventSenderType int state) {
         mSettingsData = data;
-        mSenderType = senderType;
-        mDataType = dataType;
+        mStatesStack.add(state);
     }
 
-    @ActionType
-    public int getDataType() {
-        return mDataType;
+    public ArrayList<Integer> getStatesStack() {
+        return mStatesStack;
+    }
+
+    public WrappedNavigationData addStateToStack(@NavigationEventSenderType int state) {
+        mStatesStack.add(state);
+        return this;
     }
 
     public LeftMenuSettingsData getData() {
         return mSettingsData;
-    }
-
-    @NavigationEventSenderType
-    public int getSenderType() {
-        return mSenderType;
     }
 
     @Override
@@ -56,14 +47,12 @@ public class WrappedNavigationData {
         if (!(o instanceof WrappedNavigationData)) return false;
         WrappedNavigationData data = (WrappedNavigationData) o;
         return mSettingsData != null && mSettingsData.equals(data.getData())
-                && mSenderType == data.getSenderType()
-                && mDataType == data.getDataType();
+                && mStatesStack.equals(data.getStatesStack());
     }
 
     @Override
     public int hashCode() {
         int res = mSettingsData != null ? mSettingsData.hashCode() : 0;
-        res = (res * 31) + mSenderType;
-        return (res * 31) + mDataType;
+        return (res * 31) + mStatesStack.hashCode();
     }
 }

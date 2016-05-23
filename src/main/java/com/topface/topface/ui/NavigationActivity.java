@@ -79,6 +79,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.inject.Inject;
 
 import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 
 public class NavigationActivity extends ParentNavigationActivity implements INavigationFragmentsListener {
@@ -173,7 +174,12 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 App.sendReferreRequest(adjustAttributionData);
             }
         }));
-        mSubscription.add(mNavigationState.getSwitchedFragmentObservable().subscribe(new Action1<WrappedNavigationData>() {
+        mSubscription.add(mNavigationState.getNavigationObservable().filter(new Func1<WrappedNavigationData, Boolean>() {
+            @Override
+            public Boolean call(WrappedNavigationData wrappedNavigationData) {
+                return wrappedNavigationData != null && wrappedNavigationData.getStatesStack().contains(WrappedNavigationData.FRAGMENT_SWITCHED);
+            }
+        }).subscribe(new Action1<WrappedNavigationData>() {
             @Override
             public void call(WrappedNavigationData wrappedLeftMenuSettingsData) {
                 if (wrappedLeftMenuSettingsData != null) {

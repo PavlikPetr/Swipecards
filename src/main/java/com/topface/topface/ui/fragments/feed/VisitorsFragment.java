@@ -111,7 +111,7 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
         initGagView(inflated, R.string.go_dating_message, R.string.general_get_dating, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mNavigationState.emmitItemSelected(new LeftMenuSettingsData(FragmentIdData.DATING), WrappedNavigationData.SELECTED_EXTERNALY);
+                mNavigationState.emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.DATING), WrappedNavigationData.SELECT_EXTERNALY));
             }
         });
         getUnlockButtonView(inflated).setVisibility(View.GONE);

@@ -24,61 +24,16 @@ public class NavigationState {
         mNavigationPublishSubject = PublishSubject.create();
     }
 
-    /**
-     * Send emmit when left menu item selected
-     *
-     * @param data       left menu settings data
-     * @param senderType sender type
-     */
-    public void emmitItemSelected(final LeftMenuSettingsData data, @WrappedNavigationData.NavigationEventSenderType final int senderType) {
+    public Observable<WrappedNavigationData> getNavigationObservable() {
+        return mNavigationPublishSubject;
+    }
+
+    public void emmitNavigationState(final WrappedNavigationData data) {
         AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
             @Override
             public void call() {
-                mNavigationPublishSubject.onNext(new WrappedNavigationData(data, senderType, WrappedNavigationData.SELECTED_ITEM));
+                mNavigationPublishSubject.onNext(data);
             }
         });
-    }
-
-    /**
-     * Send emmit when navigation fragment switched
-     *
-     * @param data       left menu settings data
-     * @param senderType sender type
-     */
-    public void emmitFragmentSwitched(final LeftMenuSettingsData data, @WrappedNavigationData.NavigationEventSenderType final int senderType) {
-        AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
-            @Override
-            public void call() {
-                mNavigationPublishSubject.onNext(new WrappedNavigationData(data, senderType, WrappedNavigationData.SWITCHED_FRAGMENT));
-            }
-        });
-    }
-
-    /**
-     * Get observable of left menu item selected
-     *
-     * @return observable
-     */
-    public Observable<WrappedNavigationData> getSelectedItemObservable() {
-        return mNavigationPublishSubject.filter(new Func1<WrappedNavigationData, Boolean>() {
-            @Override
-            public Boolean call(WrappedNavigationData wrappedNavigationData) {
-                return wrappedNavigationData != null && wrappedNavigationData.getDataType() == WrappedNavigationData.SELECTED_ITEM;
-            }
-        }).share();
-    }
-
-    /**
-     * Get observable of navigation fragment switched
-     *
-     * @return observable
-     */
-    public Observable<WrappedNavigationData> getSwitchedFragmentObservable() {
-        return mNavigationPublishSubject.filter(new Func1<WrappedNavigationData, Boolean>() {
-            @Override
-            public Boolean call(WrappedNavigationData wrappedNavigationData) {
-                return wrappedNavigationData != null && wrappedNavigationData.getDataType() == WrappedNavigationData.SWITCHED_FRAGMENT;
-            }
-        }).share();
     }
 }
