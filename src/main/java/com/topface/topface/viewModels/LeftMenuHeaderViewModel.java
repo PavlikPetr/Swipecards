@@ -6,12 +6,8 @@ import android.view.View;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.topface.data.HeaderFooterData;
 import com.topface.topface.data.leftMenu.LeftMenuHeaderViewData;
-import com.topface.topface.data.leftMenu.LeftMenuHeaderData;
 import com.topface.topface.utils.Utils;
 
-/**
- * Created by ppavlik on 05.05.16.
- */
 public class LeftMenuHeaderViewModel {
 
     public ObservableField<IPhoto> photo = new ObservableField<>(null);
@@ -20,9 +16,9 @@ public class LeftMenuHeaderViewModel {
     public ObservableField<String> background = new ObservableField<>(null);
 
     private HeaderFooterData.OnViewClickListener<LeftMenuHeaderViewData> mOnClick;
-    private LeftMenuHeaderData mData;
+    private HeaderFooterData<LeftMenuHeaderViewData> mData;
 
-    public LeftMenuHeaderViewModel(LeftMenuHeaderData data) {
+    public LeftMenuHeaderViewModel(HeaderFooterData<LeftMenuHeaderViewData> data) {
         if (mData == null || mData.getData() == null) {
             setPhoto(data.getData().getPhoto());
             setName(data.getData().getName());

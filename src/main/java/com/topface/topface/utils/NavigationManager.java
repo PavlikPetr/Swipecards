@@ -127,7 +127,7 @@ public class NavigationManager {
             }
             Debug.error("NavigationManager: try detach already added new fragment " + fragmentTag);
             transaction.replace(R.id.fragment_content, newFragment, fragmentTag);
-            transaction.commitAllowingStateLoss();
+            transaction.commit();
             //Вызываем executePendingTransactions, если передан соответвующий флаг
             //и сохраняем результат
             String transactionResult = executePending ?
@@ -312,6 +312,7 @@ public class NavigationManager {
     }
 
     public void onDestroy() {
+        mActivityDelegat = null;
         if (mSubscription != null && !mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
         }

@@ -2,7 +2,8 @@ package com.topface.topface.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.view.Window;
+import android.content.pm.PackageManager;
+import android.support.v4.app.FragmentManager;
 
 /**
  * Делегат для актиити. Можно дописывать лдругие методы активити
@@ -20,6 +21,7 @@ public interface IActivityDelegate {
 
     boolean isFinishing();
 
-    Window getWindow();
+    PackageManager getPackageManager();
 
+    FragmentManager getSupportFragmentManager();
 }

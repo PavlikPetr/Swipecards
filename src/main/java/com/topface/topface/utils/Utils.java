@@ -118,29 +118,6 @@ public class Utils {
         }
     }
 
-    @SafeVarargs
-    public static <T> boolean isEqualsArrays(ArrayList<T>... array) {
-        if (array == null || array.length == 0) {
-            return false;
-        }
-        for (int i = 0; i < array.length; i++) {
-            if (i + 1 >= array.length) {
-                break;
-            } else {
-                if (array[i].size() != array[i + 1].size()) {
-                    return false;
-                } else {
-                    for (int j = 0; j < array[i].size(); j++) {
-                        if (!array[i].get(j).equals(array[i + 1].get(j))) {
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-        return true;
-    }
-
     public static void showToastNotification(int stringId, int duration) {
         Context context = App.getContext();
         if (context != null && (duration == 0 || duration == 1)) {
@@ -306,7 +283,20 @@ public class Utils {
                 context.startActivityForResult(marketIntent, requestCode);
             }
         } else {
-            Toast.makeText(context, R.string.open_market_error, Toast.LENGTH_SHORT).show();
+            showToastNotification(R.string.open_market_error, Toast.LENGTH_SHORT);
+        }
+    }
+
+    public static void goToMarket(IActivityDelegate activityDelegate, Integer requestCode) {
+        Intent marketIntent = getMarketIntent();
+        if (isCallableIntent(marketIntent, activityDelegate)) {
+            if (requestCode == null) {
+                activityDelegate.startActivity(marketIntent);
+            } else {
+                activityDelegate.startActivityForResult(marketIntent, requestCode);
+            }
+        } else {
+            showToastNotification(R.string.open_market_error, Toast.LENGTH_SHORT);
         }
     }
 
@@ -315,6 +305,15 @@ public class Utils {
             return false;
         }
         List<ResolveInfo> list = context.getPackageManager().queryIntentActivities(intent,
+                PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
+    }
+
+    private static boolean isCallableIntent(Intent intent, IActivityDelegate activityDelegate) {
+        if (intent == null) {
+            return false;
+        }
+        List<ResolveInfo> list = activityDelegate.getPackageManager().queryIntentActivities(intent,
                 PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
     }

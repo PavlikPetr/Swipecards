@@ -1,6 +1,7 @@
 package com.topface.topface.state;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -45,7 +46,8 @@ public abstract class MultiTypeDataObserver<ObserveDataType extends DataAndObser
         }
     }
 
-    protected <T> ObserveDataType generateData(T data){
+    @Nullable
+    protected <T> ObserveDataType generateData(T data) {
         return null;
     }
 
@@ -74,6 +76,7 @@ public abstract class MultiTypeDataObserver<ObserveDataType extends DataAndObser
         }
     }
 
+    @NotNull
     protected <T> T getNotNullData(@NotNull T defaultData) {
         T res = (T) getData(defaultData.getClass());
         return null == res ? defaultData : res;
@@ -83,6 +86,7 @@ public abstract class MultiTypeDataObserver<ObserveDataType extends DataAndObser
         return getData(dataClass).equals(data);
     }
 
+    @Nullable
     private <T> T getData(Class<T> dataClass) {
         synchronized (getCachableData()) {
             if (getCachableData().containsKey(dataClass)) {

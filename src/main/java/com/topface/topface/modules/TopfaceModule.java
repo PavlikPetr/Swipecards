@@ -36,10 +36,14 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.feed.AdmirationFragment;
+import com.topface.topface.ui.fragments.feed.BookmarksFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.FansFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
+import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
+import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.fragments.profile.ProfileFormFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
@@ -118,7 +122,11 @@ import dagger.Provides;
                 LifeCycleReporter.class,
                 RunningStateManager.class,
                 DrawerLayoutManager.class,
-                DialogsFragment.class
+                DialogsFragment.class,
+                BookmarksFragment.class,
+                MutualFragment.class,
+                VisitorsFragment.class,
+                FansFragment.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

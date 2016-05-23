@@ -11,6 +11,10 @@ import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
 import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
+import com.topface.topface.data.leftMenu.FragmentIdData;
+import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
+import com.topface.topface.data.leftMenu.NavigationState;
+import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.promo.dialogs.PromoDialog;
 import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -43,6 +47,8 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     @Inject
     DrawerLayoutState mDrawerLayoutState;
+    @Inject
+    NavigationState mNavigationState;
     private Subscription mDrawerLayoutSubscription;
     private boolean mIsNeedRefresh;
 
@@ -196,8 +202,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
-//                MenuFragment.selectFragment(FragmentId.DATING.getFragmentSettings());
+                mNavigationState.emmitItemSelected(new LeftMenuSettingsData(FragmentIdData.DATING), WrappedNavigationData.SELECTED_EXTERNALY);
             }
         });
     }

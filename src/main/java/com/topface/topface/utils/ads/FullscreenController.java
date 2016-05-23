@@ -407,7 +407,8 @@ public class FullscreenController {
 
 
     public void onDestroy() {
-        //Пока не требуется, но на будущее
+        mActivity = null;
+        mOnNextActionListener = null;
     }
 
     public IStartAction createFullscreenStartAction(final int priority, Activity activity) {

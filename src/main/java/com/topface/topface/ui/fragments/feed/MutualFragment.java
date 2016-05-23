@@ -1,11 +1,16 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.os.Bundle;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedMutual;
+import com.topface.topface.data.leftMenu.FragmentIdData;
+import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
+import com.topface.topface.data.leftMenu.NavigationState;
+import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteMutualsRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -21,9 +26,20 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class MutualFragment extends FeedFragment<FeedMutual> {
 
     private static final String PAGE_NAME = "Mutual";
+
+    @Inject
+    NavigationState mNavigationState;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        App.get().inject(this);
+    }
 
     @Override
     protected String getTitle() {
@@ -71,8 +87,7 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
         inflated.findViewById(R.id.btnGetDating).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
-//                MenuFragment.selectFragment(FragmentId.DATING.getFragmentSettings());
+                mNavigationState.emmitItemSelected(new LeftMenuSettingsData(FragmentIdData.DATING), WrappedNavigationData.SELECTED_EXTERNALY);
             }
         });
 

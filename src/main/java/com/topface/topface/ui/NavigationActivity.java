@@ -618,6 +618,9 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (mSubscription != null && !mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
         }
+        if (mPopupManager != null) {
+            mPopupManager.onDestroy();
+        }
         super.onDestroy();
         AdmobInterstitialUtils.releaseInterstitials();
     }

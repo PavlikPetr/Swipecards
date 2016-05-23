@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.Profile;
 import com.topface.topface.databinding.OkProfileFragmentBinding;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
@@ -39,12 +40,11 @@ public class OkProfileFragment extends ProfileInnerFragment {
         public void call(OkUserData okUserData) {
             if (mHandler != null && okUserData != null) {
                 showProgress(false);
-                mHandler.imageSrc.set(getEmptyPhotoRes(TextUtils.isEmpty(okUserData.gender)));
-//                mHandler.imageSrc.set(!TextUtils.isEmpty(okUserData.bigSquareImage)
-//                        ? okUserData.bigSquareImage
-//                        : getEmptyPhotoRes(TextUtils.isEmpty(okUserData.gender)
-//                        ? App.get().getProfile().sex == Profile.BOY
-//                        : okUserData.isMale()));
+                mHandler.imageSrc.set(!TextUtils.isEmpty(okUserData.bigSquareImage)
+                        ? okUserData.bigSquareImage
+                        : getEmptyPhotoRes(TextUtils.isEmpty(okUserData.gender)
+                        ? App.get().getProfile().sex == Profile.BOY
+                        : okUserData.isMale()));
                 mHandler.avatarVisibility.set(View.VISIBLE);
                 String name = TextUtils.isEmpty(okUserData.name) ? App.get().getProfile().firstName : okUserData.name;
                 mHandler.nameVisibility.set(TextUtils.isEmpty(name) ? View.GONE : View.VISIBLE);

@@ -8,8 +8,9 @@ import com.topface.topface.BR;
 import com.topface.topface.R;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FixedViewInfo;
+import com.topface.topface.data.HeaderFooterData;
 import com.topface.topface.data.leftMenu.LeftMenuData;
-import com.topface.topface.data.leftMenu.LeftMenuHeaderData;
+import com.topface.topface.data.leftMenu.LeftMenuHeaderViewData;
 import com.topface.topface.databinding.LeftMenuItemBinding;
 import com.topface.topface.viewModels.LeftMenuHeaderViewModel;
 import com.topface.topface.viewModels.LeftMenuItemViewModel;
@@ -18,9 +19,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-/**
- * Created by ppavlik on 06.05.16.
- */
 public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAdapter<LeftMenuItemBinding, LeftMenuData> {
 
     public LeftMenuRecyclerViewAdapter(ArrayList<LeftMenuData> data) {
@@ -45,7 +43,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
 
     @Override
     protected void bindHeader(ViewDataBinding binding, int position) {
-        binding.setVariable(BR.viewModel, new LeftMenuHeaderViewModel((LeftMenuHeaderData) getHeaderItem(position)));
+        binding.setVariable(BR.viewModel, new LeftMenuHeaderViewModel((HeaderFooterData<LeftMenuHeaderViewData>) getHeaderItem(position)));
     }
 
     @Override
@@ -111,7 +109,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
         return EMPTY_POS;
     }
 
-    public void updateHeader(LeftMenuHeaderData data) {
+    public void updateHeader(HeaderFooterData<LeftMenuHeaderViewData> data) {
         ArrayList<FixedViewInfo> headers = getHeadersData();
         if (headers.size() > 0) {
             headers.get(0).setData(data);

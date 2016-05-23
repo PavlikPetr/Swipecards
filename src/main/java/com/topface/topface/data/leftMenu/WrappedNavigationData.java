@@ -8,12 +8,13 @@ import android.support.annotation.IntDef;
  */
 public class WrappedNavigationData {
 
-    public final static int SELECTED_BY_CLICK = 1;
-    public final static int SELECTED_BY_SWITCHER = 2;
-    public final static int SWITCHED_BY_SELECTOR = 3;
-    public final static int SWITCHED_EXTERNALY = 4;
+    public final static int SELECTED_EXTERNALY = 1;
+    public final static int SELECTED_BY_CLICK = 2;
+    public final static int SELECTED_BY_SWITCHER = 3;
+    public final static int SWITCHED_BY_SELECTOR = 4;
+    public final static int SWITCHED_EXTERNALY = 5;
 
-    @IntDef({SELECTED_BY_CLICK, SELECTED_BY_SWITCHER, SWITCHED_BY_SELECTOR, SWITCHED_EXTERNALY})
+    @IntDef({SELECTED_EXTERNALY, SELECTED_BY_CLICK, SELECTED_BY_SWITCHER, SWITCHED_BY_SELECTOR, SWITCHED_EXTERNALY})
     public @interface NavigationEventSenderType {
     }
 

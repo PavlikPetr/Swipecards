@@ -21,6 +21,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FixedViewInfo;
+import com.topface.topface.data.HeaderFooterData;
 import com.topface.topface.data.HeaderFooterData.OnViewClickListener;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
@@ -28,7 +29,6 @@ import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.IntegrationSettingsData;
 import com.topface.topface.data.leftMenu.LeftMenuData;
-import com.topface.topface.data.leftMenu.LeftMenuHeaderData;
 import com.topface.topface.data.leftMenu.LeftMenuHeaderViewData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
@@ -45,7 +45,9 @@ import com.topface.topface.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.inject.Inject;
 
@@ -65,8 +67,6 @@ public class MenuFragment extends Fragment {
     private static final String BALANCE_TEMPLATE = "%s %s %d %s %d";
     private static final String COINS_ICON = "coins_icon";
     private static final String LIKES_ICON = "likes_icon";
-    private static final String COUNTERS_DATA = "counters_data";
-    private static final String BALANCE_DATA = "balance_data";
     private static final String SELECTED_POSITION = "selected_position";
 
     @Inject
@@ -117,6 +117,7 @@ public class MenuFragment extends Fragment {
         }
         mSelectedPos = fragmentSettings.getUniqueKey();
         getAdapter().updateSelected(mSelectedPos, true);
+        senderType = senderType == WrappedNavigationData.SELECTED_EXTERNALY ? WrappedNavigationData.SWITCHED_EXTERNALY : senderType;
         mNavigationState.emmitItemSelected(fragmentSettings, senderType);
     }
 
@@ -141,7 +142,7 @@ public class MenuFragment extends Fragment {
         ArrayList<LeftMenuData> data = getAdapter().getData();
         ArrayList<LeftMenuData> integrationData = getIntegrationItems(options);
         ArrayList<LeftMenuData> addedIntegrationData = getAddedIntegrationItems(data);
-        if (!Utils.isEqualsArrays(integrationData, addedIntegrationData)) {
+        if (!Arrays.equals(integrationData.toArray(), addedIntegrationData.toArray())) {
             data.removeAll(addedIntegrationData);
             getAdapter().addItemsAfterFragment(integrationData, FragmentIdData.GEO);
         }
@@ -164,8 +165,6 @@ public class MenuFragment extends Fragment {
         super.onCreate(savedInstanceState);
         App.from(getActivity()).inject(this);
         if (savedInstanceState != null) {
-            mCountersData = savedInstanceState.getParcelable(COUNTERS_DATA);
-            mBalanceData = savedInstanceState.getParcelable(BALANCE_DATA);
             mSelectedPos = savedInstanceState.getInt(SELECTED_POSITION, EMPTY_POS);
         }
         mCountersData = mCountersData == null ? new CountersData() : mCountersData;
@@ -209,8 +208,6 @@ public class MenuFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(COUNTERS_DATA, mCountersData);
-        outState.putParcelable(BALANCE_DATA, mBalanceData);
         outState.putInt(SELECTED_POSITION, mSelectedPos);
     }
 
@@ -254,8 +251,8 @@ public class MenuFragment extends Fragment {
         return adapter;
     }
 
-    private LeftMenuHeaderData getHeaderData(@NotNull Profile profile) {
-        return new LeftMenuHeaderData(profile.photo, profile.getNameAndAge(), profile.city != null ? profile.city.getName() : Utils.EMPTY, mOnHeaderClick);
+    private HeaderFooterData<LeftMenuHeaderViewData> getHeaderData(@NotNull Profile profile) {
+        return new HeaderFooterData<>(new LeftMenuHeaderViewData(profile.photo, profile.getNameAndAge(), profile.city != null ? profile.city.getName() : Utils.EMPTY), mOnHeaderClick);
     }
 
     @Override
