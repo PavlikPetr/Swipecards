@@ -17,6 +17,7 @@ import com.topface.topface.data.Auth;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
+import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.state.PopupHive;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.NavigationActivity;
@@ -136,6 +137,7 @@ public class AuthorizationManager {
         config.setStartPositionOfActions(0);
         config.saveConfig();
         Ssid.remove();
+        ScruffyRequestManager.getInstance().logout();
         UserNotificationManager.getInstance().removeNotifications();
         TabbedDialogsFragment.setTabsDefaultPosition();
         AuthToken authToken = AuthToken.getInstance();
