@@ -9,7 +9,7 @@ import android.os.Parcelable;
  */
 public class IntegrationSettingsData extends LeftMenuSettingsData implements Parcelable {
 
-    private static final int UNIQUE_KEY_CAPACITY = 100;
+    private static final int UNIQUE_KEY_CAPACITY = 100; // just a factor to create uniqueKey.xxyy - where xx - it's integration item position, and yy - fragmentId
 
     private int mPos;
     private String mUrl;

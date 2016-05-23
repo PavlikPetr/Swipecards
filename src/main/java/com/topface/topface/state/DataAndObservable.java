@@ -6,7 +6,7 @@ import rx.Observable;
  * Created by ppavlik on 14.05.2016.
  * Base object with data and Observable
  */
-public class DataAndObservable<DataType, ObservableType extends Observable<DataType>> {
+class DataAndObservable<DataType, ObservableType extends Observable<DataType>> {
     private ObservableType mObservable;
     private DataType mObject;
 
@@ -18,11 +18,7 @@ public class DataAndObservable<DataType, ObservableType extends Observable<DataT
 
     }
 
-    public DataAndObservable() {
-    }
-
-    public DataAndObservable(DataType data) {
-        this();
+    DataAndObservable(DataType data) {
         setObject(data);
         setObservable(createObservable(data));
     }
@@ -43,7 +39,7 @@ public class DataAndObservable<DataType, ObservableType extends Observable<DataT
         mObservable = observable;
     }
 
-    public void emmit(final DataType data) {
+    void emmit(final DataType data) {
         emmitData(data);
     }
 }

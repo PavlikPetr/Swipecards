@@ -11,10 +11,10 @@ import rx.schedulers.Schedulers;
  * Created by ppavlik on 14.05.2016.
  * Object with data and Observable
  */
-public class DataAndSimpleObservable<DataType> extends DataAndObservable<DataType, Observable<DataType>> {
+class DataAndSimpleObservable<DataType> extends DataAndObservable<DataType, Observable<DataType>> {
     private Subscriber<? super DataType> mSubscriber;
 
-    public DataAndSimpleObservable(DataType data) {
+    DataAndSimpleObservable(DataType data) {
         super(data);
     }
 

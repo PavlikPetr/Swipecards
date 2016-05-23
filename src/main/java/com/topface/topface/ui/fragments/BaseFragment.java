@@ -26,6 +26,7 @@ import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
+import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.http.IRequestClient;
 
 import java.lang.reflect.Field;
@@ -78,6 +79,11 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         clearPreviousState();
         mTitleSetter = new ActionBarTitleSetterDelegate(getSupportActionBar());
         refreshActionBarTitles();
+        if (view != null) {
+            AppConfig appConfig = App.getAppConfig();
+            appConfig.setHardwareAcceleratedState(view.isHardwareAccelerated());
+            appConfig.saveConfig();
+        }
     }
 
     @Override

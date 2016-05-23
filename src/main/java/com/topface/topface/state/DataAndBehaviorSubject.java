@@ -10,9 +10,9 @@ import rx.subjects.BehaviorSubject;
  * Created by ppavlik on 14.05.2016.
  * Object with data and BehaviorSubject
  */
-public class DataAndBehaviorSubject<DataType> extends DataAndObservable<DataType, BehaviorSubject<DataType>> {
+class DataAndBehaviorSubject<DataType> extends DataAndObservable<DataType, BehaviorSubject<DataType>> {
 
-    public DataAndBehaviorSubject(DataType dataType) {
+    DataAndBehaviorSubject(DataType dataType) {
         super(dataType);
     }
 

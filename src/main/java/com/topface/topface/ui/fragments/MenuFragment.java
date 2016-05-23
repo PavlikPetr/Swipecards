@@ -76,7 +76,6 @@ public class MenuFragment extends Fragment {
     @Inject
     DrawerLayoutState mDrawerLayoutState;
     private LeftMenuRecyclerViewAdapter mAdapter;
-    private boolean mHardwareAccelerated;
     private CountersData mCountersData;
     private BalanceData mBalanceData;
     private CompositeSubscription mSubscription = new CompositeSubscription();
@@ -112,7 +111,7 @@ public class MenuFragment extends Fragment {
         }
     };
 
-    public void setSelected(LeftMenuSettingsData fragmentSettings, @WrappedNavigationData.NavigationEventSenderType int senderType) {
+    private void setSelected(LeftMenuSettingsData fragmentSettings, @WrappedNavigationData.NavigationEventSenderType int senderType) {
         if (mSelectedPos != EMPTY_POS) {
             getAdapter().updateSelected(mSelectedPos, false);
         }
@@ -205,17 +204,6 @@ public class MenuFragment extends Fragment {
                     }
                 }, mSubscriptionOnError));
         mOptionsAndProfileProvider = new OptionsAndProfileProvider(mStateDataUpdater);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mHardwareAccelerated = isHardwareAccelerated(view);
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private boolean isHardwareAccelerated(View rootLayout) {
-        return Build.VERSION.SDK_INT >= 11 && rootLayout.isHardwareAccelerated();
     }
 
     @Override
@@ -334,9 +322,5 @@ public class MenuFragment extends Fragment {
             titleSpan.setSpan(likesSpan, iconStartPos, iconStartPos + LIKES_ICON.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }
         return titleSpan;
-    }
-
-    public boolean isHrdwareAccelerated() {
-        return mHardwareAccelerated;
     }
 }

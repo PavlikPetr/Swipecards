@@ -2,6 +2,7 @@ package com.topface.topface.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.Window;
 
 /**
  * Делегат для актиити. Можно дописывать лдругие методы активити
@@ -18,5 +19,7 @@ public interface IActivityDelegate {
     void runOnUiThread(Runnable runnable);
 
     boolean isFinishing();
+
+    Window getWindow();
 
 }

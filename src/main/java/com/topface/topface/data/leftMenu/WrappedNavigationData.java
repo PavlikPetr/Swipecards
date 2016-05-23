@@ -21,22 +21,22 @@ public class WrappedNavigationData {
     public final static int SWITCHED_FRAGMENT = 2;
 
     @IntDef({SELECTED_ITEM, SWITCHED_FRAGMENT})
-    public @interface DataType {
+    public @interface ActionType {
     }
 
     private LeftMenuSettingsData mSettingsData;
     @NavigationEventSenderType
     private int mSenderType;
-    @DataType
+    @ActionType
     private int mDataType;
 
-    public WrappedNavigationData(LeftMenuSettingsData data, @NavigationEventSenderType int senderType, @DataType int dataType) {
+    public WrappedNavigationData(LeftMenuSettingsData data, @NavigationEventSenderType int senderType, @ActionType int dataType) {
         mSettingsData = data;
         mSenderType = senderType;
         mDataType = dataType;
     }
 
-    @DataType
+    @ActionType
     public int getDataType() {
         return mDataType;
     }

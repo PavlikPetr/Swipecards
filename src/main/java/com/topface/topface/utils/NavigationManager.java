@@ -23,7 +23,6 @@ import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.EditorFragment;
 import com.topface.topface.ui.fragments.IntegrationWebViewFragment;
-import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
@@ -60,7 +59,6 @@ public class NavigationManager {
     DrawerLayoutState mDrawerLayoutState;
     private ISimpleCallback iNeedCloseMenuCallback;
     private Subscription mDrawerLayoutStateSubscription;
-    private MenuFragment mLeftMenu;
     private IActivityDelegate mActivityDelegat;
     private FragmentManager mFragmentManager;
     private LeftMenuSettingsData mFragmentSettings = new LeftMenuSettingsData(FragmentIdData.UNDEFINED);
@@ -88,25 +86,11 @@ public class NavigationManager {
 
     public void init(@NotNull FragmentManager fragmentManager) {
         mFragmentManager = fragmentManager;
-        initLeftMenu();
         LeftMenuSettingsData settings = new LeftMenuSettingsData(App.get().getOptions().startPage);
         if (mSavedInstanceState != null && mSavedInstanceState.containsKey(FRAGMENT_SETTINGS)) {
             settings = mSavedInstanceState.getParcelable(FRAGMENT_SETTINGS);
         }
         selectFragment(settings, WrappedNavigationData.SWITCHED_EXTERNALY, false);
-    }
-
-    private void initLeftMenu() {
-        mLeftMenu = (MenuFragment) mFragmentManager.findFragmentById(R.id.fragment_menu);
-        if (mLeftMenu == null) {
-            mLeftMenu = new MenuFragment();
-        }
-        if (!mLeftMenu.isAdded()) {
-            mFragmentManager
-                    .beginTransaction()
-                    .add(R.id.fragment_menu, mLeftMenu)
-                    .commit();
-        }
     }
 
     private String getTag(LeftMenuSettingsData settings) {
@@ -134,7 +118,7 @@ public class NavigationManager {
             final String fragmnetName = newFragment.getClass().getName();
             FragmentTransaction transaction = mFragmentManager.beginTransaction();
             //Меняем фрагменты анимировано, но только на новых устройствах c HW ускорением
-            if (mLeftMenu != null && mLeftMenu.isHrdwareAccelerated()) {
+            if (App.getAppConfig().isHardwareAccelerated()) {
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
             }
             if (oldFragment != newFragment && newFragment.isAdded()) {
@@ -328,7 +312,6 @@ public class NavigationManager {
     }
 
     public void onDestroy() {
-        mLeftMenu = null;
         if (mSubscription != null && !mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
         }

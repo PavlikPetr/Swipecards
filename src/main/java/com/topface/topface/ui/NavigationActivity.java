@@ -42,6 +42,7 @@ import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
+import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.DrawerLayoutManager;
 import com.topface.topface.ui.views.HackyDrawerLayout;
@@ -82,7 +83,7 @@ import rx.subscriptions.CompositeSubscription;
 
 public class NavigationActivity extends ParentNavigationActivity implements INavigationFragmentsListener {
     public static final String INTENT_EXIT = "EXIT";
-    public static final String PAGE_SWITCH = "Page switch: ";
+    private static final String PAGE_SWITCH = "Page switch: ";
 
     private Intent mPendingNextIntent;
     private boolean mIsActionBarHidden;
@@ -109,6 +110,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private OnNextActionListener mSelectPhotoNextActionListener;
     private OnNextActionListener mChooseCityNextActionListener;
     private NavigationManager mNavigationManager;
+    private MenuFragment mLeftMenu;
 
     /**
      * Перезапускает NavigationActivity, нужно например при смене языка
@@ -241,6 +243,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }));
         Debug.log("PopupHive onCreate");
         startPopupRush(true, true);
+
     }
 
     @NotNull
@@ -329,6 +332,20 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         return mNavigationManager;
     }
 
+    private void initLeftMenu() {
+
+        mLeftMenu = (MenuFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_menu);
+        if (mLeftMenu == null) {
+            mLeftMenu = new MenuFragment();
+        }
+        if (!mLeftMenu.isAdded()) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragment_menu, mLeftMenu)
+                    .commit();
+        }
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -337,6 +354,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     private void initDrawerLayout() {
         getNavigationManager().init(getSupportFragmentManager());
+        initLeftMenu();
         mDrawerLayout = new DrawerLayoutManager<>((HackyDrawerLayout) findViewById(R.id.loNavigationDrawer));
         mDrawerLayout.initLeftMneuDrawerLayout();
     }
@@ -360,7 +378,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
     }
 
-    public void showFragment(LeftMenuSettingsData fragmentSettings) {
+    private void showFragment(LeftMenuSettingsData fragmentSettings) {
         Debug.log(PAGE_SWITCH + "show fragment: " + fragmentSettings);
         getNavigationManager().selectFragment(fragmentSettings);
     }
@@ -662,11 +680,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             mContentFrame.requestLayout();
             mActionBarOverlayed = actionbarOverlay;
         }
-    }
-
-    @Override
-    public void onFragmentSwitch(LeftMenuSettingsData fragmentSettings) {
-
     }
 
     @Override

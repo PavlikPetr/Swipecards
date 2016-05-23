@@ -6,6 +6,7 @@ import com.topface.topface.data.HeaderFooterData;
 /**
  * Created by ppavlik on 12.05.16.
  * Left menu header data class. It contains custom view clickListener interface
+ * It contains LeftMenuHeaderViewData and view click listener
  */
 public class LeftMenuHeaderData extends HeaderFooterData<LeftMenuHeaderViewData> {
 
