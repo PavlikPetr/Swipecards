@@ -175,6 +175,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         @Override
         public void call(BalanceData balanceData) {
             mBalanceData = balanceData;
+            mDatingLovePrice.setVisibility(mBalanceData.premium ? View.GONE : View.VISIBLE);
             updateResources(balanceData);
         }
     };
