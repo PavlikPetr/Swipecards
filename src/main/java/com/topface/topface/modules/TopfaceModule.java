@@ -31,6 +31,7 @@ import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.external_libs.modules.ExternalLibsInjectModule;
+import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.OkProfileFragment;
@@ -126,7 +127,8 @@ import dagger.Provides;
                 BookmarksFragment.class,
                 MutualFragment.class,
                 VisitorsFragment.class,
-                FansFragment.class
+                FansFragment.class,
+                AuthFragment.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

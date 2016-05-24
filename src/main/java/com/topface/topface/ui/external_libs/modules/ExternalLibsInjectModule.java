@@ -3,7 +3,6 @@ package com.topface.topface.ui.external_libs.modules;
 import com.topface.billing.OpenIabFragment;
 import com.topface.topface.App;
 import com.topface.topface.ui.external_libs.AdjustManager;
-import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.ui.fragments.BaseAuthFragment;
 import com.topface.topface.ui.fragments.TopfaceAuthFragment;
 import com.topface.topface.ui.fragments.buy.AmazonBuyingFragment;
@@ -39,7 +38,6 @@ import dagger.Provides;
                 AmazonBuyingFragment.class,
                 TransparentMarketFragment.class,
                 VipPaymentWallBuyFragment.class,
-                AuthFragment.class,
                 TopfaceAuthFragment.class,
                 App.class
         }

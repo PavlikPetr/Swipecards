@@ -37,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.i18n.plurals.PluralResources;
@@ -116,6 +117,30 @@ public class Utils {
         if (context != null) {
             Utils.showToastNotification(R.string.general_data_error, Toast.LENGTH_SHORT);
         }
+    }
+
+    public static IPhoto getUserPhotoGag(final String emptyPhoto) {
+        return new IPhoto() {
+            @Override
+            public boolean isFake() {
+                return false;
+            }
+
+            @Override
+            public String getSuitableLink(int height, int width) {
+                return emptyPhoto;
+            }
+
+            @Override
+            public String getSuitableLink(String sizeString) {
+                return emptyPhoto;
+            }
+
+            @Override
+            public String getDefaultLink() {
+                return emptyPhoto;
+            }
+        };
     }
 
     public static void showToastNotification(int stringId, int duration) {

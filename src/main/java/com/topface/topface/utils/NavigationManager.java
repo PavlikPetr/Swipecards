@@ -102,8 +102,7 @@ public class NavigationManager {
         return "fragment_switch_controller_" + settings.getUniqueKey();
     }
 
-    private void switchFragment(final WrappedNavigationData data,
-                                boolean executePending) {
+    private void switchFragment(final WrappedNavigationData data, boolean executePending) {
         if (data == null || data.getData() == null || mFragmentManager == null) {
             return;
         }
