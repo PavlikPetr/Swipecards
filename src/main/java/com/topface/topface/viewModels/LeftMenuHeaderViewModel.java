@@ -10,7 +10,7 @@ import com.topface.topface.utils.Utils;
 
 public class LeftMenuHeaderViewModel {
 
-    public ObservableField<IPhoto> photo = new ObservableField<>(null);
+    public ObservableField<Object> photo = new ObservableField<>(null);
     public ObservableField<String> userName = new ObservableField<>(Utils.EMPTY);
     public ObservableField<String> userCity = new ObservableField<>(Utils.EMPTY);
     public ObservableField<String> background = new ObservableField<>(null);
@@ -20,12 +20,12 @@ public class LeftMenuHeaderViewModel {
 
     public LeftMenuHeaderViewModel(HeaderFooterData<LeftMenuHeaderViewData> data) {
         if (mData == null || mData.getData() == null) {
-            setPhoto(data.getData().getPhoto());
+            setPhoto(data.getData().getPhoto(), data.getData().getEmptyPhotoUrl());
             setName(data.getData().getName());
             setCity(data.getData().getCity());
             mData = data;
         } else if (mData.getData().getPhoto() == null || !mData.getData().getPhoto().equals(data.getData().getPhoto())) {
-            setPhoto(data.getData().getPhoto());
+            setPhoto(data.getData().getPhoto(), data.getData().getEmptyPhotoUrl());
         } else if (mData.getData().getName() == null || !mData.getData().getName().equals(data.getData().getName())) {
             setName(data.getData().getName());
         } else if (mData.getData().getCity() == null || !mData.getData().getCity().equals(data.getData().getCity())) {
@@ -35,12 +35,12 @@ public class LeftMenuHeaderViewModel {
 
     }
 
-    private void setPhoto(IPhoto photo) {
+    private void setPhoto(IPhoto photo, String emptyPhotoUrl) {
         if (mData != null && mData.getData() != null) {
             mData.getData().setPhoto(photo);
         }
-        this.photo.set(photo);
-        background.set(photo != null ? photo.getDefaultLink() : null);
+        this.photo.set(photo == null || photo.isFake() ? emptyPhotoUrl : photo);
+        background.set(photo == null || photo.isFake() ? emptyPhotoUrl : photo.getDefaultLink());
     }
 
     private void setName(String name) {

@@ -40,6 +40,7 @@ import com.topface.topface.ui.adapters.ItemEventListener.OnRecyclerViewItemClick
 import com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.Editor;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -98,6 +99,7 @@ public class MenuFragment extends Fragment {
         @Override
         public void onProfileUpdate(Profile profile) {
             getAdapter().updateHeader(getHeaderData(profile));
+            updateEditorItem(profile);
         }
     };
 
@@ -255,7 +257,9 @@ public class MenuFragment extends Fragment {
     }
 
     private HeaderFooterData<LeftMenuHeaderViewData> getHeaderData(@NotNull Profile profile) {
-        return new HeaderFooterData<>(new LeftMenuHeaderViewData(profile.photo, profile.getNameAndAge(), profile.city != null ? profile.city.getName() : Utils.EMPTY), mOnHeaderClick);
+        String emptyPhotoUrl = Utils.getLocalResUrl((profile.sex == Profile.BOY ?
+                R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar));
+        return new HeaderFooterData<>(new LeftMenuHeaderViewData(profile.photo, emptyPhotoUrl, profile.getNameAndAge(), profile.city != null ? profile.city.getName() : Utils.EMPTY), mOnHeaderClick);
     }
 
     @Override
@@ -289,8 +293,22 @@ public class MenuFragment extends Fragment {
             arrayList.add(new LeftMenuData(R.drawable.ic_bonus_left_menu, App.get().getOptions().bonus.buttonText, mCountersData.getBonus(), false, new LeftMenuSettingsData(FragmentIdData.BONUS)));
         }
         arrayList.add(new LeftMenuData(R.drawable.ic_balance_left_menu, getBalanceTitle(), 0, false, new LeftMenuSettingsData(FragmentIdData.BALLANCE)));
-        arrayList.add(new LeftMenuData("", new SpannableString(getString(R.string.editor_menu_admin)), 0, true, new LeftMenuSettingsData(FragmentIdData.EDITOR)));
+        if (App.get().getProfile().isEditor()) {
+            arrayList.add(getEditorItem());
+        }
         return arrayList;
+    }
+
+    private LeftMenuData getEditorItem() {
+        return new LeftMenuData("", new SpannableString(getString(R.string.editor_menu_admin)), 0, true, new LeftMenuSettingsData(FragmentIdData.EDITOR));
+    }
+
+    private void updateEditorItem(@NotNull Profile profile) {
+        if (profile.isEditor()) {
+            getAdapter().updateEditorsItem(getEditorItem());
+        } else {
+            getAdapter().removeItem(getEditorItem().getSettings().getUniqueKey());
+        }
     }
 
     private LeftMenuRecyclerViewAdapter getAdapter() {

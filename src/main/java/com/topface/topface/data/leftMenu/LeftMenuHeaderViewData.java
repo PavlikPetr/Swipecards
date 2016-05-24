@@ -11,16 +11,19 @@ public class LeftMenuHeaderViewData {
     private IPhoto mPhoto;
     private String mName;
     private String mCity;
+    private String mEmptyPhotoUrl;
 
     /**
      * Create new data object for left menu header
      *
-     * @param photo interface for ImageLoader interaction with photos
-     * @param name  users name
-     * @param city  users city
+     * @param photo         interface for ImageLoader interaction with photos
+     * @param emptyPhotoUrl resources url if users photo empty
+     * @param name          users name
+     * @param city          users city
      */
-    public LeftMenuHeaderViewData(IPhoto photo, String name, String city) {
+    public LeftMenuHeaderViewData(IPhoto photo, String emptyPhotoUrl, String name, String city) {
         mPhoto = photo;
+        mEmptyPhotoUrl = emptyPhotoUrl;
         mName = name;
         mCity = city;
     }
@@ -41,6 +44,24 @@ public class LeftMenuHeaderViewData {
      */
     public void setPhoto(IPhoto photo) {
         mPhoto = photo;
+    }
+
+    /**
+     * Set resources url for empty users photo
+     *
+     * @param url users photo gag url
+     */
+    public void setEmptyPhotoUrl(String url) {
+        mEmptyPhotoUrl = url;
+    }
+
+    /**
+     * Get resources url for empty users photo
+     *
+     * @return users photo gag
+     */
+    public String getEmptyPhotoUrl() {
+        return mEmptyPhotoUrl;
     }
 
     /**

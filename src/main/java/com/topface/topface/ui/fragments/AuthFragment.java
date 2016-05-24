@@ -32,6 +32,10 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
+import com.topface.topface.data.leftMenu.FragmentIdData;
+import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
+import com.topface.topface.data.leftMenu.NavigationState;
+import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.data.social.AppSocialAppsIds;
 import com.topface.topface.databinding.FragmentAuthBinding;
 import com.topface.topface.requests.IApiResponse;
@@ -50,10 +54,16 @@ import com.topface.topface.utils.social.AuthorizationManager;
 import com.topface.topface.utils.social.Authorizer;
 import com.vk.sdk.dialogs.VKOpenAuthDialog;
 
+import javax.inject.Inject;
+
 public class AuthFragment extends BaseAuthFragment {
 
     public static final String TF_BUTTONS = "tf_buttons";
     public static final String REAUTH_INTENT = "com.topface.topface.action.AUTH";
+
+    @Inject
+    NavigationState mNavigationState;
+
     private static final String MAIN_BUTTONS_GA_TAG = "LoginButtonsTest";
     private static final String TRANSLATION_Y = "translationY";
     private static final String IMAGE_HTML_TEMPLATE = "<img src='%s'/> ";
@@ -214,6 +224,7 @@ public class AuthFragment extends BaseAuthFragment {
         Activity activity = getActivity();
         if (isAdded() && activity instanceof BaseFragmentActivity) {
             ((BaseFragmentActivity) activity).close(this, true);
+            mNavigationState.emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.DATING), WrappedNavigationData.SELECT_EXTERNALY));
         }
     }
 
