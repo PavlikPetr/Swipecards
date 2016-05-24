@@ -262,32 +262,11 @@ public class MenuFragment extends Fragment {
     }
 
     private IPhoto getValidatedUserPhotoInterface(@NotNull Profile profile) {
-        final String emptyPhotoUrl = Utils.getLocalResUrl((profile.sex == Profile.BOY ?
-                R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar));
         if (profile.photo != null && !profile.photo.isFake()) {
             return profile.photo;
         }
-        return new IPhoto() {
-            @Override
-            public boolean isFake() {
-                return false;
-            }
-
-            @Override
-            public String getSuitableLink(int height, int width) {
-                return emptyPhotoUrl;
-            }
-
-            @Override
-            public String getSuitableLink(String sizeString) {
-                return emptyPhotoUrl;
-            }
-
-            @Override
-            public String getDefaultLink() {
-                return emptyPhotoUrl;
-            }
-        };
+        return Utils.getUserPhotoGag(Utils.getLocalResUrl((profile.sex == Profile.BOY ?
+                R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar)));
     }
 
     @Override
