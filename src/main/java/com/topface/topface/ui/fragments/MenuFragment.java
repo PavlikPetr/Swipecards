@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.topface.framework.imageloader.IPhoto;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BalanceData;
@@ -257,9 +258,36 @@ public class MenuFragment extends Fragment {
     }
 
     private HeaderFooterData<LeftMenuHeaderViewData> getHeaderData(@NotNull Profile profile) {
-        String emptyPhotoUrl = Utils.getLocalResUrl((profile.sex == Profile.BOY ?
+        return new HeaderFooterData<>(new LeftMenuHeaderViewData(getValidatedUserPhotoInterface(profile), profile.getNameAndAge(), profile.city != null ? profile.city.getName() : Utils.EMPTY), mOnHeaderClick);
+    }
+
+    private IPhoto getValidatedUserPhotoInterface(@NotNull Profile profile) {
+        final String emptyPhotoUrl = Utils.getLocalResUrl((profile.sex == Profile.BOY ?
                 R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar));
-        return new HeaderFooterData<>(new LeftMenuHeaderViewData(profile.photo, emptyPhotoUrl, profile.getNameAndAge(), profile.city != null ? profile.city.getName() : Utils.EMPTY), mOnHeaderClick);
+        if (profile.photo != null && !profile.photo.isFake()) {
+            return profile.photo;
+        }
+        return new IPhoto() {
+            @Override
+            public boolean isFake() {
+                return false;
+            }
+
+            @Override
+            public String getSuitableLink(int height, int width) {
+                return emptyPhotoUrl;
+            }
+
+            @Override
+            public String getSuitableLink(String sizeString) {
+                return emptyPhotoUrl;
+            }
+
+            @Override
+            public String getDefaultLink() {
+                return emptyPhotoUrl;
+            }
+        };
     }
 
     @Override

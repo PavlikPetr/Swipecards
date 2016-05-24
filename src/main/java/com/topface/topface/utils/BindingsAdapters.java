@@ -70,13 +70,7 @@ public class BindingsAdapters {
     }
 
     @BindingAdapter("app:setPhoto")
-    public static void setPhoto(ImageViewRemote view, Object photo) {
-        if (photo instanceof IPhoto) {
-            view.setPhoto((IPhoto) photo);
-        } else if (photo instanceof String) {
-            view.setRemoteSrc((String) photo);
-        } else {
-            view.setImageDrawable(null);
-        }
+    public static void setPhoto(ImageViewRemote view, IPhoto photo) {
+        view.setPhoto((photo));
     }
 }
