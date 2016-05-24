@@ -10,7 +10,7 @@ import com.topface.topface.utils.Utils;
 
 public class LeftMenuHeaderViewModel {
 
-    public ObservableField<Object> photo = new ObservableField<>(null);
+    public ObservableField<IPhoto> photo = new ObservableField<>(null);
     public ObservableField<String> userName = new ObservableField<>(Utils.EMPTY);
     public ObservableField<String> userCity = new ObservableField<>(Utils.EMPTY);
     public ObservableField<String> background = new ObservableField<>(null);
