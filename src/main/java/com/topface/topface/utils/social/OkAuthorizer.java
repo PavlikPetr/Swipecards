@@ -83,6 +83,7 @@ public class OkAuthorizer extends Authorizer {
                         }, new Action1<Throwable>() {
                             @Override
                             public void call(Throwable throwable) {
+                                throwable.printStackTrace();
                                 sendTokenIntent(TOKEN_NOT_READY);
                             }
                         }, new Action0() {

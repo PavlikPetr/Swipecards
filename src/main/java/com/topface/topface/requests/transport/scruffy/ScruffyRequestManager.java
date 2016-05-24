@@ -16,6 +16,7 @@ import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.statistics.ScruffyStatistics;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.http.HttpUtils;
 import com.topface.topface.utils.social.AuthToken;
@@ -24,8 +25,13 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import rx.Observable;
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * Реализации Fatwood API - https://github.com/Topface/fatwood/blob/master/README.md
@@ -61,6 +67,17 @@ public class ScruffyRequestManager {
      * Атомарный флаг, по которому мы смотрим не начат ли уже процесс авторизации
      */
     private static AtomicBoolean mIsAuthInProgress = new AtomicBoolean(false);
+
+    private static final long PING_TIME = 30000;
+    private Subscription mPingSubscription;
+    private Observable<Long> mPingObservable = Observable.interval(PING_TIME, PING_TIME, TimeUnit.MILLISECONDS);
+    private WebSocket.PongCallback mPongCallback = new WebSocket.PongCallback() {
+        @Override
+        public void onPongReceived(String s) {
+            Debug.log("Scruffy:: PONG");
+            mScruffyAvailable = true;
+        }
+    };
 
     private CompletedCallback mClosedCallback = new CompletedCallback() {
         @Override
@@ -257,7 +274,19 @@ public class ScruffyRequestManager {
                     //Листенер получения данных от сервера
                     webSocket.setStringCallback(mStringCallback);
                     webSocket.setClosedCallback(mClosedCallback);
+                    webSocket.setPongCallback(mPongCallback);
                     mWebSocket = webSocket;
+                    if (mPingSubscription != null && !mPingSubscription.isUnsubscribed()) {
+                        mPingSubscription.unsubscribe();
+                    }
+                    Debug.log("Scruffy:: start ping interval");
+                    mPingSubscription = mPingObservable.subscribe(new Action1<Long>() {
+                        @Override
+                        public void call(Long aLong) {
+                            Debug.log("Scruffy:: PING");
+                            mWebSocket.ping(Utils.EMPTY);
+                        }
+                    });
                     if (listener != null) {
                         listener.sendConnected();
                     }
@@ -304,7 +333,8 @@ public class ScruffyRequestManager {
         ScruffyStatistics.sendScruffyTransportFallback();
         mScruffyAvailable = false;
         new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 for (ScruffyRequestHolder holder : mSentRequests.values()) {
                     holder.getRequest().exec();
                 }
@@ -321,6 +351,9 @@ public class ScruffyRequestManager {
     }
 
     public void logout() {
+        if (mPingSubscription != null && !mPingSubscription.isUnsubscribed()) {
+            mPingSubscription.unsubscribe();
+        }
         clearState();
     }
 
@@ -341,14 +374,15 @@ public class ScruffyRequestManager {
             if (ignoreCallbacks) {
                 mWebSocket.setStringCallback(null);
                 mWebSocket.setClosedCallback(null);
+                mWebSocket.setPongCallback(null);
             }
             mWebSocket.close();
             mWebSocket = null;
+            mScruffyAvailable = false;
         }
     }
 
     public HockeySender getReportSender() {
-
         return mHockeySender;
     }
 

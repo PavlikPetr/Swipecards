@@ -28,6 +28,8 @@ import com.topface.topface.data.AddedPhoto;
 import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.leftMenu.FragmentIdData;
+import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
@@ -451,7 +453,7 @@ public class AddPhotoHelper {
 
     private Intent getIntentForNotification() {
         return new Intent(App.getContext(), NavigationActivity.class)
-                .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.PROFILE.getFragmentSettings())
+                .putExtra(GCMUtils.NEXT_INTENT, new LeftMenuSettingsData(FragmentIdData.PROFILE))
                 .putExtra(GCMUtils.NOTIFICATION_INTENT, true)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }

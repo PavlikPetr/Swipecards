@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
-import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.IDialogListener;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.OldVersionDialog;
@@ -16,14 +15,13 @@ import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
 
 public class PopupManager {
-    private BaseFragmentActivity mActivity;
-
+    private IActivityDelegate mActivityDelegate;
     private AbstractDialogFragment mCurrentDialog;
     private OnNextActionListener mOldVersionPopupNextActionListener;
     private OnNextActionListener mRatePopupNextActionListener;
 
-    public PopupManager(BaseFragmentActivity activity) {
-        mActivity = activity;
+    public PopupManager(IActivityDelegate activityDelegate) {
+        mActivityDelegate = activityDelegate;
     }
 
     public IStartAction createOldVersionPopupStartAction(final int priority) {
@@ -38,7 +36,7 @@ public class PopupManager {
                 oldVersionDialog.setDialogInterface(new IDialogListener() {
                     @Override
                     public void onPositiveButtonClick() {
-                        Utils.goToMarket(mActivity);
+                        Utils.goToMarket(mActivityDelegate, null);
                     }
 
                     @Override
@@ -53,12 +51,12 @@ public class PopupManager {
                         }
                     }
                 });
-                oldVersionDialog.show(mActivity.getSupportFragmentManager(), OldVersionDialog.class.getName());
+                oldVersionDialog.show(mActivityDelegate.getSupportFragmentManager(), OldVersionDialog.class.getName());
             }
 
             @Override
             public boolean isApplicable() {
-                return isOldVersion(App.from(mActivity).getOptions().maxVersion);
+                return isOldVersion(App.get().getOptions().maxVersion);
             }
 
             @Override
@@ -120,7 +118,7 @@ public class PopupManager {
             @Override
             public boolean isApplicable() {
                 return App.isOnline() && RateAppDialog.isApplicable(ratePopupTimeout, ratePopupEnabled) &&
-                        !isOldVersion(App.from(mActivity).getOptions().maxVersion);
+                        !isOldVersion(App.get().getOptions().maxVersion);
             }
 
             @Override
@@ -142,7 +140,7 @@ public class PopupManager {
 
     private void showRatePopup() {
         RateAppDialog rateAppDialog = new RateAppDialog();
-        rateAppDialog.show(mActivity.getSupportFragmentManager(), RateAppDialog.TAG);
+        rateAppDialog.show(mActivityDelegate.getSupportFragmentManager(), RateAppDialog.TAG);
         rateAppDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
@@ -157,5 +155,11 @@ public class PopupManager {
 
     public AbstractDialogFragment getCurrentDialog() {
         return mCurrentDialog;
+    }
+
+    public void onDestroy() {
+        mActivityDelegate = null;
+        mOldVersionPopupNextActionListener = null;
+        mRatePopupNextActionListener = null;
     }
 }

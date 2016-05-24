@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -19,9 +20,11 @@ import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.fragments.AnimatedFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
+import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
+import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.Utils;
@@ -112,7 +115,45 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
                 Profile profile = App.get().getProfile();
                 if (App.isNeedShowTrial && !profile.premium && new GoogleMarketApiManager().isMarketApiAvailable()
                         && App.get().getOptions().trialVipExperiment.enabled && !profile.paid) {
-                    TrialVipPopup.newInstance(true).show(getActivity().getSupportFragmentManager(), TrialVipPopup.TAG);
+                    final TrialVipPopup popup = TrialVipPopup.newInstance(true);
+                    popup.setOnSubscribe(new TrialVipPopup.OnFragmentActionsListener() {
+                        @Override
+                        public void onSubscribeClick() {
+                            Fragment f = popup.getActivity().getSupportFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
+                            final Fragment fragment = f == null ?
+                                    TransparentMarketFragment.newInstance(App.get().getOptions().trialVipExperiment.subscriptionSku, true) : f;
+                            fragment.setRetainInstance(true);
+                            if (fragment instanceof ITransparentMarketFragmentRunner) {
+                                ((ITransparentMarketFragmentRunner) fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
+                                    @Override
+                                    public void onPurchaseSuccess() {
+                                        popup.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onPopupClosed() {
+                                        if (fragment.isAdded()) {
+                                            popup.getActivity().getSupportFragmentManager().
+                                                    beginTransaction().remove(fragment).commit();
+                                        }
+                                    }
+                                });
+                                FragmentTransaction transaction = popup.getActivity().getSupportFragmentManager().beginTransaction();
+                                if (!fragment.isAdded()) {
+                                    transaction.add(R.id.fragment_content, fragment, TransparentMarketFragment.class.getSimpleName()).commit();
+                                } else {
+                                    transaction.remove(fragment)
+                                            .add(R.id.fragment_content, fragment, TransparentMarketFragment.class.getSimpleName()).commit();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFragmentFinish() {
+
+                        }
+                    });
+                    popup.show(getActivity().getSupportFragmentManager(), TrialVipPopup.TAG);
                     App.isNeedShowTrial = false;
                 }
             }

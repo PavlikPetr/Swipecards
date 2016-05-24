@@ -72,6 +72,6 @@
     </string-array>
 
     <string name="editor_crash_me">Нажми меня чтобы КРАШНУТЬ</string>
-    <string name="options_parsing_error">Ощибка парсинга опций, срочно сообщите разработчику</string>
+    <string name="options_parsing_error">Ошибка парсинга опций, срочно сообщите разработчику</string>
 
 </resources>

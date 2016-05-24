@@ -61,6 +61,7 @@ public class AppConfig extends AbstractConfig {
     private static final String DATA_APP_SOCIAL_IDS = "data_app_social_ids";
     private static final String ADJUST_ATTRIBUTION = "adjust_attribution";
     private static final String IS_ADJUST_ATTRIBUTION_SENT = "is_adjust_attribution_sent";
+    private static final String IS_HARDWARE_ACCELERATED = "is_hardware_accelerated";
 
     public AppConfig(Context context) {
         super(context);
@@ -112,6 +113,8 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, ADJUST_ATTRIBUTION, "");
         // информация о том была ли отправка на сервер данных referrer пользователя
         addField(settingsMap, IS_ADJUST_ATTRIBUTION_SENT, false);
+        // current device, current session hardwareaccelerated state
+        addField(settingsMap, IS_HARDWARE_ACCELERATED, false);
     }
 
     protected SharedPreferences getPreferences() {
@@ -459,5 +462,19 @@ public class AppConfig extends AbstractConfig {
      */
     public void setAdjustAttributeDataSent(boolean isSent) {
         setField(getSettingsMap(), IS_ADJUST_ATTRIBUTION_SENT, isSent);
+    }
+
+    /**
+     * @return true if hardwareaccelerated turn on
+     */
+    public boolean isHardwareAccelerated() {
+        return getBooleanField(getSettingsMap(), IS_HARDWARE_ACCELERATED);
+    }
+
+    /**
+     * Set hardwareaccelerated state
+     */
+    public void setHardwareAcceleratedState(boolean isSent) {
+        setField(getSettingsMap(), IS_HARDWARE_ACCELERATED, isSent);
     }
 }

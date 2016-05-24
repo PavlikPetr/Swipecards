@@ -1,67 +1,58 @@
 package com.topface.topface.ui.fragments;
 
-import android.annotation.TargetApi;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Build;
+import android.databinding.DataBindingUtil;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.SimpleItemAnimator;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import com.topface.IllustratedTextView.IllustratedTextView;
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Ssid;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
-import com.topface.topface.data.FragmentSettings;
+import com.topface.topface.data.FixedViewInfo;
+import com.topface.topface.data.HeaderFooterData;
+import com.topface.topface.data.HeaderFooterData.OnViewClickListener;
 import com.topface.topface.data.Options;
-import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
+import com.topface.topface.data.leftMenu.FragmentIdData;
+import com.topface.topface.data.leftMenu.IntegrationSettingsData;
+import com.topface.topface.data.leftMenu.LeftMenuData;
+import com.topface.topface.data.leftMenu.LeftMenuHeaderViewData;
+import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
+import com.topface.topface.data.leftMenu.NavigationState;
+import com.topface.topface.data.leftMenu.WrappedNavigationData;
+import com.topface.topface.databinding.FragmentMenuBinding;
+import com.topface.topface.state.DrawerLayoutState;
+import com.topface.topface.state.OptionsAndProfileProvider;
+import com.topface.topface.state.SimpleStateDataUpdater;
 import com.topface.topface.state.TopfaceAppState;
-import com.topface.topface.ui.INavigationFragmentsListener;
-import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.ui.adapters.LeftMenuAdapter;
-import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
-import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
-import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
-import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
-import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
-import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
+import com.topface.topface.ui.adapters.ItemEventListener.OnRecyclerViewItemClickListener;
+import com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.Editor;
-import com.topface.topface.utils.ResourcesUtils;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.gcmutils.GCMUtils;
-import com.topface.topface.utils.offerwalls.OfferwallsManager;
-import com.topface.topface.utils.social.AuthToken;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.inject.Inject;
 
-import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
+import rx.subscriptions.CompositeSubscription;
 
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.BONUS;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.INTEGRATION_PAGE;
+import static com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter.EMPTY_POS;
 
 /**
  * Created by kirussell on 05.11.13.
@@ -69,528 +60,267 @@ import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.INTEGRATI
  * extends ListFragment and does not have any xml layout
  */
 public class MenuFragment extends Fragment {
-    public static final String SELECT_MENU_ITEM = "com.topface.topface.action.menu.selectitem";
-    public static final String SELECTED_FRAGMENT_ID = "com.topface.topface.action.menu.item";
-    private static final String CURRENT_FRAGMENT_STATE = "menu_fragment_current_fragment";
 
-    private static final String USER_ID = "{userId}";
-    private static final String SECRET_KEY = "{secretKey}";
+    private static final String BALANCE_TEMPLATE = "%s %s %d %s %d";
+    private static final String COINS_ICON = "coins_icon";
+    private static final String LIKES_ICON = "likes_icon";
+    private static final String SELECTED_POSITION = "selected_position";
 
     @Inject
     TopfaceAppState mAppState;
-    private OnFragmentSelectedListener mOnFragmentSelected;
-    private FragmentSettings mSelectedFragment = FragmentId.UNDEFINED.getFragmentSettings();
-    private LeftMenuAdapter mAdapter;
-    private boolean mHardwareAccelerated;
-    private View mEditorItem;
-    private IllustratedTextView textBalance;
+    @Inject
+    NavigationState mNavigationState;
+    @Inject
+    DrawerLayoutState mDrawerLayoutState;
+    private LeftMenuRecyclerViewAdapter mAdapter;
+    private CountersData mCountersData;
     private BalanceData mBalanceData;
-    private Action1<BalanceData> mBalanceAction = new Action1<BalanceData>() {
-        @Override
-        public void call(BalanceData balanceData) {
-            mBalanceData = balanceData;
-            updateBalance(balanceData);
-        }
-    };
-    private Subscription mBalanceSubscription;
-    private Subscription mCountersSubscription;
-    private View mLastActivated;
-    private BroadcastReceiver mOptionsReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (mListView != null) {
-                initAdapter();
-            }
-        }
-    };
-    private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action == null) return;
+    private CompositeSubscription mSubscription = new CompositeSubscription();
+    private int mSelectedPos = EMPTY_POS;
+    private OptionsAndProfileProvider mOptionsAndProfileProvider;
 
-            switch (action) {
-                case CacheProfile.PROFILE_UPDATE_ACTION:
-                    initProfileMenuItem(mProfileMenuItem);
-                    initEditor();
-                    break;
-                case SELECT_MENU_ITEM:
-                    Bundle extras = intent.getExtras();
-                    FragmentSettings fragmentSettings = null;
-                    if (extras != null) {
-                        FragmentSettings menuItem = extras.getParcelable(SELECTED_FRAGMENT_ID);
-                        fragmentSettings = menuItem != null ? menuItem : App.from(getActivity()).getOptions().startPage;
-                    }
-                    selectMenu(fragmentSettings);
-                    View view = mAdapter.getViewForActivate(mListView, fragmentSettings);
-                    if (view != null) {
-                        mLastActivated = view;
-                        mLastActivated.setActivated(true);
-                    }
-                    break;
-            }
+    private Action1<Throwable> mSubscriptionOnError = new Action1<Throwable>() {
+        @Override
+        public void call(Throwable throwable) {
+            throwable.printStackTrace();
         }
     };
 
-    private INavigationFragmentsListener mFragmentSwitchListener;
-    private ListView mListView;
-    private LeftMenuAdapter.ILeftMenuItem mProfileMenuItem;
+    private SimpleStateDataUpdater mStateDataUpdater = new SimpleStateDataUpdater() {
+        @Override
+        public void onOptionsUpdate(Options options) {
+            LeftMenuRecyclerViewAdapter adapter = getAdapter();
+            adapter.updateTitle(FragmentIdData.BONUS, options.bonus.buttonText);
+            adapter.updateIcon(FragmentIdData.BONUS, options.bonus.buttonPicture);
+            updateIntegrationPage(options);
+        }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof INavigationFragmentsListener) {
-            mFragmentSwitchListener = (INavigationFragmentsListener) context;
+        @Override
+        public void onProfileUpdate(Profile profile) {
+            getAdapter().updateHeader(getHeaderData(profile));
+        }
+    };
+
+    private OnViewClickListener<LeftMenuHeaderViewData> mOnHeaderClick = new OnViewClickListener<LeftMenuHeaderViewData>() {
+        @Override
+        public void onClick(View v, LeftMenuHeaderViewData data) {
+            setSelected(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.PROFILE),
+                    WrappedNavigationData.SELECT_BY_CLICK));
+        }
+    };
+
+    private void setSelected(WrappedNavigationData data) {
+        if (mSelectedPos != EMPTY_POS) {
+            getAdapter().updateSelected(mSelectedPos, false);
+        }
+        mSelectedPos = data.getData().getUniqueKey();
+        getAdapter().updateSelected(mSelectedPos, true);
+        if (!data.getStatesStack().contains(WrappedNavigationData.SELECT_ONLY)) {
+            mNavigationState.emmitNavigationState(data.addStateToStack(WrappedNavigationData.ITEM_SELECTED));
         }
     }
 
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mFragmentSwitchListener = null;
-    }
-
-    public static void selectFragment(FragmentSettings fragmentSettings) {
-        Intent intent = new Intent();
-        intent.setAction(SELECT_MENU_ITEM);
-        intent.putExtra(SELECTED_FRAGMENT_ID, fragmentSettings);
-        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        //Показываем фрагмент только если мы авторизованы
-        if (!AuthToken.getInstance().isEmpty()) {
-            if (savedInstanceState != null) {
-                FragmentSettings savedId = savedInstanceState.getParcelable(CURRENT_FRAGMENT_STATE);
-                if (savedId != null) {
-                    mSelectedFragment = savedId;
-                    return;
-                }
-            }
-            if (getActivity() != null) {
-                Intent intent = getActivity().getIntent();
-                if (intent != null && intent.hasExtra(GCMUtils.NEXT_INTENT)) {
-                    Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment from activity intent.");
-                    switchFragment((FragmentSettings) intent.getParcelableExtra(GCMUtils.NEXT_INTENT), false);
-                    return;
-                } else {
-                    switchFragment(App.get().getOptions().startPage, false);
-                }
-            }
-            Debug.log(NavigationActivity.PAGE_SWITCH + "Switch fragment to default from onCreate().");
+    private OnRecyclerViewItemClickListener<LeftMenuData> mItemClickListener = new OnRecyclerViewItemClickListener<LeftMenuData>() {
+        @Override
+        public void itemClick(View view, int itemPosition, LeftMenuData data) {
+            setSelected(new WrappedNavigationData(data.getSettings(), WrappedNavigationData.SELECT_BY_CLICK));
         }
-    }
+    };
 
-    private void initEditor() {
-        if (mListView != null) {
-            if (Editor.isEditor()) {
-                if (mEditorItem == null) {
-                    mEditorItem = View.inflate(getActivity(), R.layout.item_left_menu_button_with_badge, null);
-                    TextView btnMenu = (TextView) mEditorItem.findViewById(R.id.btnMenu);
-                    //noinspection ResourceType
-                    btnMenu.setText(ResourcesUtils.getFragmentNameResId(FragmentId.EDITOR.getFragmentSettings()));
-                    mEditorItem.setTag(FragmentId.EDITOR);
-                    mEditorItem.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            onMenuSelected(FragmentId.EDITOR.getFragmentSettings());
-                        }
-                    });
-                    mListView.addFooterView(mEditorItem);
-                }
-            } else {
-                if (mEditorItem != null) {
-                    mListView.removeFooterView(mEditorItem);
-                    mEditorItem.setOnClickListener(null);
-                    mEditorItem = null;
-                }
+    private ArrayList<LeftMenuData> getAddedIntegrationItems(ArrayList<LeftMenuData> data) {
+        ArrayList<LeftMenuData> arrayList = new ArrayList<>();
+        for (LeftMenuData item : data) {
+            if (item.getSettings().getFragmentId() == FragmentIdData.INTEGRATION_PAGE) {
+                arrayList.add(item);
             }
         }
+        return arrayList;
     }
 
-    public void updateAdapter() {
-        notifyDataSetChanged();
-    }
-
-    private void initAdapter() {
-        final Options options = App.from(getActivity()).getOptions();
-        ArrayList<LeftMenuAdapter.ILeftMenuItem> menuItems = new ArrayList<>();
-        mProfileMenuItem = LeftMenuAdapter.newLeftMenuItem(FragmentId.PROFILE, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_PHOTO,
-                App.get().getProfile().photo);
-        menuItems.add(mProfileMenuItem);
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.DATING, LeftMenuAdapter.TYPE_MENU_BUTTON,
-                R.drawable.ic_dating_selector));
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.TABBED_DIALOGS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.drawable.ic_dialog_selector));
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.PHOTO_BLOG, LeftMenuAdapter.TYPE_MENU_BUTTON,
-                R.drawable.ic_photolenta_selector));
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.TABBED_VISITORS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.drawable.ic_guests_selector));
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.TABBED_LIKES, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.drawable.ic_likes_selector));
-        menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.GEO, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                R.drawable.icon_people_close_selector));
-        if (options.bonus.enabled) {
-            menuItems.add(LeftMenuAdapter.newLeftMenuItem(FragmentId.BONUS, LeftMenuAdapter.TYPE_MENU_BUTTON_WITH_BADGE,
-                    R.drawable.ic_bonus_selector, options.bonus.buttonPicture));
+    private void updateIntegrationPage(Options options) {
+        ArrayList<LeftMenuData> data = getAdapter().getData();
+        ArrayList<LeftMenuData> integrationData = getIntegrationItems(options);
+        ArrayList<LeftMenuData> addedIntegrationData = getAddedIntegrationItems(data);
+        if (!Arrays.equals(integrationData.toArray(), addedIntegrationData.toArray())) {
+            data.removeAll(addedIntegrationData);
+            getAdapter().addItemsAfterFragment(integrationData, FragmentIdData.GEO);
         }
-        ArrayList<Options.LeftMenuIntegrationItems> array = options.leftMenuItems;
-        if (array != null && array.size() > 0) {
-            for (int i = 0; i < array.size(); i++) {
-                Options.LeftMenuIntegrationItems item = array.get(i);
-                menuItems.add(LeftMenuAdapter.newLeftMenuItem(new FragmentSettings(FragmentId.INTEGRATION_PAGE, i), LeftMenuAdapter.TYPE_MENU_BUTTON,
-                        R.drawable.ic_bonus_selector, null, item.iconUrl));
+    }
+
+    private ArrayList<LeftMenuData> getIntegrationItems(Options options) {
+        ArrayList<LeftMenuData> arrayList = new ArrayList<>();
+        if (options != null && options.leftMenuItems != null && options.leftMenuItems.size() > 0) {
+            int pos = 0;
+            for (Options.LeftMenuIntegrationItems leftMenuItem : options.leftMenuItems) {
+                arrayList.add(new LeftMenuData(leftMenuItem.iconUrl, new SpannableString(leftMenuItem.title), 0, false, new IntegrationSettingsData(FragmentIdData.INTEGRATION_PAGE, pos, leftMenuItem.url, leftMenuItem.external, leftMenuItem.title)));
+                pos++;
             }
         }
-        if (mAdapter == null) {
-            mAdapter = new LeftMenuAdapter(menuItems);
-            mListView.setAdapter(mAdapter);
-            mCountersSubscription = mAppState.getObservable(CountersData.class)
-                    .map(new Func1<CountersData, CountersData>() {
-                        @Override
-                        public CountersData call(CountersData countersData) {
-                            countersData.setBonus(CacheProfile.needShowBonusCounter ? options.bonus.counter : 0);
-                            return countersData;
-                        }
-                    })
-                    .subscribe(new Action1<CountersData>() {
-                        @Override
-                        public void call(CountersData countersData) {
-                            mAdapter.updateCounters(countersData);
-                        }
-                    });
-        } else {
-            mAdapter.replaceMenuItems(menuItems);
-            mAdapter.notifyDataSetChanged();
-        }
+        return arrayList;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_menu, null);
-        mListView = (ListView) root.findViewById(R.id.lvMenu);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position < mAdapter.getCount()) {
-                    onMenuSelected(mAdapter.getItem(position).getMenuId());
-                    if (mLastActivated != null) {
-                        mLastActivated.setActivated(false);
-                    }
-                    view.setActivated(true);
-                    mLastActivated = view;
-                } else {
-                    onBalanceSelected();
-                }
-            }
-        });
-        initFooter();
-        initAdapter();
-        return root;
-    }
-
-    private void onBalanceSelected() {
-        startActivity(PurchasesActivity.createBuyingIntent("Menu", App.from(getActivity()).getOptions().topfaceOfferwallRedirect));
-    }
-
-    private void initFooter() {
-        ViewGroup footer = (ViewGroup) View.inflate(getActivity(), R.layout.layout_left_menu_footer, null);
-        mListView.addFooterView(footer);
-        textBalance = (IllustratedTextView) footer.findViewById(R.id.btnMenu);
-        updateBalance(mBalanceData);
-        initEditor();
-    }
-
-    private void updateBalance(BalanceData balanceData) {
-        if (textBalance != null && balanceData != null) {
-            textBalance.setText(String.format(getString(R.string.balance), balanceData.money, balanceData.likes));
-        }
-    }
-
-    private void initProfileMenuItem(LeftMenuAdapter.ILeftMenuItem profileMenuItem) {
-        boolean notify = false;
-        if (profileMenuItem != null) {
-            // update photo
-            Profile profile = App.get().getProfile();
-            Photo photo = profileMenuItem.getMenuIconPhoto();
-            if (photo != null) {
-                if (!photo.equals(profile.photo)) {
-                    profileMenuItem.setMenuIconPhoto(profile.photo);
-                    notify = true;
-                }
-            }
-            // fill data warning icon
-            int res = 0;
-            if (!CacheProfile.isDataFilled(getActivity()) && CacheProfile.isLoaded()) {
-                res = R.drawable.ic_not_enough_data;
-            }
-            if (res != profileMenuItem.getExtraIconDrawable()) {
-                profileMenuItem.setExtraIconDrawable(res);
-                notify = true;
-            }
-            // notify if something changed
-            if (notify) {
-                notifyDataSetChanged();
-            }
-        }
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.from(getActivity()).inject(this);
-        mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
-    }
+        if (savedInstanceState != null) {
+            mSelectedPos = savedInstanceState.getInt(SELECTED_POSITION, EMPTY_POS);
+        }
+        mCountersData = mCountersData == null ? new CountersData() : mCountersData;
+        mBalanceData = mBalanceData == null ? new BalanceData() : mBalanceData;
+        mSubscription.add(mAppState
+                .getObservable(BalanceData.class)
+                .filter(new Func1<BalanceData, Boolean>() {
+                    @Override
+                    public Boolean call(BalanceData balanceData) {
+                        return mBalanceData.likes == balanceData.likes || mBalanceData.money == balanceData.money;
+                    }
+                })
+                .subscribe(new Action1<BalanceData>() {
+                    @Override
+                    public void call(BalanceData balanceData) {
+                        mBalanceData = balanceData;
+                        updateBallance();
+                    }
+                }));
+        mSubscription.add(mNavigationState
+                .getNavigationObservable()
+                .filter(new Func1<WrappedNavigationData, Boolean>() {
+                    @Override
+                    public Boolean call(WrappedNavigationData data) {
+                        return data != null && !data.getStatesStack().contains(WrappedNavigationData.ITEM_SELECTED);
+                    }
+                })
+                .subscribe(new Action1<WrappedNavigationData>() {
+                    @Override
+                    public void call(WrappedNavigationData wrappedLeftMenuSettingsData) {
+                        setSelected(wrappedLeftMenuSettingsData);
+                    }
+                }, mSubscriptionOnError));
+        mSubscription.add(mDrawerLayoutState
+                .getObservable()
+                .subscribe(new Action1<DrawerLayoutStateData>() {
+                    @Override
+                    public void call(DrawerLayoutStateData drawerLayoutStateData) {
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mBalanceSubscription.unsubscribe();
-        mCountersSubscription.unsubscribe();
+                    }
+                }, mSubscriptionOnError));
+        mOptionsAndProfileProvider = new OptionsAndProfileProvider(mStateDataUpdater);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(
-                CURRENT_FRAGMENT_STATE,
-                getCurrentFragmentId());
+        outState.putInt(SELECTED_POSITION, mSelectedPos);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        View root = inflater.inflate(R.layout.fragment_menu, null);
+        FragmentMenuBinding binding = DataBindingUtil.bind(root);
+        binding.rvMenu.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.rvMenu.setAdapter(getAdapter());
+        ((SimpleItemAnimator) binding.rvMenu.getItemAnimator()).setSupportsChangeAnimations(false);
+        return root;
+    }
+
+    private LeftMenuRecyclerViewAdapter initAdapter() {
+        LeftMenuRecyclerViewAdapter adapter = new LeftMenuRecyclerViewAdapter(getLeftMenuItems());
+        adapter.setOnItemClickListener(mItemClickListener);
+        mSubscription.add(mAppState.getObservable(CountersData.class)
+                .map(new Func1<CountersData, CountersData>() {
+                    @Override
+                    public CountersData call(CountersData countersData) {
+                        countersData.setBonus(CacheProfile.needShowBonusCounter ? App.from(getActivity()).getOptions().bonus.counter : 0);
+                        return countersData;
+                    }
+                })
+                .filter(new Func1<CountersData, Boolean>() {
+                    @Override
+                    public Boolean call(CountersData countersData) {
+                        return !mCountersData.equals(countersData);
+                    }
+                })
+                .subscribe(new Action1<CountersData>() {
+                    @Override
+                    public void call(CountersData countersData) {
+                        mCountersData = countersData;
+                        updateCounters();
+                    }
+                }, mSubscriptionOnError));
+        adapter.setHeader(new FixedViewInfo<>(R.layout.left_menu_header, getHeaderData(App.get().getProfile())));
+        return adapter;
+    }
+
+    private HeaderFooterData<LeftMenuHeaderViewData> getHeaderData(@NotNull Profile profile) {
+        return new HeaderFooterData<>(new LeftMenuHeaderViewData(profile.photo, profile.getNameAndAge(), profile.city != null ? profile.city.getName() : Utils.EMPTY), mOnHeaderClick);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(CacheProfile.PROFILE_UPDATE_ACTION);
-        filter.addAction(SELECT_MENU_ITEM);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, filter);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mOptionsReceiver,
-                new IntentFilter(Options.OPTIONS_RECEIVED_ACTION));
-        initProfileMenuItem(mProfileMenuItem);
-        updateBalance(mBalanceData);
-        selectFragment(mSelectedFragment);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mOptionsReceiver);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mHardwareAccelerated = isHardwareAccelerated(view);
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private boolean isHardwareAccelerated(View rootLayout) {
-        return Build.VERSION.SDK_INT >= 11 && rootLayout.isHardwareAccelerated();
-    }
-
-    /**
-     * Selects menu item and shows fragment by id
-     * Note: incorrect behavior, when method is called in onCreate
-     * (Exception: recursive call of executePendingTransactions)
-     *
-     * @param fragmentSettings id of fragment that is going to be shown
-     */
-    public void selectMenu(FragmentSettings fragmentSettings) {
-        String url = getWebUrl(fragmentSettings);
-        boolean isUrlNotEmpty = !TextUtils.isEmpty(url);
-        if (fragmentSettings != mSelectedFragment) {
-            if (!isUrlNotEmpty) {
-                Debug.log("MenuFragment: Switch fragment in selectMenu().");
-                switchFragment(fragmentSettings, true);
-            }
-            mOnFragmentSelected.onFragmentSelected(fragmentSettings);
+    public void onDestroy() {
+        super.onDestroy();
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
         }
-        if (isUrlNotEmpty) {
-            Utils.goToUrl(getActivity(), url);
+        mAdapter = null;
+        mOptionsAndProfileProvider.unsubscribe();
+    }
+
+    private void updateCounters() {
+        getAdapter().updateCounters(mCountersData);
+    }
+
+    private void updateBallance() {
+        getAdapter().updateTitle(FragmentIdData.BALLANCE, getBalanceTitle());
+    }
+
+    private ArrayList<LeftMenuData> getLeftMenuItems() {
+        Options options = App.from(getActivity()).getOptions();
+        ArrayList<LeftMenuData> arrayList = new ArrayList<>();
+        arrayList.add(new LeftMenuData(R.drawable.ic_photo_left_menu, R.string.general_photoblog, 0, false, new LeftMenuSettingsData(FragmentIdData.PHOTO_BLOG)));
+        arrayList.add(new LeftMenuData(R.drawable.ic_dating_left_menu, R.string.general_dating, 0, false, new LeftMenuSettingsData(FragmentIdData.DATING)));
+        arrayList.add(new LeftMenuData(R.drawable.ic_like_left_menu, R.string.general_sympathies, mCountersData.getLikes(), false, new LeftMenuSettingsData(FragmentIdData.TABBED_LIKES)));
+        arrayList.add(new LeftMenuData(R.drawable.ic_chat_left_menu, R.string.settings_messages, mCountersData.getDialogs(), false, new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS)));
+        arrayList.add(new LeftMenuData(R.drawable.ic_guests_left_menu, R.string.general_visitors, mCountersData.getVisitors(), false, new LeftMenuSettingsData(FragmentIdData.TABBED_VISITORS)));
+        arrayList.add(new LeftMenuData(R.drawable.ic_people_left_menu, R.string.people_nearby, mCountersData.getPeopleNearby(), false, new LeftMenuSettingsData(FragmentIdData.GEO)));
+        if (options.bonus.enabled) {
+            arrayList.add(new LeftMenuData(R.drawable.ic_bonus_left_menu, App.get().getOptions().bonus.buttonText, mCountersData.getBonus(), false, new LeftMenuSettingsData(FragmentIdData.BONUS)));
         }
-        if (fragmentSettings == FragmentId.BONUS.getFragmentSettings() && CacheProfile.countersData != null) {
-            mAppState.setData(CacheProfile.countersData);
+        arrayList.add(new LeftMenuData(R.drawable.ic_balance_left_menu, getBalanceTitle(), 0, false, new LeftMenuSettingsData(FragmentIdData.BALLANCE)));
+        arrayList.add(new LeftMenuData("", new SpannableString(getString(R.string.editor_menu_admin)), 0, true, new LeftMenuSettingsData(FragmentIdData.EDITOR)));
+        return arrayList;
+    }
+
+    private LeftMenuRecyclerViewAdapter getAdapter() {
+        if (mAdapter == null) {
+            mAdapter = initAdapter();
         }
+        return mAdapter;
     }
 
-    private String getWebUrl(FragmentSettings fragmentSettings) {
-        Options.LeftMenuIntegrationItems item = getServerLeftMenuItemById(fragmentSettings.getPos());
-        return fragmentSettings.getId() == INTEGRATION_PAGE.getId() && item != null && item.external ? item.url : Utils.EMPTY;
-    }
-
-    private void notifyDataSetChanged() {
-        if (mAdapter != null) {
-            mAdapter.notifyDataSetChanged();
+    private SpannableString getBalanceTitle() {
+        String title = String.format(App.getCurrentLocale(), BALANCE_TEMPLATE,
+                getString(R.string.purchase_header_title),
+                COINS_ICON,
+                mBalanceData.money,
+                LIKES_ICON,
+                mBalanceData.likes);
+        SpannableString titleSpan = new SpannableString(title);
+        boolean isNewApi = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP;
+        Drawable coins = isNewApi ? getResources().getDrawable(R.drawable.ic_pay, null) : getResources().getDrawable(R.drawable.ic_pay);
+        Drawable likes = isNewApi ? getResources().getDrawable(R.drawable.ic_symp, null) : getResources().getDrawable(R.drawable.ic_symp);
+        if (coins != null && likes != null) {
+            coins.setBounds(0, 0, coins.getIntrinsicWidth(), coins.getIntrinsicHeight());
+            likes.setBounds(0, 0, likes.getIntrinsicWidth(), likes.getIntrinsicHeight());
+            ImageSpan coinsSpan = new ImageSpan(coins, ImageSpan.ALIGN_BASELINE);
+            ImageSpan likesSpan = new ImageSpan(likes, ImageSpan.ALIGN_BASELINE);
+            int iconStartPos = title.split(COINS_ICON)[0].length();
+            titleSpan.setSpan(coinsSpan, iconStartPos, iconStartPos + COINS_ICON.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+            iconStartPos = title.split(LIKES_ICON)[0].length();
+            titleSpan.setSpan(likesSpan, iconStartPos, iconStartPos + LIKES_ICON.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }
-    }
-
-    /**
-     * Shows fragment by id
-     *
-     * @param newFragmentSettings id of fragment that is going to be shown
-     */
-    private void switchFragment(FragmentSettings newFragmentSettings, boolean executePending) {
-        FragmentManager fragmentManager = getFragmentManager();
-        if (newFragmentSettings == null || fragmentManager == null) {
-            return;
-        }
-        Fragment oldFragment = fragmentManager.findFragmentById(R.id.fragment_content);
-        String fragmentTag = getTagById(newFragmentSettings);
-        Debug.log("MenuFragment: Try switch to fragment with tag " + fragmentTag + " (old fragment " + mSelectedFragment + ")");
-        BaseFragment newFragment = (BaseFragment) fragmentManager.findFragmentByTag(fragmentTag);
-
-        //Если не нашли в FragmentManager уже существующего инстанса, то создаем новый
-        if (newFragment == null) {
-            newFragment = getFragmentNewInstanceById(newFragmentSettings);
-            Debug.log("MenuFragment: newFragment is null, create new instance");
-        }
-
-        if (oldFragment == null || newFragmentSettings.getFragmentId() != mSelectedFragment.getFragmentId() || newFragmentSettings.getPos() != mSelectedFragment.getPos()) {
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            //Меняем фрагменты анимировано, но только на новых устройствах c HW ускорением
-            if (mHardwareAccelerated) {
-                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-            }
-            if (oldFragment != newFragment && newFragment.isAdded()) {
-                transaction.remove(newFragment);
-                Debug.error("MenuFragment: try detach already added new fragment " + fragmentTag);
-            }
-            transaction.replace(R.id.fragment_content, newFragment, fragmentTag);
-            transaction.commitAllowingStateLoss();
-            //Вызываем executePendingTransactions, если передан соответвующий флаг
-            //и сохраняем результат
-            String transactionResult = executePending ?
-                    Boolean.toString(fragmentManager.executePendingTransactions()) :
-                    "no executePending";
-            mSelectedFragment = newFragmentSettings;
-            Debug.log("MenuFragment: commit " + transactionResult);
-        } else {
-            Debug.error("MenuFragment: new fragment already added");
-        }
-        mSelectedFragment = newFragmentSettings;
-
-        if (mFragmentSwitchListener != null) {
-            mFragmentSwitchListener.onFragmentSwitch(mSelectedFragment);
-        }
-        //Закрываем меню только после создания фрагмента
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (mOnFragmentSelected != null) {
-                    mOnFragmentSelected.onFragmentSelected(mSelectedFragment);
-                }
-            }
-        }, 250);
-    }
-
-    private String getTagById(FragmentSettings id) {
-        return "fragment_switch_controller_" + id.getFragmentId() + "_" + id.getPos();
-    }
-
-    public FragmentSettings getCurrentFragmentId() {
-        return mSelectedFragment.equals(FragmentId.UNDEFINED.getFragmentSettings()) ? App.get().getOptions().startPage : mSelectedFragment;
-    }
-
-    private BaseFragment getFragmentNewInstanceById(FragmentSettings id) {
-        BaseFragment fragment;
-        switch (id.getFragmentId()) {
-            case VIP_PROFILE:
-            case PROFILE:
-                fragment = OwnProfileFragment.newInstance();
-                break;
-            case DATING:
-                fragment = new DatingFragment();
-                break;
-            case GEO:
-                fragment = new PeopleNearbyFragment();
-                break;
-            case BONUS:
-                fragment = BonusFragment.newInstance(true);
-                break;
-            case INTEGRATION_PAGE:
-                fragment = getIntegrationFragment(id.getPos());
-                break;
-            case TABBED_VISITORS:
-                fragment = new TabbedVisitorsFragment();
-                break;
-            case SETTINGS:
-                fragment = new SettingsFragment();
-                break;
-            case EDITOR:
-                fragment = null;
-                if (Editor.isEditor()) {
-                    fragment = new EditorFragment();
-                }
-                break;
-            case PHOTO_BLOG:
-                fragment = new PhotoBlogFragment();
-                break;
-            case TABBED_LIKES:
-                fragment = new TabbedLikesFragment();
-                break;
-            case TABBED_DIALOGS:
-                fragment = new TabbedDialogsFragment();
-                break;
-            default:
-                fragment = OwnProfileFragment.newInstance();
-                break;
-        }
-        return fragment;
-    }
-
-    public BaseFragment getIntegrationFragment(int pos) {
-        Options.LeftMenuIntegrationItems item = getServerLeftMenuItemById(pos);
-        return item != null ? IntegrationWebViewFragment.newInstance(item.title, convertIntegrationUrl(item.url)) : null;
-    }
-
-    private String convertIntegrationUrl(String url) {
-        return url.replace(USER_ID, AuthToken.getInstance().getUserSocialId()).replace(SECRET_KEY, Ssid.get());
-    }
-
-    public static Options.LeftMenuIntegrationItems getServerLeftMenuItemById(int pos) {
-        ArrayList<Options.LeftMenuIntegrationItems> array = App.get().getOptions().leftMenuItems;
-        return array != null && array.size() > pos ? array.get(pos) : null;
-    }
-
-    public void onMenuSelected(FragmentSettings id) {
-        if (mListView.isClickable()) {
-            Options options = App.from(getActivity()).getOptions();
-            //Тут сложная работа счетчика, которая отличается от стандартной логики. Мы контроллируем
-            //его локально, а не серверно, как это происходит с остальными счетчиками.
-            if (id.getFragmentId() == BONUS) {
-                if (CacheProfile.needShowBonusCounter) {
-                    UserConfig config = App.getUserConfig();
-                    config.setBonusCounterLastShowTime(options.bonus.timestamp);
-                    config.saveConfig();
-                }
-                CacheProfile.needShowBonusCounter = false;
-                if (!TextUtils.isEmpty(options.bonus.integrationUrl) ||
-                        options.offerwalls.hasOffers()
-                        ) {
-                    selectMenu(FragmentId.BONUS.getFragmentSettings());
-                } else {
-                    OfferwallsManager.startOfferwall(getActivity(), options);
-                }
-            } else {
-                selectMenu(id);
-            }
-        }
-    }
-
-    public void setOnFragmentSelected(OnFragmentSelectedListener listener) {
-        mOnFragmentSelected = listener;
-    }
-
-    public void setClickable(boolean clickable) {
-        mListView.setClickable(clickable);
-    }
-
-    public interface OnFragmentSelectedListener {
-        void onFragmentSelected(FragmentSettings fragmentSettings);
+        return titleSpan;
     }
 }

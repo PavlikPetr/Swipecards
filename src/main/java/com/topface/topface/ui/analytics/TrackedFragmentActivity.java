@@ -13,8 +13,7 @@ import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.ui.IBackPressedListener;
 import com.topface.topface.statistics.ScreensShowStatistics;
-import com.topface.topface.ui.external_libs.TracedLifeCycleActivity;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.ui.fragments.TrackedLifeCycleActivity;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.Utils;
@@ -22,13 +21,12 @@ import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.Nullable;
 
-public class TrackedFragmentActivity extends TracedLifeCycleActivity {
+public class TrackedFragmentActivity extends TrackedLifeCycleActivity {
     private IBackPressedListener mBackPressedListener;
 
     @Override
     public void onStart() {
         super.onStart();
-        App.onActivityStarted(this.getClass().getName());
         StatisticsTracker.getInstance().activityStart(this);
         if (isTrackable()) {
             senActivitiesShownStatistics();
@@ -74,7 +72,6 @@ public class TrackedFragmentActivity extends TracedLifeCycleActivity {
     @Override
     public void onStop() {
         super.onStop();
-        App.onActivityStoped(this.getClass().getName());
         EasyTracker.getTracker().send(new HitBuilders.AppViewBuilder().set(EasyTracker.SESSION_CONTROL, "end").build());
     }
 

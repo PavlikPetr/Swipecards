@@ -18,13 +18,13 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.data.experiments.FeedScreensIntent;
+import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.UserProfileActivity;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
@@ -48,9 +48,7 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.GEO;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_LIKES;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_VISITORS;
+import static com.topface.topface.data.leftMenu.FragmentIdData.*;
 
 public class GCMUtils {
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
@@ -363,7 +361,7 @@ public class GCMUtils {
                 if (getUsersCountInMessageStack(user) > 1) {
                     // create intent to open Dialogs
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.TABBED_DIALOGS.getFragmentSettings());
+                    i.putExtra(GCMUtils.NEXT_INTENT, new LeftMenuSettingsData(TABBED_DIALOGS));
                     i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, DialogsFragment.class.getName());
                     // add the same request code like Chat intent
                     i.putExtra(App.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
@@ -388,7 +386,7 @@ public class GCMUtils {
                 if (showSympathy) {
                     lastNotificationType = GCM_TYPE_MUTUAL;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, TABBED_LIKES.getFragmentSettings());
+                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_LIKES));
                     i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, MutualFragment.class.getName());
                 }
                 break;
@@ -397,7 +395,7 @@ public class GCMUtils {
                 if (showLikes) {
                     lastNotificationType = GCM_TYPE_LIKE;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, TABBED_LIKES.getFragmentSettings());
+                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_LIKES));
                     i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, LikesFragment.class.getName());
                 }
                 break;
@@ -407,13 +405,13 @@ public class GCMUtils {
                     lastNotificationType = GCM_TYPE_GUESTS;
                     i = new Intent(context, NavigationActivity.class);
                     i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, VisitorsFragment.class.getName());
-                    i.putExtra(NEXT_INTENT, TABBED_VISITORS.getFragmentSettings());
+                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_VISITORS));
                 }
                 break;
             case GCM_TYPE_PEOPLE_NEARBY:
                 lastNotificationType = GCM_TYPE_PEOPLE_NEARBY;
                 i = new Intent(context, NavigationActivity.class);
-                i.putExtra(NEXT_INTENT, GEO.getFragmentSettings());
+                i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(GEO));
                 break;
             case GCM_TYPE_UPDATE:
                 i = Utils.getMarketIntent();

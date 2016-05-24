@@ -143,6 +143,9 @@ public class CacheProfile {
     }
 
     public static boolean isDataFilled(Context context) {
+        if (context == null) {
+            return false;
+        }
         Profile profile = App.from(context).getProfile();
         return profile.city != null && !profile.city.isEmpty() && profile.age != 0 && profile.firstName != null && profile.photo != null;
     }

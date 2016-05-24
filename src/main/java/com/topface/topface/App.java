@@ -155,14 +155,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         mGraph.inject(this);
     }
 
-    public static void onActivityStarted(String activityName) {
-        mStateManager.onActivityStarted(activityName);
-    }
-
-    public static void onActivityStoped(String activityName) {
-        mStateManager.onActivityStoped(activityName);
-    }
-
     public void inject(Object obj) {
         mGraph.inject(obj);
     }

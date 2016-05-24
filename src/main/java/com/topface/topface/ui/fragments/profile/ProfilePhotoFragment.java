@@ -155,7 +155,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
         }
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
         mBinding = DataBindingUtil.bind(root);
-        mBinding.setHandlers(new Handlers());
+        mBinding.setHandlers(new Handlers(getActivity().getApplicationContext()));
         if (getActivity() instanceof EditContainerActivity) {
             getActivity().setResult(Activity.RESULT_OK);
             setActionBarTitles(getString(R.string.edit_title), getString(R.string.edit_album));
@@ -318,9 +318,15 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
 
     public class Handlers {
 
+        private final Context mContext;
+
+        public Handlers(Context context) {
+            mContext = context;
+        }
+
         public void addPhotoClick(View v) {
             mBinding.vfFlipper.setDisplayedChild(0);
-            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(
                     new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", v.getId()));
         }
 

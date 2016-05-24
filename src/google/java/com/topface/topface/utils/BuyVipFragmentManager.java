@@ -1,8 +1,5 @@
 package com.topface.topface.utils;
 
-import android.os.Bundle;
-import android.text.TextUtils;
-
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 
 /**

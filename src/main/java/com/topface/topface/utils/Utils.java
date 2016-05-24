@@ -94,6 +94,10 @@ public class Utils {
         return (int) (System.currentTimeMillis() / 1000L);
     }
 
+    public static String getLocalResUrl(@DrawableRes int res) {
+        return String.format(App.getCurrentLocale(), Utils.LOCAL_RES, res);
+    }
+
     public static String getQuantityString(int id, int quantity, Object... formatArgs) {
         try {
             mPluralResources = new PluralResources(App.getContext().getResources());
@@ -279,7 +283,20 @@ public class Utils {
                 context.startActivityForResult(marketIntent, requestCode);
             }
         } else {
-            Toast.makeText(context, R.string.open_market_error, Toast.LENGTH_SHORT).show();
+            showToastNotification(R.string.open_market_error, Toast.LENGTH_SHORT);
+        }
+    }
+
+    public static void goToMarket(IActivityDelegate activityDelegate, Integer requestCode) {
+        Intent marketIntent = getMarketIntent();
+        if (isCallableIntent(marketIntent, activityDelegate)) {
+            if (requestCode == null) {
+                activityDelegate.startActivity(marketIntent);
+            } else {
+                activityDelegate.startActivityForResult(marketIntent, requestCode);
+            }
+        } else {
+            showToastNotification(R.string.open_market_error, Toast.LENGTH_SHORT);
         }
     }
 
@@ -288,6 +305,15 @@ public class Utils {
             return false;
         }
         List<ResolveInfo> list = context.getPackageManager().queryIntentActivities(intent,
+                PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
+    }
+
+    private static boolean isCallableIntent(Intent intent, IActivityDelegate activityDelegate) {
+        if (intent == null) {
+            return false;
+        }
+        List<ResolveInfo> list = activityDelegate.getPackageManager().queryIntentActivities(intent,
                 PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
     }

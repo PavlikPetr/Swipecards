@@ -226,7 +226,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             holder.avatarImage.setStubResId(defaultAvatarResId);
 
             if (item.user.banned || item.user.deleted || item.user.photo == null || item.user.photo.isEmpty()) {
-                holder.avatarImage.setRemoteSrc(String.format(App.getCurrentLocale(), Utils.LOCAL_RES, defaultAvatarResId));
+                holder.avatarImage.setRemoteSrc(Utils.getLocalResUrl(defaultAvatarResId));
                 if (item.user.banned || item.user.deleted) {
                     holder.avatar.setOnClickListener(null);
                 } else {

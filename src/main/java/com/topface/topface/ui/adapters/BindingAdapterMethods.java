@@ -4,10 +4,12 @@ import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
 import android.support.annotation.DrawableRes;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -41,6 +43,20 @@ public class BindingAdapterMethods {
 
     @BindingAdapter("app:remoteSrc")
     public static void setremoteSrc(ImageViewRemote view, String res) {
-        view.setRemoteSrc(res);
+        if (!TextUtils.isEmpty(res)) {
+            view.setRemoteSrc(res);
+        } else {
+            view.setImageDrawable(null);
+        }
+    }
+
+    @BindingAdapter("app:selected")
+    public static void setSelected(View view, boolean isSelected) {
+        view.setSelected(isSelected);
+    }
+
+    @BindingAdapter("app:setPhoto")
+    public static void setPhoto(ImageViewRemote view, IPhoto photo) {
+        view.setPhoto(photo);
     }
 }
