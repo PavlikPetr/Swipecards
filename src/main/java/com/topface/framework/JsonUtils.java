@@ -4,16 +4,13 @@ import android.util.SparseArray;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.InstanceCreator;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.gson.reflect.TypeToken;
 import com.topface.topface.banners.PageInfo;
-import com.topface.topface.data.CountersData;
-import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
-import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -83,11 +80,6 @@ public class JsonUtils {
                 */
                 Collection<PageInfo> list = hashMap.values();
                 return context.serialize(list);
-            }
-        }).registerTypeAdapter(FragmentSettings.class, new JsonSerializer<FragmentSettings>() {
-            @Override
-            public JsonElement serialize(FragmentSettings fragmentSettings, Type typeOfSrc, JsonSerializationContext context) {
-                return context.serialize(fragmentSettings.getFragmentId().name());
             }
         }).create();
         return gson.toJson(options);

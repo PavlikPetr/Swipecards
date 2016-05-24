@@ -85,7 +85,7 @@ public class OkProfileFragment extends ProfileInnerFragment {
         }, new Action1<Throwable>() {
             @Override
             public void call(Throwable throwable) {
-
+                throwable.printStackTrace();
             }
         }, new Action0() {
             @Override
@@ -105,7 +105,7 @@ public class OkProfileFragment extends ProfileInnerFragment {
     }
 
     private String getEmptyPhotoRes(boolean isBoy) {
-        return String.format(App.getCurrentLocale(), Utils.LOCAL_RES, isBoy ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
+        return Utils.getLocalResUrl(isBoy ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
     }
 
     private void showProgress(boolean isEnable) {

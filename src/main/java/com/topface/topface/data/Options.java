@@ -4,7 +4,6 @@ package com.topface.topface.data;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
 import android.webkit.URLUtil;
 
 import com.google.gson.annotations.SerializedName;
@@ -19,6 +18,7 @@ import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.InstantMessagesForNewbies;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
+import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.state.TopfaceAppState;
@@ -40,7 +40,8 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId;
+import static com.topface.topface.data.leftMenu.FragmentIdData.DATING;
+import static com.topface.topface.data.leftMenu.FragmentIdData.UNDEFINED;
 
 /**
  * Опции приложения
@@ -103,7 +104,8 @@ public class Options extends AbstractData {
      * Id фрагмента, который будет отображаться при старте приложения
      * По умолчанию откроем раздел "Знакомства", если сервер не переопределит его
      */
-    public FragmentSettings startPage = FragmentId.DATING.getFragmentSettings();
+    @FragmentIdData.FragmentId
+    public int startPage = DATING;
 
     /**
      * Флаг отображения превью в диалогах
@@ -539,7 +541,7 @@ public class Options extends AbstractData {
                 mEnabled = premiumMessages.optBoolean("enabled");
                 mCount = premiumMessages.optInt("count", DEFAULT_COUNT);
                 mTimeout = premiumMessages.optInt("timeout", DEFAULT_TIMEOUT);
-                mPageId = getPageId(premiumMessages.optString("page"));
+                mPageId = FragmentIdData.getFragmentId(premiumMessages.optString("page"), UNDEFINED);
                 mPopupVersion = premiumMessages.optInt("popupVersion", 0);
             }
         }
@@ -549,21 +551,8 @@ public class Options extends AbstractData {
             mCount = count;
             mTimeout = timeout;
             airType = type;
-            mPageId = getPageId(page);
+            mPageId = FragmentIdData.getFragmentId(page, UNDEFINED);
             mPopupVersion = popupVersion;
-        }
-
-        private int getPageId(String page) {
-            FragmentId fragmentId = FragmentId.UNDEFINED;
-            if (!TextUtils.isEmpty(page)) {
-                try {
-
-                    fragmentId = FragmentId.valueOf(page);
-                } catch (IllegalArgumentException e) {
-                    Debug.error("Illegal value of pageId", e);
-                }
-            }
-            return fragmentId.getId();
         }
 
         public int getCount() {
@@ -651,7 +640,7 @@ public class Options extends AbstractData {
         public long timestamp;
         public String integrationUrl;
         public String buttonText = App.getContext().getString(R.string.general_bonus);// по умолчанию кнопка имеет название "Бонус"
-        public String buttonPicture = null;// по умолчанию кнопка отображается с картинкой ic_bonus_1
+        public String buttonPicture = Utils.getLocalResUrl(R.drawable.ic_bonus_left_menu);// по умолчанию кнопка отображается с картинкой ic_bonus_left_menu
     }
 
     public static class TabsList {
@@ -739,14 +728,10 @@ public class Options extends AbstractData {
         }
     }
 
-    private FragmentSettings getStartPageFragmentId(JSONObject response) {
-        FragmentId fragmentId = startPage.getFragmentId();
-        try {
-            fragmentId = FragmentId.valueOf(response.optString("startPage"));
-        } catch (IllegalArgumentException e) {
-            Debug.error("Illegal value of startPage", e);
-        }
-        return fragmentId.getFragmentSettings();
+    @FragmentIdData.FragmentId
+    private int getStartPageFragmentId(JSONObject response) {
+        startPage = FragmentIdData.getFragmentId(response.optString("startPage"), startPage);
+        return startPage;
     }
 
     public boolean isScruffyEnabled() {

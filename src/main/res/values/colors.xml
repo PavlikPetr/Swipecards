@@ -180,4 +180,11 @@
     <color name="main_title_text_color">#212121</color>
     <color name="item_title_text_color">#333333</color>
     <color name="item_description_text_color">#6B6B6B</color>
+    <!--left menu colors-->
+    <color name="left_menu_item_selected_color">#ECEFF1</color>
+    <color name="left_menu_divider">#DFE5E8</color>
+    <color name="left_menu_title">#232C35</color>
+    <color name="left_menu_bage_text">@color/bg_white</color>
+    <color name="left_menu_bage_background">#499AFF</color>
+    <color name="left_mneu_users_city_color">#80ffffff</color>
 </resources>

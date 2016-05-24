@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.viewModels.LeftMenuItemViewModel" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/new_bg_left_menu_item_selector"
+        android:onClick="@{clickListener.onClick}"
+        app:selected="@{viewModel.isSelected}">
+
+        <View
+            style="@style/LeftMenuDivider"
+            android:visibility="@{viewModel.dividerVisibility}" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/left_menu_item_height">
+
+            <TextView
+                android:id="@+id/leftMenuBadge"
+                style="@style/LeftMenuBadge"
+                android:text="@{viewModel.badgeCount}"
+                android:visibility="@{viewModel.badgeVisibility}" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/left_menu_item_padding_left"
+                android:layout_toLeftOf="@id/leftMenuBadge">
+
+                <com.topface.topface.ui.views.ImageViewRemote
+                    style="@style/LeftMenuIcon"
+                    app:postProcessor="cropped"
+                    app:remoteSrc="@{viewModel.iconSrc}" />
+
+                <TextView
+                    style="@style/LeftMenuTitile"
+                    android:text="@{viewModel.title}" />
+            </FrameLayout>
+
+        </RelativeLayout>
+    </FrameLayout>
+</layout>
+

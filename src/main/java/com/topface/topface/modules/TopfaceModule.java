@@ -12,10 +12,13 @@ import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
+import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.promo.dialogs.PromoKey71Dialog;
 import com.topface.topface.promo.dialogs.PromoKey81Dialog;
 import com.topface.topface.state.CacheDataInterface;
 import com.topface.topface.state.CountersDataProvider;
+import com.topface.topface.state.DrawerLayoutState;
+import com.topface.topface.state.LifeCycleState;
 import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.state.PopupHive;
 import com.topface.topface.state.TopfaceAppState;
@@ -23,41 +26,49 @@ import com.topface.topface.ui.AddToLeaderActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.dialogs.CitySearchPopup;
+import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.external_libs.modules.ExternalLibsInjectModule;
-import com.topface.topface.ui.dialogs.CitySearchPopup;
-import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.feed.AdmirationFragment;
+import com.topface.topface.ui.fragments.feed.BookmarksFragment;
+import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.FansFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
+import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
+import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
+import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
 import com.topface.topface.ui.fragments.profile.ProfileFormFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
+import com.topface.topface.ui.views.DrawerLayoutManager;
+import com.topface.topface.utils.ActivityLifeCycleReporter;
 import com.topface.topface.utils.AddPhotoHelper;
-import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.FragmentLifeCycleReporter;
+import com.topface.topface.utils.LifeCycleReporter;
+import com.topface.topface.utils.NavigationManager;
 import com.topface.topface.utils.RunningStateManager;
 import com.topface.topface.utils.actionbar.OverflowMenu;
-import com.topface.topface.utils.ads.AdToAppController;
-import com.topface.topface.utils.ads.AdToAppHelper;
-import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.geo.GeoLocationManager;
 import com.topface.topface.utils.social.AuthorizationManager;
+import com.topface.topface.utils.social.OkAuthorizer;
+import com.topface.topface.utils.social.OkUserData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.topface.topface.utils.social.OkAuthorizer;
-import com.topface.topface.utils.social.OkUserData;
 
 import javax.inject.Singleton;
 
@@ -103,7 +114,19 @@ import dagger.Provides;
                 Profile.class,
                 Options.class,
                 User.class,
-                OptionsAndProfileProvider.class
+                OptionsAndProfileProvider.class,
+                MenuFragment.class,
+                NavigationManager.class,
+                FragmentLifeCycleReporter.class,
+                ActivityLifeCycleReporter.class,
+                LifeCycleReporter.class,
+                RunningStateManager.class,
+                DrawerLayoutManager.class,
+                DialogsFragment.class,
+                BookmarksFragment.class,
+                MutualFragment.class,
+                VisitorsFragment.class,
+                FansFragment.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
@@ -135,8 +158,7 @@ public class TopfaceModule {
                     AppConfig config = App.getAppConfig();
                     config.setAdjustAttributeData((AdjustAttributeData) data);
                     config.saveConfig();
-                }
-                else if (data.getClass() == Options.class) {
+                } else if (data.getClass() == Options.class) {
                     CacheProfile.setOptions(JsonUtils.optionsToJson((Options) data));
                 } else if (data.getClass() == Profile.class) {
                     Profile profile = (Profile) data;
@@ -218,5 +240,23 @@ public class TopfaceModule {
     @Provides
     RunningStateManager providesRunningStateManager() {
         return new RunningStateManager();
+    }
+
+    @Provides
+    @Singleton
+    NavigationState providesNavigationState() {
+        return new NavigationState();
+    }
+
+    @Provides
+    @Singleton
+    LifeCycleState providesLifeCycleState() {
+        return new LifeCycleState();
+    }
+
+    @Provides
+    @Singleton
+    DrawerLayoutState providesDrawerLayoutState() {
+        return new DrawerLayoutState();
     }
 }

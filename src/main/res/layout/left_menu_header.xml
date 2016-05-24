@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.viewModels.LeftMenuHeaderViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/left_menu_header_height"
+        android:onClick="@{viewModel.onClick}">
+
+        <com.topface.topface.ui.views.ImageViewRemote
+            style="@style/LeftMenuHeaderBackground"
+            app:blurRadius="10"
+            app:preProcessor="blur"
+            app:remoteSrc="@{viewModel.background}" />
+
+        <LinearLayout style="@style/LeftMenuHeader">
+
+            <com.topface.topface.ui.views.ImageViewRemote
+                android:layout_width="@dimen/left_menu_avatar_width"
+                android:layout_height="@dimen/left_menu_avatar_height"
+                app:preProcessor="inscribedAvatar"
+                app:setPhoto="@{viewModel.photo}" />
+
+            <TextView
+                style="@style/LeftMenuUserName"
+                android:text="@{viewModel.userName}" />
+
+            <TextView
+                style="@style/LeftMenuUserCity"
+                android:text="@{viewModel.userCity}" />
+        </LinearLayout>
+    </FrameLayout>
+</layout>
+
