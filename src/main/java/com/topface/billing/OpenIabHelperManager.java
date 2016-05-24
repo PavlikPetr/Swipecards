@@ -235,17 +235,13 @@ public class OpenIabHelperManager implements IabHelper.OnIabSetupFinishedListene
         }
 
         if (mHelper == null) {
-            init(context);
+            init(context.getApplicationContext());
         }
     }
 
     public void removeOpenIabEventListener(IOpenIabEventListener receiver) {
         if (mInventoryReceivers.contains(receiver)) {
             mInventoryReceivers.remove(receiver);
-        }
-        // free helper, when nobody need it
-        if (mInventoryReceivers.isEmpty()) {
-            freeHelper();
         }
     }
 
