@@ -273,7 +273,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 new DatingLockPopup.DatingLockPopupRedirectListener() {
                     @Override
                     public void onRedirect() {
-                        showFragment(new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS));
+                        showFragment(new LeftMenuSettingsData(FragmentIdData.TABBED_LIKES));
                     }
                 }, this));
         startActions.add(new InvitePopupAction(this, PopupHive.AC_PRIORITY_HIGH));
@@ -283,7 +283,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                     @Override
                     public void onRedirect() {
                         showFragment(new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS));
-                        mDrawerLayoutState.onClose();
                     }
                 }),
                 promoPopupManager.createPromoPopupStartAction(PopupHive.AC_PRIORITY_NORMAL)
