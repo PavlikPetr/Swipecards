@@ -144,6 +144,7 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
     @Override
     public void onResume() {
         super.onResume();
+        fillGiftsStrip();
         UserProfileFragment fragment = getUserProfileFragment();
         if (fragment != null) {
             ArrayList<FeedGift> newGifts = fragment.getNewGifts();
