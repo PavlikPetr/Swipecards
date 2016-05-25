@@ -21,6 +21,11 @@
             app:preProcessor="blur"
             app:remoteSrc="@{viewModel.background}" />
 
+        <ImageView
+            style="@style/LeftMenuHeaderBackground"
+            android:layout_marginTop="86dp"
+            android:background="@drawable/gradient_bg" />
+
         <LinearLayout style="@style/LeftMenuHeader">
 
             <com.topface.topface.ui.views.ImageViewRemote
