@@ -1,11 +1,9 @@
 package com.topface.topface.statistics;
 
-import com.topface.framework.JsonUtils;
 import com.topface.statistics.android.Slices;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
 import com.topface.topface.data.Options;
-import com.topface.topface.utils.CacheProfile;
 
 import java.util.HashMap;
 
@@ -35,11 +33,11 @@ public class TakePhotoStatistics {
     private static Slices getOriginalSlices() {
         Slices slices = new Slices();
         Options options = App.get().getOptions();
-        if(options != null) {
+        if (options != null) {
             HashMap<String, Object> serverSlices = options.statisticsSlices;
             if (serverSlices != null && serverSlices.size() > 0) {
                 for (String key : serverSlices.keySet()) {
-                    slices.put(key, JsonUtils.toJson(serverSlices.get(key)));
+                    slices.put(key, String.valueOf(serverSlices.get(key)));
                 }
             }
         }
