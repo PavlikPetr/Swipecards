@@ -34,7 +34,6 @@ import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.social.AppSocialAppsIds;
-import com.topface.topface.modules.TopfaceModule;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
@@ -150,7 +149,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     }
 
     private void initObjectGraphForInjections() {
-        mGraph = ObjectGraph.create(new TopfaceModule());
+        mGraph = ObjectGraph.create(getDaggerModules());
         mGraph.injectStatics();
         mGraph.inject(this);
     }
@@ -238,7 +237,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                             App.getConfig().getUserConfig().setUserAvatarAvailable(false);
                             App.getConfig().getUserConfig().saveConfig();
                         }
-                        if(!InstanceIDListenerService.isListenerStarted()){
+                        if (!InstanceIDListenerService.isListenerStarted()) {
                             InstanceIDListenerService.getToken(getContext());
                         }
                         CacheProfile.sendUpdateProfileBroadcast();

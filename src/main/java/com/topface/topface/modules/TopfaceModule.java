@@ -85,7 +85,6 @@ import dagger.Provides;
         injects = {
                 PeopleNearbyFragment.class,
                 GeoLocationManager.class,
-                App.class,
                 DatingFragment.class,
                 CountersManager.class,
                 OverflowMenu.class,
