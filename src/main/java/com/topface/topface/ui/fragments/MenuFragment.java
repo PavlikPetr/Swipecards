@@ -171,6 +171,28 @@ public class MenuFragment extends Fragment {
         }
         mCountersData = mCountersData == null ? new CountersData() : mCountersData;
         mBalanceData = mBalanceData == null ? new BalanceData() : mBalanceData;
+        mAdapter = initAdapter();
+        mSubscription.add(mAppState.getObservable(CountersData.class)
+                .map(new Func1<CountersData, CountersData>() {
+                    @Override
+                    public CountersData call(CountersData countersData) {
+                        countersData.setBonus(CacheProfile.needShowBonusCounter ? App.from(getActivity()).getOptions().bonus.counter : 0);
+                        return countersData;
+                    }
+                })
+                .filter(new Func1<CountersData, Boolean>() {
+                    @Override
+                    public Boolean call(CountersData countersData) {
+                        return !mCountersData.equals(countersData);
+                    }
+                })
+                .subscribe(new Action1<CountersData>() {
+                    @Override
+                    public void call(CountersData countersData) {
+                        mCountersData = countersData;
+                        updateCounters();
+                    }
+                }, mSubscriptionOnError));
         mSubscription.add(mAppState
                 .getObservable(BalanceData.class)
                 .filter(new Func1<BalanceData, Boolean>() {
@@ -232,27 +254,6 @@ public class MenuFragment extends Fragment {
     private LeftMenuRecyclerViewAdapter initAdapter() {
         LeftMenuRecyclerViewAdapter adapter = new LeftMenuRecyclerViewAdapter(getLeftMenuItems());
         adapter.setOnItemClickListener(mItemClickListener);
-        mSubscription.add(mAppState.getObservable(CountersData.class)
-                .map(new Func1<CountersData, CountersData>() {
-                    @Override
-                    public CountersData call(CountersData countersData) {
-                        countersData.setBonus(CacheProfile.needShowBonusCounter ? App.from(getActivity()).getOptions().bonus.counter : 0);
-                        return countersData;
-                    }
-                })
-                .filter(new Func1<CountersData, Boolean>() {
-                    @Override
-                    public Boolean call(CountersData countersData) {
-                        return !mCountersData.equals(countersData);
-                    }
-                })
-                .subscribe(new Action1<CountersData>() {
-                    @Override
-                    public void call(CountersData countersData) {
-                        mCountersData = countersData;
-                        updateCounters();
-                    }
-                }, mSubscriptionOnError));
         adapter.setHeader(new FixedViewInfo<>(R.layout.left_menu_header, getHeaderData(App.get().getProfile())));
         return adapter;
     }
@@ -318,6 +319,7 @@ public class MenuFragment extends Fragment {
         }
     }
 
+    @NotNull
     private LeftMenuRecyclerViewAdapter getAdapter() {
         if (mAdapter == null) {
             mAdapter = initAdapter();
