@@ -49,7 +49,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     private final static String VK_FRIENDS_GETTING_EXTRA = "vk_friends_getting_extra";
     private final static String VK_FRIENDS_LIST_SCROLL_POSITION = "vk_friends_list_scroll_position";
     private final static String VK_FRIENDS_AVAILABLE_COUNT = "vk_friends_available_count";
-    private final static String VK_OFFSET_VALUE = "vk_friends_current_count";
+    private final static String VK_OFFSET_VALUE = "vk_offset_value";
     private static final String PAGE_NAME = "vkinvites";
     private static final int VK_ERROR_ACCESS_DENIED = 15;
 
