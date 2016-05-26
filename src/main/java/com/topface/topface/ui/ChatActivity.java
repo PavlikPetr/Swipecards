@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
@@ -49,7 +50,7 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-
+                        Debug.error("Take photo popup actions subscription catch error", throwable);
                     }
                 });
     }
