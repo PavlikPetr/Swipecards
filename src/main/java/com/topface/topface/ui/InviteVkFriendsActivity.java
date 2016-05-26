@@ -49,7 +49,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     private final static String VK_FRIENDS_GETTING_EXTRA = "vk_friends_getting_extra";
     private final static String VK_FRIENDS_LIST_SCROLL_POSITION = "vk_friends_list_scroll_position";
     private final static String VK_FRIENDS_AVAILABLE_COUNT = "vk_friends_available_count";
-    private final static String VK_FRIENDS_CURRENT_COUNT = "vk_friends_current_count";
+    private final static String VK_OFFSET_VALUE = "vk_offset_value";
     private static final String PAGE_NAME = "vkinvites";
     private static final int VK_ERROR_ACCESS_DENIED = 15;
 
@@ -81,9 +81,9 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
             mIsGettingExtraFriends = savedInstanceState.getBoolean(VK_FRIENDS_GETTING_EXTRA);
             position = savedInstanceState.getInt(VK_FRIENDS_LIST_SCROLL_POSITION);
             mAvailableFriendsCount = savedInstanceState.getInt(VK_FRIENDS_AVAILABLE_COUNT);
-            int friendsCount = savedInstanceState.getInt(VK_FRIENDS_CURRENT_COUNT, 0);
-            if (friendsCount != 0) {
-                mAdapter.setFriendsCount(friendsCount);
+            int offsetValue = savedInstanceState.getInt(VK_OFFSET_VALUE, 0);
+            if (offsetValue != 0) {
+                mAdapter.setOffsetValue(offsetValue);
             }
 
         } else {
@@ -130,7 +130,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
 
     private void loadNewPackData() {
         showProgress(true);
-        mFriendsRequest = getVkFriendsRequest(mAdapter.getFriendsCount());
+        mFriendsRequest = getVkFriendsRequest(mAdapter.getOffsetValue());
         mFriendsRequest.executeWithListener(mFriendsListener);
     }
 
@@ -186,7 +186,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         outState.putBoolean(VK_FRIENDS_GETTING_EXTRA, mIsGettingExtraFriends);
         outState.putInt(VK_FRIENDS_LIST_SCROLL_POSITION, mListView != null ? mListView.getScrollY() : 0);
         outState.putInt(VK_FRIENDS_AVAILABLE_COUNT, mAvailableFriendsCount);
-        outState.putInt(VK_FRIENDS_CURRENT_COUNT, mAdapter != null ? mAdapter.getFriendsCount() : 0);
+        outState.putInt(VK_OFFSET_VALUE, mAdapter != null ? mAdapter.getOffsetValue() : 0);
     }
 
     @Override
@@ -202,7 +202,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         friendsRequest.attempts = MAX_RE_REQUEST_COUNT;
         friendsRequest.addExtraParameters(VKParameters.from(VKApiConst.FIELDS, "photo_200", VKApiConst.COUNT, 30, VKApiConst.EXTENDED, 1));
         if (offset > 0) {
-            friendsRequest.addExtraParameter(VKApiConst.OFFSET, mAdapter.getCount());
+            friendsRequest.addExtraParameter(VKApiConst.OFFSET, offset);
         }
         return friendsRequest;
     }
@@ -254,7 +254,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         List<VKApiUser> mFriendsList;
         private InViteClickListener mInViteClickListener;
         private ConcurrentHashMap<Integer, Boolean> mButtonsStateList = new ConcurrentHashMap<>();
-        private int mCurrentFriendsCount;
+        private int mOffset;
 
         VKFriendsAdapter(List<VKApiUser> friends) {
             this(friends, null);
@@ -262,7 +262,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
 
         VKFriendsAdapter(List<VKApiUser> friends, ConcurrentHashMap<Integer, Boolean> buttonsStateList) {
             mFriendsList = friends != null ? friends : new ArrayList<VKApiUser>();
-            mCurrentFriendsCount = mFriendsList.size();
+            setOffsetValue(mFriendsList.size());
             if (buttonsStateList != null) {
                 mButtonsStateList = buttonsStateList;
             } else {
@@ -302,7 +302,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
 
         public void addFriends(List<VKApiUser> friends) {
             mFriendsList.addAll(friends);
-            mCurrentFriendsCount += friends.size();
+            setOffsetValue(getOffsetValue() + friends.size());
             fillButtonsState();
         }
 
@@ -339,19 +339,18 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
             return convertView;
         }
 
-        public int getFriendsCount() {
-            return mCurrentFriendsCount;
+        public int getOffsetValue() {
+            return mOffset;
         }
 
-        public void setFriendsCount(int count) {
-            mCurrentFriendsCount = count;
+        public void setOffsetValue(int count) {
+            mOffset = count;
         }
 
         public void removeUserById(int id) {
             for (int i = 0; i < mFriendsList.size(); i++) {
                 if (mFriendsList.get(i).getId() == id) {
                     mFriendsList.remove(i);
-                    --mCurrentFriendsCount;
                     break;
                 }
             }
