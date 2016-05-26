@@ -1,20 +1,73 @@
 package com.topface.topface.ui;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.experiments.FeedScreensIntent;
+import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.fragments.ChatFragment;
+
+import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
+import rx.functions.Func1;
 
 public class ChatActivity extends CheckAuthActivity<ChatFragment> {
 
     public static final int REQUEST_CHAT = 3;
     public static final String LAST_MESSAGE = "com.topface.topface.ui.ChatActivity_last_message";
     public static final String LAST_MESSAGE_USER_ID = "com.topface.topface.ui.ChatActivity_last_message_user_id";
+
+    @Inject
+    TopfaceAppState mAppState;
+    private Subscription mTakePhotoSubscription;
+
+    @Override
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        App.get().inject(this);
+        mTakePhotoSubscription = mAppState.getObservable(TakePhotoPopup.TakePhotoActionHolder.class)
+                .filter(new Func1<TakePhotoPopup.TakePhotoActionHolder, Boolean>() {
+                    @Override
+                    public Boolean call(TakePhotoPopup.TakePhotoActionHolder takePhotoActionHolder) {
+                        return takePhotoActionHolder != null && takePhotoActionHolder.getAction() == TakePhotoPopup.ACTION_CANCEL;
+                    }
+                })
+                .subscribe(new Action1<TakePhotoPopup.TakePhotoActionHolder>() {
+                    @Override
+                    public void call(TakePhotoPopup.TakePhotoActionHolder takePhotoActionHolder) {
+                        finishWithResult(Activity.RESULT_CANCELED);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Debug.error("Take photo popup actions subscription catch error", throwable);
+                    }
+                });
+    }
+
+    private void finishWithResult(int resultCode) {
+        setResult(resultCode);
+        finish();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mTakePhotoSubscription != null && !mTakePhotoSubscription.isUnsubscribed()) {
+            mTakePhotoSubscription.unsubscribe();
+        }
+    }
 
     @Override
     protected void onNewIntent(Intent intent) {

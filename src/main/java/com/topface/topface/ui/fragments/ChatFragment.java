@@ -924,6 +924,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         }
     }
 
+    private void finish() {
+        getActivity().setResult(Activity.RESULT_CANCELED);
+        getActivity().finish();
+    }
+
     @SuppressWarnings("ConstantConditions")
     @Override
     public void onResume() {
@@ -933,8 +938,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         //показать клавиатуру, если она была показаны до этого(перешли в другой фрагмент, и вернулись обратно)
         showKeyboard();
         if (mUserId == 0) {
-            getActivity().setResult(Activity.RESULT_CANCELED);
-            getActivity().finish();
+            finish();
         }
 
         // Если адаптер пустой или пользователя нет, грузим с сервера
@@ -986,8 +990,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 update(false, ChatUpdateType.INITIAL);
                 break;
             default:
-                if (mAddPhotoHelper != null) {
-                    mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+                if (resultCode == Activity.RESULT_CANCELED) {
+                    finish();
+                } else {
+                    if (mAddPhotoHelper != null) {
+                        mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+                    }
                 }
                 break;
         }
@@ -1247,7 +1255,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mAddPhotoHelper.setOnResultHandler(mHandler);
             }
             if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null) {
-                TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_CHAT_OPEN).show(getChildFragmentManager(), TakePhotoPopup.TAG);
+                TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_CHAT_OPEN).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.TAG);
             }
         }
     }

@@ -23,6 +23,7 @@ import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.state.PopupHive;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.AddToLeaderActivity;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.PurchasesActivity;
@@ -128,7 +129,8 @@ import dagger.Provides;
                 MutualFragment.class,
                 VisitorsFragment.class,
                 FansFragment.class,
-                AuthFragment.class
+                AuthFragment.class,
+                ChatActivity.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
