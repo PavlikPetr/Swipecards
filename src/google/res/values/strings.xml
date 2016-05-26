@@ -188,8 +188,7 @@
     <string name="dating_header_guys">Guys from %1$d to %2$d</string>
     <string name="dating_skip_button">Next</string>
     <string name="message_too_long">The message you entered is too long. The number of symbols
-        can\'t exceed %d.
-    </string>
+        can\'t exceed %d.</string>
     <string name="chat_gift_in">You have received a gift.</string>
     <string name="chat_gift_out">Gift has been sent.</string>
     <string name="chat_like_in">Someone likes you!</string>
@@ -220,7 +219,7 @@
     </plurals>
     <plurals name="buying_admiration_you_need_coins">
         <item quantity="other">To send an adoration, get %d more coins</item>
-        <item quantity="one">To send an adreoration, get %d more coin</item>
+        <item quantity="one">To send an adoration, get %d more coin</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
         <item quantity="other">To be able to see who likes you, get %d more coins</item>

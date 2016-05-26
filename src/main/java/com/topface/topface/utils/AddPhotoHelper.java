@@ -336,7 +336,7 @@ public class AddPhotoHelper {
         }
 
         if (!isPhotoCorrectSize(uri)) {
-            Utils.showToastNotification(String.format(mContext.getString(R.string.incorrect_photo_size),
+            Utils.showToastNotification(String.format(mContext.getString(R.string.incorrect_photo_size_show_restrictions),
                     minPhotoSize.width,
                     minPhotoSize.height), Toast.LENGTH_SHORT);
             return;
