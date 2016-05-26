@@ -41,7 +41,6 @@ import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
@@ -59,6 +58,11 @@ import javax.inject.Inject;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
+
+import static com.topface.topface.ui.dialogs.TakePhotoPopup.ACTION_CAMERA_CHOSEN;
+import static com.topface.topface.ui.dialogs.TakePhotoPopup.ACTION_CANCEL;
+import static com.topface.topface.ui.dialogs.TakePhotoPopup.ACTION_GALLERY_CHOSEN;
+import static com.topface.topface.ui.dialogs.TakePhotoPopup.ACTION_UNDEFINED;
 
 /**
  * Хелпер для загрузки фотографий в любой активити
@@ -125,7 +129,7 @@ public class AddPhotoHelper {
                 .filter(new Func1<TakePhotoPopup.TakePhotoActionHolder, Boolean>() {
                     @Override
                     public Boolean call(TakePhotoPopup.TakePhotoActionHolder holder) {
-                        return holder.getAction() != null && holder.getPlc() != null;
+                        return holder.getAction() != ACTION_UNDEFINED && holder.getPlc() != null;
                     }
                 })
                 .subscribe(new Action1<TakePhotoPopup.TakePhotoActionHolder>() {
@@ -146,7 +150,7 @@ public class AddPhotoHelper {
                                 case ACTION_CANCEL:
                                     TakePhotoStatistics.sendCancelAction(holder.getPlc());
                             }
-                            mState.setData(new TakePhotoPopup.TakePhotoActionHolder(null, null));
+                            mState.setData(new TakePhotoPopup.TakePhotoActionHolder(null));
                         }
                     }
                 });
@@ -467,7 +471,7 @@ public class AddPhotoHelper {
                 Utils.showToastNotification(mContext.getString(R.string.incorrect_photo_format), Toast.LENGTH_LONG);
                 break;
             case ErrorCodes.INCORRECT_PHOTO_SIZES:
-                Utils.showToastNotification(String.format(mContext.getString(R.string.incorrect_photo_size),
+                Utils.showToastNotification(String.format(mContext.getString(R.string.incorrect_photo_size_show_restrictions),
                         minPhotoSize.width,
                         minPhotoSize.height), Toast.LENGTH_SHORT);
                 break;
