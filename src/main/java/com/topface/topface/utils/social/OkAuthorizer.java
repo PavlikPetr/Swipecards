@@ -43,7 +43,7 @@ public class OkAuthorizer extends Authorizer {
 
     public Odnoklassniki getOkAuthObj(AppSocialAppsIds ids) {
         if (!Odnoklassniki.hasInstance()) {
-            Odnoklassniki.createInstance(App.getContext(), ids.okId, ids.getOkPublicKey());
+            return Odnoklassniki.createInstance(App.getContext(), ids.okId, ids.getOkPublicKey());
         }
         return Odnoklassniki.getInstance();
     }

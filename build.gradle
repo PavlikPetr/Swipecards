@@ -109,6 +109,7 @@ android {
             buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.OK";
             buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                     "com.topface.billing.MarketApiType.OK";
+            manifestPlaceholders = [ applicationClass:"com.topface.topface.ui.OkApplication" ]
         }
         ifree {
             applicationId "com.topface.topface.ifree"
@@ -156,6 +157,7 @@ android {
         buildConfigField "String", "GIT_HEAD_SHA", "null";
         buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                 "com.topface.billing.MarketApiType.GOOGLE_PLAY";
+        manifestPlaceholders = [ applicationClass:"com.topface.topface.App" ]
 
         multiDexEnabled true
     }

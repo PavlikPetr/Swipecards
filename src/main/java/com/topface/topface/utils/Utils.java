@@ -74,6 +74,7 @@ public class Utils {
     public static final String AMPERSAND = "&";
     public static final String SEMICOLON = ":";
     public static final String LOCAL_RES = "drawable://%d";
+    public static final String PLATFORM = "Android";
     private static final String DASH_SYMBOL = "-";
     private static final String HYPHEN_SYMBOL = "&#8209;";
     private static final String EMPTY_JSON = "{}";

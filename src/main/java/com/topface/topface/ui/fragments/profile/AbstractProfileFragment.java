@@ -121,7 +121,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
                         public void onSubscribeClick() {
                             Fragment f = popup.getActivity().getSupportFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
                             final Fragment fragment = f == null ?
-                                    TransparentMarketFragment.newInstance(App.get().getOptions().trialVipExperiment.subscriptionSku, true) : f;
+                                    TransparentMarketFragment.newInstance(App.get().getOptions().trialVipExperiment.subscriptionSku, true, TrialVipPopup.TAG) : f;
                             fragment.setRetainInstance(true);
                             if (fragment instanceof ITransparentMarketFragmentRunner) {
                                 ((ITransparentMarketFragmentRunner) fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {

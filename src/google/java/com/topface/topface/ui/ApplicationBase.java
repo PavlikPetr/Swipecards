@@ -8,6 +8,7 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GooglePlayProductsRequest;
+import com.topface.topface.modules.TopfaceModule;
 import com.topface.topface.requests.IApiResponse;
 
 /**
@@ -35,5 +36,9 @@ public class ApplicationBase extends Application {
             }
         });
         return request;
+    }
+
+    public Object[] getDaggerModules() {
+        return new Object[]{new TopfaceModule()};
     }
 }
