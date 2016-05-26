@@ -907,4 +907,6 @@
     <string name="city_selector_set_your_city">Indica tu ciudad</string>
     <string name="city_selector_detect_automatically">Determinar de forma automática</string>
     <string name="city_selector_your_city">Tu ciudad</string>
+    <string name="photo_gallery_photo_deleted">La fotografía ha sido eliminada</string>
+    <string name="photofeed_add_photo_to_feed_title">¡Subir al primer puesto!</string>
 </resources>

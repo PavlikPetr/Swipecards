@@ -909,4 +909,6 @@
     <string name="city_selector_set_your_city">Choisissez votre ville</string>
     <string name="city_selector_detect_automatically">Réglage automatique</string>
     <string name="city_selector_your_city">Votre ville</string>
+    <string name="photo_gallery_photo_deleted">La photo a été supprimée</string>
+    <string name="photofeed_add_photo_to_feed_title">Placez-vous en première position !</string>
 </resources>

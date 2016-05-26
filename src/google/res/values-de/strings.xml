@@ -838,5 +838,12 @@
     <string name="like_liberty_title">Likes</string>
     <string name="like_liberty_description">Erfahre, wer dich mag</string>
     <string name="refill_balance_view_title">Auf Ihrem Konto</string>
+    <string name="access_to_location_popup_title">Geographische Positionierung ist nicht verfügbar</string>
+    <string name="access_to_location_popup_description">Leider ist für deinen Standort keine geographische Positionierung möglich. Um fortzufahren, musst du den Zugang genehmigen.</string>
     <string name="access_to_location_popup_access_button">Zulassen</string>
+    <string name="city_selector_set_your_city">Wähle deine Stadt</string>
+    <string name="city_selector_detect_automatically">Automatisch angeben</string>
+    <string name="city_selector_your_city">Deine Stadt</string>
+    <string name="photo_gallery_photo_deleted">Das Foto wurde gelöscht</string>
+    <string name="photofeed_add_photo_to_feed_title">Erreiche den ersten Platz!</string>
 </resources>

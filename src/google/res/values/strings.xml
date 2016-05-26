@@ -220,7 +220,7 @@
     </plurals>
     <plurals name="buying_admiration_you_need_coins">
         <item quantity="other">To send an adoration, get %d more coins</item>
-        <item quantity="one">To send an adreoration, get %d more coin</item>
+        <item quantity="one">To send an adoration, get %d more coin</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
         <item quantity="other">To be able to see who likes you, get %d more coins</item>
@@ -879,4 +879,6 @@
     <string name="city_selector_set_your_city">Select your city</string>
     <string name="city_selector_detect_automatically">Set automatically</string>
     <string name="city_selector_your_city">Your city</string>
+    <string name="photo_gallery_photo_deleted">Photo has been deleted</string>
+    <string name="photofeed_add_photo_to_feed_title">Get to 1st place!</string>
 </resources>

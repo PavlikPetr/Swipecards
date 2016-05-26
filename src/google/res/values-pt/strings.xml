@@ -895,4 +895,12 @@
     <string name="like_liberty_title">Gostos</string>
     <string name="like_liberty_description">Vê quem gosta de ti</string>
     <string name="refill_balance_view_title">A tua conta</string>
+    <string name="access_to_location_popup_title">O geoposicionamento está indisponível</string>
+    <string name="access_to_location_popup_description">Infelizmente, o geoposicionamento para a tua localização não está disponível. Para continuar, tens de dar permissão.</string>
+    <string name="access_to_location_popup_access_button">Permitir acesso</string>
+    <string name="city_selector_set_your_city">Seleciona a tua cidade</string>
+    <string name="city_selector_detect_automatically">Configurar automaticamente</string>
+    <string name="city_selector_your_city">A tua cidade</string>
+    <string name="photo_gallery_photo_deleted">A foto foi apagada</string>
+    <string name="photofeed_add_photo_to_feed_title">Chega até ao 1º Lugar!</string>
 </resources>

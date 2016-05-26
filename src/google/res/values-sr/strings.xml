@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_locale">sr_RS</string>
-    <string name="photofeed_title">Стави у фид</string>
+    <string name="photofeed_title">Стави у листу новости</string>
     <string name="general_warning">УПОЗОРЕЊЕ</string>
     <string name="general_ok">ОК</string>
     <string name="general_any">Било који/која</string>
@@ -907,4 +907,12 @@
     <string name="like_liberty_title">Свиђања</string>
     <string name="like_liberty_description">Погледајте коме се свиђате</string>
     <string name="refill_balance_view_title">Ваш налог</string>
+    <string name="access_to_location_popup_title">Геолокација је недоступна</string>
+    <string name="access_to_location_popup_description">На жалост, Ваша геолокација је недоступна. Да бисте наставили, морате дозволити приступ.</string>
+    <string name="access_to_location_popup_access_button">Дозволити приступ</string>
+    <string name="city_selector_set_your_city">Изаберите свој град</string>
+    <string name="city_selector_detect_automatically">Подесити аутоматски</string>
+    <string name="city_selector_your_city">Ваш град</string>
+    <string name="photo_gallery_photo_deleted">Фотографија је избрисана</string>
+    <string name="photofeed_add_photo_to_feed_title">Доспејте на прво место!</string>
 </resources>
