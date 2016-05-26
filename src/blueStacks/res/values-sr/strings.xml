@@ -1,6 +1,6 @@
 <resources>
   <string name="app_locale">sr_RS</string>
-  <string name="photofeed_title">Стави у фид</string>
+  <string name="photofeed_title">Стави у листу новости</string>
   <string name="general_warning">УПОЗОРЕЊЕ</string>
   <string name="general_ok">ОК</string>
   <string name="general_any">Било који/која</string>
