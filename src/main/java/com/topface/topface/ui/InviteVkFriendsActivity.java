@@ -153,7 +153,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
                 mAdapter.setButtonState(userId, true);
             }
             if (error != null && error.errorCode == VKError.VK_API_ERROR && error.apiError.errorCode == VK_ERROR_ACCESS_DENIED && mAdapter != null && userId != 0) {
-                mAdapter.removeUserById(userId);
+                mAvailableFriendsCount = mAvailableFriendsCount - (mAdapter.removeUserById(userId) ? 1 : 0);
             }
             if (error != null && error.errorCode != VKError.VK_CANCELED) {
                 Toast.makeText(App.getContext(), error.apiError.errorCode != VK_ERROR_ACCESS_DENIED ? R.string.general_data_error : R.string.vk_profile_invite_friends_error, Toast.LENGTH_SHORT).show();
@@ -255,6 +255,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         private InViteClickListener mInViteClickListener;
         private ConcurrentHashMap<Integer, Boolean> mButtonsStateList = new ConcurrentHashMap<>();
         private int mOffset;
+        private int mDeletedCount;
 
         VKFriendsAdapter(List<VKApiUser> friends) {
             this(friends, null);
@@ -347,13 +348,15 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
             mOffset = count;
         }
 
-        public void removeUserById(int id) {
+        public boolean removeUserById(int id) {
             for (int i = 0; i < mFriendsList.size(); i++) {
                 if (mFriendsList.get(i).getId() == id) {
                     mFriendsList.remove(i);
-                    break;
+                    mDeletedCount++;
+                    return true;
                 }
             }
+            return false;
         }
 
         private void initHolder(ViewHolder holder, final VKApiUser friend) {

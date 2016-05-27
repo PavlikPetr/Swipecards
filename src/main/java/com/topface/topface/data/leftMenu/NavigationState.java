@@ -1,14 +1,8 @@
 package com.topface.topface.data.leftMenu;
 
-import com.topface.framework.utils.Debug;
-
 import rx.Observable;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 import rx.subjects.PublishSubject;
 
 /**
