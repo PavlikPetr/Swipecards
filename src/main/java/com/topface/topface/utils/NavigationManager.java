@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Ssid;
 import com.topface.topface.data.FragmentLifreCycleData;
 import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
 import com.topface.topface.data.leftMenu.FragmentIdData;
@@ -30,6 +31,7 @@ import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
+import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -50,6 +52,8 @@ public class NavigationManager {
 
     private static final String FRAGMENT_SETTINGS = "fragment_settings";
     private static final int CLOSE_LEFT_MENU_TIMEOUT = 250;
+    private static final String USER_ID = "{userId}";
+    private static final String SECRET_KEY = "{secretKey}";
 
     @Inject
     NavigationState mNavigationState;
@@ -199,7 +203,8 @@ public class NavigationManager {
                 break;
             case FragmentIdData.INTEGRATION_PAGE:
                 IntegrationSettingsData fragmentSettings = (IntegrationSettingsData) id;
-                fragment = IntegrationWebViewFragment.newInstance(fragmentSettings.getPageName(), fragmentSettings.getUrl());
+                fragment = IntegrationWebViewFragment.newInstance(fragmentSettings.getPageName(),
+                        fragmentSettings.getUrl().replace(USER_ID, AuthToken.getInstance().getUserSocialId()).replace(SECRET_KEY, Ssid.get()));
                 break;
             case FragmentIdData.TABBED_VISITORS:
                 fragment = new TabbedVisitorsFragment();
