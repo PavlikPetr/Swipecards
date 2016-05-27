@@ -14,6 +14,7 @@ import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteAdmirationsRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.Utils;
@@ -23,16 +24,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+@FlurryOpenEvent(name = AdmirationFragment.SCREEN_TYPE)
 public class AdmirationFragment extends LikesFragment {
 
     public static final String UNLOCK_FUCTIONALITY_TYPE = "admirations";
     public static final String SCREEN_TYPE = "Admirations";
     private ViewFlipper mStubFlipper;
-
-    @Override
-    protected String getScreenName() {
-        return SCREEN_TYPE;
-    }
 
     @Override
     protected String getTitle() {

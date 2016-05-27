@@ -34,6 +34,7 @@ import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.LikesListAdapter;
@@ -63,6 +64,7 @@ import rx.functions.Action1;
 
 import static com.topface.topface.utils.FlurryManager.LIKES_UNLOCK;
 
+@FlurryOpenEvent(name = LikesFragment.PAGE_NAME)
 public class LikesFragment extends FeedFragment<FeedLike> {
 
     public static final String PREFERENCES_PAID_LIKES_COUNT = "paid_likes_count";
@@ -78,7 +80,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     public static final int SECOND_CHILD = 1;
     public static final int THIRD_CHILD = 2;
 
-    private static final String PAGE_NAME = "Likes";
+    public static final String PAGE_NAME = "Likes";
 
     @Inject
     TopfaceAppState mAppState;
@@ -97,11 +99,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected boolean isReadFeedItems() {
         return true;
-    }
-
-    @Override
-    protected String getScreenName() {
-        return PAGE_NAME;
     }
 
     @Override

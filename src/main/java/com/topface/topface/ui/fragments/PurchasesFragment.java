@@ -27,8 +27,8 @@ import com.topface.topface.data.Products;
 import com.topface.topface.data.PurchasesTabData;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.statistics.FlurryUtils;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
-import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.utils.CacheProfile;
@@ -105,7 +105,7 @@ public class PurchasesFragment extends BaseFragment {
                 mTabLayoutCreator.setTabTitle(position);
             }
             if (mPagerAdapter != null) {
-                ((TrackedFragment) mPagerAdapter.getItem(position)).onResumeFragment();
+                FlurryUtils.sendOpenEvent(mPagerAdapter.getClassNameByPos(position));
             }
             setResourceInfoText();
             if (position == mPagerAdapter.getTabIndex(PurchasesTabData.BONUS)) {

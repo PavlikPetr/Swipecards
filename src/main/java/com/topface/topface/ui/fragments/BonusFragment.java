@@ -17,16 +17,18 @@ import com.topface.offerwall.common.TFCredentials;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
+@FlurryOpenEvent(name = BonusFragment.PAGE_NAME)
 public class BonusFragment extends WebViewFragment {
 
     public static final String NEED_SHOW_TITLE = "need_show_title";
     public static final String OFFERWALL_OPENED = "com.topface.topface.offerwall.opened";
     public static final String OFFERWALL_NAME = "offerwall_name";
 
-    private static final String PAGE_NAME = "bonus";
+    public static final String PAGE_NAME = "bonus";
 
     private Button tfOfferwallButton;
 

@@ -18,6 +18,7 @@ import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteVisitorsRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
@@ -33,7 +34,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-
+@FlurryOpenEvent(name = VisitorsFragment.SCREEN_TYPE)
 public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
 
     public static final String UNLOCK_FUCTIONALITY_TYPE = "visitors";
@@ -57,11 +58,6 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     protected Type getFeedListDataType() {
         return new TypeToken<FeedList<Visitor>>() {
         }.getType();
-    }
-
-    @Override
-    protected String getScreenName() {
-        return SCREEN_TYPE;
     }
 
     @Override

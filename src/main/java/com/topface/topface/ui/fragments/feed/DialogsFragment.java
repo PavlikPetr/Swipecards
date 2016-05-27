@@ -21,6 +21,7 @@ import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteDialogsRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.state.DrawerLayoutState;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
@@ -41,9 +42,10 @@ import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
+@FlurryOpenEvent(name = DialogsFragment.PAGE_NAME)
 public class DialogsFragment extends FeedFragment<FeedDialog> {
 
-    private static final String PAGE_NAME = "Dialogs";
+    public static final String PAGE_NAME = "Dialogs";
 
     @Inject
     DrawerLayoutState mDrawerLayoutState;
@@ -54,11 +56,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     public DialogsFragment() {
         super();
-    }
-
-    @Override
-    protected String getScreenName() {
-        return PAGE_NAME;
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.utils.config.FeedsCache;
 
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-
+@FlurryOpenEvent(name = FansFragment.SCREEN_TYPE)
 public class FansFragment extends BookmarksFragment {
 
     public static final String SCREEN_TYPE = "Fans";
@@ -31,11 +32,6 @@ public class FansFragment extends BookmarksFragment {
     @Override
     protected FeedRequest.FeedService getFeedService() {
         return FeedRequest.FeedService.FANS;
-    }
-
-    @Override
-    protected String getScreenName() {
-        return SCREEN_TYPE;
     }
 
     @Override

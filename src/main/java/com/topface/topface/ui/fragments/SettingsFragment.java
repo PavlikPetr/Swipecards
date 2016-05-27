@@ -22,6 +22,7 @@ import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.dialogs.AboutAppDialog;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorDialog;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
@@ -36,9 +37,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+@FlurryOpenEvent(name = SettingsFragment.PAGE_NAME)
 public class SettingsFragment extends ProfileInnerFragment {
 
-    private static final String PAGE_NAME = "profile.settings";
+    public static final String PAGE_NAME = "profile.settings";
 
     private TextView mSocialNameText;
     private MarketApiManager mMarketApiManager;

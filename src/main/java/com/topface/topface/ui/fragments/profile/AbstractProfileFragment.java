@@ -15,8 +15,8 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
+import com.topface.topface.statistics.FlurryUtils;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
-import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.fragments.AnimatedFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
@@ -92,8 +92,9 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
             if (mTabLayoutCreator != null) {
                 mTabLayoutCreator.setTabTitle(position);
             }
+            String className = mBodyPagerAdapter.getClassNameByPos(position);
             if (mBodyPagerAdapter != null) {
-                ((TrackedFragment) mBodyPagerAdapter.getItem(position)).onResumeFragment();
+                FlurryUtils.sendOpenEvent(className);
             }
             List<Fragment> fragments = getChildFragmentManager().getFragments();
             if (fragments != null) {
@@ -104,7 +105,6 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
                     }
                 }
             }
-            String className = mBodyPagerAdapter.getClassNameByPos(position);
             if (className.equals(VipBuyFragment.class.getName())) {
                 fromVip = true;
                 return;
@@ -180,17 +180,14 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (savedInstanceState != null) {
-            int pos = savedInstanceState.getInt(CURRENT_BODY_PAGE, 0);
-            mBodyPager.setCurrentItem(pos);
-            mPageChangeListener.onPageSelected(pos);
+            mBodyPager.setCurrentItem(savedInstanceState.getInt(CURRENT_BODY_PAGE, 0));
+            return;
         }
         Bundle arg = getArguments();
         if (arg != null) {
-            String sLastPage = arg.getString(TabbedFeedFragment.EXTRA_OPEN_PAGE);
-            if (!TextUtils.isEmpty(sLastPage)) {
-                int lastPage = BODY_PAGES_CLASS_NAMES.indexOf(sLastPage);
-                mBodyPager.setCurrentItem(lastPage);
-                mPageChangeListener.onPageSelected(lastPage);
+            String lastPage = arg.getString(TabbedFeedFragment.EXTRA_OPEN_PAGE);
+            if (!TextUtils.isEmpty(lastPage)) {
+                mBodyPager.setCurrentItem(BODY_PAGES_CLASS_NAMES.indexOf(lastPage));
             } else {
                 mPageChangeListener.onPageSelected(0);
             }

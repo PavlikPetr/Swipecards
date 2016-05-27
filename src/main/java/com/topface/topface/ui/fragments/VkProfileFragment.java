@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.InviteVkFriendsActivity;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -33,6 +34,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+@FlurryOpenEvent(name = VkProfileFragment.PAGE_NAME)
 public class VkProfileFragment extends ProfileInnerFragment {
     private final static String IS_MEMER_OF_TOPFACE_TEAM = "is_memer_of_topface_team";
     private final static String IS_MEMER_OF_VK_GAMES_TEAM = "is_memer_of_vk_games_team";
@@ -42,7 +44,7 @@ public class VkProfileFragment extends ProfileInnerFragment {
     private final static String VK_TOPFACE_TEAM_ID = "topface_club";
     private final static String VK_GAMES_TEAM_ID = "vkgames";
     private final static int MAX_RE_REQUEST_COUNT = 3;
-    private static final String PAGE_NAME = "profile.vk";
+    public static final String PAGE_NAME = "profile.vk";
 
     private VKApiUser mVkUser;
     private VKList<VKApiCommunity> mVkCommunities;
@@ -138,11 +140,6 @@ public class VkProfileFragment extends ProfileInnerFragment {
     @Override
     public boolean isTrackable() {
         return false;
-    }
-
-    @Override
-    protected String getScreenName() {
-        return PAGE_NAME;
     }
 
     @Override

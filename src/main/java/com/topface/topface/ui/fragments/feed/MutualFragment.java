@@ -14,6 +14,7 @@ import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteMutualsRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.MutualListAdapter;
@@ -28,9 +29,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+
+@FlurryOpenEvent(name = MutualFragment.PAGE_NAME)
 public class MutualFragment extends FeedFragment<FeedMutual> {
 
-    private static final String PAGE_NAME = "Mutual";
+    public static final String PAGE_NAME = "Mutual";
 
     @Inject
     NavigationState mNavigationState;
@@ -49,11 +52,6 @@ public class MutualFragment extends FeedFragment<FeedMutual> {
     @Override
     protected MutualListAdapter createNewAdapter() {
         return new MutualListAdapter(getActivity(), getUpdaterCallback());
-    }
-
-    @Override
-    protected String getScreenName() {
-        return PAGE_NAME;
     }
 
     @Override
