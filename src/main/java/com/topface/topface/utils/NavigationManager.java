@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -203,8 +204,11 @@ public class NavigationManager {
                 break;
             case FragmentIdData.INTEGRATION_PAGE:
                 IntegrationSettingsData fragmentSettings = (IntegrationSettingsData) id;
-                fragment = IntegrationWebViewFragment.newInstance(fragmentSettings.getPageName(),
-                        fragmentSettings.getUrl().replace(USER_ID, AuthToken.getInstance().getUserSocialId()).replace(SECRET_KEY, Ssid.get()));
+                String url = fragmentSettings.getUrl();
+                if (!TextUtils.isEmpty(url)) {
+                    url = url.replace(USER_ID, AuthToken.getInstance().getUserSocialId()).replace(SECRET_KEY, Ssid.get());
+                }
+                fragment = IntegrationWebViewFragment.newInstance(fragmentSettings.getPageName(), url);
                 break;
             case FragmentIdData.TABBED_VISITORS:
                 fragment = new TabbedVisitorsFragment();
