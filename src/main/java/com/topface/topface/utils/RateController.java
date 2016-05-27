@@ -32,7 +32,7 @@ public class RateController {
     private OnRateControllerListener mOnRateControllerUiListener;
 
     public RateController(final Context context, @SendLikeRequest.Place int place) {
-        mContext = context;
+        mContext = context.getApplicationContext();
         mPlace = place;
     }
 

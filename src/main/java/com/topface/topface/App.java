@@ -419,8 +419,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
 
         //Включаем строгий режим, если это Debug версия
         checkStrictMode();
-        //Для Android 2.1 и ниже отключаем Keep-Alive
-        checkKeepAlive();
 
         String msg = "+onCreate\n" + baseConfig.toString();
         //noinspection ConstantConditions
@@ -484,7 +482,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         Ssid.load();
         //Оповещаем о том, что профиль загрузился
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
-        if (!GcmListenerService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty(getContext())) {
+        if (!GcmListenerService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty()) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -573,13 +571,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         comScore.setAppContext(mContext);
         comScore.setCustomerC2(COMSCORE_C2);
         comScore.setPublisherSecret(COMSCORE_SECRET_KEY);
-    }
-
-    private void checkKeepAlive() {
-        //На устройствах раньше чем Froyo (2.1),
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
-            System.setProperty("http.keepAlive", "false");
-        }
     }
 
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)

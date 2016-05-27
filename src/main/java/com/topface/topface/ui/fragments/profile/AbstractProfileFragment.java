@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -57,7 +58,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
         public void update() {
             // load owners profile in OwnProfileFragment only
             if (isOwnersProfileFragment()) {
-                setProfile(App.from(getActivity()).getProfile());
+                setProfile(App.get().getProfile());
             }
         }
 
@@ -207,12 +208,22 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     public void onDestroy() {
         super.onDestroy();
         mBodyPager = null;
+        mFormFragment = null;
+        mUserPhotoFragment = null;
+        mTabLayoutCreator = null;
+        mBodyPagerAdapter = null;
+        mPageChangeListener = null;
+        mProfileUpdater = null;
+        mProfile = null;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        mTabLayoutCreator.release();
+        mBodyPager.setAdapter(null);
+        mBodyPager.setOnPageChangeListener(null);
     }
 
     @Override
@@ -252,6 +263,14 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     }
 
     protected void initBody() {
+        FragmentManager fm = getChildFragmentManager();
+        if (fm.getFragments() != null) {
+            for (Fragment fragment : fm.getFragments()) {
+                if (fragment != null) {
+                    fm.beginTransaction().remove(fragment).commit();
+                }
+            }
+        }
     }
 
     protected void addBodyPage(String className, String pageTitle) {

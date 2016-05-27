@@ -122,7 +122,6 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
                         savedInstanceState.getInt(USER_ID, 0),
                         parcelableArrayList, gifts, giftsCount
                 );
-
                 mListQuestionnaire.setSelection(savedInstanceState.getInt(POSITION, 0));
             }
         }
@@ -179,15 +178,19 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mPendingUserInit.setCanSet(false);
-        mGiftAdapter.unregisterDataSetObserver(mGiftsObserver);
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
+        getList().setOnItemClickListener(null);
+        getList().setAdapter(null);
+        getList().removeHeaderView(mGiftsHeader);
+        mGiftsHeader = null;
+        mListQuestionnaire = null;
+        mMetrics = null;
+        mFormAdapter.release();
+        mFormAdapter = null;
+        mGiftAdapter.unregisterDataSetObserver(mGiftsObserver);
+        mGiftAdapter.release();
+        mGiftAdapter = null;
     }
 
     private void fillGiftsStrip() {
@@ -275,7 +278,6 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
             mGiftAdapter.add(feedGift);
         }
         mGiftAdapter.notifyDataSetChanged();
-
         if (isNotEnoughGifts()) {
             requestGifts();
         }

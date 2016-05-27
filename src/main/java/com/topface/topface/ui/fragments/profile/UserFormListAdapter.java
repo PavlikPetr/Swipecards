@@ -40,7 +40,7 @@ public class UserFormListAdapter extends AbstractFormListAdapter {
                 @Override
                 public void copy(FormItem formItem) {
                     super.copy(formItem);
-                    CacheProfile.setStatus(mContext, formItem.value);
+                    CacheProfile.setStatus(formItem.value);
                 }
             };
             statusItem.setTextLimitInterface(new FormItem.DefaultTextLimiter(App.getAppOptions().getUserStatusMaxLength()));

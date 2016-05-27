@@ -66,12 +66,12 @@ public class CacheProfile {
         setProfileUpdateTime();
     }
 
-    public static String getStatus(Context context) {
-        return App.from(context).getProfile().status;
+    public static String getStatus() {
+        return App.get().getProfile().status;
     }
 
-    public static void setStatus(Context context, String status) {
-        App.from(context).getProfile().status = Profile.normilizeStatus(status);
+    public static void setStatus(String status) {
+        App.get().getProfile().status = Profile.normilizeStatus(status);
     }
 
     /**
@@ -173,8 +173,8 @@ public class CacheProfile {
         return isLoaded.get();
     }
 
-    public static boolean isEmpty(Context context) {
-        return App.from(context).getProfile().uid == 0;
+    public static boolean isEmpty() {
+        return App.get().getProfile().uid == 0;
     }
 
     public static void setOptions(final String options) {
@@ -269,9 +269,9 @@ public class CacheProfile {
     }
 
     public static boolean needToSelectCity(Context context) {
-        Profile profile = App.from(context).getProfile();
+        Profile profile = App.get().getProfile();
         return (
-                !CacheProfile.isEmpty(context) &&
+                !CacheProfile.isEmpty() &&
                         (
                                 profile.city == null ||
                                         profile.city.isEmpty() ||

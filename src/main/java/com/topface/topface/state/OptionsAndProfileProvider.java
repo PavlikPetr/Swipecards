@@ -39,6 +39,7 @@ public class OptionsAndProfileProvider {
     }
 
     public void unsubscribe() {
+        mUpdater = null;
         if (mProfileSubscription != null) {
             mProfileSubscription.unsubscribe();
         }

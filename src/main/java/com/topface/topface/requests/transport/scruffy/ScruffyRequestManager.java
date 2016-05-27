@@ -16,6 +16,7 @@ import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.statistics.ScruffyStatistics;
+import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.http.HttpUtils;
@@ -31,7 +32,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import rx.Observable;
 import rx.Subscription;
-import rx.functions.Action1;
 
 /**
  * Реализации Fatwood API - https://github.com/Topface/fatwood/blob/master/README.md
@@ -276,15 +276,17 @@ public class ScruffyRequestManager {
                     webSocket.setClosedCallback(mClosedCallback);
                     webSocket.setPongCallback(mPongCallback);
                     mWebSocket = webSocket;
-                    if (mPingSubscription != null && !mPingSubscription.isUnsubscribed()) {
-                        mPingSubscription.unsubscribe();
-                    }
+                    RxUtils.saveUnsubscribe(mPingSubscription);
                     Debug.log("Scruffy:: start ping interval");
-                    mPingSubscription = mPingObservable.subscribe(new Action1<Long>() {
+                    mPingSubscription = mPingObservable.subscribe(new RxUtils.ShortSubscription<Long>() {
                         @Override
-                        public void call(Long aLong) {
+                        public void onNext(Long type) {
                             Debug.log("Scruffy:: PING");
-                            mWebSocket.ping(Utils.EMPTY);
+                            if (mWebSocket != null) {
+                                mWebSocket.ping(Utils.EMPTY);
+                            } else {
+                                RxUtils.saveUnsubscribe(mPingSubscription);
+                            }
                         }
                     });
                     if (listener != null) {
@@ -351,9 +353,7 @@ public class ScruffyRequestManager {
     }
 
     public void logout() {
-        if (mPingSubscription != null && !mPingSubscription.isUnsubscribed()) {
-            mPingSubscription.unsubscribe();
-        }
+        RxUtils.saveUnsubscribe(mPingSubscription);
         clearState();
     }
 

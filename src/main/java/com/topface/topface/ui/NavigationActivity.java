@@ -108,10 +108,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     public static boolean isPhotoAsked;
     private PopupManager mPopupManager;
     private CompositeSubscription mSubscription = new CompositeSubscription();
-    private OnNextActionListener mSelectPhotoNextActionListener;
-    private OnNextActionListener mChooseCityNextActionListener;
     private NavigationManager mNavigationManager;
-    private MenuFragment mLeftMenu;
 
     /**
      * Перезапускает NavigationActivity, нужно например при смене языка
@@ -275,7 +272,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                     public void onRedirect() {
                         showFragment(new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS));
                     }
-                }, this));
+                }));
         startActions.add(new InvitePopupAction(this, PopupHive.AC_PRIORITY_HIGH));
         PromoPopupManager promoPopupManager = new PromoPopupManager(this);
         IStartAction seventhStageActions = new ChosenStartAction().chooseFrom(
@@ -294,14 +291,14 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     private void startPopupRush(boolean isNeedResetOldSequence, boolean stateChanged) {
-        if (!App.get().getProfile().isFromCache
+        /*if (!App.get().getProfile().isFromCache
                 && App.get().isUserOptionsObtainedFromServer()
-                && !CacheProfile.isEmpty(this) && !AuthToken.getInstance().isEmpty()) {
+                && !CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
             if (!mPopupHive.containSequence(NavigationActivity.class) || stateChanged) {
                 mPopupHive.registerPopupSequence(getActionsList(), NavigationActivity.class);
             }
             mPopupHive.execPopupRush(NavigationActivity.class, isNeedResetOldSequence);
-        }
+        }*/
     }
 
     @Override
@@ -339,15 +336,14 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     private void initLeftMenu() {
-
-        mLeftMenu = (MenuFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_menu);
-        if (mLeftMenu == null) {
-            mLeftMenu = new MenuFragment();
+        MenuFragment leftMenu = (MenuFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_menu);
+        if (leftMenu == null) {
+            leftMenu = new MenuFragment();
         }
-        if (!mLeftMenu.isAdded()) {
+        if (!leftMenu.isAdded()) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.fragment_menu, mLeftMenu)
+                    .add(R.id.fragment_menu, leftMenu)
                     .commit();
         }
     }
@@ -459,6 +455,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private IStartAction chooseCityStartAction(final int priority) {
         return new IStartAction() {
 
+            private OnNextActionListener mChooseCityNextActionListener;
+
             @Override
             public void callInBackground() {
             }
@@ -505,6 +503,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
      */
     private IStartAction selectPhotoStartAction(final int priority) {
         return new IStartAction() {
+
+            private OnNextActionListener mSelectPhotoNextActionListener;
 
             @Override
             public void callInBackground() {
@@ -613,7 +613,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     @Override
     protected void onDestroy() {
-        //Для запроса фото при следующем создании NavigationActivity
         if (mFullscreenController != null) {
             mFullscreenController.onDestroy();
         }

@@ -41,7 +41,6 @@ import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
@@ -156,6 +155,7 @@ public class AddPhotoHelper {
         if (!mPhotoActionSubscription.isUnsubscribed()) {
             mPhotoActionSubscription.unsubscribe();
         }
+        mHandler = null;
     }
 
     public void showProgressDialog() {
