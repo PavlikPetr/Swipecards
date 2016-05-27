@@ -200,7 +200,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private int mUserType;
     private Subscription mUpdateUiSubscription;
     private KeyboardListenerLayout mRootLayout;
-    private boolean mKeyboardWasShown = true;
+    private boolean mKeyboardWasShown = false; // по умолчанию клава в чате закрыта
     private int mSex;
 
     private enum ChatUpdateType {
@@ -269,7 +269,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         // only DialogsFragment will hear this
         Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ_BY_UID);
         intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
-        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+        sendReadDialogsBroadcast(intent);
     }
 
     @Override
@@ -407,7 +407,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ);
                 intent.putExtra(LOADED_MESSAGES, loadedItemsCount);
                 intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
-                LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+                sendReadDialogsBroadcast(intent);
             }
         }
     }
@@ -673,6 +673,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mIsUpdating = true;
             }
         });
+        historyRequest.leave = !isTakePhotoApplicable();
         registerRequest(historyRequest);
         historyRequest.debug = type.getType();
         if (mAdapter != null) {
@@ -715,7 +716,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     mPopularUserLockController.unlockChat();
                 }
                 if (mItemId != null) {
-                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, mItemId));
+                    sendReadDialogsBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, mItemId));
                     mItemId = null;
                 }
 
@@ -1099,6 +1100,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 PurchasesActivity.INTENT_BUY_VIP);
     }
 
+    private void sendReadDialogsBroadcast(Intent intent){
+        if (!isTakePhotoApplicable()) {
+            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+        }
+    }
 
     private void startTimer() {
         mUpdateUiSubscription = Observable.interval(DEFAULT_CHAT_UPDATE_PERIOD, DEFAULT_CHAT_UPDATE_PERIOD
@@ -1110,11 +1116,16 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     update(true, ChatUpdateType.TIMER);
                 }
             }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Debug.error("fucking_timer break " + throwable);
+            }
         });
     }
 
     private void stopTimer() {
-        if (!mUpdateUiSubscription.isUnsubscribed()) {
+        if (mUpdateUiSubscription!=null && !mUpdateUiSubscription.isUnsubscribed()) {
             mUpdateUiSubscription.unsubscribe();
         }
     }
@@ -1254,9 +1265,13 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mAddPhotoHelper = new AddPhotoHelper(ChatFragment.this, null);
                 mAddPhotoHelper.setOnResultHandler(mHandler);
             }
-            if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null) {
+            if (isTakePhotoApplicable()) {
                 TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_CHAT_OPEN).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.TAG);
             }
         }
+    }
+
+    private boolean isTakePhotoApplicable(){
+        return !App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null;
     }
 }
