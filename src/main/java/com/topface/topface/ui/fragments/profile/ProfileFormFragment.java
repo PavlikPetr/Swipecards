@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.profile;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +32,7 @@ import com.topface.topface.ui.dialogs.EditTextFormDialog;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
+import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
@@ -137,7 +137,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (mProfileFormListAdapter != null && isAdded()) {
-                mProfileFormListAdapter.setUserData(CacheProfile.getStatus(getActivity()), App.from(getActivity()).getProfile().forms);
+                mProfileFormListAdapter.setUserData(CacheProfile.getStatus(), App.from(getActivity()).getProfile().forms);
                 mProfileFormListAdapter.notifyDataSetChanged();
             }
         }
@@ -166,6 +166,15 @@ public class ProfileFormFragment extends AbstractFormFragment {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mFormEditedListener = null;
+        mFragmentManager = null;
+        mOnFillClickListener = null;
+        mProfileFormListAdapter = null;
+    }
+
+    @Override
     protected AbstractFormListAdapter createFormAdapter(Context context) {
         mProfileFormListAdapter = new ProfileFormListAdapter(context);
         return mProfileFormListAdapter;
@@ -173,15 +182,15 @@ public class ProfileFormFragment extends AbstractFormFragment {
 
     @Override
     protected void onGiftsClick() {
-        Activity activity = getActivity();
-        Intent intent = new Intent(activity, OwnGiftsActivity.class);
-        activity.startActivity(intent);
+        Context context = getActivity().getApplicationContext();
+        Intent intent = new Intent(context, OwnGiftsActivity.class);
+        context.startActivity(intent);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mCitySubscription.unsubscribe();
+        RxUtils.safeUnsubscribe(mCitySubscription);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
     }
 

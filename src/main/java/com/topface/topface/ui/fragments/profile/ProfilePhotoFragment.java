@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -39,11 +40,13 @@ import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
 import javax.inject.Inject;
 
+import rx.Subscription;
 import rx.functions.Action1;
 
 @FlurryOpenEvent(name = ProfilePhotoFragment.PAGE_NAME)
@@ -54,6 +57,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
     public static final String PAGE_NAME = "profile.photos";
     @Inject
     TopfaceAppState appState;
+    private Handlers handlers;
     private OwnProfileRecyclerViewAdapter mOwnProfileRecyclerViewAdapter;
 
     private BroadcastReceiver mPhotosReceiver = new BroadcastReceiver() {
@@ -64,7 +68,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
             }
         }
     };
-
+    private Subscription mSubscription;
     private FragmentProfilePhotosBinding mBinding;
 
     private BasePhotoRecyclerViewAdapter.OnRecyclerViewItemClickListener mClickListener = new BasePhotoRecyclerViewAdapter.OnRecyclerViewItemClickListener() {
@@ -149,9 +153,9 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
         if (getActivity() instanceof TrackedFragmentActivity) {
             ((TrackedFragmentActivity) getActivity()).setBackPressedListener(this);
         }
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_profile_photos, container, false);
-        mBinding = DataBindingUtil.bind(root);
-        mBinding.setHandlers(new Handlers(getActivity().getApplicationContext()));
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_photos, container, false);
+        handlers = new Handlers(getActivity(), mBinding.vfFlipper);
+        mBinding.setHandlers(handlers);
         if (getActivity() instanceof EditContainerActivity) {
             getActivity().setResult(Activity.RESULT_OK);
             setActionBarTitles(getString(R.string.edit_title), getString(R.string.edit_album));
@@ -183,7 +187,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                 mBinding.usedGrid.scrollToPosition(position);
             }
         });
-        appState.getObservable(Profile.class).subscribe(new Action1<Profile>() {
+        mSubscription = appState.getObservable(Profile.class).subscribe(new Action1<Profile>() {
             @Override
             public void call(Profile profile) {
                 if (mOwnProfileRecyclerViewAdapter != null && profile.photos != null &&
@@ -193,7 +197,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                 }
             }
         });
-        return root;
+        return mBinding.getRoot();
     }
 
     @Override
@@ -288,6 +292,13 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        handlers = null;
+        RxUtils.safeUnsubscribe(mSubscription);
+    }
+
+    @Override
     public void onResume() {
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
                 mPhotosReceiver,
@@ -312,22 +323,24 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
         return false;
     }
 
-    public class Handlers {
+    public static class Handlers {
 
         private final Context mContext;
+        private final ViewFlipper mViewFlipper;
 
-        public Handlers(Context context) {
-            mContext = context;
+        public Handlers(Context context, ViewFlipper flipper) {
+            mContext = context.getApplicationContext();
+            mViewFlipper = flipper;
         }
 
         public void addPhotoClick(View v) {
-            mBinding.vfFlipper.setDisplayedChild(0);
+            mViewFlipper.setDisplayedChild(0);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(
                     new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", v.getId()));
         }
 
         public void cancelClick(View v) {
-            mBinding.vfFlipper.setDisplayedChild(0);
+            mViewFlipper.setDisplayedChild(0);
         }
 
     }

@@ -35,12 +35,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
+import static com.topface.topface.utils.NavigationManager.CLOSE_LEFT_MENU_TIMEOUT;
 
 @FlurryOpenEvent(name = DialogsFragment.PAGE_NAME)
 public class DialogsFragment extends FeedFragment<FeedDialog> {
@@ -62,22 +65,27 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.get().inject(this);
-        mDrawerLayoutSubscription = mDrawerLayoutState.getObservable().filter(new Func1<DrawerLayoutStateData, Boolean>() {
-            @Override
-            public Boolean call(DrawerLayoutStateData drawerLayoutStateData) {
-                return drawerLayoutStateData.getState()==DrawerLayoutStateData.CLOSED;
-            }
-        }).subscribe(new Action1<DrawerLayoutStateData>() {
-            @Override
-            public void call(DrawerLayoutStateData drawerLayoutStateData) {
-                showExpressMessagesPopupIfNeeded();
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                throwable.printStackTrace();
-            }
-        });
+        mDrawerLayoutSubscription = mDrawerLayoutState.getObservable()
+                .timeout(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS)
+                .filter(new Func1<DrawerLayoutStateData, Boolean>() {
+                    @Override
+                    public Boolean call(DrawerLayoutStateData drawerLayoutStateData) {
+                        return drawerLayoutStateData.getState() == DrawerLayoutStateData.CLOSED;
+                    }
+                }).subscribe(new Action1<DrawerLayoutStateData>() {
+                    @Override
+                    public void call(DrawerLayoutStateData drawerLayoutStateData) {
+                        showExpressMessagesPopupIfNeeded();
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+                        if (throwable.getClass().getName().equals(TimeoutException.class.getName())) {
+                            showExpressMessagesPopupIfNeeded();
+                        }
+                    }
+                });
     }
 
     @Override

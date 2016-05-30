@@ -89,8 +89,8 @@ public class FullscreenController {
         public FullscreenStartAction(int priority, Activity activity) {
             this.priority = priority;
             mActivity = activity;
-            if (!CacheProfile.isEmpty(mActivity)) {
-                startPageInfo = App.from(mActivity).getOptions().getPagesInfo().get(PageInfo.PageName.START.getName());
+            if (!CacheProfile.isEmpty()) {
+                startPageInfo = App.get().getOptions().getPagesInfo().get(PageInfo.PageName.START.getName());
             }
         }
 
@@ -103,7 +103,7 @@ public class FullscreenController {
 
         @Override
         public void callOnUi() {
-            if (App.from(mActivity).getOptions().interstitial.enabled) {
+            if (App.get().getOptions().interstitial.enabled) {
                 FullscreenController.this.requestFullscreen(BANNER_ADMOB_FULLSCREEN_START_APP);
             } else if (startPageInfo != null) {
                 FullscreenController.this.requestFullscreen(startPageInfo.getBanner());
@@ -112,7 +112,7 @@ public class FullscreenController {
 
         @Override
         public boolean isApplicable() {
-            return App.from(mActivity).getOptions().interstitial.enabled || App.from(mActivity).getProfile().showAd &&
+            return App.get().getOptions().interstitial.enabled || App.get().getProfile().showAd &&
                     FullscreenController.this.isTimePassed() && startPageInfo != null
                     && startPageInfo.floatType.equals(PageInfo.FLOAT_TYPE_BANNER);
         }
@@ -135,13 +135,13 @@ public class FullscreenController {
 
     private boolean mIsRedirected;
 
-    Application.ActivityLifecycleCallbacks activityLifecycleCallbacks;
+    private Application.ActivityLifecycleCallbacks mActivityLifecycleCallbacks;
 
     public FullscreenController(Activity activity, Options options) {
         mActivity = activity;
         mOptions = options;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            activityLifecycleCallbacks = new Utils.ActivityLifecycleCallbacksAdapter() {
+            mActivityLifecycleCallbacks = new Utils.ActivityLifecycleCallbacksAdapter() {
                 @Override
                 public void onActivityResumed(Activity activity) {
                     if (activity instanceof AdActivity && isFullScreenBannerVisible() && mIsRedirected) {
@@ -206,7 +206,7 @@ public class FullscreenController {
     }
 
     private void requestGagFullscreen() {
-        requestFullscreen(App.from(mActivity).getOptions().gagTypeFullscreen);
+        requestFullscreen(App.get().getOptions().gagTypeFullscreen);
     }
 
     public void requestFullscreen(String type) {
@@ -245,7 +245,7 @@ public class FullscreenController {
             Appodeal.setTesting(true);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            App.from(mActivity).registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
+            App.get().registerActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
         }
         Appodeal.cache(mActivity, Appodeal.INTERSTITIAL);
         Appodeal.setInterstitialCallbacks(new InterstitialCallbacks() {
@@ -397,7 +397,7 @@ public class FullscreenController {
 
     public void onResume() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            App.from(mActivity).unregisterActivityLifecycleCallbacks(activityLifecycleCallbacks);
+            App.get().unregisterActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
         }
     }
 
@@ -407,8 +407,13 @@ public class FullscreenController {
 
 
     public void onDestroy() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            App.get().unregisterActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
+            mActivityLifecycleCallbacks = null;
+        }
         mActivity = null;
         mOnNextActionListener = null;
+        mFullScreenBannerListener = null;
     }
 
     public IStartAction createFullscreenStartAction(final int priority, Activity activity) {

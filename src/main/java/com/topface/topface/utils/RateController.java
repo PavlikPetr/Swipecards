@@ -13,12 +13,14 @@ import com.topface.topface.data.search.UsersList;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.ReadLikeRequest;
 import com.topface.topface.requests.SendAdmirationRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.cache.SearchCacheManager;
 
+import static com.topface.topface.requests.SendLikeRequest.FROM_FEED;
 import static com.topface.topface.utils.FlurryManager.SEND_ADMIRATION;
 
 public class RateController {
@@ -32,7 +34,7 @@ public class RateController {
     private OnRateControllerListener mOnRateControllerUiListener;
 
     public RateController(final Context context, @SendLikeRequest.Place int place) {
-        mContext = context;
+        mContext = context.getApplicationContext();
         mPlace = place;
     }
 
@@ -65,6 +67,9 @@ public class RateController {
             protected void success(Rate rate, IApiResponse response) {
                 if (sendLike.getServiceName().equals(SendAdmirationRequest.service)) {
                     FlurryManager.getInstance().sendSpendCoinsEvent(App.get().getOptions().priceAdmiration, SEND_ADMIRATION);
+                }
+                if (mPlace == FROM_FEED) {
+                    new ReadLikeRequest(sendLike.getContext(), sendLike.getUserid()).exec();
                 }
                 if (listener != null) {
                     listener.onRateCompleted(sendLike.getMutualid());

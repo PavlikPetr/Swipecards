@@ -460,7 +460,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     private void sendLikeReadRequest(int senderId) {
-        new ReadLikeRequest(getActivity(), senderId, AdmobInterstitialUtils.canShowInterstitialAds()).exec();
+        new ReadLikeRequest(getActivity(), senderId).exec();
     }
 
     @Override

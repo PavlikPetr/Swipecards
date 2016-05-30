@@ -64,6 +64,7 @@ public class PopupHive {
     }
 
     public void releaseHive() {
+        mSequenceHolderMap.clear();
         if (mSequencedSubscription != null && !mSequencedSubscription.isUnsubscribed()) {
             mSequencedSubscription.unsubscribe();
         }

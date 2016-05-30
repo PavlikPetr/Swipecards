@@ -64,7 +64,7 @@ public class DatingInstantMessageController {
                                           View.OnClickListener clickListener,
                                           IRequestClient requestClient,
                                           final View datingButtons, final View userInfoStatus,
-                                          SendLikeAction sendLikeAction, TextView.OnEditorActionListener mEditorActionListener) {
+                                          SendLikeAction sendLikeAction, TextView.OnEditorActionListener editorActionListener) {
         mActivity = activity;
         mSendLikeAction = sendLikeAction;
         root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
@@ -89,7 +89,7 @@ public class DatingInstantMessageController {
         mFooterFlipper.setVisibility(View.VISIBLE);
         mGiftSend = root.findViewById(R.id.send_gift_button);
         mMessageText = (EditText) root.findViewById(R.id.edChatBox);
-        mMessageText.setOnEditorActionListener(mEditorActionListener);
+        mMessageText.setOnEditorActionListener(editorActionListener);
         mMessageSend = (ImageButton) root.findViewById(R.id.btnSend);
         mSpin = AnimationUtils.loadAnimation(mActivity, R.anim.loader_rotate);
         mMessageText.addTextChangedListener(new TextWatcher() {
@@ -204,7 +204,7 @@ public class DatingInstantMessageController {
 
     public void openChat(FragmentActivity activity, SearchUser user, SendGiftAnswer answer) {
         if (user != null) {
-            Intent intent = ChatActivity.createIntent(user.id, user.sex,user.getNameAndAge(), user.city.name, null, user.photo, false, answer, user.banned);
+            Intent intent = ChatActivity.createIntent(user.id, user.sex, user.getNameAndAge(), user.city.name, null, user.photo, false, answer, user.banned);
             activity.startActivityForResult(intent, ChatActivity.REQUEST_CHAT);
             EasyTracker.sendEvent("Dating", "Additional", "Chat", 1L);
         }

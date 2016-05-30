@@ -44,7 +44,7 @@ public class BindingsAdapters {
         view.setBackgroundResource(bgResource);
     }
 
-    @BindingAdapter("android:textColor")
+    @BindingAdapter("app:textColorSelector")
     public static void setTextColorSelector(View view, int colorSelector) {
         try {
             XmlResourceParser xrp = App.getContext().getResources().getXml(colorSelector);

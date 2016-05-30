@@ -73,9 +73,11 @@ public class VkProfileFragment extends ProfileInnerFragment {
 
     @OnClick(R.id.vkProfileButtonTopfaceTeam)
     public void btnTopfaceTeamClick() {
-        for (VKApiCommunity comunity : mVkCommunities) {
-            if (comunity.screen_name.equals(VK_TOPFACE_TEAM_ID)) {
-                openCommunity(comunity);
+        if (mVkCommunities != null && mVkCommunities.size() > 0) {
+            for (VKApiCommunity comunity : mVkCommunities) {
+                if (comunity.screen_name.equals(VK_TOPFACE_TEAM_ID)) {
+                    openCommunity(comunity);
+                }
             }
         }
     }

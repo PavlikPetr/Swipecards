@@ -19,28 +19,26 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
     private String mSavingText;
     private int mSavingColor;
     private int mMainValueColor;
-    private Context mContext;
 
     public ProfileFormListAdapter(Context context) {
-        super(context);
-        mContext = context;
+        super(context.getApplicationContext());
         mSavingText = context.getString(R.string.saving_in_progress);
-        mSavingColor = context.getResources().getColor(R.color.text_color_gray_transparent);
-        mMainValueColor = context.getResources().getColor(R.color.text_color_gray);
+        mSavingColor = context.getApplicationContext().getResources().getColor(R.color.text_color_gray_transparent);
+        mMainValueColor = context.getApplicationContext().getResources().getColor(R.color.text_color_gray);
     }
 
     @Override
     protected LinkedList<FormItem> prepareForm(String status, LinkedList<FormItem> forms) {
-        final Profile profile = App.from(mContext).getProfile();
+        final Profile profile = App.get().getProfile();
         FormInfo formInfo = new FormInfo(App.getContext(), profile.sex, Profile.TYPE_OWN_PROFILE);
         forms.clear();
         if (profile.forms != null) {
             // fake forms for profile main data
-            FormItem statusItem = new FormItem(R.string.edit_status, CacheProfile.getStatus(mContext), FormItem.STATUS) {
+            FormItem statusItem = new FormItem(R.string.edit_status, CacheProfile.getStatus(), FormItem.STATUS) {
                 @Override
                 public void copy(FormItem formItem) {
                     super.copy(formItem);
-                    CacheProfile.setStatus(mContext, formItem.value);
+                    CacheProfile.setStatus(formItem.value);
                 }
             };
             statusItem.setTextLimitInterface(new FormItem.DefaultTextLimiter(App.getAppOptions().getUserStatusMaxLength()));

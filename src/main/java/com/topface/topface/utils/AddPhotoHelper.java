@@ -160,6 +160,7 @@ public class AddPhotoHelper {
         if (!mPhotoActionSubscription.isUnsubscribed()) {
             mPhotoActionSubscription.unsubscribe();
         }
+        mHandler = null;
     }
 
     public void showProgressDialog() {
