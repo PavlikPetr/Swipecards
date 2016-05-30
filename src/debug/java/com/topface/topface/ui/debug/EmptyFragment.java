@@ -1,4 +1,4 @@
-package com.topface.topface.ui;
+package com.topface.topface.ui.debug;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.topface.topface.R;
 
 /**
+ * Тестовый ырагмент для поиска утечек. Удобно юзать при поиске ликов во вьюпейджере
  * Created by tiberal on 27.05.16.
  */
 public class EmptyFragment extends Fragment {
@@ -17,7 +18,6 @@ public class EmptyFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.empty, container, false);
-        return root;
+        return inflater.inflate(R.layout.empty, container, false);
     }
 }

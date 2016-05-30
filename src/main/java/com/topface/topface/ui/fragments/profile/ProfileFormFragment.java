@@ -193,7 +193,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        RxUtils.saveUnsubscribe(mCitySubscription);
+        RxUtils.safeUnsubscribe(mCitySubscription);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
     }
 

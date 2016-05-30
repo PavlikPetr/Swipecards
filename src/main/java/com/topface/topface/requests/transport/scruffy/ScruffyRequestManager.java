@@ -26,12 +26,8 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import rx.Observable;
-import rx.Subscription;
 
 /**
  * Реализации Fatwood API - https://github.com/Topface/fatwood/blob/master/README.md
@@ -45,6 +41,29 @@ public class ScruffyRequestManager {
     private static final int RECONNECTION_LIMIT_FOR_HTTP_SWITCH = 3;
 
     private static ScruffyRequestManager mInstance;
+    private PingPonger mPingPonger = new PingPonger(new PingPonger.IRequestManagerInteractor() {
+        @Override
+        public void ping() {
+            Debug.log("Scruffy:: PING");
+            if (mWebSocket != null) {
+                mWebSocket.ping(Utils.EMPTY);
+            } else {
+                reconnect();
+            }
+        }
+
+        @Override
+        public void pong() {
+            Debug.log("Scruffy:: PONG");
+            mScruffyAvailable = true;
+        }
+
+        @Override
+        public void reconnect() {
+            Debug.log("Scruffy:: RECONNECT");
+            ScruffyRequestManager.this.reconnect();
+        }
+    });
     private WebSocket mWebSocket;
     /**
      * Flag to allow send broadcast that connection were established to prevent send it too often
@@ -67,17 +86,6 @@ public class ScruffyRequestManager {
      * Атомарный флаг, по которому мы смотрим не начат ли уже процесс авторизации
      */
     private static AtomicBoolean mIsAuthInProgress = new AtomicBoolean(false);
-
-    private static final long PING_TIME = 30000;
-    private Subscription mPingSubscription;
-    private Observable<Long> mPingObservable = Observable.interval(PING_TIME, PING_TIME, TimeUnit.MILLISECONDS);
-    private WebSocket.PongCallback mPongCallback = new WebSocket.PongCallback() {
-        @Override
-        public void onPongReceived(String s) {
-            Debug.log("Scruffy:: PONG");
-            mScruffyAvailable = true;
-        }
-    };
 
     private CompletedCallback mClosedCallback = new CompletedCallback() {
         @Override
@@ -274,21 +282,8 @@ public class ScruffyRequestManager {
                     //Листенер получения данных от сервера
                     webSocket.setStringCallback(mStringCallback);
                     webSocket.setClosedCallback(mClosedCallback);
-                    webSocket.setPongCallback(mPongCallback);
+                    webSocket.setPongCallback(mPingPonger);
                     mWebSocket = webSocket;
-                    RxUtils.saveUnsubscribe(mPingSubscription);
-                    Debug.log("Scruffy:: start ping interval");
-                    mPingSubscription = mPingObservable.subscribe(new RxUtils.ShortSubscription<Long>() {
-                        @Override
-                        public void onNext(Long type) {
-                            Debug.log("Scruffy:: PING");
-                            if (mWebSocket != null) {
-                                mWebSocket.ping(Utils.EMPTY);
-                            } else {
-                                RxUtils.saveUnsubscribe(mPingSubscription);
-                            }
-                        }
-                    });
                     if (listener != null) {
                         listener.sendConnected();
                     }
@@ -353,7 +348,7 @@ public class ScruffyRequestManager {
     }
 
     public void logout() {
-        RxUtils.saveUnsubscribe(mPingSubscription);
+        RxUtils.safeUnsubscribe(mPingPonger);
         clearState();
     }
 

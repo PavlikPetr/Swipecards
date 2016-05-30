@@ -291,14 +291,14 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     private void startPopupRush(boolean isNeedResetOldSequence, boolean stateChanged) {
-        /*if (!App.get().getProfile().isFromCache
+        if (!App.get().getProfile().isFromCache
                 && App.get().isUserOptionsObtainedFromServer()
                 && !CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
             if (!mPopupHive.containSequence(NavigationActivity.class) || stateChanged) {
                 mPopupHive.registerPopupSequence(getActionsList(), NavigationActivity.class);
             }
             mPopupHive.execPopupRush(NavigationActivity.class, isNeedResetOldSequence);
-        }*/
+        }
     }
 
     @Override

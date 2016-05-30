@@ -299,7 +299,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
     public void onDestroyView() {
         super.onDestroyView();
         handlers = null;
-        RxUtils.saveUnsubscribe(mSubscription);
+        RxUtils.safeUnsubscribe(mSubscription);
     }
 
     @Override
