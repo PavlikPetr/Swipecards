@@ -496,7 +496,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
             @Override
             public boolean isApplicable() {
-                return CacheProfile.needToSelectCity(NavigationActivity.this);
+                Profile profile = App.get().getProfile();
+                return profile.city == null || profile.city.isEmpty();
             }
 
             @Override
