@@ -33,6 +33,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.config.UserConfig;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -159,6 +160,9 @@ public class ProfileFormFragment extends AbstractFormFragment {
             public void call(City city) {
                 City profileCity = App.get().getProfile().city;
                 if (city != null && profileCity != null && !profileCity.equals(city)) {
+                    UserConfig config = App.getUserConfig();
+                    config.setUserCityChanged(true);
+                    config.saveConfig();
                     mFormEditedListener.onEditingFinished(
                             new FormItem(R.string.general_city, JsonUtils.toJson(city), FormItem.CITY));
                 }
