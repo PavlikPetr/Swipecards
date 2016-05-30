@@ -64,7 +64,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
                 if (form.type == data.type && form.titleId == data.titleId) {
                     if (form.dataId != data.dataId ||
                             data.dataId == FormItem.NO_RESOURCE_ID && !TextUtils.equals(form.value, data.value)) {
-                        FormInfo info = new FormInfo(App.getContext(), App.from(getActivity()).getProfile().sex, Profile.TYPE_OWN_PROFILE);
+                        FormInfo info = new FormInfo(App.getContext(), App.get().getProfile().sex, Profile.TYPE_OWN_PROFILE);
                         boolean isSettingsRequest = mMainFormTypes.contains(data.type);
                         ApiRequest request = isSettingsRequest ?
                                 getSettingsRequest(data) : info.getFormRequest(data);
@@ -90,7 +90,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
                             }
                         });
                         if (isSettingsRequest) {
-                            new ParallelApiRequest(getActivity())
+                            new ParallelApiRequest(App.getContext())
                                     .addRequest(request)
                                     .addRequest(App.getProfileRequest())
                                     .exec();
@@ -138,7 +138,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (mProfileFormListAdapter != null && isAdded()) {
-                mProfileFormListAdapter.setUserData(CacheProfile.getStatus(), App.from(getActivity()).getProfile().forms);
+                mProfileFormListAdapter.setUserData(CacheProfile.getStatus(), App.get().getProfile().forms);
                 mProfileFormListAdapter.notifyDataSetChanged();
             }
         }
@@ -186,9 +186,8 @@ public class ProfileFormFragment extends AbstractFormFragment {
 
     @Override
     protected void onGiftsClick() {
-        Context context = getActivity().getApplicationContext();
-        Intent intent = new Intent(context, OwnGiftsActivity.class);
-        context.startActivity(intent);
+        Intent intent = new Intent(getActivity().getApplicationContext(), OwnGiftsActivity.class);
+        getActivity().startActivity(intent);
     }
 
     @Override
@@ -199,7 +198,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
     }
 
     private SettingsRequest getSettingsRequest(FormItem formItem) {
-        SettingsRequest settingsRequest = new SettingsRequest(getActivity());
+        SettingsRequest settingsRequest = new SettingsRequest(App.getContext());
         String value = formItem.value;
         switch (formItem.type) {
             case FormItem.NAME:

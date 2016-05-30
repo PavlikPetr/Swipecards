@@ -70,6 +70,7 @@ public class CitySearchPopup extends AbstractDialogFragment {
                 }
             }
         });
+        mCitySearch.findFocus();
         ((TextView) root.findViewById(R.id.title)).setText(R.string.edit_my_city);
         root.findViewById(R.id.title_clickable).setOnClickListener(new View.OnClickListener() {
             @Override

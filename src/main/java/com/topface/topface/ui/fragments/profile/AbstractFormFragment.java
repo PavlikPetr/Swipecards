@@ -263,13 +263,15 @@ public abstract class AbstractFormFragment extends ProfileInnerFragment {
     }
 
     public void setUserData(String status, int userId, LinkedList<FormItem> forms, Profile.Gifts gifts, int giftsCount) {
+        if (mGiftAdapter == null && mFormAdapter == null) {
+            return;
+        }
         mStatus = status;
         mUserId = userId;
         mForms = forms;
         mGifts = gifts;
         ArrayList<Gift> giftArrayList = gifts.getGifts();
         mGiftsCount = giftsCount < giftArrayList.size() ? giftArrayList.size() : giftsCount;
-
         mFormAdapter.setUserData(mStatus, mForms);
         mFormAdapter.notifyDataSetChanged();
         mGiftAdapter.getData().clear();
