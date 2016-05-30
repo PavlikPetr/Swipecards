@@ -328,6 +328,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (mPendingNextIntent != null) {
             // if pending intent not null, than it has fragmentSettings from notification
             fragmentSettings = mPendingNextIntent.getParcelableExtra(GCMUtils.NEXT_INTENT);
+            mPendingNextIntent = null;
         } else if (savedInstanceState != null && savedInstanceState.containsKey(FRAGMENT_SETTINGS)) {
             // get fragmentSettings from bundle
             fragmentSettings = savedInstanceState.getParcelable(FRAGMENT_SETTINGS);
@@ -430,15 +431,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
         LocaleConfig.localeChangeInitiated = false;
         App.checkProfileUpdate();
-    }
-
-    @Override
-    protected void onResumeFragments() {
-        super.onResumeFragments();
-        if (isLoggedIn() && mPendingNextIntent != null) {
-//            showFragment(mPendingNextIntent);
-            mPendingNextIntent = null;
-        }
     }
 
     @Override
