@@ -24,6 +24,7 @@ import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.OwnGiftsActivity;
 import com.topface.topface.ui.dialogs.CitySearchPopup;
 import com.topface.topface.ui.dialogs.EditFormItemsEditDialog;
@@ -45,19 +46,15 @@ import rx.functions.Action1;
 
 import static com.topface.topface.ui.dialogs.BaseEditDialog.EditingFinishedListener;
 
+@FlurryOpenEvent(name = ProfileFormFragment.PAGE_NAME)
 public class ProfileFormFragment extends AbstractFormFragment {
 
-    private static final String PAGE_NAME = "profile.form";
+    public static final String PAGE_NAME = "profile.form";
 
     private FragmentManager mFragmentManager;
 
     private List<Integer> mMainFormTypes = new ArrayList<>(Arrays.asList(
             new Integer[]{FormItem.AGE, FormItem.CITY, FormItem.NAME, FormItem.SEX, FormItem.STATUS}));
-
-    @Override
-    protected String getScreenName() {
-        return PAGE_NAME;
-    }
 
     private EditingFinishedListener<FormItem> mFormEditedListener = new EditingFinishedListener<FormItem>() {
         @Override

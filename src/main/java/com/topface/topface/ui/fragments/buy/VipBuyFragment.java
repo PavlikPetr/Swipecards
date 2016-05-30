@@ -25,6 +25,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.statistics.BuyScreenStatistics;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.statistics.PushButtonVipUniqueStatistics;
 import com.topface.topface.ui.BlackListActivity;
@@ -39,11 +40,12 @@ import java.util.List;
 
 import static android.view.View.OnClickListener;
 
+@FlurryOpenEvent(name = VipBuyFragment.PAGE_NAME)
 public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     public static final String VIP_PURCHASED_INTENT = "com.topface.topface.VIP_PURCHASED";
 
-    private static final String PAGE_NAME = "buy.vip.gp";
+    public static final String PAGE_NAME = "buy.vip.gp";
 
     EditSwitcher mInvisSwitcher;
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
@@ -96,11 +98,6 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         }
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    protected String getScreenName() {
-        return PAGE_NAME;
     }
 
     @Override

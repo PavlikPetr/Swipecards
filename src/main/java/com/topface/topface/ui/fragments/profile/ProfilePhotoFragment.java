@@ -33,6 +33,7 @@ import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.IBackPressedListener;
 import com.topface.topface.ui.adapters.BasePhotoRecyclerViewAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
@@ -48,12 +49,12 @@ import javax.inject.Inject;
 import rx.Subscription;
 import rx.functions.Action1;
 
-
+@FlurryOpenEvent(name = ProfilePhotoFragment.PAGE_NAME)
 public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackPressedListener {
 
     private static final String POSITION = "POSITION";
     private static final String FLIPPER_VISIBLE_CHILD = "FLIPPER_VISIBLE_CHILD";
-    private static final String PAGE_NAME = "profile.photos";
+    public static final String PAGE_NAME = "profile.photos";
     @Inject
     TopfaceAppState appState;
     private Handlers handlers;
@@ -104,11 +105,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
     @Override
     public boolean isTrackable() {
         return false;
-    }
-
-    @Override
-    protected String getScreenName() {
-        return PAGE_NAME;
     }
 
     private void sendAlbumRequest() {

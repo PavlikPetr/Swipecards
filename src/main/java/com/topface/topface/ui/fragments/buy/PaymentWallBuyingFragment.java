@@ -8,6 +8,7 @@ import com.topface.topface.App;
 import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.statistics.PushButtonVipUniqueStatistics;
 import com.topface.topface.ui.PaymentwallActivity;
@@ -16,11 +17,12 @@ import com.topface.topface.utils.CacheProfile;
 
 import java.util.List;
 
+@FlurryOpenEvent(name = PaymentWallBuyingFragment.PAGE_NAME)
 public class PaymentWallBuyingFragment extends CoinsBuyingFragment {
 
     public static final String PAGE_TYPE = "page_type";
 
-    private static final String PAGE_NAME = "buy.coins.pw";
+    public static final String PAGE_NAME = "buy.coins.pw";
 
     public static CoinsBuyingFragment newInstance(String from, PaymentWallProducts.TYPE type, String text) {
         PaymentWallBuyingFragment buyingFragment = new PaymentWallBuyingFragment();
@@ -36,11 +38,6 @@ public class PaymentWallBuyingFragment extends CoinsBuyingFragment {
         }
         buyingFragment.setArguments(args);
         return buyingFragment;
-    }
-
-    @Override
-    protected String getScreenName() {
-        return PAGE_NAME;
     }
 
     public static CoinsBuyingFragment newInstance(int type, int coins, String from) {

@@ -24,9 +24,9 @@ import com.topface.topface.banners.RefreshablePageWithAds;
 import com.topface.topface.banners.ad_providers.IRefresher;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.state.CountersDataProvider;
+import com.topface.topface.statistics.FlurryUtils;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
-import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.utils.Utils;
@@ -78,10 +78,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
                 mTabLayoutCreator.setTabTitle(position);
             }
             if (mBodyPagerAdapter != null) {
-                TrackedFragment fragment = (TrackedFragment) mBodyPagerAdapter.getItem(position);
-                if (fragment != null) {
-                    fragment.onResumeFragment();
-                }
+                FlurryUtils.sendOpenEvent(mBodyPagerAdapter.getClassNameByPos(position));
             }
             List<Fragment> fragments = getChildFragmentManager().getFragments();
             if (fragments != null) {
