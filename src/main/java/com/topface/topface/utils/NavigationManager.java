@@ -1,7 +1,6 @@
 package com.topface.topface.utils;
 
 import android.annotation.SuppressLint;
-import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
@@ -52,7 +51,6 @@ import rx.functions.Func1;
 public class NavigationManager {
 
     public static final int CLOSE_LEFT_MENU_TIMEOUT = 250;
-    private static final String FRAGMENT_SETTINGS = "fragment_settings";
     private static final String USER_ID = "{userId}";
     private static final String SECRET_KEY = "{secretKey}";
 
@@ -68,11 +66,10 @@ public class NavigationManager {
     private FragmentManager mFragmentManager;
     private LeftMenuSettingsData mFragmentSettings = new LeftMenuSettingsData(FragmentIdData.UNDEFINED);
     private Subscription mSubscription;
-    private Bundle mSavedInstanceState;
 
-    public NavigationManager(IActivityDelegate activityDelegate, Bundle savedInstanceState) {
+    public NavigationManager(IActivityDelegate activityDelegate, LeftMenuSettingsData settings) {
         App.get().inject(this);
-        mSavedInstanceState = savedInstanceState;
+        mFragmentSettings = settings;
         mActivityDelegate = activityDelegate;
         mNavigationState.getNavigationObservable().filter(new Func1<WrappedNavigationData, Boolean>() {
             @Override
@@ -96,11 +93,7 @@ public class NavigationManager {
 
     public void init(@NotNull FragmentManager fragmentManager) {
         mFragmentManager = fragmentManager;
-        LeftMenuSettingsData settings = new LeftMenuSettingsData(App.get().getOptions().startPage);
-        if (mSavedInstanceState != null && mSavedInstanceState.containsKey(FRAGMENT_SETTINGS)) {
-            settings = mSavedInstanceState.getParcelable(FRAGMENT_SETTINGS);
-        }
-        selectFragment(new WrappedNavigationData(settings, WrappedNavigationData.SWITCH_EXTERNALLY), false);
+        selectFragment(new WrappedNavigationData(mFragmentSettings, WrappedNavigationData.SWITCH_EXTERNALLY), false);
     }
 
     private String getTag(LeftMenuSettingsData settings) {
@@ -179,10 +172,10 @@ public class NavigationManager {
     }
 
     private void sendNavigationFragmentSwitched(WrappedNavigationData data) {
-        mNavigationState.emmitNavigationState(data.addStateToStack(WrappedNavigationData.FRAGMENT_SWITCHED));
         if (mSubscription != null && !mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
         }
+        mNavigationState.emmitNavigationState(data.addStateToStack(WrappedNavigationData.FRAGMENT_SWITCHED));
     }
 
     @SuppressLint("SwitchIntDef")
@@ -321,8 +314,8 @@ public class NavigationManager {
         sendNavigationFragmentSwitched(data);
     }
 
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(FRAGMENT_SETTINGS, mFragmentSettings);
+    public LeftMenuSettingsData getCurrentFragmentSettings(){
+        return mFragmentSettings;
     }
 
     public void onDestroy() {
@@ -333,7 +326,6 @@ public class NavigationManager {
         if (mDrawerLayoutStateSubscription != null && !mDrawerLayoutStateSubscription.isUnsubscribed()) {
             mDrawerLayoutStateSubscription.unsubscribe();
         }
-        mSavedInstanceState = null;
         mFragmentManager = null;
         iNeedCloseMenuCallback = null;
     }
