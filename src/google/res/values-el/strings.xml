@@ -517,7 +517,6 @@
     <string name="incorrect_photo_format">Μη έγκυρη μορφή φωτογραφίων (ανεβάσετε τις φωτογραφίες σε
         μορφή jpg ή png.
     </string>
-    <string name="incorrect_photo_size">Το μέγεθος της φωτογραφίας δεν είναι σωστή</string>
     <string name="input_contact_name">Πληκτρολογήστε το όνομα της επαφής</string>
     <string name="incorrect_locale">Γράψτε το μήνυμά σας στα ρωσικά ή στα Αγγλικά, για να μπορούμε
         να το διαβάσουμε

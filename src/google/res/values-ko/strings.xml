@@ -361,7 +361,6 @@
     <string name="avatar_set_successfully">아바타가 성공적으로 설치되었습니다.</string>
     <string name="incorrect_photo">해당 사진이 옳지 않습니다. 다른 사진을 선택하여 주십시오.</string>
     <string name="incorrect_photo_format">사진의 형식이 옳지 않습니다. jpg 또는 png 파일을 로딩하여 주십시오.</string>
-    <string name="incorrect_photo_size">사진의 용량이 너무 큽니다.</string>
     <string name="input_contact_name">연락처 이름을 입력하여 주십시오.</string>
     <string name="incorrect_locale">당신의 불만 사항을 저희 톱페이스 팀에서 읽어볼 수 있게 러시아어 또는 영어로 작성 바랍니다.</string>
     <string name="complain_photo_header">옳지 않은 형식의 사진</string>

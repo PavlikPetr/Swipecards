@@ -421,7 +421,6 @@
     <string name="incorrect_photo_format">Niewłaściwy format zdjęcia. Spróbuj dodać w formacie jpg
         lub png
     </string>
-    <string name="incorrect_photo_size">Niedopuszczalny rozmiar zdjęcia</string>
     <string name="input_contact_name">Wpisz imię kontaktu</string>
     <string name="incorrect_locale">Jeśli chcesz abyśmy mogli przeczytać Twoją opinię, napisz ją w
         języku rosyjskim lub angielskim

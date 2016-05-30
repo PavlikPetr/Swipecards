@@ -188,8 +188,7 @@
     <string name="dating_header_guys">Guys from %1$d to %2$d</string>
     <string name="dating_skip_button">Next</string>
     <string name="message_too_long">The message you entered is too long. The number of symbols
-        can\'t exceed %d.
-    </string>
+        can\'t exceed %d.</string>
     <string name="chat_gift_in">You have received a gift.</string>
     <string name="chat_gift_out">Gift has been sent.</string>
     <string name="chat_like_in">Someone likes you!</string>
@@ -557,7 +556,8 @@
     <string name="incorrect_photo">Improper photo. Try to upload a different one.</string>
     <string name="incorrect_photo_format">Invalid image format. Try to upload a .jpg or .png file.
     </string>
-    <string name="incorrect_photo_size">Invalid photo size</string>
+    <string name="incorrect_photo_size">This photo is too small (the minimum photo size is 
+        — %1$dx%2$d pixels).</string>
     <string name="input_contact_name">Enter contact name</string>
     <string name="incorrect_locale">If you would like us to read your review, please write it in
         either Russian or English.
@@ -826,7 +826,7 @@
     <string name="chat_auto_reply_title">Message\'s text is hidden</string>
     <string name="chat_auto_reply_message">In order to open/reply to this message, become a VIP</string>
     <string name="chat_auto_reply_button">Become VIP</string>
-    <string name="photo_list_load_info">Share your photos and be seen by millions</string>
+    <string name="photo_list_load_info">Share your photos and millions will see you!</string>
     <string name="vk_profile_button_tf_group">Topface group</string>
     <string name="vk_profile_button_join_tf_group">Join the Topface group</string>
     <string name="vk_profile_button_join_vkgames_group">Join the group \"VK games\"</string>
@@ -838,7 +838,7 @@
     <string name="vk_friends_success_invite">Invitation has been sent</string>
     <string name="join_group_success">You have joined the group</string>
     <string name="settings_auto_greeting_title">Auto-Greetings</string>
-    <string name="settings_auto_greeting_subtitle">Allow Topface to automatically start a conversation with a greeting whenever someone sends you a Like</string>
+    <string name="settings_auto_greeting_subtitle">Allow the system to automatically start a conversation with a greeting when you receive Like</string>
     <string name="take_photo_text_1">Please upload a photo of yourself to start chatting.</string>
     <string name="take_photo_text_2">Only you should be in the photo; all photos are reviewed by moderators to ensure rules are followed.</string>
     <string name="unlock_by_viewed_ad_video_button_text">Unlock for free at %s</string>
@@ -881,4 +881,10 @@
     <string name="city_selector_your_city">Your city</string>
     <string name="photo_gallery_photo_deleted">Photo has been deleted</string>
     <string name="photofeed_add_photo_to_feed_title">Get to 1st place!</string>
+    <string name="photofeed_add_photo_to_feed_description">Upload a photo with a greeting and thousands of people will see you. Stand out and start dating now!</string>
+    <string name="offers_screen_title">Bonuses</string>
+    <string name="offers_loading_text">Loading available tasks…</string>
+    <string name="offers_empty_text">Unfortunately there are no tasks available for you right now, check back soon!</string>
+    <string name="offers_rewarded_video_title">Free Coins</string>
+    <string name="offers_rewarded_video_description">for watching a video</string>
 </resources>

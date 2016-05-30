@@ -533,6 +533,8 @@
     <string name="avatar_set_successfully">Profil fotoğrafınız başarıyla yüklendi</string>
     <string name="incorrect_photo">Uygunsuz fotoğraf. Başka bir tane yüklemeyi deneyin.</string>
     <string name="incorrect_photo_format">Geçersiz fotoğraf formatı. .jpg veya .png yükleyin.</string>
+    <string name="incorrect_photo_size">Bu fotoğraf çok küçük (minimum fotoğraf boyutu 
+        — %1$dx%2$d piksel)</string>
     <string name="input_contact_name">Kişinin ismi yazın</string>
     <string name="incorrect_locale">Yorumunuzu okumamızı istiyorsanız Rusça veya İngilizce 
         dillerini kullanın</string>
@@ -773,6 +775,7 @@
     <string name="chat_auto_reply_title">Mesaj metni gizlenmiş.</string>
     <string name="chat_auto_reply_message">Bu mesajı açmak/okumak için VIP üye olmanız gerekiyor.</string>
     <string name="chat_auto_reply_button">VIP üye ol</string>
+    <string name="photo_list_load_info">Fotoğraflarını paylaş ki milyonlar seni görebilsin</string>
     <string name="vk_profile_button_tf_group">Topface grubu</string>
     <string name="vk_profile_button_join_tf_group">Topface grubuna katıl</string>
     <string name="vk_profile_button_join_vkgames_group">\"VK oyunları\" grubuna katıl</string>
@@ -784,6 +787,7 @@
     <string name="vk_friends_success_invite">Davet gönderildi</string>
     <string name="join_group_success">Gruba üye oldunuz</string>
     <string name="settings_auto_greeting_title">Otomatik-selam</string>
+    <string name="settings_auto_greeting_subtitle">Beğeni aldığınızda otomotik cevap yazarak sohbeti başlatması için sisteme izin verin.</string>
     <string name="take_photo_text_1">Arkadaşlık kurmaya başlamak için lütfen fotoğrafınızı yükleyin.</string>
     <string name="take_photo_text_2">Fotoğraf size ait olmalı ve içerisinde siz olmalısınız. Modaratörlerimiz tüm fotoğrafları kontrol etmektedir.</string>
     <string name="unlock_by_viewed_ad_video_button_text">%s ile ücretsiz aç</string>
@@ -826,4 +830,10 @@
     <string name="city_selector_your_city">Şehriniz</string>
     <string name="photo_gallery_photo_deleted">Fotoğraf silindi</string>
     <string name="photofeed_add_photo_to_feed_title">1. yeri kap!</string>
+    <string name="photofeed_add_photo_to_feed_description">Merhaba diyerek bir fotoğraf yükle ki binlerce insan seni görebilsim. Kendini göster ve arkadaşlık kurmaya başla!</string>
+    <string name="offers_screen_title">Bonus</string>
+    <string name="offers_loading_text">Mevcut görevler yükleniyor…</string>
+    <string name="offers_empty_text">Maalesef şu an sizin için görevimiz yok, lütfen daha sonra tekrar denetin!</string>
+    <string name="offers_rewarded_video_title">Bedava kredi</string>
+    <string name="offers_rewarded_video_description">vidyo izlediğiniz için</string>
 </resources>

@@ -571,7 +571,8 @@
     <string name="incorrect_photo_format">Formato de imagem inválido. Tenta carregar um ficheiro
         .jpg ou .png.
     </string>
-    <string name="incorrect_photo_size">Tamanho de foto inválido</string>
+    <string name="incorrect_photo_size">Esta foto é demasiado pequena (o tamanho mínimo para fotos é de  
+        — %1$dx%2$d pixeis).</string>
     <string name="input_contact_name">Introduza o nome do contacto</string>
     <string name="incorrect_locale">Se gostavas que ficássemos a saber a tua opinião, escreve-a em
         Inglês ou em Russo.
@@ -847,7 +848,7 @@
     <string name="chat_auto_reply_title">O texto da mensagem está oculto</string>
     <string name="chat_auto_reply_message">Para poder abrir/responder a esta mensagem, torne-se VIP</string>
     <string name="chat_auto_reply_button">Tornar-se VIP</string>
-    <string name="photo_list_load_info">Partilha as tuas fotos para que milhões de pessoas as vejam</string>
+    <string name="photo_list_load_info">Partilha as tuas fotos e serás visto por milhões</string>
     <string name="vk_profile_button_tf_group">Grupo Topface</string>
     <string name="vk_profile_button_join_tf_group">Junta-te ao grupo Topface</string>
     <string name="vk_profile_button_join_vkgames_group">Junta-te ao grupo \"Jogos VK\"</string>
@@ -859,7 +860,7 @@
     <string name="vk_friends_success_invite">Foi enviado um convite</string>
     <string name="join_group_success">Juntaste-te ao grupo</string>
     <string name="settings_auto_greeting_title">Saudação Automática</string>
-    <string name="settings_auto_greeting_subtitle">Permitir ao Topface começar automaticamente uma conversa com uma saudação sempre que alguém te envia um Gosto</string>
+    <string name="settings_auto_greeting_subtitle">Dá permissão ao Topface para começar uma conversa automática com um cumprimento sempre que alguém te envia um Gosto</string>
     <string name="take_photo_text_1">Por favor, faz upload de uma foto tua para começares a falar.</string>
     <string name="take_photo_text_2">Apenas tu deves estar na foto; todas as fotos são revistas pelos nossos moderadores para garantir que as regras são seguidas.</string>
     <string name="unlock_by_viewed_ad_video_button_text">Desbloquear gratuitamente a %s</string>
@@ -903,4 +904,10 @@
     <string name="city_selector_your_city">A tua cidade</string>
     <string name="photo_gallery_photo_deleted">A foto foi apagada</string>
     <string name="photofeed_add_photo_to_feed_title">Chega até ao 1º Lugar!</string>
+    <string name="photofeed_add_photo_to_feed_description">Faz upload de uma foto com um cumprimento e milhares de pessoas irão ver-te. Destaca-te e começa a namorar agora!</string>
+    <string name="offers_screen_title">Bónus</string>
+    <string name="offers_loading_text">A carregar as tarefas disponíveis…</string>
+    <string name="offers_empty_text">Infelizmente, não existem tarefas disponíveis de momento. Volta mais tarde!</string>
+    <string name="offers_rewarded_video_title">Moedas Grátis</string>
+    <string name="offers_rewarded_video_description">por ver um vídeo</string>
 </resources>

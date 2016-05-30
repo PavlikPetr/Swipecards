@@ -532,7 +532,6 @@
     <string name="incorrect_photo_format">Uvedená fotografie má chybný formát. Zkuste nahrát jpg
         nebo png
     </string>
-    <string name="incorrect_photo_size">Nesprávná velikost fotky</string>
     <string name="input_contact_name">Zadejte jméno kontaktu</string>
     <string name="incorrect_locale">Pokud byste chtěli, abychom mohli přečíst Vaši recenzi, napište
         ji v ruštině nebo angličtině
