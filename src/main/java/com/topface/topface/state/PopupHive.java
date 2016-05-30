@@ -29,10 +29,11 @@ public class PopupHive {
 
     private ConcurrentHashMap<Class, PopupSequencedHolder> mSequenceHolderMap = new ConcurrentHashMap<>();
     private Subscription mSequencedSubscription;
+    private boolean mAlreadyShown = false;
 
     public void execPopupRush(Class clazz, boolean isStateChanged) {
         final PopupSequencedHolder holder = mSequenceHolderMap.get(clazz);
-        if (holder != null && (!holder.mIsExecuted || isStateChanged)) {
+        if (holder != null && (!holder.mIsExecuted || isStateChanged) && !mAlreadyShown) {
             Debug.log("PopupHive start rush");
             mSequencedSubscription = holder.mActionObservable
                     .map(new Func1<IStartAction, IStartAction>() {
@@ -58,6 +59,7 @@ public class PopupHive {
                         @Override
                         public void call() {
                             Debug.log("PopupHive OK ");
+                            mAlreadyShown = true;
                         }
                     });
         }

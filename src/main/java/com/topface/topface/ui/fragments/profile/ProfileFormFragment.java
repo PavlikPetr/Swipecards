@@ -140,7 +140,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (mProfileFormListAdapter != null && isAdded()) {
-                mProfileFormListAdapter.setUserData(CacheProfile.getStatus(), App.from(getActivity()).getProfile().forms);
+                mProfileFormListAdapter.setUserData(CacheProfile.getStatus(), App.get().getProfile().forms);
                 mProfileFormListAdapter.notifyDataSetChanged();
             }
         }
@@ -185,9 +185,8 @@ public class ProfileFormFragment extends AbstractFormFragment {
 
     @Override
     protected void onGiftsClick() {
-        Context context = getActivity().getApplicationContext();
-        Intent intent = new Intent(context, OwnGiftsActivity.class);
-        context.startActivity(intent);
+        Intent intent = new Intent(getActivity().getApplicationContext(), OwnGiftsActivity.class);
+        getActivity().startActivity(intent);
     }
 
     @Override

@@ -293,6 +293,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (!App.get().getProfile().isFromCache
                 && App.get().isUserOptionsObtainedFromServer()
                 && !CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
+            Debug.log("LOOOOOOOOOPG");
             if (!mPopupHive.containSequence(NavigationActivity.class) || stateChanged) {
                 mPopupHive.registerPopupSequence(getActionsList(), NavigationActivity.class);
             }
