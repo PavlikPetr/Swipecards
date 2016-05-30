@@ -19,6 +19,8 @@ import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.buy.VipPaymentWallBuyFragment;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.LinkedList;
 
 public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
@@ -66,49 +68,47 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
         String text = mArguments.getString(PurchasesConstants.ARG_RESOURCE_INFO_TEXT);
         switch (mTabs.get(position).type) {
             case PurchasesTabData.GPLAY:
-                if (!mIsVip) {
-                    fragment = MarketBuyingFragment.newInstance(from, text);
-                } else {
-                    fragment = VipBuyFragment.newInstance(true, from, text);
-                }
+                fragment = !mIsVip ? MarketBuyingFragment.newInstance(from, text) : VipBuyFragment.newInstance(true, from, text);
                 break;
             case PurchasesTabData.AMAZON:
-                if (!mIsVip) {
-                    fragment = AmazonBuyingFragment.newInstance(from, text);
-                } else {
-                    fragment = VipBuyFragment.newInstance(true, from, text);
-                }
+                fragment = !mIsVip ? AmazonBuyingFragment.newInstance(from, text) : VipBuyFragment.newInstance(true, from, text);
                 break;
             case PurchasesTabData.BONUS:
-                if (!mIsVip) {
-                    fragment = BonusFragment.newInstance(false);
-                }
+                fragment = !mIsVip ? BonusFragment.newInstance(false) : null;
                 break;
             case PurchasesTabData.PWALL:
-                if (!mIsVip) {
-                    fragment = PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.DIRECT, text);
-                } else {
-                    fragment = VipPaymentWallBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.DIRECT, text);
-                }
+                fragment = !mIsVip ? PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.DIRECT, text) : VipPaymentWallBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.DIRECT, text);
                 break;
             case PurchasesTabData.PWALL_MOBILE:
-                if (!mIsVip) {
-                    fragment = PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.MOBILE, text);
-                } else {
-                    fragment = VipPaymentWallBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.MOBILE, text);
-                }
             case PurchasesTabData.I_FREE:
-                if (!mIsVip) {
-                    fragment = IFreeBuyFragment.newInstance(true, from, text);
-                } else {
-                    fragment = IFreeBuyVipFragment.newInstance(true, from, text);
-                }
+                fragment = !mIsVip ? IFreeBuyFragment.newInstance(true, from, text) : IFreeBuyVipFragment.newInstance(true, from, text);
                 break;
             default:
                 Debug.error("PurchasesFragmentsAdapter wrong position");
                 break;
         }
         return fragment;
+    }
+
+    @Nullable
+    public String getClassNameByPos(int pos) {
+        Class cls = null;
+        switch (mTabs.get(pos).type) {
+            case PurchasesTabData.GPLAY:
+                cls = !mIsVip ? MarketBuyingFragment.class : VipBuyFragment.class;
+                break;
+            case PurchasesTabData.AMAZON:
+                cls = !mIsVip ? AmazonBuyingFragment.class : VipBuyFragment.class;
+                break;
+            case PurchasesTabData.BONUS:
+                cls = !mIsVip ? BonusFragment.class : null;
+                break;
+            case PurchasesTabData.PWALL:
+            case PurchasesTabData.PWALL_MOBILE:
+                cls = !mIsVip ? PaymentWallBuyingFragment.class : VipPaymentWallBuyFragment.class;
+                break;
+        }
+        return cls != null ? cls.getName() : null;
     }
 
     @Override

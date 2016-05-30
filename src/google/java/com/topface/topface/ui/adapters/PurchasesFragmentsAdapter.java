@@ -72,9 +72,7 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
                 fragment = !mIsVip ? AmazonBuyingFragment.newInstance(from, text) : VipBuyFragment.newInstance(true, from, text);
                 break;
             case PurchasesTabData.BONUS:
-                if (!mIsVip) {
-                    fragment = BonusFragment.newInstance(false);
-                }
+                fragment = !mIsVip ? BonusFragment.newInstance(false) : null;
                 break;
             case PurchasesTabData.PWALL:
                 fragment = !mIsVip ? PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.DIRECT, text) : VipPaymentWallBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.DIRECT, text);
@@ -99,13 +97,9 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
                 cls = !mIsVip ? AmazonBuyingFragment.class : VipBuyFragment.class;
                 break;
             case PurchasesTabData.BONUS:
-                if (!mIsVip) {
-                    cls = BonusFragment.class;
-                }
+                cls = !mIsVip ? BonusFragment.class : null;
                 break;
             case PurchasesTabData.PWALL:
-                cls = !mIsVip ? PaymentWallBuyingFragment.class : VipPaymentWallBuyFragment.class;
-                break;
             case PurchasesTabData.PWALL_MOBILE:
                 cls = !mIsVip ? PaymentWallBuyingFragment.class : VipPaymentWallBuyFragment.class;
                 break;
