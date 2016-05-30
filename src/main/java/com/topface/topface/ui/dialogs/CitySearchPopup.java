@@ -15,6 +15,7 @@ import com.topface.topface.data.City;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.views.CitySearchView;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.FuckingVoodooMagic;
 
 import javax.inject.Inject;
@@ -49,7 +50,9 @@ public class CitySearchPopup extends AbstractDialogFragment {
         mCitySearch.setOnCityClickListener(new CitySearchView.onCityClickListener() {
             @Override
             public void onClick(City city) {
-                mAppState.setData(city);
+                UserConfig config = App.getUserConfig();
+                config.setUserCityChanged(true);
+                config.saveConfig();
                 getDialog().cancel();
             }
         });
