@@ -15,7 +15,7 @@ import rx.Subscription;
 
 public class PingPonger extends Subscriber<Long> implements WebSocket.PongCallback {
 
-    public static final long PING_TIME = 3000;
+    public static final long PING_TIME = 30000;
     private static final long MAX_ATTEMPTS_COUNT = 3;
 
     private final IRequestManagerInteractor mRequestMangerInteractor;
