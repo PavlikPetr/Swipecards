@@ -1,7 +1,9 @@
 package com.topface.topface.ui.fragments;
 
+import android.annotation.TargetApi;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -112,17 +114,6 @@ public class MenuFragment extends Fragment {
         }
     };
 
-    private void setSelected(WrappedNavigationData data) {
-        if (mSelectedPos != EMPTY_POS) {
-            getAdapter().updateSelected(mSelectedPos, false);
-        }
-        mSelectedPos = data.getData().getUniqueKey();
-        getAdapter().updateSelected(mSelectedPos, true);
-        if (!data.getStatesStack().contains(WrappedNavigationData.SELECT_ONLY)) {
-            mNavigationState.emmitNavigationState(data.addStateToStack(WrappedNavigationData.ITEM_SELECTED));
-        }
-    }
-
     private OnRecyclerViewItemClickListener<LeftMenuData> mItemClickListener = new OnRecyclerViewItemClickListener<LeftMenuData>() {
         @Override
         public void itemClick(View view, int itemPosition, LeftMenuData data) {
@@ -138,6 +129,17 @@ public class MenuFragment extends Fragment {
             }
         }
         return arrayList;
+    }
+
+    private void setSelected(WrappedNavigationData data) {
+        if (mSelectedPos != EMPTY_POS) {
+            getAdapter().updateSelected(mSelectedPos, false);
+        }
+        mSelectedPos = data.getData().getUniqueKey();
+        getAdapter().updateSelected(mSelectedPos, true);
+        if (!data.getStatesStack().contains(WrappedNavigationData.SELECT_ONLY)) {
+            mNavigationState.emmitNavigationState(data.addStateToStack(WrappedNavigationData.ITEM_SELECTED));
+        }
     }
 
     private void updateIntegrationPage(Options options) {
@@ -205,7 +207,7 @@ public class MenuFragment extends Fragment {
                     @Override
                     public void call(BalanceData balanceData) {
                         mBalanceData = balanceData;
-                        updateBallance();
+                        updateBalance();
                     }
                 }));
         mSubscription.add(mNavigationState
@@ -284,12 +286,12 @@ public class MenuFragment extends Fragment {
         getAdapter().updateCounters(mCountersData);
     }
 
-    private void updateBallance() {
+    private void updateBalance() {
         getAdapter().updateTitle(FragmentIdData.BALLANCE, getBalanceTitle());
     }
 
     private ArrayList<LeftMenuData> getLeftMenuItems() {
-        Options options = App.from(getActivity()).getOptions();
+        Options options = App.get().getOptions();
         ArrayList<LeftMenuData> arrayList = new ArrayList<>();
         arrayList.add(new LeftMenuData(R.drawable.ic_photo_left_menu, R.string.general_photoblog, 0, false, new LeftMenuSettingsData(FragmentIdData.PHOTO_BLOG)));
         arrayList.add(new LeftMenuData(R.drawable.ic_dating_left_menu, R.string.general_dating, 0, false, new LeftMenuSettingsData(FragmentIdData.DATING)));
@@ -327,6 +329,8 @@ public class MenuFragment extends Fragment {
         return mAdapter;
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @SuppressWarnings("deprecation")
     private SpannableString getBalanceTitle() {
         String title = String.format(App.getCurrentLocale(), BALANCE_TEMPLATE,
                 getString(R.string.purchase_header_title),

@@ -7,7 +7,9 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.view.LayoutInflater;
@@ -91,7 +93,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     }
 
     private void showTakePhotoDialog(String plc, boolean forceShow) {
-        if (!CacheProfile.isEmpty(getContext()) && mAddPhotoHelper != null
+        if (!CacheProfile.isEmpty() && mAddPhotoHelper != null
                 && (!mIsPhotoAsked || forceShow) && (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null)) {
             TakePhotoPopup.newInstance(plc).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.TAG);
             mIsPhotoAsked = true;
@@ -102,6 +104,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateProfileReceiver);
+        mHandler = null;
     }
 
     @Override
@@ -109,6 +112,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
         super.onDestroyView();
         if (mAddPhotoHelper != null) {
             mAddPhotoHelper.releaseHelper();
+            mAddPhotoHelper = null;
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mAddPhotoReceiver);
     }
@@ -117,7 +121,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     protected void onProfileUpdated() {
         super.onProfileUpdated();
         if (isAdded()) {
-            setProfile(App.from(getActivity()).getProfile());
+            setProfile(App.get().getProfile());
         }
     }
 
@@ -145,7 +149,6 @@ public class OwnProfileFragment extends OwnAvatarFragment {
         }
         mBarAvatar = item;
         MenuItemCompat.getActionView(mBarAvatar).findViewById(R.id.ivBarAvatarContainer).setOnClickListener(this);
-
         setActionBarAvatar(getUniversalUser());
     }
 
@@ -197,7 +200,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
 
     @Override
     protected IUniversalUser createUniversalUser() {
-        return UniversalUserFactory.create(App.from(getActivity()).getProfile());
+        return UniversalUserFactory.create(App.get().getProfile());
     }
 
     @Override
@@ -212,7 +215,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
 
     @Override
     public void onAvatarClick() {
-        Profile profile = App.from(getActivity()).getProfile();
+        Profile profile = App.get().getProfile();
         if (profile.photo != null) {
             startActivity(PhotoSwitcherActivity.
                     getPhotoSwitcherIntent(profile.gifts.getGifts(), profile.photo.position,

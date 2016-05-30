@@ -28,7 +28,7 @@
 
         </android.support.v7.widget.Toolbar>
 
-        <ScrollView
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none">
@@ -76,7 +76,7 @@
                     android:paddingTop="@dimen/take_photo_padding_40"
                     android:text="@string/take_photo_text_2" />
             </LinearLayout>
-        </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
     </LinearLayout>
 
 </layout>

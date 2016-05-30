@@ -53,7 +53,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     public ActionBarView actionBarView;
     private boolean mIndeterminateSupported = false;
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
-    private BroadcastReceiver mReauthReceiver;
     private boolean mNeedAnimate = true;
     private boolean mIsActivityRestoredState = false;
     private BroadcastReceiver mProfileLoadReceiver;
@@ -68,6 +67,18 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         @Override
         public void onReceive(Context context, Intent intent) {
             onOptionsUpdated();
+        }
+    };
+    private BroadcastReceiver mReauthReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (isNeedAuth()) {
+                try {
+                    startAuth();
+                } catch (Exception e) {
+                    Debug.error(e);
+                }
+            }
         }
     };
     private boolean mRunning;
@@ -226,7 +237,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     }
 
     protected boolean isLoggedIn() {
-        return !CacheProfile.isEmpty(this) && !AuthToken.getInstance().isEmpty();
+        return !CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty();
     }
 
     private void registerLoadProfileReceiver() {
@@ -235,21 +246,19 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     //Уведомлять о загрузке профиля следует только если мы авторизованы
-                    if (!CacheProfile.isEmpty(context) && !AuthToken.getInstance().isEmpty()) {
+                    if (!CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
                         checkProfileLoad();
                     }
                 }
             };
-            LocalBroadcastManager.getInstance(this).registerReceiver(
-                    mProfileLoadReceiver,
-                    new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD)
-            );
+            LocalBroadcastManager.getInstance(this)
+                    .registerReceiver(mProfileLoadReceiver, new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD));
         }
     }
 
     protected void onLoadProfile() {
         Debug.log("onLoadProfile in " + ((Object) this).getClass().getSimpleName());
-        if (CacheProfile.isEmpty(this) || AuthToken.getInstance().isEmpty()) {
+        if (CacheProfile.isEmpty() || AuthToken.getInstance().isEmpty()) {
             startAuth();
         }
     }
@@ -257,7 +266,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     @Override
     protected void onResume() {
         super.onResume();
-        registerReauthReceiver();
         if (AuthToken.getInstance().isEmpty()) {
             startAuth();
         }
@@ -266,6 +274,8 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
             App.mOpenIabHelperManager.init(App.getContext());
             mGoogleAuthStarted = false;
         }
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(mReauthReceiver, new IntentFilter(AuthFragment.REAUTH_INTENT));
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         LocalBroadcastManager.getInstance(this)
@@ -301,29 +311,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
 
     public boolean isActivityRestoredState() {
         return mIsActivityRestoredState;
-    }
-
-    private void registerReauthReceiver() {
-        //Если при запросе вернулась ошибка что нет токена, кидается соответствующий интент.
-        //здесь он ловится, и открывается фрагмент авторизации
-        mReauthReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (isNeedAuth()) {
-                    try {
-                        startAuth();
-                    } catch (Exception e) {
-                        Debug.error(e);
-                    }
-                }
-            }
-        };
-
-        try {
-            registerReceiver(mReauthReceiver, new IntentFilter(AuthFragment.REAUTH_INTENT));
-        } catch (Exception ex) {
-            Debug.error(ex);
-        }
     }
 
     public boolean startAuth() {
@@ -366,17 +353,13 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     protected void onPause() {
         super.onPause();
         removeAllRequests();
-        try {
-            unregisterReceiver(mReauthReceiver);
-            if (mProfileLoadReceiver != null) {
-                LocalBroadcastManager.getInstance(this).unregisterReceiver(mProfileLoadReceiver);
-                mProfileLoadReceiver = null;
-            }
-        } catch (Exception ex) {
-            Debug.error(ex);
+        if (mProfileLoadReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mProfileLoadReceiver);
+            mProfileLoadReceiver = null;
         }
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mProfileUpdateReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mOptionsUpdateReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReauthReceiver);
     }
 
     private void removeAllRequests() {
