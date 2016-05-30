@@ -85,6 +85,7 @@ import rx.subscriptions.CompositeSubscription;
 public class NavigationActivity extends ParentNavigationActivity implements INavigationFragmentsListener {
     public static final String INTENT_EXIT = "EXIT";
     private static final String PAGE_SWITCH = "Page switch: ";
+    private static final String FRAGMENT_SETTINGS = "fragment_settings";
 
     private Intent mPendingNextIntent;
     private boolean mIsActionBarHidden;
@@ -216,13 +217,13 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (params != null) {
             mInitialTopMargin = params.topMargin;
         }
+        if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
+            mPendingNextIntent = intent;
+        }
         initNavigationManager(savedInstanceState);
         initDrawerLayout();
         initFullscreen();
         initAppsFlyer();
-        if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
-            mPendingNextIntent = intent;
-        }
         isPhotoAsked = false;
         mSubscription.add(mAppState.getObservable(City.class).subscribe(new Action1<City>() {
             @Override
@@ -323,7 +324,17 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     private NavigationManager initNavigationManager(Bundle savedInstanceState) {
-        mNavigationManager = new NavigationManager(this, savedInstanceState);
+        // use startPage settings from server like default
+        LeftMenuSettingsData fragmentSettings = new LeftMenuSettingsData(App.get().getOptions().startPage);
+        if (mPendingNextIntent != null) {
+            // if pending intent not null, than it has fragmentSettings from notification
+            fragmentSettings = mPendingNextIntent.getParcelableExtra(GCMUtils.NEXT_INTENT);
+            mPendingNextIntent = null;
+        } else if (savedInstanceState != null && savedInstanceState.containsKey(FRAGMENT_SETTINGS)) {
+            // get fragmentSettings from bundle
+            fragmentSettings = savedInstanceState.getParcelable(FRAGMENT_SETTINGS);
+        }
+        mNavigationManager = new NavigationManager(this, fragmentSettings);
         mNavigationManager.setNeedCloseMenuListener(new ISimpleCallback() {
             @Override
             public void onCall() {
@@ -351,7 +362,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        getNavigationManager().onSaveInstanceState(outState);
+        outState.putParcelable(FRAGMENT_SETTINGS, getNavigationManager().getCurrentFragmentSettings());
     }
 
     private void initDrawerLayout() {
@@ -421,15 +432,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
         LocaleConfig.localeChangeInitiated = false;
         App.checkProfileUpdate();
-    }
-
-    @Override
-    protected void onResumeFragments() {
-        super.onResumeFragments();
-        if (isLoggedIn() && mPendingNextIntent != null) {
-            showFragment(mPendingNextIntent);
-            mPendingNextIntent = null;
-        }
     }
 
     @Override
