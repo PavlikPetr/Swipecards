@@ -27,8 +27,27 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import static com.topface.topface.utils.FormItem.DATA_TYPE.*;
 import javax.inject.Inject;
+
+import static com.topface.topface.utils.FormItem.DATA_TYPE.ABOUT_STATUS;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.ALCOHOL;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.ARCHIEVEMENTS;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.BREAST;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.CAR;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.CHARACTER;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.COMMUNICATION;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.DATING;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.EDUCATION;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.EYES;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.FINANCES;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.FITNESS;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.HAIRS;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.HEIGHT;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.RESIDENCE;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.RESTAURANTS;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.SMOKING;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.STATUS;
+import static com.topface.topface.utils.FormItem.DATA_TYPE.WEIGHT;
 
 /* Класс профиля владельца устройства */
 public class Profile extends AbstractDataWithPhotos {

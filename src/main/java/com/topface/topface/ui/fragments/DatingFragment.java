@@ -308,15 +308,11 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private boolean isValidUserCache() {
-        if (mUserSearchList == null) {
-            mUserSearchList = new CachableSearchList<>(SearchUser.class);
-        }
-        if (!mUserSearchList.isEmpty()) {
-            for (SearchUser searchUser : mUserSearchList) {
-                if (!searchUser.city.equals(App.get().getProfile().city)) {
-                    return false;
-                }
-            }
+        UserConfig config = App.getUserConfig();
+        if (config.isUserCityChanged()) {
+            config.setUserCityChanged(false);
+            config.saveConfig();
+            return false;
         }
         return true;
     }
@@ -325,6 +321,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.from(getActivity()).inject(this);
+        if (mUserSearchList == null) {
+            mUserSearchList = new CachableSearchList<>(SearchUser.class);
+        }
         if (!isValidUserCache()) {
             mUserSearchList.clear();
         }

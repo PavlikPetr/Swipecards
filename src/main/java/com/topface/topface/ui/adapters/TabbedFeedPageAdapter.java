@@ -57,6 +57,10 @@ public class TabbedFeedPageAdapter extends HackyFragmentStatePagerAdapter {
         return 0;
     }
 
+    public String getClassNameByPos(int pos) {
+        return mFragmentsClasses.get(pos);
+    }
+
     @Override
     public int getCount() {
         return mFragmentsClasses.size();

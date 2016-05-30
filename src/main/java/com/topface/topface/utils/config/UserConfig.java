@@ -85,7 +85,7 @@ public class UserConfig extends AbstractConfig {
     public static final String FULLSCREEN_IN_INTERVAL_SHOWN_COUNT = "fullscreen_in_interval_shown_count";
     public static final String FULLSCREEN_IN_INTERVAL_LAST_SHOW = "fullscreen_in_interval_last_show";
     public static final String START_POSITION_OF_ACTIONS = "start_position_of_actions";
-    private static final String USER_CITY = "user_city";
+    private static final String IS_USER_CITY_CHANGED = "is_user_city_changed";
     private String mUnique;
 
     public UserConfig(String uniqueKey, Context context) {
@@ -193,9 +193,10 @@ public class UserConfig extends AbstractConfig {
         // last fullscreen show in current interval
         addField(settingsMap, FULLSCREEN_IN_INTERVAL_LAST_SHOW, 0L);
         // fullscreen shown count in current interval
-        addField(settingsMap,FULLSCREEN_IN_INTERVAL_SHOWN_COUNT,0);
+        addField(settingsMap, FULLSCREEN_IN_INTERVAL_SHOWN_COUNT, 0);
         addField(settingsMap, START_POSITION_OF_ACTIONS, 0);
-        addField(settingsMap, USER_CITY, Utils.EMPTY);
+        // флаг о том, что в профиле пользователя изменился город и еще не был сброшен список в dating
+        addField(settingsMap, IS_USER_CITY_CHANGED, false);
     }
 
     @Override
@@ -409,15 +410,6 @@ public class UserConfig extends AbstractConfig {
     public void setDatingMessage(String message) {
         SettingsMap settingsMap = getSettingsMap();
         setField(settingsMap, DEFAULT_DATING_MESSAGE, message);
-    }
-
-    public void setUserCity(String cityString) {
-        SettingsMap settingsMap = getSettingsMap();
-        setField(settingsMap, USER_CITY, cityString);
-    }
-
-    public String getUserCity() {
-        return getStringField(getSettingsMap(), USER_CITY);
     }
 
     /**
@@ -770,4 +762,24 @@ public class UserConfig extends AbstractConfig {
     public int getStartPositionOfActions() {
         return getIntegerField(getSettingsMap(), START_POSITION_OF_ACTIONS);
     }
+
+    /**
+     * get user city changed mark
+     *
+     * @return {true} if user change city in profile, {false} if dating search list dropped after change city
+     */
+    public boolean isUserCityChanged() {
+        return getBooleanField(getSettingsMap(), IS_USER_CITY_CHANGED);
+    }
+
+    /**
+     * Set user change city in profile mark
+     *
+     * @param isChanged {true} if user change city in profile or {false} if dating search list dropped
+     * @return state of saving data
+     */
+    public boolean setUserCityChanged(boolean isChanged) {
+        return setField(getSettingsMap(), IS_USER_CITY_CHANGED, isChanged);
+    }
+
 }

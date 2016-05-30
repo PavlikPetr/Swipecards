@@ -7,7 +7,6 @@ import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
-import com.topface.topface.data.City;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
@@ -27,7 +26,6 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.ui.dialogs.CitySearchPopup;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
@@ -108,7 +106,6 @@ import dagger.Provides;
                 OkProfileFragment.class,
                 ProfilePhotoFragment.class,
                 UserProfileFragment.class,
-                CitySearchPopup.class,
                 ProfileFormFragment.class,
                 TakePhotoPopup.class,
                 AuthorizationManager.class,
@@ -166,10 +163,6 @@ public class TopfaceModule {
                 } else if (data.getClass() == Profile.class) {
                     Profile profile = (Profile) data;
                     CacheProfile.setProfile(profile, JsonUtils.profileToJson(profile));
-                } else if (data.getClass() == City.class) {
-                    UserConfig config = App.getUserConfig();
-                    config.setUserCity(JsonUtils.toJson(data));
-                    config.saveConfig();
                 }
             }
 
@@ -185,8 +178,6 @@ public class TopfaceModule {
                     return (T) getOptions();
                 } else if (Profile.class.equals(classType)) {
                     return (T) getProfile();
-                } else if (City.class.equals(classType)) {
-                    return (T) JsonUtils.fromJson(App.getUserConfig().getUserCity(), City.class);
                 } else if (OkUserData.class.equals(classType)) {
                     return (T) App.getUserConfig().getOkUserData();
                 } else if (AdjustAttributeData.class.equals(classType)) {

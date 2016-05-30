@@ -20,6 +20,7 @@ import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.adapters.BookmarksListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
@@ -33,6 +34,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+@FlurryOpenEvent(name = BookmarksFragment.PAGE_NAME)
 public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
 
     public static final int SELECTION_LIMIT = 10;
@@ -40,7 +42,7 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     @Inject
     NavigationState mNavigationState;
 
-    private static final String PAGE_NAME = "Bookmarks";
+    public static final String PAGE_NAME = "Bookmarks";
 
     private BroadcastReceiver mBookmarkedReceiver = new BroadcastReceiver() {
         @Override
@@ -61,11 +63,6 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
             }
         }
     };
-
-    @Override
-    protected String getScreenName() {
-        return PAGE_NAME;
-    }
 
     @Override
     protected Type getFeedListDataType() {

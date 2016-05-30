@@ -3,7 +3,6 @@ package com.topface.topface.ui.dialogs;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
@@ -12,12 +11,10 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
-import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.views.CitySearchView;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.FuckingVoodooMagic;
-
-import javax.inject.Inject;
 
 /**
  * Выбираем город
@@ -28,14 +25,7 @@ public class CitySearchPopup extends AbstractDialogFragment {
     public static final String TAG = "city_search_popup";
 
     private CitySearchView mCitySearch;
-    @Inject
-    TopfaceAppState mAppState;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        App.get().inject(this);
-    }
+    private OnCitySlected mOnCitySlected;
 
     @Override
     @FuckingVoodooMagic(description = "если в портрете запрещаем переворот")
@@ -49,7 +39,12 @@ public class CitySearchPopup extends AbstractDialogFragment {
         mCitySearch.setOnCityClickListener(new CitySearchView.onCityClickListener() {
             @Override
             public void onClick(City city) {
-                mAppState.setData(city);
+                UserConfig config = App.getUserConfig();
+                config.setUserCityChanged(true);
+                config.saveConfig();
+                if (mOnCitySlected != null) {
+                    mOnCitySlected.onSelected(city);
+                }
                 getDialog().cancel();
             }
         });
@@ -111,4 +106,11 @@ public class CitySearchPopup extends AbstractDialogFragment {
         }
     }
 
+    public void setOnCitySelected(OnCitySlected listener) {
+        mOnCitySlected = listener;
+    }
+
+    public interface OnCitySlected {
+        void onSelected(City city);
+    }
 }
