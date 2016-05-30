@@ -471,11 +471,33 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                     }
                 });
                 popup.show(getSupportFragmentManager(), CitySearchPopup.TAG);
+                popup.setOnCitySelected(new CitySearchPopup.OnCitySlected() {
+                    @Override
+                    public void onSelected(final City city) {
+                        if (city != null) {
+                            SettingsRequest request = new SettingsRequest(App.getContext());
+                            request.cityid = city.id;
+                            request.callback(new ApiHandler() {
+                                @Override
+                                public void success(IApiResponse response) {
+                                    Profile profile = App.get().getProfile();
+                                    profile.city = city;
+                                    mAppState.setData(profile);
+                                }
+
+                                @Override
+                                public void fail(int codeError, IApiResponse response) {
+                                }
+                            }).exec();
+                        }
+                    }
+                });
             }
 
             @Override
             public boolean isApplicable() {
-                return CacheProfile.needToSelectCity(NavigationActivity.this);
+                Profile profile = App.get().getProfile();
+                return profile.city == null || profile.city.isEmpty();
             }
 
             @Override
