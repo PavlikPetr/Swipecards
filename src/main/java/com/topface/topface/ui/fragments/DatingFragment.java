@@ -97,11 +97,16 @@ import javax.inject.Inject;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
+import static android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
+import static android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN;
+import static android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE;
+
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
 
     private static final String CURRENT_USER = "current_user";
     private static final String PAGE_NAME = "Dating";
+    private static final String IS_SOFT_KEYBOARD_SHOW = "is_soft_keyboard_show";
 
     @Inject
     TopfaceAppState mAppState;
@@ -126,6 +131,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private RetryViewCreator mRetryView;
     private ImageButton mRetryBtn;
     private PreloadManager<SearchUser> mPreloadManager;
+    private boolean mKeyboardWasShown = false; // по умолчанию клава закрыта
 
     private AddPhotoHelper mAddPhotoHelper;
     private Handler mHandler = new Handler() {
@@ -319,6 +325,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        mKeyboardWasShown = savedInstanceState != null && savedInstanceState.getBoolean(IS_SOFT_KEYBOARD_SHOW);
+        getActivity().getWindow().setSoftInputMode(mKeyboardWasShown ? SOFT_INPUT_STATE_ALWAYS_VISIBLE | SOFT_INPUT_ADJUST_RESIZE : SOFT_INPUT_STATE_ALWAYS_HIDDEN | SOFT_INPUT_ADJUST_RESIZE);
         super.onCreate(savedInstanceState);
         App.from(getActivity()).inject(this);
         if (mUserSearchList == null) {
@@ -345,6 +353,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         super.onSaveInstanceState(outState);
         outState.putParcelable(CURRENT_USER, mCurrentUser);
         outState.setClassLoader(SearchUser.class.getClassLoader());
+        outState.putBoolean(IS_SOFT_KEYBOARD_SHOW, mDatingInstantMessageController != null && mDatingInstantMessageController.isKeyboardShown());
     }
 
     @Override
@@ -371,6 +380,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onResume() {
+//        setKeyboardState();
         if (mIsHide) {
             setDarkStatusBarColor();
         } else {
@@ -734,6 +744,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 return false;
             }
         });
+        mDatingInstantMessageController.setKeyboardShown(mKeyboardWasShown);
     }
 
     private SearchRequest getSearchRequest(boolean isNeedRefresh) {
