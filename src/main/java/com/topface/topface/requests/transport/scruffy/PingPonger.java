@@ -1,6 +1,8 @@
 package com.topface.topface.requests.transport.scruffy;
 
 import com.koushikdutta.async.http.WebSocket;
+import com.topface.framework.utils.Debug;
+import com.topface.topface.utils.RxUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -37,9 +39,7 @@ public class PingPonger extends Subscriber<Long> implements WebSocket.PongCallba
 
     @Override
     public void onCompleted() {
-        if (mPingPongerSubscription != null && !mPingPongerSubscription.isUnsubscribed()) {
-            mPingPongerSubscription.unsubscribe();
-        }
+        RxUtils.safeUnsubscribe(mPingPongerSubscription);
     }
 
     @Override
@@ -58,6 +58,7 @@ public class PingPonger extends Subscriber<Long> implements WebSocket.PongCallba
             mIsPingSended = true;
             mRequestMangerInteractor.ping();
         } else {
+            Debug.log("Scruffy:: PONG FAIL " + mAttemptsСounter);
             mAttemptsСounter++;
         }
     }
