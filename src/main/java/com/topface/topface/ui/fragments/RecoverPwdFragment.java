@@ -65,7 +65,7 @@ public class RecoverPwdFragment extends BaseFragment {
             public void onClick(View v) {
                 hideButtons();
                 removeRedAlert();
-                Utils.hideSoftKeyboard(getActivity(), mEdEmail);
+                Utils.hideSoftKeyboard(getActivity().getApplicationContext(), mEdEmail);
                 RestorePwdRequest request = new RestorePwdRequest(getActivity());
                 request.login = mEdEmail.getText().toString();
                 request.callback(new ApiHandler() {

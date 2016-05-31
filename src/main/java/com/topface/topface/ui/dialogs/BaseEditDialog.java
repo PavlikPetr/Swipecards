@@ -45,7 +45,7 @@ public class BaseEditDialog<T extends Parcelable> extends BaseDialog {
         if (bundle != null) {
             mTitle = bundle.getString(DIALOG_TITLE);
             T data = bundle.getParcelable(DATA);
-            mAdapter = new EditAdapterFactory().createAdapterFor(getActivity(), data, App.from(getActivity()).getProfile());
+            mAdapter = new EditAdapterFactory().createAdapterFor(getActivity().getApplicationContext(), data, App.from(getActivity()).getProfile());
         }
     }
 

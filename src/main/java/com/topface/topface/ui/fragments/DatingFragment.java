@@ -380,7 +380,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onResume() {
-//        setKeyboardState();
         if (mIsHide) {
             setDarkStatusBarColor();
         } else {
