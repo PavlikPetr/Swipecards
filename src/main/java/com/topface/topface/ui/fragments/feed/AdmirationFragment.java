@@ -7,7 +7,6 @@ import android.widget.ViewFlipper;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -67,7 +66,9 @@ public class AdmirationFragment extends LikesFragment {
         View.OnClickListener buttonClick;
         //Vip, есть восхищения - показываем восхищения
         if (mCountersData.getAdmirations() > 0 && mBalanceData.premium) {
-            mStubFlipper.setVisibility(View.GONE);
+            if (mStubFlipper != null) {
+                mStubFlipper.setVisibility(View.GONE);
+            }
             return;
         }
         //Есть Vip, но нет восхищений. Отправляем на покупку симпатий

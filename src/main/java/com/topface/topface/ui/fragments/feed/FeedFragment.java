@@ -1371,7 +1371,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             @Override
             public void isAvailable(final boolean available) {
                 if (available) {
-                    new UnlockFunctionalityOptionsRequest(getActivity()).callback(new DataApiHandler<UnlockFunctionalityOption>() {
+                    new UnlockFunctionalityOptionsRequest(App.getContext()).callback(new DataApiHandler<UnlockFunctionalityOption>() {
                         @Override
                         public void fail(int codeError, IApiResponse response) {
 
@@ -1405,7 +1405,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                     @Override
                     public void onVideoWatched() {
                         super.onVideoWatched();
-                        new UnlockFunctionalityRequest(unlockType, getContext()).callback(new ApiHandler() {
+                        new UnlockFunctionalityRequest(unlockType, App.getContext()).callback(new ApiHandler() {
                             @Override
                             public void success(IApiResponse response) {
                                 updateData(false, false);
