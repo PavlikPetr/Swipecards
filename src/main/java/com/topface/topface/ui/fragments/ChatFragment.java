@@ -675,7 +675,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mIsUpdating = true;
             }
         });
-        historyRequest.leave = !isTakePhotoApplicable();
+        historyRequest.leave = isTakePhotoApplicable();
         registerRequest(historyRequest);
         historyRequest.debug = type.getType();
         if (mAdapter != null) {
