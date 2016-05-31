@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -9,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -67,7 +65,7 @@ public class RecoverPwdFragment extends BaseFragment {
             public void onClick(View v) {
                 hideButtons();
                 removeRedAlert();
-                hideSoftKeyboard();
+                Utils.hideSoftKeyboard(getActivity().getApplicationContext(), mEdEmail);
                 RestorePwdRequest request = new RestorePwdRequest(getActivity());
                 request.login = mEdEmail.getText().toString();
                 request.callback(new ApiHandler() {
@@ -89,13 +87,6 @@ public class RecoverPwdFragment extends BaseFragment {
         Bundle args = getArguments();
         if (args != null) {
             mBtnRecover.setEnabled(!TextUtils.isEmpty(getArguments().getString(ARG_EMAIL)));
-        }
-    }
-
-    private void hideSoftKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (mEdEmail != null) {
-            imm.hideSoftInputFromWindow(mEdEmail.getWindowToken(), 0);
         }
     }
 
