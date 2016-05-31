@@ -18,7 +18,7 @@ public class HistoryRequest extends LimitedApiRequest {
     public String to; // идентификатор сообщения до которого будет осуществляться выборка истории
     public String from; //идентификатор сообщения после которого будет осуществляться выборка истории
     public String debug;
-    public boolean leave = true; //Оставить сообщения не прочитанными
+    public boolean leave = false; //Оставить сообщения не прочитанными
     private WeakReference<IRequestExecuted> mRequestExecutedWeakReference;
 
     public HistoryRequest(Context context, int userId) {

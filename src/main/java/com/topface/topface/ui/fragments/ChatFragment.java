@@ -673,7 +673,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mIsUpdating = true;
             }
         });
-        historyRequest.leave = !isTakePhotoApplicable();
+        historyRequest.leave = isTakePhotoApplicable();
         registerRequest(historyRequest);
         historyRequest.debug = type.getType();
         if (mAdapter != null) {
@@ -1100,7 +1100,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 PurchasesActivity.INTENT_BUY_VIP);
     }
 
-    private void sendReadDialogsBroadcast(Intent intent){
+    private void sendReadDialogsBroadcast(Intent intent) {
         if (!isTakePhotoApplicable()) {
             LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
         }
@@ -1125,7 +1125,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private void stopTimer() {
-        if (mUpdateUiSubscription!=null && !mUpdateUiSubscription.isUnsubscribed()) {
+        if (mUpdateUiSubscription != null && !mUpdateUiSubscription.isUnsubscribed()) {
             mUpdateUiSubscription.unsubscribe();
         }
     }
@@ -1271,7 +1271,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         }
     }
 
-    private boolean isTakePhotoApplicable(){
+    private boolean isTakePhotoApplicable() {
         return !App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null;
     }
 }
