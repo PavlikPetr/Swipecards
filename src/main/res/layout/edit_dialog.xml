@@ -44,14 +44,9 @@
         android:orientation="vertical"
         android:scrollbars="none" />
 
-    <android.support.v4.widget.NestedScrollView
+    <ViewStub
+        android:id="@+id/edit_dialog_buttons_stub"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/edit_dialog_options_list">
-
-        <ViewStub
-            android:id="@+id/edit_dialog_buttons_stub"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </android.support.v4.widget.NestedScrollView>
+        android:layout_below="@id/edit_dialog_options_list" />
 </RelativeLayout>
