@@ -93,6 +93,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
 import com.topface.topface.utils.controllers.PopularUserChatController;
+import com.topface.topface.utils.debug.FuckingVoodooMagic;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.social.AuthToken;
@@ -202,6 +203,32 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private KeyboardListenerLayout mRootLayout;
     private boolean mKeyboardWasShown = false; // по умолчанию клава в чате закрыта
     private int mSex;
+    private KeyboardListenerLayout.KeyboardListener mKeyboardListener = new KeyboardListenerLayout.KeyboardListener() {
+        @Override
+        public void keyboardOpened() {
+            mKeyboardWasShown = true;
+            if (getSupportActionBar().isShowing()
+                    && getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
+                setActionbarVisibility(false);
+            }
+        }
+
+        @Override
+        public void keyboardClosed() {
+            mKeyboardWasShown = false;
+            if (!getSupportActionBar().isShowing()) {
+                setActionbarVisibility(true);
+            }
+        }
+
+        @Override
+        public void keyboardChangeState() {
+            if (getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT
+                    && !getSupportActionBar().isShowing()) {
+                setActionbarVisibility(true);
+            }
+        }
+    };
 
     private enum ChatUpdateType {
         UPDATE_COUNTERS("update counters"), PULL_TO_REFRESH("pull to refresh"), RETRY("retry"),
@@ -277,32 +304,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         super.onCreateView(inflater, container, savedInstanceState);
         mRootLayout = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
         setAnimatedView(mRootLayout.findViewById(R.id.lvChatList));
-        mRootLayout.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
-            @Override
-            public void keyboardOpened() {
-                mKeyboardWasShown = true;
-                if (getSupportActionBar().isShowing()
-                        && getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
-                    setActionbarVisibility(false);
-                }
-            }
-
-            @Override
-            public void keyboardClosed() {
-                mKeyboardWasShown = false;
-                if (!getSupportActionBar().isShowing()) {
-                    setActionbarVisibility(true);
-                }
-            }
-
-            @Override
-            public void keyboardChangeState() {
-                if (getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT
-                        && !getSupportActionBar().isShowing()) {
-                    setActionbarVisibility(true);
-                }
-            }
-        });
+        mRootLayout.setKeyboardListener(mKeyboardListener);
         Debug.log(this, "+onCreate");
         // Swap Control
         mRootLayout.findViewById(R.id.send_gift_button).setOnClickListener(this);
@@ -958,7 +960,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     @Override
+    @FuckingVoodooMagic(description = "принудительно скрываем клаву(вдруг на home нажмем), и " +
+            "убиреем листенер, т.к. в этом случае не нужно учитывать изменение состояния")
     public void onPause() {
+        mRootLayout.setKeyboardListener(null);
+        Utils.hideSoftKeyboard(App.getContext(), mEditBox);
         super.onPause();
         LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(mNewMessageReceiver);
         stopTimer();
@@ -1100,7 +1106,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 PurchasesActivity.INTENT_BUY_VIP);
     }
 
-    private void sendReadDialogsBroadcast(Intent intent){
+    private void sendReadDialogsBroadcast(Intent intent) {
         if (!isTakePhotoApplicable()) {
             LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
         }
@@ -1125,7 +1131,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private void stopTimer() {
-        if (mUpdateUiSubscription!=null && !mUpdateUiSubscription.isUnsubscribed()) {
+        if (mUpdateUiSubscription != null && !mUpdateUiSubscription.isUnsubscribed()) {
             mUpdateUiSubscription.unsubscribe();
         }
     }
@@ -1271,7 +1277,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         }
     }
 
-    private boolean isTakePhotoApplicable(){
+    private boolean isTakePhotoApplicable() {
         return !App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null;
     }
 }

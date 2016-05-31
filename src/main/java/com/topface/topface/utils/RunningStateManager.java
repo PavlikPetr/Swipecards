@@ -45,7 +45,7 @@ public class RunningStateManager {
                         if (activityLifreCycleData.getState() == ActivityLifreCycleData.STARTED) {
                             onActivityStarted(activityLifreCycleData.getClassName());
                         } else if (activityLifreCycleData.getState() == ActivityLifreCycleData.STOPPED) {
-                            onActivityStoped(activityLifreCycleData.getClassName());
+                            onActivityStopped(activityLifreCycleData.getClassName());
                         }
                     }
                 }, new Action1<Throwable>() {
@@ -67,7 +67,7 @@ public class RunningStateManager {
         }
     }
 
-    private void onActivityStoped(String activityName) {
+    private void onActivityStopped(String activityName) {
         synchronized (getActivitiesState()) {
             getActivitiesState().remove(activityName);
             if (getActivitiesState().isEmpty()) {
