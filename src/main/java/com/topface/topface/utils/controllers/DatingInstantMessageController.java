@@ -45,6 +45,7 @@ import com.topface.topface.utils.http.IRequestClient;
  */
 public class DatingInstantMessageController {
     public static final String DEFAULT_MESSAGE = "default_message";
+
     private Activity mActivity;
     private IRequestClient mRequestClient;
     private ImageButton mMessageSend;
@@ -59,6 +60,7 @@ public class DatingInstantMessageController {
     private boolean mIsSendEnadled;
 
     private String mLastMsgFromConfig;
+    private boolean mKeyboardWasShown = false;
 
     public DatingInstantMessageController(Activity activity, KeyboardListenerLayout root,
                                           View.OnClickListener clickListener,
@@ -70,12 +72,14 @@ public class DatingInstantMessageController {
         root.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
             @Override
             public void keyboardOpened() {
+                mKeyboardWasShown = true;
                 datingButtons.setVisibility(View.GONE);
                 userInfoStatus.setVisibility(View.GONE);
             }
 
             @Override
             public void keyboardClosed() {
+                mKeyboardWasShown = false;
                 datingButtons.setVisibility(View.VISIBLE);
                 userInfoStatus.setVisibility(View.VISIBLE);
             }
@@ -324,6 +328,14 @@ public class DatingInstantMessageController {
                 }
             }).exec();
         }
+    }
+
+    public boolean isKeyboardShown() {
+        return mKeyboardWasShown;
+    }
+
+    public void setKeyboardShown(boolean isShown){
+        mKeyboardWasShown = isShown;
     }
 
     public interface SendLikeAction {

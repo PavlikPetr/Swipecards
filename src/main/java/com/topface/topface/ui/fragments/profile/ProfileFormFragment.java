@@ -166,7 +166,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
             }
         });
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
-        mFragmentManager = getChildFragmentManager();
+        mFragmentManager = getActivity().getSupportFragmentManager();
     }
 
     @Override
