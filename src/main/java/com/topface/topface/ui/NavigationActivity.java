@@ -64,6 +64,7 @@ import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.InvitePopupAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.controllers.startactions.TrialVipPopupAction;
+import com.topface.topface.utils.debug.FuckingVoodooMagic;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
@@ -246,7 +247,9 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             }
         }));
         Debug.log("PopupHive onCreate");
-        startPopupRush(true, true);
+        if(savedInstanceState != null){
+            startPopupRush(true, true);
+        }
 
     }
 
@@ -360,6 +363,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     @Override
+    @FuckingVoodooMagic(description = "если ничего не сохранять в стейт, то перестанет показывться очередь(см. onCreate)")
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(FRAGMENT_SETTINGS, getNavigationManager().getCurrentFragmentSettings());
