@@ -51,6 +51,7 @@ public class PingPonger extends Subscriber<Long> implements WebSocket.PongCallba
     public void onNext(Long aLong) {
         if (mAttemptsСounter >= MAX_ATTEMPTS_COUNT) {
             mAttemptsСounter = 0;
+            mIsPingSended = false;
             mRequestMangerInteractor.reconnect();
             return;
         }
