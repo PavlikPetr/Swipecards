@@ -16,7 +16,6 @@ import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.statistics.ScruffyStatistics;
-import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.http.HttpUtils;
@@ -44,7 +43,7 @@ public class ScruffyRequestManager {
     private PingPonger mPingPonger = new PingPonger(new PingPonger.IRequestManagerInteractor() {
         @Override
         public void ping() {
-            Debug.log("Scruffy:: PING");
+            Debug.log("Scruffy:: PING_PONGER PING");
             if (mWebSocket != null) {
                 mWebSocket.ping(Utils.EMPTY);
             } else {
@@ -54,13 +53,13 @@ public class ScruffyRequestManager {
 
         @Override
         public void pong() {
-            Debug.log("Scruffy:: PONG");
+            Debug.log("Scruffy:: PING_PONGER PONG");
             mScruffyAvailable = true;
         }
 
         @Override
         public void reconnect() {
-            Debug.log("Scruffy:: RECONNECT");
+            Debug.log("Scruffy:: PING_PONGER RECONNECT");
             ScruffyRequestManager.this.reconnect();
         }
     });
@@ -145,7 +144,7 @@ public class ScruffyRequestManager {
         mHockeySender = new HockeySender();
     }
 
-    public static ScruffyRequestManager getInstance() {
+    public synchronized static ScruffyRequestManager getInstance() {
         if (mInstance == null) {
             mInstance = new ScruffyRequestManager();
         }
@@ -283,6 +282,7 @@ public class ScruffyRequestManager {
                     webSocket.setStringCallback(mStringCallback);
                     webSocket.setClosedCallback(mClosedCallback);
                     webSocket.setPongCallback(mPingPonger);
+                    mPingPonger.onPongReceived(Utils.EMPTY);
                     mWebSocket = webSocket;
                     if (listener != null) {
                         listener.sendConnected();
@@ -348,7 +348,7 @@ public class ScruffyRequestManager {
     }
 
     public void logout() {
-        RxUtils.safeUnsubscribe(mPingPonger);
+        Debug.error("Scruffy::  logout");
         clearState();
     }
 
@@ -365,6 +365,7 @@ public class ScruffyRequestManager {
     }
 
     public void killConnection(boolean ignoreCallbacks) {
+        Debug.error("Scruffy::  killConnection");
         if (mWebSocket != null) {
             if (ignoreCallbacks) {
                 mWebSocket.setStringCallback(null);
