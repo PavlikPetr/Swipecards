@@ -710,6 +710,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                                 onUserLoaded(mUser);
                                 initOverflowMenuActions(getOverflowMenu());
                             }
+                            takePhotoIfNeed();
                             return;
                         } else if (blockStage == PopularUserChatController.SECOND_STAGE) {
                             break;
