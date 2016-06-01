@@ -381,8 +381,7 @@ public class Options extends AbstractData {
             // отображение максимально заметного тоста, чтобы на этапе тестирования любого функционала
             // не пропустить ошибку парсинга опций, т.к. это может приветси к денежным потерям проекта
             // вызызывается только для сборок debug & qa
-            Handler mHandler = new Handler(App.getContext().getMainLooper());
-            mHandler.post(new Runnable() {
+            new Handler(App.getContext().getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
                     if (BuildConfig.DEBUG) {

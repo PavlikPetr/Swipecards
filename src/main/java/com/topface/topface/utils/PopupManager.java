@@ -77,11 +77,12 @@ public class PopupManager {
     }
 
     private boolean isOldVersion(String version) {
+        String template = "\\.";
         try {
             String curVersion = BuildConfig.VERSION_NAME;
-            if (!TextUtils.isEmpty(version) && !TextUtils.isEmpty(curVersion)) {
-                String[] splittedVersion = TextUtils.split(version, "\\.");
-                String[] splittedCurVersion = TextUtils.split(curVersion, "\\.");
+            if (!TextUtils.isEmpty(version) && !TextUtils.isEmpty(curVersion) && version.contains(template)) {
+                String[] splittedVersion = TextUtils.split(version, template);
+                String[] splittedCurVersion = TextUtils.split(curVersion, template);
                 for (int i = 0; i < splittedVersion.length; i++) {
                     if (i < splittedCurVersion.length) {
                         long curVersionLong = Long.parseLong(splittedCurVersion[i]);
@@ -99,7 +100,6 @@ public class PopupManager {
             }
         } catch (Exception e) {
             Debug.error("Check Version Error: " + version, e);
-
         }
         return false;
     }
