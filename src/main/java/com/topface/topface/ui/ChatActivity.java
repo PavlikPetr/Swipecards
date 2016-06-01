@@ -11,7 +11,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.experiments.FeedScreensIntent;
-import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.state.EventBus;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.fragments.ChatFragment;
 
@@ -28,14 +28,14 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
     public static final String LAST_MESSAGE_USER_ID = "com.topface.topface.ui.ChatActivity_last_message_user_id";
 
     @Inject
-    TopfaceAppState mAppState;
+    EventBus mEventBus;
     private Subscription mTakePhotoSubscription;
 
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         App.get().inject(this);
-        mTakePhotoSubscription = mAppState.getObservable(TakePhotoPopup.TakePhotoActionHolder.class)
+        mTakePhotoSubscription = mEventBus.getObservable(TakePhotoPopup.TakePhotoActionHolder.class)
                 .filter(new Func1<TakePhotoPopup.TakePhotoActionHolder, Boolean>() {
                     @Override
                     public Boolean call(TakePhotoPopup.TakePhotoActionHolder takePhotoActionHolder) {

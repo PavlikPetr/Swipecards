@@ -36,6 +36,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoAddProfileRequest;
 import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.state.EventBus;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.NavigationActivity;
@@ -91,7 +92,9 @@ public class AddPhotoHelper {
     private File outputFile;
     private DialogInterface.OnCancelListener mOnDialogCancelListener;
     @Inject
-    static TopfaceAppState mState;
+    static TopfaceAppState mAppState;
+    @Inject
+    EventBus mEventBus;
     private View.OnClickListener mOnAddPhotoClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -117,6 +120,7 @@ public class AddPhotoHelper {
     }
 
     public AddPhotoHelper(Activity activity) {
+        App.get().inject(this);
         minPhotoSize = App.getAppOptions().getMinPhotoSize();
         mActivity = new WeakReference<>(activity);
         mContext = activity.getApplicationContext();
@@ -125,7 +129,7 @@ public class AddPhotoHelper {
     }
 
     private void initPhotoActionSubscription() {
-        mPhotoActionSubscription = mState.getObservable(TakePhotoPopup.TakePhotoActionHolder.class)
+        mPhotoActionSubscription = mEventBus.getObservable(TakePhotoPopup.TakePhotoActionHolder.class)
                 .filter(new Func1<TakePhotoPopup.TakePhotoActionHolder, Boolean>() {
                     @Override
                     public Boolean call(TakePhotoPopup.TakePhotoActionHolder holder) {
@@ -150,7 +154,7 @@ public class AddPhotoHelper {
                                 case ACTION_CANCEL:
                                     TakePhotoStatistics.sendCancelAction(holder.getPlc());
                             }
-                            mState.setData(new TakePhotoPopup.TakePhotoActionHolder(null));
+                            mEventBus.setData(new TakePhotoPopup.TakePhotoActionHolder(null));
                         }
                     }
                 });
@@ -567,7 +571,7 @@ public class AddPhotoHelper {
             }
             // оповещаем всех об изменениях
             CacheProfile.sendUpdateProfileBroadcast();
-            mState.setData(profile);
+            mAppState.setData(profile);
             Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
         } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
             // если загрузка аватраки не завершилась успехом, то сбрасываем флаг

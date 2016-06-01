@@ -17,6 +17,7 @@ import com.topface.topface.promo.dialogs.PromoKey81Dialog;
 import com.topface.topface.state.CacheDataInterface;
 import com.topface.topface.state.CountersDataProvider;
 import com.topface.topface.state.DrawerLayoutState;
+import com.topface.topface.state.EventBus;
 import com.topface.topface.state.LifeCycleState;
 import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.state.PopupHive;
@@ -126,7 +127,8 @@ import dagger.Provides;
                 VisitorsFragment.class,
                 FansFragment.class,
                 AuthFragment.class,
-                ChatActivity.class
+                ChatActivity.class,
+                AddPhotoHelper.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
@@ -252,5 +254,11 @@ public class TopfaceModule {
     @Singleton
     DrawerLayoutState providesDrawerLayoutState() {
         return new DrawerLayoutState();
+    }
+
+    @Provides
+    @Singleton
+    EventBus providesEventBus() {
+        return new EventBus();
     }
 }

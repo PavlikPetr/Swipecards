@@ -11,7 +11,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.databinding.TakePhotoDialogBinding;
-import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.state.EventBus;
 import com.topface.topface.utils.debug.FuckingVoodooMagic;
 
 import javax.inject.Inject;
@@ -36,7 +36,7 @@ public class TakePhotoPopup extends AbstractDialogFragment implements View.OnCli
     }
 
     @Inject
-    TopfaceAppState mAppState;
+    EventBus mEventBus;
     private Bundle mArgs;
 
     public static TakePhotoPopup newInstance(String plc) {
@@ -62,7 +62,7 @@ public class TakePhotoPopup extends AbstractDialogFragment implements View.OnCli
             @Override
             public void onBackPressed() {
                 super.onBackPressed();
-                mAppState.setData(new TakePhotoActionHolder(ACTION_CANCEL, mArgs.getString(EXTRA_PLC)));
+                mEventBus.setData(new TakePhotoActionHolder(ACTION_CANCEL, mArgs.getString(EXTRA_PLC)));
             }
         };
     }
@@ -70,7 +70,7 @@ public class TakePhotoPopup extends AbstractDialogFragment implements View.OnCli
     @Override
     protected void initViews(View root) {
         TakePhotoDialogBinding binding = TakePhotoDialogBinding.bind(root);
-        binding.setHandlers(new Handlers(getDialog(), mArgs, mAppState));
+        binding.setHandlers(new Handlers(getDialog(), mArgs, mEventBus));
         binding.uploadPhotoPlaceholder.setBackgroundResource(App.get().getProfile().sex == Profile.GIRL ? R.drawable.upload_photo_female : R.drawable.upload_photo_male);
         ((TextView) binding.getRoot().findViewById(R.id.title)).setText(R.string.take_photo);
         binding.getRoot().findViewById(R.id.title_clickable).setOnClickListener(this);
@@ -79,7 +79,7 @@ public class TakePhotoPopup extends AbstractDialogFragment implements View.OnCli
     @FuckingVoodooMagic(description = "рассылка ивентов о действиях с попапом добавления фото")
     @Override
     public void onClick(View v) {
-        mAppState.setData(new TakePhotoActionHolder(ACTION_CANCEL, mArgs.getString(EXTRA_PLC)));
+        mEventBus.setData(new TakePhotoActionHolder(ACTION_CANCEL, mArgs.getString(EXTRA_PLC)));
         getDialog().cancel();
     }
 
@@ -125,26 +125,26 @@ public class TakePhotoPopup extends AbstractDialogFragment implements View.OnCli
     public static class Handlers {
 
         private Bundle mArgs;
-        private TopfaceAppState mAppState;
+        private EventBus mEventBus;
         private Dialog mDialog;
 
 
-        public Handlers(Dialog dialog, Bundle args, TopfaceAppState appState) {
+        public Handlers(Dialog dialog, Bundle args, EventBus eventBus) {
             mArgs = args;
-            mAppState = appState;
+            mEventBus = eventBus;
             mDialog = dialog;
         }
 
         @FuckingVoodooMagic(description = "рассылка ивентов о действиях с попапом добавления фото")
         public void onTakeClick(View view) {
-            mAppState.setData(new TakePhotoActionHolder(ACTION_CAMERA_CHOSEN, mArgs.getString(EXTRA_PLC)));
+            mEventBus.setData(new TakePhotoActionHolder(ACTION_CAMERA_CHOSEN, mArgs.getString(EXTRA_PLC)));
             view.setEnabled(false);
             mDialog.cancel();
         }
 
         @FuckingVoodooMagic(description = "рассылка ивентов о действиях с попапом добавления фото")
         public void onChooseClick(View view) {
-            mAppState.setData(new TakePhotoActionHolder(ACTION_GALLERY_CHOSEN, mArgs.getString(EXTRA_PLC)));
+            mEventBus.setData(new TakePhotoActionHolder(ACTION_GALLERY_CHOSEN, mArgs.getString(EXTRA_PLC)));
             view.setEnabled(false);
             mDialog.cancel();
         }
