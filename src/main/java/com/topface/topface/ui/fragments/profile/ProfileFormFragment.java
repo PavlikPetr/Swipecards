@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.topface.framework.JsonUtils;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
@@ -23,7 +24,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.state.EventBus;
 import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.OwnGiftsActivity;
 import com.topface.topface.ui.dialogs.CitySearchPopup;
@@ -52,6 +53,9 @@ public class ProfileFormFragment extends AbstractFormFragment {
 
     public static final String PAGE_NAME = "profile.form";
 
+    @Inject
+    EventBus mEventBus;
+    private Subscription mCitySubscription;
     private FragmentManager mFragmentManager;
 
     private List<Integer> mMainFormTypes = new ArrayList<>(Arrays.asList(
@@ -144,15 +148,13 @@ public class ProfileFormFragment extends AbstractFormFragment {
         }
     };
 
-    private Subscription mCitySubscription;
-    @Inject
-    TopfaceAppState mAppState;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.get().inject(this);
-        mCitySubscription = mAppState.getObservable(City.class).subscribe(new Action1<City>() {
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+        mFragmentManager = getActivity().getSupportFragmentManager();
+        mCitySubscription = mEventBus.getObservable(City.class).subscribe(new Action1<City>() {
             @Override
             public void call(City city) {
                 City profileCity = App.get().getProfile().city;
@@ -164,9 +166,12 @@ public class ProfileFormFragment extends AbstractFormFragment {
                             new FormItem(R.string.general_city, JsonUtils.toJson(city), FormItem.CITY));
                 }
             }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Debug.error("City change observable failed", throwable);
+            }
         });
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
-        mFragmentManager = getActivity().getSupportFragmentManager();
     }
 
     @Override
