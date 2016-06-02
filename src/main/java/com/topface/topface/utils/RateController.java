@@ -1,8 +1,6 @@
 package com.topface.topface.utils;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 
 import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
@@ -74,8 +72,6 @@ public class RateController {
                 if (listener != null) {
                     listener.onRateCompleted(sendLike.getMutualid());
                 }
-                // Broadcast to disable dating rate buttons for current user
-                userRateBroadcast(sendLike.getUserid());
 
                 /* Update dating search cache for situations when it's fragment is destroyed
                    and it will be restored from cache
@@ -124,12 +120,6 @@ public class RateController {
 
     public void setOnRateControllerUiListener(OnRateControllerListener onRateControllerUiListener) {
         mOnRateControllerUiListener = onRateControllerUiListener;
-    }
-
-    public void userRateBroadcast(int userId) {
-        Intent intent = new Intent(USER_RATED);
-        intent.putExtra(USER_ID_EXTRA, userId);
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
     /**
