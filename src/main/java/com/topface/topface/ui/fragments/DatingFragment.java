@@ -158,26 +158,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private boolean mCanSendAlbumReq = true;
     private SearchUser mCurrentUser;
     private int mCurrentStatusBarColor;
-    private BroadcastReceiver mRateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int likedUserId = intent.getExtras().getInt(RateController.USER_ID_EXTRA);
-            if (mCurrentUser != null && likedUserId == mCurrentUser.id) {
-                if (null != mDelightBtn) {
-                    mDelightBtn.setEnabled(false);
-                }
-                mMutualBtn.setEnabled(false);
-                mCurrentUser.rated = true;
-            } else if (mUserSearchList != null) {
-                for (SearchUser searchUser : mUserSearchList) {
-                    if (searchUser.id == likedUserId) {
-                        searchUser.rated = true;
-                        break;
-                    }
-                }
-            }
-        }
-    };
     private Action1<BalanceData> mBalanceAction = new Action1<BalanceData>() {
         @Override
         public void call(BalanceData balanceData) {
@@ -346,8 +326,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         // Rate Controller
         mRateController = new RateController(getActivity(), SendLikeRequest.FROM_SEARCH);
         mRateController.setOnRateControllerUiListener(this);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(mRateReceiver, new IntentFilter(RateController.USER_RATED));
     }
 
     @Override
@@ -414,7 +392,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (null != mDatingSubscriptions && !mDatingSubscriptions.isUnsubscribed()) {
             mDatingSubscriptions.unsubscribe();
         }
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mRateReceiver);
     }
 
     @Override
@@ -894,7 +871,20 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         new RateController.OnRateRequestListener() {
                             @Override
                             public void onRateCompleted(int mutualId) {
-
+                                if (mCurrentUser != null && mutualId == mCurrentUser.id) {
+                                    if (null != mDelightBtn) {
+                                        mDelightBtn.setEnabled(false);
+                                    }
+                                    mMutualBtn.setEnabled(false);
+                                    mCurrentUser.rated = true;
+                                } else if (mUserSearchList != null) {
+                                    for (SearchUser searchUser : mUserSearchList) {
+                                        if (searchUser.id == mutualId) {
+                                            searchUser.rated = true;
+                                            break;
+                                        }
+                                    }
+                                }
                             }
 
                             @Override
