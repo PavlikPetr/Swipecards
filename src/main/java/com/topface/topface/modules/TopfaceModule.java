@@ -27,6 +27,7 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.dialogs.CitySearchPopup;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
@@ -107,7 +108,6 @@ import dagger.Provides;
                 OkProfileFragment.class,
                 ProfilePhotoFragment.class,
                 UserProfileFragment.class,
-                ProfileFormFragment.class,
                 TakePhotoPopup.class,
                 AuthorizationManager.class,
                 Profile.class,
@@ -128,7 +128,9 @@ import dagger.Provides;
                 FansFragment.class,
                 AuthFragment.class,
                 ChatActivity.class,
-                AddPhotoHelper.class
+                AddPhotoHelper.class,
+                CitySearchPopup.class,
+                ProfileFormFragment.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

@@ -33,6 +33,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.state.DrawerLayoutState;
+import com.topface.topface.state.EventBus;
 import com.topface.topface.state.PopupHive;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
@@ -106,6 +107,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     NavigationState mNavigationState;
     @Inject
     DrawerLayoutState mDrawerLayoutState;
+    @Inject
+    EventBus mEventBus;
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     public static boolean isPhotoAsked;
     private PopupManager mPopupManager;
@@ -208,6 +211,32 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 }
             }
         }));
+        mSubscription.add(mEventBus.getObservable(City.class).subscribe(new Action1<City>() {
+            @Override
+            public void call(final City city) {
+                if (city != null) {
+                    SettingsRequest request = new SettingsRequest(App.getContext());
+                    request.cityid = city.id;
+                    request.callback(new ApiHandler() {
+                        @Override
+                        public void success(IApiResponse response) {
+                            Profile profile = App.get().getProfile();
+                            profile.city = city;
+                            mAppState.setData(profile);
+                        }
+
+                        @Override
+                        public void fail(int codeError, IApiResponse response) {
+                        }
+                    }).exec();
+                }
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Debug.error("City change observable failed", throwable);
+            }
+        }));
         if (isNeedBroughtToFront(intent)) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -247,7 +276,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             }
         }));
         Debug.log("PopupHive onCreate");
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             startPopupRush(true, true);
         }
 
@@ -478,27 +507,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                     }
                 });
                 popup.show(getSupportFragmentManager(), CitySearchPopup.TAG);
-                popup.setOnCitySelected(new CitySearchPopup.OnCitySlected() {
-                    @Override
-                    public void onSelected(final City city) {
-                        if (city != null) {
-                            SettingsRequest request = new SettingsRequest(App.getContext());
-                            request.cityid = city.id;
-                            request.callback(new ApiHandler() {
-                                @Override
-                                public void success(IApiResponse response) {
-                                    Profile profile = App.get().getProfile();
-                                    profile.city = city;
-                                    mAppState.setData(profile);
-                                }
-
-                                @Override
-                                public void fail(int codeError, IApiResponse response) {
-                                }
-                            }).exec();
-                        }
-                    }
-                });
             }
 
             @Override

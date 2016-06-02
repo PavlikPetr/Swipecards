@@ -11,10 +11,13 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
+import com.topface.topface.state.EventBus;
 import com.topface.topface.ui.views.CitySearchView;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.FuckingVoodooMagic;
+
+import javax.inject.Inject;
 
 /**
  * Выбираем город
@@ -24,8 +27,13 @@ public class CitySearchPopup extends AbstractDialogFragment {
 
     public static final String TAG = "city_search_popup";
 
+    @Inject
+    EventBus mEventBus;
     private CitySearchView mCitySearch;
-    private OnCitySlected mOnCitySlected;
+
+    public CitySearchPopup() {
+        App.get().inject(this);
+    }
 
     @Override
     @FuckingVoodooMagic(description = "если в портрете запрещаем переворот")
@@ -42,9 +50,7 @@ public class CitySearchPopup extends AbstractDialogFragment {
                 UserConfig config = App.getUserConfig();
                 config.setUserCityChanged(true);
                 config.saveConfig();
-                if (mOnCitySlected != null) {
-                    mOnCitySlected.onSelected(city);
-                }
+                mEventBus.setData(city);
                 getDialog().cancel();
             }
         });
@@ -104,13 +110,5 @@ public class CitySearchPopup extends AbstractDialogFragment {
         if (focus != null) {
             Utils.hideSoftKeyboard(getContext(), focus.getWindowToken());
         }
-    }
-
-    public void setOnCitySelected(OnCitySlected listener) {
-        mOnCitySlected = listener;
-    }
-
-    public interface OnCitySlected {
-        void onSelected(City city);
     }
 }
