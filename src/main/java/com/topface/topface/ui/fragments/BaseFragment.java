@@ -8,10 +8,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -29,6 +28,8 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.http.IRequestClient;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.LinkedList;
@@ -256,11 +257,12 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         return null;
     }
 
+    @Nullable
     protected ActionBar getSupportActionBar() {
         if (mSupportActionBar == null) {
             Activity activity = getActivity();
-            if (activity instanceof ActionBarActivity) {
-                mSupportActionBar = ((ActionBarActivity) activity).getSupportActionBar();
+            if (activity instanceof AppCompatActivity) {
+                mSupportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
             }
         }
         return mSupportActionBar;
@@ -273,9 +275,9 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         if (activity instanceof BaseFragmentActivity) {
             // use overriden setSupportProgressBarIndeterminateVisibility from BaseFragmentActivity
             ((BaseFragmentActivity) activity).setSupportProgressBarIndeterminateVisibility(visible);
-        } else if (activity instanceof ActionBarActivity) {
+        } else if (activity instanceof AppCompatActivity) {
             // check support of indeterminate progress bar
-            ActionBarActivity abActivity = (ActionBarActivity) activity;
+            AppCompatActivity abActivity = (AppCompatActivity) activity;
             abActivity.setSupportProgressBarIndeterminateVisibility(visible);
         }
     }

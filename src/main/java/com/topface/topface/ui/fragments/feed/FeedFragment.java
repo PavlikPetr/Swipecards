@@ -11,7 +11,7 @@ import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -689,7 +689,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     protected boolean listOnItemLongClickListener(final long itemPosition) {
         if (isDeletable) {
             FeedAdapter<T> adapter = getListAdapter();
-            ((ActionBarActivity) getActivity()).startSupportActionMode(mActionActivityCallback);
+            ((AppCompatActivity) getActivity()).startSupportActionMode(mActionActivityCallback);
             adapter.startMultiSelection(getMultiSelectionLimit());
             adapter.onSelection((int) itemPosition);
             return true;
