@@ -107,6 +107,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private static final String CURRENT_USER = "current_user";
     private static final String PAGE_NAME = "Dating";
     private static final String IS_SOFT_KEYBOARD_SHOW = "is_soft_keyboard_show";
+    private static final String FULLSCREEN_STATE = "fullscreen_state";
 
     @Inject
     TopfaceAppState mAppState;
@@ -338,6 +339,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (savedInstanceState != null) {
             mCurrentUser = savedInstanceState.getParcelable(CURRENT_USER);
         }
+        mIsHide = savedInstanceState != null && savedInstanceState.getBoolean(FULLSCREEN_STATE);
         mPreloadManager = new PreloadManager<>();
         mController = new AlbumLoadController(AlbumLoadController.FOR_PREVIEW);
         initMutualDrawables();
@@ -354,6 +356,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         outState.putParcelable(CURRENT_USER, mCurrentUser);
         outState.setClassLoader(SearchUser.class.getClassLoader());
         outState.putBoolean(IS_SOFT_KEYBOARD_SHOW, mDatingInstantMessageController != null && mDatingInstantMessageController.isKeyboardShown());
+        outState.putBoolean(FULLSCREEN_STATE, mIsHide);
     }
 
     @Override
@@ -382,8 +385,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void onResume() {
         if (mIsHide) {
             setDarkStatusBarColor();
+            hideControls();
         } else {
             setMainStatusBarColor();
+            showControls();
         }
         super.onResume();
         if (getTitleSetter() != null) {
