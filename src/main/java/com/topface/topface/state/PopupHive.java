@@ -1,6 +1,7 @@
 package com.topface.topface.state;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
@@ -66,10 +67,7 @@ public class PopupHive {
     }
 
     public void releaseHive() {
-        mSequenceHolderMap.clear();
-        if (mSequencedSubscription != null && !mSequencedSubscription.isUnsubscribed()) {
-            mSequencedSubscription.unsubscribe();
-        }
+        RxUtils.safeUnsubscribe(mSequencedSubscription);
     }
 
     public void registerPopupSequence(List<IStartAction> startActionList, Class aClass, boolean isNeedResetOldSequence) {
@@ -81,10 +79,6 @@ public class PopupHive {
         } else {
             mSequenceHolderMap.put(aClass, new PopupSequencedHolder(startActionList));
         }
-    }
-
-    public void registerPopupSequence(List<IStartAction> startActionList, Class aClass) {
-        registerPopupSequence(startActionList, aClass, false);
     }
 
     public boolean containSequence(Class aClass) {

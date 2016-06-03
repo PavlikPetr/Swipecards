@@ -326,9 +326,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (!App.get().getProfile().isFromCache
                 && App.get().isUserOptionsObtainedFromServer()
                 && !CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
-            Debug.log("LOOOOOOOOOPG");
             if (!mPopupHive.containSequence(NavigationActivity.class) || stateChanged) {
-                mPopupHive.registerPopupSequence(getActionsList(), NavigationActivity.class);
+                mPopupHive.registerPopupSequence(getActionsList(), NavigationActivity.class, false);
             }
             mPopupHive.execPopupRush(NavigationActivity.class, isNeedResetOldSequence);
         }
@@ -498,8 +497,10 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
             @Override
             public void callOnUi() {
-                CitySearchPopup popup = new CitySearchPopup();
-                popup.setRetainInstance(true);
+                CitySearchPopup popup = (CitySearchPopup) getSupportFragmentManager().findFragmentByTag(CitySearchPopup.TAG);
+                if (popup == null) {
+                    popup = new CitySearchPopup();
+                }
                 popup.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
@@ -550,7 +551,10 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             public void callOnUi() {
                 if (!isPhotoAsked) {
                     isPhotoAsked = true;
-                    TakePhotoPopup popup = TakePhotoPopup.newInstance("");
+                    TakePhotoPopup popup = (TakePhotoPopup) getSupportFragmentManager().findFragmentByTag(TakePhotoPopup.TAG);
+                    if (popup == null) {
+                        popup = TakePhotoPopup.newInstance("");
+                    }
                     popup.setOnCancelListener(new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialog) {
@@ -563,7 +567,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
             @Override
             public boolean isApplicable() {
-                return !AuthToken.getInstance().isEmpty() && (App.from(NavigationActivity.this).getProfile().photo == null)
+                return !AuthToken.getInstance().isEmpty() && (App.get().getProfile().photo == null)
                         && !App.getConfig().getUserConfig().isUserAvatarAvailable();
             }
 

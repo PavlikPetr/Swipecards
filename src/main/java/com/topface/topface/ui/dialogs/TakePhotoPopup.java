@@ -14,6 +14,8 @@ import com.topface.topface.databinding.TakePhotoDialogBinding;
 import com.topface.topface.state.EventBus;
 import com.topface.topface.utils.debug.FuckingVoodooMagic;
 
+import org.jetbrains.annotations.Nullable;
+
 import javax.inject.Inject;
 
 /**
@@ -37,6 +39,7 @@ public class TakePhotoPopup extends AbstractDialogFragment implements View.OnCli
 
     @Inject
     EventBus mEventBus;
+    @Nullable
     private Bundle mArgs;
 
     public static TakePhotoPopup newInstance(String plc) {
@@ -62,7 +65,9 @@ public class TakePhotoPopup extends AbstractDialogFragment implements View.OnCli
             @Override
             public void onBackPressed() {
                 super.onBackPressed();
-                mEventBus.setData(new TakePhotoActionHolder(ACTION_CANCEL, mArgs.getString(EXTRA_PLC)));
+                if (mArgs != null) {
+                    mEventBus.setData(new TakePhotoActionHolder(ACTION_CANCEL, mArgs.getString(EXTRA_PLC)));
+                }
             }
         };
     }
@@ -79,7 +84,9 @@ public class TakePhotoPopup extends AbstractDialogFragment implements View.OnCli
     @FuckingVoodooMagic(description = "рассылка ивентов о действиях с попапом добавления фото")
     @Override
     public void onClick(View v) {
-        mEventBus.setData(new TakePhotoActionHolder(ACTION_CANCEL, mArgs.getString(EXTRA_PLC)));
+        if (mArgs != null) {
+            mEventBus.setData(new TakePhotoActionHolder(ACTION_CANCEL, mArgs.getString(EXTRA_PLC)));
+        }
         getDialog().cancel();
     }
 
