@@ -74,6 +74,7 @@ public class FullscreenController {
         public void onClose() {
             isFullScreenBannerVisible = false;
             AdStatistics.sendFullscreenClosed(mCurrentBannerType);
+            onFullScreenAdClosed();
         }
 
         @Override
@@ -178,6 +179,9 @@ public class FullscreenController {
         long lastShow = userConfig.getLastFullscreenTime();
         int shownCount = userConfig.getFullscreenShownCount();
         long currentTime = System.currentTimeMillis();
+        shownCount = 0;
+        lastShow = 0;
+        firstShow = 0;
         FullScreenCondition fullScreenCondition = mOptions != null ? mOptions.fullScreenCondition : new FullScreenCondition();
 
         if ((currentTime - firstShow) >= fullScreenCondition.getInterval() * 1000) {
