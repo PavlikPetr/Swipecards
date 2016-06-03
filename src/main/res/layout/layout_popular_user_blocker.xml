@@ -15,7 +15,7 @@
 
         <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/popularUserAvatar"
-            style="@style/EmptyFeedsViewImageVisibility"
+            style="@style/LandscapePortraitImagesVisibility"
             android:layout_width="152dp"
             android:layout_height="152dp"
             app:postProcessor="inscribedAvatar" />

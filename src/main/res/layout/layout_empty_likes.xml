@@ -39,7 +39,7 @@
         </LinearLayout>
 
         <ImageView
-            style="@style/EmptyFeedsViewImageVisibility"
+            style="@style/LandscapePortraitImagesVisibility"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/tvText"
@@ -63,7 +63,7 @@
             android:gravity="center" />
 
         <LinearLayout
-            style="@style/EmptyFeedsViewImageVisibility"
+            style="@style/LandscapePortraitImagesVisibility"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
