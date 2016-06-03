@@ -43,14 +43,12 @@ import com.topface.framework.utils.Debug;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.ui.IEmailConfirmationListener;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.debug.HockeySender;
@@ -607,6 +605,9 @@ public class Utils {
         new ProfileRequest(App.getContext()).callback(new DataApiHandler<Profile>() {
             @Override
             protected void success(Profile data, IApiResponse response) {
+                if (emailConfirmationListener != null) {
+                    emailConfirmationListener.onSuccess(data, response);
+                }
                 if (data != null) {
                     boolean isConfirmed = data.emailConfirmed;
                     if (emailConfirmationListener != null) {
@@ -620,21 +621,7 @@ public class Utils {
                         }
                     }
                     if (isConfirmed) {
-                        new UserGetAppOptionsRequest(App.getContext()).callback(new DataApiHandler<Options>() {
-
-                            @Override
-                            public void fail(int codeError, IApiResponse response) {
-                            }
-
-                            @Override
-                            protected void success(Options data, IApiResponse response) {
-                            }
-
-                            @Override
-                            protected Options parseResponse(ApiResponse response) {
-                                return new Options(response);
-                            }
-                        }).exec();
+                        App.getUserOptionsRequest().exec();
                     }
                 }
 
@@ -647,6 +634,17 @@ public class Utils {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
+                if (emailConfirmationListener != null) {
+                    emailConfirmationListener.fail(codeError, response);
+                }
+            }
+
+            @Override
+            public void always(IApiResponse response) {
+                super.always(response);
+                if (emailConfirmationListener != null) {
+                    emailConfirmationListener.always(response);
+                }
             }
         }).exec();
     }

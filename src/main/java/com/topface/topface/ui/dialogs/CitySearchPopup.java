@@ -1,10 +1,12 @@
 package com.topface.topface.ui.dialogs;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
@@ -102,13 +104,11 @@ public class CitySearchPopup extends AbstractDialogFragment {
     }
 
     @Override
-    @FuckingVoodooMagic(description = "отключаем принудительны портрет, чтоб дольше все ок работало")
+    @FuckingVoodooMagic(description = "отключаем принудительны портрет, чтоб дальше все ок работало")
     public void onDestroyView() {
-        super.onDestroyView();
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        View focus = getActivity().getCurrentFocus();
-        if (focus != null) {
-            Utils.hideSoftKeyboard(getContext(), focus.getWindowToken());
-        }
+        ((InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE))
+                .toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+        super.onDestroyView();
     }
 }
