@@ -339,10 +339,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
 
                 @Override
                 public void onPopupClosed() {
-                    if (fragment.isAdded()) {
-                        mTrialVipPopup.getActivity().getSupportFragmentManager().
-                                beginTransaction().remove(fragment).commit();
-                    }
+
                 }
             });
             FragmentTransaction transaction = mTrialVipPopup.getActivity().getSupportFragmentManager().beginTransaction();

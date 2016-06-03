@@ -133,10 +133,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
 
                                     @Override
                                     public void onPopupClosed() {
-                                        if (fragment.isAdded()) {
-                                            popup.getActivity().getSupportFragmentManager().
-                                                    beginTransaction().remove(fragment).commit();
-                                        }
+
                                     }
                                 });
                                 FragmentTransaction transaction = popup.getActivity().getSupportFragmentManager().beginTransaction();
