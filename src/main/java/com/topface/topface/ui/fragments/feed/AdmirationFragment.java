@@ -20,6 +20,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.FeedsCache;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class AdmirationFragment extends LikesFragment {
 
     public static final String UNLOCK_FUCTIONALITY_TYPE = "admirations";
     public static final String SCREEN_TYPE = "Admirations";
+    @Nullable
     private ViewFlipper mStubFlipper;
 
     @Override
@@ -95,12 +97,16 @@ public class AdmirationFragment extends LikesFragment {
     private void setupFlipperView(@FlipperChild int child, @NotNull View inflated, @NotNull View.OnClickListener buttonClick) {
         switch (child) {
             case FIRST_CHILD:
-                getUnlockButtonView(FIRST_CHILD).setVisibility(View.GONE);
-                mStubFlipper.setDisplayedChild(FIRST_CHILD);
+                if (mStubFlipper != null) {
+                    getUnlockButtonView(FIRST_CHILD).setVisibility(View.GONE);
+                    mStubFlipper.setDisplayedChild(FIRST_CHILD);
+                }
                 inflated.findViewById(R.id.btnStartRate).setOnClickListener(buttonClick);
                 break;
             case SECOND_CHILD:
-                mStubFlipper.setDisplayedChild(SECOND_CHILD);
+                if (mStubFlipper != null) {
+                    mStubFlipper.setDisplayedChild(SECOND_CHILD);
+                }
                 setUnlockButtonView(getUnlockButtonView(SECOND_CHILD));
                 int admirations = mCountersData.getAdmirations();
                 int curCounter = admirations != 0 ? admirations : App.get().getOptions().premiumAdmirations.getCount();
@@ -134,7 +140,7 @@ public class AdmirationFragment extends LikesFragment {
 
     private Button getUnlockButtonView(@FlipperChild int child) {
         initFlipper(mEmptyFeedView);
-        return (Button) mStubFlipper.getChildAt(child).findViewWithTag("btnUnlock");
+        return (Button) (mStubFlipper != null ? mStubFlipper.getChildAt(child).findViewWithTag("btnUnlock") : null);
     }
 
     @Override
