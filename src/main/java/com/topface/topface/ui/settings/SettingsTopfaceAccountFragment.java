@@ -156,7 +156,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
             @Override
             public void fail(int codeError, IApiResponse response) {
                 if (isShowEmailConfirmMessage) {
-                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                    Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                 }
             }
 
