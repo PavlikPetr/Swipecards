@@ -11,7 +11,7 @@
         android:orientation="vertical">
 
         <ImageView
-            style="@style/EmptyFeedsViewImageVisibility"
+            style="@style/LandscapePortraitImagesVisibility"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"

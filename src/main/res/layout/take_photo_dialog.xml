@@ -43,6 +43,7 @@
 
                 <View
                     android:id="@+id/upload_photo_placeholder"
+                    style="@style/LandscapePortraitImagesVisibility"
                     android:layout_width="@dimen/take_photo_placeholder_size"
                     android:layout_height="@dimen/take_photo_placeholder_size"
                     android:layout_gravity="center_horizontal"

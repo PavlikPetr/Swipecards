@@ -1375,7 +1375,7 @@
         <item name="android:textSize">@dimen/button_description_text_size</item>
     </style>
 
-    <style name="EmptyFeedsViewImageVisibility">
+    <style name="LandscapePortraitImagesVisibility">
         <item name="android:visibility">visible</item>
     </style>
 
