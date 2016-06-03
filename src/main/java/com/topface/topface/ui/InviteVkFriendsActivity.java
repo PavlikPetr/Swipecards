@@ -131,7 +131,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
 
     private void loadNewPackData() {
         showProgress(true);
-        mFriendsRequest = getVkFriendsRequest(mAdapter != null ? mAdapter.getCount() - mAdapter.getDeletedCount() : 0);
+        mFriendsRequest = getVkFriendsRequest(mAdapter != null ? mAdapter.getCount() + mAdapter.getDeletedCount() : 0);
         mFriendsRequest.executeWithListener(mFriendsListener);
     }
 
