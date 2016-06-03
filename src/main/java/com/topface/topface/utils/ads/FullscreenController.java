@@ -74,6 +74,7 @@ public class FullscreenController {
         public void onClose() {
             isFullScreenBannerVisible = false;
             AdStatistics.sendFullscreenClosed(mCurrentBannerType);
+            onFullScreenAdClosed();
         }
 
         @Override
