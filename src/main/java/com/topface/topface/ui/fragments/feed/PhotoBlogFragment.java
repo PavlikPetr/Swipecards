@@ -109,7 +109,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
                         new RateController.OnRateRequestListener() {
                             @SuppressWarnings("ConstantConditions")
                             @Override
-                            public void onRateCompleted(int mutualId) {
+                            public void onRateCompleted(int mutualId, int ratedUserId) {
                                 if (getActivity() != null) {
                                     Utils.showToastNotification(R.string.sympathy_sended, Toast.LENGTH_SHORT);
                                 }

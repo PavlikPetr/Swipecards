@@ -178,7 +178,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 .exec();
     }
 
-    private static ApiRequest getUserOptionsRequest() {
+    public static ApiRequest getUserOptionsRequest() {
         return new UserGetAppOptionsRequest(App.getContext())
                 .callback(new DataApiHandler<Options>() {
                     @Override

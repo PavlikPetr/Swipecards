@@ -761,7 +761,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                     : SendLikeRequest.DEFAULT_NO_MUTUAL,
                             new RateController.OnRateRequestListener() {
                                 @Override
-                                public void onRateCompleted(int mutualId) {
+                                public void onRateCompleted(int mutualId, int ratedUserId) {
                                     isAdmirationFailed.set(true);
                                     EasyTracker.sendEvent("Dating", "Rate",
                                             "AdmirationSend" + (mutualId == SendLikeRequest.DEFAULT_MUTUAL ? "mutual" : ""),
@@ -870,8 +870,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                 : SendLikeRequest.DEFAULT_NO_MUTUAL,
                         new RateController.OnRateRequestListener() {
                             @Override
-                            public void onRateCompleted(int mutualId) {
-                                if (mCurrentUser != null && mutualId == mCurrentUser.id) {
+                            public void onRateCompleted(int mutualId, int ratedUserId) {
+                                if (mCurrentUser != null && ratedUserId == mCurrentUser.id) {
                                     if (null != mDelightBtn) {
                                         mDelightBtn.setEnabled(false);
                                     }
@@ -879,7 +879,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                     mCurrentUser.rated = true;
                                 } else if (mUserSearchList != null) {
                                     for (SearchUser searchUser : mUserSearchList) {
-                                        if (searchUser.id == mutualId) {
+                                        if (searchUser.id == ratedUserId) {
                                             searchUser.rated = true;
                                             break;
                                         }
