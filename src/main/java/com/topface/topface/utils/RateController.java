@@ -70,7 +70,7 @@ public class RateController {
                     new ReadLikeRequest(sendLike.getContext(), sendLike.getUserid()).exec();
                 }
                 if (listener != null) {
-                    listener.onRateCompleted(sendLike.getMutualid());
+                    listener.onRateCompleted(sendLike.getMutualid(), sendLike.getUserid());
                 }
 
                 /* Update dating search cache for situations when it's fragment is destroyed
@@ -135,7 +135,7 @@ public class RateController {
      * Interface for api request callbacks
      */
     public interface OnRateRequestListener {
-        void onRateCompleted(int mutualId);
+        void onRateCompleted(int mutualId, int ratedUserId);
 
         void onRateFailed(int userId, int mutualId);
     }

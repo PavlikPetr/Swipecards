@@ -14,7 +14,7 @@ import com.topface.topface.requests.ChangeLoginRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RemindRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.ui.IEmailConfirmationListener;
+import com.topface.topface.ui.SimpleEmailConfirmationListener;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.social.AuthToken;
@@ -166,7 +166,7 @@ public class ConfirmEmailDialog extends AbstractDialogFragment implements View.O
     }
 
     private void requestEmailConfirmed() {
-        Utils.checkEmailConfirmation(new IEmailConfirmationListener() {
+        Utils.checkEmailConfirmation(new SimpleEmailConfirmationListener() {
             @Override
             public void onEmailConfirmed(boolean isConfirmed) {
                 if (isConfirmed) {

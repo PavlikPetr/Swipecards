@@ -17,22 +17,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.topface.framework.JsonUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.BooleanEmailConfirmed;
-import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.ChangeLoginRequest;
 import com.topface.topface.requests.ConfirmRequest;
-import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
-import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.requests.RemindRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.IDialogListener;
+import com.topface.topface.ui.SimpleEmailConfirmationListener;
 import com.topface.topface.ui.analytics.TrackedDialogFragment;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -105,11 +100,12 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
             request.callback(new ApiHandler() {
                 @Override
                 public void success(IApiResponse response) {
-                    Utils.showToastNotification(R.string.email_confirmed, Toast.LENGTH_SHORT);
-                    App.from(getActivity()).getProfile().emailConfirmed = true;
+                    Utils.showToastNotification(R.string.general_email_success_confirmed, Toast.LENGTH_SHORT);
+                    App.get().getProfile().emailConfirmed = true;
                     if (isAdded()) {
-                        setViewsState();
+                        setViewsState(true);
                     }
+                    App.getUserOptionsRequest().exec();
                 }
 
                 @Override
@@ -151,29 +147,17 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
     }
 
     private void requestEmailConfirmedFlag(final boolean isShowEmailConfirmMessage) {
-        ProfileRequest profileRequest = new ProfileRequest(getActivity());
-        if (getActivity() instanceof BaseFragmentActivity) {
-            ((BaseFragmentActivity) getActivity()).registerRequest(profileRequest);
-        }
-        profileRequest.callback(new DataApiHandler<Boolean>() {
-
+        Utils.checkEmailConfirmation(new SimpleEmailConfirmationListener() {
             @Override
-            protected void success(Boolean isEmailConfirmed, IApiResponse response) {
-                App.from(getActivity()).getProfile().emailConfirmed = isEmailConfirmed;
-                if (isShowEmailConfirmMessage) {
-                    onProfileUpdated();
-                }
-                setViewsState();
-            }
-
-            @Override
-            protected Boolean parseResponse(ApiResponse response) {
-                return JsonUtils.fromJson(response.toString(), BooleanEmailConfirmed.class).isConfirmed;
+            public void onEmailConfirmed(boolean isConfirmed) {
+                setViewsState(isConfirmed);
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                if (isShowEmailConfirmMessage) {
+                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -181,12 +165,16 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
                 super.always(response);
                 unlock();
             }
-        }).exec();
+        }, isShowEmailConfirmMessage);
     }
 
     private void setViewsState() {
-        setTextViewsState();
-        setButtonsState();
+        setViewsState(App.get().getProfile().emailConfirmed);
+    }
+
+    private void setViewsState(boolean isEmailConfirmed) {
+        setTextViewsState(isEmailConfirmed);
+        setButtonsState(isEmailConfirmed);
     }
 
     private void initTextViews() {
@@ -197,8 +185,8 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
         mText.setText(mToken.getLogin());
     }
 
-    private void setTextViewsState() {
-        if (App.from(getActivity()).getProfile().emailConfirmed) {
+    private void setTextViewsState(boolean isEmailConfirmed) {
+        if (isEmailConfirmed) {
             mEditText.setVisibility(View.GONE);
             mText.setVisibility(View.VISIBLE);
             mBtnCodeWasSend.setVisibility(View.GONE);
@@ -213,8 +201,8 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
         }
     }
 
-    private void setButtonsState() {
-        if (App.from(getActivity()).getProfile().emailConfirmed) {
+    private void setButtonsState(boolean isEmailConfirmed) {
+        if (isEmailConfirmed) {
             mBtnLogout.setVisibility(View.VISIBLE);
             mBtnChangeEmail.setVisibility(View.VISIBLE);
             setChangeBtnAction(ACTION_CHANGE_PASSWORD);
@@ -426,14 +414,6 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         Utils.hideSoftKeyboard(getActivity(), mEditText);
-    }
-
-    private void onProfileUpdated() {
-        if (App.from(getActivity()).getProfile().emailConfirmed) {
-            Toast.makeText(App.getContext(), R.string.general_email_success_confirmed, Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(App.getContext(), R.string.general_email_not_confirmed, Toast.LENGTH_SHORT).show();
-        }
     }
 
     public static class ExitDialog extends TrackedDialogFragment {
