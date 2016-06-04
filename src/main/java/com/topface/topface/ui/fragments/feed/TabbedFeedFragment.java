@@ -155,7 +155,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         } else {
             Intent i = getActivity().getIntent();
             String sLastPage = i.getStringExtra(EXTRA_OPEN_PAGE);
-            if (!TextUtils.isEmpty(sLastPage)) {
+            if (!TextUtils.isEmpty(sLastPage) && mPagesClassNames.contains(sLastPage)) {
                 lastPage = mPagesClassNames.indexOf(sLastPage);
             }
         }
