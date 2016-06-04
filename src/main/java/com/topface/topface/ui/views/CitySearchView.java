@@ -195,6 +195,7 @@ public class CitySearchView extends AutoCompleteTextView {
                     setScreenHeight();
                     mGetFocusTime = Calendar.getInstance().getTimeInMillis();
                     scrollToView();
+                    clearCurrentCity();
                 }
             }
         });

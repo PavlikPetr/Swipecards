@@ -41,7 +41,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     private static final String FILTER_DIALOG_SHOWN = "dialog_shown";
     private static final String CONSTITUTION_DIALOG_MARK = "constitution_mark";
-    private static final String CITY = "city";
     public static Profile mTargetUser;
     public static final String INTENT_DATING_FILTER = "Topface_Dating_Filter";
     public static String TAG = "filter_fragment_tag";
@@ -156,19 +155,16 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         mFormInfo = new FormInfo(getActivity().getApplicationContext(), mTargetUser.sex, mTargetUser.getType());
 
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.ac_filter_light_theme, container, false);
+
+        // Preferences
         initFilter();
         initViews(root);
-        Bundle arg = savedInstanceState != null ? savedInstanceState : getArguments();
-        if (arg != null) {
-            mLoFilterChooseCity.setText(arg.getString(CITY));
-        }
         return root;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(CONSTITUTION_DIALOG_MARK, mIsHeight);
-        outState.putString(CITY, mLoFilterChooseCity.getText().toString());
         super.onSaveInstanceState(outState);
     }
 
