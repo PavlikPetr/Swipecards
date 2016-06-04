@@ -110,17 +110,17 @@ public class GCMUtils {
     }
 
     private void sendTokenToBackend(final String token) {
-        Debug.log("GCM: Try send token to server: ", token);
+        Debug.log("GCM_registration_token Try send token to server: ", token);
         new RegistrationTokenRequest(token, mContext).callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                Debug.log("GCM: OK send token ");
+                Debug.log("GCM_registration_token OK send token ");
                 storeToken(token);
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                Debug.log("GCM: fail send token to server: ");
+                Debug.log("GCM_registration_token fail send token to server: ");
             }
         }).exec();
     }

@@ -526,6 +526,10 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name="com.topface.topface.utils.gcmutils.RegistrationService"
+            android:exported="false">
+        </service>
 
         <!--Приведенная ниже херь, есть результат внедрения appodeal, и при удалении этой рекломной сети-->
         <!--все это нужно выпилить, быстро, решительно!-->
