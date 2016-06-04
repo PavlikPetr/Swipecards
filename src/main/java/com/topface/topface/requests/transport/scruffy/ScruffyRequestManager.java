@@ -60,6 +60,7 @@ public class ScruffyRequestManager {
         @Override
         public void reconnect() {
             Debug.log("Scruffy:: PING_PONGER RECONNECT");
+            mScruffyAvailable = false;
             ScruffyRequestManager.this.reconnect();
         }
     });
@@ -353,6 +354,7 @@ public class ScruffyRequestManager {
     }
 
     private void clearState() {
+        mScruffyAvailable = false;
         mPendingRequests.clear();
         mSentRequests.clear();
         mConnectionEverBeenEstablished.set(false);

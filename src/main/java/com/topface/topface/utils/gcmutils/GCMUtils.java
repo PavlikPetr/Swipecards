@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
@@ -111,7 +112,7 @@ public class GCMUtils {
 
     private void sendTokenToBackend(final String token) {
         Debug.log("GCM_registration_token Try send token to server: ", token);
-        new RegistrationTokenRequest(token, mContext).callback(new ApiHandler() {
+        new RegistrationTokenRequest(token, mContext).callback(new ApiHandler(Looper.getMainLooper()) {
             @Override
             public void success(IApiResponse response) {
                 Debug.log("GCM_registration_token OK send token ");
@@ -366,7 +367,7 @@ public class GCMUtils {
                     // add the same request code like Chat intent
                     i.putExtra(App.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
                 } else {
-                    return ChatActivity.createIntent(user.id, user.sex,user.getNameAndAge(), user.city,
+                    return ChatActivity.createIntent(user.id, user.sex, user.getNameAndAge(), user.city,
                             null, null, true, null, false);
                 }
                 return i;
