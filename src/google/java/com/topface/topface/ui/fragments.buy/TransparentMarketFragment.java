@@ -91,12 +91,16 @@ public class TransparentMarketFragment extends GoogleMarketBuyingFragment implem
     @Override
     public void onResume() {
         super.onResume();
-        if (mPurchaseActions != null && isNeedCloseFragment) {
-            mPurchaseActions.onPopupClosed();
-        }
         //Устанавливаем тестовые покупки
         if (isTestPurchasesAvailable()) {
             setTestPaymentsState(App.getUserConfig().getTestPaymentFlag());
+        }
+        if (mPurchaseActions != null && isNeedCloseFragment) {
+            if (isAdded()) {
+                getActivity().getSupportFragmentManager().
+                        beginTransaction().remove(this).commit();
+            }
+            mPurchaseActions.onPopupClosed();
         }
     }
 

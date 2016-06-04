@@ -108,9 +108,6 @@ public class TrialVipPopupAction implements IStartAction {
 
                     @Override
                     public void onPopupClosed() {
-                        if (fragment.isAdded()) {
-                            removeTransparentMarketFragment(fragment);
-                        }
                     }
                 });
             }
