@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
+    android:layout_weight="1"
     android:orientation="horizontal">
 
-    <!--братишка не верь варнингу идеи, она обманывает!wrap_content твой выбор! -->
-
+    <!--создаем отступ справа, чтобы там поместился возраст и признак статуса -->
     <TextView
         android:id="@+id/ifp_name"
         style="@style/ListName"
-        android:layout_weight="1"
+        android:layout_marginRight="45dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <!--Сдвигаем вью на размер отступа во вью имени-->
     <TextView
         android:id="@+id/ifp_age"
         style="@style/ListAge"
+        android:layout_marginLeft="-45dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </LinearLayout>
