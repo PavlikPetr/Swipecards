@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/ListItemContainer">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ListItemContainer"
+    android:orientation="horizontal">
 
     <include
         android:id="@+id/ifp_avatar"
         layout="@layout/item_feed_part_avatar" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/ifp_avatar"
-        android:paddingBottom="1dp">
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/ifp_name_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:orientation="horizontal">
 
             <include layout="@layout/item_feed_part_name" />
@@ -27,14 +26,11 @@
                 layout="@layout/item_feed_part_time"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
-
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/ifp_name_container"
             android:orientation="horizontal">
 
             <include
@@ -50,5 +46,5 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-    </RelativeLayout>
-</RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

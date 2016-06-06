@@ -5,8 +5,7 @@
     android:layout_weight="1"
     android:orientation="horizontal">
 
-    <!--братишка не верь варнингу идеи, она обманывает!wrap_content твой выбор! -->
-
+    <!--создаем отступ справа, чтобы там поместился возраст и признак статуса -->
     <TextView
         android:id="@+id/ifp_name"
         style="@style/ListName"
@@ -14,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <!--Сдвигаем вью на размер отступа во вью имени-->
     <TextView
         android:id="@+id/ifp_age"
         style="@style/ListAge"
