@@ -36,7 +36,7 @@ public class PromoExpressMessages extends PromoDialog {
 
     @Override
     public Options.PromoPopupEntity getPremiumEntity() {
-        return App.from(getActivity()).getOptions().premiumMessages;
+        return App.get().getOptions().premiumMessages;
     }
 
     @Override
@@ -98,13 +98,14 @@ public class PromoExpressMessages extends PromoDialog {
     }
 
     private ArrayList<Integer> getFakeAvatars() {
-        int arrayId = App.from(getActivity()).getProfile().dating != null && App.from(getActivity()).getProfile().dating.sex == Profile.GIRL ? R.array.fake_girl_avatars : R.array.fake_boy_avatars;
+        Profile profile = App.get().getProfile();
+        int arrayId = profile.dating != null && profile.dating.sex == Profile.GIRL ? R.array.fake_girl_avatars : R.array.fake_boy_avatars;
         ArrayList<Integer> avatarsIdArray = new ArrayList<>();
         int randomValue;
         TypedArray imgs = App.getContext().getResources().obtainTypedArray(arrayId);
         ArrayList<Integer> usersFakeArray = new ArrayList<>();
         for (int i = 0; i < imgs.length(); i++) {
-            usersFakeArray.add(imgs.getResourceId(i, App.from(getActivity()).getProfile().dating != null && App.from(getActivity()).getProfile().dating.sex == Profile.GIRL ? fake_girl1 : R.drawable.fake_boy1));
+            usersFakeArray.add(imgs.getResourceId(i, profile.dating != null && profile.dating.sex == Profile.GIRL ? fake_girl1 : R.drawable.fake_boy1));
         }
         for (int i = 0; i < AVATARS_ID_ARRAY_LENGTH; i++) {
             int iterCounter = 0;
@@ -132,10 +133,17 @@ public class PromoExpressMessages extends PromoDialog {
         return avatars != null ?
                 position < avatars.size() ?
                         avatars.get(position) :
-                        avatars.get(mRandom.nextInt(avatars.size())) :
+                        avatars.get(getRandom().nextInt(avatars.size())) :
                 profile.dating != null && profile.dating.sex == Profile.GIRL ?
                         R.drawable.fake_girl1 :
                         R.drawable.fake_boy1;
+    }
+
+    private Random getRandom(){
+        if(mRandom==null){
+            mRandom = new Random();
+        }
+        return mRandom;
     }
 
     @Override
