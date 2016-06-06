@@ -18,6 +18,7 @@ import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static com.topface.topface.R.drawable.fake_girl1;
 import static com.topface.topface.data.Options.PromoPopupEntity.AIR_MESSAGES;
 
 public class PromoExpressMessages extends PromoDialog {
@@ -31,6 +32,7 @@ public class PromoExpressMessages extends PromoDialog {
     private int mCurrentPosition = Integer.MAX_VALUE;
 
     private int mExtraPaddingTop = 0;
+    private Random mRandom;
 
     @Override
     public Options.PromoPopupEntity getPremiumEntity() {
@@ -102,7 +104,7 @@ public class PromoExpressMessages extends PromoDialog {
         TypedArray imgs = App.getContext().getResources().obtainTypedArray(arrayId);
         ArrayList<Integer> usersFakeArray = new ArrayList<>();
         for (int i = 0; i < imgs.length(); i++) {
-            usersFakeArray.add(imgs.getResourceId(i, App.from(getActivity()).getProfile().dating != null && App.from(getActivity()).getProfile().dating.sex == Profile.GIRL ? R.drawable.fake_girl1 : R.drawable.fake_boy1));
+            usersFakeArray.add(imgs.getResourceId(i, App.from(getActivity()).getProfile().dating != null && App.from(getActivity()).getProfile().dating.sex == Profile.GIRL ? fake_girl1 : R.drawable.fake_boy1));
         }
         for (int i = 0; i < AVATARS_ID_ARRAY_LENGTH; i++) {
             int iterCounter = 0;
@@ -122,7 +124,18 @@ public class PromoExpressMessages extends PromoDialog {
         } else {
             mCurrentPosition++;
         }
-        return avatars.get(mCurrentPosition);
+        return getNotNullAvatar(avatars, mCurrentPosition);
+    }
+
+    private int getNotNullAvatar(ArrayList<Integer> avatars, int position) {
+        Profile profile = App.get().getProfile();
+        return avatars != null ?
+                position < avatars.size() ?
+                        avatars.get(position) :
+                        avatars.get(mRandom.nextInt(avatars.size())) :
+                profile.dating != null && profile.dating.sex == Profile.GIRL ?
+                        R.drawable.fake_girl1 :
+                        R.drawable.fake_boy1;
     }
 
     @Override
