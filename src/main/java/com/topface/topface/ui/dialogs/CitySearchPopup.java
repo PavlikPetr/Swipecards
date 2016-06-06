@@ -41,7 +41,7 @@ public class CitySearchPopup extends AbstractDialogFragment {
         Debug.log(this, "+onCreate");
         final Context context = getActivity().getApplicationContext();
         if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         mCitySearch = (CitySearchView) root.findViewById(R.id.city_search);
         mCitySearch.setOnCityClickListener(new CitySearchView.onCityClickListener() {
@@ -76,7 +76,6 @@ public class CitySearchPopup extends AbstractDialogFragment {
                 }
             }
         });
-        mCitySearch.findFocus();
         ((TextView) root.findViewById(R.id.title)).setText(R.string.edit_my_city);
         root.findViewById(R.id.title_clickable).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +83,7 @@ public class CitySearchPopup extends AbstractDialogFragment {
                 getDialog().cancel();
             }
         });
+        mCitySearch.findFocus();
     }
 
     @Override
