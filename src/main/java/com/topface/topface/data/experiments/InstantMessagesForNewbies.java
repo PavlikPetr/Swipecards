@@ -3,6 +3,10 @@ package com.topface.topface.data.experiments;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.topface.topface.App;
+import com.topface.topface.R;
+import com.topface.topface.utils.Utils;
+
 public class InstantMessagesForNewbies extends BaseExperimentWithText {
 
     public static final Parcelable.Creator<InstantMessagesForNewbies> CREATOR
@@ -22,6 +26,14 @@ public class InstantMessagesForNewbies extends BaseExperimentWithText {
 
     public InstantMessagesForNewbies() {
 
+    }
+
+    @Override
+    public String getText() {
+        String superString = super.getText();
+        return superString.equals(Utils.EMPTY)
+                ? App.getContext().getString(R.string.chat_block_not_mutual)
+                : superString;
     }
 
     @Override

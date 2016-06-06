@@ -171,7 +171,7 @@ public class DatingInstantMessageController {
             @Override
             public void fail(int codeError, IApiResponse response) {
                 if (response.isCodeEqual(ErrorCodes.PREMIUM_ACCESS_ONLY)) {
-                    startPurchasesActivity(App.getContext().getString(R.string.chat_block_not_mutual), "InstantMessageLimitExceeded");
+                    startPurchasesActivity(App.get().getOptions().instantMessagesForNewbies.getText(), "InstantMessageLimitExceeded");
                 } else {
                     Utils.showErrorMessage();
                 }
