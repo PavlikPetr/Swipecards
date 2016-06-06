@@ -1,60 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/ListItemContainer"
-    android:orientation="horizontal">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ListItemContainer">
 
     <include
         android:id="@+id/ifp_avatar"
         layout="@layout/item_feed_part_avatar" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/ifp_avatar"
+        android:paddingBottom="1dp">
 
         <LinearLayout
             android:id="@+id/ifp_name_container"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="bottom"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:orientation="horizontal">
 
-            <!--
-            если Лена скажет, что имена о5 обрезаются нужно ей сказать, что в диалогах останется все как есть
-            если задать вес возраста, то уедет дата, если придавить датой. Максимум, что можно сделать это
-            придавить именем, но тогда будет дырка между именем и возрастом
-            -->
+            <include layout="@layout/item_feed_part_name" />
 
-            <TextView
-                android:id="@+id/ifp_name"
-                style="@style/ListName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="154dp" />
-
-            <TextView
-                android:id="@+id/ifp_age"
-                style="@style/ListAge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
+            <include
                 android:id="@+id/ifp_time"
-                style="@style/ListTime"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                layout="@layout/item_feed_part_time"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:baselineAligned="false"
-            android:gravity="top"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/ifp_name_container"
             android:orientation="horizontal">
 
             <include
@@ -70,5 +50,5 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-    </LinearLayout>
-</LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>
