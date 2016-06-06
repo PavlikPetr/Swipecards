@@ -10,6 +10,7 @@ import com.topface.framework.utils.Debug;
 import java.io.IOException;
 
 /**
+ * сервис для регистрации токена на сервере
  * Created by tiberal on 04.06.16.
  */
 public class RegistrationService extends IntentService {
@@ -24,7 +25,7 @@ public class RegistrationService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         try {
-            Debug.log("GCM_registration_token: onHandleIntent");
+            Debug.log("GCM_registration_token: onHandleIntent ");
             new GCMUtils(getApplicationContext()).registerGcmToken(InstanceID.getInstance(getApplicationContext())
                     .getToken(GCM_SENDER_ID, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null));
         } catch (IOException e) {

@@ -238,10 +238,10 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                             App.getConfig().getUserConfig().setUserAvatarAvailable(false);
                             App.getConfig().getUserConfig().saveConfig();
                         }
-                        if (Utils.getGooglePlayServicesVersion() != null) {
+                        if (Utils.checkPlayServices(App.getContext())) {
                             Debug.log("GCM_registration_token start service ");
-                            Intent intent = new Intent(getContext(), RegistrationService.class);
-                            getContext().startService(intent);
+                            Intent intent = new Intent(App.getContext(), RegistrationService.class);
+                            App.getContext().startService(intent);
                         }
                         CacheProfile.sendUpdateProfileBroadcast();
                     }

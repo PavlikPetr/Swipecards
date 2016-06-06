@@ -49,7 +49,10 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.topface.topface.data.leftMenu.FragmentIdData.*;
+import static com.topface.topface.data.leftMenu.FragmentIdData.GEO;
+import static com.topface.topface.data.leftMenu.FragmentIdData.TABBED_DIALOGS;
+import static com.topface.topface.data.leftMenu.FragmentIdData.TABBED_LIKES;
+import static com.topface.topface.data.leftMenu.FragmentIdData.TABBED_VISITORS;
 
 public class GCMUtils {
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
@@ -107,6 +110,8 @@ public class GCMUtils {
         String oldToken = getGcmToken();
         if (!token.equals(oldToken)) {
             sendTokenToBackend(token);
+        } else {
+            Debug.log("GCM_registration_token tokens equals");
         }
     }
 
