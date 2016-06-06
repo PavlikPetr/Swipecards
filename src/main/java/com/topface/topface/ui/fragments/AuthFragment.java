@@ -325,15 +325,15 @@ public class AuthFragment extends BaseAuthFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(mTokenReadyReceiver,
+                new IntentFilter(Authorizer.AUTH_TOKEN_READY_ACTION));
+        LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(mRestoreAccountShown,
+                new IntentFilter(RestoreAccountActivity.RESTORE_ACCOUNT_SHOWN));
         Activity activity = getActivity();
         mButtonAnimation = AnimationUtils.loadAnimation(activity,
                 R.anim.auth_button_anim);
         mAuthorizationManager = new AuthorizationManager();
         mAuthorizationManager.onCreate(savedInstanceState);
-        LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(mTokenReadyReceiver,
-                new IntentFilter(Authorizer.AUTH_TOKEN_READY_ACTION));
-        LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(mRestoreAccountShown,
-                new IntentFilter(RestoreAccountActivity.RESTORE_ACCOUNT_SHOWN));
     }
 
     @Override
