@@ -171,7 +171,7 @@ public class DatingInstantMessageController {
             @Override
             public void fail(int codeError, IApiResponse response) {
                 if (response.isCodeEqual(ErrorCodes.PREMIUM_ACCESS_ONLY)) {
-                    startPurchasesActivity(App.from(mActivity).getOptions().instantMessagesForNewbies.getText(), "InstantMessageLimitExceeded");
+                    startPurchasesActivity(App.get().getOptions().instantMessagesForNewbies.getText(), "InstantMessageLimitExceeded");
                 } else {
                     Utils.showErrorMessage();
                 }
@@ -334,7 +334,7 @@ public class DatingInstantMessageController {
         return mKeyboardWasShown;
     }
 
-    public void setKeyboardShown(boolean isShown){
+    public void setKeyboardShown(boolean isShown) {
         mKeyboardWasShown = isShown;
     }
 
