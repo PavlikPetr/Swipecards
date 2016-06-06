@@ -1,6 +1,7 @@
 package com.topface.topface.utils;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
@@ -23,9 +24,6 @@ import static com.topface.topface.utils.FlurryManager.SEND_ADMIRATION;
 
 public class RateController {
 
-    public static final String USER_RATED = "com.topface.topface.USER_RATED";
-    public static final String USER_ID_EXTRA = "user_id";
-
     @SendLikeRequest.Place
     private final int mPlace;
     private Context mContext;
@@ -45,7 +43,8 @@ public class RateController {
             , final OnRateRequestListener requestListener, Options options) {
         if (balanceData.money < options.priceAdmiration) {
             mContext.startActivity(PurchasesActivity.createBuyingIntent("RateAdmiration"
-                    , PurchasesFragment.TYPE_ADMIRATION, options.priceAdmiration, options.topfaceOfferwallRedirect));
+                    , PurchasesFragment.TYPE_ADMIRATION, options.priceAdmiration, options.topfaceOfferwallRedirect)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             if (mOnRateControllerUiListener != null) {
                 mOnRateControllerUiListener.failRate();
             }
