@@ -751,40 +751,42 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.btnDatingAdmiration: {
-                if (mCurrentUser != null) {
-                    lockControls();
-                    isAdmirationFailed.set(false);
-                    boolean canSendAdmiration = mRateController.onAdmiration(mBalanceData,
-                            mCurrentUser.id,
-                            mCurrentUser.isMutualPossible ?
-                                    SendLikeRequest.DEFAULT_MUTUAL
-                                    : SendLikeRequest.DEFAULT_NO_MUTUAL,
-                            new RateController.OnRateRequestListener() {
-                                @Override
-                                public void onRateCompleted(int mutualId, int ratedUserId) {
-                                    isAdmirationFailed.set(true);
-                                    EasyTracker.sendEvent("Dating", "Rate",
-                                            "AdmirationSend" + (mutualId == SendLikeRequest.DEFAULT_MUTUAL ? "mutual" : ""),
-                                            (long) options.priceAdmiration);
-                                }
-
-                                @Override
-                                public void onRateFailed(int userId, int mutualId) {
-                                    if (moneyDecreased.get()) {
-                                        moneyDecreased.set(false);
-                                        updateResources(mBalanceData);
-                                    } else {
+                if (!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_ADMIRATION)) {
+                    if (mCurrentUser != null) {
+                        lockControls();
+                        isAdmirationFailed.set(false);
+                        boolean canSendAdmiration = mRateController.onAdmiration(mBalanceData,
+                                mCurrentUser.id,
+                                mCurrentUser.isMutualPossible ?
+                                        SendLikeRequest.DEFAULT_MUTUAL
+                                        : SendLikeRequest.DEFAULT_NO_MUTUAL,
+                                new RateController.OnRateRequestListener() {
+                                    @Override
+                                    public void onRateCompleted(int mutualId, int ratedUserId) {
                                         isAdmirationFailed.set(true);
-                                        unlockControls();
+                                        EasyTracker.sendEvent("Dating", "Rate",
+                                                "AdmirationSend" + (mutualId == SendLikeRequest.DEFAULT_MUTUAL ? "mutual" : ""),
+                                                (long) options.priceAdmiration);
                                     }
-                                }
-                            }, options
-                    );
-                    if (canSendAdmiration && !isAdmirationFailed.get()) {
-                        BalanceData balance = new BalanceData(mBalanceData.premium, mBalanceData.likes, mBalanceData.money);
-                        balance.money = balance.money - options.priceAdmiration;
-                        moneyDecreased.set(true);
-                        updateResources(balance);
+
+                                    @Override
+                                    public void onRateFailed(int userId, int mutualId) {
+                                        if (moneyDecreased.get()) {
+                                            moneyDecreased.set(false);
+                                            updateResources(mBalanceData);
+                                        } else {
+                                            isAdmirationFailed.set(true);
+                                            unlockControls();
+                                        }
+                                    }
+                                }, options
+                        );
+                        if (canSendAdmiration && !isAdmirationFailed.get()) {
+                            BalanceData balance = new BalanceData(mBalanceData.premium, mBalanceData.likes, mBalanceData.money);
+                            balance.money = balance.money - options.priceAdmiration;
+                            moneyDecreased.set(true);
+                            updateResources(balance);
+                        }
                     }
                 }
             }
