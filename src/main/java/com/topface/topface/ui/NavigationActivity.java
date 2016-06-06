@@ -84,6 +84,8 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 
+import static com.topface.topface.state.PopupHive.AC_PRIORITY_HIGH;
+
 public class NavigationActivity extends ParentNavigationActivity implements INavigationFragmentsListener {
     public static final String INTENT_EXIT = "EXIT";
     private static final String PAGE_SWITCH = "Page switch: ";
@@ -286,39 +288,32 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private List<IStartAction> getActionsList() {
         List<IStartAction> startActions = new ArrayList<>();
         mPopupManager = new PopupManager(this);
-        startActions.add(chooseCityStartAction(PopupHive.AC_PRIORITY_HIGH));
-        startActions.add(selectPhotoStartAction(PopupHive.AC_PRIORITY_HIGH));
-        startActions.add(new NotificationsDisablePopup(NavigationActivity.this, PopupHive.AC_PRIORITY_HIGH));
-        IStartAction fourthStageActions = new ChosenStartAction().chooseFrom(
-                mPopupManager.createOldVersionPopupStartAction(PopupHive.AC_PRIORITY_HIGH),
-                mPopupManager.createRatePopupStartAction(PopupHive.AC_PRIORITY_NORMAL, App.get().getOptions().ratePopupTimeout, App.get().getOptions().ratePopupEnabled)
-        );
-        startActions.add(fourthStageActions);
-        IStartAction fifthStageActions = mFullscreenController != null ? new ChosenStartAction().chooseFrom(
-                new TrialVipPopupAction(this, PopupHive.AC_PRIORITY_HIGH),
-                mFullscreenController.createFullscreenStartAction(PopupHive.AC_PRIORITY_NORMAL, this)
-        ) : new TrialVipPopupAction(this, PopupHive.AC_PRIORITY_HIGH);
-        startActions.add(fifthStageActions);
-        startActions.add(new DatingLockPopupAction(getSupportFragmentManager(), PopupHive.AC_PRIORITY_HIGH,
-                new DatingLockPopup.DatingLockPopupRedirectListener() {
-                    @Override
-                    public void onRedirect() {
-                        showFragment(new LeftMenuSettingsData(FragmentIdData.TABBED_LIKES));
-                    }
-                }));
-        startActions.add(new InvitePopupAction(this, PopupHive.AC_PRIORITY_HIGH));
-        PromoPopupManager promoPopupManager = new PromoPopupManager(this);
-        IStartAction seventhStageActions = new ChosenStartAction().chooseFrom(
-                PromoExpressMessages.createPromoPopupStartAction(PopupHive.AC_PRIORITY_HIGH, new PromoExpressMessages.PopupRedirectListener() {
-                    @Override
-                    public void onRedirect() {
-                        showFragment(new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS));
-                    }
-                }),
-                promoPopupManager.createPromoPopupStartAction(PopupHive.AC_PRIORITY_NORMAL)
-        );
-        startActions.add(seventhStageActions);
-        startActions.add(new InvitePopupAction(this, PopupHive.AC_PRIORITY_HIGH));
+        startActions.add(PromoExpressMessages.createPromoPopupStartAction(AC_PRIORITY_HIGH, new PromoExpressMessages.PopupRedirectListener() {
+            @Override
+            public void onRedirect() {
+                showFragment(new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS));
+            }
+        }));
+        startActions.add(new ChosenStartAction().chooseFrom(
+                new TrialVipPopupAction(this, AC_PRIORITY_HIGH),
+                new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH,
+                        new DatingLockPopup.DatingLockPopupRedirectListener() {
+                            @Override
+                            public void onRedirect() {
+                                showFragment(new LeftMenuSettingsData(FragmentIdData.TABBED_LIKES));
+                            }
+                        })
+        ));
+        if (mFullscreenController != null) {
+            startActions.add(mFullscreenController.createFullscreenStartAction(PopupHive.AC_PRIORITY_NORMAL, this));
+        }
+        startActions.add(new ChosenStartAction().chooseFrom(selectPhotoStartAction(AC_PRIORITY_HIGH),
+                chooseCityStartAction(AC_PRIORITY_HIGH)));
+        startActions.add(new NotificationsDisablePopup(NavigationActivity.this, AC_PRIORITY_HIGH));
+        startActions.add(new PromoPopupManager(this).createPromoPopupStartAction(PopupHive.AC_PRIORITY_NORMAL));
+        startActions.add(new InvitePopupAction(this, AC_PRIORITY_HIGH));
+        startActions.add(mPopupManager.createRatePopupStartAction(PopupHive.AC_PRIORITY_NORMAL, App.get().getOptions().ratePopupTimeout, App.get().getOptions().ratePopupEnabled));
+        startActions.add(mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_HIGH));
         return startActions;
     }
 
