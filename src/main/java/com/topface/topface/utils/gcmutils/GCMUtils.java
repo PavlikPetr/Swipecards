@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
@@ -48,7 +49,10 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.topface.topface.data.leftMenu.FragmentIdData.*;
+import static com.topface.topface.data.leftMenu.FragmentIdData.GEO;
+import static com.topface.topface.data.leftMenu.FragmentIdData.TABBED_DIALOGS;
+import static com.topface.topface.data.leftMenu.FragmentIdData.TABBED_LIKES;
+import static com.topface.topface.data.leftMenu.FragmentIdData.TABBED_VISITORS;
 
 public class GCMUtils {
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
@@ -106,21 +110,23 @@ public class GCMUtils {
         String oldToken = getGcmToken();
         if (!token.equals(oldToken)) {
             sendTokenToBackend(token);
+        } else {
+            Debug.log("GCM_registration_token tokens equals");
         }
     }
 
     private void sendTokenToBackend(final String token) {
-        Debug.log("GCM: Try send token to server: ", token);
-        new RegistrationTokenRequest(token, mContext).callback(new ApiHandler() {
+        Debug.log("GCM_registration_token Try send token to server: ", token);
+        new RegistrationTokenRequest(token, mContext).callback(new ApiHandler(Looper.getMainLooper()) {
             @Override
             public void success(IApiResponse response) {
-                Debug.log("GCM: OK send token ");
+                Debug.log("GCM_registration_token OK send token ");
                 storeToken(token);
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                Debug.log("GCM: fail send token to server: ");
+                Debug.log("GCM_registration_token fail send token to server: ");
             }
         }).exec();
     }
@@ -366,7 +372,7 @@ public class GCMUtils {
                     // add the same request code like Chat intent
                     i.putExtra(App.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
                 } else {
-                    return ChatActivity.createIntent(user.id, user.sex,user.getNameAndAge(), user.city,
+                    return ChatActivity.createIntent(user.id, user.sex, user.getNameAndAge(), user.city,
                             null, null, true, null, false);
                 }
                 return i;

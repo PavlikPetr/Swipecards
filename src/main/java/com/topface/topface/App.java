@@ -65,6 +65,7 @@ import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.RunningStateManager;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ad.NativeAdManager;
 import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.config.AppConfig;
@@ -74,7 +75,7 @@ import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.gcmutils.GcmListenerService;
-import com.topface.topface.utils.gcmutils.InstanceIDListenerService;
+import com.topface.topface.utils.gcmutils.RegistrationService;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -237,8 +238,10 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                             App.getConfig().getUserConfig().setUserAvatarAvailable(false);
                             App.getConfig().getUserConfig().saveConfig();
                         }
-                        if (!InstanceIDListenerService.isListenerStarted()) {
-                            InstanceIDListenerService.getToken(getContext());
+                        if (Utils.checkPlayServices(App.getContext())) {
+                            Debug.log("GCM_registration_token start service ");
+                            Intent intent = new Intent(App.getContext(), RegistrationService.class);
+                            App.getContext().startService(intent);
                         }
                         CacheProfile.sendUpdateProfileBroadcast();
                     }

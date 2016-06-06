@@ -37,6 +37,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
@@ -598,6 +600,10 @@ public class Utils {
         public void onActivityDestroyed(Activity activity) {
 
         }
+    }
+
+    public static boolean checkPlayServices(Context context) {
+        return GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;
     }
 
     public static void checkEmailConfirmation(final IEmailConfirmationListener emailConfirmationListener, final boolean isNeedShowToast) {
