@@ -54,44 +54,38 @@ public class AdmirationFragment extends LikesFragment {
     protected void initLockedFeed(View inflated, int errorCode) {
         initFlipper(inflated);
         setEmptyFeedView(inflated);
-        chooseFlipperView(inflated);
+        chooseFlipperView(SECOND_CHILD, inflated);
     }
 
     @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
         setEmptyFeedView(inflated);
-        chooseFlipperView(inflated);
+        chooseFlipperView(FIRST_CHILD, inflated);
     }
 
-    private void chooseFlipperView(View inflated) {
-        @FlipperChild int pos = FIRST_CHILD;
-        View.OnClickListener buttonClick;
-        //Vip, есть восхищения - показываем восхищения
-        if (mCountersData.getAdmirations() > 0 && mBalanceData.premium) {
-            if (mStubFlipper != null) {
+    private void chooseFlipperView(@FlipperChild final int child, View inflated) {
+        if (mStubFlipper != null && child == FIRST_CHILD) {
+            //Vip, есть восхищения - показываем восхищения
+            if (mCountersData.getAdmirations() > 0) {
                 mStubFlipper.setVisibility(View.GONE);
+                return;
             }
-            return;
+            mStubFlipper.setVisibility(View.VISIBLE);
         }
-        //Есть Vip, но нет восхищений. Отправляем на покупку симпатий
-        if (mBalanceData.premium) {
-            buttonClick = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations", App.get().getOptions().topfaceOfferwallRedirect));
+        View.OnClickListener buttonClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (child) {
+                    case FIRST_CHILD:
+                        startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations", App.get().getOptions().topfaceOfferwallRedirect));
+                        break;
+                    case SECOND_CHILD:
+                        startActivityForResult(PurchasesActivity.createVipBuyIntent(null, SCREEN_TYPE), PurchasesActivity.INTENT_BUY_VIP);
+                        break;
                 }
-            };
-        } else {
-            //нет Vip нельзя смотреть восхищения. заглушка с просьбой купить Vip
-            pos = SECOND_CHILD;
-            buttonClick = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivityForResult(PurchasesActivity.createVipBuyIntent(null, SCREEN_TYPE), PurchasesActivity.INTENT_BUY_VIP);
-                }
-            };
-        }
-        setupFlipperView(pos, inflated, buttonClick);
+            }
+        };
+        setupFlipperView(child, inflated, buttonClick);
     }
 
     private void setupFlipperView(@FlipperChild int child, @NotNull View inflated, @NotNull View.OnClickListener buttonClick) {
