@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fadingEdge="none"
@@ -12,59 +12,50 @@
         android:layout_height="match_parent"
         android:clickable="true">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                style="@style/LandscapePortraitImagesVisibility"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_admiration" />
 
             <TextView
                 android:id="@+id/tvText"
                 style="@style/ListItemEmptyText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
                 android:layout_marginBottom="24dp"
                 android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:text="@string/likes_can_help_you" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tvText"
-                android:layout_centerHorizontal="true"
+            <Button
+                android:id="@+id/btnStartRate"
+                style="@style/BigStretchedBlueButton"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:orientation="vertical">
+                android:text="@string/buy_resources" />
 
-                <Button
-                    android:id="@+id/btnStartRate"
-                    style="@style/BigStretchedBlueButton"
-                    android:layout_width="match_parent"
-                    android:text="@string/buy_resources"
-                    android:layout_marginBottom="10dp"/>
-
-                <Button
-                    style="@style/UnlockButtonStyle"
-                    android:layout_width="match_parent"
-                    android:tag="btnUnlock" />
-            </LinearLayout>
-
-            <ImageView
-                style="@style/LandscapePortraitImagesVisibility"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/tvText"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_admiration" />
-
-        </RelativeLayout>
+            <Button
+                style="@style/UnlockButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:tag="btnUnlock" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal|top"
-            android:orientation="vertical"
-            android:paddingTop="24dp">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvTitle"
@@ -118,8 +109,8 @@
                 style="@style/Widget.Topface.Button.Big.Blue"
                 android:layout_width="210dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginBottom="10dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/buying_vip_status" />
 
             <Button
@@ -128,5 +119,5 @@
                 android:tag="btnUnlock" />
         </LinearLayout>
     </ViewFlipper>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>
 
