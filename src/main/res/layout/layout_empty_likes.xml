@@ -37,7 +37,6 @@
             <Button
                 android:id="@+id/btnStartRate"
                 style="@style/BigStretchedBlueButton"
-                android:layout_width="match_parent"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:text="@string/buy_resources" />
