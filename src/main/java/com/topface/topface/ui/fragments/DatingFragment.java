@@ -61,6 +61,7 @@ import com.topface.topface.requests.ResetFilterRequest;
 import com.topface.topface.requests.SearchRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.SkipRateRequest;
+import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.TakePhotoStatistics;
@@ -163,6 +164,30 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         public void call(BalanceData balanceData) {
             mBalanceData = balanceData;
             updateResources(balanceData);
+        }
+    };
+
+    private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            BlackListAndBookmarkHandler.ActionTypes type = (BlackListAndBookmarkHandler.ActionTypes) intent.getSerializableExtra(BlackListAndBookmarkHandler.TYPE);
+            if (type != null) {
+                switch (type) {
+                    case BLACK_LIST:
+                        skipUser(mCurrentUser);
+                        showNextUser();
+                        break;
+                    case SYMPATHY:
+                        if (null != mMutualBtn) {
+                            mMutualBtn.setEnabled(false);
+                        }
+                        if (null != mDelightBtn) {
+                            mDelightBtn.setEnabled(false);
+                        }
+                        mCurrentUser.rated = true;
+                        break;
+                }
+            }
         }
     };
 
@@ -326,6 +351,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         // Rate Controller
         mRateController = new RateController(getActivity(), SendLikeRequest.FROM_SEARCH);
         mRateController.setOnRateControllerUiListener(this);
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
     }
 
     @Override
@@ -392,6 +418,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (null != mDatingSubscriptions && !mDatingSubscriptions.isUnsubscribed()) {
             mDatingSubscriptions.unsubscribe();
         }
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mUpdateActionsReceiver);
     }
 
     @Override
