@@ -109,7 +109,6 @@
                 style="@style/Widget.Topface.Button.Big.Blue"
                 android:layout_width="210dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/buying_vip_status" />
 
