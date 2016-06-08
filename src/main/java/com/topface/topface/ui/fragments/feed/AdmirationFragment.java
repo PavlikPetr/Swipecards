@@ -67,7 +67,9 @@ public class AdmirationFragment extends LikesFragment {
         if (mStubFlipper != null && child == FIRST_CHILD) {
             //Vip, есть восхищения - показываем восхищения
             if (mCountersData.getAdmirations() > 0) {
-                mStubFlipper.setVisibility(View.GONE);
+                if (mBalanceData.premium) {
+                    mStubFlipper.setVisibility(View.GONE);
+                }
                 return;
             }
             mStubFlipper.setVisibility(View.VISIBLE);
