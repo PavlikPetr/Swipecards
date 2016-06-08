@@ -48,6 +48,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.topface.topface.data.leftMenu.FragmentIdData.GEO;
 import static com.topface.topface.data.leftMenu.FragmentIdData.TABBED_DIALOGS;
@@ -101,6 +102,7 @@ public class GCMUtils {
      * Extras key for additon gcm message label.
      */
     public static final String GCM_LABEL = "GCM_LABEL";
+    private static AtomicBoolean mIsTokenSent = new AtomicBoolean();
 
     public GCMUtils(Context context) {
         mContext = context;
@@ -117,18 +119,29 @@ public class GCMUtils {
 
     private void sendTokenToBackend(final String token) {
         Debug.log("GCM_registration_token Try send token to server: ", token);
-        new RegistrationTokenRequest(token, mContext).callback(new ApiHandler(Looper.getMainLooper()) {
-            @Override
-            public void success(IApiResponse response) {
-                Debug.log("GCM_registration_token OK send token ");
-                storeToken(token);
-            }
+        if (!mIsTokenSent.get()) {
+            mIsTokenSent.set(true);
+            new RegistrationTokenRequest(token, mContext).callback(new ApiHandler(Looper.getMainLooper()) {
+                @Override
+                public void success(IApiResponse response) {
+                    Debug.log("GCM_registration_token OK send token ");
+                    storeToken(token);
+                }
 
-            @Override
-            public void fail(int codeError, IApiResponse response) {
-                Debug.log("GCM_registration_token fail send token to server: ");
-            }
-        }).exec();
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+                    Debug.log("GCM_registration_token fail send token to server: ");
+                }
+
+                @Override
+                public void always(IApiResponse response) {
+                    super.always(response);
+                    mIsTokenSent.set(false);
+                }
+            }).exec();
+        } else {
+            Debug.log("GCM_registration_token this token already sent: ", token);
+        }
     }
 
     private void storeToken(String token) {
