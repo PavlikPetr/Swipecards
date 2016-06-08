@@ -7,7 +7,9 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.view.LayoutInflater;
@@ -46,21 +48,15 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     private boolean mIsPhotoAsked;
     private static final String TAKE_PHOTO_DIALOG_SHOWN = "dialog_shown";
     private MenuItem mBarAvatar;
-    private Handler mHandler;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            AddPhotoHelper.handlePhotoMessage(msg);
+        }
+    };
 
     public static OwnProfileFragment newInstance() {
         return new OwnProfileFragment();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        mHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                AddPhotoHelper.handlePhotoMessage(msg);
-            }
-        };
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -108,7 +104,6 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateProfileReceiver);
-        mHandler = null;
     }
 
     @Override
