@@ -14,10 +14,12 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.data.Auth;
+import com.topface.topface.data.AuthStateData;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
+import com.topface.topface.state.AuthState;
 import com.topface.topface.state.PopupHive;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.NavigationActivity;
@@ -53,6 +55,8 @@ public class AuthorizationManager {
     TopfaceAppState mAppState;
     @Inject
     PopupHive mHive;
+    @Inject
+    AuthState mAuthState;
 
     private Map<Platform, Authorizer> mAuthorizers = new HashMap<>();
 
@@ -132,6 +136,7 @@ public class AuthorizationManager {
     public void logout(Activity activity) {
         FlurryManager.getInstance().sendLogoutEvent();
         FlurryManager.getInstance().dropUserIdHash();
+        mAuthState.setData(new AuthStateData());
         App.isNeedShowTrial = true;
         UserConfig config = App.getUserConfig();
         config.setStartPositionOfActions(0);

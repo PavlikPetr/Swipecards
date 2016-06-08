@@ -32,6 +32,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
+import com.topface.topface.data.AuthStateData;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
@@ -40,6 +41,7 @@ import com.topface.topface.data.social.AppSocialAppsIds;
 import com.topface.topface.databinding.FragmentAuthBinding;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
+import com.topface.topface.state.AuthState;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.PasswordRecoverActivity;
 import com.topface.topface.ui.RegistrationActivity;
@@ -48,13 +50,16 @@ import com.topface.topface.ui.TopfaceAuthActivity;
 import com.topface.topface.utils.AuthServiceButtons;
 import com.topface.topface.utils.AuthServiceButtons.SocServicesAuthButtons;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
-import com.topface.topface.utils.social.Authorizer;
 import com.vk.sdk.dialogs.VKOpenAuthDialog;
 
 import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
 
 public class AuthFragment extends BaseAuthFragment {
 
@@ -63,7 +68,10 @@ public class AuthFragment extends BaseAuthFragment {
 
     @Inject
     NavigationState mNavigationState;
+    @Inject
+    AuthState mAuthState;
 
+    private Subscription mAuthStateSubscription;
     private static final String MAIN_BUTTONS_GA_TAG = "LoginButtonsTest";
     private static final String TRANSLATION_Y = "translationY";
     private static final String IMAGE_HTML_TEMPLATE = "<img src='%s'/> ";
@@ -81,6 +89,119 @@ public class AuthFragment extends BaseAuthFragment {
         public void onReceive(Context context, Intent intent) {
             mGoToSocNetAuthScreen = false;
             showButtons();
+        }
+    };
+    private OnAuthButtonsClick mOnAuthButtonsClick = new OnAuthButtonsClick() {
+        @Override
+        public void onVkButtonClick() {
+            EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "LoginMainVk", "", 1L);
+            if (checkOnline() && mAuthorizationManager != null) {
+                waitUntilAuthSocialOptions(new Runnable() {
+                    @Override
+                    public void run() {
+                        mGoToSocNetAuthScreen = true;
+                        mAuthorizationManager.vkontakteAuth(getActivity());
+                    }
+                });
+            }
+        }
+
+        @Override
+        public void onFbButtonClick() {
+            EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "LoginMainFb", "", 1L);
+            if (checkOnline() && mAuthorizationManager != null) {
+                waitUntilAuthSocialOptions(new Runnable() {
+                    @Override
+                    public void run() {
+                        mGoToSocNetAuthScreen = true;
+                        mAuthorizationManager.facebookAuth(getActivity());
+                    }
+                });
+            }
+        }
+
+        @Override
+        public void onOkButtonClick() {
+            EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "LoginMainOk", "", 1L);
+            if (checkOnline() && mAuthorizationManager != null) {
+                waitUntilAuthSocialOptions(new Runnable() {
+                    @Override
+                    public void run() {
+                        mGoToSocNetAuthScreen = true;
+                        mAuthorizationManager.odnoklassnikiAuth(getActivity());
+                    }
+                });
+            }
+        }
+
+        @Override
+        public void onTfButtonClick() {
+            mGoToSocNetAuthScreen = false;
+            ObjectAnimator animator = ObjectAnimator.ofFloat(mBinding.ivAuthGroup, TRANSLATION_Y, 0, Utils.getPxFromDp(ANIMATION_PATH));
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    setAllSocNetBtnVisibility(false, true, false);
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    setTfLoginBtnVisibility(true, true, true);
+                }
+            });
+            animator.setDuration(ANIMATION_DURATION).start();
+        }
+
+        @Override
+        public void onEnteranceButtonClick() {
+            if (getActivity() != null) {
+                if (checkOnline() && mAuthorizationManager != null) {
+                    mAuthorizationManager.topfaceAuth(getActivity());
+                }
+            }
+        }
+
+        @Override
+        public void onUpButtonClick() {
+            ObjectAnimator animator = ObjectAnimator.ofFloat(mBinding.ivAuthGroup, TRANSLATION_Y, Utils.getPxFromDp(ANIMATION_PATH), 0);
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    setExtraServicesBtnVisibility(false, false);
+                    setTfLoginBtnVisibility(false, true, false);
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    setAllSocNetBtnVisibility(true, true, true);
+                }
+            });
+            animator.setDuration(ANIMATION_DURATION).start();
+        }
+
+        @Override
+        public void onOtherSocButtonClick() {
+            mGoToSocNetAuthScreen = false;
+            ObjectAnimator animator = ObjectAnimator.ofFloat(mBinding.ivAuthGroup, TRANSLATION_Y, 0, Utils.getPxFromDp(ANIMATION_PATH));
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    setAllSocNetBtnVisibility(false, true, false);
+                    setTfLoginBtnVisibility(false, false, false);
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    setExtraServicesBtnVisibility(true, true);
+                }
+            });
+            animator.setDuration(ANIMATION_DURATION).start();
+        }
+
+        @Override
+        public void onCreateAccountButtonClick() {
+            EasyTracker.sendEvent("Registration", "StartActivity", "FromAuth", 1L);
+            startActivityForResult(new Intent(getContext(), RegistrationActivity.class), RegistrationActivity.INTENT_REGISTRATION);
         }
     };
 
@@ -156,30 +277,6 @@ public class AuthFragment extends BaseAuthFragment {
         v.setVisibility(visibility ? View.VISIBLE : View.GONE);
     }
 
-    private BroadcastReceiver mTokenReadyReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int tokenStatus = intent.getIntExtra(Authorizer.TOKEN_STATUS, Authorizer.TOKEN_NOT_READY);
-
-            switch (tokenStatus) {
-                case Authorizer.TOKEN_READY:
-                    auth(AuthToken.getInstance());
-                    break;
-                case Authorizer.TOKEN_FAILED:
-                    Utils.showToastNotification(R.string.general_reconnect_social, Toast.LENGTH_SHORT);
-                case Authorizer.TOKEN_NOT_READY:
-                    hideProgress();
-                    showButtons();
-                    break;
-                case Authorizer.TOKEN_PREPARING:
-                    hideButtons();
-                    showProgress();
-                    break;
-            }
-        }
-    };
-
     public static AuthFragment newInstance() {
         return new AuthFragment();
     }
@@ -195,7 +292,8 @@ public class AuthFragment extends BaseAuthFragment {
         Debug.log("AF: onCreate");
         View root = inflater.inflate(R.layout.fragment_auth, null);
         mBinding = DataBindingUtil.bind(root);
-        mLoginFragmentHandler = new LoginFragmentHandler();
+        mLoginFragmentHandler = new LoginFragmentHandler(getActivity());
+        mLoginFragmentHandler.setOnAuthButtonsClickListener(mOnAuthButtonsClick);
         mBinding.setHandler(mLoginFragmentHandler);
         mBinding.btnOtherServices.setVisibility(isOtherServicesButtonAvailable() ? View.VISIBLE : View.GONE);
         initViews(root);
@@ -206,6 +304,37 @@ public class AuthFragment extends BaseAuthFragment {
             setAllSocNetBtnVisibility(true, true, false);
         }
         return root;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mAuthStateSubscription = mAuthState.getObservable(AuthStateData.class)
+                .subscribe(new Action1<AuthStateData>() {
+                    @Override
+                    public void call(AuthStateData authStateData) {
+                        switch (authStateData.getStatus()) {
+                            case AuthStateData.TOKEN_READY:
+                                auth(AuthToken.getInstance());
+                                break;
+                            case AuthStateData.TOKEN_FAILED:
+                                Utils.showToastNotification(R.string.general_reconnect_social, Toast.LENGTH_SHORT);
+                            case AuthStateData.TOKEN_NOT_READY:
+                                hideProgress();
+                                showButtons();
+                                break;
+                            case AuthStateData.TOKEN_PREPARING:
+                                hideButtons();
+                                showProgress();
+                                break;
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Debug.error("AuthStateData error " + throwable);
+                    }
+                });
     }
 
     @Override
@@ -325,8 +454,6 @@ public class AuthFragment extends BaseAuthFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(mTokenReadyReceiver,
-                new IntentFilter(Authorizer.AUTH_TOKEN_READY_ACTION));
         LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(mRestoreAccountShown,
                 new IntentFilter(RestoreAccountActivity.RESTORE_ACCOUNT_SHOWN));
         Activity activity = getActivity();
@@ -370,8 +497,14 @@ public class AuthFragment extends BaseAuthFragment {
         if (!hasAuthorized()) {
             EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "DismissMain", "", 1L);
         }
-        LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(mTokenReadyReceiver);
         LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(mRestoreAccountShown);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Debug.log("AuthStateData unsubscribe");
+        RxUtils.safeUnsubscribe(mAuthStateSubscription);
     }
 
     @Override
@@ -406,112 +539,67 @@ public class AuthFragment extends BaseAuthFragment {
     }
 
     @SuppressWarnings("unused")
-    public class LoginFragmentHandler {
+    public static class LoginFragmentHandler {
 
         public final ObservableFloat mTFButtonPaddingTop = new ObservableFloat();
 
+        private OnAuthButtonsClick mOnAuthButtonsClick;
+        private Context mContext;
+
+        public LoginFragmentHandler(Context context) {
+            mContext = context;
+        }
+
+        public void setOnAuthButtonsClickListener(OnAuthButtonsClick listener) {
+            mOnAuthButtonsClick = listener;
+        }
+
         public void vkButtonClick(View view) {
-            EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "LoginMainVk", "", 1L);
-            if (checkOnline() && mAuthorizationManager != null) {
-                waitUntilAuthSocialOptions(new Runnable() {
-                    @Override
-                    public void run() {
-                        mGoToSocNetAuthScreen = true;
-                        mAuthorizationManager.vkontakteAuth(getActivity());
-                    }
-                });
+            if (mOnAuthButtonsClick != null) {
+                mOnAuthButtonsClick.onVkButtonClick();
             }
         }
 
         public void okButtonClick(View view) {
-            EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "LoginMainOk", "", 1L);
-            if (checkOnline() && mAuthorizationManager != null) {
-                waitUntilAuthSocialOptions(new Runnable() {
-                    @Override
-                    public void run() {
-                        mGoToSocNetAuthScreen = true;
-                        mAuthorizationManager.odnoklassnikiAuth(getActivity());
-                    }
-                });
+            if (mOnAuthButtonsClick != null) {
+                mOnAuthButtonsClick.onOkButtonClick();
             }
         }
 
         public void fbButtonClick(View view) {
-            EasyTracker.sendEvent(MAIN_BUTTONS_GA_TAG, "LoginMainFb", "", 1L);
-            if (checkOnline() && mAuthorizationManager != null) {
-                waitUntilAuthSocialOptions(new Runnable() {
-                    @Override
-                    public void run() {
-                        mGoToSocNetAuthScreen = true;
-                        mAuthorizationManager.facebookAuth(getActivity());
-                    }
-                });
+            if (mOnAuthButtonsClick != null) {
+                mOnAuthButtonsClick.onFbButtonClick();
             }
         }
 
         public void tfButtonClick(View view) {
-            mGoToSocNetAuthScreen = false;
-            ObjectAnimator animator = ObjectAnimator.ofFloat(mBinding.ivAuthGroup, TRANSLATION_Y, 0, Utils.getPxFromDp(ANIMATION_PATH));
-            animator.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    setAllSocNetBtnVisibility(false, true, false);
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    setTfLoginBtnVisibility(true, true, true);
-                }
-            });
-            animator.setDuration(ANIMATION_DURATION).start();
+            if (mOnAuthButtonsClick != null) {
+                mOnAuthButtonsClick.onTfButtonClick();
+            }
         }
 
         public void entranceButtonClick(View view) {
-            if (getActivity() != null) {
-                if (checkOnline() && mAuthorizationManager != null) {
-                    mAuthorizationManager.topfaceAuth(getActivity());
-                }
+            if (mOnAuthButtonsClick != null) {
+                mOnAuthButtonsClick.onEnteranceButtonClick();
             }
         }
 
         public void createAccountButtonClick(View view) {
-            EasyTracker.sendEvent("Registration", "StartActivity", "FromAuth", 1L);
-            startActivityForResult(new Intent(getActivity(), RegistrationActivity.class), RegistrationActivity.INTENT_REGISTRATION);
+            if (mOnAuthButtonsClick != null) {
+                mOnAuthButtonsClick.onCreateAccountButtonClick();
+            }
         }
 
         public void upButtonClick(View view) {
-            ObjectAnimator animator = ObjectAnimator.ofFloat(mBinding.ivAuthGroup, TRANSLATION_Y, Utils.getPxFromDp(ANIMATION_PATH), 0);
-            animator.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    setExtraServicesBtnVisibility(false, false);
-                    setTfLoginBtnVisibility(false, true, false);
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    setAllSocNetBtnVisibility(true, true, true);
-                }
-            });
-            animator.setDuration(ANIMATION_DURATION).start();
+            if (mOnAuthButtonsClick != null) {
+                mOnAuthButtonsClick.onUpButtonClick();
+            }
         }
 
         public void otherSocButtonClick(View view) {
-            mGoToSocNetAuthScreen = false;
-            ObjectAnimator animator = ObjectAnimator.ofFloat(mBinding.ivAuthGroup, TRANSLATION_Y, 0, Utils.getPxFromDp(ANIMATION_PATH));
-            animator.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    setAllSocNetBtnVisibility(false, true, false);
-                    setTfLoginBtnVisibility(false, false, false);
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    setExtraServicesBtnVisibility(true, true);
-                }
-            });
-            animator.setDuration(ANIMATION_DURATION).start();
+            if (mOnAuthButtonsClick != null) {
+                mOnAuthButtonsClick.onOtherSocButtonClick();
+            }
         }
 
         public Spanned getOtherServicesButtonText() {
@@ -534,10 +622,10 @@ public class AuthFragment extends BaseAuthFragment {
         }
 
         private String getOtherSocString() {
-            if (getActivity() == null || !isAdded()) {
+            if (mContext == null) {
                 return Utils.EMPTY;
             }
-            String resString = getString(R.string.other_auth);
+            String resString = mContext.getString(R.string.other_auth);
             for (SocServicesAuthButtons keys : AuthServiceButtons.getOtherButtonsList().keySet()) {
                 resString = (!keys.isMainScreenLoginEnable() && keys.isEnabled() ? String.format(IMAGE_HTML_TEMPLATE, keys.name()) : Utils.EMPTY).concat(resString);
             }
@@ -545,10 +633,28 @@ public class AuthFragment extends BaseAuthFragment {
         }
 
         private BitmapDrawable getResourceDrawable(int res) {
-            BitmapDrawable d = new BitmapDrawable(getResources(), BitmapFactory.decodeResource(getResources(), res));
-            d.setBounds(new Rect(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight() + (int) getResources().getDimension(R.dimen.other_services_button_img_padding)));
+            BitmapDrawable d = new BitmapDrawable(mContext.getResources(), BitmapFactory.decodeResource(mContext.getResources(), res));
+            d.setBounds(new Rect(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight() + (int) mContext.getResources().getDimension(R.dimen.other_services_button_img_padding)));
             d.setGravity(Gravity.CENTER);
             return d;
         }
+    }
+
+    private interface OnAuthButtonsClick {
+        void onVkButtonClick();
+
+        void onFbButtonClick();
+
+        void onOkButtonClick();
+
+        void onTfButtonClick();
+
+        void onEnteranceButtonClick();
+
+        void onUpButtonClick();
+
+        void onOtherSocButtonClick();
+
+        void onCreateAccountButtonClick();
     }
 }

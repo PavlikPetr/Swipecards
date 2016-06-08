@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.content.LocalBroadcastManager;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -19,10 +18,14 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.topface.topface.App;
+import com.topface.topface.data.AuthStateData;
+import com.topface.topface.state.AuthState;
 import com.topface.topface.utils.config.SessionConfig;
 
 import java.util.Arrays;
 import java.util.Collection;
+
+import javax.inject.Inject;
 
 /**
  * Class that starts Facebook authorization
@@ -34,13 +37,16 @@ public class FbAuthorizer extends Authorizer {
     private static final String IS_FB_AUTHORIZED = "is_fb_authorized";
     private static final String FACEBOOK_REGISTRATION_METHOD = "Facebook";
 
+    @Inject
+    AuthState mAuthState;
+
     private CallbackManager mCallbackManager;
     private ProfileTracker mProfileTracker;
 
     private Collection<String> PERMISSIONS = Arrays.asList("email", "public_profile", "user_friends", "user_photos", "user_birthday");
 
     public FbAuthorizer() {
-        super();
+        App.from(App.getContext()).inject(this);
         initFB();
         mCallbackManager = CallbackManager.Factory.create();
         mProfileTracker = new ProfileTracker() {
@@ -67,20 +73,25 @@ public class FbAuthorizer extends Authorizer {
                             accessToken.getToken(),
                             accessToken.getExpires().toString()
                     );
+                    sendTokenIntent(AuthStateData.TOKEN_READY);
+                    return;
                 }
+                sendTokenIntent(AuthStateData.TOKEN_NOT_READY);
             }
 
             @Override
             public void onCancel() {
-                Intent intent = new Intent(AUTH_TOKEN_READY_ACTION);
-                intent.putExtra(TOKEN_STATUS, TOKEN_NOT_READY);
-                LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+                sendTokenIntent(AuthStateData.TOKEN_NOT_READY);
             }
 
             @Override
             public void onError(FacebookException e) {
             }
         });
+    }
+
+    private void sendTokenIntent(@AuthStateData.AuthTokenStatus int tokenStatus) {
+        mAuthState.setData(new AuthStateData(tokenStatus, AuthStateData.FB));
     }
 
     private void sendFaceBookEvent() {
@@ -123,6 +134,7 @@ public class FbAuthorizer extends Authorizer {
     public void authorize(Activity activity) {
         initFB();
         LoginManager.getInstance().logInWithReadPermissions(activity, PERMISSIONS);
+        sendTokenIntent(AuthStateData.TOKEN_PREPARING);
     }
 
     public static String getFbId() {

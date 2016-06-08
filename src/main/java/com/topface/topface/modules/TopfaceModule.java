@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.data.AuthStateData;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
@@ -14,6 +15,7 @@ import com.topface.topface.data.User;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.promo.dialogs.PromoKey71Dialog;
 import com.topface.topface.promo.dialogs.PromoKey81Dialog;
+import com.topface.topface.state.AuthState;
 import com.topface.topface.state.CacheDataInterface;
 import com.topface.topface.state.CountersDataProvider;
 import com.topface.topface.state.DrawerLayoutState;
@@ -66,6 +68,7 @@ import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.geo.GeoLocationManager;
 import com.topface.topface.utils.social.AuthorizationManager;
+import com.topface.topface.utils.social.FbAuthorizer;
 import com.topface.topface.utils.social.OkAuthorizer;
 import com.topface.topface.utils.social.OkUserData;
 
@@ -130,7 +133,8 @@ import dagger.Provides;
                 ChatActivity.class,
                 AddPhotoHelper.class,
                 CitySearchPopup.class,
-                ProfileFormFragment.class
+                ProfileFormFragment.class,
+                FbAuthorizer.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
@@ -262,5 +266,28 @@ public class TopfaceModule {
     @Singleton
     EventBus providesEventBus() {
         return new EventBus();
+    }
+
+    @Provides
+    @Singleton
+    AuthState providesAuthState() {
+        return new AuthState(new CacheDataInterface() {
+            @Override
+            public <T> void saveDataToCache(T data) {
+                if (data.getClass() == AuthStateData.class) {
+                    SessionConfig sessionConfig = App.getSessionConfig();
+                    sessionConfig.setAuthStateData((AuthStateData) data);
+                    sessionConfig.saveConfig();
+                }
+            }
+
+            @Override
+            public <T> T getDataFromCache(Class<T> classType) {
+                if (AuthStateData.class.equals(classType)) {
+                    return (T) (App.getSessionConfig().getAuthStateData());
+                }
+                return null;
+            }
+        });
     }
 }
