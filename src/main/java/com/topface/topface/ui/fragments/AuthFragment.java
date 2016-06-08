@@ -292,7 +292,7 @@ public class AuthFragment extends BaseAuthFragment {
         Debug.log("AF: onCreate");
         View root = inflater.inflate(R.layout.fragment_auth, null);
         mBinding = DataBindingUtil.bind(root);
-        mLoginFragmentHandler = new LoginFragmentHandler(getActivity());
+        mLoginFragmentHandler = new LoginFragmentHandler(getContext());
         mLoginFragmentHandler.setOnAuthButtonsClickListener(mOnAuthButtonsClick);
         mBinding.setHandler(mLoginFragmentHandler);
         mBinding.btnOtherServices.setVisibility(isOtherServicesButtonAvailable() ? View.VISIBLE : View.GONE);
