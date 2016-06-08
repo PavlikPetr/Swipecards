@@ -638,6 +638,10 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     @Override
     public void onProfileUpdate(@NonNull Profile profile) {
         mProfile = profile;
+        // ловим ситуацию когда модер удалил фото
+        if (profile.photosCount == 0) {
+            App.getConfig().getUserConfig().setUserAvatarAvailable(false);
+        }
     }
 
     @NonNull

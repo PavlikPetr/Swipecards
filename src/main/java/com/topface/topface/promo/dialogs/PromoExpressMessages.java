@@ -33,6 +33,7 @@ public class PromoExpressMessages extends PromoDialog {
 
     private int mExtraPaddingTop = 0;
     private Random mRandom;
+    private static OnNextActionListener mOnNextActionListener;
 
     @Override
     public Options.PromoPopupEntity getPremiumEntity() {
@@ -63,7 +64,9 @@ public class PromoExpressMessages extends PromoDialog {
 
     @Override
     protected void deleteMessages() {
-
+        if (mOnNextActionListener != null) {
+            mOnNextActionListener.onNextAction();
+        }
     }
 
     @Override
@@ -139,8 +142,8 @@ public class PromoExpressMessages extends PromoDialog {
                         R.drawable.fake_boy1;
     }
 
-    private Random getRandom(){
-        if(mRandom==null){
+    private Random getRandom() {
+        if (mRandom == null) {
             mRandom = new Random();
         }
         return mRandom;
@@ -190,7 +193,7 @@ public class PromoExpressMessages extends PromoDialog {
 
             @Override
             public void setStartActionCallback(OnNextActionListener startActionCallback) {
-
+                mOnNextActionListener = startActionCallback;
             }
         };
     }
