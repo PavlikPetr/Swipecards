@@ -64,7 +64,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
         @Override
         public void onReceive(Context context, Intent intent) {
             if (null != mOwnProfileRecyclerViewAdapter) {
-                mOwnProfileRecyclerViewAdapter.updateData(App.from(context).getProfile().photos, App.from(context).getProfile().photosCount, true);
+                mOwnProfileRecyclerViewAdapter.updateData(App.get().getProfile().photos, App.from(context).getProfile().photosCount, true);
             }
         }
     };

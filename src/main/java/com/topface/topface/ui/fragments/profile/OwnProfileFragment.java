@@ -104,7 +104,6 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     public void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateProfileReceiver);
-        mHandler = null;
     }
 
     @Override

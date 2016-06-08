@@ -569,6 +569,9 @@ public class AddPhotoHelper {
                 // Увеличиваем общее количество фотографий юзера
                 profile.photosCount += 1;
             }
+            if (profile.photos != null) {
+                profile.photos.add(photo);
+            }
             // оповещаем всех об изменениях
             CacheProfile.sendUpdateProfileBroadcast();
             mAppState.setData(profile);
