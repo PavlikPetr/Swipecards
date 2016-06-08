@@ -8,6 +8,8 @@ import com.topface.topface.App;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.state.TopfaceAppState;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -68,7 +70,7 @@ public class FindAndSendCurrentLocation {
         }
     }
 
-    public void sendLocation(final Location location) {
+    public void sendLocation(final @Nullable Location location) {
         if (location != null) {
             new BackgroundThread(Thread.MIN_PRIORITY) {
                 @Override

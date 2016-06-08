@@ -13,6 +13,8 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.state.TopfaceAppState;
 
+import org.jetbrains.annotations.Nullable;
+
 import javax.inject.Inject;
 
 import static android.location.LocationManager.GPS_PROVIDER;
@@ -35,14 +37,22 @@ public class GeoLocationManager {
         @Override
         public void onLocationChanged(Location location) {
             Debug.log(this, "Receive location from Network");
-            compareWithBestLocation(location);
+            if (isValidLocation(location)) {
+                compareWithBestLocation(location);
+            } else {
+                Debug.log("Location not valid lat " + location.getLatitude() + " lang " + location.getLongitude());
+            }
         }
     };
     private ChangeLocationListener mGPSLocationListener = new ChangeLocationListener() {
         @Override
         public void onLocationChanged(Location location) {
             Debug.log(this, "Receive location from GPS");
-            compareWithBestLocation(location);
+            if (isValidLocation(location)) {
+                compareWithBestLocation(location);
+            } else {
+                Debug.log("Location not valid lat " + location.getLatitude() + " lang " + location.getLongitude());
+            }
         }
     };
 
@@ -63,13 +73,17 @@ public class GeoLocationManager {
         startLocationListener();
     }
 
+    @Nullable
     public static Location getCurrentLocation() {
         LocationManager locationManager = (LocationManager) App.getContext().getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.getLastKnownLocation(NETWORK_PROVIDER);
+        Location lastKnown = locationManager.getLastKnownLocation(NETWORK_PROVIDER);
+        return isValidLocation(lastKnown) ? lastKnown : null;
     }
 
+    @Nullable
     public Location getLastKnownLocation() {
-        setBestLocation(mLocationManager.getLastKnownLocation(NETWORK_PROVIDER));
+        Location lastKnown = mLocationManager.getLastKnownLocation(NETWORK_PROVIDER);
+        setBestLocation(isValidLocation(lastKnown) ? lastKnown : null);
         return mBestLocation;
     }
 
@@ -131,9 +145,11 @@ public class GeoLocationManager {
         }
     }
 
-    private void setBestLocation(Location location) {
-        mBestLocation = location;
-        mAppState.setData(mBestLocation);
+    private void setBestLocation(@Nullable Location location) {
+        if (isValidLocation(location)) {
+            mBestLocation = location;
+            mAppState.setData(mBestLocation);
+        }
     }
 
     public enum NavigationType {GPS_ONLY, NETWORK_ONLY, ALL, DISABLE}
@@ -168,5 +184,13 @@ public class GeoLocationManager {
         App.getContext().unregisterReceiver(mGeoStateReceiver);
     }
 
+    private static boolean isValidLocation(@Nullable Location location) {
+        if (location == null) {
+            return false;
+        }
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        return latitude <= 90 && latitude >= -90 && longitude <= 180 && longitude >= -180;
+    }
 
 }
