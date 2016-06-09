@@ -56,6 +56,9 @@ public class FullscreenController {
     private Activity mActivity;
     private String mCurrentBannerType;
     private OnNextActionListener mOnNextActionListener;
+
+    private boolean mIsControllerResumed = false;
+    private boolean mIsFullscreenSkipped = true;
     private FullScreenBannerListener mFullScreenBannerListener = new FullScreenBannerListener() {
         @Override
         public void onLoaded() {
@@ -104,6 +107,7 @@ public class FullscreenController {
 
         @Override
         public void callOnUi() {
+            mIsFullscreenSkipped = false;
             if (App.get().getOptions().interstitial.enabled) {
                 FullscreenController.this.requestFullscreen(BANNER_ADMOB_FULLSCREEN_START_APP);
             } else if (startPageInfo != null) {
@@ -397,13 +401,17 @@ public class FullscreenController {
     }
 
     public void onResume() {
+        mIsControllerResumed = true;
+        if (!isFullScreenBannerVisible()) {
+            onNextAction();
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             App.get().unregisterActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
         }
     }
 
     public void onPause() {
-        //Пока не требуется, но на будущее
+        mIsControllerResumed = false;
     }
 
 
@@ -424,14 +432,16 @@ public class FullscreenController {
     @SuppressWarnings("unused")
     private void onFullScreenAdClosed() {
         isFullScreenBannerVisible = false;
-        if (mOnNextActionListener != null) {
-            mOnNextActionListener.onNextAction();
+        if (mIsControllerResumed) {
+            onNextAction();
         }
     }
 
-    @SuppressWarnings("unused")
-    private void onFullScreenAdOpened() {
-        isFullScreenBannerVisible = true;
+    private void onNextAction() {
+        if (mOnNextActionListener != null && !mIsFullscreenSkipped) {
+            mOnNextActionListener.onNextAction();
+            mIsFullscreenSkipped = true;
+        }
     }
 
     private interface FullScreenBannerListener {
