@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -11,7 +12,7 @@
     </data>
 
     <FrameLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/left_menu_header_height"
         android:onClick="@{viewModel.onClick}">
 
@@ -35,9 +36,28 @@
                 app:preProcessor="inscribedAvatar"
                 app:setPhoto="@{viewModel.photo}" />
 
-            <TextView
-                style="@style/LeftMenuUserName"
-                android:text="@{viewModel.userName}" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/LeftMenuUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    tools:text="dsvsdvsdvsdfsdffd sfs"
+                    android:text="@{viewModel.userName}" />
+
+                <TextView
+                    style="@style/LeftMenuUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="none"
+                    tools:text=",dsvsdvsdv"
+                    android:text="@{viewModel.userAge}" />
+            </LinearLayout>
 
             <TextView
                 style="@style/LeftMenuUserCity"

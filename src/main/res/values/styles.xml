@@ -1228,7 +1228,7 @@
     </style>
 
     <style name="LeftMenuHeaderBase">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">vertical</item>
         <item name="android:paddingTop">@dimen/left_menu_header_pading_top</item>
@@ -1239,8 +1239,6 @@
     </style>
 
     <style name="LeftMenuUserName">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">14dp</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/text_white</item>
