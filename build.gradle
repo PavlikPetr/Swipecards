@@ -109,7 +109,7 @@ android {
             buildConfigField "com.topface.billing.MarketApiType", "MarketApiType", "com.topface.billing.MarketApiType.OK";
             buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                     "com.topface.billing.MarketApiType.OK";
-            manifestPlaceholders = [ applicationClass:"com.topface.topface.ui.OkApplication" ]
+            manifestPlaceholders = [applicationClass: "com.topface.topface.ui.OkApplication"]
         }
         ifree {
             applicationId "com.topface.topface.ifree"
@@ -157,7 +157,7 @@ android {
         buildConfigField "String", "GIT_HEAD_SHA", "null";
         buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                 "com.topface.billing.MarketApiType.GOOGLE_PLAY";
-        manifestPlaceholders = [ applicationClass:"com.topface.topface.App" ]
+        manifestPlaceholders = [applicationClass: "com.topface.topface.App"]
 
         multiDexEnabled true
     }
@@ -322,7 +322,8 @@ dependencies {
     //Для Амазона нужна библиотека для поддержки in-app покупок
     amazonCompile 'com.amazon:in-app-purchasing:2.0.1'
     //RxJava
-    compile 'io.reactivex:rxandroid:1.0.0'
+    compile 'io.reactivex:rxandroid:1.2.0'
+    compile 'io.reactivex:rxjava:1.1.5'
     //Dagger
     compile 'com.squareup.dagger:dagger:1.2.2'
     provided 'com.squareup.dagger:dagger-compiler:1.2.2'

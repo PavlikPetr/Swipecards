@@ -362,7 +362,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
         boolean isCalled = callTrialVipPopup(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                PurchasesActivity.super.onUpClick();
+                finish();
             }
         });
         if (!isCalled) {
@@ -375,7 +375,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
         boolean isCalled = callTrialVipPopup(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                onBackPressed();
+                finish();
             }
         });
         if (!isCalled && !isScreenShow()) {
