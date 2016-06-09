@@ -561,16 +561,15 @@ public class AddPhotoHelper {
         Profile profile = App.get().getProfile();
         if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
             Photo photo = (Photo) msg.obj;
-            // ставим фото на аватарку только если она едиснтвенная
-            if (profile.photos != null && profile.photos.size() == 0) {
-                profile.photo = photo;
+            if (profile.photos != null) {
+                // ставим фото на аватарку только если она едиснтвенная
+                if(profile.photos.size() == 0){
+                    profile.photo = photo;
+                }
                 // добавляется фото в начало списка
                 profile.photos.addFirst(photo);
                 // Увеличиваем общее количество фотографий юзера
                 profile.photosCount += 1;
-            }
-            if (profile.photos != null) {
-                profile.photos.add(photo);
             }
             // оповещаем всех об изменениях
             CacheProfile.sendUpdateProfileBroadcast();
