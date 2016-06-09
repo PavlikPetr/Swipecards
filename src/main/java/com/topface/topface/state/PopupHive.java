@@ -47,8 +47,8 @@ public class PopupHive {
                     .subscribe(new Action1<IStartAction>() {
                         @Override
                         public void call(IStartAction iStartAction) {
-                            iStartAction.callOnUi();
                             Debug.log("PopupHive " + iStartAction.getActionName() + " started " + "isApplicable " + iStartAction.isApplicable());
+                            iStartAction.callOnUi();
                         }
                     }, new Action1<Throwable>() {
                         @Override
