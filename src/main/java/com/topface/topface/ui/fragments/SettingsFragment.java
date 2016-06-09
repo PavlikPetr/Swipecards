@@ -80,14 +80,14 @@ public class SettingsFragment extends ProfileInnerFragment {
     @OnClick(R.id.loAbout)
     protected void aboutClick() {
         Options options = App.from(getActivity()).getOptions();
-        AboutAppDialog.newInstance(getActivity().getString(R.string.settings_about), options.aboutApp.title, options.aboutApp.url).show(getFragmentManager(),
+        AboutAppDialog.newInstance(getActivity().getString(R.string.settings_about), options.aboutApp.title, options.aboutApp.url).show(getActivity().getSupportFragmentManager(),
                 AboutAppDialog.class.getName());
     }
 
     @SuppressWarnings("unused")
     @OnClick(R.id.loLanguage)
     protected void languageClick() {
-        new SelectLanguageDialog().show(getFragmentManager(), SelectLanguageDialog.class.getName());
+        new SelectLanguageDialog().show(getActivity().getSupportFragmentManager(), SelectLanguageDialog.class.getName());
     }
 
     @SuppressWarnings("unused")
@@ -256,7 +256,7 @@ public class SettingsFragment extends ProfileInnerFragment {
                 preloadPhotoName.setText(type.getName());
             }
         });
-        preloadPhotoSelectorDialog.show(getFragmentManager(), PreloadPhotoSelectorDialog.class.getName());
+        preloadPhotoSelectorDialog.show(getActivity().getSupportFragmentManager(), PreloadPhotoSelectorDialog.class.getName());
 
     }
 
