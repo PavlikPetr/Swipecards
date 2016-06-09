@@ -260,7 +260,7 @@ public class MenuFragment extends Fragment {
     }
 
     private HeaderFooterData<LeftMenuHeaderViewData> getHeaderData(@NotNull Profile profile) {
-        return new HeaderFooterData<>(new LeftMenuHeaderViewData(getValidatedUserPhotoInterface(profile), profile.firstName, String.valueOf(profile.age), profile.city != null ? profile.city.getName() : Utils.EMPTY), mOnHeaderClick);
+        return new HeaderFooterData<>(new LeftMenuHeaderViewData(getValidatedUserPhotoInterface(profile), profile.firstName, profile.age, profile.city != null ? profile.city.getName() : Utils.EMPTY), mOnHeaderClick);
     }
 
     private IPhoto getValidatedUserPhotoInterface(@NotNull Profile profile) {

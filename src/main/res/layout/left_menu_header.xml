@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -12,7 +11,7 @@
     </data>
 
     <FrameLayout
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/left_menu_width"
         android:layout_height="@dimen/left_menu_header_height"
         android:onClick="@{viewModel.onClick}">
 
@@ -45,17 +44,18 @@
                     style="@style/LeftMenuUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="35dp"
                     android:ellipsize="end"
                     android:lines="1"
-                    tools:text="dsvsdvsdvsdfsdffd sfs"
                     android:text="@{viewModel.userName}" />
 
                 <TextView
                     style="@style/LeftMenuUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="-35dp"
                     android:ellipsize="none"
-                    tools:text=",dsvsdvsdv"
+                    android:lines="1"
                     android:text="@{viewModel.userAge}" />
             </LinearLayout>
 

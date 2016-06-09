@@ -4,6 +4,7 @@ import android.databinding.ObservableField;
 import android.view.View;
 
 import com.topface.framework.imageloader.IPhoto;
+import com.topface.topface.App;
 import com.topface.topface.data.HeaderFooterData;
 import com.topface.topface.data.leftMenu.LeftMenuHeaderViewData;
 import com.topface.topface.utils.Utils;
@@ -15,6 +16,7 @@ public class LeftMenuHeaderViewModel {
     public ObservableField<String> userAge = new ObservableField<>(Utils.EMPTY);
     public ObservableField<String> userCity = new ObservableField<>(Utils.EMPTY);
     public ObservableField<String> background = new ObservableField<>(null);
+    public final static String AGE_TEMPLATE = ", %d";
 
     private HeaderFooterData.OnViewClickListener<LeftMenuHeaderViewData> mOnClick;
     private HeaderFooterData<LeftMenuHeaderViewData> mData;
@@ -30,7 +32,7 @@ public class LeftMenuHeaderViewModel {
             setPhoto(data.getData().getPhoto());
         } else if (mData.getData().getName() == null || !mData.getData().getName().equals(data.getData().getName())) {
             setName(data.getData().getName());
-        } else if (mData.getData().getAge() == null || !mData.getData().getAge().equals(data.getData().getAge())) {
+        } else if (mData.getData().getAge() != data.getData().getAge()) {
             setAge(data.getData().getAge());
         } else if (mData.getData().getCity() == null || !mData.getData().getCity().equals(data.getData().getCity())) {
             setCity(data.getData().getCity());
@@ -54,11 +56,11 @@ public class LeftMenuHeaderViewModel {
         userName.set(name);
     }
 
-    private void setAge(String age) {
+    private void setAge(int age) {
         if (mData != null && mData.getData() != null) {
             mData.getData().setAge(age);
         }
-        userAge.set(",".concat(age));
+        userAge.set(String.format(App.getCurrentLocale(), AGE_TEMPLATE, age));
     }
 
     private void setCity(String city) {

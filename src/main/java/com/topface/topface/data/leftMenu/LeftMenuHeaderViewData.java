@@ -10,7 +10,7 @@ public class LeftMenuHeaderViewData {
 
     private IPhoto mPhoto;
     private String mName;
-    private String mAge;
+    private int mAge;
     private String mCity;
 
     /**
@@ -20,7 +20,7 @@ public class LeftMenuHeaderViewData {
      * @param name  users name
      * @param city  users city
      */
-    public LeftMenuHeaderViewData(IPhoto photo, String name, String age, String city) {
+    public LeftMenuHeaderViewData(IPhoto photo, String name, int age, String city) {
         mPhoto = photo;
         mName = name;
         mAge = age;
@@ -68,7 +68,7 @@ public class LeftMenuHeaderViewData {
      *
      * @return users age
      */
-    public String getAge() {
+    public int getAge() {
         return mAge;
     }
 
@@ -77,7 +77,7 @@ public class LeftMenuHeaderViewData {
      *
      * @param age users age
      */
-    public void setAge(String age) {
+    public void setAge(int age) {
         mAge = age;
     }
 
