@@ -43,7 +43,6 @@ import com.topface.topface.ui.adapters.ItemEventListener.OnRecyclerViewItemClick
 import com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.Editor;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -200,7 +199,7 @@ public class MenuFragment extends Fragment {
                 .filter(new Func1<BalanceData, Boolean>() {
                     @Override
                     public Boolean call(BalanceData balanceData) {
-                        return mBalanceData.likes == balanceData.likes || mBalanceData.money == balanceData.money;
+                        return mBalanceData.likes != balanceData.likes || mBalanceData.money != balanceData.money;
                     }
                 })
                 .subscribe(new Action1<BalanceData>() {
@@ -261,7 +260,7 @@ public class MenuFragment extends Fragment {
     }
 
     private HeaderFooterData<LeftMenuHeaderViewData> getHeaderData(@NotNull Profile profile) {
-        return new HeaderFooterData<>(new LeftMenuHeaderViewData(getValidatedUserPhotoInterface(profile), profile.getNameAndAge(), profile.city != null ? profile.city.getName() : Utils.EMPTY), mOnHeaderClick);
+        return new HeaderFooterData<>(new LeftMenuHeaderViewData(getValidatedUserPhotoInterface(profile), profile.firstName, profile.age, profile.city != null ? profile.city.getName() : Utils.EMPTY), mOnHeaderClick);
     }
 
     private IPhoto getValidatedUserPhotoInterface(@NotNull Profile profile) {

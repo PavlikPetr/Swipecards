@@ -4,6 +4,7 @@ import android.databinding.ObservableField;
 import android.view.View;
 
 import com.topface.framework.imageloader.IPhoto;
+import com.topface.topface.App;
 import com.topface.topface.data.HeaderFooterData;
 import com.topface.topface.data.leftMenu.LeftMenuHeaderViewData;
 import com.topface.topface.utils.Utils;
@@ -12,8 +13,10 @@ public class LeftMenuHeaderViewModel {
 
     public ObservableField<IPhoto> photo = new ObservableField<>(null);
     public ObservableField<String> userName = new ObservableField<>(Utils.EMPTY);
+    public ObservableField<String> userAge = new ObservableField<>(Utils.EMPTY);
     public ObservableField<String> userCity = new ObservableField<>(Utils.EMPTY);
     public ObservableField<String> background = new ObservableField<>(null);
+    public final static String AGE_TEMPLATE = ", %d";
 
     private HeaderFooterData.OnViewClickListener<LeftMenuHeaderViewData> mOnClick;
     private HeaderFooterData<LeftMenuHeaderViewData> mData;
@@ -22,12 +25,15 @@ public class LeftMenuHeaderViewModel {
         if (mData == null || mData.getData() == null) {
             setPhoto(data.getData().getPhoto());
             setName(data.getData().getName());
+            setAge(data.getData().getAge());
             setCity(data.getData().getCity());
             mData = data;
         } else if (mData.getData().getPhoto() == null || !mData.getData().getPhoto().equals(data.getData().getPhoto())) {
             setPhoto(data.getData().getPhoto());
         } else if (mData.getData().getName() == null || !mData.getData().getName().equals(data.getData().getName())) {
             setName(data.getData().getName());
+        } else if (mData.getData().getAge() != data.getData().getAge()) {
+            setAge(data.getData().getAge());
         } else if (mData.getData().getCity() == null || !mData.getData().getCity().equals(data.getData().getCity())) {
             setCity(data.getData().getCity());
         }
@@ -48,6 +54,13 @@ public class LeftMenuHeaderViewModel {
             mData.getData().setName(name);
         }
         userName.set(name);
+    }
+
+    private void setAge(int age) {
+        if (mData != null && mData.getData() != null) {
+            mData.getData().setAge(age);
+        }
+        userAge.set(String.format(App.getCurrentLocale(), AGE_TEMPLATE, age));
     }
 
     private void setCity(String city) {
