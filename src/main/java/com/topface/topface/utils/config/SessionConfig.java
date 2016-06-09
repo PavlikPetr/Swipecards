@@ -29,6 +29,7 @@ public class SessionConfig extends AbstractConfig {
     private static final String DATA_PAYMENTWALL_PRODUCTS = "data_pw_products";
     private static final String DATA_PAYMENTWALL_MOBILE_PRODUCTS = "data_pw_mobile_products";
     private static final String AUTH_TOKEN_STATE = "auth_token_state";
+    private static final String GCM_REG_ID = "gcm_reg_id";
 
     public SessionConfig(Context context) {
         super(context);
@@ -51,6 +52,8 @@ public class SessionConfig extends AbstractConfig {
         addField(settingsMap, SETTINGS_SOCIAL_ACCOUNT_EMAIL, Utils.EMPTY);
         // authorization token status
         addField(settingsMap, AUTH_TOKEN_STATE, "");
+        //GCM registration id
+        addField(settingsMap, GCM_REG_ID, Utils.EMPTY);
     }
 
     @Override
@@ -235,5 +238,21 @@ public class SessionConfig extends AbstractConfig {
             return JsonUtils.fromJson(authStateData, AuthStateData.class);
         }
         return new AuthStateData();
+    }
+
+    /**
+     * Sets GCM registration id
+     */
+    public void setGcmRegId(String regId) {
+        setField(getSettingsMap(), GCM_REG_ID, regId);
+    }
+
+    /**
+     * GCM registration id
+     *
+     * @return gsm registration id
+     */
+    public String getGcmRegId() {
+        return getStringField(getSettingsMap(), GCM_REG_ID);
     }
 }
