@@ -37,6 +37,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.notifications.UserNotificationManager;
@@ -146,13 +147,15 @@ public class GCMUtils {
 
     private void storeToken(String token) {
         AppConfig config = App.getAppConfig();
-        config.setGcmRegId(token);
         config.saveLastAppVersion();
         config.saveConfig();
+        SessionConfig sessionConfig = App.getSessionConfig();
+        sessionConfig.setGcmRegId(token);
+        sessionConfig.saveConfig();
     }
 
     private String getGcmToken() {
-        String token = App.getAppConfig().getGcmRegId();
+        String token = App.getSessionConfig().getGcmRegId();
         if (token.isEmpty()) {
             Debug.log("No reg id");
             return "";
