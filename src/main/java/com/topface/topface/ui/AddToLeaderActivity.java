@@ -124,12 +124,12 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         // init grid view and create adapter
         initPhotosGrid(mSelectedPosition);
         initAddPhotoHelper();
-        mAppState.getObservable(Profile.class).subscribe(new Action1<Profile>() {
+        mSubscriptions.add(mAppState.getObservable(Profile.class).subscribe(new Action1<Profile>() {
             @Override
             public void call(Profile profile) {
                 handlePhotos(profile);
             }
-        });
+        }));
     }
 
     private void handlePhotos(final @NotNull Profile profile) {
