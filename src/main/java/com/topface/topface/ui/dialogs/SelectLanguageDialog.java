@@ -41,7 +41,7 @@ public class SelectLanguageDialog extends TrackedDialogFragment {
         return new AlertDialog.Builder(getContext())
                 .setTitle(R.string.settings_select_language)
                 .setSingleChoiceItems(languages, selectedLocaleIndex, null)
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogLocales, int which) {
                         dialogLocales.dismiss();
@@ -94,7 +94,7 @@ public class SelectLanguageDialog extends TrackedDialogFragment {
                             LocaleConfig.changeLocale(getActivity(), mLocale);
                         }
                     })
-                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogConfirm, int which) {
                         }
