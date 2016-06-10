@@ -1236,6 +1236,7 @@
 
     <style name="LeftMenuHeader" parent="LeftMenuHeaderBase">
         <item name="android:paddingLeft">@dimen/left_menu_header_pading_left</item>
+        <item name="android:paddingRight">@dimen/left_menu_header_pading_right</item>
     </style>
 
     <style name="LeftMenuUserName">

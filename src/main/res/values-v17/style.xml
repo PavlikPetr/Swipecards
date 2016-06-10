@@ -12,5 +12,6 @@
 
     <style name="LeftMenuHeader" parent="LeftMenuHeaderBase">
         <item name="android:paddingStart">@dimen/left_menu_header_pading_left</item>
+        <item name="android:paddingEnd">@dimen/left_menu_header_pading_right</item>
     </style>
 </resources>
