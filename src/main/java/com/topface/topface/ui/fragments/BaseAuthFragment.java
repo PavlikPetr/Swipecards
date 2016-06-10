@@ -17,12 +17,14 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
+import com.topface.topface.data.AuthTokenStateData;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.state.AuthState;
 import com.topface.topface.ui.dialogs.OldVersionDialog;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.external_libs.AdjustManager;
@@ -42,6 +44,8 @@ public abstract class BaseAuthFragment extends BaseFragment {
 
     @Inject
     AdjustManager mAdjustManager;
+    @Inject
+    AuthState mAuthState;
     private boolean mHasAuthorized = false;
     private RetryViewCreator mRetryView;
     private BroadcastReceiver mConnectionChangeListener;
@@ -141,11 +145,14 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 } catch (Exception e) {
                     Debug.error("AppsFlyer Exception", e);
                 }
+                mAuthState.setData(new AuthTokenStateData(AuthTokenStateData.TOKEN_AUTHORIZED));
             }
 
             @Override
             public void fail(final int codeError, IApiResponse response) {
+                mAuthState.setData(new AuthTokenStateData(AuthTokenStateData.TOKEN_NOT_READY));
                 authorizationFailed(codeError, authRequest);
+
             }
 
             public void always(IApiResponse response) {

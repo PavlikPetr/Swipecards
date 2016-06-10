@@ -18,7 +18,7 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.topface.topface.App;
-import com.topface.topface.data.AuthStateData;
+import com.topface.topface.data.AuthTokenStateData;
 import com.topface.topface.state.AuthState;
 import com.topface.topface.utils.config.SessionConfig;
 
@@ -46,6 +46,7 @@ public class FbAuthorizer extends Authorizer {
     private Collection<String> PERMISSIONS = Arrays.asList("email", "public_profile", "user_friends", "user_photos", "user_birthday");
 
     public FbAuthorizer() {
+        super();
         App.from(App.getContext()).inject(this);
         initFB();
         mCallbackManager = CallbackManager.Factory.create();
@@ -73,25 +74,25 @@ public class FbAuthorizer extends Authorizer {
                             accessToken.getToken(),
                             accessToken.getExpires().toString()
                     );
-                    sendTokenIntent(AuthStateData.TOKEN_READY);
                     return;
                 }
-                sendTokenIntent(AuthStateData.TOKEN_NOT_READY);
+                sendTokenIntent(AuthTokenStateData.TOKEN_NOT_READY);
             }
 
             @Override
             public void onCancel() {
-                sendTokenIntent(AuthStateData.TOKEN_NOT_READY);
+                sendTokenIntent(AuthTokenStateData.TOKEN_NOT_READY);
             }
 
             @Override
             public void onError(FacebookException e) {
+                sendTokenIntent(AuthTokenStateData.TOKEN_NOT_READY);
             }
         });
     }
 
-    private void sendTokenIntent(@AuthStateData.AuthTokenStatus int tokenStatus) {
-        mAuthState.setData(new AuthStateData(tokenStatus, AuthStateData.FB));
+    private void sendTokenIntent(@AuthTokenStateData.AuthTokenStatus int tokenStatus) {
+        mAuthState.setData(new AuthTokenStateData(tokenStatus));
     }
 
     private void sendFaceBookEvent() {
@@ -134,7 +135,6 @@ public class FbAuthorizer extends Authorizer {
     public void authorize(Activity activity) {
         initFB();
         LoginManager.getInstance().logInWithReadPermissions(activity, PERMISSIONS);
-        sendTokenIntent(AuthStateData.TOKEN_PREPARING);
     }
 
     public static String getFbId() {

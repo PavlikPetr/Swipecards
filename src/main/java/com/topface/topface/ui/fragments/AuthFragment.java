@@ -32,7 +32,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
-import com.topface.topface.data.AuthStateData;
+import com.topface.topface.data.AuthTokenStateData;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
@@ -309,23 +309,25 @@ public class AuthFragment extends BaseAuthFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mAuthStateSubscription = mAuthState.getObservable(AuthStateData.class)
-                .subscribe(new Action1<AuthStateData>() {
+        mAuthStateSubscription = mAuthState.getObservable(AuthTokenStateData.class)
+                .subscribe(new Action1<AuthTokenStateData>() {
                     @Override
-                    public void call(AuthStateData authStateData) {
-                        switch (authStateData.getStatus()) {
-                            case AuthStateData.TOKEN_READY:
+                    public void call(AuthTokenStateData authTokenStateData) {
+                        switch (authTokenStateData.getStatus()) {
+                            case AuthTokenStateData.TOKEN_READY:
                                 auth(AuthToken.getInstance());
                                 break;
-                            case AuthStateData.TOKEN_FAILED:
+                            case AuthTokenStateData.TOKEN_FAILED:
                                 Utils.showToastNotification(R.string.general_reconnect_social, Toast.LENGTH_SHORT);
-                            case AuthStateData.TOKEN_NOT_READY:
-                                hideProgress();
-                                showButtons();
-                                break;
-                            case AuthStateData.TOKEN_PREPARING:
+                            case AuthTokenStateData.TOKEN_PREPARING:
                                 hideButtons();
                                 showProgress();
+                                break;
+                            case AuthTokenStateData.TOKEN_AUTHORIZED:
+                            case AuthTokenStateData.TOKEN_STATUS_UNDEFINED:
+                            case AuthTokenStateData.TOKEN_NOT_READY:
+                                hideProgress();
+                                showButtons();
                                 break;
                         }
                     }
