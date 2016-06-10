@@ -26,6 +26,7 @@ import dagger.Provides;
  * Create singletone for different wrappers/managers of external libs
  */
 @Module(library = true,
+        complete = false,
         injects = {
                 AdToAppHelper.class,
                 BaseAuthFragment.class,

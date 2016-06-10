@@ -5,7 +5,7 @@ import android.app.Activity;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.data.AuthStateData;
+import com.topface.topface.data.AuthTokenStateData;
 import com.topface.topface.data.social.AppSocialAppsIds;
 import com.topface.topface.state.AuthState;
 import com.topface.topface.state.TopfaceAppState;
@@ -50,8 +50,8 @@ public class OkAuthorizer extends Authorizer {
         return Odnoklassniki.getInstance();
     }
 
-    private void sendTokenIntent(@AuthStateData.AuthTokenStatus int tokenStatus) {
-        mAuthState.setData(new AuthStateData(tokenStatus, AuthStateData.OK));
+    private void sendTokenIntent(@AuthTokenStateData.AuthTokenStatus int tokenStatus) {
+        mAuthState.setData(new AuthTokenStateData(tokenStatus));
     }
 
     @Override
@@ -78,13 +78,13 @@ public class OkAuthorizer extends Authorizer {
                                 SessionConfig sessionConfig = App.getSessionConfig();
                                 sessionConfig.setSocialAccountName(okUserData.name);
                                 sessionConfig.saveConfig();
-                                sendTokenIntent(AuthStateData.TOKEN_READY);
+                                sendTokenIntent(AuthTokenStateData.TOKEN_READY);
                             }
                         }, new Action1<Throwable>() {
                             @Override
                             public void call(Throwable throwable) {
                                 throwable.printStackTrace();
-                                sendTokenIntent(AuthStateData.TOKEN_NOT_READY);
+                                sendTokenIntent(AuthTokenStateData.TOKEN_NOT_READY);
                             }
                         }, new Action0() {
                             @Override
@@ -92,7 +92,7 @@ public class OkAuthorizer extends Authorizer {
 
                             }
                         });
-                        sendTokenIntent(AuthStateData.TOKEN_PREPARING);
+                        sendTokenIntent(AuthTokenStateData.TOKEN_PREPARING);
                     } else {
                         Debug.log("Odnoklassniki auth data is empty");
                     }
@@ -102,6 +102,7 @@ public class OkAuthorizer extends Authorizer {
             @Override
             public void onError(String error) {
                 Debug.error("Odnoklassniki auth error");
+                sendTokenIntent(AuthTokenStateData.TOKEN_NOT_READY);
             }
         }, "okauth://ok125879808", OkAuthType.ANY, OkScope.SET_STATUS, OkScope.PHOTO_CONTENT, OkScope.VALUABLE_ACCESS);
     }

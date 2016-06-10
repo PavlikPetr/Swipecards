@@ -5,9 +5,8 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.topface.framework.JsonUtils;
-import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.AbstractConfig;
-import com.topface.topface.data.AuthStateData;
+import com.topface.topface.data.AuthTokenStateData;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.utils.Utils;
 
@@ -29,7 +28,6 @@ public class SessionConfig extends AbstractConfig {
     private static final String DATA_PAYMENTWALL_PRODUCTS = "data_pw_products";
     private static final String DATA_PAYMENTWALL_MOBILE_PRODUCTS = "data_pw_mobile_products";
     private static final String AUTH_TOKEN_STATE = "auth_token_state";
-    private static final String GCM_REG_ID = "gcm_reg_id";
 
     public SessionConfig(Context context) {
         super(context);
@@ -52,8 +50,6 @@ public class SessionConfig extends AbstractConfig {
         addField(settingsMap, SETTINGS_SOCIAL_ACCOUNT_EMAIL, Utils.EMPTY);
         // authorization token status
         addField(settingsMap, AUTH_TOKEN_STATE, "");
-        //GCM registration id
-        addField(settingsMap, GCM_REG_ID, Utils.EMPTY);
     }
 
     @Override
@@ -221,8 +217,7 @@ public class SessionConfig extends AbstractConfig {
      * @param authState token state
      * @return state of operation
      */
-    public boolean setAuthStateData(AuthStateData authState) {
-        Debug.log("AuthStateData save token status = " + authState.getStatus());
+    public boolean setAuthStateData(AuthTokenStateData authState) {
         return setField(getSettingsMap(), AUTH_TOKEN_STATE, JsonUtils.toJson(authState));
     }
 
@@ -232,27 +227,11 @@ public class SessionConfig extends AbstractConfig {
      * @return token state
      */
     @Nullable
-    public AuthStateData getAuthStateData() {
+    public AuthTokenStateData getAuthStateData() {
         String authStateData = getStringField(getSettingsMap(), AUTH_TOKEN_STATE);
         if (!TextUtils.isEmpty(authStateData)) {
-            return JsonUtils.fromJson(authStateData, AuthStateData.class);
+            return JsonUtils.fromJson(authStateData, AuthTokenStateData.class);
         }
-        return new AuthStateData();
-    }
-
-    /**
-     * Sets GCM registration id
-     */
-    public void setGcmRegId(String regId) {
-        setField(getSettingsMap(), GCM_REG_ID, regId);
-    }
-
-    /**
-     * GCM registration id
-     *
-     * @return gsm registration id
-     */
-    public String getGcmRegId() {
-        return getStringField(getSettingsMap(), GCM_REG_ID);
+        return new AuthTokenStateData();
     }
 }
