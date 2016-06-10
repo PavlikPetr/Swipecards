@@ -36,22 +36,22 @@ public class GeoLocationManager {
     private ChangeLocationListener mNetworkLocationListener = new ChangeLocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-            Debug.log(this, "Receive location from Network");
+            Debug.log("GeoLocationManager Receive location from Network");
             if (isValidLocation(location)) {
                 compareWithBestLocation(location);
             } else {
-                Debug.log("Location not valid lat " + location.getLatitude() + " lang " + location.getLongitude());
+                Debug.log("GeoLocationManager Location not valid lat " + location.getLatitude() + " lang " + location.getLongitude());
             }
         }
     };
     private ChangeLocationListener mGPSLocationListener = new ChangeLocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-            Debug.log(this, "Receive location from GPS");
+            Debug.log(this, "GeoLocationManager Receive location from GPS");
             if (isValidLocation(location)) {
                 compareWithBestLocation(location);
             } else {
-                Debug.log("Location not valid lat " + location.getLatitude() + " lang " + location.getLongitude());
+                Debug.log("GeoLocationManager Location not valid lat " + location.getLatitude() + " lang " + location.getLongitude());
             }
         }
     };
@@ -68,7 +68,7 @@ public class GeoLocationManager {
     };
 
     public GeoLocationManager() {
-        App.from(App.getContext()).inject(this);
+        App.get().inject(this);
         mLocationManager = (LocationManager) App.getContext().getSystemService(Context.LOCATION_SERVICE);
         startLocationListener();
     }
@@ -108,7 +108,7 @@ public class GeoLocationManager {
     }
 
     public void startLocationListener() {
-        Debug.log(this, "Geoloc attach listeners");
+        Debug.log(this, "GeoLocationManager attach listeners");
         switch (getEnabledProvider()) {
             case ALL:
             case GPS_ONLY:
@@ -124,7 +124,7 @@ public class GeoLocationManager {
     }
 
     public void stopLocationListener() {
-        Debug.log(this, "Geoloc remove listeners");
+        Debug.log(this, "GeoLocationManager remove listeners");
         mLocationManager.removeUpdates(mNetworkLocationListener);
         mLocationManager.removeUpdates(mGPSLocationListener);
     }
@@ -166,13 +166,13 @@ public class GeoLocationManager {
 
         @Override
         public void onProviderEnabled(String provider) {
-            Debug.log(GeoLocationManager.class, "Enabled " + provider);
+            Debug.log("GeoLocationManager Enabled " + provider);
 
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-            Debug.log(GeoLocationManager.class, "Disabled " + provider);
+            Debug.log("GeoLocationManager Disabled " + provider);
         }
     }
 
@@ -184,7 +184,7 @@ public class GeoLocationManager {
         App.getContext().unregisterReceiver(mGeoStateReceiver);
     }
 
-    private static boolean isValidLocation(@Nullable Location location) {
+    public static boolean isValidLocation(@Nullable Location location) {
         if (location == null) {
             return false;
         }
