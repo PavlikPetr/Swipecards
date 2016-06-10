@@ -41,7 +41,11 @@ public class AdmirationFragment extends LikesFragment {
     public void onResume() {
         super.onResume();
         if (mEmptyFeedView != null) {
-            initEmptyFeedView(mEmptyFeedView, ErrorCodes.RESULT_OK);
+            if (mBalanceData.premium) {
+                initEmptyFeedView(mEmptyFeedView, ErrorCodes.RESULT_OK);
+            } else {
+                onLockedFeed(ErrorCodes.RESULT_OK);
+            }
         }
     }
 
