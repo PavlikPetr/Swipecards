@@ -229,7 +229,8 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
             redAlert(R.string.empty_fields);
             showButtons();
             return;
-        } else if (!Utils.isValidEmail(emailLogin)) {
+        } else if (!Utils.isValidEmail(
+                emailLogin)) {
             redAlert(R.string.incorrect_login);
             showButtons();
             return;

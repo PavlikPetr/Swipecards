@@ -561,7 +561,7 @@ public class AddPhotoHelper {
         Profile profile = App.get().getProfile();
         if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
             Photo photo = (Photo) msg.obj;
-            if (profile.photos != null) {
+            if (profile.photos != null && photo != null) {
                 // ставим фото на аватарку только если она едиснтвенная
                 if(profile.photos.size() == 0){
                     profile.photo = photo;
