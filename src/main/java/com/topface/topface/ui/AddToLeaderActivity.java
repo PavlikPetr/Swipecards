@@ -43,10 +43,12 @@ import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.views.LockerView;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.FlurryManager;
+import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
 import java.util.List;
@@ -55,8 +57,11 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Subscription;
+import rx.Observable;
 import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.functions.Func2;
+import rx.subscriptions.CompositeSubscription;
 
 import static com.topface.topface.utils.FlurryManager.GET_LEAD;
 
@@ -80,7 +85,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
             mCoins = balanceData.money;
         }
     };
-    private Subscription mBalanceSubscription;
     private int mSelectedPosition;
     private boolean mIsPhotoDialogShown;
     private LeadersRecyclerViewAdapter mUsePhotosAdapter;
@@ -95,6 +99,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     Photos mPhotos = null;
     private String mGreetingText = Utils.EMPTY;
     private boolean mIsKeyBoardShown;
+    private CompositeSubscription mSubscriptions = new CompositeSubscription();
 
     @Bind(R.id.user_photos_grid)
     RecyclerView mRecyclerView;
@@ -105,8 +110,8 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        App.from(this).inject(this);
-        mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
+        App.get().inject(this);
+        mSubscriptions.add(mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction));
         if (savedInstanceState != null) {
             mPhotos = JsonUtils.fromJson(savedInstanceState.getString(PHOTOS), Photos.class);
             mSelectedPosition = savedInstanceState.getInt(SELECTED_POSITION, 0);
@@ -119,6 +124,46 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         // init grid view and create adapter
         initPhotosGrid(mSelectedPosition);
         initAddPhotoHelper();
+        mAppState.getObservable(Profile.class).subscribe(new Action1<Profile>() {
+            @Override
+            public void call(Profile profile) {
+                handlePhotos(profile);
+            }
+        });
+    }
+
+    private void handlePhotos(final @NotNull Profile profile) {
+        if (profile.photos.size() == 0) {
+            getAdapter().getAdapterData().clear();
+            getAdapter().getAdapterData().add(Photo.createFakePhoto());
+            getAdapter().notifyDataSetChanged();
+            return;
+        }
+        Observable.just(profile)
+                .flatMap(new Func1<Profile, Observable<Photo>>() {
+                    @Override
+                    public Observable<Photo> call(Profile profile) {
+                        return Observable.from(profile.photos);
+                    }
+                })
+                .filter(new Func1<Photo, Boolean>() {
+                    @Override
+                    public Boolean call(Photo photo) {
+                        return !getAdapter().getAdapterData().contains(photo);
+                    }
+                })
+                .reduce(new Photos(), new Func2<Photos, Photo, Photos>() {
+                    @Override
+                    public Photos call(Photos photos, Photo photo) {
+                        photos.add(photo);
+                        return photos;
+                    }
+                }).subscribe(new RxUtils.ShortSubscription<Photos>() {
+            @Override
+            public void onNext(Photos photos) {
+                getAdapter().addPhotos(getPhotoLinks(photos), profile.photos.size() < profile.photosCount, false, true);
+            }
+        });
     }
 
     @Override
@@ -153,21 +198,11 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mBalanceSubscription.unsubscribe();
+        RxUtils.safeUnsubscribe(mSubscriptions);
         if (mAddPhotoHelper != null) {
             mAddPhotoHelper.releaseHelper();
         }
         ButterKnife.unbind(this);
-    }
-
-    @Override
-    protected void onProfileUpdated() {
-        super.onProfileUpdated();
-        Profile profile = App.from(this).getProfile();
-        mPhotos = profile.photos;
-        LeadersRecyclerViewAdapter adapter = getAdapter();
-        adapter.setData(mPhotos, false, false);
-        setSelectedPosition(profile.photos.isEmpty() ? 0 : profile.photos.get(0).getId());
     }
 
     @Override
@@ -313,12 +348,11 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         }
     }
 
-    private Photos getPhotoLinks() {
+    private Photos getPhotoLinks(Photos photos) {
         Photos photoLinks = new Photos();
         photoLinks.clear();
-        Profile profile = App.from(this).getProfile();
-        if (profile.photos != null) {
-            photoLinks.addAll(profile.photos);
+        if (photos != null) {
+            photoLinks.addAll(photos);
         }
         return checkPhotos(photoLinks);
     }
@@ -336,7 +370,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
 
 
     private LeadersRecyclerViewAdapter createAdapter() {
-        Photos photos = getPhotoLinks();
+        Photos photos = getPhotoLinks(App.get().getProfile().photos);
         return (LeadersRecyclerViewAdapter) new LeadersRecyclerViewAdapter(
                 photos,
                 photos.size(), new LoadingListAdapter.Updater() {
