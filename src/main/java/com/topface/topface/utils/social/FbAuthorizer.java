@@ -74,7 +74,6 @@ public class FbAuthorizer extends Authorizer {
                             accessToken.getToken(),
                             accessToken.getExpires().toString()
                     );
-                    sendTokenIntent(AuthTokenStateData.TOKEN_READY);
                     return;
                 }
                 sendTokenIntent(AuthTokenStateData.TOKEN_NOT_READY);
