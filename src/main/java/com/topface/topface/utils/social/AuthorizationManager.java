@@ -14,7 +14,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.data.Auth;
-import com.topface.topface.data.AuthStateData;
+import com.topface.topface.data.AuthTokenStateData;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
@@ -136,7 +136,7 @@ public class AuthorizationManager {
     public void logout(Activity activity) {
         FlurryManager.getInstance().sendLogoutEvent();
         FlurryManager.getInstance().dropUserIdHash();
-        mAuthState.setData(new AuthStateData());
+        mAuthState.setData(new AuthTokenStateData());
         App.isNeedShowTrial = true;
         UserConfig config = App.getUserConfig();
         config.setStartPositionOfActions(0);
@@ -177,7 +177,7 @@ public class AuthorizationManager {
     public static void showRetryLogoutDialog(Activity activity, final LogoutRequest logoutRequest) {
         AlertDialog.Builder retryBuilder = new AlertDialog.Builder(activity);
         retryBuilder.setMessage(R.string.general_logout_error)
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();

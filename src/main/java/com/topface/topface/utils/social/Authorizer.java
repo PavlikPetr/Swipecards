@@ -9,14 +9,6 @@ import android.os.Bundle;
  */
 public abstract class Authorizer {
 
-    public static final String AUTH_TOKEN_READY_ACTION = "com.topface.topface.auth.token.ready";
-
-    public static final String TOKEN_STATUS = "token_status";
-    public static final int TOKEN_READY = 0;
-    public static final int TOKEN_NOT_READY = 1;
-    public static final int TOKEN_PREPARING = 2;
-    public static final int TOKEN_FAILED = 3;
-
     public abstract void authorize(Activity activity);
 
     public void onCreate(Bundle savedInstanceState) {

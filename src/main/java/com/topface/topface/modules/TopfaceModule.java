@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.data.AuthStateData;
+import com.topface.topface.data.AuthTokenStateData;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
@@ -35,10 +35,12 @@ import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.external_libs.modules.ExternalLibsInjectModule;
 import com.topface.topface.ui.fragments.AuthFragment;
+import com.topface.topface.ui.fragments.BaseAuthFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
+import com.topface.topface.ui.fragments.TopfaceAuthFragment;
 import com.topface.topface.ui.fragments.feed.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.BookmarksFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
@@ -134,7 +136,9 @@ import dagger.Provides;
                 AddPhotoHelper.class,
                 CitySearchPopup.class,
                 ProfileFormFragment.class,
-                FbAuthorizer.class
+                FbAuthorizer.class,
+                BaseAuthFragment.class,
+                TopfaceAuthFragment.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
@@ -274,17 +278,12 @@ public class TopfaceModule {
         return new AuthState(new CacheDataInterface() {
             @Override
             public <T> void saveDataToCache(T data) {
-                if (data.getClass() == AuthStateData.class) {
-                    SessionConfig sessionConfig = App.getSessionConfig();
-                    sessionConfig.setAuthStateData((AuthStateData) data);
-                    sessionConfig.saveConfig();
-                }
             }
 
             @Override
             public <T> T getDataFromCache(Class<T> classType) {
-                if (AuthStateData.class.equals(classType)) {
-                    return (T) (App.getSessionConfig().getAuthStateData());
+                if (AuthTokenStateData.class.equals(classType)) {
+                    return (T) (new AuthTokenStateData());
                 }
                 return null;
             }

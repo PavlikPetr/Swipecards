@@ -11,7 +11,7 @@
     </data>
 
     <FrameLayout
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/left_menu_width"
         android:layout_height="@dimen/left_menu_header_height"
         android:onClick="@{viewModel.onClick}">
 
@@ -35,9 +35,29 @@
                 app:preProcessor="inscribedAvatar"
                 app:setPhoto="@{viewModel.photo}" />
 
-            <TextView
-                style="@style/LeftMenuUserName"
-                android:text="@{viewModel.userName}" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/LeftMenuUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="35dp"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="@{viewModel.userName}" />
+
+                <TextView
+                    style="@style/LeftMenuUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="-35dp"
+                    android:ellipsize="none"
+                    android:lines="1"
+                    android:text="@{viewModel.userAge}" />
+            </LinearLayout>
 
             <TextView
                 style="@style/LeftMenuUserCity"
