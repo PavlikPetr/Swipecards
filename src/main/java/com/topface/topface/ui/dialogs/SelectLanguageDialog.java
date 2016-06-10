@@ -90,7 +90,7 @@ public class SelectLanguageDialog extends TrackedDialogFragment {
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogConfirm, int which) {
-                            (new SearchCacheManager()).clearCache();
+                            new SearchCacheManager().clearCache();
                             LocaleConfig.changeLocale(getActivity(), mLocale);
                         }
                     })

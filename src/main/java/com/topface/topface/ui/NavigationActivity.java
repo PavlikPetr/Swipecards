@@ -125,7 +125,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     public static void restartNavigationActivity(Activity activity, Options options) {
         Intent intent = new Intent(activity, NavigationActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(GCMUtils.NEXT_INTENT, options.startPage);
+                .putExtra(GCMUtils.NEXT_INTENT, new LeftMenuSettingsData(options.startPage));
         if (App.getUserConfig().getDatingMessage().equals(options
                 .instantMessageFromSearch.getText())) {
             intent.putExtra(DatingInstantMessageController.DEFAULT_MESSAGE, true);
