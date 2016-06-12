@@ -540,7 +540,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (mListAdapter != null) {
             FeedList<T> data = mListAdapter.getData();
             outState.putParcelableArray(FEEDS, data.toArray(new Parcelable[data.size()]));
-            outState.putInt(POSITION, mListView.getFirstVisiblePosition());
+            outState.putInt(POSITION, mListView != null ? mListView.getFirstVisiblePosition() : 0);
             outState.putBoolean(HAS_AD, mListAdapter.hasFeedAd());
             outState.putParcelable(FEED_AD, mListAdapter.getFeedAd());
             outState.putInt(BLACK_LIST_USER, mIdForRemove);
