@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -135,6 +136,14 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
 
     private void initPages(View root) {
         addPages();
+        FragmentManager fm = getChildFragmentManager();
+        if (fm.getFragments() != null) {
+            for (Fragment fragment : fm.getFragments()) {
+                if (fragment != null) {
+                    fm.beginTransaction().remove(fragment).commit();
+                }
+            }
+        }
         mPager = (ViewPager) root.findViewById(R.id.pager);
         mPager.setSaveEnabled(false);
         mBodyPagerAdapter = new TabbedFeedPageAdapter(getChildFragmentManager(),
