@@ -66,12 +66,13 @@ public class NavigationManager {
     private FragmentManager mFragmentManager;
     private LeftMenuSettingsData mFragmentSettings = new LeftMenuSettingsData(FragmentIdData.UNDEFINED);
     private Subscription mSubscription;
+    private Subscription mNavigationStateSubscription;
 
     public NavigationManager(IActivityDelegate activityDelegate, LeftMenuSettingsData settings) {
         App.get().inject(this);
         mFragmentSettings = settings;
         mActivityDelegate = activityDelegate;
-        mNavigationState.getNavigationObservable().filter(new Func1<WrappedNavigationData, Boolean>() {
+        mNavigationStateSubscription =  mNavigationState.getNavigationObservable().filter(new Func1<WrappedNavigationData, Boolean>() {
             @Override
             public Boolean call(WrappedNavigationData data) {
                 return data != null
@@ -314,11 +315,12 @@ public class NavigationManager {
         sendNavigationFragmentSwitched(data);
     }
 
-    public LeftMenuSettingsData getCurrentFragmentSettings(){
+    public LeftMenuSettingsData getCurrentFragmentSettings() {
         return mFragmentSettings;
     }
 
     public void onDestroy() {
+        RxUtils.safeUnsubscribe(mNavigationStateSubscription);
         mActivityDelegate = null;
         if (mSubscription != null && !mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
