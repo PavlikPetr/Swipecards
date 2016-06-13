@@ -138,7 +138,8 @@ import dagger.Provides;
                 ProfileFormFragment.class,
                 FbAuthorizer.class,
                 BaseAuthFragment.class,
-                TopfaceAuthFragment.class
+                TopfaceAuthFragment.class,
+                UserProfileFragment.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
