@@ -120,6 +120,8 @@ public class SettingsNotificationsFragment extends BaseFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_notifications, null);
         ButterKnife.bind(this, view);
+        mLoVibration.setClickable(true);
+        mLoLED.setClickable(true);
         mMarketApiManager = new MarketApiManager();
 
         mMelodyName = (TextView) mLoMelody.findViewWithTag("tvText");
