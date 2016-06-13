@@ -173,6 +173,7 @@ public class MenuFragment extends Fragment {
         mCountersData = mCountersData == null ? new CountersData() : mCountersData;
         mBalanceData = mBalanceData == null ? new BalanceData() : mBalanceData;
         mAdapter = initAdapter();
+        mAdapter.updateSelected(mSelectedPos, false);
         mSubscription.add(mAppState.getObservable(CountersData.class)
                 .map(new Func1<CountersData, CountersData>() {
                     @Override
