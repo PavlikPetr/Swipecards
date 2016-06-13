@@ -12,7 +12,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.topface.framework.utils.BackgroundThread;
@@ -35,6 +34,7 @@ import com.topface.topface.utils.social.AuthorizationManager;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 @FlurryOpenEvent(name = SettingsFragment.PAGE_NAME)
@@ -46,7 +46,7 @@ public class SettingsFragment extends ProfileInnerFragment {
     private MarketApiManager mMarketApiManager;
 
     private TextView preloadPhotoName;
-    private CheckBox mAutoReplySettings;
+    private boolean mIsAllowedAutoReply;
 
     @Bind(R.id.loNotifications)
     View mLoNotifications;
@@ -54,6 +54,8 @@ public class SettingsFragment extends ProfileInnerFragment {
     ViewGroup mNoNotificationViewGroup;
     @Bind(R.id.loHelp)
     View mHelp;
+    @Bind(R.id.auto_reply_state)
+    CheckBox mAutoReplySettings;
 
     @SuppressWarnings("unused")
     @OnClick(R.id.loNotifications)
@@ -101,6 +103,12 @@ public class SettingsFragment extends ProfileInnerFragment {
         }
     }
 
+    @SuppressWarnings("unused")
+    @OnCheckedChanged(R.id.auto_reply_state)
+    protected void autoreplyCheckedChanged(boolean isChecked) {
+        autoReplySwitched(isChecked);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
@@ -112,7 +120,9 @@ public class SettingsFragment extends ProfileInnerFragment {
         initAccountViews(view);
 
         // Auto reply settings
-        initAutoReply(view);
+        boolean isAutoreplyAllow = App.get().getOptions().isAutoreplyAllow;
+        setAutoReplySettings(isAutoreplyAllow);
+        mIsAllowedAutoReply = isAutoreplyAllow;
 
         // Init settings views
         /*
@@ -136,17 +146,6 @@ public class SettingsFragment extends ProfileInnerFragment {
         return getString(R.string.settings_header_title);
     }
 
-    private void initAutoReply(View root) {
-        mAutoReplySettings = (CheckBox) root.findViewById(R.id.auto_reply_state);
-        mAutoReplySettings.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                switchAutoReplyButton(isChecked);
-            }
-        });
-        setAutoReplySettings(App.get().getOptions().isAutoreplyAllow);
-    }
-
     @Override
     public boolean isTrackable() {
         return false;
@@ -158,6 +157,7 @@ public class SettingsFragment extends ProfileInnerFragment {
         }
     }
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.autoReplyItem)
     public void setInversAutoReplySettings() {
         if (mAutoReplySettings != null) {
@@ -165,9 +165,10 @@ public class SettingsFragment extends ProfileInnerFragment {
         }
     }
 
-    private void switchAutoReplyButton() {
-        if (mAutoReplySettings != null) {
-            switchAutoReplyButton(!mAutoReplySettings.isChecked());
+    private void autoReplySwitched(boolean state) {
+        if (state != mIsAllowedAutoReply) {
+            mIsAllowedAutoReply = state;
+            switchAutoReplyButton(state);
         }
     }
 
