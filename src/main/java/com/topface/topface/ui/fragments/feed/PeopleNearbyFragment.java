@@ -63,7 +63,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     private Action1<Location> mLocationAction = new Action1<Location>() {
         @Override
         public void call(Location location) {
-            if (isGeoEnabled()) {
+            if (isGeoEnabled() && GeoLocationManager.isValidLocation(location)) {
                 sendPeopleNearbyRequest(location, mIsHistoryLoad, mIsMakeItemsRead);
             }
         }

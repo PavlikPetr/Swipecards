@@ -285,6 +285,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     protected void setActionBarTitles(String title, String subtitle) {
         if (mTitleSetter != null && mNeedTitles) {
             mTitleSetter.setActionBarTitles(title, subtitle);
+            mTitleSetter.setOnline(false);
         }
     }
 

@@ -30,9 +30,17 @@ public class FeedRequest extends LimitedApiRequest {
     }
 
     public static class UnreadStatePair implements Parcelable {
-        public boolean wasFromInited = false;
-        public boolean from = false;
+        public boolean wasFromInited;
+        public boolean from;
         public boolean to;
+
+        public UnreadStatePair(boolean from, boolean to) {
+            this.to = to;
+            this.from = from;
+        }
+
+        public UnreadStatePair() {
+        }
 
         @Override
         public int describeContents() {
