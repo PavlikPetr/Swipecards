@@ -51,7 +51,7 @@ import static com.topface.topface.utils.FlurryManager.PEOPLE_NEARBY_UNLOCK;
 public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     private final static int WAIT_LOCATION_DELAY = 10000;
-    private static final String PAGE_NAME = "PeopleNearby";
+    private static final String PAGE_NAME = "PeopleNerby";
     private DataSetObserver mObserver = new DataSetObserver() {
         @Override
         public void onChanged() {
