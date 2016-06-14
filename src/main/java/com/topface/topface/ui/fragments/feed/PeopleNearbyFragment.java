@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.database.DataSetObserver;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -50,7 +51,15 @@ import static com.topface.topface.utils.FlurryManager.PEOPLE_NEARBY_UNLOCK;
 public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     private final static int WAIT_LOCATION_DELAY = 10000;
-    private static final String PAGE_NAME = "PeopleNerby";
+    private static final String PAGE_NAME = "PeopleNearby";
+    private DataSetObserver mObserver = new DataSetObserver() {
+        @Override
+        public void onChanged() {
+            if (getListAdapter() != null && getListAdapter().getData().isEmpty()) {
+                updateListWithOldGeo();
+            }
+        }
+    };
 
     @Inject
     TopfaceAppState mAppState;
@@ -140,7 +149,15 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     @Override
     protected FeedAdapter<FeedGeo> createNewAdapter() {
-        return new PeopleNearbyAdapter(getActivity(), getUpdaterCallback());
+        PeopleNearbyAdapter adapter = new PeopleNearbyAdapter(getActivity(), getUpdaterCallback());
+        adapter.registerDataSetObserver(mObserver);
+        return adapter;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getListAdapter().unregisterDataSetObserver(mObserver);
     }
 
     @Override
