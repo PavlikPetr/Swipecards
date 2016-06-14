@@ -852,8 +852,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                             clearCache();
                             mIsNeedClearCacheAfterFirstShow = false;
                         }
-                        processSuccessUpdate(data, isHistoryLoad, isPullToRefreshUpdating, makeItemsRead, request.getLimit());
                     }
+                    processSuccessUpdate(data, isHistoryLoad, isPullToRefreshUpdating, makeItemsRead, request.getLimit());
                 }
 
                 @Override
