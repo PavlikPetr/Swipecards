@@ -58,7 +58,7 @@ public class AdmirationFragment extends LikesFragment {
     protected void initLockedFeed(View inflated, int errorCode) {
         initFlipper(inflated);
         setEmptyFeedView(inflated);
-        chooseFlipperView(SECOND_CHILD, inflated);
+        chooseFlipperView(mCountersData.getAdmirations() == 0 && !mBalanceData.premium ? FIRST_CHILD : SECOND_CHILD, inflated);
     }
 
     @Override
@@ -69,7 +69,6 @@ public class AdmirationFragment extends LikesFragment {
 
     private void chooseFlipperView(@FlipperChild final int child, View inflated) {
         if (mStubFlipper != null && child == FIRST_CHILD) {
-            //Vip, есть восхищения - показываем восхищения
             if (mCountersData.getAdmirations() > 0) {
                 if (mBalanceData.premium) {
                     mStubFlipper.setVisibility(View.GONE);
