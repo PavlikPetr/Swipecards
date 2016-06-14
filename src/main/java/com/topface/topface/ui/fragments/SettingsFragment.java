@@ -121,8 +121,8 @@ public class SettingsFragment extends ProfileInnerFragment {
 
         // Auto reply settings
         boolean isAutoreplyAllow = App.get().getOptions().isAutoreplyAllow;
-        setAutoReplySettings(isAutoreplyAllow);
         mIsAllowedAutoReply = isAutoreplyAllow;
+        setAutoReplySettings(isAutoreplyAllow);
 
         // Init settings views
         /*
