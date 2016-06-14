@@ -185,19 +185,31 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         return FeedsCache.FEEDS_TYPE.DATA_LIKES_FEEDS;
     }
 
-    private void onMutual(@NotNull FeedList<FeedLike> items) {
+    private void onMutual(final @NotNull FeedList<FeedLike> items) {
         if (items.size() > 0) {
             FeedLike item = items.getFirst();
             if (!(item.user.deleted || item.user.banned)) {
-                for (FeedLike feedLike : items) {
-                    if (!feedLike.mutualed) {
-                        feedLike.mutualed = true;
-                        getListAdapter().notifyDataSetChanged();
+                markUsersLikes(items, true);
+                mRateController.onLike(item.user.id, 0, new RateController.OnRateRequestListener() {
+                    @Override
+                    public void onRateCompleted(int mutualId, int ratedUserId) {
+                        Utils.showToastNotification(R.string.general_mutual, Toast.LENGTH_SHORT);
                     }
-                }
-                mRateController.onLike(item.user.id, 0, null, App.from(getActivity()).getOptions().blockUnconfirmed);
-                Utils.showToastNotification(R.string.general_mutual, Toast.LENGTH_SHORT);
+
+                    @Override
+                    public void onRateFailed(int userId, int mutualId) {
+                        markUsersLikes(items, false);
+                        Utils.showToastNotification(R.string.confirm_email_for_dating, Toast.LENGTH_SHORT);
+                    }
+                }, App.from(getActivity()).getOptions().blockUnconfirmed);
             }
+        }
+    }
+
+    private void markUsersLikes(@NotNull FeedList<FeedLike> items, boolean isMutualed) {
+        for (FeedLike feedLike : items) {
+            feedLike.mutualed = isMutualed;
+            getListAdapter().notifyDataSetChanged();
         }
     }
 
