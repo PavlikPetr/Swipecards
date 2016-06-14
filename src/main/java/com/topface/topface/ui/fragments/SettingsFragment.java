@@ -167,7 +167,6 @@ public class SettingsFragment extends ProfileInnerFragment {
 
     private void autoReplySwitched(boolean state) {
         if (state != mIsAllowedAutoReply) {
-            mIsAllowedAutoReply = state;
             switchAutoReplyButton(state);
         }
     }
@@ -180,6 +179,7 @@ public class SettingsFragment extends ProfileInnerFragment {
         settingsRequest.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
+                mIsAllowedAutoReply = newValue;
                 App.get().getOptions().isAutoreplyAllow = newValue;
             }
 
