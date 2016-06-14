@@ -43,6 +43,7 @@ import javax.inject.Inject;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
+
 import static com.topface.topface.utils.NavigationManager.CLOSE_LEFT_MENU_TIMEOUT;
 
 @FlurryOpenEvent(name = DialogsFragment.PAGE_NAME)

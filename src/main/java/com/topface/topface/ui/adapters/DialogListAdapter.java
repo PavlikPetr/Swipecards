@@ -10,6 +10,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
+import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ad.NativeAd;
 
@@ -209,6 +210,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         item.type = dialog.type;
         item.text = dialog.text;
         item.target = dialog.target;
+        item.createdRelative = DateUtils.getRelativeDate(dialog.created, true);
         notifyDataSetChanged();
     }
 }
