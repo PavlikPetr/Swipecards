@@ -397,12 +397,12 @@ public class GCMUtils {
         return null;
     }
 
-    private static Intent getIntentByType(Context context, int type, User user, String ё) {
+    private static Intent getIntentByType(Context context, int type, User user, String updateUrl) {
         Intent i = null;
         switch (type) {
             case GCM_TYPE_MESSAGE:
             case GCM_TYPE_GIFT:
-                i = openChat(context, user, GCM_TYPE_MESSAGE);
+                i = openChat(context, user, type);
                 break;
             case GCM_TYPE_MUTUAL:
                 if (showSympathy) {
@@ -479,6 +479,7 @@ public class GCMUtils {
                 if (type == lastNotificationType) {
                     int id;
                     switch (type) {
+                        case GCM_TYPE_GIFT:
                         case GCM_TYPE_MESSAGE:
                         case GCM_TYPE_DIALOGS:
                             id = UserNotificationManager.MESSAGES_ID;
