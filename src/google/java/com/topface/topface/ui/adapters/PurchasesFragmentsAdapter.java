@@ -89,7 +89,6 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
     @Nullable
     public String getClassNameByPos(int pos) {
         Class cls = null;
-        Debug.log("IBE_OLOLO PurchasesFragmentsAdapter " + pos + "tabs" + mTabs.size() + " " + mTabs.isEmpty());
         if (mTabs.isEmpty() || pos < 0 || mTabs.size() < pos) {
             return null;
         }
