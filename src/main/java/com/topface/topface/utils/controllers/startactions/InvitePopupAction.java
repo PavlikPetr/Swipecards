@@ -7,23 +7,22 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 
 import com.topface.topface.App;
-import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.dialogs.InvitesPopup;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.IActivityDelegate;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 
 public class InvitePopupAction implements IStartAction {
 
-    private WeakReference<BaseFragmentActivity> mActivity;
+    private IActivityDelegate mDelegateActivity;
     private int mPriority;
     private OnNextActionListener mOnNextActionListener;
 
-    public InvitePopupAction(BaseFragmentActivity activity, int priority) {
-        mActivity = new WeakReference<>(activity);
+    public InvitePopupAction(IActivityDelegate iActivityDelegate, int priority) {
+        mDelegateActivity = iActivityDelegate;
         mPriority = priority;
     }
 
@@ -65,7 +64,7 @@ public class InvitePopupAction implements IStartAction {
     }
 
     private int getContactsCount() {
-        Cursor cursor = mActivity.get().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        Cursor cursor = mDelegateActivity != null ? mDelegateActivity.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null) : null;
         int contacts_count = 0;
         if (cursor != null) {
             contacts_count = cursor.getCount();
@@ -76,31 +75,28 @@ public class InvitePopupAction implements IStartAction {
 
 
     private void startInvitePopup() {
-        final BaseFragmentActivity activity = mActivity.get();
         ContactsProvider.GetContactsHandler handler = new ContactsProvider.GetContactsHandler() {
             @Override
             public void onContactsReceived(ArrayList<ContactsProvider.Contact> contacts) {
-                if (activity == null) {
-                    return;
-                }
                 InvitesPopup popup = InvitesPopup.newInstance(contacts);
                 popup.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
+                        mDelegateActivity = null;
                         if (mOnNextActionListener != null) {
                             mOnNextActionListener.onNextAction();
                         }
                     }
                 });
-                popup.show(activity.getSupportFragmentManager(), InvitesPopup.TAG);
-                EasyTracker.sendEvent("InvitesPopup", "Show", "", 0L);
+                if (mDelegateActivity != null) {
+                    popup.show(mDelegateActivity.getSupportFragmentManager(), InvitesPopup.TAG);
+                    EasyTracker.sendEvent("InvitesPopup", "Show", "", 0L);
+                }
 
             }
         };
-        if (activity != null) {
-            ContactsProvider provider = new ContactsProvider(activity);
-            provider.getContacts(-1, 0, handler);
-        }
+        ContactsProvider provider = new ContactsProvider(App.getContext());
+        provider.getContacts(-1, 0, handler);
     }
 
 }

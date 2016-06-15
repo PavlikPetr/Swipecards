@@ -1,5 +1,6 @@
 package com.topface.topface.utils;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,4 +25,6 @@ public interface IActivityDelegate {
     PackageManager getPackageManager();
 
     FragmentManager getSupportFragmentManager();
+
+    ContentResolver getContentResolver();
 }
