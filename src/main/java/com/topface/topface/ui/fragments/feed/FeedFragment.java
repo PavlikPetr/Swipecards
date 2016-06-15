@@ -174,7 +174,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     };
     CountersDataProvider mCountersDataProvider;
-    private boolean mIsNeedClearCacheAfterFirstShow = true;
 
     @Bind(R.id.feedContainer)
     RelativeLayout mContainer;
@@ -515,7 +514,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     public void onPause() {
         super.onPause();
         saveToCache();
-        mIsNeedClearCacheAfterFirstShow = true;
         finishMultiSelection();
     }
 
@@ -847,12 +845,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
                 @Override
                 protected void success(FeedListData<T> data, IApiResponse response) {
-                    if (!data.items.isEmpty()) {
-                        if (mIsNeedClearCacheAfterFirstShow) {
-                            clearCache();
-                            mIsNeedClearCacheAfterFirstShow = false;
-                        }
-                    }
                     processSuccessUpdate(data, isHistoryLoad, isPullToRefreshUpdating, makeItemsRead, request.getLimit());
                 }
 
