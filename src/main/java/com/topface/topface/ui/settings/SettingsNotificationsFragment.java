@@ -92,16 +92,17 @@ public class SettingsNotificationsFragment extends BaseFragment {
     @SuppressWarnings("unused")
     @OnCheckedChanged(R.id.notification_vibro)
     protected void vibrationCheckedChanged(boolean isChecked) {
-        mUserConfig.setGCMVibrationEnabled(isChecked);
-        mUserConfig.saveConfig();
-        Debug.log(mUserConfig, "UserConfig changed");
-
-        // Send empty vibro notification to demonstrate
-        if (isChecked) {
-            UserNotificationManager.getInstance().showSimpleNotification(
-                    new NotificationCompat.Builder(getActivity()).setDefaults(Notification.
-                            DEFAULT_VIBRATE).build()
-            );
+        if (mUserConfig.isVibrationEnabled() != isChecked) {
+            mUserConfig.setGCMVibrationEnabled(isChecked);
+            mUserConfig.saveConfig();
+            Debug.log(mUserConfig, "UserConfig changed");
+            // Send empty vibro notification to demonstrate
+            if (isChecked) {
+                UserNotificationManager.getInstance().showSimpleNotification(
+                        new NotificationCompat.Builder(getActivity()).setDefaults(Notification.
+                                DEFAULT_VIBRATE).build()
+                );
+            }
         }
     }
 
@@ -140,7 +141,7 @@ public class SettingsNotificationsFragment extends BaseFragment {
         }
 
         setTitle(R.string.settings_vibration, mLoVibration);
-        mLoVibration.setChecked(App.getUserConfig().isVibrationEnabled());
+        mLoVibration.setChecked(mUserConfig.isVibrationEnabled());
         setTitle(R.string.settings_led, mLoLED);
         mLoLED.setChecked(mUserConfig.isLEDEnabled());
         setTitle(R.string.settings_melody, mLoMelody);
