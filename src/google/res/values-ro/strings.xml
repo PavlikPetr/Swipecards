@@ -408,7 +408,6 @@
     <string name="incorrect_photo_format">Formatul pozei incorecte. Incercati sa incarcati jpg sau
         png
     </string>
-    <string name="incorrect_photo_size">Marimea pozei inaccesibile</string>
     <string name="input_contact_name">Intraduceti numele contactului</string>
     <string name="incorrect_locale">Daca doriti ca noi sa citim mesajul Dmv, scrietine in limba
         romana sau engleza
