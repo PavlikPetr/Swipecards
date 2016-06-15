@@ -33,7 +33,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -162,8 +161,7 @@ public class Options extends AbstractData {
     public String gagTypeFullscreen = AdProvidersFactory.BANNER_NONE;
     public String helpUrl;
 
-    public TabsList otherTabs = new TabsList();
-    public TabsList premiumTabs = new TabsList();
+    public Payments payments = new Payments();
 
     /**
      * Ключ эксперимента под который попадает данный пользователь (передаем его в GA)
@@ -245,10 +243,7 @@ public class Options extends AbstractData {
             JSONObject payments = response.optJSONObject("payments");
 
             if (payments != null) {
-                JSONObject other = payments.optJSONObject("other");
-                JSONObject premium = payments.optJSONObject("premium");
-                otherTabs = JsonUtils.optFromJson(other.toString(), TabsList.class, new TabsList());
-                premiumTabs = JsonUtils.optFromJson(premium.toString(), TabsList.class, new TabsList());
+                this.payments = JsonUtils.optFromJson(payments.toString(), Payments.class, new Payments());
             }
 
             JSONObject contactsInvite = response.optJSONObject("inviteContacts");
@@ -644,15 +639,25 @@ public class Options extends AbstractData {
 
     public static class TabsList {
         @SerializedName("tabs")
-        public LinkedList<PurchasesTabData> list;
+        public ArrayList<PurchasesTabData> list;
 
-        public TabsList(LinkedList<PurchasesTabData> list) {
+        public TabsList(ArrayList<PurchasesTabData> list) {
             this.list = list;
         }
 
         public TabsList() {
-            list = new LinkedList<>();
+            list = new ArrayList<>();
         }
+    }
+
+    public static class Payments {
+
+        public TabsList other = new TabsList();
+        public TabsList premium = new TabsList();
+
+        public Payments() {
+        }
+
     }
 
     public static class Offerwalls {

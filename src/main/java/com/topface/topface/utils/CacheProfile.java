@@ -177,7 +177,6 @@ public class CacheProfile {
     }
 
     public static void setOptions(final String options) {
-        //Каждый раз не забываем кешировать запрос опций, но делаем это в отдельном потоке
         if (options != null) {
             SessionConfig config = App.getSessionConfig();
             config.setOptionsData(options.toString());
@@ -187,7 +186,6 @@ public class CacheProfile {
 
     public static void setMarketProducts(Products products, final JSONObject response) {
         mMarketProducts = products;
-        //Каждый раз не забываем кешировать запрос продуктов, но делаем это в отдельном потоке
         if (response != null) {
             App.getSessionConfig().setMarketProductsData(response.toString());
         }

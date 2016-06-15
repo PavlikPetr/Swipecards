@@ -19,15 +19,15 @@ import com.topface.topface.ui.fragments.buy.VipPaymentWallBuyFragment;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
 
     private final boolean mIsVip;
     private Bundle mArguments;
-    private LinkedList<PurchasesTabData> mTabs;
+    private ArrayList<PurchasesTabData> mTabs;
 
-    public PurchasesFragmentsAdapter(FragmentManager fm, Bundle arguments, LinkedList<PurchasesTabData> tabs) {
+    public PurchasesFragmentsAdapter(FragmentManager fm, Bundle arguments, ArrayList<PurchasesTabData> tabs) {
         super(fm);
         mArguments = arguments;
         mIsVip = arguments.getBoolean(PurchasesFragment.IS_VIP_PRODUCTS);
@@ -89,7 +89,7 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
     @Nullable
     public String getClassNameByPos(int pos) {
         Class cls = null;
-        if (pos < 0 || mTabs.size() < pos) {
+        if (mTabs.isEmpty() || pos < 0 || mTabs.size() < pos) {
             return null;
         }
         switch (mTabs.get(pos).type) {
