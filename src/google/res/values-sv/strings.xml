@@ -558,7 +558,6 @@
     <string name="incorrect_photo_format">Felaktig fotoformat. Vänligen och försök att ladda upp jpg
         eller png.
     </string>
-    <string name="incorrect_photo_size">Fotostorlek ej tillåten</string>
     <string name="input_contact_name">Ange kontaktnamn</string>
     <string name="incorrect_locale">Om du vill att alla skall läsa ditt utlåtande, skriv på ryska
         eller engelska
