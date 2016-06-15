@@ -58,11 +58,12 @@ public class AdmirationFragment extends LikesFragment {
     protected void initLockedFeed(View inflated, int errorCode) {
         initFlipper(inflated);
         setEmptyFeedView(inflated);
-        chooseFlipperView(mCountersData.getAdmirations() == 0 && !mBalanceData.premium ? FIRST_CHILD : SECOND_CHILD, inflated);
+        chooseFlipperView(SECOND_CHILD, inflated);
     }
 
     @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
+        initFlipper(inflated);
         setEmptyFeedView(inflated);
         chooseFlipperView(FIRST_CHILD, inflated);
     }
