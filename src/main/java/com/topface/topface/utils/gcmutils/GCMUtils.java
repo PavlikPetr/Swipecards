@@ -302,7 +302,7 @@ public class GCMUtils {
     }
 
     private static void setCounters(Bundle data, Context context) {
-        CountersManager counterManager = CountersManager.getInstance(context);
+        final CountersManager counterManager = CountersManager.getInstance(context);
         counterManager.setLastRequestMethod(CountersManager.CHANGED_BY_GCM);
         try {
             String countersStr = data.getString("counters");
@@ -313,8 +313,14 @@ public class GCMUtils {
             }
             String balanceStr = data.getString("balance");
             if (balanceStr != null) {
-                JSONObject balanceJson = new JSONObject(balanceStr);
-                counterManager.setBalanceCounters(balanceJson);
+                final JSONObject balanceJson = new JSONObject(balanceStr);
+                Handler mHandler = new Handler(App.get().getMainLooper());
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        counterManager.setBalanceCounters(balanceJson);
+                    }
+                });
             }
         } catch (JSONException e) {
             Debug.error(e);
