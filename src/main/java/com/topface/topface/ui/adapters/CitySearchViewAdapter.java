@@ -82,7 +82,7 @@ public class CitySearchViewAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public long getItemId(int position) {
-        return mDataList.get(position).id;
+        return position > 0 && position < mDataList.size() ? mDataList.get(position).id : 0;
     }
 
     @Override
