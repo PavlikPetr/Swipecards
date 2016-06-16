@@ -28,7 +28,10 @@ import com.topface.topface.utils.FlurryManager;
 
 import org.jetbrains.annotations.Nullable;
 
-import static com.topface.topface.utils.FlurryManager.*;
+import static com.topface.topface.utils.FlurryManager.CLICK_BUY;
+import static com.topface.topface.utils.FlurryManager.CLICK_DELETE;
+import static com.topface.topface.utils.FlurryManager.PRODUCT_BOUGHT;
+import static com.topface.topface.utils.FlurryManager.SHOW;
 
 
 public abstract class PromoDialog extends AbstractDialogFragment implements View.OnClickListener, IPromoPopup {
@@ -205,8 +208,9 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
         if (activity instanceof NavigationActivity) {
             ((NavigationActivity) activity).setPopupVisible(false);
         }
-
-        dismissAllowingStateLoss();
+        if (activity != null && isAdded()) {
+            dismissAllowingStateLoss();
+        }
     }
 
     public interface OnCloseListener {
