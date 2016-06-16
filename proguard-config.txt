@@ -9,6 +9,11 @@
     rx.subscriptions.SerialSubscription.State state;
 }
 
+#AsyncAndroid
+-keepclassmembers class com.koushikdutta.async.AsyncServer {
+    com.koushikdutta.async.AsyncServer.Scheduler INSTANCE;
+}
+
 # Flurry
 -keep class com.flurry.** { *; }
 -dontwarn com.flurry.**

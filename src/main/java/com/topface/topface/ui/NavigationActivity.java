@@ -603,8 +603,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 Utils.showToastNotification(R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT);
                 isPopupVisible = false;
             } else {
-                super.onBackPressed();
                 isPopupVisible = false;
+                finish();
             }
         }
     }
