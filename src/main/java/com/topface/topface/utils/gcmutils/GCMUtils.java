@@ -314,8 +314,7 @@ public class GCMUtils {
             String balanceStr = data.getString("balance");
             if (balanceStr != null) {
                 final JSONObject balanceJson = new JSONObject(balanceStr);
-                Handler mHandler = new Handler(App.get().getMainLooper());
-                mHandler.post(new Runnable() {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
                         counterManager.setBalanceCounters(balanceJson);

@@ -64,7 +64,7 @@ import static com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter.EMPTY_
  */
 public class MenuFragment extends Fragment {
 
-    private static final String BALANCE_TEMPLATE = "%s %s %d %s %d";
+    private static final String BALANCE_TEMPLATE = "%s    %s %d   %s %d";
     private static final String COINS_ICON = "coins_icon";
     private static final String LIKES_ICON = "likes_icon";
     private static final String SELECTED_POSITION = "selected_position";
