@@ -27,6 +27,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,6 +64,7 @@ public class Options extends AbstractData {
     protected static final String INSTANT_MSG = "instantMessageFromSearch";
 
     private final static int TRIAL_VIP_MAX_SHOW_COUNT = 10;
+    private static final String OFFERWALL_SETTINGS_KEY = "offerwallsSettings";
 
     /**
      * Настройки для каждого типа страниц
@@ -197,6 +199,11 @@ public class Options extends AbstractData {
      * массив пунктов левого меню от интеграторов
      */
     public ArrayList<LeftMenuIntegrationItems> leftMenuItems = new ArrayList<>();
+    
+    /**
+     * настройки для оферволов на экране Бонус
+     */
+    public OfferwallsSettings offerwallsSettings = new OfferwallsSettings();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -371,6 +378,9 @@ public class Options extends AbstractData {
             if (response.has("leftMenuItems")) {
                 leftMenuItems = JsonUtils.fromJson(response.getJSONArray("leftMenuItems").toString(), new TypeToken<ArrayList<LeftMenuIntegrationItems>>() {
                 });
+            }
+            if (response.has(OFFERWALL_SETTINGS_KEY)) {
+                offerwallsSettings = JsonUtils.fromJson(response.getJSONObject(OFFERWALL_SETTINGS_KEY).toString(), OfferwallsSettings.class);
             }
         } catch (Exception e) {
             // отображение максимально заметного тоста, чтобы на этапе тестирования любого функционала
@@ -792,6 +802,49 @@ public class Options extends AbstractData {
             this.title = title;
             this.url = url;
             this.external = external;
+        }
+    }
+
+    public class OfferwallsSettings {
+        @SerializedName("coinsForVideoAd")
+        private int mCoinsForVideoAd;
+        @SerializedName("offerwalls")
+        private List<String> mOfferwalls = new ArrayList<>();
+        @SerializedName("videoOfferwalls")
+        private List<String> mVideoOfferwalls = new ArrayList<>();
+
+        public OfferwallsSettings() {
+        }
+
+        public int getForVideoAdCoinsCount() {
+            return mCoinsForVideoAd;
+        }
+
+        @NotNull
+        public List<String> getOfferwallsList() {
+            return mOfferwalls;
+        }
+
+        @NotNull
+        public List<String> getVideoOfferwallsList() {
+            return mVideoOfferwalls;
+        }
+
+        @SuppressWarnings("SimplifiableIfStatement")
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof OfferwallsSettings)) return false;
+            OfferwallsSettings data = (OfferwallsSettings) o;
+            if (mCoinsForVideoAd != data.getForVideoAdCoinsCount()) return false;
+            if (!mOfferwalls.equals(data.getOfferwallsList())) return false;
+            return mVideoOfferwalls.equals(data.getVideoOfferwallsList());
+        }
+
+        @Override
+        public int hashCode() {
+            int res = mCoinsForVideoAd;
+            res = (res * 31) + mOfferwalls.hashCode();
+            return (res * 31) + mVideoOfferwalls.hashCode();
         }
     }
 }
