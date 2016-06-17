@@ -46,13 +46,15 @@ public class CountersManager {
 
     private CountersManager(Context context) {
         mContext = context;
-        App.from(context).inject(this);
-        mAppState.getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
-            @Override
-            public void call(BalanceData balanceData) {
-                mCachedBalanceData = balanceData;
-            }
-        });
+        App.get().inject(this);
+        if (mAppState != null) {
+            mAppState.getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
+                @Override
+                public void call(BalanceData balanceData) {
+                    mCachedBalanceData = balanceData;
+                }
+            });
+        }
     }
 
     public void setLastRequestMethod(String lastRequestMeethod) {
