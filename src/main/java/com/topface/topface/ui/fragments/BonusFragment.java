@@ -41,7 +41,7 @@ public class BonusFragment extends WebViewFragment {
     }
 
     @Override
-    String getIntegrationUrl() {
+    public String getIntegrationUrl() {
         return App.get().getOptions().bonus.integrationUrl;
     }
 
@@ -51,7 +51,7 @@ public class BonusFragment extends WebViewFragment {
     }
 
     @Override
-    boolean isNeedTitles() {
+    public boolean isNeedTitles() {
         return getArguments().getBoolean(NEED_SHOW_TITLE);
     }
 

@@ -61,6 +61,13 @@ allprojects {
         maven { url 'https://raw.githubusercontent.com/onepf/OPF-mvn-repo/master/' }
         maven { url 'https://bitbucket.org/atm13/artifacts/raw/master/' }
         maven { url "https://dl.bintray.com/topface/libs" }
+        maven {
+            name "Fyber's maven repo"
+            url "https://fyber.bintray.com/maven"
+        }
+        maven {
+            url "https://dl.bintray.com/supersonic/android-sdk"
+        }
         jcenter()
         flatDir {
             dirs 'libs'
@@ -350,6 +357,10 @@ dependencies {
             [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.3.3']
     )
     ifreeCompile fileTree(dir: 'ifree/libs', include: '*.jar')
+
+    // Offerwalls
+    compile 'com.supersonic.sdk:mediationsdk:6.4.7@jar'
+    compile 'com.fyber:fyber-sdk:8.3.1'
 }
 
 project(':libs:IllustratedTextView') {

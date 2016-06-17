@@ -22,12 +22,12 @@ import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.ui.bonus.models.OfferwallsSettings;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -199,7 +199,7 @@ public class Options extends AbstractData {
      * массив пунктов левого меню от интеграторов
      */
     public ArrayList<LeftMenuIntegrationItems> leftMenuItems = new ArrayList<>();
-    
+
     /**
      * настройки для оферволов на экране Бонус
      */
@@ -802,49 +802,6 @@ public class Options extends AbstractData {
             this.title = title;
             this.url = url;
             this.external = external;
-        }
-    }
-
-    public class OfferwallsSettings {
-        @SerializedName("coinsForVideoAd")
-        private int mCoinsForVideoAd;
-        @SerializedName("offerwalls")
-        private List<String> mOfferwalls = new ArrayList<>();
-        @SerializedName("videoOfferwalls")
-        private List<String> mVideoOfferwalls = new ArrayList<>();
-
-        public OfferwallsSettings() {
-        }
-
-        public int getForVideoAdCoinsCount() {
-            return mCoinsForVideoAd;
-        }
-
-        @NotNull
-        public List<String> getOfferwallsList() {
-            return mOfferwalls;
-        }
-
-        @NotNull
-        public List<String> getVideoOfferwallsList() {
-            return mVideoOfferwalls;
-        }
-
-        @SuppressWarnings("SimplifiableIfStatement")
-        @Override
-        public boolean equals(Object o) {
-            if (!(o instanceof OfferwallsSettings)) return false;
-            OfferwallsSettings data = (OfferwallsSettings) o;
-            if (mCoinsForVideoAd != data.getForVideoAdCoinsCount()) return false;
-            if (!mOfferwalls.equals(data.getOfferwallsList())) return false;
-            return mVideoOfferwalls.equals(data.getVideoOfferwallsList());
-        }
-
-        @Override
-        public int hashCode() {
-            int res = mCoinsForVideoAd;
-            res = (res * 31) + mOfferwalls.hashCode();
-            return (res * 31) + mVideoOfferwalls.hashCode();
         }
     }
 }

@@ -25,9 +25,9 @@ abstract public class WebViewFragment extends BaseFragment {
         setNeedTitles(isNeedTitles());
     }
 
-    abstract String getIntegrationUrl();
+    public abstract String getIntegrationUrl();
 
-    abstract boolean isNeedTitles();
+    public abstract boolean isNeedTitles();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

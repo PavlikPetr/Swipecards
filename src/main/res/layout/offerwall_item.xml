@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout style="@style/OfferwallItem">
+
+        <com.topface.topface.ui.views.ImageViewRemote
+            android:layout_width="46dp"
+            android:layout_height="46dp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/OfferwallsText"
+                tools:text="Dream Vacation" />
+
+            <TextView
+                style="@style/OfferwallsText"
+                android:textColor="@color/offerwalls_description_text_color"
+                android:textSize="14sp"
+                tools:text="Download and START" />
+
+        </LinearLayout>
+
+        <Button
+            style="@style/OfferwallsButton"
+            tools:text="+1000" />
+
+    </LinearLayout>
+</layout>
