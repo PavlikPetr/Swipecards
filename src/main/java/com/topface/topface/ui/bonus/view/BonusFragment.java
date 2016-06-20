@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import com.topface.topface.R;
 import com.topface.topface.databinding.FragmentBonus1Binding;
 import com.topface.topface.statistics.FlurryOpenEvent;
+import com.topface.topface.ui.bonus.presenter.BonusPresenter;
+import com.topface.topface.ui.bonus.presenter.IBonusPresenter;
 import com.topface.topface.ui.fragments.BaseFragment;
 
 @FlurryOpenEvent(name = BonusFragment.PAGE_NAME)
@@ -17,14 +19,23 @@ public class BonusFragment extends BaseFragment implements IBonusView {
     public static final String PAGE_NAME = "bonus";
 
     private FragmentBonus1Binding mBinding;
-
+    private IBonusPresenter mPresenter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mPresenter = new BonusPresenter();
         View root = inflater.inflate(R.layout.fragment_bonus1, null);
         mBinding = DataBindingUtil.bind(root);
+        mPresenter.bindView(this);
+        mPresenter.loadOfferwalls();
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.unbindView();
     }
 
     @Override
