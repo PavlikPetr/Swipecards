@@ -32,7 +32,10 @@ public class FindAndSendCurrentLocation {
     private CompositeSubscription mSubscription = new CompositeSubscription();
 
     public FindAndSendCurrentLocation() {
-        App.from(App.getContext()).inject(this);
+        App.get().inject(this);
+        if (mAppState == null) {
+            return;
+        }
         mGeoLocationManager = new GeoLocationManager();
         mGeoLocationManager.registerProvidersChangedActionReceiver();
         // пропускаем эмит из SharedPreff (BehaviorSubject), ждем WAIT_LOCATION_DELAY и отправляем
