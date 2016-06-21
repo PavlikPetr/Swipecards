@@ -91,6 +91,8 @@ public class Utils {
     private static PluralResources mPluralResources;
     private static float mDensity = App.getContext().getResources().getDisplayMetrics().density;
     private static String mCarrier;
+    public static final String USER_ID = "{userId}";
+    public static final String SECRET_KEY = "{secretKey}";
 
     public static int unixtimeInSeconds() {
         return (int) (System.currentTimeMillis() / 1000L);

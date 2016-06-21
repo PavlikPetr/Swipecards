@@ -51,8 +51,6 @@ import rx.functions.Func1;
 public class NavigationManager {
 
     public static final int CLOSE_LEFT_MENU_TIMEOUT = 250;
-    private static final String USER_ID = "{userId}";
-    private static final String SECRET_KEY = "{secretKey}";
 
     @Inject
     NavigationState mNavigationState;
@@ -200,7 +198,7 @@ public class NavigationManager {
                 IntegrationSettingsData fragmentSettings = (IntegrationSettingsData) id;
                 String url = fragmentSettings.getUrl();
                 if (!TextUtils.isEmpty(url)) {
-                    url = url.replace(USER_ID, AuthToken.getInstance().getUserSocialId()).replace(SECRET_KEY, Ssid.get());
+                    url = url.replace(Utils.USER_ID, AuthToken.getInstance().getUserSocialId()).replace(Utils.SECRET_KEY, Ssid.get());
                 }
                 fragment = IntegrationWebViewFragment.newInstance(fragmentSettings.getPageName(), url);
                 break;

@@ -2,7 +2,9 @@ package com.topface.topface.utils.ads;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.DialogInterface;
 import android.os.Build;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -12,7 +14,9 @@ import com.appodeal.ads.Appodeal;
 import com.appodeal.ads.InterstitialCallbacks;
 import com.google.android.gms.ads.AdActivity;
 import com.google.android.gms.ads.AdListener;
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
+import com.topface.framework.utils.config.DailyConfigExtension;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
@@ -20,14 +24,19 @@ import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AppodealProvider;
 import com.topface.topface.data.Banner;
 import com.topface.topface.data.FullScreenCondition;
+import com.topface.topface.data.FullscreenSettings;
 import com.topface.topface.data.Options;
+import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.DataApiHandler;
+import com.topface.topface.requests.FullscreenSettingsRequest;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.statistics.AdStatistics;
 import com.topface.topface.statistics.TopfaceAdStatistics;
+import com.topface.topface.ui.dialogs.OwnFullscreenPopup;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
@@ -35,6 +44,7 @@ import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
+import com.topface.topface.utils.http.IRequestClient;
 
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_FULLSCREEN_START_APP;
@@ -107,19 +117,59 @@ public class FullscreenController {
 
         @Override
         public void callOnUi() {
-            mIsFullscreenSkipped = false;
-            if (App.get().getOptions().interstitial.enabled) {
-                FullscreenController.this.requestFullscreen(BANNER_ADMOB_FULLSCREEN_START_APP);
-            } else if (startPageInfo != null) {
-                FullscreenController.this.requestFullscreen(startPageInfo.getBanner());
+            final UserConfig config = App.getUserConfig();
+            ApiRequest request = new FullscreenSettingsRequest(mActivity.getApplicationContext(), config.getFullscreenInterval().getConfigFieldInfo().getAmount());
+            request.callback(new ApiHandler() {
+                @Override
+                public void success(IApiResponse response) {
+                    mIsFullscreenSkipped = false;
+                    FullscreenSettings settings = JsonUtils.fromJson(response.toString(), FullscreenSettings.class);
+                    if (!settings.isEmpty()) {
+                        config.setFullscreenInterval(settings.nextShowNoEarlierThen);
+                    } else {
+                        showOwnFullscreen(settings);
+                        return;
+                    }
+                    if (settings.banner.type.equals(FullscreenSettings.SDK)) {
+                        if (App.get().getOptions().interstitial.enabled) {
+                            FullscreenController.this.requestFullscreen(BANNER_ADMOB_FULLSCREEN_START_APP);
+                            mIsFullscreenSkipped = false;
+                        } else if (startPageInfo != null) {
+                            FullscreenController.this.requestFullscreen(startPageInfo.getBanner());
+                        }
+                    } else {
+                        showOwnFullscreen(settings);
+                    }
+                }
+
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+                    Debug.log("FullscreenController : error " + codeError + " response " + response);
+                }
+            });
+            if (mActivity instanceof IRequestClient) {
+                ((IRequestClient) mActivity).registerRequest(request);
             }
+            request.exec();
+        }
+
+        private void showOwnFullscreen(FullscreenSettings settings) {
+            OwnFullscreenPopup popup = OwnFullscreenPopup.newInstance(settings);
+            popup.show(((FragmentActivity) mActivity).getSupportFragmentManager(), OwnFullscreenPopup.TAG);
+            popup.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    mOnNextActionListener.onNextAction();
+                }
+            });
         }
 
         @Override
         public boolean isApplicable() {
-            return App.get().getOptions().interstitial.enabled || App.get().getProfile().showAd &&
-                    FullscreenController.this.isTimePassed() && startPageInfo != null
-                    && startPageInfo.floatType.equals(PageInfo.FLOAT_TYPE_BANNER);
+            UserConfig config = App.getUserConfig();
+            DailyConfigExtension.DailyConfigField<Integer> configField = config.getFullscreenInterval();
+            int interval = configField.getConfigField();
+            return interval == 0 || System.currentTimeMillis() - configField.getConfigFieldInfo().getLastWriteTime() <= interval * 1000;
         }
 
         @Override
