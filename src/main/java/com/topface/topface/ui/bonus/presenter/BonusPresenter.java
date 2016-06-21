@@ -1,6 +1,5 @@
 package com.topface.topface.ui.bonus.presenter;
 
-import com.fyber.Fyber;
 import com.topface.topface.App;
 import com.topface.topface.ui.bonus.view.IBonusView;
 
@@ -42,6 +41,5 @@ public class BonusPresenter implements IBonusPresenter {
     }
 
     private void initFyber(){
-        Fyber.with()
     }
 }

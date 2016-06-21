@@ -70,9 +70,11 @@ import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.UserProfileActivity;
+import com.topface.topface.ui.bonus.models.OfferwallBaseModel;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
+import com.topface.topface.ui.external_libs.Fyber.OfferRequest;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
@@ -91,10 +93,12 @@ import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.social.AuthToken;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 
+import rx.Single;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
@@ -826,8 +830,24 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             break;
             case R.id.skip_btn:
             case R.id.btnDatingSkip: {
-                skipUser(mCurrentUser);
-                showNextUser();
+//                skipUser(mCurrentUser);
+//                showNextUser();
+                new OfferRequest().prepareObservable(new OfferRequest.OnObservablePrepare() {
+                    @Override
+                    public void observablePrepared(Single<List<? extends OfferwallBaseModel>> observable) {
+                        observable.subscribe(new Action1<List<? extends OfferwallBaseModel>>() {
+                            @Override
+                            public void call(List<? extends OfferwallBaseModel> offerwallBaseModels) {
+                                Debug.showChunkedLogError("OfferRequestTest", "success size = " + offerwallBaseModels.size());
+                            }
+                        }, new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                Debug.showChunkedLogError("OfferRequestTest", "error " + throwable);
+                            }
+                        });
+                    }
+                });
             }
             break;
             case R.id.btnDatingProfile: {

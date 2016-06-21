@@ -530,12 +530,6 @@
             android:name="com.topface.topface.utils.gcmutils.RegistrationService"
             android:exported="false"></service>
 
-        <!--Fyber-->
-        <!--Start-->
-        <activity
-            android:name="com.fyber.ads.ofw.OfferWallActivity"
-            android:configChanges="orientation|screenSize" />
-        <!--End-->
         <!--Приведенная ниже херь, есть результат внедрения appodeal, и при удалении этой рекломной сети-->
         <!--все это нужно выпилить, быстро, решительно!-->
         <!--НАЧАЛО ТУТ-->

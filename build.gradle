@@ -360,7 +360,6 @@ dependencies {
 
     // Offerwalls
     compile 'com.supersonic.sdk:mediationsdk:6.4.7@jar'
-    compile 'com.fyber:fyber-sdk:8.3.1'
 }
 
 project(':libs:IllustratedTextView') {

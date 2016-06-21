@@ -44,6 +44,11 @@ public class FyberOfferwallModel extends OfferwallBaseModel {
         return mLink;
     }
 
+    @Override
+    int getOfferwallsType() {
+        return FYBER;
+    }
+
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean equals(Object o) {
