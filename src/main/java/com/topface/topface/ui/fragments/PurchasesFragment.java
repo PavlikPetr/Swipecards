@@ -192,7 +192,8 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     public boolean isBonusPageAvailable() {
-        return null != mPagerAdapter && mPagerAdapter.hasTab(PurchasesTabData.BONUS) && mPager.getCurrentItem() != mPagerAdapter.getTabIndex(PurchasesTabData.BONUS);
+        return true;
+//        return null != mPagerAdapter && mPagerAdapter.hasTab(PurchasesTabData.BONUS) && mPager.getCurrentItem() != mPagerAdapter.getTabIndex(PurchasesTabData.BONUS);
     }
 
     public boolean isBonusSkiped() {

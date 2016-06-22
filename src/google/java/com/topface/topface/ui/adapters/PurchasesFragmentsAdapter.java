@@ -72,7 +72,8 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
                 fragment = !mIsVip ? AmazonBuyingFragment.newInstance(from, text) : VipBuyFragment.newInstance(true, from, text);
                 break;
             case PurchasesTabData.BONUS:
-                fragment = !mIsVip ? BonusFragment.newInstance(false) : null;
+                fragment = !mIsVip ? com.topface.topface.ui.bonus.view.BonusFragment.newInstance(false) : null;
+//                fragment = !mIsVip ? BonusFragment.newInstance(false) : null;
                 break;
             case PurchasesTabData.PWALL:
                 fragment = !mIsVip ? PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.DIRECT, text) : VipPaymentWallBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.DIRECT, text);

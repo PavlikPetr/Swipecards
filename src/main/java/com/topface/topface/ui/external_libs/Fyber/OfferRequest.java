@@ -130,8 +130,7 @@ public class OfferRequest {
             request = request.concat(String.format(currentLocale, pos == 0 ? FIRST_KEY_TEMPLATE : KEY_TEMPLATE, entry.getKey(), entry.getValue()));
             pos++;
         }
-        request = request.concat(Utils.AMPERSAND).concat(API_KEY);
-        request = request.concat(String.format(currentLocale, KEY_TEMPLATE, HASHKEY_KEY, getSHA1(request)));
+        request = request.concat(String.format(currentLocale, KEY_TEMPLATE, HASHKEY_KEY, getSHA1(request.concat(Utils.AMPERSAND).concat(API_KEY))));
         request = OFFER_LINK.concat(request);
         Debug.showChunkedLogError("OfferRequestTest", "" + request);
         if (mObservableCallback != null) {

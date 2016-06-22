@@ -14,12 +14,37 @@ import com.topface.topface.ui.bonus.presenter.BonusPresenter;
 import com.topface.topface.ui.bonus.presenter.IBonusPresenter;
 import com.topface.topface.ui.fragments.BaseFragment;
 
+import static com.topface.topface.ui.fragments.BonusFragment.NEED_SHOW_TITLE;
+
 @FlurryOpenEvent(name = BonusFragment.PAGE_NAME)
 public class BonusFragment extends BaseFragment implements IBonusView {
     public static final String PAGE_NAME = "bonus";
 
     private FragmentBonus1Binding mBinding;
     private IBonusPresenter mPresenter;
+
+    public static BonusFragment newInstance(boolean needShowTitle) {
+        BonusFragment fragment = new BonusFragment();
+        Bundle arguments = new Bundle();
+        arguments.putBoolean(NEED_SHOW_TITLE, needShowTitle);
+        fragment.setArguments(arguments);
+        return fragment;
+    }
+
+    @Override
+    protected void setNeedTitles(boolean needTitles) {
+        super.setNeedTitles(getArguments().getBoolean(NEED_SHOW_TITLE));
+    }
+
+    @Override
+    protected String getScreenName() {
+        return PAGE_NAME;
+    }
+
+    @Override
+    protected String getTitle() {
+        return getString(R.string.general_bonus);
+    }
 
     @Nullable
     @Override
