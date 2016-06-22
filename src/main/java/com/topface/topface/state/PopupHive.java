@@ -66,6 +66,10 @@ public class PopupHive {
         }
     }
 
+    public boolean isSequencedExecuted(Class clazz) {
+        return mSequenceHolderMap.get(clazz).mIsExecuted;
+    }
+
     public void releaseHive() {
         RxUtils.safeUnsubscribe(mSequencedSubscription);
     }

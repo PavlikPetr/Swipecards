@@ -451,6 +451,10 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         super.onResume();
         if (mFullscreenController != null) {
             mFullscreenController.onResume();
+            if (!mPopupHive.isSequencedExecuted(NavigationActivity.class) &&
+                    mFullscreenController.canShowFullscreen() && !AuthToken.getInstance().isEmpty()) {
+                mFullscreenController.requestFullscreen();
+            }
         }
         //restart -> open NavigationActivity
         if (App.getLocaleConfig().fetchToSystemLocale()) {

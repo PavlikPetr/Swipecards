@@ -42,7 +42,6 @@ import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.http.IRequestClient;
-import com.topface.topface.utils.social.AuthToken;
 
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_FULLSCREEN_START_APP;
@@ -158,15 +157,14 @@ public class FullscreenController {
     private void handleFullscreenSettings(FullscreenSettings settings) {
         UserConfig config = App.getUserConfig();
         PageInfo startPageInfo = App.get().getOptions().getPagesInfo().get(PageInfo.PageName.START.getName());
-        mIsFullscreenSkipped = false;
         if (settings.nextShowNoEarlierThen != 0) {
             config.setFullscreenInterval(settings.nextShowNoEarlierThen);
         }
         if (!settings.isEmpty()) {
+            mIsFullscreenSkipped = false;
             if (settings.banner.type.equals(FullscreenSettings.SDK)) {
                 if (App.get().getOptions().interstitial.enabled) {
                     FullscreenController.this.requestFullscreen(BANNER_ADMOB_FULLSCREEN_START_APP);
-                    mIsFullscreenSkipped = false;
                 } else if (startPageInfo != null) {
                     FullscreenController.this.requestFullscreen(startPageInfo.getBanner());
                 }
@@ -234,14 +232,6 @@ public class FullscreenController {
                 }
             });
         }
-    }
-
-    private boolean showFullscreenBanner(String url) {
-        return passFullScreenByUrl(url);
-    }
-
-    private boolean passFullScreenByUrl(String url) {
-        return !App.getAppConfig().getFullscreenUrlsSet().contains(url);
     }
 
     private void requestGagFullscreen() {
@@ -347,7 +337,7 @@ public class FullscreenController {
             @Override
             public void success(final Banner data, IApiResponse response) {
                 if (data.action.equals(Banner.ACTION_URL)) {
-                    if (showFullscreenBanner(data.parameter)) {
+                    if (!App.getAppConfig().getFullscreenUrlsSet().contains(data.parameter)) {
                         TopfaceAdStatistics.sendFullscreenShown(data);
                         mFullScreenBannerListener.onLoaded();
                         final View fullscreenViewGroup = mActivity.getLayoutInflater().inflate(R.layout.fullscreen_topface, null);
@@ -447,9 +437,6 @@ public class FullscreenController {
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             App.get().unregisterActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
-        }
-        if (canShowFullscreen() && !AuthToken.getInstance().isEmpty()) {
-            requestFullscreen();
         }
     }
 
