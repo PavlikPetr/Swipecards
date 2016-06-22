@@ -183,6 +183,10 @@ public class ContactsProvider {
             return phone;
         }
 
+        public String getEmail() {
+            return email;
+        }
+
         public int getStatus() {
             return status;
         }
