@@ -556,7 +556,7 @@
     <string name="incorrect_photo">Improper photo. Try to upload a different one.</string>
     <string name="incorrect_photo_format">Invalid image format. Try to upload a .jpg or .png file.
     </string>
-    <string name="incorrect_photo_size">This photo is too small (the minimum photo size is 
+    <string name="incorrect_photo_size">This photo is too small (the minimum photo size is
         — %1$dx%2$d pixels).</string>
     <string name="input_contact_name">Enter contact name</string>
     <string name="incorrect_locale">If you would like us to read your review, please write it in

@@ -52,6 +52,7 @@ import com.topface.topface.data.History;
 import com.topface.topface.data.HistoryListData;
 import com.topface.topface.data.IUniversalUser;
 import com.topface.topface.data.Photo;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.UniversalUserFactory;
 import com.topface.topface.requests.ApiRequest;
@@ -92,6 +93,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
 import com.topface.topface.utils.controllers.PopularUserChatController;
+import com.topface.topface.utils.debug.FuckingVoodooMagic;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.social.AuthToken;
@@ -132,6 +134,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private static final String PAGE_NAME = "Chat";
     public static final String GIFT_DATA = "gift_data";
     public static final String BANNED_USER = "banned_user";
+    public static final String SEX = "sex";
 
     private int mUserId;
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
@@ -149,7 +152,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private String mMessage;
     private ArrayList<History> mHistoryFeedList;
     private boolean mIsUpdating;
-    private boolean mKeyboardWasShown;
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
     private FeedUser mUser;
@@ -199,6 +201,34 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private int mUserType;
     private Subscription mUpdateUiSubscription;
     private KeyboardListenerLayout mRootLayout;
+    private boolean mKeyboardWasShown = false; // по умолчанию клава в чате закрыта
+    private int mSex;
+    private KeyboardListenerLayout.KeyboardListener mKeyboardListener = new KeyboardListenerLayout.KeyboardListener() {
+        @Override
+        public void keyboardOpened() {
+            mKeyboardWasShown = true;
+            if (getSupportActionBar().isShowing()
+                    && getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
+                setActionbarVisibility(false);
+            }
+        }
+
+        @Override
+        public void keyboardClosed() {
+            mKeyboardWasShown = false;
+            if (!getSupportActionBar().isShowing()) {
+                setActionbarVisibility(true);
+            }
+        }
+
+        @Override
+        public void keyboardChangeState() {
+            if (getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT
+                    && !getSupportActionBar().isShowing()) {
+                setActionbarVisibility(true);
+            }
+        }
+    };
 
     private enum ChatUpdateType {
         UPDATE_COUNTERS("update counters"), PULL_TO_REFRESH("pull to refresh"), RETRY("retry"),
@@ -219,10 +249,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // временное решение, клавиатуру не показываем при открытии чата
-//        if (!isShowKeyboardInChat()) {
-//            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-//        }
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         DateUtils.syncTime();
         setRetainInstance(true);
@@ -255,6 +281,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         }
         Bundle args = getArguments();
         mItemId = args.getString(INTENT_ITEM_ID);
+        mSex = args.getInt(SEX);
         mUserId = args.getInt(INTENT_USER_ID, -1);
         mUserCity = args.getString(INTENT_USER_CITY);
         mUserNameAndAge = args.getString(INTENT_USER_NAME_AND_AGE);
@@ -269,7 +296,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         // only DialogsFragment will hear this
         Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ_BY_UID);
         intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
-        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+        sendReadDialogsBroadcast(intent);
     }
 
     @Override
@@ -277,32 +304,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         super.onCreateView(inflater, container, savedInstanceState);
         mRootLayout = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
         setAnimatedView(mRootLayout.findViewById(R.id.lvChatList));
-        mRootLayout.setKeyboardListener(new KeyboardListenerLayout.KeyboardListener() {
-            @Override
-            public void keyboardOpened() {
-                mKeyboardWasShown = true;
-                if (getSupportActionBar().isShowing()
-                        && getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
-                    setActionbarVisibility(false);
-                }
-            }
-
-            @Override
-            public void keyboardClosed() {
-                mKeyboardWasShown = false;
-                if (!getSupportActionBar().isShowing()) {
-                    setActionbarVisibility(true);
-                }
-            }
-
-            @Override
-            public void keyboardChangeState() {
-                if (getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT
-                        && !getSupportActionBar().isShowing()) {
-                    setActionbarVisibility(true);
-                }
-            }
-        });
+        mRootLayout.setKeyboardListener(mKeyboardListener);
         Debug.log(this, "+onCreate");
         // Swap Control
         mRootLayout.findViewById(R.id.send_gift_button).setOnClickListener(this);
@@ -407,7 +409,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ);
                 intent.putExtra(LOADED_MESSAGES, loadedItemsCount);
                 intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
-                LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+                sendReadDialogsBroadcast(intent);
             }
         }
     }
@@ -673,6 +675,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mIsUpdating = true;
             }
         });
+        historyRequest.leave = isTakePhotoApplicable();
         registerRequest(historyRequest);
         historyRequest.debug = type.getType();
         if (mAdapter != null) {
@@ -707,6 +710,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                                 onUserLoaded(mUser);
                                 initOverflowMenuActions(getOverflowMenu());
                             }
+                            takePhotoIfNeed();
                             return;
                         } else if (blockStage == PopularUserChatController.SECOND_STAGE) {
                             break;
@@ -715,7 +719,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     mPopularUserLockController.unlockChat();
                 }
                 if (mItemId != null) {
-                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, mItemId));
+                    sendReadDialogsBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, mItemId));
                     mItemId = null;
                 }
 
@@ -797,12 +801,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         getActivity().setResult(Activity.RESULT_OK, intent);
     }
 
-    private void showKeyboardOnLargeScreen() {
-        if (isShowKeyboardInChat() && mKeyboardWasShown) {
-            Utils.showSoftKeyboard(getActivity(), mEditBox);
-        }
-    }
-
     private void removeOutdatedItems(HistoryListData data) {
         if (!mAdapter.isEmpty() && !data.items.isEmpty()) {
             ArrayList<History> itemsToDelete = new ArrayList<>();
@@ -863,6 +861,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     @Override
+    protected void showStubAvatar(int sex) {
+        super.showStubAvatar(sex == Profile.TRAP ? mSex : sex);
+    }
+
+    @Override
     protected IUniversalUser createUniversalUser() {
         return UniversalUserFactory.create(mUser);
     }
@@ -908,7 +911,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private void showKeyboard() {
-        if (mEditBox != null) {
+        if (mEditBox != null && mKeyboardWasShown) {
             mEditBox.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -917,6 +920,17 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 }
             }, 200);
         }
+    }
+
+    private void showKeyboardOnLargeScreen() {
+        if (isShowKeyboardInChat()) {
+            Utils.showSoftKeyboard(getActivity(), mEditBox);
+        }
+    }
+
+    private void finish() {
+        getActivity().setResult(Activity.RESULT_CANCELED);
+        getActivity().finish();
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -928,8 +942,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         //показать клавиатуру, если она была показаны до этого(перешли в другой фрагмент, и вернулись обратно)
         showKeyboard();
         if (mUserId == 0) {
-            getActivity().setResult(Activity.RESULT_CANCELED);
-            getActivity().finish();
+            finish();
         }
 
         // Если адаптер пустой или пользователя нет, грузим с сервера
@@ -948,7 +961,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     @Override
+    @FuckingVoodooMagic(description = "принудительно скрываем клаву(вдруг на home нажмем), и " +
+            "убиреем листенер, т.к. в этом случае не нужно учитывать изменение состояния")
     public void onPause() {
+        mRootLayout.setKeyboardListener(null);
+        Utils.hideSoftKeyboard(App.getContext(), mEditBox);
         super.onPause();
         LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(mNewMessageReceiver);
         stopTimer();
@@ -981,8 +998,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 update(false, ChatUpdateType.INITIAL);
                 break;
             default:
-                if (mAddPhotoHelper != null) {
-                    mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+                if (resultCode == Activity.RESULT_CANCELED) {
+                    finish();
+                } else {
+                    if (mAddPhotoHelper != null) {
+                        mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+                    }
                 }
                 break;
         }
@@ -1086,6 +1107,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 PurchasesActivity.INTENT_BUY_VIP);
     }
 
+    private void sendReadDialogsBroadcast(Intent intent) {
+        if (!isTakePhotoApplicable()) {
+            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+        }
+    }
 
     private void startTimer() {
         mUpdateUiSubscription = Observable.interval(DEFAULT_CHAT_UPDATE_PERIOD, DEFAULT_CHAT_UPDATE_PERIOD
@@ -1097,11 +1123,16 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     update(true, ChatUpdateType.TIMER);
                 }
             }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Debug.error("fucking_timer break " + throwable);
+            }
         });
     }
 
     private void stopTimer() {
-        if (!mUpdateUiSubscription.isUnsubscribed()) {
+        if (mUpdateUiSubscription != null && !mUpdateUiSubscription.isUnsubscribed()) {
             mUpdateUiSubscription.unsubscribe();
         }
     }
@@ -1241,9 +1272,13 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mAddPhotoHelper = new AddPhotoHelper(ChatFragment.this, null);
                 mAddPhotoHelper.setOnResultHandler(mHandler);
             }
-            if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null) {
-                TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_CHAT_OPEN).show(getChildFragmentManager(), TakePhotoPopup.TAG);
+            if (isTakePhotoApplicable()) {
+                TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_CHAT_OPEN).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.TAG);
             }
         }
+    }
+
+    private boolean isTakePhotoApplicable() {
+        return !App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null;
     }
 }

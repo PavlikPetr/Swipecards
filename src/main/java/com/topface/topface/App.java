@@ -34,7 +34,6 @@ import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.social.AppSocialAppsIds;
-import com.topface.topface.modules.TopfaceModule;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
@@ -66,6 +65,7 @@ import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.RunningStateManager;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ad.NativeAdManager;
 import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.config.AppConfig;
@@ -75,7 +75,7 @@ import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.gcmutils.GcmListenerService;
-import com.topface.topface.utils.gcmutils.InstanceIDListenerService;
+import com.topface.topface.utils.gcmutils.RegistrationService;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -150,17 +150,9 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     }
 
     private void initObjectGraphForInjections() {
-        mGraph = ObjectGraph.create(new TopfaceModule());
+        mGraph = ObjectGraph.create(getDaggerModules());
         mGraph.injectStatics();
         mGraph.inject(this);
-    }
-
-    public static void onActivityStarted(String activityName) {
-        mStateManager.onActivityStarted(activityName);
-    }
-
-    public static void onActivityStoped(String activityName) {
-        mStateManager.onActivityStoped(activityName);
     }
 
     public void inject(Object obj) {
@@ -187,7 +179,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 .exec();
     }
 
-    private static ApiRequest getUserOptionsRequest() {
+    public static ApiRequest getUserOptionsRequest() {
         return new UserGetAppOptionsRequest(App.getContext())
                 .callback(new DataApiHandler<Options>() {
                     @Override
@@ -246,8 +238,10 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                             App.getConfig().getUserConfig().setUserAvatarAvailable(false);
                             App.getConfig().getUserConfig().saveConfig();
                         }
-                        if(!InstanceIDListenerService.isListenerStarted()){
-                            InstanceIDListenerService.getToken(getContext());
+                        if (Utils.checkPlayServices(App.getContext())) {
+                            Debug.log("GCM_registration_token start service ");
+                            Intent intent = new Intent(App.getContext(), RegistrationService.class);
+                            App.getContext().startService(intent);
                         }
                         CacheProfile.sendUpdateProfileBroadcast();
                     }
@@ -427,8 +421,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
 
         //Включаем строгий режим, если это Debug версия
         checkStrictMode();
-        //Для Android 2.1 и ниже отключаем Keep-Alive
-        checkKeepAlive();
 
         String msg = "+onCreate\n" + baseConfig.toString();
         //noinspection ConstantConditions
@@ -492,7 +484,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         Ssid.load();
         //Оповещаем о том, что профиль загрузился
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
-        if (!GcmListenerService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty(getContext())) {
+        if (!GcmListenerService.isOnMessageReceived.getAndSet(false) && !CacheProfile.isEmpty()) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -583,13 +575,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         comScore.setPublisherSecret(COMSCORE_SECRET_KEY);
     }
 
-    private void checkKeepAlive() {
-        //На устройствах раньше чем Froyo (2.1),
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
-            System.setProperty("http.keepAlive", "false");
-        }
-    }
-
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     private void checkStrictMode() {
         //Для разработчиков включаем StrictMode, что бы не расслоблялись
@@ -653,6 +638,10 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     @Override
     public void onProfileUpdate(@NonNull Profile profile) {
         mProfile = profile;
+        // ловим ситуацию когда модер удалил фото
+        if (profile.photosCount == 0) {
+            App.getConfig().getUserConfig().setUserAvatarAvailable(false);
+        }
     }
 
     @NonNull

@@ -39,13 +39,11 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     protected View mLoaderRetrier;
     protected TextView mLoaderRetrierText;
     protected ProgressBar mLoaderRetrierProgress;
-
-
     protected LoadController mLoadController;
     private boolean mMore;
 
     public LoadingListAdapter(Context context, FeedList<T> data, Updater updateCallback) {
-        mContext = context;
+        mContext = context.getApplicationContext();
         mInflater = LayoutInflater.from(mContext);
         mLoadController = initLoadController();
         mData = new FeedList<>();
@@ -283,6 +281,11 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     }
 
     public void release() {
+        mUpdateCallback = null;
+        mLoadController = null;
+        mLoaderRetrier = null;
+        mLoaderRetrierProgress = null;
+        mLoaderRetrierText = null;
         if (mData != null) {
             mData.clear();
         }

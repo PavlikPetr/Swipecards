@@ -2,6 +2,7 @@ package com.topface.topface.ui.views;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.os.Build;
@@ -19,20 +20,34 @@ import com.topface.topface.utils.Utils;
 public class KeyboardListenerLayout extends RelativeLayout implements ViewTreeObserver.OnGlobalLayoutListener {
     private static final int DEFAULT_LAYOUT_SIZE_IN_PERCENT = 70;
     private static final int KEYBOARD_SIZE_IN_PERCENT = 30;
+    private static final int CURRENT_MAX_DEFFAULT_VALUE = -1;
 
     private KeyboardListener mKeyboardListener;
     private boolean mKeyboardOpened;
     private boolean mWasToggled;
     private int mLayoutSizeInPercent = DEFAULT_LAYOUT_SIZE_IN_PERCENT;
     private Context mContext;
-    private int mCurrentMax = -1;
+    private int mCurrentMax = CURRENT_MAX_DEFFAULT_VALUE;
+
+    private int mScreenOrientation = Configuration.ORIENTATION_UNDEFINED;
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        if (mCurrentMax == -1) {
-            mCurrentMax = getHeight();
+        int height = getHeight();
+        int orientation = getContext().getResources().getConfiguration().orientation;
+        if (mScreenOrientation != orientation) {
+            mScreenOrientation = orientation;
+            mCurrentMax = CURRENT_MAX_DEFFAULT_VALUE;
+            mKeyboardOpened = false;
+            mWasToggled = false;
         }
-        if (h >= mCurrentMax) {
+        if (mCurrentMax < height) {
+            mKeyboardOpened = true;
+        }
+        if (mCurrentMax == -1 || mCurrentMax < height) {
+            mCurrentMax = height;
+        }
+        if (h >= mCurrentMax && !mKeyboardOpened) {
             Debug.log("ChatKeyboardListener -> skip height " + h);
             return;
         }

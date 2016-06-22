@@ -39,12 +39,12 @@ import java.util.ArrayList;
 
 public class FilterFragment extends AbstractEditFragment implements OnClickListener {
 
-    private static final String FILTER_DIALOG_SHOWN = "dialog_shown";
     private static final String CONSTITUTION_DIALOG_MARK = "constitution_mark";
     public static Profile mTargetUser;
     public static final String INTENT_DATING_FILTER = "Topface_Dating_Filter";
     public static String TAG = "filter_fragment_tag";
     private static final String PAGE_NAME = "Filter";
+    private static final String CITY = "city";
 
     private FormInfo mFormInfo;
     private DatingFilter mInitFilter;
@@ -159,12 +159,17 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         // Preferences
         initFilter();
         initViews(root);
+        Bundle arg = savedInstanceState != null ? savedInstanceState : getArguments();
+        if (arg != null) {
+            mLoFilterChooseCity.setText(arg.getString(CITY));
+        }
         return root;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(CONSTITUTION_DIALOG_MARK, mIsHeight);
+        outState.putString(CITY, mLoFilterChooseCity.getText().toString());
         super.onSaveInstanceState(outState);
     }
 

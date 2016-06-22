@@ -93,7 +93,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
     }
 
     private void sendInvitesRequest() {
-        final Options options = App.from(getActivity()).getOptions();
+        final Options options = App.get().getOptions();
         InviteContactsRequest request = new InviteContactsRequest(getActivity(), contacts
                 , options.blockUnconfirmed);
         final int contactsCount = contacts.size();
@@ -112,7 +112,7 @@ public class InvitesPopup extends AbstractDialogFragment implements View.OnClick
                     );
                     App.from(getActivity()).getProfile().canInvite = false;
                 } else {
-                    Utils.showToastNotification(getString(R.string.invalid_contacts), Toast.LENGTH_LONG);
+                    Utils.showToastNotification(App.getContext().getResources().getString(R.string.invalid_contacts), Toast.LENGTH_LONG);
                 }
             }
 

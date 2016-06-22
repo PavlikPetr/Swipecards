@@ -1,6 +1,7 @@
 package com.topface.topface.state;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
@@ -29,10 +30,11 @@ public class PopupHive {
 
     private ConcurrentHashMap<Class, PopupSequencedHolder> mSequenceHolderMap = new ConcurrentHashMap<>();
     private Subscription mSequencedSubscription;
+    private boolean mAlreadyShown = false;
 
     public void execPopupRush(Class clazz, boolean isStateChanged) {
         final PopupSequencedHolder holder = mSequenceHolderMap.get(clazz);
-        if (holder != null && (!holder.mIsExecuted || isStateChanged)) {
+        if (holder != null && (!holder.mIsExecuted || isStateChanged) && !mAlreadyShown) {
             Debug.log("PopupHive start rush");
             mSequencedSubscription = holder.mActionObservable
                     .map(new Func1<IStartAction, IStartAction>() {
@@ -45,8 +47,8 @@ public class PopupHive {
                     .subscribe(new Action1<IStartAction>() {
                         @Override
                         public void call(IStartAction iStartAction) {
-                            iStartAction.callOnUi();
                             Debug.log("PopupHive " + iStartAction.getActionName() + " started " + "isApplicable " + iStartAction.isApplicable());
+                            iStartAction.callOnUi();
                         }
                     }, new Action1<Throwable>() {
                         @Override
@@ -58,15 +60,14 @@ public class PopupHive {
                         @Override
                         public void call() {
                             Debug.log("PopupHive OK ");
+                            mAlreadyShown = true;
                         }
                     });
         }
     }
 
     public void releaseHive() {
-        if (mSequencedSubscription != null && !mSequencedSubscription.isUnsubscribed()) {
-            mSequencedSubscription.unsubscribe();
-        }
+        RxUtils.safeUnsubscribe(mSequencedSubscription);
     }
 
     public void registerPopupSequence(List<IStartAction> startActionList, Class aClass, boolean isNeedResetOldSequence) {
@@ -78,10 +79,6 @@ public class PopupHive {
         } else {
             mSequenceHolderMap.put(aClass, new PopupSequencedHolder(startActionList));
         }
-    }
-
-    public void registerPopupSequence(List<IStartAction> startActionList, Class aClass) {
-        registerPopupSequence(startActionList, aClass, false);
     }
 
     public boolean containSequence(Class aClass) {

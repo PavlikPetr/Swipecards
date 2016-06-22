@@ -296,7 +296,7 @@ public class UserNotification {
     private PendingIntent generatePendingIntent(Intent intent, int requestCode) {
         PendingIntent resultPendingIntent;
         intent.putExtra(NOTIFICATION_ID, mId);
-        if (!TextUtils.equals(intent.getComponent().getClassName(), NavigationActivity.class.toString())) {
+        if (!TextUtils.equals(intent.getComponent().getClassName(), NavigationActivity.class.getName())) {
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
             // Puts intent with it's parent activities in back stack
             stackBuilder.addNextIntentWithParentStack(intent);

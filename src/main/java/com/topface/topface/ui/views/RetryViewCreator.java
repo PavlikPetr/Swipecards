@@ -38,7 +38,7 @@ public class RetryViewCreator {
         private int mMessageColor;
 
         public Builder(Context context, View.OnClickListener listener) {
-            mContext = context;
+            mContext = context.getApplicationContext();
             mListeners.add(listener);
             mTitles.add(mContext.getString(R.string.general_dialog_retry));
             mMessage = context.getString(R.string.general_data_error);

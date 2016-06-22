@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -24,9 +25,9 @@ import com.topface.topface.banners.RefreshablePageWithAds;
 import com.topface.topface.banners.ad_providers.IRefresher;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.state.CountersDataProvider;
+import com.topface.topface.statistics.FlurryUtils;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
-import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.utils.Utils;
@@ -78,10 +79,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
                 mTabLayoutCreator.setTabTitle(position);
             }
             if (mBodyPagerAdapter != null) {
-                TrackedFragment fragment = (TrackedFragment) mBodyPagerAdapter.getItem(position);
-                if (fragment != null) {
-                    fragment.onResumeFragment();
-                }
+                FlurryUtils.sendOpenEvent(mBodyPagerAdapter.getClassNameByPos(position));
             }
             List<Fragment> fragments = getChildFragmentManager().getFragments();
             if (fragments != null) {
@@ -138,6 +136,14 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
 
     private void initPages(View root) {
         addPages();
+        FragmentManager fm = getChildFragmentManager();
+        if (fm.getFragments() != null) {
+            for (Fragment fragment : fm.getFragments()) {
+                if (fragment != null) {
+                    fm.beginTransaction().remove(fragment).commit();
+                }
+            }
+        }
         mPager = (ViewPager) root.findViewById(R.id.pager);
         mPager.setSaveEnabled(false);
         mBodyPagerAdapter = new TabbedFeedPageAdapter(getChildFragmentManager(),
@@ -158,7 +164,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         } else {
             Intent i = getActivity().getIntent();
             String sLastPage = i.getStringExtra(EXTRA_OPEN_PAGE);
-            if (!TextUtils.isEmpty(sLastPage)) {
+            if (!TextUtils.isEmpty(sLastPage) && mPagesClassNames.contains(sLastPage)) {
                 lastPage = mPagesClassNames.indexOf(sLastPage);
             }
         }

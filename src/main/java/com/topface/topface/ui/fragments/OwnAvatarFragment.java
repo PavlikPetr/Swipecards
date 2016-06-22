@@ -17,12 +17,7 @@ public abstract class OwnAvatarFragment extends AbstractProfileFragment {
 
     public static final String UPDATE_AVATAR_POSITION = "com.topface.topface.updateAvatarPosition";
 
-    private BroadcastReceiver mAvatarPositionReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateOwnProfile();
-        }
-    };
+    private BroadcastReceiver mAvatarPositionReceiver;
 
     @Override
     public void onResume() {
@@ -30,6 +25,14 @@ public abstract class OwnAvatarFragment extends AbstractProfileFragment {
         updateOwnProfile();
         IntentFilter filter = new IntentFilter(UPDATE_AVATAR_POSITION);
         filter.addAction(PhotoSwitcherActivity.DEFAULT_UPDATE_PHOTOS_INTENT);
+        if (mAvatarPositionReceiver == null) {
+            mAvatarPositionReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    updateOwnProfile();
+                }
+            };
+        }
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mAvatarPositionReceiver, filter);
     }

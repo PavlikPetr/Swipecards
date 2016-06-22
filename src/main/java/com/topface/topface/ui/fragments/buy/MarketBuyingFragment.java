@@ -10,6 +10,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.Products;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.statistics.PushButtonVipUniqueStatistics;
 import com.topface.topface.ui.fragments.PurchasesFragment;
@@ -17,9 +18,10 @@ import com.topface.topface.utils.CacheProfile;
 
 import java.util.LinkedList;
 
+@FlurryOpenEvent(name = MarketBuyingFragment.PAGE_NAME)
 public class MarketBuyingFragment extends CoinsBuyingFragment {
 
-    private static final String PAGE_NAME = "buy.coins.gp";
+    public static final String PAGE_NAME = "buy.coins.gp";
 
     public static MarketBuyingFragment newInstance(String from, String text) {
         MarketBuyingFragment buyingFragment = new MarketBuyingFragment();
@@ -32,11 +34,6 @@ public class MarketBuyingFragment extends CoinsBuyingFragment {
         }
         buyingFragment.setArguments(args);
         return buyingFragment;
-    }
-
-    @Override
-    protected String getScreenName() {
-        return PAGE_NAME;
     }
 
     public static MarketBuyingFragment newInstance(int type, int coins, String from) {

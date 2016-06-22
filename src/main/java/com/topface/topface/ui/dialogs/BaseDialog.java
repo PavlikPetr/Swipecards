@@ -74,4 +74,11 @@ public abstract class BaseDialog extends TrackedDialogFragment {
             mDismisslListener.onDismiss(dialog);
         }
     }
+
+    @Override
+    public void onDestroyView() {
+        mCancelListener = null;
+        mDismisslListener = null;
+        super.onDestroyView();
+    }
 }

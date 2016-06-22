@@ -14,6 +14,7 @@
         <attr name="remoteSrc" format="string" />
         <attr name="cornersRadius" format="dimension" />
         <attr name="clipMask" format="reference" />
+        <attr name="blurRadius" format="integer" />
         <attr name="border" format="reference" />
         <attr name="android:maxHeight" />
         <attr name="android:maxWidth" />
@@ -26,6 +27,7 @@
             <flag name="squared" value="5" />
             <flag name="cropped" value="6" />
             <flag name="inscribedAvatar" value="8" />
+            <flag name="blur" value="9" />
         </attr>
         <attr name="preProcessor">
             <flag name="none" value="0" />
@@ -37,6 +39,7 @@
             <flag name="cropped" value="6" />
             <flag name="roundAvatar" value="7" />
             <flag name="inscribedAvatar" value="8" />
+            <flag name="blur" value="9" />
         </attr>
     </declare-styleable>
 

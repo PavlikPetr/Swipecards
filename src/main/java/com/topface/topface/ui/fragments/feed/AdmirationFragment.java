@@ -7,32 +7,30 @@ import android.widget.ViewFlipper;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteAdmirationsRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.FeedsCache;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+@FlurryOpenEvent(name = AdmirationFragment.SCREEN_TYPE)
 public class AdmirationFragment extends LikesFragment {
 
     public static final String UNLOCK_FUCTIONALITY_TYPE = "admirations";
     public static final String SCREEN_TYPE = "Admirations";
+    @Nullable
     private ViewFlipper mStubFlipper;
-
-    @Override
-    protected String getScreenName() {
-        return SCREEN_TYPE;
-    }
 
     @Override
     protected String getTitle() {
@@ -43,7 +41,11 @@ public class AdmirationFragment extends LikesFragment {
     public void onResume() {
         super.onResume();
         if (mEmptyFeedView != null) {
-            initEmptyFeedView(mEmptyFeedView, ErrorCodes.RESULT_OK);
+            if (mBalanceData.premium) {
+                initEmptyFeedView(mEmptyFeedView, ErrorCodes.RESULT_OK);
+            } else {
+                onLockedFeed(ErrorCodes.RESULT_OK);
+            }
         }
     }
 
@@ -56,53 +58,55 @@ public class AdmirationFragment extends LikesFragment {
     protected void initLockedFeed(View inflated, int errorCode) {
         initFlipper(inflated);
         setEmptyFeedView(inflated);
-        chooseFlipperView(inflated);
+        chooseFlipperView(SECOND_CHILD, inflated);
     }
 
     @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
+        initFlipper(inflated);
         setEmptyFeedView(inflated);
-        chooseFlipperView(inflated);
+        chooseFlipperView(FIRST_CHILD, inflated);
     }
 
-    private void chooseFlipperView(View inflated) {
-        @FlipperChild int pos = FIRST_CHILD;
-        View.OnClickListener buttonClick;
-        //Vip, есть восхищения - показываем восхищения
-        if (mCountersData.getAdmirations() > 0 && mBalanceData.premium) {
-            mStubFlipper.setVisibility(View.GONE);
-            return;
-        }
-        //Есть Vip, но нет восхищений. Отправляем на покупку симпатий
-        if (mBalanceData.premium) {
-            buttonClick = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations", App.get().getOptions().topfaceOfferwallRedirect));
+    private void chooseFlipperView(@FlipperChild final int child, View inflated) {
+        if (mStubFlipper != null && child == FIRST_CHILD) {
+            if (mCountersData.getAdmirations() > 0) {
+                if (mBalanceData.premium) {
+                    mStubFlipper.setVisibility(View.GONE);
                 }
-            };
-        } else {
-            //нет Vip нельзя смотреть восхищения. заглушка с просьбой купить Vip
-            pos = SECOND_CHILD;
-            buttonClick = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivityForResult(PurchasesActivity.createVipBuyIntent(null, SCREEN_TYPE), PurchasesActivity.INTENT_BUY_VIP);
-                }
-            };
+                return;
+            }
+            mStubFlipper.setVisibility(View.VISIBLE);
         }
-        setupFlipperView(pos, inflated, buttonClick);
+        View.OnClickListener buttonClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (child) {
+                    case FIRST_CHILD:
+                        startActivity(PurchasesActivity.createBuyingIntent("EmptyAdmirations", App.get().getOptions().topfaceOfferwallRedirect));
+                        break;
+                    case SECOND_CHILD:
+                        startActivityForResult(PurchasesActivity.createVipBuyIntent(null, SCREEN_TYPE), PurchasesActivity.INTENT_BUY_VIP);
+                        break;
+                }
+            }
+        };
+        setupFlipperView(child, inflated, buttonClick);
     }
 
     private void setupFlipperView(@FlipperChild int child, @NotNull View inflated, @NotNull View.OnClickListener buttonClick) {
         switch (child) {
             case FIRST_CHILD:
-                getUnlockButtonView(FIRST_CHILD).setVisibility(View.GONE);
-                mStubFlipper.setDisplayedChild(FIRST_CHILD);
+                if (mStubFlipper != null) {
+                    getUnlockButtonView(FIRST_CHILD).setVisibility(View.GONE);
+                    mStubFlipper.setDisplayedChild(FIRST_CHILD);
+                }
                 inflated.findViewById(R.id.btnStartRate).setOnClickListener(buttonClick);
                 break;
             case SECOND_CHILD:
-                mStubFlipper.setDisplayedChild(SECOND_CHILD);
+                if (mStubFlipper != null) {
+                    mStubFlipper.setDisplayedChild(SECOND_CHILD);
+                }
                 setUnlockButtonView(getUnlockButtonView(SECOND_CHILD));
                 int admirations = mCountersData.getAdmirations();
                 int curCounter = admirations != 0 ? admirations : App.get().getOptions().premiumAdmirations.getCount();
@@ -136,7 +140,7 @@ public class AdmirationFragment extends LikesFragment {
 
     private Button getUnlockButtonView(@FlipperChild int child) {
         initFlipper(mEmptyFeedView);
-        return (Button) mStubFlipper.getChildAt(child).findViewWithTag("btnUnlock");
+        return (Button) (mStubFlipper != null ? mStubFlipper.getChildAt(child).findViewWithTag("btnUnlock") : null);
     }
 
     @Override

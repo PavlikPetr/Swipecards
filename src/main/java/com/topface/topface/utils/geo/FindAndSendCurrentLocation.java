@@ -8,6 +8,8 @@ import com.topface.topface.App;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.state.TopfaceAppState;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -30,7 +32,10 @@ public class FindAndSendCurrentLocation {
     private CompositeSubscription mSubscription = new CompositeSubscription();
 
     public FindAndSendCurrentLocation() {
-        App.from(App.getContext()).inject(this);
+        App.get().inject(this);
+        if (mAppState == null) {
+            return;
+        }
         mGeoLocationManager = new GeoLocationManager();
         mGeoLocationManager.registerProvidersChangedActionReceiver();
         // пропускаем эмит из SharedPreff (BehaviorSubject), ждем WAIT_LOCATION_DELAY и отправляем
@@ -68,7 +73,7 @@ public class FindAndSendCurrentLocation {
         }
     }
 
-    public void sendLocation(final Location location) {
+    public void sendLocation(final @Nullable Location location) {
         if (location != null) {
             new BackgroundThread(Thread.MIN_PRIORITY) {
                 @Override

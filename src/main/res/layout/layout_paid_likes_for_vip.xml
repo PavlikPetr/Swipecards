@@ -1,61 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="34dp">
 
     <LinearLayout
+        android:id="@+id/ivAvatars"
+        style="@style/LandscapePortraitImagesVisibility"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="34dp">
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/ivAvatars"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.topface.topface.ui.views.ImageViewRemote
-                android:id="@+id/ivOne"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/likes_male_one" />
-
-            <com.topface.topface.ui.views.ImageViewRemote
-                android:id="@+id/ivTwo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/likes_male_two" />
-
-            <com.topface.topface.ui.views.ImageViewRemote
-                android:id="@+id/ivThree"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/likes_male_three" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/blocked_likes_text"
-            style="@style/ListItemEmptyText"
+        <com.topface.topface.ui.views.ImageViewRemote
+            android:id="@+id/ivOne"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center" />
+            android:layout_weight="1"
+            android:src="@drawable/likes_male_one" />
 
-        <include layout="@layout/layout_empty_feed_controls" />
+        <com.topface.topface.ui.views.ImageViewRemote
+            android:id="@+id/ivTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/likes_male_two" />
 
-        <Button
-            style="@style/UnlockButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:tag="btnUnlock" />
+        <com.topface.topface.ui.views.ImageViewRemote
+            android:id="@+id/ivThree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/likes_male_three" />
+
     </LinearLayout>
-</ScrollView>
+
+    <TextView
+        android:id="@+id/blocked_likes_text"
+        style="@style/ListItemEmptyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center" />
+
+    <include layout="@layout/layout_empty_feed_controls" />
+
+    <Button
+        style="@style/UnlockButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:tag="btnUnlock" />
+</LinearLayout>

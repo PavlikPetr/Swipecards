@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 import com.topface.framework.imageloader.ImageViewRemoteTemplate;
+import com.topface.framework.imageloader.processor.BlurProcessor;
 import com.topface.framework.imageloader.processor.CropProcessor;
 import com.topface.framework.imageloader.processor.IViewSizeGetter;
 import com.topface.framework.imageloader.processor.InscribedCircleAvatarProcessor;
@@ -28,6 +29,11 @@ public class ImageViewRemote extends ImageViewRemoteTemplate implements IViewSiz
     private static final int POST_PROCESSOR_CROPED = 6;
     private static final int POST_PROCESSOR_ROUND_AVATAR = 7;
     private static final int POST_PROCESSOR_INSCRIBED_AVATAR_IN_CIRCLE = 8;
+    private static final int POST_PROCESSOR_BLUR = 9;
+
+    private static final int BLUR_RADIUS_DEFAULT = 10;
+
+    private int mBlurRadius;
 
     public ImageViewRemote(Context context) {
         super(context);
@@ -44,6 +50,8 @@ public class ImageViewRemote extends ImageViewRemoteTemplate implements IViewSiz
     @Override
     protected void setAttributes(AttributeSet attrs) {
         TypedArray values = getContext().obtainStyledAttributes(attrs, R.styleable.ImageViewRemote);
+
+        mBlurRadius = values.getInt(R.styleable.ImageViewRemote_blurRadius, BLUR_RADIUS_DEFAULT);
 
         borderResId = values.getResourceId(R.styleable.ImageViewRemote_border, 0);
 
@@ -98,6 +106,8 @@ public class ImageViewRemote extends ImageViewRemoteTemplate implements IViewSiz
                     return new RoundAvatarProcessor();
                 case POST_PROCESSOR_INSCRIBED_AVATAR_IN_CIRCLE:
                     return new InscribedCircleAvatarProcessor(this);
+                case POST_PROCESSOR_BLUR:
+                    return new BlurProcessor(mBlurRadius);
                 default:
                     return null;
             }

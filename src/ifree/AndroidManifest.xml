@@ -4,7 +4,7 @@
     package="com.topface.topface">
 
     <application
-        android:name=".App"
+        android:name="${applicationClass}"
         tools:node="merge">
 
         <meta-data

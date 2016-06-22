@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Widget"></style>
 
@@ -414,10 +414,12 @@
     </style>
 
     <style name="ListTime">
-        <item name="android:gravity">right|center_vertical</item>
         <item name="android:textColor">@color/list_time</item>
         <item name="android:textSize">10sp</item>
         <item name="android:textStyle">normal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">none</item>
     </style>
 
     <style name="ListMessageText">
@@ -557,21 +559,6 @@
 
     <style name="AlbumGift" parent="Gift">
         <item name="postProcessor">rounded</item>
-    </style>
-
-    <style name="LeftMenuBadge">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginRight">15dp</item>
-        <item name="android:background">@drawable/badge_left_menu</item>
-        <item name="android:gravity">center</item>
-        <item name="android:paddingLeft">9dp</item>
-        <item name="android:paddingRight">9dp</item>
-        <item name="android:paddingTop">5dp</item>
-        <item name="android:paddingBottom">5dp</item>
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:textSize">11sp</item>
-        <item name="android:visibility">gone</item>
     </style>
 
     <style name="ChatMessageLayout">
@@ -1198,8 +1185,85 @@
         <item name="android:padding">16dp</item>
     </style>
 
-    <style name="LeftMenuSelector">
-        <item name="android:listSelector">@drawable/bg_left_menu_item_selector</item>
+    <style name="LeftMenuTitleBase">
+        <item name="android:lines">1</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/left_menu_title</item>
+        <item name="android:textSize">@dimen/left_menu_title_text_size</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="LeftMenuTitile" parent="LeftMenuTitleBase">
+        <item name="android:layout_marginLeft">@dimen/left_menu_title_margin_left</item>
+
+    </style>
+
+    <style name="LeftMenuDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/left_menu_item_divider_thickness</item>
+        <item name="android:background">@color/left_menu_divider</item>
+    </style>
+
+    <style name="LeftMenuBadgeBase">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:minWidth">@dimen/left_menu_badge_width</item>
+        <item name="android:layout_height">@dimen/left_menu_badge_height</item>
+        <item name="android:lines">1</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/left_menu_bage_text</item>
+        <item name="android:textSize">@dimen/left_menu_bage_text_size</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:background">@drawable/left_menu_bage_selector</item>
+    </style>
+
+    <style name="LeftMenuBadge" parent="LeftMenuBadgeBase">
+        <item name="android:layout_marginRight">@dimen/left_menu_item_padding_right</item>
+    </style>
+
+    <style name="LeftMenuHeaderBase">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingTop">@dimen/left_menu_header_pading_top</item>
+    </style>
+
+    <style name="LeftMenuHeader" parent="LeftMenuHeaderBase">
+        <item name="android:paddingLeft">@dimen/left_menu_header_pading_left</item>
+        <item name="android:paddingRight">@dimen/left_menu_header_pading_right</item>
+    </style>
+
+    <style name="LeftMenuUserName">
+        <item name="android:layout_marginTop">14dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/text_white</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="LeftMenuUserCity">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/left_mneu_users_city_color</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="LeftMenuHeaderBackground">
+        <item name="android:layout_width">@dimen/left_menu_width</item>
+        <item name="android:layout_height">@dimen/left_menu_header_height</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
+
+    <style name="LeftMenuIcon">
+        <item name="android:layout_width">20dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_height">20dp</item>
     </style>
 
     <style name="ItemFeedStyle">
@@ -1312,7 +1376,7 @@
         <item name="android:textSize">@dimen/button_description_text_size</item>
     </style>
 
-    <style name="EmptyFeedsViewImageVisibility">
+    <style name="LandscapePortraitImagesVisibility">
         <item name="android:visibility">visible</item>
     </style>
 

@@ -62,7 +62,7 @@
         android:smallScreens="true" />
 
     <application
-        android:name=".App"
+        android:name="${applicationClass}"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
@@ -98,7 +98,7 @@
         <activity
             android:name=".ui.NavigationActivity"
             android:theme="@style/Theme.Topface.Navigation"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -238,7 +238,7 @@
             android:name=".ui.ChatActivity"
             android:parentActivityName=".ui.NavigationActivity"
             android:theme="@style/Theme.Topface.Chat"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="stateAlwaysHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
@@ -247,8 +247,8 @@
         <activity
             android:name=".ui.UserProfileActivity"
             android:parentActivityName=".ui.NavigationActivity"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:theme="@style/NoWindowAnimation">
+            android:theme="@style/NoWindowAnimation"
+            android:windowSoftInputMode="stateAlwaysHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
@@ -422,9 +422,8 @@
             </intent-filter>
         </receiver>
 
-        <!--AdWords-->
         <receiver
-            android:name="com.google.ads.conversiontracking.InstallReceiver"
+            android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
             android:exported="true"
             tools:ignore="ExportedReceiver">
             <intent-filter>
@@ -432,8 +431,9 @@
             </intent-filter>
         </receiver>
 
+        <!--AdWords-->
         <receiver
-            android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
+            android:name="com.google.ads.conversiontracking.InstallReceiver"
             android:exported="true"
             tools:ignore="ExportedReceiver">
             <intent-filter>
@@ -503,6 +503,7 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
                 <category android:name="com.topface.topface" />
             </intent-filter>
         </receiver>
@@ -525,6 +526,10 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name="com.topface.topface.utils.gcmutils.RegistrationService"
+            android:exported="false">
+        </service>
 
         <!--Приведенная ниже херь, есть результат внедрения appodeal, и при удалении этой рекломной сети-->
         <!--все это нужно выпилить, быстро, решительно!-->
@@ -545,6 +550,9 @@
 
         <activity
             android:name="com.facebook.ads.InterstitialActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="com.facebook.ads.InterstitialAdActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name="com.vungle.publisher.FullScreenAdActivity"

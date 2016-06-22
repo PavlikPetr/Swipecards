@@ -53,7 +53,6 @@ public class AppConfig extends AbstractConfig {
     public static final String DEBUG_CONNECTION = "debug_connection";
     public static final String DEBUG_CONNECTION_CHECKED = "debug_connection_checked";
     private static final String LAST_APP_VERSION = "last_app_version";
-    private static final String GCM_REG_ID = "gcm_reg_id";
     public static final String SAVED_EMAIL_LIST = "tf_saved_email_list";
     public static final String SOCIAL_BUTTONS_SETTINGS = "ButtonSettings";
     public static final String CONVERT_CONFIG = "convert_config";
@@ -61,6 +60,7 @@ public class AppConfig extends AbstractConfig {
     private static final String DATA_APP_SOCIAL_IDS = "data_app_social_ids";
     private static final String ADJUST_ATTRIBUTION = "adjust_attribution";
     private static final String IS_ADJUST_ATTRIBUTION_SENT = "is_adjust_attribution_sent";
+    private static final String IS_HARDWARE_ACCELERATED = "is_hardware_accelerated";
 
     public AppConfig(Context context) {
         super(context);
@@ -96,8 +96,6 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, DEBUG_CONNECTION_CHECKED, false);
         //Last app version
         addField(settingsMap, LAST_APP_VERSION, 0);
-        //GCM registration id
-        addField(settingsMap, GCM_REG_ID, Utils.EMPTY);
         // список всех email, с котороми удачно прошла авторизация в стандартный акк
         addField(settingsMap, SAVED_EMAIL_LIST, Utils.EMPTY);
         // social nets buttons settings. Stores value in form of JSON array. So default value is "[]"
@@ -112,6 +110,8 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, ADJUST_ATTRIBUTION, "");
         // информация о том была ли отправка на сервер данных referrer пользователя
         addField(settingsMap, IS_ADJUST_ATTRIBUTION_SENT, false);
+        // current device, current session hardwareaccelerated state
+        addField(settingsMap, IS_HARDWARE_ACCELERATED, false);
     }
 
     protected SharedPreferences getPreferences() {
@@ -342,22 +342,6 @@ public class AppConfig extends AbstractConfig {
     }
 
     /**
-     * Sets GCM registration id
-     */
-    public void setGcmRegId(String regId) {
-        setField(getSettingsMap(), GCM_REG_ID, regId);
-    }
-
-    /**
-     * GCM registration id
-     *
-     * @return gsm registration id
-     */
-    public String getGcmRegId() {
-        return getStringField(getSettingsMap(), GCM_REG_ID);
-    }
-
-    /**
      * Sets list of all succesfull-auth emails
      *
      * @param savedEmailList list of emails
@@ -459,5 +443,19 @@ public class AppConfig extends AbstractConfig {
      */
     public void setAdjustAttributeDataSent(boolean isSent) {
         setField(getSettingsMap(), IS_ADJUST_ATTRIBUTION_SENT, isSent);
+    }
+
+    /**
+     * @return true if hardwareaccelerated turn on
+     */
+    public boolean isHardwareAccelerated() {
+        return getBooleanField(getSettingsMap(), IS_HARDWARE_ACCELERATED);
+    }
+
+    /**
+     * Set hardwareaccelerated state
+     */
+    public void setHardwareAcceleratedState(boolean isSent) {
+        setField(getSettingsMap(), IS_HARDWARE_ACCELERATED, isSent);
     }
 }

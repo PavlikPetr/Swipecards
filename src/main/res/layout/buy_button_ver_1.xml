@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -36,7 +37,7 @@
                 android:gravity="center"
                 android:paddingLeft="10dp"
                 android:text="@{handler.titleText}"
-                android:textColor="@{handler.titleTextColor}"
+                app:textColorSelector="@{handler.titleTextColor}"
                 android:visibility="@{handler.titleVisibility}" />
 
             <ProgressBar

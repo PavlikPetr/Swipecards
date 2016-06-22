@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.profile;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +14,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.topface.framework.JsonUtils;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
@@ -24,7 +24,8 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.state.EventBus;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.OwnGiftsActivity;
 import com.topface.topface.ui.dialogs.CitySearchPopup;
 import com.topface.topface.ui.dialogs.EditFormItemsEditDialog;
@@ -32,7 +33,9 @@ import com.topface.topface.ui.dialogs.EditTextFormDialog;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
+import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.config.UserConfig;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,19 +48,18 @@ import rx.functions.Action1;
 
 import static com.topface.topface.ui.dialogs.BaseEditDialog.EditingFinishedListener;
 
+@FlurryOpenEvent(name = ProfileFormFragment.PAGE_NAME)
 public class ProfileFormFragment extends AbstractFormFragment {
 
-    private static final String PAGE_NAME = "profile.form";
+    public static final String PAGE_NAME = "profile.form";
 
+    @Inject
+    EventBus mEventBus;
+    private Subscription mCitySubscription;
     private FragmentManager mFragmentManager;
 
     private List<Integer> mMainFormTypes = new ArrayList<>(Arrays.asList(
             new Integer[]{FormItem.AGE, FormItem.CITY, FormItem.NAME, FormItem.SEX, FormItem.STATUS}));
-
-    @Override
-    protected String getScreenName() {
-        return PAGE_NAME;
-    }
 
     private EditingFinishedListener<FormItem> mFormEditedListener = new EditingFinishedListener<FormItem>() {
         @Override
@@ -66,7 +68,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
                 if (form.type == data.type && form.titleId == data.titleId) {
                     if (form.dataId != data.dataId ||
                             data.dataId == FormItem.NO_RESOURCE_ID && !TextUtils.equals(form.value, data.value)) {
-                        FormInfo info = new FormInfo(App.getContext(), App.from(getActivity()).getProfile().sex, Profile.TYPE_OWN_PROFILE);
+                        FormInfo info = new FormInfo(App.getContext(), App.get().getProfile().sex, Profile.TYPE_OWN_PROFILE);
                         boolean isSettingsRequest = mMainFormTypes.contains(data.type);
                         ApiRequest request = isSettingsRequest ?
                                 getSettingsRequest(data) : info.getFormRequest(data);
@@ -92,7 +94,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
                             }
                         });
                         if (isSettingsRequest) {
-                            new ParallelApiRequest(getActivity())
+                            new ParallelApiRequest(App.getContext())
                                     .addRequest(request)
                                     .addRequest(App.getProfileRequest())
                                     .exec();
@@ -140,32 +142,45 @@ public class ProfileFormFragment extends AbstractFormFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (mProfileFormListAdapter != null && isAdded()) {
-                mProfileFormListAdapter.setUserData(CacheProfile.getStatus(getActivity()), App.from(getActivity()).getProfile().forms);
+                mProfileFormListAdapter.setUserData(CacheProfile.getStatus(), App.get().getProfile().forms);
                 mProfileFormListAdapter.notifyDataSetChanged();
             }
         }
     };
 
-    private Subscription mCitySubscription;
-    @Inject
-    TopfaceAppState mAppState;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.get().inject(this);
-        mCitySubscription = mAppState.getObservable(City.class).subscribe(new Action1<City>() {
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+        mFragmentManager = getActivity().getSupportFragmentManager();
+        mCitySubscription = mEventBus.getObservable(City.class).subscribe(new Action1<City>() {
             @Override
             public void call(City city) {
                 City profileCity = App.get().getProfile().city;
                 if (city != null && profileCity != null && !profileCity.equals(city)) {
+                    UserConfig config = App.getUserConfig();
+                    config.setUserCityChanged(true);
+                    config.saveConfig();
                     mFormEditedListener.onEditingFinished(
                             new FormItem(R.string.general_city, JsonUtils.toJson(city), FormItem.CITY));
                 }
             }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Debug.error("City change observable failed", throwable);
+            }
         });
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
-        mFragmentManager = getChildFragmentManager();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mFormEditedListener = null;
+        mFragmentManager = null;
+        mOnFillClickListener = null;
+        mProfileFormListAdapter = null;
     }
 
     @Override
@@ -176,20 +191,19 @@ public class ProfileFormFragment extends AbstractFormFragment {
 
     @Override
     protected void onGiftsClick() {
-        Activity activity = getActivity();
-        Intent intent = new Intent(activity, OwnGiftsActivity.class);
-        activity.startActivity(intent);
+        Intent intent = new Intent(getActivity().getApplicationContext(), OwnGiftsActivity.class);
+        getActivity().startActivity(intent);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mCitySubscription.unsubscribe();
+        RxUtils.safeUnsubscribe(mCitySubscription);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
     }
 
     private SettingsRequest getSettingsRequest(FormItem formItem) {
-        SettingsRequest settingsRequest = new SettingsRequest(getActivity());
+        SettingsRequest settingsRequest = new SettingsRequest(App.getContext());
         String value = formItem.value;
         switch (formItem.type) {
             case FormItem.NAME:

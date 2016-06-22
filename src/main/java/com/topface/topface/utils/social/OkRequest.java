@@ -1,5 +1,6 @@
 package com.topface.topface.utils.social;
 
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
@@ -10,8 +11,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.EnumSet;
+import java.util.Map;
 
 import ru.ok.android.sdk.Odnoklassniki;
+import ru.ok.android.sdk.OkRequestMode;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -34,7 +38,18 @@ public abstract class OkRequest<T> {
         mOdnoklassniki = ok;
     }
 
-    abstract protected String getRequest(Odnoklassniki ok) throws IOException;
+    @NotNull
+    abstract protected String getRequestMethod();
+
+    @Nullable
+    protected Map<String, String> getRequestParams() {
+        return null;
+    }
+
+    @Nullable
+    protected EnumSet<OkRequestMode> getRequestMode() {
+        return OkRequestMode.DEFAULT;
+    }
 
     public Observable<T> getObservable() {
         return prepareObservable();
@@ -47,7 +62,7 @@ public abstract class OkRequest<T> {
                 mSubscriber = subscriber;
                 String res = Utils.EMPTY;
                 try {
-                    res = getRequest(mOdnoklassniki);
+                    res = mOdnoklassniki.request(getRequestMethod(), getRequestParams(), getRequestMode());
                 } catch (IOException e) {
                     e.printStackTrace();
                     subscriber.onError(e);

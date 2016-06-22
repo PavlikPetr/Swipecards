@@ -571,7 +571,7 @@
     <string name="incorrect_photo_format">Formato de imagem inválido. Tenta carregar um ficheiro
         .jpg ou .png.
     </string>
-    <string name="incorrect_photo_size">Esta foto é demasiado pequena (o tamanho mínimo para fotos é de  
+    <string name="incorrect_photo_size">Esta foto é demasiado pequena (o tamanho mínimo para fotos é de
         — %1$dx%2$d pixeis).</string>
     <string name="input_contact_name">Introduza o nome do contacto</string>
     <string name="incorrect_locale">Se gostavas que ficássemos a saber a tua opinião, escreve-a em

@@ -10,7 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -20,14 +20,16 @@ import android.widget.AdapterView;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.data.FragmentSettings;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
+import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.http.IRequestClient;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.LinkedList;
@@ -79,17 +81,23 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         clearPreviousState();
         mTitleSetter = new ActionBarTitleSetterDelegate(getSupportActionBar());
         refreshActionBarTitles();
+        if (view != null) {
+            AppConfig appConfig = App.getAppConfig();
+            appConfig.setHardwareAcceleratedState(view.isHardwareAccelerated());
+            appConfig.saveConfig();
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mTitleSetter = null;
         if (isButterKnifeAvailable()) {
             ButterKnife.unbind(this);
         }
     }
 
-    protected boolean isButterKnifeAvailable(){
+    protected boolean isButterKnifeAvailable() {
         return true;
     }
 
@@ -249,11 +257,12 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         return null;
     }
 
+    @Nullable
     protected ActionBar getSupportActionBar() {
         if (mSupportActionBar == null) {
             Activity activity = getActivity();
-            if (activity instanceof ActionBarActivity) {
-                mSupportActionBar = ((ActionBarActivity) activity).getSupportActionBar();
+            if (activity instanceof AppCompatActivity) {
+                mSupportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
             }
         }
         return mSupportActionBar;
@@ -266,9 +275,9 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         if (activity instanceof BaseFragmentActivity) {
             // use overriden setSupportProgressBarIndeterminateVisibility from BaseFragmentActivity
             ((BaseFragmentActivity) activity).setSupportProgressBarIndeterminateVisibility(visible);
-        } else if (activity instanceof ActionBarActivity) {
+        } else if (activity instanceof AppCompatActivity) {
             // check support of indeterminate progress bar
-            ActionBarActivity abActivity = (ActionBarActivity) activity;
+            AppCompatActivity abActivity = (AppCompatActivity) activity;
             abActivity.setSupportProgressBarIndeterminateVisibility(visible);
         }
     }
@@ -276,6 +285,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     protected void setActionBarTitles(String title, String subtitle) {
         if (mTitleSetter != null && mNeedTitles) {
             mTitleSetter.setActionBarTitles(title, subtitle);
+            mTitleSetter.setOnline(false);
         }
     }
 
@@ -315,41 +325,5 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     protected void setNeedTitles(boolean needTitles) {
         mNeedTitles = needTitles;
-    }
-
-    public enum FragmentId {
-        VIP_PROFILE(0),
-        PROFILE(1),
-        DATING(2),
-        TABBED_DIALOGS(3),
-        TABBED_VISITORS(4),
-        TABBED_LIKES(5),
-        PHOTO_BLOG(6),
-        GEO(9),
-        BONUS(10),
-        EDITOR(1000),
-        SETTINGS(11),
-        INTEGRATION_PAGE(12),
-        UNDEFINED(-1);
-
-        private int mNumber;
-
-        /**
-         * Constructor for enum type of fragment ids
-         * By default fragment is not overlayed by ActionBar
-         *
-         * @param number integer id
-         */
-        FragmentId(int number) {
-            mNumber = number;
-        }
-
-        public int getId() {
-            return mNumber;
-        }
-
-        public FragmentSettings getFragmentSettings() {
-            return FragmentSettings.getFragmentSettings(this);
-        }
     }
 }

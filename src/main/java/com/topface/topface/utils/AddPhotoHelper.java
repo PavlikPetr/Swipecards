@@ -28,18 +28,20 @@ import com.topface.topface.data.AddedPhoto;
 import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.leftMenu.FragmentIdData;
+import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoAddProfileRequest;
 import com.topface.topface.requests.PhotoAddRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.state.EventBus;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
@@ -57,6 +59,11 @@ import javax.inject.Inject;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
+
+import static com.topface.topface.ui.dialogs.TakePhotoPopup.ACTION_CAMERA_CHOSEN;
+import static com.topface.topface.ui.dialogs.TakePhotoPopup.ACTION_CANCEL;
+import static com.topface.topface.ui.dialogs.TakePhotoPopup.ACTION_GALLERY_CHOSEN;
+import static com.topface.topface.ui.dialogs.TakePhotoPopup.ACTION_UNDEFINED;
 
 /**
  * Хелпер для загрузки фотографий в любой активити
@@ -85,7 +92,9 @@ public class AddPhotoHelper {
     private File outputFile;
     private DialogInterface.OnCancelListener mOnDialogCancelListener;
     @Inject
-    static TopfaceAppState mState;
+    static TopfaceAppState mAppState;
+    @Inject
+    EventBus mEventBus;
     private View.OnClickListener mOnAddPhotoClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -111,6 +120,7 @@ public class AddPhotoHelper {
     }
 
     public AddPhotoHelper(Activity activity) {
+        App.get().inject(this);
         minPhotoSize = App.getAppOptions().getMinPhotoSize();
         mActivity = new WeakReference<>(activity);
         mContext = activity.getApplicationContext();
@@ -119,11 +129,11 @@ public class AddPhotoHelper {
     }
 
     private void initPhotoActionSubscription() {
-        mPhotoActionSubscription = mState.getObservable(TakePhotoPopup.TakePhotoActionHolder.class)
+        mPhotoActionSubscription = mEventBus.getObservable(TakePhotoPopup.TakePhotoActionHolder.class)
                 .filter(new Func1<TakePhotoPopup.TakePhotoActionHolder, Boolean>() {
                     @Override
                     public Boolean call(TakePhotoPopup.TakePhotoActionHolder holder) {
-                        return holder.getAction() != null && holder.getPlc() != null;
+                        return holder.getAction() != ACTION_UNDEFINED && holder.getPlc() != null;
                     }
                 })
                 .subscribe(new Action1<TakePhotoPopup.TakePhotoActionHolder>() {
@@ -144,7 +154,7 @@ public class AddPhotoHelper {
                                 case ACTION_CANCEL:
                                     TakePhotoStatistics.sendCancelAction(holder.getPlc());
                             }
-                            mState.setData(new TakePhotoPopup.TakePhotoActionHolder(null, null));
+                            mEventBus.setData(new TakePhotoPopup.TakePhotoActionHolder(null));
                         }
                     }
                 });
@@ -154,6 +164,7 @@ public class AddPhotoHelper {
         if (!mPhotoActionSubscription.isUnsubscribed()) {
             mPhotoActionSubscription.unsubscribe();
         }
+        mHandler = null;
     }
 
     public void showProgressDialog() {
@@ -334,7 +345,7 @@ public class AddPhotoHelper {
         }
 
         if (!isPhotoCorrectSize(uri)) {
-            Utils.showToastNotification(String.format(mContext.getString(R.string.incorrect_photo_size),
+            Utils.showToastNotification(String.format(mContext.getString(R.string.incorrect_photo_size_show_restrictions),
                     minPhotoSize.width,
                     minPhotoSize.height), Toast.LENGTH_SHORT);
             return;
@@ -451,7 +462,7 @@ public class AddPhotoHelper {
 
     private Intent getIntentForNotification() {
         return new Intent(App.getContext(), NavigationActivity.class)
-                .putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.PROFILE.getFragmentSettings())
+                .putExtra(GCMUtils.NEXT_INTENT, new LeftMenuSettingsData(FragmentIdData.PROFILE))
                 .putExtra(GCMUtils.NOTIFICATION_INTENT, true)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
@@ -465,7 +476,7 @@ public class AddPhotoHelper {
                 Utils.showToastNotification(mContext.getString(R.string.incorrect_photo_format), Toast.LENGTH_LONG);
                 break;
             case ErrorCodes.INCORRECT_PHOTO_SIZES:
-                Utils.showToastNotification(String.format(mContext.getString(R.string.incorrect_photo_size),
+                Utils.showToastNotification(String.format(mContext.getString(R.string.incorrect_photo_size_show_restrictions),
                         minPhotoSize.width,
                         minPhotoSize.height), Toast.LENGTH_SHORT);
                 break;
@@ -550,9 +561,11 @@ public class AddPhotoHelper {
         Profile profile = App.get().getProfile();
         if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_OK) {
             Photo photo = (Photo) msg.obj;
-            // ставим фото на аватарку только если она едиснтвенная
-            if (profile.photos != null && profile.photos.size() == 0) {
-                profile.photo = photo;
+            if (profile.photos != null && photo != null) {
+                // ставим фото на аватарку только если она едиснтвенная
+                if(profile.photos.size() == 0){
+                    profile.photo = photo;
+                }
                 // добавляется фото в начало списка
                 profile.photos.addFirst(photo);
                 // Увеличиваем общее количество фотографий юзера
@@ -560,7 +573,7 @@ public class AddPhotoHelper {
             }
             // оповещаем всех об изменениях
             CacheProfile.sendUpdateProfileBroadcast();
-            mState.setData(profile);
+            mAppState.setData(profile);
             Toast.makeText(App.getContext(), R.string.photo_add_or, Toast.LENGTH_SHORT).show();
         } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
             // если загрузка аватраки не завершилась успехом, то сбрасываем флаг

@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.topface.topface.App;
 import com.topface.topface.data.Products;
+import com.topface.topface.modules.TopfaceModule;
 import com.topface.topface.requests.AmazonProductsRequest;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
@@ -35,5 +36,9 @@ public class ApplicationBase extends Application {
             }
         });
         return request;
+    }
+
+    public Object[] getDaggerModules() {
+        return new Object[]{new TopfaceModule()};
     }
 }

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -14,14 +16,16 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
+import com.topface.topface.statistics.FlurryUtils;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
-import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.fragments.AnimatedFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
+import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
+import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.Utils;
@@ -54,7 +58,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
         public void update() {
             // load owners profile in OwnProfileFragment only
             if (isOwnersProfileFragment()) {
-                setProfile(App.from(getActivity()).getProfile());
+                setProfile(App.get().getProfile());
             }
         }
 
@@ -89,8 +93,9 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
             if (mTabLayoutCreator != null) {
                 mTabLayoutCreator.setTabTitle(position);
             }
+            String className = mBodyPagerAdapter.getClassNameByPos(position);
             if (mBodyPagerAdapter != null) {
-                ((TrackedFragment) mBodyPagerAdapter.getItem(position)).onResumeFragment();
+                FlurryUtils.sendOpenEvent(className);
             }
             List<Fragment> fragments = getChildFragmentManager().getFragments();
             if (fragments != null) {
@@ -101,7 +106,6 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
                     }
                 }
             }
-            String className = mBodyPagerAdapter.getClassNameByPos(position);
             if (className.equals(VipBuyFragment.class.getName())) {
                 fromVip = true;
                 return;
@@ -112,7 +116,42 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
                 Profile profile = App.get().getProfile();
                 if (App.isNeedShowTrial && !profile.premium && new GoogleMarketApiManager().isMarketApiAvailable()
                         && App.get().getOptions().trialVipExperiment.enabled && !profile.paid) {
-                    TrialVipPopup.newInstance(true).show(getActivity().getSupportFragmentManager(), TrialVipPopup.TAG);
+                    final TrialVipPopup popup = TrialVipPopup.newInstance(true);
+                    popup.setOnSubscribe(new TrialVipPopup.OnFragmentActionsListener() {
+                        @Override
+                        public void onSubscribeClick() {
+                            Fragment f = popup.getActivity().getSupportFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
+                            final Fragment fragment = f == null ?
+                                    TransparentMarketFragment.newInstance(App.get().getOptions().trialVipExperiment.subscriptionSku, true, TrialVipPopup.TAG) : f;
+                            fragment.setRetainInstance(true);
+                            if (fragment instanceof ITransparentMarketFragmentRunner) {
+                                ((ITransparentMarketFragmentRunner) fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
+                                    @Override
+                                    public void onPurchaseSuccess() {
+                                        popup.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onPopupClosed() {
+
+                                    }
+                                });
+                                FragmentTransaction transaction = popup.getActivity().getSupportFragmentManager().beginTransaction();
+                                if (!fragment.isAdded()) {
+                                    transaction.add(R.id.fragment_content, fragment, TransparentMarketFragment.class.getSimpleName()).commit();
+                                } else {
+                                    transaction.remove(fragment)
+                                            .add(R.id.fragment_content, fragment, TransparentMarketFragment.class.getSimpleName()).commit();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFragmentFinish() {
+
+                        }
+                    });
+                    popup.show(getActivity().getSupportFragmentManager(), TrialVipPopup.TAG);
                     App.isNeedShowTrial = false;
                 }
             }
@@ -139,17 +178,14 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (savedInstanceState != null) {
-            int pos = savedInstanceState.getInt(CURRENT_BODY_PAGE, 0);
-            mBodyPager.setCurrentItem(pos);
-            mPageChangeListener.onPageSelected(pos);
+            mBodyPager.setCurrentItem(savedInstanceState.getInt(CURRENT_BODY_PAGE, 0));
+            return;
         }
         Bundle arg = getArguments();
         if (arg != null) {
-            String sLastPage = arg.getString(TabbedFeedFragment.EXTRA_OPEN_PAGE);
-            if (!TextUtils.isEmpty(sLastPage)) {
-                int lastPage = BODY_PAGES_CLASS_NAMES.indexOf(sLastPage);
-                mBodyPager.setCurrentItem(lastPage);
-                mPageChangeListener.onPageSelected(lastPage);
+            String lastPage = arg.getString(TabbedFeedFragment.EXTRA_OPEN_PAGE);
+            if (!TextUtils.isEmpty(lastPage)) {
+                mBodyPager.setCurrentItem(BODY_PAGES_CLASS_NAMES.indexOf(lastPage));
             } else {
                 mPageChangeListener.onPageSelected(0);
             }
@@ -166,12 +202,22 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     public void onDestroy() {
         super.onDestroy();
         mBodyPager = null;
+        mFormFragment = null;
+        mUserPhotoFragment = null;
+        mTabLayoutCreator = null;
+        mBodyPagerAdapter = null;
+        mPageChangeListener = null;
+        mProfileUpdater = null;
+        mProfile = null;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        mTabLayoutCreator.release();
+        mBodyPager.setAdapter(null);
+        mBodyPager.setOnPageChangeListener(null);
     }
 
     @Override
@@ -211,6 +257,14 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     }
 
     protected void initBody() {
+        FragmentManager fm = getChildFragmentManager();
+        if (fm.getFragments() != null) {
+            for (Fragment fragment : fm.getFragments()) {
+                if (fragment != null) {
+                    fm.beginTransaction().remove(fragment).commit();
+                }
+            }
+        }
     }
 
     protected void addBodyPage(String className, String pageTitle) {

@@ -329,7 +329,7 @@ public class OverflowMenu {
                 new RateController.OnRateRequestListener() {
                     @SuppressWarnings("ConstantConditions")
                     @Override
-                    public void onRateCompleted(int mutualId) {
+                    public void onRateCompleted(int mutualId, int ratedUserId) {
                         setSympathySentState(true, true);
                         Utils.showToastNotification(R.string.sympathy_sended, Toast.LENGTH_SHORT);
                     }
@@ -359,7 +359,7 @@ public class OverflowMenu {
                 new RateController.OnRateRequestListener() {
                     @SuppressWarnings("ConstantConditions")
                     @Override
-                    public void onRateCompleted(int mutualId) {
+                    public void onRateCompleted(int mutualId, int ratedUserId) {
                         setSympathySentState(true, true);
                         Utils.showToastNotification(R.string.admiration_sended, Toast.LENGTH_SHORT);
                     }

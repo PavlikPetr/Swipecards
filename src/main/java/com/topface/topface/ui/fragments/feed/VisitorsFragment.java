@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.view.View;
 import android.widget.Button;
@@ -10,14 +11,18 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.data.Visitor;
+import com.topface.topface.data.leftMenu.FragmentIdData;
+import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
+import com.topface.topface.data.leftMenu.NavigationState;
+import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteVisitorsRequest;
 import com.topface.topface.requests.FeedRequest;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.VisitorsListAdapter;
-import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
@@ -27,11 +32,22 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import javax.inject.Inject;
 
+@FlurryOpenEvent(name = VisitorsFragment.SCREEN_TYPE)
 public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
 
     public static final String UNLOCK_FUCTIONALITY_TYPE = "visitors";
     public static final String SCREEN_TYPE = "Visitors";
+
+    @Inject
+    NavigationState mNavigationState;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        App.get().inject(this);
+    }
 
     @Override
     protected String getTitle() {
@@ -42,11 +58,6 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
     protected Type getFeedListDataType() {
         return new TypeToken<FeedList<Visitor>>() {
         }.getType();
-    }
-
-    @Override
-    protected String getScreenName() {
-        return SCREEN_TYPE;
     }
 
     @Override
@@ -96,7 +107,7 @@ public class VisitorsFragment extends NoFilterFeedFragment<Visitor> {
         initGagView(inflated, R.string.go_dating_message, R.string.general_get_dating, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MenuFragment.selectFragment(FragmentId.DATING.getFragmentSettings());
+                mNavigationState.emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.DATING), WrappedNavigationData.SELECT_EXTERNALY));
             }
         });
         getUnlockButtonView(inflated).setVisibility(View.GONE);

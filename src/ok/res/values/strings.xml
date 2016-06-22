@@ -188,8 +188,7 @@
     <string name="dating_header_guys">Guys from %1$d to %2$d</string>
     <string name="dating_skip_button">Next</string>
     <string name="message_too_long">The message you entered is too long. The number of symbols
-        can\'t exceed %d.
-    </string>
+        can\'t exceed %d.</string>
     <string name="chat_gift_in">You have received a gift.</string>
     <string name="chat_gift_out">Gift has been sent.</string>
     <string name="chat_like_in">Someone likes you!</string>
@@ -220,7 +219,7 @@
     </plurals>
     <plurals name="buying_admiration_you_need_coins">
         <item quantity="other">To send an adoration, get %d more coins</item>
-        <item quantity="one">To send an adreoration, get %d more coin</item>
+        <item quantity="one">To send an adoration, get %d more coin</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
         <item quantity="other">To be able to see who likes you, get %d more coins</item>
@@ -479,7 +478,6 @@
     <string name="reselect_city">Select a different city:</string>
     <string name="choose_cool_photo">Select your best photo and a status that reflects your mood!
     </string>
-    <string name="email_confirmed">The email is confirmed!</string>
     <string name="sympathy_sended">Like has been sent.</string>
     <string name="general_photo_deleted">Your photo was deleted because it violated one of our photo
         rules.
@@ -817,7 +815,7 @@
     <string name="novice_sympathy">Send Likes only to those\nwho really attract you.\nYou just might
         find someone special!
     </string>
-    <string name="go_dating_message">Start dating and you will who view you page here</string>
+    <string name="go_dating_message">Start getting to know people and here will appear the names of those users who visited your profile.</string>
     <string name="photo_not_from_main_album">A moderator has decided that this photo may not be used as a profile photo.</string>
     <string name="sidebar_vk_profile">VK Profile</string>
     <string name="title_vk_profile">VK Profile</string>
@@ -872,4 +870,5 @@
     <string name="crown_liberty_description">Easily stand out in Search and Messages</string>
     <string name="like_liberty_title">Likes</string>
     <string name="like_liberty_description">See who likes you</string>
+    <string name="refill_balance_view_title">Your balance</string>
 </resources>
