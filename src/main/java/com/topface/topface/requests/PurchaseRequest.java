@@ -11,6 +11,7 @@ import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.utils.CacheProfile;
 
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.onepf.oms.OpenIabHelper;
@@ -34,14 +35,20 @@ abstract public class PurchaseRequest extends ApiRequest {
         return payload;
     }
 
+    @Nullable
     public static PurchaseRequest getValidateRequest(Purchase purchase, Context context) {
-        switch (purchase.getAppstoreName()) {
-            case OpenIabHelper.NAME_GOOGLE:
-                return new GooglePlayPurchaseRequest(purchase, context);
-            case OpenIabHelper.NAME_AMAZON:
-                return new AmazonPurchaseRequest(purchase, context);
-            default:
-                throw new RuntimeException("Unknown purchase app store");
+        String appstoreName = purchase.getAppstoreName();
+        if (appstoreName != null) {
+            switch (appstoreName) {
+                case OpenIabHelper.NAME_GOOGLE:
+                    return new GooglePlayPurchaseRequest(purchase, context);
+                case OpenIabHelper.NAME_AMAZON:
+                    return new AmazonPurchaseRequest(purchase, context);
+                default:
+                    throw new RuntimeException("Unknown purchase app store");
+            }
+        } else {
+            return null;
         }
     }
 
@@ -49,11 +56,15 @@ abstract public class PurchaseRequest extends ApiRequest {
         return JsonUtils.fromJson(product.getDeveloperPayload(), DeveloperPayload.class);
     }
 
+    @Nullable
     public static ProductsDetails.ProductDetail getProductDetail(Purchase product) {
         DeveloperPayload developerPayload = getDeveloperPayload(product);
-        return developerPayload != null && !TextUtils.equals(developerPayload.sku, product.getSku()) ?
-                CacheProfile.getMarketProductsDetails().getProductDetail(getTestProductId(product)) :
-                CacheProfile.getMarketProductsDetails().getProductDetail(product.getSku());
+        ProductsDetails productDetails = CacheProfile.getMarketProductsDetails();
+        return productDetails != null ?
+                developerPayload != null && !TextUtils.equals(developerPayload.sku, product.getSku()) ?
+                        productDetails.getProductDetail(getTestProductId(product)) :
+                        productDetails.getProductDetail(product.getSku())
+                : null;
     }
 
     public static String getTestProductId(Purchase product) {
