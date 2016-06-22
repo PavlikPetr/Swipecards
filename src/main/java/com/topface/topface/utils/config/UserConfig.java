@@ -708,60 +708,6 @@ public class UserConfig extends AbstractConfig {
     }
 
     /**
-     * Last fullscreen ad show time in current interval
-     *
-     * @return last show time
-     */
-    public long getLastFullscreenTime() {
-        return getLongField(getSettingsMap(), FULLSCREEN_IN_INTERVAL_LAST_SHOW);
-    }
-
-    /**
-     * Sets last fullscreen ad show time in current interval
-     *
-     * @param time show time
-     */
-    public void setLastFullscreenTime(long time) {
-        setField(getSettingsMap(), FULLSCREEN_IN_INTERVAL_LAST_SHOW, time);
-    }
-
-    /**
-     * First fullscreen ad show time in current interval
-     *
-     * @return first show time
-     */
-    public long getFirstFullscreenTime() {
-        return getLongField(getSettingsMap(), FULLSCREEN_IN_INTERVAL_FIRST_SHOW);
-    }
-
-    /**
-     * Sets first fullscreen ad show time in current interval
-     *
-     * @param time show time
-     */
-    public void setFirstFullscreenTime(long time) {
-        setField(getSettingsMap(), FULLSCREEN_IN_INTERVAL_FIRST_SHOW, time);
-    }
-
-    /**
-     * Fullscreen ad shown count current interval
-     *
-     * @return shown count
-     */
-    public int getFullscreenShownCount() {
-        return getIntegerField(getSettingsMap(), FULLSCREEN_IN_INTERVAL_SHOWN_COUNT);
-    }
-
-    /**
-     * Sets fullscreen ad shown count in current interval
-     *
-     * @param count shown count
-     */
-    public void setFullscreenShownCount(int count) {
-        setField(getSettingsMap(), FULLSCREEN_IN_INTERVAL_SHOWN_COUNT, count);
-    }
-
-    /**
      * save current position of popups sequenced
      *
      * @param count position

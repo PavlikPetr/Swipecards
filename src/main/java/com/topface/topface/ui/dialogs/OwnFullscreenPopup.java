@@ -8,8 +8,10 @@ import android.webkit.WebView;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.data.FullscreenSettings;
 import com.topface.topface.databinding.OwnFullscreenLayoutBinding;
+import com.topface.topface.statistics.AdStatistics;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.Utils;
@@ -23,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListener {
 
     public static final String FULLSCREEN_OPTIONS = "fullscreen_options";
+    public static final String IMPROVED_BANNER_TOPFACE = "own_improved_custom_topface_banner";
     public static final String TAG = "OwnFullscreenPopup";
     @Nullable
     private FullscreenSettings mFullscreenSettings;
@@ -67,6 +70,8 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
                         @Override
                         public void onClick(View v) {
                             clickImgBannerSettings(mFullscreenSettings);
+                            AdStatistics.sendFullscreenClicked(OwnFullscreenPopup.IMPROVED_BANNER_TOPFACE);
+
                         }
                     });
                     return view;

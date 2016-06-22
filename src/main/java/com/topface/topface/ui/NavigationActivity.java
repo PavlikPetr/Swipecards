@@ -334,7 +334,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     private void initFullscreen() {
-        mFullscreenController = new FullscreenController(this, App.get().getOptions());
+        mFullscreenController = new FullscreenController(this);
     }
 
     private void initBonusCounterConfig() {
