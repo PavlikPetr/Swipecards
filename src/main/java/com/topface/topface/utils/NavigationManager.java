@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Ssid;
 import com.topface.topface.data.FragmentLifreCycleData;
 import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
 import com.topface.topface.data.leftMenu.FragmentIdData;
@@ -31,7 +30,6 @@ import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
-import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -70,7 +68,7 @@ public class NavigationManager {
         App.get().inject(this);
         mFragmentSettings = settings;
         mActivityDelegate = activityDelegate;
-        mNavigationStateSubscription =  mNavigationState.getNavigationObservable().filter(new Func1<WrappedNavigationData, Boolean>() {
+        mNavigationStateSubscription = mNavigationState.getNavigationObservable().filter(new Func1<WrappedNavigationData, Boolean>() {
             @Override
             public Boolean call(WrappedNavigationData data) {
                 return data != null
@@ -198,7 +196,7 @@ public class NavigationManager {
                 IntegrationSettingsData fragmentSettings = (IntegrationSettingsData) id;
                 String url = fragmentSettings.getUrl();
                 if (!TextUtils.isEmpty(url)) {
-                    url = url.replace(Utils.USER_ID, AuthToken.getInstance().getUserSocialId()).replace(Utils.SECRET_KEY, Ssid.get());
+                    url = Utils.prepareUrl(url);
                 }
                 fragment = IntegrationWebViewFragment.newInstance(fragmentSettings.getPageName(), url);
                 break;

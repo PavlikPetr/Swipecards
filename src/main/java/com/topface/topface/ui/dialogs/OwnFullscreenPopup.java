@@ -6,13 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Ssid;
 import com.topface.topface.data.FullscreenSettings;
 import com.topface.topface.databinding.OwnFullscreenLayoutBinding;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +24,9 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
 
     public static final String FULLSCREEN_OPTIONS = "fullscreen_options";
     public static final String TAG = "OwnFullscreenPopup";
+    @Nullable
     private FullscreenSettings mFullscreenSettings;
+    public static final String SCREEN_TYPE = "OwnFullscreenPopup";
 
     public static OwnFullscreenPopup newInstance(FullscreenSettings fullscreenSettings) {
         Bundle args = new Bundle();
@@ -53,27 +55,52 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
 
     @Nullable
     private View createBodyView() {
-        if (!mFullscreenSettings.isEmpty()) {
+        if (mFullscreenSettings != null && !mFullscreenSettings.isEmpty()) {
             switch (mFullscreenSettings.banner.type) {
                 case FullscreenSettings.IMG:
                     View view = new ImageViewRemote(getContext().getApplicationContext());
                     view.setLayoutParams(new ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.MATCH_PARENT));
-                    ((ImageViewRemote) view).setRemoteSrc(prepareUrl(mFullscreenSettings.banner.url));
+                    ((ImageViewRemote) view).setRemoteSrc(Utils.prepareUrl(mFullscreenSettings.banner.url));
+                    view.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            clickImgBannerSettings(mFullscreenSettings);
+                        }
+                    });
                     return view;
                 case FullscreenSettings.WEB:
                     WebView webView = new WebView(getContext().getApplicationContext());
-                    webView.loadUrl(prepareUrl(mFullscreenSettings.banner.url));
+                    webView.loadUrl(Utils.prepareUrl(mFullscreenSettings.banner.url));
                     return webView;
             }
         }
         return null;
     }
 
-    private String prepareUrl(String url) {
-        return url.replace(Utils.USER_ID, AuthToken.getInstance().getUserSocialId())
-                .replace(Utils.SECRET_KEY, Ssid.get());
+    private void clickImgBannerSettings(FullscreenSettings settings) {
+        switch (settings.banner.action) {
+            case FullscreenSettings.PAGE:
+                switch (settings.banner.parameter) {
+                    case FullscreenSettings.PURCHASE:
+                        startActivity(PurchasesActivity.createBuyingIntent(SCREEN_TYPE, App.get().getOptions().topfaceOfferwallRedirect));
+                        break;
+                    case FullscreenSettings.VIP:
+                        startActivity(PurchasesActivity.createVipBuyIntent(null, SCREEN_TYPE));
+                        break;
+                }
+                break;
+            case FullscreenSettings.URL:
+                Utils.getIntentToOpenUrl(settings.banner.action);
+                break;
+            case FullscreenSettings.METHOD:
+                //прост
+                break;
+            case FullscreenSettings.OFFERWALL:
+                //прост
+                break;
+        }
     }
 
     @Override
@@ -83,7 +110,7 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
 
     @Override
     protected int getDialogStyleResId() {
-        return R.style.Theme_Topface_NoActionBar_DatingLockPopup;
+        return R.style.Theme_Topface_NoActionBar;
     }
 
     @Override

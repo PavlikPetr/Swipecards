@@ -69,18 +69,12 @@ public class DailyConfigExtension {
         long currentTime = System.currentTimeMillis();
         switch (info.mMode) {
             case EVERY_DAY:
-                if (DateUtils.isDayBeforeToday(info.getLastWriteTime())) {
-                    info.resetAmount();
-                }
-                info.incrementAmount();
+                calculateAmount(DateUtils.isDayBeforeToday(info.getLastWriteTime()), info);
                 info.setWriteTime(currentTime);
                 break;
             case DAY_AFTER_LAST_EXTRACT:
-                if (currentTime - info.getLastWriteTime() >= DateUtils.DAY_IN_MILLISECONDS) {
-                    info.setWriteTime(currentTime);
-                    info.resetAmount();
-                }
-                info.incrementAmount();
+                calculateAmount(currentTime - info.getLastWriteTime() >= DateUtils.DAY_IN_MILLISECONDS, info);
+                info.setWriteTime(currentTime);
                 break;
             case DEFAULT:
                 info.setWriteTime(currentTime);
@@ -89,6 +83,15 @@ public class DailyConfigExtension {
         }
         return new DailyConfigField<>(data, info);
     }
+
+    private void calculateAmount(boolean isNeedReset, DailyConfigFieldInfo info) {
+        if (isNeedReset) {
+            info.resetAmount();
+        } else {
+            info.incrementAmount();
+        }
+    }
+
 
     public static class DailyConfigField<T> {
 
@@ -125,13 +128,33 @@ public class DailyConfigExtension {
         public String toString() {
             return JsonUtils.toJson(this);
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof DailyConfigField)) return false;
+            DailyConfigField<?> that = (DailyConfigField<?>) o;
+            return mConfigField != null ? mConfigField.equals(that.mConfigField) :
+                    that.mConfigField == null && (mConfigFieldInfo != null ?
+                            mConfigFieldInfo.equals(that.mConfigFieldInfo) :
+                            that.mConfigFieldInfo == null);
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = mConfigField != null ? mConfigField.hashCode() : 0;
+            result = 31 * result + (mConfigFieldInfo != null ? mConfigFieldInfo.hashCode() : 0);
+            return result;
+        }
     }
 
     public static class DailyConfigFieldInfo {
+
+        private final static int DEFAULT_AMOUNT = 1;
         @DailyMode
         private int mMode;
         private long mWriteTime;
-        private long mAmount = 1;
+        private long mAmount = DEFAULT_AMOUNT;
 
         private DailyConfigFieldInfo(@DailyMode int mode, long extractTime) {
             mMode = mode;
@@ -143,7 +166,7 @@ public class DailyConfigExtension {
         }
 
         private void resetAmount() {
-            mAmount = 1;
+            mAmount = DEFAULT_AMOUNT;
         }
 
         public long getAmount() {
@@ -156,6 +179,24 @@ public class DailyConfigExtension {
 
         public void setWriteTime(long writeTime) {
             this.mWriteTime = writeTime;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof DailyConfigFieldInfo)) return false;
+            DailyConfigFieldInfo that = (DailyConfigFieldInfo) o;
+            return mMode == that.mMode &&
+                    mWriteTime == that.mWriteTime &&
+                    mAmount == that.mAmount;
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = mMode;
+            result = 31 * result + (int) (mWriteTime ^ (mWriteTime >>> 32));
+            result = 31 * result + (int) (mAmount ^ (mAmount >>> 32));
+            return result;
         }
     }
 }

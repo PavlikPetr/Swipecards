@@ -66,6 +66,7 @@ public class FullscreenController {
     private Activity mActivity;
     private String mCurrentBannerType;
     private OnNextActionListener mOnNextActionListener;
+    private boolean mIsOwnPopupShown;
 
     private boolean mIsControllerResumed = false;
     private boolean mIsFullscreenSkipped = true;
@@ -126,9 +127,6 @@ public class FullscreenController {
                     FullscreenSettings settings = JsonUtils.fromJson(response.toString(), FullscreenSettings.class);
                     if (!settings.isEmpty()) {
                         config.setFullscreenInterval(settings.nextShowNoEarlierThen);
-                    } else {
-                        showOwnFullscreen(settings);
-                        return;
                     }
                     if (settings.banner.type.equals(FullscreenSettings.SDK)) {
                         if (App.get().getOptions().interstitial.enabled) {
@@ -146,6 +144,14 @@ public class FullscreenController {
                 public void fail(int codeError, IApiResponse response) {
                     Debug.log("FullscreenController : error " + codeError + " response " + response);
                 }
+
+                @Override
+                public void always(IApiResponse response) {
+                    super.always(response);
+                    if (!mIsOwnPopupShown) {
+                        mOnNextActionListener.onNextAction();
+                    }
+                }
             });
             if (mActivity instanceof IRequestClient) {
                 ((IRequestClient) mActivity).registerRequest(request);
@@ -155,13 +161,15 @@ public class FullscreenController {
 
         private void showOwnFullscreen(FullscreenSettings settings) {
             OwnFullscreenPopup popup = OwnFullscreenPopup.newInstance(settings);
-            popup.show(((FragmentActivity) mActivity).getSupportFragmentManager(), OwnFullscreenPopup.TAG);
             popup.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
                     mOnNextActionListener.onNextAction();
+                    mIsOwnPopupShown = false;
                 }
             });
+            popup.show(((FragmentActivity) mActivity).getSupportFragmentManager(), OwnFullscreenPopup.TAG);
+            mIsOwnPopupShown = true;
         }
 
         @Override
@@ -223,7 +231,6 @@ public class FullscreenController {
     private boolean showFullscreenBanner(String url) {
         boolean passByTime = isTimePassed();
         boolean passByUrl = passFullScreenByUrl(url);
-
         return passByUrl && passByTime;
     }
 
