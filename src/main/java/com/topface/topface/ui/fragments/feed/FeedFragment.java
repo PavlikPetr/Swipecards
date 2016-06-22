@@ -129,6 +129,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private TextView mActionModeTitle;
     private Boolean isNeedFirstShowListDelay = null;
     private CountDownTimer mListShowDelayCountDownTimer;
+    private boolean isDataFromCache;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -469,7 +470,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             FeedList<T> feedList = JsonUtils.fromJson(fromCacheString, dataType);
             FeedAdapter<T> adapter = getListAdapter();
             if (feedList != null && !feedList.isEmpty()) {
-                if (adapter != null) {
+                if (adapter != null && adapter.getCount() == 0) {
+                    isDataFromCache = true;
                     adapter.addData(new FeedListData<>(feedList, true, getFeedListItemClass()));
                     adapter.notifyDataSetChanged();
                     showListViewWithSuccessResponse();
@@ -846,6 +848,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 @Override
                 protected void success(FeedListData<T> data, IApiResponse response) {
                     processSuccessUpdate(data, isHistoryLoad, isPullToRefreshUpdating, makeItemsRead, request.getLimit());
+                    isDataFromCache = false;
                 }
 
                 @Override
@@ -910,7 +913,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
 
         if (isHistoryLoad) {
-            removeOldDuplicates(data);
+            if (isDataFromCache) {
+                adapter.removeAllData();
+            } else {
+                removeOldDuplicates(data);
+            }
             adapter.addData(data);
         } else if (isPullToRefreshUpdating) {
             if (makeItemsRead) {
