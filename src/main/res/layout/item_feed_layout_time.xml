@@ -1,36 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/ListItemContainer"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="horizontal">
 
     <include
         android:id="@+id/ifp_avatar"
-        layout="@layout/item_feed_part_avatar"/>
+        layout="@layout/item_feed_part_avatar" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/ifp_avatar"
-        android:paddingBottom="1dp"
-        android:orientation="vertical">
-
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingBottom="1dp">
 
         <LinearLayout
             android:id="@+id/ifp_name_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:orientation="horizontal">
 
-            <include
-                layout="@layout/item_feed_part_name"/>
+            <include layout="@layout/item_feed_part_name" />
 
             <include
                 android:id="@+id/ifp_time"
                 layout="@layout/item_feed_part_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
 
         </LinearLayout>
 
@@ -38,8 +34,6 @@
             android:id="@+id/ifp_text"
             layout="@layout/item_feed_part_text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/ifp_name_container"/>
-    </RelativeLayout>
-</RelativeLayout>
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

@@ -41,11 +41,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
+import static com.topface.topface.utils.Utils.PLATFORM;
+
 public class FeedbackMessageFragment extends AbstractEditFragment {
 
     public static final String INTENT_FEEDBACK_TYPE = "feedback_message_type";
     private static final String GOOGLE_WALLET_URL = "https://wallet.google.com";
-    public static final String PLATFORM = "Android";
     @Bind(R.id.edText)
     EditText mEditText;
     @Bind(R.id.edEmail)

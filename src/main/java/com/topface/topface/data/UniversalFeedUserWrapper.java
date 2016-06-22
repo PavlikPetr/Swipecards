@@ -40,7 +40,7 @@ public class UniversalFeedUserWrapper implements IUniversalUser {
 
     @Override
     public int getSex() {
-        return mFeedUser == null ? Profile.BOY : mFeedUser.sex;
+        return mFeedUser == null ? Profile.TRAP : mFeedUser.sex;
     }
 
     @Override

@@ -12,7 +12,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.topface.framework.utils.BackgroundThread;
@@ -22,6 +21,7 @@ import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.dialogs.AboutAppDialog;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorDialog;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
@@ -34,17 +34,19 @@ import com.topface.topface.utils.social.AuthorizationManager;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
+@FlurryOpenEvent(name = SettingsFragment.PAGE_NAME)
 public class SettingsFragment extends ProfileInnerFragment {
 
-    private static final String PAGE_NAME = "profile.settings";
+    public static final String PAGE_NAME = "profile.settings";
 
     private TextView mSocialNameText;
     private MarketApiManager mMarketApiManager;
 
     private TextView preloadPhotoName;
-    private CheckBox mAutoReplySettings;
+    private boolean mIsAllowedAutoReply;
 
     @Bind(R.id.loNotifications)
     View mLoNotifications;
@@ -52,6 +54,8 @@ public class SettingsFragment extends ProfileInnerFragment {
     ViewGroup mNoNotificationViewGroup;
     @Bind(R.id.loHelp)
     View mHelp;
+    @Bind(R.id.auto_reply_state)
+    CheckBox mAutoReplySettings;
 
     @SuppressWarnings("unused")
     @OnClick(R.id.loNotifications)
@@ -78,14 +82,14 @@ public class SettingsFragment extends ProfileInnerFragment {
     @OnClick(R.id.loAbout)
     protected void aboutClick() {
         Options options = App.from(getActivity()).getOptions();
-        AboutAppDialog.newInstance(getActivity().getString(R.string.settings_about), options.aboutApp.title, options.aboutApp.url).show(getFragmentManager(),
+        AboutAppDialog.newInstance(getActivity().getString(R.string.settings_about), options.aboutApp.title, options.aboutApp.url).show(getActivity().getSupportFragmentManager(),
                 AboutAppDialog.class.getName());
     }
 
     @SuppressWarnings("unused")
     @OnClick(R.id.loLanguage)
     protected void languageClick() {
-        new SelectLanguageDialog().show(getFragmentManager(), SelectLanguageDialog.class.getName());
+        new SelectLanguageDialog().show(getActivity().getSupportFragmentManager(), SelectLanguageDialog.class.getName());
     }
 
     @SuppressWarnings("unused")
@@ -99,6 +103,12 @@ public class SettingsFragment extends ProfileInnerFragment {
         }
     }
 
+    @SuppressWarnings("unused")
+    @OnCheckedChanged(R.id.auto_reply_state)
+    protected void autoreplyCheckedChanged(boolean isChecked) {
+        autoReplySwitched(isChecked);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
@@ -110,7 +120,9 @@ public class SettingsFragment extends ProfileInnerFragment {
         initAccountViews(view);
 
         // Auto reply settings
-        initAutoReply(view);
+        boolean isAutoreplyAllow = App.get().getOptions().isAutoreplyAllow;
+        mIsAllowedAutoReply = isAutoreplyAllow;
+        setAutoReplySettings(isAutoreplyAllow);
 
         // Init settings views
         /*
@@ -134,17 +146,6 @@ public class SettingsFragment extends ProfileInnerFragment {
         return getString(R.string.settings_header_title);
     }
 
-    private void initAutoReply(View root) {
-        mAutoReplySettings = (CheckBox) root.findViewById(R.id.auto_reply_state);
-        mAutoReplySettings.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                switchAutoReplyButton(isChecked);
-            }
-        });
-        setAutoReplySettings(App.get().getOptions().isAutoreplyAllow);
-    }
-
     @Override
     public boolean isTrackable() {
         return false;
@@ -156,6 +157,7 @@ public class SettingsFragment extends ProfileInnerFragment {
         }
     }
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.autoReplyItem)
     public void setInversAutoReplySettings() {
         if (mAutoReplySettings != null) {
@@ -163,9 +165,9 @@ public class SettingsFragment extends ProfileInnerFragment {
         }
     }
 
-    private void switchAutoReplyButton() {
-        if (mAutoReplySettings != null) {
-            switchAutoReplyButton(!mAutoReplySettings.isChecked());
+    private void autoReplySwitched(boolean state) {
+        if (state != mIsAllowedAutoReply) {
+            switchAutoReplyButton(state);
         }
     }
 
@@ -177,6 +179,7 @@ public class SettingsFragment extends ProfileInnerFragment {
         settingsRequest.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
+                mIsAllowedAutoReply = newValue;
                 App.get().getOptions().isAutoreplyAllow = newValue;
             }
 
@@ -254,7 +257,7 @@ public class SettingsFragment extends ProfileInnerFragment {
                 preloadPhotoName.setText(type.getName());
             }
         });
-        preloadPhotoSelectorDialog.show(getFragmentManager(), PreloadPhotoSelectorDialog.class.getName());
+        preloadPhotoSelectorDialog.show(getActivity().getSupportFragmentManager(), PreloadPhotoSelectorDialog.class.getName());
 
     }
 

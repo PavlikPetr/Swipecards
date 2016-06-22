@@ -3,7 +3,7 @@ package com.topface.topface.ui.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
@@ -54,8 +54,8 @@ public class QuickMessageFragment extends AbstractDialogFragment implements View
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if (activity != null && activity instanceof ActionBarActivity) {
-            android.support.v7.app.ActionBar actionBar = ((ActionBarActivity) activity).getSupportActionBar();
+        if (activity != null && activity instanceof AppCompatActivity) {
+            android.support.v7.app.ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
             mActionBarIsShowing = actionBar != null && actionBar.isShowing();
         }
     }

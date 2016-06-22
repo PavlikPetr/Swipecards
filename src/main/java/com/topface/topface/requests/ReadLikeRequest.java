@@ -14,19 +14,16 @@ public class ReadLikeRequest extends ApiRequest {
 
     private ArrayList<Integer> mIdArray;
     public final static String SERVICE_NAME = "like.read";
-    private boolean mInterstitialShown;
     private int mSenderId;
 
-    public ReadLikeRequest(Context context, int senderId, boolean interstitialShown) {
+    public ReadLikeRequest(Context context, int senderId) {
         super(context);
         mSenderId = senderId;
-        mInterstitialShown = interstitialShown;
     }
 
-    public ReadLikeRequest(Context context, ArrayList<Integer> idArray, boolean interstitialShown) {
+    public ReadLikeRequest(Context context, ArrayList<Integer> idArray) {
         super(context);
         mIdArray = idArray;
-        mInterstitialShown = interstitialShown;
     }
 
     @Override
@@ -40,7 +37,6 @@ public class ReadLikeRequest extends ApiRequest {
                 jsonArray.put(id);
             }
             jsonObject.put("ids", jsonArray);
-            jsonObject.put("interstitialShown", mInterstitialShown);
         }
         return jsonObject;
     }

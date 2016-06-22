@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true">
+    android:clickable="true"
+    android:fadingEdge="none"
+    android:fillViewport="true">
 
     <LinearLayout
         style="@style/EmptyFeedsViewGravity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:orientation="vertical">
 
         <ImageView
-            style="@style/EmptyFeedsViewImageVisibility"
+            style="@style/LandscapePortraitImagesVisibility"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_mutual" />
@@ -30,27 +32,21 @@
             android:maxWidth="290dp"
             android:text="@string/nobody_chat_with_you_sympathies_will_help" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <Button
+            android:id="@+id/btnRefill"
+            style="@style/BigStretchedBlueButton"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/buy_resources" />
+
+        <Button
+            android:id="@+id/btnGetDating"
+            style="@style/BigStretchedGrayButton"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/btnRefill"
-                style="@style/BigStretchedBlueButton"
-                android:text="@string/buy_resources" />
-
-            <Button
-                android:id="@+id/btnGetDating"
-                style="@style/BigStretchedGrayButton"
-                android:layout_marginTop="12dp"
-                android:text="@string/general_get_dating" />
-
-        </LinearLayout>
+            android:layout_marginTop="12dp"
+            android:text="@string/general_get_dating" />
 
     </LinearLayout>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>

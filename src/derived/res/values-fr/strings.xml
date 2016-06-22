@@ -491,7 +491,6 @@
     <string name="choose_cool_photo">Choisissez votre meilleure photo et un statut qui décrit votre
         humeur !
     </string>
-    <string name="email_confirmed">L\'e-mail est confirmé.</string>
     <string name="sympathy_sended">Vous avez envoyé un J\'aime.</string>
     <string name="general_photo_deleted">Votre photo ne respecte pas les règles et a été éliminée.
     </string>
@@ -847,7 +846,7 @@
     <string name="novice_sympathy">Envoyez des J\'aime aux personnes qui vous\nplaisent
         vraiment.\nVous allez peut être rencontrer quelqu\'un d\'unique !
     </string>
-    <string name="go_dating_message">Commencez à faire connaissance et découvrez ici qui regarde votre profil</string>
+    <string name="go_dating_message">Apprenez à mieux connaître les gens et les noms des utilisateurs ayant visité votre profil apparaîtront ici !</string>
     <string name="photo_not_from_main_album">Un modérateur a décidé que cette photo ne peut pas être utilisée comme photo de profil.</string>
     <string name="sidebar_vk_profile">Profil VK</string>
     <string name="title_vk_profile">Profil VK</string>
@@ -902,4 +901,5 @@
     <string name="crown_liberty_description">Démarquez-vous facilement dans la Recherche et les Messages</string>
     <string name="like_liberty_title">J\'aime</string>
     <string name="like_liberty_description">Voir qui vous aime</string>
+    <string name="refill_balance_view_title">Votre compte</string>
 </resources>

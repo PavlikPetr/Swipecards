@@ -22,6 +22,7 @@ public class SessionConfig extends AbstractConfig {
     private static final String DATA_MARKET_PRODUCTS_DETAILS = "data_google_products_details";
     private static final String DATA_PAYMENTWALL_PRODUCTS = "data_pw_products";
     private static final String DATA_PAYMENTWALL_MOBILE_PRODUCTS = "data_pw_mobile_products";
+    private static final String GCM_REG_ID = "gcm_reg_id";
 
     public SessionConfig(Context context) {
         super(context);
@@ -42,6 +43,8 @@ public class SessionConfig extends AbstractConfig {
         addField(settingsMap, SETTINGS_SOCIAL_ACCOUNT_NAME, Utils.EMPTY);
         //Social network account email
         addField(settingsMap, SETTINGS_SOCIAL_ACCOUNT_EMAIL, Utils.EMPTY);
+        //GCM registration id
+        addField(settingsMap, GCM_REG_ID, Utils.EMPTY);
     }
 
     @Override
@@ -201,5 +204,21 @@ public class SessionConfig extends AbstractConfig {
      */
     public String getSocialAccountEmail() {
         return getStringField(getSettingsMap(), SETTINGS_SOCIAL_ACCOUNT_EMAIL);
+    }
+
+    /**
+     * Sets GCM registration id
+     */
+    public void setGcmRegId(String regId) {
+        setField(getSettingsMap(), GCM_REG_ID, regId);
+    }
+
+    /**
+     * GCM registration id
+     *
+     * @return gsm registration id
+     */
+    public String getGcmRegId() {
+        return getStringField(getSettingsMap(), GCM_REG_ID);
     }
 }

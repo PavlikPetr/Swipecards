@@ -1,6 +1,5 @@
 package com.topface.topface.ui.dialogs;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -33,7 +32,6 @@ public class BaseEditDialog<T extends Parcelable> extends BaseDialog {
     private TextView mTitleText;
     private TextView mLimitText;
     private ViewStub mButtonsStub;
-    private T mData;
 
     @Override
     protected int getDialogStyleResId() {
@@ -41,22 +39,18 @@ public class BaseEditDialog<T extends Parcelable> extends BaseDialog {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        Bundle args = getArguments();
-        if (args != null) {
-            mTitle = args.getString(DIALOG_TITLE);
-            T data = args.getParcelable(DATA);
-            mAdapter = new EditAdapterFactory().createAdapterFor(activity, data, App.from(getActivity()).getProfile());
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = savedInstanceState != null ? savedInstanceState : getArguments();
+        if (bundle != null) {
+            mTitle = bundle.getString(DIALOG_TITLE);
+            T data = bundle.getParcelable(DATA);
+            mAdapter = new EditAdapterFactory().createAdapterFor(getActivity().getApplicationContext(), data, App.from(getActivity()).getProfile());
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (savedInstanceState != null && savedInstanceState.containsKey(DATA)) {
-            mData = savedInstanceState.getParcelable(DATA);
-        }
         View view = inflater.inflate(getDialogLayoutRes(), container, false);
         initViews(view);
         return view;
@@ -108,6 +102,7 @@ public class BaseEditDialog<T extends Parcelable> extends BaseDialog {
         AbstractEditAdapter<T> adapter = getAdapter();
         if (adapter != null) {
             outState.putParcelable(DATA, adapter.getCurrentData());
+            outState.putString(DIALOG_TITLE, mTitle);
         }
     }
 }

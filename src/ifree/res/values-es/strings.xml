@@ -495,7 +495,6 @@
     <string name="choose_cool_photo">¡Elige tu mejor fotografía y un estado que refleja tu estado de
         humor!
     </string>
-    <string name="email_confirmed">¡correo electrónico confirmado!</string>
     <string name="sympathy_sended">Simpatía enviada</string>
     <string name="general_photo_deleted">Tu fotografía no cumple con el reglamento y fue eliminada
     </string>
@@ -844,7 +843,7 @@
     <string name="novice_sympathy">Envía simpatías a aquellos\nquienes realmente te gustan
         para\nempezar una relación satisfactoria
     </string>
-    <string name="go_dating_message">Comienzo a conocer esto y podrá ver a los usuarios que visitan su perfil</string>
+    <string name="go_dating_message">Comienza  a conocer y aquí verás a los usuarios que visitan tu perfil.</string>
     <string name="photo_not_from_main_album">Por los resultados de la moderación, está prohibida esta foto en el avatar</string>
     <string name="sidebar_vk_profile">Perfil VKontakt</string>
     <string name="title_vk_profile">Perfil VK</string>
@@ -900,4 +899,5 @@
     <string name="crown_liberty_description">Es difícil no destacar en la búsqueda y en los mensajes</string>
     <string name="like_liberty_title">Simpatías</string>
     <string name="like_liberty_description">Mira a quién le gustas</string>
+    <string name="refill_balance_view_title">En tu cuenta</string>
 </resources>

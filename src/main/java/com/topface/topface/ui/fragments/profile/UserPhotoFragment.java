@@ -22,6 +22,7 @@ import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.adapters.BasePhotoRecyclerViewAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.adapters.UserRecyclerViewAdapter;
@@ -29,13 +30,14 @@ import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
 import org.json.JSONException;
 
+@FlurryOpenEvent(name = UserPhotoFragment.PAGE_NAME)
 public class UserPhotoFragment extends ProfileInnerFragment {
 
     private static final String USER_ID = "USER_ID";
     private static final String PHOTOS_COUNT = "PHOTOS_COUNT";
     private static final String PHOTO_LINKS = "PHOTO_LINKS";
     private static final String POSITION = "POSITION";
-    private static final String PAGE_NAME = "user.photo";
+    public static final String PAGE_NAME = "user.photo";
 
     private int mUserId;
     private int mPhotosCount;
@@ -63,11 +65,6 @@ public class UserPhotoFragment extends ProfileInnerFragment {
             }
         }
     };
-
-    @Override
-    protected String getScreenName() {
-        return PAGE_NAME;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

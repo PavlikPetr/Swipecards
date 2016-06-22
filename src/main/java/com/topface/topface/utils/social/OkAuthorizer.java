@@ -1,13 +1,13 @@
 package com.topface.topface.utils.social;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.data.AuthTokenStateData;
 import com.topface.topface.data.social.AppSocialAppsIds;
+import com.topface.topface.state.AuthState;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.SessionConfig;
@@ -32,6 +32,8 @@ public class OkAuthorizer extends Authorizer {
 
     @Inject
     TopfaceAppState mAppState;
+    @Inject
+    AuthState mAuthState;
 
     public OkAuthorizer() {
         App.from(App.getContext()).inject(this);
@@ -43,15 +45,13 @@ public class OkAuthorizer extends Authorizer {
 
     public Odnoklassniki getOkAuthObj(AppSocialAppsIds ids) {
         if (!Odnoklassniki.hasInstance()) {
-            Odnoklassniki.createInstance(App.getContext(), ids.okId, ids.getOkPublicKey());
+            return Odnoklassniki.createInstance(App.getContext(), ids.okId, ids.getOkPublicKey());
         }
         return Odnoklassniki.getInstance();
     }
 
-    private void sendTokenIntent(int tokenStatus) {
-        Intent intent = new Intent(AUTH_TOKEN_READY_ACTION);
-        intent.putExtra(TOKEN_STATUS, tokenStatus);
-        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+    private void sendTokenIntent(@AuthTokenStateData.AuthTokenStatus int tokenStatus) {
+        mAuthState.setData(new AuthTokenStateData(tokenStatus));
     }
 
     @Override
@@ -69,7 +69,7 @@ public class OkAuthorizer extends Authorizer {
                             public void call(OkUserData okUserData) {
                                 mAppState.setData(okUserData);
                                 AuthToken authToken = AuthToken.getInstance();
-                                authToken.saveToken(
+                                authToken.temporarilySaveToken(
                                         AuthToken.SN_ODNOKLASSNIKI,
                                         okUserData.uid,
                                         okAccessData.getToken(),
@@ -78,12 +78,13 @@ public class OkAuthorizer extends Authorizer {
                                 SessionConfig sessionConfig = App.getSessionConfig();
                                 sessionConfig.setSocialAccountName(okUserData.name);
                                 sessionConfig.saveConfig();
-                                sendTokenIntent(TOKEN_READY);
+                                sendTokenIntent(AuthTokenStateData.TOKEN_READY);
                             }
                         }, new Action1<Throwable>() {
                             @Override
                             public void call(Throwable throwable) {
-                                sendTokenIntent(TOKEN_NOT_READY);
+                                throwable.printStackTrace();
+                                sendTokenIntent(AuthTokenStateData.TOKEN_NOT_READY);
                             }
                         }, new Action0() {
                             @Override
@@ -91,7 +92,7 @@ public class OkAuthorizer extends Authorizer {
 
                             }
                         });
-                        sendTokenIntent(TOKEN_PREPARING);
+                        sendTokenIntent(AuthTokenStateData.TOKEN_PREPARING);
                     } else {
                         Debug.log("Odnoklassniki auth data is empty");
                     }
@@ -101,6 +102,7 @@ public class OkAuthorizer extends Authorizer {
             @Override
             public void onError(String error) {
                 Debug.error("Odnoklassniki auth error");
+                sendTokenIntent(AuthTokenStateData.TOKEN_NOT_READY);
             }
         }, "okauth://ok125879808", OkAuthType.ANY, OkScope.SET_STATUS, OkScope.PHOTO_CONTENT, OkScope.VALUABLE_ACCESS);
     }

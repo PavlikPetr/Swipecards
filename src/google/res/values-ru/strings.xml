@@ -602,7 +602,6 @@
     <string name="choose_cool_photo">Выберите свою лучшую фотографию и статус, который отражает ваше
         настроение!
     </string>
-    <string name="email_confirmed">e-mail подтвержден!</string>
     <string name="sympathy_sended">Симпатия отправлена.</string>
     <string name="general_photo_deleted">Ваша фотография не соответствует правилам и была удалена
     </string>
@@ -700,7 +699,8 @@
     <string name="incorrect_photo_format">Некорректный формат фото. Попробуйте загрузить jpg или
         png
     </string>
-    <string name="incorrect_photo_size">У этой фотографии маленький размер (минимальный размер фото
+    <string name="incorrect_photo_size">Недопустимый размер фотографии</string>
+    <string name="incorrect_photo_size_show_restrictions">У этой фотографии маленький размер (минимальный размер фото
         — %1$dx%2$d пикселей).
     </string>
     <string name="input_contact_name">Введите имя контакта</string>

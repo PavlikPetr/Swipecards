@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/ListItemContainer">
 
     <include
         android:id="@+id/ifp_avatar"
         layout="@layout/item_feed_part_avatar_photoblog" />
 
-
-    <ImageView
-        android:id="@+id/ifp_heart"
-        style="@style/FeedHeart.Selector" />
-
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerVertical="false"
+        android:layout_gravity="center_vertical"
         android:layout_marginTop="-4dp"
-        android:layout_toLeftOf="@+id/ifp_heart"
-        android:layout_toRightOf="@+id/ifp_avatar"
+        android:layout_weight="1"
         android:orientation="vertical">
 
-        <include layout="@layout/item_feed_part_name" />
+        <include
+            layout="@layout/item_feed_part_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <include
             android:id="@+id/ifp_text"
@@ -29,4 +25,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
-</RelativeLayout>
+
+    <ImageView
+        android:id="@+id/ifp_heart"
+        style="@style/FeedHeart.Selector" />
+</LinearLayout>

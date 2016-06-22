@@ -18,14 +18,16 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.StandardMessageSendRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.utils.FormItem;
 
 import java.util.LinkedList;
 
+@FlurryOpenEvent(name = UserFormFragment.PAGE_NAME)
 public class UserFormFragment extends AbstractFormFragment implements OnClickListener {
 
-    private static final String PAGE_NAME = "user.form";
+    public static final String PAGE_NAME = "user.form";
 
     private ViewGroup mEmptyFormLayout;
     private Button mAskToFillForm;
@@ -47,11 +49,6 @@ public class UserFormFragment extends AbstractFormFragment implements OnClickLis
     @Override
     protected AbstractFormListAdapter createFormAdapter(Context context) {
         return new UserFormListAdapter(context, false);
-    }
-
-    @Override
-    protected String getScreenName() {
-        return PAGE_NAME;
     }
 
     @Override

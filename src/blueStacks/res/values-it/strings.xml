@@ -451,7 +451,6 @@
   <string name="reselect_city">Scegli un’altra città:</string>
   <string name="choose_cool_photo">Scegli la tua foto migliore e lo stato che rispecchia il tuo
         umore!</string>
-  <string name="email_confirmed">l’indirizzo e-mail è stato verificato!</string>
   <string name="sympathy_sended">Simpatia inviata</string>
   <string name="general_photo_deleted">La tua foto non rispetta il regolamento ed è stata
         eliminata</string>
@@ -748,7 +747,8 @@
   <string name="settings_check_vip_alert">Richiesta di verifica inviata</string>
   <string name="novice_sympathy">Invia le simpatie solo alle persone che ti\npiacciono
         veramente\nper iniziare una piacevole relazione</string>
-  <string name="go_dating_message">Comincia a fare conoscenze e in questa sezione vedrai gli utenti che hanno visitato il tuo profilo</string>
+  <string name="go_dating_message">Comincia a fare conoscenze ed in questa sezione vedrai gli utenti
+        che hanno visitato il tuo profilo</string>
   <string name="photo_not_from_main_album">Non puoi impostare questa foto come profilo perché non conforme ai canoni della moderazione</string>
   <string name="sidebar_vk_profile">Profilo Vkontakte</string>
   <string name="title_vk_profile">Profilo VKontakte</string>
@@ -805,4 +805,5 @@
   <string name="crown_liberty_description">Spicca facilmente tra le Ricerche e i Messaggi</string>
   <string name="like_liberty_title">Mi piace</string>
   <string name="like_liberty_description">Scopri a chi piaci</string>
+  <string name="refill_balance_view_title">Il tuo saldo</string>
 </resources>

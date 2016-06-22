@@ -3,16 +3,11 @@ package com.topface.topface.ui.fragments.buy;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.topface.topface.App;
 import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
-
-import java.lang.Override;
 
 import static com.topface.topface.ui.fragments.buy.PurchasesConstants.ARG_TAG_SOURCE;
 
@@ -32,14 +27,14 @@ public class TransparentMarketFragment extends GoogleMarketBuyingFragment implem
         final TransparentMarketFragment fragment = new TransparentMarketFragment();
         Bundle bundle = new Bundle();
         bundle.putString(TransparentMarketFragment.PRODUCT_ID, skuId);
-        bundle.putString(ARG_TAG_SOURCE, from);
         bundle.putBoolean(TransparentMarketFragment.IS_SUBSCRIPTION, isSubscription);
+        bundle.putString(ARG_TAG_SOURCE, from);
         fragment.setArguments(bundle);
         return fragment;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         Bundle bundle = getArguments();
         if (null != bundle) {
             if (getArguments().containsKey(PRODUCT_ID)) {
@@ -52,7 +47,7 @@ public class TransparentMarketFragment extends GoogleMarketBuyingFragment implem
                 mFrom = getArguments().getString(ARG_TAG_SOURCE, "");
             }
         }
-        return super.onCreateView(inflater, container, savedInstanceState);
+        super.onCreate(savedInstanceState);
     }
 
     public void onOpenIabSetupFinished(boolean normaly) {
@@ -96,12 +91,16 @@ public class TransparentMarketFragment extends GoogleMarketBuyingFragment implem
     @Override
     public void onResume() {
         super.onResume();
-        if (mPurchaseActions != null && isNeedCloseFragment) {
-            mPurchaseActions.onPopupClosed();
-        }
         //Устанавливаем тестовые покупки
         if (isTestPurchasesAvailable()) {
             setTestPaymentsState(App.getUserConfig().getTestPaymentFlag());
+        }
+        if (mPurchaseActions != null && isNeedCloseFragment) {
+            if (isAdded()) {
+                getActivity().getSupportFragmentManager().
+                        beginTransaction().remove(this).commit();
+            }
+            mPurchaseActions.onPopupClosed();
         }
     }
 

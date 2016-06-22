@@ -11,7 +11,7 @@ import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -96,11 +96,6 @@ import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import butterknife.OnTouch;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.functions.Action1;
-import rx.functions.Func1;
 
 import static com.topface.topface.utils.CountersManager.NULL_METHOD;
 
@@ -134,15 +129,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private TextView mActionModeTitle;
     private Boolean isNeedFirstShowListDelay = null;
     private CountDownTimer mListShowDelayCountDownTimer;
-    private Subscriber<? super FeedList<T>> mResponseSubscriber;
-    private Subscription mCacheSubscription;
-    private Subscription mResponseSubscription;
-    private Func1<FeedList<T>, Boolean> mFilterNotNull = new Func1<FeedList<T>, Boolean>() {
-        @Override
-        public Boolean call(FeedList<T> ts) {
-            return ts != null && !ts.isEmpty();
-        }
-    };
+    private boolean isDataFromCache;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -295,7 +282,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     };
 
-    private FeedRequest.UnreadStatePair mLastUnreadState = new FeedRequest.UnreadStatePair();
+    private FeedRequest.UnreadStatePair mLastUnreadState = new FeedRequest.UnreadStatePair(true, false);
     private View mInflated;
     protected CountersData mCountersData = new CountersData();
 
@@ -309,18 +296,18 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mRefreshReceiver, new IntentFilter(REFRESH_DIALOGS));
         View root = inflater.inflate(getLayout(), null);
         ButterKnife.bind(this, root);
+        initNavigationBar();
+        mLockView.setVisibility(View.GONE);
+        init();
+        initViews(root);
+        useCacheData();
+        restoreInstanceState(saved);
         mCountersDataProvider = new CountersDataProvider(new CountersDataProvider.ICountersUpdater() {
             @Override
             public void onUpdateCounters(CountersData countersData) {
                 updateCounters(countersData);
             }
         });
-        initNavigationBar();
-        mLockView.setVisibility(View.GONE);
-        init();
-        initViews(root);
-        createObservables();
-        restoreInstanceState(saved);
         mReadItemReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -474,50 +461,23 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     abstract protected Class getFeedListItemClass();
 
-    private void createObservables() {
+    private void useCacheData() {
         updateData(false, true, false);
         final FeedsCache.FEEDS_TYPE type = getFeedsType();
         if (type != FeedsCache.FEEDS_TYPE.UNKNOWN_TYPE) {
             final Type dataType = getFeedListDataType();
             String fromCacheString = App.getFeedsCache().getFeedFromCache(type);
-            mCacheSubscription = Observable
-                    .just((FeedList<T>) JsonUtils.fromJson(fromCacheString, dataType))
-                    .filter(mFilterNotNull)
-                    .subscribe(new Action1<FeedList<T>>() {
-                        @Override
-                        public void call(FeedList<T> ts) {
-                            Debug.log("OBSERVABLE mCacheSubscription " + type + " size " + ts.size());
-                            processSuccessUpdate(new FeedListData<>(ts, true, getFeedListItemClass()));
-                        }
-                    });
-            mResponseSubscription = Observable.create(new Observable.OnSubscribe<FeedList<T>>() {
-                @Override
-                public void call(Subscriber<? super FeedList<T>> subscriber) {
-                    mResponseSubscriber = subscriber;
+            FeedList<T> feedList = JsonUtils.fromJson(fromCacheString, dataType);
+            FeedAdapter<T> adapter = getListAdapter();
+            if (feedList != null && !feedList.isEmpty()) {
+                if (adapter != null && adapter.getCount() == 0) {
+                    isDataFromCache = true;
+                    adapter.addData(new FeedListData<>(feedList, true, getFeedListItemClass()));
+                    adapter.notifyDataSetChanged();
+                    showListViewWithSuccessResponse();
                 }
-            })
-                    .first()
-                    .filter(mFilterNotNull)
-                    .subscribe(new Action1<FeedList<T>>() {
-                        @Override
-                        public void call(FeedList<T> ts) {
-                            Debug.log("OBSERVABLE mResponseSubscription " + type + " size " + ts.size());
-                            unsubscribeAllObservable();
-                            processSuccessUpdate(new FeedListData<>(ts, true, getFeedListItemClass()));
-                        }
-                    });
+            }
         }
-    }
-
-    private void unsubscribeAllObservable() {
-        if (!mCacheSubscription.isUnsubscribed()) {
-            mCacheSubscription.unsubscribe();
-        }
-        mResponseSubscriber = null;
-    }
-
-    private void processSuccessUpdate(FeedListData<T> tFeedListData) {
-        processSuccessUpdate(tFeedListData, false, false, false, tFeedListData.items.size());
     }
 
     @Override
@@ -555,12 +515,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onPause() {
         super.onPause();
-        if (mResponseSubscription != null && !mResponseSubscription.isUnsubscribed()) {
-            mResponseSubscription.unsubscribe();
-        }
-        if (mCacheSubscription != null && !mCacheSubscription.isUnsubscribed()) {
-            mCacheSubscription.unsubscribe();
-        }
         saveToCache();
         finishMultiSelection();
     }
@@ -586,7 +540,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (mListAdapter != null) {
             FeedList<T> data = mListAdapter.getData();
             outState.putParcelableArray(FEEDS, data.toArray(new Parcelable[data.size()]));
-            outState.putInt(POSITION, mListView.getFirstVisiblePosition());
+            outState.putInt(POSITION, mListView != null ? mListView.getFirstVisiblePosition() : 0);
             outState.putBoolean(HAS_AD, mListAdapter.hasFeedAd());
             outState.putParcelable(FEED_AD, mListAdapter.getFeedAd());
             outState.putInt(BLACK_LIST_USER, mIdForRemove);
@@ -689,7 +643,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     protected boolean listOnItemLongClickListener(final long itemPosition) {
         if (isDeletable) {
             FeedAdapter<T> adapter = getListAdapter();
-            ((ActionBarActivity) getActivity()).startSupportActionMode(mActionActivityCallback);
+            ((AppCompatActivity) getActivity()).startSupportActionMode(mActionActivityCallback);
             adapter.startMultiSelection(getMultiSelectionLimit());
             adapter.onSelection((int) itemPosition);
             return true;
@@ -804,7 +758,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         //Open chat activity
         if (!item.user.isEmpty()) {
             FeedUser user = item.user;
-            Intent intent = ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city.name
+            Intent intent = ChatActivity.createIntent(user.id, user.sex, user.getNameAndAge(), user.city.name
                     , null, user.photo, false, item.type, user.banned);
             startActivityForResult(intent, ChatActivity.REQUEST_CHAT);
         }
@@ -893,19 +847,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
                 @Override
                 protected void success(FeedListData<T> data, IApiResponse response) {
-                    if (mResponseSubscriber != null && !mResponseSubscriber.isUnsubscribed()) {
-                        if (data != null) {
-                            if (data.items.isEmpty()) {
-                                unsubscribeAllObservable();
-                                processSuccessUpdate(data, isHistoryLoad, isPullToRefreshUpdating, makeItemsRead, request.getLimit());
-                            } else {
-                                mResponseSubscriber.onNext(data.items);
-                            }
-                        }
-                    } else {
-                        processSuccessUpdate(data, isHistoryLoad, isPullToRefreshUpdating, makeItemsRead, request.getLimit());
-                    }
-
+                    processSuccessUpdate(data, isHistoryLoad, isPullToRefreshUpdating, makeItemsRead, request.getLimit());
+                    isDataFromCache = false;
                 }
 
                 @Override
@@ -970,7 +913,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
 
         if (isHistoryLoad) {
-            removeOldDublicates(data);
+            if (isDataFromCache) {
+                adapter.removeAllData();
+            } else {
+                removeOldDuplicates(data);
+            }
             adapter.addData(data);
         } else if (isPullToRefreshUpdating) {
             if (makeItemsRead) {
@@ -980,7 +927,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 if (adapter.getCount() >= limit) {
                     data.more = true;
                 }
-                removeOldDublicates(data);
+                removeOldDuplicates(data);
                 adapter.addDataFirst(data);
             } else {
                 adapter.notifyDataSetChanged();
@@ -1000,7 +947,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     }
 
-    protected void removeOldDublicates(FeedListData<T> data) {
+    protected void removeOldDuplicates(FeedListData<T> data) {
         Iterator<T> feedsIterator = getListAdapter().getData().iterator();
         while (feedsIterator.hasNext()) {
             T feed = feedsIterator.next();
@@ -1371,7 +1318,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             @Override
             public void isAvailable(final boolean available) {
                 if (available) {
-                    new UnlockFunctionalityOptionsRequest(getActivity()).callback(new DataApiHandler<UnlockFunctionalityOption>() {
+                    new UnlockFunctionalityOptionsRequest(App.getContext()).callback(new DataApiHandler<UnlockFunctionalityOption>() {
                         @Override
                         public void fail(int codeError, IApiResponse response) {
 
@@ -1405,7 +1352,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                     @Override
                     public void onVideoWatched() {
                         super.onVideoWatched();
-                        new UnlockFunctionalityRequest(unlockType, getContext()).callback(new ApiHandler() {
+                        new UnlockFunctionalityRequest(unlockType, App.getContext()).callback(new ApiHandler() {
                             @Override
                             public void success(IApiResponse response) {
                                 updateData(false, false);

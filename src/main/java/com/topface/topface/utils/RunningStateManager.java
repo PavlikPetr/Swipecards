@@ -1,5 +1,9 @@
 package com.topface.topface.utils;
 
+import com.topface.topface.App;
+import com.topface.topface.data.ActivityLifreCycleData;
+import com.topface.topface.state.LifeCycleState;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -8,16 +12,51 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.inject.Inject;
+
+import rx.functions.Action1;
+import rx.functions.Func1;
+
 /**
  * Created by ppetr on 14.03.16.
  * We need it to detect moment when app go background/foreground
  */
 public class RunningStateManager {
+    @Inject
+    LifeCycleState mLifeCycleState;
     private ConcurrentHashMap<String, Long> mActivitiesState;
     private List<OnAppChangeStateListener> mOnAppChangeStateListeners;
     private long mAppStartTime;
 
-    public void onActivityStarted(String activityName) {
+    public RunningStateManager() {
+        App.get().inject(this);
+        mLifeCycleState.getObservable(ActivityLifreCycleData.class)
+                .filter(new Func1<ActivityLifreCycleData, Boolean>() {
+                    @Override
+                    public Boolean call(ActivityLifreCycleData activityLifreCycleData) {
+                        return activityLifreCycleData != null
+                                && (activityLifreCycleData.getState() == ActivityLifreCycleData.STARTED
+                                || activityLifreCycleData.getState() == ActivityLifreCycleData.STOPPED);
+                    }
+                })
+                .subscribe(new Action1<ActivityLifreCycleData>() {
+                    @Override
+                    public void call(ActivityLifreCycleData activityLifreCycleData) {
+                        if (activityLifreCycleData.getState() == ActivityLifreCycleData.STARTED) {
+                            onActivityStarted(activityLifreCycleData.getClassName());
+                        } else if (activityLifreCycleData.getState() == ActivityLifreCycleData.STOPPED) {
+                            onActivityStopped(activityLifreCycleData.getClassName());
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+                });
+    }
+
+    private void onActivityStarted(String activityName) {
         long timeStart = getCurrentTime();
         synchronized (getActivitiesState()) {
             if (getActivitiesState().isEmpty()) {
@@ -28,7 +67,7 @@ public class RunningStateManager {
         }
     }
 
-    public void onActivityStoped(String activityName) {
+    private void onActivityStopped(String activityName) {
         synchronized (getActivitiesState()) {
             getActivitiesState().remove(activityName);
             if (getActivitiesState().isEmpty()) {

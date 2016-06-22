@@ -34,6 +34,7 @@ import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.LikesListAdapter;
@@ -63,6 +64,7 @@ import rx.functions.Action1;
 
 import static com.topface.topface.utils.FlurryManager.LIKES_UNLOCK;
 
+@FlurryOpenEvent(name = LikesFragment.PAGE_NAME)
 public class LikesFragment extends FeedFragment<FeedLike> {
 
     public static final String PREFERENCES_PAID_LIKES_COUNT = "paid_likes_count";
@@ -78,7 +80,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     public static final int SECOND_CHILD = 1;
     public static final int THIRD_CHILD = 2;
 
-    private static final String PAGE_NAME = "Likes";
+    public static final String PAGE_NAME = "Likes";
 
     @Inject
     TopfaceAppState mAppState;
@@ -97,11 +99,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     @Override
     protected boolean isReadFeedItems() {
         return true;
-    }
-
-    @Override
-    protected String getScreenName() {
-        return PAGE_NAME;
     }
 
     @Override
@@ -188,19 +185,31 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         return FeedsCache.FEEDS_TYPE.DATA_LIKES_FEEDS;
     }
 
-    private void onMutual(@NotNull FeedList<FeedLike> items) {
+    private void onMutual(final @NotNull FeedList<FeedLike> items) {
         if (items.size() > 0) {
             FeedLike item = items.getFirst();
             if (!(item.user.deleted || item.user.banned)) {
-                for (FeedLike feedLike : items) {
-                    if (!feedLike.mutualed) {
-                        feedLike.mutualed = true;
-                        getListAdapter().notifyDataSetChanged();
+                markUsersLikes(items, true);
+                mRateController.onLike(item.user.id, 0, new RateController.OnRateRequestListener() {
+                    @Override
+                    public void onRateCompleted(int mutualId, int ratedUserId) {
+                        Utils.showToastNotification(R.string.general_mutual, Toast.LENGTH_SHORT);
                     }
-                }
-                mRateController.onLike(item.user.id, 0, null, App.from(getActivity()).getOptions().blockUnconfirmed);
-                Utils.showToastNotification(R.string.general_mutual, Toast.LENGTH_SHORT);
+
+                    @Override
+                    public void onRateFailed(int userId, int mutualId) {
+                        markUsersLikes(items, false);
+                        Utils.showToastNotification(R.string.confirm_email_for_dating, Toast.LENGTH_SHORT);
+                    }
+                }, App.from(getActivity()).getOptions().blockUnconfirmed);
             }
+        }
+    }
+
+    private void markUsersLikes(@NotNull FeedList<FeedLike> items, boolean isMutualed) {
+        for (FeedLike feedLike : items) {
+            feedLike.mutualed = isMutualed;
+            getListAdapter().notifyDataSetChanged();
         }
     }
 
@@ -463,7 +472,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     private void sendLikeReadRequest(int senderId) {
-        new ReadLikeRequest(getActivity(), senderId, AdmobInterstitialUtils.canShowInterstitialAds()).exec();
+        new ReadLikeRequest(getActivity(), senderId).exec();
     }
 
     @Override

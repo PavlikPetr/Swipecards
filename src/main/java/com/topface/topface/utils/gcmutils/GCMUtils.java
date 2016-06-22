@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
@@ -18,13 +19,13 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.data.experiments.FeedScreensIntent;
+import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.UserProfileActivity;
-import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.MutualFragment;
@@ -36,6 +37,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.notifications.UserNotificationManager;
@@ -47,10 +49,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.GEO;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_LIKES;
-import static com.topface.topface.ui.fragments.BaseFragment.FragmentId.TABBED_VISITORS;
+import static com.topface.topface.data.leftMenu.FragmentIdData.GEO;
+import static com.topface.topface.data.leftMenu.FragmentIdData.TABBED_DIALOGS;
+import static com.topface.topface.data.leftMenu.FragmentIdData.TABBED_LIKES;
+import static com.topface.topface.data.leftMenu.FragmentIdData.TABBED_VISITORS;
 
 public class GCMUtils {
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
@@ -99,6 +103,7 @@ public class GCMUtils {
      * Extras key for additon gcm message label.
      */
     public static final String GCM_LABEL = "GCM_LABEL";
+    private static AtomicBoolean mIsTokenSent = new AtomicBoolean();
 
     public GCMUtils(Context context) {
         mContext = context;
@@ -108,34 +113,49 @@ public class GCMUtils {
         String oldToken = getGcmToken();
         if (!token.equals(oldToken)) {
             sendTokenToBackend(token);
+        } else {
+            Debug.log("GCM_registration_token tokens equals");
         }
     }
 
     private void sendTokenToBackend(final String token) {
-        Debug.log("GCM: Try send token to server: ", token);
-        new RegistrationTokenRequest(token, mContext).callback(new ApiHandler() {
-            @Override
-            public void success(IApiResponse response) {
-                Debug.log("GCM: OK send token ");
-                storeToken(token);
-            }
+        Debug.log("GCM_registration_token Try send token to server: ", token);
+        if (!mIsTokenSent.get()) {
+            mIsTokenSent.set(true);
+            new RegistrationTokenRequest(token, mContext).callback(new ApiHandler(Looper.getMainLooper()) {
+                @Override
+                public void success(IApiResponse response) {
+                    Debug.log("GCM_registration_token OK send token ");
+                    storeToken(token);
+                }
 
-            @Override
-            public void fail(int codeError, IApiResponse response) {
-                Debug.log("GCM: fail send token to server: ");
-            }
-        }).exec();
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+                    Debug.log("GCM_registration_token fail send token to server: ");
+                }
+
+                @Override
+                public void always(IApiResponse response) {
+                    super.always(response);
+                    mIsTokenSent.set(false);
+                }
+            }).exec();
+        } else {
+            Debug.log("GCM_registration_token this token already sent: ", token);
+        }
     }
 
     private void storeToken(String token) {
         AppConfig config = App.getAppConfig();
-        config.setGcmRegId(token);
         config.saveLastAppVersion();
         config.saveConfig();
+        SessionConfig sessionConfig = App.getSessionConfig();
+        sessionConfig.setGcmRegId(token);
+        sessionConfig.saveConfig();
     }
 
     private String getGcmToken() {
-        String token = App.getAppConfig().getGcmRegId();
+        String token = App.getSessionConfig().getGcmRegId();
         if (token.isEmpty()) {
             Debug.log("No reg id");
             return "";
@@ -282,7 +302,7 @@ public class GCMUtils {
     }
 
     private static void setCounters(Bundle data, Context context) {
-        CountersManager counterManager = CountersManager.getInstance(context);
+        final CountersManager counterManager = CountersManager.getInstance(context);
         counterManager.setLastRequestMethod(CountersManager.CHANGED_BY_GCM);
         try {
             String countersStr = data.getString("counters");
@@ -293,8 +313,13 @@ public class GCMUtils {
             }
             String balanceStr = data.getString("balance");
             if (balanceStr != null) {
-                JSONObject balanceJson = new JSONObject(balanceStr);
-                counterManager.setBalanceCounters(balanceJson);
+                final JSONObject balanceJson = new JSONObject(balanceStr);
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        counterManager.setBalanceCounters(balanceJson);
+                    }
+                });
             }
         } catch (JSONException e) {
             Debug.error(e);
@@ -363,12 +388,12 @@ public class GCMUtils {
                 if (getUsersCountInMessageStack(user) > 1) {
                     // create intent to open Dialogs
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(GCMUtils.NEXT_INTENT, BaseFragment.FragmentId.TABBED_DIALOGS.getFragmentSettings());
+                    i.putExtra(GCMUtils.NEXT_INTENT, new LeftMenuSettingsData(TABBED_DIALOGS));
                     i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, DialogsFragment.class.getName());
                     // add the same request code like Chat intent
                     i.putExtra(App.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
                 } else {
-                    return ChatActivity.createIntent(user.id, user.getNameAndAge(), user.city,
+                    return ChatActivity.createIntent(user.id, user.sex, user.getNameAndAge(), user.city,
                             null, null, true, null, false);
                 }
                 return i;
@@ -377,18 +402,18 @@ public class GCMUtils {
         return null;
     }
 
-    private static Intent getIntentByType(Context context, int type, User user, String ё) {
+    private static Intent getIntentByType(Context context, int type, User user, String updateUrl) {
         Intent i = null;
         switch (type) {
             case GCM_TYPE_MESSAGE:
             case GCM_TYPE_GIFT:
-                i = openChat(context, user, GCM_TYPE_MESSAGE);
+                i = openChat(context, user, type);
                 break;
             case GCM_TYPE_MUTUAL:
                 if (showSympathy) {
                     lastNotificationType = GCM_TYPE_MUTUAL;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, TABBED_LIKES.getFragmentSettings());
+                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_LIKES));
                     i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, MutualFragment.class.getName());
                 }
                 break;
@@ -397,7 +422,7 @@ public class GCMUtils {
                 if (showLikes) {
                     lastNotificationType = GCM_TYPE_LIKE;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, TABBED_LIKES.getFragmentSettings());
+                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_LIKES));
                     i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, LikesFragment.class.getName());
                 }
                 break;
@@ -407,13 +432,13 @@ public class GCMUtils {
                     lastNotificationType = GCM_TYPE_GUESTS;
                     i = new Intent(context, NavigationActivity.class);
                     i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, VisitorsFragment.class.getName());
-                    i.putExtra(NEXT_INTENT, TABBED_VISITORS.getFragmentSettings());
+                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_VISITORS));
                 }
                 break;
             case GCM_TYPE_PEOPLE_NEARBY:
                 lastNotificationType = GCM_TYPE_PEOPLE_NEARBY;
                 i = new Intent(context, NavigationActivity.class);
-                i.putExtra(NEXT_INTENT, GEO.getFragmentSettings());
+                i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(GEO));
                 break;
             case GCM_TYPE_UPDATE:
                 i = Utils.getMarketIntent();
@@ -459,6 +484,7 @@ public class GCMUtils {
                 if (type == lastNotificationType) {
                     int id;
                     switch (type) {
+                        case GCM_TYPE_GIFT:
                         case GCM_TYPE_MESSAGE:
                         case GCM_TYPE_DIALOGS:
                             id = UserNotificationManager.MESSAGES_ID;

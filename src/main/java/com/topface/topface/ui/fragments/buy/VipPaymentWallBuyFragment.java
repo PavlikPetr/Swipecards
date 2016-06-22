@@ -8,14 +8,16 @@ import com.topface.topface.App;
 import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.Products;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.statistics.PushButtonVipUniqueStatistics;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.utils.CacheProfile;
 
+@FlurryOpenEvent(name = VipPaymentWallBuyFragment.PAGE_NAME)
 public class VipPaymentWallBuyFragment extends VipBuyFragment {
 
-    private static final String PAGE_NAME = "buy.vip.pw";
+    public static final String PAGE_NAME = "buy.vip.pw";
 
     public static VipPaymentWallBuyFragment newInstance(boolean needActionBar, String from, PaymentWallProducts.TYPE type, String text) {
         VipPaymentWallBuyFragment fragment = new VipPaymentWallBuyFragment();
@@ -30,11 +32,6 @@ public class VipPaymentWallBuyFragment extends VipBuyFragment {
         }
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    protected String getScreenName() {
-        return PAGE_NAME;
     }
 
     @Override

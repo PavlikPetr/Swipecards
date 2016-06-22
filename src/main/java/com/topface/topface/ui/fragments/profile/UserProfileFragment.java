@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Gift;
@@ -38,6 +39,7 @@ import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.fragments.ChatFragment;
@@ -45,10 +47,16 @@ import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
 
 /**
  * Created by kirussell on 18.03.14.
@@ -77,6 +85,9 @@ public class UserProfileFragment extends AbstractProfileFragment {
     private String mUserNameAndAge;
     private String mUserCity;
     private Photo mPhoto;
+    @Inject
+    TopfaceAppState mState;
+    Subscription mBalanceSubscription;
 
     @Override
     public void onAttach(Context context) {
@@ -98,7 +109,16 @@ public class UserProfileFragment extends AbstractProfileFragment {
     @SuppressWarnings("ConstantConditions")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        App.get().inject(this);
         View root = super.onCreateView(inflater, container, savedInstanceState);
+        mBalanceSubscription = mState.getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
+            @Override
+            public void call(BalanceData balanceData) {
+                if (!isAddToFavoriteAvailable() && balanceData.premium) {
+                    setIsAddToFavoritsAvailable(balanceData.premium);
+                }
+            }
+        });
         if (mItemId != null) {
             Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ);
             intent.putExtra(ChatFragment.INTENT_ITEM_ID, mItemId);
@@ -138,6 +158,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        RxUtils.safeUnsubscribe(mBalanceSubscription);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mGiftReceiver);
     }
 
@@ -430,7 +451,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
                     public Intent getOpenChatIntent() {
                         Profile profile = getProfile();
                         if (profile != null) {
-                            return ChatActivity.createIntent(profile.uid, profile.getNameAndAge(),
+                            return ChatActivity.createIntent(profile.uid, profile.sex, profile.getNameAndAge(),
                                     profile.city == null ? "" : profile.city.name,
                                     null, profile.photo, false, null, getUser().banned);
                         }

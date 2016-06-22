@@ -2,7 +2,6 @@ package com.topface.topface.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 
 import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
@@ -13,18 +12,17 @@ import com.topface.topface.data.search.UsersList;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
+import com.topface.topface.requests.ReadLikeRequest;
 import com.topface.topface.requests.SendAdmirationRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.cache.SearchCacheManager;
 
+import static com.topface.topface.requests.SendLikeRequest.FROM_FEED;
 import static com.topface.topface.utils.FlurryManager.SEND_ADMIRATION;
 
 public class RateController {
-
-    public static final String USER_RATED = "com.topface.topface.USER_RATED";
-    public static final String USER_ID_EXTRA = "user_id";
 
     @SendLikeRequest.Place
     private final int mPlace;
@@ -32,7 +30,7 @@ public class RateController {
     private OnRateControllerListener mOnRateControllerUiListener;
 
     public RateController(final Context context, @SendLikeRequest.Place int place) {
-        mContext = context;
+        mContext = context.getApplicationContext();
         mPlace = place;
     }
 
@@ -45,7 +43,8 @@ public class RateController {
             , final OnRateRequestListener requestListener, Options options) {
         if (balanceData.money < options.priceAdmiration) {
             mContext.startActivity(PurchasesActivity.createBuyingIntent("RateAdmiration"
-                    , PurchasesFragment.TYPE_ADMIRATION, options.priceAdmiration, options.topfaceOfferwallRedirect));
+                    , PurchasesFragment.TYPE_ADMIRATION, options.priceAdmiration, options.topfaceOfferwallRedirect)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             if (mOnRateControllerUiListener != null) {
                 mOnRateControllerUiListener.failRate();
             }
@@ -64,13 +63,14 @@ public class RateController {
             @Override
             protected void success(Rate rate, IApiResponse response) {
                 if (sendLike.getServiceName().equals(SendAdmirationRequest.service)) {
-                    FlurryManager.getInstance().sendSpendCoinsEvent(CacheProfile.getOptions().priceAdmiration, SEND_ADMIRATION);
+                    FlurryManager.getInstance().sendSpendCoinsEvent(App.get().getOptions().priceAdmiration, SEND_ADMIRATION);
+                }
+                if (mPlace == FROM_FEED) {
+                    new ReadLikeRequest(sendLike.getContext(), sendLike.getUserid()).exec();
                 }
                 if (listener != null) {
-                    listener.onRateCompleted(sendLike.getMutualid());
+                    listener.onRateCompleted(sendLike.getMutualid(), sendLike.getUserid());
                 }
-                // Broadcast to disable dating rate buttons for current user
-                userRateBroadcast(sendLike.getUserid());
 
                 /* Update dating search cache for situations when it's fragment is destroyed
                    and it will be restored from cache
@@ -121,12 +121,6 @@ public class RateController {
         mOnRateControllerUiListener = onRateControllerUiListener;
     }
 
-    public void userRateBroadcast(int userId) {
-        Intent intent = new Intent(USER_RATED);
-        intent.putExtra(USER_ID_EXTRA, userId);
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
-    }
-
     /**
      * Interface for UI callbacks
      */
@@ -140,7 +134,7 @@ public class RateController {
      * Interface for api request callbacks
      */
     public interface OnRateRequestListener {
-        void onRateCompleted(int mutualId);
+        void onRateCompleted(int mutualId, int ratedUserId);
 
         void onRateFailed(int userId, int mutualId);
     }

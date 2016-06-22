@@ -27,8 +27,8 @@ import com.topface.topface.data.Products;
 import com.topface.topface.data.PurchasesTabData;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.statistics.FlurryUtils;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
-import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.utils.CacheProfile;
@@ -38,7 +38,6 @@ import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 import javax.inject.Inject;
 
@@ -105,7 +104,7 @@ public class PurchasesFragment extends BaseFragment {
                 mTabLayoutCreator.setTabTitle(position);
             }
             if (mPagerAdapter != null) {
-                ((TrackedFragment) mPagerAdapter.getItem(position)).onResumeFragment();
+                FlurryUtils.sendOpenEvent(mPagerAdapter.getClassNameByPos(position));
             }
             setResourceInfoText();
             if (position == mPagerAdapter.getTabIndex(PurchasesTabData.BONUS)) {
@@ -200,26 +199,26 @@ public class PurchasesFragment extends BaseFragment {
         return mSkipBonus;
     }
 
-    private void createTabList(LinkedList<PurchasesTabData> list) {
-        for (PurchasesTabData tab : list)
+    private void createTabList(ArrayList<PurchasesTabData> list) {
+        for (PurchasesTabData tab : list) {
             mPagesTitle.add(tab.name.toUpperCase());
+        }
     }
 
     private void initViews(View root, Bundle savedInstanceState) {
         Bundle args = getArguments();
-        final Options options = App.from(getActivity()).getOptions();
+        final Options options = App.get().getOptions();
         mIsVip = args.getBoolean(IS_VIP_PRODUCTS, false);
         args.putString(PurchasesConstants.ARG_RESOURCE_INFO_TEXT, mResourceInfoText == null ? getInfoText() : mResourceInfoText);
-
         Options.TabsList tabs;
         //Для того, что бы при изменении текста плавно менялся лейаут, без скачков
         Utils.enableLayoutChangingTransition((ViewGroup) root.findViewById(R.id.purchaseLayout));
         if (mIsVip) {
             tabs = new Options.TabsList();
-            tabs.list.addAll(options.premiumTabs.list);
+            tabs.list.addAll(options.payments.premium.list);
         } else {
             tabs = new Options.TabsList();
-            tabs.list.addAll(options.otherTabs.list);
+            tabs.list.addAll(options.payments.other.list);
         }
         removeExcessTabs(tabs.list); //Убираем табы в которых нет продуктов и бонусную вкладку, если фрагмент для покупки випа
         createTabList(tabs.list);
@@ -238,7 +237,7 @@ public class PurchasesFragment extends BaseFragment {
         }
     }
 
-    private void removeExcessTabs(LinkedList<PurchasesTabData> tabs) {
+    private void removeExcessTabs(ArrayList<PurchasesTabData> tabs) {
         boolean isVip = getArguments().getBoolean(IS_VIP_PRODUCTS, false);
         for (Iterator<PurchasesTabData> iterator = tabs.iterator(); iterator.hasNext(); ) {
             PurchasesTabData tab = iterator.next();

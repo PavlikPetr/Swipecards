@@ -1,11 +1,10 @@
 package com.topface.topface.ui;
 
 import android.app.Application;
-import android.content.Context;
-import android.support.multidex.MultiDex;
 
 import com.topface.topface.App;
 import com.topface.topface.data.Products;
+import com.topface.topface.modules.TopfaceModule;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -37,5 +36,9 @@ public abstract class ApplicationBase extends Application {
             }
         });
         return request;
+    }
+
+    public Object[] getDaggerModules() {
+        return new Object[]{new TopfaceModule()};
     }
 }

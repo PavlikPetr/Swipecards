@@ -9,16 +9,21 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedBookmark;
+import com.topface.topface.data.leftMenu.FragmentIdData;
+import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
+import com.topface.topface.data.leftMenu.NavigationState;
+import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.adapters.BookmarksListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
-import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.config.FeedsCache;
 
@@ -27,11 +32,17 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import javax.inject.Inject;
+
+@FlurryOpenEvent(name = BookmarksFragment.PAGE_NAME)
 public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
 
     public static final int SELECTION_LIMIT = 10;
 
-    private static final String PAGE_NAME = "Bookmarks";
+    @Inject
+    NavigationState mNavigationState;
+
+    public static final String PAGE_NAME = "Bookmarks";
 
     private BroadcastReceiver mBookmarkedReceiver = new BroadcastReceiver() {
         @Override
@@ -54,11 +65,6 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     };
 
     @Override
-    protected String getScreenName() {
-        return PAGE_NAME;
-    }
-
-    @Override
     protected Type getFeedListDataType() {
         return new TypeToken<FeedList<FeedBookmark>>() {
         }.getType();
@@ -77,6 +83,7 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.get().inject(this);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBookmarkedReceiver,
                 new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
     }
@@ -132,7 +139,7 @@ public class BookmarksFragment extends NoFilterFeedFragment<FeedBookmark> {
         inflated.findViewById(R.id.btnStartRate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MenuFragment.selectFragment(FragmentId.DATING.getFragmentSettings());
+                mNavigationState.emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.DATING), WrappedNavigationData.SELECT_EXTERNALY));
             }
         });
     }

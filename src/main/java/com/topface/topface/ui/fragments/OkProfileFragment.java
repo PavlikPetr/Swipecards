@@ -14,6 +14,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.databinding.OkProfileFragmentBinding;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.Utils;
@@ -27,9 +28,10 @@ import rx.Subscription;
 import rx.functions.Action0;
 import rx.functions.Action1;
 
+@FlurryOpenEvent(name = OkProfileFragment.PAGE_NAME)
 public class OkProfileFragment extends ProfileInnerFragment {
 
-    private static final String PAGE_NAME = "profile.ok";
+    public static final String PAGE_NAME = "profile.ok";
 
     @Inject
     TopfaceAppState mAppState;
@@ -52,11 +54,6 @@ public class OkProfileFragment extends ProfileInnerFragment {
             }
         }
     };
-
-    @Override
-    protected String getScreenName() {
-        return PAGE_NAME;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,7 +82,7 @@ public class OkProfileFragment extends ProfileInnerFragment {
         }, new Action1<Throwable>() {
             @Override
             public void call(Throwable throwable) {
-
+                throwable.printStackTrace();
             }
         }, new Action0() {
             @Override
@@ -105,7 +102,7 @@ public class OkProfileFragment extends ProfileInnerFragment {
     }
 
     private String getEmptyPhotoRes(boolean isBoy) {
-        return String.format(App.getCurrentLocale(), Utils.LOCAL_RES, isBoy ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
+        return Utils.getLocalResUrl(isBoy ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar);
     }
 
     private void showProgress(boolean isEnable) {

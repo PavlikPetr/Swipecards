@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.topface.topface.App;
 import com.topface.topface.data.Products;
+import com.topface.topface.module.OkModule;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -35,5 +36,9 @@ public class ApplicationBase extends Application {
             }
         });
         return request;
+    }
+
+    public Object[] getDaggerModules() {
+        return new Object[]{new OkModule()};
     }
 }

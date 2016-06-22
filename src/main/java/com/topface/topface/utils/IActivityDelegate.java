@@ -1,7 +1,10 @@
 package com.topface.topface.utils;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.FragmentManager;
 
 /**
  * Делегат для актиити. Можно дописывать лдругие методы активити
@@ -19,4 +22,9 @@ public interface IActivityDelegate {
 
     boolean isFinishing();
 
+    PackageManager getPackageManager();
+
+    FragmentManager getSupportFragmentManager();
+
+    ContentResolver getContentResolver();
 }

@@ -16,6 +16,7 @@ import com.topface.topface.requests.IApiRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.statistics.ScruffyStatistics;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.http.HttpUtils;
 import com.topface.topface.utils.social.AuthToken;
@@ -39,6 +40,30 @@ public class ScruffyRequestManager {
     private static final int RECONNECTION_LIMIT_FOR_HTTP_SWITCH = 3;
 
     private static ScruffyRequestManager mInstance;
+    private PingPonger mPingPonger = new PingPonger(new PingPonger.IRequestManagerInteractor() {
+        @Override
+        public void ping() {
+            Debug.log("Scruffy:: PING_PONGER PING");
+            if (mWebSocket != null) {
+                mWebSocket.ping(Utils.EMPTY);
+            } else {
+                reconnect();
+            }
+        }
+
+        @Override
+        public void pong() {
+            Debug.log("Scruffy:: PING_PONGER PONG");
+            mScruffyAvailable = true;
+        }
+
+        @Override
+        public void reconnect() {
+            Debug.log("Scruffy:: PING_PONGER RECONNECT");
+            mScruffyAvailable = false;
+            ScruffyRequestManager.this.reconnect();
+        }
+    });
     private WebSocket mWebSocket;
     /**
      * Flag to allow send broadcast that connection were established to prevent send it too often
@@ -120,7 +145,7 @@ public class ScruffyRequestManager {
         mHockeySender = new HockeySender();
     }
 
-    public static ScruffyRequestManager getInstance() {
+    public synchronized static ScruffyRequestManager getInstance() {
         if (mInstance == null) {
             mInstance = new ScruffyRequestManager();
         }
@@ -257,6 +282,8 @@ public class ScruffyRequestManager {
                     //Листенер получения данных от сервера
                     webSocket.setStringCallback(mStringCallback);
                     webSocket.setClosedCallback(mClosedCallback);
+                    webSocket.setPongCallback(mPingPonger);
+                    mPingPonger.onPongReceived(Utils.EMPTY);
                     mWebSocket = webSocket;
                     if (listener != null) {
                         listener.sendConnected();
@@ -304,7 +331,8 @@ public class ScruffyRequestManager {
         ScruffyStatistics.sendScruffyTransportFallback();
         mScruffyAvailable = false;
         new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 for (ScruffyRequestHolder holder : mSentRequests.values()) {
                     holder.getRequest().exec();
                 }
@@ -321,10 +349,12 @@ public class ScruffyRequestManager {
     }
 
     public void logout() {
+        Debug.error("Scruffy::  logout");
         clearState();
     }
 
     private void clearState() {
+        mScruffyAvailable = false;
         mPendingRequests.clear();
         mSentRequests.clear();
         mConnectionEverBeenEstablished.set(false);
@@ -337,18 +367,20 @@ public class ScruffyRequestManager {
     }
 
     public void killConnection(boolean ignoreCallbacks) {
+        Debug.error("Scruffy::  killConnection");
         if (mWebSocket != null) {
             if (ignoreCallbacks) {
                 mWebSocket.setStringCallback(null);
                 mWebSocket.setClosedCallback(null);
+                mWebSocket.setPongCallback(null);
             }
             mWebSocket.close();
             mWebSocket = null;
+            mScruffyAvailable = false;
         }
     }
 
     public HockeySender getReportSender() {
-
         return mHockeySender;
     }
 

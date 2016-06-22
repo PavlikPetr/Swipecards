@@ -61,6 +61,7 @@ import com.topface.topface.requests.ResetFilterRequest;
 import com.topface.topface.requests.SearchRequest;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.SkipRateRequest;
+import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.TakePhotoStatistics;
@@ -97,11 +98,17 @@ import javax.inject.Inject;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
+import static android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
+import static android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN;
+import static android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE;
+
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
 
     private static final String CURRENT_USER = "current_user";
     private static final String PAGE_NAME = "Dating";
+    private static final String IS_SOFT_KEYBOARD_SHOW = "is_soft_keyboard_show";
+    private static final String FULLSCREEN_STATE = "fullscreen_state";
 
     @Inject
     TopfaceAppState mAppState;
@@ -126,6 +133,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private RetryViewCreator mRetryView;
     private ImageButton mRetryBtn;
     private PreloadManager<SearchUser> mPreloadManager;
+    private boolean mKeyboardWasShown = false; // по умолчанию клава закрыта
 
     private AddPhotoHelper mAddPhotoHelper;
     private Handler mHandler = new Handler() {
@@ -151,32 +159,36 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private boolean mCanSendAlbumReq = true;
     private SearchUser mCurrentUser;
     private int mCurrentStatusBarColor;
-    private BroadcastReceiver mRateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int likedUserId = intent.getExtras().getInt(RateController.USER_ID_EXTRA);
-            if (mCurrentUser != null && likedUserId == mCurrentUser.id) {
-                if (null != mDelightBtn) {
-                    mDelightBtn.setEnabled(false);
-                }
-                mMutualBtn.setEnabled(false);
-                mCurrentUser.rated = true;
-            } else if (mUserSearchList != null) {
-                for (SearchUser searchUser : mUserSearchList) {
-                    if (searchUser.id == likedUserId) {
-                        searchUser.rated = true;
-                        break;
-                    }
-                }
-            }
-        }
-    };
     private Action1<BalanceData> mBalanceAction = new Action1<BalanceData>() {
         @Override
         public void call(BalanceData balanceData) {
             mBalanceData = balanceData;
             mDatingLovePrice.setVisibility(mBalanceData.premium ? View.GONE : View.VISIBLE);
             updateResources(balanceData);
+        }
+    };
+
+    private BroadcastReceiver mUpdateActionsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            BlackListAndBookmarkHandler.ActionTypes type = (BlackListAndBookmarkHandler.ActionTypes) intent.getSerializableExtra(BlackListAndBookmarkHandler.TYPE);
+            if (type != null) {
+                switch (type) {
+                    case BLACK_LIST:
+                        skipUser(mCurrentUser);
+                        showNextUser();
+                        break;
+                    case SYMPATHY:
+                        if (null != mMutualBtn) {
+                            mMutualBtn.setEnabled(false);
+                        }
+                        if (null != mDelightBtn) {
+                            mDelightBtn.setEnabled(false);
+                        }
+                        mCurrentUser.rated = true;
+                        break;
+                }
+            }
         }
     };
 
@@ -309,37 +321,38 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private boolean isValidUserCache() {
-        if (mUserSearchList == null) {
-            mUserSearchList = new CachableSearchList<>(SearchUser.class);
-        }
-        if (!mUserSearchList.isEmpty()) {
-            for (SearchUser searchUser : mUserSearchList) {
-                if (!searchUser.city.equals(App.get().getProfile().city)) {
-                    return false;
-                }
-            }
+        UserConfig config = App.getUserConfig();
+        if (config.isUserCityChanged()) {
+            config.setUserCityChanged(false);
+            config.saveConfig();
+            return false;
         }
         return true;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        mKeyboardWasShown = savedInstanceState != null && savedInstanceState.getBoolean(IS_SOFT_KEYBOARD_SHOW);
+        getActivity().getWindow().setSoftInputMode(mKeyboardWasShown ? SOFT_INPUT_STATE_ALWAYS_VISIBLE | SOFT_INPUT_ADJUST_RESIZE : SOFT_INPUT_STATE_ALWAYS_HIDDEN | SOFT_INPUT_ADJUST_RESIZE);
         super.onCreate(savedInstanceState);
         App.from(getActivity()).inject(this);
+        if (mUserSearchList == null) {
+            mUserSearchList = new CachableSearchList<>(SearchUser.class);
+        }
         if (!isValidUserCache()) {
             mUserSearchList.clear();
         }
         if (savedInstanceState != null) {
             mCurrentUser = savedInstanceState.getParcelable(CURRENT_USER);
         }
+        mIsHide = savedInstanceState != null && savedInstanceState.getBoolean(FULLSCREEN_STATE);
         mPreloadManager = new PreloadManager<>();
         mController = new AlbumLoadController(AlbumLoadController.FOR_PREVIEW);
         initMutualDrawables();
         // Rate Controller
         mRateController = new RateController(getActivity(), SendLikeRequest.FROM_SEARCH);
         mRateController.setOnRateControllerUiListener(this);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(mRateReceiver, new IntentFilter(RateController.USER_RATED));
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
     }
 
     @Override
@@ -347,6 +360,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         super.onSaveInstanceState(outState);
         outState.putParcelable(CURRENT_USER, mCurrentUser);
         outState.setClassLoader(SearchUser.class.getClassLoader());
+        outState.putBoolean(IS_SOFT_KEYBOARD_SHOW, mDatingInstantMessageController != null && mDatingInstantMessageController.isKeyboardShown());
+        outState.putBoolean(FULLSCREEN_STATE, mIsHide);
     }
 
     @Override
@@ -375,8 +390,10 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void onResume() {
         if (mIsHide) {
             setDarkStatusBarColor();
+            hideControls();
         } else {
             setMainStatusBarColor();
+            showControls();
         }
         super.onResume();
         if (getTitleSetter() != null) {
@@ -402,7 +419,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (null != mDatingSubscriptions && !mDatingSubscriptions.isUnsubscribed()) {
             mDatingSubscriptions.unsubscribe();
         }
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mRateReceiver);
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mUpdateActionsReceiver);
     }
 
     @Override
@@ -736,6 +753,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                 return false;
             }
         });
+        mDatingInstantMessageController.setKeyboardShown(mKeyboardWasShown);
     }
 
     private SearchRequest getSearchRequest(boolean isNeedRefresh) {
@@ -761,40 +779,42 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.btnDatingAdmiration: {
-                if (mCurrentUser != null) {
-                    lockControls();
-                    isAdmirationFailed.set(false);
-                    boolean canSendAdmiration = mRateController.onAdmiration(mBalanceData,
-                            mCurrentUser.id,
-                            mCurrentUser.isMutualPossible ?
-                                    SendLikeRequest.DEFAULT_MUTUAL
-                                    : SendLikeRequest.DEFAULT_NO_MUTUAL,
-                            new RateController.OnRateRequestListener() {
-                                @Override
-                                public void onRateCompleted(int mutualId) {
-                                    isAdmirationFailed.set(true);
-                                    EasyTracker.sendEvent("Dating", "Rate",
-                                            "AdmirationSend" + (mutualId == SendLikeRequest.DEFAULT_MUTUAL ? "mutual" : ""),
-                                            (long) options.priceAdmiration);
-                                }
-
-                                @Override
-                                public void onRateFailed(int userId, int mutualId) {
-                                    if (moneyDecreased.get()) {
-                                        moneyDecreased.set(false);
-                                        updateResources(mBalanceData);
-                                    } else {
+                if (!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_ADMIRATION)) {
+                    if (mCurrentUser != null) {
+                        lockControls();
+                        isAdmirationFailed.set(false);
+                        boolean canSendAdmiration = mRateController.onAdmiration(mBalanceData,
+                                mCurrentUser.id,
+                                mCurrentUser.isMutualPossible ?
+                                        SendLikeRequest.DEFAULT_MUTUAL
+                                        : SendLikeRequest.DEFAULT_NO_MUTUAL,
+                                new RateController.OnRateRequestListener() {
+                                    @Override
+                                    public void onRateCompleted(int mutualId, int ratedUserId) {
                                         isAdmirationFailed.set(true);
-                                        unlockControls();
+                                        EasyTracker.sendEvent("Dating", "Rate",
+                                                "AdmirationSend" + (mutualId == SendLikeRequest.DEFAULT_MUTUAL ? "mutual" : ""),
+                                                (long) options.priceAdmiration);
                                     }
-                                }
-                            }, options
-                    );
-                    if (canSendAdmiration && !isAdmirationFailed.get()) {
-                        BalanceData balance = new BalanceData(mBalanceData.premium, mBalanceData.likes, mBalanceData.money);
-                        balance.money = balance.money - options.priceAdmiration;
-                        moneyDecreased.set(true);
-                        updateResources(balance);
+
+                                    @Override
+                                    public void onRateFailed(int userId, int mutualId) {
+                                        if (moneyDecreased.get()) {
+                                            moneyDecreased.set(false);
+                                            updateResources(mBalanceData);
+                                        } else {
+                                            isAdmirationFailed.set(true);
+                                            unlockControls();
+                                        }
+                                    }
+                                }, options
+                        );
+                        if (canSendAdmiration && !isAdmirationFailed.get()) {
+                            BalanceData balance = new BalanceData(mBalanceData.premium, mBalanceData.likes, mBalanceData.money);
+                            balance.money = balance.money - options.priceAdmiration;
+                            moneyDecreased.set(true);
+                            updateResources(balance);
+                        }
                     }
                 }
             }
@@ -880,8 +900,21 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                                 : SendLikeRequest.DEFAULT_NO_MUTUAL,
                         new RateController.OnRateRequestListener() {
                             @Override
-                            public void onRateCompleted(int mutualId) {
-
+                            public void onRateCompleted(int mutualId, int ratedUserId) {
+                                if (mCurrentUser != null && ratedUserId == mCurrentUser.id) {
+                                    if (null != mDelightBtn) {
+                                        mDelightBtn.setEnabled(false);
+                                    }
+                                    mMutualBtn.setEnabled(false);
+                                    mCurrentUser.rated = true;
+                                } else if (mUserSearchList != null) {
+                                    for (SearchUser searchUser : mUserSearchList) {
+                                        if (searchUser.id == ratedUserId) {
+                                            searchUser.rated = true;
+                                            break;
+                                        }
+                                    }
+                                }
                             }
 
                             @Override

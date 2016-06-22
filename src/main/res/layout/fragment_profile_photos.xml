@@ -3,6 +3,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="handlers"
             type="com.topface.topface.ui.fragments.profile.ProfilePhotoFragment.Handlers" />
@@ -33,7 +34,7 @@
                 android:padding="@dimen/add_to_leader_spacing_value"
                 android:verticalSpacing="@dimen/add_to_leader_spacing_value" />
 
-            <ScrollView
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -75,7 +76,7 @@
                         android:onClick="@{handlers.cancelClick}"
                         android:text="@string/general_cancel" />
                 </LinearLayout>
-            </ScrollView>
+            </android.support.v4.widget.NestedScrollView>
         </ViewFlipper>
 
         <com.topface.topface.ui.views.LockerView

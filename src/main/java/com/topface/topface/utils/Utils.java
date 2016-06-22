@@ -37,19 +37,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.ui.IEmailConfirmationListener;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.debug.HockeySender;
@@ -73,6 +74,7 @@ public class Utils {
     public static final String AMPERSAND = "&";
     public static final String SEMICOLON = ":";
     public static final String LOCAL_RES = "drawable://%d";
+    public static final String PLATFORM = "Android";
     private static final String DASH_SYMBOL = "-";
     private static final String HYPHEN_SYMBOL = "&#8209;";
     private static final String EMPTY_JSON = "{}";
@@ -94,6 +96,10 @@ public class Utils {
         return (int) (System.currentTimeMillis() / 1000L);
     }
 
+    public static String getLocalResUrl(@DrawableRes int res) {
+        return String.format(App.getCurrentLocale(), Utils.LOCAL_RES, res);
+    }
+
     public static String getQuantityString(int id, int quantity, Object... formatArgs) {
         try {
             mPluralResources = new PluralResources(App.getContext().getResources());
@@ -112,6 +118,30 @@ public class Utils {
         if (context != null) {
             Utils.showToastNotification(R.string.general_data_error, Toast.LENGTH_SHORT);
         }
+    }
+
+    public static IPhoto getUserPhotoGag(final String emptyPhoto) {
+        return new IPhoto() {
+            @Override
+            public boolean isFake() {
+                return false;
+            }
+
+            @Override
+            public String getSuitableLink(int height, int width) {
+                return emptyPhoto;
+            }
+
+            @Override
+            public String getSuitableLink(String sizeString) {
+                return emptyPhoto;
+            }
+
+            @Override
+            public String getDefaultLink() {
+                return emptyPhoto;
+            }
+        };
     }
 
     public static void showToastNotification(int stringId, int duration) {
@@ -279,7 +309,20 @@ public class Utils {
                 context.startActivityForResult(marketIntent, requestCode);
             }
         } else {
-            Toast.makeText(context, R.string.open_market_error, Toast.LENGTH_SHORT).show();
+            showToastNotification(R.string.open_market_error, Toast.LENGTH_SHORT);
+        }
+    }
+
+    public static void goToMarket(IActivityDelegate activityDelegate, Integer requestCode) {
+        Intent marketIntent = getMarketIntent();
+        if (isCallableIntent(marketIntent, activityDelegate)) {
+            if (requestCode == null) {
+                activityDelegate.startActivity(marketIntent);
+            } else {
+                activityDelegate.startActivityForResult(marketIntent, requestCode);
+            }
+        } else {
+            showToastNotification(R.string.open_market_error, Toast.LENGTH_SHORT);
         }
     }
 
@@ -288,6 +331,15 @@ public class Utils {
             return false;
         }
         List<ResolveInfo> list = context.getPackageManager().queryIntentActivities(intent,
+                PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
+    }
+
+    private static boolean isCallableIntent(Intent intent, IActivityDelegate activityDelegate) {
+        if (intent == null) {
+            return false;
+        }
+        List<ResolveInfo> list = activityDelegate.getPackageManager().queryIntentActivities(intent,
                 PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
     }
@@ -550,11 +602,18 @@ public class Utils {
         }
     }
 
+    public static boolean checkPlayServices(Context context) {
+        return GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;
+    }
+
     public static void checkEmailConfirmation(final IEmailConfirmationListener emailConfirmationListener, final boolean isNeedShowToast) {
         final boolean isEmailConfirmedCurrentValue = App.get().getProfile().emailConfirmed;
         new ProfileRequest(App.getContext()).callback(new DataApiHandler<Profile>() {
             @Override
             protected void success(Profile data, IApiResponse response) {
+                if (emailConfirmationListener != null) {
+                    emailConfirmationListener.onSuccess(data, response);
+                }
                 if (data != null) {
                     boolean isConfirmed = data.emailConfirmed;
                     if (emailConfirmationListener != null) {
@@ -568,21 +627,7 @@ public class Utils {
                         }
                     }
                     if (isConfirmed) {
-                        new UserGetAppOptionsRequest(App.getContext()).callback(new DataApiHandler<Options>() {
-
-                            @Override
-                            public void fail(int codeError, IApiResponse response) {
-                            }
-
-                            @Override
-                            protected void success(Options data, IApiResponse response) {
-                            }
-
-                            @Override
-                            protected Options parseResponse(ApiResponse response) {
-                                return new Options(response);
-                            }
-                        }).exec();
+                        App.getUserOptionsRequest().exec();
                     }
                 }
 
@@ -595,6 +640,17 @@ public class Utils {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
+                if (emailConfirmationListener != null) {
+                    emailConfirmationListener.fail(codeError, response);
+                }
+            }
+
+            @Override
+            public void always(IApiResponse response) {
+                super.always(response);
+                if (emailConfirmationListener != null) {
+                    emailConfirmationListener.always(response);
+                }
             }
         }).exec();
     }

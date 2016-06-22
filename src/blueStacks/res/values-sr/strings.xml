@@ -1,6 +1,6 @@
 <resources>
   <string name="app_locale">sr_RS</string>
-  <string name="photofeed_title">Стави у фид</string>
+  <string name="photofeed_title">Стави у листу новости</string>
   <string name="general_warning">УПОЗОРЕЊЕ</string>
   <string name="general_ok">ОК</string>
   <string name="general_any">Било који/која</string>
@@ -461,7 +461,6 @@
   <string name="reselect_city">Одаберите други град:</string>
   <string name="choose_cool_photo">Одаберите своју најбољу фотографију и статус који одражава Ваше
         расположење!</string>
-  <string name="email_confirmed">адреса е-поште је потврђена!</string>
   <string name="sympathy_sended">Свиђање је послато.</string>
   <string name="general_photo_deleted">Ваша фотографија је уклоњена јер крши једно од правила.</string>
   <string name="general_change">Промени</string>
@@ -763,7 +762,8 @@
   <string name="settings_check_vip_alert">Ваш захтев за проверу VIP-статуса је послат.</string>
   <string name="novice_sympathy">Шаљите свиђања само онима који\nВас заиста привлаче.\nМожда ћете
         наћи неког посебног!</string>
-  <string name="go_dating_message">Почните да упознајете људе и овде ће се појавити имена оних корисника који су посетили Ваш профил</string>
+  <string name="go_dating_message">Почните да упознајете људе и овде ће се појавити имена оних корисника 
+        који су посетили Ваш профил</string>
   <string name="photo_not_from_main_album">Наши модератори су одлучили да ова фотографија не може да буде искоришћена као
           профилна слика</string>
   <string name="sidebar_vk_profile">ВК профил</string>
@@ -821,4 +821,5 @@
   <string name="crown_liberty_description">Лако се истиче у Претрази и Порукама</string>
   <string name="like_liberty_title">Свиђања</string>
   <string name="like_liberty_description">Погледајте коме се свиђате</string>
+  <string name="refill_balance_view_title">Ваш налог</string>
 </resources>

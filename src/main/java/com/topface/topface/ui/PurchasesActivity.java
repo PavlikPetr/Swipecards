@@ -7,10 +7,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 
 import com.topface.billing.OpenIabFragment;
+import com.topface.framework.utils.Debug;
 import com.topface.offerwall.common.OfferwallPayload;
 import com.topface.offerwall.common.TFCredentials;
 import com.topface.offerwall.publisher.TFOfferwallActivity;
@@ -27,7 +30,8 @@ import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
-import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
+import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.PurchasesUtils;
 import com.topface.topface.utils.actionbar.ActionBarView;
@@ -46,7 +50,7 @@ import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCTS_TYPE;
 import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCT_ID;
 import static com.topface.topface.ui.PaymentwallActivity.PW_TRANSACTION_ID;
 
-public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
+public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> implements TrialVipPopup.OnFragmentActionsListener {
 
     /**
      * Constant keys for different fragments
@@ -93,6 +97,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
             }
         }
     };
+    private TrialVipPopup mTrialVipPopup;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -309,9 +314,10 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         if (getIntent().getIntExtra(App.INTENT_REQUEST_KEY, -1) == INTENT_BUY_VIP && App.isNeedShowTrial
                 && !profile.premium && new GoogleMarketApiManager().isMarketApiAvailable()
                 && App.get().getOptions().trialVipExperiment.enabled && !profile.paid) {
-            TrialVipPopup trialVipPopup = TrialVipPopup.newInstance(true);
-            trialVipPopup.setOnDismissListener(dismissListener);
-            trialVipPopup.show(getSupportFragmentManager(), TrialVipPopup.TAG);
+            mTrialVipPopup = TrialVipPopup.newInstance(true);
+            mTrialVipPopup.setOnDismissListener(dismissListener);
+            mTrialVipPopup.setOnSubscribe(this);
+            mTrialVipPopup.show(getSupportFragmentManager(), TrialVipPopup.TAG);
             App.isNeedShowTrial = false;
             return true;
         }
@@ -319,11 +325,44 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
     }
 
     @Override
+    public void onSubscribeClick() {
+        Fragment f = mTrialVipPopup.getActivity().getSupportFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
+        final Fragment fragment = f == null ?
+                TransparentMarketFragment.newInstance(App.get().getOptions().trialVipExperiment.subscriptionSku, true, TrialVipPopup.TAG) : f;
+        fragment.setRetainInstance(true);
+        if (fragment instanceof ITransparentMarketFragmentRunner) {
+            ((ITransparentMarketFragmentRunner) fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
+                @Override
+                public void onPurchaseSuccess() {
+                    mTrialVipPopup.dismiss();
+                }
+
+                @Override
+                public void onPopupClosed() {
+
+                }
+            });
+            FragmentTransaction transaction = mTrialVipPopup.getActivity().getSupportFragmentManager().beginTransaction();
+            if (!fragment.isAdded()) {
+                transaction.add(fragment, TransparentMarketFragment.class.getSimpleName()).commit();
+            } else {
+                transaction.remove(fragment)
+                        .add(fragment, TransparentMarketFragment.class.getSimpleName()).commit();
+            }
+        }
+    }
+
+    @Override
+    public void onFragmentFinish() {
+        Debug.log("TransparentMarketFragment Finish");
+    }
+
+    @Override
     public void onUpClick() {
         boolean isCalled = callTrialVipPopup(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                PurchasesActivity.super.onUpClick();
+                finish();
             }
         });
         if (!isCalled) {
@@ -336,7 +375,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> {
         boolean isCalled = callTrialVipPopup(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                onBackPressed();
+                finish();
             }
         });
         if (!isCalled && !isScreenShow()) {

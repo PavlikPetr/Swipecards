@@ -14,9 +14,12 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.data.Auth;
+import com.topface.topface.data.AuthTokenStateData;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
+import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
+import com.topface.topface.state.AuthState;
 import com.topface.topface.state.PopupHive;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.NavigationActivity;
@@ -52,6 +55,8 @@ public class AuthorizationManager {
     TopfaceAppState mAppState;
     @Inject
     PopupHive mHive;
+    @Inject
+    AuthState mAuthState;
 
     private Map<Platform, Authorizer> mAuthorizers = new HashMap<>();
 
@@ -131,11 +136,13 @@ public class AuthorizationManager {
     public void logout(Activity activity) {
         FlurryManager.getInstance().sendLogoutEvent();
         FlurryManager.getInstance().dropUserIdHash();
+        mAuthState.setData(new AuthTokenStateData());
         App.isNeedShowTrial = true;
         UserConfig config = App.getUserConfig();
         config.setStartPositionOfActions(0);
         config.saveConfig();
         Ssid.remove();
+        ScruffyRequestManager.getInstance().logout();
         UserNotificationManager.getInstance().removeNotifications();
         TabbedDialogsFragment.setTabsDefaultPosition();
         AuthToken authToken = AuthToken.getInstance();
@@ -170,7 +177,7 @@ public class AuthorizationManager {
     public static void showRetryLogoutDialog(Activity activity, final LogoutRequest logoutRequest) {
         AlertDialog.Builder retryBuilder = new AlertDialog.Builder(activity);
         retryBuilder.setMessage(R.string.general_logout_error)
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();

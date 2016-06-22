@@ -1,6 +1,6 @@
 package com.topface.topface.ui.views;
 
-import android.app.Activity;
+import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -21,15 +21,15 @@ import butterknife.ButterKnife;
  */
 public class TabLayoutCreator {
 
-    private Activity mActivity;
+    private Context mContext;
     private TabLayout mTabLayout;
     private ArrayList<TabViewsContainer> mTabViews;
     private ArrayList<String> mPagesTitles;
     private ArrayList<Integer> mPagesCounters;
 
-    public TabLayoutCreator(Activity activity, ViewPager pager, TabLayout tabLayout
+    public TabLayoutCreator(Context context, ViewPager pager, TabLayout tabLayout
             , ArrayList<String> pageTitles, ArrayList<Integer> pageCounters) {
-        mActivity = activity;
+        mContext = context.getApplicationContext();
         mPagesCounters = pageCounters;
         mPagesTitles = pageTitles;
         mTabLayout = tabLayout;
@@ -37,7 +37,23 @@ public class TabLayoutCreator {
         initTabView();
     }
 
-    public class TabViewsContainer {
+    public void release() {
+        mTabLayout = null;
+        mContext = null;
+        if (mPagesCounters != null) {
+            mPagesCounters.clear();
+        }
+        if (mPagesTitles != null) {
+            mPagesTitles.clear();
+        }
+        for (TabViewsContainer container : mTabViews) {
+            container.clear();
+        }
+        mTabViews.clear();
+    }
+
+    // TODO: 25.05.16 Убираешь батернайф? Сделай это приватом!
+    public static class TabViewsContainer {
 
         @Bind(R.id.tab_title)
         public TextView titleView;
@@ -45,17 +61,24 @@ public class TabLayoutCreator {
         public TextView counterView;
         public View tabView;
 
-        public TabViewsContainer(Activity activity) {
-            tabView = LayoutInflater.from(activity).inflate(R.layout.tab_indicator, null);
+        public TabViewsContainer(Context context) {
+            tabView = LayoutInflater.from(context).inflate(R.layout.tab_indicator, null);
             ButterKnife.bind(this, tabView);
         }
+
+        public void clear() {
+            titleView = null;
+            counterView = null;
+            tabView = null;
+        }
+
     }
 
     private void initTabView() {
         mTabViews = new ArrayList<>();
         TabViewsContainer viewsContainer;
         for (int i = 0; i < mPagesTitles.size(); i++) {
-            viewsContainer = new TabViewsContainer(mActivity);
+            viewsContainer = new TabViewsContainer(mContext);
             mTabViews.add(viewsContainer);
             mTabLayout.getTabAt(i).setCustomView(viewsContainer.tabView);
         }

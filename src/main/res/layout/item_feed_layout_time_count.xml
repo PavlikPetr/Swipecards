@@ -9,59 +9,36 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/ifp_name_container"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="bottom"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <!--
-            если Лена скажет, что имена о5 обрезаются нужно ей сказать, что в диалогах останется все как есть
-            если задать вес возраста, то уедет дата, если придавить датой. Максимум, что можно сделать это
-            придавить именем, но тогда будет дырка между именем и возрастом
-            -->
+            <include layout="@layout/item_feed_part_name" />
 
-            <TextView
-                android:id="@+id/ifp_name"
-                style="@style/ListName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="154dp" />
-
-            <TextView
-                android:id="@+id/ifp_age"
-                style="@style/ListAge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
+            <include
                 android:id="@+id/ifp_time"
-                style="@style/ListTime"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
+                layout="@layout/item_feed_part_time"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:baselineAligned="false"
-            android:gravity="top"
+            android:layout_height="wrap_content"
+            android:minHeight="20dp"
             android:orientation="horizontal">
 
             <include
                 android:id="@+id/ifp_text"
                 layout="@layout/item_feed_part_text"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
             <include
