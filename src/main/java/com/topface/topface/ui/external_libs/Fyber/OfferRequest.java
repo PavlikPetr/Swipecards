@@ -24,9 +24,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Single;
 import rx.SingleSubscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -37,7 +41,7 @@ import static com.adjust.sdk.Util.convertToHex;
 
 public class OfferRequest {
     private static final String BASE_FYBER_LINK = "http://api.fyber.com/";
-    private static final String GET_OFFERS_LINK = "feed/v1/offers.json?";
+    private static final String GET_OFFERS_LINK = "feed/v1/offers.json{params}";
     private static final String APP_ID_KEY = "appid";
     private static final String UID_KEY = "uid";
     private static final String LOCALE_KEY = "locale";
@@ -61,14 +65,28 @@ public class OfferRequest {
         prepareRequestParams();
     }
 
-    public FyberOffersResponse sendRequest(String params) {
-        return new Retrofit.Builder().baseUrl(BASE_FYBER_LINK).build().create(IFyberOffersRestAPI.class).getOffers(params);
+    public void sendRequest(String params) {
+        OffersRequest request = OffersRequest.retrofit.create(OffersRequest.class);
+        Call<FyberOffersResponse> call = request.getOffers(params);
+        call.enqueue(new Callback<FyberOffersResponse>() {
+            @Override
+            public void onResponse(Call<FyberOffersResponse> call, Response<FyberOffersResponse> response) {
+                Debug.showChunkedLogError("OfferRequestTest", "" + response);
+            }
+
+            @Override
+            public void onFailure(Call<FyberOffersResponse> call, Throwable t) {
+                Debug.showChunkedLogError("OfferRequestTest", "error " + t);
+            }
+        });
     }
 
 
-    private interface IFyberOffersRestAPI {
-        @GET(GET_OFFERS_LINK + "{params}")
-        FyberOffersResponse getOffers(@Path("params") String params);
+    private interface OffersRequest {
+        @GET(GET_OFFERS_LINK)
+        Call<FyberOffersResponse> getOffers(@Query(value = "params", encoded = true) String params);
+
+        public static final Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_FYBER_LINK).addConverterFactory(GsonConverterFactory.create()).build();
     }
 
 
@@ -147,7 +165,8 @@ public class OfferRequest {
         }
         request = request.concat(String.format(currentLocale, KEY_TEMPLATE, HASHKEY_KEY, getSHA1(request.concat(Utils.AMPERSAND).concat(API_KEY))));
         Debug.showChunkedLogError("OfferRequestTest", "" + request);
-        Debug.showChunkedLogError("", "response " + sendRequest(request));
+        sendRequest(request);
+//        Debug.showChunkedLogError("", "response " + sendRequest(request));
     }
 
     private Single<String> getGoogleAdIdObservable() {

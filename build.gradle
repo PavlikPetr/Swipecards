@@ -362,6 +362,7 @@ dependencies {
     compile 'com.supersonic.sdk:mediationsdk:6.4.7@jar'
 
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 }
 
 project(':libs:IllustratedTextView') {
