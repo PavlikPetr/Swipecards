@@ -1,5 +1,6 @@
 package com.topface.topface.data;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.utils.DateUtils;
 
 import org.json.JSONObject;
@@ -15,7 +16,6 @@ public class FullScreenCondition {
     private int mFullscreenShowCount = 1;
 
     public FullScreenCondition() {
-
     }
 
     public FullScreenCondition(JSONObject response) {

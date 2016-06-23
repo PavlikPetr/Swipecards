@@ -20,7 +20,6 @@ import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AppodealProvider;
 import com.topface.topface.data.Banner;
 import com.topface.topface.data.FullScreenCondition;
-import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
 import com.topface.topface.requests.DataApiHandler;
@@ -52,7 +51,6 @@ public class FullscreenController {
     private static final String ADMOB_INTERSTITIAL_START_APP_ID = "ca-app-pub-9530442067223936/3776010801";
     private static final String BANNER_APPODEAL_FULLSCREEN = "APPODEAL_FULLSCREEN";
     private static boolean isFullScreenBannerVisible = false;
-    private final Options mOptions;
     private Activity mActivity;
     private String mCurrentBannerType;
     private OnNextActionListener mOnNextActionListener;
@@ -142,9 +140,8 @@ public class FullscreenController {
 
     private Application.ActivityLifecycleCallbacks mActivityLifecycleCallbacks;
 
-    public FullscreenController(Activity activity, Options options) {
+    public FullscreenController(Activity activity) {
         mActivity = activity;
-        mOptions = options;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             mActivityLifecycleCallbacks = new Utils.ActivityLifecycleCallbacksAdapter() {
                 @Override
@@ -183,7 +180,7 @@ public class FullscreenController {
         long lastShow = userConfig.getLastFullscreenTime();
         int shownCount = userConfig.getFullscreenShownCount();
         long currentTime = System.currentTimeMillis();
-        FullScreenCondition fullScreenCondition = mOptions != null ? mOptions.fullScreenCondition : new FullScreenCondition();
+        FullScreenCondition fullScreenCondition = App.get().getOptions().fullScreenCondition;
 
         if ((currentTime - firstShow) >= fullScreenCondition.getInterval() * 1000) {
             userConfig.setFirstFullscreenTime(0);
