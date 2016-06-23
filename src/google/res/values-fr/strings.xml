@@ -575,8 +575,7 @@
     <string name="incorrect_photo_format">Format de la photo incorrect. Veuillez télécharger un
         fichier .jpg ou .png.
     </string>
-    <string name="incorrect_photo_size">Cette photo est trop petite (la taille minimale de la photo est
-         -% 1 $ dx% 2 $ d pixels).</string>
+    <string name="incorrect_photo_size">Cette photo est trop petite (la taille minimale de la photo est %1$dx%2$d pixels).</string>
     <string name="input_contact_name">Saisissez le nom du contact</string>
     <string name="incorrect_locale">Si vous voulez que nous puissions lire votre avis, veuillez le
         rédiger en russe ou en anglais
