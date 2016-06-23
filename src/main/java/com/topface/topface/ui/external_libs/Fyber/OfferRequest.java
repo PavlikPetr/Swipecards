@@ -24,6 +24,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
+import retrofit2.Retrofit;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
 import rx.Single;
 import rx.SingleSubscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -33,7 +36,8 @@ import rx.schedulers.Schedulers;
 import static com.adjust.sdk.Util.convertToHex;
 
 public class OfferRequest {
-    private static final String OFFER_LINK = "http://api.fyber.com/feed/v1/offers.json?";
+    private static final String BASE_FYBER_LINK = "http://api.fyber.com/";
+    private static final String GET_OFFERS_LINK = "feed/v1/offers.json?";
     private static final String APP_ID_KEY = "appid";
     private static final String UID_KEY = "uid";
     private static final String LOCALE_KEY = "locale";
@@ -56,6 +60,17 @@ public class OfferRequest {
         mObservableCallback = callback;
         prepareRequestParams();
     }
+
+    public FyberOffersResponse sendRequest(String params) {
+        return new Retrofit.Builder().baseUrl(BASE_FYBER_LINK).build().create(IFyberOffersRestAPI.class).getOffers(params);
+    }
+
+
+    private interface IFyberOffersRestAPI {
+        @GET(GET_OFFERS_LINK + "{params}")
+        FyberOffersResponse getOffers(@Path("params") String params);
+    }
+
 
     private Single<List<? extends OfferwallBaseModel>> getObservable(final String request) {
         return Single.create(new Single.OnSubscribe<List<? extends OfferwallBaseModel>>() {
@@ -131,11 +146,8 @@ public class OfferRequest {
             pos++;
         }
         request = request.concat(String.format(currentLocale, KEY_TEMPLATE, HASHKEY_KEY, getSHA1(request.concat(Utils.AMPERSAND).concat(API_KEY))));
-        request = OFFER_LINK.concat(request);
         Debug.showChunkedLogError("OfferRequestTest", "" + request);
-        if (mObservableCallback != null) {
-            mObservableCallback.observablePrepared(getObservable(request));
-        }
+        Debug.showChunkedLogError("", "response " + sendRequest(request));
     }
 
     private Single<String> getGoogleAdIdObservable() {
