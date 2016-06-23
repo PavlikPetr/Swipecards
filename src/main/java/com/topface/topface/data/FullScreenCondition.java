@@ -6,7 +6,6 @@ import org.json.JSONObject;
 
 public class FullScreenCondition {
     // TODO после мержа в develop проверить серилизацию
-    private static final String INTERVAL = "fullscreenInterval";
     private static final String PERIOD = "interval";
     private static final String SHOW_COUNT = "dailyShows";
     private static final String CONDITION_OBJECT = "startFullScreen";
@@ -20,7 +19,6 @@ public class FullScreenCondition {
     }
 
     public FullScreenCondition(JSONObject response) {
-        mFullScreenInterval = response.optLong(INTERVAL, DateUtils.DAY_IN_SECONDS);
         if (response.has(CONDITION_OBJECT)) {
             JSONObject object = response.optJSONObject(CONDITION_OBJECT);
             if (object != null) {
