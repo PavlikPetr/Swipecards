@@ -13,6 +13,7 @@ import com.topface.topface.data.LoaderData;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -63,6 +64,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
 
     protected abstract LoadController initLoadController();
 
+    @Nullable
     @Override
     public T getItem(int i) {
         if (mData == null) {
@@ -102,13 +104,16 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     @Override
     public int getItemViewType(int position) {
         IListLoader item = getItem(position);
-        if (item == null) return T_OTHER;
-        if (getItem(position).isLoader())
-            return T_LOADER;
-        else if (getItem(position).isRetrier())
-            return T_RETRIER;
-        else
+        if (item == null) {
             return T_OTHER;
+        }
+        if (item.isLoader()) {
+            return T_LOADER;
+        } else if (item.isRetrier()) {
+            return T_RETRIER;
+        } else {
+            return T_OTHER;
+        }
     }
 
     @Override
