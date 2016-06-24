@@ -14,6 +14,7 @@ import com.topface.topface.ui.fragments.buy.VipPaymentWallBuyFragment;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
 import com.topface.topface.utils.BuyVipFragmentManager;
 import com.topface.topface.utils.GoogleMarketApiManager;
+import com.topface.topface.utils.ListUtils;
 
 import java.util.ArrayList;
 
@@ -47,7 +48,7 @@ public class ProfilePageAdapter extends HackyFragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (!mFragmentsTitles.isEmpty() && position >= 0 && mFragmentsTitles.size() > position)
+        if (ListUtils.isEntry(position, mFragmentsTitles))
             return mFragmentsTitles.get(position);
 
         return super.getPageTitle(position);
