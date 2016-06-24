@@ -47,7 +47,7 @@ public class ProfilePageAdapter extends HackyFragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (!mFragmentsTitles.isEmpty())
+        if (!mFragmentsTitles.isEmpty() && mFragmentsTitles.size() > position)
             return mFragmentsTitles.get(position);
 
         return super.getPageTitle(position);

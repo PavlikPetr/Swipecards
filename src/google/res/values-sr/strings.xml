@@ -580,6 +580,8 @@
         или .png формат
     </string>
     <string name="incorrect_photo_size">Неодговарајућа величина фотографије</string>
+    <string name="incorrect_photo_size_show_restrictions">Ова фотографија је превише мала (најмања дозвољена величина је 
+        — %1$dx%2$d пиксела).</string>
     <string name="input_contact_name">Унеси име контакта</string>
     <string name="incorrect_locale">Ако желите да прочитамо Ваше критике, напишите је на руском или
         енглеском језику.
@@ -889,7 +891,7 @@
     <string name="mutual_like_popup_text">Осећање је узајамно!</string>
     <string name="mutual_like_popup_button">Кажите \"Поздрав\"</string>
     <string name="people_nearby_access_to_location_description">Да бисте видели ко је у близини, морате дозволити приступ својој гео-локацији.</string>
-    <string name="people_nearby_not_enought_money">Недостају Вам новчићи да бисте приступили функцији \"Људи у близини\"\</string>
+    <string name="people_nearby_not_enought_money">Недостају Вам новчићи да бисте приступили функцији \"Људи у близини\"</string>
     <string name="people_nearby_not_found_title">Тренутно нема корисника у Вашој близини</string>
     <string name="people_nearby_not_found_description">Да бисте покушали поново, притисните и држите прстом по средини екрана.</string>
     <string name="NSLocationWhenInUseUsageDescription">Неопходна Вам је дозвола да бисте приступили овој функцији.</string>
