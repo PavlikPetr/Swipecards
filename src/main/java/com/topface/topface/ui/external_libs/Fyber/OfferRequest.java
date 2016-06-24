@@ -30,7 +30,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
-import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 import rx.Single;
 import rx.SingleSubscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -41,7 +41,7 @@ import static com.adjust.sdk.Util.convertToHex;
 
 public class OfferRequest {
     private static final String BASE_FYBER_LINK = "http://api.fyber.com/";
-    private static final String GET_OFFERS_LINK = "feed/v1/offers.json{params}";
+    private static final String GET_OFFERS_LINK = "feed/v1/offers.json";
     private static final String APP_ID_KEY = "appid";
     private static final String UID_KEY = "uid";
     private static final String LOCALE_KEY = "locale";
@@ -65,9 +65,10 @@ public class OfferRequest {
         prepareRequestParams();
     }
 
-    public void sendRequest(String params) {
+    public void sendRequest(TreeMap<String, String> params) {
+        params.put(HASHKEY_KEY, getHash(params));
         OffersRequest request = OffersRequest.retrofit.create(OffersRequest.class);
-        Call<FyberOffersResponse> call = request.getOffers(params);
+        Call<FyberOffersResponse> call = request.list(params);
         call.enqueue(new Callback<FyberOffersResponse>() {
             @Override
             public void onResponse(Call<FyberOffersResponse> call, Response<FyberOffersResponse> response) {
@@ -84,7 +85,7 @@ public class OfferRequest {
 
     private interface OffersRequest {
         @GET(GET_OFFERS_LINK)
-        Call<FyberOffersResponse> getOffers(@Query(value = "params", encoded = true) String params);
+        Call<FyberOffersResponse> list(@QueryMap Map<String, String> params);
 
         public static final Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_FYBER_LINK).addConverterFactory(GsonConverterFactory.create()).build();
     }
@@ -124,7 +125,7 @@ public class OfferRequest {
             public void call(String s) {
                 params.put(GOOGLE_AD_ID_KEY, s);
                 if (params.containsKey(IS_LIMITED_KEY)) {
-                    prepareRequest(params);
+                    sendRequest(params);
                 }
             }
         }, new Action1<Throwable>() {
@@ -132,7 +133,7 @@ public class OfferRequest {
             public void call(Throwable throwable) {
                 params.put(GOOGLE_AD_ID_KEY, Utils.EMPTY);
                 if (params.containsKey(IS_LIMITED_KEY)) {
-                    prepareRequest(params);
+                    sendRequest(params);
                 }
             }
         });
@@ -141,7 +142,7 @@ public class OfferRequest {
             public void call(Boolean isEnable) {
                 params.put(IS_LIMITED_KEY, String.valueOf(isEnable));
                 if (params.containsKey(GOOGLE_AD_ID_KEY)) {
-                    prepareRequest(params);
+                    sendRequest(params);
                 }
             }
         }, new Action1<Throwable>() {
@@ -149,10 +150,21 @@ public class OfferRequest {
             public void call(Throwable throwable) {
                 params.put(IS_LIMITED_KEY, String.valueOf(false));
                 if (params.containsKey(GOOGLE_AD_ID_KEY)) {
-                    prepareRequest(params);
+                    sendRequest(params);
                 }
             }
         });
+    }
+
+    private String getHash(TreeMap<String, String> params) {
+        String request = Utils.EMPTY;
+        int pos = 0;
+        Locale currentLocale = App.getCurrentLocale();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            request = request.concat(String.format(currentLocale, pos == 0 ? FIRST_KEY_TEMPLATE : KEY_TEMPLATE, entry.getKey(), entry.getValue()));
+            pos++;
+        }
+        return getSHA1(request.concat(Utils.AMPERSAND).concat(API_KEY));
     }
 
     private void prepareRequest(TreeMap<String, String> params) {
@@ -165,7 +177,7 @@ public class OfferRequest {
         }
         request = request.concat(String.format(currentLocale, KEY_TEMPLATE, HASHKEY_KEY, getSHA1(request.concat(Utils.AMPERSAND).concat(API_KEY))));
         Debug.showChunkedLogError("OfferRequestTest", "" + request);
-        sendRequest(request);
+//        sendRequest(request);
 //        Debug.showChunkedLogError("", "response " + sendRequest(request));
     }
 
