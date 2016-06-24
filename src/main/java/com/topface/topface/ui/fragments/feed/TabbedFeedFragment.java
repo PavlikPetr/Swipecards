@@ -281,17 +281,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        FragmentManager fm = getChildFragmentManager();
-        if (fm != null) {
-            List<Fragment> list = fm.getFragments();
-            if (list != null && list.size() > 0) {
-                for (Fragment fr : getChildFragmentManager().getFragments()) {
-                    if (fr != null) {
-                        fr.onActivityResult(requestCode, resultCode, data);
-                    }
-                }
-            }
-        }
+        Utils.activityResultToNestedFragments(getChildFragmentManager(), requestCode, resultCode, data);
     }
 
     @Override
