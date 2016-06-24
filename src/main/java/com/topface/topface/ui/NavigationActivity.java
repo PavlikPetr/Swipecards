@@ -87,7 +87,7 @@ import rx.subscriptions.CompositeSubscription;
 import static com.topface.topface.state.PopupHive.AC_PRIORITY_HIGH;
 
 public class NavigationActivity extends ParentNavigationActivity implements INavigationFragmentsListener {
-    public static final String INTENT_EXIT = "EXIT";
+    public static final String INTENT_EXIT = "com.topface.topface.is_user_banned";
     private static final String PAGE_SWITCH = "Page switch: ";
     private static final String FRAGMENT_SETTINGS = "fragment_settings";
 
@@ -159,8 +159,12 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
         App.from(getApplicationContext()).inject(this);
         Intent intent = getIntent();
-        if (intent.getBooleanExtra(INTENT_EXIT, false)) {
-            finish();
+        if (intent != null) {
+            if (intent.hasExtra(INTENT_EXIT)) {
+                if (intent.getBooleanExtra(INTENT_EXIT, false)) {
+                    finish();
+                }
+            }
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);

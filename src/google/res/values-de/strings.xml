@@ -562,6 +562,8 @@
         hochzuladen
     </string>
     <string name="incorrect_photo_size">Foto hat ungültige Größe</string>
+    <string name="incorrect_photo_size_show_restrictions">Dieses Foto ist zu klein (die minimale Fotogröße beträgt
+        — %1$dx%2$d Pixel).</string>
     <string name="input_contact_name">Geben Sie den Namen des Kontaktes ein</string>
     <string name="incorrect_locale">Wenn Sie möchten, dass wir Ihr Gutachten lesen könnten,
         schreiben Sie es auf Russisch oder Englisch

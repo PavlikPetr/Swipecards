@@ -253,11 +253,15 @@ public class FullscreenController {
         Appodeal.setInterstitialCallbacks(new InterstitialCallbacks() {
             public void onInterstitialLoaded(boolean isPrecache) {
                 Appodeal.show(mActivity, Appodeal.INTERSTITIAL);
-                mFullScreenBannerListener.onLoaded();
+                if (mFullScreenBannerListener != null) {
+                    mFullScreenBannerListener.onLoaded();
+                }
             }
 
             public void onInterstitialFailedToLoad() {
-                mFullScreenBannerListener.onFailedToLoad(null);
+                if (mFullScreenBannerListener != null) {
+                    mFullScreenBannerListener.onFailedToLoad(null);
+                }
             }
 
             public void onInterstitialShown() {
@@ -265,11 +269,15 @@ public class FullscreenController {
 
             public void onInterstitialClicked() {
                 mIsRedirected = true;
-                mFullScreenBannerListener.onClick();
+                if (mFullScreenBannerListener != null) {
+                    mFullScreenBannerListener.onClick();
+                }
             }
 
             public void onInterstitialClosed() {
-                mFullScreenBannerListener.onClose();
+                if (mFullScreenBannerListener != null) {
+                    mFullScreenBannerListener.onClose();
+                }
             }
         });
     }
@@ -278,12 +286,16 @@ public class FullscreenController {
         AdmobInterstitialUtils.requestAdmobFullscreen(mActivity, id, new AdListener() {
             @Override
             public void onAdClosed() {
-                mFullScreenBannerListener.onClose();
+                if (mFullScreenBannerListener != null) {
+                    mFullScreenBannerListener.onClose();
+                }
             }
 
             @Override
             public void onAdFailedToLoad(int errorCode) {
-                mFullScreenBannerListener.onFailedToLoad(errorCode);
+                if (mFullScreenBannerListener != null) {
+                    mFullScreenBannerListener.onFailedToLoad(errorCode);
+                }
             }
 
             @Override
@@ -298,7 +310,9 @@ public class FullscreenController {
 
             @Override
             public void onAdLoaded() {
-                mFullScreenBannerListener.onLoaded();
+                if (mFullScreenBannerListener != null) {
+                    mFullScreenBannerListener.onLoaded();
+                }
             }
         });
     }
@@ -312,7 +326,9 @@ public class FullscreenController {
                 if (data.action.equals(Banner.ACTION_URL)) {
                     if (showFullscreenBanner(data.parameter)) {
                         TopfaceAdStatistics.sendFullscreenShown(data);
-                        mFullScreenBannerListener.onLoaded();
+                        if (mFullScreenBannerListener != null) {
+                            mFullScreenBannerListener.onLoaded();
+                        }
                         final View fullscreenViewGroup = mActivity.getLayoutInflater().inflate(R.layout.fullscreen_topface, null);
                         final ViewGroup bannerContainer = getFullscreenBannerContainer();
                         bannerContainer.addView(fullscreenViewGroup);
@@ -322,7 +338,9 @@ public class FullscreenController {
                         fullscreenImage.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                mFullScreenBannerListener.onClick();
+                                if (mFullScreenBannerListener != null) {
+                                    mFullScreenBannerListener.onClick();
+                                }
                                 TopfaceAdStatistics.sendFullscreenClicked(data);
                                 AppConfig config = App.getAppConfig();
                                 config.addFullscreenUrl(data.parameter);
@@ -350,7 +368,9 @@ public class FullscreenController {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                mFullScreenBannerListener.onFailedToLoad(codeError);
+                if (mFullScreenBannerListener != null) {
+                    mFullScreenBannerListener.onFailedToLoad(codeError);
+                }
                 if (codeError == ErrorCodes.BANNER_NOT_FOUND) {
                     addLastFullscreenShowedTime();
                 }
@@ -381,7 +401,9 @@ public class FullscreenController {
                 bannerContainer.setVisibility(View.GONE);
             }
         }
-        mFullScreenBannerListener.onClose();
+        if (mFullScreenBannerListener != null) {
+            mFullScreenBannerListener.onClose();
+        }
     }
 
     public boolean isFullScreenBannerVisible() {

@@ -150,7 +150,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
         if (savedInstanceState != null) {
             mIsHeight = savedInstanceState.getBoolean(CONSTITUTION_DIALOG_MARK);
         }
-        DatingFilter datingFilter = App.from(getActivity()).getProfile().dating;
+        DatingFilter datingFilter = App.get().getProfile().dating;
         mTargetUser.sex = datingFilter != null ? datingFilter.sex : Profile.BOY;
         mFormInfo = new FormInfo(getActivity().getApplicationContext(), mTargetUser.sex, mTargetUser.getType());
 
@@ -176,7 +176,7 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
     private void initFilter() {
         try {
             //Странный, достаточно редкий баг, но бывает что CacheProfile.dating == null
-            DatingFilter dating = App.from(getActivity()).getProfile().dating;
+            DatingFilter dating = App.get().getProfile().dating;
             mFilter = (dating != null) ? dating.clone() : new DatingFilter();
             mInitFilter = mFilter.clone();
             mInitFilterOnline = DatingFilter.getOnlyOnlineField();
@@ -419,11 +419,13 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
                 break;
             case R.id.loFilterButtonHome:
                 City city = null;
-                Profile profile = App.from(getActivity()).getProfile();
-                try {
-                    city = new City(new JSONObject(profile.city.getName()));
-                } catch (JSONException e) {
-                    Debug.error(e);
+                Profile profile = App.get().getProfile();
+                if (profile.city != null) {
+                    try {
+                        city = new City(new JSONObject(profile.city.getName()));
+                    } catch (JSONException e) {
+                        Debug.error(e);
+                    }
                 }
                 if (city == null) {
                     mLoFilterChooseCity.setDefaultCity(profile.city);

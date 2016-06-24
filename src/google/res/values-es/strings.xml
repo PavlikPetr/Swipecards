@@ -579,6 +579,8 @@
     <string name="incorrect_photo_format">Formato de foto incorrecto. Prueba subir jpg o png
     </string>
     <string name="incorrect_photo_size">Tamaño de fotografía no permitido</string>
+    <string name="incorrect_photo_size_show_restrictions">Esta fotografía es pequeña (el tamaño mínimo de las fotos es de
+        — %1$dx%2$d píxeles).</string>
     <string name="input_contact_name">Escribe el nombre de contacto</string>
     <string name="incorrect_locale">Si quieres que nosotros seamos capaces de leer tu comentario,
         escríbelo en ruso o en inglés
