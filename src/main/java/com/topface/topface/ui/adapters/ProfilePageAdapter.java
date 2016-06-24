@@ -48,8 +48,9 @@ public class ProfilePageAdapter extends HackyFragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (ListUtils.isEntry(position, mFragmentsTitles))
+        if (ListUtils.isEntry(position, mFragmentsTitles)) {
             return mFragmentsTitles.get(position);
+        }
 
         return super.getPageTitle(position);
     }
