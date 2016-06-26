@@ -1,9 +1,11 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -43,6 +45,7 @@ import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
+import com.topface.topface.ui.fragments.IOnBackPressed;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.DrawerLayoutManager;
@@ -593,22 +596,32 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     @Override
     public void onBackPressed() {
-        if (getBackPressedListener() == null || !getBackPressedListener().onBackPressed()) {
-            if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible() && !isPopupVisible) {
-                mFullscreenController.hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
-            } else if (!mBackPressedOnce.get()) {
-                (new Timer()).schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        mBackPressedOnce.set(false);
-                    }
-                }, 3000);
-                mBackPressedOnce.set(true);
-                Utils.showToastNotification(R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT);
-                isPopupVisible = false;
-            } else {
-                isPopupVisible = false;
-                finish();
+        FragmentManager fm = getSupportFragmentManager();
+        IOnBackPressed backPressedListener = null;
+        for (android.support.v4.app.Fragment fragment : fm.getFragments()) {
+            if (fragment instanceof IOnBackPressed) {
+                backPressedListener = (IOnBackPressed) fragment;
+                break;
+            }
+        }
+        if (backPressedListener == null || !backPressedListener.onBackPressed()) {
+            if (getBackPressedListener() == null || !getBackPressedListener().onBackPressed()) {
+                if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible() && !isPopupVisible) {
+                    mFullscreenController.hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
+                } else if (!mBackPressedOnce.get()) {
+                    (new Timer()).schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            mBackPressedOnce.set(false);
+                        }
+                    }, 3000);
+                    mBackPressedOnce.set(true);
+                    Utils.showToastNotification(R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT);
+                    isPopupVisible = false;
+                } else {
+                    isPopupVisible = false;
+                    finish();
+                }
             }
         }
     }

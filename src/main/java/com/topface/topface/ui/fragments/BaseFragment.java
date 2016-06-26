@@ -37,7 +37,7 @@ import java.util.LinkedList;
 import butterknife.ButterKnife;
 
 
-public abstract class BaseFragment extends TrackedFragment implements IRequestClient {
+public abstract class BaseFragment extends TrackedFragment implements IRequestClient, IOnBackPressed {
 
     private static final String STATE_NEED_TITLES = "STATE_NEED_TITLES";
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
@@ -325,5 +325,10 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     protected void setNeedTitles(boolean needTitles) {
         mNeedTitles = needTitles;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return false;
     }
 }
