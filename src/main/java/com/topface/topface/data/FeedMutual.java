@@ -1,7 +1,5 @@
 package com.topface.topface.data;
 
-import com.topface.topface.utils.ad.NativeAd;
-
 import org.json.JSONObject;
 
 public class FeedMutual extends FeedLike {
@@ -14,7 +12,4 @@ public class FeedMutual extends FeedLike {
         super(data);
     }
 
-    public FeedMutual(NativeAd nativeAd) {
-        super(nativeAd);
-    }
 }

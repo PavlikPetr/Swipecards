@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.banners.BannersController;
 import com.topface.topface.banners.PageInfo;
@@ -181,21 +180,13 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         Utils.addOnGlobalLayoutListener(mPager, new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                boolean needNativeAd = false;
                 if (mBodyPagerAdapter != null) {
                     for (int i = 0; i < mBodyPagerAdapter.getCount(); i++) {
                         Fragment feed = mBodyPagerAdapter.getItem(i);
                         if (feed instanceof FeedFragment) {
                             FeedAdapter adapter = ((FeedFragment) feed).getListAdapter();
-                            if (adapter != null && adapter.isNeedFeedAd()) {
-                                needNativeAd = true;
-                                break;
-                            }
                         }
                     }
-                }
-                if (!needNativeAd) {
-                    mBannersController = new BannersController(TabbedFeedFragment.this, App.get().getOptions());
                 }
             }
         });
