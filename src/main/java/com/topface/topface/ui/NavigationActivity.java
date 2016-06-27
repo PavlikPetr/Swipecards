@@ -334,7 +334,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     private void initFullscreen() {
-        mFullscreenController = new FullscreenController(this, App.get().getOptions());
+        mFullscreenController = new FullscreenController(this);
     }
 
     private void initBonusCounterConfig() {
@@ -451,6 +451,10 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         super.onResume();
         if (mFullscreenController != null) {
             mFullscreenController.onResume();
+            if (!mPopupHive.isSequencedExecuted(NavigationActivity.class) &&
+                    mFullscreenController.canShowFullscreen() && !AuthToken.getInstance().isEmpty()) {
+                mFullscreenController.requestFullscreen();
+            }
         }
         //restart -> open NavigationActivity
         if (App.getLocaleConfig().fetchToSystemLocale()) {

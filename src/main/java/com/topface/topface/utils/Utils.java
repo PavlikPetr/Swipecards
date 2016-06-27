@@ -45,6 +45,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Ssid;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.ApiResponse;
@@ -58,6 +59,7 @@ import com.topface.topface.utils.exception.OurTestException;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.acra.sender.ReportSenderException;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -91,6 +93,8 @@ public class Utils {
     private static PluralResources mPluralResources;
     private static float mDensity = App.getContext().getResources().getDisplayMetrics().density;
     private static String mCarrier;
+    public static final String USER_ID = "{userId}";
+    public static final String SECRET_KEY = "{secretKey}";
 
     public static int unixtimeInSeconds() {
         return (int) (System.currentTimeMillis() / 1000L);
@@ -654,4 +658,11 @@ public class Utils {
             }
         }).exec();
     }
+
+    @NotNull
+    public static String prepareUrl(@NotNull String url) {
+        return url.replace(USER_ID, AuthToken.getInstance().getUserSocialId())
+                .replace(SECRET_KEY, Ssid.get());
+    }
+
 }
