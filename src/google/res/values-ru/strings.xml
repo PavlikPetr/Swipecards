@@ -1091,4 +1091,7 @@
     <string name="offers_rewarded_video_title">Бесплатные монеты</string>
     <string name="offers_rewarded_video_description">За просмотр видео</string>
 
+    <string name="ad">Реклама</string>
+
+
 </resources>

@@ -1012,7 +1012,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             showListViewWithSuccessResponse();
             mRetryView.setVisibility(View.GONE);
         }
-        if (getListAdapter().isEmpty()) {
+        FeedAdapter adapter = getListAdapter();
+        if (adapter != null && adapter.isEmpty()) {
             onEmptyFeed();
         } else {
             onFilledFeed();

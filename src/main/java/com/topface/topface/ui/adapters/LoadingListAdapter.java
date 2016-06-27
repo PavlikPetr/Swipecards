@@ -10,9 +10,13 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.data.LoaderData;
+import com.topface.topface.ui.adapters.test.IInjectViewBucketRegistrator;
+import com.topface.topface.ui.adapters.test.InjectViewBucket;
+import com.topface.topface.ui.adapters.test.ViewInjectManager;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -25,7 +29,7 @@ import java.util.ArrayList;
  *
  * @author kirussell
  */
-public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapter {
+public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapter implements IInjectViewBucketRegistrator {
 
     public static final int T_OTHER = 0;
     public static final int T_LOADER = 1;
@@ -42,8 +46,11 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     protected LoadController mLoadController;
     private boolean mMore;
 
+    private ViewInjectManager injectManager;
+
     public LoadingListAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         mContext = context.getApplicationContext();
+        injectManager = new ViewInjectManager(mContext);
         mInflater = LayoutInflater.from(mContext);
         mLoadController = initLoadController();
         mData = new FeedList<>();
@@ -64,23 +71,28 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     protected abstract LoadController initLoadController();
 
     @Override
-    public T getItem(int i) {
+    @Nullable
+    public T getItem(int position) {
+        if (injectManager.isFakePosition(position)) {
+            return null;
+        }
+        int pos = injectManager.getTruePosition(position);
         if (mData == null) {
             return null;
         }
-        return mData.hasItem(i) ? mData.get(i) : null;
+        return mData.hasItem(pos) ? mData.get(pos) : null;
     }
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return injectManager.getTruePosition(position);
     }
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
+        View injectView = injectManager.getView(position);
         int type = getItemViewType(position);
-
-        return getViewByType(type, position, view, viewGroup);
+        return injectView != null ? injectView : getViewByType(type, position, view, viewGroup);
     }
 
     protected View getViewByType(int type, int position, View view, ViewGroup viewGroup) {
@@ -102,13 +114,17 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     @Override
     public int getItemViewType(int position) {
         IListLoader item = getItem(position);
-        if (item == null) return T_OTHER;
+        if (item == null) {
+            return T_OTHER;
+        }
+        //noinspection ConstantConditions
         if (getItem(position).isLoader())
             return T_LOADER;
-        else if (getItem(position).isRetrier())
-            return T_RETRIER;
-        else
-            return T_OTHER;
+        else //noinspection ConstantConditions
+            if (getItem(position).isRetrier())
+                return T_RETRIER;
+            else
+                return T_OTHER;
     }
 
     @Override
@@ -291,5 +307,20 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
         }
         mData = null;
         mInflater = null;
+    }
+
+    @Override
+    public void registerViewBucket(InjectViewBucket bucket) {
+        injectManager.registerInjectViewBucket(bucket);
+    }
+
+    @Override
+    public void removeViewBucket(InjectViewBucket bucket) {
+        injectManager.removeInjectViewBucket(bucket);
+    }
+
+    @Override
+    public void removeAllBuckets() {
+        injectManager.removeAllBuckets();
     }
 }
