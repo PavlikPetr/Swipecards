@@ -328,7 +328,7 @@ dependencies {
     compile 'com.squareup.dagger:dagger:1.2.2'
     provided 'com.squareup.dagger:dagger-compiler:1.2.2'
     //Social networks SDK
-    compile 'com.vk:androidsdk:1.6.1'
+    compile 'com.vk:androidsdk:1.6.7'
     compile 'com.facebook.android:facebook-android-sdk:4.5.0'
     //Animations: NineOldAndroids, ListViewAnimations
     compile 'com.nineoldandroids:library:2.4.0'

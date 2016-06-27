@@ -517,7 +517,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mCountersDataProvider.unsubscribe();
+        if (mCountersDataProvider != null) {
+            mCountersDataProvider.unsubscribe();
+        }
         if (mBannersController != null) {
             mBannersController.onDestroy();
         }
